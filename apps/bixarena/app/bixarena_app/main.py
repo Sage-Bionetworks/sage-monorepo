@@ -30,6 +30,36 @@ class PageNavigator:
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
+def _get_api_base_url() -> str | None:
+    """Resolve the BixArena API base URL from environment.
+
+    Uses API_BASE_URL. If unset, prints an error and returns None.
+    """
+    api = os.environ.get("API_BASE_URL")
+    if api:
+        return api.rstrip("/")
+    print(
+        "[config] API_BASE_URL not set.\n"
+        "[config] Login and identity sync will be disabled until configured."
+    )
+    return None
+
+
+def _get_oidc_base_url() -> str | None:
+    """Resolve the OIDC base URL for browser-driven auth redirects.
+
+    Uses OIDC_BASE_URL. If unset, prints an error and returns None.
+    """
+    base = os.environ.get("OIDC_BASE_URL")
+    if base:
+        return base.rstrip("/")
+    print(
+        "[config] OIDC_BASE_URL not set.\n"
+        "[config] Login/logout redirects will be disabled until configured."
+    )
+    return None
+
+
 def sync_backend_session_on_load(request: gr.Request):
     """Fetch user identity from backend once (if JSESSIONID cookie present).
 
@@ -48,36 +78,44 @@ def sync_backend_session_on_load(request: gr.Request):
                 jsessionid = ck.split("=", 1)[1]
                 break
         if jsessionid:
-            backend_base = os.environ.get(
-                "BACKEND_BASE_URL", "http://127.0.0.1:8112/v1"
-            )
+            backend_base = _get_api_base_url()
             try:
                 print(
                     "[auth-sync] Starting backend identity fetch (JSESSIONID present) "
                     f"len={len(jsessionid)}"
                 )
-                resp = requests.get(
-                    f"{backend_base}/echo",
-                    cookies={"JSESSIONID": jsessionid},
-                    timeout=2,
-                )
-                if resp.status_code == 200:
-                    data = resp.json()
-                    sub = data.get("sub")
-                    if sub:
-                        state.set_current_user(
-                            {"firstName": sub, "userName": sub, "source": "backend"}
-                        )
-                        print(f"[auth-sync] Identity sync success sub={sub}")
-                        return update_login_button(), *update_user_page(), gr.HTML("")
-                    else:
-                        print(
-                            "[auth-sync] /echo 200 but no sub field; "
-                            "leaving guest state"
-                        )
+                if not backend_base:
+                    print("[auth-sync] Skipping identity fetch: API_BASE_URL missing")
                 else:
-                    snippet = resp.text[:160] if resp.text else ""
-                    print(f"[auth-sync] /echo {resp.status_code} bodySnippet={snippet}")
+                    resp = requests.get(
+                        f"{backend_base}/echo",
+                        cookies={"JSESSIONID": jsessionid},
+                        timeout=2,
+                    )
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        sub = data.get("sub")
+                        if sub:
+                            state.set_current_user(
+                                {"firstName": sub, "userName": sub, "source": "backend"}
+                            )
+                            print(f"[auth-sync] Identity sync success sub={sub}")
+                            return (
+                                update_login_button(),
+                                *update_user_page(),
+                                gr.HTML(""),
+                            )
+                        else:
+                            print(
+                                "[auth-sync] /echo 200 but no sub field; "
+                                "leaving guest state"
+                            )
+                    else:
+                        snippet = resp.text[:160] if resp.text else ""
+                        print(
+                            f"[auth-sync] /echo {resp.status_code} "
+                            f"bodySnippet={snippet}"
+                        )
             except Exception as e:
                 print(f"[auth-sync] identity fetch failed: {e}")
         else:
@@ -145,15 +183,19 @@ def build_app(moderate=False):
         cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
 
         # Expose start endpoint to login button JS for immediate redirect
-        import os as _os
-
-        backend_base = _os.environ.get("BACKEND_BASE_URL", "http://127.0.0.1:8112/v1")
-        start_endpoint = f"{backend_base}/auth/oidc/start"
+        oidc_base = _get_oidc_base_url()
+        if not oidc_base:
+            print("[config] OIDC_BASE_URL missing; login button will be disabled.")
+            start_endpoint = ""
+            base_markup = ""
+        else:
+            start_endpoint = f"{oidc_base}/auth/oidc/start"
+            base_markup = oidc_base
         gr.HTML(
             "<span id='login-start-endpoint' style='display:none'>"
             + start_endpoint
             + "</span><span id='backend-base' style='display:none'>"
-            + backend_base
+            + base_markup
             + "</span>"
         )
 
@@ -178,7 +220,8 @@ def build_app(moderate=False):
   const label = btn.innerText.trim();
   if(label === 'Login') {
       const el = document.getElementById('login-start-endpoint');
-      if(el){ window.location.href = el.textContent.trim(); }
+      const url = el ? el.textContent.trim() : '';
+      if(url){ window.location.href = url; }
       return;
   }
   if(label === 'Logout') {
