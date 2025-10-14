@@ -1,10 +1,11 @@
 # bixarena_api_client.AuthApi
 
-All URIs are relative to *https://bixarena.ai/api/v1*
+All URIs are relative to _http://localhost/v1_
 
 | Method                                                    | HTTP request                   | Description                                |
 | --------------------------------------------------------- | ------------------------------ | ------------------------------------------ |
 | [**get_jwks**](AuthApi.md#get_jwks)                       | **GET** /.well-known/jwks.json | JSON Web Key Set                           |
+| [**logout**](AuthApi.md#logout)                           | **POST** /auth/logout          | Logout current session                     |
 | [**mint_internal_token**](AuthApi.md#mint_internal_token) | **POST** /token                | Mint short-lived internal JWT              |
 | [**oidc_callback**](AuthApi.md#oidc_callback)             | **GET** /auth/oidc/callback    | OIDC redirect callback                     |
 | [**start_oidc**](AuthApi.md#start_oidc)                   | **GET** /auth/oidc/start       | Start Synapse OIDC authorization code flow |
@@ -25,10 +26,10 @@ from bixarena_api_client.models.get_jwks200_response import GetJwks200Response
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost/v1"
 )
 
 
@@ -72,6 +73,65 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **logout**
+
+> logout()
+
+Logout current session
+
+Invalidate the current authenticated session.
+
+### Example
+
+```python
+import bixarena_api_client
+from bixarena_api_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client.Configuration(
+    host = "http://localhost/v1"
+)
+
+
+# Enter a context with an instance of the API client
+with bixarena_api_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client.AuthApi(api_client)
+
+    try:
+        # Logout current session
+        api_instance.logout()
+    except Exception as e:
+        print("Exception when calling AuthApi->logout: %s\n" % e)
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: Not defined
+
+### HTTP response details
+
+| Status code | Description             | Response headers |
+| ----------- | ----------------------- | ---------------- |
+| **204**     | Logged out (idempotent) | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **mint_internal_token**
 
 > MintInternalToken200Response mint_internal_token()
@@ -88,10 +148,10 @@ from bixarena_api_client.models.mint_internal_token200_response import MintInter
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost/v1"
 )
 
 
@@ -151,10 +211,10 @@ from bixarena_api_client.models.oidc_callback200_response import OidcCallback200
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost/v1"
 )
 
 
@@ -219,10 +279,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost/v1"
 )
 
 
@@ -257,9 +317,10 @@ No authorization required
 
 ### HTTP response details
 
-| Status code | Description                | Response headers |
-| ----------- | -------------------------- | ---------------- |
-| **302**     | Redirect to Synapse login  | -                |
-| **400**     | Invalid request parameters | -                |
+| Status code | Description                                               | Response headers |
+| ----------- | --------------------------------------------------------- | ---------------- |
+| **204**     | Flow started (no content; clients should follow redirect) | -                |
+| **302**     | Redirect to Synapse login                                 | -                |
+| **400**     | Invalid request parameters                                | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

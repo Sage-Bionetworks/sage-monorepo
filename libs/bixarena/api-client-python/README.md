@@ -62,10 +62,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -96,12 +96,13 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://bixarena.ai/api/v1*
+All URIs are relative to _http://localhost/v1_
 
 | Class              | Method                                                                            | HTTP request                                            | Description                                |
 | ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------ |
 | _AdminApi_         | [**admin_stats**](docs/AdminApi.md#admin_stats)                                   | **GET** /admin/stats                                    | Admin statistics                           |
 | _AuthApi_          | [**get_jwks**](docs/AuthApi.md#get_jwks)                                          | **GET** /.well-known/jwks.json                          | JSON Web Key Set                           |
+| _AuthApi_          | [**logout**](docs/AuthApi.md#logout)                                              | **POST** /auth/logout                                   | Logout current session                     |
 | _AuthApi_          | [**mint_internal_token**](docs/AuthApi.md#mint_internal_token)                    | **POST** /token                                         | Mint short-lived internal JWT              |
 | _AuthApi_          | [**oidc_callback**](docs/AuthApi.md#oidc_callback)                                | **GET** /auth/oidc/callback                             | OIDC redirect callback                     |
 | _AuthApi_          | [**start_oidc**](docs/AuthApi.md#start_oidc)                                      | **GET** /auth/oidc/start                                | Start Synapse OIDC authorization code flow |

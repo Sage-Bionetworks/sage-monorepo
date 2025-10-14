@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena API
+BixArena AI API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -29,6 +29,13 @@ class TestAuthApi(unittest.TestCase):
         """Test case for get_jwks
 
         JSON Web Key Set
+        """
+        pass
+
+    def test_logout(self) -> None:
+        """Test case for logout
+
+        Logout current session
         """
         pass
 
