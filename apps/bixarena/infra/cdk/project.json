@@ -34,13 +34,6 @@
         "cwd": "{projectRoot}"
       },
       "cache": true
-    },
-    "run-hello": {
-      "executor": "@nxlv/python:run-commands",
-      "options": {
-        "command": "uv run bixarena_infra_cdk/hello.py",
-        "cwd": "{projectRoot}"
-      }
     }
   },
   "tags": ["language:python", "package-manager:uv"],
