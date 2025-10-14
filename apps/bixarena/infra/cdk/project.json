@@ -59,6 +59,32 @@
         "prod": {}
       },
       "defaultConfiguration": "dev"
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdk deploy",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "ls": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdk ls",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
     }
   },
   "tags": ["language:python", "package-manager:uv"],
