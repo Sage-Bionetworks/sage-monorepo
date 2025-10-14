@@ -43,9 +43,9 @@
       "cache": true
     },
     "synth": {
-      "executor": "@nxlv/python:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "command": "uv run bixarena_infra_cdk/index_kaggle_challenges.py",
+        "command": "cdk synth",
         "cwd": "{projectRoot}"
       }
     }
