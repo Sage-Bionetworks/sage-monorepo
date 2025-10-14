@@ -34,6 +34,7 @@ public class McpServerApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     log.info(appProperties.welcomeMessage());
+    log.info("OC API base URL: {}", appProperties.apiBaseUrl());
   }
 
   @Bean

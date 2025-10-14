@@ -1,6 +1,8 @@
 package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import io.micrometer.common.lang.Nullable;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.EdamConceptApi;
@@ -12,8 +14,10 @@ import org.sagebionetworks.openchallenges.api.client.model.EdamSection;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class EdamConceptService {
 
@@ -22,57 +26,55 @@ public class EdamConceptService {
   @Tool(
     name = "list_edam_concepts",
     description = """
-    Searches for EDAM, an ontology for bioinformatics data types, formats, operations, and topics.
+    Search EDAM ontology concepts (data, format, operation, topic, identifier).
 
-    Usage guidelines:
-    - Use this tool when the user refers to a specific type of input data or training dataset.
-    - EDAM uses standardized terminology. Start with SHORT, CORE terms and avoid extra descriptive words:
+    When to use: User mentions specific input/training data types or needs standardized terminology.
 
-    Search Strategy:
-    1. Extract the CORE scientific/technical term from user input:
-       - "MRI imaging data" → use "MRI" or "MRI image"
-       - "genomic sequence data" → use "sequence" or "genome"
-       - "protein structure information" → use "protein structure"
-       - "CT scan images" → use "CT" or "CT image"
+    Strategy:
+    - Extract the core scientific term: "MRI imaging data" -> "MRI"; "protein structural data" -> "protein structure".
+    - Prefer singular concise forms ("image" not "images").
+    - Avoid generic words (data, dataset, information, file).
+    - If first attempt empty: try controlled synonyms (MRI -> magnetic resonance, CT -> computed tomography, DNA -> nucleotide sequence).
+    - To target data input concepts only set sections=["data"].
+    - After 2-3 unsuccessful variations, report no close EDAM match and optionally point user to BioPortal.
 
-    2. If no results with core terms, try slight variations:
-       - "MRI" → try "magnetic resonance"
-       - "CT" → try "computed tomography"
-       - "DNA" → try "nucleotide sequence"
-
-    3. Avoid adding generic words like "data", "information", "dataset", "file" to search terms
-    4. Use singular forms when possible ("image" not "images")
-    5. Set `sections = ["data"]` to restrict search to EDAM data-related concepts only
-    6. If no matches found after trying variations**:
-    - Inform the user that their terminology may not exist in EDAM ontology (data section)
-    - Direct them to browse available terms at: https://bioportal.bioontology.org/ontologies/EDAM?p=classes
-    - Suggest they find the closest matching EDAM data concept and retry the search
-
-    Example searches:
-    - User: "MRI imaging data" → searchTerms: "MRI"
-    - User: "protein structural data" → searchTerms: "protein structure"
-    - User: "genomics datasets" → searchTerms: "genome"
-    """
+    Examples:
+    - "Need MRI training data" -> searchTerms="MRI", sections=[data].
+    - "Genomics datasets" -> searchTerms="genome", sections=[data].
+    - "Protein structure operations" -> searchTerms="protein structure", sections=[operation] (if focusing on operations).
+     """
   )
   public EdamConceptsPage listEdamConcepts(
     @ToolParam(
-      description = "The page number to retrieve. The first page is 0."
-    ) @Nullable Integer pageNumber,
+      description = "Page index (integer >= 0). First page is 0."
+    ) @Nullable @PositiveOrZero Integer pageNumber,
     @ToolParam(
-      description = "The number of items per page. Default is 100."
-    ) @Nullable Integer pageSize,
+      description = "Page size (integer 1-200). Default 100 if null."
+    ) @Nullable @Positive Integer pageSize,
     @ToolParam(
-      description = "Sort field: preferred_label, relevance."
+      description = "Sort enum: preferred_label|relevance."
     ) @Nullable EdamConceptSort sort,
-    @ToolParam(description = "Sort direction: asc, desc.") @Nullable EdamConceptDirection direction,
-    @ToolParam(description = "List of EDAM concept IDs.") @Nullable List<Integer> ids,
     @ToolParam(
-      description = "Free-text search terms to match concept names or descriptions."
-    ) @Nullable String searchTerms,
+      description = "Sort direction enum: asc|desc."
+    ) @Nullable EdamConceptDirection direction,
+    @ToolParam(description = "Concept ID integers list (exact match).") @Nullable List<
+      @PositiveOrZero Integer
+    > ids,
+    @ToolParam(description = "Free-text search (concise core term).") @Nullable String searchTerms,
     @ToolParam(
-      description = "EDAM sections to filter by: data, format, identifier, operation, topic."
+      description = "Section enums list: data|format|identifier|operation|topic."
     ) @Nullable List<EdamSection> sections
   ) {
+    if (pageNumber != null && pageNumber < 0) {
+      throw new IllegalArgumentException("pageNumber must be >= 0");
+    }
+    if (pageSize != null && pageSize <= 0) {
+      throw new IllegalArgumentException("pageSize must be > 0");
+    }
+    if (ids != null && ids.stream().anyMatch(id -> id == null || id < 0)) {
+      throw new IllegalArgumentException("ids must be >= 0");
+    }
+
     EdamConceptSearchQuery query = new EdamConceptSearchQuery();
     query.setPageNumber(pageNumber);
     query.setPageSize(pageSize);
