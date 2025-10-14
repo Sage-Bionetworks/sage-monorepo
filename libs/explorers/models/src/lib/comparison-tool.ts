@@ -14,3 +14,25 @@ export interface ComparisonToolConfigFilter {
   field: string;
   values: string[];
 }
+
+export type ComparisonToolPage = 'Model Overview' | 'Gene Expression' | 'Disease Correlation';
+
+export type ComparisonToolConfigColumnType = 'text' | 'heat_map';
+export const ComparisonToolConfigColumnTypeEnum = {
+  Text: 'text' as ComparisonToolConfigColumnType,
+  HeatMap: 'heat_map' as ComparisonToolConfigColumnType,
+} as const;
+
+export interface ComparisonToolConfigColumn {
+  name: string;
+  type: ComparisonToolConfigColumnType;
+  tooltip: string;
+  sort_tooltip: string;
+}
+
+export interface ComparisonToolConfig {
+  page: ComparisonToolPage;
+  dropdowns: Array<string>;
+  columns: Array<ComparisonToolConfigColumn>;
+  filters?: Array<ComparisonToolConfigFilter>;
+}

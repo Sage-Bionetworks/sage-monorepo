@@ -1,0 +1,12 @@
+<div class="comparison-tool-selectors">
+  @for (dropdownOptions of dropdownLevels(); track $index; let levelIndex = $index) {
+    <div class="selector-container">
+      <p-select
+        [id]="'selector-level-' + levelIndex"
+        [options]="dropdownOptions"
+        [ngModel]="getSelectedValueForLevel(levelIndex)"
+        (onChange)="onDropdownChange(levelIndex, $event.value)"
+      />
+    </div>
+  }
+</div>

@@ -1,0 +1,80 @@
+@use 'explorers/styles/src/lib/variables' as variables;
+
+.comparison-tool-selectors {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .selector-container:first-of-type {
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .p-select {
+    padding: 0 0 10px;
+    border: none;
+    background-color: transparent;
+
+    .p-select-label {
+      padding: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .p-select-dropdown-icon {
+      font-size: 14px;
+      color: var(--color-text);
+    }
+
+    .p-select-list-container {
+      background-color: #fff;
+      box-shadow: 0 1px 10px 0 rgb(0 0 0 / 15%);
+      border-radius: 5px;
+      padding: 10px 0;
+
+      ul {
+        padding: 0;
+
+        li {
+          padding: 5px 15px;
+          transition: variables.$transition-duration;
+
+          span {
+            white-space: nowrap;
+            color: var(--color-primary);
+            font-size: 12px;
+            font-weight: 900;
+          }
+
+          &.p-disabled {
+            span {
+              color: #a6a6a6;
+            }
+          }
+
+          &.p-select-option-selected {
+            background-color: var(--color-action-primary);
+
+            span {
+              color: #fff;
+            }
+          }
+
+          &:not(.p-disabled):hover {
+            background-color: var(--color-action-primary);
+
+            span {
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+
+    &:hover {
+      .p-select-dropdown-icon {
+        color: var(--color-action-primary);
+      }
+    }
+  }
+}
