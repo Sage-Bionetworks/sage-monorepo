@@ -4,15 +4,15 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-  # jpa:
-  #   hibernate:
-  #     ddl-auto: create-drop
-  #   database-platform: org.hibernate.dialect.H2Dialect
-  #   show-sql: false
-  #   properties:
-  #     hibernate:
-  #       search:
-  #         enabled: false # Disable Hibernate Search for tests
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+    properties:
+      hibernate:
+        search:
+          enabled: false # Disable Hibernate Search for tests
   flyway:
     enabled: false # Disable Flyway for simple tests
 
