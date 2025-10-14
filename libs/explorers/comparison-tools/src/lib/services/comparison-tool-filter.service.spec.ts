@@ -1,11 +1,13 @@
-import { FilterPanelService } from './comparison-tool-filter.service';
+import { TestBed } from '@angular/core/testing';
+import { ComparisonToolFilterService } from './comparison-tool-filter.service';
 import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 
-describe('FilterPanelService', () => {
-  let service: FilterPanelService;
+describe('ComparisonToolFilterService', () => {
+  let service: ComparisonToolFilterService;
 
   beforeEach(() => {
-    service = new FilterPanelService();
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(ComparisonToolFilterService);
   });
 
   it('should be closed by default', () => {
