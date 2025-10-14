@@ -20,3 +20,18 @@ logging:
   level:
     org.sagebionetworks.amp.als: DEBUG
     org.hibernate.search: OFF
+
+# Minimal application properties required for configuration binding during tests
+app:
+  welcome-message: 'Welcome to BixArena API (test)'
+  ui-base-url: http://localhost:8100
+  auth:
+    authorize-url: https://example.org/authorize
+    token-url: https://example.org/token
+    jwks-url: https://example.org/jwks
+    client-id: test-client
+    client-secret: test-secret
+    redirect-uri: http://localhost:8112/v1/auth/oidc/callback
+    internal-issuer: http://localhost
+    audience: test-audience
+    token-ttl-seconds: 600
