@@ -94,7 +94,7 @@ Use the [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) local proxy to 
 
 #### Other MCP Clients
 
-For additional [MCP clients](https://modelcontextprotocol.io/clients) supporting streamable HTTP or Server-Sent Events transports, consult their setup guides. Compatibility beyond Claude Desktop and Copilot is currently experimental.
+For additional [MCP clients](https://modelcontextprotocol.io/clients) that support connecting to a remote MCP server via streamable HTTP, consult their setup guides. Compatibility beyond Claude Desktop and Copilot is currently experimental.
 
 ## Example Prompts
 
