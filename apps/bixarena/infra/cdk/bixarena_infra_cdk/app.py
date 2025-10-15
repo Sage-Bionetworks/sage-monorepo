@@ -3,15 +3,13 @@
 from os import environ
 
 import aws_cdk as cdk
-from platform_infra_cdk_common.hello import hello
+from platform_infra_cdk_common.constants import VALID_ENVIRONMENTS
 
 from .ecs_stack import EcsStack
 from .load_balancer_stack import LoadBalancerStack
 from .network_stack import NetworkStack
 from .service_props import ServiceProps
 from .service_stack import LoadBalancedServiceStack
-
-VALID_ENVIRONMENTS = ["dev", "stage", "prod"]
 
 
 def build_app() -> cdk.App:
@@ -62,11 +60,6 @@ def build_app() -> cdk.App:
     app_version = "edge"
 
     cdk_app = cdk.App()
-
-    # Demo: import and use a function from shared library 'platform-infra-cdk-common'
-    # This proves the CDK app can depend on and use code from libs/.
-    lib_greeting = hello()
-    cdk.Tags.of(cdk_app).add("LibraryGreeting", lib_greeting)
 
     if environment_tags:
         for key, value in environment_tags.items():
