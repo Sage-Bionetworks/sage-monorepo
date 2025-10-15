@@ -2,11 +2,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolConfigs } from '@sagebionetworks/explorers/testing';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { ComparisonToolSelectorsComponent } from './comparison-tool-selectors.component';
-
-const mockSelectionChanged = jest.fn();
 
 async function setup(
   pageConfigs: ComparisonToolConfig[] = mockComparisonToolConfigs,
@@ -17,10 +15,7 @@ async function setup(
     providers: [provideHttpClient(), provideRouter([])],
     componentInputs: {
       pageConfigs,
-      initialSelection: initialSelection || [],
-    },
-    on: {
-      selectionChanged: mockSelectionChanged,
+      selection: initialSelection || [],
     },
   });
   const instance = component.fixture.componentInstance;
@@ -33,10 +28,6 @@ function getAllDropdowns() {
 }
 
 describe('ComparisonToolSelectorsComponent', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should create the component', async () => {
     const { component } = await setup();
     expect(component.fixture.componentInstance).toBeTruthy();
@@ -55,26 +46,18 @@ describe('ComparisonToolSelectorsComponent', () => {
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 
-  it('should display correct initial dropdowns with default selection', async () => {
-    await setup();
+  it('should display correct initial dropdowns with provided selection', async () => {
+    const { instance } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
     await screen.findByRole('combobox', { name: 'Red' });
     await screen.findByRole('combobox', { name: 'Crimson' });
     expect(getAllDropdowns()).toHaveLength(2);
-  });
-
-  it('should emit initial selection on component initialization', async () => {
-    await setup();
-    await waitFor(() => {
-      expect(mockSelectionChanged).toHaveBeenCalledWith(['Red', 'Crimson']);
-    });
+    expect(instance.selection()).toEqual(['Red', 'Crimson']);
   });
 
   it('should use provided initial selection when valid', async () => {
     const selectedDropdowns = ['Blue', 'Light Blue', 'Powder Blue'];
-    await setup(mockComparisonToolConfigs, selectedDropdowns);
-    await waitFor(() => {
-      expect(mockSelectionChanged).toHaveBeenCalledWith(selectedDropdowns);
-    });
+    const { instance } = await setup(mockComparisonToolConfigs, selectedDropdowns);
+    expect(instance.selection()).toEqual(selectedDropdowns);
     const dropdowns = getAllDropdowns();
     expect(dropdowns).toHaveLength(selectedDropdowns.length);
     for (let i = 0; i < dropdowns.length; i++) {
@@ -83,18 +66,14 @@ describe('ComparisonToolSelectorsComponent', () => {
   });
 
   it('should fall back to default selection when initial selection is invalid', async () => {
-    await setup(mockComparisonToolConfigs, ['NonExistent', 'Option']);
-    await waitFor(() => {
-      expect(mockSelectionChanged).toHaveBeenCalledWith(['Red', 'Crimson']);
-    });
+    const { instance } = await setup(mockComparisonToolConfigs, ['NonExistent', 'Option']);
+    expect(instance.selection()).toEqual(['Red', 'Crimson']);
   });
 
   it('should auto-select subsequent levels when changing dropdown selection', async () => {
-    const { component } = await setup();
-    component.fixture.componentInstance.onDropdownChange(0, 'Blue');
-    await waitFor(() => {
-      expect(mockSelectionChanged).toHaveBeenCalledWith(['Blue', 'Light Blue', 'Powder Blue']);
-    });
+    const { instance } = await setup();
+    instance.onDropdownChange(0, 'Blue');
+    expect(instance.selection()).toEqual(['Blue', 'Light Blue', 'Powder Blue']);
   });
 
   it('should handle single level dropdown configurations', async () => {
@@ -103,12 +82,10 @@ describe('ComparisonToolSelectorsComponent', () => {
       { page: 'Disease Correlation', dropdowns: ['Option2'], columns: [], filters: [] },
     ];
 
-    await setup(singleLevelConfigs);
+    const { instance } = await setup(singleLevelConfigs, ['Option1']);
 
     expect(getAllDropdowns()).toHaveLength(1);
-    await waitFor(() => {
-      expect(mockSelectionChanged).toHaveBeenCalledWith(['Option1']);
-    });
+    expect(instance.selection()).toEqual(['Option1']);
   });
 
   it('should handle deep nested dropdown configurations', async () => {
@@ -121,26 +98,15 @@ describe('ComparisonToolSelectorsComponent', () => {
       },
     ];
 
-    await setup(deepConfigs);
+    const initialSelection = ['Level1', 'Level2', 'Level3', 'Level4', 'Level5'];
+    const { instance } = await setup(deepConfigs, initialSelection);
 
     expect(getAllDropdowns()).toHaveLength(5);
-    await waitFor(() => {
-      expect(mockSelectionChanged).toHaveBeenCalledWith([
-        'Level1',
-        'Level2',
-        'Level3',
-        'Level4',
-        'Level5',
-      ]);
-    });
+    expect(instance.selection()).toEqual(initialSelection);
   });
 
   it('should return correct selected value for each level', async () => {
-    const { instance } = await setup();
-
-    await waitFor(() => {
-      expect(mockSelectionChanged).toHaveBeenCalled();
-    });
+    const { instance } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
 
     expect(instance.getSelectedValueForLevel(0)).toBe('Red');
     expect(instance.getSelectedValueForLevel(1)).toBe('Crimson');
@@ -148,42 +114,33 @@ describe('ComparisonToolSelectorsComponent', () => {
   });
 
   it('should handle selection change to first level dropdown', async () => {
-    const { instance } = await setup();
+    const { instance } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
 
     instance.onDropdownChange(0, 'Blue');
 
-    await waitFor(() => {
-      expect(mockSelectionChanged).toHaveBeenCalledWith(['Blue', 'Light Blue', 'Powder Blue']);
-    });
-
+    expect(instance.selection()).toEqual(['Blue', 'Light Blue', 'Powder Blue']);
     expect(instance.getSelectedValueForLevel(0)).toBe('Blue');
     expect(instance.getSelectedValueForLevel(1)).toBe('Light Blue');
     expect(instance.getSelectedValueForLevel(2)).toBe('Powder Blue');
   });
 
   it('should handle selection change to non-first level dropdown', async () => {
-    const { instance } = await setup();
+    const { instance } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
 
     instance.onDropdownChange(0, 'Blue');
-
-    await waitFor(() => {
-      expect(instance.getSelectedValueForLevel(2)).toBe('Powder Blue');
-    });
+    expect(instance.getSelectedValueForLevel(2)).toBe('Powder Blue');
 
     instance.onDropdownChange(1, 'Dark Blue');
-
-    await waitFor(() => {
-      expect(mockSelectionChanged).toHaveBeenLastCalledWith(['Blue', 'Dark Blue', 'Navy Blue']);
-    });
+    expect(instance.selection()).toEqual(['Blue', 'Dark Blue', 'Navy Blue']);
 
     expect(instance.getSelectedValueForLevel(0)).toBe('Blue');
     expect(instance.getSelectedValueForLevel(1)).toBe('Dark Blue');
     expect(instance.getSelectedValueForLevel(2)).toBe('Navy Blue');
   });
 
-  it('should not emit selection when no configs provided', async () => {
+  it('should not set selection when no configs provided', async () => {
     const emptyConfigs: ComparisonToolConfig[] = [];
-    await setup(emptyConfigs);
-    expect(mockSelectionChanged).not.toHaveBeenCalled();
+    const { instance } = await setup(emptyConfigs);
+    expect(instance.selection()).toEqual([]);
   });
 });
