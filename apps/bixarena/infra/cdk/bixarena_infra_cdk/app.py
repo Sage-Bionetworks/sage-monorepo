@@ -61,11 +61,6 @@ def build_app() -> cdk.App:
 
     cdk_app = cdk.App()
 
-    # Demo: import and use a function from shared library 'platform-infra-cdk-common'
-    # This proves the CDK app can depend on and use code from libs/.
-    lib_greeting = hello()
-    cdk.Tags.of(cdk_app).add("LibraryGreeting", lib_greeting)
-
     if environment_tags:
         for key, value in environment_tags.items():
             cdk.Tags.of(cdk_app).add(key, value)
