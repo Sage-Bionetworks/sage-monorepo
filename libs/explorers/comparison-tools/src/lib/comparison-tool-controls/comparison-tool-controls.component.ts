@@ -18,5 +18,5 @@ import { ComparisonToolSelectorsComponent } from './comparison-tool-selectors/co
 export class ComparisonToolControlsComponent {
   pageConfigs = input<ComparisonToolConfig[]>([]);
   popoverWikis = input<{ [key: string]: SynapseWikiParams }>({});
-  selection = model<string[]>([]);
+  dropdownsSelection = model<string[]>([]);
 }

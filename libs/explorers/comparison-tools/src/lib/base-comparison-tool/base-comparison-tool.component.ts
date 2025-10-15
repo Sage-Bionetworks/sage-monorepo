@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, model, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model } from '@angular/core';
 import {
   ComparisonToolConfig,
   ComparisonToolFilter,
@@ -38,22 +38,25 @@ export class BaseComparisonToolComponent {
 
   isFilterPanelOpen = model(false);
 
-  selection = signal<string[]>([]);
+  dropdownsSelection = model<string[]>([]);
 
   currentConfig = computed(() => {
     const configs = this.pageConfigs();
-    const selection = this.selection();
-
+    const dropdownsSelection = this.dropdownsSelection();
     if (!configs.length) {
       return null;
     }
 
     const defaultConfig = configs[0];
-    if (!selection.length) {
+    if (!dropdownsSelection.length) {
       return defaultConfig;
     }
 
-    return configs.find((config) => isEqual(config.dropdowns, selection)) || defaultConfig || null;
+    return (
+      configs.find((config) => isEqual(config.dropdowns, dropdownsSelection)) ||
+      defaultConfig ||
+      null
+    );
   });
 
   constructor() {

@@ -19,7 +19,7 @@ interface DropdownTree {
 export class ComparisonToolSelectorsComponent {
   pageConfigs = input<ComparisonToolConfig[]>([]);
   popoverWikis = input<{ [key: string]: SynapseWikiParams }>({});
-  selection = model<string[]>([]);
+  selection = model<string[]>([], { alias: 'dropdownsSelection' });
 
   dropdownTree = computed(() => {
     const configs = this.pageConfigs();
