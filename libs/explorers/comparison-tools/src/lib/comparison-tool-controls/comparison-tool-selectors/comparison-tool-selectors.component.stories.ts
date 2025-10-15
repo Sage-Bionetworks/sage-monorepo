@@ -16,9 +16,6 @@ const meta: Meta<ComparisonToolSelectorsComponent> = {
       providers: [provideRouter([]), provideHttpClient(withInterceptorsFromDi())],
     }),
   ],
-  argTypes: {
-    selectionChanged: { control: false },
-  },
 };
 export default meta;
 type Story = StoryObj<ComparisonToolSelectorsComponent>;
@@ -27,8 +24,6 @@ export const MultipleDropdowns: Story = {
   args: {
     pageConfigs: mockComparisonToolConfigs,
     popoverWikis: mockComparisonToolSelectorPopoverWikiIds,
-    initialSelection: mockComparisonToolConfigs[0].dropdowns,
-    selectionChanged: (selection: string[]) => console.log(selection),
   },
 };
 
