@@ -1,6 +1,7 @@
 .controls {
   display: flex;
   flex-direction: row;
+  padding: 20px 0;
 
   .controls-left {
     display: flex;
@@ -11,7 +12,7 @@
   .controls-right {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: center;
     flex-grow: 1;
   }
 }

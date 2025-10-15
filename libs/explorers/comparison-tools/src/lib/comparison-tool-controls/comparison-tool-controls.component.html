@@ -4,6 +4,10 @@
     <explorers-comparison-tool-search-input />
   </div>
   <div class="controls-right">
-    <!--- TODO add category and subcategory controls here for applicable CTs -->
+    <explorers-comparison-tool-selectors
+      [pageConfigs]="pageConfigs()"
+      [popoverWikis]="popoverWikis()"
+      [(selection)]="selection"
+    />
   </div>
 </div>
