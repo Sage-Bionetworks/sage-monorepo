@@ -2,7 +2,10 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolFilterService,
+  ComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -15,7 +18,7 @@ import { GeneExpressionHelpLinksComponent } from './components/gene-expression-h
   imports: [BaseComparisonToolComponent, GeneExpressionHelpLinksComponent],
   templateUrl: './gene-expression-comparison-tool.component.html',
   styleUrls: ['./gene-expression-comparison-tool.component.scss'],
-  providers: [ComparisonToolService],
+  providers: [ComparisonToolService, ComparisonToolFilterService],
 })
 export class GeneExpressionComparisonToolComponent implements OnInit {
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);

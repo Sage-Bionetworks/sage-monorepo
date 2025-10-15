@@ -1,6 +1,9 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { provideComparisonToolService } from '@sagebionetworks/explorers/services';
+import {
+  provideComparisonToolFilterService,
+  provideComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import {
   mockComparisonToolConfigs,
   provideLoadingIconColors,
@@ -18,6 +21,7 @@ const meta: Meta<BaseComparisonToolComponent> = {
         provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService(),
+        ...provideComparisonToolFilterService(),
         ...provideLoadingIconColors(),
       ],
     }),

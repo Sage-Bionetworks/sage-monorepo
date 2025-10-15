@@ -2,7 +2,11 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolFilterService,
+  ComparisonToolService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -20,7 +24,7 @@ import { ModelOverviewMainTableComponent } from './components/model-overview-mai
     ModelOverviewMainTableComponent,
     ModelOverviewHelpLinksComponent,
   ],
-  providers: [ComparisonToolService],
+  providers: [ComparisonToolService, ComparisonToolFilterService],
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })

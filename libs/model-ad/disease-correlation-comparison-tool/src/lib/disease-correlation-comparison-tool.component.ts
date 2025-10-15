@@ -2,7 +2,10 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolFilterService,
+  ComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -15,7 +18,7 @@ import { DiseaseCorrelationHelpLinksComponent } from './components/disease-corre
   imports: [BaseComparisonToolComponent, DiseaseCorrelationHelpLinksComponent],
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
-  providers: [ComparisonToolService],
+  providers: [ComparisonToolService, ComparisonToolFilterService],
 })
 export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
@@ -28,7 +31,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   configs: ComparisonToolConfig[] = [];
 
   ngOnInit() {
-    // TODO - Replace with actual data fetching logic
+    // TODO - Replace with actual data fetching logic (MG-447)
     setTimeout(() => {
       this.isLoading.set(false);
     }, 300);

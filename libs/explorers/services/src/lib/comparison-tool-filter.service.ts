@@ -1,18 +1,15 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, signal } from '@angular/core';
 import {
   ComparisonToolFilter,
   ComparisonToolFilterOption,
 } from '@sagebionetworks/explorers/models';
 import { FilterService } from 'primeng/api';
 
-@Injectable({
-  providedIn: 'root',
-})
 export class ComparisonToolFilterService {
-  private filterService = inject(FilterService);
+  private readonly filterService = inject(FilterService);
 
-  private filtersSignal = signal<ComparisonToolFilter[]>([]);
-  private searchTermSignal = signal<string>('');
+  private readonly filtersSignal = signal<ComparisonToolFilter[]>([]);
+  private readonly searchTermSignal = signal<string>('');
 
   readonly filters = this.filtersSignal.asReadonly();
   readonly searchTerm = this.searchTermSignal.asReadonly();

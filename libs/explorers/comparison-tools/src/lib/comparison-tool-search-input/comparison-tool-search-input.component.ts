@@ -1,8 +1,8 @@
-import { Component, inject, signal, ViewEncapsulation } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { ComparisonToolFilterService } from '@sagebionetworks/explorers/services';
+import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { ComparisonToolFilterService } from '../services/comparison-tool-filter.service';
-import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'explorers-comparison-tool-search-input',

@@ -4,7 +4,10 @@ import {
   ComparisonToolFilter,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolFilterService,
+  ComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { isEqual } from 'lodash';
 import { ComparisonToolColumnsComponent } from '../comparison-tool-columns/comparison-tool-columns.component';
@@ -26,6 +29,7 @@ import { ComparisonToolHeaderComponent } from '../comparison-tool-header/compari
 })
 export class BaseComparisonToolComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
+  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
   isLoading = input(true);
   resultsCount = input(0);
@@ -73,8 +77,7 @@ export class BaseComparisonToolComponent {
   }
 
   onFiltersChanged(filters: ComparisonToolFilter[]) {
-    // TODO: call CT filter service
-    console.log('Filters changed: ', filters);
+    this.comparisonToolFilterService.setFilters(filters);
   }
 
   getColumnsFromConfig(config: ComparisonToolConfig) {
