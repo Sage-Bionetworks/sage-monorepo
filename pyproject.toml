@@ -52,6 +52,9 @@ workspace = true
 [tool.uv.sources.openchallenges-client]
 workspace = true
 
+[tool.uv.sources.platform-infra-cdk-common]
+workspace = true
+
 [tool.uv.workspace]
 # List here every subproject directory that belongs to this monorepo and should be
 # managed by uv (apps, tools, libraries, etc.).
@@ -67,7 +70,8 @@ members = [
   "apps/openchallenges/tools",
   "libs/bixarena/api-client-python",
   "libs/openchallenges/api-client-python",
-  "libs/openchallenges/client-python"
+  "libs/openchallenges/client-python",
+  "libs/platform/infra/cdk/common"
 ]
 
 [build-system]
