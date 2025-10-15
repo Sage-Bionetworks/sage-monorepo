@@ -15,7 +15,7 @@ async function setup(
     providers: [provideHttpClient(), provideRouter([])],
     componentInputs: {
       pageConfigs,
-      selection: initialSelection || [],
+      dropdownsSelection: initialSelection || [],
     },
   });
   const instance = component.fixture.componentInstance;
@@ -101,8 +101,11 @@ describe('ComparisonToolSelectorsComponent', () => {
     const initialSelection = ['Level1', 'Level2', 'Level3', 'Level4', 'Level5'];
     const { instance } = await setup(deepConfigs, initialSelection);
 
-    expect(getAllDropdowns()).toHaveLength(5);
     expect(instance.selection()).toEqual(initialSelection);
+    expect(screen.queryAllByRole('combobox')).toHaveLength(0);
+    for (const level of initialSelection) {
+      expect(screen.getByText(level)).toBeInTheDocument();
+    }
   });
 
   it('should return correct selected value for each level', async () => {
