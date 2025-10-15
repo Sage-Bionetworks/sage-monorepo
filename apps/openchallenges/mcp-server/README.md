@@ -64,7 +64,7 @@ Use the [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) local proxy to 
      "mcpServers": {
        "mcp-server": {
          "command": "npx",
-         "args": ["mcp-remote", "http://localhost:8887/mcp"]
+         "args": ["mcp-remote", "http://localhost:8887/mcp-server/sse"]
        }
      }
    }
@@ -83,8 +83,8 @@ Use the [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) local proxy to 
   {
     "servers": {
       "openchallenges-mcp-server": {
-        "type": "http",
-        "url": "http://localhost:8887/mcp"
+        "type": "sse",
+        "url": "http://localhost:8887/mcp-server/sse"
       }
     }
   }
@@ -94,7 +94,7 @@ Use the [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) local proxy to 
 
 #### Other MCP Clients
 
-For additional [MCP clients](https://modelcontextprotocol.io/clients) that support connecting to a remote MCP server via streamable HTTP, consult their setup guides. Compatibility beyond Claude Desktop and Copilot is currently experimental.
+For other [MCP clients](https://modelcontextprotocol.io/clients) that support connecting to a remote MCP server via Server-Sent Events (SSE), configure a custom SSE endpoint: `http://localhost:8887/mcp-server/sse`. Compatibility beyond Claude Desktop and GitHub Copilot is still experimental.
 
 ## Example Prompts
 
