@@ -19,9 +19,9 @@
           />
           <ng-content></ng-content>
           <explorers-comparison-tool-filter-panel
-            [filterConfigs]="filterConfigs()"
+            [filterConfigs]="currentConfig()?.filters || []"
             [(isOpen)]="isFilterPanelOpen"
-            (filtersChanged)="filtersChanged.emit($event)"
+            (filtersChanged)="onFiltersChanged($event)"
           />
         </div>
       </div>
