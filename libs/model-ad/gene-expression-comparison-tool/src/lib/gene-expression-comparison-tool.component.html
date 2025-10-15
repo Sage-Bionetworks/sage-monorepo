@@ -3,8 +3,7 @@
   [resultsCount]="resultsCount()"
   headerTitle="Gene Expression"
   filterResultsButtonTooltip="Filter results by Model, Biological Domain, and more"
-  [filterConfigs]="config?.filters || []"
-  [onFiltersChange]="setFilters"
+  [pageConfigs]="configs"
 >
   <div class="gene-expression-comparison-tool">
     <model-ad-gene-expression-help-links />
