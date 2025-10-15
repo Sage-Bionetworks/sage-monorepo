@@ -10,7 +10,9 @@ const getNxProjectNames = async () => {
 };
 
 const getNxProjects = async () => {
-  let projectFiles = await exec('find . -name project.json -not -path "./node_modules/*"');
+  let projectFiles = await exec(
+    'find . -name project.json -not -path "./node_modules/*" -not -path "./dist/*" -not -path "./.pdm-build/*"',
+  );
   projectFiles = projectFiles.stdout.trim().split(/\n/);
   // const prefix = './';
   // projectFiles = projectFiles.map((projectFile) => {
