@@ -1,5 +1,6 @@
 <div class="comparison-tool-selectors">
   @for (dropdownOptions of dropdownLevels(); track $index; let levelIndex = $index) {
+    @let selectedValue = getSelectedValueForLevel(levelIndex);
     <div class="selector-container">
       @if (dropdownOptions.length === 1) {
         <span class="selector-value">{{ dropdownOptions[0].label }}</span>
@@ -7,9 +8,14 @@
         <p-select
           [id]="'selector-level-' + levelIndex"
           [options]="dropdownOptions"
-          [ngModel]="getSelectedValueForLevel(levelIndex)"
+          [ngModel]="selectedValue"
           (onChange)="onDropdownChange(levelIndex, $event.value)"
         />
+      }
+
+      @let selectedWiki = selectedValue ? selectorsWikiParams()[selectedValue] : null;
+      @if (selectedWiki) {
+        <explorers-popover-link [wikiParams]="selectedWiki" />
       }
     </div>
   }

@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolFilterService,
   ComparisonToolService,
@@ -29,6 +30,12 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   resultsCount = signal(50000);
 
   configs: ComparisonToolConfig[] = [];
+  selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
+    'RNA - DIFFERENTIAL EXPRESSION': {
+      ownerId: 'syn66271427',
+      wikiId: '632873',
+    },
+  };
 
   ngOnInit() {
     // TODO - Replace with actual data fetching logic

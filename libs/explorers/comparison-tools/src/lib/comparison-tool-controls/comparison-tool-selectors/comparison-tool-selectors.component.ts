@@ -1,6 +1,7 @@
 import { Component, computed, effect, input, model, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { PopoverLinkComponent } from '@sagebionetworks/explorers/util';
 import { isEqual } from 'lodash';
 import { SelectItem } from 'primeng/api';
 import { Select } from 'primeng/select';
@@ -11,14 +12,14 @@ interface DropdownTree {
 
 @Component({
   selector: 'explorers-comparison-tool-selectors',
-  imports: [FormsModule, Select],
+  imports: [FormsModule, Select, PopoverLinkComponent],
   templateUrl: './comparison-tool-selectors.component.html',
   styleUrls: ['./comparison-tool-selectors.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class ComparisonToolSelectorsComponent {
   pageConfigs = input<ComparisonToolConfig[]>([]);
-  popoverWikis = input<{ [key: string]: SynapseWikiParams }>({});
+  selectorsWikiParams = input<{ [key: string]: SynapseWikiParams }>({});
   selection = model<string[]>([], { alias: 'dropdownsSelection' });
 
   dropdownTree = computed(() => {

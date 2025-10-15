@@ -3,7 +3,6 @@ import {
   ComparisonToolConfigColumn,
   ComparisonToolConfigFilter,
   ComparisonToolFilter,
-  SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 
 export const mockComparisonToolConfigFilters: ComparisonToolConfigFilter[] = [
@@ -123,14 +122,3 @@ export const mockComparisonToolConfigs: ComparisonToolConfig[] = [
     filters: mockComparisonToolConfigFilters,
   },
 ];
-
-export const mockComparisonToolSelectorPopoverWikiIds: { [key: string]: SynapseWikiParams } = {
-  First: {
-    ownerId: 'syn66271427',
-    wikiId: '632874',
-  },
-  Second: {
-    ownerId: 'syn66271427',
-    wikiId: '632873',
-  },
-};

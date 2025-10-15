@@ -1,4 +1,5 @@
 export * from './comparison-tool-config-mocks';
+export * from './comparison-tool-mocks';
 export * from './components/hero-component-mock';
 export * from './components/svg-icon-component-mock';
 export * from './components/wiki-component-mock';

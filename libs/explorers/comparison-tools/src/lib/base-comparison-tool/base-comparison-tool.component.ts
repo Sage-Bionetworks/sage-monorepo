@@ -35,7 +35,7 @@ export class BaseComparisonToolComponent {
   resultsCount = input(0);
 
   pageConfigs = input.required<ComparisonToolConfig[]>();
-  popoverWikis = input<{ [key: string]: SynapseWikiParams }>({});
+  selectorsWikiParams = input<{ [key: string]: SynapseWikiParams }>({});
 
   headerTitle = input.required<string>();
   filterResultsButtonTooltip = input.required<string>();

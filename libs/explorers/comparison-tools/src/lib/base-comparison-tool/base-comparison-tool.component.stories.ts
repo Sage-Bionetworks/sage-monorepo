@@ -6,6 +6,7 @@ import {
 } from '@sagebionetworks/explorers/services';
 import {
   mockComparisonToolConfigs,
+  mockComparisonToolSelectorsWikiParams,
   provideLoadingIconColors,
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
@@ -37,5 +38,6 @@ export const Demo: Story = {
     headerTitle: 'Gene Comparison',
     filterResultsButtonTooltip: 'Filter the results based on the selected criteria',
     pageConfigs: mockComparisonToolConfigs,
+    selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
   },
 };
