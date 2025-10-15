@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
@@ -8,7 +9,11 @@ import { DiseaseCorrelationComparisonToolComponent } from './disease-correlation
 async function setup() {
   const { fixture } = await render(DiseaseCorrelationComparisonToolComponent, {
     imports: [BaseComparisonToolComponent],
-    providers: [MessageService, provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS)],
+    providers: [
+      MessageService,
+      provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
+      provideHttpClient(),
+    ],
   });
 
   const component = fixture.componentInstance;

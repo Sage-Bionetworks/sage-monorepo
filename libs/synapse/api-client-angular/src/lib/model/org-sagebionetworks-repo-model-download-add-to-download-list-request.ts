@@ -16,7 +16,7 @@ export interface OrgSagebionetworksRepoModelDownloadAddToDownloadListRequest {
   concreteType: OrgSagebionetworksRepoModelDownloadAddToDownloadListRequest.ConcreteTypeEnum;
   query?: OrgSagebionetworksRepoModelTableQuery;
   /**
-   * The synID of a folder, project, or dataset to add all of the children files to the user\'s download list.  This parameter should be excluded when adding files from a query. Note: This is not recursive, unless the recursive property is set to true.
+   * The synID of a folder, project, dataset or dataset collection to add all of the children files to the user\'s download list.  This parameter should be excluded when adding files from a query. Note: This is not recursive, unless the recursive property is set to true.
    */
   parentId?: string;
   /**

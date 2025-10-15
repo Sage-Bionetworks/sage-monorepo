@@ -11,16 +11,40 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
 servers:
   - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
+  - name: Example Prompt
+    description: Operations about example prompts for biomedical relevance detection.
   - name: Leaderboard
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
-  - name: ExamplePrompt
-    description: Operations about example prompts for biomedical relevance detection.
 paths:
+  /example-prompts:
+    get:
+      x-anonymous-access: true
+      tags:
+        - Example Prompt
+      summary: List example prompts
+      description: Get a list of example prompts with comprehensive filtering options
+      operationId: listExamplePrompts
+      parameters:
+        - $ref: '#/components/parameters/examplePromptSearchQuery'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamplePromptPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /leaderboards:
     get:
+      x-anonymous-access: true
       tags:
         - Leaderboard
       summary: List all available leaderboards
@@ -38,14 +62,16 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}:
+    parameters:
+      - $ref: '#/components/parameters/leaderboardId'
     get:
+      x-anonymous-access: true
       tags:
         - Leaderboard
       summary: Get leaderboard entries
       description: Get paginated leaderboard entries for a specific leaderboard
       operationId: getLeaderboard
       parameters:
-        - $ref: '#/components/parameters/leaderboardId'
         - $ref: '#/components/parameters/leaderboardSearchQuery'
       responses:
         '200':
@@ -61,15 +87,17 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}/history/{modelId}:
+    parameters:
+      - $ref: '#/components/parameters/leaderboardId'
+      - $ref: '#/components/parameters/modelId'
     get:
+      x-anonymous-access: true
       tags:
         - Leaderboard
       summary: Get model performance history
       description: Get historical performance data for a specific model in a leaderboard
       operationId: getModelHistory
       parameters:
-        - $ref: '#/components/parameters/leaderboardId'
-        - $ref: '#/components/parameters/modelId'
         - $ref: '#/components/parameters/leaderboardModelHistoryQuery'
       responses:
         '200':
@@ -85,14 +113,16 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}/snapshots:
+    parameters:
+      - $ref: '#/components/parameters/leaderboardId'
     get:
+      x-anonymous-access: true
       tags:
         - Leaderboard
       summary: Get leaderboard snapshots
       description: Get a paginated list of available snapshots for a leaderboard
       operationId: getLeaderboardSnapshots
       parameters:
-        - $ref: '#/components/parameters/leaderboardId'
         - $ref: '#/components/parameters/leaderboardSnapshotQuery'
       responses:
         '200':
@@ -109,6 +139,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /models:
     get:
+      x-anonymous-access: true
       tags:
         - Model
       summary: List models
@@ -127,89 +158,23 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /example-prompts:
-    get:
-      tags:
-        - ExamplePrompt
-      summary: List example prompts
-      description: Get a list of example prompts with comprehensive filtering options
-      operationId: listExamplePrompts
-      parameters:
-        - $ref: '#/components/parameters/examplePromptSearchQuery'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExamplePromptPage'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
 components:
+  securitySchemes:
+    jwtBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Short-lived internal JWT issued by the API gateway after authentication through Synapse or an API key exchange. The token is included in the Authorization header using the Bearer scheme.
   schemas:
-    LeaderboardList:
-      type: array
-      description: A list of leaderboards.
-      items:
-        type: object
-        properties:
-          id:
-            type: string
-            description: Unique identifier for the leaderboard
-            example: open-source
-          name:
-            type: string
-            description: Display name for the leaderboard
-            example: Open Source Models
-          description:
-            type: string
-            description: Description of what this leaderboard measures
-            example: Performance ranking of open-source AI models
-          updatedAt:
-            type: string
-            format: date-time
-            description: When this leaderboard was last updated
-            example: '2025-08-16T14:30:00Z'
-        required:
-          - id
-          - name
-          - description
-          - updatedAt
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem
-      required:
-        - title
-        - status
-    LeaderboardSort:
+    ExamplePromptSort:
       type: string
-      description: The field to sort leaderboard entries by.
+      description: The field to sort example prompts by.
       enum:
-        - rank
-        - bt_score
-        - vote_count
         - created_at
-        - model_name
-      default: rank
-      example: bt_score
+        - random
+      default: created_at
+      example: random
     SortDirection:
       type: string
       description: The direction to sort results.
@@ -218,9 +183,17 @@ components:
         - desc
       default: asc
       example: desc
-    LeaderboardSearchQuery:
+    ExamplePromptSource:
+      description: The source dataset or origin of the example prompt.
+      type: string
+      enum:
+        - pubmedqa
+        - bixbench
+        - bixarena
+      example: pubmedqa
+    ExamplePromptSearchQuery:
       type: object
-      description: A leaderboard search query with pagination and filtering options.
+      description: An example prompt search query with pagination and filtering options.
       properties:
         pageNumber:
           description: The page number.
@@ -233,24 +206,28 @@ components:
           description: The number of items in a single page.
           type: integer
           format: int32
-          default: 100
+          default: 25
           minimum: 1
-          maximum: 1000
+          maximum: 100
           example: 25
         sort:
-          $ref: '#/components/schemas/LeaderboardSort'
+          $ref: '#/components/schemas/ExamplePromptSort'
         direction:
           $ref: '#/components/schemas/SortDirection'
+        source:
+          $ref: '#/components/schemas/ExamplePromptSource'
+          nullable: true
+        active:
+          description: Filter by active status (true returns only active prompts; false only inactive; omit for all).
+          type: boolean
+          nullable: true
+          example: true
         search:
-          description: Search by model name (case-insensitive partial match).
+          description: Search by question content (case-insensitive partial match).
           type: string
           nullable: true
-          example: gpt
-        snapshotId:
-          description: Get a specific historical snapshot instead of latest.
-          type: string
-          nullable: true
-          example: snapshot_2025-08-15_10-00
+          example: diabetes
+      required: []
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -290,6 +267,145 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
+    ExamplePrompt:
+      type: object
+      description: A self-contained example prompt for biomedical question answering.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the example prompt.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        question:
+          type: string
+          description: The biomedical question text.
+          minLength: 1
+          maxLength: 1000
+          example: What are the main symptoms of Type 2 diabetes?
+        source:
+          $ref: '#/components/schemas/ExamplePromptSource'
+        active:
+          type: boolean
+          description: Whether this example prompt is currently active/visible for use.
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          description: When the example prompt was created.
+          example: '2025-08-01T09:00:00Z'
+      required:
+        - id
+        - question
+        - source
+        - active
+        - createdAt
+    ExamplePromptPage:
+      type: object
+      description: A page of example prompts.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            examplePrompts:
+              type: array
+              description: A list of example prompts.
+              items:
+                $ref: '#/components/schemas/ExamplePrompt'
+          required:
+            - examplePrompts
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
+    LeaderboardList:
+      type: array
+      description: A list of leaderboards.
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            description: Unique identifier for the leaderboard
+            example: open-source
+          name:
+            type: string
+            description: Display name for the leaderboard
+            example: Open Source Models
+          description:
+            type: string
+            description: Description of what this leaderboard measures
+            example: Performance ranking of open-source AI models
+          updatedAt:
+            type: string
+            format: date-time
+            description: When this leaderboard was last updated
+            example: '2025-08-16T14:30:00Z'
+        required:
+          - id
+          - name
+          - description
+          - updatedAt
+    LeaderboardSort:
+      type: string
+      description: The field to sort leaderboard entries by.
+      enum:
+        - rank
+        - bt_score
+        - vote_count
+        - created_at
+        - model_name
+      default: rank
+      example: bt_score
+    LeaderboardSearchQuery:
+      type: object
+      description: A leaderboard search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+          example: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+          maximum: 1000
+          example: 25
+        sort:
+          $ref: '#/components/schemas/LeaderboardSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        search:
+          description: Search by model name (case-insensitive partial match).
+          type: string
+          nullable: true
+          example: gpt
+        snapshotId:
+          description: Get a specific historical snapshot instead of latest.
+          type: string
+          nullable: true
+          example: snapshot_2025-08-15_10-00
     LeaderboardEntry:
       type: object
       description: A single entry in a leaderboard representing a model's performance.
@@ -679,124 +795,15 @@ components:
                 $ref: '#/components/schemas/Model'
           required:
             - models
-    ExamplePromptSort:
-      type: string
-      description: The field to sort example prompts by.
-      enum:
-        - created_at
-        - random
-      default: created_at
-      example: random
-    ExamplePromptSource:
-      description: The source dataset or origin of the example prompt.
-      type: string
-      enum:
-        - pubmedqa
-        - bixbench
-        - bixarena
-      example: pubmedqa
-    ExamplePromptSearchQuery:
-      type: object
-      description: An example prompt search query with pagination and filtering options.
-      properties:
-        pageNumber:
-          description: The page number.
-          type: integer
-          format: int32
-          default: 0
-          minimum: 0
-          example: 0
-        pageSize:
-          description: The number of items in a single page.
-          type: integer
-          format: int32
-          default: 25
-          minimum: 1
-          maximum: 100
-          example: 25
-        sort:
-          $ref: '#/components/schemas/ExamplePromptSort'
-        direction:
-          $ref: '#/components/schemas/SortDirection'
-        source:
-          $ref: '#/components/schemas/ExamplePromptSource'
-          nullable: true
-        active:
-          description: Filter by active status (true returns only active prompts; false only inactive; omit for all).
-          type: boolean
-          nullable: true
-          example: true
-        search:
-          description: Search by question content (case-insensitive partial match).
-          type: string
-          nullable: true
-          example: diabetes
-      required: []
-    ExamplePrompt:
-      type: object
-      description: A self-contained example prompt for biomedical question answering.
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the example prompt.
-          example: 123e4567-e89b-12d3-a456-426614174000
-        question:
-          type: string
-          description: The biomedical question text.
-          minLength: 1
-          maxLength: 1000
-          example: What are the main symptoms of Type 2 diabetes?
-        source:
-          $ref: '#/components/schemas/ExamplePromptSource'
-        active:
-          type: boolean
-          description: Whether this example prompt is currently active/visible for use.
-          example: true
-        createdAt:
-          type: string
-          format: date-time
-          description: When the example prompt was created.
-          example: '2025-08-01T09:00:00Z'
-      required:
-        - id
-        - question
-        - source
-        - active
-        - createdAt
-    ExamplePromptPage:
-      type: object
-      description: A page of example prompts.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            examplePrompts:
-              type: array
-              description: A list of example prompts.
-              items:
-                $ref: '#/components/schemas/ExamplePrompt'
-          required:
-            - examplePrompts
-  responses:
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The requested resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
   parameters:
+    examplePromptSearchQuery:
+      name: examplePromptSearchQuery
+      description: The search query used to find and filter example prompts.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ExamplePromptSearchQuery'
     leaderboardId:
       name: leaderboardId
       description: The unique identifier of a leaderboard
@@ -845,11 +852,23 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
-    examplePromptSearchQuery:
-      name: examplePromptSearchQuery
-      description: The search query used to find and filter example prompts.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/ExamplePromptSearchQuery'
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The requested resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+x-oauth2-audience: urn:bixarena:api

@@ -21,6 +21,9 @@ export interface ComparisonToolConfig {
    * List of column definitions
    */
   columns: Array<ComparisonToolConfigColumn>;
-  filters?: ComparisonToolConfigFilter;
+  /**
+   * List of filter configurations
+   */
+  filters?: Array<ComparisonToolConfigFilter>;
 }
 export namespace ComparisonToolConfig {}

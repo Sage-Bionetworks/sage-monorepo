@@ -1,9 +1,12 @@
-<explorers-base-comparison-tool [isLoading]="isLoading()" [resultsCount]="resultsCount()">
+<explorers-base-comparison-tool
+  [isLoading]="isLoading()"
+  [resultsCount]="resultsCount()"
+  headerTitle="Gene Expression"
+  filterResultsButtonTooltip="Filter results by Model, Biological Domain, and more"
+  [filterConfigs]="config?.filters || []"
+  [onFiltersChange]="setFilters"
+>
   <div class="gene-expression-comparison-tool">
-    <explorers-comparison-tool-header
-      headerTitle="Gene Expression"
-      filterResultsButtonTooltip="Filter the results based on the selected criteria"
-    />
     <model-ad-gene-expression-help-links />
   </div>
 </explorers-base-comparison-tool>

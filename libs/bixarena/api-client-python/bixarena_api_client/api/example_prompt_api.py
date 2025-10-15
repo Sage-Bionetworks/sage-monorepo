@@ -290,7 +290,7 @@ class ExamplePromptApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = []
+        _auth_settings: List[str] = ["jwtBearer"]
 
         return self.api_client.param_serialize(
             method="GET",

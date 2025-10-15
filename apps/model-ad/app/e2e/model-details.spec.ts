@@ -14,6 +14,30 @@ async function expectPageNotAtTop(page: Page) {
   expect(await isPageAtTop(page)).toBe(false);
 }
 
+async function waitForScrollToStop(page: Page, timeout = 5000) {
+  let previousOffset = await page.evaluate(() => window.pageYOffset);
+  let stableCount = 0;
+  const requiredStableChecks = 10;
+
+  await expect
+    .poll(
+      async () => {
+        const currentOffset = await page.evaluate(() => window.pageYOffset);
+
+        if (currentOffset === previousOffset) {
+          stableCount++;
+          return stableCount >= requiredStableChecks;
+        } else {
+          stableCount = 0;
+          previousOffset = currentOffset;
+          return false;
+        }
+      },
+      { timeout, intervals: [200] },
+    )
+    .toBe(true);
+}
+
 test.describe('model details', () => {
   test('invalid model results in a 404 redirect', async ({ page }) => {
     await page.goto('/models/DOES-NOT-EXIST');
@@ -442,12 +466,14 @@ test.describe('model details - boxplots selector - share links - same-document n
   }) => {
     await page.goto(`${basePath}#${validFragment}`);
     await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
+    await waitForScrollToStop(page);
 
     const invalidFragment = 'does-not-exist';
     await page.evaluate((fragment) => {
       window.location.hash = fragment;
     }, invalidFragment);
 
+    await waitForScrollToStop(page);
     await expectPageAtTop(page);
     await expect(page).toHaveURL(`${baseURL}${basePath}`);
     await expect(page.getByRole('heading', { level: 1, name: modelName })).toBeInViewport();
