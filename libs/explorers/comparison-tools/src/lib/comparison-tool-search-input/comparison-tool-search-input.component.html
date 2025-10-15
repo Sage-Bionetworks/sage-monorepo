@@ -9,10 +9,10 @@
     type="text"
     pInputText
     (input)="onSearchInput($event)"
-    [value]="searchTerm()"
+    [value]="searchTerm"
     placeholder="Search"
   />
-  @if (searchTerm()) {
+  @if (searchTerm) {
     <button (click)="clearSearch()">
       <explorers-svg-icon
         imagePath="/explorers-assets/icons/close.svg"

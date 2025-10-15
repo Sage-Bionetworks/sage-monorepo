@@ -12,46 +12,24 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
   encapsulation: ViewEncapsulation.None,
 })
 export class ComparisonToolSearchInputComponent {
-  private filterPanelService = inject(ComparisonToolFilterService);
-  searchTerm = signal('');
+  private comparisonToolFilterService = inject(ComparisonToolFilterService);
+
+  get searchTerm() {
+    return this.comparisonToolFilterService.searchTerm();
+  }
 
   onSearchInput(event: Event) {
-    const el = event?.target as HTMLTextAreaElement;
-    this.setSearchTerm(el.value);
+    const input = event?.target as HTMLInputElement | HTMLTextAreaElement;
+    if (input) {
+      this.setSearchTerm(input.value);
+    }
   }
 
   setSearchTerm(term: string) {
-    this.searchTerm.set(term);
-    this.filter();
-  }
-
-  filter() {
-    const filters: { [key: string]: any } = {};
-
-    if (this.searchTerm()) {
-      if (this.searchTerm().indexOf(',') !== -1) {
-        const terms = this.searchTerm()
-          .toLowerCase()
-          .split(',')
-          .map((t: string) => t.trim())
-          .filter((t: string) => t !== '');
-        filters['search_array'] = {
-          value: terms,
-          matchMode: 'intersect',
-        };
-      } else {
-        filters['search_string'] = {
-          value: this.searchTerm().toLowerCase(),
-          matchMode: 'contains',
-        };
-      }
-    }
-
-    this.filterPanelService.updateSearchFilters(filters);
+    this.comparisonToolFilterService.updateSearchTerm(term);
   }
 
   clearSearch() {
-    this.searchTerm.set('');
-    this.filter();
+    this.setSearchTerm('');
   }
 }
