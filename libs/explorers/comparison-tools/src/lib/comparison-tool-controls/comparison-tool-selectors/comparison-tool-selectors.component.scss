@@ -1,5 +1,11 @@
 @use 'explorers/styles/src/lib/variables' as variables;
 
+%selector-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
 explorers-comparison-tool-selectors {
   flex: 1 1 auto;
 }
@@ -39,9 +45,8 @@ explorers-comparison-tool-selectors {
 
     .p-select-label {
       padding: 0;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--color-text);
+
+      @extend %selector-text;
     }
 
     .p-select-dropdown-icon {
@@ -99,5 +104,9 @@ explorers-comparison-tool-selectors {
         color: var(--color-action-primary);
       }
     }
+  }
+
+  .selector-value {
+    @extend %selector-text;
   }
 }
