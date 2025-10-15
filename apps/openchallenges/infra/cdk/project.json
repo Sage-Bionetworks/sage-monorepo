@@ -1,0 +1,96 @@
+{
+  "name": "openchallenges-infra-cdk",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/openchallenges/infra/cdk/openchallenges_infra_cdk",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "cp --update=none .env.example .env",
+          "cp --update=none .env.dev.example .env.dev",
+          "cp --update=none .env.stage.example .env.stage",
+          "cp --update=none .env.prod.example .envprod"
+        ],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      },
+      "cache": true
+    },
+    "lint": {
+      "executor": "@nxlv/python:ruff-check",
+      "outputs": [],
+      "options": {
+        "lintFilePatterns": ["openchallenges_infra_cdk", "tests"]
+      },
+      "cache": true
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/{projectRoot}/unittests",
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "command": "uv run pytest tests/",
+        "cwd": "{projectRoot}"
+      },
+      "cache": true
+    },
+    "synth": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdk synth",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdk deploy",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "ls": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdk ls",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    }
+  },
+  "tags": ["language:python", "package-manager:uv"],
+  "release": {
+    "version": {
+      "versionActions": "@nxlv/python/src/release/version-actions"
+    }
+  }
+}
