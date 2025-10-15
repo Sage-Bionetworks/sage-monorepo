@@ -1,0 +1,73 @@
+[tool.coverage.run]
+branch = true
+source = [ "openchallenges_infra_cdk" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = """
+ --cov
+ --cov-fail-under=50
+ --cov-report html:'../../../../coverage/apps/openchallenges/infra/cdk/html'
+ --cov-report xml:'../../../../coverage/apps/openchallenges/infra/cdk/coverage.xml'
+ --html='../../../../reports/apps/openchallenges/infra/cdk/unittests/html/index.html'
+ --junitxml='../../../../reports/apps/openchallenges/infra/cdk/unittests/junit.xml'
+"""
+
+[project]
+name = "openchallenges-infra-cdk"
+version = "1.0.0"
+description = "CDK application for deploying the OpenChallenges infrastructure to AWS."
+requires-python = "==3.13.3"
+readme = 'README.md'
+dependencies = [
+  "aws-cdk-lib>=2.219.0",
+  "boto3>=1.40.51",
+]
+
+[project.scripts]
+"openchallenges-infra-cdk" = "openchallenges_infra_cdk.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["openchallenges_infra_cdk"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
+]
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []

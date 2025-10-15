@@ -11,6 +11,7 @@ members = [
     "bixarena-tools",
     "openchallenges-api-client",
     "openchallenges-client",
+    "openchallenges-infra-cdk",
     "openchallenges-tools",
     "sage-monorepo",
 ]
@@ -1052,6 +1053,21 @@ requires-dist = [
     { name = "questionary", specifier = ">=2.0.0" },
     { name = "rich", specifier = ">=13.7.0" },
     { name = "typer", specifier = ">=0.12.3" },
+]
+
+[[package]]
+name = "openchallenges-infra-cdk"
+version = "1.0.0"
+source = { editable = "apps/openchallenges/infra/cdk" }
+dependencies = [
+    { name = "aws-cdk-lib" },
+    { name = "boto3" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "aws-cdk-lib", specifier = ">=2.219.0" },
+    { name = "boto3", specifier = ">=1.40.51" },
 ]
 
 [[package]]

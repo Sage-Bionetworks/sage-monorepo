@@ -63,6 +63,7 @@ members = [
   "apps/bixarena/app",
   "apps/bixarena/infra/cdk",
   "apps/bixarena/tools",
+  "apps/openchallenges/infra/cdk",
   "apps/openchallenges/tools",
   "libs/bixarena/api-client-python",
   "libs/openchallenges/api-client-python",
