@@ -13,7 +13,6 @@ import {
   provideRouter,
   UrlSerializer,
   withComponentInputBinding,
-  withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client';
@@ -57,7 +56,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withComponentInputBinding(),
-      withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
       }),
