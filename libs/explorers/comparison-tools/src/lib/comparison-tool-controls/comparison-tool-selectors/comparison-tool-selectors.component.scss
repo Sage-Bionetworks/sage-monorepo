@@ -1,16 +1,39 @@
 @use 'explorers/styles/src/lib/variables' as variables;
 
+explorers-comparison-tool-selectors {
+  flex: 1 1 auto;
+}
+
 .comparison-tool-selectors {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+
+  .selector-container {
+    display: flex;
+    width: 100%;
+  }
 
   .selector-container:first-of-type {
-    border-bottom: 1px solid var(--color-gray-200);
+    position: relative;
+    padding-bottom: 10px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: var(--color-gray-200);
+    }
   }
 
   .p-select {
-    padding: 0 0 10px;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;
     border: none;
     background-color: transparent;
 
