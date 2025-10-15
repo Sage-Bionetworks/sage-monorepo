@@ -17,6 +17,7 @@
             [popoverWikis]="popoverWikis()"
             [(selection)]="selection"
           />
+          <explorers-comparison-tool-columns />
           <ng-content></ng-content>
           <explorers-comparison-tool-filter-panel
             [filterConfigs]="currentConfig()?.filters || []"
