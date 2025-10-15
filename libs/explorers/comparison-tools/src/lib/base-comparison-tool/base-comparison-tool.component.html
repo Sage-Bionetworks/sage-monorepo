@@ -12,11 +12,16 @@
     <div class="comparison-tool-body">
       <div class="comparison-tool-body-inner">
         <div class="comparison-tool-tables">
+          <explorers-comparison-tool-controls
+            [pageConfigs]="pageConfigs()"
+            [popoverWikis]="popoverWikis()"
+            [(selection)]="selection"
+          />
           <ng-content></ng-content>
           <explorers-comparison-tool-filter-panel
             [filterConfigs]="filterConfigs()"
             [(isOpen)]="isFilterPanelOpen"
-            (filtersChanged)="onFiltersChange()($event)"
+            (filtersChanged)="filtersChanged.emit($event)"
           />
         </div>
       </div>
