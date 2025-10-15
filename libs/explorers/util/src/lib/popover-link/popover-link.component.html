@@ -1,0 +1,21 @@
+<div class="popover-link-container">
+  <button (click)="toggle($event)">
+    <span class="popover-link-inner">
+      <span class="popover-link-icon">
+        <explorers-svg-icon
+          imagePath="/explorers-assets/icons/info-circle.svg"
+          [width]="16"
+          [height]="16"
+          altText="info"
+        />
+      </span>
+    </span>
+  </button>
+  <p-popover #popover>
+    <div class="popover-link-content">
+      @if (wikiParams() && isActive) {
+        <explorers-wiki [wikiParams]="wikiParams()" />
+      }
+    </div>
+  </p-popover>
+</div>
