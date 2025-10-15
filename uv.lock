@@ -281,12 +281,14 @@ source = { editable = "apps/bixarena/infra/cdk" }
 dependencies = [
     { name = "aws-cdk-lib" },
     { name = "boto3" },
+    { name = "platform-infra-cdk-common" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "aws-cdk-lib", specifier = ">=2.219.0" },
     { name = "boto3", specifier = ">=1.40.51" },
+    { name = "platform-infra-cdk-common", editable = "libs/platform/infra/cdk/common" },
 ]
 
 [[package]]
@@ -1063,12 +1065,14 @@ source = { editable = "apps/openchallenges/infra/cdk" }
 dependencies = [
     { name = "aws-cdk-lib" },
     { name = "boto3" },
+    { name = "platform-infra-cdk-common" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "aws-cdk-lib", specifier = ">=2.219.0" },
     { name = "boto3", specifier = ">=1.40.51" },
+    { name = "platform-infra-cdk-common", editable = "libs/platform/infra/cdk/common" },
 ]
 
 [[package]]
@@ -1627,7 +1631,9 @@ name = "sage-monorepo"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "bixarena-infra-cdk" },
     { name = "openchallenges-client" },
+    { name = "openchallenges-infra-cdk" },
 ]
 
 [package.dev-dependencies]
@@ -1645,7 +1651,11 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "openchallenges-client", editable = "libs/openchallenges/client-python" }]
+requires-dist = [
+    { name = "bixarena-infra-cdk", editable = "apps/bixarena/infra/cdk" },
+    { name = "openchallenges-client", editable = "libs/openchallenges/client-python" },
+    { name = "openchallenges-infra-cdk", editable = "apps/openchallenges/infra/cdk" },
+]
 
 [package.metadata.requires-dev]
 dev = [

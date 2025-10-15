@@ -25,6 +25,7 @@ readme = 'README.md'
 dependencies = [
   "aws-cdk-lib>=2.219.0",
   "boto3>=1.40.51",
+  "platform-infra-cdk-common",
 ]
 
 [project.scripts]
@@ -71,3 +72,6 @@ ignore = []
 
 fixable = ["ALL"]
 unfixable = []
+
+[tool.uv.sources]
+platform-infra-cdk-common = { workspace = true }
