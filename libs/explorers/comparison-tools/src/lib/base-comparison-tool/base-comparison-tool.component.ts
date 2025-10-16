@@ -33,15 +33,13 @@ export class BaseComparisonToolComponent {
 
   isLoading = input(true);
   resultsCount = input(0);
-
   pageConfigs = input.required<ComparisonToolConfig[]>();
   selectorsWikiParams = input<{ [key: string]: SynapseWikiParams }>({});
-
+  significanceControls = input(true);
   headerTitle = input.required<string>();
   filterResultsButtonTooltip = input.required<string>();
 
   isFilterPanelOpen = model(false);
-
   dropdownsSelection = model<string[]>([]);
 
   currentConfig = computed(() => {

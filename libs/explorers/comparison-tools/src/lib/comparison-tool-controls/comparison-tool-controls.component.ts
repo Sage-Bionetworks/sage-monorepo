@@ -20,5 +20,7 @@ import { SignificanceControlsComponent } from '../significance-controls/signific
 export class ComparisonToolControlsComponent {
   pageConfigs = input<ComparisonToolConfig[]>([]);
   selectorsWikiParams = input<{ [key: string]: SynapseWikiParams }>({});
+  significanceControls = input(true);
+
   dropdownsSelection = model<string[]>([]);
 }

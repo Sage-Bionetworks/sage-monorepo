@@ -9,6 +9,8 @@
       [selectorsWikiParams]="selectorsWikiParams()"
       [(dropdownsSelection)]="dropdownsSelection"
     />
-    <explorers-significance-controls />
+    @if (significanceControls()) {
+      <explorers-significance-controls />
+    }
   </div>
 </div>
