@@ -13,12 +13,13 @@ import { isEqual } from 'lodash';
 export class ComparisonToolService {
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly dropdownSelectionSignal = signal<string[]>([]);
-  private readonly isLegendVisible$ = signal(false);
+  private readonly isLegendVisibleSignal = signal(false);
   private readonly selectorsWikiParamsSignal = signal<Record<string, SynapseWikiParams>>({});
 
   readonly configs = this.configsSignal.asReadonly();
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
   readonly selectorsWikiParams = this.selectorsWikiParamsSignal.asReadonly();
+  readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -62,16 +63,12 @@ export class ComparisonToolService {
   totalResultsCount = signal<number>(0);
   pinnedResultsCount = signal<number>(0);
 
-  isLegendVisible() {
-    return this.isLegendVisible$();
-  }
-
   setLegendVisibility(visible: boolean) {
-    this.isLegendVisible$.set(visible);
+    this.isLegendVisibleSignal.set(visible);
   }
 
   toggleLegend() {
-    this.isLegendVisible$.update((visible) => !visible);
+    this.isLegendVisibleSignal.update((visible) => !visible);
   }
 
   initialize(
