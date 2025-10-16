@@ -109,7 +109,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
           this.comparisonToolService.totalResultsCount.set(data.length);
         },
         error: (error) => {
-          throw new Error('Error fetching model overview data:', { cause: error });
+          throw new Error('Error fetching disease correlation data:', { cause: error });
         },
         complete: () => {
           this.isLoading.set(false);

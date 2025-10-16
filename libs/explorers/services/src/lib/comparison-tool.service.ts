@@ -4,6 +4,7 @@ import { isEqual } from 'lodash';
 
 /**
  * Shared state contract for comparison tools.
+ *
  * - Call {@link initialize} when configs load to seed dropdowns, reset counts, and wiki params.
  * - Read derived state via {@link configs}, {@link dropdownSelection}, {@link currentConfig}, and {@link columns}.
  * - Update user selections through {@link setDropdownSelection}; consumers can read the latest value via {@link dropdownSelection}.
