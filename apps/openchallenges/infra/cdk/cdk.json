@@ -1,5 +1,6 @@
 {
-  "app": "uv run openchallenges-infra-cdk",
+  "app": "python -m openchallenges_infra_cdk.${ENV}.app",
+  "requireApproval": "never",
   "watch": {
     "include": ["**"],
     "exclude": [

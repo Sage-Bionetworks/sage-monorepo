@@ -57,21 +57,43 @@
         "dev": {},
         "stage": {},
         "prod": {}
-      },
-      "defaultConfiguration": "dev"
+      }
     },
     "deploy": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cdk deploy",
+        "command": "cdk deploy --all",
         "cwd": "{projectRoot}"
       },
       "configurations": {
         "dev": {},
         "stage": {},
         "prod": {}
+      }
+    },
+    "destroy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdk destroy --all --force",
+        "cwd": "{projectRoot}"
       },
-      "defaultConfiguration": "dev"
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      }
+    },
+    "diff": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdk diff",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      }
     },
     "ls": {
       "executor": "nx:run-commands",
