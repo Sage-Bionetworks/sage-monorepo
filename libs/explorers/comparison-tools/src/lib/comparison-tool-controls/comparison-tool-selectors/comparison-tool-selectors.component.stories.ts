@@ -1,5 +1,6 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
+import { provideComparisonToolService } from '@sagebionetworks/explorers/services';
 import {
   mockComparisonToolConfigs,
   mockComparisonToolSelectorsWikiParams,
@@ -26,14 +27,29 @@ export default meta;
 type Story = StoryObj<ComparisonToolSelectorsComponent>;
 
 export const MultipleDropdowns: Story = {
+  decorators: [
+    applicationConfig({
+      providers: [
+        ...provideComparisonToolService({
+          configs: mockComparisonToolConfigs,
+        }),
+      ],
+    }),
+  ],
   args: {
-    pageConfigs: mockComparisonToolConfigs,
     selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
   },
 };
 
 export const NoDropdowns: Story = {
-  args: {
-    pageConfigs: [{ ...mockComparisonToolConfigs[0], dropdowns: [] }],
-  },
+  decorators: [
+    applicationConfig({
+      providers: [
+        ...provideComparisonToolService({
+          configs: [{ ...mockComparisonToolConfigs[0], dropdowns: [] }],
+        }),
+      ],
+    }),
+  ],
+  args: {},
 };

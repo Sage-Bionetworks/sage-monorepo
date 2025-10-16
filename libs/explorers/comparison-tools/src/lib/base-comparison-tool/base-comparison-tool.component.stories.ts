@@ -21,7 +21,10 @@ const meta: Meta<BaseComparisonToolComponent> = {
       providers: [
         provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
-        ...provideComparisonToolService(),
+        ...provideComparisonToolService({
+          configs: mockComparisonToolConfigs,
+          totalResultsCount: 1000,
+        }),
         ...provideComparisonToolFilterService(),
         ...provideLoadingIconColors(),
       ],
@@ -34,10 +37,8 @@ type Story = StoryObj<BaseComparisonToolComponent>;
 export const Demo: Story = {
   args: {
     isLoading: false,
-    resultsCount: 1000,
     headerTitle: 'Gene Comparison',
     filterResultsButtonTooltip: 'Filter the results based on the selected criteria',
-    pageConfigs: mockComparisonToolConfigs,
     selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
   },
 };

@@ -1,9 +1,12 @@
 import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import { ComparisonToolConfigService } from '@sagebionetworks/model-ad/api-client';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
+import { of } from 'rxjs';
 import { GeneExpressionComparisonToolComponent } from './gene-expression-comparison-tool.component';
 
 async function setup() {
@@ -13,6 +16,13 @@ async function setup() {
       MessageService,
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
       provideHttpClient(),
+      provideRouter([]),
+      {
+        provide: ComparisonToolConfigService,
+        useValue: {
+          getComparisonToolConfig: jest.fn().mockReturnValue(of([])),
+        },
+      },
     ],
   });
 

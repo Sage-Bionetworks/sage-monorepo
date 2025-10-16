@@ -1,8 +1,8 @@
-import { Component, computed, effect, input, model, ViewEncapsulation } from '@angular/core';
+import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { PopoverLinkComponent } from '@sagebionetworks/explorers/util';
-import { isEqual } from 'lodash';
 import { SelectItem } from 'primeng/api';
 import { Select } from 'primeng/select';
 
@@ -18,9 +18,10 @@ interface DropdownTree {
   encapsulation: ViewEncapsulation.None,
 })
 export class ComparisonToolSelectorsComponent {
-  pageConfigs = input<ComparisonToolConfig[]>([]);
+  private readonly comparisonToolService = inject(ComparisonToolService);
+
+  pageConfigs = computed(() => this.comparisonToolService.configs());
   selectorsWikiParams = input<{ [key: string]: SynapseWikiParams }>({});
-  selection = model<string[]>([], { alias: 'dropdownsSelection' });
 
   dropdownTree = computed(() => {
     const configs = this.pageConfigs();
@@ -34,24 +35,18 @@ export class ComparisonToolSelectorsComponent {
     return this.getDropdownOptionsFromTree(tree);
   });
 
-  constructor() {
-    effect(() => {
-      this.validateSelection();
-    });
-  }
-
   private buildDropdownTree(configs: ComparisonToolConfig[]): DropdownTree {
     const tree: DropdownTree = {};
 
-    configs.forEach((config) => {
+    for (const config of configs) {
       let currentLevel = tree;
-      config.dropdowns.forEach((value) => {
+      for (const value of config.dropdowns ?? []) {
         if (!currentLevel[value]) {
           currentLevel[value] = {};
         }
         currentLevel = currentLevel[value];
-      });
-    });
+      }
+    }
 
     return tree;
   }
@@ -59,6 +54,8 @@ export class ComparisonToolSelectorsComponent {
   private getDropdownOptionsFromTree(tree: DropdownTree): SelectItem[][] {
     const levels: SelectItem[][] = [];
     let currentTree = tree;
+
+    const selection = this.getSelection();
 
     let levelIndex = 0;
     while (this.hasKeys(currentTree)) {
@@ -69,8 +66,8 @@ export class ComparisonToolSelectorsComponent {
 
       levels.push(options);
 
-      if (levelIndex < this.selection().length) {
-        const selectedValue = this.selection()[levelIndex];
+      if (levelIndex < selection.length) {
+        const selectedValue = selection[levelIndex];
         if (currentTree[selectedValue]) {
           currentTree = currentTree[selectedValue];
         } else {
@@ -88,23 +85,6 @@ export class ComparisonToolSelectorsComponent {
     return levels;
   }
 
-  private validateSelection(): void {
-    const tree = this.dropdownTree();
-    const selection = this.selection();
-
-    if (!this.hasKeys(tree)) {
-      if (selection.length > 0) {
-        this.selection.set([]);
-      }
-      return;
-    }
-
-    const normalizedSelection = this.normalizeSelection(selection, tree);
-    if (!isEqual(selection, normalizedSelection)) {
-      this.selection.set(normalizedSelection);
-    }
-  }
-
   private autoCompleteSelection(currentLevel: DropdownTree, selection: string[]): void {
     while (this.hasKeys(currentLevel)) {
       const firstKey = Object.keys(currentLevel)[0];
@@ -113,35 +93,9 @@ export class ComparisonToolSelectorsComponent {
     }
   }
 
-  private normalizeSelection(selection: string[], tree: DropdownTree): string[] {
-    if (!this.hasKeys(tree)) {
-      return [];
-    }
-
-    const normalized: string[] = [];
-    let currentLevel = tree;
-
-    for (const value of selection) {
-      const nextLevel = currentLevel[value];
-      if (!nextLevel) {
-        break;
-      }
-
-      normalized.push(value);
-      currentLevel = nextLevel;
-    }
-
-    if (normalized.length === 0) {
-      this.autoCompleteSelection(tree, normalized);
-      return normalized;
-    }
-
-    this.autoCompleteSelection(currentLevel, normalized);
-    return normalized;
-  }
-
   onDropdownChange(levelIndex: number, selectedValue: string): void {
-    const newSelection = this.selection().slice(0, levelIndex + 1);
+    const currentSelection = this.getSelection();
+    const newSelection = currentSelection.slice(0, levelIndex + 1);
     newSelection[levelIndex] = selectedValue;
 
     const tree = this.dropdownTree();
@@ -157,14 +111,18 @@ export class ComparisonToolSelectorsComponent {
 
     this.autoCompleteSelection(currentLevel, newSelection);
 
-    this.selection.set(newSelection);
+    this.comparisonToolService.setDropdownSelection(newSelection);
   }
 
   getSelectedValueForLevel(levelIndex: number): string | undefined {
-    return this.selection()[levelIndex];
+    return this.getSelection()[levelIndex];
   }
 
   private hasKeys(tree: DropdownTree): boolean {
     return Object.keys(tree).length > 0;
+  }
+
+  private getSelection(): string[] {
+    return this.comparisonToolService.dropdownSelection();
   }
 }
