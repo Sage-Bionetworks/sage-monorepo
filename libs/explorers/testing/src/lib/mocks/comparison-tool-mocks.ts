@@ -1,50 +1,12 @@
-import {
-  ComparisonToolConfigFilter,
-  ComparisonToolFilter,
-} from '@sagebionetworks/explorers/models';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
-export const mockComparisonToolConfigFilters: ComparisonToolConfigFilter[] = [
-  {
-    name: 'Age',
-    field: 'age',
-    values: ['4 months', '8 months', '12 months'],
+export const mockComparisonToolSelectorsWikiParams: { [key: string]: SynapseWikiParams } = {
+  Red: {
+    ownerId: 'syn66271427',
+    wikiId: '632874',
   },
-  {
-    name: 'Model Type',
-    field: 'model_type',
-    values: ['Familial AD', 'Late Onset AD'],
+  Blue: {
+    ownerId: 'syn66271427',
+    wikiId: '632873',
   },
-  {
-    name: 'Sex',
-    field: 'sex',
-    values: ['Female', 'Male'],
-  },
-];
-
-export const mockComparisonToolFilters: ComparisonToolFilter[] = [
-  {
-    name: 'Age',
-    field: 'age',
-    options: [
-      { label: '4 months', selected: false },
-      { label: '8 months', selected: false },
-      { label: '12 months', selected: false },
-    ],
-  },
-  {
-    name: 'Model Type',
-    field: 'model_type',
-    options: [
-      { label: 'Familial AD', selected: false },
-      { label: 'Late Onset AD', selected: false },
-    ],
-  },
-  {
-    name: 'Sex',
-    field: 'sex',
-    options: [
-      { label: 'Female', selected: false },
-      { label: 'Male', selected: false },
-    ],
-  },
-];
+};

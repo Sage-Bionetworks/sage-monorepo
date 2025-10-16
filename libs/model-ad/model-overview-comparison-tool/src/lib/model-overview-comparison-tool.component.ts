@@ -1,18 +1,20 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import {
-  BaseComparisonToolComponent,
-  ComparisonToolColumnsComponent,
-  ComparisonToolControlsComponent,
-} from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
-import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
+  ComparisonToolFilterService,
+  ComparisonToolService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
+  ComparisonToolConfigService,
+  ComparisonToolPage,
   ModelOverview,
   ModelOverviewService,
 } from '@sagebionetworks/model-ad/api-client';
+import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
 import { ModelOverviewMainTableComponent } from './components/model-overview-main-table/model-overview-main-table.component';
 
@@ -20,59 +22,48 @@ import { ModelOverviewMainTableComponent } from './components/model-overview-mai
   selector: 'model-ad-model-overview-comparison-tool',
   imports: [
     BaseComparisonToolComponent,
-    ComparisonToolControlsComponent,
     ModelOverviewMainTableComponent,
     ModelOverviewHelpLinksComponent,
-    ComparisonToolColumnsComponent,
   ],
-  providers: [ComparisonToolService],
+  providers: [ComparisonToolService, ComparisonToolFilterService],
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })
 export class ModelOverviewComparisonToolComponent implements OnInit {
-  private platformService = inject(PlatformService);
-  private destroyRef = inject(DestroyRef);
-
+  private readonly platformService = inject(PlatformService);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly comparisonToolService = inject(ComparisonToolService);
+  private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly modelOverviewService = inject(ModelOverviewService);
-
-  private readonly route = inject(ActivatedRoute);
 
   data: ModelOverview[] = [];
 
   isLoading = signal(true);
-  columns = this.comparisonToolService.columns;
   resultsCount = this.comparisonToolService.totalResultsCount;
 
-  config!: ComparisonToolConfig;
-
-  constructor() {
-    if (this.platformService.isBrowser) {
-      this.config = this.getConfig();
-      this.columns.set(this.getColumnsFromConfig(this.config));
-    }
-  }
+  configs: ComparisonToolConfig[] = [];
 
   ngOnInit() {
     if (this.platformService.isBrowser) {
+      this.getConfigs();
       this.getData();
     }
   }
 
-  getConfig() {
-    return this.route.snapshot.data['comparisonToolConfig'];
-  }
-
-  getColumnsFromConfig(config: ComparisonToolConfig) {
-    let columns: string[] = [];
-    if (config && config.columns) {
-      columns = config.columns.map((column) => column.name);
-      return columns;
-    } else {
-      throw new Error(
-        'Missing comparison tool config data: "columns" property is undefined or empty.',
-      );
-    }
+  getConfigs() {
+    this.comparisonToolConfigService
+      .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (configs: ComparisonToolConfig[]) => {
+          this.configs = configs;
+        },
+        error: (error) => {
+          console.error('Error retrieving comparison tool config: ', error);
+          this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
+        },
+      });
   }
 
   getData() {
@@ -91,9 +82,4 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
         },
       });
   }
-
-  setFilters = (filters: ComparisonToolFilter[]) => {
-    // TODO: filter data based on selected filters
-    console.log('Filters changed:', filters);
-  };
 }

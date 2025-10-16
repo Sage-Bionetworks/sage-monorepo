@@ -1,5 +1,7 @@
 export * from './lib/breakpoint-config.service';
+export * from './lib/comparison-tool-filter.service';
 export * from './lib/comparison-tool.service';
+export * from './lib/comparison-tool.service.providers';
 export * from './lib/github.service';
 export * from './lib/global-error-handler.service';
 export * from './lib/helper.service';

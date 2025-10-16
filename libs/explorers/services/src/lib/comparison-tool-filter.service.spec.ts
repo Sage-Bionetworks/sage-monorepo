@@ -1,12 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { ComparisonToolFilterService } from './comparison-tool-filter.service';
 import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
+import { FilterService } from 'primeng/api';
+import { ComparisonToolFilterService } from './comparison-tool-filter.service';
+import { provideComparisonToolFilterService } from './comparison-tool.service.providers';
 
 describe('ComparisonToolFilterService', () => {
   let service: ComparisonToolFilterService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [FilterService, ...provideComparisonToolFilterService()],
+    });
     service = TestBed.inject(ComparisonToolFilterService);
   });
 

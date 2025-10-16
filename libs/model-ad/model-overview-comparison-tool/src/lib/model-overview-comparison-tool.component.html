@@ -3,12 +3,9 @@
   [resultsCount]="resultsCount()"
   headerTitle="Model Overview"
   filterResultsButtonTooltip="Filter results by Model Type, Modified Gene, and more"
-  [filterConfigs]="config.filters || []"
-  [onFiltersChange]="setFilters"
+  [pageConfigs]="configs"
 >
   <div class="model-overview-comparison-tool">
-    <explorers-comparison-tool-controls />
-    <explorers-comparison-tool-columns />
     <model-ad-model-overview-main-table [data]="data" />
     <model-ad-model-overview-help-links />
   </div>
