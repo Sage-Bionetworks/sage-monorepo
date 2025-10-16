@@ -12,6 +12,7 @@ import {
   ComparisonToolConfigService,
   ComparisonToolPage,
 } from '@sagebionetworks/model-ad/api-client';
+import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { GeneExpressionHelpLinksComponent } from './components/gene-expression-help-links/gene-expression-help-links.component';
 
 @Component({
@@ -52,7 +53,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
-          this.router.navigateByUrl('/not-found', { skipLocationChange: true });
+          this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
         },
       });
   }

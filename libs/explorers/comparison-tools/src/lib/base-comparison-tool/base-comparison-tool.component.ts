@@ -56,11 +56,7 @@ export class BaseComparisonToolComponent {
       return defaultConfig;
     }
 
-    return (
-      configs.find((config) => isEqual(config.dropdowns, dropdownsSelection)) ||
-      defaultConfig ||
-      null
-    );
+    return configs.find((config) => isEqual(config.dropdowns, dropdownsSelection)) || defaultConfig;
   });
 
   constructor() {

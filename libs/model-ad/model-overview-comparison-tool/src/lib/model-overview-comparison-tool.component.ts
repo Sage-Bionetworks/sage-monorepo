@@ -14,6 +14,7 @@ import {
   ModelOverview,
   ModelOverviewService,
 } from '@sagebionetworks/model-ad/api-client';
+import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
 import { ModelOverviewMainTableComponent } from './components/model-overview-main-table/model-overview-main-table.component';
 
@@ -60,7 +61,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
-          this.router.navigateByUrl('/not-found', { skipLocationChange: true });
+          this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
         },
       });
   }
