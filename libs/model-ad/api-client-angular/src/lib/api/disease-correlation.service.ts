@@ -109,10 +109,12 @@ export class DiseaseCorrelationService {
   /**
    * Get disease correlation comparison data
    * Returns a list of disease correlation objects for use in comparison tools.
+   * @param category An ordered list of categories used to filter the disease correlation data, where the first value is the category and the second is the subcategory. Pass each value by repeating the \&#39;category\&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getDiseaseCorrelations(
+    category: Array<string>,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -122,6 +124,7 @@ export class DiseaseCorrelationService {
     },
   ): Observable<Array<DiseaseCorrelation>>;
   public getDiseaseCorrelations(
+    category: Array<string>,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -131,6 +134,7 @@ export class DiseaseCorrelationService {
     },
   ): Observable<HttpResponse<Array<DiseaseCorrelation>>>;
   public getDiseaseCorrelations(
+    category: Array<string>,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -140,6 +144,7 @@ export class DiseaseCorrelationService {
     },
   ): Observable<HttpEvent<Array<DiseaseCorrelation>>>;
   public getDiseaseCorrelations(
+    category: Array<string>,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -148,6 +153,23 @@ export class DiseaseCorrelationService {
       transferCache?: boolean;
     },
   ): Observable<any> {
+    if (category === null || category === undefined) {
+      throw new Error(
+        'Required parameter category was null or undefined when calling getDiseaseCorrelations.',
+      );
+    }
+
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (category) {
+      category.forEach((element) => {
+        localVarQueryParameters = this.addToHttpParams(
+          localVarQueryParameters,
+          <any>element,
+          'category',
+        );
+      });
+    }
+
     let localVarHeaders = this.defaultHeaders;
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -187,6 +209,7 @@ export class DiseaseCorrelationService {
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
+        params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
