@@ -21,7 +21,7 @@ def main() -> None:
 
     # Add common tags
     cdk.Tags.of(app).add("Environment", environment)
-    cdk.Tags.of(app).add("Project", "OpenChallenges")
+    cdk.Tags.of(app).add("Product", "OpenChallenges")
     cdk.Tags.of(app).add("ManagedBy", "CDK")
 
     # Create bucket stack
