@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
+import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { ComparisonToolFilterService } from './comparison-tool-filter.service';
 import { ComparisonToolService } from './comparison-tool.service';
 
@@ -9,6 +9,7 @@ export type ComparisonToolServiceOptions = {
   totalResultsCount?: number;
   pinnedResultsCount?: number;
   legendVisible?: boolean;
+  selectorsWikiParams?: Record<string, SynapseWikiParams>;
 };
 
 export const provideComparisonToolService = (
@@ -25,9 +26,13 @@ export const provideComparisonToolService = (
         const service = new ComparisonToolService();
 
         if (options.configs) {
-          service.initialize(options.configs, options.selection);
+          service.initialize(options.configs, options.selection, options.selectorsWikiParams);
         } else if (options.selection) {
           service.setDropdownSelection(options.selection);
+        }
+
+        if (!options.configs && options.selectorsWikiParams) {
+          service.setSelectorsWikiParams(options.selectorsWikiParams);
         }
 
         if (options.totalResultsCount !== undefined) {

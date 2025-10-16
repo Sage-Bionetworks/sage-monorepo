@@ -1,10 +1,10 @@
 import { Injectable, Signal, computed, signal } from '@angular/core';
-import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
+import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 
 /**
  * Shared state contract for comparison tools.
- * - Call {@link initialize} when configs load to seed dropdowns and reset counts.
+ * - Call {@link initialize} when configs load to seed dropdowns, reset counts, and wiki params.
  * - Read derived state via {@link configs}, {@link dropdownSelection}, {@link currentConfig}, and {@link columns}.
  * - Update user selections through {@link setDropdownSelection}; consumers can read the latest value via {@link dropdownSelection}.
  * - Manage result totals via {@link totalResultsCount} and {@link pinnedResultsCount}.
@@ -14,9 +14,11 @@ export class ComparisonToolService {
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisible$ = signal(false);
+  private readonly selectorsWikiParamsSignal = signal<Record<string, SynapseWikiParams>>({});
 
   readonly configs = this.configsSignal.asReadonly();
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
+  readonly selectorsWikiParams = this.selectorsWikiParamsSignal.asReadonly();
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -72,17 +74,22 @@ export class ComparisonToolService {
     this.isLegendVisible$.update((visible) => !visible);
   }
 
-  initialize(configs: ComparisonToolConfig[], selection: string[] = []) {
+  initialize(
+    configs: ComparisonToolConfig[],
+    selection?: string[],
+    selectorsWikiParams: Record<string, SynapseWikiParams> = {},
+  ) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
     this.pinnedResultsCount.set(0);
+    this.setSelectorsWikiParams(selectorsWikiParams);
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);
       return;
     }
 
-    const normalizedSelection = this.normalizeSelection(selection, configs);
+    const normalizedSelection = this.normalizeSelection(selection ?? [], configs);
     this.updateDropdownSelectionIfChanged(normalizedSelection);
   }
 
@@ -96,6 +103,10 @@ export class ComparisonToolService {
 
     const normalizedSelection = this.normalizeSelection(selection, configs);
     this.updateDropdownSelectionIfChanged(normalizedSelection);
+  }
+
+  setSelectorsWikiParams(params: Record<string, SynapseWikiParams>) {
+    this.selectorsWikiParamsSignal.set(params ?? {});
   }
 
   private updateDropdownSelectionIfChanged(selection: string[]) {

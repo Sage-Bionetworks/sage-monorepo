@@ -1,5 +1,5 @@
 import { Component, inject, input, model } from '@angular/core';
-import { ComparisonToolFilter, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolFilterService,
   ComparisonToolService,
@@ -27,8 +27,6 @@ export class BaseComparisonToolComponent {
   private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
   isLoading = input(true);
-  selectorsWikiParams = input<{ [key: string]: SynapseWikiParams }>({});
-
   headerTitle = input.required<string>();
   filterResultsButtonTooltip = input.required<string>();
 

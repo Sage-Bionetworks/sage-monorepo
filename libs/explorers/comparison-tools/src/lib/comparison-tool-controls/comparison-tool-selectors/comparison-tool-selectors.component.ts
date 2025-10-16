@@ -1,6 +1,6 @@
-import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import { Component, computed, inject, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { PopoverLinkComponent } from '@sagebionetworks/explorers/util';
 import { SelectItem } from 'primeng/api';
@@ -21,7 +21,7 @@ export class ComparisonToolSelectorsComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
   pageConfigs = computed(() => this.comparisonToolService.configs());
-  selectorsWikiParams = input<{ [key: string]: SynapseWikiParams }>({});
+  selectorsWikiParams = computed(() => this.comparisonToolService.selectorsWikiParams());
 
   dropdownTree = computed(() => {
     const configs = this.pageConfigs();

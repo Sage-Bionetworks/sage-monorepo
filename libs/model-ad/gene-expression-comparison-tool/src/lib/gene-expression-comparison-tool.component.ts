@@ -47,7 +47,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs);
+          this.comparisonToolService.initialize(configs, undefined, this.selectorsWikiParams);
           this.comparisonToolService.totalResultsCount.set(50000);
         },
         error: (error) => {

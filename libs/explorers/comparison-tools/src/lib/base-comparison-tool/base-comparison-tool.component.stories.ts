@@ -24,6 +24,7 @@ const meta: Meta<BaseComparisonToolComponent> = {
         ...provideComparisonToolService({
           configs: mockComparisonToolConfigs,
           totalResultsCount: 1000,
+          selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
         }),
         ...provideComparisonToolFilterService(),
         ...provideLoadingIconColors(),
@@ -39,6 +40,5 @@ export const Demo: Story = {
     isLoading: false,
     headerTitle: 'Gene Comparison',
     filterResultsButtonTooltip: 'Filter the results based on the selected criteria',
-    selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
   },
 };

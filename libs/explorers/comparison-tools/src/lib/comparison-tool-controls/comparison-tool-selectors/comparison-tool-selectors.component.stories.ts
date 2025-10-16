@@ -32,13 +32,12 @@ export const MultipleDropdowns: Story = {
       providers: [
         ...provideComparisonToolService({
           configs: mockComparisonToolConfigs,
+          selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
         }),
       ],
     }),
   ],
-  args: {
-    selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
-  },
+  args: {},
 };
 
 export const NoDropdowns: Story = {

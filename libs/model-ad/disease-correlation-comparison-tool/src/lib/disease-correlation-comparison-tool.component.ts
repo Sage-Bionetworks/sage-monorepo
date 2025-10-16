@@ -67,7 +67,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs);
+          this.comparisonToolService.initialize(configs, undefined, this.selectorsWikiParams);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
