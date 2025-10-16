@@ -1,60 +1,142 @@
 """Integration tests for CDK stack synthesis."""
 
-import os
-import subprocess
-from pathlib import Path
-from unittest.mock import patch
+import aws_cdk as cdk
+from aws_cdk.assertions import Template
+
+from openchallenges_infra_cdk.shared.config import get_stack_prefix
 
 
 class TestSynthesis:
     """Tests for CDK stack synthesis."""
 
-    def test_dev_synth(self):
+    def test_dev_synth(self, monkeypatch):
         """Test dev environment synthesis."""
-        with patch.dict(
-            os.environ, {"ENV": "dev", "DEVELOPER_NAME": "testuser"}, clear=True
-        ):
-            result = subprocess.run(
-                ["cdk", "synth", "--quiet"],
-                cwd=Path(__file__).parent.parent.parent,
-                capture_output=True,
-                text=True,
-            )
+        # Set environment variables
+        monkeypatch.setenv("ENV", "dev")
+        monkeypatch.setenv("DEVELOPER_NAME", "testuser")
 
-            # Check that synthesis succeeded
-            assert result.returncode == 0, f"CDK synth failed: {result.stderr}"
+        # Create app and synthesize
+        app = cdk.App()
+        monkeypatch.setattr("aws_cdk.App", lambda: app)
 
-            # Check that output contains expected stack name
-            assert "openchallenges-dev-testuser-buckets" in result.stdout
+        # Import and create stack manually
+        from openchallenges_infra_cdk.shared.config import (
+            get_developer_name,
+            get_environment,
+        )
+        from openchallenges_infra_cdk.shared.stacks.bucket_stack import BucketStack
 
-    def test_stage_synth(self):
+        environment = get_environment()
+        developer_name = get_developer_name()
+        stack_prefix = get_stack_prefix()
+
+        cdk.Tags.of(app).add("Environment", environment)
+        cdk.Tags.of(app).add("Product", "OpenChallenges")
+        cdk.Tags.of(app).add("ManagedBy", "CDK")
+        if developer_name:
+            cdk.Tags.of(app).add("Developer", developer_name)
+
+        stack = BucketStack(
+            app,
+            f"{stack_prefix}-buckets",
+            stack_prefix=stack_prefix,
+            environment=environment,
+            developer_name=developer_name,
+            description=f"S3 buckets for OpenChallenges {environment} environment",
+        )
+
+        # Get template
+        template = Template.from_stack(stack)
+
+        # Verify stack has S3 bucket
+        template.resource_count_is("AWS::S3::Bucket", 1)
+
+        # Verify bucket name
+        template.has_resource_properties(
+            "AWS::S3::Bucket",
+            {"BucketName": "openchallenges-dev-testuser-img"},
+        )
+
+    def test_stage_synth(self, monkeypatch):
         """Test stage environment synthesis."""
-        with patch.dict(os.environ, {"ENV": "stage"}, clear=True):
-            result = subprocess.run(
-                ["cdk", "synth", "--quiet"],
-                cwd=Path(__file__).parent.parent.parent,
-                capture_output=True,
-                text=True,
-            )
+        # Set environment variables
+        monkeypatch.setenv("ENV", "stage")
 
-            # Check that synthesis succeeded
-            assert result.returncode == 0, f"CDK synth failed: {result.stderr}"
+        # Create app and synthesize
+        app = cdk.App()
 
-            # Check that output contains expected stack name
-            assert "openchallenges-stage-buckets" in result.stdout
+        from openchallenges_infra_cdk.shared.config import (
+            get_developer_name,
+            get_environment,
+        )
+        from openchallenges_infra_cdk.shared.stacks.bucket_stack import BucketStack
 
-    def test_prod_synth(self):
+        environment = get_environment()
+        developer_name = get_developer_name()
+        stack_prefix = get_stack_prefix()
+
+        cdk.Tags.of(app).add("Environment", environment)
+        cdk.Tags.of(app).add("Product", "OpenChallenges")
+        cdk.Tags.of(app).add("ManagedBy", "CDK")
+
+        stack = BucketStack(
+            app,
+            f"{stack_prefix}-buckets",
+            stack_prefix=stack_prefix,
+            environment=environment,
+            developer_name=developer_name,
+            description=f"S3 buckets for OpenChallenges {environment} environment",
+        )
+
+        # Get template
+        template = Template.from_stack(stack)
+
+        # Verify stack has S3 bucket
+        template.resource_count_is("AWS::S3::Bucket", 1)
+
+        # Verify bucket name
+        template.has_resource_properties(
+            "AWS::S3::Bucket", {"BucketName": "openchallenges-stage-img"}
+        )
+
+    def test_prod_synth(self, monkeypatch):
         """Test prod environment synthesis."""
-        with patch.dict(os.environ, {"ENV": "prod"}, clear=True):
-            result = subprocess.run(
-                ["cdk", "synth", "--quiet"],
-                cwd=Path(__file__).parent.parent.parent,
-                capture_output=True,
-                text=True,
-            )
+        # Set environment variables
+        monkeypatch.setenv("ENV", "prod")
 
-            # Check that synthesis succeeded
-            assert result.returncode == 0, f"CDK synth failed: {result.stderr}"
+        # Create app and synthesize
+        app = cdk.App()
 
-            # Check that output contains expected stack name
-            assert "openchallenges-prod-buckets" in result.stdout
+        from openchallenges_infra_cdk.shared.config import (
+            get_developer_name,
+            get_environment,
+        )
+        from openchallenges_infra_cdk.shared.stacks.bucket_stack import BucketStack
+
+        environment = get_environment()
+        developer_name = get_developer_name()
+        stack_prefix = get_stack_prefix()
+
+        cdk.Tags.of(app).add("Environment", environment)
+        cdk.Tags.of(app).add("Product", "OpenChallenges")
+        cdk.Tags.of(app).add("ManagedBy", "CDK")
+
+        stack = BucketStack(
+            app,
+            f"{stack_prefix}-buckets",
+            stack_prefix=stack_prefix,
+            environment=environment,
+            developer_name=developer_name,
+            description=f"S3 buckets for OpenChallenges {environment} environment",
+        )
+
+        # Get template
+        template = Template.from_stack(stack)
+
+        # Verify stack has S3 bucket
+        template.resource_count_is("AWS::S3::Bucket", 1)
+
+        # Verify bucket name
+        template.has_resource_properties(
+            "AWS::S3::Bucket", {"BucketName": "openchallenges-prod-img"}
+        )
