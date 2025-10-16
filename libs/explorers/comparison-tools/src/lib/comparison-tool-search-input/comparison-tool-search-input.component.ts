@@ -6,6 +6,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
 
 @Component({
   selector: 'explorers-comparison-tool-search-input',
@@ -21,7 +22,7 @@ export class ComparisonToolSearchInputComponent {
 
   constructor() {
     this.searchSubject
-      .pipe(debounceTime(300), takeUntilDestroyed())
+      .pipe(debounceTime(DEBOUNCE_TIME_MS), takeUntilDestroyed())
       .subscribe((term) => this.comparisonToolFilterService.updateSearchTerm(term));
   }
 
