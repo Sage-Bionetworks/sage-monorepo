@@ -1,6 +1,6 @@
 [tool.coverage.run]
 branch = true
-source = [ "bixarena_infra_cdk" ]
+source = [ "platform_infra_cdk_common" ]
 
 [tool.coverage.report]
 exclude_lines = ['if TYPE_CHECKING:']
@@ -9,30 +9,22 @@ show_missing = true
 [tool.pytest.ini_options]
 addopts = """
  --cov
- --cov-fail-under=50
- --cov-report html:'../../../../coverage/apps/bixarena/infra/cdk/html'
- --cov-report xml:'../../../../coverage/apps/bixarena/infra/cdk/coverage.xml'
- --html='../../../../reports/apps/bixarena/infra/cdk/unittests/html/index.html'
- --junitxml='../../../../reports/apps/bixarena/infra/cdk/unittests/junit.xml'
+ --cov-report html:'../../../../../coverage/libs/platform/infra/cdk/common/html'
+ --cov-report xml:'../../../../../coverage/libs/platform/infra/cdk/common/coverage.xml'
+ --html='../../../../../reports/libs/platform/infra/cdk/common/unittests/html/index.html'
+ --junitxml='../../../../../reports/libs/platform/infra/cdk/common/unittests/junit.xml'
 """
 
 [project]
-name = "bixarena-infra-cdk"
+name = "platform-infra-cdk-common"
 version = "1.0.0"
-description = "CDK application for deploying the BixArena infrastructure to AWS."
+description = "Common AWS CDK utilities and base classes for Sage infrastructure projects"
 requires-python = "==3.13.3"
 readme = 'README.md'
-dependencies = [
-  "aws-cdk-lib>=2.219.0",
-  "boto3>=1.40.51",
-  "platform-infra-cdk-common",
-]
-
-[project.scripts]
-"bixarena-infra-cdk" = "bixarena_infra_cdk.main:main"
+dependencies = []
 
 [tool.hatch.build.targets.wheel]
-packages = ["bixarena_infra_cdk"]
+packages = ["platform_infra_cdk_common"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -72,6 +64,3 @@ ignore = []
 
 fixable = ["ALL"]
 unfixable = []
-
-[tool.uv.sources]
-platform-infra-cdk-common = { workspace = true }
