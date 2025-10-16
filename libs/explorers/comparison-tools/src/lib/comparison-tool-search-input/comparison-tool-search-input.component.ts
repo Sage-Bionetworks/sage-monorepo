@@ -3,33 +3,37 @@ import { ComparisonToolFilterService } from '@sagebionetworks/explorers/services
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
+import { FormsModule } from '@angular/forms';
+import { debounceTime, Subject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'explorers-comparison-tool-search-input',
-  imports: [TableModule, TooltipModule, SvgIconComponent],
+  imports: [FormsModule, TableModule, TooltipModule, SvgIconComponent],
   templateUrl: './comparison-tool-search-input.component.html',
   styleUrls: ['./comparison-tool-search-input.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class ComparisonToolSearchInputComponent {
-  private comparisonToolFilterService = inject(ComparisonToolFilterService);
+  comparisonToolFilterService = inject(ComparisonToolFilterService);
+
+  private searchSubject = new Subject<string>();
+
+  constructor() {
+    this.searchSubject
+      .pipe(debounceTime(300), takeUntilDestroyed())
+      .subscribe((term) => this.comparisonToolFilterService.updateSearchTerm(term));
+  }
 
   get searchTerm() {
     return this.comparisonToolFilterService.searchTerm();
   }
 
-  onSearchInput(event: Event) {
-    const input = event?.target as HTMLInputElement | HTMLTextAreaElement;
-    if (input) {
-      this.setSearchTerm(input.value);
-    }
-  }
-
-  setSearchTerm(term: string) {
-    this.comparisonToolFilterService.updateSearchTerm(term);
+  updateSearchTerm(term: string) {
+    this.searchSubject.next(term);
   }
 
   clearSearch() {
-    this.setSearchTerm('');
+    this.comparisonToolFilterService.updateSearchTerm('');
   }
 }
