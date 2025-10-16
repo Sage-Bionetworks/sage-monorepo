@@ -57,7 +57,8 @@
         "dev": {},
         "stage": {},
         "prod": {}
-      }
+      },
+      "defaultConfiguration": "dev"
     },
     "deploy": {
       "executor": "nx:run-commands",
@@ -69,7 +70,8 @@
         "dev": {},
         "stage": {},
         "prod": {}
-      }
+      },
+      "defaultConfiguration": "dev"
     },
     "destroy": {
       "executor": "nx:run-commands",
@@ -81,7 +83,8 @@
         "dev": {},
         "stage": {},
         "prod": {}
-      }
+      },
+      "defaultConfiguration": "dev"
     },
     "diff": {
       "executor": "nx:run-commands",
@@ -93,7 +96,8 @@
         "dev": {},
         "stage": {},
         "prod": {}
-      }
+      },
+      "defaultConfiguration": "dev"
     },
     "ls": {
       "executor": "nx:run-commands",
