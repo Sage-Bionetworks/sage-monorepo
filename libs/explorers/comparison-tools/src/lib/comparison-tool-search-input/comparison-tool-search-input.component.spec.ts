@@ -7,6 +7,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
 
+const DEBOUNCE_TIME_FOR_TESTING = DEBOUNCE_TIME_MS + 100;
+
 const mockComparisonToolFilterService = {
   searchTerm: signal(''),
   updateSearchTerm: jest.fn(),
@@ -27,7 +29,8 @@ async function setup(searchTerm = '') {
   });
 
   const component = fixture.componentInstance;
-  return { component, fixture };
+  const user = userEvent.setup();
+  return { component, fixture, user };
 }
 
 describe('ComparisonToolSearchInputComponent', () => {
@@ -56,8 +59,7 @@ describe('ComparisonToolSearchInputComponent', () => {
   });
 
   it('should debounce search term updates', async () => {
-    const user = userEvent.setup();
-    await setup();
+    const { user } = await setup();
 
     const searchInput = screen.getByRole('textbox');
     await user.type(searchInput, 'search');
@@ -68,13 +70,12 @@ describe('ComparisonToolSearchInputComponent', () => {
       () => {
         expect(mockComparisonToolFilterService.updateSearchTerm).toHaveBeenCalledWith('search');
       },
-      { timeout: DEBOUNCE_TIME_MS + 100 },
+      { timeout: DEBOUNCE_TIME_FOR_TESTING },
     );
   });
 
   it('should update search term after debounce delay', async () => {
-    const user = userEvent.setup();
-    await setup();
+    const { user } = await setup();
 
     const searchInput = screen.getByRole('textbox');
     await user.type(searchInput, 'test');
@@ -83,13 +84,12 @@ describe('ComparisonToolSearchInputComponent', () => {
       () => {
         expect(mockComparisonToolFilterService.updateSearchTerm).toHaveBeenCalledWith('test');
       },
-      { timeout: DEBOUNCE_TIME_MS + 100 },
+      { timeout: DEBOUNCE_TIME_FOR_TESTING },
     );
   });
 
   it('should clear search when clear button is clicked', async () => {
-    const user = userEvent.setup();
-    await setup('existing search');
+    const { user } = await setup('existing search');
 
     const clearButton = screen.getByRole('button');
     await user.click(clearButton);
@@ -98,18 +98,25 @@ describe('ComparisonToolSearchInputComponent', () => {
   });
 
   it('should handle multiple rapid input changes', async () => {
-    const user = userEvent.setup();
-    await setup();
+    const { user } = await setup();
 
     const searchInput = screen.getByRole('textbox');
-    await user.type(searchInput, 'abc');
 
+    // Rapidly type multiple characters
+    await user.type(searchInput, 'a');
+    await user.type(searchInput, 'b');
+    await user.type(searchInput, 'c');
+
+    // Should not call updateSearchTerm immediately
+    expect(mockComparisonToolFilterService.updateSearchTerm).not.toHaveBeenCalled();
+
+    // After debounce, should only call once with the final value
     await waitFor(
       () => {
         expect(mockComparisonToolFilterService.updateSearchTerm).toHaveBeenCalledTimes(1);
         expect(mockComparisonToolFilterService.updateSearchTerm).toHaveBeenCalledWith('abc');
       },
-      { timeout: DEBOUNCE_TIME_MS + 100 },
+      { timeout: DEBOUNCE_TIME_FOR_TESTING },
     );
   });
 });
