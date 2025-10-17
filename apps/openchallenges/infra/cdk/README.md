@@ -73,6 +73,79 @@ nx deploy openchallenges-infra-cdk:stage
 nx deploy openchallenges-infra-cdk:prod
 ```
 
+**Note**: The first time you deploy to an AWS account/region, you must bootstrap CDK:
+
+```bash
+# For development account
+nx bootstrap openchallenges-infra-cdk:dev
+
+# For production account (stage and prod share the same account)
+nx bootstrap openchallenges-infra-cdk:prod
+```
+
+### Testing the Application Load Balancer
+
+After deploying, you can test the ALB health endpoint:
+
+#### 1. Get the ALB DNS Name
+
+After deployment, the ALB DNS name will be displayed in the CloudFormation outputs:
+
+```bash
+# Look for the "HealthCheckUrl" output
+nx deploy openchallenges-infra-cdk:dev
+```
+
+Or retrieve it from the CloudFormation stack:
+
+```bash
+# Using AWS CLI
+aws cloudformation describe-stacks \
+  --stack-name openchallenges-dev-{your-name}-alb \
+  --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerDnsName`].OutputValue' \
+  --output text
+```
+
+#### 2. Test the `/health` Endpoint
+
+**Using HTTP (no certificate configured):**
+
+```bash
+# From your terminal
+curl http://<alb-dns-name>/health
+
+# Or open in browser
+# http://<alb-dns-name>/health
+```
+
+**Using HTTPS (with certificate configured):**
+
+```bash
+# From your terminal
+curl https://<alb-dns-name>/health
+
+# Or open in browser
+# https://<alb-dns-name>/health
+```
+
+**Expected Response:**
+
+```json
+{
+  "status": "healthy",
+  "service": "openchallenges-alb"
+}
+```
+
+#### 3. Test Other Paths
+
+Since no backend services are configured yet, other paths will return 503:
+
+```bash
+curl http://<alb-dns-name>/api/v1/challenges
+# Returns: {"error":"Service Unavailable","message":"No backend services configured"}
+```
+
 ### Destroy Infrastructure
 
 Remove all deployed resources:
