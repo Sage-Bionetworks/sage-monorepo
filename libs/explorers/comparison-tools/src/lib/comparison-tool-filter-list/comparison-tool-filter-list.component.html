@@ -4,7 +4,7 @@
       <div>
         <button class="filter-list-clear-all" (click)="clearList()">
           <explorers-svg-icon
-            imagePath="/agora-assets/icons/trash.svg"
+            imagePath="/explorers-assets/icons/trash.svg"
             [width]="10"
             [height]="12"
             [color]="'#aeb5bc'"
@@ -16,11 +16,11 @@
       <div>
         <explorers-comparison-tool-filter-list-item
           [item]=""
-          [description]="'Significance &leq; ' + significanceThreshold"
-          [isVisible]="significanceThresholdActive"
+          [description]="'Significance &leq; ' + significanceThreshold()"
+          [isVisible]="significanceThresholdActive()"
           (clearEvent)="removeSignificanceThresholdFilter()"
         />
-        @for (filter of filters; track filter; let i = $index) {
+        @for (filter of filters(); track filter; let i = $index) {
           @for (option of filter.options; track option; let j = $index) {
             <explorers-comparison-tool-filter-list-item
               [item]="option"

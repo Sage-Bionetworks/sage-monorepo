@@ -1,8 +1,6 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import {
-  ComparisonToolFilter,
-  ComparisonToolFilterOption,
-} from '@sagebionetworks/explorers/models';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { ComparisonToolFilterOption } from '@sagebionetworks/explorers/models';
+import { ComparisonToolFilterService } from '@sagebionetworks/explorers/services';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { ComparisonToolFilterListItemComponent } from './comparison-tool-filter-list-item/comparison-tool-filter-list-item.component';
 
@@ -14,20 +12,14 @@ import { ComparisonToolFilterListItemComponent } from './comparison-tool-filter-
   encapsulation: ViewEncapsulation.None,
 })
 export class ComparisonToolFilterListComponent {
-  /* Filters ------------------------------------------------------------------ */
-  @Input() filters: ComparisonToolFilter[] = [] as ComparisonToolFilter[];
-  @Output() changeEvent: EventEmitter<object> = new EventEmitter<object>();
+  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  /* Significance Threshold --------------------------------------------------- */
-  @Input() significanceThresholdActive = false;
-  @Input() significanceThreshold = -1;
-  @Output() onremoveSignificanceThresholdFilter: EventEmitter<any> = new EventEmitter();
+  filters = this.comparisonToolFilterService.filters;
+  significanceThresholdActive = this.comparisonToolFilterService.significanceThresholdActive;
+  significanceThreshold = this.comparisonToolFilterService.significanceThreshold;
 
-  /* ----------------------------------------------------------------------- */
-  /* All
-  /* ----------------------------------------------------------------------- */
   shouldShowList() {
-    return this.hasSelectedFilters() || this.significanceThresholdActive;
+    return this.hasSelectedFilters() || this.significanceThresholdActive();
   }
 
   clearList() {
@@ -35,11 +27,8 @@ export class ComparisonToolFilterListComponent {
     this.clearSelectedFilters();
   }
 
-  /* ----------------------------------------------------------------------- */
-  /* Filters
-  /* ----------------------------------------------------------------------- */
   hasSelectedFilters() {
-    for (const filter of this.filters) {
+    for (const filter of this.filters()) {
       if (filter.options.filter((option) => option.selected).length > 0) {
         return true;
       }
@@ -51,20 +40,16 @@ export class ComparisonToolFilterListComponent {
     if (option) {
       option.selected = false;
     } else {
-      for (const filter of this.filters) {
+      for (const filter of this.filters()) {
         for (const o of filter.options) {
           o.selected = false;
         }
       }
     }
-    this.changeEvent.emit(this.filters);
+    this.comparisonToolFilterService.setFilters(this.filters());
   }
 
-  /* ----------------------------------------------------------------------- */
-  /* Significance Threshold
-  /* ----------------------------------------------------------------------- */
   removeSignificanceThresholdFilter(): void {
-    this.significanceThresholdActive = false;
-    this.onremoveSignificanceThresholdFilter.emit(this.significanceThresholdActive);
+    this.comparisonToolFilterService.setSignificanceThresholdActive(false);
   }
 }

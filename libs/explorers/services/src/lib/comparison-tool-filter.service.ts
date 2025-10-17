@@ -9,6 +9,7 @@ export class ComparisonToolFilterService {
   private DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
 
   private readonly filterService = inject(FilterService);
+  private DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
 
   private readonly filtersSignal = signal<ComparisonToolFilter[]>([]);
   private readonly searchTermSignal = signal<string>('');

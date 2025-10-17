@@ -1,5 +1,8 @@
 import { provideHttpClient } from '@angular/common/http';
-import { SvgIconService } from '@sagebionetworks/explorers/services';
+import {
+  provideComparisonToolFilterService,
+  SvgIconService,
+} from '@sagebionetworks/explorers/services';
 import {
   mockComparisonToolFiltersWithSelections,
   SvgIconServiceStub,
@@ -11,12 +14,15 @@ import { ComparisonToolFilterListComponent } from './comparison-tool-filter-list
 async function setup() {
   const user = userEvent.setup();
   const component = await render(ComparisonToolFilterListComponent, {
-    componentProperties: {
-      filters: JSON.parse(JSON.stringify(mockComparisonToolFiltersWithSelections)),
-      significanceThreshold: 0.05,
-      significanceThresholdActive: true,
-    },
-    providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+    providers: [
+      provideHttpClient(),
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
+      ...provideComparisonToolFilterService({
+        filters: JSON.parse(JSON.stringify(mockComparisonToolFiltersWithSelections)),
+        significanceThreshold: 0.05,
+        significanceThresholdActive: true,
+      }),
+    ],
   });
   return { user, component };
 }
