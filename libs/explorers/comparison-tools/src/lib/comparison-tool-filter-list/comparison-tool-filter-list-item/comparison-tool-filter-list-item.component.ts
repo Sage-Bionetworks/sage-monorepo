@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Component, input, model, output, ViewEncapsulation } from '@angular/core';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
@@ -10,14 +10,16 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
   encapsulation: ViewEncapsulation.None,
 })
 export class ComparisonToolFilterListItemComponent {
-  @Input() item: any;
-  @Input() isVisible = false;
-  @Input() title = '';
-  @Input() description = '';
-  @Output() clearEvent: EventEmitter<object> = new EventEmitter<object>();
+  item = input<object>();
+  title = input<string>('');
+  description = input<string>('');
+
+  isVisible = model<boolean>(false);
+
+  clearEvent = output<object>();
 
   clearWasClicked() {
-    this.isVisible = false;
+    this.isVisible.set(false);
     this.clearEvent.emit(this.item);
   }
 }

@@ -11,7 +11,7 @@ const MOCK_DESCRIPTION = '5678';
 async function setup() {
   const user = userEvent.setup();
   const component = await render(ComparisonToolFilterListItemComponent, {
-    componentProperties: {
+    componentInputs: {
       item: { label: 'some option', selected: true },
       title: MOCK_TITLE,
       description: MOCK_DESCRIPTION,
