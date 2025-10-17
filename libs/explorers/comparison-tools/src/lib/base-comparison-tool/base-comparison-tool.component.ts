@@ -1,9 +1,5 @@
 import { Component, inject, input, model } from '@angular/core';
-import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
-import {
-  ComparisonToolFilterService,
-  ComparisonToolService,
-} from '@sagebionetworks/explorers/services';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { ComparisonToolColumnsComponent } from '../comparison-tool-columns/comparison-tool-columns.component';
 import { ComparisonToolControlsComponent } from '../comparison-tool-controls/comparison-tool-controls.component';
@@ -24,7 +20,6 @@ import { ComparisonToolHeaderComponent } from '../comparison-tool-header/compari
 })
 export class BaseComparisonToolComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
-  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
   isLoading = input(true);
   showSignificanceControls = input(true);
@@ -38,9 +33,5 @@ export class BaseComparisonToolComponent {
 
   toggleFilterPanel() {
     this.isFilterPanelOpen.update((isOpen) => !isOpen);
-  }
-
-  onFiltersChanged(filters: ComparisonToolFilter[]) {
-    this.comparisonToolFilterService.setFilters(filters);
   }
 }

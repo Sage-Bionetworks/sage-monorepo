@@ -1,6 +1,11 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { HelperService, SvgIconService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolFilterService,
+  HelperService,
+  provideComparisonToolFilterService,
+  SvgIconService,
+} from '@sagebionetworks/explorers/services';
 import {
   mockComparisonToolConfigFilters,
   mockComparisonToolFilters,
@@ -17,6 +22,7 @@ async function setup(isOpen = false) {
       provideRouter([]),
       HelperService,
       provideHttpClient(),
+      ...provideComparisonToolFilterService(),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
     componentInputs: {
@@ -25,7 +31,8 @@ async function setup(isOpen = false) {
     },
   });
   const componentInstance = component.fixture.componentInstance;
-  return { user, component, componentInstance };
+  const ctFilterService = component.fixture.debugElement.injector.get(ComparisonToolFilterService);
+  return { user, component, componentInstance, ctFilterService };
 }
 
 function getCategoryButton(category: string) {
@@ -110,10 +117,7 @@ describe('ComparisonToolFilterPanelComponent', () => {
   });
 
   it('should emit filtersChanged when option is selected', async () => {
-    const { user, componentInstance } = await setup(true);
-
-    const filtersChangedSpy = jest.fn();
-    componentInstance.filtersChanged.subscribe(filtersChangedSpy);
+    const { user, ctFilterService } = await setup(true);
 
     const categoryButton = getCategoryButton(mockComparisonToolConfigFilters[0].name);
     await user.click(categoryButton);
@@ -124,7 +128,7 @@ describe('ComparisonToolFilterPanelComponent', () => {
     const expectedFilters = JSON.parse(JSON.stringify(mockComparisonToolFilters));
     expectedFilters[0].options[0].selected = true;
 
-    expect(filtersChangedSpy).toHaveBeenCalledWith(expectedFilters);
+    expect(ctFilterService.filters()).toEqual(expectedFilters);
   });
 
   it('should show active state when pane is open', async () => {
