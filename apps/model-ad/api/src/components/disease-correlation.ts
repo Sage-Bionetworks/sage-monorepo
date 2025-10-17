@@ -3,6 +3,10 @@ import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { DiseaseCorrelationCollection } from '../models';
 
+enum KNOWN_CATEGORIES {
+  CONSENSUS_NETWORK_MODULES = 'CONSENSUS NETWORK MODULES',
+}
+
 export async function getDiseaseCorrelations(cluster: string) {
   const cacheKey = 'diseaseCorrelations-' + cluster;
   const cachedResult: DiseaseCorrelation[] | null | undefined = cache.get(cacheKey);
@@ -25,25 +29,30 @@ export async function diseaseCorrelationRoute(req: Request, res: Response, next:
     categories.length !== 2 ||
     !categories.every((f) => typeof f === 'string')
   ) {
-    res.status(400).contentType('application/problem+json').json({
-      title: 'Bad Request',
-      status: 400,
-      detail:
-        'Query parameter category must repeat twice (e.g. ?category=CONSENSUS%20NETWORK%20MODULES&category=subcategory) and each value must be a string',
-      instance: req.path,
-    });
+    res
+      .status(400)
+      .contentType('application/problem+json')
+      .json({
+        title: 'Bad Request',
+        status: 400,
+        detail: `Query parameter category must repeat twice (e.g. ?category=${KNOWN_CATEGORIES.CONSENSUS_NETWORK_MODULES}&category=subcategory) and each value must be a string`,
+        instance: req.path,
+      });
     return;
   }
 
   const [category, subcategory] = categories;
 
-  if (category !== 'CONSENSUS NETWORK MODULES') {
-    res.status(400).contentType('application/problem+json').json({
-      title: 'Bad Request',
-      status: 400,
-      detail: 'Only CONSENSUS NETWORK MODULES category is supported',
-      instance: req.path,
-    });
+  if (category !== KNOWN_CATEGORIES.CONSENSUS_NETWORK_MODULES) {
+    res
+      .status(400)
+      .contentType('application/problem+json')
+      .json({
+        title: 'Bad Request',
+        status: 400,
+        detail: `Only ${KNOWN_CATEGORIES.CONSENSUS_NETWORK_MODULES} category is supported`,
+        instance: req.path,
+      });
     return;
   }
 
