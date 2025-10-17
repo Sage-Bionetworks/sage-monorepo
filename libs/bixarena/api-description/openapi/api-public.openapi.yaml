@@ -20,6 +20,12 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
+  - name: Auth
+    description: Authentication and token minting operations.
+  - name: Utility
+    description: Utility endpoints.
+  - name: Admin
+    description: Administrative endpoints requiring elevated roles.
 paths:
   /example-prompts:
     get:
@@ -158,6 +164,163 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /auth/oidc/start:
+    get:
+      tags:
+        - Auth
+      summary: Start Synapse OIDC authorization code flow
+      description: Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
+      operationId: startOidc
+      security: []
+      responses:
+        '204':
+          description: Flow started (no content; clients should follow redirect)
+        '302':
+          description: Redirect to Synapse login
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /auth/oidc/callback:
+    get:
+      tags:
+        - Auth
+      summary: OIDC redirect callback
+      description: Handles redirect from Synapse, validates state and nonce, establishes authenticated session.
+      operationId: oidcCallback
+      security: []
+      parameters:
+        - in: query
+          name: code
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: state
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout current session
+      description: Invalidate the current authenticated session.
+      operationId: logout
+      security: []
+      responses:
+        '204':
+          description: Logged out (idempotent)
+  /token:
+    post:
+      tags:
+        - Auth
+      summary: Mint short-lived internal JWT
+      description: Exchanges an authenticated session (cookie) for an internal JWT.
+      operationId: mintInternalToken
+      security: []
+      responses:
+        '200':
+          description: Access token response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - access_token
+                  - token_type
+                  - expires_in
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    enum:
+                      - Bearer
+                  expires_in:
+                    type: integer
+                    example: 600
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /.well-known/jwks.json:
+    get:
+      tags:
+        - Auth
+      summary: JSON Web Key Set
+      description: Returns the public keys used to verify internally issued JWTs.
+      operationId: getJwks
+      security: []
+      responses:
+        '200':
+          description: JWKS document
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /echo:
+    get:
+      tags:
+        - Utility
+      summary: Echo authenticated principal
+      description: Returns information about the authenticated user.
+      operationId: echo
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sub:
+                    type: string
+                  roles:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /admin/stats:
+    get:
+      tags:
+        - Admin
+      summary: Admin statistics
+      description: Administrative operations requiring admin role.
+      operationId: adminStats
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
 components:
   securitySchemes:
     jwtBearer:
@@ -165,7 +328,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: |
-        Short-lived internal JWT issued by the API gateway after authentication through Synapse or an API key exchange. The token is included in the Authorization header using the Bearer scheme.
+        Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
   schemas:
     ExamplePromptSort:
       type: string
@@ -869,6 +1032,18 @@ components:
       description: The requested resource was not found
       content:
         application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
           schema:
             $ref: '#/components/schemas/BasicError'
 x-oauth2-audience: urn:bixarena:api

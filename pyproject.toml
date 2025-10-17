@@ -46,10 +46,19 @@ constraint-dependencies = [
 [tool.uv.sources.bixarena-api-client]
 workspace = true
 
+[tool.uv.sources.bixarena-infra-cdk]
+workspace = true
+
 [tool.uv.sources.openchallenges-api-client]
 workspace = true
 
 [tool.uv.sources.openchallenges-client]
+workspace = true
+
+[tool.uv.sources.openchallenges-infra-cdk]
+workspace = true
+
+[tool.uv.sources.platform-infra-cdk-common]
 workspace = true
 
 [tool.uv.workspace]
@@ -67,7 +76,8 @@ members = [
   "apps/openchallenges/tools",
   "libs/bixarena/api-client-python",
   "libs/openchallenges/api-client-python",
-  "libs/openchallenges/client-python"
+  "libs/openchallenges/client-python",
+  "libs/platform/infra/cdk/common"
 ]
 
 [build-system]
@@ -85,7 +95,9 @@ requires-python = "==3.13.3"
 # Do NOT include libraries that are only needed by other workspace projects;
 # they will be installed transitively.
 dependencies = [
-  "openchallenges-client"
+  "bixarena-infra-cdk",
+  "openchallenges-client",
+  "openchallenges-infra-cdk"
 ]
 name = "sage-monorepo"
 version = "1.0.0"

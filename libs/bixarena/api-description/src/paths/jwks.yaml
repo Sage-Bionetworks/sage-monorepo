@@ -1,0 +1,21 @@
+get:
+  tags:
+    - Auth
+  summary: JSON Web Key Set
+  description: Returns the public keys used to verify internally issued JWTs.
+  operationId: getJwks
+  security: []
+  responses:
+    '200':
+      description: JWKS document
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              keys:
+                type: array
+                items:
+                  type: object
+    '400':
+      $ref: ../components/responses/BadRequest.yaml

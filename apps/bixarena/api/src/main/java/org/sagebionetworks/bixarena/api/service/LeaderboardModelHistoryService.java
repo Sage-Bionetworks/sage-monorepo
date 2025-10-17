@@ -1,6 +1,7 @@
 package org.sagebionetworks.bixarena.api.service;
 
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.exception.LeaderboardModelNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.LeaderboardNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryPageDto;
@@ -12,8 +13,6 @@ import org.sagebionetworks.bixarena.api.model.mapper.LeaderboardModelHistoryMapp
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardEntryRepository;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class LeaderboardModelHistoryService {
-
-  private static final Logger logger = LoggerFactory.getLogger(
-    LeaderboardModelHistoryService.class
-  );
 
   private final LeaderboardRepository leaderboardRepository;
   private final ModelRepository modelRepository;
@@ -49,7 +45,7 @@ public class LeaderboardModelHistoryService {
     String modelId,
     LeaderboardModelHistoryQueryDto query
   ) {
-    logger.info(
+    log.info(
       "Getting model history for leaderboard {} and model {} with query {}",
       leaderboardId,
       modelId,

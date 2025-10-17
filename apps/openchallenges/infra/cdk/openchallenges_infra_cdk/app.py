@@ -3,14 +3,13 @@
 from os import environ
 
 import aws_cdk as cdk
+from platform_infra_cdk_common.constants import VALID_ENVIRONMENTS
 
 from .ecs_stack import EcsStack
 from .load_balancer_stack import LoadBalancerStack
 from .network_stack import NetworkStack
 from .service_props import ServiceProps
 from .service_stack import LoadBalancedServiceStack
-
-VALID_ENVIRONMENTS = ["dev", "stage", "prod"]
 
 
 def build_app() -> cdk.App:

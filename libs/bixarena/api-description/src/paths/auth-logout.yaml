@@ -1,0 +1,10 @@
+post:
+  tags:
+    - Auth
+  summary: Logout current session
+  description: Invalidate the current authenticated session.
+  operationId: logout
+  security: []
+  responses:
+    '204':
+      description: Logged out (idempotent)

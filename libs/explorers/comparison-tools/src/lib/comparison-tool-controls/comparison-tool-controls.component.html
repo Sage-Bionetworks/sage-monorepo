@@ -4,11 +4,7 @@
     <explorers-comparison-tool-search-input />
   </div>
   <div class="controls-right">
-    <explorers-comparison-tool-selectors
-      [pageConfigs]="pageConfigs()"
-      [selectorsWikiParams]="selectorsWikiParams()"
-      [(dropdownsSelection)]="dropdownsSelection"
-    />
+    <explorers-comparison-tool-selectors />
     @if (showSignificanceControls()) {
       <explorers-significance-controls />
     }

@@ -25,6 +25,7 @@ spring-security = "6.5.4"
 springdoc = "2.8.13"
 squareup = "3.0.0"
 testcontainers = "1.21.3"
+nimbus = "10.5"
 
 [libraries]
 # Jackson libraries
@@ -83,6 +84,7 @@ squareup-pollexor = { module = "com.squareup:pollexor", version.ref = "squareup"
 testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+nimbus-jose-jwt = { module = "com.nimbusds:nimbus-jose-jwt", version.ref = "nimbus" }
 
 [plugins]
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }

@@ -1,0 +1,33 @@
+get:
+  tags:
+    - Auth
+  summary: OIDC redirect callback
+  description: Handles redirect from Synapse, validates state and nonce, establishes authenticated session.
+  operationId: oidcCallback
+  security: []
+  parameters:
+    - in: query
+      name: code
+      required: true
+      schema:
+        type: string
+    - in: query
+      name: state
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Authentication successful
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: ok
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
