@@ -1,0 +1,26 @@
+@if (isVisible) {
+  <div class="filter-list-item">
+    <div class="filter-list-item-text">
+      @if (title !== '') {
+        <b>{{ title }}:&nbsp;</b>
+      }
+      @if (description !== '') {
+        <span>{{ description }}</span>
+      }
+    </div>
+    <div>
+      <button
+        class="filter-list-item-clear"
+        (click)="clearWasClicked()"
+        [attr.aria-label]="`Clear ${description !== '' ? description : title}`"
+      >
+        <explorers-svg-icon
+          imagePath="/explorers-assets/icons/close.svg"
+          [width]="10"
+          [height]="10"
+          altText="close"
+        />
+      </button>
+    </div>
+  </div>
+}
