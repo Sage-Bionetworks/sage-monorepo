@@ -28,12 +28,7 @@ export class ComparisonToolFilterListComponent {
   }
 
   hasSelectedFilters() {
-    for (const filter of this.filters()) {
-      if (filter.options.filter((option) => option.selected).length > 0) {
-        return true;
-      }
-    }
-    return false;
+    return this.filters().some((filter) => filter.options.some((option) => option.selected));
   }
 
   clearSelectedFilters(option?: ComparisonToolFilterOption) {

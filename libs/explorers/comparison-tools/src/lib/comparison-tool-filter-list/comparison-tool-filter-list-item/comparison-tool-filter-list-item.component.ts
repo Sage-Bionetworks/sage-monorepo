@@ -1,4 +1,5 @@
 import { Component, input, model, output, ViewEncapsulation } from '@angular/core';
+import { ComparisonToolFilterOption } from '@sagebionetworks/explorers/models';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
@@ -10,7 +11,7 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
   encapsulation: ViewEncapsulation.None,
 })
 export class ComparisonToolFilterListItemComponent {
-  item = input<object>();
+  item = input<ComparisonToolFilterOption | null>();
   title = input<string>('');
   description = input<string>('');
 

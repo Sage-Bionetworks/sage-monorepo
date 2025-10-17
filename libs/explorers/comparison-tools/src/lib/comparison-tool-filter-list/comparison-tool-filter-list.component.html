@@ -15,7 +15,7 @@
       </div>
       <div>
         <explorers-comparison-tool-filter-list-item
-          [item]=""
+          [item]="null"
           [description]="'Significance &leq; ' + significanceThreshold()"
           [isVisible]="significanceThresholdActive()"
           (clearEvent)="removeSignificanceThresholdFilter()"
