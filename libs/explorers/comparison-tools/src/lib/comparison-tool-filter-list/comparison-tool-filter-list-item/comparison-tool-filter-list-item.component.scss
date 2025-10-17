@@ -1,11 +1,10 @@
 @use 'sass:map';
 @use 'explorers/styles/src/lib/variables';
-@use 'explorers/styles/src/lib/mixins';
 
 .filter-list-item {
   display: flex;
   padding: 8px 15px;
-  background-color: rgba(map.get(variables.$main-colors, 'action-primary'), 0.2);
+  background-color: rgb(80 129 167 / 20%);
   border-radius: 40px;
   margin-left: 8px;
   margin-bottom: 8px;
@@ -30,10 +29,11 @@
   .filter-list-item-clear {
     cursor: pointer;
     margin-left: 12px;
-    color: var(--color-action-primary);
+    color: #5081a7;
 
     svg path {
       transition: variables.$transition-duration;
+      stroke-width: 5;
     }
   }
 }
