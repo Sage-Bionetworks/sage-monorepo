@@ -41,12 +41,24 @@ class BucketStack(cdk.Stack):
             developer_name=developer_name,
         )
 
+        # Determine removal policy based on environment
+        # Dev: DESTROY for easier cleanup and re-deployment
+        # Stage/Prod: RETAIN for data safety
+        removal_policy = (
+            cdk.RemovalPolicy.DESTROY
+            if environment == "dev"
+            else cdk.RemovalPolicy.RETAIN
+        )
+        auto_delete = environment == "dev"
+
         # Create image bucket for Thumbor service
         self.image_bucket = OpenchallengesBucket(
             self,
             "ImageBucket",
             bucket_name=bucket_base_name,
             versioned=False,  # Images are immutable, no need for versioning
+            removal_policy=removal_policy,
+            auto_delete_objects=auto_delete,
         )
 
         # CloudFormation outputs

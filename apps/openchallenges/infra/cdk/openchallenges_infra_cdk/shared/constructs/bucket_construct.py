@@ -15,6 +15,8 @@ class OpenchallengesBucket(Construct):
         bucket_name: str,
         versioned: bool = False,
         lifecycle_rules: list[s3.LifecycleRule] | None = None,
+        removal_policy: cdk.RemovalPolicy = cdk.RemovalPolicy.RETAIN,
+        auto_delete_objects: bool = False,
         **kwargs,
     ) -> None:
         """
@@ -26,6 +28,9 @@ class OpenchallengesBucket(Construct):
             bucket_name: Base name for the bucket (suffix will be added for uniqueness)
             versioned: Enable versioning (default: False)
             lifecycle_rules: Optional lifecycle rules
+            removal_policy: Policy for bucket removal (default: RETAIN)
+            auto_delete_objects: Auto-delete objects when stack is deleted
+                (default: False)
             **kwargs: Additional arguments passed to parent Construct
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -45,10 +50,10 @@ class OpenchallengesBucket(Construct):
             versioned=versioned,
             # Lifecycle rules
             lifecycle_rules=lifecycle_rules or [],
-            # Auto-delete objects when stack is deleted (dev only, overridden in prod)
-            auto_delete_objects=False,
+            # Auto-delete objects when stack is deleted
+            auto_delete_objects=auto_delete_objects,
             # Removal policy
-            removal_policy=cdk.RemovalPolicy.RETAIN,
+            removal_policy=removal_policy,
             # Enable event bridge notifications
             event_bridge_enabled=True,
         )
