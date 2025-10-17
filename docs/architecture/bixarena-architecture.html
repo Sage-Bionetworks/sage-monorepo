@@ -67,17 +67,20 @@
         caddy -->|"/**"| web
 
         gw -->|"HTTP /api/**"| api
-        gw -->|"HTTP/WS /ai/**"| ai
+        gw -.->|"HTTP/WS /ai/**"| ai
+        gw -.-> cache
 
         web -->|"/api/\*\*, /ai/**"| caddy
-        web --> or
+        web e1@--> or
 
         %% or --> claude
 
         api --> db
-        ai --> db
-        api --> cache
-        ai --> cache
+        ai -.-> db
+        api -.-> cache
+        ai -.-> cache
+
+        e1@{ animate: false }
       </div>
     </div>
 
