@@ -40,9 +40,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   data: ModelOverview[] = [];
 
   isLoading = signal(true);
-  resultsCount = this.comparisonToolService.totalResultsCount;
-
-  configs: ComparisonToolConfig[] = [];
 
   ngOnInit() {
     if (this.platformService.isBrowser) {
@@ -57,7 +54,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.configs = configs;
+          this.comparisonToolService.initialize(configs);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
@@ -73,6 +70,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.data = data;
+          this.comparisonToolService.totalResultsCount.set(data.length);
         },
         error: (error) => {
           throw new Error('Error fetching model overview data:', { cause: error });

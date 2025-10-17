@@ -1,26 +1,32 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolService,
+  provideComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import { mockComparisonToolConfigs } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
 import { ComparisonToolSelectorsComponent } from './comparison-tool-selectors.component';
 
 async function setup(
   pageConfigs: ComparisonToolConfig[] = mockComparisonToolConfigs,
   initialSelection?: string[],
 ) {
-  const user = userEvent.setup();
   const component = await render(ComparisonToolSelectorsComponent, {
-    providers: [provideHttpClient(), provideRouter([])],
-    componentInputs: {
-      pageConfigs,
-      dropdownsSelection: initialSelection || [],
-    },
+    providers: [
+      provideHttpClient(),
+      provideRouter([]),
+      ...provideComparisonToolService({
+        configs: pageConfigs,
+        selection: initialSelection,
+      }),
+    ],
   });
   const instance = component.fixture.componentInstance;
+  const service = component.fixture.debugElement.injector.get(ComparisonToolService);
 
-  return { user, component, instance };
+  return { component, instance, service };
 }
 
 function getAllDropdowns() {
@@ -47,17 +53,17 @@ describe('ComparisonToolSelectorsComponent', () => {
   });
 
   it('should display correct initial dropdowns with provided selection', async () => {
-    const { instance } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
+    const { service } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
     await screen.findByRole('combobox', { name: 'Red' });
     await screen.findByRole('combobox', { name: 'Crimson' });
     expect(getAllDropdowns()).toHaveLength(2);
-    expect(instance.selection()).toEqual(['Red', 'Crimson']);
+    expect(service.dropdownSelection()).toEqual(['Red', 'Crimson']);
   });
 
   it('should use provided initial selection when valid', async () => {
     const selectedDropdowns = ['Blue', 'Light Blue', 'Powder Blue'];
-    const { instance } = await setup(mockComparisonToolConfigs, selectedDropdowns);
-    expect(instance.selection()).toEqual(selectedDropdowns);
+    const { service } = await setup(mockComparisonToolConfigs, selectedDropdowns);
+    expect(service.dropdownSelection()).toEqual(selectedDropdowns);
     const dropdowns = getAllDropdowns();
     expect(dropdowns).toHaveLength(selectedDropdowns.length);
     for (let i = 0; i < dropdowns.length; i++) {
@@ -66,14 +72,14 @@ describe('ComparisonToolSelectorsComponent', () => {
   });
 
   it('should fall back to default selection when initial selection is invalid', async () => {
-    const { instance } = await setup(mockComparisonToolConfigs, ['NonExistent', 'Option']);
-    expect(instance.selection()).toEqual(['Red', 'Crimson']);
+    const { service } = await setup(mockComparisonToolConfigs, ['NonExistent', 'Option']);
+    expect(service.dropdownSelection()).toEqual(['Red', 'Crimson']);
   });
 
   it('should auto-select subsequent levels when changing dropdown selection', async () => {
-    const { instance } = await setup();
+    const { instance, service } = await setup();
     instance.onDropdownChange(0, 'Blue');
-    expect(instance.selection()).toEqual(['Blue', 'Light Blue', 'Powder Blue']);
+    expect(service.dropdownSelection()).toEqual(['Blue', 'Light Blue', 'Powder Blue']);
   });
 
   it('should handle single level dropdown configurations', async () => {
@@ -82,10 +88,10 @@ describe('ComparisonToolSelectorsComponent', () => {
       { page: 'Disease Correlation', dropdowns: ['Option2'], columns: [], filters: [] },
     ];
 
-    const { instance } = await setup(singleLevelConfigs, ['Option1']);
+    const { service } = await setup(singleLevelConfigs, ['Option1']);
 
     expect(getAllDropdowns()).toHaveLength(1);
-    expect(instance.selection()).toEqual(['Option1']);
+    expect(service.dropdownSelection()).toEqual(['Option1']);
   });
 
   it('should handle deep nested dropdown configurations', async () => {
@@ -99,9 +105,9 @@ describe('ComparisonToolSelectorsComponent', () => {
     ];
 
     const initialSelection = ['Level1', 'Level2', 'Level3', 'Level4', 'Level5'];
-    const { instance } = await setup(deepConfigs, initialSelection);
+    const { service } = await setup(deepConfigs, initialSelection);
 
-    expect(instance.selection()).toEqual(initialSelection);
+    expect(service.dropdownSelection()).toEqual(initialSelection);
     expect(screen.queryAllByRole('combobox')).toHaveLength(0);
     for (const level of initialSelection) {
       expect(screen.getByText(level)).toBeInTheDocument();
@@ -117,24 +123,24 @@ describe('ComparisonToolSelectorsComponent', () => {
   });
 
   it('should handle selection change to first level dropdown', async () => {
-    const { instance } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
+    const { instance, service } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
 
     instance.onDropdownChange(0, 'Blue');
 
-    expect(instance.selection()).toEqual(['Blue', 'Light Blue', 'Powder Blue']);
+    expect(service.dropdownSelection()).toEqual(['Blue', 'Light Blue', 'Powder Blue']);
     expect(instance.getSelectedValueForLevel(0)).toBe('Blue');
     expect(instance.getSelectedValueForLevel(1)).toBe('Light Blue');
     expect(instance.getSelectedValueForLevel(2)).toBe('Powder Blue');
   });
 
   it('should handle selection change to non-first level dropdown', async () => {
-    const { instance } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
+    const { instance, service } = await setup(mockComparisonToolConfigs, ['Red', 'Crimson']);
 
     instance.onDropdownChange(0, 'Blue');
     expect(instance.getSelectedValueForLevel(2)).toBe('Powder Blue');
 
     instance.onDropdownChange(1, 'Dark Blue');
-    expect(instance.selection()).toEqual(['Blue', 'Dark Blue', 'Navy Blue']);
+    expect(service.dropdownSelection()).toEqual(['Blue', 'Dark Blue', 'Navy Blue']);
 
     expect(instance.getSelectedValueForLevel(0)).toBe('Blue');
     expect(instance.getSelectedValueForLevel(1)).toBe('Dark Blue');
@@ -143,7 +149,7 @@ describe('ComparisonToolSelectorsComponent', () => {
 
   it('should not set selection when no configs provided', async () => {
     const emptyConfigs: ComparisonToolConfig[] = [];
-    const { instance } = await setup(emptyConfigs);
-    expect(instance.selection()).toEqual([]);
+    const { service } = await setup(emptyConfigs);
+    expect(service.dropdownSelection()).toEqual([]);
   });
 });

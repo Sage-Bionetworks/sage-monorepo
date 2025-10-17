@@ -1,5 +1,4 @@
-import { Component, input, model, ViewEncapsulation } from '@angular/core';
-import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { ComparisonToolSearchInputComponent } from '../comparison-tool-search-input/comparison-tool-search-input.component';
 import { DisplayedResultsComponent } from '../displayed-results/displayed-results.component';
 import { ComparisonToolSelectorsComponent } from './comparison-tool-selectors/comparison-tool-selectors.component';
@@ -15,8 +14,4 @@ import { ComparisonToolSelectorsComponent } from './comparison-tool-selectors/co
   styleUrls: ['./comparison-tool-controls.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ComparisonToolControlsComponent {
-  pageConfigs = input<ComparisonToolConfig[]>([]);
-  selectorsWikiParams = input<{ [key: string]: SynapseWikiParams }>({});
-  dropdownsSelection = model<string[]>([]);
-}
+export class ComparisonToolControlsComponent {}
