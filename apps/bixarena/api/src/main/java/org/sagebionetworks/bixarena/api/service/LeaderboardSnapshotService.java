@@ -1,6 +1,8 @@
 package org.sagebionetworks.bixarena.api.service;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.exception.LeaderboardNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotQueryDto;
@@ -9,8 +11,6 @@ import org.sagebionetworks.bixarena.api.model.mapper.LeaderboardSnapshotMapper;
 import org.sagebionetworks.bixarena.api.model.projection.SnapshotWithEntryCount;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardRepository;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardSnapshotRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,28 +19,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class LeaderboardSnapshotService {
-
-  private static final Logger logger = LoggerFactory.getLogger(LeaderboardSnapshotService.class);
 
   private final LeaderboardRepository leaderboardRepository;
   private final LeaderboardSnapshotRepository snapshotRepository;
   private final LeaderboardSnapshotMapper snapshotMapper = new LeaderboardSnapshotMapper();
-
-  public LeaderboardSnapshotService(
-    LeaderboardRepository leaderboardRepository,
-    LeaderboardSnapshotRepository snapshotRepository
-  ) {
-    this.leaderboardRepository = leaderboardRepository;
-    this.snapshotRepository = snapshotRepository;
-  }
 
   @Transactional(readOnly = true)
   public LeaderboardSnapshotPageDto getLeaderboardSnapshots(
     String leaderboardId,
     LeaderboardSnapshotQueryDto query
   ) {
-    logger.info("Getting snapshots for leaderboard {} with query {}", leaderboardId, query);
+    log.info("Getting snapshots for leaderboard {} with query {}", leaderboardId, query);
 
     // Use default query if not provided
     LeaderboardSnapshotQueryDto snapshotQuery = query != null

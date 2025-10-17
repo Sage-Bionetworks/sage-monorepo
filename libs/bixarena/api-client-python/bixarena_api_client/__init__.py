@@ -3,7 +3,7 @@
 # flake8: noqa
 
 """
-BixArena API
+BixArena AI API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -17,9 +17,12 @@ __version__ = "1.0.0"
 
 # Define package exports
 __all__ = [
+    "AdminApi",
+    "AuthApi",
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
+    "UtilityApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -29,12 +32,15 @@ __all__ = [
     "ApiKeyError",
     "ApiAttributeError",
     "ApiException",
+    "AdminStats200Response",
     "BasicError",
+    "Echo200Response",
     "ExamplePrompt",
     "ExamplePromptPage",
     "ExamplePromptSearchQuery",
     "ExamplePromptSort",
     "ExamplePromptSource",
+    "GetJwks200Response",
     "HistoricalLeaderboardEntry",
     "LeaderboardEntry",
     "LeaderboardEntryPage",
@@ -49,20 +55,25 @@ __all__ = [
     "LeaderboardSnapshotSort",
     "LeaderboardSort",
     "License",
+    "MintInternalToken200Response",
     "Model",
     "ModelPage",
     "ModelSearchQuery",
     "ModelSort",
+    "OidcCallback200Response",
     "PageMetadata",
     "SortDirection",
 ]
 
 # import apis into sdk package
+from bixarena_api_client.api.admin_api import AdminApi as AdminApi
+from bixarena_api_client.api.auth_api import AuthApi as AuthApi
 from bixarena_api_client.api.example_prompt_api import (
     ExamplePromptApi as ExamplePromptApi,
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
+from bixarena_api_client.api.utility_api import UtilityApi as UtilityApi
 
 # import ApiClient
 from bixarena_api_client.api_response import ApiResponse as ApiResponse
@@ -76,7 +87,13 @@ from bixarena_api_client.exceptions import ApiAttributeError as ApiAttributeErro
 from bixarena_api_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
+from bixarena_api_client.models.admin_stats200_response import (
+    AdminStats200Response as AdminStats200Response,
+)
 from bixarena_api_client.models.basic_error import BasicError as BasicError
+from bixarena_api_client.models.echo200_response import (
+    Echo200Response as Echo200Response,
+)
 from bixarena_api_client.models.example_prompt import ExamplePrompt as ExamplePrompt
 from bixarena_api_client.models.example_prompt_page import (
     ExamplePromptPage as ExamplePromptPage,
@@ -89,6 +106,9 @@ from bixarena_api_client.models.example_prompt_sort import (
 )
 from bixarena_api_client.models.example_prompt_source import (
     ExamplePromptSource as ExamplePromptSource,
+)
+from bixarena_api_client.models.get_jwks200_response import (
+    GetJwks200Response as GetJwks200Response,
 )
 from bixarena_api_client.models.historical_leaderboard_entry import (
     HistoricalLeaderboardEntry as HistoricalLeaderboardEntry,
@@ -130,11 +150,17 @@ from bixarena_api_client.models.leaderboard_sort import (
     LeaderboardSort as LeaderboardSort,
 )
 from bixarena_api_client.models.license import License as License
+from bixarena_api_client.models.mint_internal_token200_response import (
+    MintInternalToken200Response as MintInternalToken200Response,
+)
 from bixarena_api_client.models.model import Model as Model
 from bixarena_api_client.models.model_page import ModelPage as ModelPage
 from bixarena_api_client.models.model_search_query import (
     ModelSearchQuery as ModelSearchQuery,
 )
 from bixarena_api_client.models.model_sort import ModelSort as ModelSort
+from bixarena_api_client.models.oidc_callback200_response import (
+    OidcCallback200Response as OidcCallback200Response,
+)
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection

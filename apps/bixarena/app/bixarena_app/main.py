@@ -1,21 +1,23 @@
 import argparse
-import urllib.parse
+import os
+
 import gradio as gr
-from typing import Optional, Tuple, Any
+import requests
+
+from bixarena_app.auth.user_state import get_user_state
+from bixarena_app.page.bixarena_battle import build_battle_page
 from bixarena_app.page.bixarena_header import (
     build_header,
-    update_login_button,
     handle_login_click,
+    update_login_button,
 )
-from bixarena_app.page.bixarena_battle import build_battle_page
-from bixarena_app.page.bixarena_leaderboard import build_leaderboard_page
 from bixarena_app.page.bixarena_home import build_home_page
+from bixarena_app.page.bixarena_leaderboard import build_leaderboard_page
 from bixarena_app.page.bixarena_user import (
     build_user_page,
-    update_user_page,
     handle_logout_click,
+    update_user_page,
 )
-from bixarena_app.auth.auth_service import get_auth_service
 
 
 class PageNavigator:
@@ -28,90 +30,99 @@ class PageNavigator:
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
-def _extract_session_cookie(request: gr.Request) -> Optional[str]:
-    """Extract session cookie from request"""
-    if not request or not hasattr(request, "headers"):
-        return None
+def _get_api_base_url() -> str | None:
+    """Resolve the BixArena API base URL from environment.
 
-    cookie_header = request.headers.get("cookie", "")
-    for cookie in cookie_header.split(";"):
-        if "bixarena_session=" in cookie:
-            return cookie.split("bixarena_session=")[1].strip()
+    Uses API_BASE_URL. If unset, prints an error and returns None.
+    """
+    api = os.environ.get("API_BASE_URL")
+    if api:
+        return api.rstrip("/")
+    print(
+        "[config] API_BASE_URL not set.\n"
+        "[config] Login and identity sync will be disabled until configured."
+    )
     return None
 
 
-def _validate_oauth_params(code: str, state: str) -> bool:
-    """Validate OAuth parameters"""
-    if not code or len(code) > 500:
-        print("❌ Invalid OAuth code parameter")
-        return False
-    if state and len(state) > 100:
-        print("❌ Invalid OAuth state parameter")
-        return False
-    return True
+def _get_oidc_base_url() -> str | None:
+    """Resolve the OIDC base URL for browser-driven auth redirects.
 
-
-def _process_oauth_callback(
-    request: gr.Request, auth_service
-) -> Optional[Tuple[Any, ...]]:
-    """Process OAuth callback parameters"""
-    try:
-        parsed_url = urllib.parse.urlparse(str(request.url))
-        params = urllib.parse.parse_qs(parsed_url.query)
-
-        if "code" not in params:
-            return None
-
-        code = params["code"][0]
-        state = params.get("state", [None])[0]
-
-        if not _validate_oauth_params(code, state):
-            return update_login_button(), *update_user_page(), gr.HTML("")
-
-        success, session_id = auth_service.handle_oauth_callback(code, state)
-        if success and session_id:
-            # Set cookie with appropriate security for environment (2 hours)
-            secure_flag = "secure" if str(request.url).startswith("https") else ""
-            cookie_script = f"""
-            <script>
-            document.cookie = "bixarena_session={session_id}; path=/; max-age=7200; samesite=strict; {secure_flag}";
-            </script>
-            """
-            return update_login_button(), *update_user_page(), gr.HTML(cookie_script)
-
-    except Exception as e:
-        print(f"❌ OAuth callback failed: {e}")
-
+    Uses OIDC_BASE_URL. If unset, prints an error and returns None.
+    """
+    base = os.environ.get("OIDC_BASE_URL")
+    if base:
+        return base.rstrip("/")
+    print(
+        "[config] OIDC_BASE_URL not set.\n"
+        "[config] Login/logout redirects will be disabled until configured."
+    )
     return None
 
 
-def check_oauth_callback(request: gr.Request):
-    """Process OAuth callback with input validation and cookie management"""
-    auth_service = get_auth_service()
+def sync_backend_session_on_load(request: gr.Request):
+    """Fetch user identity from backend once (if JSESSIONID cookie present).
 
-    # Load session from cookie (for both callback and normal page loads)
-    session_cookie = _extract_session_cookie(request)
-    if session_cookie:
-        success = auth_service.load_session_from_cookie(session_cookie)
-        if not success:
-            # Invalid session, clear cookie
-            # Clear cookie (no need for secure flag when clearing)
-            clear_cookie_script = """
-            <script>
-            document.cookie = "bixarena_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=strict;";
-            </script>
-            """
-            return (
-                update_login_button(),
-                *update_user_page(),
-                gr.HTML(clear_cookie_script),
-            )
+    No local token storage, refresh logic, or OAuth flow lives here—only a
+    best-effort identity pull so UI components can render the logged-in name.
+    """
+    state = get_user_state()
 
-    # Process OAuth callback if present
-    if request and hasattr(request, "url"):
-        result = _process_oauth_callback(request, auth_service)
-        if result:
-            return result
+    # Skip if already populated or request has no headers (e.g. internal load)
+    if not state.is_authenticated() and request and hasattr(request, "headers"):
+        cookie_header = request.headers.get("cookie", "")
+        jsessionid = None
+        for ck in cookie_header.split(";"):
+            ck = ck.strip()
+            if ck.startswith("JSESSIONID="):
+                jsessionid = ck.split("=", 1)[1]
+                break
+        if jsessionid:
+            backend_base = _get_api_base_url()
+            try:
+                print(
+                    "[auth-sync] Starting backend identity fetch (JSESSIONID present) "
+                    f"len={len(jsessionid)}"
+                )
+                if not backend_base:
+                    print("[auth-sync] Skipping identity fetch: API_BASE_URL missing")
+                else:
+                    resp = requests.get(
+                        f"{backend_base}/echo",
+                        cookies={"JSESSIONID": jsessionid},
+                        timeout=2,
+                    )
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        sub = data.get("sub")
+                        if sub:
+                            state.set_current_user(
+                                {"firstName": sub, "userName": sub, "source": "backend"}
+                            )
+                            print(f"[auth-sync] Identity sync success sub={sub}")
+                            return (
+                                update_login_button(),
+                                *update_user_page(),
+                                gr.HTML(""),
+                            )
+                        else:
+                            print(
+                                "[auth-sync] /echo 200 but no sub field; "
+                                "leaving guest state"
+                            )
+                    else:
+                        snippet = resp.text[:160] if resp.text else ""
+                        print(
+                            f"[auth-sync] /echo {resp.status_code} "
+                            f"bodySnippet={snippet}"
+                        )
+            except Exception as e:
+                print(f"[auth-sync] identity fetch failed: {e}")
+        else:
+            if cookie_header:
+                print("[auth-sync] Cookie header present but no JSESSIONID token")
+            else:
+                print("[auth-sync] No cookie header; skipping identity fetch")
 
     return update_login_button(), *update_user_page(), gr.HTML("")
 
@@ -168,8 +179,25 @@ def build_app(moderate=False):
         with gr.Column(visible=False) as user_page:
             _, welcome_display, logout_btn = build_user_page()
 
-        # Hidden HTML component for cookie scripts
-        cookie_html = gr.HTML("", visible=False)
+        # Hidden HTML component(s) for cookie scripts / future use
+        cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
+
+        # Expose start endpoint to login button JS for immediate redirect
+        oidc_base = _get_oidc_base_url()
+        if not oidc_base:
+            print("[config] OIDC_BASE_URL missing; login button will be disabled.")
+            start_endpoint = ""
+            base_markup = ""
+        else:
+            start_endpoint = f"{oidc_base}/auth/oidc/start"
+            base_markup = oidc_base
+        gr.HTML(
+            "<span id='login-start-endpoint' style='display:none'>"
+            + start_endpoint
+            + "</span><span id='backend-base' style='display:none'>"
+            + base_markup
+            + "</span>"
+        )
 
         pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(pages)
@@ -184,7 +212,31 @@ def build_app(moderate=False):
             lambda: handle_login_click(
                 navigator, update_login_button, update_user_page
             ),
-            outputs=pages + [login_btn, welcome_display, logout_btn],
+            outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
+            js="""
+() => {
+  const btn = document.querySelector('#login-btn button,#login-btn');
+  if(!btn) return;
+  const label = btn.innerText.trim();
+  if(label === 'Login') {
+      const el = document.getElementById('login-start-endpoint');
+      const url = el ? el.textContent.trim() : '';
+      if(url){ window.location.href = url; }
+      return;
+  }
+  if(label === 'Logout') {
+      const baseEl = document.getElementById('backend-base');
+      const base = baseEl ? baseEl.textContent.trim() : '';
+      if(base){
+          fetch(base + '/auth/logout', {method:'POST', credentials:'include'})
+             .finally(()=> {
+                 try { sessionStorage.setItem('justLoggedOut','1'); } catch(e) {}
+                 window.location.href = '/';
+             });
+      }
+  }
+}
+                """,
         )
 
         # Logout
@@ -195,12 +247,14 @@ def build_app(moderate=False):
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
         )
 
-        # OAuth callback
+        # Initial identity sync (not an OAuth callback—just a passive identity fetch)
         demo.load(
-            check_oauth_callback,
+            sync_backend_session_on_load,
             outputs=[login_btn, welcome_display, logout_btn, cookie_html],
             js=cleanup_js,
         )
+
+        # (Removed MutationObserver; direct JS click handles login redirect.)
 
     return demo
 

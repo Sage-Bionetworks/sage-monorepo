@@ -20,6 +20,12 @@ tags:
     name: Leaderboard
   - description: Operations about models.
     name: Model
+  - description: Authentication and token minting operations.
+    name: Auth
+  - description: Utility endpoints.
+    name: Utility
+  - description: Administrative endpoints requiring elevated roles.
+    name: Admin
 paths:
   /example-prompts:
     get:
@@ -253,6 +259,166 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Model
+  /auth/oidc/start:
+    get:
+      description: Initiates the OIDC login by redirecting the user to Synapse with
+        state and nonce.
+      operationId: startOidc
+      responses:
+        '204':
+          description: Flow started (no content; clients should follow redirect)
+        '302':
+          description: Redirect to Synapse login
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      security: []
+      summary: Start Synapse OIDC authorization code flow
+      tags:
+        - Auth
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: Auth
+  /auth/oidc/callback:
+    get:
+      description: "Handles redirect from Synapse, validates state and nonce, establishes\
+        \ authenticated session."
+      operationId: oidcCallback
+      parameters:
+        - explode: true
+          in: query
+          name: code
+          required: true
+          schema:
+            type: string
+          style: form
+        - explode: true
+          in: query
+          name: state
+          required: true
+          schema:
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oidcCallback_200_response'
+          description: Authentication successful
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security: []
+      summary: OIDC redirect callback
+      tags:
+        - Auth
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Auth
+  /auth/logout:
+    post:
+      description: Invalidate the current authenticated session.
+      operationId: logout
+      responses:
+        '204':
+          description: Logged out (idempotent)
+      security: []
+      summary: Logout current session
+      tags:
+        - Auth
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: Auth
+  /token:
+    post:
+      description: Exchanges an authenticated session (cookie) for an internal JWT.
+      operationId: mintInternalToken
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mintInternalToken_200_response'
+          description: Access token response
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security: []
+      summary: Mint short-lived internal JWT
+      tags:
+        - Auth
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: Auth
+  /.well-known/jwks.json:
+    get:
+      description: Returns the public keys used to verify internally issued JWTs.
+      operationId: getJwks
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getJwks_200_response'
+          description: JWKS document
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      security: []
+      summary: JSON Web Key Set
+      tags:
+        - Auth
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Auth
+  /echo:
+    get:
+      description: Returns information about the authenticated user.
+      operationId: echo
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/echo_200_response'
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      summary: Echo authenticated principal
+      tags:
+        - Utility
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: Utility
+  /admin/stats:
+    get:
+      description: Administrative operations requiring admin role.
+      operationId: adminStats
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adminStats_200_response'
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      summary: Admin statistics
+      tags:
+        - Admin
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: Admin
 components:
   parameters:
     examplePromptSearchQuery:
@@ -340,6 +506,18 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The requested resource was not found
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Unauthorized
+    Forbidden:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Forbidden
   schemas:
     ExamplePromptSort:
       default: created_at
@@ -512,6 +690,12 @@ components:
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
+      example:
+        instance: instance
+        detail: detail
+        title: title
+        type: type
+        status: 0
       properties:
         title:
           description: A human readable documentation for the problem type
@@ -1103,6 +1287,66 @@ components:
         hasNext: true
         totalElements: 99
       type: object
+    oidcCallback_200_response:
+      example:
+        status: ok
+      properties:
+        status:
+          example: ok
+          type: string
+      type: object
+    mintInternalToken_200_response:
+      example:
+        access_token: access_token
+        token_type: Bearer
+        expires_in: 600
+      properties:
+        access_token:
+          type: string
+        token_type:
+          enum:
+            - Bearer
+          type: string
+        expires_in:
+          example: 600
+          type: integer
+      required:
+        - access_token
+        - expires_in
+        - token_type
+      type: object
+    getJwks_200_response:
+      example:
+        keys:
+          - '{}'
+          - '{}'
+      properties:
+        keys:
+          items:
+            type: object
+          type: array
+      type: object
+    echo_200_response:
+      example:
+        sub: sub
+        roles:
+          - roles
+          - roles
+      properties:
+        sub:
+          type: string
+        roles:
+          items:
+            type: string
+          type: array
+      type: object
+    adminStats_200_response:
+      example:
+        ok: true
+      properties:
+        ok:
+          type: boolean
+      type: object
     LeaderboardList_inner:
       example:
         name: Open Source Models
@@ -1137,7 +1381,7 @@ components:
     jwtBearer:
       bearerFormat: JWT
       description: |
-        Short-lived internal JWT issued by the API gateway after authentication through Synapse or an API key exchange. The token is included in the Authorization header using the Bearer scheme.
+        Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
       scheme: bearer
       type: http
 x-oauth2-audience: urn:bixarena:api
