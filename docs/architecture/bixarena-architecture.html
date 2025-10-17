@@ -42,7 +42,7 @@
     </style>
   </head>
   <body>
-    <h2>Bixarena: Full-Stack Application Architecture</h2>
+    <h2>BixArena: Full-Stack Application Architecture</h2>
 
     <div class="diagram-container">
       <!-- prettier-ignore -->
@@ -59,6 +59,8 @@
         ai@{shape: icon, icon: 'logos:fastapi-icon', label: 'AI Service<br>(FastAPI)'}
         db@{shape: icon, icon: 'logos:postgresql', label: 'RDS PostgreSQL'}
         cache@{shape: icon, icon: 'logos:redis', label: 'Redis / ElastiCache'}
+        or@{shape: icon, icon: 'system-uicons:fork-git', label: 'OpenRouter<br>(LLM Proxy)'}
+        %% claude@{shape: icon, icon: 'logos:claude-icon', label: 'Claude'}
 
         user -->|"HTTPS"| caddy
         caddy -->|"proxy /api/\*\*, /ai/**"| gw
@@ -68,6 +70,9 @@
         gw -->|"HTTP/WS /ai/**"| ai
 
         web -->|"/api/\*\*, /ai/**"| caddy
+        web --> or
+
+        %% or --> claude
 
         api --> db
         ai --> db
@@ -95,6 +100,13 @@
           name: 'catppuccin',
           loader: () =>
             fetch('https://unpkg.com/@iconify-json/catppuccin@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'system-uicons',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/system-uicons@1.2.4/icons.json').then((r) =>
+              r.json(),
+            ),
         },
       ]);
 
