@@ -178,16 +178,12 @@ nx test openchallenges-infra-cdk --testPathPattern=integration
 
 ### Required for All Environments
 
+- `AWS_PROFILE`: Name of the AWS profile
 - `ENV`: Environment name (`dev`, `stage`, or `prod`)
 
 ### Required for Development
 
 - `DEVELOPER_NAME`: Your identifier for resource naming (alphanumeric, hyphens, underscores only)
-
-### Optional
-
-- `AWS_REGION`: AWS region for deployment (defaults to CDK's default region)
-- `AWS_ACCOUNT`: AWS account ID (defaults to CDK's default account)
 
 ## Environment Variable Precedence
 
