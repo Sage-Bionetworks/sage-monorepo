@@ -51,6 +51,35 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   },
 ];
 
+export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
+  {
+    name: 'Available Data',
+    field: 'available_data',
+    options: [
+      { label: 'Biomarkers', selected: true },
+      { label: 'Disease Correlation', selected: true },
+      { label: 'Gene Expression', selected: true },
+      { label: 'Pathology', selected: true },
+    ],
+  },
+  {
+    name: 'Contributing Center',
+    field: 'center',
+    options: [
+      { label: 'IU/Jax/Pitt', selected: false },
+      { label: 'UCI', selected: false },
+    ],
+  },
+  {
+    name: 'Model Type',
+    field: 'model_type',
+    options: [
+      { label: 'Familial AD', selected: false },
+      { label: 'Late Onset AD', selected: false },
+    ],
+  },
+];
+
 export const mockComparisonToolColumns: ComparisonToolConfigColumn[] = [
   {
     name: 'Age',

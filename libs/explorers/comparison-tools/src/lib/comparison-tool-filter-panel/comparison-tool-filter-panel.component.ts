@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, model, output, signal } from '@angular/core';
+import { Component, computed, inject, input, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   ComparisonToolConfigFilter,
   ComparisonToolFilter,
 } from '@sagebionetworks/explorers/models';
+import { ComparisonToolFilterService } from '@sagebionetworks/explorers/services';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
 import { FilterPanelHeaderComponent } from './filter-panel-header/filter-panel-header.component';
@@ -24,8 +25,9 @@ import { FilterPanelMainMenuItemButtonComponent } from './filter-panel-main-menu
   styleUrls: ['./comparison-tool-filter-panel.component.scss'],
 })
 export class ComparisonToolFilterPanelComponent {
+  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
+
   filterConfigs = input<ComparisonToolConfigFilter[]>([]);
-  filtersChanged = output<ComparisonToolFilter[]>();
   isOpen = model<boolean>(false);
 
   filters = computed(() => {
@@ -46,7 +48,7 @@ export class ComparisonToolFilterPanelComponent {
   hasActivePane = computed(() => this.activePane() !== -1);
 
   handleChange() {
-    this.filtersChanged.emit(this.filters());
+    this.comparisonToolFilterService.setFilters(this.filters());
   }
 
   openPane(index: number) {

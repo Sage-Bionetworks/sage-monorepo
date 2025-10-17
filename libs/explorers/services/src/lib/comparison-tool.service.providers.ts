@@ -1,6 +1,5 @@
 import { Provider } from '@angular/core';
 import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { ComparisonToolFilterService } from './comparison-tool-filter.service';
 import { ComparisonToolService } from './comparison-tool.service';
 
 export type ComparisonToolServiceOptions = {
@@ -51,8 +50,4 @@ export const provideComparisonToolService = (
       },
     },
   ];
-};
-
-export const provideComparisonToolFilterService = (): Provider[] => {
-  return [ComparisonToolFilterService];
 };

@@ -1,0 +1,38 @@
+@use 'explorers/styles/src/lib/variables';
+
+.filter-list-item {
+  display: flex;
+  padding: 8px 15px;
+  background-color: rgb(80 129 167 / 20%);
+  border-radius: 40px;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  float: left;
+  align-items: center;
+
+  b {
+    font-weight: 700;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+  .filter-list-item-text > *:hover {
+    cursor: default;
+  }
+
+  .filter-list-item-clear {
+    cursor: pointer;
+    margin-left: 12px;
+    color: #5081a7;
+
+    svg path {
+      transition: variables.$transition-duration;
+      stroke-width: 5;
+    }
+  }
+}
