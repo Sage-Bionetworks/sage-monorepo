@@ -8,8 +8,8 @@
   <input
     type="text"
     pInputText
-    (input)="onSearchInput($event)"
-    [value]="searchTerm"
+    [ngModel]="searchTerm"
+    (ngModelChange)="updateSearchTerm($event)"
     placeholder="Search"
   />
   @if (searchTerm) {

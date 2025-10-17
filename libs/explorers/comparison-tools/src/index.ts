@@ -6,3 +6,4 @@ export * from './lib/comparison-tool-table-link/comparison-tool-table-link.compo
 export * from './lib/displayed-results/displayed-results.component';
 export * from './lib/help-links/help-links.component';
 export * from './lib/legend-panel/legend-panel.component';
+export * from './lib/significance-controls/significance-controls.component';

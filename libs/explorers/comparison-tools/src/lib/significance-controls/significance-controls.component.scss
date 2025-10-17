@@ -1,0 +1,59 @@
+@use 'explorers/styles/src/lib/variables';
+@use 'explorers/styles/src/lib/mixins';
+
+.significance-controls {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  color: gray;
+  height: 20px;
+  margin-bottom: 8px;
+  margin-right: 100px;
+
+  button {
+    @include mixins.reset-button;
+
+    cursor: pointer;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+
+    &:last-child {
+      border-left: 1px solid var(--color-gray-300);
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+
+  .toggle-switch {
+    display: flex;
+    align-items: start;
+  }
+}
+
+.significance-control-panel {
+  max-width: 425px;
+  background: #fff;
+  box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
+
+  .p-popover-content {
+    padding: 40px;
+  }
+
+  .significance-control-panel-heading {
+    font-size: 21px;
+    font-weight: 700;
+  }
+
+  input {
+    width: 100%;
+    background-color: #f1f3f5;
+    border: none;
+    padding: 8px;
+    font-size: 14px;
+    outline: none;
+  }
+}

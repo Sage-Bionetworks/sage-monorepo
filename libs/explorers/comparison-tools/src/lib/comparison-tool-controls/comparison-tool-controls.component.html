@@ -5,5 +5,8 @@
   </div>
   <div class="controls-right">
     <explorers-comparison-tool-selectors />
+    @if (showSignificanceControls()) {
+      <explorers-significance-controls />
+    }
   </div>
 </div>

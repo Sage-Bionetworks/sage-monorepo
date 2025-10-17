@@ -28,6 +28,7 @@ import {
 } from 'rxjs';
 import sanitizeHtml from 'sanitize-html';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
+import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
 
 @Component({
   selector: 'explorers-search-input',
@@ -104,7 +105,7 @@ export class SearchInputComponent implements AfterViewInit {
           const keyEvent = event as KeyboardEvent;
           return !['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(keyEvent.key);
         }),
-        debounceTime(500),
+        debounceTime(DEBOUNCE_TIME_MS),
         switchMap((event: Event) => {
           const target = event.target as HTMLInputElement;
           return this.search(target.value).pipe(

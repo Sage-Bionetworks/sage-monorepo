@@ -27,6 +27,7 @@ export class BaseComparisonToolComponent {
   private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
   isLoading = input(true);
+  showSignificanceControls = input(true);
   headerTitle = input.required<string>();
   filterResultsButtonTooltip = input.required<string>();
 
