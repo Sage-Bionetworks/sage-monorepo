@@ -6,7 +6,6 @@ from constructs import Construct
 from openchallenges_infra_cdk.shared.constructs.bucket_construct import (
     OpenchallengesBucket,
 )
-from openchallenges_infra_cdk.shared.naming import generate_resource_name
 
 
 class BucketStack(cdk.Stack):
@@ -34,13 +33,6 @@ class BucketStack(cdk.Stack):
         """
         super().__init__(scope, construct_id, **kwargs)
 
-        # Generate bucket name
-        bucket_base_name = generate_resource_name(
-            resource_type="img",
-            environment=environment,
-            developer_name=developer_name,
-        )
-
         # Determine removal policy based on environment
         # Dev: DESTROY for easier cleanup and re-deployment
         # Stage/Prod: RETAIN for data safety
@@ -52,10 +44,14 @@ class BucketStack(cdk.Stack):
         auto_delete = environment == "dev"
 
         # Create image bucket for Thumbor service
+        # CDK auto-generates name using stack ID as prefix:
+        # - Dev: openchallenges-dev-{developer}-imagebucket{hash}-{random}
+        # - Stage: openchallenges-stage-imagebucket{hash}-{random}
+        # - Prod: openchallenges-prod-imagebucket{hash}-{random}
         self.image_bucket = OpenchallengesBucket(
             self,
             "ImageBucket",
-            bucket_name=bucket_base_name,
+            bucket_name=None,  # Let CDK auto-generate with stack prefix
             versioned=False,  # Images are immutable, no need for versioning
             removal_policy=removal_policy,
             auto_delete_objects=auto_delete,

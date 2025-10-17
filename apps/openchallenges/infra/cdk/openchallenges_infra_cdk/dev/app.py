@@ -31,7 +31,7 @@ def main() -> None:
     # Create bucket stack
     BucketStack(
         app,
-        f"{stack_prefix}-buckets",
+        stack_prefix,  # Use stack_prefix directly as stack ID
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,

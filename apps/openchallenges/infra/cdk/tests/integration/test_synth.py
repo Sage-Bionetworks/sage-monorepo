@@ -38,7 +38,7 @@ class TestSynthesis:
 
         stack = BucketStack(
             app,
-            f"{stack_prefix}-buckets",
+            stack_prefix,  # Use stack_prefix directly as stack ID
             stack_prefix=stack_prefix,
             environment=environment,
             developer_name=developer_name,
@@ -51,10 +51,24 @@ class TestSynthesis:
         # Verify stack has S3 bucket
         template.resource_count_is("AWS::S3::Bucket", 1)
 
-        # Verify bucket name
+        # All environments use auto-generated bucket names with stack prefix
+        # Dev: openchallenges-dev-testuser-imagebucket{hash}-{random}
+        # This prevents naming conflicts on stack updates
         template.has_resource_properties(
             "AWS::S3::Bucket",
-            {"BucketName": "openchallenges-dev-testuser-img"},
+            {
+                "BucketEncryption": {
+                    "ServerSideEncryptionConfiguration": [
+                        {"ServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}
+                    ]
+                },
+                "PublicAccessBlockConfiguration": {
+                    "BlockPublicAcls": True,
+                    "BlockPublicPolicy": True,
+                    "IgnorePublicAcls": True,
+                    "RestrictPublicBuckets": True,
+                },
+            },
         )
 
     def test_stage_synth(self, monkeypatch):
@@ -81,7 +95,7 @@ class TestSynthesis:
 
         stack = BucketStack(
             app,
-            f"{stack_prefix}-buckets",
+            stack_prefix,  # Use stack_prefix directly as stack ID
             stack_prefix=stack_prefix,
             environment=environment,
             developer_name=developer_name,
@@ -94,9 +108,24 @@ class TestSynthesis:
         # Verify stack has S3 bucket
         template.resource_count_is("AWS::S3::Bucket", 1)
 
-        # Verify bucket name
+        # Stage uses auto-generated bucket names (no explicit BucketName property)
+        # This prevents naming conflicts on stack updates
+        # Verify other bucket properties
         template.has_resource_properties(
-            "AWS::S3::Bucket", {"BucketName": "openchallenges-stage-img"}
+            "AWS::S3::Bucket",
+            {
+                "BucketEncryption": {
+                    "ServerSideEncryptionConfiguration": [
+                        {"ServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}
+                    ]
+                },
+                "PublicAccessBlockConfiguration": {
+                    "BlockPublicAcls": True,
+                    "BlockPublicPolicy": True,
+                    "IgnorePublicAcls": True,
+                    "RestrictPublicBuckets": True,
+                },
+            },
         )
 
     def test_prod_synth(self, monkeypatch):
@@ -123,7 +152,7 @@ class TestSynthesis:
 
         stack = BucketStack(
             app,
-            f"{stack_prefix}-buckets",
+            stack_prefix,  # Use stack_prefix directly as stack ID
             stack_prefix=stack_prefix,
             environment=environment,
             developer_name=developer_name,
@@ -136,7 +165,22 @@ class TestSynthesis:
         # Verify stack has S3 bucket
         template.resource_count_is("AWS::S3::Bucket", 1)
 
-        # Verify bucket name
+        # Prod uses auto-generated bucket names (no explicit BucketName property)
+        # This prevents naming conflicts on stack updates
+        # Verify other bucket properties
         template.has_resource_properties(
-            "AWS::S3::Bucket", {"BucketName": "openchallenges-prod-img"}
+            "AWS::S3::Bucket",
+            {
+                "BucketEncryption": {
+                    "ServerSideEncryptionConfiguration": [
+                        {"ServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}
+                    ]
+                },
+                "PublicAccessBlockConfiguration": {
+                    "BlockPublicAcls": True,
+                    "BlockPublicPolicy": True,
+                    "IgnorePublicAcls": True,
+                    "RestrictPublicBuckets": True,
+                },
+            },
         )

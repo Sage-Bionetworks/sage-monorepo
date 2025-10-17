@@ -12,7 +12,7 @@ class OpenchallengesBucket(Construct):
         self,
         scope: Construct,
         construct_id: str,
-        bucket_name: str,
+        bucket_name: str | None = None,
         versioned: bool = False,
         lifecycle_rules: list[s3.LifecycleRule] | None = None,
         removal_policy: cdk.RemovalPolicy = cdk.RemovalPolicy.RETAIN,
@@ -25,7 +25,8 @@ class OpenchallengesBucket(Construct):
         Args:
             scope: CDK construct scope
             construct_id: Construct identifier
-            bucket_name: Base name for the bucket (suffix will be added for uniqueness)
+            bucket_name: Explicit name for the bucket. If None, CDK auto-generates
+                with stack name + construct ID + random suffix (default: None)
             versioned: Enable versioning (default: False)
             lifecycle_rules: Optional lifecycle rules
             removal_policy: Policy for bucket removal (default: RETAIN)
@@ -39,7 +40,7 @@ class OpenchallengesBucket(Construct):
         self.bucket = s3.Bucket(
             self,
             "Bucket",
-            bucket_name=bucket_name,
+            bucket_name=bucket_name,  # None = auto-generate
             # Security: Enable encryption at rest
             encryption=s3.BucketEncryption.S3_MANAGED,
             # Security: Block all public access

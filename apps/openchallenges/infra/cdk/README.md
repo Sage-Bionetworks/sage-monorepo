@@ -4,29 +4,7 @@ AWS CDK infrastructure as code for OpenChallenges. This project defines and mana
 
 ## Project Structure
 
-```
-openchallenges-infra-cdk/
-├── openchallenges_infra_cdk/
-│   ├── shared/              # Shared libraries used by all environments
-│   │   ├── config.py        # Configuration management
-│   │   ├── naming.py        # Resource naming utilities
-│   │   ├── constructs/      # Reusable CDK constructs
-│   │   └── stacks/          # Reusable CDK stacks
-│   ├── dev/                 # Development environment app
-│   │   └── app.py
-│   ├── stage/               # Staging environment app
-│   │   └── app.py
-│   └── prod/                # Production environment app
-│       └── app.py
-├── tests/
-│   ├── unit/                # Unit tests
-│   └── integration/         # Integration tests
-├── .env                     # Base environment variables
-├── .env.dev                 # Development-specific variables
-├── .env.stage               # Staging-specific variables
-├── .env.prod                # Production-specific variables
-└── cdk.json                 # CDK configuration
-```
+TODO
 
 ## Quick Start
 
