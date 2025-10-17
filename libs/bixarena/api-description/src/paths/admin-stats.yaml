@@ -1,0 +1,20 @@
+get:
+  tags:
+    - Admin
+  summary: Admin statistics
+  description: Administrative operations requiring admin role.
+  operationId: adminStats
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml

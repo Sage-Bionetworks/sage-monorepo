@@ -62,10 +62,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -82,40 +82,49 @@ configuration = bixarena_api_client.Configuration(
 # Enter a context with an instance of the API client
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = bixarena_api_client.ExamplePromptApi(api_client)
-    example_prompt_search_query = bixarena_api_client.ExamplePromptSearchQuery() # ExamplePromptSearchQuery | The search query used to find and filter example prompts. (optional)
+    api_instance = bixarena_api_client.AdminApi(api_client)
 
     try:
-        # List example prompts
-        api_response = api_instance.list_example_prompts(example_prompt_search_query=example_prompt_search_query)
-        print("The response of ExamplePromptApi->list_example_prompts:\n")
+        # Admin statistics
+        api_response = api_instance.admin_stats()
+        print("The response of AdminApi->admin_stats:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling ExamplePromptApi->list_example_prompts: %s\n" % e)
+        print("Exception when calling AdminApi->admin_stats: %s\n" % e)
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://bixarena.ai/api/v1*
+All URIs are relative to _http://localhost/v1_
 
-| Class              | Method                                                                            | HTTP request                                            | Description                     |
-| ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------- |
-| _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts            |
-| _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries         |
-| _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots       |
-| _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history   |
-| _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards |
-| _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                     |
+| Class              | Method                                                                            | HTTP request                                            | Description                                |
+| ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------ |
+| _AdminApi_         | [**admin_stats**](docs/AdminApi.md#admin_stats)                                   | **GET** /admin/stats                                    | Admin statistics                           |
+| _AuthApi_          | [**get_jwks**](docs/AuthApi.md#get_jwks)                                          | **GET** /.well-known/jwks.json                          | JSON Web Key Set                           |
+| _AuthApi_          | [**logout**](docs/AuthApi.md#logout)                                              | **POST** /auth/logout                                   | Logout current session                     |
+| _AuthApi_          | [**mint_internal_token**](docs/AuthApi.md#mint_internal_token)                    | **POST** /token                                         | Mint short-lived internal JWT              |
+| _AuthApi_          | [**oidc_callback**](docs/AuthApi.md#oidc_callback)                                | **GET** /auth/oidc/callback                             | OIDC redirect callback                     |
+| _AuthApi_          | [**start_oidc**](docs/AuthApi.md#start_oidc)                                      | **GET** /auth/oidc/start                                | Start Synapse OIDC authorization code flow |
+| _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts                       |
+| _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
+| _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |
+| _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
+| _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
+| _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
+| _UtilityApi_       | [**echo**](docs/UtilityApi.md#echo)                                               | **GET** /echo                                           | Echo authenticated principal               |
 
 ## Documentation For Models
 
+- [AdminStats200Response](docs/AdminStats200Response.md)
 - [BasicError](docs/BasicError.md)
+- [Echo200Response](docs/Echo200Response.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
 - [ExamplePromptPage](docs/ExamplePromptPage.md)
 - [ExamplePromptSearchQuery](docs/ExamplePromptSearchQuery.md)
 - [ExamplePromptSort](docs/ExamplePromptSort.md)
 - [ExamplePromptSource](docs/ExamplePromptSource.md)
+- [GetJwks200Response](docs/GetJwks200Response.md)
 - [HistoricalLeaderboardEntry](docs/HistoricalLeaderboardEntry.md)
 - [LeaderboardEntry](docs/LeaderboardEntry.md)
 - [LeaderboardEntryPage](docs/LeaderboardEntryPage.md)
@@ -130,10 +139,12 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [LeaderboardSnapshotSort](docs/LeaderboardSnapshotSort.md)
 - [LeaderboardSort](docs/LeaderboardSort.md)
 - [License](docs/License.md)
+- [MintInternalToken200Response](docs/MintInternalToken200Response.md)
 - [Model](docs/Model.md)
 - [ModelPage](docs/ModelPage.md)
 - [ModelSearchQuery](docs/ModelSearchQuery.md)
 - [ModelSort](docs/ModelSort.md)
+- [OidcCallback200Response](docs/OidcCallback200Response.md)
 - [PageMetadata](docs/PageMetadata.md)
 - [SortDirection](docs/SortDirection.md)
 

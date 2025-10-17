@@ -1,0 +1,21 @@
+get:
+  tags:
+    - Utility
+  summary: Echo authenticated principal
+  description: Returns information about the authenticated user.
+  operationId: echo
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sub:
+                type: string
+              roles:
+                type: array
+                items: { type: string }
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml

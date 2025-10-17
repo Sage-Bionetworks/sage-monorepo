@@ -13,6 +13,7 @@ members = [
     "openchallenges-client",
     "openchallenges-infra-cdk",
     "openchallenges-tools",
+    "platform-infra-cdk-common",
     "sage-monorepo",
 ]
 constraints = [
@@ -280,12 +281,14 @@ source = { editable = "apps/bixarena/infra/cdk" }
 dependencies = [
     { name = "aws-cdk-lib" },
     { name = "boto3" },
+    { name = "platform-infra-cdk-common" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "aws-cdk-lib", specifier = ">=2.219.0" },
     { name = "boto3", specifier = ">=1.40.51" },
+    { name = "platform-infra-cdk-common", editable = "libs/platform/infra/cdk/common" },
 ]
 
 [[package]]
@@ -1074,12 +1077,14 @@ source = { editable = "apps/openchallenges/infra/cdk" }
 dependencies = [
     { name = "aws-cdk-lib" },
     { name = "boto3" },
+    { name = "platform-infra-cdk-common" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "aws-cdk-lib", specifier = ">=2.219.0" },
     { name = "boto3", specifier = ">=1.40.51" },
+    { name = "platform-infra-cdk-common", editable = "libs/platform/infra/cdk/common" },
 ]
 
 [[package]]
@@ -1224,6 +1229,11 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/e8/5c/6caaba7e261c0d75bab23be79f1d06b5ad2a2ae49f028ccec801b0e853d6/pillow-11.3.0-cp313-cp313t-win_amd64.whl", hash = "sha256:857844335c95bea93fb39e0fa2726b4d9d758850b34075a7e3ff4f4fa3aa3b31", size = 6985102, upload-time = "2025-07-01T09:15:13.164Z" },
     { url = "https://files.pythonhosted.org/packages/f3/7e/b623008460c09a0cb38263c93b828c666493caee2eb34ff67f778b87e58c/pillow-11.3.0-cp313-cp313t-win_arm64.whl", hash = "sha256:8797edc41f3e8536ae4b10897ee2f637235c94f27404cac7297f7b607dd0716e", size = 2424803, upload-time = "2025-07-01T09:15:15.695Z" },
 ]
+
+[[package]]
+name = "platform-infra-cdk-common"
+version = "1.0.0"
+source = { editable = "libs/platform/infra/cdk/common" }
 
 [[package]]
 name = "platformdirs"
@@ -1633,7 +1643,9 @@ name = "sage-monorepo"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "bixarena-infra-cdk" },
     { name = "openchallenges-client" },
+    { name = "openchallenges-infra-cdk" },
 ]
 
 [package.dev-dependencies]
@@ -1651,7 +1663,11 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "openchallenges-client", editable = "libs/openchallenges/client-python" }]
+requires-dist = [
+    { name = "bixarena-infra-cdk", editable = "apps/bixarena/infra/cdk" },
+    { name = "openchallenges-client", editable = "libs/openchallenges/client-python" },
+    { name = "openchallenges-infra-cdk", editable = "apps/openchallenges/infra/cdk" },
+]
 
 [package.metadata.requires-dev]
 dev = [

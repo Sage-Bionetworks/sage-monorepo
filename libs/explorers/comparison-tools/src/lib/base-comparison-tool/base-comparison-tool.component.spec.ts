@@ -1,4 +1,11 @@
-import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import {
+  provideComparisonToolFilterService,
+  provideComparisonToolService,
+} from '@sagebionetworks/explorers/services';
+import {
+  mockComparisonToolConfigs,
+  provideLoadingIconColors,
+} from '@sagebionetworks/explorers/testing';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { render } from '@testing-library/angular';
 import { BaseComparisonToolComponent } from './base-comparison-tool.component';
@@ -6,7 +13,14 @@ import { BaseComparisonToolComponent } from './base-comparison-tool.component';
 async function setup() {
   const { fixture } = await render(BaseComparisonToolComponent, {
     imports: [LoadingContainerComponent],
-    providers: [provideLoadingIconColors()],
+    providers: [
+      provideLoadingIconColors(),
+      ...provideComparisonToolService(),
+      ...provideComparisonToolFilterService(),
+    ],
+    componentInputs: {
+      pageConfigs: mockComparisonToolConfigs,
+    },
   });
 
   const component = fixture.componentInstance;

@@ -1,0 +1,26 @@
+post:
+  tags:
+    - Auth
+  summary: Mint short-lived internal JWT
+  description: Exchanges an authenticated session (cookie) for an internal JWT.
+  operationId: mintInternalToken
+  security: []
+  responses:
+    '200':
+      description: Access token response
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [access_token, token_type, expires_in]
+            properties:
+              access_token:
+                type: string
+              token_type:
+                type: string
+                enum: [Bearer]
+              expires_in:
+                type: integer
+                example: 600
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml

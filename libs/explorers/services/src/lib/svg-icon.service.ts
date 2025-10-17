@@ -29,13 +29,18 @@ export class SvgIconService {
 
   // Common SVGs we want to preload
   private commonSvgPaths = [
+    '/explorers-assets/icons/card-arrow.svg',
+    '/explorers-assets/icons/caret-right-outline.svg',
+    '/explorers-assets/icons/close.svg',
     '/explorers-assets/icons/cog.svg',
     '/explorers-assets/icons/column.svg',
     '/explorers-assets/icons/download.svg',
     '/explorers-assets/icons/external-link.svg',
     '/explorers-assets/icons/gct.svg',
     '/explorers-assets/icons/info-circle.svg',
+    '/explorers-assets/icons/link.svg',
     '/explorers-assets/icons/pin.svg',
+    '/explorers-assets/icons/search.svg',
     '/explorers-assets/icons/trash.svg',
   ];
 
