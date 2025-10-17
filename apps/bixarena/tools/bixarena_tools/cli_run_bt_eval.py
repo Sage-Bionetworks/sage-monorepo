@@ -5,6 +5,7 @@ Command-line interface for running Bradley-Terry evaluation with mock data.
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 
 from .bt_eval import (
@@ -73,6 +74,9 @@ def main():
     print("🎯 BixArena Bradley-Terry Evaluation")
     print("=" * 40)
 
+    # Start total timing
+    total_start_time = time.time()
+
     # Create simulation configuration
     config = SimConfig(
         num_models=args.num_models,
@@ -83,18 +87,25 @@ def main():
 
     # Generate mock votes
     print("📊 Generating mock vote data...")
+    data_gen_start = time.time()
     votes = simulate_battles(config)
+    data_gen_time = time.time() - data_gen_start
     print_simulation_summary(votes, config)
+    print(f"⏱️  Data generation completed in {data_gen_time:.3f} seconds")
 
     # Run BT evaluation
     print("\n🧮 Computing Bradley-Terry scores...")
+    bt_eval_start = time.time()
     bt_results, confidence_intervals = compute_bt_scores_and_bootstrap(
         votes, num_bootstrap=args.num_bootstrap
     )
+    bt_eval_time = time.time() - bt_eval_start
 
     if bt_results.empty:
         print("❌ Failed to compute BT scores")
         sys.exit(1)
+
+    print(f"⏱️  BT evaluation completed in {bt_eval_time:.3f} seconds")
 
     # Format for leaderboard
     print("📋 Formatting leaderboard results...")
@@ -126,6 +137,11 @@ def main():
                 "tie_probability": config.tie_probability,
                 "random_seed": config.random_seed,
             },
+            "timing": {
+                "data_generation_seconds": data_gen_time,
+                "bt_evaluation_seconds": bt_eval_time,
+                "total_runtime_seconds": time.time() - total_start_time,
+            },
             "leaderboard": leaderboard.to_dict("records"),
             "bt_scores": bt_results.to_dict("records"),
             "summary": {
@@ -148,7 +164,15 @@ def main():
 
         print(f"\n💾 Results saved to: {output_path}")
 
+    # Calculate total runtime
+    total_time = time.time() - total_start_time
+
     print("\n✅ Evaluation completed successfully!")
+    print(f"⏱️  Total runtime: {total_time:.3f} seconds")
+    print(f"   • Data generation: {data_gen_time:.3f}s")
+    print(f"   • BT evaluation: {bt_eval_time:.3f}s")
+    print(f"   • Other operations: {total_time - data_gen_time - bt_eval_time:.3f}s")
+
     top_model = leaderboard.iloc[0]
     print(
         f"   Top model: {top_model['model_name']} "
