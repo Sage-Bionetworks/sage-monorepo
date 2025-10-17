@@ -13,11 +13,11 @@ interface DropdownTree {
 @Component({
   selector: 'explorers-comparison-tool-selectors',
   imports: [FormsModule, Select, PopoverLinkComponent],
-  templateUrl: './comparison-tool-selectors.component.html',
-  styleUrls: ['./comparison-tool-selectors.component.scss'],
+  templateUrl: './comparison-tool-category-selectors.component.html',
+  styleUrls: ['./comparison-tool-category-selectors.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ComparisonToolSelectorsComponent {
+export class ComparisonToolCategorySelectorsComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
   pageConfigs = computed(() => this.comparisonToolService.configs());

@@ -1,14 +1,14 @@
 import { Component, input, ViewEncapsulation } from '@angular/core';
 import { ComparisonToolSearchInputComponent } from '../comparison-tool-search-input/comparison-tool-search-input.component';
 import { DisplayedResultsComponent } from '../displayed-results/displayed-results.component';
-import { ComparisonToolSelectorsComponent } from './comparison-tool-selectors/comparison-tool-selectors.component';
+import { ComparisonToolCategorySelectorsComponent } from './comparison-tool-category-selectors/comparison-tool-category-selectors.component';
 import { SignificanceControlsComponent } from '../significance-controls/significance-controls.component';
 
 @Component({
   selector: 'explorers-comparison-tool-controls',
   imports: [
     DisplayedResultsComponent,
-    ComparisonToolSelectorsComponent,
+    ComparisonToolCategorySelectorsComponent,
     ComparisonToolSearchInputComponent,
     SignificanceControlsComponent,
   ],
