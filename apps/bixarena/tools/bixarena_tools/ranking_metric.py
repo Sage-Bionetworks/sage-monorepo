@@ -1,5 +1,5 @@
 """
-Standalone Bradley-Terry implementation based on FastChat's rating_systems.py.
+Bradley-Terry ranking implementation based on FastChat's rating_systems.py.
 
 This is a minimal adaptation of FastChat's Bradley-Terry code to decouple from FastChat
 while preserving the original algorithm and structure for easy comparison.
@@ -10,6 +10,8 @@ Original source: https://github.com/lm-sys/FastChat/blob/main/fastchat/serve/mon
 import math
 import multiprocessing as mp
 import os
+import uuid
+from datetime import UTC, datetime
 from functools import partial
 
 import numpy as np
@@ -213,3 +215,103 @@ def compute_bootstrap_bt(
     scaled_ratings = scale_and_offset(ratings, models, scale, init_rating)
     df = pd.DataFrame(scaled_ratings, columns=models)
     return df[df.median().sort_values(ascending=False).index]
+
+
+def convert_votes_to_battles_df(votes: list[dict]) -> pd.DataFrame:
+    """Convert BixArena vote format to battles DataFrame for BT algorithm."""
+    battles_data = []
+    for vote in votes:
+        if vote["preference"] == "model_a":
+            winner = "model_a"
+        elif vote["preference"] == "model_b":
+            winner = "model_b"
+        elif vote["preference"] == "tie":
+            winner = "tie"
+        else:
+            continue  # Skip invalid preferences
+
+        battles_data.append(
+            {"model_a": vote["model_a"], "model_b": vote["model_b"], "winner": winner}
+        )
+
+    return pd.DataFrame(battles_data)
+
+
+def compute_leaderboard_bt(
+    votes: list[dict],
+    models: dict[str, dict],
+    num_bootstrap: int = 5000,
+    base: float = 10.0,
+    scale: float = 400.0,
+    init_rating: float = 1000.0,
+    tol: float = 1e-6,
+) -> list[dict]:
+    """
+    Compute Bradley-Terry leaderboard directly from votes and model data.
+
+    Args:
+        votes: List of vote dictionaries with model_a, model_b, preference
+        models: Dict mapping model_name -> model_info with id, name, etc.
+        num_bootstrap: Number of bootstrap iterations for confidence intervals
+        base: Base for logarithm (default 10.0)
+        scale: Scaling factor for final ratings
+        init_rating: Initial rating offset
+        tol: Optimization tolerance
+
+    Returns:
+        List of leaderboard entry dictionaries ready for API
+    """
+    # Convert votes to battles format
+    battles_df = convert_votes_to_battles_df(votes)
+    if battles_df.empty:
+        return []
+
+    # Compute base scores
+    scores = compute_bt(battles_df, base, scale, int(init_rating), tol)
+    if scores.empty:
+        return []
+
+    # Compute bootstrap confidence intervals
+    bootstrap_results = compute_bootstrap_bt(
+        battles_df, num_bootstrap, base, scale, init_rating, tol, num_cpu=1
+    )
+
+    # Count votes per model
+    vote_counts = {}
+    for vote in votes:
+        for model in [vote["model_a"], vote["model_b"]]:
+            vote_counts[model] = vote_counts.get(model, 0) + 1
+
+    # Format leaderboard entries
+    leaderboard_entries = []
+    current_time = datetime.now(UTC).isoformat()
+
+    for rank, (model_name, bt_score) in enumerate(scores.items(), 1):
+        model_info = models.get(str(model_name), {})
+
+        # Get bootstrap confidence intervals
+        if model_name in bootstrap_results.columns:
+            model_bootstrap = bootstrap_results[model_name]
+            ci_lower = float(model_bootstrap.quantile(0.025))
+            ci_upper = float(model_bootstrap.quantile(0.975))
+        else:
+            # Fallback if bootstrap failed
+            margin = float(bt_score) * 0.1
+            ci_lower = float(bt_score) - margin
+            ci_upper = float(bt_score) + margin
+
+        entry = {
+            "id": str(uuid.uuid4()),
+            "modelId": model_info.get("id", str(uuid.uuid4())),
+            "modelName": model_name,
+            "license": model_info.get("license", "Unknown"),
+            "btScore": float(bt_score),
+            "voteCount": vote_counts.get(model_name, 0),
+            "rank": rank,
+            "createdAt": current_time,
+            "bootstrapQ025": ci_lower,
+            "bootstrapQ975": ci_upper,
+        }
+        leaderboard_entries.append(entry)
+
+    return leaderboard_entries

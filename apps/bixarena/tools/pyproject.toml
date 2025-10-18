@@ -29,7 +29,7 @@ dependencies = [
 ]
 
 [project.scripts]
-bixarena-eval = "bixarena_tools.run_evaluation:main"
+bixarena-leaderboard = "bixarena_tools.generate_leaderboard:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["bixarena_tools"]

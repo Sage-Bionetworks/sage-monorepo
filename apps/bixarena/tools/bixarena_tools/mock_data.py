@@ -3,6 +3,7 @@ Mock data generation for Bradley-Terry evaluation testing.
 """
 
 import random
+import uuid
 from dataclasses import dataclass
 
 
@@ -16,7 +17,37 @@ class SimConfig:
     random_seed: int = 123
 
 
-def simulate_battles(config: SimConfig) -> list[dict]:
+def generate_mock_models(num_models: int, seed: int) -> dict[str, dict]:
+    """
+    Generate mock models with minimal props.
+
+    Args:
+        num_models: Number of models to generate
+        seed: Random seed for reproducible UUIDs
+
+    Returns:
+        Dict mapping model_name -> model_info with id, name, etc.
+    """
+    random.seed(seed)
+    models = {}
+
+    for i in range(1, num_models + 1):
+        model_name = f"model_{i:02d}"
+        # Generate deterministic UUID based on seed and model name
+        random.seed(seed + i)  # Make UUID deterministic but unique per model
+        model_id = str(uuid.UUID(int=random.getrandbits(128)))
+
+        models[model_name] = {
+            "id": model_id,
+            "name": model_name,
+            "displayName": f"Test Model {i:02d}",
+            "license": "Unknown",
+        }
+
+    return models
+
+
+def simulate_battles(config: SimConfig) -> tuple[list[dict], dict[str, dict]]:
     """
     Simulate battle outcomes with simple random preferences.
 
@@ -24,18 +55,21 @@ def simulate_battles(config: SimConfig) -> list[dict]:
         config: Simulation configuration
 
     Returns:
-        List of vote dictionaries in BixArena format
+        Tuple of (votes, models) where:
+        - votes: List of vote dictionaries in BixArena format
+        - models: Dict of model_name -> model_info
     """
     random.seed(config.random_seed)
 
-    # Generate model names
-    models = [f"model_{i:02d}" for i in range(1, config.num_models + 1)]
+    # Generate models with UUIDs
+    models = generate_mock_models(config.num_models, config.random_seed)
+    model_names = list(models.keys())
 
     votes = []
 
     for _ in range(config.num_votes):
         # Select two different models randomly
-        model_a, model_b = random.sample(models, 2)
+        model_a, model_b = random.sample(model_names, 2)
 
         # Simple random outcome determination
         rand_outcome = random.random()
@@ -50,10 +84,12 @@ def simulate_battles(config: SimConfig) -> list[dict]:
         vote = {"model_a": model_a, "model_b": model_b, "preference": preference}
         votes.append(vote)
 
-    return votes
+    return votes, models
 
 
-def print_simulation_summary(votes: list[dict], config: SimConfig):
+def print_simulation_summary(
+    votes: list[dict], config: SimConfig, models: dict[str, dict]
+):
     """Print a summary of the simulated votes."""
 
     print("\n=== Simulation Summary ===")
@@ -78,5 +114,5 @@ def print_simulation_summary(votes: list[dict], config: SimConfig):
 
 if __name__ == "__main__":
     config = SimConfig(num_models=20, num_votes=1000)
-    votes = simulate_battles(config)
-    print_simulation_summary(votes, config)
+    votes, models = simulate_battles(config)
+    print_simulation_summary(votes, config, models)
