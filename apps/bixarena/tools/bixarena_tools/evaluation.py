@@ -8,7 +8,7 @@ import logging
 import pandas as pd
 
 # Import our standalone Bradley-Terry implementation (based on FastChat)
-from .bt_metric import compute_bootstrap_bt, compute_bt
+from bixarena_tools.ranking_metric import compute_bootstrap_bt, compute_bt
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -56,19 +56,19 @@ def convert_votes_to_battles(votes: list[dict]) -> pd.DataFrame:
     return battles_df
 
 
-def compute_bt_scores_and_bootstrap(
+def compute_scores_and_bootstrap(
     votes: list[dict], num_bootstrap: int = 1000
 ) -> tuple[pd.DataFrame, dict[str, tuple[float, float]]]:
     """
-    Compute Bradley-Terry scores with bootstrap confidence intervals.
+    Compute ranking scores with bootstrap confidence intervals.
 
     Args:
         votes: List of vote dictionaries (BixArena format)
         num_bootstrap: Number of bootstrap samples
 
     Returns:
-        Tuple of (bt_results_df, confidence_intervals)
-        - bt_results_df: DataFrame with columns ['model', 'bt_score', 'rank',
+        Tuple of (results_df, confidence_intervals)
+        - results_df: DataFrame with columns ['model', 'bt_score', 'rank',
           'bootstrap_q025', 'bootstrap_q975']
         - confidence_intervals: Dict mapping model -> (lower_bound, upper_bound)
     """
