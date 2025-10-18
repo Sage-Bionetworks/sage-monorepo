@@ -36,14 +36,8 @@ public class SecurityConfiguration {
             "/.well-known/jwks.json",
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/v1/auth/**",
-            "/v1/auth/logout",
-            "/v1/example-prompts",
-            "/v1/example-prompts/**",
-            "/v1/leaderboards",
-            "/v1/leaderboards/**",
-            "/v1/models",
-            "/v1/models/**",
+            "/auth/**",
+            "/auth/logout",
             "/v3/api-docs/**"
           )
           .permitAll()
