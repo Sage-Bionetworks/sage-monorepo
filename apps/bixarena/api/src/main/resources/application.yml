@@ -15,6 +15,8 @@ spring:
   flyway:
     enabled: true
     clean-disabled: false
+    schemas: api
+    default-schema: api
   jackson:
     date-format: org.sagebionetworks.bixarena.api.RFC3339DateFormat
     serialization:
@@ -29,6 +31,7 @@ spring:
         format_sql: true
         jdbc:
           time_zone: UTC
+        default_schema: api
     open-in-view: false
   # autoconfigure:
   #   # Prevent Spring Boot from auto-configuring a default Elasticsearch client,

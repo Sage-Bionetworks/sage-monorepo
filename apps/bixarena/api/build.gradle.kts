@@ -35,7 +35,9 @@ dependencies {
 
 flyway {
   url = "jdbc:postgresql://bixarena-postgres:21000/bixarena"
-  user = System.getenv("FLYWAY_USER") ?: "bixarena"
+  user = System.getenv("FLYWAY_USER") ?: "postgres"
   password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
   cleanDisabled = false
+  schemas = arrayOf("api")
+  defaultSchema = "api"
 }
