@@ -12,7 +12,9 @@
           "redocly bundle ai-public --output openapi/ai-public.openapi.yaml",
           "redocly bundle ai-service --output openapi/ai-service.openapi.yaml",
           "redocly bundle api-public --output openapi/api-public.openapi.yaml",
-          "redocly bundle api-service --output openapi/api-service.openapi.yaml"
+          "redocly bundle api-service --output openapi/api-service.openapi.yaml",
+          "redocly bundle auth-public --output openapi/auth-public.openapi.yaml",
+          "redocly bundle auth-service --output openapi/auth-service.openapi.yaml"
         ],
         "cwd": "{projectRoot}"
       }
