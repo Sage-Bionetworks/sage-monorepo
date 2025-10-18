@@ -37,12 +37,14 @@ def main() -> None:
         cdk.Tags.of(app).add("Developer", developer_name)
 
     # Create VPC stack
+    # Dev uses 1 NAT gateway for cost optimization (~$32/month vs ~$65/month)
     vpc_stack = VpcStack(
         app,
         f"{stack_prefix}-vpc",
         stack_prefix=stack_prefix,
         environment=environment,
         vpc_cidr=vpc_cidr,
+        nat_gateways=1,  # Single NAT for cost savings in dev
         description=f"VPC for OpenChallenges {environment} environment",
     )
 

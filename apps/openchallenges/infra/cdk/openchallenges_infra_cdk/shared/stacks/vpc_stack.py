@@ -19,6 +19,7 @@ class VpcStack(cdk.Stack):
         environment: str,
         vpc_cidr: str = "10.0.0.0/16",
         max_azs: int = 2,
+        nat_gateways: int = 1,
         **kwargs,
     ) -> None:
         """
@@ -31,6 +32,7 @@ class VpcStack(cdk.Stack):
             environment: Environment name (dev, stage, prod)
             vpc_cidr: CIDR block for the VPC (default: 10.0.0.0/16)
             max_azs: Maximum number of Availability Zones (default: 2)
+            nat_gateways: Number of NAT gateways (default: 1)
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -41,6 +43,7 @@ class VpcStack(cdk.Stack):
             "Vpc",
             cidr=vpc_cidr,
             max_azs=max_azs,
+            nat_gateways=nat_gateways,
         )
 
         # Export VPC for use in other stacks

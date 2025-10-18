@@ -26,6 +26,7 @@ def main() -> None:
     # Get optional configuration
     vpc_cidr = os.getenv("VPC_CIDR", "10.0.0.0/16")
     certificate_arn = os.getenv("CERTIFICATE_ARN", "")
+    max_azs = int(os.getenv("MAX_AZS", "2"))  # Number of Availability Zones
 
     # Add common tags
     cdk.Tags.of(app).add("Environment", environment)
@@ -33,12 +34,15 @@ def main() -> None:
     cdk.Tags.of(app).add("ManagedBy", "CDK")
 
     # Create VPC stack
+    # Stage uses NAT gateways matching the number of AZs for high availability
     vpc_stack = VpcStack(
         app,
         f"{stack_prefix}-vpc",
         stack_prefix=stack_prefix,
         environment=environment,
         vpc_cidr=vpc_cidr,
+        max_azs=max_azs,
+        nat_gateways=max_azs,  # One NAT per AZ for high availability
         description=f"VPC for OpenChallenges {environment} environment",
     )
 

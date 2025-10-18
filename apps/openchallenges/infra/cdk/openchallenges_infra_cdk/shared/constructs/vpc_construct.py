@@ -13,6 +13,7 @@ class OpenchallengesVpc(Construct):
         construct_id: str,
         cidr: str = "10.0.0.0/16",
         max_azs: int = 2,
+        nat_gateways: int = 1,
         **kwargs,
     ) -> None:
         """
@@ -23,6 +24,9 @@ class OpenchallengesVpc(Construct):
             construct_id: Construct identifier
             cidr: CIDR block for the VPC (default: 10.0.0.0/16)
             max_azs: Maximum number of Availability Zones (default: 2)
+            nat_gateways: Number of NAT gateways to create (default: 1)
+                Use 1 for cost optimization in dev (~$32/month)
+                Use 2 for high availability in prod (~$65/month)
             **kwargs: Additional arguments passed to parent Construct
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -51,10 +55,10 @@ class OpenchallengesVpc(Construct):
                     cidr_mask=24,
                 ),
             ],
-            # Single NAT gateway for cost optimization
-            # All private subnets in all AZs will route through this one NAT gateway
-            # Trade-off: Lower cost (~$32/month) vs reduced availability if NAT fails
-            nat_gateways=1,
+            # NAT gateways for internet access from private subnets
+            # 1 NAT: Cost-optimized (~$32/month), single point of failure
+            # 2 NATs: High availability (~$65/month), one per AZ
+            nat_gateways=nat_gateways,
         )
 
         # Export VPC attributes for use in other stacks

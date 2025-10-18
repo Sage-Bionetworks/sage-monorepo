@@ -239,16 +239,24 @@ This phase deploys the core networking infrastructure and application load balan
 
   - 2 Availability Zones for redundancy
   - CIDR block: 10.0.0.0/16 (configurable via `VPC_CIDR` environment variable)
-  - Public subnets (/24): For ALB and NAT Gateway
+  - Public subnets (/24): For ALB and NAT Gateway(s)
   - Private subnets (/24): For ECS tasks and backend services
-  - 1 NAT Gateway: Provides internet access for private subnets
   - DNS support: Enabled
 
-- **Cost Optimization**:
-  - Single NAT Gateway is used to reduce costs (~$32.50/month vs ~$65/month for 2)
-  - Trade-off: Lower high availability - if the NAT Gateway or its AZ fails, private subnet resources lose internet access
-  - Suitable for dev/test environments where cost is prioritized over uptime
-  - For production, consider using 2 NAT Gateways (one per AZ) for high availability
+- **NAT Gateway Configuration** (Environment-Specific):
+
+  - **Development**: 1 NAT Gateway
+
+    - Cost-optimized: ~$32.50/month
+    - Trade-off: Single point of failure for internet access from private subnets
+    - Suitable for dev/test environments where cost is prioritized over uptime
+
+  - **Stage/Production**: NAT Gateways = Number of Availability Zones (default: 2)
+    - High availability: ~$32.50/month per NAT Gateway
+    - One NAT Gateway per AZ ensures redundancy
+    - If one NAT or AZ fails, the other continues to provide internet access
+    - Recommended for production workloads requiring high uptime
+    - Configurable via `MAX_AZS` environment variable (scales automatically)
 
 #### Application Load Balancer (ALB)
 
@@ -288,6 +296,11 @@ Add these optional variables to your `.env` files:
 # Optional: Customize VPC CIDR block (default: 10.0.0.0/16)
 VPC_CIDR=10.0.0.0/16
 
+# Optional: Number of Availability Zones (default: 2)
+# Stage/prod environments use one NAT Gateway per AZ for high availability
+# Dev always uses 1 NAT Gateway regardless of this setting
+MAX_AZS=2
+
 # Optional: Enable HTTPS with ACM certificate
 # When set, ALB will listen on port 443 and redirect HTTP to HTTPS
 CERTIFICATE_ARN=arn:aws:acm:region:account:certificate/xxxxxxxxx
@@ -297,24 +310,39 @@ CERTIFICATE_ARN=arn:aws:acm:region:account:certificate/xxxxxxxxx
 
 **Production**: HTTPS should be enabled for security. Set `CERTIFICATE_ARN` to your ACM certificate.
 
-### Cost Estimates (Development Environment)
+### Cost Estimates
 
-Monthly costs for the networking and ALB infrastructure:
+Monthly costs for the networking and ALB infrastructure by environment:
+
+#### Development Environment
 
 | Resource                  | Cost              | Details                                           |
 | ------------------------- | ----------------- | ------------------------------------------------- |
 | VPC                       | $0                | No charge for VPC itself                          |
-| NAT Gateway               | ~$32.50           | $0.045/hour (~$32.40) + data transfer (~$0.10/GB) |
+| NAT Gateway (1)           | ~$32.50           | $0.045/hour (~$32.40) + data transfer (~$0.10/GB) |
 | Application Load Balancer | ~$18              | $0.0225/hour (~$16.20) + LCU charges (~$1.80)     |
 | S3 Bucket (from Phase 0)  | <$1               | Minimal storage and requests                      |
 | **Total**                 | **~$51.50/month** | Estimated for dev environment with low traffic    |
 
+#### Stage/Production Environments
+
+| Resource                  | Cost                | Details                                                  |
+| ------------------------- | ------------------- | -------------------------------------------------------- |
+| VPC                       | $0                  | No charge for VPC itself                                 |
+| NAT Gateways              | ~$32.50 × N AZs     | Default: 2 AZs = ~$65/month; scales with MAX_AZS setting |
+| Application Load Balancer | ~$25-50             | Higher traffic = higher LCU charges                      |
+| S3 Bucket (from Phase 0)  | $1-5                | More storage and requests                                |
+| **Total (2 AZs)**         | **~$91-120/month**  | Estimated for stage/prod with moderate traffic           |
+| **Total (3 AZs)**         | **~$124-153/month** | Add ~$32.50/month for each additional AZ                 |
+
 **Notes**:
 
-- NAT Gateway data transfer charges vary based on usage (estimated at ~2GB/month for dev)
-- ALB LCU (Load Balancer Capacity Unit) charges vary based on traffic, connections, and rule evaluations
-- Stage/production environments will have higher costs with more traffic
-- Using 2 NAT Gateways for high availability would add ~$32.50/month
+- NAT Gateway data transfer charges vary based on usage (estimated at ~2GB/month for dev, higher for stage/prod)
+- ALB LCU (Load Balancer Capacity Unit) charges scale with traffic, connections, and rule evaluations
+- Production costs can be higher depending on actual traffic patterns
+- Stage/prod environments use one NAT Gateway per Availability Zone (configurable via `MAX_AZS`)
+- Each additional AZ adds approximately $32.50/month in NAT Gateway costs
+- These estimates do NOT include future ECS services, databases, or other resources
 
 ### Architecture Notes
 
