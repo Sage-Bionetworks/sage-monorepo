@@ -227,6 +227,116 @@ The bucket stack exports the following values:
 
 These outputs can be referenced by other stacks or services.
 
+## Phase 1: Networking and Load Balancer
+
+This phase deploys the core networking infrastructure and application load balancer.
+
+### Resources Deployed
+
+#### VPC (Virtual Private Cloud)
+
+- **Configuration**:
+
+  - 2 Availability Zones for redundancy
+  - CIDR block: 10.0.0.0/16 (configurable via `VPC_CIDR` environment variable)
+  - Public subnets (/24): For ALB and NAT Gateway
+  - Private subnets (/24): For ECS tasks and backend services
+  - 1 NAT Gateway: Provides internet access for private subnets
+  - DNS support: Enabled
+
+- **Cost Optimization**:
+  - Single NAT Gateway is used to reduce costs (~$32.50/month vs ~$65/month for 2)
+  - Trade-off: Lower high availability - if the NAT Gateway or its AZ fails, private subnet resources lose internet access
+  - Suitable for dev/test environments where cost is prioritized over uptime
+  - For production, consider using 2 NAT Gateways (one per AZ) for high availability
+
+#### Application Load Balancer (ALB)
+
+- **Configuration**:
+
+  - Internet-facing: Accessible from the public internet
+  - HTTP support: Always enabled on port 80
+  - HTTPS support: Optional, enabled when `CERTIFICATE_ARN` is provided
+  - Security groups: Allow HTTP (80) and HTTPS (443) from anywhere (0.0.0.0/0)
+  - Health check endpoint: `/health` returns 200 OK with JSON response
+  - Default action: Returns 503 "Service Unavailable" for unconfigured routes
+  - HTTP to HTTPS redirect: Automatically enabled when certificate is configured
+
+- **Listener Rules**:
+  - Priority 1: `/health` → Fixed response (200 OK, JSON)
+  - Default: All other paths → 503 Service Unavailable (until backends are configured)
+
+### CloudFormation Outputs
+
+#### VPC Stack
+
+- `VpcId`: ID of the VPC
+- `PublicSubnetIds`: Comma-separated list of public subnet IDs
+- `PrivateSubnetIds`: Comma-separated list of private subnet IDs
+
+#### ALB Stack
+
+- `LoadBalancerArn`: ARN of the Application Load Balancer
+- `LoadBalancerDnsName`: DNS name to access the ALB
+- `HealthCheckUrl`: Full URL to the health check endpoint
+
+### Environment Configuration
+
+Add these optional variables to your `.env` files:
+
+```bash
+# Optional: Customize VPC CIDR block (default: 10.0.0.0/16)
+VPC_CIDR=10.0.0.0/16
+
+# Optional: Enable HTTPS with ACM certificate
+# When set, ALB will listen on port 443 and redirect HTTP to HTTPS
+CERTIFICATE_ARN=arn:aws:acm:region:account:certificate/xxxxxxxxx
+```
+
+**Development**: HTTPS is optional. Without a certificate, the ALB will only listen on port 80 (HTTP).
+
+**Production**: HTTPS should be enabled for security. Set `CERTIFICATE_ARN` to your ACM certificate.
+
+### Cost Estimates (Development Environment)
+
+Monthly costs for the networking and ALB infrastructure:
+
+| Resource                  | Cost              | Details                                           |
+| ------------------------- | ----------------- | ------------------------------------------------- |
+| VPC                       | $0                | No charge for VPC itself                          |
+| NAT Gateway               | ~$32.50           | $0.045/hour (~$32.40) + data transfer (~$0.10/GB) |
+| Application Load Balancer | ~$18              | $0.0225/hour (~$16.20) + LCU charges (~$1.80)     |
+| S3 Bucket (from Phase 0)  | <$1               | Minimal storage and requests                      |
+| **Total**                 | **~$51.50/month** | Estimated for dev environment with low traffic    |
+
+**Notes**:
+
+- NAT Gateway data transfer charges vary based on usage (estimated at ~2GB/month for dev)
+- ALB LCU (Load Balancer Capacity Unit) charges vary based on traffic, connections, and rule evaluations
+- Stage/production environments will have higher costs with more traffic
+- Using 2 NAT Gateways for high availability would add ~$32.50/month
+
+### Architecture Notes
+
+This infrastructure replaces the Caddy reverse proxy used in the original deployment:
+
+- **Original**: ALB → Caddy container → Backend services
+- **New**: ALB → Backend services (direct)
+
+The ALB provides the same capabilities as Caddy:
+
+- Path-based routing (via listener rules)
+- HTTPS termination
+- Health checks
+- HTTP to HTTPS redirection
+
+Benefits of ALB-only approach:
+
+- One less service to manage and monitor
+- Better AWS integration (CloudWatch metrics, access logs, WAF)
+- Higher availability (AWS-managed service)
+- Cost-effective (eliminates ECS task for Caddy)
+
 ## Testing
 
 ### Run All Tests

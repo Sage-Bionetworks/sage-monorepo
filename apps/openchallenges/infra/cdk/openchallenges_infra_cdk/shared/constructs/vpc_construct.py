@@ -51,8 +51,10 @@ class OpenchallengesVpc(Construct):
                     cidr_mask=24,
                 ),
             ],
-            # One NAT gateway per AZ for high availability
-            nat_gateways=max_azs,
+            # Single NAT gateway for cost optimization
+            # All private subnets in all AZs will route through this one NAT gateway
+            # Trade-off: Lower cost (~$32/month) vs reduced availability if NAT fails
+            nat_gateways=1,
         )
 
         # Export VPC attributes for use in other stacks
