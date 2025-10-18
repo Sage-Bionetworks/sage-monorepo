@@ -1,0 +1,81 @@
+# bixarena-api:
+#   welcome-message: 'Welcome to the BixArena API'
+
+server:
+  port: 8115
+
+spring:
+  application:
+    name: bixarena-auth-service
+  datasource:
+    url: jdbc:postgresql://bixarena-postgres:21000/bixarena
+    username: postgres
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    clean-disabled: false
+  jackson:
+    date-format: org.sagebionetworks.bixarena.auth.service.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+  # autoconfigure:
+  #   # Prevent Spring Boot from auto-configuring a default Elasticsearch client,
+  #   # which Hibernate Search might incorrectly use, leading to node sniffing errors
+  #   # when a local cluster is not available.
+  #   exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, prometheus
+      path-mapping:
+        prometheus: metrics
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+    prometheus:
+      cache.time-to-live: 1ms
+
+info:
+  application:
+    name: ${spring.application.name}
+
+app:
+  welcome-message: 'Welcome to BixArena Auth Service'
+  ui-base-url: http://127.0.0.1:8100
+  auth:
+    # Synapse OAuth endpoints (adjusted to known working endpoints)
+    # Authorize endpoint: root sign-in portal with query params
+    authorize-url: https://signin.synapse.org
+    # Token endpoint (Synapse repo service)
+    token-url: https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token
+    # JWKS endpoint (Synapse repo service openid)
+    jwks-url: https://repo-prod.prod.sagebase.org/auth/v1/openid/jwks
+    client-id: changeme
+    client-secret: changeme
+    # Use localhost (not 127.0.0.1) so the browser sends the same cookie across app and api if app uses localhost
+    redirect-uri: http://127.0.0.1:8115/v1/auth/oidc/callback
+    internal-issuer: http://bixarena-api:8115
+    audience: myapi
+    token-ttl-seconds: 600

@@ -1,0 +1,1 @@
+FROM ghcr.io/sage-bionetworks/bixarena-auth-service-base:local
