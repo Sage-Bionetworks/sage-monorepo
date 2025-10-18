@@ -30,7 +30,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.bixArena.base-path:/v1}")
+@RequestMapping("${openapi.bixArenaAPIService.base-path:/v1}")
 public class ModelApiController implements ModelApi {
 
     private final ModelApiDelegate delegate;

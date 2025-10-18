@@ -36,8 +36,6 @@ public class SecurityConfiguration {
             "/.well-known/jwks.json",
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/v1/auth/**",
-            "/v1/auth/logout",
             "/v1/example-prompts",
             "/v1/example-prompts/**",
             "/v1/leaderboards",
