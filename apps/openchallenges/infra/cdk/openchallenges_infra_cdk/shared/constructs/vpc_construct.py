@@ -61,6 +61,20 @@ class OpenchallengesVpc(Construct):
             nat_gateways=nat_gateways,
         )
 
+        # Create VPC endpoint for GuardDuty
+        # This is required for ECS Runtime Monitoring and must be explicitly
+        # managed to avoid orphaned resources during stack deletion
+        self.guardduty_endpoint = ec2.InterfaceVpcEndpoint(
+            self,
+            "GuardDutyEndpoint",
+            vpc=self.vpc,
+            service=ec2.InterfaceVpcEndpointAwsService.GUARDDUTY_DATA,
+            # Place endpoints in private subnets for security
+            subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS),
+            # Enable private DNS to use standard GuardDuty endpoint name
+            private_dns_enabled=True,
+        )
+
         # Export VPC attributes for use in other stacks
         self.vpc_id = self.vpc.vpc_id
         self.availability_zones = self.vpc.availability_zones

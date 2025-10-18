@@ -198,6 +198,16 @@ nx destroy openchallenges-infra-cdk:prod
 
 ### Cleaning Up
 
+When you're done with your development stack, destroy it to avoid charges:
+
+```bash
+nx destroy openchallenges-infra-cdk:dev --force
+```
+
+**Note on GuardDuty**: The CDK app now manages the GuardDuty VPC endpoint to ensure clean stack deletion. In earlier versions, GuardDuty created AWS-managed resources (VPC endpoints and security groups) outside of CloudFormation, which blocked VPC deletion. These are now explicitly managed by the CDK stack.
+
+### Troubleshooting Stack Deletion
+
 When you're done testing, destroy your development stack:
 
 ```bash
