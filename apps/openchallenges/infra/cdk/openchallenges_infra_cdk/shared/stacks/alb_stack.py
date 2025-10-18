@@ -53,7 +53,7 @@ class AlbStack(cdk.Stack):
             self,
             "AppTargetGroup",
             vpc=vpc,
-            port=4200,
+            port=80,  # nginx port (change to 4200 for openchallenges-app)
             protocol=elbv2.ApplicationProtocol.HTTP,
             target_type=elbv2.TargetType.IP,
             health_check=elbv2.HealthCheck(

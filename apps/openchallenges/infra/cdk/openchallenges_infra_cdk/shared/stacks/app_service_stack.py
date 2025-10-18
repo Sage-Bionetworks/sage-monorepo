@@ -53,7 +53,9 @@ class AppServiceStack(cdk.Stack):
         protocol = "https" if use_https else "http"
 
         # Container image
-        image = f"ghcr.io/sage-bionetworks/openchallenges-app:{app_version}"
+        # TEMPORARY: Using nginx for testing - replace with app when ready
+        # image = f"ghcr.io/sage-bionetworks/openchallenges-app:{app_version}"
+        image = "nginx:alpine"
 
         # Environment variables for the app container
         # Based on the original CDK app configuration
@@ -79,7 +81,7 @@ class AppServiceStack(cdk.Stack):
             cluster=cluster,
             service_name="openchallenges-app",
             container_image=image,
-            container_port=4200,
+            container_port=80,  # nginx default port (change to 4200 for app)
             cpu=256,  # 0.25 vCPU
             memory_limit_mib=512,  # 512 MiB
             environment=container_env,
