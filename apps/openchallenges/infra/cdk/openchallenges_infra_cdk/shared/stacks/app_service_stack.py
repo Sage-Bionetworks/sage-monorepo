@@ -66,6 +66,9 @@ class AppServiceStack(cdk.Stack):
             "GOOGLE_TAG_MANAGER_ID": "GTM-NBR5XD8C",
             # SSR_API_URL will be updated later when API Gateway is deployed
             "SSR_API_URL": f"{protocol}://{base_url}/api/v1",
+            "ENABLE_OPERATION_FILTER": "false",
+            "SHOW_ANNOUNCEMENT": "false",
+            "TELEMETRY_ENABLED": "false",
         }
 
         # Create Fargate service for the app
