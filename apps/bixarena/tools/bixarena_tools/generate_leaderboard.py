@@ -8,12 +8,12 @@ import logging
 import sys
 import time
 
-from bixarena_tools.mock_data import (
+from bixarena_tools.rank_battle import compute_leaderboard_bt
+from bixarena_tools.simulate_battle_votes import (
     SimConfig,
     print_simulation_summary,
-    simulate_battles,
+    simulate_votes,
 )
-from bixarena_tools.ranking_metric import compute_leaderboard_bt
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -79,7 +79,7 @@ def main():
 
     # Generate mock votes
     print("📊 Generating mock vote data...")
-    votes, models = simulate_battles(config)
+    votes, models = simulate_votes(config)
     print_simulation_summary(votes, config, models)
 
     # Run evaluation

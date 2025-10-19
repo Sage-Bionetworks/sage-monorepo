@@ -17,9 +17,9 @@ class SimConfig:
     random_seed: int = 123
 
 
-def generate_mock_models(num_models: int, seed: int) -> dict[str, dict]:
+def simulate_models(num_models: int, seed: int) -> dict[str, dict]:
     """
-    Generate mock models with minimal props.
+    Simulate models with minimal props.
 
     Args:
         num_models: Number of models to generate
@@ -47,9 +47,9 @@ def generate_mock_models(num_models: int, seed: int) -> dict[str, dict]:
     return models
 
 
-def simulate_battles(config: SimConfig) -> tuple[list[dict], dict[str, dict]]:
+def simulate_votes(config: SimConfig) -> tuple[list[dict], dict[str, dict]]:
     """
-    Simulate battle outcomes with simple random preferences.
+    Simulate vote with simple random preferences.
 
     Args:
         config: Simulation configuration
@@ -62,7 +62,7 @@ def simulate_battles(config: SimConfig) -> tuple[list[dict], dict[str, dict]]:
     random.seed(config.random_seed)
 
     # Generate models with UUIDs
-    models = generate_mock_models(config.num_models, config.random_seed)
+    models = simulate_models(config.num_models, config.random_seed)
     model_names = list(models.keys())
 
     votes = []
@@ -114,5 +114,5 @@ def print_simulation_summary(
 
 if __name__ == "__main__":
     config = SimConfig(num_models=20, num_votes=1000)
-    votes, models = simulate_battles(config)
+    votes, models = simulate_votes(config)
     print_simulation_summary(votes, config, models)

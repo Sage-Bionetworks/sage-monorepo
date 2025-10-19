@@ -1,10 +1,6 @@
 """
-Bradley-Terry ranking implementation based on FastChat's rating_systems.py.
-
-This is a minimal adaptation of FastChat's Bradley-Terry code to decouple from FastChat
-while preserving the original algorithm and structure for easy comparison.
-
-Original source: https://github.com/lm-sys/FastChat/blob/main/fastchat/serve/monitor/rating_systems.py
+Bradley-Terry ranking implementation optimized for BixArena vote data,
+while preserving the original Bradley-Terry algorithm.
 """
 
 import math
@@ -21,21 +17,14 @@ from scipy.special import expit
 from tqdm import tqdm
 
 
-def get_matchups_models(df):
-    """Extract matchups and model names from battles DataFrame."""
-    n_rows = len(df)
-    model_indices, models = pd.factorize(pd.concat([df["model_a"], df["model_b"]]))
-    matchups = np.column_stack([model_indices[:n_rows], model_indices[n_rows:]])
-    return matchups, models.to_list()
-
-
-def preprocess_for_bt(df):
+def preprocess_votes_for_bt(votes: list[dict]):
     """
-    In BT we only need the unique (matchup,outcome) sets along with the weights
-    of how often they occur.
+    Convert votes directly to Bradley-Terry format.
+
+    Processes BixArena vote to the numeric outcomes used by BT algorithm.
 
     Args:
-        df: DataFrame with columns ['model_a', 'model_b', 'winner']
+        votes: List of vote dicts with model_a, model_b, preference
 
     Returns:
         matchups: array of shape (n_unique_matchups, 2) with model indices
@@ -43,22 +32,48 @@ def preprocess_for_bt(df):
         models: list of model names
         weights: array of shape (n_unique_matchups,) with occurrence counts
     """
-    n_rows = len(df)
-    # the 3 columns of schedule represent: model_a id, model_b id, outcome_id
-    schedule = np.full((n_rows, 3), fill_value=1, dtype=np.int32)
-    # set the two model cols by mapping the model names to their int ids
-    schedule[:, [0, 1]], models = get_matchups_models(df)
-    # map outcomes to integers (same dtype as model ids for array compatibility)
-    # model_a win -> 2, tie -> 1 (prefilled by default), model_b win -> 0
-    schedule[df["winner"] == "model_a", 2] = 2
-    schedule[df["winner"] == "model_b", 2] = 0
-    # count the number of occurances of each observed result
+    if not votes:
+        return np.array([]), np.array([]), [], np.array([])
+
+    # Extract all model names and create mapping
+    all_models = set()
+    for vote in votes:
+        all_models.add(vote["model_a"])
+        all_models.add(vote["model_b"])
+
+    models = sorted(all_models)  # Sort for consistent ordering
+    model_to_idx = {model: idx for idx, model in enumerate(models)}
+
+    # Build schedule directly with outcomes: model_a_idx, model_b_idx, outcome
+    schedule = []
+    for vote in votes:
+        preference = vote["preference"]
+        if preference == "model_a":
+            outcome = 2  # model_a wins → 1.0
+        elif preference == "model_b":
+            outcome = 0  # model_b wins → 0.0
+        elif preference == "tie":
+            outcome = 1  # tie → 0.5
+        else:
+            continue  # Skip invalid preferences
+
+        schedule.append(
+            [model_to_idx[vote["model_a"]], model_to_idx[vote["model_b"]], outcome]
+        )
+
+    if not schedule:
+        return np.array([]), np.array([]), models, np.array([])
+
+    schedule = np.array(schedule, dtype=np.int32)
+
+    # Count occurrences of each unique (model_a, model_b, outcome) combination
     matchups_outcomes, weights = np.unique(schedule, return_counts=True, axis=0)
     matchups = matchups_outcomes[:, [0, 1]]
-    # map 2 -> 1.0, 1 -> 0.5, 0 -> 0.0 which will be used as labels during optimization
+    # Convert outcomes to labels:
+    # 2→1.0 (model_a win), 1→0.5 (tie), 0→0.0 (model_b win)
     outcomes = matchups_outcomes[:, 2].astype(np.float64) / 2.0
     weights = weights.astype(np.float64)
-    # each result is weighted by number of times it occurred in the dataset
+
     return matchups, outcomes, models, weights
 
 
@@ -151,12 +166,12 @@ def scale_and_offset(
     return scaled_ratings
 
 
-def compute_bt(df, base=10.0, scale=400.0, init_rating=1000, tol=1e-6):
+def compute_bt(votes: list[dict], base=10.0, scale=400.0, init_rating=1000.0, tol=1e-6):
     """
-    Compute Bradley-Terry ratings for models.
+    Compute Bradley-Terry ratings directly from votes.
 
     Args:
-        df: DataFrame with columns ['model_a', 'model_b', 'winner']
+        votes: List of vote dictionaries with model_a, model_b, preference
         base: base for logarithm (default 10.0)
         scale: scaling factor for final ratings
         init_rating: initial rating offset
@@ -165,15 +180,19 @@ def compute_bt(df, base=10.0, scale=400.0, init_rating=1000, tol=1e-6):
     Returns:
         pd.Series with model ratings, sorted in descending order
     """
-    matchups, outcomes, models, weights = preprocess_for_bt(df)
+    matchups, outcomes, models, weights = preprocess_votes_for_bt(votes)
+
+    if len(models) == 0:
+        return pd.Series(dtype=float)
+
     ratings = fit_bt(matchups, outcomes, weights, len(models), math.log(base), tol)
     scaled_ratings = scale_and_offset(ratings, models, scale, init_rating=init_rating)
     return pd.Series(scaled_ratings, index=models).sort_values(ascending=False)
 
 
 def compute_bootstrap_bt(
-    battles,
-    num_round,
+    votes: list[dict],
+    num_round: int,
     base=10.0,
     scale=400.0,
     init_rating=1000.0,
@@ -181,10 +200,10 @@ def compute_bootstrap_bt(
     num_cpu=None,
 ):
     """
-    Compute bootstrap confidence intervals for Bradley-Terry ratings.
+    Compute bootstrap confidence intervals for Bradley-Terry ratings from votes.
 
     Args:
-        battles: DataFrame with columns ['model_a', 'model_b', 'winner']
+        votes: List of vote dictionaries with model_a, model_b, preference
         num_round: number of bootstrap rounds
         base: base for logarithm (default 10.0)
         scale: scaling factor for final ratings
@@ -195,14 +214,18 @@ def compute_bootstrap_bt(
     Returns:
         pd.DataFrame with bootstrap results, columns are models, sorted by median
     """
-    matchups, outcomes, models, weights = preprocess_for_bt(battles)
+    matchups, outcomes, models, weights = preprocess_votes_for_bt(votes)
+
+    if len(models) == 0:
+        return pd.DataFrame()
+
     # bootstrap sample unique outcomes and counts using multinomial distribution
     rng = np.random.default_rng(seed=0)
     idxs = rng.multinomial(
-        n=len(battles), pvals=weights / weights.sum(), size=(num_round)
+        n=len(votes), pvals=weights / weights.sum(), size=(num_round)
     )
     # only occurrence count distribution changes between samples (can be 0)
-    boot_weights = idxs.astype(np.float64) / len(battles)
+    boot_weights = idxs.astype(np.float64) / len(votes)
 
     # the only thing different across samples is the distribution of weights
     bt_fn = partial(
@@ -261,19 +284,14 @@ def compute_leaderboard_bt(
     Returns:
         List of leaderboard entry dictionaries ready for API
     """
-    # Convert votes to battles format
-    battles_df = convert_votes_to_battles_df(votes)
-    if battles_df.empty:
-        return []
-
-    # Compute base scores
-    scores = compute_bt(battles_df, base, scale, int(init_rating), tol)
+    # Compute base scores directly from votes (optimized path)
+    scores = compute_bt(votes, base, scale, init_rating, tol)
     if scores.empty:
         return []
 
-    # Compute bootstrap confidence intervals
+    # Compute bootstrap confidence intervals directly from votes
     bootstrap_results = compute_bootstrap_bt(
-        battles_df, num_bootstrap, base, scale, init_rating, tol, num_cpu=1
+        votes, num_bootstrap, base, scale, init_rating, tol, num_cpu=1
     )
 
     # Count votes per model
