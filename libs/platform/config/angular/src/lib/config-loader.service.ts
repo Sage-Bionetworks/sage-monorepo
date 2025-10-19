@@ -45,7 +45,7 @@ export abstract class ConfigLoaderService<T> {
 
   /**
    * Get the active profile name for loading profile-specific config file
-   * Priority: ENVIRONMENT > NODE_ENV > 'development' (which maps to 'dev' file)
+   * Priority: ENVIRONMENT > NODE_ENV > environment from application.yaml
    *
    * ENVIRONMENT should match the 'environment' property in your config schema
    * NODE_ENV is typically set by build tools (development, production, test)
@@ -54,15 +54,21 @@ export abstract class ConfigLoaderService<T> {
    * - ENVIRONMENT=stage → loads application-stage.yaml
    * - ENVIRONMENT=prod → loads application-prod.yaml
    * - NODE_ENV=development → loads application-dev.yaml (mapped)
+   * - No env vars → reads 'environment' from application.yaml
    *
    * Note: Default values always come from application.yaml, not from the profile
    */
-  private getActiveProfile(): string {
+  private getActiveProfile(baseConfig?: Record<string, any>): string {
     if (this.isServer) {
-      const rawProfile = process.env['ENVIRONMENT'] || process.env['NODE_ENV'] || 'development';
+      const rawProfile =
+        process.env['ENVIRONMENT'] ||
+        process.env['NODE_ENV'] ||
+        baseConfig?.['environment'] ||
+        'development';
       return this.profileFileMap[rawProfile] || rawProfile;
     }
-    return 'dev'; // Default to 'dev' profile for browser
+    // For browser, use environment from base config or default to 'dev'
+    return baseConfig?.['environment'] || 'dev';
   }
 
   /**
@@ -79,25 +85,26 @@ export abstract class ConfigLoaderService<T> {
     }
 
     try {
-      const profile = this.getActiveProfile();
-      console.log(`[ConfigLoader] Loading configuration for profile: ${profile}`);
-
-      // 1. Load base configuration
+      // 1. Load base configuration first to determine default environment
       const baseConfig = await this.yamlParser.loadYaml('application.yaml', basePath);
       if (!baseConfig) {
         throw new Error('Base configuration file (application.yaml) not found');
       }
 
+      // 2. Determine active profile using base config as fallback
+      const profile = this.getActiveProfile(baseConfig);
+      console.log(`[ConfigLoader] Loading configuration for profile: ${profile}`);
+
       let mergedConfig = { ...baseConfig };
 
-      // 2. Load profile-specific configuration
+      // 3. Load profile-specific configuration
       const profileConfig = await this.yamlParser.loadYaml(`application-${profile}.yaml`, basePath);
       if (profileConfig) {
         console.log(`[ConfigLoader] Merging profile configuration: application-${profile}.yaml`);
         mergedConfig = this.yamlParser.deepMerge(mergedConfig, profileConfig);
       }
 
-      // 3. Apply environment variable overrides
+      // 4. Apply environment variable overrides
       // Environment variables are loaded from .env files by Nx and available in process.env
       if (this.isServer) {
         console.log('[ConfigLoader] Applying environment variable overrides');
@@ -110,7 +117,7 @@ export abstract class ConfigLoaderService<T> {
         }
       }
 
-      // 4. Validate configuration using subclass implementation
+      // 5. Validate configuration using subclass implementation
       console.log('[ConfigLoader] Validating configuration');
       const validatedConfig = this.validateConfig(mergedConfig);
 

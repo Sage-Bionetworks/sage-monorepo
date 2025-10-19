@@ -1,10 +1,11 @@
 import { z } from 'zod';
+import { BaseConfigSchema } from '@sagebionetworks/platform/config/angular';
 
 /**
  * Zod schema for application configuration
- * This provides runtime validation and type inference
+ * Extends BaseConfigSchema to inherit the standard 'environment' property
  */
-export const AppConfigSchema = z.object({
+export const AppConfigSchema = BaseConfigSchema.extend({
   app: z.object({
     version: z.string().min(1, 'App version is required'),
     telemetry: z.object({
@@ -25,10 +26,6 @@ export const AppConfigSchema = z.object({
     ssr: z.object({
       url: z.string().url('SSR API URL must be a valid URL'),
     }),
-  }),
-
-  environment: z.enum(['dev', 'development', 'test', 'stage', 'staging', 'prod', 'production'], {
-    message: 'Environment must be one of: dev, development, test, stage, staging, prod, production',
   }),
 
   data: z.object({

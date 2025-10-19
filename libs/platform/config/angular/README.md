@@ -15,11 +15,17 @@ A reusable Angular configuration library that provides Spring Boot-inspired conf
 
 ## Configuration Loading
 
-The library determines which profile to load using environment variables:
+The library determines which profile to load using the following priority:
 
-- **`ENVIRONMENT`** - Primary variable for setting the active profile (e.g., `ENVIRONMENT=stage` loads `application-stage.yaml`)
-- **`NODE_ENV`** - Fallback variable, automatically set by build tools (maps `development` → `dev`, `production` → `prod`)
-- Default: `development` (loads `application-dev.yaml`)
+1. **`ENVIRONMENT`** - Primary environment variable (e.g., `ENVIRONMENT=stage` loads `application-stage.yaml`)
+2. **`NODE_ENV`** - Fallback variable, automatically set by build tools (maps `development` → `dev`, `production` → `prod`)
+3. **`environment` property in `application.yaml`** - Default value defined in base configuration
+
+This approach allows you to:
+
+- Set a sensible default in `application.yaml` (e.g., `environment: dev`)
+- Override for specific environments using `ENVIRONMENT` variable
+- Leverage standard Node.js `NODE_ENV` conventions
 
 ### Examples
 
@@ -39,7 +45,34 @@ ENVIRONMENT=prod API__CSR__URL=https://custom-api.example.com npm start
 
 ## Usage
 
-This is a generic library that can be extended for specific applications. See `@sagebionetworks/openchallenges/web/angular/config` for an example implementation.
+This is a generic library that can be extended for specific applications.
+
+### Base Configuration Schema
+
+The library provides a `BaseConfigSchema` that includes the standard `environment` property:
+
+```typescript
+import { BaseConfigSchema } from '@sagebionetworks/platform/config/angular';
+import { z } from 'zod';
+
+// Extend the base schema with app-specific properties
+export const AppConfigSchema = BaseConfigSchema.extend({
+  app: z.object({
+    version: z.string(),
+  }),
+  api: z.object({
+    url: z.string().url(),
+  }),
+});
+
+export type AppConfig = z.infer<typeof AppConfigSchema>;
+```
+
+This ensures all applications have a consistent `environment` property that's used for profile selection.
+
+### Example Implementation
+
+See `@sagebionetworks/openchallenges/web/angular/config` for a complete example implementation.
 
 ## Running unit tests
 
