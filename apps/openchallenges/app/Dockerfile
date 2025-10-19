@@ -6,8 +6,7 @@ RUN apk add --no-cache curl jq su-exec
 
 WORKDIR /
 COPY apps/openchallenges/app/docker-entrypoint.sh .
-COPY apps/openchallenges/app/docker-entrypoint.d /docker-entrypoint.d
-RUN chmod +x docker-entrypoint.sh /docker-entrypoint.d/*
+RUN chmod +x docker-entrypoint.sh
 
 WORKDIR ${APP_DIR}
 COPY dist/apps/openchallenges/app/server ./server
