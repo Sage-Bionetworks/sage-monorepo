@@ -27,8 +27,8 @@ export const AppConfigSchema = z.object({
     }),
   }),
 
-  environment: z.enum(['development', 'staging', 'production', 'test', 'local'], {
-    message: 'Environment must be one of: development, staging, production, test, local',
+  environment: z.enum(['dev', 'development', 'test', 'stage', 'staging', 'prod', 'production'], {
+    message: 'Environment must be one of: dev, development, test, stage, staging, prod, production',
   }),
 
   data: z.object({
