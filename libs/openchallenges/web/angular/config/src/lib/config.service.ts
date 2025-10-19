@@ -1,10 +1,10 @@
-import { inject, Injectable } from '@angular/core';
-import { ConfigLoaderService } from './config-loader.service';
-import { RuntimeAppConfig } from './config.schema';
+import { Injectable } from '@angular/core';
+import { ConfigLoaderService } from '@sagebionetworks/web/angular/config';
+import { RuntimeAppConfig, validateConfig } from './config.schema';
 
 /**
- * Main configuration service
- * Provides access to application configuration
+ * OpenChallenges-specific configuration service
+ * Extends the generic ConfigLoaderService with OpenChallenges schema validation
  *
  * Usage:
  * 1. ConfigService is initialized via APP_INITIALIZER (see config.factory.ts)
@@ -14,9 +14,7 @@ import { RuntimeAppConfig } from './config.schema';
 @Injectable({
   providedIn: 'root',
 })
-export class ConfigService {
-  private readonly configLoader = inject(ConfigLoaderService);
-
+export class ConfigService extends ConfigLoaderService<RuntimeAppConfig> {
   /**
    * Current application configuration
    * Access this property after APP_INITIALIZER has run
@@ -24,31 +22,34 @@ export class ConfigService {
   config!: RuntimeAppConfig;
 
   /**
+   * Validate configuration using OpenChallenges schema
+   */
+  protected override validateConfig(config: unknown): RuntimeAppConfig {
+    const validated = validateConfig(config);
+    return {
+      ...validated,
+      isPlatformServer: this.isServer,
+    };
+  }
+
+  /**
    * Load configuration using the new YAML-based system
    * Called during APP_INITIALIZER phase
    */
-  async loadConfig(): Promise<void> {
-    try {
-      this.config = await this.configLoader.loadConfig();
-    } catch (err) {
-      console.error('[ConfigService] Unable to load configuration:', err);
-      // In case of error, use empty config to prevent app crash
-      // The app should have sensible defaults or handle missing config gracefully
-      throw err; // Re-throw to let app initialization know there's an issue
-    }
+  override async loadConfig(basePath?: string): Promise<RuntimeAppConfig> {
+    const loaded = await super.loadConfig(basePath);
+    this.config = loaded;
+    return loaded;
   }
 
   /**
    * Reload configuration
    * Useful for development or when config needs to be refreshed
    */
-  async reloadConfig(): Promise<void> {
-    try {
-      this.config = await this.configLoader.reloadConfig();
-    } catch (err) {
-      console.error('[ConfigService] Unable to reload configuration:', err);
-      throw err;
-    }
+  override async reloadConfig(): Promise<RuntimeAppConfig> {
+    const reloaded = await super.reloadConfig();
+    this.config = reloaded;
+    return reloaded;
   }
 
   /**

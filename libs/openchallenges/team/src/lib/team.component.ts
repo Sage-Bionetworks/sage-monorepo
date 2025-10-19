@@ -7,7 +7,7 @@ import {
   ImageHeight,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { Observable } from 'rxjs';

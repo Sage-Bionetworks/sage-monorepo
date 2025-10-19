@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { HomeDataService } from '@sagebionetworks/openchallenges/home';
 import {
   Avatar,

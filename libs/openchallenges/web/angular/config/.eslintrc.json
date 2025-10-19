@@ -1,23 +1,16 @@
 {
-  "extends": ["../../../.eslintrc.json"],
+  "extends": ["../../../../../.eslintrc.json"],
   "ignorePatterns": ["!**/*"],
-  "env": {
-    "jest": true
-  },
   "overrides": [
     {
       "files": ["*.ts"],
-      "extends": [
-        "plugin:@nx/angular",
-        "plugin:@angular-eslint/template/process-inline-templates",
-        "plugin:jest/recommended"
-      ],
+      "extends": ["plugin:@nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
           {
             "type": "attribute",
-            "prefix": "openchallenges",
+            "prefix": "lib",
             "style": "camelCase"
           }
         ],
@@ -25,11 +18,10 @@
           "error",
           {
             "type": "element",
-            "prefix": "openchallenges",
+            "prefix": "lib",
             "style": "kebab-case"
           }
-        ],
-        "@angular-eslint/prefer-standalone": "off"
+        ]
       }
     },
     {

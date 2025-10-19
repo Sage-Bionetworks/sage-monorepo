@@ -1,5 +1,5 @@
 import { Component, inject, Renderer2 } from '@angular/core';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { ChallengeHostListComponent } from './challenge-host-list/challenge-host-list.component';

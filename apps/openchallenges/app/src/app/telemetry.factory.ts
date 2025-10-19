@@ -8,7 +8,7 @@ import { DocumentLoadInstrumentation } from '@opentelemetry/instrumentation-docu
 import { W3CTraceContextPropagator } from '@opentelemetry/core/build/src/trace/W3CTraceContextPropagator';
 import { CompositePropagator } from '@opentelemetry/core';
 import { UserInteractionInstrumentation } from '@opentelemetry/instrumentation-user-interaction';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { ZoneContextManager } from '@opentelemetry/context-zone-peer-dep';
 
 export const telemetryFactory = (configService: ConfigService) => {

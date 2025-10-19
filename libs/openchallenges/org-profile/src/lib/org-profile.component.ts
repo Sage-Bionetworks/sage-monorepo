@@ -16,7 +16,7 @@ import {
 import { Tab } from './tab.model';
 import { ORG_PROFILE_TABS } from './org-profile-tabs';
 import { Avatar, AvatarComponent, FooterComponent } from '@sagebionetworks/openchallenges/ui';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import {
   ImageAspectRatio,
   ImageHeight,

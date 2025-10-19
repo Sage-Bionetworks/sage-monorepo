@@ -1,10 +1,8 @@
-/* eslint-disable */
 export default {
-  displayName: 'openchallenges-config',
-  preset: '../../../jest.preset.js',
+  displayName: 'openchallenges-web-angular-config',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  globals: {},
-  coverageDirectory: '../../../coverage/libs/openchallenges/config',
+  coverageDirectory: '../../../../../coverage/libs/openchallenges/web/angular/config',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

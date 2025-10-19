@@ -21,7 +21,7 @@ import {
   ChallengeParticipationRole,
   OrganizationCategory,
 } from '@sagebionetworks/openchallenges/api-client';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import {
   CheckboxFilterComponent,
   Filter,

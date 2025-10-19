@@ -15,7 +15,7 @@ import {
 import { Tab } from './tab.model';
 import { CHALLENGE_TABS } from './challenge-tabs';
 import { Avatar, AvatarComponent, FooterComponent } from '@sagebionetworks/openchallenges/ui';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';

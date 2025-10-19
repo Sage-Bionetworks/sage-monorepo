@@ -1,5 +1,5 @@
 import { Component, Renderer2, inject } from '@angular/core';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { getSeoData } from './about-seo-data';
 import { SeoService } from '@sagebionetworks/shared/util';

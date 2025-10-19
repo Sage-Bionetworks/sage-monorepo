@@ -2,31 +2,35 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { YamlParserService } from './yaml-parser.service';
 import { EnvironmentMapperService } from './environment-mapper.service';
-import { RuntimeAppConfig, validateConfig } from './config.schema';
 
 /**
- * Service for loading application configuration
+ * Generic configuration loader service
  * Implements Spring Boot-style configuration hierarchy:
  * 1. Load base configuration (application.yaml)
  * 2. Load profile-specific configuration (application-{profile}.yaml)
- * 3. Load local overrides (application-local.yaml) - optional
- * 4. Apply environment variable overrides
- * 5. Validate final configuration
+ * 3. Apply environment variable overrides
+ * 4. Validate final configuration
+ *
+ * This is a generic service that can be extended for specific applications
  */
-@Injectable({
-  providedIn: 'root',
-})
-export class ConfigLoaderService {
-  private readonly yamlParser = inject(YamlParserService);
-  private readonly envMapper = inject(EnvironmentMapperService);
-  private readonly platformId = inject(PLATFORM_ID);
+@Injectable()
+export abstract class ConfigLoaderService<T> {
+  protected readonly yamlParser = inject(YamlParserService);
+  protected readonly envMapper = inject(EnvironmentMapperService);
+  protected readonly platformId = inject(PLATFORM_ID);
 
-  private configCache: RuntimeAppConfig | null = null;
+  protected configCache: T | null = null;
+
+  /**
+   * Abstract method to validate configuration
+   * Must be implemented by subclasses with their specific schema
+   */
+  protected abstract validateConfig(config: unknown): T;
 
   /**
    * Check if running on server (Node.js)
    */
-  private get isServer(): boolean {
+  protected get isServer(): boolean {
     return isPlatformServer(this.platformId);
   }
 
@@ -64,7 +68,7 @@ export class ConfigLoaderService {
    * @param basePath - Optional base path for config files (for testing)
    * @returns Complete validated configuration
    */
-  async loadConfig(basePath?: string): Promise<RuntimeAppConfig> {
+  async loadConfig(basePath?: string): Promise<T> {
     // Return cached config if available
     if (this.configCache) {
       return this.configCache;
@@ -102,21 +106,15 @@ export class ConfigLoaderService {
         }
       }
 
-      // 4. Validate configuration
+      // 4. Validate configuration using subclass implementation
       console.log('[ConfigLoader] Validating configuration');
-      const validatedConfig = validateConfig(mergedConfig);
-
-      // 5. Add runtime properties
-      const runtimeConfig: RuntimeAppConfig = {
-        ...validatedConfig,
-        isPlatformServer: this.isServer,
-      };
+      const validatedConfig = this.validateConfig(mergedConfig);
 
       // Cache the configuration
-      this.configCache = runtimeConfig;
+      this.configCache = validatedConfig;
 
       console.log('[ConfigLoader] Configuration loaded successfully');
-      return runtimeConfig;
+      return validatedConfig;
     } catch (error) {
       console.error('[ConfigLoader] Failed to load configuration:', error);
       throw new Error(`Configuration loading failed: ${error}`);
@@ -127,7 +125,7 @@ export class ConfigLoaderService {
    * Get cached configuration
    * Throws error if config hasn't been loaded yet
    */
-  getConfig(): RuntimeAppConfig {
+  getConfig(): T {
     if (!this.configCache) {
       throw new Error('Configuration not loaded. Call loadConfig() first.');
     }
@@ -146,7 +144,7 @@ export class ConfigLoaderService {
    * Reload configuration
    * Clears cache and loads configuration again
    */
-  async reloadConfig(basePath?: string): Promise<RuntimeAppConfig> {
+  async reloadConfig(basePath?: string): Promise<T> {
     this.clearCache();
     return this.loadConfig(basePath);
   }
@@ -155,7 +153,7 @@ export class ConfigLoaderService {
    * Set configuration directly (for testing)
    * Bypasses normal loading process
    */
-  setConfig(config: RuntimeAppConfig): void {
+  setConfig(config: T): void {
     this.configCache = config;
   }
 }
