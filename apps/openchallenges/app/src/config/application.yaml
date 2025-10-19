@@ -5,26 +5,26 @@
 # 3. Environment variables (e.g., APP_VERSION=2.0.0)
 
 app:
-  version: 1.0.0-alpha
+  version: 1.3.9
   telemetry:
-    enabled: true
+    enabled: false
   announcement:
     show: false
 
 api:
   docs:
-    url: http://localhost:8000/api-docs
+    url: https://openchallenges.io/api-docs
   csr:
     # Client-side rendering API URL (used by browser)
-    url: http://localhost:8082/api/v1
+    url: https://openchallenges.io/api/v1
   ssr:
     # Server-side rendering API URL (used by Node.js server)
-    url: http://openchallenges-api-gateway:8082/api/v1
+    url: https://openchallenges.io/api/v1
 
 environment: dev
 
 data:
-  updatedOn: yyyy-mm-dd
+  updatedOn: '2025-10-19'
 
 features:
   operationFilter:
@@ -32,7 +32,7 @@ features:
 
 google:
   tagManager:
-    id: ''
+    id: 'GTM-NBR5XD8C'
 
 urls:
   privacyPolicy: https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948530178/OpenChallenges+Privacy+Policy

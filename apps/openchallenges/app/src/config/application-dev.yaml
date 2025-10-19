@@ -1,20 +1,21 @@
 # Development-specific configuration
 # Applied when NODE_ENV=development or ENVIRONMENT=dev
-
-environment: development
-
-api:
-  # In development, both CSR and SSR use localhost
-  # (SSR runs on the dev machine, not in Docker)
-  csr:
-    url: http://localhost:8082/api/v1
-  ssr:
-    url: http://localhost:8082/api/v1
-
 app:
+  version: local
   telemetry:
     enabled: false
 
-features:
-  operationFilter:
-    enabled: false
+data:
+  updatedOn: '2025-10-19'
+
+google:
+  tagManager:
+    id: 'GTM-NBR5XD8C'
+
+api:
+  docs:
+    url: http://localhost:8000/api-docs
+  csr:
+    url: http://localhost:8000/api/v1
+  ssr:
+    url: http://openchallenges-apex:8000/api/v1

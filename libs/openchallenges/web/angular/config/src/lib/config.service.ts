@@ -29,6 +29,7 @@ export class ConfigService extends ConfigLoaderService<RuntimeAppConfig> {
     return {
       ...validated,
       isPlatformServer: this.isServer,
+      googleTagManagerId: validated.google.tagManager.id, // Expose for GTM compatibility
     };
   }
 

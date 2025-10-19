@@ -1,22 +1,2 @@
 # Production environment overrides
 # Applied when NODE_ENV=production or ENVIRONMENT=prod
-
-environment: production
-
-api:
-  # Production URLs MUST be set via environment variables in deployment
-  # Example:
-  #   API_CSR_URL=https://openchallenges.io/api/v1
-  #   API_SSR_URL=http://api-gateway:8082/api/v1
-  # The SSR URL can use internal Docker networking (api-gateway hostname)
-  # while CSR URL must be publicly accessible
-
-app:
-  telemetry:
-    enabled: true
-  announcement:
-    show: false
-
-features:
-  operationFilter:
-    enabled: false

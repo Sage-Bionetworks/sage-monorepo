@@ -62,6 +62,7 @@ export type AppConfig = z.infer<typeof AppConfigSchema>;
  */
 export interface RuntimeAppConfig extends AppConfig {
   isPlatformServer: boolean;
+  googleTagManagerId: string; // Computed from google.tagManager.id for compatibility
 }
 
 /**

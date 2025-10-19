@@ -13,11 +13,10 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
 import {
-  CONFIG_SERVICE_TOKEN,
-  createGoogleTagManagerIdProvider,
   GoogleTagManagerComponent,
-  isGoogleTagManagerIdSet,
-} from '@sagebionetworks/shared/google-tag-manager';
+  isGtmIdSet,
+  GTM_CONFIG,
+} from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
@@ -34,14 +33,19 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './app.component.scss',
   providers: [
     {
-      provide: CONFIG_SERVICE_TOKEN,
-      useFactory: () => inject(ConfigService),
+      provide: GTM_CONFIG,
+      useFactory: () => {
+        const config = inject(ConfigService);
+        return {
+          gtmId: config.config.googleTagManagerId,
+          isPlatformServer: config.config.isPlatformServer,
+        };
+      },
     },
     {
       provide: LOADING_ICON_COLORS,
       useValue: AGORA_LOADING_ICON_COLORS,
     },
-    createGoogleTagManagerIdProvider(),
   ],
 })
 export class AppComponent implements OnInit {
@@ -65,9 +69,7 @@ export class AppComponent implements OnInit {
   constructor() {
     this.metaTagService.initialize('Agora');
 
-    this.useGoogleTagManager = isGoogleTagManagerIdSet(
-      this.configService.config.googleTagManagerId,
-    );
+    this.useGoogleTagManager = isGtmIdSet(this.configService.config.googleTagManagerId);
   }
 
   ngOnInit() {

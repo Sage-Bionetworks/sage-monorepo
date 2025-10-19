@@ -1,18 +1,2 @@
 # Staging environment overrides
 # Applied when NODE_ENV=staging or ENVIRONMENT=stage
-
-environment: staging
-
-api:
-  # Set these via environment variables in staging deployment
-  # Example: API_CSR_URL=https://staging.openchallenges.io/api/v1
-
-app:
-  telemetry:
-    enabled: true
-  announcement:
-    show: false
-
-features:
-  operationFilter:
-    enabled: false

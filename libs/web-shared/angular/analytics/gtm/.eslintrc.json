@@ -1,5 +1,5 @@
 {
-  "extends": ["../../../../.eslintrc.json"],
+  "extends": ["../../../../../.eslintrc.json"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
@@ -14,7 +14,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "sage",
+            "prefix": "web-shared",
             "style": "camelCase"
           }
         ],
@@ -22,7 +22,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "sage",
+            "prefix": "web-shared",
             "style": "kebab-case"
           }
         ],

@@ -12,11 +12,10 @@ import {
 } from '@sagebionetworks/openchallenges/ui';
 import { PageTitleService } from '@sagebionetworks/openchallenges/util';
 import {
-  CONFIG_SERVICE_TOKEN,
-  createGoogleTagManagerIdProvider,
   GoogleTagManagerComponent,
-  isGoogleTagManagerIdSet,
-} from '@sagebionetworks/shared/google-tag-manager';
+  isGtmIdSet,
+  GTM_CONFIG,
+} from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { Subscription } from 'rxjs';
 import { APP_SECTIONS } from './app-sections';
 
@@ -27,10 +26,15 @@ import { APP_SECTIONS } from './app-sections';
   imports: [NavbarComponent, RouterOutlet, GoogleTagManagerComponent],
   providers: [
     {
-      provide: CONFIG_SERVICE_TOKEN,
-      useFactory: () => CONFIG_SERVICE_TOKEN,
+      provide: GTM_CONFIG,
+      useFactory: () => {
+        const config = inject(ConfigService);
+        return {
+          gtmId: config.config.google.tagManager.id,
+          isPlatformServer: config.config.isPlatformServer,
+        };
+      },
     },
-    createGoogleTagManagerIdProvider(),
   ],
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -48,9 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private configService = inject(ConfigService);
 
   constructor() {
-    this.useGoogleTagManager = isGoogleTagManagerIdSet(
-      this.configService.config.google.tagManager.id,
-    );
+    this.useGoogleTagManager = isGtmIdSet(this.configService.config.google.tagManager.id);
   }
 
   ngOnInit() {

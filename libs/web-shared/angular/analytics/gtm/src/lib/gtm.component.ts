@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
-import { CONFIG_SERVICE_TOKEN, ConfigService } from './google-tag-manager-id.provider';
+import { GTM_CONFIG, GtmConfig } from './gtm.tokens';
 
 @Component({
-  selector: 'sage-google-tag-manager',
+  selector: 'web-shared-angular-analytics-gtm',
   template: '',
   standalone: true,
   providers: [
@@ -17,10 +17,10 @@ import { CONFIG_SERVICE_TOKEN, ConfigService } from './google-tag-manager-id.pro
 export class GoogleTagManagerComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly gtmService = inject(GoogleTagManagerService);
-  private readonly configService = inject<ConfigService>(CONFIG_SERVICE_TOKEN);
+  private readonly gtmConfig = inject<GtmConfig>(GTM_CONFIG);
 
   ngOnInit(): void {
-    if (!this.configService.config.isPlatformServer) {
+    if (!this.gtmConfig.isPlatformServer) {
       this.router.events.forEach((event) => {
         if (event instanceof NavigationEnd) {
           const gtmTag = {

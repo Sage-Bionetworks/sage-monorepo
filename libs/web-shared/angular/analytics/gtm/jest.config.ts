@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-typescript-google-tag-manager',
-  preset: '../../../../jest.preset.js',
+  displayName: 'web-shared-angular-analytics-gtm',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../../coverage/libs/shared/typescript/google-tag-manager',
+  coverageDirectory: '../../../../../coverage/libs/web-shared/angular/analytics/gtm',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
