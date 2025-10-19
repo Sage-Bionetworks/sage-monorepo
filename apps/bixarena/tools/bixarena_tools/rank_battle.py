@@ -11,7 +11,6 @@ from datetime import UTC, datetime
 from functools import partial
 
 import numpy as np
-import pandas as pd
 from scipy.optimize import minimize
 from scipy.special import expit
 from tqdm import tqdm
@@ -178,16 +177,21 @@ def compute_bt(votes: list[dict], base=10.0, scale=400.0, init_rating=1000.0, to
         tol: optimization tolerance
 
     Returns:
-        pd.Series with model ratings, sorted in descending order
+        dict with model ratings, sorted in descending order by rating
     """
     matchups, outcomes, models, weights = preprocess_votes_for_bt(votes)
 
     if len(models) == 0:
-        return pd.Series(dtype=float)
+        return {}
 
     ratings = fit_bt(matchups, outcomes, weights, len(models), math.log(base), tol)
     scaled_ratings = scale_and_offset(ratings, models, scale, init_rating=init_rating)
-    return pd.Series(scaled_ratings, index=models).sort_values(ascending=False)
+    # Return as dict sorted by rating (descending)
+    return dict(
+        sorted(
+            zip(models, scaled_ratings, strict=True), key=lambda x: x[1], reverse=True
+        )
+    )
 
 
 def compute_bootstrap_bt(
@@ -212,12 +216,13 @@ def compute_bootstrap_bt(
         num_cpu: number of CPU cores to use (None for all available)
 
     Returns:
-        pd.DataFrame with bootstrap results, columns are models, sorted by median
+        dict with bootstrap results, keys are models, values are arrays of ratings
+        sorted by median rating (descending)
     """
     matchups, outcomes, models, weights = preprocess_votes_for_bt(votes)
 
     if len(models) == 0:
-        return pd.DataFrame()
+        return {}
 
     # bootstrap sample unique outcomes and counts using multinomial distribution
     rng = np.random.default_rng(seed=0)
@@ -236,28 +241,15 @@ def compute_bootstrap_bt(
 
     ratings = np.array(results)
     scaled_ratings = scale_and_offset(ratings, models, scale, init_rating)
-    df = pd.DataFrame(scaled_ratings, columns=models)
-    return df[df.median().sort_values(ascending=False).index]
 
+    # Convert to dict with model names as keys and rating arrays as values
+    results_dict = {model: scaled_ratings[:, i] for i, model in enumerate(models)}
 
-def convert_votes_to_battles_df(votes: list[dict]) -> pd.DataFrame:
-    """Convert BixArena vote format to battles DataFrame for BT algorithm."""
-    battles_data = []
-    for vote in votes:
-        if vote["preference"] == "model_a":
-            winner = "model_a"
-        elif vote["preference"] == "model_b":
-            winner = "model_b"
-        elif vote["preference"] == "tie":
-            winner = "tie"
-        else:
-            continue  # Skip invalid preferences
-
-        battles_data.append(
-            {"model_a": vote["model_a"], "model_b": vote["model_b"], "winner": winner}
-        )
-
-    return pd.DataFrame(battles_data)
+    # Sort by median rating (descending)
+    sorted_models = sorted(
+        results_dict.keys(), key=lambda m: np.median(results_dict[m]), reverse=True
+    )
+    return {model: results_dict[model] for model in sorted_models}
 
 
 def compute_leaderboard_bt(
@@ -286,7 +278,7 @@ def compute_leaderboard_bt(
     """
     # Compute base scores directly from votes (optimized path)
     scores = compute_bt(votes, base, scale, init_rating, tol)
-    if scores.empty:
+    if not scores:
         return []
 
     # Compute bootstrap confidence intervals directly from votes
@@ -308,10 +300,10 @@ def compute_leaderboard_bt(
         model_info = models.get(str(model_name), {})
 
         # Get bootstrap confidence intervals
-        if model_name in bootstrap_results.columns:
+        if model_name in bootstrap_results:
             model_bootstrap = bootstrap_results[model_name]
-            ci_lower = float(model_bootstrap.quantile(0.025))
-            ci_upper = float(model_bootstrap.quantile(0.975))
+            ci_lower = float(np.quantile(model_bootstrap, 0.025))
+            ci_upper = float(np.quantile(model_bootstrap, 0.975))
         else:
             # Fallback if bootstrap failed
             margin = float(bt_score) * 0.1
