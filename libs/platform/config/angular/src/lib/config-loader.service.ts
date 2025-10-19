@@ -1,8 +1,11 @@
-import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID, makeStateKey, TransferState } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { YamlParserService } from './yaml-parser.service';
 import { EnvironmentMapperService } from './environment-mapper.service';
 import { normalizeEnvironment } from './base-config.schema';
+
+// State key for transferring config from server to browser
+const CONFIG_STATE_KEY = makeStateKey<any>('app-config');
 
 /**
  * Generic configuration loader service
@@ -11,6 +14,7 @@ import { normalizeEnvironment } from './base-config.schema';
  * 2. Load profile-specific configuration (application-{profile}.yaml)
  * 3. Apply environment variable overrides
  * 4. Validate final configuration
+ * 5. Transfer state from server to browser (SSR)
  *
  * This is a generic service that can be extended for specific applications
  */
@@ -19,6 +23,7 @@ export abstract class ConfigLoaderService<T> {
   protected readonly yamlParser = inject(YamlParserService);
   protected readonly envMapper = inject(EnvironmentMapperService);
   protected readonly platformId = inject(PLATFORM_ID);
+  protected readonly transferState = inject(TransferState);
 
   protected configCache: T | null = null;
 
@@ -70,6 +75,13 @@ export abstract class ConfigLoaderService<T> {
    * Load complete application configuration
    * Merges all configuration sources and applies overrides
    *
+   * In SSR mode:
+   * - Server: Loads from YAML files with env var overrides, stores in TransferState
+   * - Browser: Retrieves from TransferState (same config as server)
+   *
+   * This ensures 12-factor compliance: browser uses the same environment-specific
+   * configuration as the server, including all environment variable overrides.
+   *
    * @param basePath - Optional base path for config files (for testing)
    * @returns Complete validated configuration
    */
@@ -80,6 +92,19 @@ export abstract class ConfigLoaderService<T> {
     }
 
     try {
+      // In browser context with SSR, check if config was transferred from server
+      if (!this.isServer) {
+        const transferredConfig = this.transferState.get(CONFIG_STATE_KEY, null);
+        if (transferredConfig) {
+          console.log('[ConfigLoader] Using configuration transferred from server');
+          const validatedConfig = this.validateConfig(transferredConfig);
+          this.configCache = validatedConfig;
+          return validatedConfig;
+        }
+        console.log('[ConfigLoader] No transferred state found, loading from YAML files');
+      }
+
+      // Server or browser without SSR: Load from YAML files
       // 1. Load base configuration first to determine default environment
       const baseConfig = await this.yamlParser.loadYaml('application.yaml', basePath);
       if (!baseConfig) {
@@ -99,8 +124,7 @@ export abstract class ConfigLoaderService<T> {
         mergedConfig = this.yamlParser.deepMerge(mergedConfig, profileConfig);
       }
 
-      // 4. Apply environment variable overrides
-      // Environment variables are loaded from .env files by Nx and available in process.env
+      // 4. Apply environment variable overrides (server only)
       if (this.isServer) {
         console.log('[ConfigLoader] Applying environment variable overrides');
         mergedConfig = this.envMapper.applyEnvironmentOverrides(mergedConfig);
@@ -115,6 +139,12 @@ export abstract class ConfigLoaderService<T> {
       // 5. Validate configuration using subclass implementation
       console.log('[ConfigLoader] Validating configuration');
       const validatedConfig = this.validateConfig(mergedConfig);
+
+      // 6. On server, store config in TransferState for browser hydration
+      if (this.isServer) {
+        console.log('[ConfigLoader] Storing configuration in TransferState for browser');
+        this.transferState.set(CONFIG_STATE_KEY, mergedConfig);
+      }
 
       // Cache the configuration
       this.configCache = validatedConfig;

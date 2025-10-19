@@ -6,12 +6,35 @@ A reusable Angular configuration library that provides Spring Boot-inspired conf
 
 - **YAML-based configuration** with profile support (dev, test, stage, prod)
 - **Environment variable overrides** with automatic type conversion
-- **Server-side rendering (SSR) support** with separate browser/Node.js code paths
+- **Server-side rendering (SSR) support** with TransferState for config sharing
+- **12-factor app compliant** - Browser uses the same config as server (including env var overrides)
 - **Type-safe configuration** using generics and Zod validation
 - **Spring Boot-style hierarchy** (priority from highest to lowest):
   1. **Environment variables** (highest priority) - Individual property overrides
   2. **Profile-specific configuration** (`application-{profile}.yaml`) - Environment-specific overrides
   3. **Base configuration** (`application.yaml`) - Default values for all environments
+
+## SSR and 12-Factor Compliance
+
+When running with server-side rendering (SSR), the library ensures **both server and browser use identical configuration**:
+
+1. **Server (Node.js):**
+
+   - Loads YAML configuration files from filesystem
+   - Applies environment variable overrides (e.g., `ENVIRONMENT=prod`, `API_CSR_URL=...`)
+   - Stores final configuration in Angular's `TransferState`
+
+2. **Browser (Client):**
+   - Retrieves configuration from `TransferState` (injected during SSR)
+   - Uses the **exact same configuration** as the server, including all environment variable overrides
+   - No separate HTTP requests needed for config files
+
+This approach ensures:
+
+- ✅ **12-factor compliance** - Configuration comes from environment variables
+- ✅ **Consistency** - No drift between server and client configuration
+- ✅ **Security** - Sensitive environment variables processed server-side only
+- ✅ **Performance** - No additional HTTP requests for config files
 
 ## Configuration Loading
 
@@ -26,6 +49,36 @@ This approach allows you to:
 - Set a sensible default in `application.yaml` (e.g., `environment: dev`)
 - Override for specific environments using `ENVIRONMENT` variable
 - Leverage standard Node.js `NODE_ENV` conventions
+
+### Configuration Flow
+
+**With SSR (Server-Side Rendering):**
+
+```
+Server Start
+    ↓
+1. Load application.yaml
+2. Load application-{ENVIRONMENT}.yaml
+3. Apply environment variable overrides (API_CSR_URL, etc.)
+4. Store in TransferState
+    ↓
+Browser Hydration
+    ↓
+5. Retrieve config from TransferState
+6. Use server's configuration (with env var overrides)
+```
+
+**Without SSR (Client-Side Only):**
+
+```
+Browser Start
+    ↓
+1. HTTP GET /config/application.yaml
+2. HTTP GET /config/application-{environment}.yaml
+3. Merge and validate
+```
+
+**Note:** With SSR, the browser never makes HTTP requests for config files - it uses the server's configuration directly via TransferState.
 
 ### Examples
 
