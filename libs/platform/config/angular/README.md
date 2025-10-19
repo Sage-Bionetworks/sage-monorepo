@@ -57,28 +57,45 @@ This approach allows you to:
 ```
 Server Start
     ↓
-1. Load application.yaml
-2. Load application-{ENVIRONMENT}.yaml
-3. Apply environment variable overrides (API_CSR_URL, etc.)
-4. Store in TransferState
+1. Load application.yaml (from filesystem)
+2. Load application-{ENVIRONMENT}.yaml (from filesystem)
+3. Apply environment variable overrides (`API_CSR_URL`, etc.)
+4. Validate and store in TransferState
     ↓
 Browser Hydration
     ↓
-5. Retrieve config from TransferState
-6. Use server's configuration (with env var overrides)
+5. Check TransferState for config
+6. If found: Use server's configuration (with env var overrides)
+7. Config loaded successfully ✓
 ```
 
-**Without SSR (Client-Side Only):**
+**Without SSR (Client-Side Only Rendering):**
 
 ```
 Browser Start
     ↓
-1. HTTP GET /config/application.yaml
-2. HTTP GET /config/application-{environment}.yaml
-3. Merge and validate
+1. Check TransferState for config
+2. If not found: Load via HTTP
+    ↓
+3. HTTP GET /config/application.yaml
+4. Read 'environment' property from application.yaml
+5. HTTP GET /config/application-{environment}.yaml
+6. Merge configurations
+7. Validate config
+8. Config loaded successfully ✓
 ```
 
-**Note:** With SSR, the browser never makes HTTP requests for config files - it uses the server's configuration directly via TransferState.
+**Key Differences:**
+
+| Aspect                    | With SSR                                        | Without SSR                              |
+| ------------------------- | ----------------------------------------------- | ---------------------------------------- |
+| **Config Source**         | TransferState (from server)                     | HTTP requests to `/config/` endpoint     |
+| **Environment Variables** | ✅ Applied (server-side)                        | ❌ Not available (browser has no access) |
+| **Profile Selection**     | `ENVIRONMENT` → `NODE_ENV` → `application.yaml` | Only from `application.yaml`             |
+| **12-Factor Compliant**   | ✅ Yes                                          | ⚠️ Limited (no env var overrides)        |
+| **HTTP Requests**         | 0 (config embedded in HTML)                     | 2 (application.yaml + profile yaml)      |
+
+**Note:** For production deployments, SSR is recommended to ensure 12-factor compliance and allow environment variable overrides.
 
 ### Examples
 
