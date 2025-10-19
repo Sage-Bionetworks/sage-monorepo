@@ -49,7 +49,11 @@ def simulate_models(num_models: int, seed: int) -> dict[str, dict]:
 
 def simulate_votes(config: SimConfig) -> tuple[list[dict], dict[str, dict]]:
     """
-    Simulate vote with simple random preferences.
+    Simulate votes with models having different base win rates.
+
+    Models are assigned base win rates (40%-90%), with higher numbered
+    models having higher rates. When two models compete, the one with
+    the higher base rate is more likely to win (normalized probability).
 
     Args:
         config: Simulation configuration
@@ -65,18 +69,37 @@ def simulate_votes(config: SimConfig) -> tuple[list[dict], dict[str, dict]]:
     models = simulate_models(config.num_models, config.random_seed)
     model_names = list(models.keys())
 
+    # Assign base win rates to models (40%-90% range)
+    # Higher numbered models have higher base win rates
+    model_base_rates = {}
+    for i, model_name in enumerate(sorted(model_names)):
+        # Create gradient: early models ~40% win rate, later models ~90%
+        base_rate = 0.40 + (i / (config.num_models - 1)) * 0.50
+        # Add small random noise (±5%)
+        noise = random.gauss(0, 0.05)
+        model_base_rates[model_name] = max(0.1, min(0.95, base_rate + noise))
+
     votes = []
 
     for _ in range(config.num_votes):
         # Select two different models randomly
         model_a, model_b = random.sample(model_names, 2)
 
-        # Simple random outcome determination
+        # Simple approach: model with higher base rate is more likely to win
+        # Normalize so probabilities sum to 1
+        rate_a = model_base_rates[model_a]
+        rate_b = model_base_rates[model_b]
+        total_rate = rate_a + rate_b
+        prob_a_wins = rate_a / total_rate
+
+        # Determine outcome
         rand_outcome = random.random()
 
         if rand_outcome < config.tie_probability:
             preference = "tie"
-        elif rand_outcome < 0.5 + (config.tie_probability / 2):
+        elif rand_outcome < (
+            config.tie_probability + prob_a_wins * (1 - config.tie_probability)
+        ):
             preference = "model_a"
         else:
             preference = "model_b"
@@ -87,9 +110,7 @@ def simulate_votes(config: SimConfig) -> tuple[list[dict], dict[str, dict]]:
     return votes, models
 
 
-def print_simulation_summary(
-    votes: list[dict], config: SimConfig, models: dict[str, dict]
-):
+def print_simulation_summary(votes: list[dict], config: SimConfig):
     """Print a summary of the simulated votes."""
 
     print("\n=== Simulation Summary ===")
@@ -115,4 +136,4 @@ def print_simulation_summary(
 if __name__ == "__main__":
     config = SimConfig(num_models=20, num_votes=1000)
     votes, models = simulate_votes(config)
-    print_simulation_summary(votes, config, models)
+    print_simulation_summary(votes, config)

@@ -292,23 +292,36 @@ def compute_leaderboard_bt(
         for model in [vote["model_a"], vote["model_b"]]:
             vote_counts[model] = vote_counts.get(model, 0) + 1
 
+    # Compute confidence intervals for all models
+    model_ci = {}
+    for model_name in scores:
+        model_bootstrap = bootstrap_results[model_name]
+        model_ci[model_name] = {
+            "lower": float(np.quantile(model_bootstrap, 0.025)),
+            "upper": float(np.quantile(model_bootstrap, 0.975)),
+        }
+
+    # Compute statistical ranking based on CI overlap
+    # A model's rank = 1 + number of models statistically significantly better than it
+    # Model B is significantly better than A if: CI_lower(B) > CI_upper(A)
+    model_order = list(scores.keys())
+    final_rank = {}
+    for model_a in model_order:
+        final_rank[model_a] = 1
+        for model_b in model_order:
+            if model_a == model_b:
+                continue
+            # Check if model_b is statistically significantly better than model_a
+            if model_ci[model_b]["lower"] > model_ci[model_a]["upper"]:
+                final_rank[model_a] += 1
+
     # Format leaderboard entries
     leaderboard_entries = []
     current_time = datetime.now(UTC).isoformat()
 
-    for rank, (model_name, bt_score) in enumerate(scores.items(), 1):
+    for model_name, bt_score in scores.items():
         model_info = models.get(str(model_name), {})
-
-        # Get bootstrap confidence intervals
-        if model_name in bootstrap_results:
-            model_bootstrap = bootstrap_results[model_name]
-            ci_lower = float(np.quantile(model_bootstrap, 0.025))
-            ci_upper = float(np.quantile(model_bootstrap, 0.975))
-        else:
-            # Fallback if bootstrap failed
-            margin = float(bt_score) * 0.1
-            ci_lower = float(bt_score) - margin
-            ci_upper = float(bt_score) + margin
+        ci = model_ci[model_name]
 
         entry = {
             "id": str(uuid.uuid4()),
@@ -317,10 +330,10 @@ def compute_leaderboard_bt(
             "license": model_info.get("license", "Unknown"),
             "btScore": float(bt_score),
             "voteCount": vote_counts.get(model_name, 0),
-            "rank": rank,
+            "rank": final_rank[model_name],
             "createdAt": current_time,
-            "bootstrapQ025": ci_lower,
-            "bootstrapQ975": ci_upper,
+            "bootstrapQ025": ci["lower"],
+            "bootstrapQ975": ci["upper"],
         }
         leaderboard_entries.append(entry)
 
