@@ -2,6 +2,7 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { YamlParserService } from './yaml-parser.service';
 import { EnvironmentMapperService } from './environment-mapper.service';
+import { normalizeEnvironment } from './base-config.schema';
 
 /**
  * Generic configuration loader service
@@ -35,25 +36,18 @@ export abstract class ConfigLoaderService<T> {
   }
 
   /**
-   * Map standard NODE_ENV values to config file names
-   * NODE_ENV is set automatically by build tools (development, production, test)
-   */
-  private readonly profileFileMap: Record<string, string> = {
-    development: 'dev',
-    production: 'prod',
-  };
-
-  /**
    * Get the active profile name for loading profile-specific config file
    * Priority: ENVIRONMENT > NODE_ENV > environment from application.yaml
    *
-   * ENVIRONMENT should match the 'environment' property in your config schema
-   * NODE_ENV is typically set by build tools (development, production, test)
+   * Uses normalizeEnvironment() to map aliases to canonical values:
+   * - development → dev
+   * - staging → stage
+   * - production → prod
    *
    * Examples:
    * - ENVIRONMENT=stage → loads application-stage.yaml
    * - ENVIRONMENT=prod → loads application-prod.yaml
-   * - NODE_ENV=development → loads application-dev.yaml (mapped)
+   * - NODE_ENV=development → loads application-dev.yaml (normalized)
    * - No env vars → reads 'environment' from application.yaml
    *
    * Note: Default values always come from application.yaml, not from the profile
@@ -65,10 +59,11 @@ export abstract class ConfigLoaderService<T> {
         process.env['NODE_ENV'] ||
         baseConfig?.['environment'] ||
         'development';
-      return this.profileFileMap[rawProfile] || rawProfile;
+      return normalizeEnvironment(rawProfile as any);
     }
     // For browser, use environment from base config or default to 'dev'
-    return baseConfig?.['environment'] || 'dev';
+    const browserEnv = baseConfig?.['environment'] || 'dev';
+    return normalizeEnvironment(browserEnv as any);
   }
 
   /**
