@@ -80,6 +80,13 @@
         "command": "uv run bixarena_tools/hello.py",
         "cwd": "{projectRoot}"
       }
+    },
+    "generate-leaderboard": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "uv run bixarena_tools/generate_leaderboard.py",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["language:python", "package-manager:uv"],
