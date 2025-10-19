@@ -97,6 +97,8 @@ export abstract class ConfigLoaderService<T> {
         const transferredConfig = this.transferState.get(CONFIG_STATE_KEY, null);
         if (transferredConfig) {
           console.log('[ConfigLoader] Using configuration transferred from server');
+          console.log('[ConfigLoader] Browser configuration (from server via TransferState):');
+          console.log(JSON.stringify(transferredConfig, null, 2));
           const validatedConfig = this.validateConfig(transferredConfig);
           this.configCache = validatedConfig;
           return validatedConfig;
@@ -143,7 +145,13 @@ export abstract class ConfigLoaderService<T> {
       // 6. On server, store config in TransferState for browser hydration
       if (this.isServer) {
         console.log('[ConfigLoader] Storing configuration in TransferState for browser');
+        console.log('[ConfigLoader] Server configuration (will be transferred to browser):');
+        console.log(JSON.stringify(mergedConfig, null, 2));
         this.transferState.set(CONFIG_STATE_KEY, mergedConfig);
+      } else {
+        // Browser without SSR
+        console.log('[ConfigLoader] Browser configuration (loaded from YAML, no SSR):');
+        console.log(JSON.stringify(mergedConfig, null, 2));
       }
 
       // Cache the configuration
