@@ -49,11 +49,14 @@ export class YamlParserService {
    * Load YAML file in server context (Node.js)
    */
   private async loadYamlServer(filename: string, basePath?: string): Promise<Record<string, any>> {
-    // Dynamic import to avoid bundling Node.js modules in browser code
-    const { readFile, access } = await import('node:fs/promises');
-    const { join, dirname, resolve } = await import('node:path');
-    const { fileURLToPath } = await import('node:url');
-    const { constants } = await import('node:fs');
+    // Use eval to prevent bundler from trying to resolve Node.js modules
+    // This ensures Node.js modules are only loaded at runtime on the server
+    const dynamicImport = new Function('specifier', 'return import(specifier)');
+
+    const { readFile, access } = await dynamicImport('node:fs/promises');
+    const { join, dirname, resolve } = await dynamicImport('node:path');
+    const { fileURLToPath } = await dynamicImport('node:url');
+    const { constants } = await dynamicImport('node:fs');
 
     // Determine the config directory path
     let configPath: string | undefined;
