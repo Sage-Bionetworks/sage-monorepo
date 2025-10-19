@@ -31,14 +31,28 @@ export class ConfigLoaderService {
   }
 
   /**
+   * Map standard NODE_ENV values to config file names
+   * NODE_ENV is set automatically by build tools (development, production, test)
+   * For custom environments like 'stage', use ACTIVE_PROFILE instead
+   */
+  private readonly profileFileMap: Record<string, string> = {
+    development: 'dev',
+    production: 'prod',
+  };
+
+  /**
    * Get the active profile from environment
-   * Priority: ACTIVE_PROFILE > NODE_ENV > 'development'
+   * Priority: ACTIVE_PROFILE > NODE_ENV > 'dev'
+   *
+   * Use ACTIVE_PROFILE for custom environments (e.g., ACTIVE_PROFILE=stage)
+   * NODE_ENV is typically set by build tools (development, production, test)
    */
   private getActiveProfile(): string {
     if (this.isServer) {
-      return process.env['ACTIVE_PROFILE'] || process.env['NODE_ENV'] || 'development';
+      const rawProfile = process.env['ACTIVE_PROFILE'] || process.env['NODE_ENV'] || 'development';
+      return this.profileFileMap[rawProfile] || rawProfile;
     }
-    return 'development';
+    return 'dev'; // Default to 'dev' for browser
   }
 
   /**
