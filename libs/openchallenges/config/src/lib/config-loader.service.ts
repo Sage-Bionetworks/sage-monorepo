@@ -41,18 +41,20 @@ export class ConfigLoaderService {
   };
 
   /**
-   * Get the active profile from environment
-   * Priority: ACTIVE_PROFILE > NODE_ENV > 'dev'
+   * Get the active profile name for loading profile-specific config file
+   * Priority: ACTIVE_PROFILE > NODE_ENV > 'development' (which maps to 'dev' file)
    *
    * Use ACTIVE_PROFILE for custom environments (e.g., ACTIVE_PROFILE=stage)
    * NODE_ENV is typically set by build tools (development, production, test)
+   *
+   * Note: Default values always come from application.yaml, not from the profile
    */
   private getActiveProfile(): string {
     if (this.isServer) {
       const rawProfile = process.env['ACTIVE_PROFILE'] || process.env['NODE_ENV'] || 'development';
       return this.profileFileMap[rawProfile] || rawProfile;
     }
-    return 'dev'; // Default to 'dev' for browser
+    return 'dev'; // Default to 'dev' profile for browser
   }
 
   /**

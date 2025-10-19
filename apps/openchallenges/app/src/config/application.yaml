@@ -21,7 +21,7 @@ api:
     # Server-side rendering API URL (used by Node.js server)
     url: http://openchallenges-api-gateway:8082/api/v1
 
-environment: development
+environment: dev
 
 data:
   updatedOn: yyyy-mm-dd
