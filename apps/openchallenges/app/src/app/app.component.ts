@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.useGoogleTagManager = isGoogleTagManagerIdSet(
-      this.configService.config.googleTagManagerId,
+      this.configService.config.google.tagManager.id,
     );
   }
 

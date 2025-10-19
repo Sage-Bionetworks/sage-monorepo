@@ -1,0 +1,39 @@
+# Base configuration for OpenChallenges App
+# This file contains default values that can be overridden by:
+# 1. Profile-specific files (e.g., application-production.yaml)
+# 2. Local overrides (application-local.yaml - gitignored)
+# 3. Environment variables (e.g., APP_VERSION=2.0.0)
+
+app:
+  version: 1.0.0-alpha
+  telemetry:
+    enabled: true
+  announcement:
+    show: false
+
+api:
+  docs:
+    url: http://localhost:8000/api-docs
+  csr:
+    # Client-side rendering API URL (used by browser)
+    url: http://localhost:8082/api/v1
+  ssr:
+    # Server-side rendering API URL (used by Node.js server)
+    url: http://openchallenges-api-gateway:8082/api/v1
+
+environment: development
+
+data:
+  updatedOn: yyyy-mm-dd
+
+features:
+  operationFilter:
+    enabled: false
+
+google:
+  tagManager:
+    id: ''
+
+urls:
+  privacyPolicy: https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948530178/OpenChallenges+Privacy+Policy
+  termsOfUse: https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948333575/OpenChallenges+Terms+of+Use

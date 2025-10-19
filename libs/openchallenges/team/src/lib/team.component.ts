@@ -45,11 +45,11 @@ export class TeamComponent implements OnInit {
   public jakeAvatar$: Observable<Image> | undefined;
 
   constructor() {
-    this.appVersion = this.configService.config.appVersion;
-    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
-    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
-    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
-    this.apiDocsUrl = this.configService.config.apiDocsUrl;
+    this.appVersion = this.configService.config.app.version;
+    this.dataUpdatedOn = this.configService.config.data.updatedOn;
+    this.privacyPolicyUrl = this.configService.config.urls.privacyPolicy;
+    this.termsOfUseUrl = this.configService.config.urls.termsOfUse;
+    this.apiDocsUrl = this.configService.config.api.docs.url;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 

@@ -1,18 +1,12 @@
 import { provideServerRendering } from '@angular/ssr';
 import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { APP_PORT } from '@sagebionetworks/openchallenges/config';
 import { appConfig } from './app.config';
 
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(),
-    // This provider enables the config service to locate the config file during SSR.
-    // Originally added to server.ts (used for production with the Express server),
-    // it was moved here to ensure availability in both production and development environments.
-    {
-      provide: APP_PORT,
-      useValue: process.env['PORT'] || '4200',
-    },
+    // Note: The new YAML-based config system automatically handles file location
+    // in both SSR and browser contexts, so no additional providers are needed here.
   ],
 };
 

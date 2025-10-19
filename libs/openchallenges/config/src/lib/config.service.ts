@@ -1,33 +1,72 @@
-import { isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
-import { APP_PORT, AppConfig, EMPTY_APP_CONFIG } from './app.config';
+import { inject, Injectable } from '@angular/core';
+import { ConfigLoaderService } from './config-loader.service';
+import { RuntimeAppConfig } from './config.schema';
 
+/**
+ * Main configuration service
+ * Provides access to application configuration
+ *
+ * Usage:
+ * 1. ConfigService is initialized via APP_INITIALIZER (see config.factory.ts)
+ * 2. Inject ConfigService in components/services to access config
+ * 3. Access config properties via configService.config
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  private readonly http = inject(HttpClient);
-  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
-  private readonly port = inject(APP_PORT, { optional: true });
+  private readonly configLoader = inject(ConfigLoaderService);
 
-  config: AppConfig = EMPTY_APP_CONFIG;
+  /**
+   * Current application configuration
+   * Access this property after APP_INITIALIZER has run
+   */
+  config!: RuntimeAppConfig;
 
+  /**
+   * Load configuration using the new YAML-based system
+   * Called during APP_INITIALIZER phase
+   */
   async loadConfig(): Promise<void> {
     try {
-      const browserRoot = this.port ? `http://localhost:${this.port}` : '';
-      const appConfig$ = this.http.get<AppConfig>(`${browserRoot}/config/config.json`);
-      const config = await lastValueFrom(appConfig$);
-      this.config = config;
-      this.config.isPlatformServer = isPlatformServer(this.platformId);
-      this.config.privacyPolicyUrl =
-        'https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948530178/OpenChallenges+Privacy+Policy';
-      this.config.termsOfUseUrl =
-        'https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948333575/OpenChallenges+Terms+of+Use';
+      this.config = await this.configLoader.loadConfig();
     } catch (err) {
-      console.error('Unable to load the config file: ', err);
-      return await Promise.resolve();
+      console.error('[ConfigService] Unable to load configuration:', err);
+      // In case of error, use empty config to prevent app crash
+      // The app should have sensible defaults or handle missing config gracefully
+      throw err; // Re-throw to let app initialization know there's an issue
     }
+  }
+
+  /**
+   * Reload configuration
+   * Useful for development or when config needs to be refreshed
+   */
+  async reloadConfig(): Promise<void> {
+    try {
+      this.config = await this.configLoader.reloadConfig();
+    } catch (err) {
+      console.error('[ConfigService] Unable to reload configuration:', err);
+      throw err;
+    }
+  }
+
+  /**
+   * Get a specific config value by path
+   * Example: getValue('api.csr.url') returns config.api.csr.url
+   */
+  getValue<T = any>(path: string): T | undefined {
+    const parts = path.split('.');
+    let current: any = this.config;
+
+    for (const part of parts) {
+      if (current && typeof current === 'object' && part in current) {
+        current = current[part];
+      } else {
+        return undefined;
+      }
+    }
+
+    return current as T;
   }
 }

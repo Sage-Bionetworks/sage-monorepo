@@ -1,0 +1,24 @@
+# Test environment overrides
+# Applied when NODE_ENV=test or ACTIVE_PROFILE=test
+
+environment: test
+
+api:
+  csr:
+    url: http://localhost:8082/api/v1
+  ssr:
+    url: http://localhost:8082/api/v1
+
+app:
+  telemetry:
+    enabled: false
+  announcement:
+    show: false
+
+features:
+  operationFilter:
+    enabled: true
+
+google:
+  tagManager:
+    id: ''

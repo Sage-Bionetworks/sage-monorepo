@@ -1,0 +1,20 @@
+# Development environment overrides
+# Applied when NODE_ENV=development or ACTIVE_PROFILE=development
+
+environment: development
+
+api:
+  # In development, both CSR and SSR use localhost
+  # (SSR runs on the dev machine, not in Docker)
+  csr:
+    url: http://localhost:8082/api/v1
+  ssr:
+    url: http://localhost:8082/api/v1
+
+app:
+  telemetry:
+    enabled: false
+
+features:
+  operationFilter:
+    enabled: false
