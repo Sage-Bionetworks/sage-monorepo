@@ -6,13 +6,19 @@ import {
 import { FilterService } from 'primeng/api';
 
 export class ComparisonToolFilterService {
+  private DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
+
   private readonly filterService = inject(FilterService);
 
   private readonly filtersSignal = signal<ComparisonToolFilter[]>([]);
   private readonly searchTermSignal = signal<string>('');
+  private readonly significanceThresholdSignal = signal(this.DEFAULT_SIGNIFICANCE_THRESHOLD);
+  private readonly significanceThresholdActiveSignal = signal(false);
 
   readonly filters = this.filtersSignal.asReadonly();
   readonly searchTerm = this.searchTermSignal.asReadonly();
+  readonly significanceThreshold = this.significanceThresholdSignal.asReadonly();
+  readonly significanceThresholdActive = this.significanceThresholdActiveSignal.asReadonly();
 
   setFilters(filters: ComparisonToolFilter[]) {
     this.filtersSignal.set(filters);
@@ -20,6 +26,14 @@ export class ComparisonToolFilterService {
 
   updateSearchTerm(term: string) {
     this.searchTermSignal.set(term);
+  }
+
+  setSignificanceThresholdActive(value: boolean) {
+    this.significanceThresholdActiveSignal.set(value);
+  }
+
+  setSignificanceThreshold(value: number) {
+    this.significanceThresholdSignal.set(value);
   }
 
   handleFilterChange(option: ComparisonToolFilterOption) {

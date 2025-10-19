@@ -15,12 +15,11 @@ async function setup() {
     imports: [LoadingContainerComponent],
     providers: [
       provideLoadingIconColors(),
-      ...provideComparisonToolService(),
+      ...provideComparisonToolService({
+        configs: mockComparisonToolConfigs,
+      }),
       ...provideComparisonToolFilterService(),
     ],
-    componentInputs: {
-      pageConfigs: mockComparisonToolConfigs,
-    },
   });
 
   const component = fixture.componentInstance;

@@ -1,28 +1,17 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
+import {
+  ComparisonToolConfigService,
+  ModelOverviewService,
+} from '@sagebionetworks/model-ad/api-client';
 import { render } from '@testing-library/angular';
-
 import { MessageService } from 'primeng/api';
+import { of } from 'rxjs';
 import { ModelOverviewComparisonToolComponent } from './model-overview-comparison-tool.component';
-import { provideHttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
-
-class MockComparisonToolService {
-  columns = { set: jest.fn(), value: ['Model Type', 'Matched Control', 'Gene Expression'] };
-  totalResultsCount = { value: 3 };
-  pinnedResultsCount = { value: 0 };
-
-  isLegendVisible = jest.fn().mockReturnValue(false);
-  setLegendVisibility = jest.fn();
-  toggleLegend = jest.fn();
-}
-
-const mockComparisonToolConfig = {
-  columns: [{ name: 'Model Type' }, { name: 'Matched Control' }, { name: 'Gene Expression' }],
-  // Add other properties if required by the interface
-};
 
 async function setup() {
   const { fixture } = await render(ModelOverviewComparisonToolComponent, {
@@ -31,19 +20,22 @@ async function setup() {
       MessageService,
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
       provideHttpClient(),
+      provideRouter([]),
       {
-        provide: ActivatedRoute,
+        provide: PlatformService,
+        useValue: { isBrowser: true },
+      },
+      {
+        provide: ComparisonToolConfigService,
         useValue: {
-          snapshot: {
-            data: {
-              comparisonToolConfig: mockComparisonToolConfig,
-            },
-          },
+          getComparisonToolConfig: jest.fn().mockReturnValue(of([])),
         },
       },
       {
-        provide: ComparisonToolService,
-        useClass: MockComparisonToolService,
+        provide: ModelOverviewService,
+        useValue: {
+          getModelOverviews: jest.fn().mockReturnValue(of([])),
+        },
       },
     ],
   });

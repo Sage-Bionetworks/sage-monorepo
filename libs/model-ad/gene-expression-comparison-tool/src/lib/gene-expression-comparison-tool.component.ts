@@ -26,11 +26,9 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly comparisonToolService = inject(ComparisonToolService);
 
   isLoading = signal(true);
-  resultsCount = signal(50000);
-
-  configs: ComparisonToolConfig[] = [];
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'RNA - DIFFERENTIAL EXPRESSION': {
       ownerId: 'syn66271427',
@@ -49,7 +47,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.configs = configs;
+          this.comparisonToolService.initialize(configs, undefined, this.selectorsWikiParams);
+          this.comparisonToolService.totalResultsCount.set(50000);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);

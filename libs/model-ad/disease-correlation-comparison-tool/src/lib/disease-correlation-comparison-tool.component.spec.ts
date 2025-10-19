@@ -1,9 +1,16 @@
 import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import {
+  ComparisonToolConfigService,
+  DiseaseCorrelationService,
+} from '@sagebionetworks/model-ad/api-client';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
+import { of } from 'rxjs';
 import { DiseaseCorrelationComparisonToolComponent } from './disease-correlation-comparison-tool.component';
 
 async function setup() {
@@ -13,6 +20,23 @@ async function setup() {
       MessageService,
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
       provideHttpClient(),
+      provideRouter([]),
+      {
+        provide: PlatformService,
+        useValue: { isBrowser: true },
+      },
+      {
+        provide: ComparisonToolConfigService,
+        useValue: {
+          getComparisonToolConfig: jest.fn().mockReturnValue(of([])),
+        },
+      },
+      {
+        provide: DiseaseCorrelationService,
+        useValue: {
+          getDiseaseCorrelations: jest.fn().mockReturnValue(of([])),
+        },
+      },
     ],
   });
 

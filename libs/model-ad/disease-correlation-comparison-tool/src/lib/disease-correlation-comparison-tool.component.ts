@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
@@ -6,11 +6,14 @@ import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolFilterService,
   ComparisonToolService,
+  PlatformService,
 } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
+  DiseaseCorrelation,
+  DiseaseCorrelationService,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
@@ -23,14 +26,16 @@ import { DiseaseCorrelationHelpLinksComponent } from './components/disease-corre
   providers: [ComparisonToolService, ComparisonToolFilterService],
 })
 export class DiseaseCorrelationComparisonToolComponent implements OnInit {
+  private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
+  private readonly comparisonToolService = inject(ComparisonToolService);
+
+  data: DiseaseCorrelation[] = [];
 
   isLoading = signal(true);
-  resultsCount = signal(40000);
-
-  configs: ComparisonToolConfig[] = [];
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'CONSENSUS NETWORK MODULES': {
       ownerId: 'syn66271427',
@@ -38,22 +43,76 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
     },
   };
 
-  ngOnInit() {
-    // TODO - Replace with actual data fetching logic (MG-447)
-    setTimeout(() => {
-      this.isLoading.set(false);
-    }, 300);
+  constructor() {
+    effect(() => {
+      const selection = this.comparisonToolService.dropdownSelection();
+      if (!selection.length) {
+        return;
+      }
 
+      this.isLoading.set(true);
+      this.getData();
+    });
+  }
+
+  ngOnInit() {
+    if (this.platformService.isBrowser) {
+      this.getConfigs();
+    }
+  }
+
+  getConfigs() {
     this.comparisonToolConfigService
       .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.configs = configs;
+          this.comparisonToolService.initialize(configs, undefined, this.selectorsWikiParams);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
           this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
+        },
+      });
+  }
+
+  // TODO: remove fixDropdownSelection and replaceWordsSingleOccurrence as part of next data release (MG-416)
+  fixDropdownSelection(dropdownSelection: string[]) {
+    const [category, subcategory] = dropdownSelection;
+    const replacements = {
+      System: 'system',
+      'Stress Response': 'stress response',
+      Organization: 'organization',
+      Biogenesis: 'Biogensis',
+    };
+
+    const fixedSubcategory =
+      this.replaceWordsSingleOccurrence(subcategory, replacements).replace(' - ', ' (') + ')';
+    return [category, fixedSubcategory];
+  }
+  replaceWordsSingleOccurrence(input: string, replacements: { [key: string]: string }): string {
+    for (const [word, replacement] of Object.entries(replacements)) {
+      input = input.replace(word, replacement);
+    }
+    return input;
+  }
+
+  getData() {
+    this.diseaseCorrelationService
+      .getDiseaseCorrelations(
+        this.fixDropdownSelection(this.comparisonToolService.dropdownSelection()),
+      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.data = data;
+          this.comparisonToolService.totalResultsCount.set(data.length);
+        },
+        error: (error) => {
+          throw new Error('Error fetching disease correlation data:', { cause: error });
+        },
+        complete: () => {
+          this.isLoading.set(false);
         },
       });
   }

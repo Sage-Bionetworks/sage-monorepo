@@ -1,0 +1,44 @@
+<div class="significance-controls">
+  <div class="unselectable-text">Hide insignificant</div>
+  <div class="toggle-switch">
+    <p-toggleswitch
+      [pTooltip]="
+        'When on, this will filter out all statistically insignificant results. Current significance cutoff is: ' +
+        significanceThreshold
+      "
+      styleClass="significance-control-toggle"
+      tooltipPosition="top"
+      tooltipStyleClass="tooltip"
+      [ngModel]="significanceThresholdActive"
+      (ngModelChange)="updateSignificanceThresholdActive($event)"
+    />
+  </div>
+  <div>
+    <p-popover #significancePopover styleClass="significance-control-panel">
+      <p class="significance-control-panel-heading">Statistical significance</p>
+      <p>Enter the P-value to use for the significance cutoff.</p>
+      <input
+        type="number"
+        min="0"
+        max="1"
+        step="0.01"
+        [ngModel]="significanceThreshold"
+        (ngModelChange)="updateSignificanceThreshold($event)"
+      />
+    </p-popover>
+    <button
+      (click)="significancePopover.toggle($event)"
+      class="significance-control-settings"
+      pTooltip="Edit significance cutoff value"
+      tooltipPosition="top"
+      tooltipStyleClass="tooltip"
+    >
+      <explorers-svg-icon
+        imagePath="/explorers-assets/icons/cog.svg"
+        [width]="16"
+        [height]="16"
+        altText="cog"
+      />
+    </button>
+  </div>
+</div>
