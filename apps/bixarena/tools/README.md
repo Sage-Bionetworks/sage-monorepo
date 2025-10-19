@@ -6,113 +6,73 @@ Tools for Bradley-Terry evaluation and ranking in the BixArena project.
 
 - **Bradley-Terry Evaluation**: Compute BT scores using FastChat's proven implementation
 - **Bootstrap Confidence Intervals**: Statistical confidence intervals for rankings
+- **Statistical Ranking (final ranking)**: Determine model rankings based on confidence interval overlaps
 - **Mock Data Generation**: Generate synthetic vote data for testing
 - **CLI Interface**: Easy-to-use command-line interface
 
-## Usage
+## How It Works
 
-### Run BT Evaluation with Mock Data
+### Battle Vote Evaluation Pipeline
 
-```bash
-# Run with default parameters (10 models, 500 votes, 1000 bootstrap samples)
-uv run python -m bixarena_tools.cli_run_bt_eval
+BixArena uses a sophisticated statistical approach to evaluate model performance from pairwise comparison votes:
 
-# Or use the console script entry point
-uv run bixarena-bt-eval
+#### 1. **Data Collection**
 
-# Customize the evaluation
-uv run bixarena-bt-eval --num-models 8 --num-votes 1000 --num-bootstrap 500
+- Users compare two models side-by-side (Model A vs Model B)
+- Each vote records: which models were compared and the user's preference (Model A, Model B, or Tie)
+- Votes accumulate over time from many users making independent comparisons
 
-# Save results to file
-uv run bixarena-bt-eval --output-file bt_results.json --verbose
+#### 2. **Bradley-Terry Model Fitting**
 
-# Quick test with fewer models and votes
-uv run bixarena-bt-eval --num-models 5 --num-votes 100 --num-bootstrap 100
-```
+The Bradley-Terry (BT) model is a probabilistic framework that:
 
-### Parameters
+- Assigns each model a strength rating based on observed win/loss/tie patterns
+- Uses statistical optimization (L-BFGS-B) to find ratings that best explain the vote outcomes
+- Accounts for all pairwise comparisons simultaneously, not just individual matchups
+- Produces scores on a standardized scale (typically anchored at 1000 ± 400 points)
 
-- `--num-models`: Number of models to simulate (default: 10)
-- `--num-votes`: Number of votes to generate (default: 500)
-- `--num-bootstrap`: Bootstrap samples for confidence intervals (default: 1000)
-- `--tie-probability`: Probability of tie outcomes (default: 0.05)
-- `--random-seed`: Random seed for reproducibility (default: 42)
-- `--output-file`: Optional file to save results (JSON format)
-- `--verbose`: Enable verbose logging
+**Why Bradley-Terry?** Unlike simple win-rate calculations, BT handles:
 
-## Implementation
+- Different models being compared different numbers of times
+- Transitive relationships (if A beats B, and B beats C, then A should rate higher than C)
+- Tie outcomes with appropriate probability modeling
 
-This tool uses:
+#### 3. **Bootstrap Confidence Intervals**
 
-1. **FastChat's BT Implementation**: Leverages the proven `compute_bt` and `compute_bootstrap_bt` functions from FastChat
-2. **BixArena Data Model**: Adapts FastChat's battle format to BixArena's vote preferences (model_a, model_b, tie)
-3. **Bootstrap Statistics**: Provides confidence intervals for statistical significance
+To measure uncertainty in the ratings:
 
-## Output Format
+- Resample the vote data 1000 times (with replacement) using multinomial sampling
+- Compute BT scores for each resample
+- Calculate the 2.5th and 97.5th percentiles to get 95% confidence intervals
+- Wider intervals indicate more uncertainty (often due to fewer votes)
 
-The evaluation produces a leaderboard DataFrame with:
+#### 4. **Statistical Ranking**
 
-- `rank`: Model ranking (1-based)
-- `model_name`: Name of the model
-- `bt_score`: Bradley-Terry score (higher is better)
-- `vote_count`: Number of votes involving this model
-- `bootstrap_q025`: 2.5th percentile (lower confidence bound)
-- `bootstrap_q975`: 97.5th percentile (upper confidence bound)
-- `ci_95`: Formatted 95% confidence interval string
+Rather than ranking purely by score, we use **statistical significance**:
 
-## Example Output
+- Model A ranks higher than Model B **only if** A's lower confidence bound exceeds B's upper confidence bound
+- Models with overlapping confidence intervals are considered **statistically tied**
+- Rank is computed as: `1 + count(models that are statistically significantly better)`
 
-```
-🏆 Bradley-Terry Leaderboard Results:
---------------------------------------------------------------------------------
-Rank   Model        BT Score   95% CI               Votes
---------------------------------------------------------------------------------
-1      model_05     1073.925   [966.5, 1181.3]      41
-2      model_01     1058.142   [952.3, 1164.0]      39
-3      model_02     975.134    [877.6, 1072.6]      44
-4      model_03     970.718    [873.6, 1067.8]      38
-5      model_04     922.081    [829.9, 1014.3]      38
-```
+**Example:**
 
-## Dependencies
+- Models with ranks 1, 1, 1, 1 (4 models tied at top)
+- Next distinct model gets rank 5 (not rank 2), because 4 models are not statistically worse
+- This is similar to Olympic medal standings
 
-- pandas >= 2.1
-- numpy >= 1.26
-- scipy >= 1.11
+#### 5. **Leaderboard Generation**
 
-## Development
+The final leaderboard displays:
 
-This package is part of the Sage Bionetworks monorepo and integrates with the BixArena evaluation platform.
+- **Rank**: Statistical ranking (ties preserved)
+- **Model**: Model identifier
+- **Score**: Bradley-Terry rating (higher = stronger)
+- **95% CI**: Confidence interval showing uncertainty
+- **Votes**: Number of comparisons involving this model
 
-### Running Tests
+### Key Principles
 
-```bash
-# Run the mock data generator directly
-uv run python -m bixarena_tools.mock_bt_data
-
-# Test with different configurations
-uv run bixarena-bt-eval --num-models 3 --num-votes 50 --verbose
-```
-
-### Integration with BixArena
-
-The evaluation functions can be imported and used programmatically:
-
-```python
-from bixarena_tools import (
-    compute_bt_scores_and_bootstrap,
-    format_leaderboard_output,
-    SimConfig,
-    simulate_battles
-)
-
-# Generate mock data
-config = SimConfig(num_models=5, num_votes=100)
-votes = simulate_battles(config)
-
-# Compute BT scores
-bt_results, confidence_intervals = compute_bt_scores_and_bootstrap(votes)
-
-# Format for display
-leaderboard = format_leaderboard_output(bt_results, confidence_intervals)
-```
+1. **Statistical Rigor**: Rankings reflect measurable differences, not random noise
+2. **Transparency**: Confidence intervals show where we're certain vs. uncertain
+3. **Fairness**: All models are evaluated on the same statistical framework
+4. **Reproducibility**: Bootstrap sampling ensures stable rankings with enough votes

@@ -19,7 +19,7 @@ addopts = """
 [project]
 name = "bixarena-tools"
 version = "1.0.0"
-description = "Bradley-Terry evaluation and ranking tools for BixArena"
+description = "BixArena Tools"
 requires-python = "==3.13.3"
 readme = 'README.md'
 dependencies = [
