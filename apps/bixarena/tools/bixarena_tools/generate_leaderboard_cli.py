@@ -60,7 +60,7 @@ def main(
     num_votes: Annotated[int, typer.Option(help="Number of votes to generate")] = 500,
     num_bootstrap: Annotated[
         int, typer.Option(help="Number of bootstrap iterations")
-    ] = 5000,
+    ] = 100,
     tie_probability: Annotated[
         float, typer.Option(help="Probability of tie outcomes")
     ] = 0.05,
@@ -68,7 +68,12 @@ def main(
         int, typer.Option(help="Random seed for reproducibility")
     ] = 42,
     output: Annotated[str, typer.Option(help="Output format: table|json")] = "table",
-    verbose: Annotated[bool, typer.Option(help="Enable verbose logging")] = False,
+    num_items: Annotated[
+        int,
+        typer.Option(
+            help="Limit number of items displayed (table/json)",
+        ),
+    ] = 5,
 ):
     """Generate BixArena leaderboard using Bradley-Terry evaluation."""
 
@@ -104,6 +109,10 @@ def main(
         models=models,
         num_bootstrap=num_bootstrap,
     )
+
+    # Apply row limit if requested (>0)
+    if num_items is not None and num_items > 0:
+        leaderboard = leaderboard[:num_items]
 
     # Calculate runtime for all formats
     total_time = time.time() - start_time
