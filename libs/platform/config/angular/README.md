@@ -40,7 +40,7 @@ ENVIRONMENT=stage npm start
 NODE_ENV=development npm start
 
 # Override specific property
-ENVIRONMENT=prod API__CSR__URL=https://custom-api.example.com npm start
+ENVIRONMENT=prod API_CSR_URL=https://custom-api.example.com npm start
 ```
 
 ## Usage
