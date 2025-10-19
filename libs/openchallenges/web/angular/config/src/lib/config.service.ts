@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ConfigLoaderService } from '@sagebionetworks/web/angular/config';
+import { ConfigLoaderService } from '@sagebionetworks/platform/config/angular';
 import { RuntimeAppConfig, validateConfig } from './config.schema';
 
 /**

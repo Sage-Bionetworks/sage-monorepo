@@ -1,10 +1,10 @@
 {
-  "name": "web-angular-config",
+  "name": "platform-config-angular",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/web/angular/config/src",
+  "sourceRoot": "libs/platform/config/angular/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:feature", "scope:web", "language:typescript"],
+  "tags": ["type:feature", "scope:platform", "language:typescript"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

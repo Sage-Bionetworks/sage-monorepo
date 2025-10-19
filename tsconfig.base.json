@@ -109,7 +109,7 @@
         "libs/shared/typescript/web-components/src/index.ts"
       ],
       "@sagebionetworks/synapse/api-client": ["libs/synapse/api-client-angular/src/index.ts"],
-      "@sagebionetworks/web/angular/config": ["libs/web/angular/config/src/index.ts"]
+      "@sagebionetworks/platform/config/angular": ["libs/platform/config/angular/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
