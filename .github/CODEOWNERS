@@ -14,6 +14,7 @@
 # OpenChallenges
 /apps/openchallenges/ @rrchai @tschaffter
 /libs/openchallenges/ @rrchai @tschaffter
+/libs/openchallenges/web/config/angular @tschaffter
 
 ## DB content
 /apps/openchallenges/challenge-service/src/main/resources/db/     @tschaffter @gaiaandreoletti
@@ -37,3 +38,6 @@
 /libs/explorers/ @Sage-Bionetworks/sage-monorepo-agora
 
 /libs/synapse/ @Sage-Bionetworks/sage-monorepo-agora
+
+# Platform
+/libs/platform/config/angular @tschaffter
