@@ -1,5 +1,5 @@
 # Staging environment overrides
-# Applied when NODE_ENV=staging or ACTIVE_PROFILE=staging
+# Applied when NODE_ENV=staging or ENVIRONMENT=stage
 
 environment: staging
 

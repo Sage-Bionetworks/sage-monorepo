@@ -1,5 +1,5 @@
-# Development environment overrides
-# Applied when NODE_ENV=development or ACTIVE_PROFILE=development
+# Development-specific configuration
+# Applied when NODE_ENV=development or ENVIRONMENT=dev
 
 environment: development
 

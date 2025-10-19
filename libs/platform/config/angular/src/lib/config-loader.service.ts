@@ -37,7 +37,6 @@ export abstract class ConfigLoaderService<T> {
   /**
    * Map standard NODE_ENV values to config file names
    * NODE_ENV is set automatically by build tools (development, production, test)
-   * For custom environments like 'stage', use ACTIVE_PROFILE instead
    */
   private readonly profileFileMap: Record<string, string> = {
     development: 'dev',
@@ -46,16 +45,21 @@ export abstract class ConfigLoaderService<T> {
 
   /**
    * Get the active profile name for loading profile-specific config file
-   * Priority: ACTIVE_PROFILE > NODE_ENV > 'development' (which maps to 'dev' file)
+   * Priority: ENVIRONMENT > NODE_ENV > 'development' (which maps to 'dev' file)
    *
-   * Use ACTIVE_PROFILE for custom environments (e.g., ACTIVE_PROFILE=stage)
+   * ENVIRONMENT should match the 'environment' property in your config schema
    * NODE_ENV is typically set by build tools (development, production, test)
+   *
+   * Examples:
+   * - ENVIRONMENT=stage → loads application-stage.yaml
+   * - ENVIRONMENT=prod → loads application-prod.yaml
+   * - NODE_ENV=development → loads application-dev.yaml (mapped)
    *
    * Note: Default values always come from application.yaml, not from the profile
    */
   private getActiveProfile(): string {
     if (this.isServer) {
-      const rawProfile = process.env['ACTIVE_PROFILE'] || process.env['NODE_ENV'] || 'development';
+      const rawProfile = process.env['ENVIRONMENT'] || process.env['NODE_ENV'] || 'development';
       return this.profileFileMap[rawProfile] || rawProfile;
     }
     return 'dev'; // Default to 'dev' profile for browser

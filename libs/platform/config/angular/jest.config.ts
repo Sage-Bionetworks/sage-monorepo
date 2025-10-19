@@ -1,8 +1,8 @@
 export default {
-  displayName: 'config',
+  displayName: 'platform-config-angular',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/web/angular/config',
+  coverageDirectory: '../../../../coverage/libs/platform/config/angular',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

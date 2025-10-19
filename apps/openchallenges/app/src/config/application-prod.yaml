@@ -1,5 +1,5 @@
 # Production environment overrides
-# Applied when NODE_ENV=production or ACTIVE_PROFILE=production
+# Applied when NODE_ENV=production or ENVIRONMENT=prod
 
 environment: production
 
