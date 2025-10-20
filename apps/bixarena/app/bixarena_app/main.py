@@ -163,6 +163,9 @@ def build_app(moderate=False):
             max-width: 1200px;
             margin: 0 auto;
         }
+        footer {
+            visibility: hidden;
+        }
         """,
     ) as demo:
         _, battle_btn, leaderboard_btn, login_btn = build_header()

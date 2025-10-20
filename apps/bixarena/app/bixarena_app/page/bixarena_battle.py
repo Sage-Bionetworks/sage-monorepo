@@ -30,6 +30,7 @@ from bixarena_app.model.model_response import (
 )
 from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
 from bixarena_app.page.battle_page_css import (
+    DISCLAIMER_CSS,
     EXAMPLE_PROMPTS_CSS,
     INPUT_PROMPT_CSS,
 )
@@ -256,6 +257,7 @@ def build_side_by_side_ui_anony():
     <style>
     {EXAMPLE_PROMPTS_CSS}
     {INPUT_PROMPT_CSS}
+    {DISCLAIMER_CSS}
     </style>
     """
 
@@ -326,6 +328,23 @@ def build_side_by_side_ui_anony():
                 clear_btn = gr.Button(value="🧪 Next Battle", interactive=False)
             with gr.Column(scale=2):
                 gr.HTML("")
+
+        # Disclaimer
+        gr.HTML(
+            """
+            <div id="disclaimer-footer">
+                <div id="disclaimer-content">
+                    <div id="disclaimer-text">
+                        <div class="pulse-dot"></div>
+                        <span>
+                            AI may make mistakes. Please don't include private or
+                            sensitive information in your prompts.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            """
+        )
 
     # Register listeners
     btn_list = [
