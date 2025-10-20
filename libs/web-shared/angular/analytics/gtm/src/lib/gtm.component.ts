@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, Injector } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { GTM_CONFIG, GtmConfig, isGtmIdSet } from './gtm.tokens';
@@ -10,11 +10,8 @@ import { GTM_CONFIG, GtmConfig, isGtmIdSet } from './gtm.tokens';
 })
 export class GtmComponent implements OnInit {
   private readonly router = inject(Router);
-  private readonly injector = inject(Injector);
+  private readonly gtmService = inject(GoogleTagManagerService, { optional: true });
   private readonly gtmConfig = inject<GtmConfig>(GTM_CONFIG, { optional: true });
-
-  // Lazily initialized GTM service (only created when needed)
-  private gtmService?: GoogleTagManagerService;
 
   ngOnInit(): void {
     // Only proceed if config is provided and GTM ID is set
@@ -34,19 +31,9 @@ export class GtmComponent implements OnInit {
       return;
     }
 
-    // Lazy initialization: inject GTM service only when we're ready to use it
-    // This happens AFTER config has loaded (because ngOnInit runs after APP_INITIALIZER)
-    try {
-      this.gtmService = this.injector.get(GoogleTagManagerService, undefined);
-
-      if (!this.gtmService) {
-        console.error('GoogleTagManagerService could not be instantiated');
-        return;
-      }
-
-      console.info('GTM service initialized with ID:', this.gtmConfig.gtmId);
-    } catch (error) {
-      console.error('Failed to initialize GTM service:', error);
+    // Only proceed if GTM service is available
+    if (!this.gtmService) {
+      console.error('GoogleTagManagerService not provided. Did you call provideGoogleTagManager?');
       return;
     }
 
