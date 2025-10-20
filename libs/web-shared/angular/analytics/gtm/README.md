@@ -210,41 +210,6 @@ export class AppComponent {
 }
 ```
 
-## Migration from Old Library
-
-If migrating from `@sagebionetworks/shared/google-tag-manager`:
-
-### Old Approach (Deprecated)
-
-```typescript
-import {
-  CONFIG_SERVICE_TOKEN,
-  createGoogleTagManagerIdProvider,
-} from '@sagebionetworks/shared/google-tag-manager';
-
-providers: [
-  { provide: CONFIG_SERVICE_TOKEN, useExisting: ConfigService },
-  createGoogleTagManagerIdProvider(),
-];
-```
-
-### New Approach
-
-```typescript
-import { provideGtm } from '@sagebionetworks/web-shared/angular/analytics/gtm';
-
-providers: [
-  provideGtm(() => {
-    const config = inject(ConfigService);
-    return {
-      gtmId: config.config.googleTagManagerId,
-      isPlatformServer: config.config.isPlatformServer,
-    };
-  }),
-];
-```
-
 ## Related Libraries
 
 - `@sagebionetworks/platform/config/angular` - Platform configuration loader (apps use this to get config, then pass to GTM)
-- `@sagebionetworks/shared/google-tag-manager` - Legacy GTM library (deprecated, use this library instead)
