@@ -9,8 +9,8 @@ import requests
 from bixarena_api_client import ApiClient, Configuration, ModelApi, ModelSearchQuery
 from bixarena_api_client.exceptions import ApiException
 
-from bixarena_app.config.constants import SERVER_ERROR_MSG, ErrorCode
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
+from bixarena_app.model.error_handler import handle_error_message
 from bixarena_app.model.model_adapter import get_conversation_template
 
 logging.basicConfig(level=logging.INFO)
@@ -175,7 +175,7 @@ def bot_response(
                 conv.update_last_message(output + "▌")
                 yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
             else:
-                output = data["text"] + f"\n\n(error_code: {data['error_code']})"
+                output = data["text"]
                 conv.update_last_message(output)
                 yield (state, state.to_gradio_chatbot()) + (
                     disable_btn,
@@ -189,9 +189,8 @@ def bot_response(
         conv.update_last_message(output)
         yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 4
     except requests.exceptions.RequestException as e:
-        conv.update_last_message(
-            f"{SERVER_ERROR_MSG}\n\n(error_code: {ErrorCode.GRADIO_REQUEST_ERROR}, {e})"
-        )
+        display_error_msg = handle_error_message(e)
+        conv.update_last_message(display_error_msg)
         yield (state, state.to_gradio_chatbot()) + (
             disable_btn,
             disable_btn,
@@ -201,10 +200,8 @@ def bot_response(
         )
         return
     except Exception as e:
-        conv.update_last_message(
-            f"{SERVER_ERROR_MSG}\n\n"
-            f"(error_code: {ErrorCode.GRADIO_STREAM_UNKNOWN_ERROR}, {e})"
-        )
+        display_error_msg = handle_error_message(e)
+        conv.update_last_message(display_error_msg)
         yield (state, state.to_gradio_chatbot()) + (
             disable_btn,
             disable_btn,

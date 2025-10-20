@@ -8,6 +8,7 @@ import time
 import requests
 
 from bixarena_app.config.utils import build_logger
+from bixarena_app.model.error_handler import handle_error_message
 
 logger = build_logger("gradio_web_server", "gradio_web_server.log")
 
@@ -124,22 +125,31 @@ def openai_api_stream_iter(
     }
     logger.info(f"==== request ====\n{gen_params}")
 
-    res = client.chat.completions.create(
-        model=model_name,
-        messages=messages,
-        temperature=temperature,
-        max_tokens=max_new_tokens,
-        stream=True,
-    )
-    text = ""
-    for chunk in res:
-        if len(chunk.choices) > 0:
-            text += chunk.choices[0].delta.content or ""
-            data = {
-                "text": text,
-                "error_code": 0,
-            }
-            yield data
+    try:
+        res = client.chat.completions.create(
+            model=model_name,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_new_tokens,
+            stream=True,
+        )
+        text = ""
+        for chunk in res:
+            if len(chunk.choices) > 0:
+                text += chunk.choices[0].delta.content or ""
+                data = {
+                    "text": text,
+                    "error_code": 0,
+                }
+                yield data
+    except Exception as e:
+        # Log full error for debugging, but handle for user display
+        logger.error(f"OpenAI API error: {e}", exc_info=True)
+        display_error_msg = handle_error_message(e)
+        yield {
+            "text": display_error_msg,
+            "error_code": 1,
+        }
 
 
 def anthropic_api_stream_iter(model_name, prompt, temperature, top_p, max_new_tokens):
