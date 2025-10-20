@@ -12,9 +12,11 @@ import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/mo
 import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
 import {
+  CONFIG_SERVICE_TOKEN,
+  createGoogleTagManagerIdProvider,
   GoogleTagManagerComponent,
-  isGtmIdSet,
-} from '@sagebionetworks/web-shared/angular/analytics/gtm';
+  isGoogleTagManagerIdSet,
+} from '@sagebionetworks/shared/google-tag-manager';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
@@ -31,9 +33,14 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './app.component.scss',
   providers: [
     {
+      provide: CONFIG_SERVICE_TOKEN,
+      useFactory: () => inject(ConfigService),
+    },
+    {
       provide: LOADING_ICON_COLORS,
       useValue: MODEL_AD_LOADING_ICON_COLORS,
     },
+    createGoogleTagManagerIdProvider(),
   ],
 })
 export class AppComponent implements OnInit {
@@ -56,7 +63,9 @@ export class AppComponent implements OnInit {
   constructor() {
     this.metaTagService.initialize('Model AD');
 
-    this.useGoogleTagManager = isGtmIdSet(this.configService.config.googleTagManagerId);
+    this.useGoogleTagManager = isGoogleTagManagerIdSet(
+      this.configService.config.googleTagManagerId,
+    );
   }
 
   ngOnInit() {

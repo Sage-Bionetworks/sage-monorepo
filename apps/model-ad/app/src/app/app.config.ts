@@ -24,8 +24,6 @@ import { CustomUrlSerializer } from './app.custom-url-serializer';
 import { routes } from './app.routes';
 import { ModelAdPreset } from './primeNGPreset';
 import { GlobalErrorHandler } from '@sagebionetworks/explorers/services';
-import { provideGoogleTagManager } from 'angular-google-tag-manager';
-import { GTM_CONFIG } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -55,19 +53,6 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideMarkdown(),
-    {
-      provide: GTM_CONFIG,
-      useFactory: () => {
-        const config = inject(ConfigService);
-        return {
-          gtmId: config.config.googleTagManagerId,
-          isPlatformServer: config.config.isPlatformServer,
-        };
-      },
-    },
-    provideGoogleTagManager({
-      id: inject(ConfigService).config.googleTagManagerId,
-    }),
     provideRouter(
       routes,
       withComponentInputBinding(),

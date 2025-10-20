@@ -29,8 +29,6 @@ import { CustomUrlSerializer } from './app.custom-uri-serializer';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideMarkdown } from 'ngx-markdown';
-import { provideGoogleTagManager } from 'angular-google-tag-manager';
-import { GTM_CONFIG } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -69,19 +67,6 @@ export const appConfig: ApplicationConfig = {
       useFactory: rollbarFactory,
     },
     provideMarkdown(),
-    {
-      provide: GTM_CONFIG,
-      useFactory: () => {
-        const config = inject(ConfigService);
-        return {
-          gtmId: config.config.googleTagManagerId,
-          isPlatformServer: config.config.isPlatformServer,
-        };
-      },
-    },
-    provideGoogleTagManager({
-      id: inject(ConfigService).config.googleTagManagerId,
-    }),
     provideRouter(
       routes,
       withEnabledBlockingInitialNavigation(),
