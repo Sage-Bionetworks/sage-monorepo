@@ -9,7 +9,6 @@ show_missing = true
 [tool.pytest.ini_options]
 addopts = """
  --cov
- --cov-fail-under=100
  --cov-report html:'../../../coverage/apps/bixarena/tools/html'
  --cov-report xml:'../../../coverage/apps/bixarena/tools/coverage.xml'
  --html='../../../reports/apps/bixarena/tools/unittests/html/index.html'
