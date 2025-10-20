@@ -41,3 +41,6 @@
 
 # Platform
 /libs/platform/config/angular @tschaffter
+
+# Web Shared
+/libs/web-shared/angular/analtyics/gtm @tschaffter
