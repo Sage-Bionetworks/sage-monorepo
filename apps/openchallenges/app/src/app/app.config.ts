@@ -5,12 +5,7 @@ import {
   inject,
   provideAppInitializer,
 } from '@angular/core';
-import {
-  provideRouter,
-  withComponentInputBinding,
-  withEnabledBlockingInitialNavigation,
-  withInMemoryScrolling,
-} from '@angular/router';
+import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { configFactory, ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
@@ -63,7 +58,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       appRoutes,
       withComponentInputBinding(),
-      withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
       }),

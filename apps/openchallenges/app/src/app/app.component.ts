@@ -11,7 +11,7 @@ import {
   USER_MENU_ITEMS,
 } from '@sagebionetworks/openchallenges/ui';
 import { PageTitleService } from '@sagebionetworks/openchallenges/util';
-import { GtmComponent, isGtmIdSet } from '@sagebionetworks/web-shared/angular/analytics/gtm';
+import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { Subscription } from 'rxjs';
 import { APP_SECTIONS } from './app-sections';
 
@@ -36,9 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private configService = inject(ConfigService);
 
   constructor() {
-    this.useGoogleTagManager =
-      this.configService.config.google.tagManager.enabled &&
-      isGtmIdSet(this.configService.config.google.tagManager.id);
+    this.useGoogleTagManager = this.configService.config.google.tagManager.enabled;
   }
 
   ngOnInit() {

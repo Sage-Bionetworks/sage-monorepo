@@ -96,24 +96,26 @@ export class AppComponent {}
 
 ### GtmConfig Interface
 
+````typescript
+The GTM configuration is validated using Zod:
+
 ```typescript
+import { GtmConfigSchema } from '@sagebionetworks/web-shared/angular/analytics/gtm';
+
+// Configuration is automatically validated when provided
 interface GtmConfig {
   enabled: boolean; // Whether GTM is enabled (if false, no tracking occurs)
-  gtmId: string; // GTM Container ID (e.g., 'GTM-XXXXXX')
+  gtmId: string; // GTM Container ID (e.g., 'GTM-XXXXXX') - must be non-empty
   isPlatformServer?: boolean; // Whether running on server (SSR)
 }
-```
+````
 
 ### Conditional GTM Loading
 
-To only load GTM when enabled and a valid ID is configured:
+To only load GTM when enabled:
 
 ```typescript
-import { isGtmIdSet } from '@sagebionetworks/web-shared/angular/analytics/gtm';
-
-const gtmEnabled = config.config.google.tagManager.enabled;
-const gtmId = config.config.googleTagManagerId;
-const useGoogleTagManager = gtmEnabled && isGtmIdSet(gtmId);
+const useGoogleTagManager = config.config.google.tagManager.enabled;
 
 // In template:
 @if (useGoogleTagManager) {
@@ -169,18 +171,20 @@ This prevents HTTPS certificate errors when loading GTM scripts locally.
 ```typescript
 // apps/openchallenges/app/src/app/app.config.ts
 import { ApplicationConfig, inject } from '@angular/core';
-import { provideGtm, isGtmIdSet } from '@sagebionetworks/web-shared/angular/analytics/gtm';
+import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideGtm(() => {
-      const config = inject(ConfigService);
-      return {
-        gtmId: config.config.googleTagManagerId,
+    provideGtmConfig(
+      (config: ConfigService) => ({
+        enabled: config.config.google.tagManager.enabled,
+        gtmId: config.config.google.tagManager.id,
         isPlatformServer: config.config.isPlatformServer,
-      };
-    }),
+      }),
+      [ConfigService],
+    ),
+    provideGtmId(),
   ],
 };
 ```
@@ -188,25 +192,22 @@ export const appConfig: ApplicationConfig = {
 ```typescript
 // apps/openchallenges/app/src/app/app.component.ts
 import { Component, inject } from '@angular/core';
-import {
-  GoogleTagManagerComponent,
-  isGtmIdSet,
-} from '@sagebionetworks/web-shared/angular/analytics/gtm';
+import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 
 @Component({
   selector: 'app-root',
-  imports: [GoogleTagManagerComponent],
+  imports: [GtmComponent],
   template: `
     @if (useGoogleTagManager) {
-      <sage-google-tag-manager />
+      <web-shared-angular-analytics-gtm />
     }
     <router-outlet />
   `,
 })
 export class AppComponent {
   private configService = inject(ConfigService);
-  readonly useGoogleTagManager = isGtmIdSet(this.configService.config.googleTagManagerId);
+  readonly useGoogleTagManager = this.configService.config.google.tagManager.enabled;
 }
 ```
 
