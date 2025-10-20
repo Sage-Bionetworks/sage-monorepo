@@ -6,6 +6,11 @@ import { InjectionToken } from '@angular/core';
  */
 export interface GtmConfig {
   /**
+   * Whether GTM is enabled. If false, no tracking will occur.
+   */
+  enabled: boolean;
+
+  /**
    * Google Tag Manager Container ID (e.g., 'GTM-XXXXXX')
    */
   gtmId: string;

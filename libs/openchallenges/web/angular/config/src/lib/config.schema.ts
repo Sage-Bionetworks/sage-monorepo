@@ -40,6 +40,7 @@ export const AppConfigSchema = BaseConfigSchema.extend({
 
   google: z.object({
     tagManager: z.object({
+      enabled: z.boolean(),
       id: z.string(),
     }),
   }),

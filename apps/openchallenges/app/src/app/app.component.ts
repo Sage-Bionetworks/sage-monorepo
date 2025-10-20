@@ -14,7 +14,6 @@ import { PageTitleService } from '@sagebionetworks/openchallenges/util';
 import {
   GoogleTagManagerComponent,
   isGtmIdSet,
-  GTM_CONFIG,
 } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { Subscription } from 'rxjs';
 import { APP_SECTIONS } from './app-sections';
@@ -24,18 +23,6 @@ import { APP_SECTIONS } from './app-sections';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   imports: [NavbarComponent, RouterOutlet, GoogleTagManagerComponent],
-  providers: [
-    {
-      provide: GTM_CONFIG,
-      useFactory: () => {
-        const config = inject(ConfigService);
-        return {
-          gtmId: config.config.google.tagManager.id,
-          isPlatformServer: config.config.isPlatformServer,
-        };
-      },
-    },
-  ],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'OpenChallenges';
@@ -52,7 +39,9 @@ export class AppComponent implements OnInit, OnDestroy {
   private configService = inject(ConfigService);
 
   constructor() {
-    this.useGoogleTagManager = isGtmIdSet(this.configService.config.google.tagManager.id);
+    this.useGoogleTagManager =
+      this.configService.config.google.tagManager.enabled &&
+      isGtmIdSet(this.configService.config.google.tagManager.id);
   }
 
   ngOnInit() {

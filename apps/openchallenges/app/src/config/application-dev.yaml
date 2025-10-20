@@ -10,6 +10,7 @@ data:
 
 google:
   tagManager:
+    enabled: false
     id: 'GTM-NBR5XD8C'
 
 api:

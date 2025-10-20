@@ -18,6 +18,7 @@ import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchalleng
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
+import { GTM_CONFIG } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import Lara from '@primeng/themes/lara';
 import { telemetryFactory } from './telemetry.factory';
 
@@ -50,6 +51,20 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    {
+      provide: GTM_CONFIG,
+      useFactory: (config: ConfigService) => ({
+        enabled: config.config.google.tagManager.enabled,
+        gtmId: config.config.google.tagManager.id,
+        isPlatformServer: config.config.isPlatformServer,
+      }),
+      deps: [ConfigService],
+    },
+    {
+      provide: 'googleTagManagerId',
+      useFactory: (config: ConfigService) => config.config.google.tagManager.id,
+      deps: [ConfigService],
+    },
     provideRouter(
       appRoutes,
       withComponentInputBinding(),

@@ -48,6 +48,7 @@ export const appConfig: ApplicationConfig = {
     provideGtm(() => {
       const config = inject(ConfigService);
       return {
+        enabled: config.config.google.tagManager.enabled,
         gtmId: config.config.googleTagManagerId,
         isPlatformServer: config.config.isPlatformServer,
       };
@@ -76,6 +77,7 @@ import { ConfigService } from './config/config.service';
       useFactory: () => {
         const config = inject(ConfigService);
         return {
+          enabled: config.config.google.tagManager.enabled,
           gtmId: config.config.googleTagManagerId,
           isPlatformServer: config.config.isPlatformServer,
         };
@@ -96,6 +98,7 @@ export class AppComponent {}
 
 ```typescript
 interface GtmConfig {
+  enabled: boolean; // Whether GTM is enabled (if false, no tracking occurs)
   gtmId: string; // GTM Container ID (e.g., 'GTM-XXXXXX')
   isPlatformServer?: boolean; // Whether running on server (SSR)
 }
@@ -103,19 +106,33 @@ interface GtmConfig {
 
 ### Conditional GTM Loading
 
-To only load GTM when a valid ID is configured:
+To only load GTM when enabled and a valid ID is configured:
 
 ```typescript
 import { isGtmIdSet } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 
+const gtmEnabled = config.config.google.tagManager.enabled;
 const gtmId = config.config.googleTagManagerId;
-const useGoogleTagManager = isGtmIdSet(gtmId);
+const useGoogleTagManager = gtmEnabled && isGtmIdSet(gtmId);
 
 // In template:
 @if (useGoogleTagManager) {
   <sage-google-tag-manager />
 }
 ```
+
+### Disabling GTM in Development
+
+In your development config (e.g., `application-dev.yaml`):
+
+```yaml
+google:
+  tagManager:
+    enabled: false  # Disable GTM in local development
+    id: 'GTM-XXXXXX'
+```
+
+This prevents HTTPS certificate errors when loading GTM scripts locally.
 
 ## Features
 

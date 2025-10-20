@@ -14,7 +14,6 @@ import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
 import {
   GoogleTagManagerComponent,
   isGtmIdSet,
-  GTM_CONFIG,
 } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { ToastModule } from 'primeng/toast';
 
@@ -31,16 +30,6 @@ import { ToastModule } from 'primeng/toast';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   providers: [
-    {
-      provide: GTM_CONFIG,
-      useFactory: () => {
-        const config = inject(ConfigService);
-        return {
-          gtmId: config.config.googleTagManagerId,
-          isPlatformServer: config.config.isPlatformServer,
-        };
-      },
-    },
     {
       provide: LOADING_ICON_COLORS,
       useValue: MODEL_AD_LOADING_ICON_COLORS,
