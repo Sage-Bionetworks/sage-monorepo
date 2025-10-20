@@ -101,6 +101,9 @@
         "libs/results-visualization-framework/ui/src/index.ts"
       ],
       "@sagebionetworks/sage-monorepo-nx-plugin": ["libs/sage-monorepo/nx-plugin/src/index.ts"],
+      "@sagebionetworks/shared/google-tag-manager": [
+        "libs/shared/typescript/google-tag-manager/src/index.ts"
+      ],
       "@sagebionetworks/web-shared/angular/analytics/gtm": [
         "libs/web-shared/angular/analytics/gtm/src/index.ts"
       ],
