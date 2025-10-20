@@ -8,7 +8,7 @@ import { GTM_CONFIG, GtmConfig, isGtmIdSet } from './gtm.tokens';
   template: '',
   standalone: true,
 })
-export class GoogleTagManagerComponent implements OnInit {
+export class GtmComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly injector = inject(Injector);
   private readonly gtmConfig = inject<GtmConfig>(GTM_CONFIG, { optional: true });
@@ -57,7 +57,11 @@ export class GoogleTagManagerComponent implements OnInit {
           event: 'page',
           pageName: event.url,
         };
-        this.gtmService.pushTag(gtmTag);
+        this.gtmService.pushTag(gtmTag).catch((error) => {
+          // Silently handle GTM script load failures (ad blockers, certificate errors, etc.)
+          // This is expected in development or when GTM is blocked
+          console.debug('GTM tracking skipped:', error || 'Script load failed');
+        });
       }
     });
   }

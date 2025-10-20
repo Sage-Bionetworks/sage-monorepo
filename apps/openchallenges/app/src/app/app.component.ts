@@ -11,10 +11,7 @@ import {
   USER_MENU_ITEMS,
 } from '@sagebionetworks/openchallenges/ui';
 import { PageTitleService } from '@sagebionetworks/openchallenges/util';
-import {
-  GoogleTagManagerComponent,
-  isGtmIdSet,
-} from '@sagebionetworks/web-shared/angular/analytics/gtm';
+import { GtmComponent, isGtmIdSet } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { Subscription } from 'rxjs';
 import { APP_SECTIONS } from './app-sections';
 
@@ -22,7 +19,7 @@ import { APP_SECTIONS } from './app-sections';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [NavbarComponent, RouterOutlet, GoogleTagManagerComponent],
+  imports: [NavbarComponent, RouterOutlet, GtmComponent],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'OpenChallenges';
