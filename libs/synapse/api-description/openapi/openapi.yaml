@@ -15340,7 +15340,7 @@ components:
             - datasetcollection
         viewType:
           type: string
-          description: 'Deprecated. Use: ''viewTypeMask'''
+          description: "Deprecated. Use: 'viewTypeMask'"
           enum:
             - file
             - project
@@ -16438,7 +16438,7 @@ components:
       properties:
         concreteType:
           type: string
-          description: 'Required. For this type the value should be: ''org.sagebionetworks.repo.model.download.DownloadListManifestRequest'''
+          description: "Required. For this type the value should be: 'org.sagebionetworks.repo.model.download.DownloadListManifestRequest'"
           enum:
             - org.sagebionetworks.repo.model.download.DownloadListManifestRequest
         csvTableDescriptor:
@@ -17839,7 +17839,7 @@ components:
       properties:
         concreteType:
           type: string
-          description: 'Required. For this type the value should be: ''org.sagebionetworks.repo.model.download.AvailableFilesRequest'''
+          description: "Required. For this type the value should be: 'org.sagebionetworks.repo.model.download.AvailableFilesRequest'"
           enum:
             - org.sagebionetworks.repo.model.download.AvailableFilesRequest
         nextPageToken:
@@ -18966,7 +18966,7 @@ components:
       properties:
         concreteType:
           type: string
-          description: 'Required. Should be the full package name of the details implementation.  For example, the value should be: ''org.sagebionetworks.repo.model.download.AvailalbeFilesRequest'' for AvailalbeFilesRequest'
+          description: "Required. Should be the full package name of the details implementation.  For example, the value should be: 'org.sagebionetworks.repo.model.download.AvailalbeFilesRequest' for AvailalbeFilesRequest"
       description: Required.  Must be one of the implementations of QueryRequestDetails.
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.ActionRequiredRequest'
@@ -19277,7 +19277,7 @@ components:
           description: The unique identifier of the sender of this message
         fileHandleId:
           type: string
-          description: 'The S3 file handle storing the body of this message.  Note: The file''s mime type should be ''text/plain'' or ''text/html''.  If no character encoding is specified, then UTF-8 is assumed.'
+          description: "The S3 file handle storing the body of this message.  Note: The file's mime type should be 'text/plain' or 'text/html'.  If no character encoding is specified, then UTF-8 is assumed."
         createdOn:
           type: string
           description: When this message was created
@@ -19292,7 +19292,7 @@ components:
       properties:
         concreteType:
           type: string
-          description: 'Indicates which implementation of CurationTaskProperties this object represents. Possible values include: ''org.sagebionetworks.repo.model.curation.metadata.FileBasedMetadataTaskProperties'' and ''org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties''.'
+          description: "Indicates which implementation of CurationTaskProperties this object represents. Possible values include: 'org.sagebionetworks.repo.model.curation.metadata.FileBasedMetadataTaskProperties' and 'org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties'."
           enum:
             - org.sagebionetworks.repo.model.curation.metadata.FileBasedMetadataTaskProperties
         uploadFolderId:
@@ -19826,7 +19826,7 @@ components:
           format: int32
         type:
           type: string
-          description: 'Deprecated. Use: ''viewTypeMask'''
+          description: "Deprecated. Use: 'viewTypeMask'"
           enum:
             - file
             - project
@@ -20459,7 +20459,7 @@ components:
           format: int32
         checksum:
           type: string
-          description: 'The checksum is computed over a sorted concatenation of the checksums of all items in the dataset. For example, if a dataset contains two files with the following checksums: file1.md5 = 72794b6d and file2.md5 = 5e089d29. Then the checksum of the dataset is: md5(''5e089d2972794b6d'') = f7a29a04.  This will be automatically computed by the service.'
+          description: "The checksum is computed over a sorted concatenation of the checksums of all items in the dataset. For example, if a dataset contains two files with the following checksums: file1.md5 = 72794b6d and file2.md5 = 5e089d29. Then the checksum of the dataset is: md5('5e089d2972794b6d') = f7a29a04.  This will be automatically computed by the service."
         count:
           type: integer
           description: The number of items/files in the dataset. This will be automatically computed by the service.
@@ -20602,7 +20602,7 @@ components:
       properties:
         concreteType:
           type: string
-          description: 'Required. For this type the value should be: ''org.sagebionetworks.repo.model.download.ActionRequiredRequest'''
+          description: "Required. For this type the value should be: 'org.sagebionetworks.repo.model.download.ActionRequiredRequest'"
           enum:
             - org.sagebionetworks.repo.model.download.ActionRequiredRequest
         nextPageToken:
@@ -20731,7 +20731,7 @@ components:
         concreteType:
           type: string
           description: Indicates which type of AccessRequirement this object represents.  Provided by the system, the user may not set this field.
-      description: 'Interface for JSON schema for AccessRequirement.  The Access Requirement mechanism is distinct from the access control list in that it is controlled not by the entity owner but by a separate authority:  Access Requirements are created and maintained by the Synapse Access and Compliance Team (ACT).  ACTAccessRequirements can only be approved by the ACT.  Self-sign Access Requirements can be approved by the user desiring access, but said user first has to meet ''terms of use'' associated with the requirement.'
+      description: "Interface for JSON schema for AccessRequirement.  The Access Requirement mechanism is distinct from the access control list in that it is controlled not by the entity owner but by a separate authority:  Access Requirements are created and maintained by the Synapse Access and Compliance Team (ACT).  ACTAccessRequirements can only be approved by the ACT.  Self-sign Access Requirements can be approved by the user desiring access, but said user first has to meet 'terms of use' associated with the requirement."
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.PostMessageContentAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.TermsOfUseAccessRequirement'
@@ -20773,7 +20773,7 @@ components:
             - org.sagebionetworks.repo.model.file.MultipartUploadCopyRequest
         partSizeBytes:
           type: integer
-          description: 'In order to copy a file, the client must split the process into ''parts'' and copy each part separately. This indicates the clients intended part size in bytes. Part size must be at least 5,242,880 bytes (5MB) with a max of 5,368,709,120 bytes (5GB). Also the maximum number of parts for a single file is 10K. The recommended part size for a single file copy should be: MAX(104857600, (originalFileSizeBytes/10000)).'
+          description: "In order to copy a file, the client must split the process into 'parts' and copy each part separately. This indicates the clients intended part size in bytes. Part size must be at least 5,242,880 bytes (5MB) with a max of 5,368,709,120 bytes (5GB). Also the maximum number of parts for a single file is 10K. The recommended part size for a single file copy should be: MAX(104857600, (originalFileSizeBytes/10000))."
           format: int32
         fileName:
           type: string
@@ -21218,7 +21218,7 @@ components:
             - org.sagebionetworks.repo.model.file.AddFileToDownloadListRequest
         folderId:
           type: string
-          description: 'The ID of the folder containing the files to add to the user''s download list. Note: Only the files in this folder will be added to the download list, files in sub-folders will not be added. Should be null if setting a ''query''.'
+          description: "The ID of the folder containing the files to add to the user's download list. Note: Only the files in this folder will be added to the download list, files in sub-folders will not be added. Should be null if setting a 'query'."
         query:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.Query'
       description: Request to add either the children of a folder or the files of a view query to the user's download list.
@@ -23092,7 +23092,7 @@ components:
             - NOT_LIKE
         validationResultValue:
           type: string
-          description: 'A validation result value.  For wildcards use ''%'' to represents zero or more characters, and ''_'' to represents a single character.  For example, LIKE ''%expected type: String, found%'' would match rows with a validation result that contains the message: ''expected type: String, found''. Use the ''NOT_LIKE'' operator to find all rows that do not have a validation message matching the provided ''validationResultValue''.'
+          description: "A validation result value.  For wildcards use '%' to represents zero or more characters, and '_' to represents a single character.  For example, LIKE '%expected type: String, found%' would match rows with a validation result that contains the message: 'expected type: String, found'. Use the 'NOT_LIKE' operator to find all rows that do not have a validation message matching the provided 'validationResultValue'."
       description: Use this filter to find rows that have data quality issues or schema validation errors. This is ideal for requests about finding 'errors', 'invalid data', or 'rows that failed validation'. To find rows with a specific error message, set the 'operator' to 'LIKE' and provide the error text in 'validationResultValue'. For example, for a user request like 'show me all rows with a type error', a good value for 'validationResultValue' would be '%expected type:%'.
       required:
         - concreteType
@@ -23410,7 +23410,7 @@ components:
             - CHANGE
         type:
           type: string
-          description: 'Deprecated.  Use: ''migrationType'''
+          description: "Deprecated.  Use: 'migrationType'"
         salt:
           type: string
           description: Salt
@@ -23539,7 +23539,7 @@ components:
         value:
           type: array
           items: {}
-          description: 'A filter used to select rows based on a specific column''s cell value. Use operators like ''EQUALS'' or ''LIKE'' with the ''value'' array for standard comparisons. For user requests about finding ''empty'', ''blank'', or ''null'' values, use the ''IS_NULL'' operator and omit the ''value'' property. To find rows that are not empty, use the ''IS_NOT_NULL'' operator. When using either ''LIKE'' or ''NOT_LIKE'', the wildcard character: ''%'' is used to represents zero or more characters, and ''_'' is used to represents a single character.'
+          description: "A filter used to select rows based on a specific column's cell value. Use operators like 'EQUALS' or 'LIKE' with the 'value' array for standard comparisons. For user requests about finding 'empty', 'blank', or 'null' values, use the 'IS_NULL' operator and omit the 'value' property. To find rows that are not empty, use the 'IS_NOT_NULL' operator. When using either 'LIKE' or 'NOT_LIKE', the wildcard character: '%' is used to represents zero or more characters, and '_' is used to represents a single character."
       description: A filter used to select rows based on cell values. For example, to handle a user request like 'find all rows where the Project column is Alpha', you would set 'columnName' to 'Project', 'operator' to 'EQUALS', and 'value' to ['Alpha']
       required:
         - concreteType
@@ -23671,7 +23671,7 @@ components:
           description: The unique identifier of the sender of this message
         fileHandleId:
           type: string
-          description: 'The S3 file handle storing the body of this message.  Note: The file''s mime type should be ''text/plain'' or ''text/html''.  If no character encoding is specified, then UTF-8 is assumed.'
+          description: "The S3 file handle storing the body of this message.  Note: The file's mime type should be 'text/plain' or 'text/html'.  If no character encoding is specified, then UTF-8 is assumed."
         createdOn:
           type: string
           description: When this message was created
@@ -23780,7 +23780,7 @@ components:
       properties:
         concreteType:
           type: string
-          description: 'Indicates which implementation of CurationTaskProperties this object represents. Possible values include: ''org.sagebionetworks.repo.model.curation.metadata.FileBasedMetadataTaskProperties'' and ''org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties''.'
+          description: "Indicates which implementation of CurationTaskProperties this object represents. Possible values include: 'org.sagebionetworks.repo.model.curation.metadata.FileBasedMetadataTaskProperties' and 'org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties'."
       description: The properties of a CurationTask
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties'
@@ -24020,7 +24020,7 @@ components:
             - org.sagebionetworks.repo.model.grid.query.RowSelectionFilter
         isSelected:
           type: boolean
-          description: 'When true, only rows that the user has selected will be returned.  When false, rows that the user has selected with be excluded.  This filter should be excluded to ignore the user''s row selection. '
+          description: "When true, only rows that the user has selected will be returned.  When false, rows that the user has selected with be excluded.  This filter should be excluded to ignore the user's row selection. "
       description: Use this filter to narrow down results based on rows the user has actively selected in the interface. For user requests like 'show me only my selected items' or 'run this analysis on the rows I've checked', set the 'isSelected' property to true. For requests to see the opposite, like 'show me the unselected rows', set 'isSelected' to false. If the user makes no mention of selected items, do not include this filter in the query.
       required:
         - concreteType
@@ -25405,7 +25405,7 @@ components:
             - org.sagebionetworks.repo.model.file.MultipartUploadRequest
         partSizeBytes:
           type: integer
-          description: 'In order to upload a file, the client must split the process into ''parts'' and upload each part separately. This indicates the clients intended part size in bytes. Part size must be at least 5,242,880 bytes (5MB) with a max of 5,368,709,120 bytes (5GB). Also the maximum number of parts for a single file is 10K. The recommended part size for a single file upload should be: MAX(5242880, (fileSizeBytes/10000)).'
+          description: "In order to upload a file, the client must split the process into 'parts' and upload each part separately. This indicates the clients intended part size in bytes. Part size must be at least 5,242,880 bytes (5MB) with a max of 5,368,709,120 bytes (5GB). Also the maximum number of parts for a single file is 10K. The recommended part size for a single file upload should be: MAX(5242880, (fileSizeBytes/10000))."
           format: int32
         fileName:
           type: string
@@ -27344,7 +27344,7 @@ components:
       properties:
         concreteType:
           type: string
-          description: 'Required. For this type the value should be: ''org.sagebionetworks.repo.model.download.DownloadListQueryRequest'''
+          description: "Required. For this type the value should be: 'org.sagebionetworks.repo.model.download.DownloadListQueryRequest'"
           enum:
             - org.sagebionetworks.repo.model.download.DownloadListQueryRequest
         requestDetails:
@@ -27922,7 +27922,7 @@ components:
           description: Represent the current size and limits for a single project storage location.
         endpointUrl:
           type: string
-          description: 'endpoint URL of the S3 service (for example: ''https://s3.amazonaws.com'')'
+          description: "endpoint URL of the S3 service (for example: 'https://s3.amazonaws.com')"
         bucket:
           type: string
           description: the bucket to use
@@ -28064,7 +28064,7 @@ components:
           description: The unique identifier of the sender of this message
         fileHandleId:
           type: string
-          description: 'The S3 file handle storing the body of this message.  Note: The file''s mime type should be ''text/plain'' or ''text/html''.  If no character encoding is specified, then UTF-8 is assumed.'
+          description: "The S3 file handle storing the body of this message.  Note: The file's mime type should be 'text/plain' or 'text/html'.  If no character encoding is specified, then UTF-8 is assumed."
         createdOn:
           type: string
           description: When this message was created
@@ -28186,7 +28186,7 @@ components:
             - range
         jsonPath:
           type: string
-          description: 'Defines the JSON path of the sub column. Use the ''$'' char to represent the root of JSON object. If the JSON key of a sub column is ''a'', then the jsonPath for that column would be: ''$.a''.'
+          description: "Defines the JSON path of the sub column. Use the '$' char to represent the root of JSON object. If the JSON key of a sub column is 'a', then the jsonPath for that column would be: '$.a'."
       description: Defines a single sub-column of a column of type JSON.  This can be used to enable the faceting of the sub-columns.
     org.sagebionetworks.repo.model.table.TextMatchesMode:
       type: string
@@ -28708,7 +28708,7 @@ components:
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListItem'
             description: A single item for a user's download list.
-          description: 'The batch of files to remove from the user''s download list. Note: There is a limit of 1000 files per batch.'
+          description: "The batch of files to remove from the user's download list. Note: There is a limit of 1000 files per batch."
       description: Request to remove a single batch of files to the user's download list.
     org.sagebionetworks.repo.model.discussion.ThreadCount:
       type: object
@@ -30089,7 +30089,7 @@ components:
           description: The bucket name
         endpointUrl:
           type: string
-          description: 'endpoint URL of the S3 service (for example: ''https://s3.amazonaws.com'')'
+          description: "endpoint URL of the S3 service (for example: 'https://s3.amazonaws.com')"
       description: The external upload destination setting contains information to generate an upload destination for an S3 object storage NOT managed by Synapse. This is different from ExternalS3StorageLocationSetting, which contains information about an external S3 storage that is managed by Synapse
       required:
         - bucket
@@ -31366,7 +31366,7 @@ components:
             - CHANGE
         type:
           type: string
-          description: 'Deprecated.  Use: ''migrationType'''
+          description: "Deprecated.  Use: 'migrationType'"
       description: Request checksum for given type.
       required:
         - concreteType
@@ -31755,10 +31755,10 @@ components:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.Query'
         parentId:
           type: string
-          description: 'The synID of a folder, project, dataset or dataset collection to add all of the children files to the user''s download list.  This parameter should be excluded when adding files from a query. Note: This is not recursive, unless the recursive property is set to true.'
+          description: "The synID of a folder, project, dataset or dataset collection to add all of the children files to the user's download list.  This parameter should be excluded when adding files from a query. Note: This is not recursive, unless the recursive property is set to true."
         recursive:
           type: boolean
-          description: 'When the parentId is specified and this property is set to true all the files in a folder or project will be added to the user''s download list, including files contained in sub-folders. When set to false (default) only the direct children of the provided parentId will be added to the download list. Note: the property cannot be true when a query is specified or when the parentId is a dataset.'
+          description: "When the parentId is specified and this property is set to true all the files in a folder or project will be added to the user's download list, including files contained in sub-folders. When set to false (default) only the direct children of the provided parentId will be added to the download list. Note: the property cannot be true when a query is specified or when the parentId is a dataset."
         useVersionNumber:
           type: boolean
           description: When true (default), the version number will be included for each file added to the user's download list.  When set to false, the version number will be excluded, indicating that the 'current' version should always be downloaded.
@@ -32232,7 +32232,7 @@ components:
       properties:
         concreteType:
           type: string
-          description: 'Required. For this type the value should be: ''org.sagebionetworks.repo.model.download.FilesStatisticsRequest'''
+          description: "Required. For this type the value should be: 'org.sagebionetworks.repo.model.download.FilesStatisticsRequest'"
           enum:
             - org.sagebionetworks.repo.model.download.FilesStatisticsRequest
       description: Request to get statistics about the files currently on the user's download list.
@@ -32255,7 +32255,7 @@ components:
       properties:
         concreteType:
           type: string
-          description: 'Indicates which implementation of CurationTaskProperties this object represents. Possible values include: ''org.sagebionetworks.repo.model.curation.metadata.FileBasedMetadataTaskProperties'' and ''org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties''.'
+          description: "Indicates which implementation of CurationTaskProperties this object represents. Possible values include: 'org.sagebionetworks.repo.model.curation.metadata.FileBasedMetadataTaskProperties' and 'org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties'."
           enum:
             - org.sagebionetworks.repo.model.curation.metadata.RecordBasedMetadataTaskProperties
         recordSetId:
@@ -33196,7 +33196,7 @@ components:
           description: Is the certification requirement enabled for the project of the entity?
         isEntityOpenData:
           type: boolean
-          description: 'Returns true if the Entity''s DateType equals ''OPEN_DATA'', indicating that the data is safe to be released to the public. '
+          description: "Returns true if the Entity's DateType equals 'OPEN_DATA', indicating that the data is safe to be released to the public. "
         isDataContributor:
           type: boolean
           description: True if the user is considered a data contributor, e.g. has update and delete permissions on the data.
@@ -35850,7 +35850,7 @@ components:
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListItem'
             description: A single item for a user's download list.
-          description: 'The batch of files to add to the user''s download list. Note: There is a limit of 1000 files per batch.'
+          description: "The batch of files to add to the user's download list. Note: There is a limit of 1000 files per batch."
       description: Request to add a single batch of files to a user's download list.
     org.sagebionetworks.repo.model.table.IdRange:
       type: object
