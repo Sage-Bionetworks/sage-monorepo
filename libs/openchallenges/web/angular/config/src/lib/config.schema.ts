@@ -18,13 +18,13 @@ export const AppConfigSchema = BaseConfigSchema.extend({
 
   api: z.object({
     docs: z.object({
-      url: z.string().url('API docs URL must be a valid URL'),
+      url: z.url({ message: 'API docs URL must be a valid URL' }),
     }),
     csr: z.object({
-      url: z.string().url('CSR API URL must be a valid URL'),
+      url: z.url({ message: 'CSR API URL must be a valid URL' }),
     }),
     ssr: z.object({
-      url: z.string().url('SSR API URL must be a valid URL'),
+      url: z.url({ message: 'SSR API URL must be a valid URL' }),
     }),
   }),
 
@@ -46,8 +46,8 @@ export const AppConfigSchema = BaseConfigSchema.extend({
   }),
 
   urls: z.object({
-    privacyPolicy: z.string().url('Privacy policy URL must be a valid URL'),
-    termsOfUse: z.string().url('Terms of use URL must be a valid URL'),
+    privacyPolicy: z.url({ message: 'Privacy policy URL must be a valid URL' }),
+    termsOfUse: z.url({ message: 'Terms of use URL must be a valid URL' }),
   }),
 });
 
@@ -63,7 +63,6 @@ export type AppConfig = z.infer<typeof AppConfigSchema>;
  */
 export interface RuntimeAppConfig extends AppConfig {
   isPlatformServer: boolean;
-  googleTagManagerId: string; // Computed from google.tagManager.id for compatibility
 }
 
 /**
