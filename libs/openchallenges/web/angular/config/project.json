@@ -4,7 +4,7 @@
   "sourceRoot": "libs/openchallenges/web/angular/config/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:feature", "scope:openchallenges", "language:typescript"],
+  "tags": ["scope:openchallenges", "layer:web", "tech:angular", "type:util"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
