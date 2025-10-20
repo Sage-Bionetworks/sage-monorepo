@@ -10,7 +10,7 @@ data:
 
 google:
   tagManager:
-    enabled: false
+    enabled: false # Disabled in local dev to avoid HTTPS certificate errors
     id: 'GTM-NBR5XD8C'
 
 api:

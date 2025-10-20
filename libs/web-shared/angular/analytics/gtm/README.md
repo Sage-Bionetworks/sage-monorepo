@@ -128,7 +128,7 @@ In your development config (e.g., `application-dev.yaml`):
 ```yaml
 google:
   tagManager:
-    enabled: false  # Disable GTM in local development
+    enabled: false # Disable GTM in local development
     id: 'GTM-XXXXXX'
 ```
 
@@ -138,16 +138,33 @@ This prevents HTTPS certificate errors when loading GTM scripts locally.
 
 - ✅ **Automatic page tracking** - Tracks route navigation events
 - ✅ **SSR-safe** - Only initializes GTM on the client side
+- ✅ **Lazy initialization** - GTM service instantiated only after config loads
+- ✅ **No race conditions** - Component uses `Injector.get()` in `ngOnInit()` (after `APP_INITIALIZER`)
 - ✅ **Config-agnostic** - No dependency on platform config library
 - ✅ **Type-safe** - Full TypeScript support with interfaces
 - ✅ **Easy integration** - Simple provider function
 
 ## How It Works
 
-1. **Component Initialization**: The `GoogleTagManagerComponent` injects the `GTM_CONFIG` token
-2. **Server Detection**: Checks `isPlatformServer` to avoid running on the server
-3. **Route Tracking**: Subscribes to router `NavigationEnd` events
-4. **GTM Push**: Sends page events to GTM data layer using `GoogleTagManagerService`
+### Initialization Flow
+
+1. **App Startup**: `APP_INITIALIZER` loads config asynchronously
+2. **Component Creation**: `GoogleTagManagerComponent` is instantiated in the app template
+3. **ngOnInit**: Component's `ngOnInit()` runs **after** `APP_INITIALIZER` completes
+4. **Lazy Injection**: Component uses `Injector.get(GoogleTagManagerService)` to lazily instantiate the service
+5. **Config Available**: At this point, `ConfigService` has the loaded config, so `'googleTagManagerId'` factory returns the correct ID
+6. **GTM Initialization**: Service initializes with correct config
+7. **Route Tracking**: Component subscribes to router `NavigationEnd` events
+8. **Event Tracking**: Sends page events to GTM data layer
+
+### Why Lazy Injection?
+
+The GTM service is injected lazily (in `ngOnInit()`) rather than in the constructor to avoid race conditions:
+
+- **Problem**: `GoogleTagManagerService` is `providedIn: 'root'`, so it would be instantiated immediately if injected in constructor
+- **Issue**: Config might not be loaded yet when service constructor runs
+- **Solution**: Use `Injector.get()` in `ngOnInit()`, which runs **after** `APP_INITIALIZER` completes
+- **Result**: Service is created only when config is guaranteed to be available
 
 ## Dependencies
 

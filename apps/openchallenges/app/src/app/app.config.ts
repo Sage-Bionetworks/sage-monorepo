@@ -18,7 +18,7 @@ import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchalleng
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
-import { GTM_CONFIG } from '@sagebionetworks/web-shared/angular/analytics/gtm';
+import { GTM_CONFIG, GtmConfig } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import Lara from '@primeng/themes/lara';
 import { telemetryFactory } from './telemetry.factory';
 
@@ -62,8 +62,8 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: 'googleTagManagerId',
-      useFactory: (config: ConfigService) => config.config.google.tagManager.id,
-      deps: [ConfigService],
+      useFactory: (gtmConfig: GtmConfig) => gtmConfig.gtmId,
+      deps: [GTM_CONFIG],
     },
     provideRouter(
       appRoutes,
