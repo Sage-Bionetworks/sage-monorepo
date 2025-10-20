@@ -126,9 +126,8 @@ def main(
     # Always show the same performance metrics for all formats
     console.print("\n✅ Evaluation completed successfully!")
     console.print(f"⏱️  Total runtime: {total_time:.3f} seconds")
-    console.print(f"   • Models evaluated: {len(leaderboard)}")
-    total_votes = sum(entry["voteCount"] for entry in leaderboard)
-    console.print(f"   • Total votes processed: {total_votes}")
+    console.print(f"   • Models evaluated: {num_models}")
+    console.print(f"   • Total votes processed: {num_votes}")
     console.print(f"   • Bootstrap iterations: {num_bootstrap}")
     if leaderboard:
         top_model = leaderboard[0]
