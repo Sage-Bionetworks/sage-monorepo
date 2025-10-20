@@ -10,8 +10,8 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from bixarena_tools.rank_battle import compute_leaderboard_bt
-from bixarena_tools.simulate_battle_votes import (
+from bixarena_tools.evaluation.rank_battle import compute_leaderboard_bt
+from bixarena_tools.evaluation.simulate_battle_votes import (
     SimConfig,
     simulate_votes,
 )

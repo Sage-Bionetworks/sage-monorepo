@@ -84,7 +84,7 @@
     "generate-leaderboard": {
       "executor": "@nxlv/python:run-commands",
       "options": {
-        "command": "uv run python -m bixarena_tools.generate_leaderboard_cli",
+        "command": "uv run python -m bixarena_tools.evaluation.generate_leaderboard_cli",
         "cwd": "{projectRoot}"
       }
     }
