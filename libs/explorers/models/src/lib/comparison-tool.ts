@@ -36,3 +36,7 @@ export interface ComparisonToolConfig {
   columns: Array<ComparisonToolConfigColumn>;
   filters?: Array<ComparisonToolConfigFilter>;
 }
+
+export type HeatmapCircleData = Record<string, number | null | undefined> & {
+  adj_p_val: number | null | undefined;
+};
