@@ -15,8 +15,8 @@ public class BattleMapper {
       .id(entity.getId().toString())
       .title(entity.getTitle())
       .userId(entity.getUserId().toString())
-      .modelAId(entity.getModelA().getId().toString())
-      .modelBId(entity.getModelB().getId().toString())
+      .modelAId(entity.getModelAId().toString())
+      .modelBId(entity.getModelBId().toString())
       .createdAt(entity.getCreatedAt())
       .endedAt(entity.getEndedAt())
       .build();

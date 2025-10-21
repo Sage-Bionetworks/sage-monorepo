@@ -747,10 +747,6 @@ components:
           nullable: true
           description: Title of the battle.
           example: Gene Expression Analysis Comparison
-        userId:
-          type: string
-          description: UUID of the user who is initiating this battle.
-          example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
         modelAId:
           type: string
           description: UUID of model A to compare.
@@ -760,7 +756,6 @@ components:
           description: UUID of model B to compare.
           example: 9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c
       required:
-        - userId
         - modelAId
         - modelBId
     BattleUpdateRequest:

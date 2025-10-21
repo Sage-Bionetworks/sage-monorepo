@@ -11,18 +11,24 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.PageMetadataDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
+import org.sagebionetworks.bixarena.api.model.entity.UserEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.BattleMapper;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
+import org.sagebionetworks.bixarena.api.model.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +37,7 @@ public class BattleService {
 
   private final BattleRepository battleRepository;
   private final ModelRepository modelRepository;
+  private final UserRepository userRepository;
   private final BattleMapper battleMapper = new BattleMapper();
 
   @Transactional(readOnly = true)
@@ -47,7 +54,7 @@ public class BattleService {
     return BattlePageDto.builder()
       .battles(battleMapper.convertToDtoList(page.getContent()))
       .page(
-        org.sagebionetworks.bixarena.api.model.dto.PageMetadataDto.builder()
+        PageMetadataDto.builder()
           .number(page.getNumber())
           .size(page.getSize())
           .totalElements(page.getTotalElements())
@@ -67,22 +74,38 @@ public class BattleService {
   }
 
   @Transactional
-  public BattleDto createBattle(BattleCreateRequestDto request) {
-    log.info("Creating battle for user: {}", request.getUserId());
+  public BattleDto createBattle(BattleCreateRequestDto request, Authentication authentication) {
+    // Get the authenticated username (SOURCE OF TRUTH from Spring Security)
+    String authenticatedUsername = authentication.getName();
+
+    // Look up the authenticated user to get their UUID
+    UserEntity authenticatedUser = userRepository
+      .findByUsername(authenticatedUsername)
+      .orElseThrow(() ->
+        new ResponseStatusException(
+          HttpStatus.UNAUTHORIZED,
+          "Authenticated user not found in database"
+        )
+      );
+
+    UUID userId = authenticatedUser.getId();
+
+    log.info("Creating battle for user: {} (username: {})", userId, authenticatedUsername);
 
     // Validate that both models exist
     UUID modelAId = UUID.fromString(request.getModelAId());
     UUID modelBId = UUID.fromString(request.getModelBId());
 
-    ModelEntity modelA = getModelEntity(modelAId);
-    ModelEntity modelB = getModelEntity(modelBId);
+    // Verify models exist (throws exception if not found)
+    getModelEntity(modelAId);
+    getModelEntity(modelBId);
 
     // Create new battle entity
     BattleEntity battle = BattleEntity.builder()
       .title(request.getTitle())
-      .userId(UUID.fromString(request.getUserId()))
-      .modelA(modelA)
-      .modelB(modelB)
+      .userId(userId)
+      .modelAId(modelAId)
+      .modelBId(modelBId)
       .build();
 
     // Save the battle

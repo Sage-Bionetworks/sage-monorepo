@@ -26,8 +26,6 @@ public class BattleCreateRequestDto {
 
   private @Nullable String title = null;
 
-  private String userId;
-
   private String modelAId;
 
   private String modelBId;
@@ -39,8 +37,7 @@ public class BattleCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public BattleCreateRequestDto(String userId, String modelAId, String modelBId) {
-    this.userId = userId;
+  public BattleCreateRequestDto(String modelAId, String modelBId) {
     this.modelAId = modelAId;
     this.modelBId = modelBId;
   }
@@ -63,26 +60,6 @@ public class BattleCreateRequestDto {
 
   public void setTitle(@Nullable String title) {
     this.title = title;
-  }
-
-  public BattleCreateRequestDto userId(String userId) {
-    this.userId = userId;
-    return this;
-  }
-
-  /**
-   * UUID of the user who is initiating this battle.
-   * @return userId
-   */
-  @NotNull 
-  @Schema(name = "userId", example = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of the user who is initiating this battle.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("userId")
-  public String getUserId() {
-    return userId;
-  }
-
-  public void setUserId(String userId) {
-    this.userId = userId;
   }
 
   public BattleCreateRequestDto modelAId(String modelAId) {
@@ -135,14 +112,13 @@ public class BattleCreateRequestDto {
     }
     BattleCreateRequestDto battleCreateRequest = (BattleCreateRequestDto) o;
     return Objects.equals(this.title, battleCreateRequest.title) &&
-        Objects.equals(this.userId, battleCreateRequest.userId) &&
         Objects.equals(this.modelAId, battleCreateRequest.modelAId) &&
         Objects.equals(this.modelBId, battleCreateRequest.modelBId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, userId, modelAId, modelBId);
+    return Objects.hash(title, modelAId, modelBId);
   }
 
   @Override
@@ -150,7 +126,6 @@ public class BattleCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class BattleCreateRequestDto {\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    modelAId: ").append(toIndentedString(modelAId)).append("\n");
     sb.append("    modelBId: ").append(toIndentedString(modelBId)).append("\n");
     sb.append("}");
@@ -182,7 +157,6 @@ public class BattleCreateRequestDto {
 
     protected Builder copyOf(BattleCreateRequestDto value) { 
       this.instance.setTitle(value.title);
-      this.instance.setUserId(value.userId);
       this.instance.setModelAId(value.modelAId);
       this.instance.setModelBId(value.modelBId);
       return this;
@@ -190,11 +164,6 @@ public class BattleCreateRequestDto {
 
     public BattleCreateRequestDto.Builder title(String title) {
       this.instance.title(title);
-      return this;
-    }
-    
-    public BattleCreateRequestDto.Builder userId(String userId) {
-      this.instance.userId(userId);
       return this;
     }
     
