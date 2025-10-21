@@ -42,7 +42,7 @@
     </style>
   </head>
   <body>
-    <h2>BixArena MVP: Full-Stack Application Architecture</h2>
+    <!-- <h2>BixArena MVP: Full-Stack Application Architecture</h2> -->
 
     <div class="diagram-container">
       <!-- prettier-ignore -->
@@ -63,28 +63,41 @@
         or@{shape: icon, icon: 'system-uicons:fork-git', label: 'OpenRouter<br>(LLM Proxy)'}
         %% claude@{shape: icon, icon: 'logos:claude-icon', label: 'Claude'}
 
-        user -->|"HTTPS"| caddy
-        caddy -->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| gw
-        caddy -->|"/**"| web
+        user user_caddy@-->|"HTTPS"| caddy
+        caddy caddy_gw@-->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| gw
+        caddy caddy_web@-->|"/**"| web
 
-        gw -.->|"HTTP /auth/\*\*"| auth
-        gw -->|"HTTP /api/**"| api
-        gw -.->|"HTTP/WS /ai/**"| ai
-        gw -.-> cache
+        gw gw_auth@-.->|"HTTP /auth/\*\*"| auth
+        gw gw_api@-->|"HTTP /api/**"| api
+        gw gw_ai@-.->|"HTTP/WS /ai/**"| ai
+        gw gw_cache@-.-> cache
 
         %% web -->|"/api/\*\*, /ai/\*\*, /auth/\*\*"| caddy
-        web e1@--> or
+        web web_or@--> or
 
         %% or --> claude
 
-        auth --> db
-        api --> db
-        ai -.-> db
-        auth -.-> cache
-        api -.-> cache
-        ai -.-> cache
+        auth auth_db@--> db
+        api api_db@--> db
+        ai ai_db@-.-> db
+        auth auth_cache@-.-> cache
+        api api_cache@-.-> cache
+        ai ai_cache@-.-> cache
 
-        e1@{ animate: false }
+        user_caddy@{ animate: true }
+        caddy_gw@{ animate: true }
+        caddy_web@{ animate: true }
+        gw_auth@{ animate: true }
+        gw_api@{ animate: true }
+        gw_ai@{ animate: false }
+        gw_cache@{ animate: false }
+        web_or@{ animate: true }
+        auth_db@{ animate: true }
+        api_db@{ animate: true }
+        ai_db@{ animate: false }
+        auth_cache@{ animate: false }
+        api_cache@{ animate: false }
+        ai_cache@{ animate: false }
       </div>
     </div>
 
