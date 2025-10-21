@@ -99,6 +99,7 @@ def sync_backend_session_on_load(request: gr.Request):
                             state.set_current_user(
                                 {"firstName": sub, "userName": sub, "source": "backend"}
                             )
+                            state.set_jsessionid(jsessionid)  # Store for API calls
                             print(f"[auth-sync] Identity sync success sub={sub}")
                             return (
                                 update_login_button(),

@@ -44,7 +44,6 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
-  @PreAuthorize("hasAuthority('SCOPE_create:battles')")
   public ResponseEntity<BattleDto> createBattle(BattleCreateRequestDto battleCreateRequestDto) {
     // Get the authenticated user (SOURCE OF TRUTH from Spring Security)
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

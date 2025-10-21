@@ -10,7 +10,9 @@ import logging
 import time
 
 import gradio as gr
+import requests
 
+from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.constants import (
     CONVERSATION_LIMIT_MSG,
     CONVERSATION_TURN_LIMIT,
@@ -18,8 +20,10 @@ from bixarena_app.config.constants import (
     MODERATION_MSG,
     SLOW_MODEL_MSG,
 )
+from bixarena_app.main import _get_api_base_url
 from bixarena_app.model.model_response import (
     State,
+    api_endpoint_info,
     bot_response_multi,
     disable_btn,
     enable_btn,
@@ -172,6 +176,31 @@ def add_text(
             State(model_left),
             State(model_right),
         ]
+
+        # Create battle record
+        try:
+            user_state = get_user_state()
+            jsessionid = user_state.get_jsessionid()
+            api_base_url = _get_api_base_url()
+
+            if jsessionid and api_base_url:
+                model_a_info = api_endpoint_info.get(model_left)
+                model_b_info = api_endpoint_info.get(model_right)
+
+                if model_a_info and model_b_info:
+                    model_a_id = model_a_info.get("model_id")
+                    model_b_id = model_b_info.get("model_id")
+
+                    if model_a_id and model_b_id:
+                        requests.post(
+                            f"{api_base_url}/battles",
+                            json={"modelAId": model_a_id, "modelBId": model_b_id},
+                            cookies={"JSESSIONID": jsessionid},
+                            headers={"Content-Type": "application/json"},
+                            timeout=5,
+                        )
+        except Exception as e:
+            logger.warning(f"Failed to create battle: {e}")
 
     if len(text) <= 0:
         for i in range(num_sides):

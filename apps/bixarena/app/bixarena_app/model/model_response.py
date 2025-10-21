@@ -79,6 +79,7 @@ def get_model_list():
 
             for model in visible_models_response.models:
                 model_name = model.name
+                model_id = model.id
 
                 # Check required fields for API configuration
                 api_model_name = model.api_model_name
@@ -97,6 +98,7 @@ def get_model_list():
 
                 # Convert to FastChat API-based format (text-only models)
                 api_endpoint_info[model_name] = {
+                    "model_id": model_id,
                     "api_type": api_type,
                     "api_base": api_base,
                     "api_key": api_key,
