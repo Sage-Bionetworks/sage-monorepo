@@ -345,10 +345,13 @@ class Conversation:
 
     def to_openai_api_messages(self):
         """Convert the conversation to OpenAI chat completion format."""
-        if self.system_message == "":
-            ret = []
-        else:
-            ret = [{"role": "system", "content": self.system_message}]
+        # BixArena: Override system message for all models to prevent identity leaking
+        bixarena_system_message = (
+            "You are a helpful AI assistant specializing in biomedical topics. "
+            "Do not reveal your identity, model name, organization or training details."
+        )
+
+        ret = [{"role": "system", "content": bixarena_system_message}]
 
         for i, (_, msg) in enumerate(self.messages[self.offset :]):
             if i % 2 == 0:
