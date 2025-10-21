@@ -26,7 +26,7 @@ describe('HomeComponent', () => {
       features: {
         announcement: { enabled: false },
       },
-      urls: {
+      links: {
         privacyPolicy: 'https://example.com/privacy',
         termsOfUse: 'https://example.com/terms',
       },

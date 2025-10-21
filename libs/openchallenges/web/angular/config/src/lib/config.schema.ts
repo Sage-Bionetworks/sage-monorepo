@@ -46,7 +46,7 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     }),
   }),
 
-  urls: z.object({
+  links: z.object({
     privacyPolicy: z.url({ message: 'Privacy policy URL must be a valid URL' }),
     termsOfUse: z.url({ message: 'Terms of use URL must be a valid URL' }),
   }),

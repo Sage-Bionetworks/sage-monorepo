@@ -36,6 +36,6 @@ analytics:
     enabled: true
     id: 'GTM-NBR5XD8C'
 
-urls:
+links:
   privacyPolicy: https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948530178/OpenChallenges+Privacy+Policy
   termsOfUse: https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948333575/OpenChallenges+Terms+of+Use

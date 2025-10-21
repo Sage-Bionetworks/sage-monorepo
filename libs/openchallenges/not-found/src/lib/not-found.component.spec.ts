@@ -14,7 +14,7 @@ describe('NotFoundComponent', () => {
     config: {
       app: { version: '1.0.0' },
       data: { updatedOn: '2025-01-01' },
-      urls: {
+      links: {
         privacyPolicy: 'https://example.com/privacy',
         termsOfUse: 'https://example.com/terms',
       },

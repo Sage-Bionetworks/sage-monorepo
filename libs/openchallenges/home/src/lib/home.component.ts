@@ -43,8 +43,8 @@ export class HomeComponent {
   constructor() {
     this.appVersion = this.configService.config.app.version;
     this.dataUpdatedOn = this.configService.config.data.updatedOn;
-    this.privacyPolicyUrl = this.configService.config.urls.privacyPolicy;
-    this.termsOfUseUrl = this.configService.config.urls.termsOfUse;
+    this.privacyPolicyUrl = this.configService.config.links.privacyPolicy;
+    this.termsOfUseUrl = this.configService.config.links.termsOfUse;
     this.apiDocsUrl = this.configService.config.api.docs.url;
     this.showAnnouncement = this.configService.config.features.announcement.enabled;
     this.seoService.setData(getSeoData(), this.renderer2);
