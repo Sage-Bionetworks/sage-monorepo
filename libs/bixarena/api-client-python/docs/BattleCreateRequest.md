@@ -1,0 +1,32 @@
+# BattleCreateRequest
+
+The information used to create a new battle.
+
+## Properties
+
+| Name          | Type    | Description                                     | Notes      |
+| ------------- | ------- | ----------------------------------------------- | ---------- |
+| **title**     | **str** | Title of the battle.                            | [optional] |
+| **user_id**   | **str** | UUID of the user who is initiating this battle. |
+| **model_aid** | **str** | UUID of model A to compare.                     |
+| **model_bid** | **str** | UUID of model B to compare.                     |
+
+## Example
+
+```python
+from bixarena_api_client.models.battle_create_request import BattleCreateRequest
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of BattleCreateRequest from a JSON string
+battle_create_request_instance = BattleCreateRequest.from_json(json)
+# print the JSON string representation of the object
+print(BattleCreateRequest.to_json())
+
+# convert the object into a dict
+battle_create_request_dict = battle_create_request_instance.to_dict()
+# create an instance of BattleCreateRequest from a dict
+battle_create_request_from_dict = BattleCreateRequest.from_dict(battle_create_request_dict)
+```
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

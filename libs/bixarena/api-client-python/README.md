@@ -62,10 +62,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "http://localhost/v1"
+    host = "https://bixarena.ai/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -96,7 +96,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ## Documentation for API Endpoints
 
-All URIs are relative to _http://localhost/v1_
+All URIs are relative to *https://bixarena.ai/api/v1*
 
 | Class              | Method                                                                            | HTTP request                                            | Description                                |
 | ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------ |
@@ -106,6 +106,11 @@ All URIs are relative to _http://localhost/v1_
 | _AuthApi_          | [**mint_internal_token**](docs/AuthApi.md#mint_internal_token)                    | **POST** /token                                         | Mint short-lived internal JWT              |
 | _AuthApi_          | [**oidc_callback**](docs/AuthApi.md#oidc_callback)                                | **GET** /auth/oidc/callback                             | OIDC redirect callback                     |
 | _AuthApi_          | [**start_oidc**](docs/AuthApi.md#start_oidc)                                      | **GET** /auth/oidc/start                                | Start Synapse OIDC authorization code flow |
+| _BattleApi_        | [**create_battle**](docs/BattleApi.md#create_battle)                              | **POST** /battles                                       | Create a battle                            |
+| _BattleApi_        | [**delete_battle**](docs/BattleApi.md#delete_battle)                              | **DELETE** /battles/{battleId}                          | Delete a battle                            |
+| _BattleApi_        | [**get_battle**](docs/BattleApi.md#get_battle)                                    | **GET** /battles/{battleId}                             | Get a battle by ID                         |
+| _BattleApi_        | [**list_battles**](docs/BattleApi.md#list_battles)                                | **GET** /battles                                        | List battles                               |
+| _BattleApi_        | [**update_battle**](docs/BattleApi.md#update_battle)                              | **PATCH** /battles/{battleId}                           | Update a battle                            |
 | _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts                       |
 | _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
 | _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |
@@ -118,6 +123,12 @@ All URIs are relative to _http://localhost/v1_
 
 - [AdminStats200Response](docs/AdminStats200Response.md)
 - [BasicError](docs/BasicError.md)
+- [Battle](docs/Battle.md)
+- [BattleCreateRequest](docs/BattleCreateRequest.md)
+- [BattlePage](docs/BattlePage.md)
+- [BattleSearchQuery](docs/BattleSearchQuery.md)
+- [BattleSort](docs/BattleSort.md)
+- [BattleUpdateRequest](docs/BattleUpdateRequest.md)
 - [Echo200Response](docs/Echo200Response.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
 - [ExamplePromptPage](docs/ExamplePromptPage.md)
