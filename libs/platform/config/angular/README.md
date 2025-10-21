@@ -15,6 +15,65 @@ A reusable Angular configuration library that provides Spring Boot-inspired conf
   2. **Profile-specific configuration** (`application-{profile}.yaml`) - Environment-specific overrides
   3. **Base configuration** (`application.yaml`) - Default values for all environments
 
+## Architecture
+
+The configuration management system is organized into reusable layers:
+
+```mermaid
+graph TB
+    subgraph "Application Layer"
+        APP[openchallenges-app<br/>Angular SSR Application]
+    end
+
+    subgraph "App-Specific Config Layer"
+        APP_CONFIG[openchallenges-web-angular-config<br/>Application-specific schemas & transformer]
+        APP_CONFIG_ITEMS["• ServerConfigSchema<br/>• ClientConfigSchema<br/>• transformServerToClientConfig()<br/>• ConfigService"]
+    end
+
+    subgraph "Platform Layer"
+        PLATFORM_CONFIG[platform-config-angular<br/>Generic configuration library]
+        PLATFORM_CONFIG_ITEMS["• ConfigLoaderService&lt;T, S&gt;<br/>• YamlParserService<br/>• EnvMapperService<br/>• BaseConfigSchema"]
+    end
+
+    subgraph "Configuration Files"
+        YAML_FILES["YAML Files<br/>application.yaml<br/>application-{profile}.yaml"]
+        ENV_VARS["Environment Variables<br/>ENVIRONMENT, APP_VERSION, etc."]
+    end
+
+    APP -->|uses| APP_CONFIG
+    APP_CONFIG -->|extends| PLATFORM_CONFIG
+    APP_CONFIG -.->|defines schemas for| YAML_FILES
+    PLATFORM_CONFIG -->|loads & merges| YAML_FILES
+    PLATFORM_CONFIG -->|applies| ENV_VARS
+
+    style APP fill:#e1f5ff
+    style APP_CONFIG fill:#fff4e1
+    style PLATFORM_CONFIG fill:#e8f5e9
+    style YAML_FILES fill:#f3e5f5
+    style ENV_VARS fill:#f3e5f5
+```
+
+**Key responsibilities:**
+
+- **`platform-config-angular`** (Generic Library)
+
+  - Provides base configuration loading logic
+  - Handles YAML parsing, profile merging, and environment variable overrides
+  - Generic `ConfigLoaderService<T, S>` for flexible type handling
+  - Can be reused across any Angular application
+
+- **`openchallenges-web-angular-config`** (App-Specific Library)
+
+  - Defines OpenChallenges-specific configuration schemas (Zod)
+  - Implements `ConfigService` extending `ConfigLoaderService`
+  - Provides `transformServerToClientConfig()` for server/client separation
+  - Bridges platform library and application needs
+
+- **`openchallenges-app`** (Application)
+  - Consumes configuration via dependency injection
+  - Uses `ConfigService.config` throughout the application
+  - Provides YAML configuration files in `/src/config/`
+
 ## SSR and 12-Factor Compliance
 
 When running with server-side rendering (SSR), the library follows the [12-factor app](https://12factor.net/config) principle: **configuration is stored in environment variables**, allowing you to change configuration without rebuilding the application.
@@ -22,7 +81,7 @@ When running with server-side rendering (SSR), the library follows the [12-facto
 1. **Server (Node.js):**
 
    - Loads YAML configuration files from filesystem
-   - Applies environment variable overrides (e.g., `ENVIRONMENT=prod`, `API_CSR_URL=...`)
+   - Applies environment variable overrides (e.g., `ENVIRONMENT=prod`, `APP_VERSION=2.0.0`)
    - Optionally transforms config for client (e.g., filtering server-only URLs)
    - Stores client configuration in Angular's `TransferState` (embedded in the HTML response)
    - Keeps full server configuration for its own use
@@ -63,7 +122,7 @@ Server Start
     ↓
 1. Load application.yaml (from filesystem)
 2. Load application-{ENVIRONMENT}.yaml (from filesystem)
-3. Apply environment variable overrides (`API_CSR_URL`, etc.)
+3. Apply environment variable overrides (e.g., `APP_VERSION`, `TELEMETRY_ENABLED`)
 4. Validate and store in TransferState
     ↓
 Browser Hydration
