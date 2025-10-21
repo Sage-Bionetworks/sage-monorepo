@@ -14,7 +14,11 @@ export interface ComparisonToolConfigColumn {
    */
   name: string;
   /**
-   * The data type of the column. Must be \'text\' or \'heat_map\'.
+   * The data field associated with the column.
+   */
+  field: string;
+  /**
+   * The data type of the column. Must be \'text\', \'heat_map\', \'link_internal\', or \'link_external\'.
    */
   type: ComparisonToolConfigColumn.TypeEnum;
   /**
@@ -25,11 +29,21 @@ export interface ComparisonToolConfigColumn {
    * Tooltip text for the column\'s sort functionality.
    */
   sort_tooltip: string;
+  /**
+   * The default text for a link in this column.
+   */
+  link_text?: string;
+  /**
+   * The default URL for this column.
+   */
+  link_url?: string;
 }
 export namespace ComparisonToolConfigColumn {
-  export type TypeEnum = 'text' | 'heat_map';
+  export type TypeEnum = 'text' | 'heat_map' | 'link_internal' | 'link_external';
   export const TypeEnum = {
     Text: 'text' as TypeEnum,
     HeatMap: 'heat_map' as TypeEnum,
+    LinkInternal: 'link_internal' as TypeEnum,
+    LinkExternal: 'link_external' as TypeEnum,
   };
 }
