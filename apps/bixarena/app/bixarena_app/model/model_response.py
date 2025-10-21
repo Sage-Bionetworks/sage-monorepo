@@ -33,6 +33,7 @@ class State:
         self.conv_id = uuid.uuid4().hex
         self.skip_next = False
         self.model_name = model_name
+        self.has_error = False
 
     def to_gradio_chatbot(self):
         return self.conv.to_gradio_chatbot()
@@ -177,11 +178,11 @@ def bot_response(
             else:
                 output = data["text"]
                 conv.update_last_message(output)
+                state.has_error = True
                 yield (state, state.to_gradio_chatbot()) + (
                     disable_btn,
                     disable_btn,
                     disable_btn,
-                    enable_btn,
                     enable_btn,
                 )
                 return
@@ -191,22 +192,22 @@ def bot_response(
     except requests.exceptions.RequestException as e:
         display_error_msg = handle_error_message(e)
         conv.update_last_message(display_error_msg)
+        state.has_error = True  # Mark this state as having an error
         yield (state, state.to_gradio_chatbot()) + (
             disable_btn,
             disable_btn,
             disable_btn,
-            enable_btn,
             enable_btn,
         )
         return
     except Exception as e:
         display_error_msg = handle_error_message(e)
         conv.update_last_message(display_error_msg)
+        state.has_error = True  # Mark this state as having an error
         yield (state, state.to_gradio_chatbot()) + (
             disable_btn,
             disable_btn,
             disable_btn,
-            enable_btn,
             enable_btn,
         )
         return
@@ -283,3 +284,10 @@ def bot_response_multi(
         yield states + chatbots + [disable_btn] * 4
         if stop:
             break
+
+    # At least one model had an error -> keep voting buttons disabled
+    if any(state.has_error for state in states):
+        yield states + chatbots + [disable_btn, disable_btn, disable_btn, enable_btn]
+    else:
+        # Both models succeeded -> enable all buttons including voting
+        yield states + chatbots + [enable_btn] * 4

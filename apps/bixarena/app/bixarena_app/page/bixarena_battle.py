@@ -147,16 +147,6 @@ def clear_history(request: gr.Request):
     )
 
 
-def flash_buttons():
-    btn_updates = [
-        [disable_btn] * 3 + [enable_btn] * 1,
-        [enable_btn] * 4,
-    ]
-    for i in range(4):
-        yield btn_updates[i % 2]
-        time.sleep(0.3)
-
-
 def add_text(
     state0, state1, model_selector0, model_selector1, text, request: gr.Request
 ):
@@ -417,10 +407,6 @@ def build_side_by_side_ui_anony():
         states,
         states + chatbots + btn_list,
     ).then(
-        flash_buttons,
-        [],
-        btn_list,
-    ).then(
         lambda: None,  # Enable enter key
         [],
         [],
@@ -449,10 +435,6 @@ def build_side_by_side_ui_anony():
             bot_response_multi,
             states,
             states + chatbots + btn_list,
-        ).then(
-            flash_buttons,
-            [],
-            btn_list,
         ).then(
             lambda: None,
             [],
