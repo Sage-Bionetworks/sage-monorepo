@@ -54,8 +54,7 @@ export class YamlParserService {
     const dynamicImport = new Function('specifier', 'return import(specifier)');
 
     const { readFile, access } = await dynamicImport('node:fs/promises');
-    const { join, dirname, resolve } = await dynamicImport('node:path');
-    const { fileURLToPath } = await dynamicImport('node:url');
+    const { join, resolve } = await dynamicImport('node:path');
     const { constants } = await dynamicImport('node:fs');
 
     // Determine the config directory path
@@ -63,18 +62,21 @@ export class YamlParserService {
     if (basePath) {
       configPath = basePath;
     } else {
-      // Handle both CommonJS (tests) and ESM (runtime) environments
-      // In CommonJS __dirname is defined, in ESM we use import.meta.url
-      // Use Function constructor to avoid TypeScript static analysis of import.meta
-      const currentDir =
-        typeof __dirname !== 'undefined'
-          ? __dirname
-          : dirname(
-              fileURLToPath(
-                // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
-                new Function('return import.meta.url')() as string,
-              ),
-            );
+      // For Vite/ESM bundler, we need to use import.meta.url
+      // For Jest/CommonJS tests, we use process.cwd() as fallback
+      let currentDir: string;
+      try {
+        // Try ESM approach (works with Vite)
+        // Use Function constructor to avoid TypeScript error in CommonJS mode
+        const getImportMetaUrl = new Function('return import.meta.url');
+        const importMetaUrl = getImportMetaUrl() as string;
+        const { fileURLToPath } = await dynamicImport('node:url');
+        const { dirname } = await dynamicImport('node:path');
+        currentDir = dirname(fileURLToPath(importMetaUrl));
+      } catch {
+        // Fallback for CommonJS/Jest: use process.cwd()
+        currentDir = process.cwd();
+      }
 
       // Try multiple possible paths (development and production)
       const possiblePaths = [
@@ -84,6 +86,8 @@ export class YamlParserService {
         resolve(process.cwd(), 'apps/openchallenges/app/src/config'),
         // Alternative production path
         join(currentDir, '../browser/config'),
+        // Fallback for Jest tests
+        resolve(process.cwd(), 'apps/openchallenges/app/src/config'),
       ];
 
       // Find the first path that exists

@@ -97,22 +97,6 @@ Browser Start
 
 **Note:** For production deployments, SSR is recommended to ensure 12-factor compliance and allow environment variable overrides.
 
-### Examples
-
-```bash
-# Load production configuration
-ENVIRONMENT=prod npm start
-
-# Load staging configuration
-ENVIRONMENT=stage npm start
-
-# Use NODE_ENV (mapped to 'dev')
-NODE_ENV=development npm start
-
-# Override specific property
-ENVIRONMENT=prod API_CSR_URL=https://custom-api.example.com npm start
-```
-
 ## Usage
 
 This is a generic library that can be extended for specific applications.
@@ -131,7 +115,7 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     version: z.string(),
   }),
   api: z.object({
-    url: z.string().url(),
+    url: z.url(),
   }),
 });
 
