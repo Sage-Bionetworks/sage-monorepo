@@ -47,17 +47,17 @@ def handle_error_message(error: Exception) -> str:
     if isinstance(error, AuthenticationError):
         return (
             "**Connection Issue**\n\n"
-            "A temporary connection issue occurred.\n"
-            "Please wait a moment and try again.\n\n"
+            "The service is currently unavailable.\n"
+            "Please start a new battle to try again.\n\n"
             "_Error Code: 401_"
         )
 
     # 403 - Permission Denied
     if isinstance(error, PermissionDeniedError):
         return (
-            "**Temporarily Unavailable**\n\n"
+            "**Connection Issue**\n\n"
             "The service is currently unavailable.\n"
-            "Please wait a moment and try again.\n\n"
+            "Please start a new battle to try again.\n\n"
             "_Error Code: 403_"
         )
 
@@ -65,8 +65,8 @@ def handle_error_message(error: Exception) -> str:
     if isinstance(error, NotFoundError):
         return (
             "**Service Unavailable**\n\n"
-            "Unable to reach the service at this time.\n"
-            "Please try again shortly.\n\n"
+            "The service is currently unavailable.\n"
+            "Please start a new battle and try again.\n\n"
             "_Error Code: 404_"
         )
 
@@ -75,16 +75,16 @@ def handle_error_message(error: Exception) -> str:
         return (
             "**Rate Limit Exceeded**\n\n"
             "The request rate limit has been exceeded.\n"
-            "Please wait a moment and try again.\n\n"
+            "Please wait a moment, then re-enter your prompt.\n\n"
             "_Error Code: 429_"
         )
 
     # 500 - Internal Server Error
     if isinstance(error, InternalServerError):
         return (
-            "**Server Error**\n\n"
+            "**Internal Server Error**\n\n"
             "An internal server error occurred.\n"
-            "Please wait a moment and try again.\n\n"
+            "Please wait a moment, then re-enter your prompt.\n\n"
             "_Error Code: 500_"
         )
 
@@ -93,16 +93,16 @@ def handle_error_message(error: Exception) -> str:
         return (
             "**Invalid Request**\n\n"
             "The request could not be processed due to a formatting issue.\n"
-            "Please try again or report this issue if it persists.\n\n"
+            "Please try rephrasing your prompt or report this issue if it persists.\n\n"
             "_Error Code: 400_"
         )
 
     # Connection errors (network issues)
     if isinstance(error, APIConnectionError):
         return (
-            "**Connection Error**\n\n"
-            "Unable to establish connection.\n"
-            "Please wait a moment and try again."
+            "**Network Connection Error**\n\n"
+            "Unable to establish a network connection.\n"
+            "Please wait a moment, then re-enter your prompt."
         )
 
     # Generic API errors
@@ -124,5 +124,6 @@ def handle_error_message(error: Exception) -> str:
     return (
         "**Service Error**\n\n"
         "An unexpected error occurred.\n"
-        "Please try again or report this issue if it persists."
+        "Please refresh the page or start a new battle, "
+        "and report this issue if it persists."
     )
