@@ -46,6 +46,11 @@ export interface ComparisonToolConfig {
   filters?: Array<ComparisonToolConfigFilter>;
 }
 
-export type HeatmapCircleData = Record<string, number | null | undefined> & {
+export type HeatmapCircleData<ColorKey extends string = string> = {
   adj_p_val: number | null | undefined;
-};
+} & Record<ColorKey, number | null | undefined>;
+
+export type HeatmapCircleColorKey<T extends HeatmapCircleData> = Extract<
+  Exclude<keyof T, 'adj_p_val'>,
+  string
+>;

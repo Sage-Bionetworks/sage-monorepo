@@ -7,7 +7,7 @@ import {
 import { render } from '@testing-library/angular';
 import { HeatmapCircleComponent } from './heatmap-circle.component';
 
-async function setup(data: HeatmapCircleData) {
+async function setup<T extends HeatmapCircleData>(data: T) {
   const component = await render(HeatmapCircleComponent, {
     imports: [RouterModule],
     providers: [...provideComparisonToolFilterService()],

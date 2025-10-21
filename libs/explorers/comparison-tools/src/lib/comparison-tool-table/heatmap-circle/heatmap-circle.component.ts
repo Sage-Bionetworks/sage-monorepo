@@ -1,5 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { HeatmapCircleData } from '@sagebionetworks/explorers/models';
+import { HeatmapCircleColorKey, HeatmapCircleData } from '@sagebionetworks/explorers/models';
 import { ComparisonToolFilterService, HelperService } from '@sagebionetworks/explorers/services';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -21,12 +21,12 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
       return 'No data available';
     }
 
-    const { value, key } = this.resolvePrimaryMetric(data);
-    const knownPrimaryMetricToDisplayName = [
+    const { value, key } = this.resolveColorMetric(data);
+    const knownColorMetricToDisplayName = [
       { field: 'log2_fc', displayName: 'L2FC' },
       { field: 'correlation', displayName: 'Correlation' },
     ];
-    const displayName = knownPrimaryMetricToDisplayName.find(
+    const displayName = knownColorMetricToDisplayName.find(
       (item) => item.field === key,
     )?.displayName;
 
@@ -44,7 +44,7 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
 
   colorValue = computed(() => {
     const data = this.data();
-    const { value } = this.resolvePrimaryMetric(data);
+    const { value } = this.resolveColorMetric(data);
     return value;
   });
   adjustedPValue = computed(() => {
@@ -62,7 +62,7 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
     return this.getCircleStyle(adjustedPValue, colorValue);
   });
 
-  private resolvePrimaryMetric(data: T | null | undefined): {
+  private resolveColorMetric(data: T | null | undefined): {
     key: string | null;
     value: number | null;
   } {
@@ -70,21 +70,20 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
       return { key: null, value: null };
     }
 
-    for (const [field, fieldValue] of Object.entries(data)) {
-      if (field === 'adj_p_val') {
-        continue;
-      }
+    const colorKey = (Object.keys(data) as Array<keyof T>).find(
+      (field): field is HeatmapCircleColorKey<T> => field !== 'adj_p_val',
+    );
 
-      if (fieldValue === null || fieldValue === undefined) {
-        return { key: field, value: null };
-      }
-
-      if (typeof fieldValue === 'number') {
-        return { key: field, value: fieldValue };
-      }
+    if (!colorKey) {
+      return { key: null, value: null };
     }
 
-    return { key: null, value: null };
+    const result = data[colorKey];
+
+    return {
+      key: colorKey,
+      value: result ?? null,
+    };
   }
 
   private formatNumericValue(val: number | null | undefined) {

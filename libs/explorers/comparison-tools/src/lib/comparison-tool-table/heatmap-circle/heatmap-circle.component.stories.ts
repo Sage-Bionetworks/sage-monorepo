@@ -9,10 +9,7 @@ import {
 import type { Meta, StoryObj } from '@storybook/angular';
 import { HeatmapCircleComponent } from './heatmap-circle.component';
 
-interface ExampleResult extends HeatmapCircleData {
-  log2_fc: number;
-  adj_p_val: number;
-}
+type ExampleResult = HeatmapCircleData<'log2_fc'>;
 
 @Component({
   selector: 'explorers-heatmap-circle-story-host',
