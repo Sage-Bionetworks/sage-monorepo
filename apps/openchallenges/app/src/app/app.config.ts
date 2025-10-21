@@ -48,8 +48,8 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideGtmConfig(
       (config: ConfigService) => ({
-        enabled: config.config.google.tagManager.enabled,
-        gtmId: config.config.google.tagManager.id,
+        enabled: config.config.analytics.googleTagManager.enabled,
+        gtmId: config.config.analytics.googleTagManager.id,
         isPlatformServer: config.config.isPlatformServer,
       }),
       [ConfigService],

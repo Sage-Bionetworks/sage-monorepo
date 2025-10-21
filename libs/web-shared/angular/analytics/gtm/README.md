@@ -48,8 +48,8 @@ export const appConfig: ApplicationConfig = {
     provideGtm(() => {
       const config = inject(ConfigService);
       return {
-        enabled: config.config.google.tagManager.enabled,
-        gtmId: config.config.googleTagManagerId,
+        enabled: config.config.analytics.googleTagManager.enabled,
+        gtmId: config.config.analytics.googleTagManager.id,
         isPlatformServer: config.config.isPlatformServer,
       };
     }),
@@ -77,8 +77,8 @@ import { ConfigService } from './config/config.service';
       useFactory: () => {
         const config = inject(ConfigService);
         return {
-          enabled: config.config.google.tagManager.enabled,
-          gtmId: config.config.googleTagManagerId,
+          enabled: config.config.analytics.googleTagManager.enabled,
+          gtmId: config.config.analytics.googleTagManager.id,
           isPlatformServer: config.config.isPlatformServer,
         };
       },
@@ -115,7 +115,7 @@ interface GtmConfig {
 To only load GTM when enabled:
 
 ```typescript
-const useGoogleTagManager = config.config.google.tagManager.enabled;
+const useGoogleTagManager = config.config.analytics.googleTagManager.enabled;
 
 // In template:
 @if (useGoogleTagManager) {
@@ -178,8 +178,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideGtmConfig(
       (config: ConfigService) => ({
-        enabled: config.config.google.tagManager.enabled,
-        gtmId: config.config.google.tagManager.id,
+        enabled: config.config.analytics.googleTagManager.enabled,
+        gtmId: config.config.analytics.googleTagManager.id,
         isPlatformServer: config.config.isPlatformServer,
       }),
       [ConfigService],
@@ -207,7 +207,7 @@ import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/confi
 })
 export class AppComponent {
   private configService = inject(ConfigService);
-  readonly useGoogleTagManager = this.configService.config.google.tagManager.enabled;
+  readonly useGoogleTagManager = this.configService.config.analytics.googleTagManager.enabled;
 }
 ```
 

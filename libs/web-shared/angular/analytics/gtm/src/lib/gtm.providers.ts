@@ -23,8 +23,8 @@ import { GTM_CONFIG, GtmConfig, validateGtmConfig } from './gtm.tokens';
  * export const appConfig: ApplicationConfig = {
  *   providers: [
  *     provideGtmConfig((config: ConfigService) => ({
- *       enabled: config.config.google.tagManager.enabled,
- *       gtmId: config.config.google.tagManager.id,
+ *       enabled: config.config.analytics.googleTagManager.enabled,
+ *       gtmId: config.config.analytics.googleTagManager.id,
  *       isPlatformServer: config.config.isPlatformServer,
  *     }), [ConfigService]),
  *   ]

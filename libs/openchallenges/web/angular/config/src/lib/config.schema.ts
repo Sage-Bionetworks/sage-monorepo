@@ -38,8 +38,8 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     }),
   }),
 
-  google: z.object({
-    tagManager: z.object({
+  analytics: z.object({
+    googleTagManager: z.object({
       enabled: z.boolean(),
       id: z.string(),
     }),

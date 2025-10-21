@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private configService = inject(ConfigService);
 
   constructor() {
-    this.useGoogleTagManager = this.configService.config.google.tagManager.enabled;
+    this.useGoogleTagManager = this.configService.config.analytics.googleTagManager.enabled;
   }
 
   ngOnInit() {

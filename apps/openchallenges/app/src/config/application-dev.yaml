@@ -6,8 +6,8 @@ app:
   telemetry:
     enabled: false
 
-google:
-  tagManager:
+analytics:
+  googleTagManager:
     enabled: false
 
 api:

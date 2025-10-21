@@ -30,8 +30,8 @@ features:
   operationFilter:
     enabled: false
 
-google:
-  tagManager:
+analytics:
+  googleTagManager:
     enabled: true
     id: 'GTM-NBR5XD8C'
 
