@@ -17,10 +17,27 @@ describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
+  const mockConfigService = {
+    config: {
+      app: {
+        version: '1.0.0',
+        announcement: { show: false },
+      },
+      data: { updatedOn: '2025-01-01' },
+      urls: {
+        privacyPolicy: 'https://example.com/privacy',
+        termsOfUse: 'https://example.com/terms',
+      },
+      api: {
+        docs: { url: 'https://example.com/api-docs' },
+      },
+    },
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientModule, RouterTestingModule, HomeComponent],
-      providers: [ConfigService],
+      providers: [{ provide: ConfigService, useValue: mockConfigService }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });

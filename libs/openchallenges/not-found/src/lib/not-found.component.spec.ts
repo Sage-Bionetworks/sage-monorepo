@@ -10,10 +10,24 @@ describe('NotFoundComponent', () => {
   let component: NotFoundComponent;
   let fixture: ComponentFixture<NotFoundComponent>;
 
+  const mockConfigService = {
+    config: {
+      app: { version: '1.0.0' },
+      data: { updatedOn: '2025-01-01' },
+      urls: {
+        privacyPolicy: 'https://example.com/privacy',
+        termsOfUse: 'https://example.com/terms',
+      },
+      api: {
+        docs: { url: 'https://example.com/api-docs' },
+      },
+    },
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientModule, RouterTestingModule, NotFoundComponent],
-      providers: [ConfigService],
+      providers: [{ provide: ConfigService, useValue: mockConfigService }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });

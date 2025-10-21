@@ -63,7 +63,18 @@ export class YamlParserService {
     if (basePath) {
       configPath = basePath;
     } else {
-      const currentDir = dirname(fileURLToPath(import.meta.url));
+      // Handle both CommonJS (tests) and ESM (runtime) environments
+      // In CommonJS __dirname is defined, in ESM we use import.meta.url
+      // Use Function constructor to avoid TypeScript static analysis of import.meta
+      const currentDir =
+        typeof __dirname !== 'undefined'
+          ? __dirname
+          : dirname(
+              fileURLToPath(
+                // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
+                new Function('return import.meta.url')() as string,
+              ),
+            );
 
       // Try multiple possible paths (development and production)
       const possiblePaths = [
