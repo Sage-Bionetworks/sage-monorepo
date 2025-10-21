@@ -45,12 +45,6 @@ graph TB
     APP_CONFIG -.->|defines schemas for| YAML_FILES
     PLATFORM_CONFIG -->|loads & merges| YAML_FILES
     PLATFORM_CONFIG -->|applies| ENV_VARS
-
-    style APP fill:#e1f5ff
-    style APP_CONFIG fill:#fff4e1
-    style PLATFORM_CONFIG fill:#e8f5e9
-    style YAML_FILES fill:#f3e5f5
-    style ENV_VARS fill:#f3e5f5
 ```
 
 **Key responsibilities:**
