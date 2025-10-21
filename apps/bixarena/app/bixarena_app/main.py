@@ -78,14 +78,14 @@ def sync_backend_session_on_load(request: gr.Request):
                 jsessionid = ck.split("=", 1)[1]
                 break
         if jsessionid:
-            backend_base = _get_api_base_url()
+            backend_base = _get_oidc_base_url()
             try:
                 print(
-                    "[auth-sync] Starting backend identity fetch (JSESSIONID present) "
-                    f"len={len(jsessionid)}"
+                    "[auth-sync] Starting auth service identity fetch "
+                    f"(JSESSIONID present) len={len(jsessionid)}"
                 )
                 if not backend_base:
-                    print("[auth-sync] Skipping identity fetch: API_BASE_URL missing")
+                    print("[auth-sync] Skipping identity fetch: OIDC_BASE_URL missing")
                 else:
                     resp = requests.get(
                         f"{backend_base}/echo",
