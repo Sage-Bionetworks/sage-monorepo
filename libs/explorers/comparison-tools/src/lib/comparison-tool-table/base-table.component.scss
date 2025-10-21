@@ -1,0 +1,42 @@
+@use 'explorers/styles/src/lib/variables' as vars;
+
+.base-table-container {
+  .comparison-tool-paginator {
+    display: block;
+    padding: 20px 30px;
+    text-align: right;
+    border-top: 1px solid var(--color-gray-300);
+
+    .p-paginator-current {
+      margin-right: 15px;
+      font-size: 15px;
+      cursor: default;
+      color: var(--color-text);
+    }
+
+    .p-paginator-first-icon,
+    .p-paginator-prev-icon,
+    .p-paginator-next-icon,
+    .p-paginator-last-icon {
+      color: var(--color-action-primary);
+      cursor: pointer;
+      transition: vars.$transition-duration;
+    }
+
+    .p-link.p-disabled {
+      opacity: 0.5;
+    }
+
+    button {
+      transform: translateY(3px);
+      height: 16px;
+      min-width: 16px;
+    }
+  }
+
+  .p-paginator-bottom {
+    &::before {
+      content: ' ';
+    }
+  }
+}

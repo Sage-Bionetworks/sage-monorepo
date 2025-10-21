@@ -1,0 +1,42 @@
+<div class="base-table-container">
+  @let pagination = shouldPaginate() ? paginationConfig : null;
+  <p-table
+    #table
+    [value]="data()"
+    [customSort]="true"
+    (sortFunction)="sortCallback($event)"
+    breakpoint="0"
+    stripedRows
+    showGridlines
+    [paginator]="!!pagination"
+    [paginatorStyleClass]="pagination?.paginatorStyleClass ?? ''"
+    [rows]="pagination?.rows ?? undefined"
+    [showCurrentPageReport]="!!pagination?.showCurrentPageReport"
+    [currentPageReportTemplate]="pagination?.currentPageReportTemplate ?? ''"
+    [showPageLinks]="pagination?.showPageLinks ?? null"
+  >
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        @for (columnConfig of currentConfig()?.columns; track columnConfig) {
+          <td [style]="{ width: columnWidth }">
+            @let columnType = columnConfig.type;
+            @let cellData = rowData[columnConfig.field];
+            <!-- TODO: add primary identifier column (MG-431) -->
+            @if (columnType === 'heat_map') {
+              <explorers-heatmap-circle [data]="cellData" />
+            }
+            @if (columnType === 'text') {
+              {{ cellData | commaSeparate }}
+            }
+            @if (columnType.startsWith('link_')) {
+              <explorers-comparison-tool-table-link
+                [linkText]="cellData?.link_text || columnConfig.link_text"
+                [linkUrl]="cellData?.link_url || columnConfig.link_url"
+              />
+            }
+          </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
