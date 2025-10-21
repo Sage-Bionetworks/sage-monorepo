@@ -149,6 +149,5 @@
     "rmdir": false,
     "wc": true,
     "wget": false
-  },
-  "angular.enable-strict-mode-prompt": false
+  }
 }
