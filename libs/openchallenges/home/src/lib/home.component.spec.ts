@@ -21,9 +21,11 @@ describe('HomeComponent', () => {
     config: {
       app: {
         version: '1.0.0',
-        announcement: { show: false },
       },
       data: { updatedOn: '2025-01-01' },
+      features: {
+        announcement: { enabled: false },
+      },
       urls: {
         privacyPolicy: 'https://example.com/privacy',
         termsOfUse: 'https://example.com/terms',

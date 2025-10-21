@@ -11,9 +11,6 @@ export const AppConfigSchema = BaseConfigSchema.extend({
     telemetry: z.object({
       enabled: z.boolean(),
     }),
-    announcement: z.object({
-      show: z.boolean(),
-    }),
   }),
 
   api: z.object({
@@ -33,6 +30,9 @@ export const AppConfigSchema = BaseConfigSchema.extend({
   }),
 
   features: z.object({
+    announcement: z.object({
+      enabled: z.boolean(),
+    }),
     operationFilter: z.object({
       enabled: z.boolean(),
     }),
