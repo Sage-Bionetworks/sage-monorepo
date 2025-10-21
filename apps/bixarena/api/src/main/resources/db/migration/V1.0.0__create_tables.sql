@@ -131,3 +131,17 @@ $$ language 'plpgsql';
 -- Add triggers for updated_at columns
 CREATE TRIGGER update_app_user_updated_at BEFORE UPDATE ON app_user FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_external_account_updated_at BEFORE UPDATE ON external_account FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Create battle table
+CREATE TABLE battle (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title VARCHAR(255),
+  user_id UUID NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
+  model_a_id UUID NOT NULL REFERENCES model(id) ON DELETE CASCADE,
+  model_b_id UUID NOT NULL REFERENCES model(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  ended_at TIMESTAMPTZ
+);
+
+-- Indexes for performance
+CREATE INDEX idx_battle_user_id ON battle(user_id);

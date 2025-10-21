@@ -16,14 +16,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     LeaderboardSnapshotNotFoundException ex,
     Locale locale
   ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-      .body(
-        BasicErrorDto.builder()
-          .title("Leaderboard Snapshot Not Found")
-          .status(HttpStatus.NOT_FOUND.value())
-          .detail(ex.getMessage())
-          .build()
-      );
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Leaderboard Snapshot Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
   }
 
   @ExceptionHandler(LeaderboardNotFoundException.class)
@@ -31,14 +30,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     LeaderboardNotFoundException ex,
     Locale locale
   ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-      .body(
-        BasicErrorDto.builder()
-          .title("Leaderboard Not Found")
-          .status(HttpStatus.NOT_FOUND.value())
-          .detail(ex.getMessage())
-          .build()
-      );
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Leaderboard Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
   }
 
   @ExceptionHandler(LeaderboardModelNotFoundException.class)
@@ -46,25 +44,51 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     LeaderboardModelNotFoundException ex,
     Locale locale
   ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-      .body(
-        BasicErrorDto.builder()
-          .title("Model Not Found")
-          .status(HttpStatus.NOT_FOUND.value())
-          .detail(ex.getMessage())
-          .build()
-      );
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Model Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(BattleNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleBattleNotFound(
+    BattleNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Battle Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(ModelNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleModelNotFoundException(
+    ModelNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Model Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
   }
 
   @ExceptionHandler({ Exception.class })
   protected ResponseEntity<BasicErrorDto> handleGenericException(Exception ex, Locale locale) {
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-      .body(
-        BasicErrorDto.builder()
-          .title("Internal Server Error")
-          .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-          .detail("An unexpected error occurred")
-          .build()
-      );
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+      BasicErrorDto.builder()
+        .title("Internal Server Error")
+        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        .detail("An unexpected error occurred")
+        .build()
+    );
   }
 }
