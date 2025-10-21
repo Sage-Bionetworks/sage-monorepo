@@ -14,12 +14,17 @@ const CONFIG_STATE_KEY = makeStateKey<any>('app-config');
  * 2. Load profile-specific configuration (application-{profile}.yaml)
  * 3. Apply environment variable overrides
  * 4. Validate final configuration
- * 5. Transfer state from server to browser (SSR)
+ * 5. Transform config for client (if transformer provided)
+ * 6. Transfer state from server to browser (SSR)
  *
  * This is a generic service that can be extended for specific applications
+ *
+ * Type Parameters:
+ * @template T - The configuration type (ServerConfig on server, ClientConfig on client)
+ * @template S - The source configuration type (ServerConfig when loading from YAML)
  */
 @Injectable()
-export abstract class ConfigLoaderService<T> {
+export abstract class ConfigLoaderService<T, S = T> {
   protected readonly yamlParser = inject(YamlParserService);
   protected readonly envMapper = inject(EnvironmentMapperService);
   protected readonly platformId = inject(PLATFORM_ID);
@@ -31,7 +36,17 @@ export abstract class ConfigLoaderService<T> {
    * Abstract method to validate configuration
    * Must be implemented by subclasses with their specific schema
    */
-  protected abstract validateConfig(config: unknown): T;
+  protected abstract validateConfig(config: unknown): S;
+
+  /**
+   * Optional method to transform server config to client config
+   * Override this in subclass if client needs a different config structure
+   * Only called on the server before transferring to client
+   *
+   * @param serverConfig - Full server configuration
+   * @returns Transformed configuration for client
+   */
+  protected transformForClient?(serverConfig: S): T;
 
   /**
    * Check if running on server (Node.js)
@@ -75,12 +90,16 @@ export abstract class ConfigLoaderService<T> {
    * Load complete application configuration
    * Merges all configuration sources and applies overrides
    *
-   * In SSR mode:
-   * - Server: Loads from YAML files with env var overrides, stores in TransferState
-   * - Browser: Retrieves from TransferState (same config as server)
+   * In SSR mode with transformation:
+   * - Server: Loads full config from YAML, transforms to client format, stores in TransferState
+   * - Browser: Retrieves transformed client config from TransferState
    *
-   * This ensures 12-factor compliance: browser uses the same environment-specific
-   * configuration as the server, including all environment variable overrides.
+   * In SSR mode without transformation:
+   * - Server: Loads config from YAML, stores in TransferState
+   * - Browser: Retrieves same config from TransferState
+   *
+   * This ensures 12-factor compliance: browser uses environment-specific
+   * configuration derived from the server configuration.
    *
    * @param basePath - Optional base path for config files (for testing)
    * @returns Complete validated configuration
@@ -99,9 +118,11 @@ export abstract class ConfigLoaderService<T> {
           console.log('[ConfigLoader] Using configuration transferred from server');
           console.log('[ConfigLoader] Browser configuration (from server via TransferState):');
           console.log(JSON.stringify(transferredConfig, null, 2));
-          const validatedConfig = this.validateConfig(transferredConfig);
-          this.configCache = validatedConfig;
-          return validatedConfig;
+          // Config transferred from server is already in target format (T)
+          // because it was transformed on the server before being stored
+          const clientConfig = transferredConfig as T;
+          this.configCache = clientConfig;
+          return clientConfig;
         }
         console.log('[ConfigLoader] No transferred state found, loading from YAML files');
       }
@@ -140,25 +161,42 @@ export abstract class ConfigLoaderService<T> {
 
       // 5. Validate configuration using subclass implementation
       console.log('[ConfigLoader] Validating configuration');
-      const validatedConfig = this.validateConfig(mergedConfig);
+      const validatedServerConfig = this.validateConfig(mergedConfig);
 
-      // 6. On server, store config in TransferState for browser hydration
-      if (this.isServer) {
-        console.log('[ConfigLoader] Storing configuration in TransferState for browser');
-        console.log('[ConfigLoader] Server configuration (will be transferred to browser):');
-        console.log(JSON.stringify(mergedConfig, null, 2));
-        this.transferState.set(CONFIG_STATE_KEY, mergedConfig);
+      // 6. On server: store config for transfer to client
+      //    On client: use the loaded config
+      let finalConfig: T;
+      if (this.isServer && this.transformForClient) {
+        // Server with transformation: transform for client and store in TransferState
+        console.log('[ConfigLoader] Transforming server config to client config for transfer');
+        const clientConfig = this.transformForClient(validatedServerConfig);
+        console.log('[ConfigLoader] Storing transformed client configuration in TransferState');
+        console.log(JSON.stringify(clientConfig, null, 2));
+        this.transferState.set(CONFIG_STATE_KEY, clientConfig);
+
+        // Server keeps the full server config for its own use
+        finalConfig = validatedServerConfig as unknown as T;
+        console.log('[ConfigLoader] Server will use full server configuration');
+      } else if (this.isServer) {
+        // No transformation - use server config as-is and transfer same to client
+        finalConfig = validatedServerConfig as unknown as T;
+        console.log(
+          '[ConfigLoader] Storing server configuration in TransferState (no transformation)',
+        );
+        console.log(JSON.stringify(finalConfig, null, 2));
+        this.transferState.set(CONFIG_STATE_KEY, finalConfig);
       } else {
-        // Browser without SSR
+        // Browser without SSR - use server config format
+        finalConfig = validatedServerConfig as unknown as T;
         console.log('[ConfigLoader] Browser configuration (loaded from YAML, no SSR):');
-        console.log(JSON.stringify(mergedConfig, null, 2));
+        console.log(JSON.stringify(finalConfig, null, 2));
       }
 
       // Cache the configuration
-      this.configCache = validatedConfig;
+      this.configCache = finalConfig;
 
       console.log('[ConfigLoader] Configuration loaded successfully');
-      return validatedConfig;
+      return finalConfig;
     } catch (error) {
       console.error('[ConfigLoader] Failed to load configuration:', error);
       throw new Error(`Configuration loading failed: ${error}`);

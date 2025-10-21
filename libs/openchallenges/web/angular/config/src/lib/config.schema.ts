@@ -2,7 +2,16 @@ import { z } from 'zod';
 import { BaseConfigSchema } from '@sagebionetworks/platform/config/angular';
 
 /**
- * Zod schema for application configuration
+ * Server-side configuration schema (Full Schema)
+ * This schema contains ALL configuration properties, including server-only properties.
+ *
+ * Used by:
+ * - Server-side rendering (SSR) to load full configuration from YAML files
+ * - Server-side API calls using api.baseUrls.ssr
+ *
+ * Note: For client-side configuration, see client-config.schema.ts
+ * The client receives a filtered subset of this configuration.
+ *
  * Extends BaseConfigSchema to inherit the standard 'environment' property
  */
 export const AppConfigSchema = BaseConfigSchema.extend({
@@ -49,18 +58,29 @@ export const AppConfigSchema = BaseConfigSchema.extend({
 });
 
 /**
- * TypeScript type inferred from Zod schema
- * This ensures type safety across the application
+ * Server configuration type
+ * Full configuration available on the server
  */
 export type AppConfig = z.infer<typeof AppConfigSchema>;
 
 /**
- * Runtime configuration with additional computed properties
+ * Alias for clarity: ServerConfig = AppConfig
+ * This is the full configuration available on the server
+ */
+export type ServerConfig = AppConfig;
+
+/**
+ * Runtime server configuration with additional computed properties
  * These are added after the base config is loaded
  */
 export interface RuntimeAppConfig extends AppConfig {
   isPlatformServer: boolean;
 }
+
+/**
+ * Alias for clarity: RuntimeServerConfig = RuntimeAppConfig
+ */
+export type RuntimeServerConfig = RuntimeAppConfig;
 
 /**
  * Validate configuration object against schema

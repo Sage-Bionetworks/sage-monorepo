@@ -26,10 +26,15 @@ export const appConfig: ApplicationConfig = {
     }),
     {
       provide: API_CLIENT_BASE_PATH,
-      useFactory: (configService: ConfigService) =>
-        configService.config.isPlatformServer
-          ? configService.config.api.baseUrls.ssr
-          : configService.config.api.baseUrls.csr,
+      useFactory: (configService: ConfigService) => {
+        if (configService.config.isPlatformServer) {
+          // Server: Use full server config type
+          return (configService.config as any).api.baseUrls.ssr;
+        } else {
+          // Client: Use client config type
+          return (configService.config as any).api.baseUrl;
+        }
+      },
       deps: [ConfigService],
     },
     provideAnimations(),
