@@ -13,30 +13,9 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
   helperService = inject(HelperService);
   comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  // First value drives color: log2_fc, correlation
-  // Second value is adj_p_val
   data = input<T>();
   getCircleTooltip = input<(data: T | null | undefined) => string>((data) => {
-    if (!data) {
-      return 'No data available';
-    }
-
-    const { value, key } = this.resolveColorMetric(data);
-    const knownColorMetricToDisplayName = [
-      { field: 'log2_fc', displayName: 'L2FC' },
-      { field: 'correlation', displayName: 'Correlation' },
-    ];
-    const displayName = knownColorMetricToDisplayName.find(
-      (item) => item.field === key,
-    )?.displayName;
-
-    return (
-      `${displayName || key}: ` +
-      this.formatNumericValue(value) +
-      '\n' +
-      'P-value: ' +
-      this.formatNumericValue(data.adj_p_val)
-    );
+    return this.getDefaultTooltip(data);
   });
 
   significanceThresholdActive = this.comparisonToolFilterService.significanceThresholdActive;
@@ -61,6 +40,29 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
     const colorValue = this.colorValue();
     return this.getCircleStyle(adjustedPValue, colorValue);
   });
+
+  private getDefaultTooltip(data: T | null | undefined): string {
+    if (!data) {
+      return 'No data available';
+    }
+
+    const { value, key } = this.resolveColorMetric(data);
+    const knownColorMetricToDisplayName = [
+      { field: 'log2_fc', displayName: 'L2FC' },
+      { field: 'correlation', displayName: 'Correlation' },
+    ];
+    const displayName = knownColorMetricToDisplayName.find(
+      (item) => item.field === key,
+    )?.displayName;
+
+    return (
+      `${displayName || key}: ` +
+      this.formatNumericValue(value) +
+      '\n' +
+      'P-value: ' +
+      this.formatNumericValue(data.adj_p_val)
+    );
+  }
 
   private resolveColorMetric(data: T | null | undefined): {
     key: string | null;
@@ -145,12 +147,12 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
     const MIN_SIZE = 6;
     const MAX_SIZE = 50;
 
-    // sizeValue shouldn't be undefined but if it is, don't show a circle
+    // adjustedPValue shouldn't be undefined but if it is, don't show a circle
     // null means there is no data in which case, also don't show a circle
     if (adjustedPValue === null || adjustedPValue === undefined) return 0;
 
     // if significance cutoff radio button selected and
-    // sizeValue > significance threshhold, don't show
+    // adjustedPValue > significance threshhold, don't show
     if (this.significanceThresholdActive() && adjustedPValue > this.significanceThreshold()) {
       return 0;
     }
