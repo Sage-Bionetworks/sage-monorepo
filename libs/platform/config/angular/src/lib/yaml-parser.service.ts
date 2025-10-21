@@ -116,7 +116,13 @@ export class YamlParserService {
     const fileContent = await readFile(filePath, 'utf-8');
     const parsed = yaml.load(fileContent);
 
-    if (typeof parsed !== 'object' || parsed === null) {
+    // Allow empty/null YAML files (valid for optional profile configs)
+    if (parsed === null || parsed === undefined) {
+      console.log(`[YamlParser] ${filename} is empty, returning empty object`);
+      return {};
+    }
+
+    if (typeof parsed !== 'object') {
       throw new Error(`Invalid YAML content in ${filename}`);
     }
 
@@ -131,7 +137,13 @@ export class YamlParserService {
     const yamlContent = await lastValueFrom(this.http.get(configUrl, { responseType: 'text' }));
     const parsed = yaml.load(yamlContent);
 
-    if (typeof parsed !== 'object' || parsed === null) {
+    // Allow empty/null YAML files (valid for optional profile configs)
+    if (parsed === null || parsed === undefined) {
+      console.log(`[YamlParser] ${filename} is empty, returning empty object`);
+      return {};
+    }
+
+    if (typeof parsed !== 'object') {
       throw new Error(`Invalid YAML content in ${filename}`);
     }
 
@@ -146,7 +158,12 @@ export class YamlParserService {
   parseYaml(yamlContent: string): Record<string, any> {
     const parsed = yaml.load(yamlContent);
 
-    if (typeof parsed !== 'object' || parsed === null) {
+    // Allow empty/null YAML content (valid for optional configs)
+    if (parsed === null || parsed === undefined) {
+      return {};
+    }
+
+    if (typeof parsed !== 'object') {
       throw new Error('Invalid YAML content');
     }
 
