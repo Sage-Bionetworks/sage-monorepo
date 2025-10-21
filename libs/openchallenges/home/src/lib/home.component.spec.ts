@@ -31,7 +31,7 @@ describe('HomeComponent', () => {
         termsOfUse: 'https://example.com/terms',
       },
       api: {
-        docs: { url: 'https://example.com/api-docs' },
+        docsUrl: 'https://example.com/api-docs',
       },
     },
   };

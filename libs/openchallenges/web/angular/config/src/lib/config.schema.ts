@@ -15,15 +15,11 @@ export const AppConfigSchema = BaseConfigSchema.extend({
   }),
 
   api: z.object({
-    docs: z.object({
-      url: z.url({ message: 'API docs URL must be a valid URL' }),
+    baseUrls: z.object({
+      csr: z.url({ message: 'CSR API base URL must be a valid URL' }),
+      ssr: z.url({ message: 'SSR API base URL must be a valid URL' }),
     }),
-    csr: z.object({
-      url: z.url({ message: 'CSR API URL must be a valid URL' }),
-    }),
-    ssr: z.object({
-      url: z.url({ message: 'SSR API URL must be a valid URL' }),
-    }),
+    docsUrl: z.url({ message: 'API docs URL must be a valid URL' }),
   }),
 
   data: z.object({

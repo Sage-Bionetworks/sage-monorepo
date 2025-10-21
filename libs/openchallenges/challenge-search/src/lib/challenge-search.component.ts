@@ -192,7 +192,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     this.dataUpdatedOn = this.configService.config.data.updatedOn;
     this.privacyPolicyUrl = this.configService.config.links.privacyPolicy;
     this.termsOfUseUrl = this.configService.config.links.termsOfUse;
-    this.apiDocsUrl = this.configService.config.api.docs.url;
+    this.apiDocsUrl = this.configService.config.api.docsUrl;
     this.enableOperationFilter = this.configService.config.features.operationFilter.enabled;
     this.seoService.setData(getSeoData(), this.renderer2);
   }

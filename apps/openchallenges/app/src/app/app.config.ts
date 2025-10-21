@@ -28,8 +28,8 @@ export const appConfig: ApplicationConfig = {
       provide: API_CLIENT_BASE_PATH,
       useFactory: (configService: ConfigService) =>
         configService.config.isPlatformServer
-          ? configService.config.api.ssr.url
-          : configService.config.api.csr.url,
+          ? configService.config.api.baseUrls.ssr
+          : configService.config.api.baseUrls.csr,
       deps: [ConfigService],
     },
     provideAnimations(),

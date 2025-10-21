@@ -12,9 +12,7 @@ analytics:
     enabled: false
 
 api:
-  docs:
-    url: http://localhost:8000/api-docs
-  csr:
-    url: http://localhost:8000/api/v1
-  ssr:
-    url: http://openchallenges-apex:8000/api/v1
+  baseUrls:
+    csr: http://localhost:8000/api/v1
+    ssr: http://openchallenges-apex:8000/api/v1
+  docsUrl: http://localhost:8000/api-docs

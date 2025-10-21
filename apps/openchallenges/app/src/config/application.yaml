@@ -12,14 +12,10 @@ telemetry:
   enabled: false
 
 api:
-  docs:
-    url: https://openchallenges.io/api-docs
-  csr:
-    # Client-side rendering API URL (used by browser)
-    url: https://openchallenges.io/api/v1
-  ssr:
-    # Server-side rendering API URL (used by Node.js server)
-    url: https://openchallenges.io/api/v1
+  baseUrls:
+    csr: https://openchallenges.io/api/v1
+    ssr: https://openchallenges.io/api/v1
+  docsUrl: https://openchallenges.io/api-docs
 
 environment: dev
 

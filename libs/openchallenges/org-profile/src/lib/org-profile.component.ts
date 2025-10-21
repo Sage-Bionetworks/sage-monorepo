@@ -82,7 +82,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
     this.dataUpdatedOn = this.configService.config.data.updatedOn;
     this.privacyPolicyUrl = this.configService.config.links.privacyPolicy;
     this.termsOfUseUrl = this.configService.config.links.termsOfUse;
-    this.apiDocsUrl = this.configService.config.api.docs.url;
+    this.apiDocsUrl = this.configService.config.api.docsUrl;
   }
 
   ngOnInit(): void {
