@@ -33,11 +33,6 @@ spring:
           time_zone: UTC
         default_schema: auth
     open-in-view: false
-  # autoconfigure:
-  #   # Prevent Spring Boot from auto-configuring a default Elasticsearch client,
-  #   # which Hibernate Search might incorrectly use, leading to node sniffing errors
-  #   # when a local cluster is not available.
-  #   exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
 
 management:
   endpoints:
