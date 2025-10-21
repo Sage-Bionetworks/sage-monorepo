@@ -84,8 +84,9 @@ export class YamlParserService {
         join(currentDir, '../../browser/config'),
         // Development with Vite/ng serve: Check relative to project root
         resolve(process.cwd(), 'apps/openchallenges/app/src/config'),
-        // Alternative production path
-        join(currentDir, '../browser/config'),
+        // Alternative production paths
+        join(currentDir, '../browser/config'), // when cwd is the server/ dir
+        join(currentDir, 'browser/config'), // when cwd is the parent dir of server/
         // Fallback for Jest tests
         resolve(process.cwd(), 'apps/openchallenges/app/src/config'),
       ];

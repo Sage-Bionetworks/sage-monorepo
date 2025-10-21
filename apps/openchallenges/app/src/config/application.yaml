@@ -13,9 +13,9 @@ telemetry:
 
 api:
   baseUrls:
-    csr: https://openchallenges.io/api/v1
-    ssr: https://openchallenges.io/api/v1
-  docsUrl: https://openchallenges.io/api-docs
+    csr: http://localhost:8000/api/v1
+    ssr: http://openchallenges-apex:8000/api/v1
+  docsUrl: http://localhost:8000/api-docs
 
 environment: dev
 
