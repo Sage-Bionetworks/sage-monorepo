@@ -6,8 +6,9 @@
 
 app:
   version: 1.3.9
-  telemetry:
-    enabled: false
+
+telemetry:
+  enabled: false
 
 api:
   docs:

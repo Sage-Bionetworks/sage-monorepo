@@ -8,9 +8,10 @@ import { BaseConfigSchema } from '@sagebionetworks/platform/config/angular';
 export const AppConfigSchema = BaseConfigSchema.extend({
   app: z.object({
     version: z.string().min(1, 'App version is required'),
-    telemetry: z.object({
-      enabled: z.boolean(),
-    }),
+  }),
+
+  telemetry: z.object({
+    enabled: z.boolean(),
   }),
 
   api: z.object({

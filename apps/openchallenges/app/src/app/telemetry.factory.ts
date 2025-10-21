@@ -13,9 +13,9 @@ import { ZoneContextManager } from '@opentelemetry/context-zone-peer-dep';
 
 export const telemetryFactory = (configService: ConfigService) => {
   return () => {
-    console.log(`Telemetry enabled:`, configService.config.app.telemetry.enabled);
+    console.log(`Telemetry enabled:`, configService.config.telemetry.enabled);
 
-    if (!configService.config.app.telemetry.enabled) {
+    if (!configService.config.telemetry.enabled) {
       return Promise.resolve();
     }
     if (configService.config.isPlatformServer) {

@@ -3,8 +3,9 @@
 
 app:
   version: dev
-  telemetry:
-    enabled: false
+
+telemetry:
+  enabled: false
 
 analytics:
   googleTagManager:
