@@ -57,17 +57,24 @@ def set_global_vars_anony(enable_moderation_):
 
 def validate_responses(states: list) -> tuple[bool, str]:
     """Validate battle responses for identity leaking."""
-    for i, state in enumerate(states):
+    for state in states:
         if not state:
             continue
 
-        # Check for identity leaking in assistant messages
-        for role, content in state.conv.messages:
-            if content and role.lower() in ["assistant", "model"]:
-                content_lower = content.lower()
-                for word in identity_words:
-                    if word in content_lower:
-                        return False, f"identity_leak:{word}"
+        # Collect the messages from both models
+        assistant_messages = [
+            content.lower()
+            for role, content in state.conv.messages
+            if content and role.lower() in ["assistant", "model"]
+        ]
+
+        # Check if any identity word appears in both models' responses
+        for content_lower in assistant_messages:
+            leaked_word = next(
+                (word for word in identity_words if word in content_lower), None
+            )
+            if leaked_word:
+                return False, f"identity_leak:{leaked_word}"
 
     return True, ""
 
