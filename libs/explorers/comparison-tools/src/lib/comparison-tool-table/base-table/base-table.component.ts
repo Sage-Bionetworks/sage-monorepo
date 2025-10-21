@@ -4,8 +4,8 @@ import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
 import { SortEvent } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { ComparisonToolTableLinkComponent } from '../comparison-tool-table-link/comparison-tool-table-link.component';
-import { HeatmapCircleComponent } from './heatmap-circle/heatmap-circle.component';
+import { ComparisonToolTableLinkComponent } from '../../comparison-tool-table-link/comparison-tool-table-link.component';
+import { HeatmapCircleComponent } from '../heatmap-circle/heatmap-circle.component';
 
 interface PaginationOptions {
   rows: number;
