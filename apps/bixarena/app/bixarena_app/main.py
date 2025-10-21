@@ -1,10 +1,10 @@
 import argparse
-import os
 
 import gradio as gr
 import requests
 
 from bixarena_app.auth.user_state import get_user_state
+from bixarena_app.config.utils import get_api_base_url, get_oidc_base_url
 from bixarena_app.page.bixarena_battle import build_battle_page
 from bixarena_app.page.bixarena_header import (
     build_header,
@@ -30,36 +30,6 @@ class PageNavigator:
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
-def _get_api_base_url() -> str | None:
-    """Resolve the BixArena API base URL from environment.
-
-    Uses API_BASE_URL. If unset, prints an error and returns None.
-    """
-    api = os.environ.get("API_BASE_URL")
-    if api:
-        return api.rstrip("/")
-    print(
-        "[config] API_BASE_URL not set.\n"
-        "[config] Login and identity sync will be disabled until configured."
-    )
-    return None
-
-
-def _get_oidc_base_url() -> str | None:
-    """Resolve the OIDC base URL for browser-driven auth redirects.
-
-    Uses OIDC_BASE_URL. If unset, prints an error and returns None.
-    """
-    base = os.environ.get("OIDC_BASE_URL")
-    if base:
-        return base.rstrip("/")
-    print(
-        "[config] OIDC_BASE_URL not set.\n"
-        "[config] Login/logout redirects will be disabled until configured."
-    )
-    return None
-
-
 def sync_backend_session_on_load(request: gr.Request):
     """Fetch user identity from backend once (if JSESSIONID cookie present).
 
@@ -78,7 +48,7 @@ def sync_backend_session_on_load(request: gr.Request):
                 jsessionid = ck.split("=", 1)[1]
                 break
         if jsessionid:
-            backend_base = _get_api_base_url()
+            backend_base = get_api_base_url()
             try:
                 print(
                     "[auth-sync] Starting backend identity fetch (JSESSIONID present) "
@@ -184,7 +154,7 @@ def build_app(moderate=False):
         cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
 
         # Expose start endpoint to login button JS for immediate redirect
-        oidc_base = _get_oidc_base_url()
+        oidc_base = get_oidc_base_url()
         if not oidc_base:
             print("[config] OIDC_BASE_URL missing; login button will be disabled.")
             start_endpoint = ""

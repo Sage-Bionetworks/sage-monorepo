@@ -110,6 +110,8 @@ public class BattleService {
 
     // Save the battle
     BattleEntity savedBattle = battleRepository.save(battle);
+    battleRepository.flush();
+
     log.info("Successfully created battle with ID: {}", savedBattle.getId());
 
     return battleMapper.convertToDto(savedBattle);
