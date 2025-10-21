@@ -1,8 +1,9 @@
 # Base configuration for OpenChallenges App
 # This file contains default values that can be overridden by:
-# 1. Profile-specific files (e.g., application-prod.yaml)
+# 1. Profile-specific files (e.g., application-prod.yaml, application-dev.yaml)
 # 2. Local overrides (application-local.yaml - gitignored)
-# 3. Environment variables (e.g., APP_VERSION=2.0.0)
+# 3. Environment variables following the pattern: SECTION_SUBSECTION_PROPERTY
+#    Examples: APP_VERSION, TELEMETRY_ENABLED, ANALYTICS_GOOGLETAGMANAGER_ENABLED
 
 app:
   version: 1.3.9
