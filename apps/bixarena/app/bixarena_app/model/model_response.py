@@ -25,6 +25,7 @@ controller_url = ""
 enable_moderation = False
 
 api_endpoint_info = {}
+identity_words = set()  # Populated from model list
 
 
 class State:
@@ -54,6 +55,23 @@ def set_global_vars_anony(enable_moderation_):
     enable_moderation = enable_moderation_
 
 
+def validate_responses(states: list) -> tuple[bool, str]:
+    """Validate battle responses for identity leaking."""
+    for i, state in enumerate(states):
+        if not state:
+            continue
+
+        # Check for identity leaking in assistant messages
+        for role, content in state.conv.messages:
+            if content and role.lower() in ["assistant", "model"]:
+                content_lower = content.lower()
+                for word in identity_words:
+                    if word in content_lower:
+                        return False, f"identity_leak:{word}"
+
+    return True, ""
+
+
 def get_model_list():
     """Fetch models from the BixArena API using the proper API client"""
     global api_endpoint_info
@@ -78,8 +96,22 @@ def get_model_list():
 
             api_endpoint_info = {}
 
+            # Populate identity words for validation
+            global identity_words
+            identity_words = set()
+
             for model in visible_models_response.models:
                 model_name = model.name
+
+                # Add model identifiers for identity leak detection
+                if model.slug:
+                    identity_words.add(model.slug.lower())
+                if model.name:
+                    identity_words.add(model.name.lower())
+                if model.alias:
+                    identity_words.add(model.alias.lower())
+                if model.organization:
+                    identity_words.add(model.organization.lower())
 
                 # Check required fields for API configuration
                 api_model_name = model.api_model_name
