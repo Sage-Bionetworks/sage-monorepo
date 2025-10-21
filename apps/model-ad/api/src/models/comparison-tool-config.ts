@@ -18,7 +18,7 @@ const ComparisonToolConfigColumnSchema = new Schema<ComparisonToolConfigColumn>(
   tooltip: { type: String, required: true },
   sort_tooltip: { type: String, required: true },
   link_text: { type: String, required: false },
-  link_url: { type: String, requiryed: false },
+  link_url: { type: String, required: false },
 });
 
 const ComparisonToolConfigSchema = new Schema<ComparisonToolConfig>(
