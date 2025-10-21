@@ -21,9 +21,17 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
       return 'No data available';
     }
 
-    const { value } = this.resolvePrimaryMetric(data);
+    const { value, key } = this.resolvePrimaryMetric(data);
+    const knownPrimaryMetricToDisplayName = [
+      { field: 'log2_fc', displayName: 'L2FC' },
+      { field: 'correlation', displayName: 'Correlation' },
+    ];
+    const displayName = knownPrimaryMetricToDisplayName.find(
+      (item) => item.field === key,
+    )?.displayName;
+
     return (
-      'Color: ' +
+      `${displayName || key}: ` +
       this.formatNumericValue(value) +
       '\n' +
       'P-value: ' +
