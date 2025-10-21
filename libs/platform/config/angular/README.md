@@ -7,7 +7,8 @@ A reusable Angular configuration library that provides Spring Boot-inspired conf
 - **YAML-based configuration** with profile support (dev, test, stage, prod)
 - **Environment variable overrides** with automatic type conversion
 - **Server-side rendering (SSR) support** with TransferState for config sharing
-- **12-factor app compliant** - Browser uses the same config as server (including env var overrides)
+- **Server/client config separation** - Optionally transform config before sending to browser (e.g., filter server-only URLs)
+- **12-factor app compliant** - Configuration via environment variables, no rebuild needed for config changes
 - **Type-safe configuration** using generics and Zod validation
 - **Spring Boot-style hierarchy** (priority from highest to lowest):
   1. **Environment variables** (highest priority) - Individual property overrides
@@ -16,24 +17,27 @@ A reusable Angular configuration library that provides Spring Boot-inspired conf
 
 ## SSR and 12-Factor Compliance
 
-When running with server-side rendering (SSR), the library ensures **both server and browser use identical configuration**:
+When running with server-side rendering (SSR), the library follows the [12-factor app](https://12factor.net/config) principle: **configuration is stored in environment variables**, allowing you to change configuration without rebuilding the application.
 
 1. **Server (Node.js):**
 
    - Loads YAML configuration files from filesystem
    - Applies environment variable overrides (e.g., `ENVIRONMENT=prod`, `API_CSR_URL=...`)
-   - Stores final configuration in Angular's `TransferState`
+   - Optionally transforms config for client (e.g., filtering server-only URLs)
+   - Stores client configuration in Angular's `TransferState` (embedded in the HTML response)
+   - Keeps full server configuration for its own use
 
 2. **Browser (Client):**
+
    - Retrieves configuration from `TransferState` (injected during SSR)
-   - Uses the **exact same configuration** as the server, including all environment variable overrides
+   - The browser config reflects the server's environment variable overrides (either directly or after transformation)
    - No separate HTTP requests needed for config files
 
 This approach ensures:
 
-- ✅ **12-factor compliance** - Configuration comes from environment variables
-- ✅ **Consistency** - No drift between server and client configuration
-- ✅ **Security** - Sensitive environment variables processed server-side only
+- ✅ **12-factor compliance** - Configuration via environment variables, no rebuild required for config changes
+- ✅ **Consistency** - Client configuration is derived from the same source as server (YAML + env vars)
+- ✅ **Security** - Sensitive server-only data can be filtered out before sending to browser
 - ✅ **Performance** - No additional HTTP requests for config files
 
 ## Configuration Loading
@@ -97,11 +101,103 @@ Browser Start
 
 **Note:** For production deployments, SSR is recommended to ensure 12-factor compliance and allow environment variable overrides.
 
+## Server/Client Config Separation
+
+The library supports optional transformation of configuration before sending it to the browser. This is useful when:
+
+- The server needs different URLs than the client (e.g., internal service URLs vs public URLs)
+- You want to prevent exposing server-only configuration to the browser
+- Client needs a simplified version of the server configuration
+
+### How It Works
+
+The `ConfigLoaderService` is generic with two type parameters:
+
+```typescript
+ConfigLoaderService<T, S = T>
+```
+
+- **T**: Target config type (what the service returns - `ClientConfig` on client, `ServerConfig` on server)
+- **S**: Source config type (what's loaded from YAML - typically `ServerConfig`)
+
+When implementing a custom config service, you can provide an optional `transformForClient()` method:
+
+```typescript
+export class MyConfigService extends ConfigLoaderService<
+  RuntimeClientConfig | RuntimeServerConfig,
+  ServerConfig
+> {
+  // Validate the server config (loaded from YAML)
+  override validateConfig(config: unknown): ServerConfig {
+    return ServerConfigSchema.parse(config);
+  }
+
+  // Transform server config to client config before sending to browser
+  override transformForClient(serverConfig: ServerConfig): ClientConfig {
+    return {
+      // Copy most properties as-is
+      environment: serverConfig.environment,
+      analytics: serverConfig.analytics,
+      features: serverConfig.features,
+
+      // Transform API URLs - client gets only the CSR URL
+      api: {
+        baseUrl: serverConfig.api.baseUrls.csr, // Client uses CSR URL
+        docsUrl: serverConfig.api.docsUrl,
+      },
+
+      // Server-only properties are omitted (api.baseUrls.ssr)
+    };
+  }
+}
+```
+
+### Configuration Flow with Transformation
+
+**Server Side:**
+
+1. Load and validate `ServerConfig` from YAML (with `api.baseUrls.{csr, ssr}`)
+2. Apply environment variable overrides
+3. **Transform** to `ClientConfig` (filters to `api.baseUrl` only)
+4. Store transformed `ClientConfig` in TransferState
+5. **Keep full `ServerConfig` for server's own use** (can access `api.baseUrls.ssr`)
+
+**Client Side:**
+
+1. Retrieve `ClientConfig` from TransferState
+2. Use simplified config (only has `api.baseUrl`, not `api.baseUrls`)
+
+### Example: Different API URLs
+
+**Server Config (application.yaml):**
+
+```yaml
+api:
+  baseUrls:
+    csr: https://api.example.com # Public API URL for browser
+    ssr: http://api-internal:8080 # Internal API URL for server
+  docsUrl: https://docs.example.com
+```
+
+**Client Config (after transformation):**
+
+```typescript
+{
+  api: {
+    baseUrl: "https://api.example.com",  // Only the public URL
+    docsUrl: "https://docs.example.com"
+  }
+  // api.baseUrls.ssr is NOT exposed to browser
+}
+```
+
+This allows the server to communicate with internal services while the browser uses public URLs.
+
 ## Usage
 
 This is a generic library that can be extended for specific applications.
 
-### Base Configuration Schema
+### Basic Usage (Same Config for Server and Client)
 
 The library provides a `BaseConfigSchema` that includes the standard `environment` property:
 
@@ -120,9 +216,99 @@ export const AppConfigSchema = BaseConfigSchema.extend({
 });
 
 export type AppConfig = z.infer<typeof AppConfigSchema>;
+export type RuntimeAppConfig = AppConfig & { isPlatformServer: boolean };
+
+// Create a config service
+@Injectable({ providedIn: 'root' })
+export class AppConfigService extends ConfigLoaderService<RuntimeAppConfig> {
+  override validateConfig(config: unknown): AppConfig {
+    return AppConfigSchema.parse(config);
+  }
+}
 ```
 
 This ensures all applications have a consistent `environment` property that's used for profile selection.
+
+### Advanced Usage (Separate Server and Client Config)
+
+For applications that need different configuration on server vs client:
+
+```typescript
+import { BaseConfigSchema } from '@sagebionetworks/platform/config/angular';
+import { z } from 'zod';
+
+// Server config schema (full configuration)
+export const ServerConfigSchema = BaseConfigSchema.extend({
+  api: z.object({
+    baseUrls: z.object({
+      csr: z.string().url(), // Client-side URL
+      ssr: z.string().url(), // Server-side URL (internal)
+    }),
+    docsUrl: z.string().url(),
+  }),
+  // ... other properties
+});
+
+// Client config schema (filtered/simplified)
+export const ClientConfigSchema = BaseConfigSchema.extend({
+  api: z.object({
+    baseUrl: z.string().url(), // Single URL for client
+    docsUrl: z.string().url(),
+  }),
+  // ... same properties as server, minus server-only ones
+});
+
+export type ServerConfig = z.infer<typeof ServerConfigSchema>;
+export type ClientConfig = z.infer<typeof ClientConfigSchema>;
+export type RuntimeServerConfig = ServerConfig & { isPlatformServer: true };
+export type RuntimeClientConfig = ClientConfig & { isPlatformServer: false };
+
+// Transformer function
+export function transformServerToClientConfig(serverConfig: ServerConfig): ClientConfig {
+  return {
+    environment: serverConfig.environment,
+    api: {
+      baseUrl: serverConfig.api.baseUrls.csr, // Map CSR URL to single baseUrl
+      docsUrl: serverConfig.api.docsUrl,
+    },
+    // ... other properties
+  };
+}
+
+// Config service with transformation
+@Injectable({ providedIn: 'root' })
+export class AppConfigService extends ConfigLoaderService<
+  RuntimeClientConfig | RuntimeServerConfig,
+  ServerConfig
+> {
+  override validateConfig(config: unknown): ServerConfig {
+    return ServerConfigSchema.parse(config);
+  }
+
+  override transformForClient(serverConfig: ServerConfig): ClientConfig {
+    return transformServerToClientConfig(serverConfig);
+  }
+}
+```
+
+**Usage in Application:**
+
+```typescript
+// In a component or service
+export class MyComponent {
+  constructor(private configService: AppConfigService) {
+    const config = this.configService.config;
+
+    if (config.isPlatformServer) {
+      // Server: access full server config
+      const serverUrl = (config as RuntimeServerConfig).api.baseUrls.ssr;
+    } else {
+      // Client: access client config
+      const clientUrl = (config as RuntimeClientConfig).api.baseUrl;
+    }
+  }
+}
+```
 
 ### Example Implementation
 
