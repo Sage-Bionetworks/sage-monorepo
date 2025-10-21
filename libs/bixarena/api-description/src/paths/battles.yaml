@@ -1,0 +1,95 @@
+get:
+  tags:
+    - Battle
+  summary: List battles
+  description: List battles with optional filtering and pagination
+  operationId: listBattles
+  security:
+    - jwtBearer:
+        - read:battles
+  parameters:
+    - $ref: ../components/parameters/query/battleSearchQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BattlePage.yaml
+      description: Success
+    '400':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BasicError.yaml
+      description: Bad request
+    '401':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BasicError.yaml
+      description: Unauthorized
+    '500':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BasicError.yaml
+      description: Internal server error
+
+post:
+  tags:
+    - Battle
+  summary: Create a battle
+  description: Create a new battle between two AI models.
+  operationId: createBattle
+  security:
+    - jwtBearer:
+        - create:battles
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/BattleCreateRequest.yaml
+    required: true
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Battle.yaml
+      description: Battle created successfully
+    '400':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BasicError.yaml
+      description: Bad request
+    '401':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BasicError.yaml
+      description: Unauthorized
+    '403':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BasicError.yaml
+      description: Forbidden
+    '404':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BasicError.yaml
+      description: Model not found
+    '409':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BasicError.yaml
+      description: Conflict
+    '500':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BasicError.yaml
+      description: Internal server error

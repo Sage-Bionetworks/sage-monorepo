@@ -1,0 +1,13 @@
+type: object
+description: A page of battles.
+properties:
+  battles:
+    description: List of battles in this page.
+    type: array
+    items:
+      $ref: Battle.yaml
+  page:
+    $ref: PageMetadata.yaml
+required:
+  - battles
+  - page

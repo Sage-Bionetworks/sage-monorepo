@@ -1,0 +1,31 @@
+type: object
+description: A battle search query.
+properties:
+  pageNumber:
+    description: The page number to return (0-indexed).
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items to return in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    example: 10
+  sort:
+    $ref: BattleSort.yaml
+  direction:
+    $ref: SortDirection.yaml
+  userId:
+    description: Filter by user ID.
+    type: string
+    nullable: true
+    example: 'a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d'
+required:
+  - pageNumber
+  - pageSize
+  - sort
+  - direction

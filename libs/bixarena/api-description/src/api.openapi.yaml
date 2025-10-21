@@ -22,6 +22,8 @@ security:
   - jwtBearer: []
 
 tags:
+  - name: Battle
+    description: Operations about battles between AI models.
   - name: Example Prompt
     description: Operations about example prompts for biomedical relevance detection.
   - name: Leaderboard
@@ -36,6 +38,10 @@ tags:
     description: Administrative endpoints requiring elevated roles.
 
 paths:
+  /battles:
+    $ref: paths/battles.yaml
+  /battles/{battleId}:
+    $ref: paths/battles/{battleId}.yaml
   /example-prompts:
     $ref: paths/example-prompts.yaml
   /leaderboards:

@@ -1,0 +1,41 @@
+type: object
+description: A battle entity representing a comparison between two AI models.
+properties:
+  id:
+    type: string
+    description: Unique identifier (UUID) of the battle.
+    example: '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f'
+  title:
+    type: string
+    nullable: true
+    description: Title of the battle.
+    example: 'Gene Expression Analysis Comparison'
+  userId:
+    type: string
+    description: UUID of the user who initiated this battle.
+    example: 'a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d'
+  modelAId:
+    type: string
+    description: UUID of model A in the battle.
+    example: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d'
+  modelBId:
+    type: string
+    description: UUID of model B in the battle.
+    example: '9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c'
+  createdAt:
+    type: string
+    format: date-time
+    description: Timestamp when the battle was created.
+    example: '2024-01-15T10:30:00Z'
+  endedAt:
+    type: string
+    format: date-time
+    nullable: true
+    description: Timestamp when the battle ended (null if ongoing).
+    example: '2024-01-15T11:45:00Z'
+required:
+  - id
+  - userId
+  - modelAId
+  - modelBId
+  - createdAt
