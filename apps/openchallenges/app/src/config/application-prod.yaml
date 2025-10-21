@@ -1,2 +1,2 @@
-# Production environment overrides
-# Applied when NODE_ENV=production or ENVIRONMENT=prod
+# Production-specific configuration
+# Applied when ENVIRONMENT=prod or NODE_ENV=production

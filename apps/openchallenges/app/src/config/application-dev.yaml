@@ -1,17 +1,14 @@
 # Development-specific configuration
-# Applied when NODE_ENV=development or ENVIRONMENT=dev
+# Applied when ENVIRONMENT=dev or NODE_ENV=development
+
 app:
-  version: local
+  version: dev
   telemetry:
     enabled: false
 
-data:
-  updatedOn: '2025-10-19'
-
 google:
   tagManager:
-    enabled: true
-    id: 'GTM-NBR5XD8C'
+    enabled: false
 
 api:
   docs:
