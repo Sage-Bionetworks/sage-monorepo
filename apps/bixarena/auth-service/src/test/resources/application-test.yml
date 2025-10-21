@@ -31,7 +31,7 @@ app:
     jwks-url: https://example.org/jwks
     client-id: test-client
     client-secret: test-secret
-    redirect-uri: http://localhost:8115/v1/auth/oidc/callback
+    redirect-uri: http://localhost:8115/auth/oidc/callback
     internal-issuer: http://localhost
     audience: test-audience
     token-ttl-seconds: 600
