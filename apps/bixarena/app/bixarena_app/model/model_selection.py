@@ -319,9 +319,6 @@ def get_sample_weight(model):
 
 
 def get_battle_pair(models):
-    # TODO: Temporarily disable DeepSeek models
-    models = [m for m in models if "deepseek" not in m.lower()]
-
     if len(models) == 1:
         return models[0], models[0]
 
