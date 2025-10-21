@@ -45,16 +45,33 @@ def _get_api_base_url() -> str | None:
     return None
 
 
-def _get_auth_base_url() -> str | None:
-    """Resolve the auth service base URL for browser-driven auth redirects.
+def _get_auth_base_url_ssr() -> str | None:
+    """Resolve the auth service base URL for server-side requests (SSR).
 
-    Uses AUTH_BASE_URL. If unset, prints an error and returns None.
+    Uses AUTH_BASE_URL_SSR for server-to-server communication (e.g., /echo endpoint).
+    If unset, prints an error and returns None.
     """
-    base = os.environ.get("AUTH_BASE_URL")
+    base = os.environ.get("AUTH_BASE_URL_SSR")
     if base:
         return base.rstrip("/")
     print(
-        "[config] AUTH_BASE_URL not set.\n"
+        "[config] AUTH_BASE_URL_SSR not set.\n"
+        "[config] Server-side auth requests will be disabled until configured."
+    )
+    return None
+
+
+def _get_auth_base_url_csr() -> str | None:
+    """Resolve the auth service base URL for client-side browser redirects (CSR).
+
+    Uses AUTH_BASE_URL_CSR for browser-driven auth redirects (login/logout).
+    If unset, prints an error and returns None.
+    """
+    base = os.environ.get("AUTH_BASE_URL_CSR")
+    if base:
+        return base.rstrip("/")
+    print(
+        "[config] AUTH_BASE_URL_CSR not set.\n"
         "[config] Login/logout redirects will be disabled until configured."
     )
     return None
@@ -78,14 +95,16 @@ def sync_backend_session_on_load(request: gr.Request):
                 jsessionid = ck.split("=", 1)[1]
                 break
         if jsessionid:
-            backend_base = _get_auth_base_url()
+            backend_base = _get_auth_base_url_ssr()
             try:
                 print(
                     "[auth-sync] Starting auth service identity fetch "
                     f"(JSESSIONID present) len={len(jsessionid)}"
                 )
                 if not backend_base:
-                    print("[auth-sync] Skipping identity fetch: AUTH_BASE_URL missing")
+                    print(
+                        "[auth-sync] Skipping identity fetch: AUTH_BASE_URL_SSR missing"
+                    )
                 else:
                     resp = requests.get(
                         f"{backend_base}/echo",
@@ -183,9 +202,9 @@ def build_app(moderate=False):
         cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
 
         # Expose start endpoint to login button JS for immediate redirect
-        auth_base = _get_auth_base_url()
+        auth_base = _get_auth_base_url_csr()
         if not auth_base:
-            print("[config] AUTH_BASE_URL missing; login button will be disabled.")
+            print("[config] AUTH_BASE_URL_CSR missing; login button will be disabled.")
             start_endpoint = ""
             base_markup = ""
         else:
