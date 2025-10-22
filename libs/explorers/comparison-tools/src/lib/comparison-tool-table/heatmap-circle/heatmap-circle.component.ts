@@ -2,6 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { HeatmapCircleColorKey, HeatmapCircleData } from '@sagebionetworks/explorers/models';
 import { ComparisonToolFilterService, HelperService } from '@sagebionetworks/explorers/services';
 import { TooltipModule } from 'primeng/tooltip';
+import { knownColorMetricToDisplayName } from '../../base-comparison-tool/base-comparison-tool.variables';
 
 @Component({
   selector: 'explorers-heatmap-circle',
@@ -47,10 +48,6 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
     }
 
     const { value, key } = this.resolveColorMetric(data);
-    const knownColorMetricToDisplayName = [
-      { field: 'log2_fc', displayName: 'L2FC' },
-      { field: 'correlation', displayName: 'Correlation' },
-    ];
     const displayName = knownColorMetricToDisplayName.find(
       (item) => item.field === key,
     )?.displayName;
