@@ -196,22 +196,30 @@ public interface AuthApi {
 
     /**
      * POST /auth/logout : Logout current session
-     * Invalidate the current authenticated session.
+     * Invalidate the current authenticated session. Requires an active session.
      *
-     * @return Logged out (idempotent) (status code 204)
+     * @return Logged out successfully (status code 204)
+     *         or Unauthorized (status code 401)
      */
     @Operation(
         operationId = "logout",
         summary = "Logout current session",
-        description = "Invalidate the current authenticated session.",
+        description = "Invalidate the current authenticated session. Requires an active session.",
         tags = { "Auth" },
         responses = {
-            @ApiResponse(responseCode = "204", description = "Logged out (idempotent)")
+            @ApiResponse(responseCode = "204", description = "Logged out successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/auth/logout"
+        value = "/auth/logout",
+        produces = { "application/json" }
     )
     
     default ResponseEntity<Void> logout(

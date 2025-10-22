@@ -255,12 +255,15 @@ paths:
       tags:
         - Auth
       summary: Logout current session
-      description: Invalidate the current authenticated session.
+      description: Invalidate the current authenticated session. Requires an active session.
       operationId: logout
-      security: []
       responses:
         '204':
-          description: Logged out (idempotent)
+          description: Logged out successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - jwtBearer: []
   /oauth2/token:
     post:
       tags:

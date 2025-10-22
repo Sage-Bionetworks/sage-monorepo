@@ -37,17 +37,16 @@ public class SecurityConfiguration {
             "/actuator/health",
             "/actuator/health/**",
             "/actuator/info",
-            "/auth/**",
-            "/auth/logout",
+            "/auth/login",
+            "/auth/callback",
+            "/oauth2/token",
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**"
           )
           .permitAll()
-          // /userinfo, /oauth2/token, and /admin/** require authentication
+          // All other requests require authentication (including /auth/logout)
           // Role-based authorization is handled by @PreAuthorize annotations
-          .requestMatchers("/userinfo", "/oauth2/token", "/admin/**")
-          .authenticated()
           .anyRequest()
           .authenticated()
       )

@@ -79,12 +79,14 @@ paths:
         - tag: Auth
   /auth/logout:
     post:
-      description: Invalidate the current authenticated session.
+      description: Invalidate the current authenticated session. Requires an active
+        session.
       operationId: logout
       responses:
         '204':
-          description: Logged out (idempotent)
-      security: []
+          description: Logged out successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
       summary: Logout current session
       tags:
         - Auth

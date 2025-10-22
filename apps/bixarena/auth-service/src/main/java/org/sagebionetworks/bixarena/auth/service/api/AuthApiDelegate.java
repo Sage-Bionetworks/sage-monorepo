@@ -145,12 +145,22 @@ public interface AuthApiDelegate {
 
     /**
      * POST /auth/logout : Logout current session
-     * Invalidate the current authenticated session.
+     * Invalidate the current authenticated session. Requires an active session.
      *
-     * @return Logged out (idempotent) (status code 204)
+     * @return Logged out successfully (status code 204)
+     *         or Unauthorized (status code 401)
      * @see AuthApi#logout
      */
     default ResponseEntity<Void> logout() {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
