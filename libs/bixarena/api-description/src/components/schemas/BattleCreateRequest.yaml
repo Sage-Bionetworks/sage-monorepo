@@ -2,9 +2,8 @@ type: object
 description: The information used to create a new battle.
 properties:
   title:
-    allOf:
-      - $ref: BattleTitle.yaml
-      - nullable: true
+    $ref: BattleTitle.yaml
+    nullable: true
   leftModelId:
     $ref: ModelId.yaml
   rightModelId:

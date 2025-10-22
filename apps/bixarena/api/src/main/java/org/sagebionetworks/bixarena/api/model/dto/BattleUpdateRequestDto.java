@@ -26,10 +26,10 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class BattleUpdateRequestDto {
 
-  private @Nullable String title = null;
+  private @Nullable String title;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private @Nullable OffsetDateTime endedAt = null;
+  private @Nullable OffsetDateTime endedAt;
 
   public BattleUpdateRequestDto title(@Nullable String title) {
     this.title = title;

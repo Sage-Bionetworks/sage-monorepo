@@ -645,9 +645,9 @@ components:
       example:
         leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         createdAt: 2024-01-15T10:30:00Z
-        endedAt: ''
+        endedAt: 2024-01-15T11:45:00Z
         id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-        title: ''
+        title: Gene Expression Analysis Comparison
         userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
         rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
       properties:
@@ -657,9 +657,9 @@ components:
           format: uuid
           type: string
         title:
-          allOf:
-            - $ref: '#/components/schemas/BattleTitle'
-          nullable: true
+          description: Title of the battle.
+          example: Gene Expression Analysis Comparison
+          type: string
         userId:
           description: UUID of a user.
           example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
@@ -681,9 +681,10 @@ components:
           format: date-time
           type: string
         endedAt:
-          allOf:
-            - $ref: '#/components/schemas/EndedAt'
-          nullable: true
+          description: Timestamp when the entity ended.
+          example: 2024-01-15T11:45:00Z
+          format: date-time
+          type: string
       required:
         - createdAt
         - id
@@ -743,16 +744,16 @@ components:
         battles:
           - leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             createdAt: 2024-01-15T10:30:00Z
-            endedAt: ''
+            endedAt: 2024-01-15T11:45:00Z
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-            title: ''
+            title: Gene Expression Analysis Comparison
             userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
             rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           - leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             createdAt: 2024-01-15T10:30:00Z
-            endedAt: ''
+            endedAt: 2024-01-15T11:45:00Z
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-            title: ''
+            title: Gene Expression Analysis Comparison
             userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
             rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         page:
@@ -802,9 +803,9 @@ components:
       description: The information used to create a new battle.
       properties:
         title:
-          allOf:
-            - $ref: '#/components/schemas/BattleTitle'
-          nullable: true
+          description: Title of the battle.
+          example: Gene Expression Analysis Comparison
+          type: string
         leftModelId:
           description: UUID of an AI model.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
@@ -823,13 +824,14 @@ components:
       description: The information used to update a battle.
       properties:
         title:
-          allOf:
-            - $ref: '#/components/schemas/BattleTitle'
-          nullable: true
+          description: Title of the battle.
+          example: Gene Expression Analysis Comparison
+          type: string
         endedAt:
-          allOf:
-            - $ref: '#/components/schemas/EndedAt'
-          nullable: true
+          description: Timestamp when the entity ended.
+          example: 2024-01-15T11:45:00Z
+          format: date-time
+          type: string
       type: object
     ExamplePromptSort:
       default: created_at

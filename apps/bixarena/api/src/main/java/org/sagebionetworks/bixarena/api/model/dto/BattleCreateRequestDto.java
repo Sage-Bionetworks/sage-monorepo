@@ -25,7 +25,7 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class BattleCreateRequestDto {
 
-  private @Nullable String title = null;
+  private @Nullable String title;
 
   private UUID leftModelId;
 

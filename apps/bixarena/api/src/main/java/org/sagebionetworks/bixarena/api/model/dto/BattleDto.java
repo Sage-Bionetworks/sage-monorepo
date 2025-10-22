@@ -29,7 +29,7 @@ public class BattleDto {
 
   private UUID id;
 
-  private @Nullable String title = null;
+  private @Nullable String title;
 
   private UUID userId;
 
@@ -41,7 +41,7 @@ public class BattleDto {
   private OffsetDateTime createdAt;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private @Nullable OffsetDateTime endedAt = null;
+  private @Nullable OffsetDateTime endedAt;
 
   public BattleDto() {
     super();

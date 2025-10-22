@@ -2,10 +2,8 @@ type: object
 description: The information used to update a battle.
 properties:
   title:
-    allOf:
-      - $ref: BattleTitle.yaml
-      - nullable: true
+    $ref: BattleTitle.yaml
+    nullable: true
   endedAt:
-    allOf:
-      - $ref: EndedAt.yaml
-      - nullable: true
+    $ref: EndedAt.yaml
+    nullable: true
