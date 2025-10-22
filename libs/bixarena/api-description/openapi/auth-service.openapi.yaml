@@ -17,13 +17,13 @@ tags:
   - name: Auth
     description: Authentication and token minting operations.
 paths:
-  /auth/oidc/start:
+  /auth/login:
     get:
       tags:
         - Auth
       summary: Start Synapse OIDC authorization code flow
       description: Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
-      operationId: startOidc
+      operationId: login
       security: []
       responses:
         '204':
@@ -32,13 +32,13 @@ paths:
           description: Redirect to Synapse login
         '400':
           $ref: '#/components/responses/BadRequest'
-  /auth/oidc/callback:
+  /auth/callback:
     get:
       tags:
         - Auth
       summary: OIDC redirect callback
       description: Handles redirect from Synapse, validates state and nonce, establishes authenticated session.
-      operationId: oidcCallback
+      operationId: callback
       security: []
       parameters:
         - in: query
@@ -77,13 +77,13 @@ paths:
       responses:
         '204':
           description: Logged out (idempotent)
-  /token:
+  /oauth2/token:
     post:
       tags:
         - Auth
       summary: Mint short-lived internal JWT
-      description: Exchanges an authenticated session (cookie) for an internal JWT.
-      operationId: mintInternalToken
+      description: Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+      operationId: token
       security: []
       responses:
         '200':
@@ -108,6 +108,26 @@ paths:
                     example: 600
         '401':
           $ref: '#/components/responses/Unauthorized'
+  /userinfo:
+    get:
+      tags:
+        - Auth
+      summary: Get current user profile
+      description: |
+        Returns the authenticated user's profile information.
+        This is an OIDC-compliant UserInfo endpoint that provides details about the currently authenticated user.
+
+        Requires a valid JWT obtained via the `/token` endpoint or an active session.
+      operationId: getUserInfo
+      responses:
+        '200':
+          description: User profile information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
   /.well-known/jwks.json:
     get:
       tags:
@@ -130,26 +150,6 @@ paths:
                       type: object
         '400':
           $ref: '#/components/responses/BadRequest'
-  /userinfo:
-    get:
-      tags:
-        - Auth
-      summary: Get current user profile
-      description: |
-        Returns the authenticated user's profile information.
-        This is an OIDC-compliant UserInfo endpoint that provides details about the currently authenticated user.
-
-        Requires a valid JWT obtained via the `/token` endpoint or an active session.
-      operationId: getUserInfo
-      responses:
-        '200':
-          description: User profile information
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserInfo'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
 components:
   securitySchemes:
     jwtBearer:
