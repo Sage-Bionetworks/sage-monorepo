@@ -16,9 +16,10 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.auth.service.configuration.AppProperties;
+import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.Callback200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
-import org.sagebionetworks.bixarena.auth.service.model.dto.MintInternalToken200ResponseDto;
-import org.sagebionetworks.bixarena.auth.service.model.dto.OidcCallback200ResponseDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.Token200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
 import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity;
 import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity.Provider;
@@ -58,7 +59,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
   }
 
   @Override
-  public ResponseEntity<MintInternalToken200ResponseDto> mintInternalToken() {
+  public ResponseEntity<Token200ResponseDto> token() {
     HttpServletRequest req =
       ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     HttpSession session = req.getSession(false);
@@ -73,9 +74,9 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     }
     var minted = jwtService.mint(subject, roles);
     long expiresIn = Duration.between(Instant.now(), minted.expiresAt()).getSeconds();
-    var body = MintInternalToken200ResponseDto.builder()
+    var body = Token200ResponseDto.builder()
       .accessToken(minted.token())
-      .tokenType(MintInternalToken200ResponseDto.TokenTypeEnum.BEARER)
+      .tokenType(Token200ResponseDto.TokenTypeEnum.BEARER)
       .expiresIn((int) expiresIn)
       .build();
     return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);
@@ -132,7 +133,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Void> startOidc() {
+  public ResponseEntity<Void> login() {
     // Generate state & nonce (TODO: persist securely in session)
     String state = java.util.UUID.randomUUID().toString();
     String nonce = java.util.UUID.randomUUID().toString();
@@ -170,7 +171,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
   }
 
   @Override
-  public ResponseEntity<OidcCallback200ResponseDto> oidcCallback(String code, String state) {
+  public ResponseEntity<Callback200ResponseDto> callback(String code, String state) {
     HttpServletRequest req =
       ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     HttpSession session = req.getSession(false);
@@ -184,7 +185,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       );
       return ResponseEntity.status(400)
         .contentType(MediaType.APPLICATION_JSON)
-        .body(OidcCallback200ResponseDto.builder().status("error:no-session").build());
+        .body(Callback200ResponseDto.builder().status("error:no-session").build());
     }
     if (log.isInfoEnabled()) {
       log.info(
@@ -202,7 +203,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       log.info("OIDC callback: state mismatch expected={} received={}", expectedState, state);
       return ResponseEntity.status(400)
         .contentType(MediaType.APPLICATION_JSON)
-        .body(OidcCallback200ResponseDto.builder().status("error:state-mismatch").build());
+        .body(Callback200ResponseDto.builder().status("error:state-mismatch").build());
     }
     try {
       // Exchange code for tokens at Synapse
@@ -211,14 +212,14 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
         log.info("OIDC callback: token exchange returned null");
         return ResponseEntity.status(400)
           .contentType(MediaType.APPLICATION_JSON)
-          .body(OidcCallback200ResponseDto.builder().status("error:token-exchange").build());
+          .body(Callback200ResponseDto.builder().status("error:token-exchange").build());
       }
       String idToken = (String) tokenResponse.get("id_token");
       if (idToken == null) {
         log.info("OIDC callback: missing id_token in response keys={}", tokenResponse.keySet());
         return ResponseEntity.status(400)
           .contentType(MediaType.APPLICATION_JSON)
-          .body(OidcCallback200ResponseDto.builder().status("error:missing-id-token").build());
+          .body(Callback200ResponseDto.builder().status("error:missing-id-token").build());
       }
       Map<String, Object> idClaims = decodeJwt(idToken);
       String sub = (String) idClaims.get("sub");
@@ -226,7 +227,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
         log.info("OIDC callback: missing sub claim in id token");
         return ResponseEntity.status(400)
           .contentType(MediaType.APPLICATION_JSON)
-          .body(OidcCallback200ResponseDto.builder().status("error:missing-sub").build());
+          .body(Callback200ResponseDto.builder().status("error:missing-sub").build());
       }
       String email = (String) idClaims.get("email");
       String givenName = (String) idClaims.getOrDefault("given_name", null);
@@ -273,13 +274,13 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
         String uiBase = appProperties.uiBaseUrl();
         return ResponseEntity.status(302).header("Location", uiBase).build();
       }
-      var body = OidcCallback200ResponseDto.builder().status("ok").build();
+      var body = Callback200ResponseDto.builder().status("ok").build();
       return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);
     } catch (Exception e) {
       log.info("OIDC callback: exception {}", e.getMessage());
       return ResponseEntity.status(400)
         .contentType(MediaType.APPLICATION_JSON)
-        .body(OidcCallback200ResponseDto.builder().status("error:exception").build());
+        .body(Callback200ResponseDto.builder().status("error:exception").build());
     }
   }
 

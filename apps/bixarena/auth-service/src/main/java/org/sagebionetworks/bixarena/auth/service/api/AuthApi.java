@@ -6,9 +6,9 @@
 package org.sagebionetworks.bixarena.auth.service.api;
 
 import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.Callback200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
-import org.sagebionetworks.bixarena.auth.service.model.dto.MintInternalToken200ResponseDto;
-import org.sagebionetworks.bixarena.auth.service.model.dto.OidcCallback200ResponseDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.Token200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,6 +42,50 @@ public interface AuthApi {
     default AuthApiDelegate getDelegate() {
         return new AuthApiDelegate() {};
     }
+
+    /**
+     * GET /auth/callback : OIDC redirect callback
+     * Handles redirect from Synapse, validates state and nonce, establishes authenticated session.
+     *
+     * @param code  (required)
+     * @param state  (required)
+     * @return Authentication successful (status code 200)
+     *         or Invalid request parameters (status code 400)
+     *         or Unauthorized (status code 401)
+     */
+    @Operation(
+        operationId = "callback",
+        summary = "OIDC redirect callback",
+        description = "Handles redirect from Synapse, validates state and nonce, establishes authenticated session.",
+        tags = { "Auth" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Authentication successful", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Callback200ResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = Callback200ResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/auth/callback",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<Callback200ResponseDto> callback(
+        @NotNull @Parameter(name = "code", description = "", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "code", required = true) String code,
+        @NotNull @Parameter(name = "state", description = "", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "state", required = true) String state
+    ) {
+        return getDelegate().callback(code, state);
+    }
+
 
     /**
      * GET /.well-known/jwks.json : JSON Web Key Set
@@ -117,6 +161,40 @@ public interface AuthApi {
 
 
     /**
+     * GET /auth/login : Start Synapse OIDC authorization code flow
+     * Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
+     *
+     * @return Flow started (no content; clients should follow redirect) (status code 204)
+     *         or Redirect to Synapse login (status code 302)
+     *         or Invalid request parameters (status code 400)
+     */
+    @Operation(
+        operationId = "login",
+        summary = "Start Synapse OIDC authorization code flow",
+        description = "Initiates the OIDC login by redirecting the user to Synapse with state and nonce.",
+        tags = { "Auth" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Flow started (no content; clients should follow redirect)"),
+            @ApiResponse(responseCode = "302", description = "Redirect to Synapse login"),
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/auth/login",
+        produces = { "application/problem+json" }
+    )
+    
+    default ResponseEntity<Void> login(
+        
+    ) {
+        return getDelegate().login();
+    }
+
+
+    /**
      * POST /auth/logout : Logout current session
      * Invalidate the current authenticated session.
      *
@@ -144,20 +222,20 @@ public interface AuthApi {
 
 
     /**
-     * POST /token : Mint short-lived internal JWT
-     * Exchanges an authenticated session (cookie) for an internal JWT.
+     * POST /oauth2/token : Mint short-lived internal JWT
+     * Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
      *
      * @return Access token response (status code 200)
      *         or Unauthorized (status code 401)
      */
     @Operation(
-        operationId = "mintInternalToken",
+        operationId = "token",
         summary = "Mint short-lived internal JWT",
-        description = "Exchanges an authenticated session (cookie) for an internal JWT.",
+        description = "Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).",
         tags = { "Auth" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Access token response", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = MintInternalToken200ResponseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Token200ResponseDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
@@ -166,92 +244,14 @@ public interface AuthApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/token",
+        value = "/oauth2/token",
         produces = { "application/json" }
     )
     
-    default ResponseEntity<MintInternalToken200ResponseDto> mintInternalToken(
+    default ResponseEntity<Token200ResponseDto> token(
         
     ) {
-        return getDelegate().mintInternalToken();
-    }
-
-
-    /**
-     * GET /auth/oidc/callback : OIDC redirect callback
-     * Handles redirect from Synapse, validates state and nonce, establishes authenticated session.
-     *
-     * @param code  (required)
-     * @param state  (required)
-     * @return Authentication successful (status code 200)
-     *         or Invalid request parameters (status code 400)
-     *         or Unauthorized (status code 401)
-     */
-    @Operation(
-        operationId = "oidcCallback",
-        summary = "OIDC redirect callback",
-        description = "Handles redirect from Synapse, validates state and nonce, establishes authenticated session.",
-        tags = { "Auth" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Authentication successful", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = OidcCallback200ResponseDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = OidcCallback200ResponseDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/auth/oidc/callback",
-        produces = { "application/json", "application/problem+json" }
-    )
-    
-    default ResponseEntity<OidcCallback200ResponseDto> oidcCallback(
-        @NotNull @Parameter(name = "code", description = "", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "code", required = true) String code,
-        @NotNull @Parameter(name = "state", description = "", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "state", required = true) String state
-    ) {
-        return getDelegate().oidcCallback(code, state);
-    }
-
-
-    /**
-     * GET /auth/oidc/start : Start Synapse OIDC authorization code flow
-     * Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
-     *
-     * @return Flow started (no content; clients should follow redirect) (status code 204)
-     *         or Redirect to Synapse login (status code 302)
-     *         or Invalid request parameters (status code 400)
-     */
-    @Operation(
-        operationId = "startOidc",
-        summary = "Start Synapse OIDC authorization code flow",
-        description = "Initiates the OIDC login by redirecting the user to Synapse with state and nonce.",
-        tags = { "Auth" },
-        responses = {
-            @ApiResponse(responseCode = "204", description = "Flow started (no content; clients should follow redirect)"),
-            @ApiResponse(responseCode = "302", description = "Redirect to Synapse login"),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/auth/oidc/start",
-        produces = { "application/problem+json" }
-    )
-    
-    default ResponseEntity<Void> startOidc(
-        
-    ) {
-        return getDelegate().startOidc();
+        return getDelegate().token();
     }
 
 }

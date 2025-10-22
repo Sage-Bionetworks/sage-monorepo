@@ -44,9 +44,9 @@ public class SecurityConfiguration {
             "/v3/api-docs/**"
           )
           .permitAll()
-          // /userinfo, /token, and /admin/** require authentication
+          // /userinfo, /oauth2/token, and /admin/** require authentication
           // Role-based authorization is handled by @PreAuthorize annotations
-          .requestMatchers("/userinfo", "/token", "/admin/**")
+          .requestMatchers("/userinfo", "/oauth2/token", "/admin/**")
           .authenticated()
           .anyRequest()
           .authenticated()

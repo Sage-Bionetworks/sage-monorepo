@@ -33,7 +33,7 @@ def mint_jwt_from_session(jsessionid: str) -> str | None:
         return None
 
     try:
-        token_url = f"{AUTH_BASE_URL_SSR}/token"
+        token_url = f"{AUTH_BASE_URL_SSR}/oauth2/token"
         cookies = {"JSESSIONID": jsessionid}
 
         logger.debug(f"Minting JWT from session at {token_url}")

@@ -91,9 +91,9 @@ echo ""
 
 # Test 3: Mint JWT
 echo "Test 3: Minting JWT from session..."
-echo "   POST $AUTH_BASE_URL/token"
+echo "   POST $AUTH_BASE_URL/oauth2/token"
 TOKEN_RESPONSE=$(curl -s -w "\n%{http_code}" \
-    -X POST "$AUTH_BASE_URL/token" \
+    -X POST "$AUTH_BASE_URL/oauth2/token" \
     -H "Cookie: JSESSIONID=$SESSION_ID")
 
 TOKEN_CODE=$(echo "$TOKEN_RESPONSE" | tail -n1)

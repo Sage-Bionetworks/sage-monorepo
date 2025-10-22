@@ -217,7 +217,7 @@ def build_app(moderate=False):
             start_endpoint = ""
             base_markup = ""
         else:
-            start_endpoint = f"{auth_base}/auth/oidc/start"
+            start_endpoint = f"{auth_base}/auth/login"
             base_markup = auth_base
         gr.HTML(
             "<span id='login-start-endpoint' style='display:none'>"
