@@ -13,7 +13,8 @@ properties:
       - heat_map
       - link_internal
       - link_external
-    description: The data type of the column. Must be 'text', 'heat_map', 'link_internal', or 'link_external'.
+      - primary
+    description: The data type of the column. Must be 'text', 'heat_map', 'link_internal', 'link_external', or 'primary'.
   tooltip:
     type: string
     description: Tooltip text for the column.
@@ -27,8 +28,5 @@ properties:
     type: string
     description: The default URL for this column.
 required:
-  - name
   - field
   - type
-  - tooltip
-  - sort_tooltip
