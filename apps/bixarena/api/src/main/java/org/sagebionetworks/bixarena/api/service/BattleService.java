@@ -62,9 +62,9 @@ public class BattleService {
   }
 
   @Transactional(readOnly = true)
-  public BattleDto getBattle(String battleId) {
+  public BattleDto getBattle(UUID battleId) {
     log.info("Get battle with ID: {}", battleId);
-    BattleEntity battleEntity = getBattleEntity(UUID.fromString(battleId));
+    BattleEntity battleEntity = getBattleEntity(battleId);
     return battleMapper.convertToDto(battleEntity);
   }
 
@@ -76,8 +76,8 @@ public class BattleService {
     log.info("Creating battle for MOCK user: {}", userId);
 
     // Validate that both models exist
-    UUID leftModelId = UUID.fromString(request.getLeftModelId());
-    UUID rightModelId = UUID.fromString(request.getRightModelId());
+    UUID leftModelId = request.getLeftModelId();
+    UUID rightModelId = request.getRightModelId();
 
     // Verify models exist (throws exception if not found)
     getModelEntity(leftModelId);
@@ -101,10 +101,10 @@ public class BattleService {
   }
 
   @Transactional
-  public BattleDto updateBattle(String battleId, BattleUpdateRequestDto request) {
+  public BattleDto updateBattle(UUID battleId, BattleUpdateRequestDto request) {
     log.info("Updating battle with ID: {}", battleId);
 
-    BattleEntity existingBattle = getBattleEntity(UUID.fromString(battleId));
+    BattleEntity existingBattle = getBattleEntity(battleId);
 
     // Update title if provided
     if (request.getTitle() != null) {
@@ -127,14 +127,14 @@ public class BattleService {
   }
 
   @Transactional
-  public void deleteBattle(String battleId) {
+  public void deleteBattle(UUID battleId) {
     log.info("Deleting battle with ID: {}", battleId);
 
     // Verify battle exists before deletion
-    getBattleEntity(UUID.fromString(battleId));
+    getBattleEntity(battleId);
 
     // Delete the battle
-    battleRepository.deleteById(UUID.fromString(battleId));
+    battleRepository.deleteById(battleId);
     log.info("Successfully deleted battle with ID: {}", battleId);
   }
 
@@ -183,14 +183,14 @@ public class BattleService {
   }
 
   private Specification<BattleEntity> buildSpecification(BattleSearchQueryDto query) {
-    return Specification.where(userIdFilter(query));
+    return userIdFilter(query);
   }
 
   private Specification<BattleEntity> userIdFilter(BattleSearchQueryDto query) {
-    if (query.getUserId() == null || query.getUserId().trim().isEmpty()) {
+    if (query.getUserId() == null) {
       return null; // no filtering
     }
-    UUID userId = UUID.fromString(query.getUserId().trim());
+    UUID userId = query.getUserId();
     return (root, cq, cb) -> cb.equal(root.get("userId"), userId);
   }
 }

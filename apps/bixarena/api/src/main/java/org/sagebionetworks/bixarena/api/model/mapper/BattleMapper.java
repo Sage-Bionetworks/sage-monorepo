@@ -12,11 +12,11 @@ public class BattleMapper {
     }
 
     return BattleDto.builder()
-      .id(entity.getId().toString())
+      .id(entity.getId())
       .title(entity.getTitle())
-      .userId(entity.getUserId().toString())
-      .leftModelId(entity.getLeftModelId().toString())
-      .rightModelId(entity.getRightModelId().toString())
+      .userId(entity.getUserId())
+      .leftModelId(entity.getLeftModelId())
+      .rightModelId(entity.getRightModelId())
       .createdAt(entity.getCreatedAt())
       .endedAt(entity.getEndedAt())
       .build();

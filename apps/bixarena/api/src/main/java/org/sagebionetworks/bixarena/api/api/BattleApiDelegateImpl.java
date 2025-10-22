@@ -1,6 +1,7 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
@@ -38,7 +39,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
 
   @Override
   @PreAuthorize("hasAuthority('SCOPE_read:battles')")
-  public ResponseEntity<BattleDto> getBattle(String battleId) {
+  public ResponseEntity<BattleDto> getBattle(UUID battleId) {
     log.info("Getting battle with ID: {}", battleId);
     return ResponseEntity.ok(battleService.getBattle(battleId));
   }
@@ -62,7 +63,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   @Override
   // @PreAuthorize("hasAuthority('SCOPE_update:battles')") // Disabled for anonymous access
   public ResponseEntity<BattleDto> updateBattle(
-    String battleId,
+    UUID battleId,
     BattleUpdateRequestDto battleUpdateRequestDto
   ) {
     // Log the authenticated user for audit purposes
@@ -75,7 +76,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
 
   @Override
   @PreAuthorize("hasAuthority('SCOPE_delete:battles')")
-  public ResponseEntity<Void> deleteBattle(String battleId) {
+  public ResponseEntity<Void> deleteBattle(UUID battleId) {
     // Log the authenticated user for audit purposes
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     log.info("User {} is deleting battle: {}", authentication.getName(), battleId);
