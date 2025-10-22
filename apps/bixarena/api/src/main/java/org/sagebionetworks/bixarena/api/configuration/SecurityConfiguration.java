@@ -36,6 +36,9 @@ public class SecurityConfiguration {
       .authorizeHttpRequests(authz ->
         authz
           .requestMatchers(
+            "/actuator/health",
+            "/actuator/health/**",
+            "/actuator/info",
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v1/example-prompts",

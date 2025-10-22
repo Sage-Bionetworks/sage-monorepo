@@ -27,29 +27,48 @@ fi
 
 SESSION_ID="$1"
 
+# Base URLs for services
+AUTH_BASE_URL="${AUTH_BASE_URL:-http://localhost:8115}"
+API_BASE_URL="${API_BASE_URL:-http://localhost:8112}"
+
 echo "============================================"
 echo "BixArena JWT Authentication Quick Test"
 echo "============================================"
 echo ""
+echo "Configuration:"
+echo "  Auth Service: $AUTH_BASE_URL"
+echo "  API Service: $API_BASE_URL"
+echo ""
 
-# Test 1: Check if auth service is running
-echo "Test 1: Checking auth service health..."
+# Test 1: Check if services are running
+echo "Test 1: Checking services health..."
 
 # Check auth service
-AUTH_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:8115/actuator/health" 2>/dev/null)
+AUTH_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" "$AUTH_BASE_URL/actuator/health" 2>/dev/null)
 if [ "$AUTH_HEALTH" != "200" ]; then
     echo "❌ Auth service not healthy (HTTP $AUTH_HEALTH)"
-    echo "   Make sure auth service is running on http://localhost:8115"
+    echo "   Make sure auth service is running on $AUTH_BASE_URL"
     exit 1
 fi
 
-echo "✅ Auth service is healthy (HTTP $AUTH_HEALTH)"
+# Check API service
+API_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" "$API_BASE_URL/actuator/health" 2>/dev/null)
+if [ "$API_HEALTH" != "200" ]; then
+    echo "❌ API service not healthy (HTTP $API_HEALTH)"
+    echo "   Make sure API service is running on $API_BASE_URL"
+    exit 1
+fi
+
+echo "✅ Services are healthy"
+echo "   Auth service: $AUTH_BASE_URL (HTTP $AUTH_HEALTH)"
+echo "   API service: $API_BASE_URL (HTTP $API_HEALTH)"
 echo ""
 
 # Test 2: Get user info
 echo "Test 2: Getting user info from session..."
+echo "   GET $AUTH_BASE_URL/userinfo"
 USERINFO_RESPONSE=$(curl -s -w "\n%{http_code}" \
-    "http://localhost:8115/userinfo" \
+    "$AUTH_BASE_URL/userinfo" \
     -H "Cookie: JSESSIONID=$SESSION_ID")
 
 USERINFO_CODE=$(echo "$USERINFO_RESPONSE" | tail -n1)
@@ -72,8 +91,9 @@ echo ""
 
 # Test 3: Mint JWT
 echo "Test 3: Minting JWT from session..."
+echo "   POST $AUTH_BASE_URL/token"
 TOKEN_RESPONSE=$(curl -s -w "\n%{http_code}" \
-    -X POST "http://localhost:8115/token" \
+    -X POST "$AUTH_BASE_URL/token" \
     -H "Cookie: JSESSIONID=$SESSION_ID")
 
 TOKEN_CODE=$(echo "$TOKEN_RESPONSE" | tail -n1)
@@ -98,8 +118,9 @@ echo ""
 
 # Test 4: Call API without JWT
 echo "Test 4: Calling API without JWT (should work for public endpoints)..."
+echo "   GET $API_BASE_URL/v1/leaderboards/open-source"
 API_RESPONSE_NO_JWT=$(curl -s -w "\n%{http_code}" \
-    "http://localhost:8112/v1/leaderboards/open-source")
+    "$API_BASE_URL/v1/leaderboards/open-source")
 
 API_CODE_NO_JWT=$(echo "$API_RESPONSE_NO_JWT" | tail -n1)
 
@@ -115,8 +136,10 @@ echo ""
 
 # Test 5: Call API with JWT
 echo "Test 5: Calling API with JWT..."
+echo "   GET $API_BASE_URL/v1/leaderboards/open-source"
+echo "   Authorization: Bearer <JWT>"
 API_RESPONSE_WITH_JWT=$(curl -s -w "\n%{http_code}" \
-    "http://localhost:8112/v1/leaderboards/open-source" \
+    "$API_BASE_URL/v1/leaderboards/open-source" \
     -H "Authorization: Bearer $JWT")
 
 API_CODE_WITH_JWT=$(echo "$API_RESPONSE_WITH_JWT" | tail -n1)
@@ -137,10 +160,32 @@ else
 fi
 echo ""
 
-# Test 6: Call protected admin endpoint with JWT
-echo "Test 6: Calling protected /admin/stats endpoint with JWT..."
+# Test 6: Call protected admin endpoint WITHOUT JWT (and without session cookie)
+echo "Test 6: Calling protected /admin/stats endpoint WITHOUT JWT or session..."
+echo "   GET $AUTH_BASE_URL/admin/stats"
+ADMIN_RESPONSE_NO_JWT=$(curl -s -w "\n%{http_code}" \
+    -b "" \
+    "$AUTH_BASE_URL/admin/stats")
+
+ADMIN_CODE_NO_JWT=$(echo "$ADMIN_RESPONSE_NO_JWT" | tail -n1)
+
+if [ "$ADMIN_CODE_NO_JWT" = "401" ]; then
+    echo "✅ Correctly rejected without authentication (HTTP $ADMIN_CODE_NO_JWT)"
+    echo "   This demonstrates the endpoint requires authentication"
+elif [ "$ADMIN_CODE_NO_JWT" = "403" ]; then
+    echo "ℹ️  Access forbidden (HTTP $ADMIN_CODE_NO_JWT)"
+    echo "   Note: Expected 401, but got 403. This might indicate session-based auth is active."
+else
+    echo "⚠️  Unexpected response without JWT (HTTP $ADMIN_CODE_NO_JWT)"
+fi
+echo ""
+
+# Test 7: Call protected admin endpoint WITH JWT
+echo "Test 7: Calling protected /admin/stats endpoint WITH JWT..."
+echo "   GET $AUTH_BASE_URL/admin/stats"
+echo "   Authorization: Bearer <JWT>"
 ADMIN_RESPONSE=$(curl -s -w "\n%{http_code}" \
-    "http://localhost:8115/admin/stats" \
+    "$AUTH_BASE_URL/admin/stats" \
     -H "Authorization: Bearer $JWT")
 
 ADMIN_CODE=$(echo "$ADMIN_RESPONSE" | tail -n1)
