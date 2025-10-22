@@ -19,6 +19,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from uuid import UUID
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,15 +29,15 @@ class Battle(BaseModel):
     A battle entity representing a comparison between two AI models.
     """  # noqa: E501
 
-    id: StrictStr = Field(description="Unique identifier (UUID) of the battle.")
+    id: UUID = Field(description="Unique identifier (UUID) of the battle.")
     title: Optional[StrictStr] = Field(default=None, description="Title of the battle.")
-    user_id: StrictStr = Field(
+    user_id: UUID = Field(
         description="UUID of the user who initiated this battle.", alias="userId"
     )
-    model_aid: StrictStr = Field(
+    model_aid: UUID = Field(
         description="UUID of model A in the battle.", alias="modelAId"
     )
-    model_bid: StrictStr = Field(
+    model_bid: UUID = Field(
         description="UUID of model B in the battle.", alias="modelBId"
     )
     created_at: datetime = Field(

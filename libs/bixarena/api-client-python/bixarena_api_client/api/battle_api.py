@@ -16,9 +16,10 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictStr
+from pydantic import Field
 from typing import Optional
 from typing_extensions import Annotated
+from uuid import UUID
 from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
 from bixarena_api_client.models.battle_page import BattlePage
@@ -280,7 +281,7 @@ class BattleApi:
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
             _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json"]
+                ["application/json", "application/problem+json"]
             )
 
         # set the HTTP header `Content-Type`
@@ -315,7 +316,7 @@ class BattleApi:
     def delete_battle(
         self,
         battle_id: Annotated[
-            StrictStr, Field(description="The unique identifier of the battle")
+            UUID, Field(description="The unique identifier of the battle")
         ],
         _request_timeout: Union[
             None,
@@ -385,7 +386,7 @@ class BattleApi:
     def delete_battle_with_http_info(
         self,
         battle_id: Annotated[
-            StrictStr, Field(description="The unique identifier of the battle")
+            UUID, Field(description="The unique identifier of the battle")
         ],
         _request_timeout: Union[
             None,
@@ -455,7 +456,7 @@ class BattleApi:
     def delete_battle_without_preload_content(
         self,
         battle_id: Annotated[
-            StrictStr, Field(description="The unique identifier of the battle")
+            UUID, Field(description="The unique identifier of the battle")
         ],
         _request_timeout: Union[
             None,
@@ -549,7 +550,7 @@ class BattleApi:
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
             _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json"]
+                ["application/problem+json"]
             )
 
         # authentication setting
@@ -574,7 +575,7 @@ class BattleApi:
     def get_battle(
         self,
         battle_id: Annotated[
-            StrictStr, Field(description="The unique identifier of the battle")
+            UUID, Field(description="The unique identifier of the battle")
         ],
         _request_timeout: Union[
             None,
@@ -643,7 +644,7 @@ class BattleApi:
     def get_battle_with_http_info(
         self,
         battle_id: Annotated[
-            StrictStr, Field(description="The unique identifier of the battle")
+            UUID, Field(description="The unique identifier of the battle")
         ],
         _request_timeout: Union[
             None,
@@ -712,7 +713,7 @@ class BattleApi:
     def get_battle_without_preload_content(
         self,
         battle_id: Annotated[
-            StrictStr, Field(description="The unique identifier of the battle")
+            UUID, Field(description="The unique identifier of the battle")
         ],
         _request_timeout: Union[
             None,
@@ -805,7 +806,7 @@ class BattleApi:
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
             _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json"]
+                ["application/json", "application/problem+json"]
             )
 
         # authentication setting
@@ -1068,7 +1069,7 @@ class BattleApi:
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
             _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json"]
+                ["application/json", "application/problem+json"]
             )
 
         # authentication setting
@@ -1093,7 +1094,7 @@ class BattleApi:
     def update_battle(
         self,
         battle_id: Annotated[
-            StrictStr, Field(description="The unique identifier of the battle")
+            UUID, Field(description="The unique identifier of the battle")
         ],
         battle_update_request: BattleUpdateRequest,
         _request_timeout: Union[
@@ -1168,7 +1169,7 @@ class BattleApi:
     def update_battle_with_http_info(
         self,
         battle_id: Annotated[
-            StrictStr, Field(description="The unique identifier of the battle")
+            UUID, Field(description="The unique identifier of the battle")
         ],
         battle_update_request: BattleUpdateRequest,
         _request_timeout: Union[
@@ -1243,7 +1244,7 @@ class BattleApi:
     def update_battle_without_preload_content(
         self,
         battle_id: Annotated[
-            StrictStr, Field(description="The unique identifier of the battle")
+            UUID, Field(description="The unique identifier of the battle")
         ],
         battle_update_request: BattleUpdateRequest,
         _request_timeout: Union[
@@ -1345,7 +1346,7 @@ class BattleApi:
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
             _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json"]
+                ["application/json", "application/problem+json"]
             )
 
         # set the HTTP header `Content-Type`

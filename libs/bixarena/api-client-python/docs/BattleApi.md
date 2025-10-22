@@ -77,19 +77,19 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                 | Response headers |
-| ----------- | --------------------------- | ---------------- |
-| **201**     | Battle created successfully | -                |
-| **400**     | Bad request                 | -                |
-| **401**     | Unauthorized                | -                |
-| **403**     | Forbidden                   | -                |
-| **404**     | Model not found             | -                |
-| **409**     | Conflict                    | -                |
-| **500**     | Internal server error       | -                |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **201**     | Battle created successfully                                       | -                |
+| **400**     | Invalid request                                                   | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **409**     | The request conflicts with current state of the target resource   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -156,17 +156,17 @@ void (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
+- **Accept**: application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                 | Response headers |
-| ----------- | --------------------------- | ---------------- |
-| **204**     | Battle deleted successfully | -                |
-| **401**     | Unauthorized                | -                |
-| **403**     | Forbidden                   | -                |
-| **404**     | Battle not found            | -                |
-| **500**     | Internal server error       | -                |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **204**     | Battle deleted successfully                                       | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -236,16 +236,16 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description           | Response headers |
-| ----------- | --------------------- | ---------------- |
-| **200**     | Success               | -                |
-| **401**     | Unauthorized          | -                |
-| **404**     | Battle not found      | -                |
-| **500**     | Internal server error | -                |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -316,16 +316,16 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description           | Response headers |
-| ----------- | --------------------- | ---------------- |
-| **200**     | Success               | -                |
-| **400**     | Bad request           | -                |
-| **401**     | Unauthorized          | -                |
-| **500**     | Internal server error | -                |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -398,17 +398,17 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                 | Response headers |
-| ----------- | --------------------------- | ---------------- |
-| **200**     | Battle updated successfully | -                |
-| **400**     | Bad request                 | -                |
-| **401**     | Unauthorized                | -                |
-| **403**     | Forbidden                   | -                |
-| **404**     | Battle not found            | -                |
-| **500**     | Internal server error       | -                |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Battle updated successfully                                       | -                |
+| **400**     | Invalid request                                                   | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

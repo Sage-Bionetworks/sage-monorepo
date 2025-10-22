@@ -16,9 +16,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from uuid import UUID
 from bixarena_api_client.models.battle_sort import BattleSort
 from bixarena_api_client.models.sort_direction import SortDirection
 from typing import Optional, Set
@@ -38,7 +39,7 @@ class BattleSearchQuery(BaseModel):
     )
     sort: BattleSort
     direction: SortDirection
-    user_id: Optional[StrictStr] = Field(
+    user_id: Optional[UUID] = Field(
         default=None, description="Filter by user ID.", alias="userId"
     )
     __properties: ClassVar[List[str]] = [

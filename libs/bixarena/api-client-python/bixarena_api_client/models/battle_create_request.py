@@ -18,6 +18,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from uuid import UUID
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,12 +29,8 @@ class BattleCreateRequest(BaseModel):
     """  # noqa: E501
 
     title: Optional[StrictStr] = Field(default=None, description="Title of the battle.")
-    model_aid: StrictStr = Field(
-        description="UUID of model A to compare.", alias="modelAId"
-    )
-    model_bid: StrictStr = Field(
-        description="UUID of model B to compare.", alias="modelBId"
-    )
+    model_aid: UUID = Field(description="UUID of model A to compare.", alias="modelAId")
+    model_bid: UUID = Field(description="UUID of model B to compare.", alias="modelBId")
     __properties: ClassVar[List[str]] = ["title", "modelAId", "modelBId"]
 
     model_config = ConfigDict(
