@@ -49,4 +49,9 @@ describe('Service: Helper', () => {
     expect(helperService.getNumberFromCSSValue('0.4px')).toBe(0.4);
     expect(helperService.getNumberFromCSSValue('-120px')).toBe(-120);
   });
+
+  it('should get significant figures', () => {
+    const res = helperService.getSignificantFigures(0.123, 2);
+    expect(res).toEqual(0.12);
+  });
 });

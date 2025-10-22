@@ -1,4 +1,4 @@
-import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
 export const mockComparisonToolSelectorsWikiParams: { [key: string]: SynapseWikiParams } = {
   Red: {
@@ -10,3 +10,165 @@ export const mockComparisonToolSelectorsWikiParams: { [key: string]: SynapseWiki
     wikiId: '632873',
   },
 };
+
+export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
+  {
+    page: 'Model Overview',
+    dropdowns: [],
+    columns: [
+      {
+        name: 'Model Type',
+        type: 'text',
+        field: 'model_type',
+        tooltip: '',
+        sort_tooltip: 'Sort by Model Type value',
+      },
+      {
+        name: 'Matched Control',
+        field: 'matched_controls',
+        type: 'text',
+        tooltip: '',
+        sort_tooltip: 'Sort by Matched Control value',
+      },
+      {
+        name: 'Disease Correlation',
+        field: 'disease_correlation',
+        type: 'link_internal',
+        tooltip: '',
+        sort_tooltip: 'Sort by Disease Correlation value',
+        link_text: 'Results',
+      },
+      {
+        name: 'Center',
+        field: 'center',
+        type: 'link_external',
+        tooltip: '',
+        sort_tooltip: 'Sort by Center value',
+        link_url: 'https://www.model-ad.org/',
+      },
+      {
+        name: 'Age',
+        field: 'age',
+        type: 'text',
+        tooltip: '',
+        sort_tooltip: 'Sort by Age value',
+      },
+      {
+        name: 'IFG',
+        field: 'IFG',
+        type: 'heat_map',
+        tooltip: 'Inferior Frontal Gyrus',
+        sort_tooltip: 'Sort by correlation value',
+      },
+      {
+        name: 'PHG',
+        field: 'PHG',
+        type: 'heat_map',
+        tooltip: 'Parahippocampal Gyrus',
+        sort_tooltip: 'Sort by correlation value',
+      },
+    ],
+  },
+];
+
+export const mockComparisonToolData: Record<string, any>[] = [
+  {
+    name: '3xTg-AD',
+    model_type: 'Familial AD',
+    matched_controls: ['B6129'],
+    disease_correlation: null,
+    center: {
+      link_text: 'UCI',
+      link_url: 'https://www.sagebionetworks.org/',
+    },
+    age: '12 months',
+    IFG: {
+      correlation: 0.0970533422952035,
+      adj_p_val: 0.388719974861466,
+    },
+    PHG: {
+      correlation: 0.084295638183579,
+      adj_p_val: 0.409231075552908,
+    },
+  },
+  {
+    name: '5xFAD (UCI)',
+    model_type: 'Familial AD',
+    matched_controls: ['C57BL/6J'],
+    disease_correlation: null,
+    center: {
+      link_text: 'UCI',
+      link_url: 'http://model-ad.org/uci-disease-model-development-and-phenotyping-dmp/',
+    },
+    age: '12 months',
+    IFG: {
+      correlation: 0.180202547119964,
+      adj_p_val: 0.107436343673528,
+    },
+    PHG: {
+      correlation: 0.120000548192961,
+      adj_p_val: 0.239210931286464,
+    },
+  },
+  {
+    name: '5xFAD (IU/Jax/Pitt)',
+    model_type: 'Familial AD',
+    matched_controls: ['C57BL/6J'],
+    disease_correlation: {
+      link_url: 'comparison/correlation?model=5xFAD (IU/Jax/Pitt)',
+    },
+    center: {
+      link_text: 'IU/Jax/Pitt',
+      link_url: 'https://www.model-ad.org/iu-jax-pitt-disease-modeling-project/',
+    },
+    age: '4 months',
+    IFG: {
+      correlation: 0.0829228557717284,
+      adj_p_val: 0.46174597641461,
+    },
+    PHG: {
+      correlation: 0.0555691060937462,
+      adj_p_val: 0.586807542376288,
+    },
+  },
+  {
+    name: 'Abca7*V1599M',
+    model_type: 'Familial AD',
+    matched_controls: ['C57BL/6J', '5xFAD'],
+    disease_correlation: null,
+    center: {
+      link_text: 'UCI',
+      link_url: 'http://model-ad.org/uci-disease-model-development-and-phenotyping-dmp/',
+    },
+    age: '4 months',
+    IFG: {
+      correlation: 0.0341639955699389,
+      adj_p_val: 0.762053474034212,
+    },
+    PHG: {
+      correlation: 0.0748918760876008,
+      adj_p_val: 0.463613681499704,
+    },
+  },
+  {
+    name: 'APOE4',
+    model_type: 'Late Onset AD',
+    matched_controls: ['C57BL/6J'],
+    disease_correlation: {
+      link_url: 'comparison/correlation?model=APOE4',
+    },
+    age: '12 months',
+    center: {
+      link_text: 'IU/Jax/Pitt',
+      link_url: 'https://www.model-ad.org/iu-jax-pitt-disease-modeling-project/',
+    },
+    IFG: {
+      correlation: 0.437347817670545,
+      adj_p_val: 3.39986129951837e-7,
+    },
+    PHG: {
+      correlation: 0.0472918655548024,
+      adj_p_val: 0.638623415843113,
+    },
+  },
+];
