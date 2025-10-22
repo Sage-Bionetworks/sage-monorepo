@@ -3,6 +3,8 @@ import pandas as pd
 from bixarena_api_client import ApiClient, Configuration, LeaderboardApi
 from bixarena_api_client.exceptions import ApiException
 
+from bixarena_app.config.utils import _get_api_base_url
+
 print("🚀 bixarena_leaderboard.py module loaded successfully!")
 
 
@@ -10,7 +12,12 @@ def fetch_leaderboard_data():
     """Fetch leaderboard data from the BixArena API"""
     try:
         # Configure the API client
-        configuration = Configuration(host="http://bixarena-api:8112/v1")
+        api_base_url = _get_api_base_url()
+        if not api_base_url:
+            print("❌ API_BASE_URL not configured")
+            return pd.DataFrame()
+
+        configuration = Configuration(host=api_base_url)
         print(f"🔗 Attempting to connect to API at: {configuration.host}")
 
         # Create API client and leaderboard API instance

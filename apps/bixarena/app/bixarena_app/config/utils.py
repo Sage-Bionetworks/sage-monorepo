@@ -108,7 +108,7 @@ def build_logger(logger_name, logger_filename):
     return logger
 
 
-def get_api_base_url() -> str | None:
+def _get_api_base_url() -> str | None:
     """Resolve the BixArena API base URL from environment.
 
     Uses API_BASE_URL. If unset, prints an error and returns None.
@@ -119,20 +119,5 @@ def get_api_base_url() -> str | None:
     print(
         "[config] API_BASE_URL not set.\n"
         "[config] Login and identity sync will be disabled until configured."
-    )
-    return None
-
-
-def get_oidc_base_url() -> str | None:
-    """Resolve the OIDC base URL for browser-driven auth redirects.
-
-    Uses OIDC_BASE_URL. If unset, prints an error and returns None.
-    """
-    base = os.environ.get("OIDC_BASE_URL")
-    if base:
-        return base.rstrip("/")
-    print(
-        "[config] OIDC_BASE_URL not set.\n"
-        "[config] Login/logout redirects will be disabled until configured."
     )
     return None

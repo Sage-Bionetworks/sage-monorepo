@@ -20,7 +20,7 @@ from bixarena_app.config.constants import (
     MODERATION_MSG,
     SLOW_MODEL_MSG,
 )
-from bixarena_app.config.utils import get_api_base_url
+from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model import model_response
 from bixarena_app.model.model_response import (
     State,
@@ -181,7 +181,7 @@ def add_text(
         try:
             user_state = get_user_state()
             jsessionid = user_state.get_jsessionid()
-            api_base_url = get_api_base_url()
+            api_base_url = _get_api_base_url()
 
             if jsessionid and api_base_url:
                 # Runtime lookup model info

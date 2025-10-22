@@ -5,6 +5,7 @@ import gradio as gr
 import requests
 
 from bixarena_app.auth.user_state import get_user_state
+from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.page.bixarena_battle import build_battle_page
 from bixarena_app.page.bixarena_header import (
     build_header,
@@ -28,21 +29,6 @@ class PageNavigator:
 
     def show_page(self, index):
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
-
-
-def _get_api_base_url() -> str | None:
-    """Resolve the BixArena API base URL from environment.
-
-    Uses API_BASE_URL. If unset, prints an error and returns None.
-    """
-    api = os.environ.get("API_BASE_URL")
-    if api:
-        return api.rstrip("/")
-    print(
-        "[config] API_BASE_URL not set.\n"
-        "[config] Login and identity sync will be disabled until configured."
-    )
-    return None
 
 
 def _get_auth_base_url_ssr() -> str | None:
