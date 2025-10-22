@@ -1,8 +1,8 @@
 #!/bin/bash
 # Quick JWT Authentication Test
-# 
+#
 # Usage: ./quick-test-jwt.sh <JSESSIONID>
-# 
+#
 # To get your JSESSIONID:
 # 1. Open http://localhost:8100 in browser
 # 2. Click Login and authenticate with Synapse
@@ -80,11 +80,11 @@ TOKEN_BODY=$(echo "$TOKEN_RESPONSE" | head -n-1)
 
 if [ "$TOKEN_CODE" = "200" ]; then
     echo "✅ JWT minted successfully"
-    
+
     JWT=$(echo "$TOKEN_BODY" | jq -r '.access_token' 2>/dev/null)
     TOKEN_TYPE=$(echo "$TOKEN_BODY" | jq -r '.token_type' 2>/dev/null)
     EXPIRES_IN=$(echo "$TOKEN_BODY" | jq -r '.expires_in' 2>/dev/null)
-    
+
     echo "   Token type: $TOKEN_TYPE"
     echo "   Expires in: $EXPIRES_IN seconds"
     echo "   JWT (first 50 chars): ${JWT:0:50}..."
@@ -123,10 +123,10 @@ API_BODY_WITH_JWT=$(echo "$API_RESPONSE_WITH_JWT" | head -n-1)
 
 if [ "$API_CODE_WITH_JWT" = "200" ]; then
     echo "✅ Authenticated API call successful (HTTP $API_CODE_WITH_JWT)"
-    
+
     LEADERBOARD_ID=$(echo "$API_BODY_WITH_JWT" | jq -r '.id' 2>/dev/null)
     ENTRY_COUNT=$(echo "$API_BODY_WITH_JWT" | jq -r '.entries | length' 2>/dev/null)
-    
+
     echo "   Leaderboard ID: $LEADERBOARD_ID"
     echo "   Number of entries: $ENTRY_COUNT"
 else
