@@ -24,8 +24,6 @@ security:
 tags:
   - name: Auth
     description: Authentication and token minting operations.
-  - name: Admin
-    description: Administrative endpoints requiring elevated roles.
 
 paths:
   /auth/oidc/start:
@@ -40,8 +38,6 @@ paths:
     $ref: paths/jwks.yaml
   /userinfo:
     $ref: paths/userinfo.yaml
-  /admin/stats:
-    $ref: paths/admin-stats.yaml
 
 components:
   securitySchemes:

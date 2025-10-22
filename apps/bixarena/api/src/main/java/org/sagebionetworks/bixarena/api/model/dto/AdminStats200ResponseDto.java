@@ -1,4 +1,4 @@
-package org.sagebionetworks.bixarena.auth.service.model.dto;
+package org.sagebionetworks.bixarena.api.model.dto;
 
 import java.net.URI;
 import java.util.Objects;

@@ -16,10 +16,6 @@ security:
 tags:
   - description: Authentication and token minting operations.
     name: Auth
-  - description: Utility endpoints.
-    name: Utility
-  - description: Administrative endpoints requiring elevated roles.
-    name: Admin
 paths:
   /auth/oidc/start:
     get:
@@ -163,28 +159,6 @@ paths:
         - application/json
       x-tags:
         - tag: Auth
-  /admin/stats:
-    get:
-      description: Administrative operations requiring admin role.
-      operationId: adminStats
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/adminStats_200_response'
-          description: Success
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-      summary: Admin statistics
-      tags:
-        - Admin
-      x-accepts:
-        - application/json
-      x-tags:
-        - tag: Admin
 components:
   responses:
     BadRequest:
@@ -199,12 +173,6 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Unauthorized
-    Forbidden:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: Forbidden
   schemas:
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -314,13 +282,6 @@ components:
           items:
             type: object
           type: array
-      type: object
-    adminStats_200_response:
-      example:
-        ok: true
-      properties:
-        ok:
-          type: boolean
       type: object
   securitySchemes:
     jwtBearer:

@@ -160,12 +160,11 @@ else
 fi
 echo ""
 
-# Test 6: Call protected admin endpoint WITHOUT JWT (and without session cookie)
-echo "Test 6: Calling protected /admin/stats endpoint WITHOUT JWT or session..."
-echo "   GET $AUTH_BASE_URL/admin/stats"
+# Test 6: Call protected admin endpoint WITHOUT JWT
+echo "Test 6: Calling protected /v1/admin/stats endpoint WITHOUT JWT..."
+echo "   GET $API_BASE_URL/v1/admin/stats"
 ADMIN_RESPONSE_NO_JWT=$(curl -s -w "\n%{http_code}" \
-    -b "" \
-    "$AUTH_BASE_URL/admin/stats")
+    "$API_BASE_URL/v1/admin/stats")
 
 ADMIN_CODE_NO_JWT=$(echo "$ADMIN_RESPONSE_NO_JWT" | tail -n1)
 
@@ -174,19 +173,19 @@ if [ "$ADMIN_CODE_NO_JWT" = "401" ]; then
     echo "   This demonstrates the endpoint requires authentication"
 elif [ "$ADMIN_CODE_NO_JWT" = "403" ]; then
     echo "ℹ️  Access forbidden (HTTP $ADMIN_CODE_NO_JWT)"
-    echo "   Note: Expected 401, but got 403. This might indicate session-based auth is active."
+    echo "   Note: Expected 401, but got 403."
 else
     echo "⚠️  Unexpected response without JWT (HTTP $ADMIN_CODE_NO_JWT)"
 fi
 echo ""
 
-# Test 7: Call protected admin endpoint WITH session (auth service uses session-based auth)
-echo "Test 7: Calling protected /admin/stats endpoint WITH session cookie..."
-echo "   GET $AUTH_BASE_URL/admin/stats"
-echo "   Cookie: JSESSIONID=<session>"
+# Test 7: Call protected admin endpoint WITH JWT
+echo "Test 7: Calling protected /v1/admin/stats endpoint WITH JWT..."
+echo "   GET $API_BASE_URL/v1/admin/stats"
+echo "   Authorization: Bearer <JWT>"
 ADMIN_RESPONSE=$(curl -s -w "\n%{http_code}" \
-    "$AUTH_BASE_URL/admin/stats" \
-    -H "Cookie: JSESSIONID=$SESSION_ID")
+    "$API_BASE_URL/v1/admin/stats" \
+    -H "Authorization: Bearer $JWT")
 
 ADMIN_CODE=$(echo "$ADMIN_RESPONSE" | tail -n1)
 ADMIN_BODY=$(echo "$ADMIN_RESPONSE" | head -n-1)
@@ -201,7 +200,7 @@ elif [ "$ADMIN_CODE" = "403" ]; then
     echo "   This demonstrates role-based access control is working!"
 elif [ "$ADMIN_CODE" = "401" ]; then
     echo "❌ Authentication failed (HTTP $ADMIN_CODE)"
-    echo "   Session might be invalid or expired"
+    echo "   JWT might be invalid or expired"
     exit 1
 else
     echo "⚠️  Unexpected response (HTTP $ADMIN_CODE)"

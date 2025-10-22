@@ -1,7 +1,7 @@
-package org.sagebionetworks.bixarena.auth.service.api;
+package org.sagebionetworks.bixarena.api.api;
 
-import org.sagebionetworks.bixarena.auth.service.model.dto.AdminStats200ResponseDto;
-import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.AdminStats200ResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.bixArenaAuthService.base-path:}")
+@RequestMapping("${openapi.bixArenaAPIService.base-path:/v1}")
 public class AdminApiController implements AdminApi {
 
     private final AdminApiDelegate delegate;

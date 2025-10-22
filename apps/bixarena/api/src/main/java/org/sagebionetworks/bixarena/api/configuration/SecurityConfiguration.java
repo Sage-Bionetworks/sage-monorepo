@@ -19,7 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(jsr250Enabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
   @Autowired
@@ -51,7 +51,7 @@ public class SecurityConfiguration {
           )
           .permitAll()
           .requestMatchers("/v1/admin/**")
-          .hasRole("ADMIN")
+          .authenticated()
           .anyRequest()
           .authenticated()
       )

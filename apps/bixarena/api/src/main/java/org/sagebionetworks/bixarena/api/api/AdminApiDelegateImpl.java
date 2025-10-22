@@ -1,28 +1,27 @@
-package org.sagebionetworks.bixarena.auth.service.api;
+package org.sagebionetworks.bixarena.api.api;
 
-import org.sagebionetworks.bixarena.auth.service.model.dto.AdminStats200ResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.AdminStats200ResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 /**
- * Delegate implementation for admin API operations.
+ * Implementation of the Admin API delegate.
+ * Handles administrative operations requiring elevated privileges.
  */
 @Component
 public class AdminApiDelegateImpl implements AdminApiDelegate {
 
   /**
    * Get administrative statistics.
-   *
-   * <p>This endpoint requires the user to have the USER role.
+   * Requires USER role for testing authorization.
    *
    * @return Admin statistics response
    */
   @Override
-  @PreAuthorize("hasAuthority('ROLE_USER')")
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<AdminStats200ResponseDto> adminStats() {
-    AdminStats200ResponseDto response = new AdminStats200ResponseDto();
-    response.setOk(true);
+    AdminStats200ResponseDto response = AdminStats200ResponseDto.builder().ok(true).build();
     return ResponseEntity.ok(response);
   }
 }

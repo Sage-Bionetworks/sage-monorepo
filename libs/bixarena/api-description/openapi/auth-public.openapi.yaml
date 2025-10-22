@@ -16,10 +16,6 @@ security:
 tags:
   - name: Auth
     description: Authentication and token minting operations.
-  - name: Utility
-    description: Utility endpoints.
-  - name: Admin
-    description: Administrative endpoints requiring elevated roles.
 paths:
   /auth/oidc/start:
     get:
@@ -154,27 +150,6 @@ paths:
                 $ref: '#/components/schemas/UserInfo'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  /admin/stats:
-    get:
-      tags:
-        - Admin
-      summary: Admin statistics
-      description: Administrative operations requiring admin role.
-      operationId: adminStats
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ok:
-                    type: boolean
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
 components:
   securitySchemes:
     jwtBearer:
@@ -248,12 +223,6 @@ components:
             $ref: '#/components/schemas/BasicError'
     Unauthorized:
       description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    Forbidden:
-      description: Forbidden
       content:
         application/json:
           schema:

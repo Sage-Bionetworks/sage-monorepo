@@ -3,10 +3,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-package org.sagebionetworks.bixarena.auth.service.api;
+package org.sagebionetworks.bixarena.api.api;
 
-import org.sagebionetworks.bixarena.auth.service.model.dto.AdminStats200ResponseDto;
-import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.AdminStats200ResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
