@@ -9,8 +9,8 @@ import requests
 from bixarena_api_client import ApiClient, Configuration, ModelApi, ModelSearchQuery
 from bixarena_api_client.exceptions import ApiException
 
-from bixarena_app.config.constants import SERVER_ERROR_MSG, ErrorCode
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
+from bixarena_app.model.error_handler import handle_error_message
 from bixarena_app.model.model_adapter import get_conversation_template
 
 logging.basicConfig(level=logging.INFO)
@@ -25,6 +25,7 @@ controller_url = ""
 enable_moderation = False
 
 api_endpoint_info = {}
+identity_words = set()  # Populated from model list
 
 
 class State:
@@ -33,6 +34,7 @@ class State:
         self.conv_id = uuid.uuid4().hex
         self.skip_next = False
         self.model_name = model_name
+        self.has_error = False
 
     def to_gradio_chatbot(self):
         return self.conv.to_gradio_chatbot()
@@ -51,6 +53,30 @@ class State:
 def set_global_vars_anony(enable_moderation_):
     global enable_moderation
     enable_moderation = enable_moderation_
+
+
+def validate_responses(states: list) -> tuple[bool, str]:
+    """Validate battle responses for identity leaking."""
+    for state in states:
+        if not state:
+            continue
+
+        # Collect the messages from both models
+        assistant_messages = [
+            content.lower()
+            for role, content in state.conv.messages
+            if content and role.lower() in ["assistant", "model"]
+        ]
+
+        # Check if any identity word appears in both models' responses
+        for content_lower in assistant_messages:
+            leaked_word = next(
+                (word for word in identity_words if word in content_lower), None
+            )
+            if leaked_word:
+                return False, f"identity_leak:{leaked_word}"
+
+    return True, ""
 
 
 def get_model_list():
@@ -77,8 +103,22 @@ def get_model_list():
 
             api_endpoint_info = {}
 
+            # Populate identity words for validation
+            global identity_words
+            identity_words = set()
+
             for model in visible_models_response.models:
                 model_name = model.name
+
+                # Add model identifiers for identity leak detection
+                if model.slug:
+                    identity_words.add(model.slug.lower())
+                if model.name:
+                    identity_words.add(model.name.lower())
+                if model.alias:
+                    identity_words.add(model.alias.lower())
+                if model.organization:
+                    identity_words.add(model.organization.lower())
 
                 # Check required fields for API configuration
                 api_model_name = model.api_model_name
@@ -175,13 +215,13 @@ def bot_response(
                 conv.update_last_message(output + "▌")
                 yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
             else:
-                output = data["text"] + f"\n\n(error_code: {data['error_code']})"
+                output = data["text"]
                 conv.update_last_message(output)
+                state.has_error = True
                 yield (state, state.to_gradio_chatbot()) + (
                     disable_btn,
                     disable_btn,
                     disable_btn,
-                    enable_btn,
                     enable_btn,
                 )
                 return
@@ -189,27 +229,24 @@ def bot_response(
         conv.update_last_message(output)
         yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 4
     except requests.exceptions.RequestException as e:
-        conv.update_last_message(
-            f"{SERVER_ERROR_MSG}\n\n(error_code: {ErrorCode.GRADIO_REQUEST_ERROR}, {e})"
-        )
+        display_error_msg = handle_error_message(e)
+        conv.update_last_message(display_error_msg)
+        state.has_error = True  # Mark this state as having an error
         yield (state, state.to_gradio_chatbot()) + (
             disable_btn,
             disable_btn,
             disable_btn,
-            enable_btn,
             enable_btn,
         )
         return
     except Exception as e:
-        conv.update_last_message(
-            f"{SERVER_ERROR_MSG}\n\n"
-            f"(error_code: {ErrorCode.GRADIO_STREAM_UNKNOWN_ERROR}, {e})"
-        )
+        display_error_msg = handle_error_message(e)
+        conv.update_last_message(display_error_msg)
+        state.has_error = True  # Mark this state as having an error
         yield (state, state.to_gradio_chatbot()) + (
             disable_btn,
             disable_btn,
             disable_btn,
-            enable_btn,
             enable_btn,
         )
         return
@@ -286,3 +323,10 @@ def bot_response_multi(
         yield states + chatbots + [disable_btn] * 4
         if stop:
             break
+
+    # At least one model had an error -> keep voting buttons disabled
+    if any(state.has_error for state in states):
+        yield states + chatbots + [disable_btn, disable_btn, disable_btn, enable_btn]
+    else:
+        # Both models succeeded -> enable all buttons including voting
+        yield states + chatbots + [enable_btn] * 4

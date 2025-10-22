@@ -27,6 +27,7 @@ from bixarena_app.model.model_response import (
     invisible_btn,
     no_change_btn,
     set_global_vars_anony,
+    validate_responses,
 )
 from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
 from bixarena_app.page.battle_page_css import (
@@ -57,12 +58,16 @@ def load_demo_side_by_side_anony(models_, _):
 
 
 def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
-    # Log the exact same data to console instead of file
+    is_valid, reason = validate_responses(states)
+
+    # Log vote with validation results in original data format
     data = {
         "tstamp": round(time.time(), 4),
         "type": vote_type,
-        "models": list(model_selectors),
-        "states": [x.dict() for x in states],
+        "models": model_selectors,
+        "states": [state.dict() for state in states],
+        "is_valid": is_valid,
+        "invalid_reason": reason or "",
     }
     logger.info(f"Vote data: {json.dumps(data)}")
 
@@ -145,16 +150,6 @@ def clear_history(request: gr.Request):
         + [gr.Row(visible=False)]  # hide next_battle_row
         + [gr.Column(visible=True)]  # show suggested_prompts_group
     )
-
-
-def flash_buttons():
-    btn_updates = [
-        [disable_btn] * 3 + [enable_btn] * 1,
-        [enable_btn] * 4,
-    ]
-    for i in range(4):
-        yield btn_updates[i % 2]
-        time.sleep(0.3)
 
 
 def add_text(
@@ -417,10 +412,6 @@ def build_side_by_side_ui_anony():
         states,
         states + chatbots + btn_list,
     ).then(
-        flash_buttons,
-        [],
-        btn_list,
-    ).then(
         lambda: None,  # Enable enter key
         [],
         [],
@@ -449,10 +440,6 @@ def build_side_by_side_ui_anony():
             bot_response_multi,
             states,
             states + chatbots + btn_list,
-        ).then(
-            flash_buttons,
-            [],
-            btn_list,
         ).then(
             lambda: None,
             [],
