@@ -131,9 +131,7 @@ paths:
           name: battleId
           required: true
           schema:
-            example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-            format: uuid
-            type: string
+            $ref: '#/components/schemas/BattleId'
           style: simple
       responses:
         '204':
@@ -163,9 +161,7 @@ paths:
           name: battleId
           required: true
           schema:
-            example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-            format: uuid
-            type: string
+            $ref: '#/components/schemas/BattleId'
           style: simple
       responses:
         '200':
@@ -198,9 +194,7 @@ paths:
           name: battleId
           required: true
           schema:
-            example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-            format: uuid
-            type: string
+            $ref: '#/components/schemas/BattleId'
           style: simple
       requestBody:
         content:
@@ -485,9 +479,7 @@ components:
       name: battleId
       required: true
       schema:
-        example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-        format: uuid
-        type: string
+        $ref: '#/components/schemas/BattleId'
       style: simple
     examplePromptSearchQuery:
       description: The search query used to find and filter example prompts.
@@ -665,6 +657,11 @@ components:
         - pageSize
         - sort
       type: object
+    BattleId:
+      description: Unique identifier (UUID) of the battle.
+      example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+      format: uuid
+      type: string
     BattleTitle:
       description: Title of the battle.
       example: Gene Expression Analysis Comparison

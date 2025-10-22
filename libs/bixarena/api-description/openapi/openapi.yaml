@@ -554,6 +554,11 @@ components:
         - pageSize
         - sort
         - direction
+    BattleId:
+      type: string
+      format: uuid
+      description: Unique identifier (UUID) of the battle.
+      example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
     BattleTitle:
       description: Title of the battle.
       type: string
@@ -583,10 +588,7 @@ components:
       description: A battle entity representing a comparison between two AI models.
       properties:
         id:
-          type: string
-          format: uuid
-          description: Unique identifier (UUID) of the battle.
-          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+          $ref: '#/components/schemas/BattleId'
         title:
           $ref: '#/components/schemas/BattleTitle'
           nullable: true
@@ -1328,9 +1330,7 @@ components:
       in: path
       required: true
       schema:
-        type: string
-        format: uuid
-        example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+        $ref: '#/components/schemas/BattleId'
     examplePromptSearchQuery:
       name: examplePromptSearchQuery
       description: The search query used to find and filter example prompts.

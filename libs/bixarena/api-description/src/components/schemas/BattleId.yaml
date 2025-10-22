@@ -1,0 +1,4 @@
+type: string
+format: uuid
+description: Unique identifier (UUID) of the battle.
+example: '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f'

@@ -130,7 +130,7 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.BattleApi(api_client)
-    battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f' # str | The unique identifier of the battle
+    battle_id = 'battle_id_example' # str | The unique identifier of the battle
 
     try:
         # Delete a battle
@@ -208,7 +208,7 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.BattleApi(api_client)
-    battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f' # str | The unique identifier of the battle
+    battle_id = 'battle_id_example' # str | The unique identifier of the battle
 
     try:
         # Get a battle by ID
@@ -368,7 +368,7 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.BattleApi(api_client)
-    battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f' # str | The unique identifier of the battle
+    battle_id = 'battle_id_example' # str | The unique identifier of the battle
     battle_update_request = bixarena_api_client.BattleUpdateRequest() # BattleUpdateRequest |
 
     try:
