@@ -53,6 +53,9 @@ public class UserEntity {
   @Column(name = "updated_at", nullable = false)
   private OffsetDateTime updatedAt;
 
+  @Column(name = "last_login_at")
+  private OffsetDateTime lastLoginAt;
+
   public enum Role {
     admin,
     user,

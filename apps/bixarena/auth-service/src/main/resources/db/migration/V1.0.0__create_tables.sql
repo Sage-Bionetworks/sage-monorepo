@@ -8,7 +8,8 @@ CREATE TABLE auth.app_user (
   role VARCHAR(50) NOT NULL DEFAULT 'user',
   enabled BOOLEAN NOT NULL DEFAULT true,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  last_login_at TIMESTAMP WITH TIME ZONE
 );
 
 -- Create indexes for better performance
@@ -16,6 +17,7 @@ CREATE INDEX idx_auth_app_user_username ON auth.app_user(username);
 CREATE INDEX idx_auth_app_user_email ON auth.app_user(email) WHERE email IS NOT NULL;
 CREATE INDEX idx_auth_app_user_first_name ON auth.app_user(first_name) WHERE first_name IS NOT NULL;
 CREATE INDEX idx_auth_app_user_last_name ON auth.app_user(last_name) WHERE last_name IS NOT NULL;
+CREATE INDEX idx_auth_app_user_last_login_at ON auth.app_user(last_login_at) WHERE last_login_at IS NOT NULL;
 
 -- Create external_account table for OAuth2 provider linking
 CREATE TABLE auth.external_account (

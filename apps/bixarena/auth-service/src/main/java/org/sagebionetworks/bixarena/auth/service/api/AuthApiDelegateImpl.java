@@ -16,18 +16,15 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.auth.service.configuration.AppProperties;
-import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.Callback200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.Token200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
-import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity;
 import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity.Provider;
 import org.sagebionetworks.bixarena.auth.service.model.entity.UserEntity;
-import org.sagebionetworks.bixarena.auth.service.model.repository.ExternalAccountRepository;
-import org.sagebionetworks.bixarena.auth.service.model.repository.UserRepository;
 import org.sagebionetworks.bixarena.auth.service.security.key.JwkKeyStore;
 import org.sagebionetworks.bixarena.auth.service.service.InternalJwtService;
+import org.sagebionetworks.bixarena.auth.service.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -42,8 +39,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
   private final JwkKeyStore keyStore;
   private final InternalJwtService jwtService;
   private final AppProperties appProperties;
-  private final UserRepository userRepository;
-  private final ExternalAccountRepository externalAccountRepository;
+  private final UserService userService;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
@@ -233,34 +229,17 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       String givenName = (String) idClaims.getOrDefault("given_name", null);
       String familyName = (String) idClaims.getOrDefault("family_name", null);
       String preferred = (String) idClaims.getOrDefault("preferred_username", sub);
-      // Upsert user
-      UserEntity existingOrNew = userRepository
-        .findByUsername(preferred)
-        .orElseGet(() ->
-          UserEntity.builder()
-            .username(preferred)
-            .email(email)
-            .firstName(givenName)
-            .lastName(familyName)
-            .build()
-        );
-      UserEntity persistedUser = existingOrNew.getId() == null
-        ? userRepository.save(existingOrNew)
-        : existingOrNew;
-      // Link external account
-      externalAccountRepository
-        .findByProviderAndExternalId(Provider.synapse, sub)
-        .orElseGet(() ->
-          externalAccountRepository.save(
-            ExternalAccountEntity.builder()
-              .user(persistedUser)
-              .provider(Provider.synapse)
-              .externalId(sub)
-              .externalUsername(preferred)
-              .externalEmail(email)
-              .build()
-          )
-        );
+
+      // Use UserService to handle user creation/update and login tracking
+      UserEntity persistedUser = userService.handleUserLogin(
+        Provider.synapse,
+        sub,
+        preferred,
+        email,
+        givenName,
+        familyName
+      );
+
       // Establish authenticated session principal
       session.setAttribute("AUTH_SUBJECT", persistedUser.getUsername());
       session.setAttribute("AUTH_PREFERRED_USERNAME", persistedUser.getUsername());

@@ -1,0 +1,10 @@
+# Staging profile configuration
+spring:
+  jpa:
+    show-sql: false
+  flyway:
+    enabled: false
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: INFO
