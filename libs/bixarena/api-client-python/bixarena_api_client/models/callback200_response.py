@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena AI API
+BixArena API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -16,28 +16,19 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class MintInternalToken200Response(BaseModel):
+class Callback200Response(BaseModel):
     """
-    MintInternalToken200Response
+    Callback200Response
     """  # noqa: E501
 
-    access_token: StrictStr
-    token_type: StrictStr
-    expires_in: StrictInt
-    __properties: ClassVar[List[str]] = ["access_token", "token_type", "expires_in"]
-
-    @field_validator("token_type")
-    def token_type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(["Bearer"]):
-            raise ValueError("must be one of enum values ('Bearer')")
-        return value
+    status: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["status"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -56,7 +47,7 @@ class MintInternalToken200Response(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MintInternalToken200Response from a JSON string"""
+        """Create an instance of Callback200Response from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -80,18 +71,12 @@ class MintInternalToken200Response(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MintInternalToken200Response from a dict"""
+        """Create an instance of Callback200Response from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "access_token": obj.get("access_token"),
-                "token_type": obj.get("token_type"),
-                "expires_in": obj.get("expires_in"),
-            }
-        )
+        _obj = cls.model_validate({"status": obj.get("status")})
         return _obj

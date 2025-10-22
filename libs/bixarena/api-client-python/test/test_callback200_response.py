@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.basic_error import BasicError
+from bixarena_api_client.models.callback200_response import Callback200Response
 
 
-class TestBasicError(unittest.TestCase):
-    """BasicError unit test stubs"""
+class TestCallback200Response(unittest.TestCase):
+    """Callback200Response unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,31 +25,25 @@ class TestBasicError(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> BasicError:
-        """Test BasicError
+    def make_instance(self, include_optional) -> Callback200Response:
+        """Test Callback200Response
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `BasicError`
+        # uncomment below to create an instance of `Callback200Response`
         """
-        model = BasicError()
+        model = Callback200Response()
         if include_optional:
-            return BasicError(
-                title = '',
-                status = 56,
-                detail = '',
-                type = '',
-                instance = ''
+            return Callback200Response(
+                status = 'ok'
             )
         else:
-            return BasicError(
-                title = '',
-                status = 56,
+            return Callback200Response(
         )
         """
 
-    def testBasicError(self):
-        """Test BasicError"""
+    def testCallback200Response(self):
+        """Test Callback200Response"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

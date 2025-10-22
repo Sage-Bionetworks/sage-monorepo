@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena AI API
+BixArena API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.oidc_callback200_response import OidcCallback200Response
+from bixarena_api_client.models.user_info import UserInfo
 
 
-class TestOidcCallback200Response(unittest.TestCase):
-    """OidcCallback200Response unit test stubs"""
+class TestUserInfo(unittest.TestCase):
+    """UserInfo unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,25 +25,30 @@ class TestOidcCallback200Response(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> OidcCallback200Response:
-        """Test OidcCallback200Response
+    def make_instance(self, include_optional) -> UserInfo:
+        """Test UserInfo
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `OidcCallback200Response`
+        # uncomment below to create an instance of `UserInfo`
         """
-        model = OidcCallback200Response()
+        model = UserInfo()
         if include_optional:
-            return OidcCallback200Response(
-                status = 'ok'
+            return UserInfo(
+                sub = '3350396',
+                preferred_username = 'john.doe',
+                email = 'john.doe@example.com',
+                email_verified = True,
+                roles = ["user"]
             )
         else:
-            return OidcCallback200Response(
+            return UserInfo(
+                sub = '3350396',
         )
         """
 
-    def testOidcCallback200Response(self):
-        """Test OidcCallback200Response"""
+    def testUserInfo(self):
+        """Test UserInfo"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
