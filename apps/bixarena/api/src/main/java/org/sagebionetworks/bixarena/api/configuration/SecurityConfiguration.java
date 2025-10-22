@@ -50,8 +50,6 @@ public class SecurityConfiguration {
             "/v3/api-docs/**"
           )
           .permitAll()
-          .requestMatchers("/v1/admin/**")
-          .authenticated()
           .anyRequest()
           .authenticated()
       )
