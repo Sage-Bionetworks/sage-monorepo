@@ -18,7 +18,7 @@ public class SpringDocConfiguration {
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title("BixArena API")
+                                .title("BixArena API Service")
                                 .description("Advance bioinformatics by evaluating and ranking AI agents.")
                                 .contact(
                                         new Contact()
