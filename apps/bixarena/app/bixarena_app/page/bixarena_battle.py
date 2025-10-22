@@ -12,7 +12,6 @@ import time
 import gradio as gr
 from bixarena_api_client import ApiClient, BattleApi, BattleCreateRequest, Configuration
 
-from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.constants import (
     CONVERSATION_LIMIT_MSG,
     CONVERSATION_TURN_LIMIT,
@@ -179,40 +178,30 @@ def add_text(
 
         # Create battle record
         try:
-            user_state = get_user_state()
-            jsessionid = user_state.get_jsessionid()
             api_base_url = _get_api_base_url()
 
-            if jsessionid and api_base_url:
-                # Runtime lookup model info
-                model_a_info = model_response.api_endpoint_info.get(model_left).get(
-                    "model_id"
-                )
-                model_b_info = model_response.api_endpoint_info.get(model_right).get(
-                    "model_id"
-                )
+            # Runtime lookup model info
+            model_a_info = model_response.api_endpoint_info.get(model_left).get(
+                "model_id"
+            )
+            model_b_info = model_response.api_endpoint_info.get(model_right).get(
+                "model_id"
+            )
 
-                if model_a_info and model_b_info:
-                    model_a_id = model_a_info.get("model_id")
-                    model_b_id = model_b_info.get("model_id")
+            if model_a_info and model_b_info:
+                model_a_id = model_a_info.get("model_id")
+                model_b_id = model_b_info.get("model_id")
 
-                    if model_a_id and model_b_id:
-                        configuration = Configuration(host=api_base_url)
-                        with ApiClient(configuration) as api_client:
-                            api_client.default_headers["Cookie"] = (
-                                f"JSESSIONID={jsessionid}"
-                            )
-                            battle_api = BattleApi(api_client)
-                            battle_request = BattleCreateRequest(
-                                modelAId=model_a_id, modelBId=model_b_id
-                            )
-                            try:
-                                battle = battle_api.create_battle(battle_request)
-                                if battle and battle.id:
-                                    logger.info(f"✅ Battle created: {battle.id}")
-                            except Exception as e:
-                                logger.error(f"❌ Failed to create battle: {e}")
-                                raise
+                if model_a_id and model_b_id:
+                    configuration = Configuration(host=api_base_url)
+                    with ApiClient(configuration) as api_client:
+                        battle_api = BattleApi(api_client)
+                        battle_request = BattleCreateRequest(
+                            modelAId=model_a_id, modelBId=model_b_id
+                        )
+                        battle = battle_api.create_battle(battle_request)
+                        if battle and battle.id:
+                            logger.info(f"✅ Battle created: {battle.id}")
 
         except Exception as e:
             logger.warning(f"❌ Failed to create battle: {e}")
