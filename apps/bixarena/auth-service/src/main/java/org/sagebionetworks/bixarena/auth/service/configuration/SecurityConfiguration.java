@@ -41,8 +41,11 @@ public class SecurityConfiguration {
             "/v3/api-docs/**"
           )
           .permitAll()
-          .requestMatchers("/v1/admin/**")
+          .requestMatchers("/admin/**")
           .hasRole("ADMIN")
+          // /userinfo and /token require authentication (via session)
+          .requestMatchers("/userinfo", "/token")
+          .authenticated()
           .anyRequest()
           .authenticated()
       )

@@ -25,4 +25,4 @@ logging:
 app:
   welcome-message: 'Welcome to BixArena API (test)'
   auth-service:
-    base-url: 'http://localhost:8111/v1'
+    base-url: 'http://bixarena-auth-service:8115'
