@@ -14,21 +14,17 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.PageMetadataDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
-import org.sagebionetworks.bixarena.api.model.entity.UserEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.BattleMapper;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
-import org.sagebionetworks.bixarena.api.model.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
 @Service
@@ -37,7 +33,6 @@ public class BattleService {
 
   private final BattleRepository battleRepository;
   private final ModelRepository modelRepository;
-  private final UserRepository userRepository;
   private final BattleMapper battleMapper = new BattleMapper();
 
   @Transactional(readOnly = true)
@@ -75,22 +70,11 @@ public class BattleService {
 
   @Transactional
   public BattleDto createBattle(BattleCreateRequestDto request, Authentication authentication) {
-    // Get the authenticated username (SOURCE OF TRUTH from Spring Security)
-    String authenticatedUsername = authentication.getName();
+    // TODO: Temporarily using mock userId for testing - replace with real auth after PR #3590
+    // MOCK: Hardcoded userId for development/testing
+    UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
-    // Look up the authenticated user to get their UUID
-    UserEntity authenticatedUser = userRepository
-      .findByUsername(authenticatedUsername)
-      .orElseThrow(() ->
-        new ResponseStatusException(
-          HttpStatus.UNAUTHORIZED,
-          "Authenticated user not found in database"
-        )
-      );
-
-    UUID userId = authenticatedUser.getId();
-
-    log.info("Creating battle for user: {} (username: {})", userId, authenticatedUsername);
+    log.info("Creating battle for MOCK user: {}", userId);
 
     // Validate that both models exist
     UUID modelAId = UUID.fromString(request.getModelAId());
