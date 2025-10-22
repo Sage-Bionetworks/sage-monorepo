@@ -15,6 +15,12 @@ Do not edit the class manually.
 # import models into model package
 from bixarena_api_client.models.admin_stats200_response import AdminStats200Response
 from bixarena_api_client.models.basic_error import BasicError
+from bixarena_api_client.models.battle import Battle
+from bixarena_api_client.models.battle_create_request import BattleCreateRequest
+from bixarena_api_client.models.battle_page import BattlePage
+from bixarena_api_client.models.battle_search_query import BattleSearchQuery
+from bixarena_api_client.models.battle_sort import BattleSort
+from bixarena_api_client.models.battle_update_request import BattleUpdateRequest
 from bixarena_api_client.models.callback200_response import Callback200Response
 from bixarena_api_client.models.example_prompt import ExamplePrompt
 from bixarena_api_client.models.example_prompt_page import ExamplePromptPage

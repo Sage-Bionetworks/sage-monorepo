@@ -72,11 +72,11 @@ No authorization required
 
 ### HTTP response details
 
-| Status code | Description                | Response headers |
-| ----------- | -------------------------- | ---------------- |
-| **200**     | Authentication successful  | -                |
-| **400**     | Invalid request parameters | -                |
-| **401**     | Unauthorized               | -                |
+| Status code | Description               | Response headers |
+| ----------- | ------------------------- | ---------------- |
+| **200**     | Authentication successful | -                |
+| **400**     | Invalid request           | -                |
+| **401**     | Unauthorized              | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -136,10 +136,10 @@ No authorization required
 
 ### HTTP response details
 
-| Status code | Description                | Response headers |
-| ----------- | -------------------------- | ---------------- |
-| **200**     | JWKS document              | -                |
-| **400**     | Invalid request parameters | -                |
+| Status code | Description     | Response headers |
+| ----------- | --------------- | ---------------- |
+| **200**     | JWKS document   | -                |
+| **400**     | Invalid request | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -209,7 +209,7 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
@@ -277,7 +277,7 @@ No authorization required
 | ----------- | --------------------------------------------------------- | ---------------- |
 | **204**     | Flow started (no content; clients should follow redirect) | -                |
 | **302**     | Redirect to Synapse login                                 | -                |
-| **400**     | Invalid request parameters                                | -                |
+| **400**     | Invalid request                                           | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -341,7 +341,7 @@ void (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
+- **Accept**: application/problem+json
 
 ### HTTP response details
 
@@ -404,7 +404,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 

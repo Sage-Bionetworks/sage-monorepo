@@ -1,0 +1,25 @@
+type: object
+description: A battle entity representing a comparison between two AI models.
+properties:
+  id:
+    $ref: BattleId.yaml
+  title:
+    $ref: BattleTitle.yaml
+    nullable: true
+  userId:
+    $ref: UserId.yaml
+  leftModelId:
+    $ref: ModelId.yaml
+  rightModelId:
+    $ref: ModelId.yaml
+  createdAt:
+    $ref: CreatedAt.yaml
+  endedAt:
+    $ref: EndedAt.yaml
+    nullable: true
+required:
+  - id
+  - userId
+  - leftModelId
+  - rightModelId
+  - createdAt

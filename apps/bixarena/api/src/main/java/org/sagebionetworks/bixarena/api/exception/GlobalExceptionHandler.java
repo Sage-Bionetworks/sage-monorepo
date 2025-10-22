@@ -54,6 +54,34 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
+  @ExceptionHandler(BattleNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleBattleNotFound(
+    BattleNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Battle Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(ModelNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleModelNotFoundException(
+    ModelNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Model Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
   @ExceptionHandler(AccessDeniedException.class)
   protected ResponseEntity<BasicErrorDto> handleAccessDenied(
     AccessDeniedException ex,

@@ -19,6 +19,7 @@ __version__ = "1.0.0"
 __all__ = [
     "AdminApi",
     "AuthApi",
+    "BattleApi",
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
@@ -33,6 +34,12 @@ __all__ = [
     "ApiException",
     "AdminStats200Response",
     "BasicError",
+    "Battle",
+    "BattleCreateRequest",
+    "BattlePage",
+    "BattleSearchQuery",
+    "BattleSort",
+    "BattleUpdateRequest",
     "Callback200Response",
     "ExamplePrompt",
     "ExamplePromptPage",
@@ -67,6 +74,7 @@ __all__ = [
 # import apis into sdk package
 from bixarena_api_client.api.admin_api import AdminApi as AdminApi
 from bixarena_api_client.api.auth_api import AuthApi as AuthApi
+from bixarena_api_client.api.battle_api import BattleApi as BattleApi
 from bixarena_api_client.api.example_prompt_api import (
     ExamplePromptApi as ExamplePromptApi,
 )
@@ -89,6 +97,18 @@ from bixarena_api_client.models.admin_stats200_response import (
     AdminStats200Response as AdminStats200Response,
 )
 from bixarena_api_client.models.basic_error import BasicError as BasicError
+from bixarena_api_client.models.battle import Battle as Battle
+from bixarena_api_client.models.battle_create_request import (
+    BattleCreateRequest as BattleCreateRequest,
+)
+from bixarena_api_client.models.battle_page import BattlePage as BattlePage
+from bixarena_api_client.models.battle_search_query import (
+    BattleSearchQuery as BattleSearchQuery,
+)
+from bixarena_api_client.models.battle_sort import BattleSort as BattleSort
+from bixarena_api_client.models.battle_update_request import (
+    BattleUpdateRequest as BattleUpdateRequest,
+)
 from bixarena_api_client.models.callback200_response import (
     Callback200Response as Callback200Response,
 )

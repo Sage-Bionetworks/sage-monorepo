@@ -1,0 +1,13 @@
+type: object
+description: The information used to create a new battle.
+properties:
+  title:
+    $ref: BattleTitle.yaml
+    nullable: true
+  leftModelId:
+    $ref: ModelId.yaml
+  rightModelId:
+    $ref: ModelId.yaml
+required:
+  - leftModelId
+  - rightModelId

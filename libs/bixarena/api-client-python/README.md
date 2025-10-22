@@ -107,6 +107,11 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _AuthApi_          | [**login**](docs/AuthApi.md#login)                                                | **GET** /auth/login                                     | Start Synapse OIDC authorization code flow |
 | _AuthApi_          | [**logout**](docs/AuthApi.md#logout)                                              | **POST** /auth/logout                                   | Logout current session                     |
 | _AuthApi_          | [**token**](docs/AuthApi.md#token)                                                | **POST** /oauth2/token                                  | Mint short-lived internal JWT              |
+| _BattleApi_        | [**create_battle**](docs/BattleApi.md#create_battle)                              | **POST** /battles                                       | Create a battle                            |
+| _BattleApi_        | [**delete_battle**](docs/BattleApi.md#delete_battle)                              | **DELETE** /battles/{battleId}                          | Delete a battle                            |
+| _BattleApi_        | [**get_battle**](docs/BattleApi.md#get_battle)                                    | **GET** /battles/{battleId}                             | Get a battle by ID                         |
+| _BattleApi_        | [**list_battles**](docs/BattleApi.md#list_battles)                                | **GET** /battles                                        | List battles                               |
+| _BattleApi_        | [**update_battle**](docs/BattleApi.md#update_battle)                              | **PATCH** /battles/{battleId}                           | Update a battle                            |
 | _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts                       |
 | _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
 | _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |
@@ -118,6 +123,12 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 
 - [AdminStats200Response](docs/AdminStats200Response.md)
 - [BasicError](docs/BasicError.md)
+- [Battle](docs/Battle.md)
+- [BattleCreateRequest](docs/BattleCreateRequest.md)
+- [BattlePage](docs/BattlePage.md)
+- [BattleSearchQuery](docs/BattleSearchQuery.md)
+- [BattleSort](docs/BattleSort.md)
+- [BattleUpdateRequest](docs/BattleUpdateRequest.md)
 - [Callback200Response](docs/Callback200Response.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
 - [ExamplePromptPage](docs/ExamplePromptPage.md)

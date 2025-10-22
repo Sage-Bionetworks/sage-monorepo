@@ -16,6 +16,8 @@ security:
 tags:
   - description: Administrative endpoints requiring elevated roles.
     name: Admin
+  - description: Operations about battles between AI models.
+    name: Battle
   - description: Operations about example prompts for biomedical relevance detection.
     name: Example Prompt
   - description: Operations about leaderboards.
@@ -43,8 +45,190 @@ paths:
         - Admin
       x-accepts:
         - application/json
+        - application/problem+json
       x-tags:
         - tag: Admin
+  /battles:
+    get:
+      description: List battles with optional filtering and pagination
+      operationId: listBattles
+      parameters:
+        - description: The search query used to find and filter battles.
+          explode: true
+          in: query
+          name: battleSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/BattleSearchQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattlePage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: List battles
+      tags:
+        - Battle
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
+    post:
+      description: Create a new battle between two AI models.
+      operationId: createBattle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Battle'
+          description: Battle created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Create a battle
+      tags:
+        - Battle
+      x-anonymous-access: true
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
+  /battles/{battleId}:
+    delete:
+      description: Delete a battle by its unique identifier
+      operationId: deleteBattle
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      responses:
+        '204':
+          description: Battle deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Delete a battle
+      tags:
+        - Battle
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: Battle
+    get:
+      description: Returns a single battle by its unique identifier
+      operationId: getBattle
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Battle'
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get a battle by ID
+      tags:
+        - Battle
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
+    patch:
+      description: Update a battle's end time or other properties
+      operationId: updateBattle
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Battle'
+          description: Battle updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Update a battle
+      tags:
+        - Battle
+      x-anonymous-access: true
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
   /example-prompts:
     get:
       description: Get a list of example prompts with comprehensive filtering options
@@ -279,6 +463,24 @@ paths:
         - tag: Model
 components:
   parameters:
+    battleSearchQuery:
+      description: The search query used to find and filter battles.
+      explode: true
+      in: query
+      name: battleSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/BattleSearchQuery'
+      style: deepObject
+    battleId:
+      description: The unique identifier of the battle
+      explode: false
+      in: path
+      name: battleId
+      required: true
+      schema:
+        $ref: '#/components/schemas/BattleId'
+      style: simple
     examplePromptSearchQuery:
       description: The search query used to find and filter example prompts.
       explode: true
@@ -348,22 +550,22 @@ components:
   responses:
     Unauthorized:
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Unauthorized
     Forbidden:
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-      description: Forbidden
+      description: The user does not have the permission to perform this action
     BadRequest:
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-      description: Invalid request parameters
+      description: Invalid request
     InternalServerError:
       content:
         application/problem+json:
@@ -375,16 +577,16 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-      description: The requested resource was not found
+      description: The specified resource was not found
+    Conflict:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request conflicts with current state of the target resource
   schemas:
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
-      example:
-        instance: instance
-        detail: detail
-        title: title
-        type: type
-        status: 0
       properties:
         title:
           description: A human readable documentation for the problem type
@@ -407,13 +609,12 @@ components:
         - status
         - title
       type: object
-    ExamplePromptSort:
+    BattleSort:
       default: created_at
-      description: The field to sort example prompts by.
+      description: What to sort battles by.
       enum:
         - created_at
-        - random
-      example: random
+      example: created_at
       type: string
     SortDirection:
       default: asc
@@ -422,6 +623,245 @@ components:
         - asc
         - desc
       example: desc
+      type: string
+    BattleSearchQuery:
+      description: A battle search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number to return (0-indexed).
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items to return in a single page.
+          example: 10
+          format: int32
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/BattleSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        userId:
+          description: Filter by user ID.
+          example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
+          nullable: true
+          type: string
+      required:
+        - direction
+        - pageNumber
+        - pageSize
+        - sort
+      type: object
+    BattleId:
+      description: Unique identifier (UUID) of the battle.
+      example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+      format: uuid
+      type: string
+    BattleTitle:
+      description: Title of the battle.
+      example: Gene Expression Analysis Comparison
+      type: string
+    UserId:
+      description: UUID of a user.
+      example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+      format: uuid
+      type: string
+    ModelId:
+      description: UUID of an AI model.
+      example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+      format: uuid
+      type: string
+    CreatedAt:
+      description: Timestamp when the entity was created.
+      example: 2024-01-15T10:30:00Z
+      format: date-time
+      type: string
+    EndedAt:
+      description: Timestamp when the entity ended.
+      example: 2024-01-15T11:45:00Z
+      format: date-time
+      type: string
+    Battle:
+      description: A battle entity representing a comparison between two AI models.
+      example:
+        leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+        createdAt: 2024-01-15T10:30:00Z
+        endedAt: 2024-01-15T11:45:00Z
+        id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+        title: Gene Expression Analysis Comparison
+        userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+        rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+      properties:
+        id:
+          description: Unique identifier (UUID) of the battle.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+          format: uuid
+          type: string
+        title:
+          description: Title of the battle.
+          example: Gene Expression Analysis Comparison
+          type: string
+        userId:
+          description: UUID of a user.
+          example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
+          type: string
+        leftModelId:
+          description: UUID of an AI model.
+          example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
+          type: string
+        rightModelId:
+          description: UUID of an AI model.
+          example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
+          type: string
+        createdAt:
+          description: Timestamp when the entity was created.
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          type: string
+        endedAt:
+          description: Timestamp when the entity ended.
+          example: 2024-01-15T11:45:00Z
+          format: date-time
+          type: string
+      required:
+        - createdAt
+        - id
+        - leftModelId
+        - rightModelId
+        - userId
+      type: object
+    PageMetadata:
+      description: The metadata of a page.
+      example:
+        number: 99
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
+      properties:
+        number:
+          description: The page number.
+          example: 99
+          format: int32
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 99
+          format: int32
+          type: integer
+        totalElements:
+          description: Total number of elements in the result set.
+          example: 99
+          format: int64
+          type: integer
+        totalPages:
+          description: Total number of pages in the result set.
+          example: 99
+          format: int32
+          type: integer
+        hasNext:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        hasPrevious:
+          description: Returns if there is a previous page.
+          example: true
+          type: boolean
+      required:
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
+      type: object
+    BattlePage:
+      description: A page of battles.
+      example:
+        battles:
+          - leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+            createdAt: 2024-01-15T10:30:00Z
+            endedAt: 2024-01-15T11:45:00Z
+            id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            title: Gene Expression Analysis Comparison
+            userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+            rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          - leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+            createdAt: 2024-01-15T10:30:00Z
+            endedAt: 2024-01-15T11:45:00Z
+            id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            title: Gene Expression Analysis Comparison
+            userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+            rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+        page:
+          number: 99
+          size: 99
+          totalPages: 99
+          hasPrevious: true
+          hasNext: true
+          totalElements: 99
+      properties:
+        battles:
+          description: List of battles in this page.
+          items:
+            $ref: '#/components/schemas/Battle'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - battles
+        - page
+      type: object
+    BattleCreateRequest:
+      description: The information used to create a new battle.
+      properties:
+        title:
+          description: Title of the battle.
+          example: Gene Expression Analysis Comparison
+          type: string
+        leftModelId:
+          description: UUID of an AI model.
+          example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
+          type: string
+        rightModelId:
+          description: UUID of an AI model.
+          example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
+          type: string
+      required:
+        - leftModelId
+        - rightModelId
+      type: object
+    BattleUpdateRequest:
+      description: The information used to update a battle.
+      properties:
+        title:
+          description: Title of the battle.
+          example: Gene Expression Analysis Comparison
+          type: string
+        endedAt:
+          description: Timestamp when the entity ended.
+          example: 2024-01-15T11:45:00Z
+          format: date-time
+          type: string
+      type: object
+    ExamplePromptSort:
+      default: created_at
+      description: The field to sort example prompts by.
+      enum:
+        - created_at
+        - random
+      example: random
       type: string
     ExamplePromptSource:
       description: The source dataset or origin of the example prompt.
@@ -466,45 +906,6 @@ components:
           example: diabetes
           nullable: true
           type: string
-      type: object
-    PageMetadata:
-      description: The metadata of a page.
-      properties:
-        number:
-          description: The page number.
-          example: 99
-          format: int32
-          type: integer
-        size:
-          description: The number of items in a single page.
-          example: 99
-          format: int32
-          type: integer
-        totalElements:
-          description: Total number of elements in the result set.
-          example: 99
-          format: int64
-          type: integer
-        totalPages:
-          description: Total number of pages in the result set.
-          example: 99
-          format: int32
-          type: integer
-        hasNext:
-          description: Returns if there is a next page.
-          example: true
-          type: boolean
-        hasPrevious:
-          description: Returns if there is a previous page.
-          example: true
-          type: boolean
-      required:
-        - hasNext
-        - hasPrevious
-        - number
-        - size
-        - totalElements
-        - totalPages
       type: object
     ExamplePrompt:
       description: A self-contained example prompt for biomedical question answering.

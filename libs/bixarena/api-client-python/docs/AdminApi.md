@@ -69,14 +69,14 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description  | Response headers |
-| ----------- | ------------ | ---------------- |
-| **200**     | Success      | -                |
-| **401**     | Unauthorized | -                |
-| **403**     | Forbidden    | -                |
+| Status code | Description                                                  | Response headers |
+| ----------- | ------------------------------------------------------------ | ---------------- |
+| **200**     | Success                                                      | -                |
+| **401**     | Unauthorized                                                 | -                |
+| **403**     | The user does not have the permission to perform this action | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

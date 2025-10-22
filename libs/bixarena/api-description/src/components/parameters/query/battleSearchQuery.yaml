@@ -1,0 +1,7 @@
+name: battleSearchQuery
+description: The search query used to find and filter battles.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../schemas/BattleSearchQuery.yaml

@@ -76,3 +76,18 @@ CREATE TABLE api.example_prompt (
 -- Indexes for performance
 CREATE INDEX idx_api_example_prompt_source ON api.example_prompt(source);
 CREATE INDEX idx_api_example_prompt_active ON api.example_prompt(active);
+
+-- Create battle table
+CREATE TABLE api.battle (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title VARCHAR(255),
+  user_id UUID NOT NULL,
+  left_model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  right_model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  ended_at TIMESTAMPTZ
+);
+
+-- Indexes for performance
+CREATE INDEX idx_api_battle_user_id ON api.battle(user_id);
+CREATE INDEX idx_api_battle_created_at ON api.battle(created_at DESC);

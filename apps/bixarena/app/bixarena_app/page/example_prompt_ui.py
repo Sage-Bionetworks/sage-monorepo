@@ -16,16 +16,16 @@ from bixarena_api_client.models.example_prompt_search_query import (
 )
 from bixarena_api_client.models.example_prompt_sort import ExamplePromptSort
 
-logger = logging.getLogger(__name__)
+from bixarena_app.config.utils import _get_api_base_url
 
-API_HOST_DEFAULT = "http://bixarena-api:8112/v1"
+logger = logging.getLogger(__name__)
 
 
 class ExamplePromptUI:
     """Stateful manager for example prompt navigation and rendering."""
 
-    def __init__(self, api_host: str = API_HOST_DEFAULT):
-        self.api_host = api_host
+    def __init__(self):
+        self.api_host = _get_api_base_url()
         self.history: list[list[str]] = []
         self.index: int = -1
         self.prev_btn: gr.Button | None = None
@@ -138,8 +138,7 @@ class ExamplePromptUI:
 def example_prompt_cards(
     textbox: gr.Textbox | None = None,
     num_prompts: int = 3,
-    api_host: str = API_HOST_DEFAULT,
 ) -> tuple[gr.Row, list[gr.Button], gr.Button, gr.Button]:
     """Functional wrapper used to call in other modules."""
-    ui = ExamplePromptUI(api_host)
+    ui = ExamplePromptUI()
     return ui.build(textbox=textbox, num_prompts=num_prompts)

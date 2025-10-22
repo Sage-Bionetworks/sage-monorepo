@@ -53,8 +53,8 @@ public interface LeaderboardApi {
      * @param leaderboardId The unique identifier of a leaderboard (required)
      * @param leaderboardSearchQuery The search query used to find and filter leaderboard entries. (optional)
      * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
-     *         or The requested resource was not found (status code 404)
+     *         or Invalid request (status code 400)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -67,11 +67,11 @@ public interface LeaderboardApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = LeaderboardEntryPageDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LeaderboardEntryPageDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
@@ -105,8 +105,8 @@ public interface LeaderboardApi {
      * @param leaderboardId The unique identifier of a leaderboard (required)
      * @param leaderboardSnapshotQuery The query used to filter and paginate leaderboard snapshots. (optional)
      * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
-     *         or The requested resource was not found (status code 404)
+     *         or Invalid request (status code 400)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -119,11 +119,11 @@ public interface LeaderboardApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = LeaderboardSnapshotPageDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LeaderboardSnapshotPageDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
@@ -158,8 +158,8 @@ public interface LeaderboardApi {
      * @param modelId The unique identifier of a model (required)
      * @param leaderboardModelHistoryQuery The query used to filter and paginate historical model performance data. (optional)
      * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
-     *         or The requested resource was not found (status code 404)
+     *         or Invalid request (status code 400)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -172,11 +172,11 @@ public interface LeaderboardApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = LeaderboardModelHistoryPageDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LeaderboardModelHistoryPageDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
@@ -209,7 +209,7 @@ public interface LeaderboardApi {
      * Get a list of all available leaderboards with their metadata
      *
      * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -222,7 +222,7 @@ public interface LeaderboardApi {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LeaderboardListInnerDto.class))),
                 @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = LeaderboardListInnerDto.class)))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),

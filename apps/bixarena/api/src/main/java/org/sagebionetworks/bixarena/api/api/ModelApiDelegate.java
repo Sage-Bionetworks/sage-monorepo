@@ -34,7 +34,7 @@ public interface ModelApiDelegate {
      *
      * @param modelSearchQuery The search query used to find and filter models. (optional)
      * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ModelApi#listModels
      */

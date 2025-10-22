@@ -46,7 +46,7 @@ public interface AdminApi {
      *
      * @return Success (status code 200)
      *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
+     *         or The user does not have the permission to perform this action (status code 403)
      */
     @Operation(
         operationId = "adminStats",
@@ -55,13 +55,16 @@ public interface AdminApi {
         tags = { "Admin" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = AdminStats200ResponseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = AdminStats200ResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = AdminStats200ResponseDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
@@ -71,7 +74,7 @@ public interface AdminApi {
     @RequestMapping(
         method = RequestMethod.GET,
         value = "/admin/stats",
-        produces = { "application/json" }
+        produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<AdminStats200ResponseDto> adminStats(

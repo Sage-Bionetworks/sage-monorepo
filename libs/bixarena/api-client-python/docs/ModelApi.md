@@ -80,7 +80,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 | Status code | Description                                                       | Response headers |
 | ----------- | ----------------------------------------------------------------- | ---------------- |
 | **200**     | Success                                                           | -                |
-| **400**     | Invalid request parameters                                        | -                |
+| **400**     | Invalid request                                                   | -                |
 | **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

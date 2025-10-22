@@ -217,7 +217,7 @@ components:
         - sub
   responses:
     BadRequest:
-      description: Invalid request parameters
+      description: Invalid request
       content:
         application/problem+json:
           schema:
@@ -225,7 +225,7 @@ components:
     Unauthorized:
       description: Unauthorized
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
 x-oauth2-audience: urn:bixarena:api

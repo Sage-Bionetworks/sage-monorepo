@@ -1,5 +1,5 @@
-description: Forbidden
+description: The user does not have the permission to perform this action
 content:
-  application/json:
+  application/problem+json:
     schema:
       $ref: ../schemas/BasicError.yaml

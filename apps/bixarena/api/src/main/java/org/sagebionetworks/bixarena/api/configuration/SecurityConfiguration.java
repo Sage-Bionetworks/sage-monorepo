@@ -5,6 +5,7 @@ import org.sagebionetworks.bixarena.api.security.JwtAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -50,6 +51,10 @@ public class SecurityConfiguration {
             "/v3/api-docs/**"
           )
           .permitAll()
+          .requestMatchers(HttpMethod.POST, "/v1/battles")
+          .permitAll()
+          .requestMatchers(HttpMethod.PATCH, "/v1/battles/**")
+          .permitAll()
           .anyRequest()
           .authenticated()
       )
@@ -79,7 +84,7 @@ public class SecurityConfiguration {
         "http://127.0.0.1:7860"
       )
     );
-    config.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
+    config.setAllowedMethods(List.of("GET", "POST", "PATCH", "OPTIONS"));
     config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", config);

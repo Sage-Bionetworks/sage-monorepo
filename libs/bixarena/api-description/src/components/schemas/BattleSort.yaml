@@ -1,0 +1,6 @@
+description: What to sort battles by.
+type: string
+enum:
+  - created_at
+default: created_at
+example: created_at

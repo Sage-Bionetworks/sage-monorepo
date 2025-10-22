@@ -1,0 +1,6 @@
+name: battleId
+description: The unique identifier of the battle
+in: path
+required: true
+schema:
+  $ref: ../../schemas/BattleId.yaml

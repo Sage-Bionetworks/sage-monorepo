@@ -17,13 +17,14 @@ x-oauth2-audience: 'urn:bixarena:api'
 servers:
   - url: http://localhost/v1
 
-# Default security posture (scopes on operations)
 security:
   - jwtBearer: []
 
 tags:
   - name: Admin
     description: Administrative endpoints requiring elevated roles.
+  - name: Battle
+    description: Operations about battles between AI models.
   - name: Example Prompt
     description: Operations about example prompts for biomedical relevance detection.
   - name: Leaderboard
@@ -34,6 +35,10 @@ tags:
 paths:
   /admin/stats:
     $ref: paths/admin-stats.yaml
+  /battles:
+    $ref: paths/battles.yaml
+  /battles/{battleId}:
+    $ref: paths/battles/{battleId}.yaml
   /example-prompts:
     $ref: paths/example-prompts.yaml
   /leaderboards:

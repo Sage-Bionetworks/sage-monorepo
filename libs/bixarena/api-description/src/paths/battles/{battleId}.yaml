@@ -1,0 +1,71 @@
+parameters:
+  - $ref: ../../components/parameters/path/battleId.yaml
+
+get:
+  tags:
+    - Battle
+  summary: Get a battle by ID
+  description: Returns a single battle by its unique identifier
+  operationId: getBattle
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Battle.yaml
+      description: Success
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
+
+patch:
+  tags:
+    - Battle
+  summary: Update a battle
+  description: Update a battle's end time or other properties
+  operationId: updateBattle
+  x-anonymous-access: true
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/BattleUpdateRequest.yaml
+    required: true
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Battle.yaml
+      description: Battle updated successfully
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
+
+delete:
+  tags:
+    - Battle
+  summary: Delete a battle
+  description: Delete a battle by its unique identifier
+  operationId: deleteBattle
+  responses:
+    '204':
+      description: Battle deleted successfully
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
