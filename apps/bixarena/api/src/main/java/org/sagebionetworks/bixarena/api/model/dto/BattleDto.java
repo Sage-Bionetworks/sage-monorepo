@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -26,15 +27,15 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class BattleDto {
 
-  private String id;
+  private UUID id;
 
   private @Nullable String title = null;
 
-  private String userId;
+  private UUID userId;
 
-  private String modelAId;
+  private UUID modelAId;
 
-  private String modelBId;
+  private UUID modelBId;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -49,7 +50,7 @@ public class BattleDto {
   /**
    * Constructor with only required parameters
    */
-  public BattleDto(String id, String userId, String modelAId, String modelBId, OffsetDateTime createdAt) {
+  public BattleDto(UUID id, UUID userId, UUID modelAId, UUID modelBId, OffsetDateTime createdAt) {
     this.id = id;
     this.userId = userId;
     this.modelAId = modelAId;
@@ -57,7 +58,7 @@ public class BattleDto {
     this.createdAt = createdAt;
   }
 
-  public BattleDto id(String id) {
+  public BattleDto id(UUID id) {
     this.id = id;
     return this;
   }
@@ -66,14 +67,14 @@ public class BattleDto {
    * Unique identifier (UUID) of the battle.
    * @return id
    */
-  @NotNull 
+  @NotNull @Valid 
   @Schema(name = "id", example = "5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f", description = "Unique identifier (UUID) of the battle.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("id")
-  public String getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -97,7 +98,7 @@ public class BattleDto {
     this.title = title;
   }
 
-  public BattleDto userId(String userId) {
+  public BattleDto userId(UUID userId) {
     this.userId = userId;
     return this;
   }
@@ -106,18 +107,18 @@ public class BattleDto {
    * UUID of the user who initiated this battle.
    * @return userId
    */
-  @NotNull 
+  @NotNull @Valid 
   @Schema(name = "userId", example = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of the user who initiated this battle.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("userId")
-  public String getUserId() {
+  public UUID getUserId() {
     return userId;
   }
 
-  public void setUserId(String userId) {
+  public void setUserId(UUID userId) {
     this.userId = userId;
   }
 
-  public BattleDto modelAId(String modelAId) {
+  public BattleDto modelAId(UUID modelAId) {
     this.modelAId = modelAId;
     return this;
   }
@@ -126,18 +127,18 @@ public class BattleDto {
    * UUID of model A in the battle.
    * @return modelAId
    */
-  @NotNull 
+  @NotNull @Valid 
   @Schema(name = "modelAId", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of model A in the battle.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("modelAId")
-  public String getModelAId() {
+  public UUID getModelAId() {
     return modelAId;
   }
 
-  public void setModelAId(String modelAId) {
+  public void setModelAId(UUID modelAId) {
     this.modelAId = modelAId;
   }
 
-  public BattleDto modelBId(String modelBId) {
+  public BattleDto modelBId(UUID modelBId) {
     this.modelBId = modelBId;
     return this;
   }
@@ -146,14 +147,14 @@ public class BattleDto {
    * UUID of model B in the battle.
    * @return modelBId
    */
-  @NotNull 
+  @NotNull @Valid 
   @Schema(name = "modelBId", example = "9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c", description = "UUID of model B in the battle.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("modelBId")
-  public String getModelBId() {
+  public UUID getModelBId() {
     return modelBId;
   }
 
-  public void setModelBId(String modelBId) {
+  public void setModelBId(UUID modelBId) {
     this.modelBId = modelBId;
   }
 
@@ -269,7 +270,7 @@ public class BattleDto {
       return this;
     }
 
-    public BattleDto.Builder id(String id) {
+    public BattleDto.Builder id(UUID id) {
       this.instance.id(id);
       return this;
     }
@@ -279,17 +280,17 @@ public class BattleDto {
       return this;
     }
     
-    public BattleDto.Builder userId(String userId) {
+    public BattleDto.Builder userId(UUID userId) {
       this.instance.userId(userId);
       return this;
     }
     
-    public BattleDto.Builder modelAId(String modelAId) {
+    public BattleDto.Builder modelAId(UUID modelAId) {
       this.instance.modelAId(modelAId);
       return this;
     }
     
-    public BattleDto.Builder modelBId(String modelBId) {
+    public BattleDto.Builder modelBId(UUID modelBId) {
       this.instance.modelBId(modelBId);
       return this;
     }

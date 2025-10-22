@@ -44,31 +44,17 @@ paths:
                 $ref: '#/components/schemas/BattlePage'
           description: Success
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Bad request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Internal server error
-      security:
-        - jwtBearer:
-            - read:battles
+          $ref: '#/components/responses/InternalServerError'
       summary: List battles
       tags:
         - Battle
       x-accepts:
         - application/json
+        - application/problem+json
       x-tags:
         - tag: Battle
     post:
@@ -88,29 +74,13 @@ paths:
                 $ref: '#/components/schemas/Battle'
           description: Battle created successfully
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Bad request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Model not found
+          $ref: '#/components/responses/NotFound'
         '409':
           content:
             application/json:
@@ -118,14 +88,7 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: Conflict
         '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Internal server error
-      security:
-        - jwtBearer:
-            - create:battles
+          $ref: '#/components/responses/InternalServerError'
       summary: Create a battle
       tags:
         - Battle
@@ -133,6 +96,7 @@ paths:
       x-content-type: application/json
       x-accepts:
         - application/json
+        - application/problem+json
       x-tags:
         - tag: Battle
   /battles/{battleId}:
@@ -147,43 +111,26 @@ paths:
           required: true
           schema:
             example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            format: uuid
             type: string
           style: simple
       responses:
         '204':
           description: Battle deleted successfully
         '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Battle not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Internal server error
-      security:
-        - jwtBearer:
-            - delete:battles
+          $ref: '#/components/responses/InternalServerError'
       summary: Delete a battle
       tags:
         - Battle
       x-accepts:
         - application/json
+        - application/problem+json
       x-tags:
         - tag: Battle
     get:
@@ -197,6 +144,7 @@ paths:
           required: true
           schema:
             example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            format: uuid
             type: string
           style: simple
       responses:
@@ -207,31 +155,17 @@ paths:
                 $ref: '#/components/schemas/Battle'
           description: Success
         '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Battle not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Internal server error
-      security:
-        - jwtBearer:
-            - read:battles
+          $ref: '#/components/responses/InternalServerError'
       summary: Get a battle by ID
       tags:
         - Battle
       x-accepts:
         - application/json
+        - application/problem+json
       x-tags:
         - tag: Battle
     patch:
@@ -245,6 +179,7 @@ paths:
           required: true
           schema:
             example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            format: uuid
             type: string
           style: simple
       requestBody:
@@ -261,38 +196,15 @@ paths:
                 $ref: '#/components/schemas/Battle'
           description: Battle updated successfully
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Bad request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Forbidden
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Battle not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Internal server error
-      security:
-        - jwtBearer:
-            - update:battles
+          $ref: '#/components/responses/InternalServerError'
       summary: Update a battle
       tags:
         - Battle
@@ -300,6 +212,7 @@ paths:
       x-content-type: application/json
       x-accepts:
         - application/json
+        - application/problem+json
       x-tags:
         - tag: Battle
   /example-prompts:
@@ -545,6 +458,17 @@ components:
       schema:
         $ref: '#/components/schemas/BattleSearchQuery'
       style: deepObject
+    battleId:
+      description: The unique identifier of the battle
+      explode: false
+      in: path
+      name: battleId
+      required: true
+      schema:
+        example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+        format: uuid
+        type: string
+      style: simple
     examplePromptSearchQuery:
       description: The search query used to find and filter example prompts.
       explode: true
@@ -618,12 +542,24 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Invalid request parameters
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Unauthorized
     InternalServerError:
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
+    Forbidden:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Forbidden
     NotFound:
       content:
         application/problem+json:
@@ -670,6 +606,7 @@ components:
         userId:
           description: Filter by user ID.
           example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
           nullable: true
           type: string
       required:
@@ -692,6 +629,7 @@ components:
         id:
           description: Unique identifier (UUID) of the battle.
           example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+          format: uuid
           type: string
         title:
           description: Title of the battle.
@@ -701,14 +639,17 @@ components:
         userId:
           description: UUID of the user who initiated this battle.
           example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
           type: string
         modelAId:
           description: UUID of model A in the battle.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
           type: string
         modelBId:
           description: UUID of model B in the battle.
           example: 9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c
+          format: uuid
           type: string
         createdAt:
           description: Timestamp when the battle was created.
@@ -852,10 +793,12 @@ components:
         modelAId:
           description: UUID of model A to compare.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
           type: string
         modelBId:
           description: UUID of model B to compare.
           example: 9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c
+          format: uuid
           type: string
       required:
         - modelAId

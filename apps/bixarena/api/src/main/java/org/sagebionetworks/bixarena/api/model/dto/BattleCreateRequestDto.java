@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -26,9 +27,9 @@ public class BattleCreateRequestDto {
 
   private @Nullable String title = null;
 
-  private String modelAId;
+  private UUID modelAId;
 
-  private String modelBId;
+  private UUID modelBId;
 
   public BattleCreateRequestDto() {
     super();
@@ -37,7 +38,7 @@ public class BattleCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public BattleCreateRequestDto(String modelAId, String modelBId) {
+  public BattleCreateRequestDto(UUID modelAId, UUID modelBId) {
     this.modelAId = modelAId;
     this.modelBId = modelBId;
   }
@@ -62,7 +63,7 @@ public class BattleCreateRequestDto {
     this.title = title;
   }
 
-  public BattleCreateRequestDto modelAId(String modelAId) {
+  public BattleCreateRequestDto modelAId(UUID modelAId) {
     this.modelAId = modelAId;
     return this;
   }
@@ -71,18 +72,18 @@ public class BattleCreateRequestDto {
    * UUID of model A to compare.
    * @return modelAId
    */
-  @NotNull 
+  @NotNull @Valid 
   @Schema(name = "modelAId", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of model A to compare.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("modelAId")
-  public String getModelAId() {
+  public UUID getModelAId() {
     return modelAId;
   }
 
-  public void setModelAId(String modelAId) {
+  public void setModelAId(UUID modelAId) {
     this.modelAId = modelAId;
   }
 
-  public BattleCreateRequestDto modelBId(String modelBId) {
+  public BattleCreateRequestDto modelBId(UUID modelBId) {
     this.modelBId = modelBId;
     return this;
   }
@@ -91,14 +92,14 @@ public class BattleCreateRequestDto {
    * UUID of model B to compare.
    * @return modelBId
    */
-  @NotNull 
+  @NotNull @Valid 
   @Schema(name = "modelBId", example = "9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c", description = "UUID of model B to compare.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("modelBId")
-  public String getModelBId() {
+  public UUID getModelBId() {
     return modelBId;
   }
 
-  public void setModelBId(String modelBId) {
+  public void setModelBId(UUID modelBId) {
     this.modelBId = modelBId;
   }
 
@@ -167,12 +168,12 @@ public class BattleCreateRequestDto {
       return this;
     }
     
-    public BattleCreateRequestDto.Builder modelAId(String modelAId) {
+    public BattleCreateRequestDto.Builder modelAId(UUID modelAId) {
       this.instance.modelAId(modelAId);
       return this;
     }
     
-    public BattleCreateRequestDto.Builder modelBId(String modelBId) {
+    public BattleCreateRequestDto.Builder modelBId(UUID modelBId) {
       this.instance.modelBId(modelBId);
       return this;
     }

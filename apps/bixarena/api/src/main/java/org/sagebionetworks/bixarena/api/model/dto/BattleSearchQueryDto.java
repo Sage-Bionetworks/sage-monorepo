@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.SortDirectionDto;
 import org.springframework.lang.Nullable;
@@ -35,7 +36,7 @@ public class BattleSearchQueryDto {
 
   private SortDirectionDto direction = SortDirectionDto.ASC;
 
-  private @Nullable String userId = null;
+  private @Nullable UUID userId = null;
 
   public BattleSearchQueryDto() {
     super();
@@ -133,7 +134,7 @@ public class BattleSearchQueryDto {
     this.direction = direction;
   }
 
-  public BattleSearchQueryDto userId(@Nullable String userId) {
+  public BattleSearchQueryDto userId(@Nullable UUID userId) {
     this.userId = userId;
     return this;
   }
@@ -142,14 +143,14 @@ public class BattleSearchQueryDto {
    * Filter by user ID.
    * @return userId
    */
-  
+  @Valid 
   @Schema(name = "userId", example = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", description = "Filter by user ID.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("userId")
-  public @Nullable String getUserId() {
+  public @Nullable UUID getUserId() {
     return userId;
   }
 
-  public void setUserId(@Nullable String userId) {
+  public void setUserId(@Nullable UUID userId) {
     this.userId = userId;
   }
 
@@ -239,7 +240,7 @@ public class BattleSearchQueryDto {
       return this;
     }
     
-    public BattleSearchQueryDto.Builder userId(String userId) {
+    public BattleSearchQueryDto.Builder userId(UUID userId) {
       this.instance.userId(userId);
       return this;
     }

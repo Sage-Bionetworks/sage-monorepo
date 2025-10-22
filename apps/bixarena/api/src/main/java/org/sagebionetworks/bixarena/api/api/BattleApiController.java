@@ -6,6 +6,7 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import java.util.UUID;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

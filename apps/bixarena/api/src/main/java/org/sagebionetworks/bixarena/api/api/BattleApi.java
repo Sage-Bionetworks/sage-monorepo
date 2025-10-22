@@ -11,6 +11,7 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -50,12 +51,12 @@ public interface BattleApi {
      *
      * @param battleCreateRequestDto  (required)
      * @return Battle created successfully (status code 201)
-     *         or Bad request (status code 400)
+     *         or Invalid request parameters (status code 400)
      *         or Unauthorized (status code 401)
      *         or Forbidden (status code 403)
-     *         or Model not found (status code 404)
+     *         or The requested resource was not found (status code 404)
      *         or Conflict (status code 409)
-     *         or Internal server error (status code 500)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "createBattle",
@@ -64,35 +65,42 @@ public interface BattleApi {
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Battle created successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Model not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "409", description = "Conflict", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "create:battles" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/battles",
-        produces = { "application/json" },
+        produces = { "application/json", "application/problem+json" },
         consumes = { "application/json" }
     )
     
@@ -111,8 +119,8 @@ public interface BattleApi {
      * @return Battle deleted successfully (status code 204)
      *         or Unauthorized (status code 401)
      *         or Forbidden (status code 403)
-     *         or Battle not found (status code 404)
-     *         or Internal server error (status code 500)
+     *         or The requested resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "deleteBattle",
@@ -122,30 +130,34 @@ public interface BattleApi {
         responses = {
             @ApiResponse(responseCode = "204", description = "Battle deleted successfully"),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Battle not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "delete:battles" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
         value = "/battles/{battleId}",
-        produces = { "application/json" }
+        produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<Void> deleteBattle(
-        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") String battleId
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId
     ) {
         return getDelegate().deleteBattle(battleId);
     }
@@ -158,8 +170,8 @@ public interface BattleApi {
      * @param battleId The unique identifier of the battle (required)
      * @return Success (status code 200)
      *         or Unauthorized (status code 401)
-     *         or Battle not found (status code 404)
-     *         or Internal server error (status code 500)
+     *         or The requested resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "getBattle",
@@ -168,30 +180,34 @@ public interface BattleApi {
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Battle not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:battles" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
         value = "/battles/{battleId}",
-        produces = { "application/json" }
+        produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<BattleDto> getBattle(
-        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") String battleId
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId
     ) {
         return getDelegate().getBattle(battleId);
     }
@@ -203,9 +219,9 @@ public interface BattleApi {
      *
      * @param battleSearchQuery The search query used to find and filter battles. (optional)
      * @return Success (status code 200)
-     *         or Bad request (status code 400)
+     *         or Invalid request parameters (status code 400)
      *         or Unauthorized (status code 401)
-     *         or Internal server error (status code 500)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "listBattles",
@@ -214,26 +230,30 @@ public interface BattleApi {
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BattlePageDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattlePageDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattlePageDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:battles" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
         value = "/battles",
-        produces = { "application/json" }
+        produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<BattlePageDto> listBattles(
@@ -250,11 +270,11 @@ public interface BattleApi {
      * @param battleId The unique identifier of the battle (required)
      * @param battleUpdateRequestDto  (required)
      * @return Battle updated successfully (status code 200)
-     *         or Bad request (status code 400)
+     *         or Invalid request parameters (status code 400)
      *         or Unauthorized (status code 401)
      *         or Forbidden (status code 403)
-     *         or Battle not found (status code 404)
-     *         or Internal server error (status code 500)
+     *         or The requested resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "updateBattle",
@@ -263,37 +283,43 @@ public interface BattleApi {
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Battle updated successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Battle not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "update:battles" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
         method = RequestMethod.PATCH,
         value = "/battles/{battleId}",
-        produces = { "application/json" },
+        produces = { "application/json", "application/problem+json" },
         consumes = { "application/json" }
     )
     
     default ResponseEntity<BattleDto> updateBattle(
-        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") String battleId,
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
         @Parameter(name = "BattleUpdateRequestDto", description = "", required = true) @Valid @RequestBody BattleUpdateRequestDto battleUpdateRequestDto
     ) {
         return getDelegate().updateBattle(battleId, battleUpdateRequestDto);
