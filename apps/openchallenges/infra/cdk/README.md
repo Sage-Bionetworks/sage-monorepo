@@ -73,16 +73,6 @@ nx deploy openchallenges-infra-cdk:stage
 nx deploy openchallenges-infra-cdk:prod
 ```
 
-**Note**: The first time you deploy to an AWS account/region, you must bootstrap CDK:
-
-```bash
-# For development account
-nx bootstrap openchallenges-infra-cdk:dev
-
-# For production account (stage and prod share the same account)
-nx bootstrap openchallenges-infra-cdk:prod
-```
-
 ### Testing the Application Load Balancer
 
 After deploying, you can test the ALB health endpoint:
@@ -201,7 +191,7 @@ nx destroy openchallenges-infra-cdk:prod
 When you're done with your development stack, destroy it to avoid charges:
 
 ```bash
-nx destroy openchallenges-infra-cdk:dev --force
+nx destroy openchallenges-infra-cdk:dev
 ```
 
 **Note on GuardDuty**: The CDK app now manages the GuardDuty VPC endpoint to ensure clean stack deletion. In earlier versions, GuardDuty created AWS-managed resources (VPC endpoints and security groups) outside of CloudFormation, which blocked VPC deletion. These are now explicitly managed by the CDK stack.
@@ -381,18 +371,6 @@ Benefits of ALB-only approach:
 
 ```bash
 nx test openchallenges-infra-cdk
-```
-
-### Run Unit Tests Only
-
-```bash
-nx test openchallenges-infra-cdk --testPathPattern=unit
-```
-
-### Run Integration Tests Only
-
-```bash
-nx test openchallenges-infra-cdk --testPathPattern=integration
 ```
 
 ## Environment Variable Reference
