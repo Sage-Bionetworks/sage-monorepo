@@ -11,7 +11,6 @@ plugins {
 }
 
 dependencies {
-  implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
