@@ -19,7 +19,7 @@ public class AdminApiDelegateImpl implements AdminApiDelegate {
    * @return Admin statistics response
    */
   @Override
-  @PreAuthorize("hasAuthority('ROLE_USER')")
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public ResponseEntity<AdminStats200ResponseDto> adminStats() {
     AdminStats200ResponseDto response = AdminStats200ResponseDto.builder().ok(true).build();
     return ResponseEntity.ok(response);
