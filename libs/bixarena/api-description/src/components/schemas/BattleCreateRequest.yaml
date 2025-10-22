@@ -8,10 +8,12 @@ properties:
     example: 'Gene Expression Analysis Comparison'
   modelAId:
     type: string
+    format: uuid
     description: UUID of model A to compare.
     example: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d'
   modelBId:
     type: string
+    format: uuid
     description: UUID of model B to compare.
     example: '9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c'
 required:

@@ -4,9 +4,6 @@ get:
   summary: List battles
   description: List battles with optional filtering and pagination
   operationId: listBattles
-  security:
-    - jwtBearer:
-        - read:battles
   parameters:
     - $ref: ../components/parameters/query/battleSearchQuery.yaml
   responses:
@@ -17,23 +14,11 @@ get:
             $ref: ../components/schemas/BattlePage.yaml
       description: Success
     '400':
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/BasicError.yaml
-      description: Bad request
+      $ref: ../components/responses/BadRequest.yaml
     '401':
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/BasicError.yaml
-      description: Unauthorized
+      $ref: ../components/responses/Unauthorized.yaml
     '500':
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/BasicError.yaml
-      description: Internal server error
+      $ref: ../components/responses/InternalServerError.yaml
 
 post:
   tags:
@@ -42,9 +27,6 @@ post:
   description: Create a new battle between two AI models.
   operationId: createBattle
   x-anonymous-access: true
-  security:
-    - jwtBearer:
-        - create:battles
   requestBody:
     content:
       application/json:
@@ -59,29 +41,13 @@ post:
             $ref: ../components/schemas/Battle.yaml
       description: Battle created successfully
     '400':
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/BasicError.yaml
-      description: Bad request
+      $ref: ../components/responses/BadRequest.yaml
     '401':
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/BasicError.yaml
-      description: Unauthorized
+      $ref: ../components/responses/Unauthorized.yaml
     '403':
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/BasicError.yaml
-      description: Forbidden
+      $ref: ../components/responses/Forbidden.yaml
     '404':
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/BasicError.yaml
-      description: Model not found
+      $ref: ../components/responses/NotFound.yaml
     '409':
       content:
         application/json:
@@ -89,8 +55,4 @@ post:
             $ref: ../components/schemas/BasicError.yaml
       description: Conflict
     '500':
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/BasicError.yaml
-      description: Internal server error
+      $ref: ../components/responses/InternalServerError.yaml

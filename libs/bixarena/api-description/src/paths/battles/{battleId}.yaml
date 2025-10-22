@@ -1,20 +1,12 @@
+parameters:
+  - $ref: ../../components/parameters/path/battleId.yaml
+
 get:
   tags:
     - Battle
   summary: Get a battle by ID
   description: Returns a single battle by its unique identifier
   operationId: getBattle
-  security:
-    - jwtBearer:
-        - read:battles
-  parameters:
-    - name: battleId
-      in: path
-      description: The unique identifier of the battle
-      required: true
-      schema:
-        type: string
-        example: '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f'
   responses:
     '200':
       content:
@@ -23,23 +15,11 @@ get:
             $ref: ../../components/schemas/Battle.yaml
       description: Success
     '401':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Unauthorized
+      $ref: ../../components/responses/Unauthorized.yaml
     '404':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Battle not found
+      $ref: ../../components/responses/NotFound.yaml
     '500':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Internal server error
+      $ref: ../../components/responses/InternalServerError.yaml
 
 patch:
   tags:
@@ -48,17 +28,6 @@ patch:
   description: Update a battle's end time or other properties
   operationId: updateBattle
   x-anonymous-access: true
-  security:
-    - jwtBearer:
-        - update:battles
-  parameters:
-    - name: battleId
-      in: path
-      description: The unique identifier of the battle
-      required: true
-      schema:
-        type: string
-        example: '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f'
   requestBody:
     content:
       application/json:
@@ -73,35 +42,15 @@ patch:
             $ref: ../../components/schemas/Battle.yaml
       description: Battle updated successfully
     '400':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Bad request
+      $ref: ../../components/responses/BadRequest.yaml
     '401':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Unauthorized
+      $ref: ../../components/responses/Unauthorized.yaml
     '403':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Forbidden
+      $ref: ../../components/responses/Forbidden.yaml
     '404':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Battle not found
+      $ref: ../../components/responses/NotFound.yaml
     '500':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Internal server error
+      $ref: ../../components/responses/InternalServerError.yaml
 
 delete:
   tags:
@@ -109,41 +58,14 @@ delete:
   summary: Delete a battle
   description: Delete a battle by its unique identifier
   operationId: deleteBattle
-  security:
-    - jwtBearer:
-        - delete:battles
-  parameters:
-    - name: battleId
-      in: path
-      description: The unique identifier of the battle
-      required: true
-      schema:
-        type: string
-        example: '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f'
   responses:
     '204':
       description: Battle deleted successfully
     '401':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Unauthorized
+      $ref: ../../components/responses/Unauthorized.yaml
     '403':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Forbidden
+      $ref: ../../components/responses/Forbidden.yaml
     '404':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Battle not found
+      $ref: ../../components/responses/NotFound.yaml
     '500':
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/BasicError.yaml
-      description: Internal server error
+      $ref: ../../components/responses/InternalServerError.yaml

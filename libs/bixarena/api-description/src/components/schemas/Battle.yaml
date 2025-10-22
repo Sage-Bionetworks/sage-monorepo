@@ -3,6 +3,7 @@ description: A battle entity representing a comparison between two AI models.
 properties:
   id:
     type: string
+    format: uuid
     description: Unique identifier (UUID) of the battle.
     example: '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f'
   title:
@@ -12,14 +13,17 @@ properties:
     example: 'Gene Expression Analysis Comparison'
   userId:
     type: string
+    format: uuid
     description: UUID of the user who initiated this battle.
     example: 'a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d'
   modelAId:
     type: string
+    format: uuid
     description: UUID of model A in the battle.
     example: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d'
   modelBId:
     type: string
+    format: uuid
     description: UUID of model B in the battle.
     example: '9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c'
   createdAt:
