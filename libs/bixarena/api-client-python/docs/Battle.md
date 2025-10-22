@@ -4,15 +4,15 @@ A battle entity representing a comparison between two AI models.
 
 ## Properties
 
-| Name           | Type         | Description                                        | Notes      |
-| -------------- | ------------ | -------------------------------------------------- | ---------- |
-| **id**         | **str**      | Unique identifier (UUID) of the battle.            |
-| **title**      | **str**      | Title of the battle.                               | [optional] |
-| **user_id**    | **str**      | UUID of the user who initiated this battle.        |
-| **model_aid**  | **str**      | UUID of model A in the battle.                     |
-| **model_bid**  | **str**      | UUID of model B in the battle.                     |
-| **created_at** | **datetime** | Timestamp when the battle was created.             |
-| **ended_at**   | **datetime** | Timestamp when the battle ended (null if ongoing). | [optional] |
+| Name               | Type         | Description                             | Notes      |
+| ------------------ | ------------ | --------------------------------------- | ---------- |
+| **id**             | **str**      | Unique identifier (UUID) of the battle. |
+| **title**          | **str**      | Title of the battle.                    | [optional] |
+| **user_id**        | **str**      | UUID of a user.                         |
+| **left_model_id**  | **str**      | UUID of an AI model.                    |
+| **right_model_id** | **str**      | UUID of an AI model.                    |
+| **created_at**     | **datetime** | Timestamp when the entity was created.  |
+| **ended_at**       | **datetime** | Timestamp when the entity ended.        | [optional] |
 
 ## Example
 

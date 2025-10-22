@@ -26,7 +26,7 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class BattleUpdateRequestDto {
 
-  private @Nullable String title;
+  private @Nullable String title = null;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private @Nullable OffsetDateTime endedAt = null;
@@ -37,11 +37,11 @@ public class BattleUpdateRequestDto {
   }
 
   /**
-   * Updated title of the battle.
+   * Title of the battle.
    * @return title
    */
   
-  @Schema(name = "title", example = "Gene Expression Analysis Comparison", description = "Updated title of the battle.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "title", example = "Gene Expression Analysis Comparison", description = "Title of the battle.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("title")
   public @Nullable String getTitle() {
     return title;
@@ -57,11 +57,11 @@ public class BattleUpdateRequestDto {
   }
 
   /**
-   * Timestamp when the battle ended. Set to mark battle as completed.
+   * Timestamp when the entity ended.
    * @return endedAt
    */
   @Valid 
-  @Schema(name = "endedAt", example = "2024-01-15T11:45Z", description = "Timestamp when the battle ended. Set to mark battle as completed.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "endedAt", example = "2024-01-15T11:45Z", description = "Timestamp when the entity ended.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("endedAt")
   public @Nullable OffsetDateTime getEndedAt() {
     return endedAt;

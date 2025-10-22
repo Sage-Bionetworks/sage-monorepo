@@ -76,19 +76,19 @@ public class BattleService {
     log.info("Creating battle for MOCK user: {}", userId);
 
     // Validate that both models exist
-    UUID modelAId = UUID.fromString(request.getModelAId());
-    UUID modelBId = UUID.fromString(request.getModelBId());
+    UUID leftModelId = UUID.fromString(request.getLeftModelId());
+    UUID rightModelId = UUID.fromString(request.getRightModelId());
 
     // Verify models exist (throws exception if not found)
-    getModelEntity(modelAId);
-    getModelEntity(modelBId);
+    getModelEntity(leftModelId);
+    getModelEntity(rightModelId);
 
     // Create new battle entity
     BattleEntity battle = BattleEntity.builder()
       .title(request.getTitle())
       .userId(userId)
-      .modelAId(modelAId)
-      .modelBId(modelBId)
+      .leftModelId(leftModelId)
+      .rightModelId(rightModelId)
       .build();
 
     // Save the battle

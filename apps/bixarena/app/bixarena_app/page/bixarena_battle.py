@@ -54,13 +54,13 @@ current_battle_id = None
 
 
 def create_battle(
-    model_left: str, model_right: str, title: str | None = None
+    left_model: str, right_model: str, title: str | None = None
 ) -> str | None:
     """Create a new battle record in the database.
 
     Args:
-        model_left: Name of model A
-        model_right: Name of model B
+        left_model: Name of left model
+        right_model: Name of right model
         title: Optional battle title (first prompt snippet)
 
     Returns:
@@ -70,25 +70,16 @@ def create_battle(
         api_base_url = _get_api_base_url()
 
         # Runtime lookup model info
-        model_a_info = model_response.api_endpoint_info.get(model_left)
-        model_b_info = model_response.api_endpoint_info.get(model_right)
-
-        if not (model_a_info and model_b_info):
-            logger.warning(f"⚠️ Model info not found for {model_left} or {model_right}")
-            return None
-
-        model_a_id = model_a_info.get("model_id")
-        model_b_id = model_b_info.get("model_id")
-
-        if not (model_a_id and model_b_id):
-            logger.warning(f"⚠️ Model IDs not found for {model_left} or {model_right}")
-            return None
+        left_model_info = model_response.api_endpoint_info[left_model]
+        right_model_info = model_response.api_endpoint_info[right_model]
 
         configuration = Configuration(host=api_base_url)
         with ApiClient(configuration) as api_client:
             battle_api = BattleApi(api_client)
             battle_request = BattleCreateRequest(
-                modelAId=model_a_id, modelBId=model_b_id, title=title
+                left_model_id=left_model_info["model_id"],
+                right_model_id=right_model_info["model_id"],
+                title=title,
             )
             battle = battle_api.create_battle(battle_request)
             if battle and battle.id:
@@ -261,10 +252,10 @@ def add_text(
     if states[0] is None:
         assert states[1] is None
 
-        model_left, model_right = get_battle_pair(models)
+        left_model, right_model = get_battle_pair(models)
         states = [
-            State(model_left),
-            State(model_right),
+            State(left_model),
+            State(right_model),
         ]
 
     if len(text) <= 0:
@@ -316,11 +307,11 @@ def add_text(
 
     # Create battle with first prompt as title (only for first message)
     if not current_battle_id and states[0] and states[1]:
-        model_left = states[0].model_name
-        model_right = states[1].model_name
+        left_model = states[0].model_name
+        right_model = states[1].model_name
         # Use first 50 characters of prompt as battle title
         battle_title = text[:50] + "..." if len(text) > 50 else text
-        current_battle_id = create_battle(model_left, model_right, battle_title)
+        current_battle_id = create_battle(left_model, right_model, battle_title)
 
     for i in range(num_sides):
         states[i].conv.append_message(states[i].conv.roles[0], text)

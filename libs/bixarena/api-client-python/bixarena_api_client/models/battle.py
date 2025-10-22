@@ -31,29 +31,23 @@ class Battle(BaseModel):
 
     id: UUID = Field(description="Unique identifier (UUID) of the battle.")
     title: Optional[StrictStr] = Field(default=None, description="Title of the battle.")
-    user_id: UUID = Field(
-        description="UUID of the user who initiated this battle.", alias="userId"
-    )
-    model_aid: UUID = Field(
-        description="UUID of model A in the battle.", alias="modelAId"
-    )
-    model_bid: UUID = Field(
-        description="UUID of model B in the battle.", alias="modelBId"
+    user_id: UUID = Field(description="UUID of a user.", alias="userId")
+    left_model_id: UUID = Field(description="UUID of an AI model.", alias="leftModelId")
+    right_model_id: UUID = Field(
+        description="UUID of an AI model.", alias="rightModelId"
     )
     created_at: datetime = Field(
-        description="Timestamp when the battle was created.", alias="createdAt"
+        description="Timestamp when the entity was created.", alias="createdAt"
     )
     ended_at: Optional[datetime] = Field(
-        default=None,
-        description="Timestamp when the battle ended (null if ongoing).",
-        alias="endedAt",
+        default=None, description="Timestamp when the entity ended.", alias="endedAt"
     )
     __properties: ClassVar[List[str]] = [
         "id",
         "title",
         "userId",
-        "modelAId",
-        "modelBId",
+        "leftModelId",
+        "rightModelId",
         "createdAt",
         "endedAt",
     ]
@@ -121,8 +115,8 @@ class Battle(BaseModel):
                 "id": obj.get("id"),
                 "title": obj.get("title"),
                 "userId": obj.get("userId"),
-                "modelAId": obj.get("modelAId"),
-                "modelBId": obj.get("modelBId"),
+                "leftModelId": obj.get("leftModelId"),
+                "rightModelId": obj.get("rightModelId"),
                 "createdAt": obj.get("createdAt"),
                 "endedAt": obj.get("endedAt"),
             }

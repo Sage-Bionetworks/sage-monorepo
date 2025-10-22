@@ -4,10 +4,10 @@ The information used to update a battle.
 
 ## Properties
 
-| Name         | Type         | Description                                                       | Notes      |
-| ------------ | ------------ | ----------------------------------------------------------------- | ---------- |
-| **title**    | **str**      | Updated title of the battle.                                      | [optional] |
-| **ended_at** | **datetime** | Timestamp when the battle ended. Set to mark battle as completed. | [optional] |
+| Name         | Type         | Description                      | Notes      |
+| ------------ | ------------ | -------------------------------- | ---------- |
+| **title**    | **str**      | Title of the battle.             | [optional] |
+| **ended_at** | **datetime** | Timestamp when the entity ended. | [optional] |
 
 ## Example
 

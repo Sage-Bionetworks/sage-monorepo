@@ -29,9 +29,11 @@ class BattleCreateRequest(BaseModel):
     """  # noqa: E501
 
     title: Optional[StrictStr] = Field(default=None, description="Title of the battle.")
-    model_aid: UUID = Field(description="UUID of model A to compare.", alias="modelAId")
-    model_bid: UUID = Field(description="UUID of model B to compare.", alias="modelBId")
-    __properties: ClassVar[List[str]] = ["title", "modelAId", "modelBId"]
+    left_model_id: UUID = Field(description="UUID of an AI model.", alias="leftModelId")
+    right_model_id: UUID = Field(
+        description="UUID of an AI model.", alias="rightModelId"
+    )
+    __properties: ClassVar[List[str]] = ["title", "leftModelId", "rightModelId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -89,8 +91,8 @@ class BattleCreateRequest(BaseModel):
         _obj = cls.model_validate(
             {
                 "title": obj.get("title"),
-                "modelAId": obj.get("modelAId"),
-                "modelBId": obj.get("modelBId"),
+                "leftModelId": obj.get("leftModelId"),
+                "rightModelId": obj.get("rightModelId"),
             }
         )
         return _obj

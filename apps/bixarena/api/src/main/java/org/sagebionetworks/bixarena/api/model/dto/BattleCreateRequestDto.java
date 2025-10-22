@@ -27,9 +27,9 @@ public class BattleCreateRequestDto {
 
   private @Nullable String title = null;
 
-  private UUID modelAId;
+  private UUID leftModelId;
 
-  private UUID modelBId;
+  private UUID rightModelId;
 
   public BattleCreateRequestDto() {
     super();
@@ -38,9 +38,9 @@ public class BattleCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public BattleCreateRequestDto(UUID modelAId, UUID modelBId) {
-    this.modelAId = modelAId;
-    this.modelBId = modelBId;
+  public BattleCreateRequestDto(UUID leftModelId, UUID rightModelId) {
+    this.leftModelId = leftModelId;
+    this.rightModelId = rightModelId;
   }
 
   public BattleCreateRequestDto title(@Nullable String title) {
@@ -63,44 +63,44 @@ public class BattleCreateRequestDto {
     this.title = title;
   }
 
-  public BattleCreateRequestDto modelAId(UUID modelAId) {
-    this.modelAId = modelAId;
+  public BattleCreateRequestDto leftModelId(UUID leftModelId) {
+    this.leftModelId = leftModelId;
     return this;
   }
 
   /**
-   * UUID of model A to compare.
-   * @return modelAId
+   * UUID of an AI model.
+   * @return leftModelId
    */
   @NotNull @Valid 
-  @Schema(name = "modelAId", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of model A to compare.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("modelAId")
-  public UUID getModelAId() {
-    return modelAId;
+  @Schema(name = "leftModelId", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of an AI model.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("leftModelId")
+  public UUID getLeftModelId() {
+    return leftModelId;
   }
 
-  public void setModelAId(UUID modelAId) {
-    this.modelAId = modelAId;
+  public void setLeftModelId(UUID leftModelId) {
+    this.leftModelId = leftModelId;
   }
 
-  public BattleCreateRequestDto modelBId(UUID modelBId) {
-    this.modelBId = modelBId;
+  public BattleCreateRequestDto rightModelId(UUID rightModelId) {
+    this.rightModelId = rightModelId;
     return this;
   }
 
   /**
-   * UUID of model B to compare.
-   * @return modelBId
+   * UUID of an AI model.
+   * @return rightModelId
    */
   @NotNull @Valid 
-  @Schema(name = "modelBId", example = "9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c", description = "UUID of model B to compare.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("modelBId")
-  public UUID getModelBId() {
-    return modelBId;
+  @Schema(name = "rightModelId", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of an AI model.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("rightModelId")
+  public UUID getRightModelId() {
+    return rightModelId;
   }
 
-  public void setModelBId(UUID modelBId) {
-    this.modelBId = modelBId;
+  public void setRightModelId(UUID rightModelId) {
+    this.rightModelId = rightModelId;
   }
 
   @Override
@@ -113,13 +113,13 @@ public class BattleCreateRequestDto {
     }
     BattleCreateRequestDto battleCreateRequest = (BattleCreateRequestDto) o;
     return Objects.equals(this.title, battleCreateRequest.title) &&
-        Objects.equals(this.modelAId, battleCreateRequest.modelAId) &&
-        Objects.equals(this.modelBId, battleCreateRequest.modelBId);
+        Objects.equals(this.leftModelId, battleCreateRequest.leftModelId) &&
+        Objects.equals(this.rightModelId, battleCreateRequest.rightModelId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, modelAId, modelBId);
+    return Objects.hash(title, leftModelId, rightModelId);
   }
 
   @Override
@@ -127,8 +127,8 @@ public class BattleCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class BattleCreateRequestDto {\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("    modelAId: ").append(toIndentedString(modelAId)).append("\n");
-    sb.append("    modelBId: ").append(toIndentedString(modelBId)).append("\n");
+    sb.append("    leftModelId: ").append(toIndentedString(leftModelId)).append("\n");
+    sb.append("    rightModelId: ").append(toIndentedString(rightModelId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -158,8 +158,8 @@ public class BattleCreateRequestDto {
 
     protected Builder copyOf(BattleCreateRequestDto value) { 
       this.instance.setTitle(value.title);
-      this.instance.setModelAId(value.modelAId);
-      this.instance.setModelBId(value.modelBId);
+      this.instance.setLeftModelId(value.leftModelId);
+      this.instance.setRightModelId(value.rightModelId);
       return this;
     }
 
@@ -168,13 +168,13 @@ public class BattleCreateRequestDto {
       return this;
     }
     
-    public BattleCreateRequestDto.Builder modelAId(UUID modelAId) {
-      this.instance.modelAId(modelAId);
+    public BattleCreateRequestDto.Builder leftModelId(UUID leftModelId) {
+      this.instance.leftModelId(leftModelId);
       return this;
     }
     
-    public BattleCreateRequestDto.Builder modelBId(UUID modelBId) {
-      this.instance.modelBId(modelBId);
+    public BattleCreateRequestDto.Builder rightModelId(UUID rightModelId) {
+      this.instance.rightModelId(rightModelId);
       return this;
     }
     

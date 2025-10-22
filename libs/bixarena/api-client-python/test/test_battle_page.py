@@ -38,12 +38,12 @@ class TestBattlePage(unittest.TestCase):
                 battles = [
                     bixarena_api_client.models.battle.Battle(
                         id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f', 
-                        title = 'Gene Expression Analysis Comparison', 
+                        title = null, 
                         user_id = 'a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d', 
-                        model_aid = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', 
-                        model_bid = '9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c', 
+                        left_model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', 
+                        right_model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', 
                         created_at = '2024-01-15T10:30Z', 
-                        ended_at = '2024-01-15T11:45Z', )
+                        ended_at = null, )
                     ],
                 page = bixarena_api_client.models.page_metadata.PageMetadata(
                     number = 99, 
@@ -58,12 +58,12 @@ class TestBattlePage(unittest.TestCase):
                 battles = [
                     bixarena_api_client.models.battle.Battle(
                         id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f', 
-                        title = 'Gene Expression Analysis Comparison', 
+                        title = null, 
                         user_id = 'a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d', 
-                        model_aid = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', 
-                        model_bid = '9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c', 
+                        left_model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', 
+                        right_model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', 
                         created_at = '2024-01-15T10:30Z', 
-                        ended_at = '2024-01-15T11:45Z', )
+                        ended_at = null, )
                     ],
                 page = bixarena_api_client.models.page_metadata.PageMetadata(
                     number = 99, 

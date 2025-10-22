@@ -535,6 +535,30 @@ components:
         - pageSize
         - sort
         - direction
+    BattleTitle:
+      description: Title of the battle.
+      type: string
+      example: Gene Expression Analysis Comparison
+    UserId:
+      description: UUID of a user.
+      type: string
+      format: uuid
+      example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+    ModelId:
+      description: UUID of an AI model.
+      type: string
+      format: uuid
+      example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+    CreatedAt:
+      description: Timestamp when the entity was created.
+      type: string
+      format: date-time
+      example: '2024-01-15T10:30:00Z'
+    EndedAt:
+      description: Timestamp when the entity ended.
+      type: string
+      format: date-time
+      example: '2024-01-15T11:45:00Z'
     Battle:
       type: object
       description: A battle entity representing a comparison between two AI models.
@@ -545,41 +569,26 @@ components:
           description: Unique identifier (UUID) of the battle.
           example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         title:
-          type: string
-          nullable: true
-          description: Title of the battle.
-          example: Gene Expression Analysis Comparison
+          allOf:
+            - $ref: '#/components/schemas/BattleTitle'
+            - nullable: true
         userId:
-          type: string
-          format: uuid
-          description: UUID of the user who initiated this battle.
-          example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-        modelAId:
-          type: string
-          format: uuid
-          description: UUID of model A in the battle.
-          example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-        modelBId:
-          type: string
-          format: uuid
-          description: UUID of model B in the battle.
-          example: 9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c
+          $ref: '#/components/schemas/UserId'
+        leftModelId:
+          $ref: '#/components/schemas/ModelId'
+        rightModelId:
+          $ref: '#/components/schemas/ModelId'
         createdAt:
-          type: string
-          format: date-time
-          description: Timestamp when the battle was created.
-          example: '2024-01-15T10:30:00Z'
+          $ref: '#/components/schemas/CreatedAt'
         endedAt:
-          type: string
-          format: date-time
-          nullable: true
-          description: Timestamp when the battle ended (null if ongoing).
-          example: '2024-01-15T11:45:00Z'
+          allOf:
+            - $ref: '#/components/schemas/EndedAt'
+            - nullable: true
       required:
         - id
         - userId
-        - modelAId
-        - modelBId
+        - leftModelId
+        - rightModelId
         - createdAt
     PageMetadata:
       type: object
@@ -661,37 +670,28 @@ components:
       description: The information used to create a new battle.
       properties:
         title:
-          type: string
-          nullable: true
-          description: Title of the battle.
-          example: Gene Expression Analysis Comparison
-        modelAId:
-          type: string
-          format: uuid
-          description: UUID of model A to compare.
-          example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-        modelBId:
-          type: string
-          format: uuid
-          description: UUID of model B to compare.
-          example: 9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c
+          allOf:
+            - $ref: '#/components/schemas/BattleTitle'
+            - nullable: true
+        leftModelId:
+          $ref: '#/components/schemas/ModelId'
+        rightModelId:
+          $ref: '#/components/schemas/ModelId'
       required:
-        - modelAId
-        - modelBId
+        - leftModelId
+        - rightModelId
     BattleUpdateRequest:
       type: object
       description: The information used to update a battle.
       properties:
         title:
-          type: string
-          description: Updated title of the battle.
-          example: Gene Expression Analysis Comparison
+          allOf:
+            - $ref: '#/components/schemas/BattleTitle'
+            - nullable: true
         endedAt:
-          type: string
-          format: date-time
-          nullable: true
-          description: Timestamp when the battle ended. Set to mark battle as completed.
-          example: '2024-01-15T11:45:00Z'
+          allOf:
+            - $ref: '#/components/schemas/EndedAt'
+            - nullable: true
     ExamplePromptSort:
       type: string
       description: The field to sort example prompts by.

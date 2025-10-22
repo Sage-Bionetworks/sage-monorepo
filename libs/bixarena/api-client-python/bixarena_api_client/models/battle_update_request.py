@@ -28,13 +28,9 @@ class BattleUpdateRequest(BaseModel):
     The information used to update a battle.
     """  # noqa: E501
 
-    title: Optional[StrictStr] = Field(
-        default=None, description="Updated title of the battle."
-    )
+    title: Optional[StrictStr] = Field(default=None, description="Title of the battle.")
     ended_at: Optional[datetime] = Field(
-        default=None,
-        description="Timestamp when the battle ended. Set to mark battle as completed.",
-        alias="endedAt",
+        default=None, description="Timestamp when the entity ended.", alias="endedAt"
     )
     __properties: ClassVar[List[str]] = ["title", "endedAt"]
 
@@ -75,6 +71,11 @@ class BattleUpdateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if title (nullable) is None
+        # and model_fields_set contains the field
+        if self.title is None and "title" in self.model_fields_set:
+            _dict["title"] = None
+
         # set to None if ended_at (nullable) is None
         # and model_fields_set contains the field
         if self.ended_at is None and "ended_at" in self.model_fields_set:

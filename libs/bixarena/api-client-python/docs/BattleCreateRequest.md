@@ -4,11 +4,11 @@ The information used to create a new battle.
 
 ## Properties
 
-| Name          | Type    | Description                 | Notes      |
-| ------------- | ------- | --------------------------- | ---------- |
-| **title**     | **str** | Title of the battle.        | [optional] |
-| **model_aid** | **str** | UUID of model A to compare. |
-| **model_bid** | **str** | UUID of model B to compare. |
+| Name               | Type    | Description          | Notes      |
+| ------------------ | ------- | -------------------- | ---------- |
+| **title**          | **str** | Title of the battle. | [optional] |
+| **left_model_id**  | **str** | UUID of an AI model. |
+| **right_model_id** | **str** | UUID of an AI model. |
 
 ## Example
 

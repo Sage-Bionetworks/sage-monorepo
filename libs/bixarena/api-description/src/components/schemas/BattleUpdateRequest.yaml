@@ -2,12 +2,10 @@ type: object
 description: The information used to update a battle.
 properties:
   title:
-    type: string
-    description: Updated title of the battle.
-    example: 'Gene Expression Analysis Comparison'
+    allOf:
+      - $ref: BattleTitle.yaml
+      - nullable: true
   endedAt:
-    type: string
-    format: date-time
-    nullable: true
-    description: Timestamp when the battle ended. Set to mark battle as completed.
-    example: '2024-01-15T11:45:00Z'
+    allOf:
+      - $ref: EndedAt.yaml
+      - nullable: true

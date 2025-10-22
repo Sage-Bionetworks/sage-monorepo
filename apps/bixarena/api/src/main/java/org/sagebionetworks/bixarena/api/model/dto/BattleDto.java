@@ -33,9 +33,9 @@ public class BattleDto {
 
   private UUID userId;
 
-  private UUID modelAId;
+  private UUID leftModelId;
 
-  private UUID modelBId;
+  private UUID rightModelId;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -50,11 +50,11 @@ public class BattleDto {
   /**
    * Constructor with only required parameters
    */
-  public BattleDto(UUID id, UUID userId, UUID modelAId, UUID modelBId, OffsetDateTime createdAt) {
+  public BattleDto(UUID id, UUID userId, UUID leftModelId, UUID rightModelId, OffsetDateTime createdAt) {
     this.id = id;
     this.userId = userId;
-    this.modelAId = modelAId;
-    this.modelBId = modelBId;
+    this.leftModelId = leftModelId;
+    this.rightModelId = rightModelId;
     this.createdAt = createdAt;
   }
 
@@ -104,11 +104,11 @@ public class BattleDto {
   }
 
   /**
-   * UUID of the user who initiated this battle.
+   * UUID of a user.
    * @return userId
    */
   @NotNull @Valid 
-  @Schema(name = "userId", example = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of the user who initiated this battle.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "userId", example = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of a user.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("userId")
   public UUID getUserId() {
     return userId;
@@ -118,44 +118,44 @@ public class BattleDto {
     this.userId = userId;
   }
 
-  public BattleDto modelAId(UUID modelAId) {
-    this.modelAId = modelAId;
+  public BattleDto leftModelId(UUID leftModelId) {
+    this.leftModelId = leftModelId;
     return this;
   }
 
   /**
-   * UUID of model A in the battle.
-   * @return modelAId
+   * UUID of an AI model.
+   * @return leftModelId
    */
   @NotNull @Valid 
-  @Schema(name = "modelAId", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of model A in the battle.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("modelAId")
-  public UUID getModelAId() {
-    return modelAId;
+  @Schema(name = "leftModelId", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of an AI model.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("leftModelId")
+  public UUID getLeftModelId() {
+    return leftModelId;
   }
 
-  public void setModelAId(UUID modelAId) {
-    this.modelAId = modelAId;
+  public void setLeftModelId(UUID leftModelId) {
+    this.leftModelId = leftModelId;
   }
 
-  public BattleDto modelBId(UUID modelBId) {
-    this.modelBId = modelBId;
+  public BattleDto rightModelId(UUID rightModelId) {
+    this.rightModelId = rightModelId;
     return this;
   }
 
   /**
-   * UUID of model B in the battle.
-   * @return modelBId
+   * UUID of an AI model.
+   * @return rightModelId
    */
   @NotNull @Valid 
-  @Schema(name = "modelBId", example = "9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c", description = "UUID of model B in the battle.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("modelBId")
-  public UUID getModelBId() {
-    return modelBId;
+  @Schema(name = "rightModelId", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of an AI model.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("rightModelId")
+  public UUID getRightModelId() {
+    return rightModelId;
   }
 
-  public void setModelBId(UUID modelBId) {
-    this.modelBId = modelBId;
+  public void setRightModelId(UUID rightModelId) {
+    this.rightModelId = rightModelId;
   }
 
   public BattleDto createdAt(OffsetDateTime createdAt) {
@@ -164,11 +164,11 @@ public class BattleDto {
   }
 
   /**
-   * Timestamp when the battle was created.
+   * Timestamp when the entity was created.
    * @return createdAt
    */
   @NotNull @Valid 
-  @Schema(name = "createdAt", example = "2024-01-15T10:30Z", description = "Timestamp when the battle was created.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "createdAt", example = "2024-01-15T10:30Z", description = "Timestamp when the entity was created.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("createdAt")
   public OffsetDateTime getCreatedAt() {
     return createdAt;
@@ -184,11 +184,11 @@ public class BattleDto {
   }
 
   /**
-   * Timestamp when the battle ended (null if ongoing).
+   * Timestamp when the entity ended.
    * @return endedAt
    */
   @Valid 
-  @Schema(name = "endedAt", example = "2024-01-15T11:45Z", description = "Timestamp when the battle ended (null if ongoing).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "endedAt", example = "2024-01-15T11:45Z", description = "Timestamp when the entity ended.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("endedAt")
   public @Nullable OffsetDateTime getEndedAt() {
     return endedAt;
@@ -210,15 +210,15 @@ public class BattleDto {
     return Objects.equals(this.id, battle.id) &&
         Objects.equals(this.title, battle.title) &&
         Objects.equals(this.userId, battle.userId) &&
-        Objects.equals(this.modelAId, battle.modelAId) &&
-        Objects.equals(this.modelBId, battle.modelBId) &&
+        Objects.equals(this.leftModelId, battle.leftModelId) &&
+        Objects.equals(this.rightModelId, battle.rightModelId) &&
         Objects.equals(this.createdAt, battle.createdAt) &&
         Objects.equals(this.endedAt, battle.endedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, userId, modelAId, modelBId, createdAt, endedAt);
+    return Objects.hash(id, title, userId, leftModelId, rightModelId, createdAt, endedAt);
   }
 
   @Override
@@ -228,8 +228,8 @@ public class BattleDto {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
-    sb.append("    modelAId: ").append(toIndentedString(modelAId)).append("\n");
-    sb.append("    modelBId: ").append(toIndentedString(modelBId)).append("\n");
+    sb.append("    leftModelId: ").append(toIndentedString(leftModelId)).append("\n");
+    sb.append("    rightModelId: ").append(toIndentedString(rightModelId)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    endedAt: ").append(toIndentedString(endedAt)).append("\n");
     sb.append("}");
@@ -263,8 +263,8 @@ public class BattleDto {
       this.instance.setId(value.id);
       this.instance.setTitle(value.title);
       this.instance.setUserId(value.userId);
-      this.instance.setModelAId(value.modelAId);
-      this.instance.setModelBId(value.modelBId);
+      this.instance.setLeftModelId(value.leftModelId);
+      this.instance.setRightModelId(value.rightModelId);
       this.instance.setCreatedAt(value.createdAt);
       this.instance.setEndedAt(value.endedAt);
       return this;
@@ -285,13 +285,13 @@ public class BattleDto {
       return this;
     }
     
-    public BattleDto.Builder modelAId(UUID modelAId) {
-      this.instance.modelAId(modelAId);
+    public BattleDto.Builder leftModelId(UUID leftModelId) {
+      this.instance.leftModelId(leftModelId);
       return this;
     }
     
-    public BattleDto.Builder modelBId(UUID modelBId) {
-      this.instance.modelBId(modelBId);
+    public BattleDto.Builder rightModelId(UUID rightModelId) {
+      this.instance.rightModelId(rightModelId);
       return this;
     }
     
