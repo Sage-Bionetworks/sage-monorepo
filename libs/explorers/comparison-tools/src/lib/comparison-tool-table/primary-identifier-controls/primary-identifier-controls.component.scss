@@ -1,0 +1,52 @@
+@use 'explorers/styles/src/lib/variables' as vars;
+@use 'explorers/styles/src/lib/mixins';
+
+.primary-identifier-controls {
+  display: flex;
+  justify-content: end;
+  align-items: stretch;
+  flex: 1;
+  background-color: transparent;
+  transition: vars.$transition-duration;
+  padding: 6px 15px 6px 7px;
+  margin-right: 0;
+  font-size: var(--font-size-md);
+  font-weight: 700;
+
+  > div:first-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &:not(:hover) {
+    > div:not(:first-child) {
+      display: none;
+    }
+  }
+
+  &:hover {
+    background-color: var(--color-action-primary);
+    color: #fff;
+
+    > div:first-child {
+      padding-right: 6px;
+    }
+  }
+
+  button {
+    @include mixins.reset-button;
+
+    display: flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+}

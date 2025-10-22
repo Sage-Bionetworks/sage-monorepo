@@ -17,6 +17,10 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
     dropdowns: [],
     columns: [
       {
+        type: 'primary',
+        field: 'name',
+      },
+      {
         name: 'Model Type',
         type: 'text',
         field: 'model_type',

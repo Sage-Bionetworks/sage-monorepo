@@ -1,4 +1,4 @@
-import { Component, inject, input, ViewEncapsulation } from '@angular/core';
+import { Component, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
 import { SortEvent } from 'primeng/api';
@@ -6,6 +6,7 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { ComparisonToolTableLinkComponent } from '../../comparison-tool-table-link/comparison-tool-table-link.component';
 import { HeatmapCircleComponent } from '../heatmap-circle/heatmap-circle.component';
+import { PrimaryIdentifierControlsComponent } from '../primary-identifier-controls/primary-identifier-controls.component';
 
 interface PaginationOptions {
   rows: number;
@@ -23,6 +24,7 @@ interface PaginationOptions {
     HeatmapCircleComponent,
     CommaSeparatePipe,
     ComparisonToolTableLinkComponent,
+    PrimaryIdentifierControlsComponent,
   ],
   templateUrl: './base-table.component.html',
   styleUrls: ['./base-table.component.scss'],
@@ -35,6 +37,8 @@ export class BaseTableComponent {
 
   data = input.required<Record<string, any>[]>();
   shouldPaginate = input<boolean>(true);
+  viewDetailsTooltip = input<string>('View detailed results');
+  viewDetailsEvent = output<string>();
 
   columnWidth = 'auto';
   paginationConfig: PaginationOptions = {

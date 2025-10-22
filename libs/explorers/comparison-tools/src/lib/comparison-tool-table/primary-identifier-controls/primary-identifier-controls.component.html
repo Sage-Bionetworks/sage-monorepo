@@ -1,0 +1,37 @@
+<div class="primary-identifier-controls">
+  <div>
+    {{ id() }}
+  </div>
+
+  <div>
+    <button
+      (click)="viewDetailsWasClicked()"
+      [pTooltip]="viewDetailsTooltip()"
+      tooltipPosition="top"
+      tooltipStyleClass="tooltip"
+      [ariaLabel]="'View Details'"
+    >
+      <explorers-svg-icon
+        imagePath="/explorers-assets/icons/external-link.svg"
+        [enableHoverEffects]="false"
+        altText="link"
+      />
+    </button>
+  </div>
+  <div>
+    <button
+      (click)="pinToggle()"
+      [pTooltip]="pinTooltip()"
+      tooltipPosition="top"
+      tooltipStyleClass="tooltip"
+      [disabled]="isPinDisabled()"
+      [ariaLabel]="`${isPinned() ? 'Unpin' : 'Pin'}`"
+    >
+      <explorers-svg-icon
+        imagePath="/explorers-assets/icons/pin.svg"
+        [enableHoverEffects]="false"
+        altText="pin"
+      />
+    </button>
+  </div>
+</div>

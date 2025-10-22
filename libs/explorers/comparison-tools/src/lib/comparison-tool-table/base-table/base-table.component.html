@@ -21,7 +21,13 @@
           <td [style]="{ width: columnWidth }">
             @let columnType = columnConfig.type;
             @let cellData = rowData[columnConfig.field];
-            <!-- TODO: add primary identifier column (MG-431) -->
+            @if (columnType === 'primary') {
+              <explorers-primary-identifier-controls
+                [id]="cellData"
+                [viewDetailsTooltip]="viewDetailsTooltip()"
+                (viewDetailsEvent)="viewDetailsEvent.emit($event)"
+              />
+            }
             @if (columnType === 'heat_map') {
               <explorers-heatmap-circle [data]="cellData" />
             }
