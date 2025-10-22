@@ -41,3 +41,11 @@ export const Demo: Story = {
     shouldPaginate: true,
   },
 };
+
+export const NoData: Story = {
+  args: {
+    data: [],
+    shouldPaginate: true,
+    shouldShowNoDataMessage: true,
+  },
+};

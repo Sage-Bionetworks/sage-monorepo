@@ -37,6 +37,7 @@ export class BaseTableComponent {
 
   data = input.required<Record<string, any>[]>();
   shouldPaginate = input<boolean>(true);
+  shouldShowNoDataMessage = input<boolean>(true);
   viewDetailsTooltip = input<string>('View detailed results');
   viewDetailsEvent = output<string>();
 
