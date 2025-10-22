@@ -3,10 +3,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-package org.sagebionetworks.bixarena.auth.service.api;
+package org.sagebionetworks.bixarena.api.api;
 
-import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.bixarena.auth.service.model.dto.Echo200ResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.AdminStats200ResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,31 +33,38 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Utility", description = "Utility endpoints.")
-public interface UtilityApi {
+@Tag(name = "Admin", description = "Administrative endpoints requiring elevated roles.")
+public interface AdminApi {
 
-    default UtilityApiDelegate getDelegate() {
-        return new UtilityApiDelegate() {};
+    default AdminApiDelegate getDelegate() {
+        return new AdminApiDelegate() {};
     }
 
     /**
-     * GET /echo : Echo authenticated principal
-     * Returns information about the authenticated user.
+     * GET /admin/stats : Admin statistics
+     * Administrative operations requiring admin role.
      *
      * @return Success (status code 200)
      *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
      */
     @Operation(
-        operationId = "echo",
-        summary = "Echo authenticated principal",
-        description = "Returns information about the authenticated user.",
-        tags = { "Utility" },
+        operationId = "adminStats",
+        summary = "Admin statistics",
+        description = "Administrative operations requiring admin role.",
+        tags = { "Admin" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Echo200ResponseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = AdminStats200ResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = AdminStats200ResponseDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
@@ -66,14 +73,14 @@ public interface UtilityApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/echo",
-        produces = { "application/json" }
+        value = "/admin/stats",
+        produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<Echo200ResponseDto> echo(
+    default ResponseEntity<AdminStats200ResponseDto> adminStats(
         
     ) {
-        return getDelegate().echo();
+        return getDelegate().adminStats();
     }
 
 }

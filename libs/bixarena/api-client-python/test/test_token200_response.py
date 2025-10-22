@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.oidc_callback200_response import OidcCallback200Response
+from bixarena_api_client.models.token200_response import Token200Response
 
 
-class TestOidcCallback200Response(unittest.TestCase):
-    """OidcCallback200Response unit test stubs"""
+class TestToken200Response(unittest.TestCase):
+    """Token200Response unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,25 +25,30 @@ class TestOidcCallback200Response(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> OidcCallback200Response:
-        """Test OidcCallback200Response
+    def make_instance(self, include_optional) -> Token200Response:
+        """Test Token200Response
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `OidcCallback200Response`
+        # uncomment below to create an instance of `Token200Response`
         """
-        model = OidcCallback200Response()
+        model = Token200Response()
         if include_optional:
-            return OidcCallback200Response(
-                status = 'ok'
+            return Token200Response(
+                access_token = '',
+                token_type = 'Bearer',
+                expires_in = 600
             )
         else:
-            return OidcCallback200Response(
+            return Token200Response(
+                access_token = '',
+                token_type = 'Bearer',
+                expires_in = 600,
         )
         """
 
-    def testOidcCallback200Response(self):
-        """Test OidcCallback200Response"""
+    def testToken200Response(self):
+        """Test Token200Response"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

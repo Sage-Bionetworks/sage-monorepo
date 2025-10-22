@@ -22,9 +22,9 @@ from typing import Optional, Set
 from typing_extensions import Self
 
 
-class OidcCallback200Response(BaseModel):
+class Callback200Response(BaseModel):
     """
-    OidcCallback200Response
+    Callback200Response
     """  # noqa: E501
 
     status: Optional[StrictStr] = None
@@ -47,7 +47,7 @@ class OidcCallback200Response(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of OidcCallback200Response from a JSON string"""
+        """Create an instance of Callback200Response from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,7 +71,7 @@ class OidcCallback200Response(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of OidcCallback200Response from a dict"""
+        """Create an instance of Callback200Response from a dict"""
         if obj is None:
             return None
 

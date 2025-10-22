@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.echo200_response import Echo200Response
+from bixarena_api_client.models.user_info import UserInfo
 
 
-class TestEcho200Response(unittest.TestCase):
-    """Echo200Response unit test stubs"""
+class TestUserInfo(unittest.TestCase):
+    """UserInfo unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,28 +25,30 @@ class TestEcho200Response(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> Echo200Response:
-        """Test Echo200Response
+    def make_instance(self, include_optional) -> UserInfo:
+        """Test UserInfo
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `Echo200Response`
+        # uncomment below to create an instance of `UserInfo`
         """
-        model = Echo200Response()
+        model = UserInfo()
         if include_optional:
-            return Echo200Response(
-                sub = '',
-                roles = [
-                    ''
-                    ]
+            return UserInfo(
+                sub = '3350396',
+                preferred_username = 'john.doe',
+                email = 'john.doe@example.com',
+                email_verified = True,
+                roles = ["user"]
             )
         else:
-            return Echo200Response(
+            return UserInfo(
+                sub = '3350396',
         )
         """
 
-    def testEcho200Response(self):
-        """Test Echo200Response"""
+    def testUserInfo(self):
+        """Test UserInfo"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

@@ -23,7 +23,6 @@ __all__ = [
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
-    "UtilityApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -41,7 +40,7 @@ __all__ = [
     "BattleSearchQuery",
     "BattleSort",
     "BattleUpdateRequest",
-    "Echo200Response",
+    "Callback200Response",
     "ExamplePrompt",
     "ExamplePromptPage",
     "ExamplePromptSearchQuery",
@@ -62,14 +61,14 @@ __all__ = [
     "LeaderboardSnapshotSort",
     "LeaderboardSort",
     "License",
-    "MintInternalToken200Response",
     "Model",
     "ModelPage",
     "ModelSearchQuery",
     "ModelSort",
-    "OidcCallback200Response",
     "PageMetadata",
     "SortDirection",
+    "Token200Response",
+    "UserInfo",
 ]
 
 # import apis into sdk package
@@ -81,7 +80,6 @@ from bixarena_api_client.api.example_prompt_api import (
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
-from bixarena_api_client.api.utility_api import UtilityApi as UtilityApi
 
 # import ApiClient
 from bixarena_api_client.api_response import ApiResponse as ApiResponse
@@ -111,8 +109,8 @@ from bixarena_api_client.models.battle_sort import BattleSort as BattleSort
 from bixarena_api_client.models.battle_update_request import (
     BattleUpdateRequest as BattleUpdateRequest,
 )
-from bixarena_api_client.models.echo200_response import (
-    Echo200Response as Echo200Response,
+from bixarena_api_client.models.callback200_response import (
+    Callback200Response as Callback200Response,
 )
 from bixarena_api_client.models.example_prompt import ExamplePrompt as ExamplePrompt
 from bixarena_api_client.models.example_prompt_page import (
@@ -170,17 +168,15 @@ from bixarena_api_client.models.leaderboard_sort import (
     LeaderboardSort as LeaderboardSort,
 )
 from bixarena_api_client.models.license import License as License
-from bixarena_api_client.models.mint_internal_token200_response import (
-    MintInternalToken200Response as MintInternalToken200Response,
-)
 from bixarena_api_client.models.model import Model as Model
 from bixarena_api_client.models.model_page import ModelPage as ModelPage
 from bixarena_api_client.models.model_search_query import (
     ModelSearchQuery as ModelSearchQuery,
 )
 from bixarena_api_client.models.model_sort import ModelSort as ModelSort
-from bixarena_api_client.models.oidc_callback200_response import (
-    OidcCallback200Response as OidcCallback200Response,
-)
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection
+from bixarena_api_client.models.token200_response import (
+    Token200Response as Token200Response,
+)
+from bixarena_api_client.models.user_info import UserInfo as UserInfo

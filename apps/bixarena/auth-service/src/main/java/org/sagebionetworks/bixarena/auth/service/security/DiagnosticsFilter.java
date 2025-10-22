@@ -30,7 +30,7 @@ public class DiagnosticsFilter extends OncePerRequestFilter {
   ) throws ServletException, IOException {
     try {
       String path = request.getRequestURI();
-      if (path.startsWith("/v1/auth") || path.equals("/v1/echo")) {
+      if (path.startsWith("/v1/auth") || path.equals("/v1/userinfo")) {
         String cookieHeader = request.getHeader("Cookie");
         String jsid = null;
         if (cookieHeader != null) {

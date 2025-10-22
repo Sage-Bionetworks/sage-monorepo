@@ -21,7 +21,7 @@ from bixarena_api_client.models.battle_page import BattlePage
 from bixarena_api_client.models.battle_search_query import BattleSearchQuery
 from bixarena_api_client.models.battle_sort import BattleSort
 from bixarena_api_client.models.battle_update_request import BattleUpdateRequest
-from bixarena_api_client.models.echo200_response import Echo200Response
+from bixarena_api_client.models.callback200_response import Callback200Response
 from bixarena_api_client.models.example_prompt import ExamplePrompt
 from bixarena_api_client.models.example_prompt_page import ExamplePromptPage
 from bixarena_api_client.models.example_prompt_search_query import (
@@ -52,13 +52,11 @@ from bixarena_api_client.models.leaderboard_snapshot_query import (
 from bixarena_api_client.models.leaderboard_snapshot_sort import LeaderboardSnapshotSort
 from bixarena_api_client.models.leaderboard_sort import LeaderboardSort
 from bixarena_api_client.models.license import License
-from bixarena_api_client.models.mint_internal_token200_response import (
-    MintInternalToken200Response,
-)
 from bixarena_api_client.models.model import Model
 from bixarena_api_client.models.model_page import ModelPage
 from bixarena_api_client.models.model_search_query import ModelSearchQuery
 from bixarena_api_client.models.model_sort import ModelSort
-from bixarena_api_client.models.oidc_callback200_response import OidcCallback200Response
 from bixarena_api_client.models.page_metadata import PageMetadata
 from bixarena_api_client.models.sort_direction import SortDirection
+from bixarena_api_client.models.token200_response import Token200Response
+from bixarena_api_client.models.user_info import UserInfo

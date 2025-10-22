@@ -2,8 +2,8 @@ post:
   tags:
     - Auth
   summary: Mint short-lived internal JWT
-  description: Exchanges an authenticated session (cookie) for an internal JWT.
-  operationId: mintInternalToken
+  description: Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+  operationId: token
   security: []
   responses:
     '200':

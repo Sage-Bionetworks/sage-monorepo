@@ -24,26 +24,20 @@ security:
 tags:
   - name: Auth
     description: Authentication and token minting operations.
-  - name: Utility
-    description: Utility endpoints.
-  - name: Admin
-    description: Administrative endpoints requiring elevated roles.
 
 paths:
-  /auth/oidc/start:
-    $ref: paths/auth-oidc-start.yaml
-  /auth/oidc/callback:
-    $ref: paths/auth-oidc-callback.yaml
+  /auth/login:
+    $ref: paths/auth-login.yaml
+  /auth/callback:
+    $ref: paths/auth-callback.yaml
   /auth/logout:
     $ref: paths/auth-logout.yaml
-  /token:
-    $ref: paths/token.yaml
+  /oauth2/token:
+    $ref: paths/oauth2-token.yaml
+  /userinfo:
+    $ref: paths/userinfo.yaml
   /.well-known/jwks.json:
     $ref: paths/jwks.yaml
-  /echo:
-    $ref: paths/echo.yaml
-  /admin/stats:
-    $ref: paths/admin-stats.yaml
 
 components:
   securitySchemes:

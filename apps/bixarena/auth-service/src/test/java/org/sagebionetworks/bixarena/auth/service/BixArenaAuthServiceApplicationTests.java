@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
     "app.auth.jwks-url=https://example.org/jwks",
     "app.auth.client-id=test-client",
     "app.auth.client-secret=test-secret",
-    "app.auth.redirect-uri=http://localhost:8115/auth/oidc/callback",
+    "app.auth.redirect-uri=http://localhost:8115/auth/callback",
     "app.auth.internal-issuer=http://localhost",
     "app.auth.audience=test-audience",
     "app.auth.token-ttl-seconds=600",

@@ -14,6 +14,8 @@ servers:
 security:
   - jwtBearer: []
 tags:
+  - description: Administrative endpoints requiring elevated roles.
+    name: Admin
   - description: Operations about battles between AI models.
     name: Battle
   - description: Operations about example prompts for biomedical relevance detection.
@@ -23,6 +25,29 @@ tags:
   - description: Operations about models.
     name: Model
 paths:
+  /admin/stats:
+    get:
+      description: Administrative operations requiring admin role.
+      operationId: adminStats
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adminStats_200_response'
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      summary: Admin statistics
+      tags:
+        - Admin
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Admin
   /battles:
     get:
       description: List battles with optional filtering and pagination
@@ -531,30 +556,30 @@ components:
         $ref: '#/components/schemas/ModelSearchQuery'
       style: deepObject
   responses:
-    BadRequest:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: Invalid request
     Unauthorized:
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Unauthorized
-    InternalServerError:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: The request cannot be fulfilled due to an unexpected server error
     Forbidden:
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The user does not have the permission to perform this action
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
     NotFound:
       content:
         application/problem+json:
@@ -568,6 +593,30 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request conflicts with current state of the target resource
   schemas:
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+        instance:
+          description: An absolute URI that identifies the specific occurrence of
+            the problem
+          type: string
+      required:
+        - status
+        - title
+      type: object
     BattleSort:
       default: created_at
       description: What to sort battles by.
@@ -774,30 +823,6 @@ components:
       required:
         - battles
         - page
-      type: object
-    BasicError:
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          description: A human readable documentation for the problem type
-          type: string
-        status:
-          description: The HTTP status code
-          type: integer
-        detail:
-          description: A human readable explanation specific to this occurrence of
-            the problem
-          type: string
-        type:
-          description: An absolute URI that identifies the problem type
-          type: string
-        instance:
-          description: An absolute URI that identifies the specific occurrence of
-            the problem
-          type: string
-      required:
-        - status
-        - title
       type: object
     BattleCreateRequest:
       description: The information used to create a new battle.
@@ -1523,6 +1548,13 @@ components:
         hasPrevious: true
         hasNext: true
         totalElements: 99
+      type: object
+    adminStats_200_response:
+      example:
+        ok: true
+      properties:
+        ok:
+          type: boolean
       type: object
     LeaderboardList_inner:
       example:

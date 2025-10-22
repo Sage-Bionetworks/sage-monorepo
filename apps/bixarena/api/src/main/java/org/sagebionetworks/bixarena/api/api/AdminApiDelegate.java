@@ -1,7 +1,7 @@
-package org.sagebionetworks.bixarena.auth.service.api;
+package org.sagebionetworks.bixarena.api.api;
 
-import org.sagebionetworks.bixarena.auth.service.model.dto.AdminStats200ResponseDto;
-import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.AdminStats200ResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public interface AdminApiDelegate {
      *
      * @return Success (status code 200)
      *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
+     *         or The user does not have the permission to perform this action (status code 403)
      * @see AdminApi#adminStats
      */
     default ResponseEntity<AdminStats200ResponseDto> adminStats() {
@@ -44,14 +44,14 @@ public interface AdminApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
             }

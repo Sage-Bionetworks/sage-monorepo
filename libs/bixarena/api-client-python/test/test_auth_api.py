@@ -25,10 +25,31 @@ class TestAuthApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_callback(self) -> None:
+        """Test case for callback
+
+        OIDC redirect callback
+        """
+        pass
+
     def test_get_jwks(self) -> None:
         """Test case for get_jwks
 
         JSON Web Key Set
+        """
+        pass
+
+    def test_get_user_info(self) -> None:
+        """Test case for get_user_info
+
+        Get current user profile
+        """
+        pass
+
+    def test_login(self) -> None:
+        """Test case for login
+
+        Start Synapse OIDC authorization code flow
         """
         pass
 
@@ -39,24 +60,10 @@ class TestAuthApi(unittest.TestCase):
         """
         pass
 
-    def test_mint_internal_token(self) -> None:
-        """Test case for mint_internal_token
+    def test_token(self) -> None:
+        """Test case for token
 
         Mint short-lived internal JWT
-        """
-        pass
-
-    def test_oidc_callback(self) -> None:
-        """Test case for oidc_callback
-
-        OIDC redirect callback
-        """
-        pass
-
-    def test_start_oidc(self) -> None:
-        """Test case for start_oidc
-
-        Start Synapse OIDC authorization code flow
         """
         pass
 

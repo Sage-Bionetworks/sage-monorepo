@@ -1,0 +1,19 @@
+get:
+  tags:
+    - Auth
+  summary: Get current user profile
+  description: |
+    Returns the authenticated user's profile information.
+    This is an OIDC-compliant UserInfo endpoint that provides details about the currently authenticated user.
+
+    Requires a valid JWT obtained via the `/token` endpoint or an active session.
+  operationId: getUserInfo
+  responses:
+    '200':
+      description: User profile information
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserInfo.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml

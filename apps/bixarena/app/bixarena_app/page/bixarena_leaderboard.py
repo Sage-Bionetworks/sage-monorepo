@@ -1,27 +1,26 @@
 import gradio as gr
 import pandas as pd
-from bixarena_api_client import ApiClient, Configuration, LeaderboardApi
+from bixarena_api_client import LeaderboardApi
 from bixarena_api_client.exceptions import ApiException
 
-from bixarena_app.config.utils import _get_api_base_url
+from bixarena_app.api.api_client_helper import create_authenticated_api_client
 
 print("🚀 bixarena_leaderboard.py module loaded successfully!")
 
 
-def fetch_leaderboard_data():
-    """Fetch leaderboard data from the BixArena API"""
-    try:
-        # Configure the API client
-        api_base_url = _get_api_base_url()
-        if not api_base_url:
-            print("❌ API_BASE_URL not configured")
-            return pd.DataFrame()
+def fetch_leaderboard_data(jwt_token: str | None = None):
+    """Fetch leaderboard data from the BixArena API
 
-        configuration = Configuration(host=api_base_url)
-        print(f"🔗 Attempting to connect to API at: {configuration.host}")
+    Args:
+        jwt_token: Optional JWT token for authenticated API calls
+    """
+    try:
+        print("📊 Fetching leaderboard data for 'open-source'...")
+        if jwt_token:
+            print("🔑 Using JWT token for authenticated API call")
 
         # Create API client and leaderboard API instance
-        with ApiClient(configuration) as api_client:
+        with create_authenticated_api_client(jwt_token) as api_client:
             api_instance = LeaderboardApi(api_client)
 
             # Fetch leaderboard entries for "open-source" leaderboard

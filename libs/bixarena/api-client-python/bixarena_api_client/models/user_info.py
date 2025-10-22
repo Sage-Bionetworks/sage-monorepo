@@ -16,27 +16,52 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    StrictBool,
+    StrictStr,
+    field_validator,
+)
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class MintInternalToken200Response(BaseModel):
+class UserInfo(BaseModel):
     """
-    MintInternalToken200Response
+    OIDC-compliant user information response
     """  # noqa: E501
 
-    access_token: StrictStr
-    token_type: StrictStr
-    expires_in: StrictInt
-    __properties: ClassVar[List[str]] = ["access_token", "token_type", "expires_in"]
+    sub: StrictStr = Field(description="Subject identifier - the Synapse user ID")
+    preferred_username: Optional[StrictStr] = Field(
+        default=None, description="Preferred username for display"
+    )
+    email: Optional[StrictStr] = Field(default=None, description="User's email address")
+    email_verified: Optional[StrictBool] = Field(
+        default=None, description="Whether the email address has been verified"
+    )
+    roles: Optional[List[StrictStr]] = Field(
+        default=None, description="User roles assigned within BixArena"
+    )
+    __properties: ClassVar[List[str]] = [
+        "sub",
+        "preferred_username",
+        "email",
+        "email_verified",
+        "roles",
+    ]
 
-    @field_validator("token_type")
-    def token_type_validate_enum(cls, value):
+    @field_validator("roles")
+    def roles_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(["Bearer"]):
-            raise ValueError("must be one of enum values ('Bearer')")
+        if value is None:
+            return value
+
+        for i in value:
+            if i not in set(["user", "admin"]):
+                raise ValueError("each list item must be one of ('user', 'admin')")
         return value
 
     model_config = ConfigDict(
@@ -56,7 +81,7 @@ class MintInternalToken200Response(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MintInternalToken200Response from a JSON string"""
+        """Create an instance of UserInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -80,7 +105,7 @@ class MintInternalToken200Response(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MintInternalToken200Response from a dict"""
+        """Create an instance of UserInfo from a dict"""
         if obj is None:
             return None
 
@@ -89,9 +114,11 @@ class MintInternalToken200Response(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "access_token": obj.get("access_token"),
-                "token_type": obj.get("token_type"),
-                "expires_in": obj.get("expires_in"),
+                "sub": obj.get("sub"),
+                "preferred_username": obj.get("preferred_username"),
+                "email": obj.get("email"),
+                "email_verified": obj.get("email_verified"),
+                "roles": obj.get("roles"),
             }
         )
         return _obj

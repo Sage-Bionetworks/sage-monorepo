@@ -13,6 +13,9 @@ servers:
   - url: https://bixarena.ai/api/v1
   - url: https://bixarena.ai/api/v1
 tags:
+  - name: Admin
+    description: Administrative endpoints requiring elevated roles.
+    x-displayName: Admin
   - name: Battle
     description: Operations about battles between AI models.
     x-displayName: Battle
@@ -28,13 +31,30 @@ tags:
   - name: Auth
     description: Authentication and token minting operations.
     x-displayName: Auth
-  - name: Utility
-    description: Utility endpoints.
-    x-displayName: Utility
-  - name: Admin
-    description: Administrative endpoints requiring elevated roles.
-    x-displayName: Admin
 paths:
+  /admin/stats:
+    get:
+      tags:
+        - Admin
+      summary: Admin statistics
+      description: Administrative operations requiring admin role.
+      operationId: adminStats
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      security:
+        - jwtBearer: []
   /battles:
     get:
       tags:
@@ -317,13 +337,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
-  /auth/oidc/start:
+  /auth/login:
     get:
       tags:
         - Auth
       summary: Start Synapse OIDC authorization code flow
       description: Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
-      operationId: startOidc
+      operationId: login
       security: []
       responses:
         '204':
@@ -332,13 +352,13 @@ paths:
           description: Redirect to Synapse login
         '400':
           $ref: '#/components/responses/BadRequest'
-  /auth/oidc/callback:
+  /auth/callback:
     get:
       tags:
         - Auth
       summary: OIDC redirect callback
       description: Handles redirect from Synapse, validates state and nonce, establishes authenticated session.
-      operationId: oidcCallback
+      operationId: callback
       security: []
       parameters:
         - in: query
@@ -371,19 +391,22 @@ paths:
       tags:
         - Auth
       summary: Logout current session
-      description: Invalidate the current authenticated session.
+      description: Invalidate the current authenticated session. Requires an active session.
       operationId: logout
-      security: []
       responses:
         '204':
-          description: Logged out (idempotent)
-  /token:
+          description: Logged out successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - jwtBearer: []
+  /oauth2/token:
     post:
       tags:
         - Auth
       summary: Mint short-lived internal JWT
-      description: Exchanges an authenticated session (cookie) for an internal JWT.
-      operationId: mintInternalToken
+      description: Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+      operationId: token
       security: []
       responses:
         '200':
@@ -408,6 +431,28 @@ paths:
                     example: 600
         '401':
           $ref: '#/components/responses/Unauthorized'
+  /userinfo:
+    get:
+      tags:
+        - Auth
+      summary: Get current user profile
+      description: |
+        Returns the authenticated user's profile information.
+        This is an OIDC-compliant UserInfo endpoint that provides details about the currently authenticated user.
+
+        Requires a valid JWT obtained via the `/token` endpoint or an active session.
+      operationId: getUserInfo
+      responses:
+        '200':
+          description: User profile information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - jwtBearer: []
   /.well-known/jwks.json:
     get:
       tags:
@@ -430,54 +475,6 @@ paths:
                       type: object
         '400':
           $ref: '#/components/responses/BadRequest'
-  /echo:
-    get:
-      tags:
-        - Utility
-      summary: Echo authenticated principal
-      description: Returns information about the authenticated user.
-      operationId: echo
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  sub:
-                    type: string
-                  roles:
-                    type: array
-                    items:
-                      type: string
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-      security:
-        - jwtBearer: []
-  /admin/stats:
-    get:
-      tags:
-        - Admin
-      summary: Admin statistics
-      description: Administrative operations requiring admin role.
-      operationId: adminStats
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ok:
-                    type: boolean
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-      security:
-        - jwtBearer: []
 components:
   securitySchemes:
     jwtBearer:
@@ -487,6 +484,28 @@ components:
       description: |
         Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
   schemas:
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
     BattleSort:
       description: What to sort battles by.
       type: string
@@ -641,28 +660,6 @@ components:
       required:
         - battles
         - page
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem
-      required:
-        - title
-        - status
     BattleCreateRequest:
       type: object
       description: The information used to create a new battle.
@@ -1246,6 +1243,76 @@ components:
                 $ref: '#/components/schemas/Model'
           required:
             - models
+    UserInfo:
+      type: object
+      description: OIDC-compliant user information response
+      properties:
+        sub:
+          type: string
+          description: Subject identifier - the Synapse user ID
+          example: '3350396'
+        preferred_username:
+          type: string
+          description: Preferred username for display
+          example: john.doe
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: john.doe@example.com
+        email_verified:
+          type: boolean
+          description: Whether the email address has been verified
+          example: true
+        roles:
+          type: array
+          description: User roles assigned within BixArena
+          items:
+            type: string
+            enum:
+              - user
+              - admin
+          example:
+            - user
+      required:
+        - sub
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Forbidden:
+      description: The user does not have the permission to perform this action
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Conflict:
+      description: The request conflicts with current state of the target resource
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
   parameters:
     battleSearchQuery:
       name: battleSearchQuery
@@ -1320,46 +1387,10 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
-  responses:
-    BadRequest:
-      description: Invalid request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    Forbidden:
-      description: The user does not have the permission to perform this action
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    Conflict:
-      description: The request conflicts with current state of the target resource
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
 x-tagGroups:
   - name: BixArena API Service
     tags:
+      - Admin
       - Battle
       - Example Prompt
       - Leaderboard
@@ -1367,5 +1398,3 @@ x-tagGroups:
   - name: BixArena Auth Service
     tags:
       - Auth
-      - Utility
-      - Admin

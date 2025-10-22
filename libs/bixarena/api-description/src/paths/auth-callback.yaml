@@ -3,7 +3,7 @@ get:
     - Auth
   summary: OIDC redirect callback
   description: Handles redirect from Synapse, validates state and nonce, establishes authenticated session.
-  operationId: oidcCallback
+  operationId: callback
   security: []
   parameters:
     - in: query
