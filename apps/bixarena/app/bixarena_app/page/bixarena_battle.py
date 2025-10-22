@@ -10,7 +10,13 @@ import logging
 import time
 
 import gradio as gr
-from bixarena_api_client import ApiClient, BattleApi, BattleCreateRequest, Configuration
+from bixarena_api_client import (
+    ApiClient,
+    BattleApi,
+    BattleCreateRequest,
+    BattleUpdateRequest,
+    Configuration,
+)
 
 from bixarena_app.config.constants import (
     CONVERSATION_LIMIT_MSG,
@@ -44,6 +50,25 @@ logger = logging.getLogger(__name__)
 num_sides = 2
 anony_names = ["", ""]
 models = []
+current_battle_id = None
+
+
+def end_battle(battle_id: str) -> None:
+    """Update battle endedAt timestamp when voting completes."""
+    if not battle_id:
+        logger.warning("⚠️ No battle_id to end")
+        return
+
+    try:
+        api_base_url = _get_api_base_url()
+        configuration = Configuration(host=api_base_url)
+        with ApiClient(configuration) as api_client:
+            battle_api = BattleApi(api_client)
+            # PATCH with empty body will trigger backend to set endedAt
+            battle_api.update_battle(battle_id, BattleUpdateRequest())
+            logger.info(f"✅ Battle ended: {battle_id}")
+    except Exception as e:
+        logger.warning(f"❌ Failed to end battle {battle_id}: {e}")
 
 
 def load_demo_side_by_side_anony(models_, _):
@@ -60,6 +85,13 @@ def load_demo_side_by_side_anony(models_, _):
 
 
 def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
+    global current_battle_id
+
+    # End the battle when voting happens
+    if current_battle_id:
+        end_battle(current_battle_id)
+        current_battle_id = None
+
     # Log the exact same data to console instead of file
     data = {
         "tstamp": round(time.time(), 4),
@@ -130,7 +162,16 @@ def tievote_last_response(
 
 
 def clear_history(request: gr.Request):
+    """Clear battle history and end the active battle."""
+    global current_battle_id
+
     logger.info("clear_history (anony).")
+
+    # End the active battle if one exists
+    if current_battle_id:
+        end_battle(current_battle_id)
+        current_battle_id = None
+
     return (
         [None] * num_sides  # states
         + [None] * num_sides  # chatbots
@@ -163,6 +204,8 @@ def flash_buttons():
 def add_text(
     state0, state1, model_selector0, model_selector1, text, request: gr.Request
 ):
+    global current_battle_id
+
     logger.info(f"add_text (anony). len: {len(text)}")
     states = [state0, state1]
 
@@ -197,7 +240,8 @@ def add_text(
                         )
                         battle = battle_api.create_battle(battle_request)
                         if battle and battle.id:
-                            logger.info(f"✅ Battle created: {battle.id}")
+                            current_battle_id = battle.id
+                            logger.info(f"✅ Battle created: {current_battle_id}")
 
         except Exception as e:
             logger.warning(f"❌ Failed to create battle: {e}")
