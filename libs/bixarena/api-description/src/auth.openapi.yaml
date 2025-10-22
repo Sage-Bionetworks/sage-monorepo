@@ -1,0 +1,51 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: BixArena Auth Service
+  description: Advance bioinformatics by evaluating and ranking AI agents.
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+
+# Vendor extensions at the top level
+x-oauth2-audience: 'urn:bixarena:api'
+
+servers:
+  - url: http://localhost
+
+# Default security posture (scopes on operations)
+security:
+  - jwtBearer: []
+
+tags:
+  - name: Auth
+    description: Authentication and token minting operations.
+  - name: Utility
+    description: Utility endpoints.
+  - name: Admin
+    description: Administrative endpoints requiring elevated roles.
+
+paths:
+  /auth/oidc/start:
+    $ref: paths/auth-oidc-start.yaml
+  /auth/oidc/callback:
+    $ref: paths/auth-oidc-callback.yaml
+  /auth/logout:
+    $ref: paths/auth-logout.yaml
+  /token:
+    $ref: paths/token.yaml
+  /.well-known/jwks.json:
+    $ref: paths/jwks.yaml
+  /echo:
+    $ref: paths/echo.yaml
+  /admin/stats:
+    $ref: paths/admin-stats.yaml
+
+components:
+  securitySchemes:
+    jwtBearer:
+      $ref: components/securitySchemes/JwtBearer.yaml

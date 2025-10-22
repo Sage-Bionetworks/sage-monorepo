@@ -1,7 +1,6 @@
 package org.sagebionetworks.bixarena.api.configuration;
 
 import java.util.List;
-import org.sagebionetworks.bixarena.api.security.SessionAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -10,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -21,23 +19,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfiguration {
 
   @Bean
-  public SecurityFilterChain securityFilterChain(
-    HttpSecurity http,
-    SessionAuthenticationFilter sessionAuthenticationFilter
-  ) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
       .csrf(csrf -> csrf.disable())
       .cors(Customizer.withDefaults())
-      // Populate SecurityContext from session (after OIDC callback) early in chain
-      .addFilterBefore(sessionAuthenticationFilter, AnonymousAuthenticationFilter.class)
       .authorizeHttpRequests(authz ->
         authz
           .requestMatchers(
-            "/.well-known/jwks.json",
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/v1/auth/**",
-            "/v1/auth/logout",
             "/v1/example-prompts",
             "/v1/example-prompts/**",
             "/v1/leaderboards",

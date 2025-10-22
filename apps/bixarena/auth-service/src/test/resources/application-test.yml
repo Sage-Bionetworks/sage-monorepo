@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+    properties:
+      hibernate:
+        search:
+          enabled: false # Disable Hibernate Search for tests
+  flyway:
+    enabled: false # Disable Flyway for simple tests
+
+logging:
+  level:
+    org.sagebionetworks.amp.als: DEBUG
+    org.hibernate.search: OFF
+
+# Minimal application properties required for configuration binding during tests
+app:
+  welcome-message: 'Welcome to BixArena Auth Service (test)'
+  ui-base-url: http://localhost:8100
+  auth:
+    authorize-url: https://example.org/authorize
+    token-url: https://example.org/token
+    jwks-url: https://example.org/jwks
+    client-id: test-client
+    client-secret: test-secret
+    redirect-uri: http://localhost:8115/auth/oidc/callback
+    internal-issuer: http://localhost
+    audience: test-audience
+    token-ttl-seconds: 600

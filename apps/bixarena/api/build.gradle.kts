@@ -16,11 +16,9 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
-  implementation(libs.nimbus.jose.jwt)
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.jdbc)
-  implementation(libs.spring.boot.starter.oauth2.client)
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
@@ -35,7 +33,9 @@ dependencies {
 
 flyway {
   url = "jdbc:postgresql://bixarena-postgres:21000/bixarena"
-  user = System.getenv("FLYWAY_USER") ?: "bixarena"
+  user = System.getenv("FLYWAY_USER") ?: "postgres"
   password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
   cleanDisabled = false
+  schemas = arrayOf("api")
+  defaultSchema = "api"
 }
