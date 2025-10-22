@@ -53,6 +53,54 @@ models = []
 current_battle_id = None
 
 
+def create_battle(
+    model_left: str, model_right: str, title: str | None = None
+) -> str | None:
+    """Create a new battle record in the database.
+
+    Args:
+        model_left: Name of model A
+        model_right: Name of model B
+        title: Optional battle title (first prompt snippet)
+
+    Returns:
+        Battle ID if successful, None otherwise
+    """
+    try:
+        api_base_url = _get_api_base_url()
+
+        # Runtime lookup model info
+        model_a_info = model_response.api_endpoint_info.get(model_left)
+        model_b_info = model_response.api_endpoint_info.get(model_right)
+
+        if not (model_a_info and model_b_info):
+            logger.warning(f"⚠️ Model info not found for {model_left} or {model_right}")
+            return None
+
+        model_a_id = model_a_info.get("model_id")
+        model_b_id = model_b_info.get("model_id")
+
+        if not (model_a_id and model_b_id):
+            logger.warning(f"⚠️ Model IDs not found for {model_left} or {model_right}")
+            return None
+
+        configuration = Configuration(host=api_base_url)
+        with ApiClient(configuration) as api_client:
+            battle_api = BattleApi(api_client)
+            battle_request = BattleCreateRequest(
+                modelAId=model_a_id, modelBId=model_b_id, title=title
+            )
+            battle = battle_api.create_battle(battle_request)
+            if battle and battle.id:
+                logger.info(f"✅ Battle created: {battle.id} - '{title}'")
+                return battle.id
+
+    except Exception as e:
+        logger.warning(f"❌ Failed to create battle: {e}")
+
+    return None
+
+
 def end_battle(battle_id: str) -> None:
     """Update battle endedAt timestamp when voting completes."""
     if not battle_id:
@@ -219,33 +267,6 @@ def add_text(
             State(model_right),
         ]
 
-        # Create battle record
-        try:
-            api_base_url = _get_api_base_url()
-
-            # Runtime lookup model info
-            model_a_info = model_response.api_endpoint_info.get(model_left)
-            model_b_info = model_response.api_endpoint_info.get(model_right)
-
-            if model_a_info and model_b_info:
-                model_a_id = model_a_info.get("model_id")
-                model_b_id = model_b_info.get("model_id")
-
-                if model_a_id and model_b_id:
-                    configuration = Configuration(host=api_base_url)
-                    with ApiClient(configuration) as api_client:
-                        battle_api = BattleApi(api_client)
-                        battle_request = BattleCreateRequest(
-                            modelAId=model_a_id, modelBId=model_b_id
-                        )
-                        battle = battle_api.create_battle(battle_request)
-                        if battle and battle.id:
-                            current_battle_id = battle.id
-                            logger.info(f"✅ Battle created: {current_battle_id}")
-
-        except Exception as e:
-            logger.warning(f"❌ Failed to create battle: {e}")
-
     if len(text) <= 0:
         for i in range(num_sides):
             states[i].skip_next = True
@@ -292,6 +313,15 @@ def add_text(
         )
 
     text = text[:INPUT_CHAR_LEN_LIMIT]  # Hard cut-off
+
+    # Create battle with first prompt as title (only for first message)
+    if not current_battle_id and states[0] and states[1]:
+        model_left = states[0].model_name
+        model_right = states[1].model_name
+        # Use first 50 characters of prompt as battle title
+        battle_title = text[:50] + "..." if len(text) > 50 else text
+        current_battle_id = create_battle(model_left, model_right, battle_title)
+
     for i in range(num_sides):
         states[i].conv.append_message(states[i].conv.roles[0], text)
         states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
