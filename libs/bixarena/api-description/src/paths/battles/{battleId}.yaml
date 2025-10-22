@@ -47,6 +47,7 @@ patch:
   summary: Update a battle
   description: Update a battle's end time or other properties
   operationId: updateBattle
+  x-anonymous-access: true
   security:
     - jwtBearer:
         - update:battles

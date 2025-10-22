@@ -41,6 +41,7 @@ post:
   summary: Create a battle
   description: Create a new battle between two AI models.
   operationId: createBattle
+  x-anonymous-access: true
   security:
     - jwtBearer:
         - create:battles

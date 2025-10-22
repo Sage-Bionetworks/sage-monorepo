@@ -60,7 +60,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
-  @PreAuthorize("hasAuthority('SCOPE_update:battles')")
+  // @PreAuthorize("hasAuthority('SCOPE_update:battles')") // Disabled for anonymous access
   public ResponseEntity<BattleDto> updateBattle(
     String battleId,
     BattleUpdateRequestDto battleUpdateRequestDto
