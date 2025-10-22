@@ -15,6 +15,8 @@ spring:
   flyway:
     enabled: true
     clean-disabled: false
+    schemas: api
+    default-schema: api
   jackson:
     date-format: org.sagebionetworks.bixarena.api.RFC3339DateFormat
     serialization:
@@ -29,6 +31,7 @@ spring:
         format_sql: true
         jdbc:
           time_zone: UTC
+        default_schema: api
     open-in-view: false
   # autoconfigure:
   #   # Prevent Spring Boot from auto-configuring a default Elasticsearch client,
@@ -63,19 +66,3 @@ info:
 
 app:
   welcome-message: 'Welcome to BixArena API'
-  ui-base-url: http://127.0.0.1:8100
-  auth:
-    # Synapse OAuth endpoints (adjusted to known working endpoints)
-    # Authorize endpoint: root sign-in portal with query params
-    authorize-url: https://signin.synapse.org
-    # Token endpoint (Synapse repo service)
-    token-url: https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token
-    # JWKS endpoint (Synapse repo service openid)
-    jwks-url: https://repo-prod.prod.sagebase.org/auth/v1/openid/jwks
-    client-id: changeme
-    client-secret: changeme
-    # Use localhost (not 127.0.0.1) so the browser sends the same cookie across app and api if app uses localhost
-    redirect-uri: http://127.0.0.1:8112/v1/auth/oidc/callback
-    internal-issuer: http://bixarena-api:8112
-    audience: myapi
-    token-ttl-seconds: 600

@@ -1,10 +1,10 @@
 import argparse
+import os
 
 import gradio as gr
 import requests
 
 from bixarena_app.auth.user_state import get_user_state
-from bixarena_app.config.utils import get_api_base_url, get_oidc_base_url
 from bixarena_app.page.bixarena_battle import build_battle_page
 from bixarena_app.page.bixarena_header import (
     build_header,
@@ -30,6 +30,53 @@ class PageNavigator:
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
+def _get_api_base_url() -> str | None:
+    """Resolve the BixArena API base URL from environment.
+
+    Uses API_BASE_URL. If unset, prints an error and returns None.
+    """
+    api = os.environ.get("API_BASE_URL")
+    if api:
+        return api.rstrip("/")
+    print(
+        "[config] API_BASE_URL not set.\n"
+        "[config] Login and identity sync will be disabled until configured."
+    )
+    return None
+
+
+def _get_auth_base_url_ssr() -> str | None:
+    """Resolve the auth service base URL for server-side requests (SSR).
+
+    Uses AUTH_BASE_URL_SSR for server-to-server communication (e.g., /echo endpoint).
+    If unset, prints an error and returns None.
+    """
+    base = os.environ.get("AUTH_BASE_URL_SSR")
+    if base:
+        return base.rstrip("/")
+    print(
+        "[config] AUTH_BASE_URL_SSR not set.\n"
+        "[config] Server-side auth requests will be disabled until configured."
+    )
+    return None
+
+
+def _get_auth_base_url_csr() -> str | None:
+    """Resolve the auth service base URL for client-side browser redirects (CSR).
+
+    Uses AUTH_BASE_URL_CSR for browser-driven auth redirects (login/logout).
+    If unset, prints an error and returns None.
+    """
+    base = os.environ.get("AUTH_BASE_URL_CSR")
+    if base:
+        return base.rstrip("/")
+    print(
+        "[config] AUTH_BASE_URL_CSR not set.\n"
+        "[config] Login/logout redirects will be disabled until configured."
+    )
+    return None
+
+
 def sync_backend_session_on_load(request: gr.Request):
     """Fetch user identity from backend once (if JSESSIONID cookie present).
 
@@ -48,14 +95,16 @@ def sync_backend_session_on_load(request: gr.Request):
                 jsessionid = ck.split("=", 1)[1]
                 break
         if jsessionid:
-            backend_base = get_api_base_url()
+            backend_base = _get_auth_base_url_ssr()
             try:
                 print(
-                    "[auth-sync] Starting backend identity fetch (JSESSIONID present) "
-                    f"len={len(jsessionid)}"
+                    "[auth-sync] Starting auth service identity fetch "
+                    f"(JSESSIONID present) len={len(jsessionid)}"
                 )
                 if not backend_base:
-                    print("[auth-sync] Skipping identity fetch: API_BASE_URL missing")
+                    print(
+                        "[auth-sync] Skipping identity fetch: AUTH_BASE_URL_SSR missing"
+                    )
                 else:
                     resp = requests.get(
                         f"{backend_base}/echo",
@@ -69,7 +118,6 @@ def sync_backend_session_on_load(request: gr.Request):
                             state.set_current_user(
                                 {"firstName": sub, "userName": sub, "source": "backend"}
                             )
-                            state.set_jsessionid(jsessionid)  # Store for API calls
                             print(f"[auth-sync] Identity sync success sub={sub}")
                             return (
                                 update_login_button(),
@@ -154,14 +202,14 @@ def build_app(moderate=False):
         cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
 
         # Expose start endpoint to login button JS for immediate redirect
-        oidc_base = get_oidc_base_url()
-        if not oidc_base:
-            print("[config] OIDC_BASE_URL missing; login button will be disabled.")
+        auth_base = _get_auth_base_url_csr()
+        if not auth_base:
+            print("[config] AUTH_BASE_URL_CSR missing; login button will be disabled.")
             start_endpoint = ""
             base_markup = ""
         else:
-            start_endpoint = f"{oidc_base}/auth/oidc/start"
-            base_markup = oidc_base
+            start_endpoint = f"{auth_base}/auth/oidc/start"
+            base_markup = auth_base
         gr.HTML(
             "<span id='login-start-endpoint' style='display:none'>"
             + start_endpoint

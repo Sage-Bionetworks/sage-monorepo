@@ -533,7 +533,11 @@ class Configuration:
             {
                 "url": "https://bixarena.ai/api/v1",
                 "description": "No description provided",
-            }
+            },
+            {
+                "url": "https://bixarena.ai/api/v1",
+                "description": "No description provided",
+            },
         ]
 
     def get_host_from_settings(
