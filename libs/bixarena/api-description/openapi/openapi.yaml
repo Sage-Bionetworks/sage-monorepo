@@ -11,6 +11,7 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
 servers:
   - url: https://bixarena.ai/api/v1
+  - url: https://bixarena.ai/api/v1
 tags:
   - name: Example Prompt
     description: Operations about example prompts for biomedical relevance detection.
@@ -1067,11 +1068,13 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
 x-tagGroups:
-  - name: BixArena API
+  - name: BixArena API Service
     tags:
       - Example Prompt
       - Leaderboard
       - Model
+  - name: BixArena Auth Service
+    tags:
       - Auth
       - Utility
       - Admin

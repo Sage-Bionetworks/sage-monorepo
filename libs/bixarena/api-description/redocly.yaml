@@ -32,7 +32,7 @@ apis:
       plugin/replace-servers-url:
         serverUrl: 'https://bixarena.ai/api/v1'
 
-  # Main API
+  # API service
   api-public:
     root: ./src/api.openapi.yaml
     decorators:
@@ -41,7 +41,7 @@ apis:
   api-service:
     root: ./src/api.openapi.yaml
 
-  # AI API
+  # AI service
   ai-public:
     root: ./src/ai.openapi.yaml
     decorators:
@@ -49,3 +49,12 @@ apis:
         internalFlagProperty: 'x-sage-internal'
   ai-service:
     root: ./src/ai.openapi.yaml
+
+  # Auth service
+  auth-public:
+    root: ./src/auth.openapi.yaml
+    decorators:
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
+  auth-service:
+    root: ./src/auth.openapi.yaml

@@ -1,0 +1,17 @@
+services:
+  bixarena-auth-service:
+    image: ghcr.io/sage-bionetworks/bixarena-auth-service:${BIXARENA_VERSION:-local}
+    container_name: bixarena-auth-service
+    restart: always
+    env_file:
+      - ../../../apps/bixarena/auth-service/.env
+    networks:
+      - bixarena
+    ports:
+      - '8115:8115'
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
+    depends_on:
+      - bixarena-postgres

@@ -1,5 +1,5 @@
 -- Insert example prompt records
-INSERT INTO example_prompt (id, question, source, active, created_at) VALUES
+INSERT INTO api.example_prompt (id, question, source, active, created_at) VALUES
   ('01111111-1111-1111-1111-111111111111', 'Do mitochondria play a role in remodelling lace plant leaves during programmed cell death?', 'pubmedqa', TRUE, '2025-08-01 09:00:00+00'),
   ('02222222-2222-2222-2222-222222222222', 'Do mutations causing low HDL-C promote increased carotid intima-media thickness?', 'pubmedqa', TRUE, '2025-08-01 09:15:00+00'),
   ('03333333-3333-3333-3333-333333333333', '30-Day and 1-year mortality in emergency general surgery laparotomies: an area of concern and need for improvement?', 'pubmedqa', TRUE, '2025-08-01 09:30:00+00'),
