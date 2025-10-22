@@ -17,7 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(jsr250Enabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
   @Bean
@@ -44,10 +44,9 @@ public class SecurityConfiguration {
             "/v3/api-docs/**"
           )
           .permitAll()
-          .requestMatchers("/admin/**")
-          .hasRole("ADMIN")
-          // /userinfo and /token require authentication (via session)
-          .requestMatchers("/userinfo", "/token")
+          // /userinfo, /token, and /admin/** require authentication
+          // Role-based authorization is handled by @PreAuthorize annotations
+          .requestMatchers("/userinfo", "/token", "/admin/**")
           .authenticated()
           .anyRequest()
           .authenticated()
