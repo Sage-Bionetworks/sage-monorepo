@@ -111,3 +111,32 @@ INPUT_PROMPT_CSS = """
     box-shadow: none;
 }
 """
+
+# CSS for disclaimer
+DISCLAIMER_CSS = """
+#disclaimer-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px 24px;
+    margin-top: 32px;
+}
+
+#disclaimer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#disclaimer-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    background-color: rgba(245, 158, 11, 1);
+    border-radius: 50%;
+}
+"""
