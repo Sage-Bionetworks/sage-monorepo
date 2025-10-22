@@ -17,17 +17,26 @@ export interface ComparisonToolConfigFilter {
 
 export type ComparisonToolPage = 'Model Overview' | 'Gene Expression' | 'Disease Correlation';
 
-export type ComparisonToolConfigColumnType = 'text' | 'heat_map';
+export type ComparisonToolConfigColumnType =
+  | 'text'
+  | 'heat_map'
+  | 'link_internal'
+  | 'link_external';
 export const ComparisonToolConfigColumnTypeEnum = {
   Text: 'text' as ComparisonToolConfigColumnType,
   HeatMap: 'heat_map' as ComparisonToolConfigColumnType,
+  LinkInternal: 'link_internal' as ComparisonToolConfigColumnType,
+  LinkExternal: 'link_external' as ComparisonToolConfigColumnType,
 } as const;
 
 export interface ComparisonToolConfigColumn {
   name: string;
+  field: string;
   type: ComparisonToolConfigColumnType;
   tooltip: string;
   sort_tooltip: string;
+  link_text?: string;
+  link_url?: string;
 }
 
 export interface ComparisonToolConfig {
@@ -36,3 +45,12 @@ export interface ComparisonToolConfig {
   columns: Array<ComparisonToolConfigColumn>;
   filters?: Array<ComparisonToolConfigFilter>;
 }
+
+export type HeatmapCircleData<ColorKey extends string = string> = {
+  adj_p_val: number | null | undefined;
+} & Record<ColorKey, number | null | undefined>;
+
+export type HeatmapCircleColorKey<T extends HeatmapCircleData> = Extract<
+  Exclude<keyof T, 'adj_p_val'>,
+  string
+>;

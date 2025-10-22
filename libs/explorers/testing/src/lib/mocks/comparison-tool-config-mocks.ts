@@ -83,30 +83,35 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
 export const mockComparisonToolColumns: ComparisonToolConfigColumn[] = [
   {
     name: 'Age',
+    field: 'age',
     type: 'text',
     tooltip: '',
     sort_tooltip: 'Sort by Age value',
   },
   {
     name: 'Sex',
+    field: 'sex',
     type: 'text',
     tooltip: '',
     sort_tooltip: 'Sort by Sex value',
   },
   {
     name: 'CBE',
+    field: 'CBE',
     type: 'heat_map',
     tooltip: 'Cerebellum',
     sort_tooltip: 'Sort by correlation value',
   },
   {
     name: 'DLPFC',
+    field: 'DLPFC',
     type: 'heat_map',
     tooltip: 'Dorsolateral Prefrontal Cortex',
     sort_tooltip: 'Sort by correlation value',
   },
   {
     name: 'PHG',
+    field: 'PHG',
     type: 'heat_map',
     tooltip: 'Parahippocampal Gyrus',
     sort_tooltip: 'Sort by correlation value',

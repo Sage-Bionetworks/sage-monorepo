@@ -119,4 +119,18 @@ export class HelperService {
   getNumberFromCSSValue(cssValue: string) {
     return parseFloat(cssValue);
   }
+
+  getSignificantFigures(n: number, sig = 2) {
+    let sign = 1;
+    if (n === 0) {
+      return 0;
+    }
+    if (n < 0) {
+      n *= -1;
+      sign = -1;
+    }
+
+    const mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
+    return (Math.round(n * mult) / mult) * sign;
+  }
 }

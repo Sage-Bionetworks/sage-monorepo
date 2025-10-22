@@ -8,6 +8,7 @@ import time
 import requests
 
 from bixarena_app.config.utils import build_logger
+from bixarena_app.model.error_handler import handle_error_message
 
 logger = build_logger("gradio_web_server", "gradio_web_server.log")
 
@@ -124,22 +125,67 @@ def openai_api_stream_iter(
     }
     logger.info(f"==== request ====\n{gen_params}")
 
-    res = client.chat.completions.create(
-        model=model_name,
-        messages=messages,
-        temperature=temperature,
-        max_tokens=max_new_tokens,
-        stream=True,
-    )
-    text = ""
-    for chunk in res:
-        if len(chunk.choices) > 0:
-            text += chunk.choices[0].delta.content or ""
-            data = {
-                "text": text,
-                "error_code": 0,
-            }
-            yield data
+    try:
+        res = client.chat.completions.create(
+            model=model_name,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_new_tokens,
+            stream=True,
+        )
+        text = ""
+        for chunk in res:
+            if len(chunk.choices) > 0:
+                text += chunk.choices[0].delta.content or ""
+                data = {
+                    "text": text,
+                    "error_code": 0,
+                }
+                yield data
+    except Exception as e:
+        # Retry without system message if provider doesn't support it
+        error_str = str(e).lower()
+        is_system_error = any(
+            pattern in error_str
+            for pattern in ["developer instruction", "system role", "system message"]
+        )
+        has_system = messages and messages[0].get("role") == "system"
+        is_400 = getattr(e, "status_code", None) == 400
+
+        if is_400 and is_system_error and has_system:
+            logger.warning(f"Retrying {model_name} without system message...")
+            # Merge system message into first user message
+            system_msg = messages[0]["content"]
+            retry_messages = messages[1:]
+            if retry_messages and retry_messages[0].get("role") == "user":
+                user_msg = retry_messages[0]["content"]
+                retry_messages[0]["content"] = f"{system_msg}\n\n{user_msg}"
+
+            try:
+                res = client.chat.completions.create(
+                    model=model_name,
+                    messages=retry_messages,
+                    temperature=temperature,
+                    max_tokens=max_new_tokens,
+                    stream=True,
+                )
+                text = ""
+                for chunk in res:
+                    if chunk.choices and chunk.choices[0].delta.content:
+                        text += chunk.choices[0].delta.content
+                        yield {"text": text, "error_code": 0}
+                return
+            except Exception as retry_e:
+                logger.error(f"Retry also failed: {retry_e}", exc_info=True)
+                e = retry_e
+
+        # Handle error
+        logger.error(f"OpenAI API error: {e}", exc_info=True)
+        display_error_msg = handle_error_message(e)
+        yield {
+            "text": display_error_msg,
+            "error_code": 1,
+        }
 
 
 def anthropic_api_stream_iter(model_name, prompt, temperature, top_p, max_new_tokens):

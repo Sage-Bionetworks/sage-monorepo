@@ -36,9 +36,11 @@ from bixarena_app.model.model_response import (
     invisible_btn,
     no_change_btn,
     set_global_vars_anony,
+    validate_responses,
 )
 from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
 from bixarena_app.page.battle_page_css import (
+    DISCLAIMER_CSS,
     EXAMPLE_PROMPTS_CSS,
     INPUT_PROMPT_CSS,
 )
@@ -131,12 +133,16 @@ def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
         end_battle(current_battle_id)
         current_battle_id = None
 
+    is_valid, reason = validate_responses(states)
+
     # Log the exact same data to console instead of file
     data = {
         "tstamp": round(time.time(), 4),
         "type": vote_type,
-        "models": list(model_selectors),
-        "states": [x.dict() for x in states],
+        "models": model_selectors,
+        "states": [state.dict() for state in states],
+        "is_valid": is_valid,
+        "invalid_reason": reason or "",
     }
     logger.info(f"Vote data: {json.dumps(data)}")
 
@@ -228,16 +234,6 @@ def clear_history(request: gr.Request):
         + [gr.Row(visible=False)]  # hide next_battle_row
         + [gr.Column(visible=True)]  # show suggested_prompts_group
     )
-
-
-def flash_buttons():
-    btn_updates = [
-        [disable_btn] * 3 + [enable_btn] * 1,
-        [enable_btn] * 4,
-    ]
-    for i in range(4):
-        yield btn_updates[i % 2]
-        time.sleep(0.3)
 
 
 def add_text(
@@ -350,6 +346,7 @@ def build_side_by_side_ui_anony():
     <style>
     {EXAMPLE_PROMPTS_CSS}
     {INPUT_PROMPT_CSS}
+    {DISCLAIMER_CSS}
     </style>
     """
 
@@ -420,6 +417,23 @@ def build_side_by_side_ui_anony():
                 clear_btn = gr.Button(value="🧪 Next Battle", interactive=False)
             with gr.Column(scale=2):
                 gr.HTML("")
+
+        # Disclaimer
+        gr.HTML(
+            """
+            <div id="disclaimer-footer">
+                <div id="disclaimer-content">
+                    <div id="disclaimer-text">
+                        <div class="pulse-dot"></div>
+                        <span>
+                            AI may make mistakes. Please don't include private or
+                            sensitive information in your prompts.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            """
+        )
 
     # Register listeners
     btn_list = [
@@ -511,10 +525,6 @@ def build_side_by_side_ui_anony():
         states,
         states + chatbots + btn_list,
     ).then(
-        flash_buttons,
-        [],
-        btn_list,
-    ).then(
         lambda: None,  # Enable enter key
         [],
         [],
@@ -543,10 +553,6 @@ def build_side_by_side_ui_anony():
             bot_response_multi,
             states,
             states + chatbots + btn_list,
-        ).then(
-            flash_buttons,
-            [],
-            btn_list,
         ).then(
             lambda: None,
             [],
