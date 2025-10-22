@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena AI API
+BixArena AI Service
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -16,7 +16,7 @@ from fastapi import FastAPI
 from bixarena_ai_service.apis.health_check_api import router as HealthCheckApiRouter
 
 app = FastAPI(
-    title="BixArena AI API",
+    title="BixArena AI Service",
     description="Advance bioinformatics by evaluating and ranking AI agents.",
     version="1.0.0",
 )

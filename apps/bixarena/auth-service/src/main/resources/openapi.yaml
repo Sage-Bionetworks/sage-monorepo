@@ -16,16 +16,12 @@ security:
 tags:
   - description: Authentication and token minting operations.
     name: Auth
-  - description: Utility endpoints.
-    name: Utility
-  - description: Administrative endpoints requiring elevated roles.
-    name: Admin
 paths:
-  /auth/oidc/start:
+  /auth/login:
     get:
       description: Initiates the OIDC login by redirecting the user to Synapse with
         state and nonce.
-      operationId: startOidc
+      operationId: login
       responses:
         '204':
           description: Flow started (no content; clients should follow redirect)
@@ -41,11 +37,11 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Auth
-  /auth/oidc/callback:
+  /auth/callback:
     get:
       description: "Handles redirect from Synapse, validates state and nonce, establishes\
         \ authenticated session."
-      operationId: oidcCallback
+      operationId: callback
       parameters:
         - explode: true
           in: query
@@ -66,7 +62,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/oidcCallback_200_response'
+                $ref: '#/components/schemas/callback_200_response'
           description: Authentication successful
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -83,12 +79,14 @@ paths:
         - tag: Auth
   /auth/logout:
     post:
-      description: Invalidate the current authenticated session.
+      description: Invalidate the current authenticated session. Requires an active
+        session.
       operationId: logout
       responses:
         '204':
-          description: Logged out (idempotent)
-      security: []
+          description: Logged out successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
       summary: Logout current session
       tags:
         - Auth
@@ -96,21 +94,46 @@ paths:
         - application/json
       x-tags:
         - tag: Auth
-  /token:
+  /oauth2/token:
     post:
-      description: Exchanges an authenticated session (cookie) for an internal JWT.
-      operationId: mintInternalToken
+      description: Exchanges an authenticated session (cookie) for an internal JWT
+        (OAuth2-style endpoint).
+      operationId: token
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mintInternalToken_200_response'
+                $ref: '#/components/schemas/token_200_response'
           description: Access token response
         '401':
           $ref: '#/components/responses/Unauthorized'
       security: []
       summary: Mint short-lived internal JWT
+      tags:
+        - Auth
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: Auth
+  /userinfo:
+    get:
+      description: |
+        Returns the authenticated user's profile information.
+        This is an OIDC-compliant UserInfo endpoint that provides details about the currently authenticated user.
+
+        Requires a valid JWT obtained via the `/token` endpoint or an active session.
+      operationId: getUserInfo
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+          description: User profile information
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      summary: Get current user profile
       tags:
         - Auth
       x-accepts:
@@ -139,48 +162,6 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Auth
-  /echo:
-    get:
-      description: Returns information about the authenticated user.
-      operationId: echo
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/echo_200_response'
-          description: Success
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-      summary: Echo authenticated principal
-      tags:
-        - Utility
-      x-accepts:
-        - application/json
-      x-tags:
-        - tag: Utility
-  /admin/stats:
-    get:
-      description: Administrative operations requiring admin role.
-      operationId: adminStats
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/adminStats_200_response'
-          description: Success
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-      summary: Admin statistics
-      tags:
-        - Admin
-      x-accepts:
-        - application/json
-      x-tags:
-        - tag: Admin
 components:
   responses:
     BadRequest:
@@ -195,12 +176,6 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Unauthorized
-    Forbidden:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: Forbidden
   schemas:
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -232,7 +207,47 @@ components:
         - status
         - title
       type: object
-    oidcCallback_200_response:
+    UserInfo:
+      description: OIDC-compliant user information response
+      example:
+        sub: '3350396'
+        email_verified: true
+        roles:
+          - user
+        preferred_username: john.doe
+        email: john.doe@example.com
+      properties:
+        sub:
+          description: Subject identifier - the Synapse user ID
+          example: '3350396'
+          type: string
+        preferred_username:
+          description: Preferred username for display
+          example: john.doe
+          type: string
+        email:
+          description: User's email address
+          example: john.doe@example.com
+          format: email
+          type: string
+        email_verified:
+          description: Whether the email address has been verified
+          example: true
+          type: boolean
+        roles:
+          description: User roles assigned within BixArena
+          example:
+            - user
+          items:
+            enum:
+              - user
+              - admin
+            type: string
+          type: array
+      required:
+        - sub
+      type: object
+    callback_200_response:
       example:
         status: ok
       properties:
@@ -240,7 +255,7 @@ components:
           example: ok
           type: string
       type: object
-    mintInternalToken_200_response:
+    token_200_response:
       example:
         access_token: access_token
         token_type: Bearer
@@ -270,27 +285,6 @@ components:
           items:
             type: object
           type: array
-      type: object
-    echo_200_response:
-      example:
-        sub: sub
-        roles:
-          - roles
-          - roles
-      properties:
-        sub:
-          type: string
-        roles:
-          items:
-            type: string
-          type: array
-      type: object
-    adminStats_200_response:
-      example:
-        ok: true
-      properties:
-        ok:
-          type: boolean
       type: object
   securitySchemes:
     jwtBearer:

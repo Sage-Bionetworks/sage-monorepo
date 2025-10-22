@@ -17,7 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(jsr250Enabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
   @Bean
@@ -34,15 +34,19 @@ public class SecurityConfiguration {
         authz
           .requestMatchers(
             "/.well-known/jwks.json",
+            "/actuator/health",
+            "/actuator/health/**",
+            "/actuator/info",
+            "/auth/login",
+            "/auth/callback",
+            "/oauth2/token",
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/auth/**",
-            "/auth/logout",
             "/v3/api-docs/**"
           )
           .permitAll()
-          .requestMatchers("/v1/admin/**")
-          .hasRole("ADMIN")
+          // All other requests require authentication (including /auth/logout)
+          // Role-based authorization is handled by @PreAuthorize annotations
           .anyRequest()
           .authenticated()
       )

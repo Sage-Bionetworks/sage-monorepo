@@ -62,10 +62,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "http://localhost/v1"
+    host = "https://bixarena.ai/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -96,29 +96,29 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ## Documentation for API Endpoints
 
-All URIs are relative to _http://localhost/v1_
+All URIs are relative to *https://bixarena.ai/api/v1*
 
 | Class              | Method                                                                            | HTTP request                                            | Description                                |
 | ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------ |
 | _AdminApi_         | [**admin_stats**](docs/AdminApi.md#admin_stats)                                   | **GET** /admin/stats                                    | Admin statistics                           |
+| _AuthApi_          | [**callback**](docs/AuthApi.md#callback)                                          | **GET** /auth/callback                                  | OIDC redirect callback                     |
 | _AuthApi_          | [**get_jwks**](docs/AuthApi.md#get_jwks)                                          | **GET** /.well-known/jwks.json                          | JSON Web Key Set                           |
+| _AuthApi_          | [**get_user_info**](docs/AuthApi.md#get_user_info)                                | **GET** /userinfo                                       | Get current user profile                   |
+| _AuthApi_          | [**login**](docs/AuthApi.md#login)                                                | **GET** /auth/login                                     | Start Synapse OIDC authorization code flow |
 | _AuthApi_          | [**logout**](docs/AuthApi.md#logout)                                              | **POST** /auth/logout                                   | Logout current session                     |
-| _AuthApi_          | [**mint_internal_token**](docs/AuthApi.md#mint_internal_token)                    | **POST** /token                                         | Mint short-lived internal JWT              |
-| _AuthApi_          | [**oidc_callback**](docs/AuthApi.md#oidc_callback)                                | **GET** /auth/oidc/callback                             | OIDC redirect callback                     |
-| _AuthApi_          | [**start_oidc**](docs/AuthApi.md#start_oidc)                                      | **GET** /auth/oidc/start                                | Start Synapse OIDC authorization code flow |
+| _AuthApi_          | [**token**](docs/AuthApi.md#token)                                                | **POST** /oauth2/token                                  | Mint short-lived internal JWT              |
 | _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts                       |
 | _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
 | _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |
 | _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
 | _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
 | _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
-| _UtilityApi_       | [**echo**](docs/UtilityApi.md#echo)                                               | **GET** /echo                                           | Echo authenticated principal               |
 
 ## Documentation For Models
 
 - [AdminStats200Response](docs/AdminStats200Response.md)
 - [BasicError](docs/BasicError.md)
-- [Echo200Response](docs/Echo200Response.md)
+- [Callback200Response](docs/Callback200Response.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
 - [ExamplePromptPage](docs/ExamplePromptPage.md)
 - [ExamplePromptSearchQuery](docs/ExamplePromptSearchQuery.md)
@@ -139,14 +139,14 @@ All URIs are relative to _http://localhost/v1_
 - [LeaderboardSnapshotSort](docs/LeaderboardSnapshotSort.md)
 - [LeaderboardSort](docs/LeaderboardSort.md)
 - [License](docs/License.md)
-- [MintInternalToken200Response](docs/MintInternalToken200Response.md)
 - [Model](docs/Model.md)
 - [ModelPage](docs/ModelPage.md)
 - [ModelSearchQuery](docs/ModelSearchQuery.md)
 - [ModelSort](docs/ModelSort.md)
-- [OidcCallback200Response](docs/OidcCallback200Response.md)
 - [PageMetadata](docs/PageMetadata.md)
 - [SortDirection](docs/SortDirection.md)
+- [Token200Response](docs/Token200Response.md)
+- [UserInfo](docs/UserInfo.md)
 
 <a id="documentation-for-authorization"></a>
 

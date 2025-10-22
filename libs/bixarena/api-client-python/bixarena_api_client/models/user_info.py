@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena AI API
+BixArena API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -16,19 +16,53 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    StrictBool,
+    StrictStr,
+    field_validator,
+)
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class OidcCallback200Response(BaseModel):
+class UserInfo(BaseModel):
     """
-    OidcCallback200Response
+    OIDC-compliant user information response
     """  # noqa: E501
 
-    status: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["status"]
+    sub: StrictStr = Field(description="Subject identifier - the Synapse user ID")
+    preferred_username: Optional[StrictStr] = Field(
+        default=None, description="Preferred username for display"
+    )
+    email: Optional[StrictStr] = Field(default=None, description="User's email address")
+    email_verified: Optional[StrictBool] = Field(
+        default=None, description="Whether the email address has been verified"
+    )
+    roles: Optional[List[StrictStr]] = Field(
+        default=None, description="User roles assigned within BixArena"
+    )
+    __properties: ClassVar[List[str]] = [
+        "sub",
+        "preferred_username",
+        "email",
+        "email_verified",
+        "roles",
+    ]
+
+    @field_validator("roles")
+    def roles_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        for i in value:
+            if i not in set(["user", "admin"]):
+                raise ValueError("each list item must be one of ('user', 'admin')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +81,7 @@ class OidcCallback200Response(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of OidcCallback200Response from a JSON string"""
+        """Create an instance of UserInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,12 +105,20 @@ class OidcCallback200Response(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of OidcCallback200Response from a dict"""
+        """Create an instance of UserInfo from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"status": obj.get("status")})
+        _obj = cls.model_validate(
+            {
+                "sub": obj.get("sub"),
+                "preferred_username": obj.get("preferred_username"),
+                "email": obj.get("email"),
+                "email_verified": obj.get("email_verified"),
+                "roles": obj.get("roles"),
+            }
+        )
         return _obj
