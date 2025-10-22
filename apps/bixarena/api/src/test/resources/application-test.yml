@@ -24,3 +24,5 @@ logging:
 # Minimal application properties required for configuration binding during tests
 app:
   welcome-message: 'Welcome to BixArena API (test)'
+  auth-service:
+    base-url: 'http://localhost:8111/v1'

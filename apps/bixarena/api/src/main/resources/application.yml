@@ -66,3 +66,5 @@ info:
 
 app:
   welcome-message: 'Welcome to BixArena API'
+  auth-service:
+    base-url: ${AUTH_SERVICE_BASE_URL:http://bixarena-auth-service:8111/v1}

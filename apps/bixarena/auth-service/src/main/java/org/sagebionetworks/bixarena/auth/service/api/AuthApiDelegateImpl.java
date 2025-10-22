@@ -86,35 +86,36 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     HttpServletRequest req =
       ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     HttpSession session = req.getSession(false);
-    
+
     if (session == null) {
       return ResponseEntity.status(401).build();
     }
-    
+
     String subject = (String) session.getAttribute("AUTH_SUBJECT");
     String email = (String) session.getAttribute("AUTH_EMAIL");
     String preferredUsername = (String) session.getAttribute("AUTH_PREFERRED_USERNAME");
     Boolean emailVerified = (Boolean) session.getAttribute("AUTH_EMAIL_VERIFIED");
     @SuppressWarnings("unchecked")
     List<String> roles = (List<String>) session.getAttribute("AUTH_ROLES");
-    
+
     if (subject == null) {
       return ResponseEntity.status(401).build();
     }
-    
+
     // Convert string roles to enum
     List<UserInfoDto.RolesEnum> roleEnums = (roles != null && !roles.isEmpty())
-      ? roles.stream()
-          .map(r -> {
-            try {
-              return UserInfoDto.RolesEnum.fromValue(r.toLowerCase());
-            } catch (IllegalArgumentException e) {
-              return UserInfoDto.RolesEnum.USER;
-            }
-          })
-          .collect(Collectors.toList())
+      ? roles
+        .stream()
+        .map(r -> {
+          try {
+            return UserInfoDto.RolesEnum.fromValue(r.toLowerCase());
+          } catch (IllegalArgumentException e) {
+            return UserInfoDto.RolesEnum.USER;
+          }
+        })
+        .collect(Collectors.toList())
       : List.of(UserInfoDto.RolesEnum.USER);
-    
+
     var body = UserInfoDto.builder()
       .sub(subject)
       .email(email)
@@ -122,7 +123,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       .emailVerified(emailVerified != null ? emailVerified : false)
       .roles(roleEnums)
       .build();
-      
+
     return ResponseEntity.ok()
       .header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
       .header("Pragma", "no-cache")
