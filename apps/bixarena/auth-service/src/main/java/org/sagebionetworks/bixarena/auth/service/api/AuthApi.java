@@ -9,6 +9,7 @@ import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.MintInternalToken200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.OidcCallback200ResponseDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -75,6 +76,43 @@ public interface AuthApi {
         
     ) {
         return getDelegate().getJwks();
+    }
+
+
+    /**
+     * GET /userinfo : Get current user profile
+     * Returns the authenticated user&#39;s profile information. This is an OIDC-compliant UserInfo endpoint that provides details about the currently authenticated user.  Requires a valid JWT obtained via the &#x60;/token&#x60; endpoint or an active session. 
+     *
+     * @return User profile information (status code 200)
+     *         or Unauthorized (status code 401)
+     */
+    @Operation(
+        operationId = "getUserInfo",
+        summary = "Get current user profile",
+        description = "Returns the authenticated user's profile information. This is an OIDC-compliant UserInfo endpoint that provides details about the currently authenticated user.  Requires a valid JWT obtained via the `/token` endpoint or an active session. ",
+        tags = { "Auth" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "User profile information", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserInfoDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/userinfo",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<UserInfoDto> getUserInfo(
+        
+    ) {
+        return getDelegate().getUserInfo();
     }
 
 

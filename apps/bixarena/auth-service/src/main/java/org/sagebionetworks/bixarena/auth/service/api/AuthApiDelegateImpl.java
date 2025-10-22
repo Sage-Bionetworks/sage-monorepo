@@ -19,6 +19,7 @@ import org.sagebionetworks.bixarena.auth.service.configuration.AppProperties;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.MintInternalToken200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.OidcCallback200ResponseDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
 import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity;
 import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity.Provider;
 import org.sagebionetworks.bixarena.auth.service.model.entity.UserEntity;
@@ -78,6 +79,55 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       .expiresIn((int) expiresIn)
       .build();
     return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);
+  }
+
+  @Override
+  public ResponseEntity<UserInfoDto> getUserInfo() {
+    HttpServletRequest req =
+      ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    HttpSession session = req.getSession(false);
+    
+    if (session == null) {
+      return ResponseEntity.status(401).build();
+    }
+    
+    String subject = (String) session.getAttribute("AUTH_SUBJECT");
+    String email = (String) session.getAttribute("AUTH_EMAIL");
+    String preferredUsername = (String) session.getAttribute("AUTH_PREFERRED_USERNAME");
+    Boolean emailVerified = (Boolean) session.getAttribute("AUTH_EMAIL_VERIFIED");
+    @SuppressWarnings("unchecked")
+    List<String> roles = (List<String>) session.getAttribute("AUTH_ROLES");
+    
+    if (subject == null) {
+      return ResponseEntity.status(401).build();
+    }
+    
+    // Convert string roles to enum
+    List<UserInfoDto.RolesEnum> roleEnums = (roles != null && !roles.isEmpty())
+      ? roles.stream()
+          .map(r -> {
+            try {
+              return UserInfoDto.RolesEnum.fromValue(r.toLowerCase());
+            } catch (IllegalArgumentException e) {
+              return UserInfoDto.RolesEnum.USER;
+            }
+          })
+          .collect(Collectors.toList())
+      : List.of(UserInfoDto.RolesEnum.USER);
+    
+    var body = UserInfoDto.builder()
+      .sub(subject)
+      .email(email)
+      .preferredUsername(preferredUsername != null ? preferredUsername : subject)
+      .emailVerified(emailVerified != null ? emailVerified : false)
+      .roles(roleEnums)
+      .build();
+      
+    return ResponseEntity.ok()
+      .header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+      .header("Pragma", "no-cache")
+      .contentType(MediaType.APPLICATION_JSON)
+      .body(body);
   }
 
   @Override
@@ -211,6 +261,8 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
         );
       // Establish authenticated session principal
       session.setAttribute("AUTH_SUBJECT", persistedUser.getUsername());
+      session.setAttribute("AUTH_PREFERRED_USERNAME", persistedUser.getUsername());
+      session.setAttribute("AUTH_EMAIL", persistedUser.getEmail());
       session.setAttribute("AUTH_ROLES", List.of(persistedUser.getRole().name()));
       session.removeAttribute("OIDC_STATE");
       session.removeAttribute("OIDC_NONCE");

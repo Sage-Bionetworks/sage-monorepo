@@ -40,8 +40,8 @@ paths:
     $ref: paths/token.yaml
   /.well-known/jwks.json:
     $ref: paths/jwks.yaml
-  /echo:
-    $ref: paths/echo.yaml
+  /userinfo:
+    $ref: paths/userinfo.yaml
   /admin/stats:
     $ref: paths/admin-stats.yaml
 

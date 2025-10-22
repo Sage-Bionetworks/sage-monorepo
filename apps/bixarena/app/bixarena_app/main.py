@@ -48,7 +48,8 @@ def _get_api_base_url() -> str | None:
 def _get_auth_base_url_ssr() -> str | None:
     """Resolve the auth service base URL for server-side requests (SSR).
 
-    Uses AUTH_BASE_URL_SSR for server-to-server communication (e.g., /echo endpoint).
+    Uses AUTH_BASE_URL_SSR for server-to-server communication
+    (e.g., /userinfo endpoint).
     If unset, prints an error and returns None.
     """
     base = os.environ.get("AUTH_BASE_URL_SSR")
@@ -107,18 +108,26 @@ def sync_backend_session_on_load(request: gr.Request):
                     )
                 else:
                     resp = requests.get(
-                        f"{backend_base}/echo",
+                        f"{backend_base}/userinfo",
                         cookies={"JSESSIONID": jsessionid},
                         timeout=2,
                     )
                     if resp.status_code == 200:
                         data = resp.json()
                         sub = data.get("sub")
+                        preferred_username = data.get("preferred_username", sub)
                         if sub:
                             state.set_current_user(
-                                {"firstName": sub, "userName": sub, "source": "backend"}
+                                {
+                                    "firstName": preferred_username,
+                                    "userName": sub,
+                                    "source": "backend",
+                                }
                             )
-                            print(f"[auth-sync] Identity sync success sub={sub}")
+                            print(
+                                f"[auth-sync] Identity sync success sub={sub} "
+                                f"preferred_username={preferred_username}"
+                            )
                             return (
                                 update_login_button(),
                                 *update_user_page(),
@@ -126,13 +135,13 @@ def sync_backend_session_on_load(request: gr.Request):
                             )
                         else:
                             print(
-                                "[auth-sync] /echo 200 but no sub field; "
+                                "[auth-sync] /userinfo 200 but no sub field; "
                                 "leaving guest state"
                             )
                     else:
                         snippet = resp.text[:160] if resp.text else ""
                         print(
-                            f"[auth-sync] /echo {resp.status_code} "
+                            f"[auth-sync] /userinfo {resp.status_code} "
                             f"bodySnippet={snippet}"
                         )
             except Exception as e:

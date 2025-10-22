@@ -139,26 +139,30 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Auth
-  /echo:
+  /userinfo:
     get:
-      description: Returns information about the authenticated user.
-      operationId: echo
+      description: |
+        Returns the authenticated user's profile information.
+        This is an OIDC-compliant UserInfo endpoint that provides details about the currently authenticated user.
+
+        Requires a valid JWT obtained via the `/token` endpoint or an active session.
+      operationId: getUserInfo
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/echo_200_response'
-          description: Success
+                $ref: '#/components/schemas/UserInfo'
+          description: User profile information
         '401':
           $ref: '#/components/responses/Unauthorized'
-      summary: Echo authenticated principal
+      summary: Get current user profile
       tags:
-        - Utility
+        - Auth
       x-accepts:
         - application/json
       x-tags:
-        - tag: Utility
+        - tag: Auth
   /admin/stats:
     get:
       description: Administrative operations requiring admin role.
@@ -232,6 +236,46 @@ components:
         - status
         - title
       type: object
+    UserInfo:
+      description: OIDC-compliant user information response
+      example:
+        sub: '3350396'
+        email_verified: true
+        roles:
+          - user
+        preferred_username: john.doe
+        email: john.doe@example.com
+      properties:
+        sub:
+          description: Subject identifier - the Synapse user ID
+          example: '3350396'
+          type: string
+        preferred_username:
+          description: Preferred username for display
+          example: john.doe
+          type: string
+        email:
+          description: User's email address
+          example: john.doe@example.com
+          format: email
+          type: string
+        email_verified:
+          description: Whether the email address has been verified
+          example: true
+          type: boolean
+        roles:
+          description: User roles assigned within BixArena
+          example:
+            - user
+          items:
+            enum:
+              - user
+              - admin
+            type: string
+          type: array
+      required:
+        - sub
+      type: object
     oidcCallback_200_response:
       example:
         status: ok
@@ -269,20 +313,6 @@ components:
         keys:
           items:
             type: object
-          type: array
-      type: object
-    echo_200_response:
-      example:
-        sub: sub
-        roles:
-          - roles
-          - roles
-      properties:
-        sub:
-          type: string
-        roles:
-          items:
-            type: string
           type: array
       type: object
     adminStats_200_response:

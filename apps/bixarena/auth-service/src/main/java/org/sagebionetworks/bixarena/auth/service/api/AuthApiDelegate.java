@@ -4,6 +4,7 @@ import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.MintInternalToken200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.OidcCallback200ResponseDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,33 @@ public interface AuthApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /userinfo : Get current user profile
+     * Returns the authenticated user&#39;s profile information. This is an OIDC-compliant UserInfo endpoint that provides details about the currently authenticated user.  Requires a valid JWT obtained via the &#x60;/token&#x60; endpoint or an active session. 
+     *
+     * @return User profile information (status code 200)
+     *         or Unauthorized (status code 401)
+     * @see AuthApi#getUserInfo
+     */
+    default ResponseEntity<UserInfoDto> getUserInfo() {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"sub\" : \"3350396\", \"email_verified\" : true, \"roles\" : [ \"user\" ], \"preferred_username\" : \"john.doe\", \"email\" : \"john.doe@example.com\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
             }

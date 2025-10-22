@@ -4,6 +4,7 @@ import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.MintInternalToken200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.OidcCallback200ResponseDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
