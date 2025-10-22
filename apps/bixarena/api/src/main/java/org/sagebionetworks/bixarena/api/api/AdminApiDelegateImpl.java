@@ -14,12 +14,12 @@ public class AdminApiDelegateImpl implements AdminApiDelegate {
 
   /**
    * Get administrative statistics.
-   * Requires USER role for testing authorization.
+   * Requires ADMIN role for testing authorization.
    *
    * @return Admin statistics response
    */
   @Override
-  @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("hasAuthority('ROLE_USER')")
   public ResponseEntity<AdminStats200ResponseDto> adminStats() {
     AdminStats200ResponseDto response = AdminStats200ResponseDto.builder().ok(true).build();
     return ResponseEntity.ok(response);
