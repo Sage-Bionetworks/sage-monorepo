@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "api.battle")
+@Table(name = "battle", schema = "api")
 @Data
 @Builder
 @NoArgsConstructor

@@ -82,8 +82,8 @@ CREATE TABLE api.battle (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(255),
   user_id UUID NOT NULL,
-  model_a_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
-  model_b_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  left_model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  right_model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   ended_at TIMESTAMPTZ
 );
