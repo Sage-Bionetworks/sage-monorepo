@@ -1,7 +1,7 @@
-package org.sagebionetworks.bixarena.auth.service.api;
+package org.sagebionetworks.bixarena.api.api;
 
-import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.bixarena.auth.service.model.dto.Echo200ResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.AdminStats200ResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +29,17 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.bixArenaAuthService.base-path:}")
-public class UtilityApiController implements UtilityApi {
+@RequestMapping("${openapi.bixArenaAPIService.base-path:/v1}")
+public class AdminApiController implements AdminApi {
 
-    private final UtilityApiDelegate delegate;
+    private final AdminApiDelegate delegate;
 
-    public UtilityApiController(@Autowired(required = false) UtilityApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new UtilityApiDelegate() {});
+    public AdminApiController(@Autowired(required = false) AdminApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new AdminApiDelegate() {});
     }
 
     @Override
-    public UtilityApiDelegate getDelegate() {
+    public AdminApiDelegate getDelegate() {
         return delegate;
     }
 

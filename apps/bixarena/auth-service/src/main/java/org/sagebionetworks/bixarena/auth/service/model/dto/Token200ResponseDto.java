@@ -17,12 +17,12 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * MintInternalToken200ResponseDto
+ * Token200ResponseDto
  */
 
-@JsonTypeName("mintInternalToken_200_response")
+@JsonTypeName("token_200_response")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class MintInternalToken200ResponseDto {
+public class Token200ResponseDto {
 
   private String accessToken;
 
@@ -63,20 +63,20 @@ public class MintInternalToken200ResponseDto {
 
   private Integer expiresIn;
 
-  public MintInternalToken200ResponseDto() {
+  public Token200ResponseDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public MintInternalToken200ResponseDto(String accessToken, TokenTypeEnum tokenType, Integer expiresIn) {
+  public Token200ResponseDto(String accessToken, TokenTypeEnum tokenType, Integer expiresIn) {
     this.accessToken = accessToken;
     this.tokenType = tokenType;
     this.expiresIn = expiresIn;
   }
 
-  public MintInternalToken200ResponseDto accessToken(String accessToken) {
+  public Token200ResponseDto accessToken(String accessToken) {
     this.accessToken = accessToken;
     return this;
   }
@@ -96,7 +96,7 @@ public class MintInternalToken200ResponseDto {
     this.accessToken = accessToken;
   }
 
-  public MintInternalToken200ResponseDto tokenType(TokenTypeEnum tokenType) {
+  public Token200ResponseDto tokenType(TokenTypeEnum tokenType) {
     this.tokenType = tokenType;
     return this;
   }
@@ -116,7 +116,7 @@ public class MintInternalToken200ResponseDto {
     this.tokenType = tokenType;
   }
 
-  public MintInternalToken200ResponseDto expiresIn(Integer expiresIn) {
+  public Token200ResponseDto expiresIn(Integer expiresIn) {
     this.expiresIn = expiresIn;
     return this;
   }
@@ -144,10 +144,10 @@ public class MintInternalToken200ResponseDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MintInternalToken200ResponseDto mintInternalToken200Response = (MintInternalToken200ResponseDto) o;
-    return Objects.equals(this.accessToken, mintInternalToken200Response.accessToken) &&
-        Objects.equals(this.tokenType, mintInternalToken200Response.tokenType) &&
-        Objects.equals(this.expiresIn, mintInternalToken200Response.expiresIn);
+    Token200ResponseDto token200Response = (Token200ResponseDto) o;
+    return Objects.equals(this.accessToken, token200Response.accessToken) &&
+        Objects.equals(this.tokenType, token200Response.tokenType) &&
+        Objects.equals(this.expiresIn, token200Response.expiresIn);
   }
 
   @Override
@@ -158,7 +158,7 @@ public class MintInternalToken200ResponseDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MintInternalToken200ResponseDto {\n");
+    sb.append("class Token200ResponseDto {\n");
     sb.append("    accessToken: ").append(toIndentedString(accessToken)).append("\n");
     sb.append("    tokenType: ").append(toIndentedString(tokenType)).append("\n");
     sb.append("    expiresIn: ").append(toIndentedString(expiresIn)).append("\n");
@@ -179,44 +179,44 @@ public class MintInternalToken200ResponseDto {
   
   public static class Builder {
 
-    private MintInternalToken200ResponseDto instance;
+    private Token200ResponseDto instance;
 
     public Builder() {
-      this(new MintInternalToken200ResponseDto());
+      this(new Token200ResponseDto());
     }
 
-    protected Builder(MintInternalToken200ResponseDto instance) {
+    protected Builder(Token200ResponseDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(MintInternalToken200ResponseDto value) { 
+    protected Builder copyOf(Token200ResponseDto value) { 
       this.instance.setAccessToken(value.accessToken);
       this.instance.setTokenType(value.tokenType);
       this.instance.setExpiresIn(value.expiresIn);
       return this;
     }
 
-    public MintInternalToken200ResponseDto.Builder accessToken(String accessToken) {
+    public Token200ResponseDto.Builder accessToken(String accessToken) {
       this.instance.accessToken(accessToken);
       return this;
     }
     
-    public MintInternalToken200ResponseDto.Builder tokenType(TokenTypeEnum tokenType) {
+    public Token200ResponseDto.Builder tokenType(TokenTypeEnum tokenType) {
       this.instance.tokenType(tokenType);
       return this;
     }
     
-    public MintInternalToken200ResponseDto.Builder expiresIn(Integer expiresIn) {
+    public Token200ResponseDto.Builder expiresIn(Integer expiresIn) {
       this.instance.expiresIn(expiresIn);
       return this;
     }
     
     /**
-    * returns a built MintInternalToken200ResponseDto instance.
+    * returns a built Token200ResponseDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public MintInternalToken200ResponseDto build() {
+    public Token200ResponseDto build() {
       try {
         return this.instance;
       } finally {
@@ -234,15 +234,15 @@ public class MintInternalToken200ResponseDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static MintInternalToken200ResponseDto.Builder builder() {
-    return new MintInternalToken200ResponseDto.Builder();
+  public static Token200ResponseDto.Builder builder() {
+    return new Token200ResponseDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public MintInternalToken200ResponseDto.Builder toBuilder() {
-    MintInternalToken200ResponseDto.Builder builder = new MintInternalToken200ResponseDto.Builder();
+  public Token200ResponseDto.Builder toBuilder() {
+    Token200ResponseDto.Builder builder = new Token200ResponseDto.Builder();
     return builder.copyOf(this);
   }
 

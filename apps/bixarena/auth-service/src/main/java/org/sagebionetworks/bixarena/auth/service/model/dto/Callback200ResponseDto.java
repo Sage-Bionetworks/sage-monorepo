@@ -16,16 +16,16 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * OidcCallback200ResponseDto
+ * Callback200ResponseDto
  */
 
-@JsonTypeName("oidcCallback_200_response")
+@JsonTypeName("callback_200_response")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class OidcCallback200ResponseDto {
+public class Callback200ResponseDto {
 
   private @Nullable String status;
 
-  public OidcCallback200ResponseDto status(@Nullable String status) {
+  public Callback200ResponseDto status(@Nullable String status) {
     this.status = status;
     return this;
   }
@@ -53,8 +53,8 @@ public class OidcCallback200ResponseDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OidcCallback200ResponseDto oidcCallback200Response = (OidcCallback200ResponseDto) o;
-    return Objects.equals(this.status, oidcCallback200Response.status);
+    Callback200ResponseDto callback200Response = (Callback200ResponseDto) o;
+    return Objects.equals(this.status, callback200Response.status);
   }
 
   @Override
@@ -65,7 +65,7 @@ public class OidcCallback200ResponseDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OidcCallback200ResponseDto {\n");
+    sb.append("class Callback200ResponseDto {\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -84,32 +84,32 @@ public class OidcCallback200ResponseDto {
   
   public static class Builder {
 
-    private OidcCallback200ResponseDto instance;
+    private Callback200ResponseDto instance;
 
     public Builder() {
-      this(new OidcCallback200ResponseDto());
+      this(new Callback200ResponseDto());
     }
 
-    protected Builder(OidcCallback200ResponseDto instance) {
+    protected Builder(Callback200ResponseDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(OidcCallback200ResponseDto value) { 
+    protected Builder copyOf(Callback200ResponseDto value) { 
       this.instance.setStatus(value.status);
       return this;
     }
 
-    public OidcCallback200ResponseDto.Builder status(String status) {
+    public Callback200ResponseDto.Builder status(String status) {
       this.instance.status(status);
       return this;
     }
     
     /**
-    * returns a built OidcCallback200ResponseDto instance.
+    * returns a built Callback200ResponseDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public OidcCallback200ResponseDto build() {
+    public Callback200ResponseDto build() {
       try {
         return this.instance;
       } finally {
@@ -127,15 +127,15 @@ public class OidcCallback200ResponseDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static OidcCallback200ResponseDto.Builder builder() {
-    return new OidcCallback200ResponseDto.Builder();
+  public static Callback200ResponseDto.Builder builder() {
+    return new Callback200ResponseDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public OidcCallback200ResponseDto.Builder toBuilder() {
-    OidcCallback200ResponseDto.Builder builder = new OidcCallback200ResponseDto.Builder();
+  public Callback200ResponseDto.Builder toBuilder() {
+    Callback200ResponseDto.Builder builder = new Callback200ResponseDto.Builder();
     return builder.copyOf(this);
   }
 

@@ -4,6 +4,7 @@ import java.util.Locale;
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -16,14 +17,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     LeaderboardSnapshotNotFoundException ex,
     Locale locale
   ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-      .body(
-        BasicErrorDto.builder()
-          .title("Leaderboard Snapshot Not Found")
-          .status(HttpStatus.NOT_FOUND.value())
-          .detail(ex.getMessage())
-          .build()
-      );
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Leaderboard Snapshot Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
   }
 
   @ExceptionHandler(LeaderboardNotFoundException.class)
@@ -31,14 +31,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     LeaderboardNotFoundException ex,
     Locale locale
   ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-      .body(
-        BasicErrorDto.builder()
-          .title("Leaderboard Not Found")
-          .status(HttpStatus.NOT_FOUND.value())
-          .detail(ex.getMessage())
-          .build()
-      );
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Leaderboard Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
   }
 
   @ExceptionHandler(LeaderboardModelNotFoundException.class)
@@ -46,25 +45,37 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     LeaderboardModelNotFoundException ex,
     Locale locale
   ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-      .body(
-        BasicErrorDto.builder()
-          .title("Model Not Found")
-          .status(HttpStatus.NOT_FOUND.value())
-          .detail(ex.getMessage())
-          .build()
-      );
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Model Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  protected ResponseEntity<BasicErrorDto> handleAccessDenied(
+    AccessDeniedException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+      BasicErrorDto.builder()
+        .title("Forbidden")
+        .status(HttpStatus.FORBIDDEN.value())
+        .detail("Access denied: " + ex.getMessage())
+        .build()
+    );
   }
 
   @ExceptionHandler({ Exception.class })
   protected ResponseEntity<BasicErrorDto> handleGenericException(Exception ex, Locale locale) {
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-      .body(
-        BasicErrorDto.builder()
-          .title("Internal Server Error")
-          .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-          .detail("An unexpected error occurred")
-          .build()
-      );
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+      BasicErrorDto.builder()
+        .title("Internal Server Error")
+        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        .detail("An unexpected error occurred")
+        .build()
+    );
   }
 }

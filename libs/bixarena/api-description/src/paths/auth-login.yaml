@@ -3,7 +3,7 @@ get:
     - Auth
   summary: Start Synapse OIDC authorization code flow
   description: Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
-  operationId: startOidc
+  operationId: login
   security: []
   responses:
     '204':
