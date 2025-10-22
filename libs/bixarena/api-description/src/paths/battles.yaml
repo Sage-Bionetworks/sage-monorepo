@@ -49,10 +49,6 @@ post:
     '404':
       $ref: ../components/responses/NotFound.yaml
     '409':
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/BasicError.yaml
-      description: Conflict
+      $ref: ../components/responses/Conflict.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml

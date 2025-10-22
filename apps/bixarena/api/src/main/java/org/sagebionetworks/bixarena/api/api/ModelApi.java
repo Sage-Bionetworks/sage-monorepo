@@ -47,7 +47,7 @@ public interface ModelApi {
      *
      * @param modelSearchQuery The search query used to find and filter models. (optional)
      * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -60,7 +60,7 @@ public interface ModelApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ModelPageDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ModelPageDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),

@@ -211,7 +211,7 @@ components:
         - status
   responses:
     BadRequest:
-      description: Invalid request parameters
+      description: Invalid request
       content:
         application/problem+json:
           schema:
@@ -219,13 +219,13 @@ components:
     Unauthorized:
       description: Unauthorized
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
     Forbidden:
-      description: Forbidden
+      description: The user does not have the permission to perform this action
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
 x-oauth2-audience: urn:bixarena:api

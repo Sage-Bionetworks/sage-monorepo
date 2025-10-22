@@ -38,11 +38,11 @@ public interface BattleApiDelegate {
      *
      * @param battleCreateRequestDto  (required)
      * @return Battle created successfully (status code 201)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
-     *         or The requested resource was not found (status code 404)
-     *         or Conflict (status code 409)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#createBattle
      */
@@ -59,14 +59,9 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -74,9 +69,14 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -97,22 +97,22 @@ public interface BattleApiDelegate {
      * @param battleId The unique identifier of the battle (required)
      * @return Battle deleted successfully (status code 204)
      *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
-     *         or The requested resource was not found (status code 404)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#deleteBattle
      */
     default ResponseEntity<Void> deleteBattle(UUID battleId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -138,7 +138,7 @@ public interface BattleApiDelegate {
      * @param battleId The unique identifier of the battle (required)
      * @return Success (status code 200)
      *         or Unauthorized (status code 401)
-     *         or The requested resource was not found (status code 404)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#getBattle
      */
@@ -150,9 +150,9 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -177,7 +177,7 @@ public interface BattleApiDelegate {
      *
      * @param battleSearchQuery The search query used to find and filter battles. (optional)
      * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#listBattles
@@ -195,9 +195,9 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -218,10 +218,10 @@ public interface BattleApiDelegate {
      * @param battleId The unique identifier of the battle (required)
      * @param battleUpdateRequestDto  (required)
      * @return Battle updated successfully (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
-     *         or The requested resource was not found (status code 404)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#updateBattle
      */
@@ -239,14 +239,14 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

@@ -88,11 +88,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Conflict
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -1331,7 +1327,7 @@ components:
         $ref: '#/components/schemas/ModelSearchQuery'
   responses:
     BadRequest:
-      description: Invalid request parameters
+      description: Invalid request
       content:
         application/problem+json:
           schema:
@@ -1339,7 +1335,7 @@ components:
     Unauthorized:
       description: Unauthorized
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
     InternalServerError:
@@ -1349,13 +1345,19 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
     Forbidden:
-      description: Forbidden
+      description: The user does not have the permission to perform this action
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
     NotFound:
-      description: The requested resource was not found
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Conflict:
+      description: The request conflicts with current state of the target resource
       content:
         application/problem+json:
           schema:

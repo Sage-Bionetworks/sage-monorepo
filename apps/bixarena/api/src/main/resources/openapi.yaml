@@ -82,11 +82,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Conflict
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Create a battle
@@ -129,7 +125,6 @@ paths:
       tags:
         - Battle
       x-accepts:
-        - application/json
         - application/problem+json
       x-tags:
         - tag: Battle
@@ -541,10 +536,10 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-      description: Invalid request parameters
+      description: Invalid request
     Unauthorized:
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Unauthorized
@@ -556,16 +551,22 @@ components:
       description: The request cannot be fulfilled due to an unexpected server error
     Forbidden:
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-      description: Forbidden
+      description: The user does not have the permission to perform this action
     NotFound:
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-      description: The requested resource was not found
+      description: The specified resource was not found
+    Conflict:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request conflicts with current state of the target resource
   schemas:
     BattleSort:
       default: created_at
@@ -754,12 +755,6 @@ components:
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
-      example:
-        instance: instance
-        detail: detail
-        title: title
-        type: type
-        status: 0
       properties:
         title:
           description: A human readable documentation for the problem type

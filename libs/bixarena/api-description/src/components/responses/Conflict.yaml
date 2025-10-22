@@ -1,4 +1,4 @@
-description: The user does not have the permission to perform this action
+description: The request conflicts with current state of the target resource
 content:
   application/problem+json:
     schema:

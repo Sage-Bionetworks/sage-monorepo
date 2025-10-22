@@ -51,11 +51,11 @@ public interface BattleApi {
      *
      * @param battleCreateRequestDto  (required)
      * @return Battle created successfully (status code 201)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
-     *         or The requested resource was not found (status code 404)
-     *         or Conflict (status code 409)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -68,7 +68,7 @@ public interface BattleApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
@@ -76,15 +76,15 @@ public interface BattleApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = {
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "409", description = "Conflict", content = {
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
@@ -118,8 +118,8 @@ public interface BattleApi {
      * @param battleId The unique identifier of the battle (required)
      * @return Battle deleted successfully (status code 204)
      *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
-     *         or The requested resource was not found (status code 404)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -130,19 +130,15 @@ public interface BattleApi {
         responses = {
             @ApiResponse(responseCode = "204", description = "Battle deleted successfully"),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
@@ -153,7 +149,7 @@ public interface BattleApi {
     @RequestMapping(
         method = RequestMethod.DELETE,
         value = "/battles/{battleId}",
-        produces = { "application/json", "application/problem+json" }
+        produces = { "application/problem+json" }
     )
     
     default ResponseEntity<Void> deleteBattle(
@@ -170,7 +166,7 @@ public interface BattleApi {
      * @param battleId The unique identifier of the battle (required)
      * @return Success (status code 200)
      *         or Unauthorized (status code 401)
-     *         or The requested resource was not found (status code 404)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -187,7 +183,7 @@ public interface BattleApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
@@ -219,7 +215,7 @@ public interface BattleApi {
      *
      * @param battleSearchQuery The search query used to find and filter battles. (optional)
      * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
@@ -233,7 +229,7 @@ public interface BattleApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BattlePageDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattlePageDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
@@ -270,10 +266,10 @@ public interface BattleApi {
      * @param battleId The unique identifier of the battle (required)
      * @param battleUpdateRequestDto  (required)
      * @return Battle updated successfully (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
-     *         or The requested resource was not found (status code 404)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -286,7 +282,7 @@ public interface BattleApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
@@ -294,11 +290,11 @@ public interface BattleApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = {
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
