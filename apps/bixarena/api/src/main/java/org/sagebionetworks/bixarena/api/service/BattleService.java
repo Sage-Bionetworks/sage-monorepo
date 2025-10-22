@@ -70,8 +70,7 @@ public class BattleService {
 
   @Transactional
   public BattleDto createBattle(BattleCreateRequestDto request, Authentication authentication) {
-    // TODO: Temporarily using mock userId for testing - replace with real auth after PR #3590
-    // MOCK: Hardcoded userId for development/testing
+    // MOCK: Hardcoded userId for development
     UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
     log.info("Creating battle for MOCK user: {}", userId);

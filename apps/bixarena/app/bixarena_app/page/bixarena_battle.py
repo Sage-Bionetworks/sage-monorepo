@@ -181,12 +181,8 @@ def add_text(
             api_base_url = _get_api_base_url()
 
             # Runtime lookup model info
-            model_a_info = model_response.api_endpoint_info.get(model_left).get(
-                "model_id"
-            )
-            model_b_info = model_response.api_endpoint_info.get(model_right).get(
-                "model_id"
-            )
+            model_a_info = model_response.api_endpoint_info.get(model_left)
+            model_b_info = model_response.api_endpoint_info.get(model_right)
 
             if model_a_info and model_b_info:
                 model_a_id = model_a_info.get("model_id")

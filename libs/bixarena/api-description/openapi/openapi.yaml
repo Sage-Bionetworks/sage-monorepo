@@ -78,6 +78,7 @@ paths:
       summary: Create a battle
       description: Create a new battle between two AI models.
       operationId: createBattle
+      x-anonymous-access: true
       security:
         - jwtBearer:
             - create:battles
@@ -179,6 +180,7 @@ paths:
       summary: Update a battle
       description: Update a battle's end time or other properties
       operationId: updateBattle
+      x-anonymous-access: true
       security:
         - jwtBearer:
             - update:battles

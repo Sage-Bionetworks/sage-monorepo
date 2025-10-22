@@ -129,6 +129,7 @@ paths:
       summary: Create a battle
       tags:
         - Battle
+      x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -295,6 +296,7 @@ paths:
       summary: Update a battle
       tags:
         - Battle
+      x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
