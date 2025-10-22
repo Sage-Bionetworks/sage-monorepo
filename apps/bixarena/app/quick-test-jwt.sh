@@ -32,17 +32,18 @@ echo "BixArena JWT Authentication Quick Test"
 echo "============================================"
 echo ""
 
-# Test 1: Check if services are running
-echo "Test 1: Checking services..."
-if ! docker ps | grep -q "bixarena-auth-service"; then
-    echo "❌ Auth service not running"
+# Test 1: Check if auth service is running
+echo "Test 1: Checking auth service health..."
+
+# Check auth service
+AUTH_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:8115/actuator/health" 2>/dev/null)
+if [ "$AUTH_HEALTH" != "200" ]; then
+    echo "❌ Auth service not healthy (HTTP $AUTH_HEALTH)"
+    echo "   Make sure auth service is running on http://localhost:8115"
     exit 1
 fi
-if ! docker ps | grep -q "bixarena-api"; then
-    echo "❌ API service not running"
-    exit 1
-fi
-echo "✅ Services are running"
+
+echo "✅ Auth service is healthy (HTTP $AUTH_HEALTH)"
 echo ""
 
 # Test 2: Get user info
@@ -133,6 +134,33 @@ else
     echo "❌ API call with JWT failed (HTTP $API_CODE_WITH_JWT)"
     echo "   Response: ${API_BODY_WITH_JWT:0:200}"
     exit 1
+fi
+echo ""
+
+# Test 6: Call protected admin endpoint with JWT
+echo "Test 6: Calling protected /admin/stats endpoint with JWT..."
+ADMIN_RESPONSE=$(curl -s -w "\n%{http_code}" \
+    "http://localhost:8115/admin/stats" \
+    -H "Authorization: Bearer $JWT")
+
+ADMIN_CODE=$(echo "$ADMIN_RESPONSE" | tail -n1)
+ADMIN_BODY=$(echo "$ADMIN_RESPONSE" | head -n-1)
+
+if [ "$ADMIN_CODE" = "200" ]; then
+    echo "✅ Admin endpoint call successful (HTTP $ADMIN_CODE)"
+    echo "   Response:"
+    echo "$ADMIN_BODY" | jq '.' 2>/dev/null || echo "$ADMIN_BODY"
+elif [ "$ADMIN_CODE" = "403" ]; then
+    echo "ℹ️  Access forbidden (HTTP $ADMIN_CODE)"
+    echo "   Your user doesn't have ROLE_ADMIN"
+    echo "   This demonstrates JWT role-based access control is working!"
+elif [ "$ADMIN_CODE" = "401" ]; then
+    echo "❌ Authentication failed (HTTP $ADMIN_CODE)"
+    echo "   JWT might be invalid or expired"
+    exit 1
+else
+    echo "⚠️  Unexpected response (HTTP $ADMIN_CODE)"
+    echo "   Response: ${ADMIN_BODY:0:200}"
 fi
 echo ""
 

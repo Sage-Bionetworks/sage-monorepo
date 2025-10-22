@@ -34,10 +34,13 @@ public class SecurityConfiguration {
         authz
           .requestMatchers(
             "/.well-known/jwks.json",
-            "/swagger-ui.html",
-            "/swagger-ui/**",
+            "/actuator/health",
+            "/actuator/health/**",
+            "/actuator/info",
             "/auth/**",
             "/auth/logout",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
             "/v3/api-docs/**"
           )
           .permitAll()

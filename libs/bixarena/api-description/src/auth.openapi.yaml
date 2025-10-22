@@ -24,8 +24,6 @@ security:
 tags:
   - name: Auth
     description: Authentication and token minting operations.
-  - name: Utility
-    description: Utility endpoints.
   - name: Admin
     description: Administrative endpoints requiring elevated roles.
 
