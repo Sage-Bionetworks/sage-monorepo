@@ -4,15 +4,26 @@
   breakpoint="0"
   [customSort]="true"
   (sortFunction)="sortCallback($event)"
+  [defaultSortOrder]="-1"
 >
   <ng-template pTemplate="header">
     <tr>
       <th></th>
-      @for (column of columns(); track column) {
-        <th [pSortableColumn]="column.name" [style]="{ width: columnWidth }">
+      @let columns = currentConfig()?.columns || [];
+      @for (column of columns; track column) {
+        <th [pSortableColumn]="column.column_key" [style]="{ width: columnWidth }">
           <div class="column-header">
             <div class="column-header-text">
-              {{ column.name }}
+              <span [pTooltip]="column.tooltip" tooltipPosition="top">
+                {{ column.name }}
+              </span>
+            </div>
+            <div class="column-header-sort">
+              <p-sortIcon
+                [field]="column.column_key"
+                [pTooltip]="column.sort_tooltip"
+                tooltipPosition="top"
+              />
             </div>
           </div>
         </th>
