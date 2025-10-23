@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
+import { SortEvent } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -17,7 +18,7 @@ export class ComparisonToolColumnsComponent {
   resultsCount = this.comparisonToolService.totalResultsCount;
   columnWidth = 'auto';
 
-  updateSort() {
-    // TODO implement
+  sortCallback(event: SortEvent) {
+    this.comparisonToolService.setSort(event.field, event.order);
   }
 }

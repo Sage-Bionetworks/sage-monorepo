@@ -31,7 +31,7 @@ interface PaginationOptions {
   encapsulation: ViewEncapsulation.None,
 })
 export class BaseTableComponent {
-  comparisonToolService = inject(ComparisonToolService);
+  private readonly comparisonToolService = inject(ComparisonToolService);
 
   currentConfig = this.comparisonToolService.currentConfig;
 
@@ -51,6 +51,6 @@ export class BaseTableComponent {
   };
 
   sortCallback(event: SortEvent) {
-    // TODO: implement Sort (MG-459)
+    this.comparisonToolService.setSort(event.field, event.order);
   }
 }
