@@ -1,13 +1,14 @@
+````markdown
 # Diagram Capture Tool
 
-A Node.js tool for capturing Mermaid diagrams as animated WebM videos or GIF files using Puppeteer and FFmpeg.
+A Node.js tool for capturing Mermaid diagrams as animated WebM videos or GIF files using Playwright and FFmpeg.
 
 ## Features
 
 - 📹 Record Mermaid diagram animations as WebM video
 - 🎞️ Convert to high-quality GIF with optimized palette
 - 📐 Automatically detects diagram dimensions for perfect framing
-- ⚡ High framerate (30fps WebM, 24fps GIF) for smooth animations
+- ⚡ Smooth animations with automatic recording
 - 🎨 Advanced color palette generation and dithering
 
 ## Prerequisites
@@ -16,20 +17,33 @@ A Node.js tool for capturing Mermaid diagrams as animated WebM videos or GIF fil
 
 The required packages are already included in the monorepo's `package.json`:
 
-- `puppeteer` - Headless Chrome automation
-- `puppeteer-screen-recorder` - Screen recording for Puppeteer
+- `@playwright/test` - Headless browser automation and video recording
 
-### Chrome Browser
+### Playwright Browsers
 
-Install Chrome for Puppeteer (headless):
+Playwright browsers (Chromium) are automatically installed on first run using `pnpx playwright install chromium`.
+
+If you prefer to install manually beforehand:
 
 ```bash
-npx puppeteer browsers install chrome
+pnpx playwright install chromium
+```
+
+Or install all Playwright browsers:
+
+```bash
+pnpx playwright install
 ```
 
 ### System Dependencies (Linux/Ubuntu)
 
-For headless Chrome to run, you need several system libraries:
+Playwright handles most browser dependencies automatically, but you may need to install system libraries:
+
+```bash
+npx playwright install-deps chromium
+```
+
+Or manually install required libraries:
 
 ```bash
 sudo apt-get update
@@ -93,22 +107,23 @@ Output: Creates `<diagram-name>.gif` in the same directory as the HTML file.
 
 ## How It Works
 
-1. **Launch headless Chrome** using Puppeteer
+1. **Launch headless Chromium** using Playwright
 2. **Load the HTML file** containing the Mermaid diagram
 3. **Wait for rendering** (8 seconds for icons and animations to load)
 4. **Measure diagram dimensions** by querying the rendered SVG
-5. **Set viewport** to match diagram size perfectly (avoiding distortion)
-6. **Reload and record** with correct dimensions at 30fps
-7. **For GIF**: Convert WebM to GIF using FFmpeg with optimized palette
+5. **Relaunch browser with video recording** enabled
+6. **Set viewport** to match diagram size perfectly (avoiding distortion)
+7. **Record the animation** with automatic WebM capture
+8. **For GIF**: Convert WebM to GIF using FFmpeg with optimized palette
 
 ## Quality Settings
 
 ### WebM Recording
 
-- **FPS**: 30 (smooth animation)
-- **Bitrate**: 10 Mbps (high quality)
+- **Format**: VP8/VP9 codec (Playwright default)
 - **Resolution**: Auto-detected from diagram
 - **Device Scale**: 2x (retina quality)
+- **Recording**: Native Playwright video recording
 
 ### GIF Conversion
 
@@ -129,40 +144,48 @@ GIF files are larger due to format limitations but are widely compatible.
 
 ## Troubleshooting
 
-### "Chrome missing shared libraries" error
+### "Executable doesn't exist" error
 
-You need to install the system dependencies listed above. On Ubuntu 24.04, make sure to use the `t64` variants of packages (e.g., `libasound2t64` instead of `libasound2`).
+You need to install Playwright browsers:
 
-### "File format is not supported" error
+```bash
+npx playwright install chromium
+```
 
-The library only supports WebM recording. For GIF, the script automatically converts WebM to GIF using FFmpeg.
+Or use the automatic dependency installer:
+
+```bash
+npx playwright install-deps chromium
+```
 
 ### Diagram appears cut off or distorted
 
 The script automatically measures the diagram, but if you still see issues:
 
-- Increase the padding in the dimension calculation (line ~45)
+- Increase the padding in the dimension calculation (edit the script around line 65)
 - Check that the diagram has fully rendered before measurement
 
 ### Animation not captured
 
-Increase the recording duration:
+Increase the recording duration by editing the script around line 110:
 
-- Edit line ~88: Change `setTimeout(resolve, 5000)` to a higher value (e.g., 10000 for 10 seconds)
+```javascript
+await recordingPage.waitForTimeout(10000); // 10 seconds
+```
 
 ## Advanced Usage
 
 ### Custom Recording Duration
 
-Edit `capture-diagram.mjs` line ~88:
+Edit `capture-diagram.mjs` around line 110:
 
 ```javascript
-await new Promise((resolve) => setTimeout(resolve, 10000)); // 10 seconds
+await recordingPage.waitForTimeout(10000); // 10 seconds
 ```
 
 ### Custom GIF Framerate
 
-Edit `capture-diagram.mjs` line ~102, change the `fps=24` value:
+Edit `capture-diagram.mjs` around line 140, change the `fps=24` value:
 
 ```javascript
 const ffmpegCmd = `ffmpeg -i "${webmFile}" -vf "fps=15,scale=...`;
@@ -170,6 +193,17 @@ const ffmpegCmd = `ffmpeg -i "${webmFile}" -vf "fps=15,scale=...`;
 
 Lower values = smaller file size, less smooth animation.
 
+## Migration from Puppeteer
+
+This tool was migrated from Puppeteer to Playwright because:
+
+- **Built-in video recording**: Playwright has native video recording support
+- **Better maintained**: Playwright is actively developed by Microsoft
+- **Already in monorepo**: `@playwright/test` is already a dependency
+- **Simpler API**: No need for third-party screen recording libraries
+- **Better browser support**: More modern browser automation features
+
 ## License
 
 Part of the Sage Bionetworks monorepo. See root LICENSE.txt for details.
+````

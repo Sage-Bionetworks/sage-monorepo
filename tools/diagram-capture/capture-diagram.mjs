@@ -1,12 +1,22 @@
-import puppeteer from 'puppeteer';
-import { PuppeteerScreenRecorder } from 'puppeteer-screen-recorder';
+import { chromium } from '@playwright/test';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { exec } from 'child_process';
+import { execSync, exec } from 'child_process';
 import { promisify } from 'util';
 import fs from 'fs/promises';
 
 const execAsync = promisify(exec);
+
+// Ensure Playwright browsers are installed
+function ensurePlaywrightBrowsers() {
+  console.log('Ensuring Playwright browsers are installed...');
+  try {
+    execSync('pnpx playwright install chromium', { stdio: 'inherit' });
+  } catch (error) {
+    console.error('Failed to install Playwright browsers:', error.message);
+    process.exit(1);
+  }
+}
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -44,19 +54,22 @@ try {
 console.log(`Input file: ${htmlFile}`);
 console.log(`Output format: ${format.toUpperCase()}`);
 
-const browser = await puppeteer.launch({
-  headless: 'new',
-  args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
-  executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+// Ensure Playwright browsers are installed
+ensurePlaywrightBrowsers();
+
+// Launch browser without video recording first to measure dimensions
+const browser = await chromium.launch({
+  headless: true,
 });
-const page = await browser.newPage();
+const context = await browser.newContext();
+const page = await context.newPage();
 
 console.log('Loading diagram to measure dimensions...');
-await page.goto('file://' + htmlFile, { waitUntil: 'networkidle0' });
+await page.goto('file://' + htmlFile, { waitUntil: 'networkidle' });
 
 // Wait for Mermaid to fully render
 console.log('Waiting for diagram to render...');
-await new Promise((resolve) => setTimeout(resolve, 8000));
+await page.waitForTimeout(8000);
 
 // Get the actual diagram dimensions
 const dimensions = await page.evaluate(() => {
@@ -74,44 +87,58 @@ const dimensions = await page.evaluate(() => {
 
 console.log(`Diagram dimensions: ${dimensions.width}x${dimensions.height}`);
 
-// Set viewport to match diagram size
-await page.setViewport({
-  width: dimensions.width,
-  height: dimensions.height,
-  deviceScaleFactor: 2,
+// Close the initial browser
+await browser.close();
+
+// Launch browser again with video recording enabled
+console.log('Starting recording...');
+const recordingBrowser = await chromium.launch({
+  headless: true,
 });
 
-// Reload with correct viewport
-console.log('Reloading with correct viewport...');
-await page.goto('file://' + htmlFile, { waitUntil: 'networkidle0' });
-await new Promise((resolve) => setTimeout(resolve, 8000));
+const recordingContext = await recordingBrowser.newContext({
+  viewport: {
+    width: dimensions.width,
+    height: dimensions.height,
+  },
+  deviceScaleFactor: 2,
+  recordVideo: {
+    dir: htmlDir,
+    size: {
+      width: dimensions.width,
+      height: dimensions.height,
+    },
+  },
+});
 
-// Start recording with correct dimensions
-console.log('Starting recording...');
-const recorderConfig = {
-  followNewTab: false,
-  fps: 30, // Increased from 12 to 30 for smoother animation
-  videoFrame: { width: dimensions.width, height: dimensions.height },
-  videoBitsPerSecond: 10000000, // 10 Mbps for better quality
-};
+const recordingPage = await recordingContext.newPage();
 
-// Add GIF-specific configuration
-if (format === 'gif') {
-  recorderConfig.recordDurationLimit = 10; // 10 seconds max for GIF
-}
-
-const recorder = new PuppeteerScreenRecorder(page, recorderConfig);
-
-// Always record to WebM first
-await recorder.start(webmFile);
+// Load the page with recording
+console.log('Loading diagram with recording...');
+await recordingPage.goto('file://' + htmlFile, { waitUntil: 'networkidle' });
+await recordingPage.waitForTimeout(8000);
 
 // Wait a bit while recording
 console.log('Recording...');
-await new Promise((resolve) => setTimeout(resolve, 5000)); // Increased from 2s to 5s to capture more animation
+await recordingPage.waitForTimeout(5000); // Capture animation for 5 seconds
 
 console.log('Stopping recording...');
-await recorder.stop();
-await browser.close();
+await recordingContext.close();
+await recordingBrowser.close();
+
+// Get the recorded video file
+const videoFiles = await fs.readdir(htmlDir);
+const videoFile = videoFiles.find(
+  (file) => file.endsWith('.webm') && file !== path.basename(webmFile),
+);
+
+if (videoFile) {
+  const tempVideoPath = path.join(htmlDir, videoFile);
+  await fs.rename(tempVideoPath, webmFile);
+} else {
+  console.error('Error: Video file not found after recording');
+  process.exit(1);
+}
 
 // Convert to GIF if requested
 if (format === 'gif') {
