@@ -78,11 +78,11 @@ public class VoteDto {
   }
 
   /**
-   * The identifier of the battle this vote belongs to
+   * Unique identifier (UUID) of the battle.
    * @return battleId
    */
   @NotNull @Valid 
-  @Schema(name = "battleId", description = "The identifier of the battle this vote belongs to", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "battleId", example = "5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f", description = "Unique identifier (UUID) of the battle.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("battleId")
   public UUID getBattleId() {
     return battleId;

@@ -32,8 +32,7 @@ class Vote(BaseModel):
 
     id: UUID = Field(description="The unique identifier of the vote")
     battle_id: UUID = Field(
-        description="The identifier of the battle this vote belongs to",
-        alias="battleId",
+        description="Unique identifier (UUID) of the battle.", alias="battleId"
     )
     preference: VotePreference
     created_at: datetime = Field(

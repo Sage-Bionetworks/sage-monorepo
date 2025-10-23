@@ -36,14 +36,14 @@ class TestVote(unittest.TestCase):
         if include_optional:
             return Vote(
                 id = '',
-                battle_id = '',
+                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
                 preference = 'left_model',
                 created_at = '2024-01-15T10:30Z'
             )
         else:
             return Vote(
                 id = '',
-                battle_id = '',
+                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
                 preference = 'left_model',
                 created_at = '2024-01-15T10:30Z',
         )

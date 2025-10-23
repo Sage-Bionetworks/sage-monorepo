@@ -1201,18 +1201,18 @@ components:
         - pageSize
         - sort
         - direction
+    VoteId:
+      type: string
+      format: uuid
+      description: The unique identifier of the vote
     Vote:
       type: object
       description: A vote entity representing a user's preference in a battle between two AI models.
       properties:
         id:
-          type: string
-          format: uuid
-          description: The unique identifier of the vote
+          $ref: '#/components/schemas/VoteId'
         battleId:
-          type: string
-          format: uuid
-          description: The identifier of the battle this vote belongs to
+          $ref: '#/components/schemas/BattleId'
         preference:
           $ref: '#/components/schemas/VotePreference'
         createdAt:

@@ -1721,12 +1721,16 @@ components:
         - pageSize
         - sort
       type: object
+    VoteId:
+      description: The unique identifier of the vote
+      format: uuid
+      type: string
     Vote:
       description: A vote entity representing a user's preference in a battle between
         two AI models.
       example:
         createdAt: 2024-01-15T10:30:00Z
-        battleId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         preference: left_model
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
@@ -1735,7 +1739,8 @@ components:
           format: uuid
           type: string
         battleId:
-          description: The identifier of the battle this vote belongs to
+          description: Unique identifier (UUID) of the battle.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
           format: uuid
           type: string
         preference:
@@ -1756,11 +1761,11 @@ components:
       example:
         data:
           - createdAt: 2024-01-15T10:30:00Z
-            battleId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             preference: left_model
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           - createdAt: 2024-01-15T10:30:00Z
-            battleId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             preference: left_model
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         page:

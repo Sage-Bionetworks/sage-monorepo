@@ -4,12 +4,12 @@ A vote entity representing a user's preference in a battle between two AI models
 
 ## Properties
 
-| Name           | Type                                    | Description                                       | Notes |
-| -------------- | --------------------------------------- | ------------------------------------------------- | ----- |
-| **id**         | **str**                                 | The unique identifier of the vote                 |
-| **battle_id**  | **str**                                 | The identifier of the battle this vote belongs to |
-| **preference** | [**VotePreference**](VotePreference.md) |                                                   |
-| **created_at** | **datetime**                            | Timestamp when the entity was created.            |
+| Name           | Type                                    | Description                             | Notes |
+| -------------- | --------------------------------------- | --------------------------------------- | ----- |
+| **id**         | **str**                                 | The unique identifier of the vote       |
+| **battle_id**  | **str**                                 | Unique identifier (UUID) of the battle. |
+| **preference** | [**VotePreference**](VotePreference.md) |                                         |
+| **created_at** | **datetime**                            | Timestamp when the entity was created.  |
 
 ## Example
 
