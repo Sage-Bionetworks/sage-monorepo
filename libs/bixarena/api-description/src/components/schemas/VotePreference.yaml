@@ -1,0 +1,6 @@
+type: string
+description: The user's preference in a battle
+enum:
+  - left_model
+  - right_model
+  - tie

@@ -24,6 +24,8 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
+  - name: Vote
+    description: Operations about votes.
 paths:
   /admin/stats:
     get:
@@ -304,6 +306,50 @@ paths:
                 $ref: '#/components/schemas/ModelPage'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /votes:
+    get:
+      tags:
+        - Vote
+      summary: List votes
+      description: List votes with optional filtering and pagination
+      operationId: listVotes
+      parameters:
+        - $ref: '#/components/parameters/voteSearchQuery'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VotePage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /votes/{voteId}:
+    parameters:
+      - $ref: '#/components/parameters/voteId'
+    get:
+      tags:
+        - Vote
+      summary: Get a vote by ID
+      description: Returns a single vote by its unique identifier
+      operationId: getVote
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -1076,6 +1122,85 @@ components:
                 $ref: '#/components/schemas/Model'
           required:
             - models
+    VoteSort:
+      description: What to sort votes by.
+      type: string
+      enum:
+        - created_at
+      default: created_at
+      example: created_at
+    VotePreference:
+      type: string
+      description: The user's preference in a battle
+      enum:
+        - left_model
+        - right_model
+        - tie
+    VoteSearchQuery:
+      type: object
+      description: A vote search query.
+      properties:
+        pageNumber:
+          description: The page number to return (0-indexed).
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+          example: 0
+        pageSize:
+          description: The number of items to return in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+          example: 10
+        sort:
+          $ref: '#/components/schemas/VoteSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        preference:
+          description: Filter by vote preference.
+          $ref: '#/components/schemas/VotePreference'
+          nullable: true
+      required:
+        - pageNumber
+        - pageSize
+        - sort
+        - direction
+    Vote:
+      type: object
+      description: A vote entity representing a user's preference in a battle between two AI models.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the vote
+        battleId:
+          type: string
+          format: uuid
+          description: The identifier of the battle this vote belongs to
+        preference:
+          $ref: '#/components/schemas/VotePreference'
+        createdAt:
+          $ref: '#/components/schemas/CreatedAt'
+      required:
+        - id
+        - battleId
+        - preference
+        - createdAt
+    VotePage:
+      type: object
+      description: A page of votes
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vote'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - data
+        - page
   responses:
     Unauthorized:
       description: Unauthorized
@@ -1185,4 +1310,21 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
+    voteSearchQuery:
+      name: voteSearchQuery
+      description: The search query used to find and filter votes.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/VoteSearchQuery'
+    voteId:
+      name: voteId
+      description: The unique identifier of the vote
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        description: The unique identifier of the vote
 x-oauth2-audience: urn:bixarena:api

@@ -1,0 +1,21 @@
+get:
+  tags:
+    - Vote
+  summary: List votes
+  description: List votes with optional filtering and pagination
+  operationId: listVotes
+  parameters:
+    - $ref: ../components/parameters/query/voteSearchQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/VotePage.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

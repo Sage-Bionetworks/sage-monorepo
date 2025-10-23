@@ -1,0 +1,30 @@
+type: object
+description: A vote search query.
+properties:
+  pageNumber:
+    description: The page number to return (0-indexed).
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items to return in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    example: 10
+  sort:
+    $ref: VoteSort.yaml
+  direction:
+    $ref: SortDirection.yaml
+  preference:
+    description: Filter by vote preference.
+    $ref: VotePreference.yaml
+    nullable: true
+required:
+  - pageNumber
+  - pageSize
+  - sort
+  - direction
