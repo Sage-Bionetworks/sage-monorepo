@@ -13,6 +13,10 @@
   font-size: var(--font-size-md);
   font-weight: 700;
 
+  .primary-control-icons {
+    display: none;
+  }
+
   > div:first-child {
     display: flex;
     justify-content: center;
@@ -28,6 +32,11 @@
   &:hover {
     background-color: var(--color-action-primary);
     color: #fff;
+
+    .primary-control-icons {
+      margin-left: 14px;
+      display: flex;
+    }
 
     > div:first-child {
       padding-right: 6px;

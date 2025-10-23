@@ -7,6 +7,15 @@
     padding: 15px 20px 20px;
   }
 
+  .p-datatable-tbody {
+    td {
+      height: 56px !important;
+      padding-top: 4px !important;
+      padding-bottom: 4px !important;
+      vertical-align: middle;
+    }
+  }
+
   .p-datatable-thead,
   .p-datatable-tbody {
     td {
