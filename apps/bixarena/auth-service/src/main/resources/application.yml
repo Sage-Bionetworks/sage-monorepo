@@ -33,6 +33,8 @@ spring:
           time_zone: UTC
         default_schema: auth
     open-in-view: false
+  profiles:
+    active: dev
 
 management:
   endpoints:

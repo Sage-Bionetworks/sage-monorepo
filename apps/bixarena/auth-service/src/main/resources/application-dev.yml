@@ -1,0 +1,9 @@
+# Development profile configuration
+spring:
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: DEBUG
+    org.sagebionetworks.bixarena.auth.service: DEBUG

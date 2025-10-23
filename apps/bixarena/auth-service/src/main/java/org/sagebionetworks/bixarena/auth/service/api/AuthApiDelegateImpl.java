@@ -16,18 +16,15 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.auth.service.configuration.AppProperties;
-import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.Callback200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.Token200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
-import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity;
 import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity.Provider;
 import org.sagebionetworks.bixarena.auth.service.model.entity.UserEntity;
-import org.sagebionetworks.bixarena.auth.service.model.repository.ExternalAccountRepository;
-import org.sagebionetworks.bixarena.auth.service.model.repository.UserRepository;
 import org.sagebionetworks.bixarena.auth.service.security.key.JwkKeyStore;
 import org.sagebionetworks.bixarena.auth.service.service.InternalJwtService;
+import org.sagebionetworks.bixarena.auth.service.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -42,8 +39,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
   private final JwkKeyStore keyStore;
   private final InternalJwtService jwtService;
   private final AppProperties appProperties;
-  private final UserRepository userRepository;
-  private final ExternalAccountRepository externalAccountRepository;
+  private final UserService userService;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
@@ -221,7 +217,13 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
           .contentType(MediaType.APPLICATION_JSON)
           .body(Callback200ResponseDto.builder().status("error:missing-id-token").build());
       }
+
       Map<String, Object> idClaims = decodeJwt(idToken);
+
+      // Log all claims to see what's available
+      log.info("OIDC callback: All ID token claims: {}", idClaims.keySet());
+      log.debug("OIDC callback: Full ID token claims: {}", idClaims);
+
       String sub = (String) idClaims.get("sub");
       if (sub == null) {
         log.info("OIDC callback: missing sub claim in id token");
@@ -229,38 +231,39 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
           .contentType(MediaType.APPLICATION_JSON)
           .body(Callback200ResponseDto.builder().status("error:missing-sub").build());
       }
+
       String email = (String) idClaims.get("email");
       String givenName = (String) idClaims.getOrDefault("given_name", null);
       String familyName = (String) idClaims.getOrDefault("family_name", null);
-      String preferred = (String) idClaims.getOrDefault("preferred_username", sub);
-      // Upsert user
-      UserEntity existingOrNew = userRepository
-        .findByUsername(preferred)
-        .orElseGet(() ->
-          UserEntity.builder()
-            .username(preferred)
-            .email(email)
-            .firstName(givenName)
-            .lastName(familyName)
-            .build()
-        );
-      UserEntity persistedUser = existingOrNew.getId() == null
-        ? userRepository.save(existingOrNew)
-        : existingOrNew;
-      // Link external account
-      externalAccountRepository
-        .findByProviderAndExternalId(Provider.synapse, sub)
-        .orElseGet(() ->
-          externalAccountRepository.save(
-            ExternalAccountEntity.builder()
-              .user(persistedUser)
-              .provider(Provider.synapse)
-              .externalId(sub)
-              .externalUsername(preferred)
-              .externalEmail(email)
-              .build()
-          )
-        );
+      String preferredUsername = (String) idClaims.getOrDefault("preferred_username", sub);
+      String userName = (String) idClaims.getOrDefault("user_name", null);
+
+      // Use user_name claim if available (this is the actual Synapse username)
+      // Otherwise fall back to preferred_username
+      String synapseUsername = userName != null ? userName : preferredUsername;
+
+      log.info(
+        "OIDC callback: ID token claims - sub={}, user_name={}, preferred_username={}, email={}, given_name={}, family_name={}",
+        sub,
+        userName,
+        preferredUsername,
+        email,
+        givenName,
+        familyName
+      );
+
+      log.info("OIDC callback: Using username={} for user creation/update", synapseUsername);
+
+      // Use UserService to handle user creation/update and login tracking
+      UserEntity persistedUser = userService.handleUserLogin(
+        Provider.synapse,
+        sub,
+        synapseUsername,
+        email,
+        givenName,
+        familyName
+      );
+
       // Establish authenticated session principal
       session.setAttribute("AUTH_SUBJECT", persistedUser.getUsername());
       session.setAttribute("AUTH_PREFERRED_USERNAME", persistedUser.getUsername());
