@@ -1,4 +1,10 @@
-<p-table #headerTable id="table-header" breakpoint="0">
+<p-table
+  #headerTable
+  id="table-header"
+  breakpoint="0"
+  [customSort]="true"
+  (sortFunction)="sortCallback($event)"
+>
   <ng-template pTemplate="header">
     <tr>
       <th></th>
