@@ -8,6 +8,7 @@ simplified to a single function for a single-page LLM comparison arena.
 import json
 import logging
 import time
+from uuid import UUID
 
 import gradio as gr
 from bixarena_api_client import (
@@ -16,6 +17,9 @@ from bixarena_api_client import (
     BattleCreateRequest,
     BattleUpdateRequest,
     Configuration,
+    VoteApi,
+    VoteCreateRequest,
+    VotePreference,
 )
 
 from bixarena_app.config.constants import (
@@ -52,12 +56,12 @@ logger = logging.getLogger(__name__)
 num_sides = 2
 anony_names = ["", ""]
 models = []
-current_battle_id = None
+current_battle_id: UUID | None = None
 
 
 def create_battle(
     left_model: str, right_model: str, title: str | None = None
-) -> str | None:
+) -> UUID | None:
     """Create a new battle record in the database.
 
     Args:
@@ -94,7 +98,7 @@ def create_battle(
     return None
 
 
-def end_battle(battle_id: str) -> None:
+def end_battle(battle_id: UUID) -> None:
     """Update battle endedAt timestamp when voting completes."""
     if not battle_id:
         logger.warning("⚠️ No battle_id to end")
@@ -112,6 +116,36 @@ def end_battle(battle_id: str) -> None:
         logger.warning(f"❌ Failed to end battle {battle_id}: {e}")
 
 
+def create_vote(battle_id: UUID, preference: VotePreference) -> UUID | None:
+    """Create a vote record for the battle.
+
+    Args:
+        battle_id: The battle ID to vote on
+        preference: VotePreference enum (LEFT_MODEL, RIGHT_MODEL, or TIE)
+
+    Returns:
+        Vote ID if created successfully, None otherwise
+    """
+    if not battle_id:
+        logger.warning("⚠️ No battle_id to vote on")
+        return None
+
+    try:
+        api_base_url = _get_api_base_url()
+        configuration = Configuration(host=api_base_url)
+        with ApiClient(configuration) as api_client:
+            vote_api = VoteApi(api_client)
+            vote_request = VoteCreateRequest(battle_id=battle_id, preference=preference)
+            vote = vote_api.create_vote(vote_request)
+            if vote and vote.id:
+                logger.info(f"✅ Vote created: {vote.id} for battle {battle_id}")
+                return vote.id
+    except Exception as e:
+        logger.warning(f"❌ Failed to create vote for battle {battle_id}: {e}")
+
+    return None
+
+
 def load_demo_side_by_side_anony(models_, _):
     global models
     models = models_
@@ -125,11 +159,12 @@ def load_demo_side_by_side_anony(models_, _):
     return states + selector_updates
 
 
-def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
+def vote_last_response(states, preference, model_selectors, _: gr.Request):
     global current_battle_id
 
-    # End the battle when voting happens
+    # Create vote record and end the battle
     if current_battle_id:
+        create_vote(current_battle_id, preference)
         end_battle(current_battle_id)
         current_battle_id = None
 
@@ -138,7 +173,7 @@ def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
     # Log the exact same data to console instead of file
     data = {
         "tstamp": round(time.time(), 4),
-        "type": vote_type,
+        "type": preference.value,
         "models": model_selectors,
         "states": [state.dict() for state in states],
         "is_valid": is_valid,
@@ -180,30 +215,36 @@ def leftvote_last_response(
     state0, state1, model_selector0, model_selector1, request: gr.Request
 ):
     logger.info("leftvote (anony).")
-    for x in vote_last_response(
-        [state0, state1], "leftvote", [model_selector0, model_selector1], request
-    ):
-        yield x
+    yield from vote_last_response(
+        [state0, state1],
+        VotePreference.LEFT_MODEL,
+        [model_selector0, model_selector1],
+        request,
+    )
 
 
 def rightvote_last_response(
     state0, state1, model_selector0, model_selector1, request: gr.Request
 ):
     logger.info("rightvote (anony).")
-    for x in vote_last_response(
-        [state0, state1], "rightvote", [model_selector0, model_selector1], request
-    ):
-        yield x
+    yield from vote_last_response(
+        [state0, state1],
+        VotePreference.RIGHT_MODEL,
+        [model_selector0, model_selector1],
+        request,
+    )
 
 
 def tievote_last_response(
     state0, state1, model_selector0, model_selector1, request: gr.Request
 ):
     logger.info("tievote (anony).")
-    for x in vote_last_response(
-        [state0, state1], "tievote", [model_selector0, model_selector1], request
-    ):
-        yield x
+    yield from vote_last_response(
+        [state0, state1],
+        VotePreference.TIE,
+        [model_selector0, model_selector1],
+        request,
+    )
 
 
 def clear_history(request: gr.Request):
