@@ -48,6 +48,8 @@ public class SecurityConfiguration {
             "/v1/leaderboards/**",
             "/v1/models",
             "/v1/models/**",
+            "/v1/votes",
+            "/v1/votes/**",
             "/v3/api-docs/**"
           )
           .permitAll()

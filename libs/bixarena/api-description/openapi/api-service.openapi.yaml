@@ -315,6 +315,7 @@ paths:
       summary: List votes
       description: List votes with optional filtering and pagination
       operationId: listVotes
+      x-anonymous-access: true
       parameters:
         - $ref: '#/components/parameters/voteSearchQuery'
       responses:
@@ -339,6 +340,7 @@ paths:
       summary: Get a vote by ID
       description: Returns a single vote by its unique identifier
       operationId: getVote
+      x-anonymous-access: true
       responses:
         '200':
           content:

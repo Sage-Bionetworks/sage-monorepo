@@ -492,6 +492,7 @@ paths:
       summary: List votes
       tags:
         - Vote
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -528,6 +529,7 @@ paths:
       summary: Get a vote by ID
       tags:
         - Vote
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json

@@ -4,6 +4,7 @@ get:
   summary: List votes
   description: List votes with optional filtering and pagination
   operationId: listVotes
+  x-anonymous-access: true
   parameters:
     - $ref: ../components/parameters/query/voteSearchQuery.yaml
   responses:
