@@ -413,9 +413,6 @@ components:
         name:
           type: string
           description: The display name of the column.
-        field:
-          type: string
-          description: The data field associated with the column.
         type:
           type: string
           enum:
@@ -425,6 +422,9 @@ components:
             - link_external
             - primary
           description: The data type of the column. Must be 'text', 'heat_map', 'link_internal', 'link_external', or 'primary'.
+        column_key:
+          type: string
+          description: The data key associated with the column.
         tooltip:
           type: string
           description: Tooltip text for the column.
@@ -438,8 +438,8 @@ components:
           type: string
           description: The default URL for this column.
       required:
-        - field
         - type
+        - column_key
     ComparisonToolConfigFilter:
       type: object
       description: Comparison Tool Config Filter

@@ -25,7 +25,7 @@
       <tr>
         @for (columnConfig of currentConfig()?.columns; track columnConfig) {
           @let columnType = columnConfig.type;
-          @let cellData = rowData[columnConfig.field];
+          @let cellData = rowData[columnConfig.column_key];
           <td [style]="{ width: columnWidth }" [class]="columnType">
             @if (columnType === 'primary') {
               <explorers-primary-identifier-controls

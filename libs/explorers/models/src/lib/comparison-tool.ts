@@ -33,8 +33,8 @@ export const ComparisonToolConfigColumnTypeEnum = {
 
 export interface ComparisonToolConfigColumn {
   name?: string;
-  field: string;
   type: ComparisonToolConfigColumnType;
+  column_key: string;
   tooltip?: string;
   sort_tooltip?: string;
   link_text?: string;

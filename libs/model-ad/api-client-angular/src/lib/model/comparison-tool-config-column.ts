@@ -14,13 +14,13 @@ export interface ComparisonToolConfigColumn {
    */
   name?: string;
   /**
-   * The data field associated with the column.
-   */
-  field: string;
-  /**
    * The data type of the column. Must be \'text\', \'heat_map\', \'link_internal\', \'link_external\', or \'primary\'.
    */
   type: ComparisonToolConfigColumn.TypeEnum;
+  /**
+   * The data key associated with the column.
+   */
+  column_key: string;
   /**
    * Tooltip text for the column.
    */
