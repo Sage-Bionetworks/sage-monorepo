@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformServer } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -95,8 +95,8 @@ export class SearchInputComponent implements AfterViewInit {
   root = viewChild.required<ElementRef>('root');
   input = viewChild.required<ElementRef<HTMLInputElement>>('input');
 
-  isBrowser = computed(() => {
-    return isPlatformBrowser(this.platformId);
+  isServer = computed(() => {
+    return isPlatformServer(this.platformId);
   });
 
   @HostListener('document:click', ['$event'])
