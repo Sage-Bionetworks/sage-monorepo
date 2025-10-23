@@ -9,6 +9,8 @@ import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.SortDirectionDto;
+import org.sagebionetworks.bixarena.api.model.dto.VotePreferenceDto;
+import org.sagebionetworks.bixarena.api.model.dto.VoteSortDto;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -95,6 +97,24 @@ public class EnumConverterConfiguration {
             @Override
             public SortDirectionDto convert(String source) {
                 return SortDirectionDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.votePreferenceConverter")
+    Converter<String, VotePreferenceDto> votePreferenceConverter() {
+        return new Converter<String, VotePreferenceDto>() {
+            @Override
+            public VotePreferenceDto convert(String source) {
+                return VotePreferenceDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.voteSortConverter")
+    Converter<String, VoteSortDto> voteSortConverter() {
+        return new Converter<String, VoteSortDto>() {
+            @Override
+            public VoteSortDto convert(String source) {
+                return VoteSortDto.fromValue(source);
             }
         };
     }

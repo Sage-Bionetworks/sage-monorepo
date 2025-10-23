@@ -24,6 +24,8 @@ tags:
     name: Leaderboard
   - description: Operations about models.
     name: Model
+  - description: Operations about votes.
+    name: Vote
 paths:
   /admin/stats:
     get:
@@ -461,6 +463,76 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Model
+  /votes:
+    get:
+      description: List votes with optional filtering and pagination
+      operationId: listVotes
+      parameters:
+        - description: The search query used to find and filter votes.
+          explode: true
+          in: query
+          name: voteSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/VoteSearchQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VotePage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: List votes
+      tags:
+        - Vote
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Vote
+  /votes/{voteId}:
+    get:
+      description: Returns a single vote by its unique identifier
+      operationId: getVote
+      parameters:
+        - description: The unique identifier of the vote
+          explode: false
+          in: path
+          name: voteId
+          required: true
+          schema:
+            description: The unique identifier of the vote
+            format: uuid
+            type: string
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get a vote by ID
+      tags:
+        - Vote
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Vote
 components:
   parameters:
     battleSearchQuery:
@@ -547,6 +619,26 @@ components:
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
       style: deepObject
+    voteSearchQuery:
+      description: The search query used to find and filter votes.
+      explode: true
+      in: query
+      name: voteSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/VoteSearchQuery'
+      style: deepObject
+    voteId:
+      description: The unique identifier of the vote
+      explode: false
+      in: path
+      name: voteId
+      required: true
+      schema:
+        description: The unique identifier of the vote
+        format: uuid
+        type: string
+      style: simple
   responses:
     Unauthorized:
       content:
@@ -1545,6 +1637,109 @@ components:
         hasPrevious: true
         hasNext: true
         totalElements: 99
+      type: object
+    VoteSort:
+      default: created_at
+      description: What to sort votes by.
+      enum:
+        - created_at
+      example: created_at
+      type: string
+    VotePreference:
+      description: The user's preference in a battle
+      enum:
+        - left_model
+        - right_model
+        - tie
+      type: string
+    VoteSearchQuery:
+      description: A vote search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number to return (0-indexed).
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items to return in a single page.
+          example: 10
+          format: int32
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/VoteSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        preference:
+          $ref: '#/components/schemas/VotePreference'
+      required:
+        - direction
+        - pageNumber
+        - pageSize
+        - sort
+      type: object
+    Vote:
+      description: A vote entity representing a user's preference in a battle between
+        two AI models.
+      example:
+        createdAt: 2024-01-15T10:30:00Z
+        battleId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        preference: left_model
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          description: The unique identifier of the vote
+          format: uuid
+          type: string
+        battleId:
+          description: The identifier of the battle this vote belongs to
+          format: uuid
+          type: string
+        preference:
+          $ref: '#/components/schemas/VotePreference'
+        createdAt:
+          description: Timestamp when the entity was created.
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          type: string
+      required:
+        - battleId
+        - createdAt
+        - id
+        - preference
+      type: object
+    VotePage:
+      description: A page of votes
+      example:
+        data:
+          - createdAt: 2024-01-15T10:30:00Z
+            battleId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            preference: left_model
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - createdAt: 2024-01-15T10:30:00Z
+            battleId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            preference: left_model
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        page:
+          number: 99
+          size: 99
+          totalPages: 99
+          hasPrevious: true
+          hasNext: true
+          totalElements: 99
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Vote'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - data
+        - page
       type: object
     adminStats_200_response:
       example:
