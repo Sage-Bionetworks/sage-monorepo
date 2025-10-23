@@ -23,6 +23,7 @@ __all__ = [
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
+    "VoteApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -69,6 +70,11 @@ __all__ = [
     "SortDirection",
     "Token200Response",
     "UserInfo",
+    "Vote",
+    "VotePage",
+    "VotePreference",
+    "VoteSearchQuery",
+    "VoteSort",
 ]
 
 # import apis into sdk package
@@ -80,6 +86,7 @@ from bixarena_api_client.api.example_prompt_api import (
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
+from bixarena_api_client.api.vote_api import VoteApi as VoteApi
 
 # import ApiClient
 from bixarena_api_client.api_response import ApiResponse as ApiResponse
@@ -180,3 +187,10 @@ from bixarena_api_client.models.token200_response import (
     Token200Response as Token200Response,
 )
 from bixarena_api_client.models.user_info import UserInfo as UserInfo
+from bixarena_api_client.models.vote import Vote as Vote
+from bixarena_api_client.models.vote_page import VotePage as VotePage
+from bixarena_api_client.models.vote_preference import VotePreference as VotePreference
+from bixarena_api_client.models.vote_search_query import (
+    VoteSearchQuery as VoteSearchQuery,
+)
+from bixarena_api_client.models.vote_sort import VoteSort as VoteSort
