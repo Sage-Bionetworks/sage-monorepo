@@ -217,7 +217,13 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
           .contentType(MediaType.APPLICATION_JSON)
           .body(Callback200ResponseDto.builder().status("error:missing-id-token").build());
       }
+
       Map<String, Object> idClaims = decodeJwt(idToken);
+
+      // Log all claims to see what's available
+      log.info("OIDC callback: All ID token claims: {}", idClaims.keySet());
+      log.debug("OIDC callback: Full ID token claims: {}", idClaims);
+
       String sub = (String) idClaims.get("sub");
       if (sub == null) {
         log.info("OIDC callback: missing sub claim in id token");
@@ -225,16 +231,34 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
           .contentType(MediaType.APPLICATION_JSON)
           .body(Callback200ResponseDto.builder().status("error:missing-sub").build());
       }
+
       String email = (String) idClaims.get("email");
       String givenName = (String) idClaims.getOrDefault("given_name", null);
       String familyName = (String) idClaims.getOrDefault("family_name", null);
-      String preferred = (String) idClaims.getOrDefault("preferred_username", sub);
+      String preferredUsername = (String) idClaims.getOrDefault("preferred_username", sub);
+      String userName = (String) idClaims.getOrDefault("user_name", null);
+
+      // Use user_name claim if available (this is the actual Synapse username)
+      // Otherwise fall back to preferred_username
+      String synapseUsername = userName != null ? userName : preferredUsername;
+
+      log.info(
+        "OIDC callback: ID token claims - sub={}, user_name={}, preferred_username={}, email={}, given_name={}, family_name={}",
+        sub,
+        userName,
+        preferredUsername,
+        email,
+        givenName,
+        familyName
+      );
+
+      log.info("OIDC callback: Using username={} for user creation/update", synapseUsername);
 
       // Use UserService to handle user creation/update and login tracking
       UserEntity persistedUser = userService.handleUserLogin(
         Provider.synapse,
         sub,
-        preferred,
+        synapseUsername,
         email,
         givenName,
         familyName

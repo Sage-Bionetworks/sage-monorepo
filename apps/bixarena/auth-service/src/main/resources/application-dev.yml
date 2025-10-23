@@ -6,3 +6,4 @@ spring:
 logging:
   level:
     org.sagebionetworks.openchallenges: DEBUG
+    org.sagebionetworks.bixarena.auth.service: DEBUG
