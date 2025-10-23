@@ -2,13 +2,9 @@ type: object
 description: A vote entity representing a user's preference in a battle between two AI models.
 properties:
   id:
-    type: string
-    format: uuid
-    description: The unique identifier of the vote
+    $ref: VoteId.yaml
   battleId:
-    type: string
-    format: uuid
-    description: The identifier of the battle this vote belongs to
+    $ref: BattleId.yaml
   preference:
     $ref: VotePreference.yaml
   createdAt:
