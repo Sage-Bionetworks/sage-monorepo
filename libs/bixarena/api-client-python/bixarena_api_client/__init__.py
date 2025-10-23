@@ -71,6 +71,7 @@ __all__ = [
     "Token200Response",
     "UserInfo",
     "Vote",
+    "VoteCreateRequest",
     "VotePage",
     "VotePreference",
     "VoteSearchQuery",
@@ -188,6 +189,9 @@ from bixarena_api_client.models.token200_response import (
 )
 from bixarena_api_client.models.user_info import UserInfo as UserInfo
 from bixarena_api_client.models.vote import Vote as Vote
+from bixarena_api_client.models.vote_create_request import (
+    VoteCreateRequest as VoteCreateRequest,
+)
 from bixarena_api_client.models.vote_page import VotePage as VotePage
 from bixarena_api_client.models.vote_preference import VotePreference as VotePreference
 from bixarena_api_client.models.vote_search_query import (

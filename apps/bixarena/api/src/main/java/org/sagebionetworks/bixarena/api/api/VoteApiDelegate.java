@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import java.util.UUID;
+import org.sagebionetworks.bixarena.api.model.dto.VoteCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteDto;
 import org.sagebionetworks.bixarena.api.model.dto.VotePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteSearchQueryDto;
@@ -28,6 +29,64 @@ public interface VoteApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
+    }
+
+    /**
+     * POST /votes : Create a vote
+     * Create a new vote for a battle.
+     *
+     * @param voteCreateRequestDto  (required)
+     * @return Vote created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see VoteApi#createVote
+     */
+    default ResponseEntity<VoteDto> createVote(VoteCreateRequestDto voteCreateRequestDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"battleId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"preference\" : \"left_model\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
     }
 
     /**

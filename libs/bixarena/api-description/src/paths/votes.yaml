@@ -20,3 +20,36 @@ get:
       $ref: ../components/responses/Unauthorized.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml
+
+post:
+  tags:
+    - Vote
+  summary: Create a vote
+  description: Create a new vote for a battle.
+  operationId: createVote
+  x-anonymous-access: true
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/VoteCreateRequest.yaml
+    required: true
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Vote.yaml
+      description: Vote created successfully
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

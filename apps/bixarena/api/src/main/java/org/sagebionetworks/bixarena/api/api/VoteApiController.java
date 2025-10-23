@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import java.util.UUID;
+import org.sagebionetworks.bixarena.api.model.dto.VoteCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteDto;
 import org.sagebionetworks.bixarena.api.model.dto.VotePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteSearchQueryDto;

@@ -7,6 +7,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import java.util.UUID;
+import org.sagebionetworks.bixarena.api.model.dto.VoteCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteDto;
 import org.sagebionetworks.bixarena.api.model.dto.VotePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteSearchQueryDto;
@@ -42,6 +43,72 @@ public interface VoteApi {
     default VoteApiDelegate getDelegate() {
         return new VoteApiDelegate() {};
     }
+
+    /**
+     * POST /votes : Create a vote
+     * Create a new vote for a battle.
+     *
+     * @param voteCreateRequestDto  (required)
+     * @return Vote created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createVote",
+        summary = "Create a vote",
+        description = "Create a new vote for a battle.",
+        tags = { "Vote" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Vote created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = VoteDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = VoteDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/votes",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<VoteDto> createVote(
+        @Parameter(name = "VoteCreateRequestDto", description = "", required = true) @Valid @RequestBody VoteCreateRequestDto voteCreateRequestDto
+    ) {
+        return getDelegate().createVote(voteCreateRequestDto);
+    }
+
 
     /**
      * GET /votes/{voteId} : Get a vote by ID

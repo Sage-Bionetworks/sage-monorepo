@@ -4,15 +4,21 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
+import org.sagebionetworks.bixarena.api.exception.DuplicateVoteException;
 import org.sagebionetworks.bixarena.api.exception.VoteNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.PageMetadataDto;
+import org.sagebionetworks.bixarena.api.model.dto.VoteCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteDto;
 import org.sagebionetworks.bixarena.api.model.dto.VotePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.VotePreferenceDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteSearchQueryDto;
+import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.VoteEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.VoteMapper;
+import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.VoteRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class VoteService {
 
   private final VoteRepository voteRepository;
+  private final BattleRepository battleRepository;
   private final VoteMapper voteMapper = new VoteMapper();
 
   @Transactional(readOnly = true)
@@ -62,8 +69,50 @@ public class VoteService {
     return voteMapper.convertToDto(voteEntity);
   }
 
+  @Transactional
+  public VoteDto createVote(VoteCreateRequestDto request) {
+    UUID battleId = request.getBattleId();
+
+    log.info("Creating vote for battle ID: {}", battleId);
+
+    // Validate that the battle exists
+    getBattleEntity(battleId);
+
+    // Convert DTO preference to entity preference
+    VoteEntity.VotePreference entityPreference = convertDtoToEntityPreference(
+      request.getPreference()
+    );
+
+    // Create new vote entity
+    VoteEntity vote = VoteEntity.builder().battleId(battleId).preference(entityPreference).build();
+
+    try {
+      // Save the vote
+      VoteEntity savedVote = voteRepository.save(vote);
+      voteRepository.flush();
+
+      log.info("Successfully created vote with ID: {}", savedVote.getId());
+
+      return voteMapper.convertToDto(savedVote);
+    } catch (DataIntegrityViolationException e) {
+      // Check if this is the unique constraint violation
+      if (e.getMessage() != null && e.getMessage().contains("unique_battle_vote")) {
+        throw new DuplicateVoteException(battleId);
+      }
+      throw e;
+    }
+  }
+
   private VoteEntity getVoteEntity(UUID voteId) {
     return voteRepository.findById(voteId).orElseThrow(() -> new VoteNotFoundException(voteId));
+  }
+
+  private BattleEntity getBattleEntity(UUID battleId) {
+    return battleRepository
+      .findById(battleId)
+      .orElseThrow(() ->
+        new BattleNotFoundException(String.format("Battle not found with ID: %s", battleId))
+      );
   }
 
   private Pageable createPageable(VoteSearchQueryDto query) {

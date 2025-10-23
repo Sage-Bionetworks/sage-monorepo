@@ -498,6 +498,44 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Vote
+    post:
+      description: Create a new vote for a battle.
+      operationId: createVote
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: Vote created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Create a vote
+      tags:
+        - Vote
+      x-anonymous-access: true
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Vote
   /votes/{voteId}:
     get:
       description: Returns a single vote by its unique identifier
@@ -1742,6 +1780,20 @@ components:
       required:
         - data
         - page
+      type: object
+    VoteCreateRequest:
+      description: The information used to create a new vote.
+      properties:
+        battleId:
+          description: Unique identifier (UUID) of the battle.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+          format: uuid
+          type: string
+        preference:
+          $ref: '#/components/schemas/VotePreference'
+      required:
+        - battleId
+        - preference
       type: object
     adminStats_200_response:
       example:

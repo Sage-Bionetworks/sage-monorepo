@@ -4,10 +4,12 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.model.dto.VoteCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteDto;
 import org.sagebionetworks.bixarena.api.model.dto.VotePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.VoteSearchQueryDto;
 import org.sagebionetworks.bixarena.api.service.VoteService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -35,5 +37,12 @@ public class VoteApiDelegateImpl implements VoteApiDelegate {
   public ResponseEntity<VoteDto> getVote(UUID voteId) {
     log.info("Getting vote with ID: {}", voteId);
     return ResponseEntity.ok(voteService.getVote(voteId));
+  }
+
+  @Override
+  public ResponseEntity<VoteDto> createVote(VoteCreateRequestDto voteCreateRequestDto) {
+    log.info("Creating vote for battle ID: {}", voteCreateRequestDto.getBattleId());
+    VoteDto createdVote = voteService.createVote(voteCreateRequestDto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdVote);
   }
 }

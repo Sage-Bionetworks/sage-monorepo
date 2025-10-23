@@ -55,6 +55,8 @@ public class SecurityConfiguration {
           .permitAll()
           .requestMatchers(HttpMethod.POST, "/v1/battles")
           .permitAll()
+          .requestMatchers(HttpMethod.POST, "/v1/votes")
+          .permitAll()
           .requestMatchers(HttpMethod.PATCH, "/v1/battles/**")
           .permitAll()
           .anyRequest()

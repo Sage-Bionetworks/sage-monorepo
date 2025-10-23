@@ -51,6 +51,7 @@ bixarena_api_client/models/sort_direction.py
 bixarena_api_client/models/token200_response.py
 bixarena_api_client/models/user_info.py
 bixarena_api_client/models/vote.py
+bixarena_api_client/models/vote_create_request.py
 bixarena_api_client/models/vote_page.py
 bixarena_api_client/models/vote_preference.py
 bixarena_api_client/models/vote_search_query.py
@@ -102,6 +103,7 @@ docs/Token200Response.md
 docs/UserInfo.md
 docs/Vote.md
 docs/VoteApi.md
+docs/VoteCreateRequest.md
 docs/VotePage.md
 docs/VotePreference.md
 docs/VoteSearchQuery.md
@@ -152,6 +154,7 @@ test/test_token200_response.py
 test/test_user_info.py
 test/test_vote.py
 test/test_vote_api.py
+test/test_vote_create_request.py
 test/test_vote_page.py
 test/test_vote_preference.py
 test/test_vote_search_query.py

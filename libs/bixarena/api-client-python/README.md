@@ -118,6 +118,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
 | _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
 | _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
+| _VoteApi_          | [**create_vote**](docs/VoteApi.md#create_vote)                                    | **POST** /votes                                         | Create a vote                              |
 | _VoteApi_          | [**get_vote**](docs/VoteApi.md#get_vote)                                          | **GET** /votes/{voteId}                                 | Get a vote by ID                           |
 | _VoteApi_          | [**list_votes**](docs/VoteApi.md#list_votes)                                      | **GET** /votes                                          | List votes                                 |
 
@@ -161,6 +162,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [Token200Response](docs/Token200Response.md)
 - [UserInfo](docs/UserInfo.md)
 - [Vote](docs/Vote.md)
+- [VoteCreateRequest](docs/VoteCreateRequest.md)
 - [VotePage](docs/VotePage.md)
 - [VotePreference](docs/VotePreference.md)
 - [VoteSearchQuery](docs/VoteSearchQuery.md)

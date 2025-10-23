@@ -25,6 +25,13 @@ class TestVoteApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_create_vote(self) -> None:
+        """Test case for create_vote
+
+        Create a vote
+        """
+        pass
+
     def test_get_vote(self) -> None:
         """Test case for get_vote
 

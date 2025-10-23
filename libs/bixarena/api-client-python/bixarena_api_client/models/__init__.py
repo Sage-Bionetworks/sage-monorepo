@@ -61,6 +61,7 @@ from bixarena_api_client.models.sort_direction import SortDirection
 from bixarena_api_client.models.token200_response import Token200Response
 from bixarena_api_client.models.user_info import UserInfo
 from bixarena_api_client.models.vote import Vote
+from bixarena_api_client.models.vote_create_request import VoteCreateRequest
 from bixarena_api_client.models.vote_page import VotePage
 from bixarena_api_client.models.vote_preference import VotePreference
 from bixarena_api_client.models.vote_search_query import VoteSearchQuery
