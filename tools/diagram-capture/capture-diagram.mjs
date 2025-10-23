@@ -11,7 +11,7 @@ const execAsync = promisify(exec);
 function ensurePlaywrightBrowsers() {
   console.log('Ensuring Playwright browsers are installed...');
   try {
-    execSync('pnpx playwright install chromium', { stdio: 'inherit' });
+    execSync('pnpx playwright install chromium --with-deps', { stdio: 'inherit' });
   } catch (error) {
     console.error('Failed to install Playwright browsers:', error.message);
     process.exit(1);

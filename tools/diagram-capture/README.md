@@ -1,4 +1,3 @@
-````markdown
 # Diagram Capture Tool
 
 A Node.js tool for capturing Mermaid diagrams as animated WebM videos or GIF files using Playwright and FFmpeg.
@@ -26,45 +25,13 @@ Playwright browsers (Chromium) are automatically installed on first run using `p
 If you prefer to install manually beforehand:
 
 ```bash
-pnpx playwright install chromium
+pnpx playwright install chromium --with-deps
 ```
 
 Or install all Playwright browsers:
 
 ```bash
-pnpx playwright install
-```
-
-### System Dependencies (Linux/Ubuntu)
-
-Playwright handles most browser dependencies automatically, but you may need to install system libraries:
-
-```bash
-npx playwright install-deps chromium
-```
-
-Or manually install required libraries:
-
-```bash
-sudo apt-get update
-sudo apt-get install -y \
-  libatk-bridge2.0-0t64 \
-  libxkbcommon0 \
-  libxcomposite1 \
-  libxdamage1 \
-  libxfixes3 \
-  libxrandr2 \
-  libgbm1 \
-  libasound2t64 \
-  libpango-1.0-0 \
-  libcairo2 \
-  libatspi2.0-0t64 \
-  libcups2t64 \
-  libdbus-1-3 \
-  libdrm2 \
-  libgtk-3-0t64 \
-  libnss3 \
-  libxss1
+pnpx playwright install --with-deps
 ```
 
 ### FFmpeg (for GIF conversion)
@@ -149,13 +116,7 @@ GIF files are larger due to format limitations but are widely compatible.
 You need to install Playwright browsers:
 
 ```bash
-npx playwright install chromium
-```
-
-Or use the automatic dependency installer:
-
-```bash
-npx playwright install-deps chromium
+npx playwright install chromium --with-deps
 ```
 
 ### Diagram appears cut off or distorted
@@ -193,17 +154,6 @@ const ffmpegCmd = `ffmpeg -i "${webmFile}" -vf "fps=15,scale=...`;
 
 Lower values = smaller file size, less smooth animation.
 
-## Migration from Puppeteer
-
-This tool was migrated from Puppeteer to Playwright because:
-
-- **Built-in video recording**: Playwright has native video recording support
-- **Better maintained**: Playwright is actively developed by Microsoft
-- **Already in monorepo**: `@playwright/test` is already a dependency
-- **Simpler API**: No need for third-party screen recording libraries
-- **Better browser support**: More modern browser automation features
-
 ## License
 
 Part of the Sage Bionetworks monorepo. See root LICENSE.txt for details.
-````
