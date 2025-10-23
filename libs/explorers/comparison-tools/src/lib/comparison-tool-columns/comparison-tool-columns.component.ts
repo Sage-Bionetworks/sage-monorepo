@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, signal, input, inject } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';

@@ -1,0 +1,59 @@
+@use 'explorers/styles/src/lib/variables';
+@use 'explorers/styles/src/lib/mixins';
+
+.column-selector {
+  display: flex;
+  align-items: center;
+  color: gray;
+
+  button {
+    @include mixins.reset-button;
+
+    margin-right: 100px;
+    cursor: pointer;
+  }
+
+  .toggle-columns {
+    background: #fff;
+    box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
+  }
+}
+
+// Global styles for PrimeNG Popover (created outside component due to overlay)
+.p-popover.toggle-columns {
+  .p-popover-content {
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        .column-toggle {
+          display: flex;
+          padding: 11px;
+          font-size: 14px;
+
+          .column-toggle-status {
+            width: 20px;
+            margin-right: 5px;
+
+            span {
+              color: var(--color-action-primary);
+              font-weight: bold;
+            }
+          }
+
+          &:hover {
+            background-color: var(--color-action-primary);
+            color: white;
+            cursor: pointer;
+          }
+
+          &:hover .column-toggle-status span {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+<div class="column-selector">
+  <p-popover #columnPopover styleClass="toggle-columns">
+    <ul id="columns">
+      @for (column of columns; track column) {
+        <li>
+          <div class="column-toggle" (click)="toggleColumn(column)">
+            <div class="column-toggle-status">
+              @if (column.selected) {
+                <span class="pi pi-check"></span>
+              }
+            </div>
+            <div>
+              <span>{{ column.name }}</span>
+            </div>
+          </div>
+        </li>
+      }
+    </ul>
+  </p-popover>
+  <button
+    (click)="columnPopover.toggle($event)"
+    pTooltip="Show/hide columns"
+    tooltipPosition="top"
+    tooltipStyleClass="tooltip-xs"
+  >
+    @if (hasHiddenColumns()) {
+      <p-overlaybadge severity="warn">
+        <explorers-svg-icon
+          imagePath="/explorers-assets/icons/column.svg"
+          [width]="20"
+          [height]="16"
+          altText="column"
+        ></explorers-svg-icon>
+      </p-overlaybadge>
+    } @else {
+      <explorers-svg-icon
+        imagePath="/explorers-assets/icons/column.svg"
+        [width]="20"
+        [height]="16"
+        altText="column"
+      ></explorers-svg-icon>
+    }
+  </button>
+</div>

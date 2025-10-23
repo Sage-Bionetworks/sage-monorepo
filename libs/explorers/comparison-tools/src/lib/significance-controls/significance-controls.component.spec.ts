@@ -1,5 +1,8 @@
 import { signal } from '@angular/core';
-import { ComparisonToolFilterService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolFilterService,
+  ComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { SignificanceControlsComponent } from './significance-controls.component';
@@ -25,6 +28,7 @@ async function setup(threshold = 0.05, active = false) {
         provide: ComparisonToolFilterService,
         useValue: mockComparisonToolFilterService,
       },
+      ComparisonToolService,
     ],
   });
 

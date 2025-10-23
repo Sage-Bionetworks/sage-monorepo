@@ -1,5 +1,10 @@
-import { Injectable, Signal, computed, signal } from '@angular/core';
-import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { computed, signal, Signal } from '@angular/core';
+import {
+  ComparisonToolConfig,
+  ComparisonToolColumn,
+  SynapseWikiParams,
+  ComparisonToolColumns,
+} from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 
 /**
@@ -10,12 +15,12 @@ import { isEqual } from 'lodash';
  * - Update user selections through {@link setDropdownSelection}; consumers can read the latest value via {@link dropdownSelection}.
  * - Manage result totals via {@link totalResultsCount} and {@link pinnedResultsCount}.
  */
-@Injectable()
 export class ComparisonToolService {
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly selectorsWikiParamsSignal = signal<Record<string, SynapseWikiParams>>({});
+  private readonly columnsForAllPagesSignal = signal<ComparisonToolColumns[]>([]);
 
   readonly configs = this.configsSignal.asReadonly();
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
@@ -28,6 +33,7 @@ export class ComparisonToolService {
       return null;
     }
 
+    // if no selection, return first config
     const dropdownSelection = this.dropdownSelectionSignal();
     if (!dropdownSelection.length) {
       return configs[0];
@@ -46,20 +52,21 @@ export class ComparisonToolService {
     return prefixMatch ?? configs[0];
   });
 
-  readonly columns: Signal<string[]> = computed(() => {
+  readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
     const config = this.currentConfig();
-    if (!config) {
-      return [];
-    }
+    if (!config) return [];
 
-    if (!config.columns || config.columns.length === 0) {
-      throw new Error(
-        'Missing comparison tool config data: "columns" property is undefined or empty.',
-      );
-    }
-
-    return config.columns.map((column) => column.name);
+    // Match on BOTH page AND dropdowns
+    return (
+      this.columnsForAllPagesSignal().find(
+        (c) => c.page === config.page && isEqual(c.dropdowns, config.dropdowns),
+      )?.columns ?? []
+    );
   });
+
+  hasHiddenColumns(): boolean {
+    return this.columns().some((col) => !col.selected);
+  }
 
   totalResultsCount = signal<number>(0);
   pinnedResultsCount = signal<number>(0);
@@ -84,11 +91,22 @@ export class ComparisonToolService {
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);
+      this.columnsForAllPagesSignal.set([]);
       return;
     }
 
     const normalizedSelection = this.normalizeSelection(selection ?? [], configs);
     this.updateDropdownSelectionIfChanged(normalizedSelection);
+
+    const columnsData: ComparisonToolColumns[] = this.configs().map((config) => ({
+      page: config.page,
+      dropdowns: config.dropdowns,
+      columns: config.columns.map((column) => ({
+        name: column.name,
+        selected: true,
+      })),
+    }));
+    this.columnsForAllPagesSignal.set(columnsData);
   }
 
   setDropdownSelection(selection: string[]) {
@@ -101,10 +119,70 @@ export class ComparisonToolService {
 
     const normalizedSelection = this.normalizeSelection(selection, configs);
     this.updateDropdownSelectionIfChanged(normalizedSelection);
+
+    const config = this.currentConfig();
+    if (config?.columns && config.columns.length > 0) {
+      const currentPage = config.page;
+      const currentDropdowns = config.dropdowns;
+
+      this.columnsForAllPagesSignal.update((columnsData) => {
+        // Match on BOTH page AND dropdowns
+        const existingIndex = columnsData.findIndex(
+          (c) => c.page === currentPage && isEqual(c.dropdowns, currentDropdowns),
+        );
+
+        // If this dropdown combination exists, preserve its column state
+        if (existingIndex !== -1) {
+          return columnsData; // State already exists, don't modify
+        }
+
+        // New dropdown combination - initialize with all columns selected
+        const newPageData: ComparisonToolColumns = {
+          page: currentPage,
+          dropdowns: currentDropdowns,
+          columns: config.columns.map((column) => ({
+            name: column.name,
+            selected: true,
+          })),
+        };
+
+        return [...columnsData, newPageData];
+      });
+    }
   }
 
   setSelectorsWikiParams(params: Record<string, SynapseWikiParams>) {
     this.selectorsWikiParamsSignal.set(params ?? {});
+  }
+
+  toggleColumn(column: ComparisonToolColumn) {
+    const config = this.currentConfig();
+    if (!config) return;
+
+    const currentPage = config.page;
+    const currentDropdowns = config.dropdowns;
+
+    this.columnsForAllPagesSignal.update((cols) => {
+      // Match on BOTH page AND dropdowns
+      const pageColumnsIndex = cols.findIndex(
+        (c) => c.page === currentPage && isEqual(c.dropdowns, currentDropdowns),
+      );
+
+      if (pageColumnsIndex !== -1) {
+        const pageColumns = cols[pageColumnsIndex];
+        const colIndex = pageColumns.columns.findIndex((col) => col.name === column.name);
+
+        if (colIndex !== -1) {
+          const newCols = [...pageColumns.columns];
+          newCols[colIndex] = { ...newCols[colIndex], selected: !newCols[colIndex].selected };
+
+          const updatedCols = [...cols];
+          updatedCols[pageColumnsIndex] = { ...pageColumns, columns: newCols };
+          return updatedCols;
+        }
+      }
+      return cols;
+    });
   }
 
   private updateDropdownSelectionIfChanged(selection: string[]) {
