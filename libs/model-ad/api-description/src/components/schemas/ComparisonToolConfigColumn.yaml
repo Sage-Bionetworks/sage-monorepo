@@ -3,9 +3,6 @@ properties:
   name:
     type: string
     description: The display name of the column.
-  field:
-    type: string
-    description: The data field associated with the column.
   type:
     type: string
     enum:
@@ -13,7 +10,13 @@ properties:
       - heat_map
       - link_internal
       - link_external
-    description: The data type of the column. Must be 'text', 'heat_map', 'link_internal', or 'link_external'.
+      - primary
+    description: The data type of the column. Must be 'text', 'heat_map', 'link_internal',
+      'link_external', or 'primary', where 'primary' is the primary key column that uniquely
+      identifies each record in the table.
+  column_key:
+    type: string
+    description: The key used to retrieve data for this column from the data source.
   tooltip:
     type: string
     description: Tooltip text for the column.
@@ -27,8 +30,5 @@ properties:
     type: string
     description: The default URL for this column.
 required:
-  - name
-  - field
   - type
-  - tooltip
-  - sort_tooltip
+  - column_key

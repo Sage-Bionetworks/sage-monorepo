@@ -1,6 +1,32 @@
 @use 'explorers/styles/src/lib/variables' as vars;
 
 .base-table-container {
+  .no-results {
+    color: #a6a6a6;
+    text-align: center;
+    padding: 15px 20px 20px;
+  }
+
+  .p-datatable-tbody {
+    td {
+      height: 56px !important;
+      padding-top: 4px !important;
+      padding-bottom: 4px !important;
+      vertical-align: middle;
+    }
+  }
+
+  .p-datatable-thead,
+  .p-datatable-tbody {
+    td {
+      &.primary {
+        width: 300px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+      }
+    }
+  }
+
   .comparison-tool-paginator {
     display: block;
     padding: 20px 30px;

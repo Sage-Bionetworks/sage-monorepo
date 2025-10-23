@@ -20,7 +20,10 @@ const meta: Meta<BaseTableComponent> = {
       providers: [
         provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
-        ...provideComparisonToolService({ configs: mockComparisonToolDataConfig }),
+        ...provideComparisonToolService({
+          configs: mockComparisonToolDataConfig,
+          pinnedItems: ['3xTg-AD', 'APOE4'],
+        }),
         ...provideComparisonToolFilterService({
           significanceThresholdActive: false,
           significanceThreshold: 0.05,
@@ -36,5 +39,13 @@ export const Demo: Story = {
   args: {
     data: mockComparisonToolData,
     shouldPaginate: true,
+  },
+};
+
+export const NoData: Story = {
+  args: {
+    data: [],
+    shouldPaginate: true,
+    shouldShowNoDataMessage: true,
   },
 };

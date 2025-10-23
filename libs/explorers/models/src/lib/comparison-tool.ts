@@ -21,20 +21,22 @@ export type ComparisonToolConfigColumnType =
   | 'text'
   | 'heat_map'
   | 'link_internal'
-  | 'link_external';
+  | 'link_external'
+  | 'primary';
 export const ComparisonToolConfigColumnTypeEnum = {
   Text: 'text' as ComparisonToolConfigColumnType,
   HeatMap: 'heat_map' as ComparisonToolConfigColumnType,
   LinkInternal: 'link_internal' as ComparisonToolConfigColumnType,
   LinkExternal: 'link_external' as ComparisonToolConfigColumnType,
+  Primary: 'primary' as ComparisonToolConfigColumnType,
 } as const;
 
 export interface ComparisonToolConfigColumn {
-  name: string;
-  field: string;
+  name?: string;
   type: ComparisonToolConfigColumnType;
-  tooltip: string;
-  sort_tooltip: string;
+  column_key: string;
+  tooltip?: string;
+  sort_tooltip?: string;
   link_text?: string;
   link_url?: string;
 }

@@ -16,11 +16,15 @@ export class ComparisonToolService {
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly selectorsWikiParamsSignal = signal<Record<string, SynapseWikiParams>>({});
+  private readonly maxPinnedItemsSignal = signal<number>(50);
+  private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
 
   readonly configs = this.configsSignal.asReadonly();
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
   readonly selectorsWikiParams = this.selectorsWikiParamsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
+  readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
+  readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -46,26 +50,18 @@ export class ComparisonToolService {
     return prefixMatch ?? configs[0];
   });
 
-  readonly columns: Signal<string[]> = computed(() => {
-    const config = this.currentConfig();
-    if (!config) {
-      return [];
-    }
-
-    if (!config.columns || config.columns.length === 0) {
-      throw new Error(
-        'Missing comparison tool config data: "columns" property is undefined or empty.',
-      );
-    }
-
-    return config.columns.map((column) => column.name);
-  });
-
   totalResultsCount = signal<number>(0);
-  pinnedResultsCount = signal<number>(0);
+  pinnedResultsCount = computed(() => this.pinnedItemsSignal().size);
+  hasMaxPinnedItems = computed(() => {
+    return this.pinnedResultsCount() >= this.maxPinnedItems();
+  });
 
   setLegendVisibility(visible: boolean) {
     this.isLegendVisibleSignal.set(visible);
+  }
+
+  setMaxPinnedItems(count: number) {
+    this.maxPinnedItemsSignal.set(count);
   }
 
   toggleLegend() {
@@ -79,7 +75,7 @@ export class ComparisonToolService {
   ) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
-    this.pinnedResultsCount.set(0);
+    this.pinnedItemsSignal.set(new Set());
     this.setSelectorsWikiParams(selectorsWikiParams);
 
     if (!configs?.length) {
@@ -105,6 +101,42 @@ export class ComparisonToolService {
 
   setSelectorsWikiParams(params: Record<string, SynapseWikiParams>) {
     this.selectorsWikiParamsSignal.set(params ?? {});
+  }
+
+  isPinned(id: string): boolean {
+    return this.pinnedItemsSignal().has(id);
+  }
+
+  togglePin(id: string) {
+    this.pinnedItemsSignal.update((pinnedItems) => {
+      const newSet = new Set(pinnedItems);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  }
+
+  pinItem(id: string) {
+    this.pinnedItemsSignal.update((pinnedItems) => {
+      const newSet = new Set(pinnedItems);
+      newSet.add(id);
+      return newSet;
+    });
+  }
+
+  unpinItem(id: string) {
+    this.pinnedItemsSignal.update((pinnedItems) => {
+      const newSet = new Set(pinnedItems);
+      newSet.delete(id);
+      return newSet;
+    });
+  }
+
+  setPinnedItems(items: string[]) {
+    this.pinnedItemsSignal.set(new Set(items));
   }
 
   private updateDropdownSelectionIfChanged(selection: string[]) {
