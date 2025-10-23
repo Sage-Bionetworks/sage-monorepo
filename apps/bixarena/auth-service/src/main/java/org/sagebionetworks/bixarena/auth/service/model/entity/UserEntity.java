@@ -12,7 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "app_user", schema = "auth")
+@Table(name = "user", schema = "auth")
 @Getter
 @Setter
 @Builder
@@ -52,6 +52,9 @@ public class UserEntity {
   @UpdateTimestamp
   @Column(name = "updated_at", nullable = false)
   private OffsetDateTime updatedAt;
+
+  @Column(name = "last_login_at")
+  private OffsetDateTime lastLoginAt;
 
   public enum Role {
     admin,

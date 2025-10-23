@@ -1,5 +1,5 @@
 <div class="base-table-container">
-  @let pagination = shouldPaginate() ? paginationConfig : null;
+  @let pagination = shouldPaginate() && data().length !== 0 ? paginationConfig : null;
   <p-table
     #table
     [value]="data()"
@@ -15,13 +15,25 @@
     [currentPageReportTemplate]="pagination?.currentPageReportTemplate ?? ''"
     [showPageLinks]="pagination?.showPageLinks ?? null"
   >
+    <ng-template pTemplate="emptymessage" let-rowData>
+      @if (shouldShowNoDataMessage()) {
+        <div class="no-results">No results found...</div>
+      }
+    </ng-template>
+
     <ng-template pTemplate="body" let-rowData>
       <tr>
         @for (columnConfig of currentConfig()?.columns; track columnConfig) {
-          <td [style]="{ width: columnWidth }">
-            @let columnType = columnConfig.type;
-            @let cellData = rowData[columnConfig.field];
-            <!-- TODO: add primary identifier column (MG-431) -->
+          @let columnType = columnConfig.type;
+          @let cellData = rowData[columnConfig.column_key];
+          <td [style]="{ width: columnWidth }" [class]="columnType">
+            @if (columnType === 'primary') {
+              <explorers-primary-identifier-controls
+                [id]="cellData"
+                [viewDetailsTooltip]="viewDetailsTooltip()"
+                (viewDetailsEvent)="viewDetailsEvent.emit($event)"
+              />
+            }
             @if (columnType === 'heat_map') {
               <explorers-heatmap-circle [data]="cellData" />
             }

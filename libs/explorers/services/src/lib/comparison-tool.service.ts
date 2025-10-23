@@ -20,12 +20,16 @@ export class ComparisonToolService {
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly selectorsWikiParamsSignal = signal<Record<string, SynapseWikiParams>>({});
+  private readonly maxPinnedItemsSignal = signal<number>(50);
+  private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
   private readonly columnsForAllPagesSignal = signal<ComparisonToolColumns[]>([]);
 
   readonly configs = this.configsSignal.asReadonly();
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
   readonly selectorsWikiParams = this.selectorsWikiParamsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
+  readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
+  readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -69,10 +73,17 @@ export class ComparisonToolService {
   }
 
   totalResultsCount = signal<number>(0);
-  pinnedResultsCount = signal<number>(0);
+  pinnedResultsCount = computed(() => this.pinnedItemsSignal().size);
+  hasMaxPinnedItems = computed(() => {
+    return this.pinnedResultsCount() >= this.maxPinnedItems();
+  });
 
   setLegendVisibility(visible: boolean) {
     this.isLegendVisibleSignal.set(visible);
+  }
+
+  setMaxPinnedItems(count: number) {
+    this.maxPinnedItemsSignal.set(count);
   }
 
   toggleLegend() {
@@ -86,7 +97,7 @@ export class ComparisonToolService {
   ) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
-    this.pinnedResultsCount.set(0);
+    this.pinnedItemsSignal.set(new Set());
     this.setSelectorsWikiParams(selectorsWikiParams);
 
     if (!configs?.length) {
@@ -101,10 +112,12 @@ export class ComparisonToolService {
     const columnsData: ComparisonToolColumns[] = this.configs().map((config) => ({
       page: config.page,
       dropdowns: config.dropdowns,
-      columns: config.columns.map((column) => ({
-        name: column.name,
-        selected: true,
-      })),
+      columns: config.columns
+        .filter((column) => column.name !== undefined)
+        .map((column) => ({
+          name: column.name as string,
+          selected: true,
+        })),
     }));
     this.columnsForAllPagesSignal.set(columnsData);
   }
@@ -140,10 +153,12 @@ export class ComparisonToolService {
         const newPageData: ComparisonToolColumns = {
           page: currentPage,
           dropdowns: currentDropdowns,
-          columns: config.columns.map((column) => ({
-            name: column.name,
-            selected: true,
-          })),
+          columns: config.columns
+            .filter((column) => column.name !== undefined)
+            .map((column) => ({
+              name: column.name as string,
+              selected: true,
+            })),
         };
 
         return [...columnsData, newPageData];
@@ -153,6 +168,42 @@ export class ComparisonToolService {
 
   setSelectorsWikiParams(params: Record<string, SynapseWikiParams>) {
     this.selectorsWikiParamsSignal.set(params ?? {});
+  }
+
+  isPinned(id: string): boolean {
+    return this.pinnedItemsSignal().has(id);
+  }
+
+  togglePin(id: string) {
+    this.pinnedItemsSignal.update((pinnedItems) => {
+      const newSet = new Set(pinnedItems);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  }
+
+  pinItem(id: string) {
+    this.pinnedItemsSignal.update((pinnedItems) => {
+      const newSet = new Set(pinnedItems);
+      newSet.add(id);
+      return newSet;
+    });
+  }
+
+  unpinItem(id: string) {
+    this.pinnedItemsSignal.update((pinnedItems) => {
+      const newSet = new Set(pinnedItems);
+      newSet.delete(id);
+      return newSet;
+    });
+  }
+
+  setPinnedItems(items: string[]) {
+    this.pinnedItemsSignal.set(new Set(items));
   }
 
   toggleColumn(column: ComparisonToolColumn) {

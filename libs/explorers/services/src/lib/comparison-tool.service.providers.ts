@@ -6,9 +6,10 @@ export type ComparisonToolServiceOptions = {
   configs?: ComparisonToolConfig[];
   selection?: string[];
   totalResultsCount?: number;
-  pinnedResultsCount?: number;
   legendVisible?: boolean;
   selectorsWikiParams?: Record<string, SynapseWikiParams>;
+  maxPinnedItems?: number;
+  pinnedItems?: string[];
 };
 
 export const provideComparisonToolService = (
@@ -38,12 +39,16 @@ export const provideComparisonToolService = (
           service.totalResultsCount.set(options.totalResultsCount);
         }
 
-        if (options.pinnedResultsCount !== undefined) {
-          service.pinnedResultsCount.set(options.pinnedResultsCount);
-        }
-
         if (options.legendVisible !== undefined) {
           service.setLegendVisibility(options.legendVisible);
+        }
+
+        if (options.maxPinnedItems !== undefined) {
+          service.setMaxPinnedItems(options.maxPinnedItems);
+        }
+
+        if (options.pinnedItems !== undefined) {
+          service.setPinnedItems(options.pinnedItems);
         }
 
         return service;

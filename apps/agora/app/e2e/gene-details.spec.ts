@@ -42,6 +42,7 @@ test.describe('gene details', () => {
 
     const responsePromise = page.waitForResponse(`**/genes/search/enhanced?q=${gene2.id}`);
     const searchInput = page.getByRole('textbox', { name: 'Search genes' });
+    await expect(searchInput).toBeEnabled();
     await searchInput.pressSequentially(gene2.id);
     await expect(searchInput).toHaveValue(gene2.id);
     await responsePromise;
