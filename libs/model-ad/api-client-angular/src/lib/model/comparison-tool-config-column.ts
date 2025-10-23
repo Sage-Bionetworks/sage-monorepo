@@ -14,11 +14,11 @@ export interface ComparisonToolConfigColumn {
    */
   name?: string;
   /**
-   * The data type of the column. Must be \'text\', \'heat_map\', \'link_internal\', \'link_external\', or \'primary\'.
+   * The data type of the column. Must be \'text\', \'heat_map\', \'link_internal\', \'link_external\', or \'primary\', where \'primary\' is the primary key column that uniquely identifies each record in the table.
    */
   type: ComparisonToolConfigColumn.TypeEnum;
   /**
-   * The data key associated with the column.
+   * The key used to retrieve data for this column from the data source.
    */
   column_key: string;
   /**
