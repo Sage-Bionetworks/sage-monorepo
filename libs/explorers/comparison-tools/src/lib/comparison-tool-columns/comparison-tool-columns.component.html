@@ -8,25 +8,28 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th></th>
       @let columns = currentConfig()?.columns || [];
       @for (column of columns; track column) {
-        <th [pSortableColumn]="column.column_key" [style]="{ width: columnWidth }">
-          <div class="column-header">
-            <div class="column-header-text">
-              <span [pTooltip]="column.tooltip" tooltipPosition="top">
-                {{ column.name }}
-              </span>
+        @if (column.type === 'primary') {
+          <th></th>
+        } @else {
+          <th [pSortableColumn]="column.column_key" [style]="{ width: columnWidth }">
+            <div class="column-header">
+              <div class="column-header-text">
+                <span [pTooltip]="column.tooltip" tooltipPosition="top">
+                  {{ column.name }}
+                </span>
+              </div>
+              <div class="column-header-sort">
+                <p-sortIcon
+                  [field]="column.column_key"
+                  [pTooltip]="column.sort_tooltip"
+                  tooltipPosition="top"
+                />
+              </div>
             </div>
-            <div class="column-header-sort">
-              <p-sortIcon
-                [field]="column.column_key"
-                [pTooltip]="column.sort_tooltip"
-                tooltipPosition="top"
-              />
-            </div>
-          </div>
-        </th>
+          </th>
+        }
       }
     </tr>
   </ng-template>
