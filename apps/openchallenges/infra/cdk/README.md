@@ -243,6 +243,12 @@ This phase deploys the core networking infrastructure and application load balan
   - Private subnets (/24): For ECS tasks and backend services
   - DNS support: Enabled
 
+> [!NOTE]
+> It is important that every VPC CIDR be a unique value within our AWS organization. That will allow
+> us to easily setup private access via VPN and cross account VPC routing if needed. Check our
+> [wiki](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/2850586648/Setup+AWS+VPC) for
+> information on how to obtain a unique CIDR.
+
 - **NAT Gateway Configuration** (Environment-Specific):
 
   - **Development**: 1 NAT Gateway
@@ -287,62 +293,6 @@ This phase deploys the core networking infrastructure and application load balan
 - `LoadBalancerArn`: ARN of the Application Load Balancer
 - `LoadBalancerDnsName`: DNS name to access the ALB
 - `HealthCheckUrl`: Full URL to the health check endpoint
-
-### Environment Configuration
-
-Add these optional variables to your `.env` files:
-
-```bash
-# Optional: Customize VPC CIDR block (default: 10.0.0.0/16)
-VPC_CIDR=10.0.0.0/16
-
-# Optional: Number of Availability Zones (default: 2)
-# Stage/prod environments use one NAT Gateway per AZ for high availability
-# Dev always uses 1 NAT Gateway regardless of this setting
-MAX_AZS=2
-
-# Optional: Enable HTTPS with ACM certificate
-# When set, ALB will listen on port 443 and redirect HTTP to HTTPS
-CERTIFICATE_ARN=arn:aws:acm:region:account:certificate/xxxxxxxxx
-```
-
-**Development**: HTTPS is optional. Without a certificate, the ALB will only listen on port 80 (HTTP).
-
-**Production**: HTTPS should be enabled for security. Set `CERTIFICATE_ARN` to your ACM certificate.
-
-### Cost Estimates
-
-Monthly costs for the networking and ALB infrastructure by environment:
-
-#### Development Environment
-
-| Resource                  | Cost              | Details                                           |
-| ------------------------- | ----------------- | ------------------------------------------------- |
-| VPC                       | $0                | No charge for VPC itself                          |
-| NAT Gateway (1)           | ~$32.50           | $0.045/hour (~$32.40) + data transfer (~$0.10/GB) |
-| Application Load Balancer | ~$18              | $0.0225/hour (~$16.20) + LCU charges (~$1.80)     |
-| S3 Bucket (from Phase 0)  | <$1               | Minimal storage and requests                      |
-| **Total**                 | **~$51.50/month** | Estimated for dev environment with low traffic    |
-
-#### Stage/Production Environments
-
-| Resource                  | Cost                | Details                                                  |
-| ------------------------- | ------------------- | -------------------------------------------------------- |
-| VPC                       | $0                  | No charge for VPC itself                                 |
-| NAT Gateways              | ~$32.50 × N AZs     | Default: 2 AZs = ~$65/month; scales with MAX_AZS setting |
-| Application Load Balancer | ~$25-50             | Higher traffic = higher LCU charges                      |
-| S3 Bucket (from Phase 0)  | $1-5                | More storage and requests                                |
-| **Total (2 AZs)**         | **~$91-120/month**  | Estimated for stage/prod with moderate traffic           |
-| **Total (3 AZs)**         | **~$124-153/month** | Add ~$32.50/month for each additional AZ                 |
-
-**Notes**:
-
-- NAT Gateway data transfer charges vary based on usage (estimated at ~2GB/month for dev, higher for stage/prod)
-- ALB LCU (Load Balancer Capacity Unit) charges scale with traffic, connections, and rule evaluations
-- Production costs can be higher depending on actual traffic patterns
-- Stage/prod environments use one NAT Gateway per Availability Zone (configurable via `MAX_AZS`)
-- Each additional AZ adds approximately $32.50/month in NAT Gateway costs
-- These estimates do NOT include future ECS services, databases, or other resources
 
 ### Architecture Notes
 

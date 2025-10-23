@@ -96,17 +96,6 @@ aws ec2 delete-security-group --group-id sg-xxxxx
 nx destroy openchallenges-infra-cdk:dev --force
 ```
 
-## Stack Deletion Order
-
-The CDK respects stack dependencies and destroys in this order:
-
-1. `app-service` - Stops ECS tasks, removes ENIs
-2. `alb` - Deletes load balancer, removes ALB ENIs
-3. `ecs-cluster` - Deletes ECS cluster
-4. `vpc` - Deletes VPC endpoint, security groups, subnets, VPC
-
-Always use `nx destroy` rather than manually deleting in the CloudFormation console to ensure proper ordering.
-
 ## Related AWS Documentation
 
 - [GuardDuty Runtime Monitoring for ECS](https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecs.html)
