@@ -22,6 +22,7 @@
       type="text"
       (focus)="onFocus()"
       [(ngModel)]="query"
+      [disabled]="!isBrowser()"
     />
     @if (query) {
       <div class="search-bar-close">
