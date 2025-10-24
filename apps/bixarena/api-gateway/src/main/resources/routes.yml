@@ -24,7 +24,7 @@ app:
       audience: 'urn:bixarena:api'
       anonymousAccess: true
     - method: 'GET'
-      path: '/api/v1/leaderboards'
+      path: '/leaderboards'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
     - method: 'GET'
