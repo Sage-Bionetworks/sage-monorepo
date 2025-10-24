@@ -426,8 +426,9 @@ def build_side_by_side_ui_anony():
                     <div id="disclaimer-text">
                         <div class="pulse-dot"></div>
                         <span>
-                            AI may make mistakes. Please don't include private or
-                            sensitive information in your prompts.
+                            AI may make mistakes. Don't include private or 
+                            sensitive information in your prompts, 
+                            and please verify responses. 
                         </span>
                     </div>
                 </div>
