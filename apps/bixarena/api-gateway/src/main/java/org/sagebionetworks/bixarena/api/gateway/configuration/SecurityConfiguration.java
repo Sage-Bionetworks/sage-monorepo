@@ -27,17 +27,22 @@ public class SecurityConfiguration {
     // Dynamically collect all anonymous endpoints from the route config registry
     var anonymousPaths = routeConfigRegistry.getAnonymousPaths();
 
-    return http
+    http
       .csrf(ServerHttpSecurity.CsrfSpec::disable)
-      .authorizeExchange(ex ->
-        ex
-          .pathMatchers("/actuator/health", "/actuator/metrics")
-          .permitAll()
-          .pathMatchers(anonymousPaths)
-          .permitAll()
-          .anyExchange()
-          .authenticated()
-      )
-      .build();
+      // .oauth2ResourceServer(ServerHttpSecurity.OAuth2ResourceServerSpec::jwt) // enable if you use JWT
+      .authorizeExchange(exchanges -> {
+        // Always allow actuator probes
+        exchanges.pathMatchers("/actuator/health", "/actuator/metrics").permitAll();
+
+        // Guard: only register matchers when there's at least one
+        if (anonymousPaths.length > 0) {
+          exchanges.pathMatchers(anonymousPaths).permitAll();
+        }
+
+        // Everything else requires auth
+        exchanges.anyExchange().authenticated();
+      });
+
+    return http.build();
   }
 }
