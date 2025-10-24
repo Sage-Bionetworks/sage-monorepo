@@ -13,3 +13,4 @@ servers:
   - url: http://localhost
 paths: {}
 components: {}
+x-oauth2-audience: urn:bixarena:ai

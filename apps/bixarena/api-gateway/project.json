@@ -49,8 +49,10 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "./gradlew :{projectName}:generateRouteConfig"
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
-  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"]
+  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
+  "implicitDependencies": ["bixarena-api-description"]
 }

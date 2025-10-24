@@ -46,6 +46,14 @@ public final class OpenApiRouteConfigGenerator {
   /** Path prefix to prepend to each OpenAPI path (if your gateway mounts services at a versioned prefix). */
   private static final String DEFAULT_API_PREFIX = "";
 
+  /** Map audience to path prefix. */
+  private static final Map<String, String> AUDIENCE_PREFIX_MAP = Map.of(
+    "urn:bixarena:api",
+    "/api/v1",
+    "urn:bixarena:auth",
+    ""
+  );
+
   /** Default output location for the generated YAML. */
   private static final String DEFAULT_OUTPUT_PATH = "src/main/resources/routes.yml";
 
@@ -159,9 +167,15 @@ public final class OpenApiRouteConfigGenerator {
             String audience = extractAudience(operation);
             if (audience == null) audience = globalAudience;
 
+            // Fix: avoid passing null as key to getOrDefault
+            String prefix = AUDIENCE_PREFIX_MAP.getOrDefault(
+              audience != null ? audience : "",
+              DEFAULT_API_PREFIX
+            );
+
             // We include a route if any of the fields matter to the gateway.
             if (audience != null || anonymousAccess) {
-              String normalizedPath = normalizePath(DEFAULT_API_PREFIX + rawPath);
+              String normalizedPath = normalizePath(prefix + rawPath);
               RouteSpec entry = new RouteSpec(method, normalizedPath, audience, anonymousAccess);
               out.add(entry);
             }
