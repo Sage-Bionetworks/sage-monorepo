@@ -1,5 +1,5 @@
 import { Component, Renderer2, inject } from '@angular/core';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { getSeoData } from './about-seo-data';
 import { SeoService } from '@sagebionetworks/shared/util';
@@ -22,11 +22,11 @@ export class AboutComponent {
   private renderer2 = inject(Renderer2);
 
   constructor() {
-    this.appVersion = this.configService.config.appVersion;
-    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
-    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
-    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
-    this.apiDocsUrl = this.configService.config.apiDocsUrl;
+    this.appVersion = this.configService.config.app.version;
+    this.dataUpdatedOn = this.configService.config.data.updatedOn;
+    this.privacyPolicyUrl = this.configService.config.links.privacyPolicy;
+    this.termsOfUseUrl = this.configService.config.links.termsOfUse;
+    this.apiDocsUrl = this.configService.config.api.docsUrl;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 }

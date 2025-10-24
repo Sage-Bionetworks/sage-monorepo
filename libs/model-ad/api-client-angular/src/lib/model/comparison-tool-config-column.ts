@@ -12,23 +12,23 @@ export interface ComparisonToolConfigColumn {
   /**
    * The display name of the column.
    */
-  name: string;
+  name?: string;
   /**
-   * The data field associated with the column.
-   */
-  field: string;
-  /**
-   * The data type of the column. Must be \'text\', \'heat_map\', \'link_internal\', or \'link_external\'.
+   * The data type of the column. Must be \'text\', \'heat_map\', \'link_internal\', \'link_external\', or \'primary\', where \'primary\' is the primary key column that uniquely identifies each record in the table.
    */
   type: ComparisonToolConfigColumn.TypeEnum;
   /**
+   * The key used to retrieve data for this column from the data source.
+   */
+  column_key: string;
+  /**
    * Tooltip text for the column.
    */
-  tooltip: string;
+  tooltip?: string;
   /**
    * Tooltip text for the column\'s sort functionality.
    */
-  sort_tooltip: string;
+  sort_tooltip?: string;
   /**
    * The default text for a link in this column.
    */
@@ -39,11 +39,12 @@ export interface ComparisonToolConfigColumn {
   link_url?: string;
 }
 export namespace ComparisonToolConfigColumn {
-  export type TypeEnum = 'text' | 'heat_map' | 'link_internal' | 'link_external';
+  export type TypeEnum = 'text' | 'heat_map' | 'link_internal' | 'link_external' | 'primary';
   export const TypeEnum = {
     Text: 'text' as TypeEnum,
     HeatMap: 'heat_map' as TypeEnum,
     LinkInternal: 'link_internal' as TypeEnum,
     LinkExternal: 'link_external' as TypeEnum,
+    Primary: 'primary' as TypeEnum,
   };
 }

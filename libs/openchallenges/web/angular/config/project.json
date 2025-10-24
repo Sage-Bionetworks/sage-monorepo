@@ -1,0 +1,21 @@
+{
+  "name": "openchallenges-web-angular-config",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/web/angular/config/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:openchallenges", "layer:web", "tech:angular", "type:util"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/openchallenges/web/angular/config/jest.config.ts",
+        "tsConfig": "libs/openchallenges/web/angular/config/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

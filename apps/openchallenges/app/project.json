@@ -29,7 +29,11 @@
         "tsConfig": "apps/openchallenges/app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          "apps/openchallenges/app/src/config",
+          {
+            "input": "apps/openchallenges/app/src/config",
+            "glob": "**/*.yaml",
+            "output": "config"
+          },
           "apps/openchallenges/app/src/humans.txt",
           "apps/openchallenges/app/src/robots.txt",
           {
@@ -63,7 +67,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1.5mb"
+              "maximumError": "2.0mb"
             },
             {
               "type": "anyComponentStyle",

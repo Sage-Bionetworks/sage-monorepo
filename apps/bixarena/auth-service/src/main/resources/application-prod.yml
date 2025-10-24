@@ -1,0 +1,11 @@
+# Production profile configuration
+spring:
+  jpa:
+    show-sql: false
+  flyway:
+    enabled: false
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: WARN
+    org.springframework.security: WARN

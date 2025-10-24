@@ -1,0 +1,2 @@
+# Production-specific configuration
+# Applied when ENVIRONMENT=prod or NODE_ENV=production

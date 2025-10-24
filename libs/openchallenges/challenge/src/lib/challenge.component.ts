@@ -15,7 +15,7 @@ import {
 import { Tab } from './tab.model';
 import { CHALLENGE_TABS } from './challenge-tabs';
 import { Avatar, AvatarComponent, FooterComponent } from '@sagebionetworks/openchallenges/ui';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
@@ -72,11 +72,11 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
 
   constructor() {
-    this.appVersion = this.configService.config.appVersion;
-    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
-    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
-    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
-    this.apiDocsUrl = this.configService.config.apiDocsUrl;
+    this.appVersion = this.configService.config.app.version;
+    this.dataUpdatedOn = this.configService.config.data.updatedOn;
+    this.privacyPolicyUrl = this.configService.config.links.privacyPolicy;
+    this.termsOfUseUrl = this.configService.config.links.termsOfUse;
+    this.apiDocsUrl = this.configService.config.api.docsUrl;
   }
 
   ngOnInit(): void {

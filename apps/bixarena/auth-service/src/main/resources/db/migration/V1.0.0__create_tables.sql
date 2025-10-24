@@ -1,5 +1,5 @@
--- Create app_user table
-CREATE TABLE auth.app_user (
+-- Create user table
+CREATE TABLE auth.user (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   username VARCHAR(255) UNIQUE NOT NULL,
   email VARCHAR(255) UNIQUE,
@@ -8,19 +8,23 @@ CREATE TABLE auth.app_user (
   role VARCHAR(50) NOT NULL DEFAULT 'user',
   enabled BOOLEAN NOT NULL DEFAULT true,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  last_login_at TIMESTAMP WITH TIME ZONE
 );
 
+COMMENT ON COLUMN auth.user.last_login_at IS 'Timestamp of the user''s most recent successful login';
+
 -- Create indexes for better performance
-CREATE INDEX idx_auth_app_user_username ON auth.app_user(username);
-CREATE INDEX idx_auth_app_user_email ON auth.app_user(email) WHERE email IS NOT NULL;
-CREATE INDEX idx_auth_app_user_first_name ON auth.app_user(first_name) WHERE first_name IS NOT NULL;
-CREATE INDEX idx_auth_app_user_last_name ON auth.app_user(last_name) WHERE last_name IS NOT NULL;
+CREATE INDEX idx_auth_user_username ON auth.user(username);
+CREATE INDEX idx_auth_user_email ON auth.user(email) WHERE email IS NOT NULL;
+CREATE INDEX idx_auth_user_first_name ON auth.user(first_name) WHERE first_name IS NOT NULL;
+CREATE INDEX idx_auth_user_last_name ON auth.user(last_name) WHERE last_name IS NOT NULL;
+CREATE INDEX idx_auth_user_last_login_at ON auth.user(last_login_at) WHERE last_login_at IS NOT NULL;
 
 -- Create external_account table for OAuth2 provider linking
 CREATE TABLE auth.external_account (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES auth.app_user(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES auth.user(id) ON DELETE CASCADE,
     provider VARCHAR(50) NOT NULL,  -- 'synapse'
     external_id VARCHAR(255) NOT NULL,  -- provider's user ID
     external_username VARCHAR(255),  -- provider's username/login
@@ -50,5 +54,5 @@ END;
 $$ language 'plpgsql';
 
 -- Add triggers for updated_at columns
-CREATE TRIGGER update_app_user_updated_at BEFORE UPDATE ON auth.app_user FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_user_updated_at BEFORE UPDATE ON auth.user FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_external_account_updated_at BEFORE UPDATE ON auth.external_account FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

@@ -1,0 +1,21 @@
+{
+  "name": "platform-config-angular",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/platform/config/angular/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:global", "layer:platform", "tech:angular", "type:util"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/platform/config/angular/jest.config.ts",
+        "tsConfig": "libs/platform/config/angular/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

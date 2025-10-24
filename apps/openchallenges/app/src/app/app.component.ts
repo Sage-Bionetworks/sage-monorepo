@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { HomeDataService } from '@sagebionetworks/openchallenges/home';
 import {
   Avatar,
@@ -11,12 +11,7 @@ import {
   USER_MENU_ITEMS,
 } from '@sagebionetworks/openchallenges/ui';
 import { PageTitleService } from '@sagebionetworks/openchallenges/util';
-import {
-  CONFIG_SERVICE_TOKEN,
-  createGoogleTagManagerIdProvider,
-  GoogleTagManagerComponent,
-  isGoogleTagManagerIdSet,
-} from '@sagebionetworks/shared/google-tag-manager';
+import { GtmComponent } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import { Subscription } from 'rxjs';
 import { APP_SECTIONS } from './app-sections';
 
@@ -24,14 +19,7 @@ import { APP_SECTIONS } from './app-sections';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [NavbarComponent, RouterOutlet, GoogleTagManagerComponent],
-  providers: [
-    {
-      provide: CONFIG_SERVICE_TOKEN,
-      useFactory: () => CONFIG_SERVICE_TOKEN,
-    },
-    createGoogleTagManagerIdProvider(),
-  ],
+  imports: [NavbarComponent, RouterOutlet, GtmComponent],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'OpenChallenges';
@@ -48,9 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private configService = inject(ConfigService);
 
   constructor() {
-    this.useGoogleTagManager = isGoogleTagManagerIdSet(
-      this.configService.config.googleTagManagerId,
-    );
+    this.useGoogleTagManager = this.configService.config.analytics.googleTagManager.enabled;
   }
 
   ngOnInit() {

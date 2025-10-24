@@ -1,12 +1,15 @@
+import { isPlatformServer } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  computed,
   DestroyRef,
   ElementRef,
   HostListener,
   inject,
   input,
   output,
+  PLATFORM_ID,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
 import { SearchResult } from '@sagebionetworks/explorers/models';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import {
@@ -28,7 +32,6 @@ import {
 } from 'rxjs';
 import sanitizeHtml from 'sanitize-html';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
-import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
 
 @Component({
   selector: 'explorers-search-input',
@@ -38,6 +41,7 @@ import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
   standalone: true,
 })
 export class SearchInputComponent implements AfterViewInit {
+  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
   router = inject(Router);
   elementRef = inject(ElementRef);
   destroyRef = inject(DestroyRef);
@@ -90,6 +94,10 @@ export class SearchInputComponent implements AfterViewInit {
 
   root = viewChild.required<ElementRef>('root');
   input = viewChild.required<ElementRef<HTMLInputElement>>('input');
+
+  isServer = computed(() => {
+    return isPlatformServer(this.platformId);
+  });
 
   @HostListener('document:click', ['$event'])
   onClick(event: Event) {

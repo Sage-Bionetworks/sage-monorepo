@@ -1,0 +1,2 @@
+# Test environment overrides
+# Applied when NODE_ENV=test or ENVIRONMENT=test

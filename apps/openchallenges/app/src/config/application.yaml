@@ -1,0 +1,38 @@
+# Base configuration for OpenChallenges App
+# This file contains default values that can be overridden by:
+# 1. Profile-specific files (e.g., application-prod.yaml, application-dev.yaml)
+# 2. Local overrides (application-local.yaml - gitignored)
+# 3. Environment variables following the pattern: SECTION_SUBSECTION_PROPERTY
+#    Examples: APP_VERSION, TELEMETRY_ENABLED, ANALYTICS_GOOGLETAGMANAGER_ENABLED
+
+app:
+  version: 1.3.9
+
+telemetry:
+  enabled: false
+
+api:
+  baseUrls:
+    csr: http://localhost:8000/api/v1
+    ssr: http://openchallenges-apex:8000/api/v1
+  docsUrl: http://localhost:8000/api-docs
+
+environment: dev
+
+data:
+  updatedOn: '2025-10-19'
+
+features:
+  announcement:
+    enabled: false
+  operationFilter:
+    enabled: false
+
+analytics:
+  googleTagManager:
+    enabled: true
+    id: 'GTM-NBR5XD8C'
+
+links:
+  privacyPolicy: https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948530178/OpenChallenges+Privacy+Policy
+  termsOfUse: https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948333575/OpenChallenges+Terms+of+Use

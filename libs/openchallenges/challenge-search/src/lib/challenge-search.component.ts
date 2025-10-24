@@ -19,7 +19,7 @@ import {
   ChallengeSubmissionType,
   EdamSection,
 } from '@sagebionetworks/openchallenges/api-client';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import {
   ChallengeCardComponent,
   CheckboxFilterComponent,
@@ -188,12 +188,12 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   };
 
   constructor() {
-    this.appVersion = this.configService.config.appVersion;
-    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
-    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
-    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
-    this.apiDocsUrl = this.configService.config.apiDocsUrl;
-    this.enableOperationFilter = this.configService.config.enableOperationFilter;
+    this.appVersion = this.configService.config.app.version;
+    this.dataUpdatedOn = this.configService.config.data.updatedOn;
+    this.privacyPolicyUrl = this.configService.config.links.privacyPolicy;
+    this.termsOfUseUrl = this.configService.config.links.termsOfUse;
+    this.apiDocsUrl = this.configService.config.api.docsUrl;
+    this.enableOperationFilter = this.configService.config.features.operationFilter.enabled;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 

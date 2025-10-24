@@ -1,5 +1,5 @@
 import { Component, inject, Renderer2 } from '@angular/core';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { ChallengeHostListComponent } from './challenge-host-list/challenge-host-list.component';
@@ -41,12 +41,12 @@ export class HomeComponent {
   public showAnnouncement: boolean;
 
   constructor() {
-    this.appVersion = this.configService.config.appVersion;
-    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
-    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
-    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
-    this.apiDocsUrl = this.configService.config.apiDocsUrl;
-    this.showAnnouncement = this.configService.config.showAnnouncement;
+    this.appVersion = this.configService.config.app.version;
+    this.dataUpdatedOn = this.configService.config.data.updatedOn;
+    this.privacyPolicyUrl = this.configService.config.links.privacyPolicy;
+    this.termsOfUseUrl = this.configService.config.links.termsOfUse;
+    this.apiDocsUrl = this.configService.config.api.docsUrl;
+    this.showAnnouncement = this.configService.config.features.announcement.enabled;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 }
