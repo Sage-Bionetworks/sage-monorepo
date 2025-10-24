@@ -1,5 +1,5 @@
 app:
-  welcome-message: 'Welcome to BixArena API Gateway!'
+  welcome-message: 'Welcome to BixArena API Gateway'
 
 server:
   port: 8113
@@ -51,11 +51,17 @@ spring:
             - id: bixarena-api
               uri: http://bixarena-api:8112
               predicates:
-                - Path=/api/v1/leaderboards/**
+                - Path=/api/v1/**
               filters:
                 - StripPrefix=1
+            - id: bixarena-auth-service
+              uri: http://bixarena-auth-service:8115
+              predicates:
+                - Path=/auth/**
   profiles:
     active: dev
+  config:
+    import: 'classpath:routes.yml'
 
 logging:
   level:
