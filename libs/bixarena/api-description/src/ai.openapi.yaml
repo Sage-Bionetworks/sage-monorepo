@@ -16,6 +16,9 @@ x-oauth2-audience: 'urn:bixarena:ai'
 servers:
   - url: http://localhost
 
+security:
+  - jwtBearer: []
+
 tags:
   - name: Health Check
     description: Operations about health checks

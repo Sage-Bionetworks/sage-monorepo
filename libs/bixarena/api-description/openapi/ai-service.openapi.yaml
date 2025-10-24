@@ -11,6 +11,8 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
 servers:
   - url: http://localhost
+security:
+  - jwtBearer: []
 tags:
   - name: Health Check
     description: Operations about health checks
@@ -18,6 +20,7 @@ tags:
 paths:
   /health-check:
     get:
+      x-anonymous-access: true
       x-sage-internal: true
       tags:
         - Health Check

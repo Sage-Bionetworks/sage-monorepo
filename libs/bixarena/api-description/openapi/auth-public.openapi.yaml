@@ -19,6 +19,7 @@ tags:
 paths:
   /auth/login:
     get:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: Start Synapse OIDC authorization code flow
@@ -34,6 +35,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
   /auth/callback:
     get:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: OIDC redirect callback
@@ -68,6 +70,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /auth/logout:
     post:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: Logout current session
@@ -80,6 +83,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /oauth2/token:
     post:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: Mint short-lived internal JWT
@@ -131,6 +135,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /.well-known/jwks.json:
     get:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: JSON Web Key Set

@@ -3,18 +3,22 @@ app:
     - method: 'DELETE'
       path: '/api/v1/battles/{battleId}'
       audience: 'urn:bixarena:api'
+      anonymousAccess: true
     - method: 'GET'
       path: '/.well-known/jwks.json'
       audience: 'urn:bixarena:auth'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/admin/stats'
       audience: 'urn:bixarena:api'
     - method: 'GET'
       path: '/api/v1/battles'
       audience: 'urn:bixarena:api'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/battles/{battleId}'
       audience: 'urn:bixarena:api'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/example-prompts'
       audience: 'urn:bixarena:api'
@@ -42,12 +46,15 @@ app:
     - method: 'GET'
       path: '/auth/callback'
       audience: 'urn:bixarena:auth'
+      anonymousAccess: true
     - method: 'GET'
       path: '/auth/login'
       audience: 'urn:bixarena:auth'
+      anonymousAccess: true
     - method: 'GET'
       path: '/health-check'
       audience: 'urn:bixarena:ai'
+      anonymousAccess: true
     - method: 'GET'
       path: '/userinfo'
       audience: 'urn:bixarena:auth'
@@ -62,6 +69,8 @@ app:
     - method: 'POST'
       path: '/auth/logout'
       audience: 'urn:bixarena:auth'
+      anonymousAccess: true
     - method: 'POST'
       path: '/oauth2/token'
       audience: 'urn:bixarena:auth'
+      anonymousAccess: true

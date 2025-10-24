@@ -1,4 +1,5 @@
 post:
+  x-anonymous-access: true
   tags:
     - Auth
   summary: Mint short-lived internal JWT
