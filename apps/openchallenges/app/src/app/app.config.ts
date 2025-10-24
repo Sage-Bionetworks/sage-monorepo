@@ -5,19 +5,15 @@ import {
   inject,
   provideAppInitializer,
 } from '@angular/core';
-import {
-  provideRouter,
-  withComponentInputBinding,
-  withEnabledBlockingInitialNavigation,
-  withInMemoryScrolling,
-} from '@angular/router';
+import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { configFactory, ConfigService } from '@sagebionetworks/openchallenges/config';
+import { configFactory, ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchallenges/api-client';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
+import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
 import Lara from '@primeng/themes/lara';
 import { telemetryFactory } from './telemetry.factory';
 
@@ -30,10 +26,15 @@ export const appConfig: ApplicationConfig = {
     }),
     {
       provide: API_CLIENT_BASE_PATH,
-      useFactory: (configService: ConfigService) =>
-        configService.config.isPlatformServer
-          ? configService.config.ssrApiUrl
-          : configService.config.csrApiUrl,
+      useFactory: (configService: ConfigService) => {
+        if (configService.config.isPlatformServer) {
+          // Server: Use full server config type
+          return (configService.config as any).api.baseUrls.ssr;
+        } else {
+          // Client: Use client config type
+          return (configService.config as any).api.baseUrl;
+        }
+      },
       deps: [ConfigService],
     },
     provideAnimations(),
@@ -50,10 +51,18 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    provideGtmConfig(
+      (config: ConfigService) => ({
+        enabled: config.config.analytics.googleTagManager.enabled,
+        gtmId: config.config.analytics.googleTagManager.id,
+        isPlatformServer: config.config.isPlatformServer,
+      }),
+      [ConfigService],
+    ),
+    provideGtmId(),
     provideRouter(
       appRoutes,
       withComponentInputBinding(),
-      withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
       }),

@@ -82,7 +82,6 @@
       "@sagebionetworks/openchallenges/challenge-search": [
         "libs/openchallenges/challenge-search/src/index.ts"
       ],
-      "@sagebionetworks/openchallenges/config": ["libs/openchallenges/config/src/index.ts"],
       "@sagebionetworks/openchallenges/home": ["libs/openchallenges/home/src/index.ts"],
       "@sagebionetworks/openchallenges/login": ["libs/openchallenges/login/src/index.ts"],
       "@sagebionetworks/openchallenges/not-found": ["libs/openchallenges/not-found/src/index.ts"],
@@ -95,6 +94,9 @@
       "@sagebionetworks/openchallenges/team": ["libs/openchallenges/team/src/index.ts"],
       "@sagebionetworks/openchallenges/ui": ["libs/openchallenges/ui/src/index.ts"],
       "@sagebionetworks/openchallenges/util": ["libs/openchallenges/util/src/index.ts"],
+      "@sagebionetworks/openchallenges/web/angular/config": [
+        "libs/openchallenges/web/angular/config/src/index.ts"
+      ],
       "@sagebionetworks/results-visualization-framework/ui": [
         "libs/results-visualization-framework/ui/src/index.ts"
       ],
@@ -102,11 +104,15 @@
       "@sagebionetworks/shared/google-tag-manager": [
         "libs/shared/typescript/google-tag-manager/src/index.ts"
       ],
+      "@sagebionetworks/web-shared/angular/analytics/gtm": [
+        "libs/web-shared/angular/analytics/gtm/src/index.ts"
+      ],
       "@sagebionetworks/shared/util": ["libs/shared/typescript/util/src/index.ts"],
       "@sagebionetworks/shared/web-components": [
         "libs/shared/typescript/web-components/src/index.ts"
       ],
-      "@sagebionetworks/synapse/api-client": ["libs/synapse/api-client-angular/src/index.ts"]
+      "@sagebionetworks/synapse/api-client": ["libs/synapse/api-client-angular/src/index.ts"],
+      "@sagebionetworks/platform/config/angular": ["libs/platform/config/angular/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

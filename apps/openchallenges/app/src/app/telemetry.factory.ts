@@ -8,14 +8,14 @@ import { DocumentLoadInstrumentation } from '@opentelemetry/instrumentation-docu
 import { W3CTraceContextPropagator } from '@opentelemetry/core/build/src/trace/W3CTraceContextPropagator';
 import { CompositePropagator } from '@opentelemetry/core';
 import { UserInteractionInstrumentation } from '@opentelemetry/instrumentation-user-interaction';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { ConfigService } from '@sagebionetworks/openchallenges/web/angular/config';
 import { ZoneContextManager } from '@opentelemetry/context-zone-peer-dep';
 
 export const telemetryFactory = (configService: ConfigService) => {
   return () => {
-    console.log(`Telemetry enabled:`, configService.config.telemetryEnabled);
+    console.log(`Telemetry enabled:`, configService.config.telemetry.enabled);
 
-    if (!configService.config.telemetryEnabled) {
+    if (!configService.config.telemetry.enabled) {
       return Promise.resolve();
     }
     if (configService.config.isPlatformServer) {

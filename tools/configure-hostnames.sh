@@ -31,6 +31,7 @@ declare -a hostnames=(
   "127.0.0.1 observability-prometheus"
   "127.0.0.1 observability-pyroscope"
   "127.0.0.1 observability-tempo"
+  "127.0.0.1 openchallenges-apex"
   "127.0.0.1 openchallenges-api-gateway"
   "127.0.0.1 openchallenges-app"
   "127.0.0.1 openchallenges-auth-service"
