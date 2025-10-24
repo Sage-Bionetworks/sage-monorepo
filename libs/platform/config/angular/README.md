@@ -56,14 +56,14 @@ graph TB
   - Generic `ConfigLoaderService<T, S>` for flexible type handling
   - Can be reused across any Angular application
 
-- **`openchallenges-web-angular-config`** (App-Specific Library)
+- **`openchallenges-web-angular-config`** (App-Specific Library, e.g. OpenChallenges)
 
   - Defines OpenChallenges-specific configuration schemas (Zod)
   - Implements `ConfigService` extending `ConfigLoaderService`
   - Provides `transformServerToClientConfig()` for server/client separation
   - Bridges platform library and application needs
 
-- **`openchallenges-app`** (Application)
+- **`openchallenges-app`** (Application, e.g. OpenChallenges)
   - Consumes configuration via dependency injection
   - Uses `ConfigService.config` throughout the application
   - Provides YAML configuration files in `/src/config/`
