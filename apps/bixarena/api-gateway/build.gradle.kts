@@ -46,3 +46,12 @@ tasks.register<JavaExec>("generateRouteConfig") {
 tasks.named("generateRouteConfig") {
   dependsOn("compileJava")
 }
+
+// tasks.test {
+//   useJUnitPlatform()
+//   testLogging {
+//     showStandardStreams = true
+//     events("passed", "skipped", "failed", "standardOut", "standardError")
+//     // exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+//   }
+// }
