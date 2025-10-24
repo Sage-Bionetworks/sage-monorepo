@@ -23,22 +23,13 @@
     tooltipPosition="top"
     tooltipStyleClass="tooltip-xs"
   >
-    @if (hasHiddenColumns()) {
-      <p-overlaybadge severity="warn">
-        <explorers-svg-icon
-          imagePath="/explorers-assets/icons/column.svg"
-          [width]="20"
-          [height]="16"
-          altText="column"
-        ></explorers-svg-icon>
-      </p-overlaybadge>
-    } @else {
+    <p-overlaybadge severity="warn" [badgeDisabled]="!hasHiddenColumns()">
       <explorers-svg-icon
         imagePath="/explorers-assets/icons/column.svg"
         [width]="20"
         [height]="16"
         altText="column"
       ></explorers-svg-icon>
-    }
+    </p-overlaybadge>
   </button>
 </div>
