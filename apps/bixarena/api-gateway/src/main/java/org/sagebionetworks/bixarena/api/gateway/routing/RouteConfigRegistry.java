@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.gateway.routing;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -75,6 +76,16 @@ public final class RouteConfigRegistry {
 
   public boolean isAnonymousAccessAllowed(String method, String path) {
     return getRouteConfig(method, path).map(RouteConfig::anonymousAccess).orElse(false);
+  }
+
+  public String[] getAnonymousPaths() {
+    return getAllRouteConfigs()
+      .entrySet()
+      .stream()
+      .filter(e -> e.getValue().anonymousAccess())
+      .map(e -> e.getKey().path())
+      .distinct()
+      .toArray(String[]::new);
   }
 
   public Map<RouteKey, RouteConfig> getAllRouteConfigs() {

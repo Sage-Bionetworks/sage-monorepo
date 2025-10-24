@@ -44,13 +44,13 @@ public final class OpenApiRouteConfigGenerator {
   private static final String DEFAULT_SECURITY_SCHEME = "jwtBearer";
 
   /** Path prefix to prepend to each OpenAPI path (if your gateway mounts services at a versioned prefix). */
-  private static final String DEFAULT_API_PREFIX = "/api";
+  private static final String DEFAULT_API_PREFIX = "";
 
   /** Default output location for the generated YAML. */
   private static final String DEFAULT_OUTPUT_PATH = "src/main/resources/routes.yml";
 
   /** Default top-level key under which routes are written. */
-  private static final String DEFAULT_APP_KEY = "bixarena";
+  private static final String DEFAULT_APP_KEY = "app";
 
   private static final String OAUTH2_AUDIENCE_EXTENSION = "x-oauth2-audience";
   private static final String ANONYMOUS_ACCESS_EXTENSION = "x-anonymous-access";
@@ -139,35 +139,34 @@ public final class OpenApiRouteConfigGenerator {
     }
 
     // Iterate path → method
-    paths.fields().forEachRemaining(pathEntry -> {
-      String rawPath = pathEntry.getKey();
-      JsonNode pathObj = pathEntry.getValue();
+    paths
+      .fields()
+      .forEachRemaining(pathEntry -> {
+        String rawPath = pathEntry.getKey();
+        JsonNode pathObj = pathEntry.getValue();
 
-      pathObj.fields().forEachRemaining(methodEntry -> {
-        String method = methodEntry.getKey().toUpperCase(Locale.ROOT);
-        JsonNode operation = methodEntry.getValue();
+        pathObj
+          .fields()
+          .forEachRemaining(methodEntry -> {
+            String method = methodEntry.getKey().toUpperCase(Locale.ROOT);
+            JsonNode operation = methodEntry.getValue();
 
-        if (!VALID_HTTP_METHODS.contains(method)) {
-          return; // skip non-method keys like "parameters"
-        }
+            if (!VALID_HTTP_METHODS.contains(method)) {
+              return; // skip non-method keys like "parameters"
+            }
 
-        boolean anonymousAccess = extractAnonymous(operation);
-        String audience = extractAudience(operation);
-        if (audience == null) audience = globalAudience;
+            boolean anonymousAccess = extractAnonymous(operation);
+            String audience = extractAudience(operation);
+            if (audience == null) audience = globalAudience;
 
-        // We include a route if any of the fields matter to the gateway.
-        if (audience != null || anonymousAccess) {
-          String normalizedPath = normalizePath(DEFAULT_API_PREFIX + rawPath);
-          RouteSpec entry = new RouteSpec(
-            method,
-            normalizedPath,
-            audience,
-            anonymousAccess
-          );
-          out.add(entry);
-        }
+            // We include a route if any of the fields matter to the gateway.
+            if (audience != null || anonymousAccess) {
+              String normalizedPath = normalizePath(DEFAULT_API_PREFIX + rawPath);
+              RouteSpec entry = new RouteSpec(method, normalizedPath, audience, anonymousAccess);
+              out.add(entry);
+            }
+          });
       });
-    });
 
     return out;
   }
