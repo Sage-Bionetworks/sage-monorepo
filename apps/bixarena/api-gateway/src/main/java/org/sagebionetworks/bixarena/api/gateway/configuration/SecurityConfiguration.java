@@ -25,30 +25,43 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-  // private final AnonymousAccessGatewayFilter anonymousAccessFilter;
-  // private final ApiKeyAuthenticationGatewayFilter apiKeyAuthenticationFilter;
-  // private final JwtAuthenticationGatewayFilter jwtAuthenticationFilter;
+  private final org.sagebionetworks.bixarena.api.gateway.security.AnonymousAccessGatewayFilter anonymousAccessFilter;
+
+  @Bean
+  public org.sagebionetworks.bixarena.api.gateway.security.AnonymousAccessGatewayFilter anonymousAccessGatewayFilter() {
+    java.util.Set<String> anonymousEndpoints = java.util.Set.of(
+      "/.well-known/jwks.json",
+      "/oauth2/token",
+      "/auth/login",
+      "/auth/callback",
+      "/auth/logout",
+      "/userinfo"
+    );
+    return new org.sagebionetworks.bixarena.api.gateway.security.AnonymousAccessGatewayFilter(
+      anonymousEndpoints
+    );
+  }
 
   @Bean
   SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     return http
       .csrf(ServerHttpSecurity.CsrfSpec::disable)
-      // Add our custom authentication filters in order:
-      // 1. Anonymous access (generates JWTs for public endpoints)
-      // 2. API key authentication (exchanges API keys for JWTs)
-      // 3. JWT validation (validates existing JWTs)
-      // .addFilterBefore(anonymousAccessFilter, SecurityWebFiltersOrder.AUTHORIZATION)
-      // .addFilterBefore(apiKeyAuthenticationFilter, SecurityWebFiltersOrder.AUTHORIZATION)
-      // .addFilterBefore(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHORIZATION)
+      .addFilterBefore(anonymousAccessGatewayFilter(), SecurityWebFiltersOrder.AUTHORIZATION)
       .authorizeExchange(ex ->
         ex
-          // Actuator endpoints for health checks
           .pathMatchers("/actuator/health", "/actuator/metrics")
           .permitAll()
-          // Leaderboard endpoints are public
+          .pathMatchers(
+            "/.well-known/jwks.json",
+            "/oauth2/token",
+            "/auth/login",
+            "/auth/callback",
+            "/auth/logout",
+            "/userinfo"
+          )
+          .permitAll()
           .pathMatchers("/api/v1/leaderboards/**")
           .permitAll()
-          // Everything else requires authentication
           .anyExchange()
           .authenticated()
       )
