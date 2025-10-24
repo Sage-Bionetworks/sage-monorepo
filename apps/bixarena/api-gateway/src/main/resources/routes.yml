@@ -60,11 +60,15 @@ app:
       audience: 'urn:bixarena:auth'
     - method: 'PATCH'
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d19d1cf3a (chore: add dynamic prefix to route paths based on audience)
       path: '/api/v1/battles/{battleId}'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
     - method: 'POST'
       path: '/api/v1/battles'
+<<<<<<< HEAD
       audience: 'urn:bixarena:api'
       anonymousAccess: true
     - method: 'POST'
@@ -77,16 +81,18 @@ app:
       anonymousAccess: true
 =======
       path: '/battles/{battleId}'
+=======
+>>>>>>> d19d1cf3a (chore: add dynamic prefix to route paths based on audience)
       audience: 'urn:bixarena:api'
       anonymousAccess: true
     - method: 'POST'
       path: '/auth/logout'
-      audience: 'urn:bixarena:api'
-    - method: 'POST'
-      path: '/battles'
-      audience: 'urn:bixarena:api'
-      anonymousAccess: true
+      audience: 'urn:bixarena:auth'
     - method: 'POST'
       path: '/oauth2/token'
+<<<<<<< HEAD
       audience: 'urn:bixarena:api'
 >>>>>>> 29de0cb28 (chore: dynamically allow anonymous request)
+=======
+      audience: 'urn:bixarena:auth'
+>>>>>>> d19d1cf3a (chore: add dynamic prefix to route paths based on audience)
