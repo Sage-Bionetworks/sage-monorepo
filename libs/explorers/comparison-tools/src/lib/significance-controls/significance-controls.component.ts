@@ -5,18 +5,10 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { PopoverModule } from 'primeng/popover';
-import { ComparisonToolColumnSelectorComponent } from '../comparison-tool-controls/comparison-tool-column-selector/comparison-tool-column-selector.component';
 
 @Component({
   selector: 'explorers-significance-controls',
-  imports: [
-    FormsModule,
-    TooltipModule,
-    ToggleSwitchModule,
-    SvgIconComponent,
-    PopoverModule,
-    ComparisonToolColumnSelectorComponent,
-  ],
+  imports: [FormsModule, TooltipModule, ToggleSwitchModule, SvgIconComponent, PopoverModule],
   templateUrl: './significance-controls.component.html',
   styleUrls: ['./significance-controls.component.scss'],
   encapsulation: ViewEncapsulation.None,

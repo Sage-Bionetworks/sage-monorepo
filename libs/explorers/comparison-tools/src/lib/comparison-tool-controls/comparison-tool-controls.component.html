@@ -4,9 +4,16 @@
     <explorers-comparison-tool-search-input />
   </div>
   <div class="controls-right">
-    <explorers-comparison-tool-selectors />
+    <explorers-comparison-tool-category-selectors />
     @if (showSignificanceControls()) {
-      <explorers-significance-controls />
+      <div class="significance-and-column-selector">
+        <div>
+          <explorers-significance-controls />
+        </div>
+        <div>
+          <explorers-comparison-tool-column-selector />
+        </div>
+      </div>
     } @else {
       <explorers-comparison-tool-column-selector />
     }

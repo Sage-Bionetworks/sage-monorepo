@@ -11,7 +11,7 @@ interface DropdownTree {
 }
 
 @Component({
-  selector: 'explorers-comparison-tool-selectors',
+  selector: 'explorers-comparison-tool-category-selectors',
   imports: [FormsModule, Select, PopoverLinkComponent],
   templateUrl: './comparison-tool-category-selectors.component.html',
   styleUrls: ['./comparison-tool-category-selectors.component.scss'],

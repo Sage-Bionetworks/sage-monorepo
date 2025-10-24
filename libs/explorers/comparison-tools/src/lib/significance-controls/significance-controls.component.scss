@@ -8,7 +8,6 @@
   color: gray;
   height: 20px;
   margin-bottom: 8px;
-  margin-right: 100px;
 
   button {
     @include mixins.reset-button;
@@ -20,12 +19,6 @@
     display: flex;
     align-items: center;
     padding-left: 10px;
-
-    &:last-child {
-      border-left: 1px solid var(--color-gray-300);
-      margin-left: 10px;
-      margin-right: 10px;
-    }
   }
 
   .toggle-switch {

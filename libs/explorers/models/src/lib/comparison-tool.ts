@@ -48,7 +48,6 @@ export interface ComparisonToolColumn {
 }
 
 export interface ComparisonToolColumns {
-  page: ComparisonToolPage;
   dropdowns: string[];
   columns: ComparisonToolColumn[];
 }
