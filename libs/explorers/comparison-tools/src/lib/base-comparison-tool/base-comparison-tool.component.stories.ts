@@ -5,7 +5,7 @@ import {
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import {
-  mockComparisonToolConfigs,
+  mockComparisonToolDataConfig,
   mockComparisonToolSelectorsWikiParams,
   provideLoadingIconColors,
 } from '@sagebionetworks/explorers/testing';
@@ -22,7 +22,7 @@ const meta: Meta<BaseComparisonToolComponent> = {
         provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService({
-          configs: mockComparisonToolConfigs,
+          configs: mockComparisonToolDataConfig,
           totalResultsCount: 1000,
           selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
         }),

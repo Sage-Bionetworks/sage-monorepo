@@ -12,12 +12,16 @@ import { isEqual } from 'lodash';
  */
 @Injectable()
 export class ComparisonToolService {
+  private readonly DEFAULT_SORT_ORDER = -1;
+
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly selectorsWikiParamsSignal = signal<Record<string, SynapseWikiParams>>({});
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
+  private readonly sortFieldSignal = signal<string | undefined>(undefined);
+  private readonly sortOrderSignal = signal<number>(this.DEFAULT_SORT_ORDER);
 
   readonly configs = this.configsSignal.asReadonly();
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
@@ -25,6 +29,8 @@ export class ComparisonToolService {
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
+  readonly sortField = this.sortFieldSignal.asReadonly();
+  readonly sortOrder = this.sortOrderSignal.asReadonly();
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -77,6 +83,7 @@ export class ComparisonToolService {
     this.totalResultsCount.set(0);
     this.pinnedItemsSignal.set(new Set());
     this.setSelectorsWikiParams(selectorsWikiParams);
+    this.setSort(undefined, this.DEFAULT_SORT_ORDER);
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);
@@ -178,5 +185,10 @@ export class ComparisonToolService {
     }
 
     return prefix.every((value, index) => normalizedTarget[index] === value);
+  }
+
+  setSort(sortField: string | undefined, sortOrder: number | undefined) {
+    this.sortFieldSignal.set(sortField);
+    this.sortOrderSignal.set(sortOrder || this.DEFAULT_SORT_ORDER);
   }
 }
