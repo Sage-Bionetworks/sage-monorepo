@@ -47,11 +47,10 @@ public final class OpenApiRouteConfigGenerator {
   private static final String DEFAULT_API_PREFIX = "";
 
   /** Map audience to path prefix. */
-  private static final Map<String, String> AUDIENCE_PREFIX_MAP = Map.of(
-    "urn:bixarena:api",
-    "/api/v1",
-    "urn:bixarena:auth",
-    ""
+  private static final Map<String, String> AUDIENCE_PREFIX_MAP = Map.ofEntries(
+    Map.entry("urn:bixarena:ai", ""),
+    Map.entry("urn:bixarena:api", "/api/v1"),
+    Map.entry("urn:bixarena:auth", "")
   );
 
   /** Default output location for the generated YAML. */
