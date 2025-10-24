@@ -25,7 +25,7 @@ import { GoogleTagManagerComponent } from '@sagebionetworks/web-shared/angular/a
   selector: 'app-root',
   imports: [GoogleTagManagerComponent],
   template: `
-    <sage-google-tag-manager />
+    <web-shared-angular-analytics-gtm />
     <router-outlet />
   `,
 })
@@ -85,7 +85,7 @@ import { ConfigService } from './config/config.service';
     },
   ],
   template: `
-    <sage-google-tag-manager />
+    <web-shared-angular-analytics-gtm />
     <router-outlet />
   `,
 })
@@ -119,7 +119,7 @@ const useGoogleTagManager = config.config.analytics.googleTagManager.enabled;
 
 // In template:
 @if (useGoogleTagManager) {
-  <sage-google-tag-manager />
+  <web-shared-angular-analytics-gtm />
 }
 ```
 
