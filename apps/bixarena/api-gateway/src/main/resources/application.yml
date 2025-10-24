@@ -58,6 +58,9 @@ spring:
               uri: http://bixarena-auth-service:8115
               predicates:
                 - Path=/auth/**
+                - Path=/oauth2/token
+                - Path=/userinfo
+                - Path=/.well-known/jwks.json
   profiles:
     active: dev
   config:
