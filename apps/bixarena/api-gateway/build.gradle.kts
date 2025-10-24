@@ -8,7 +8,7 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.spring.boot.starter.actuator)
-  implementation(libs.spring.boot.starter.oauth2.resource.server)
+  // implementation(libs.spring.boot.starter.oauth2.resource.server)
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.webflux)
   implementation(libs.spring.cloud.starter.gateway.server.webflux)
@@ -46,3 +46,12 @@ tasks.register<JavaExec>("generateRouteConfig") {
 tasks.named("generateRouteConfig") {
   dependsOn("compileJava")
 }
+
+// tasks.test {
+//   useJUnitPlatform()
+//   testLogging {
+//     showStandardStreams = true
+//     events("passed", "skipped", "failed", "standardOut", "standardError")
+//     // exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+//   }
+// }
