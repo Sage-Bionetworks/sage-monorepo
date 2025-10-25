@@ -1,7 +1,7 @@
 type: object
 description: The information used to create a new evaluation.
 properties:
-  preference:
-    $ref: EvaluationPreference.yaml
+  outcome:
+    $ref: EvaluationOutcome.yaml
 required:
-  - preference
+  - outcome

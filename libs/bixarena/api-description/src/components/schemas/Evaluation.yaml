@@ -3,11 +3,11 @@ description: An evaluation entity representing a user's assessment in a battle b
 properties:
   id:
     $ref: EvaluationId.yaml
-  preference:
-    $ref: EvaluationPreference.yaml
+  outcome:
+    $ref: EvaluationOutcome.yaml
   createdAt:
     $ref: CreatedAt.yaml
 required:
   - id
-  - preference
+  - outcome
   - createdAt

@@ -8,9 +8,9 @@ properties:
     nullable: true
   userId:
     $ref: UserId.yaml
-  leftModelId:
+  model1Id:
     $ref: ModelId.yaml
-  rightModelId:
+  model2Id:
     $ref: ModelId.yaml
   createdAt:
     $ref: CreatedAt.yaml
@@ -20,6 +20,6 @@ properties:
 required:
   - id
   - userId
-  - leftModelId
-  - rightModelId
+  - model1Id
+  - model2Id
   - createdAt
