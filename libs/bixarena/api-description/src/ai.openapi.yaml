@@ -10,8 +10,14 @@ info:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
 
+# Vendor extensions at the top level
+x-oauth2-audience: 'urn:bixarena:ai'
+
 servers:
   - url: http://localhost
+
+security:
+  - jwtBearer: []
 
 tags:
   - name: Health Check

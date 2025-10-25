@@ -75,7 +75,7 @@ app:
     client-id: changeme
     client-secret: changeme
     # Use localhost (not 127.0.0.1) so the browser sends the same cookie across app and api if app uses localhost
-    redirect-uri: http://127.0.0.1:8115/auth/callback
-    internal-issuer: http://bixarena-api:8115
+    redirect-uri: http://127.0.0.1:8113/auth/callback
+    internal-issuer: http://bixarena-api-gateway:8113
     audience: myapi
     token-ttl-seconds: 600

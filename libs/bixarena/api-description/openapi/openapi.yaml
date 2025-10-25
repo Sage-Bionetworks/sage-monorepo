@@ -57,6 +57,7 @@ paths:
         - jwtBearer: []
   /battles:
     get:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: List battles
@@ -80,12 +81,12 @@ paths:
       security:
         - jwtBearer: []
     post:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Create a battle
       description: Create a new battle between two AI models.
       operationId: createBattle
-      x-anonymous-access: true
       requestBody:
         content:
           application/json:
@@ -117,6 +118,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     get:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Get a battle by ID
@@ -138,12 +140,12 @@ paths:
       security:
         - jwtBearer: []
     patch:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Update a battle
       description: Update a battle's end time or other properties
       operationId: updateBattle
-      x-anonymous-access: true
       requestBody:
         content:
           application/json:
@@ -170,6 +172,7 @@ paths:
       security:
         - jwtBearer: []
     delete:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Delete a battle
@@ -339,6 +342,7 @@ paths:
         - jwtBearer: []
   /auth/login:
     get:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: Start Synapse OIDC authorization code flow
@@ -354,6 +358,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
   /auth/callback:
     get:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: OIDC redirect callback
@@ -388,6 +393,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /auth/logout:
     post:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: Logout current session
@@ -402,6 +408,7 @@ paths:
         - jwtBearer: []
   /oauth2/token:
     post:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: Mint short-lived internal JWT
@@ -455,6 +462,7 @@ paths:
         - jwtBearer: []
   /.well-known/jwks.json:
     get:
+      x-anonymous-access: true
       tags:
         - Auth
       summary: JSON Web Key Set

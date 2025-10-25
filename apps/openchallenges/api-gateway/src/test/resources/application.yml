@@ -9,9 +9,6 @@ app:
       scopes: []
       audience: 'test'
 
-openchallenges-api-gatewau:
-  welcome-message: 'Welcome to OpenChallenges API Gateway'
-
 server:
   port: 8082
 

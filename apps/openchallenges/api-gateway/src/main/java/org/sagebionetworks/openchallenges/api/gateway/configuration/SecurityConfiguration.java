@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.api.gateway.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.gateway.security.AnonymousAccessGatewayFilter;
 import org.sagebionetworks.openchallenges.api.gateway.security.ApiKeyAuthenticationGatewayFilter;
 import org.sagebionetworks.openchallenges.api.gateway.security.JwtAuthenticationGatewayFilter;
@@ -10,7 +11,6 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Spring Security configuration for the API Gateway.
@@ -43,15 +43,17 @@ public class SecurityConfiguration {
       .addFilterBefore(anonymousAccessFilter, SecurityWebFiltersOrder.AUTHORIZATION)
       .addFilterBefore(apiKeyAuthenticationFilter, SecurityWebFiltersOrder.AUTHORIZATION)
       .addFilterBefore(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHORIZATION)
-      .authorizeExchange(ex -> ex
-        // Actuator endpoints for health checks
-        .pathMatchers("/actuator/health", "/actuator/metrics").permitAll()
-
-        // OAuth2 endpoints (served by auth service)
-        .pathMatchers("/oauth2/**", "/.well-known/**").permitAll()
-
-        // Everything else requires authentication
-        .anyExchange().authenticated()
+      .authorizeExchange(ex ->
+        ex
+          // Actuator endpoints for health checks
+          .pathMatchers("/actuator/health", "/actuator/metrics")
+          .permitAll()
+          // OAuth2 endpoints (served by auth service)
+          .pathMatchers("/oauth2/**", "/.well-known/**")
+          .permitAll()
+          // Everything else requires authentication
+          .anyExchange()
+          .authenticated()
       )
       .build();
   }

@@ -1,16 +1,15 @@
 app:
-  welcome-message: 'Welcome to BixArena API Gateway!'
-
-server:
-  port: 8113
+  welcome-message: 'Welcome to BixArena API Gateway'
+  routes:
+    - method: 'GET'
+      path: '/api/v1/test'
+      audience: 'test'
+      anonymousAccess: true
 
 spring:
-  application:
-    name: bixarena-api-gateway
   profiles:
     active: test
-  cloud:
-    config:
-      enabled: false
-    discovery:
-      enabled: false
+
+logging:
+  level:
+    org.sagebionetworks.bixarena: DEBUG
