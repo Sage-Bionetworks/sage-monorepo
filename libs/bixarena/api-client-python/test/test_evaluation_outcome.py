@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.vote_preference import VotePreference
+from bixarena_api_client.models.evaluation_outcome import EvaluationOutcome
 
 
-class TestVotePreference(unittest.TestCase):
-    """VotePreference unit test stubs"""
+class TestEvaluationOutcome(unittest.TestCase):
+    """EvaluationOutcome unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,9 +25,9 @@ class TestVotePreference(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testVotePreference(self):
-        """Test VotePreference"""
-        # inst = VotePreference()
+    def testEvaluationOutcome(self):
+        """Test EvaluationOutcome"""
+        # inst = EvaluationOutcome()
 
 
 if __name__ == "__main__":

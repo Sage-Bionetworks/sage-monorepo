@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.vote_create_request import VoteCreateRequest
+from bixarena_api_client.models.evaluation import Evaluation
 
 
-class TestVoteCreateRequest(unittest.TestCase):
-    """VoteCreateRequest unit test stubs"""
+class TestEvaluation(unittest.TestCase):
+    """Evaluation unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,28 +25,30 @@ class TestVoteCreateRequest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> VoteCreateRequest:
-        """Test VoteCreateRequest
+    def make_instance(self, include_optional) -> Evaluation:
+        """Test Evaluation
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `VoteCreateRequest`
+        # uncomment below to create an instance of `Evaluation`
         """
-        model = VoteCreateRequest()
+        model = Evaluation()
         if include_optional:
-            return VoteCreateRequest(
-                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
-                preference = 'left_model'
+            return Evaluation(
+                id = '',
+                outcome = 'model1',
+                created_at = '2024-01-15T10:30Z'
             )
         else:
-            return VoteCreateRequest(
-                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
-                preference = 'left_model',
+            return Evaluation(
+                id = '',
+                outcome = 'model1',
+                created_at = '2024-01-15T10:30Z',
         )
         """
 
-    def testVoteCreateRequest(self):
-        """Test VoteCreateRequest"""
+    def testEvaluation(self):
+        """Test Evaluation"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

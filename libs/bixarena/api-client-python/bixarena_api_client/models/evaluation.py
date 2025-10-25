@@ -16,24 +16,26 @@ import pprint
 import re  # noqa: F401
 import json
 
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List
 from uuid import UUID
-from bixarena_api_client.models.vote_preference import VotePreference
+from bixarena_api_client.models.evaluation_outcome import EvaluationOutcome
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class VoteCreateRequest(BaseModel):
+class Evaluation(BaseModel):
     """
-    The information used to create a new vote.
+    An evaluation entity representing a user's assessment in a battle between two AI models.
     """  # noqa: E501
 
-    battle_id: UUID = Field(
-        description="Unique identifier (UUID) of the battle.", alias="battleId"
+    id: UUID = Field(description="The unique identifier of the evaluation")
+    outcome: EvaluationOutcome
+    created_at: datetime = Field(
+        description="Timestamp when the entity was created.", alias="createdAt"
     )
-    preference: VotePreference
-    __properties: ClassVar[List[str]] = ["battleId", "preference"]
+    __properties: ClassVar[List[str]] = ["id", "outcome", "createdAt"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -52,7 +54,7 @@ class VoteCreateRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of VoteCreateRequest from a JSON string"""
+        """Create an instance of Evaluation from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,7 +78,7 @@ class VoteCreateRequest(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of VoteCreateRequest from a dict"""
+        """Create an instance of Evaluation from a dict"""
         if obj is None:
             return None
 
@@ -84,6 +86,10 @@ class VoteCreateRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate(
-            {"battleId": obj.get("battleId"), "preference": obj.get("preference")}
+            {
+                "id": obj.get("id"),
+                "outcome": obj.get("outcome"),
+                "createdAt": obj.get("createdAt"),
+            }
         )
         return _obj

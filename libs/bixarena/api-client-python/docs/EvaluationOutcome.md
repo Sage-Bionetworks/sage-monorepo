@@ -1,9 +1,13 @@
-# VoteSort
+# EvaluationOutcome
 
-What to sort votes by.
+The outcome of the evaluation between model1 and model2
 
 ## Enum
 
-- `CREATED_AT` (value: `'created_at'`)
+- `MODEL1` (value: `'model1'`)
+
+- `MODEL2` (value: `'model2'`)
+
+- `TIE` (value: `'tie'`)
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

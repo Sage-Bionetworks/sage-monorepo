@@ -112,15 +112,13 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _BattleApi_        | [**get_battle**](docs/BattleApi.md#get_battle)                                    | **GET** /battles/{battleId}                             | Get a battle by ID                         |
 | _BattleApi_        | [**list_battles**](docs/BattleApi.md#list_battles)                                | **GET** /battles                                        | List battles                               |
 | _BattleApi_        | [**update_battle**](docs/BattleApi.md#update_battle)                              | **PATCH** /battles/{battleId}                           | Update a battle                            |
+| _EvaluationApi_    | [**create_evaluation**](docs/EvaluationApi.md#create_evaluation)                  | **POST** /battles/{battleId}/evaluations                | Create an evaluation                       |
 | _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts                       |
 | _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
 | _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |
 | _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
 | _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
 | _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
-| _VoteApi_          | [**create_vote**](docs/VoteApi.md#create_vote)                                    | **POST** /votes                                         | Create a vote                              |
-| _VoteApi_          | [**get_vote**](docs/VoteApi.md#get_vote)                                          | **GET** /votes/{voteId}                                 | Get a vote by ID                           |
-| _VoteApi_          | [**list_votes**](docs/VoteApi.md#list_votes)                                      | **GET** /votes                                          | List votes                                 |
 
 ## Documentation For Models
 
@@ -133,6 +131,9 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [BattleSort](docs/BattleSort.md)
 - [BattleUpdateRequest](docs/BattleUpdateRequest.md)
 - [Callback200Response](docs/Callback200Response.md)
+- [Evaluation](docs/Evaluation.md)
+- [EvaluationCreateRequest](docs/EvaluationCreateRequest.md)
+- [EvaluationOutcome](docs/EvaluationOutcome.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
 - [ExamplePromptPage](docs/ExamplePromptPage.md)
 - [ExamplePromptSearchQuery](docs/ExamplePromptSearchQuery.md)
@@ -161,12 +162,6 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [SortDirection](docs/SortDirection.md)
 - [Token200Response](docs/Token200Response.md)
 - [UserInfo](docs/UserInfo.md)
-- [Vote](docs/Vote.md)
-- [VoteCreateRequest](docs/VoteCreateRequest.md)
-- [VotePage](docs/VotePage.md)
-- [VotePreference](docs/VotePreference.md)
-- [VoteSearchQuery](docs/VoteSearchQuery.md)
-- [VoteSort](docs/VoteSort.md)
 
 <a id="documentation-for-authorization"></a>
 

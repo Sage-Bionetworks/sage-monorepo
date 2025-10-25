@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.vote import Vote
+from bixarena_api_client.models.evaluation_create_request import EvaluationCreateRequest
 
 
-class TestVote(unittest.TestCase):
-    """Vote unit test stubs"""
+class TestEvaluationCreateRequest(unittest.TestCase):
+    """EvaluationCreateRequest unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,32 +25,26 @@ class TestVote(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> Vote:
-        """Test Vote
+    def make_instance(self, include_optional) -> EvaluationCreateRequest:
+        """Test EvaluationCreateRequest
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `Vote`
+        # uncomment below to create an instance of `EvaluationCreateRequest`
         """
-        model = Vote()
+        model = EvaluationCreateRequest()
         if include_optional:
-            return Vote(
-                id = '',
-                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
-                preference = 'left_model',
-                created_at = '2024-01-15T10:30Z'
+            return EvaluationCreateRequest(
+                outcome = 'model1'
             )
         else:
-            return Vote(
-                id = '',
-                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
-                preference = 'left_model',
-                created_at = '2024-01-15T10:30Z',
+            return EvaluationCreateRequest(
+                outcome = 'model1',
         )
         """
 
-    def testVote(self):
-        """Test Vote"""
+    def testEvaluationCreateRequest(self):
+        """Test EvaluationCreateRequest"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

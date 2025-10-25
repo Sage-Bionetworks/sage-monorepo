@@ -20,10 +20,10 @@ __all__ = [
     "AdminApi",
     "AuthApi",
     "BattleApi",
+    "EvaluationApi",
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
-    "VoteApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -42,6 +42,9 @@ __all__ = [
     "BattleSort",
     "BattleUpdateRequest",
     "Callback200Response",
+    "Evaluation",
+    "EvaluationCreateRequest",
+    "EvaluationOutcome",
     "ExamplePrompt",
     "ExamplePromptPage",
     "ExamplePromptSearchQuery",
@@ -70,24 +73,18 @@ __all__ = [
     "SortDirection",
     "Token200Response",
     "UserInfo",
-    "Vote",
-    "VoteCreateRequest",
-    "VotePage",
-    "VotePreference",
-    "VoteSearchQuery",
-    "VoteSort",
 ]
 
 # import apis into sdk package
 from bixarena_api_client.api.admin_api import AdminApi as AdminApi
 from bixarena_api_client.api.auth_api import AuthApi as AuthApi
 from bixarena_api_client.api.battle_api import BattleApi as BattleApi
+from bixarena_api_client.api.evaluation_api import EvaluationApi as EvaluationApi
 from bixarena_api_client.api.example_prompt_api import (
     ExamplePromptApi as ExamplePromptApi,
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
-from bixarena_api_client.api.vote_api import VoteApi as VoteApi
 
 # import ApiClient
 from bixarena_api_client.api_response import ApiResponse as ApiResponse
@@ -119,6 +116,13 @@ from bixarena_api_client.models.battle_update_request import (
 )
 from bixarena_api_client.models.callback200_response import (
     Callback200Response as Callback200Response,
+)
+from bixarena_api_client.models.evaluation import Evaluation as Evaluation
+from bixarena_api_client.models.evaluation_create_request import (
+    EvaluationCreateRequest as EvaluationCreateRequest,
+)
+from bixarena_api_client.models.evaluation_outcome import (
+    EvaluationOutcome as EvaluationOutcome,
 )
 from bixarena_api_client.models.example_prompt import ExamplePrompt as ExamplePrompt
 from bixarena_api_client.models.example_prompt_page import (
@@ -188,13 +192,3 @@ from bixarena_api_client.models.token200_response import (
     Token200Response as Token200Response,
 )
 from bixarena_api_client.models.user_info import UserInfo as UserInfo
-from bixarena_api_client.models.vote import Vote as Vote
-from bixarena_api_client.models.vote_create_request import (
-    VoteCreateRequest as VoteCreateRequest,
-)
-from bixarena_api_client.models.vote_page import VotePage as VotePage
-from bixarena_api_client.models.vote_preference import VotePreference as VotePreference
-from bixarena_api_client.models.vote_search_query import (
-    VoteSearchQuery as VoteSearchQuery,
-)
-from bixarena_api_client.models.vote_sort import VoteSort as VoteSort

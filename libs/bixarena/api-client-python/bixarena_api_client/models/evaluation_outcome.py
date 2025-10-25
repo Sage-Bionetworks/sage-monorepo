@@ -17,17 +17,19 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class VoteSort(str, Enum):
+class EvaluationOutcome(str, Enum):
     """
-    What to sort votes by.
+    The outcome of the evaluation between model1 and model2
     """
 
     """
     allowed enum values
     """
-    CREATED_AT = "created_at"
+    MODEL1 = "model1"
+    MODEL2 = "model2"
+    TIE = "tie"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of VoteSort from a JSON string"""
+        """Create an instance of EvaluationOutcome from a JSON string"""
         return cls(json.loads(json_str))

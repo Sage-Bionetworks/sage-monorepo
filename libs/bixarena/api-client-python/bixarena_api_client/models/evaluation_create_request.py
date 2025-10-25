@@ -16,37 +16,20 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
-from bixarena_api_client.models.sort_direction import SortDirection
-from bixarena_api_client.models.vote_preference import VotePreference
-from bixarena_api_client.models.vote_sort import VoteSort
+from pydantic import BaseModel, ConfigDict
+from typing import Any, ClassVar, Dict, List
+from bixarena_api_client.models.evaluation_outcome import EvaluationOutcome
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class VoteSearchQuery(BaseModel):
+class EvaluationCreateRequest(BaseModel):
     """
-    A vote search query.
+    The information used to create a new evaluation.
     """  # noqa: E501
 
-    page_number: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="The page number to return (0-indexed).", alias="pageNumber"
-    )
-    page_size: Annotated[int, Field(strict=True, ge=1)] = Field(
-        description="The number of items to return in a single page.", alias="pageSize"
-    )
-    sort: VoteSort
-    direction: SortDirection
-    preference: Optional[VotePreference] = None
-    __properties: ClassVar[List[str]] = [
-        "pageNumber",
-        "pageSize",
-        "sort",
-        "direction",
-        "preference",
-    ]
+    outcome: EvaluationOutcome
+    __properties: ClassVar[List[str]] = ["outcome"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -65,7 +48,7 @@ class VoteSearchQuery(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of VoteSearchQuery from a JSON string"""
+        """Create an instance of EvaluationCreateRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -89,28 +72,12 @@ class VoteSearchQuery(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of VoteSearchQuery from a dict"""
+        """Create an instance of EvaluationCreateRequest from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "pageNumber": obj.get("pageNumber")
-                if obj.get("pageNumber") is not None
-                else 0,
-                "pageSize": obj.get("pageSize")
-                if obj.get("pageSize") is not None
-                else 100,
-                "sort": obj.get("sort")
-                if obj.get("sort") is not None
-                else VoteSort.CREATED_AT,
-                "direction": obj.get("direction")
-                if obj.get("direction") is not None
-                else SortDirection.ASC,
-                "preference": obj.get("preference"),
-            }
-        )
+        _obj = cls.model_validate({"outcome": obj.get("outcome")})
         return _obj

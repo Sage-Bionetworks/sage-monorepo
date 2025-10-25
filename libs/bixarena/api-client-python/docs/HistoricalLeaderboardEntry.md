@@ -4,13 +4,13 @@ A historical entry representing a model's performance at a specific point in tim
 
 ## Properties
 
-| Name            | Type         | Description                                       | Notes |
-| --------------- | ------------ | ------------------------------------------------- | ----- |
-| **snapshot_id** | **str**      | Identifier for the snapshot/timepoint             |
-| **bt_score**    | **float**    | Primary scoring metric at this point in time      |
-| **vote_count**  | **int**      | Number of votes/evaluations at this point in time |
-| **rank**        | **int**      | Rank position at this point in time (1-based)     |
-| **created_at**  | **datetime** | When this snapshot was created                    |
+| Name                 | Type         | Description                                   | Notes |
+| -------------------- | ------------ | --------------------------------------------- | ----- |
+| **snapshot_id**      | **str**      | Identifier for the snapshot/timepoint         |
+| **bt_score**         | **float**    | Primary scoring metric at this point in time  |
+| **evaluation_count** | **int**      | Number of evaluations at this point in time   |
+| **rank**             | **int**      | Rank position at this point in time (1-based) |
+| **created_at**       | **datetime** | When this snapshot was created                |
 
 ## Example
 

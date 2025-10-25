@@ -4,16 +4,16 @@ A single entry in a leaderboard representing a model's performance.
 
 ## Properties
 
-| Name           | Type         | Description                                  | Notes |
-| -------------- | ------------ | -------------------------------------------- | ----- |
-| **id**         | **str**      | Unique identifier for this leaderboard entry |
-| **model_id**   | **str**      | Identifier for the model                     |
-| **model_name** | **str**      | Display name of the model                    |
-| **license**    | **str**      | License type of the model                    |
-| **bt_score**   | **float**    | Primary scoring metric (higher is better)    |
-| **vote_count** | **int**      | Number of votes/evaluations                  |
-| **rank**       | **int**      | Current rank position (1-based)              |
-| **created_at** | **datetime** | When this entry was created                  |
+| Name                 | Type         | Description                                  | Notes |
+| -------------------- | ------------ | -------------------------------------------- | ----- |
+| **id**               | **str**      | Unique identifier for this leaderboard entry |
+| **model_id**         | **str**      | Identifier for the model                     |
+| **model_name**       | **str**      | Display name of the model                    |
+| **license**          | **str**      | License type of the model                    |
+| **bt_score**         | **float**    | Primary scoring metric (higher is better)    |
+| **evaluation_count** | **int**      | Number of evaluations                        |
+| **rank**             | **int**      | Current rank position (1-based)              |
+| **created_at**       | **datetime** | When this entry was created                  |
 
 ## Example
 

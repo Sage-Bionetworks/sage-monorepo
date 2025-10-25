@@ -50,7 +50,7 @@ class TestLeaderboardEntryPage(unittest.TestCase):
                         model_name = 'GPT-4o', 
                         license = 'MIT', 
                         bt_score = 0.925, 
-                        vote_count = 1250, 
+                        evaluation_count = 1250, 
                         rank = 1, 
                         created_at = '2025-08-16T10:30Z', )
                     ]
@@ -72,7 +72,7 @@ class TestLeaderboardEntryPage(unittest.TestCase):
                         model_name = 'GPT-4o', 
                         license = 'MIT', 
                         bt_score = 0.925, 
-                        vote_count = 1250, 
+                        evaluation_count = 1250, 
                         rank = 1, 
                         created_at = '2025-08-16T10:30Z', )
                     ],

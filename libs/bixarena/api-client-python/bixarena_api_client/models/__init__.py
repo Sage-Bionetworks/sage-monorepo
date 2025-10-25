@@ -22,6 +22,9 @@ from bixarena_api_client.models.battle_search_query import BattleSearchQuery
 from bixarena_api_client.models.battle_sort import BattleSort
 from bixarena_api_client.models.battle_update_request import BattleUpdateRequest
 from bixarena_api_client.models.callback200_response import Callback200Response
+from bixarena_api_client.models.evaluation import Evaluation
+from bixarena_api_client.models.evaluation_create_request import EvaluationCreateRequest
+from bixarena_api_client.models.evaluation_outcome import EvaluationOutcome
 from bixarena_api_client.models.example_prompt import ExamplePrompt
 from bixarena_api_client.models.example_prompt_page import ExamplePromptPage
 from bixarena_api_client.models.example_prompt_search_query import (
@@ -60,9 +63,3 @@ from bixarena_api_client.models.page_metadata import PageMetadata
 from bixarena_api_client.models.sort_direction import SortDirection
 from bixarena_api_client.models.token200_response import Token200Response
 from bixarena_api_client.models.user_info import UserInfo
-from bixarena_api_client.models.vote import Vote
-from bixarena_api_client.models.vote_create_request import VoteCreateRequest
-from bixarena_api_client.models.vote_page import VotePage
-from bixarena_api_client.models.vote_preference import VotePreference
-from bixarena_api_client.models.vote_search_query import VoteSearchQuery
-from bixarena_api_client.models.vote_sort import VoteSort

@@ -8,7 +8,7 @@ The field to sort leaderboard entries by.
 
 - `BT_SCORE` (value: `'bt_score'`)
 
-- `VOTE_COUNT` (value: `'vote_count'`)
+- `EVALUATION_COUNT` (value: `'evaluation_count'`)
 
 - `CREATED_AT` (value: `'created_at'`)
 
