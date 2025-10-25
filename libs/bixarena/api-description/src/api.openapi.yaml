@@ -31,8 +31,8 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
-  - name: Evaluation
-    description: Operations about evaluations.
+  - name: BattleEvaluation
+    description: Operations about battle evaluations.
 
 paths:
   /admin/stats:

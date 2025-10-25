@@ -1,8 +1,8 @@
 type: object
-description: The information used to create a new evaluation.
+description: The information used to create a new battle evaluation.
 properties:
   outcome:
-    $ref: EvaluationOutcome.yaml
+    $ref: BattleEvaluationOutcome.yaml
   is_valid:
     $ref: IsValid.yaml
   validation_error:

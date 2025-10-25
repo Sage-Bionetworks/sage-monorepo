@@ -28,9 +28,9 @@ tags:
   - name: Model
     description: Operations about models.
     x-displayName: Model
-  - name: Evaluation
-    description: Operations about evaluations.
-    x-displayName: Evaluation
+  - name: BattleEvaluation
+    description: Operations about battle evaluations.
+    x-displayName: BattleEvaluation
   - name: Auth
     description: Authentication and token minting operations.
     x-displayName: Auth
@@ -345,24 +345,24 @@ paths:
       - $ref: '#/components/parameters/battleId'
     post:
       tags:
-        - Evaluation
-      summary: Create an evaluation
-      description: Create a new evaluation for a battle.
-      operationId: createEvaluation
+        - BattleEvaluation
+      summary: Create a battle evaluation
+      description: Create a new battle evaluation for a battle.
+      operationId: createBattleEvaluation
       x-anonymous-access: true
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EvaluationCreateRequest'
+              $ref: '#/components/schemas/BattleEvaluationCreateRequest'
         required: true
       responses:
         '201':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Evaluation'
-          description: Evaluation created successfully
+                $ref: '#/components/schemas/BattleEvaluation'
+          description: BattleEvaluation created successfully
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1283,9 +1283,9 @@ components:
                 $ref: '#/components/schemas/Model'
           required:
             - models
-    EvaluationOutcome:
+    BattleEvaluationOutcome:
       type: string
-      description: The outcome of the evaluation between model1 and model2
+      description: The outcome of the battle evaluation between model1 and model2
       enum:
         - model1
         - model2
@@ -1298,12 +1298,12 @@ components:
       type: string
       maxLength: 1000
       description: Short validation error message or reason
-    EvaluationCreateRequest:
+    BattleEvaluationCreateRequest:
       type: object
-      description: The information used to create a new evaluation.
+      description: The information used to create a new battle evaluation.
       properties:
         outcome:
-          $ref: '#/components/schemas/EvaluationOutcome'
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
         is_valid:
           $ref: '#/components/schemas/IsValid'
         validation_error:
@@ -1311,18 +1311,18 @@ components:
           nullable: true
       required:
         - outcome
-    EvaluationId:
+    BattleEvaluationId:
       type: string
       format: uuid
-      description: The unique identifier of the evaluation
-    Evaluation:
+      description: The unique identifier of the battle evaluation
+    BattleEvaluation:
       type: object
-      description: An evaluation entity representing a user's assessment in a battle between two AI models.
+      description: A battle evaluation entity representing a user's assessment in a battle between two AI models.
       properties:
         id:
-          $ref: '#/components/schemas/EvaluationId'
+          $ref: '#/components/schemas/BattleEvaluationId'
         outcome:
-          $ref: '#/components/schemas/EvaluationOutcome'
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
         createdAt:
           $ref: '#/components/schemas/CreatedAt'
         is_valid:
@@ -1485,7 +1485,7 @@ x-tagGroups:
       - Example Prompt
       - Leaderboard
       - Model
-      - Evaluation
+      - BattleEvaluation
   - name: BixArena Auth Service
     tags:
       - Auth

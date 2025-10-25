@@ -1,3 +1,0 @@
-type: string
-format: uuid
-description: The unique identifier of the evaluation

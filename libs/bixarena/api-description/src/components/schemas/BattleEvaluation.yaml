@@ -1,10 +1,10 @@
 type: object
-description: An evaluation entity representing a user's assessment in a battle between two AI models.
+description: A battle evaluation entity representing a user's assessment in a battle between two AI models.
 properties:
   id:
-    $ref: EvaluationId.yaml
+    $ref: BattleEvaluationId.yaml
   outcome:
-    $ref: EvaluationOutcome.yaml
+    $ref: BattleEvaluationOutcome.yaml
   createdAt:
     $ref: CreatedAt.yaml
   is_valid:
