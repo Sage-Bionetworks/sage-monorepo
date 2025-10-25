@@ -40,6 +40,8 @@ public class EvaluationService {
     EvaluationEntity entity = EvaluationEntity.builder()
       .battleId(battleId)
       .outcome(outcome)
+      .isValid(false)
+      .validationError(null)
       .build();
 
     try {
@@ -53,6 +55,8 @@ public class EvaluationService {
         .id(saved.getId())
         .outcome(outcomeDto)
         .createdAt(saved.getCreatedAt())
+        .isValid(saved.getIsValid())
+        .validationError(saved.getValidationError())
         .build();
     } catch (DataIntegrityViolationException e) {
       if (e.getMessage() != null && e.getMessage().toLowerCase().contains("unique")) {

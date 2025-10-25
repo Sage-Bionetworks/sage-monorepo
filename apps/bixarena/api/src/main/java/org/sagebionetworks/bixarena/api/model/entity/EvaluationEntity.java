@@ -36,6 +36,12 @@ public class EvaluationEntity {
   @Column(name = "outcome", nullable = false, length = 20)
   private Outcome outcome;
 
+  @Column(name = "is_valid", nullable = false)
+  private Boolean isValid;
+
+  @Column(name = "validation_error", length = 1000)
+  private String validationError;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;
