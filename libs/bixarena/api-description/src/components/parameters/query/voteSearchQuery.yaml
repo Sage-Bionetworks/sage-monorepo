@@ -1,7 +1,0 @@
-name: voteSearchQuery
-description: The search query used to find and filter votes.
-in: query
-style: deepObject
-explode: true
-schema:
-  $ref: ../../schemas/VoteSearchQuery.yaml

@@ -31,8 +31,8 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
-  - name: Vote
-    description: Operations about votes.
+  - name: Evaluation
+    description: Operations about evaluations.
 
 paths:
   /admin/stats:
@@ -53,10 +53,8 @@ paths:
     $ref: paths/leaderboards/{leaderboardId}/snapshots.yaml
   /models:
     $ref: paths/models.yaml
-  /votes:
-    $ref: paths/votes.yaml
-  /votes/{voteId}:
-    $ref: paths/votes/{voteId}.yaml
+  /battles/{battleId}/evaluations:
+    $ref: paths/battles/{battleId}/evaluations.yaml
 
 components:
   securitySchemes:

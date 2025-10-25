@@ -1,0 +1,13 @@
+type: object
+description: An evaluation entity representing a user's assessment in a battle between two AI models.
+properties:
+  id:
+    $ref: EvaluationId.yaml
+  preference:
+    $ref: EvaluationPreference.yaml
+  createdAt:
+    $ref: CreatedAt.yaml
+required:
+  - id
+  - preference
+  - createdAt
