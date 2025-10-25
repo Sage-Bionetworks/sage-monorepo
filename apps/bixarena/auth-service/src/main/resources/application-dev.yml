@@ -6,3 +6,4 @@ spring:
 logging:
   level:
     org.sagebionetworks.bixarena: DEBUG
+    org.springframework.security: DEBUG

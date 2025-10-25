@@ -57,10 +57,7 @@ spring:
             - id: bixarena-auth-service
               uri: http://bixarena-auth-service:8115
               predicates:
-                - Path=/auth/**
-                - Path=/oauth2/token
-                - Path=/userinfo
-                - Path=/.well-known/jwks.json
+                - Path=/auth/**,/.well-known/jwks.json,/oauth2/token,/userinfo
   profiles:
     active: dev
   config:
@@ -69,8 +66,10 @@ spring:
 logging:
   level:
     org.sagebionetworks.bixarena.api.gateway: DEBUG
-    org.springframework.security: DEBUG
     org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher: OFF
+    org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher: OFF
 
 management:
   endpoints:
