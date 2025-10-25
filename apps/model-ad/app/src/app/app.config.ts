@@ -1,4 +1,9 @@
-import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import {
   APP_ID,
   ApplicationConfig,
@@ -24,6 +29,7 @@ import { CustomUrlSerializer } from './app.custom-url-serializer';
 import { routes } from './app.routes';
 import { ModelAdPreset } from './primeNGPreset';
 import { GlobalErrorHandler } from '@sagebionetworks/explorers/services';
+import { HttpErrorInterceptor } from '@sagebionetworks/explorers/util';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -63,5 +69,10 @@ export const appConfig: ApplicationConfig = {
     { provide: UrlSerializer, useClass: CustomUrlSerializer },
     MessageService,
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
   ],
 };
