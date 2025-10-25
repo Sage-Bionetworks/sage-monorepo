@@ -20,7 +20,7 @@ __all__ = [
     "AdminApi",
     "AuthApi",
     "BattleApi",
-    "EvaluationApi",
+    "BattleEvaluationApi",
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
@@ -37,14 +37,14 @@ __all__ = [
     "BasicError",
     "Battle",
     "BattleCreateRequest",
+    "BattleEvaluation",
+    "BattleEvaluationCreateRequest",
+    "BattleEvaluationOutcome",
     "BattlePage",
     "BattleSearchQuery",
     "BattleSort",
     "BattleUpdateRequest",
     "Callback200Response",
-    "Evaluation",
-    "EvaluationCreateRequest",
-    "EvaluationOutcome",
     "ExamplePrompt",
     "ExamplePromptPage",
     "ExamplePromptSearchQuery",
@@ -79,7 +79,9 @@ __all__ = [
 from bixarena_api_client.api.admin_api import AdminApi as AdminApi
 from bixarena_api_client.api.auth_api import AuthApi as AuthApi
 from bixarena_api_client.api.battle_api import BattleApi as BattleApi
-from bixarena_api_client.api.evaluation_api import EvaluationApi as EvaluationApi
+from bixarena_api_client.api.battle_evaluation_api import (
+    BattleEvaluationApi as BattleEvaluationApi,
+)
 from bixarena_api_client.api.example_prompt_api import (
     ExamplePromptApi as ExamplePromptApi,
 )
@@ -106,6 +108,15 @@ from bixarena_api_client.models.battle import Battle as Battle
 from bixarena_api_client.models.battle_create_request import (
     BattleCreateRequest as BattleCreateRequest,
 )
+from bixarena_api_client.models.battle_evaluation import (
+    BattleEvaluation as BattleEvaluation,
+)
+from bixarena_api_client.models.battle_evaluation_create_request import (
+    BattleEvaluationCreateRequest as BattleEvaluationCreateRequest,
+)
+from bixarena_api_client.models.battle_evaluation_outcome import (
+    BattleEvaluationOutcome as BattleEvaluationOutcome,
+)
 from bixarena_api_client.models.battle_page import BattlePage as BattlePage
 from bixarena_api_client.models.battle_search_query import (
     BattleSearchQuery as BattleSearchQuery,
@@ -116,13 +127,6 @@ from bixarena_api_client.models.battle_update_request import (
 )
 from bixarena_api_client.models.callback200_response import (
     Callback200Response as Callback200Response,
-)
-from bixarena_api_client.models.evaluation import Evaluation as Evaluation
-from bixarena_api_client.models.evaluation_create_request import (
-    EvaluationCreateRequest as EvaluationCreateRequest,
-)
-from bixarena_api_client.models.evaluation_outcome import (
-    EvaluationOutcome as EvaluationOutcome,
 )
 from bixarena_api_client.models.example_prompt import ExamplePrompt as ExamplePrompt
 from bixarena_api_client.models.example_prompt_page import (

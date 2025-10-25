@@ -16,39 +16,28 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from uuid import UUID
-from bixarena_api_client.models.evaluation_outcome import EvaluationOutcome
+from bixarena_api_client.models.battle_evaluation_outcome import BattleEvaluationOutcome
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class Evaluation(BaseModel):
+class BattleEvaluationCreateRequest(BaseModel):
     """
-    An evaluation entity representing a user's assessment in a battle between two AI models.
+    The information used to create a new battle evaluation.
     """  # noqa: E501
 
-    id: UUID = Field(description="The unique identifier of the evaluation")
-    outcome: EvaluationOutcome
-    created_at: datetime = Field(
-        description="Timestamp when the entity was created.", alias="createdAt"
-    )
-    is_valid: StrictBool = Field(
-        description="Indicates whether the resource passed server-side validation."
+    outcome: BattleEvaluationOutcome
+    is_valid: Optional[StrictBool] = Field(
+        default=False,
+        description="Indicates whether the resource passed server-side validation.",
     )
     validation_error: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = (
         Field(default=None, description="Short validation error message or reason")
     )
-    __properties: ClassVar[List[str]] = [
-        "id",
-        "outcome",
-        "createdAt",
-        "is_valid",
-        "validation_error",
-    ]
+    __properties: ClassVar[List[str]] = ["outcome", "is_valid", "validation_error"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -67,7 +56,7 @@ class Evaluation(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Evaluation from a JSON string"""
+        """Create an instance of BattleEvaluationCreateRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -91,7 +80,7 @@ class Evaluation(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Evaluation from a dict"""
+        """Create an instance of BattleEvaluationCreateRequest from a dict"""
         if obj is None:
             return None
 
@@ -100,9 +89,7 @@ class Evaluation(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "id": obj.get("id"),
                 "outcome": obj.get("outcome"),
-                "createdAt": obj.get("createdAt"),
                 "is_valid": obj.get("is_valid")
                 if obj.get("is_valid") is not None
                 else False,

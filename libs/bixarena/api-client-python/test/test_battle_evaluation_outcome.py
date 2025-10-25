@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.evaluation_outcome import EvaluationOutcome
+from bixarena_api_client.models.battle_evaluation_outcome import BattleEvaluationOutcome
 
 
-class TestEvaluationOutcome(unittest.TestCase):
-    """EvaluationOutcome unit test stubs"""
+class TestBattleEvaluationOutcome(unittest.TestCase):
+    """BattleEvaluationOutcome unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,9 +25,9 @@ class TestEvaluationOutcome(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testEvaluationOutcome(self):
-        """Test EvaluationOutcome"""
-        # inst = EvaluationOutcome()
+    def testBattleEvaluationOutcome(self):
+        """Test BattleEvaluationOutcome"""
+        # inst = BattleEvaluationOutcome()
 
 
 if __name__ == "__main__":
