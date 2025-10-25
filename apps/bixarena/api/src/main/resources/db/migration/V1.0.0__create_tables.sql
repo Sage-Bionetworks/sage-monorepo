@@ -102,7 +102,7 @@ CREATE TABLE api.battle_evaluation (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   -- Table constraints
   CONSTRAINT unique_battle_evaluation UNIQUE (battle_id),
-  CONSTRAINT chk_evaluation_outcome CHECK (outcome IN ('MODEL_1', 'MODEL_2', 'TIE'))
+  CONSTRAINT chk_battle_evaluation_outcome CHECK (outcome IN ('MODEL_1', 'MODEL_2', 'TIE'))
 );
 
 -- Indexes for evaluation queries

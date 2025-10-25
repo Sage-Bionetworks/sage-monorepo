@@ -16,11 +16,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * The outcome of the evaluation between model1 and model2
+ * The outcome of the battle evaluation between model1 and model2
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public enum EvaluationOutcomeDto {
+public enum BattleEvaluationOutcomeDto {
   
   MODEL1("model1"),
   
@@ -30,7 +30,7 @@ public enum EvaluationOutcomeDto {
 
   private final String value;
 
-  EvaluationOutcomeDto(String value) {
+  BattleEvaluationOutcomeDto(String value) {
     this.value = value;
   }
 
@@ -45,8 +45,8 @@ public enum EvaluationOutcomeDto {
   }
 
   @JsonCreator
-  public static EvaluationOutcomeDto fromValue(String value) {
-    for (EvaluationOutcomeDto b : EvaluationOutcomeDto.values()) {
+  public static BattleEvaluationOutcomeDto fromValue(String value) {
+    for (BattleEvaluationOutcomeDto b : BattleEvaluationOutcomeDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

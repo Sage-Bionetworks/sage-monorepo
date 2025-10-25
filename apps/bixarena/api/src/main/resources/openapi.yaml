@@ -24,8 +24,8 @@ tags:
     name: Leaderboard
   - description: Operations about models.
     name: Model
-  - description: Operations about evaluations.
-    name: Evaluation
+  - description: Operations about battle evaluations.
+    name: BattleEvaluation
 paths:
   /admin/stats:
     get:
@@ -465,8 +465,8 @@ paths:
         - tag: Model
   /battles/{battleId}/evaluations:
     post:
-      description: Create a new evaluation for a battle.
-      operationId: createEvaluation
+      description: Create a new battle evaluation for a battle.
+      operationId: createBattleEvaluation
       parameters:
         - description: The unique identifier of the battle
           explode: false
@@ -480,15 +480,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EvaluationCreateRequest'
+              $ref: '#/components/schemas/BattleEvaluationCreateRequest'
         required: true
       responses:
         '201':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Evaluation'
-          description: Evaluation created successfully
+                $ref: '#/components/schemas/BattleEvaluation'
+          description: BattleEvaluation created successfully
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -499,16 +499,16 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      summary: Create an evaluation
+      summary: Create a battle evaluation
       tags:
-        - Evaluation
+        - BattleEvaluation
       x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: Evaluation
+        - tag: BattleEvaluation
 components:
   parameters:
     battleSearchQuery:
@@ -1594,8 +1594,8 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-    EvaluationOutcome:
-      description: The outcome of the evaluation between model1 and model2
+    BattleEvaluationOutcome:
+      description: The outcome of the battle evaluation between model1 and model2
       enum:
         - model1
         - model2
@@ -1609,11 +1609,11 @@ components:
       description: Short validation error message or reason
       maxLength: 1000
       type: string
-    EvaluationCreateRequest:
-      description: The information used to create a new evaluation.
+    BattleEvaluationCreateRequest:
+      description: The information used to create a new battle evaluation.
       properties:
         outcome:
-          $ref: '#/components/schemas/EvaluationOutcome'
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
         is_valid:
           default: false
           description: Indicates whether the resource passed server-side validation.
@@ -1625,13 +1625,13 @@ components:
       required:
         - outcome
       type: object
-    EvaluationId:
-      description: The unique identifier of the evaluation
+    BattleEvaluationId:
+      description: The unique identifier of the battle evaluation
       format: uuid
       type: string
-    Evaluation:
-      description: An evaluation entity representing a user's assessment in a battle
-        between two AI models.
+    BattleEvaluation:
+      description: A battle evaluation entity representing a user's assessment in
+        a battle between two AI models.
       example:
         createdAt: 2024-01-15T10:30:00Z
         validation_error: validation_error
@@ -1640,11 +1640,11 @@ components:
         outcome: model1
       properties:
         id:
-          description: The unique identifier of the evaluation
+          description: The unique identifier of the battle evaluation
           format: uuid
           type: string
         outcome:
-          $ref: '#/components/schemas/EvaluationOutcome'
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
         createdAt:
           description: Timestamp when the entity was created.
           example: 2024-01-15T10:30:00Z

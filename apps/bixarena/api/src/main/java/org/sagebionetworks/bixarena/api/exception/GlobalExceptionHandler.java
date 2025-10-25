@@ -68,28 +68,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
-  @ExceptionHandler(EvaluationNotFoundException.class)
-  protected ResponseEntity<BasicErrorDto> handleEvaluationNotFound(
-    EvaluationNotFoundException ex,
-    Locale locale
-  ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-      BasicErrorDto.builder()
-        .title("Evaluation Not Found")
-        .status(HttpStatus.NOT_FOUND.value())
-        .detail(ex.getMessage())
-        .build()
-    );
-  }
-
-  @ExceptionHandler(DuplicateEvaluationException.class)
-  protected ResponseEntity<BasicErrorDto> handleDuplicateEvaluation(
-    DuplicateEvaluationException ex,
+  @ExceptionHandler(DuplicateBattleEvaluationException.class)
+  protected ResponseEntity<BasicErrorDto> handleDuplicateBattleEvaluation(
+    DuplicateBattleEvaluationException ex,
     Locale locale
   ) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(
       BasicErrorDto.builder()
-        .title("Duplicate Evaluation")
+        .title("Duplicate Battle Evaluation")
         .status(HttpStatus.CONFLICT.value())
         .detail(ex.getMessage())
         .build()

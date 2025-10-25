@@ -1,8 +1,8 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
-import org.sagebionetworks.bixarena.api.model.dto.EvaluationCreateRequestDto;
-import org.sagebionetworks.bixarena.api.model.dto.EvaluationDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationDto;
 import java.util.UUID;
 
 
@@ -32,16 +32,16 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
 @RequestMapping("${openapi.bixArenaAPIService.base-path:/v1}")
-public class EvaluationApiController implements EvaluationApi {
+public class BattleEvaluationApiController implements BattleEvaluationApi {
 
-    private final EvaluationApiDelegate delegate;
+    private final BattleEvaluationApiDelegate delegate;
 
-    public EvaluationApiController(@Autowired(required = false) EvaluationApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new EvaluationApiDelegate() {});
+    public BattleEvaluationApiController(@Autowired(required = false) BattleEvaluationApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new BattleEvaluationApiDelegate() {});
     }
 
     @Override
-    public EvaluationApiDelegate getDelegate() {
+    public BattleEvaluationApiDelegate getDelegate() {
         return delegate;
     }
 

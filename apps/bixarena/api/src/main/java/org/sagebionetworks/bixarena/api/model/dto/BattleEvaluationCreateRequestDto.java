@@ -6,10 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.OffsetDateTime;
-import java.util.UUID;
-import org.sagebionetworks.bixarena.api.model.dto.EvaluationOutcomeDto;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationOutcomeDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -21,60 +18,32 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * An evaluation entity representing a user&#39;s assessment in a battle between two AI models.
+ * The information used to create a new battle evaluation.
  */
 
-@Schema(name = "Evaluation", description = "An evaluation entity representing a user's assessment in a battle between two AI models.")
-@JsonTypeName("Evaluation")
+@Schema(name = "BattleEvaluationCreateRequest", description = "The information used to create a new battle evaluation.")
+@JsonTypeName("BattleEvaluationCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class EvaluationDto {
+public class BattleEvaluationCreateRequestDto {
 
-  private UUID id;
-
-  private EvaluationOutcomeDto outcome;
-
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime createdAt;
+  private BattleEvaluationOutcomeDto outcome;
 
   private Boolean isValid = false;
 
   private @Nullable String validationError;
 
-  public EvaluationDto() {
+  public BattleEvaluationCreateRequestDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public EvaluationDto(UUID id, EvaluationOutcomeDto outcome, OffsetDateTime createdAt, Boolean isValid) {
-    this.id = id;
+  public BattleEvaluationCreateRequestDto(BattleEvaluationOutcomeDto outcome) {
     this.outcome = outcome;
-    this.createdAt = createdAt;
-    this.isValid = isValid;
   }
 
-  public EvaluationDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * The unique identifier of the evaluation
-   * @return id
-   */
-  @NotNull @Valid 
-  @Schema(name = "id", description = "The unique identifier of the evaluation", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("id")
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public EvaluationDto outcome(EvaluationOutcomeDto outcome) {
+  public BattleEvaluationCreateRequestDto outcome(BattleEvaluationOutcomeDto outcome) {
     this.outcome = outcome;
     return this;
   }
@@ -86,35 +55,15 @@ public class EvaluationDto {
   @NotNull @Valid 
   @Schema(name = "outcome", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("outcome")
-  public EvaluationOutcomeDto getOutcome() {
+  public BattleEvaluationOutcomeDto getOutcome() {
     return outcome;
   }
 
-  public void setOutcome(EvaluationOutcomeDto outcome) {
+  public void setOutcome(BattleEvaluationOutcomeDto outcome) {
     this.outcome = outcome;
   }
 
-  public EvaluationDto createdAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-    return this;
-  }
-
-  /**
-   * Timestamp when the entity was created.
-   * @return createdAt
-   */
-  @NotNull @Valid 
-  @Schema(name = "createdAt", example = "2024-01-15T10:30Z", description = "Timestamp when the entity was created.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("createdAt")
-  public OffsetDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public EvaluationDto isValid(Boolean isValid) {
+  public BattleEvaluationCreateRequestDto isValid(Boolean isValid) {
     this.isValid = isValid;
     return this;
   }
@@ -123,8 +72,8 @@ public class EvaluationDto {
    * Indicates whether the resource passed server-side validation.
    * @return isValid
    */
-  @NotNull 
-  @Schema(name = "is_valid", description = "Indicates whether the resource passed server-side validation.", requiredMode = Schema.RequiredMode.REQUIRED)
+  
+  @Schema(name = "is_valid", description = "Indicates whether the resource passed server-side validation.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("is_valid")
   public Boolean getIsValid() {
     return isValid;
@@ -134,7 +83,7 @@ public class EvaluationDto {
     this.isValid = isValid;
   }
 
-  public EvaluationDto validationError(@Nullable String validationError) {
+  public BattleEvaluationCreateRequestDto validationError(@Nullable String validationError) {
     this.validationError = validationError;
     return this;
   }
@@ -162,26 +111,22 @@ public class EvaluationDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EvaluationDto evaluation = (EvaluationDto) o;
-    return Objects.equals(this.id, evaluation.id) &&
-        Objects.equals(this.outcome, evaluation.outcome) &&
-        Objects.equals(this.createdAt, evaluation.createdAt) &&
-        Objects.equals(this.isValid, evaluation.isValid) &&
-        Objects.equals(this.validationError, evaluation.validationError);
+    BattleEvaluationCreateRequestDto battleEvaluationCreateRequest = (BattleEvaluationCreateRequestDto) o;
+    return Objects.equals(this.outcome, battleEvaluationCreateRequest.outcome) &&
+        Objects.equals(this.isValid, battleEvaluationCreateRequest.isValid) &&
+        Objects.equals(this.validationError, battleEvaluationCreateRequest.validationError);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, outcome, createdAt, isValid, validationError);
+    return Objects.hash(outcome, isValid, validationError);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EvaluationDto {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("class BattleEvaluationCreateRequestDto {\n");
     sb.append("    outcome: ").append(toIndentedString(outcome)).append("\n");
-    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    isValid: ").append(toIndentedString(isValid)).append("\n");
     sb.append("    validationError: ").append(toIndentedString(validationError)).append("\n");
     sb.append("}");
@@ -201,56 +146,44 @@ public class EvaluationDto {
   
   public static class Builder {
 
-    private EvaluationDto instance;
+    private BattleEvaluationCreateRequestDto instance;
 
     public Builder() {
-      this(new EvaluationDto());
+      this(new BattleEvaluationCreateRequestDto());
     }
 
-    protected Builder(EvaluationDto instance) {
+    protected Builder(BattleEvaluationCreateRequestDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(EvaluationDto value) { 
-      this.instance.setId(value.id);
+    protected Builder copyOf(BattleEvaluationCreateRequestDto value) { 
       this.instance.setOutcome(value.outcome);
-      this.instance.setCreatedAt(value.createdAt);
       this.instance.setIsValid(value.isValid);
       this.instance.setValidationError(value.validationError);
       return this;
     }
 
-    public EvaluationDto.Builder id(UUID id) {
-      this.instance.id(id);
-      return this;
-    }
-    
-    public EvaluationDto.Builder outcome(EvaluationOutcomeDto outcome) {
+    public BattleEvaluationCreateRequestDto.Builder outcome(BattleEvaluationOutcomeDto outcome) {
       this.instance.outcome(outcome);
       return this;
     }
     
-    public EvaluationDto.Builder createdAt(OffsetDateTime createdAt) {
-      this.instance.createdAt(createdAt);
-      return this;
-    }
-    
-    public EvaluationDto.Builder isValid(Boolean isValid) {
+    public BattleEvaluationCreateRequestDto.Builder isValid(Boolean isValid) {
       this.instance.isValid(isValid);
       return this;
     }
     
-    public EvaluationDto.Builder validationError(String validationError) {
+    public BattleEvaluationCreateRequestDto.Builder validationError(String validationError) {
       this.instance.validationError(validationError);
       return this;
     }
     
     /**
-    * returns a built EvaluationDto instance.
+    * returns a built BattleEvaluationCreateRequestDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public EvaluationDto build() {
+    public BattleEvaluationCreateRequestDto build() {
       try {
         return this.instance;
       } finally {
@@ -268,15 +201,15 @@ public class EvaluationDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static EvaluationDto.Builder builder() {
-    return new EvaluationDto.Builder();
+  public static BattleEvaluationCreateRequestDto.Builder builder() {
+    return new BattleEvaluationCreateRequestDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public EvaluationDto.Builder toBuilder() {
-    EvaluationDto.Builder builder = new EvaluationDto.Builder();
+  public BattleEvaluationCreateRequestDto.Builder toBuilder() {
+    BattleEvaluationCreateRequestDto.Builder builder = new BattleEvaluationCreateRequestDto.Builder();
     return builder.copyOf(this);
   }
 

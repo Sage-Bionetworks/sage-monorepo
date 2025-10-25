@@ -22,7 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EvaluationEntity {
+public class BattleEvaluationEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)

@@ -6,8 +6,8 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
-import org.sagebionetworks.bixarena.api.model.dto.EvaluationCreateRequestDto;
-import org.sagebionetworks.bixarena.api.model.dto.EvaluationDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationDto;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,20 +35,20 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Evaluation", description = "Operations about evaluations.")
-public interface EvaluationApi {
+@Tag(name = "BattleEvaluation", description = "Operations about battle evaluations.")
+public interface BattleEvaluationApi {
 
-    default EvaluationApiDelegate getDelegate() {
-        return new EvaluationApiDelegate() {};
+    default BattleEvaluationApiDelegate getDelegate() {
+        return new BattleEvaluationApiDelegate() {};
     }
 
     /**
-     * POST /battles/{battleId}/evaluations : Create an evaluation
-     * Create a new evaluation for a battle.
+     * POST /battles/{battleId}/evaluations : Create a battle evaluation
+     * Create a new battle evaluation for a battle.
      *
      * @param battleId The unique identifier of the battle (required)
-     * @param evaluationCreateRequestDto  (required)
-     * @return Evaluation created successfully (status code 201)
+     * @param battleEvaluationCreateRequestDto  (required)
+     * @return BattleEvaluation created successfully (status code 201)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
@@ -56,14 +56,14 @@ public interface EvaluationApi {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "createEvaluation",
-        summary = "Create an evaluation",
-        description = "Create a new evaluation for a battle.",
-        tags = { "Evaluation" },
+        operationId = "createBattleEvaluation",
+        summary = "Create a battle evaluation",
+        description = "Create a new battle evaluation for a battle.",
+        tags = { "BattleEvaluation" },
         responses = {
-            @ApiResponse(responseCode = "201", description = "Evaluation created successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = EvaluationDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = EvaluationDto.class))
+            @ApiResponse(responseCode = "201", description = "BattleEvaluation created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleEvaluationDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleEvaluationDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -97,11 +97,11 @@ public interface EvaluationApi {
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<EvaluationDto> createEvaluation(
+    default ResponseEntity<BattleEvaluationDto> createBattleEvaluation(
         @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
-        @Parameter(name = "EvaluationCreateRequestDto", description = "", required = true) @Valid @RequestBody EvaluationCreateRequestDto evaluationCreateRequestDto
+        @Parameter(name = "BattleEvaluationCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleEvaluationCreateRequestDto battleEvaluationCreateRequestDto
     ) {
-        return getDelegate().createEvaluation(battleId, evaluationCreateRequestDto);
+        return getDelegate().createBattleEvaluation(battleId, battleEvaluationCreateRequestDto);
     }
 
 }

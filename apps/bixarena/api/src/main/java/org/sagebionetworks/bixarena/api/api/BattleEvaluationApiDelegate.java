@@ -1,8 +1,8 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
-import org.sagebionetworks.bixarena.api.model.dto.EvaluationCreateRequestDto;
-import org.sagebionetworks.bixarena.api.model.dto.EvaluationDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationDto;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,32 +19,32 @@ import java.util.Optional;
 import jakarta.annotation.Generated;
 
 /**
- * A delegate to be called by the {@link EvaluationApiController}}.
+ * A delegate to be called by the {@link BattleEvaluationApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public interface EvaluationApiDelegate {
+public interface BattleEvaluationApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
     /**
-     * POST /battles/{battleId}/evaluations : Create an evaluation
-     * Create a new evaluation for a battle.
+     * POST /battles/{battleId}/evaluations : Create a battle evaluation
+     * Create a new battle evaluation for a battle.
      *
      * @param battleId The unique identifier of the battle (required)
-     * @param evaluationCreateRequestDto  (required)
-     * @return Evaluation created successfully (status code 201)
+     * @param battleEvaluationCreateRequestDto  (required)
+     * @return BattleEvaluation created successfully (status code 201)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see EvaluationApi#createEvaluation
+     * @see BattleEvaluationApi#createBattleEvaluation
      */
-    default ResponseEntity<EvaluationDto> createEvaluation(UUID battleId,
-        EvaluationCreateRequestDto evaluationCreateRequestDto) {
+    default ResponseEntity<BattleEvaluationDto> createBattleEvaluation(UUID battleId,
+        BattleEvaluationCreateRequestDto battleEvaluationCreateRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
