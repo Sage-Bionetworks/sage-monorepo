@@ -5,15 +5,18 @@ Adapted from FastChat's gradio_web_server_multi.py and
 simplified to a single function for a single-page LLM comparison arena.
 """
 
-import json
 import logging
 import time
+from uuid import UUID
 
 import gradio as gr
 from bixarena_api_client import (
     ApiClient,
     BattleApi,
     BattleCreateRequest,
+    BattleEvaluationApi,
+    BattleEvaluationCreateRequest,
+    BattleEvaluationOutcome,
     BattleUpdateRequest,
     Configuration,
 )
@@ -52,17 +55,15 @@ logger = logging.getLogger(__name__)
 num_sides = 2
 anony_names = ["", ""]
 models = []
-current_battle_id = None
+current_battle_id: UUID | None = None
 
 
-def create_battle(
-    left_model: str, right_model: str, title: str | None = None
-) -> str | None:
+def create_battle(model1: str, model2: str, title: str | None = None) -> UUID | None:
     """Create a new battle record in the database.
 
     Args:
-        left_model: Name of left model
-        right_model: Name of right model
+        model1: Name of model 1
+        model2: Name of model 2
         title: Optional battle title (first prompt snippet)
 
     Returns:
@@ -72,15 +73,15 @@ def create_battle(
         api_base_url = _get_api_base_url()
 
         # Runtime lookup model info
-        left_model_info = model_response.api_endpoint_info[left_model]
-        right_model_info = model_response.api_endpoint_info[right_model]
+        model1_info = model_response.api_endpoint_info[model1]
+        model2_info = model_response.api_endpoint_info[model2]
 
         configuration = Configuration(host=api_base_url)
         with ApiClient(configuration) as api_client:
             battle_api = BattleApi(api_client)
             battle_request = BattleCreateRequest(
-                left_model_id=left_model_info["model_id"],
-                right_model_id=right_model_info["model_id"],
+                model1Id=model1_info["model_id"],
+                model2Id=model2_info["model_id"],
                 title=title,
             )
             battle = battle_api.create_battle(battle_request)
@@ -94,7 +95,7 @@ def create_battle(
     return None
 
 
-def end_battle(battle_id: str) -> None:
+def end_battle(battle_id: UUID) -> None:
     """Update battle endedAt timestamp when voting completes."""
     if not battle_id:
         logger.warning("⚠️ No battle_id to end")
@@ -112,6 +113,51 @@ def end_battle(battle_id: str) -> None:
         logger.warning(f"❌ Failed to end battle {battle_id}: {e}")
 
 
+def create_battle_evaluation(
+    battle_id: UUID,
+    outcome: BattleEvaluationOutcome,
+    is_valid: bool | None = None,
+    validation_error: str | None = None,
+) -> UUID | None:
+    """Create a battleevaluation record for the battle.
+
+    Args:
+        battle_id: The battle ID to evaluate
+        outcome: BattleEvaluationOutcome enum (MODEL_1, MODEL_2, or TIE)
+        is_valid: boolean indicating whether the responses passed validation
+        validation_error: validation error message
+
+    Returns:
+        Battle Evaluation ID if created successfully, None otherwise
+    """
+    if not battle_id:
+        logger.warning("⚠️ No battle_id to evaluate")
+        return None
+
+    try:
+        api_base_url = _get_api_base_url()
+        configuration = Configuration(host=api_base_url)
+        with ApiClient(configuration) as api_client:
+            evaluation_api = BattleEvaluationApi(api_client)
+            evaluation_request = BattleEvaluationCreateRequest(
+                outcome=outcome,
+                is_valid=is_valid,
+                validation_error=validation_error,
+            )
+            evaluation = evaluation_api.create_battle_evaluation(
+                battle_id, evaluation_request
+            )
+            if evaluation and evaluation.id:
+                logger.info(
+                    f"✅ Evaluation created: {evaluation.id} for battle {battle_id}"
+                )
+                return evaluation.id
+    except Exception as e:
+        logger.warning(f"❌ Failed to create evaluation for battle {battle_id}: {e}")
+
+    return None
+
+
 def load_demo_side_by_side_anony(models_, _):
     global models
     models = models_
@@ -125,32 +171,37 @@ def load_demo_side_by_side_anony(models_, _):
     return states + selector_updates
 
 
-def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
+def vote_last_response(states, outcome, model_selectors, _: gr.Request):
     global current_battle_id
 
-    # End the battle when voting happens
+    # Create evaluation record and end the battle
     if current_battle_id:
+        # TODO: Move the messages validation for identify leaking to backend
+        is_valid, validation_error = validate_responses(states)
+        create_battle_evaluation(
+            current_battle_id,
+            outcome,
+            is_valid=is_valid,
+            validation_error=validation_error,
+        )
         end_battle(current_battle_id)
         current_battle_id = None
 
-    is_valid, reason = validate_responses(states)
-
-    # Log the exact same data to console instead of file
-    data = {
-        "tstamp": round(time.time(), 4),
-        "type": vote_type,
-        "models": model_selectors,
-        "states": [state.dict() for state in states],
-        "is_valid": is_valid,
-        "invalid_reason": reason or "",
-    }
-    logger.info(f"Vote data: {json.dumps(data)}")
+    # # Log the exact same data to console instead of file
+    # data = {
+    #     "tstamp": round(time.time(), 4),
+    #     "type": outcome.value,
+    #     "models": model_selectors,
+    #     "states": [state.dict() for state in states],
+    #     "is_valid": is_valid,
+    #     "invalid_reason": reason or "",
+    # }
 
     if ":" not in model_selectors[0]:
         for _ in range(5):
             names = (
-                "### Model A: " + states[0].model_name,
-                "### Model B: " + states[1].model_name,
+                "### Model 1: " + states[0].model_name,
+                "### Model 2: " + states[1].model_name,
             )
             yield (
                 names
@@ -165,8 +216,8 @@ def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
             time.sleep(0.1)
     else:
         names = (
-            "### Model A: " + states[0].model_name,
-            "### Model B: " + states[1].model_name,
+            "### Model 1: " + states[0].model_name,
+            "### Model 2: " + states[1].model_name,
         )
         yield (
             names
@@ -180,30 +231,36 @@ def leftvote_last_response(
     state0, state1, model_selector0, model_selector1, request: gr.Request
 ):
     logger.info("leftvote (anony).")
-    for x in vote_last_response(
-        [state0, state1], "leftvote", [model_selector0, model_selector1], request
-    ):
-        yield x
+    yield from vote_last_response(
+        [state0, state1],
+        BattleEvaluationOutcome.MODEL1,
+        [model_selector0, model_selector1],
+        request,
+    )
 
 
 def rightvote_last_response(
     state0, state1, model_selector0, model_selector1, request: gr.Request
 ):
     logger.info("rightvote (anony).")
-    for x in vote_last_response(
-        [state0, state1], "rightvote", [model_selector0, model_selector1], request
-    ):
-        yield x
+    yield from vote_last_response(
+        [state0, state1],
+        BattleEvaluationOutcome.MODEL2,
+        [model_selector0, model_selector1],
+        request,
+    )
 
 
 def tievote_last_response(
     state0, state1, model_selector0, model_selector1, request: gr.Request
 ):
     logger.info("tievote (anony).")
-    for x in vote_last_response(
-        [state0, state1], "tievote", [model_selector0, model_selector1], request
-    ):
-        yield x
+    yield from vote_last_response(
+        [state0, state1],
+        BattleEvaluationOutcome.TIE,
+        [model_selector0, model_selector1],
+        request,
+    )
 
 
 def clear_history(request: gr.Request):
@@ -303,11 +360,11 @@ def add_text(
 
     # Create battle with first prompt as title (only for first message)
     if not current_battle_id and states[0] and states[1]:
-        left_model = states[0].model_name
-        right_model = states[1].model_name
+        model1 = states[0].model_name
+        model2 = states[1].model_name
         # Use first 50 characters of prompt as battle title
         battle_title = text[:50] + "..." if len(text) > 50 else text
-        current_battle_id = create_battle(left_model, right_model, battle_title)
+        current_battle_id = create_battle(model1, model2, battle_title)
 
     for i in range(num_sides):
         states[i].conv.append_message(states[i].conv.roles[0], text)
@@ -369,7 +426,7 @@ def build_side_by_side_ui_anony():
         with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
             with gr.Row():
                 for i in range(num_sides):
-                    label = "Model A" if i == 0 else "Model B"
+                    label = "Model 1" if i == 0 else "Model 2"
                     with gr.Column():
                         chatbot = gr.Chatbot(
                             label=label,

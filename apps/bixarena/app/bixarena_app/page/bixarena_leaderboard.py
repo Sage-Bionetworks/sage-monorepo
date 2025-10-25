@@ -51,7 +51,7 @@ def fetch_leaderboard_data(jwt_token: str | None = None):
                 ci_lower = entry.bt_score - 15
                 ci_upper = entry.bt_score + 15
                 data["95% CI"].append(f"[{ci_lower:.1f}, {ci_upper:.1f}]")
-                data["Total Votes"].append(entry.vote_count)
+                data["Total Votes"].append(entry.evaluation_count)
                 # API doesn't provide organization, using placeholder
                 data["Organization"].append("Unknown")
 

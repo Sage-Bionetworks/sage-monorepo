@@ -46,8 +46,8 @@ public class LeaderboardEntryEntity {
   @Column(name = "bt_score", nullable = false, precision = 10, scale = 6)
   private BigDecimal btScore;
 
-  @Column(name = "vote_count", nullable = false)
-  private Integer voteCount;
+  @Column(name = "evaluation_count", nullable = false)
+  private Integer evaluationCount;
 
   @Column(name = "rank", nullable = false)
   private Integer rank;

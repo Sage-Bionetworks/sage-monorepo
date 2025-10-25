@@ -46,7 +46,7 @@ CREATE TABLE api.leaderboard_entry (
   model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
   snapshot_id UUID NOT NULL REFERENCES api.leaderboard_snapshot(id) ON DELETE CASCADE,
   bt_score DECIMAL(10,6) NOT NULL,
-  vote_count INTEGER NOT NULL DEFAULT 0,
+  evaluation_count INTEGER NOT NULL DEFAULT 0,
   rank INTEGER NOT NULL,
   secondary_score DECIMAL(10,6),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -82,8 +82,8 @@ CREATE TABLE api.battle (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(255),
   user_id UUID NOT NULL,
-  left_model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
-  right_model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  model_1_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  model_2_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   ended_at TIMESTAMPTZ
 );
@@ -91,3 +91,21 @@ CREATE TABLE api.battle (
 -- Indexes for performance
 CREATE INDEX idx_api_battle_user_id ON api.battle(user_id);
 CREATE INDEX idx_api_battle_created_at ON api.battle(created_at DESC);
+
+-- Create round table
+CREATE TABLE api.battle_evaluation (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
+  outcome VARCHAR(20) NOT NULL,
+  is_valid BOOLEAN NOT NULL DEFAULT FALSE,
+  validation_error VARCHAR(1000),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  -- Table constraints
+  CONSTRAINT unique_battle_evaluation UNIQUE (battle_id),
+  CONSTRAINT chk_battle_evaluation_outcome CHECK (outcome IN ('MODEL_1', 'MODEL_2', 'TIE'))
+);
+
+-- Indexes for evaluation queries
+CREATE INDEX idx_api_battle_evaluation_outcome ON api.battle_evaluation(outcome);
+CREATE INDEX idx_api_battle_evaluation_created_at ON api.battle_evaluation(created_at DESC);
+CREATE INDEX idx_api_battle_evaluation_is_valid ON api.battle_evaluation(is_valid);

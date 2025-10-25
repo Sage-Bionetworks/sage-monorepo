@@ -68,15 +68,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
-  @ExceptionHandler(ModelNotFoundException.class)
-  protected ResponseEntity<BasicErrorDto> handleModelNotFoundException(
-    ModelNotFoundException ex,
+  @ExceptionHandler(DuplicateBattleEvaluationException.class)
+  protected ResponseEntity<BasicErrorDto> handleDuplicateBattleEvaluation(
+    DuplicateBattleEvaluationException ex,
     Locale locale
   ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(
       BasicErrorDto.builder()
-        .title("Model Not Found")
-        .status(HttpStatus.NOT_FOUND.value())
+        .title("Duplicate Battle Evaluation")
+        .status(HttpStatus.CONFLICT.value())
         .detail(ex.getMessage())
         .build()
     );

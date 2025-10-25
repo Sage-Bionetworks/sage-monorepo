@@ -33,11 +33,11 @@ public class BattleEntity {
   @Column(name = "user_id", nullable = false)
   private UUID userId;
 
-  @Column(name = "left_model_id", nullable = false)
-  private UUID leftModelId;
+  @Column(name = "model_1_id", nullable = false)
+  private UUID model1Id;
 
-  @Column(name = "right_model_id", nullable = false)
-  private UUID rightModelId;
+  @Column(name = "model_2_id", nullable = false)
+  private UUID model2Id;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)

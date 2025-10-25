@@ -24,6 +24,8 @@ tags:
     name: Leaderboard
   - description: Operations about models.
     name: Model
+  - description: Operations about battle evaluations.
+    name: BattleEvaluation
 paths:
   /admin/stats:
     get:
@@ -461,6 +463,51 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Model
+  /battles/{battleId}/evaluations:
+    post:
+      description: Create a new battle evaluation for a battle.
+      operationId: createBattleEvaluation
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleEvaluationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleEvaluation'
+          description: BattleEvaluation created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Create a battle evaluation
+      tags:
+        - BattleEvaluation
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: BattleEvaluation
 components:
   parameters:
     battleSearchQuery:
@@ -689,13 +736,13 @@ components:
     Battle:
       description: A battle entity representing a comparison between two AI models.
       example:
-        leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         createdAt: 2024-01-15T10:30:00Z
         endedAt: 2024-01-15T11:45:00Z
+        model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         title: Gene Expression Analysis Comparison
         userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-        rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+        model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
       properties:
         id:
           description: Unique identifier (UUID) of the battle.
@@ -711,12 +758,12 @@ components:
           example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
           type: string
-        leftModelId:
+        model1Id:
           description: UUID of an AI model.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
           type: string
-        rightModelId:
+        model2Id:
           description: UUID of an AI model.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
@@ -734,8 +781,8 @@ components:
       required:
         - createdAt
         - id
-        - leftModelId
-        - rightModelId
+        - model1Id
+        - model2Id
         - userId
       type: object
     PageMetadata:
@@ -788,20 +835,20 @@ components:
       description: A page of battles.
       example:
         battles:
-          - leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-            createdAt: 2024-01-15T10:30:00Z
+          - createdAt: 2024-01-15T10:30:00Z
             endedAt: 2024-01-15T11:45:00Z
+            model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             title: Gene Expression Analysis Comparison
             userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-            rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-          - leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-            createdAt: 2024-01-15T10:30:00Z
+            model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          - createdAt: 2024-01-15T10:30:00Z
             endedAt: 2024-01-15T11:45:00Z
+            model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             title: Gene Expression Analysis Comparison
             userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-            rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+            model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         page:
           number: 99
           size: 99
@@ -828,19 +875,19 @@ components:
           description: Title of the battle.
           example: Gene Expression Analysis Comparison
           type: string
-        leftModelId:
+        model1Id:
           description: UUID of an AI model.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
           type: string
-        rightModelId:
+        model2Id:
           description: UUID of an AI model.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
           type: string
       required:
-        - leftModelId
-        - rightModelId
+        - model1Id
+        - model2Id
       type: object
     BattleUpdateRequest:
       description: The information used to update a battle.
@@ -988,7 +1035,7 @@ components:
       enum:
         - rank
         - bt_score
-        - vote_count
+        - evaluation_count
         - created_at
         - model_name
       example: bt_score
@@ -1032,11 +1079,11 @@ components:
         modelName: GPT-4o
         license: MIT
         createdAt: 2025-08-16T10:30:00Z
+        evaluationCount: 1250
         modelId: model_456
         btScore: 0.925
         rank: 1
         id: entry_123
-        voteCount: 1250
       properties:
         id:
           description: Unique identifier for this leaderboard entry
@@ -1059,8 +1106,8 @@ components:
           example: 0.925
           format: double
           type: number
-        voteCount:
-          description: Number of votes/evaluations
+        evaluationCount:
+          description: Number of evaluations
           example: 1250
           type: integer
         rank:
@@ -1075,12 +1122,12 @@ components:
       required:
         - btScore
         - createdAt
+        - evaluationCount
         - id
         - license
         - modelId
         - modelName
         - rank
-        - voteCount
       type: object
     LeaderboardEntryPage:
       allOf:
@@ -1112,19 +1159,19 @@ components:
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
+            evaluationCount: 1250
             modelId: model_456
             btScore: 0.925
             rank: 1
             id: entry_123
-            voteCount: 1250
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
+            evaluationCount: 1250
             modelId: model_456
             btScore: 0.925
             rank: 1
             id: entry_123
-            voteCount: 1250
         snapshotId: snapshot_2025-08-16_14-30
         size: 99
         totalPages: 99
@@ -1183,9 +1230,9 @@ components:
       example:
         createdAt: 2025-08-15T10:00:00Z
         snapshotId: snapshot_2025-08-15_10-00
+        evaluationCount: 1180
         btScore: 0.915
         rank: 2
-        voteCount: 1180
       properties:
         snapshotId:
           description: Identifier for the snapshot/timepoint
@@ -1196,8 +1243,8 @@ components:
           example: 0.915
           format: double
           type: number
-        voteCount:
-          description: Number of votes/evaluations at this point in time
+        evaluationCount:
+          description: Number of evaluations at this point in time
           example: 1180
           type: integer
         rank:
@@ -1212,9 +1259,9 @@ components:
       required:
         - btScore
         - createdAt
+        - evaluationCount
         - rank
         - snapshotId
-        - voteCount
       type: object
     LeaderboardModelHistoryPage:
       allOf:
@@ -1250,14 +1297,14 @@ components:
         history:
           - createdAt: 2025-08-15T10:00:00Z
             snapshotId: snapshot_2025-08-15_10-00
+            evaluationCount: 1180
             btScore: 0.915
             rank: 2
-            voteCount: 1180
           - createdAt: 2025-08-15T10:00:00Z
             snapshotId: snapshot_2025-08-15_10-00
+            evaluationCount: 1180
             btScore: 0.915
             rank: 2
-            voteCount: 1180
         totalElements: 99
       type: object
     LeaderboardSnapshotSort:
@@ -1545,6 +1592,76 @@ components:
         hasPrevious: true
         hasNext: true
         totalElements: 99
+      type: object
+    BattleEvaluationOutcome:
+      description: The outcome of the battle evaluation between model1 and model2
+      enum:
+        - model1
+        - model2
+        - tie
+      type: string
+    IsValid:
+      default: false
+      description: Indicates whether the resource passed server-side validation.
+      type: boolean
+    ValidationError:
+      description: Short validation error message or reason
+      maxLength: 1000
+      type: string
+    BattleEvaluationCreateRequest:
+      description: The information used to create a new battle evaluation.
+      properties:
+        outcome:
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
+        is_valid:
+          default: false
+          description: Indicates whether the resource passed server-side validation.
+          type: boolean
+        validation_error:
+          description: Short validation error message or reason
+          maxLength: 1000
+          type: string
+      required:
+        - outcome
+      type: object
+    BattleEvaluationId:
+      description: The unique identifier of the battle evaluation
+      format: uuid
+      type: string
+    BattleEvaluation:
+      description: A battle evaluation entity representing a user's assessment in
+        a battle between two AI models.
+      example:
+        createdAt: 2024-01-15T10:30:00Z
+        validation_error: validation_error
+        is_valid: false
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        outcome: model1
+      properties:
+        id:
+          description: The unique identifier of the battle evaluation
+          format: uuid
+          type: string
+        outcome:
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
+        createdAt:
+          description: Timestamp when the entity was created.
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          type: string
+        is_valid:
+          default: false
+          description: Indicates whether the resource passed server-side validation.
+          type: boolean
+        validation_error:
+          description: Short validation error message or reason
+          maxLength: 1000
+          type: string
+      required:
+        - createdAt
+        - id
+        - is_valid
+        - outcome
       type: object
     adminStats_200_response:
       example:

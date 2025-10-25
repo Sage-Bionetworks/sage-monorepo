@@ -4,10 +4,10 @@ properties:
   title:
     $ref: BattleTitle.yaml
     nullable: true
-  leftModelId:
+  model1Id:
     $ref: ModelId.yaml
-  rightModelId:
+  model2Id:
     $ref: ModelId.yaml
 required:
-  - leftModelId
-  - rightModelId
+  - model1Id
+  - model2Id

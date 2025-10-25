@@ -32,10 +32,8 @@ class Battle(BaseModel):
     id: UUID = Field(description="Unique identifier (UUID) of the battle.")
     title: Optional[StrictStr] = Field(default=None, description="Title of the battle.")
     user_id: UUID = Field(description="UUID of a user.", alias="userId")
-    left_model_id: UUID = Field(description="UUID of an AI model.", alias="leftModelId")
-    right_model_id: UUID = Field(
-        description="UUID of an AI model.", alias="rightModelId"
-    )
+    model1_id: UUID = Field(description="UUID of an AI model.", alias="model1Id")
+    model2_id: UUID = Field(description="UUID of an AI model.", alias="model2Id")
     created_at: datetime = Field(
         description="Timestamp when the entity was created.", alias="createdAt"
     )
@@ -46,8 +44,8 @@ class Battle(BaseModel):
         "id",
         "title",
         "userId",
-        "leftModelId",
-        "rightModelId",
+        "model1Id",
+        "model2Id",
         "createdAt",
         "endedAt",
     ]
@@ -105,8 +103,8 @@ class Battle(BaseModel):
                 "id": obj.get("id"),
                 "title": obj.get("title"),
                 "userId": obj.get("userId"),
-                "leftModelId": obj.get("leftModelId"),
-                "rightModelId": obj.get("rightModelId"),
+                "model1Id": obj.get("model1Id"),
+                "model2Id": obj.get("model2Id"),
                 "createdAt": obj.get("createdAt"),
                 "endedAt": obj.get("endedAt"),
             }

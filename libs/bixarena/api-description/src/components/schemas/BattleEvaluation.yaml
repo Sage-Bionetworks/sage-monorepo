@@ -1,0 +1,19 @@
+type: object
+description: A battle evaluation entity representing a user's assessment in a battle between two AI models.
+properties:
+  id:
+    $ref: BattleEvaluationId.yaml
+  outcome:
+    $ref: BattleEvaluationOutcome.yaml
+  createdAt:
+    $ref: CreatedAt.yaml
+  is_valid:
+    $ref: IsValid.yaml
+  validation_error:
+    $ref: ValidationError.yaml
+    nullable: true
+required:
+  - id
+  - outcome
+  - is_valid
+  - createdAt
