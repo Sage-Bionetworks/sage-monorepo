@@ -10,6 +10,7 @@ import org.sagebionetworks.bixarena.api.model.dto.EvaluationDto;
 import org.sagebionetworks.bixarena.api.model.dto.EvaluationOutcomeDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.EvaluationEntity;
+import org.sagebionetworks.bixarena.api.model.mapper.EvaluationMapper;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.EvaluationRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,6 +27,7 @@ public class EvaluationService {
 
   private final EvaluationRepository evaluationRepository;
   private final BattleRepository battleRepository;
+  private final EvaluationMapper evaluationMapper = new EvaluationMapper();
 
   @Transactional
   public EvaluationDto createEvaluation(UUID battleId, EvaluationCreateRequestDto request) {
@@ -48,16 +50,7 @@ public class EvaluationService {
       EvaluationEntity saved = evaluationRepository.save(entity);
       evaluationRepository.flush();
 
-      // Map saved entity to EvaluationDto
-      EvaluationOutcomeDto outcomeDto = mapEntityOutcomeToDto(saved.getOutcome());
-
-      return EvaluationDto.builder()
-        .id(saved.getId())
-        .outcome(outcomeDto)
-        .createdAt(saved.getCreatedAt())
-        .isValid(saved.getIsValid())
-        .validationError(saved.getValidationError())
-        .build();
+      return evaluationMapper.convertToDto(saved);
     } catch (DataIntegrityViolationException e) {
       if (e.getMessage() != null && e.getMessage().toLowerCase().contains("unique")) {
         // Best-effort detect unique constraint violation for duplicate evaluation
@@ -81,15 +74,6 @@ public class EvaluationService {
       case MODEL1 -> EvaluationEntity.Outcome.MODEL_1;
       case MODEL2 -> EvaluationEntity.Outcome.MODEL_2;
       case TIE -> EvaluationEntity.Outcome.TIE;
-    };
-  }
-
-  private EvaluationOutcomeDto mapEntityOutcomeToDto(EvaluationEntity.Outcome outcome) {
-    if (outcome == null) return null;
-    return switch (outcome) {
-      case MODEL_1 -> EvaluationOutcomeDto.MODEL1;
-      case MODEL_2 -> EvaluationOutcomeDto.MODEL2;
-      case TIE -> EvaluationOutcomeDto.TIE;
     };
   }
 }

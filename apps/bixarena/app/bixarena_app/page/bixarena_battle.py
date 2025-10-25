@@ -113,12 +113,22 @@ def end_battle(battle_id: UUID) -> None:
         logger.warning(f"❌ Failed to end battle {battle_id}: {e}")
 
 
-def create_evaluation(battle_id: UUID, outcome: EvaluationOutcome) -> UUID | None:
+def create_evaluation(
+    battle_id: UUID,
+    outcome: EvaluationOutcome,
+    is_valid: bool | None = None,
+    validation_error: str | None = None,
+) -> UUID | None:
     """Create an evaluation record for the battle.
+
+    This now includes server-side validation metadata (`is_valid` and
+    `validation_error`) which are persisted by the API.
 
     Args:
         battle_id: The battle ID to evaluate
         outcome: EvaluationOutcome enum (MODEL_1, MODEL_2, or TIE)
+        is_valid: boolean indicating whether the responses passed validation
+        validation_error: validation error message
 
     Returns:
         Evaluation ID if created successfully, None otherwise
@@ -132,7 +142,11 @@ def create_evaluation(battle_id: UUID, outcome: EvaluationOutcome) -> UUID | Non
         configuration = Configuration(host=api_base_url)
         with ApiClient(configuration) as api_client:
             evaluation_api = EvaluationApi(api_client)
-            evaluation_request = EvaluationCreateRequest(outcome=outcome)
+            evaluation_request = EvaluationCreateRequest(
+                outcome=outcome,
+                is_valid=is_valid,
+                validation_error=validation_error,
+            )
             evaluation = evaluation_api.create_evaluation(battle_id, evaluation_request)
             if evaluation and evaluation.id:
                 logger.info(
@@ -163,21 +177,25 @@ def vote_last_response(states, outcome, model_selectors, _: gr.Request):
 
     # Create evaluation record and end the battle
     if current_battle_id:
-        create_evaluation(current_battle_id, outcome)
+        # TODO: Move the validation of messages to backend
+        is_valid, reason = validate_responses(states)
+        print(is_valid)
+        print(reason)
+        create_evaluation(
+            current_battle_id, outcome, is_valid=is_valid, validation_error=reason
+        )
         end_battle(current_battle_id)
         current_battle_id = None
 
-    is_valid, reason = validate_responses(states)
-
-    # Log the exact same data to console instead of file
-    data = {
-        "tstamp": round(time.time(), 4),
-        "type": outcome.value,
-        "models": model_selectors,
-        "states": [state.dict() for state in states],
-        "is_valid": is_valid,
-        "invalid_reason": reason or "",
-    }
+    # # Log the exact same data to console instead of file
+    # data = {
+    #     "tstamp": round(time.time(), 4),
+    #     "type": outcome.value,
+    #     "models": model_selectors,
+    #     "states": [state.dict() for state in states],
+    #     "is_valid": is_valid,
+    #     "invalid_reason": reason or "",
+    # }
 
     if ":" not in model_selectors[0]:
         for _ in range(5):
