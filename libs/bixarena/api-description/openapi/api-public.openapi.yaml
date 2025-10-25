@@ -317,7 +317,6 @@ paths:
       summary: Create a battle evaluation
       description: Create a new battle evaluation for a battle.
       operationId: createBattleEvaluation
-      x-anonymous-access: true
       requestBody:
         content:
           application/json:

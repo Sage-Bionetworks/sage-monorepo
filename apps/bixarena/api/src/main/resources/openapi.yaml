@@ -502,7 +502,6 @@ paths:
       summary: Create a battle evaluation
       tags:
         - BattleEvaluation
-      x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
