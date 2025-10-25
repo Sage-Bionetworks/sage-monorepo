@@ -14,11 +14,11 @@ from bixarena_api_client import (
     ApiClient,
     BattleApi,
     BattleCreateRequest,
+    BattleEvaluationApi,
+    BattleEvaluationCreateRequest,
+    BattleEvaluationOutcome,
     BattleUpdateRequest,
     Configuration,
-    EvaluationApi,
-    EvaluationCreateRequest,
-    EvaluationOutcome,
 )
 
 from bixarena_app.config.constants import (
@@ -113,25 +113,22 @@ def end_battle(battle_id: UUID) -> None:
         logger.warning(f"❌ Failed to end battle {battle_id}: {e}")
 
 
-def create_evaluation(
+def create_battle_evaluation(
     battle_id: UUID,
-    outcome: EvaluationOutcome,
+    outcome: BattleEvaluationOutcome,
     is_valid: bool | None = None,
     validation_error: str | None = None,
 ) -> UUID | None:
-    """Create an evaluation record for the battle.
-
-    This now includes server-side validation metadata (`is_valid` and
-    `validation_error`) which are persisted by the API.
+    """Create a battleevaluation record for the battle.
 
     Args:
         battle_id: The battle ID to evaluate
-        outcome: EvaluationOutcome enum (MODEL_1, MODEL_2, or TIE)
+        outcome: BattleEvaluationOutcome enum (MODEL_1, MODEL_2, or TIE)
         is_valid: boolean indicating whether the responses passed validation
         validation_error: validation error message
 
     Returns:
-        Evaluation ID if created successfully, None otherwise
+        Battle Evaluation ID if created successfully, None otherwise
     """
     if not battle_id:
         logger.warning("⚠️ No battle_id to evaluate")
@@ -141,13 +138,15 @@ def create_evaluation(
         api_base_url = _get_api_base_url()
         configuration = Configuration(host=api_base_url)
         with ApiClient(configuration) as api_client:
-            evaluation_api = EvaluationApi(api_client)
-            evaluation_request = EvaluationCreateRequest(
+            evaluation_api = BattleEvaluationApi(api_client)
+            evaluation_request = BattleEvaluationCreateRequest(
                 outcome=outcome,
                 is_valid=is_valid,
                 validation_error=validation_error,
             )
-            evaluation = evaluation_api.create_evaluation(battle_id, evaluation_request)
+            evaluation = evaluation_api.create_battle_evaluation(
+                battle_id, evaluation_request
+            )
             if evaluation and evaluation.id:
                 logger.info(
                     f"✅ Evaluation created: {evaluation.id} for battle {battle_id}"
@@ -177,12 +176,13 @@ def vote_last_response(states, outcome, model_selectors, _: gr.Request):
 
     # Create evaluation record and end the battle
     if current_battle_id:
-        # TODO: Move the validation of messages to backend
-        is_valid, reason = validate_responses(states)
-        print(is_valid)
-        print(reason)
-        create_evaluation(
-            current_battle_id, outcome, is_valid=is_valid, validation_error=reason
+        # TODO: Move the messages validation for identify leaking to backend
+        is_valid, validation_error = validate_responses(states)
+        create_battle_evaluation(
+            current_battle_id,
+            outcome,
+            is_valid=is_valid,
+            validation_error=validation_error,
         )
         end_battle(current_battle_id)
         current_battle_id = None
@@ -233,7 +233,7 @@ def leftvote_last_response(
     logger.info("leftvote (anony).")
     yield from vote_last_response(
         [state0, state1],
-        EvaluationOutcome.MODEL1,
+        BattleEvaluationOutcome.MODEL1,
         [model_selector0, model_selector1],
         request,
     )
@@ -245,7 +245,7 @@ def rightvote_last_response(
     logger.info("rightvote (anony).")
     yield from vote_last_response(
         [state0, state1],
-        EvaluationOutcome.MODEL2,
+        BattleEvaluationOutcome.MODEL2,
         [model_selector0, model_selector1],
         request,
     )
@@ -257,7 +257,7 @@ def tievote_last_response(
     logger.info("tievote (anony).")
     yield from vote_last_response(
         [state0, state1],
-        EvaluationOutcome.TIE,
+        BattleEvaluationOutcome.TIE,
         [model_selector0, model_selector1],
         request,
     )
