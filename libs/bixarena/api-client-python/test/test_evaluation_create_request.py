@@ -35,7 +35,9 @@ class TestEvaluationCreateRequest(unittest.TestCase):
         model = EvaluationCreateRequest()
         if include_optional:
             return EvaluationCreateRequest(
-                outcome = 'model1'
+                outcome = 'model1',
+                is_valid = True,
+                validation_error = ''
             )
         else:
             return EvaluationCreateRequest(

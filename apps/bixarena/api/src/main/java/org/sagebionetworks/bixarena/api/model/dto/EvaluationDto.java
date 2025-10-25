@@ -38,7 +38,7 @@ public class EvaluationDto {
 
   private Boolean isValid = false;
 
-  private @Nullable String validationError = null;
+  private @Nullable String validationError;
 
   public EvaluationDto() {
     super();

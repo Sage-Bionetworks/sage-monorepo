@@ -16,8 +16,9 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from bixarena_api_client.models.evaluation_outcome import EvaluationOutcome
 from typing import Optional, Set
 from typing_extensions import Self
@@ -29,7 +30,14 @@ class EvaluationCreateRequest(BaseModel):
     """  # noqa: E501
 
     outcome: EvaluationOutcome
-    __properties: ClassVar[List[str]] = ["outcome"]
+    is_valid: Optional[StrictBool] = Field(
+        default=False,
+        description="Indicates whether the resource passed server-side validation.",
+    )
+    validation_error: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = (
+        Field(default=None, description="Short validation error message or reason")
+    )
+    __properties: ClassVar[List[str]] = ["outcome", "is_valid", "validation_error"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -79,5 +87,13 @@ class EvaluationCreateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"outcome": obj.get("outcome")})
+        _obj = cls.model_validate(
+            {
+                "outcome": obj.get("outcome"),
+                "is_valid": obj.get("is_valid")
+                if obj.get("is_valid") is not None
+                else False,
+                "validation_error": obj.get("validation_error"),
+            }
+        )
         return _obj

@@ -1118,27 +1118,31 @@ components:
         - model1
         - model2
         - tie
-    EvaluationCreateRequest:
-      type: object
-      description: The information used to create a new evaluation.
-      properties:
-        outcome:
-          $ref: '#/components/schemas/EvaluationOutcome'
-      required:
-        - outcome
-    EvaluationId:
-      type: string
-      format: uuid
-      description: The unique identifier of the evaluation
     IsValid:
       type: boolean
       description: Indicates whether the resource passed server-side validation.
       default: false
     ValidationError:
       type: string
-      nullable: true
       maxLength: 1000
       description: Short validation error message or reason
+    EvaluationCreateRequest:
+      type: object
+      description: The information used to create a new evaluation.
+      properties:
+        outcome:
+          $ref: '#/components/schemas/EvaluationOutcome'
+        is_valid:
+          $ref: '#/components/schemas/IsValid'
+        validation_error:
+          $ref: '#/components/schemas/ValidationError'
+          nullable: true
+      required:
+        - outcome
+    EvaluationId:
+      type: string
+      format: uuid
+      description: The unique identifier of the evaluation
     Evaluation:
       type: object
       description: An evaluation entity representing a user's assessment in a battle between two AI models.
@@ -1153,6 +1157,7 @@ components:
           $ref: '#/components/schemas/IsValid'
         validation_error:
           $ref: '#/components/schemas/ValidationError'
+          nullable: true
       required:
         - id
         - outcome

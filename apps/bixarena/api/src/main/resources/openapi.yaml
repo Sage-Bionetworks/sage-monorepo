@@ -1601,18 +1601,6 @@ components:
         - model2
         - tie
       type: string
-    EvaluationCreateRequest:
-      description: The information used to create a new evaluation.
-      properties:
-        outcome:
-          $ref: '#/components/schemas/EvaluationOutcome'
-      required:
-        - outcome
-      type: object
-    EvaluationId:
-      description: The unique identifier of the evaluation
-      format: uuid
-      type: string
     IsValid:
       default: false
       description: Indicates whether the resource passed server-side validation.
@@ -1620,7 +1608,26 @@ components:
     ValidationError:
       description: Short validation error message or reason
       maxLength: 1000
-      nullable: true
+      type: string
+    EvaluationCreateRequest:
+      description: The information used to create a new evaluation.
+      properties:
+        outcome:
+          $ref: '#/components/schemas/EvaluationOutcome'
+        is_valid:
+          default: false
+          description: Indicates whether the resource passed server-side validation.
+          type: boolean
+        validation_error:
+          description: Short validation error message or reason
+          maxLength: 1000
+          type: string
+      required:
+        - outcome
+      type: object
+    EvaluationId:
+      description: The unique identifier of the evaluation
+      format: uuid
       type: string
     Evaluation:
       description: An evaluation entity representing a user's assessment in a battle
@@ -1650,7 +1657,6 @@ components:
         validation_error:
           description: Short validation error message or reason
           maxLength: 1000
-          nullable: true
           type: string
       required:
         - createdAt

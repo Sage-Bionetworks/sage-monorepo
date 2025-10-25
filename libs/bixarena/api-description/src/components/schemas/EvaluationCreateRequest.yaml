@@ -3,5 +3,10 @@ description: The information used to create a new evaluation.
 properties:
   outcome:
     $ref: EvaluationOutcome.yaml
+  is_valid:
+    $ref: IsValid.yaml
+  validation_error:
+    $ref: ValidationError.yaml
+    nullable: true
 required:
   - outcome

@@ -4,9 +4,11 @@ The information used to create a new evaluation.
 
 ## Properties
 
-| Name        | Type                                          | Description | Notes |
-| ----------- | --------------------------------------------- | ----------- | ----- |
-| **outcome** | [**EvaluationOutcome**](EvaluationOutcome.md) |             |
+| Name                 | Type                                          | Description                                                   | Notes                         |
+| -------------------- | --------------------------------------------- | ------------------------------------------------------------- | ----------------------------- |
+| **outcome**          | [**EvaluationOutcome**](EvaluationOutcome.md) |                                                               |
+| **is_valid**         | **bool**                                      | Indicates whether the resource passed server-side validation. | [optional] [default to False] |
+| **validation_error** | **str**                                       | Short validation error message or reason                      | [optional]                    |
 
 ## Example
 

@@ -28,6 +28,10 @@ public class EvaluationCreateRequestDto {
 
   private EvaluationOutcomeDto outcome;
 
+  private Boolean isValid = false;
+
+  private @Nullable String validationError;
+
   public EvaluationCreateRequestDto() {
     super();
   }
@@ -59,6 +63,46 @@ public class EvaluationCreateRequestDto {
     this.outcome = outcome;
   }
 
+  public EvaluationCreateRequestDto isValid(Boolean isValid) {
+    this.isValid = isValid;
+    return this;
+  }
+
+  /**
+   * Indicates whether the resource passed server-side validation.
+   * @return isValid
+   */
+  
+  @Schema(name = "is_valid", description = "Indicates whether the resource passed server-side validation.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("is_valid")
+  public Boolean getIsValid() {
+    return isValid;
+  }
+
+  public void setIsValid(Boolean isValid) {
+    this.isValid = isValid;
+  }
+
+  public EvaluationCreateRequestDto validationError(@Nullable String validationError) {
+    this.validationError = validationError;
+    return this;
+  }
+
+  /**
+   * Short validation error message or reason
+   * @return validationError
+   */
+  @Size(max = 1000) 
+  @Schema(name = "validation_error", description = "Short validation error message or reason", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("validation_error")
+  public @Nullable String getValidationError() {
+    return validationError;
+  }
+
+  public void setValidationError(@Nullable String validationError) {
+    this.validationError = validationError;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -68,12 +112,14 @@ public class EvaluationCreateRequestDto {
       return false;
     }
     EvaluationCreateRequestDto evaluationCreateRequest = (EvaluationCreateRequestDto) o;
-    return Objects.equals(this.outcome, evaluationCreateRequest.outcome);
+    return Objects.equals(this.outcome, evaluationCreateRequest.outcome) &&
+        Objects.equals(this.isValid, evaluationCreateRequest.isValid) &&
+        Objects.equals(this.validationError, evaluationCreateRequest.validationError);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(outcome);
+    return Objects.hash(outcome, isValid, validationError);
   }
 
   @Override
@@ -81,6 +127,8 @@ public class EvaluationCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class EvaluationCreateRequestDto {\n");
     sb.append("    outcome: ").append(toIndentedString(outcome)).append("\n");
+    sb.append("    isValid: ").append(toIndentedString(isValid)).append("\n");
+    sb.append("    validationError: ").append(toIndentedString(validationError)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -110,11 +158,23 @@ public class EvaluationCreateRequestDto {
 
     protected Builder copyOf(EvaluationCreateRequestDto value) { 
       this.instance.setOutcome(value.outcome);
+      this.instance.setIsValid(value.isValid);
+      this.instance.setValidationError(value.validationError);
       return this;
     }
 
     public EvaluationCreateRequestDto.Builder outcome(EvaluationOutcomeDto outcome) {
       this.instance.outcome(outcome);
+      return this;
+    }
+    
+    public EvaluationCreateRequestDto.Builder isValid(Boolean isValid) {
+      this.instance.isValid(isValid);
+      return this;
+    }
+    
+    public EvaluationCreateRequestDto.Builder validationError(String validationError) {
+      this.instance.validationError(validationError);
       return this;
     }
     

@@ -42,8 +42,8 @@ public class EvaluationService {
     EvaluationEntity entity = EvaluationEntity.builder()
       .battleId(battleId)
       .outcome(outcome)
-      .isValid(false)
-      .validationError(null)
+      .isValid(Boolean.TRUE.equals(request.getIsValid()))
+      .validationError(request.getValidationError())
       .build();
 
     try {

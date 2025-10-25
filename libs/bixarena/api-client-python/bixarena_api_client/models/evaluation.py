@@ -87,14 +87,6 @@ class Evaluation(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if validation_error (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.validation_error is None
-            and "validation_error" in self.model_fields_set
-        ):
-            _dict["validation_error"] = None
-
         return _dict
 
     @classmethod
