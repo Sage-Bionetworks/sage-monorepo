@@ -46,7 +46,7 @@ CREATE TABLE api.leaderboard_entry (
   model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
   snapshot_id UUID NOT NULL REFERENCES api.leaderboard_snapshot(id) ON DELETE CASCADE,
   bt_score DECIMAL(10,6) NOT NULL,
-  vote_count INTEGER NOT NULL DEFAULT 0,
+  evaluation_count INTEGER NOT NULL DEFAULT 0,
   rank INTEGER NOT NULL,
   secondary_score DECIMAL(10,6),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -82,8 +82,8 @@ CREATE TABLE api.battle (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(255),
   user_id UUID NOT NULL,
-  left_model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
-  right_model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  model_1_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  model_2_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   ended_at TIMESTAMPTZ
 );
@@ -92,17 +92,11 @@ CREATE TABLE api.battle (
 CREATE INDEX idx_api_battle_user_id ON api.battle(user_id);
 CREATE INDEX idx_api_battle_created_at ON api.battle(created_at DESC);
 
--- Create vote table
-CREATE TABLE api.vote (
+-- Create round table
+CREATE TABLE api.battle_evaluation (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
-  preference VARCHAR(20) NOT NULL,
+  outcome VARCHAR(20) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   -- Table constraints
-  CONSTRAINT unique_battle_vote UNIQUE (battle_id),
-  CONSTRAINT chk_vote_preference CHECK (preference IN ('LEFT_MODEL', 'RIGHT_MODEL', 'TIE'))
+  CONSTRAINT chk_vote_preference CHECK (outcome IN ('MODEL_1', 'MODEL_2', 'TIE'))
 );
-
--- Indexes for performance
-CREATE INDEX idx_api_vote_preference ON api.vote(preference);
-CREATE INDEX idx_api_vote_created_at ON api.vote(created_at DESC);

@@ -48,14 +48,10 @@ public class SecurityConfiguration {
             "/v1/leaderboards/**",
             "/v1/models",
             "/v1/models/**",
-            "/v1/votes",
-            "/v1/votes/**",
             "/v3/api-docs/**"
           )
           .permitAll()
           .requestMatchers(HttpMethod.POST, "/v1/battles")
-          .permitAll()
-          .requestMatchers(HttpMethod.POST, "/v1/votes")
           .permitAll()
           .requestMatchers(HttpMethod.PATCH, "/v1/battles/**")
           .permitAll()
