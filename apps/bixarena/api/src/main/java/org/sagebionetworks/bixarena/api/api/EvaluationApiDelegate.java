@@ -48,7 +48,7 @@ public interface EvaluationApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"outcome\" : \"model1\" }";
+                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"validation_error\" : \"validation_error\", \"is_valid\" : false, \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"outcome\" : \"model1\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -36,6 +36,10 @@ public class EvaluationDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
+  private Boolean isValid = false;
+
+  private @Nullable String validationError = null;
+
   public EvaluationDto() {
     super();
   }
@@ -43,10 +47,11 @@ public class EvaluationDto {
   /**
    * Constructor with only required parameters
    */
-  public EvaluationDto(UUID id, EvaluationOutcomeDto outcome, OffsetDateTime createdAt) {
+  public EvaluationDto(UUID id, EvaluationOutcomeDto outcome, OffsetDateTime createdAt, Boolean isValid) {
     this.id = id;
     this.outcome = outcome;
     this.createdAt = createdAt;
+    this.isValid = isValid;
   }
 
   public EvaluationDto id(UUID id) {
@@ -109,6 +114,46 @@ public class EvaluationDto {
     this.createdAt = createdAt;
   }
 
+  public EvaluationDto isValid(Boolean isValid) {
+    this.isValid = isValid;
+    return this;
+  }
+
+  /**
+   * Indicates whether the resource passed server-side validation.
+   * @return isValid
+   */
+  @NotNull 
+  @Schema(name = "is_valid", description = "Indicates whether the resource passed server-side validation.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("is_valid")
+  public Boolean getIsValid() {
+    return isValid;
+  }
+
+  public void setIsValid(Boolean isValid) {
+    this.isValid = isValid;
+  }
+
+  public EvaluationDto validationError(@Nullable String validationError) {
+    this.validationError = validationError;
+    return this;
+  }
+
+  /**
+   * Short validation error message or reason
+   * @return validationError
+   */
+  @Size(max = 1000) 
+  @Schema(name = "validation_error", description = "Short validation error message or reason", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("validation_error")
+  public @Nullable String getValidationError() {
+    return validationError;
+  }
+
+  public void setValidationError(@Nullable String validationError) {
+    this.validationError = validationError;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -120,12 +165,14 @@ public class EvaluationDto {
     EvaluationDto evaluation = (EvaluationDto) o;
     return Objects.equals(this.id, evaluation.id) &&
         Objects.equals(this.outcome, evaluation.outcome) &&
-        Objects.equals(this.createdAt, evaluation.createdAt);
+        Objects.equals(this.createdAt, evaluation.createdAt) &&
+        Objects.equals(this.isValid, evaluation.isValid) &&
+        Objects.equals(this.validationError, evaluation.validationError);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, outcome, createdAt);
+    return Objects.hash(id, outcome, createdAt, isValid, validationError);
   }
 
   @Override
@@ -135,6 +182,8 @@ public class EvaluationDto {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    outcome: ").append(toIndentedString(outcome)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    isValid: ").append(toIndentedString(isValid)).append("\n");
+    sb.append("    validationError: ").append(toIndentedString(validationError)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -166,6 +215,8 @@ public class EvaluationDto {
       this.instance.setId(value.id);
       this.instance.setOutcome(value.outcome);
       this.instance.setCreatedAt(value.createdAt);
+      this.instance.setIsValid(value.isValid);
+      this.instance.setValidationError(value.validationError);
       return this;
     }
 
@@ -181,6 +232,16 @@ public class EvaluationDto {
     
     public EvaluationDto.Builder createdAt(OffsetDateTime createdAt) {
       this.instance.createdAt(createdAt);
+      return this;
+    }
+    
+    public EvaluationDto.Builder isValid(Boolean isValid) {
+      this.instance.isValid(isValid);
+      return this;
+    }
+    
+    public EvaluationDto.Builder validationError(String validationError) {
+      this.instance.validationError(validationError);
       return this;
     }
     

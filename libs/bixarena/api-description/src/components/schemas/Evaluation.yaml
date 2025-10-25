@@ -7,7 +7,12 @@ properties:
     $ref: EvaluationOutcome.yaml
   createdAt:
     $ref: CreatedAt.yaml
+  is_valid:
+    $ref: IsValid.yaml
+  validation_error:
+    $ref: ValidationError.yaml
 required:
   - id
   - outcome
+  - is_valid
   - createdAt

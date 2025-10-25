@@ -1613,11 +1613,22 @@ components:
       description: The unique identifier of the evaluation
       format: uuid
       type: string
+    IsValid:
+      default: false
+      description: Indicates whether the resource passed server-side validation.
+      type: boolean
+    ValidationError:
+      description: Short validation error message or reason
+      maxLength: 1000
+      nullable: true
+      type: string
     Evaluation:
       description: An evaluation entity representing a user's assessment in a battle
         between two AI models.
       example:
         createdAt: 2024-01-15T10:30:00Z
+        validation_error: validation_error
+        is_valid: false
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         outcome: model1
       properties:
@@ -1632,9 +1643,19 @@ components:
           example: 2024-01-15T10:30:00Z
           format: date-time
           type: string
+        is_valid:
+          default: false
+          description: Indicates whether the resource passed server-side validation.
+          type: boolean
+        validation_error:
+          description: Short validation error message or reason
+          maxLength: 1000
+          nullable: true
+          type: string
       required:
         - createdAt
         - id
+        - is_valid
         - outcome
       type: object
     adminStats_200_response:

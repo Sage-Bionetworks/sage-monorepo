@@ -97,6 +97,8 @@ CREATE TABLE api.battle_evaluation (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
   outcome VARCHAR(20) NOT NULL,
+  is_valid BOOLEAN NOT NULL DEFAULT FALSE,
+  validation_error VARCHAR(1000),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   -- Table constraints
   CONSTRAINT unique_battle_evaluation UNIQUE (battle_id),
@@ -106,3 +108,4 @@ CREATE TABLE api.battle_evaluation (
 -- Indexes for evaluation queries
 CREATE INDEX idx_api_battle_evaluation_outcome ON api.battle_evaluation(outcome);
 CREATE INDEX idx_api_battle_evaluation_created_at ON api.battle_evaluation(created_at DESC);
+CREATE INDEX idx_api_battle_evaluation_is_valid ON api.battle_evaluation(is_valid);

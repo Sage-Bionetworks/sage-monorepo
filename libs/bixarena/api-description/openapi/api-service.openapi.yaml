@@ -1130,6 +1130,15 @@ components:
       type: string
       format: uuid
       description: The unique identifier of the evaluation
+    IsValid:
+      type: boolean
+      description: Indicates whether the resource passed server-side validation.
+      default: false
+    ValidationError:
+      type: string
+      nullable: true
+      maxLength: 1000
+      description: Short validation error message or reason
     Evaluation:
       type: object
       description: An evaluation entity representing a user's assessment in a battle between two AI models.
@@ -1140,9 +1149,14 @@ components:
           $ref: '#/components/schemas/EvaluationOutcome'
         createdAt:
           $ref: '#/components/schemas/CreatedAt'
+        is_valid:
+          $ref: '#/components/schemas/IsValid'
+        validation_error:
+          $ref: '#/components/schemas/ValidationError'
       required:
         - id
         - outcome
+        - is_valid
         - createdAt
   responses:
     Unauthorized:
