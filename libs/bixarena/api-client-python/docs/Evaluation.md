@@ -4,11 +4,13 @@ An evaluation entity representing a user's assessment in a battle between two AI
 
 ## Properties
 
-| Name           | Type                                          | Description                             | Notes |
-| -------------- | --------------------------------------------- | --------------------------------------- | ----- |
-| **id**         | **str**                                       | The unique identifier of the evaluation |
-| **outcome**    | [**EvaluationOutcome**](EvaluationOutcome.md) |                                         |
-| **created_at** | **datetime**                                  | Timestamp when the entity was created.  |
+| Name                 | Type                                          | Description                                                   | Notes              |
+| -------------------- | --------------------------------------------- | ------------------------------------------------------------- | ------------------ |
+| **id**               | **str**                                       | The unique identifier of the evaluation                       |
+| **outcome**          | [**EvaluationOutcome**](EvaluationOutcome.md) |                                                               |
+| **created_at**       | **datetime**                                  | Timestamp when the entity was created.                        |
+| **is_valid**         | **bool**                                      | Indicates whether the resource passed server-side validation. | [default to False] |
+| **validation_error** | **str**                                       | Short validation error message or reason                      | [optional]         |
 
 ## Example
 

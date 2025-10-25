@@ -37,13 +37,16 @@ class TestEvaluation(unittest.TestCase):
             return Evaluation(
                 id = '',
                 outcome = 'model1',
-                created_at = '2024-01-15T10:30Z'
+                created_at = '2024-01-15T10:30Z',
+                is_valid = True,
+                validation_error = ''
             )
         else:
             return Evaluation(
                 id = '',
                 outcome = 'model1',
                 created_at = '2024-01-15T10:30Z',
+                is_valid = True,
         )
         """
 

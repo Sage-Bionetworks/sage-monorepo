@@ -17,8 +17,9 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from uuid import UUID
 from bixarena_api_client.models.evaluation_outcome import EvaluationOutcome
 from typing import Optional, Set
@@ -35,7 +36,19 @@ class Evaluation(BaseModel):
     created_at: datetime = Field(
         description="Timestamp when the entity was created.", alias="createdAt"
     )
-    __properties: ClassVar[List[str]] = ["id", "outcome", "createdAt"]
+    is_valid: StrictBool = Field(
+        description="Indicates whether the resource passed server-side validation."
+    )
+    validation_error: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = (
+        Field(default=None, description="Short validation error message or reason")
+    )
+    __properties: ClassVar[List[str]] = [
+        "id",
+        "outcome",
+        "createdAt",
+        "is_valid",
+        "validation_error",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -74,6 +87,14 @@ class Evaluation(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if validation_error (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.validation_error is None
+            and "validation_error" in self.model_fields_set
+        ):
+            _dict["validation_error"] = None
+
         return _dict
 
     @classmethod
@@ -90,6 +111,10 @@ class Evaluation(BaseModel):
                 "id": obj.get("id"),
                 "outcome": obj.get("outcome"),
                 "createdAt": obj.get("createdAt"),
+                "is_valid": obj.get("is_valid")
+                if obj.get("is_valid") is not None
+                else False,
+                "validation_error": obj.get("validation_error"),
             }
         )
         return _obj
