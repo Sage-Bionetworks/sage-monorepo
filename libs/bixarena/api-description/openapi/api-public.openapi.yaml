@@ -24,8 +24,8 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
-  - name: Vote
-    description: Operations about votes.
+  - name: Evaluation
+    description: Operations about evaluations.
 paths:
   /admin/stats:
     get:
@@ -308,80 +308,35 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /votes:
-    get:
-      tags:
-        - Vote
-      summary: List votes
-      description: List votes with optional filtering and pagination
-      operationId: listVotes
-      x-anonymous-access: true
-      parameters:
-        - $ref: '#/components/parameters/voteSearchQuery'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VotePage'
-          description: Success
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+  /battles/{battleId}/evaluations:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
     post:
       tags:
-        - Vote
-      summary: Create a vote
-      description: Create a new vote for a battle.
-      operationId: createVote
+        - Evaluation
+      summary: Create an evaluation
+      description: Create a new evaluation for a battle.
+      operationId: createEvaluation
       x-anonymous-access: true
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VoteCreateRequest'
+              $ref: '#/components/schemas/EvaluationCreateRequest'
         required: true
       responses:
         '201':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Vote'
-          description: Vote created successfully
+                $ref: '#/components/schemas/Evaluation'
+          description: Evaluation created successfully
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /votes/{voteId}:
-    parameters:
-      - $ref: '#/components/parameters/voteId'
-    get:
-      tags:
-        - Vote
-      summary: Get a vote by ID
-      description: Returns a single vote by its unique identifier
-      operationId: getVote
-      x-anonymous-access: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: Success
-        '401':
-          $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -505,9 +460,9 @@ components:
           nullable: true
         userId:
           $ref: '#/components/schemas/UserId'
-        leftModelId:
+        model1Id:
           $ref: '#/components/schemas/ModelId'
-        rightModelId:
+        model2Id:
           $ref: '#/components/schemas/ModelId'
         createdAt:
           $ref: '#/components/schemas/CreatedAt'
@@ -517,8 +472,8 @@ components:
       required:
         - id
         - userId
-        - leftModelId
-        - rightModelId
+        - model1Id
+        - model2Id
         - createdAt
     PageMetadata:
       type: object
@@ -580,13 +535,13 @@ components:
         title:
           $ref: '#/components/schemas/BattleTitle'
           nullable: true
-        leftModelId:
+        model1Id:
           $ref: '#/components/schemas/ModelId'
-        rightModelId:
+        model2Id:
           $ref: '#/components/schemas/ModelId'
       required:
-        - leftModelId
-        - rightModelId
+        - model1Id
+        - model2Id
     BattleUpdateRequest:
       type: object
       description: The information used to update a battle.
@@ -729,7 +684,7 @@ components:
       enum:
         - rank
         - bt_score
-        - vote_count
+        - evaluation_count
         - created_at
         - model_name
       default: rank
@@ -792,9 +747,9 @@ components:
           format: double
           description: Primary scoring metric (higher is better)
           example: 0.925
-        voteCount:
+        evaluationCount:
           type: integer
-          description: Number of votes/evaluations
+          description: Number of evaluations
           example: 1250
         rank:
           type: integer
@@ -811,7 +766,7 @@ components:
         - modelName
         - license
         - btScore
-        - voteCount
+        - evaluationCount
         - rank
         - createdAt
     LeaderboardEntryPage:
@@ -896,9 +851,9 @@ components:
           format: double
           description: Primary scoring metric at this point in time
           example: 0.915
-        voteCount:
+        evaluationCount:
           type: integer
-          description: Number of votes/evaluations at this point in time
+          description: Number of evaluations at this point in time
           example: 1180
         rank:
           type: integer
@@ -912,7 +867,7 @@ components:
       required:
         - snapshotId
         - btScore
-        - voteCount
+        - evaluationCount
         - rank
         - createdAt
     LeaderboardModelHistoryPage:
@@ -1156,96 +1111,39 @@ components:
                 $ref: '#/components/schemas/Model'
           required:
             - models
-    VoteSort:
-      description: What to sort votes by.
+    EvaluationOutcome:
       type: string
+      description: The outcome of the evaluation between model1 and model2
       enum:
-        - created_at
-      default: created_at
-      example: created_at
-    VotePreference:
-      type: string
-      description: The user's preference in a battle
-      enum:
-        - left_model
-        - right_model
+        - model1
+        - model2
         - tie
-    VoteSearchQuery:
+    EvaluationCreateRequest:
       type: object
-      description: A vote search query.
+      description: The information used to create a new evaluation.
       properties:
-        pageNumber:
-          description: The page number to return (0-indexed).
-          type: integer
-          format: int32
-          default: 0
-          minimum: 0
-          example: 0
-        pageSize:
-          description: The number of items to return in a single page.
-          type: integer
-          format: int32
-          default: 100
-          minimum: 1
-          example: 10
-        sort:
-          $ref: '#/components/schemas/VoteSort'
-        direction:
-          $ref: '#/components/schemas/SortDirection'
-        preference:
-          description: Filter by vote preference.
-          $ref: '#/components/schemas/VotePreference'
-          nullable: true
+        outcome:
+          $ref: '#/components/schemas/EvaluationOutcome'
       required:
-        - pageNumber
-        - pageSize
-        - sort
-        - direction
-    VoteId:
+        - outcome
+    EvaluationId:
       type: string
       format: uuid
-      description: The unique identifier of the vote
-    Vote:
+      description: The unique identifier of the evaluation
+    Evaluation:
       type: object
-      description: A vote entity representing a user's preference in a battle between two AI models.
+      description: An evaluation entity representing a user's assessment in a battle between two AI models.
       properties:
         id:
-          $ref: '#/components/schemas/VoteId'
-        battleId:
-          $ref: '#/components/schemas/BattleId'
-        preference:
-          $ref: '#/components/schemas/VotePreference'
+          $ref: '#/components/schemas/EvaluationId'
+        outcome:
+          $ref: '#/components/schemas/EvaluationOutcome'
         createdAt:
           $ref: '#/components/schemas/CreatedAt'
       required:
         - id
-        - battleId
-        - preference
+        - outcome
         - createdAt
-    VotePage:
-      type: object
-      description: A page of votes
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vote'
-        page:
-          $ref: '#/components/schemas/PageMetadata'
-      required:
-        - data
-        - page
-    VoteCreateRequest:
-      type: object
-      description: The information used to create a new vote.
-      properties:
-        battleId:
-          $ref: '#/components/schemas/BattleId'
-        preference:
-          $ref: '#/components/schemas/VotePreference'
-      required:
-        - battleId
-        - preference
   responses:
     Unauthorized:
       description: Unauthorized
@@ -1355,21 +1253,4 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
-    voteSearchQuery:
-      name: voteSearchQuery
-      description: The search query used to find and filter votes.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/VoteSearchQuery'
-    voteId:
-      name: voteId
-      description: The unique identifier of the vote
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-        description: The unique identifier of the vote
 x-oauth2-audience: urn:bixarena:api

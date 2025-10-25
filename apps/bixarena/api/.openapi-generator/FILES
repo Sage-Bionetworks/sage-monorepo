@@ -6,6 +6,9 @@ src/main/java/org/sagebionetworks/bixarena/api/api/ApiUtil.java
 src/main/java/org/sagebionetworks/bixarena/api/api/BattleApi.java
 src/main/java/org/sagebionetworks/bixarena/api/api/BattleApiController.java
 src/main/java/org/sagebionetworks/bixarena/api/api/BattleApiDelegate.java
+src/main/java/org/sagebionetworks/bixarena/api/api/EvaluationApi.java
+src/main/java/org/sagebionetworks/bixarena/api/api/EvaluationApiController.java
+src/main/java/org/sagebionetworks/bixarena/api/api/EvaluationApiDelegate.java
 src/main/java/org/sagebionetworks/bixarena/api/api/ExamplePromptApi.java
 src/main/java/org/sagebionetworks/bixarena/api/api/ExamplePromptApiController.java
 src/main/java/org/sagebionetworks/bixarena/api/api/ExamplePromptApiDelegate.java
@@ -15,9 +18,6 @@ src/main/java/org/sagebionetworks/bixarena/api/api/LeaderboardApiDelegate.java
 src/main/java/org/sagebionetworks/bixarena/api/api/ModelApi.java
 src/main/java/org/sagebionetworks/bixarena/api/api/ModelApiController.java
 src/main/java/org/sagebionetworks/bixarena/api/api/ModelApiDelegate.java
-src/main/java/org/sagebionetworks/bixarena/api/api/VoteApi.java
-src/main/java/org/sagebionetworks/bixarena/api/api/VoteApiController.java
-src/main/java/org/sagebionetworks/bixarena/api/api/VoteApiDelegate.java
 src/main/java/org/sagebionetworks/bixarena/api/configuration/EnumConverterConfiguration.java
 src/main/java/org/sagebionetworks/bixarena/api/configuration/HomeController.java
 src/main/java/org/sagebionetworks/bixarena/api/configuration/SpringDocConfiguration.java
@@ -29,6 +29,9 @@ src/main/java/org/sagebionetworks/bixarena/api/model/dto/BattlePageDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/BattleSearchQueryDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/BattleSortDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/BattleUpdateRequestDto.java
+src/main/java/org/sagebionetworks/bixarena/api/model/dto/EvaluationCreateRequestDto.java
+src/main/java/org/sagebionetworks/bixarena/api/model/dto/EvaluationDto.java
+src/main/java/org/sagebionetworks/bixarena/api/model/dto/EvaluationOutcomeDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ExamplePromptDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ExamplePromptPageDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ExamplePromptSearchQueryDto.java
@@ -54,10 +57,4 @@ src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelSearchQueryDto.jav
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelSortDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/PageMetadataDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/SortDirectionDto.java
-src/main/java/org/sagebionetworks/bixarena/api/model/dto/VoteCreateRequestDto.java
-src/main/java/org/sagebionetworks/bixarena/api/model/dto/VoteDto.java
-src/main/java/org/sagebionetworks/bixarena/api/model/dto/VotePageDto.java
-src/main/java/org/sagebionetworks/bixarena/api/model/dto/VotePreferenceDto.java
-src/main/java/org/sagebionetworks/bixarena/api/model/dto/VoteSearchQueryDto.java
-src/main/java/org/sagebionetworks/bixarena/api/model/dto/VoteSortDto.java
 src/main/resources/openapi.yaml

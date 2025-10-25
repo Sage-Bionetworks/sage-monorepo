@@ -24,8 +24,8 @@ tags:
     name: Leaderboard
   - description: Operations about models.
     name: Model
-  - description: Operations about votes.
-    name: Vote
+  - description: Operations about evaluations.
+    name: Evaluation
 paths:
   /admin/stats:
     get:
@@ -463,57 +463,32 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Model
-  /votes:
-    get:
-      description: List votes with optional filtering and pagination
-      operationId: listVotes
-      parameters:
-        - description: The search query used to find and filter votes.
-          explode: true
-          in: query
-          name: voteSearchQuery
-          required: false
-          schema:
-            $ref: '#/components/schemas/VoteSearchQuery'
-          style: deepObject
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VotePage'
-          description: Success
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: List votes
-      tags:
-        - Vote
-      x-anonymous-access: true
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Vote
+  /battles/{battleId}/evaluations:
     post:
-      description: Create a new vote for a battle.
-      operationId: createVote
+      description: Create a new evaluation for a battle.
+      operationId: createEvaluation
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VoteCreateRequest'
+              $ref: '#/components/schemas/EvaluationCreateRequest'
         required: true
       responses:
         '201':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Vote'
-          description: Vote created successfully
+                $ref: '#/components/schemas/Evaluation'
+          description: Evaluation created successfully
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -522,57 +497,18 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      summary: Create a vote
+      summary: Create an evaluation
       tags:
-        - Vote
+        - Evaluation
       x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: Vote
-  /votes/{voteId}:
-    get:
-      description: Returns a single vote by its unique identifier
-      operationId: getVote
-      parameters:
-        - description: The unique identifier of the vote
-          explode: false
-          in: path
-          name: voteId
-          required: true
-          schema:
-            description: The unique identifier of the vote
-            format: uuid
-            type: string
-          style: simple
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: Success
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: Get a vote by ID
-      tags:
-        - Vote
-      x-anonymous-access: true
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Vote
+        - tag: Evaluation
 components:
   parameters:
     battleSearchQuery:
@@ -659,26 +595,6 @@ components:
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
       style: deepObject
-    voteSearchQuery:
-      description: The search query used to find and filter votes.
-      explode: true
-      in: query
-      name: voteSearchQuery
-      required: false
-      schema:
-        $ref: '#/components/schemas/VoteSearchQuery'
-      style: deepObject
-    voteId:
-      description: The unique identifier of the vote
-      explode: false
-      in: path
-      name: voteId
-      required: true
-      schema:
-        description: The unique identifier of the vote
-        format: uuid
-        type: string
-      style: simple
   responses:
     Unauthorized:
       content:
@@ -821,13 +737,13 @@ components:
     Battle:
       description: A battle entity representing a comparison between two AI models.
       example:
-        leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         createdAt: 2024-01-15T10:30:00Z
         endedAt: 2024-01-15T11:45:00Z
+        model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         title: Gene Expression Analysis Comparison
         userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-        rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+        model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
       properties:
         id:
           description: Unique identifier (UUID) of the battle.
@@ -843,12 +759,12 @@ components:
           example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
           type: string
-        leftModelId:
+        model1Id:
           description: UUID of an AI model.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
           type: string
-        rightModelId:
+        model2Id:
           description: UUID of an AI model.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
@@ -866,8 +782,8 @@ components:
       required:
         - createdAt
         - id
-        - leftModelId
-        - rightModelId
+        - model1Id
+        - model2Id
         - userId
       type: object
     PageMetadata:
@@ -920,20 +836,20 @@ components:
       description: A page of battles.
       example:
         battles:
-          - leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-            createdAt: 2024-01-15T10:30:00Z
+          - createdAt: 2024-01-15T10:30:00Z
             endedAt: 2024-01-15T11:45:00Z
+            model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             title: Gene Expression Analysis Comparison
             userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-            rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-          - leftModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-            createdAt: 2024-01-15T10:30:00Z
+            model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          - createdAt: 2024-01-15T10:30:00Z
             endedAt: 2024-01-15T11:45:00Z
+            model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             title: Gene Expression Analysis Comparison
             userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-            rightModelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+            model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         page:
           number: 99
           size: 99
@@ -960,19 +876,19 @@ components:
           description: Title of the battle.
           example: Gene Expression Analysis Comparison
           type: string
-        leftModelId:
+        model1Id:
           description: UUID of an AI model.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
           type: string
-        rightModelId:
+        model2Id:
           description: UUID of an AI model.
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
           type: string
       required:
-        - leftModelId
-        - rightModelId
+        - model1Id
+        - model2Id
       type: object
     BattleUpdateRequest:
       description: The information used to update a battle.
@@ -1120,7 +1036,7 @@ components:
       enum:
         - rank
         - bt_score
-        - vote_count
+        - evaluation_count
         - created_at
         - model_name
       example: bt_score
@@ -1164,11 +1080,11 @@ components:
         modelName: GPT-4o
         license: MIT
         createdAt: 2025-08-16T10:30:00Z
+        evaluationCount: 1250
         modelId: model_456
         btScore: 0.925
         rank: 1
         id: entry_123
-        voteCount: 1250
       properties:
         id:
           description: Unique identifier for this leaderboard entry
@@ -1191,8 +1107,8 @@ components:
           example: 0.925
           format: double
           type: number
-        voteCount:
-          description: Number of votes/evaluations
+        evaluationCount:
+          description: Number of evaluations
           example: 1250
           type: integer
         rank:
@@ -1207,12 +1123,12 @@ components:
       required:
         - btScore
         - createdAt
+        - evaluationCount
         - id
         - license
         - modelId
         - modelName
         - rank
-        - voteCount
       type: object
     LeaderboardEntryPage:
       allOf:
@@ -1244,19 +1160,19 @@ components:
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
+            evaluationCount: 1250
             modelId: model_456
             btScore: 0.925
             rank: 1
             id: entry_123
-            voteCount: 1250
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
+            evaluationCount: 1250
             modelId: model_456
             btScore: 0.925
             rank: 1
             id: entry_123
-            voteCount: 1250
         snapshotId: snapshot_2025-08-16_14-30
         size: 99
         totalPages: 99
@@ -1315,9 +1231,9 @@ components:
       example:
         createdAt: 2025-08-15T10:00:00Z
         snapshotId: snapshot_2025-08-15_10-00
+        evaluationCount: 1180
         btScore: 0.915
         rank: 2
-        voteCount: 1180
       properties:
         snapshotId:
           description: Identifier for the snapshot/timepoint
@@ -1328,8 +1244,8 @@ components:
           example: 0.915
           format: double
           type: number
-        voteCount:
-          description: Number of votes/evaluations at this point in time
+        evaluationCount:
+          description: Number of evaluations at this point in time
           example: 1180
           type: integer
         rank:
@@ -1344,9 +1260,9 @@ components:
       required:
         - btScore
         - createdAt
+        - evaluationCount
         - rank
         - snapshotId
-        - voteCount
       type: object
     LeaderboardModelHistoryPage:
       allOf:
@@ -1382,14 +1298,14 @@ components:
         history:
           - createdAt: 2025-08-15T10:00:00Z
             snapshotId: snapshot_2025-08-15_10-00
+            evaluationCount: 1180
             btScore: 0.915
             rank: 2
-            voteCount: 1180
           - createdAt: 2025-08-15T10:00:00Z
             snapshotId: snapshot_2025-08-15_10-00
+            evaluationCount: 1180
             btScore: 0.915
             rank: 2
-            voteCount: 1180
         totalElements: 99
       type: object
     LeaderboardSnapshotSort:
@@ -1678,127 +1594,48 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-    VoteSort:
-      default: created_at
-      description: What to sort votes by.
+    EvaluationOutcome:
+      description: The outcome of the evaluation between model1 and model2
       enum:
-        - created_at
-      example: created_at
-      type: string
-    VotePreference:
-      description: The user's preference in a battle
-      enum:
-        - left_model
-        - right_model
+        - model1
+        - model2
         - tie
       type: string
-    VoteSearchQuery:
-      description: A vote search query.
+    EvaluationCreateRequest:
+      description: The information used to create a new evaluation.
       properties:
-        pageNumber:
-          default: 0
-          description: The page number to return (0-indexed).
-          example: 0
-          format: int32
-          minimum: 0
-          type: integer
-        pageSize:
-          default: 100
-          description: The number of items to return in a single page.
-          example: 10
-          format: int32
-          minimum: 1
-          type: integer
-        sort:
-          $ref: '#/components/schemas/VoteSort'
-        direction:
-          $ref: '#/components/schemas/SortDirection'
-        preference:
-          $ref: '#/components/schemas/VotePreference'
+        outcome:
+          $ref: '#/components/schemas/EvaluationOutcome'
       required:
-        - direction
-        - pageNumber
-        - pageSize
-        - sort
+        - outcome
       type: object
-    VoteId:
-      description: The unique identifier of the vote
+    EvaluationId:
+      description: The unique identifier of the evaluation
       format: uuid
       type: string
-    Vote:
-      description: A vote entity representing a user's preference in a battle between
-        two AI models.
+    Evaluation:
+      description: An evaluation entity representing a user's assessment in a battle
+        between two AI models.
       example:
         createdAt: 2024-01-15T10:30:00Z
-        battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-        preference: left_model
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        outcome: model1
       properties:
         id:
-          description: The unique identifier of the vote
+          description: The unique identifier of the evaluation
           format: uuid
           type: string
-        battleId:
-          description: Unique identifier (UUID) of the battle.
-          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-          format: uuid
-          type: string
-        preference:
-          $ref: '#/components/schemas/VotePreference'
+        outcome:
+          $ref: '#/components/schemas/EvaluationOutcome'
         createdAt:
           description: Timestamp when the entity was created.
           example: 2024-01-15T10:30:00Z
           format: date-time
           type: string
       required:
-        - battleId
         - createdAt
         - id
-        - preference
-      type: object
-    VotePage:
-      description: A page of votes
-      example:
-        data:
-          - createdAt: 2024-01-15T10:30:00Z
-            battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-            preference: left_model
-            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          - createdAt: 2024-01-15T10:30:00Z
-            battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-            preference: left_model
-            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        page:
-          number: 99
-          size: 99
-          totalPages: 99
-          hasPrevious: true
-          hasNext: true
-          totalElements: 99
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/Vote'
-          type: array
-        page:
-          $ref: '#/components/schemas/PageMetadata'
-      required:
-        - data
-        - page
-      type: object
-    VoteCreateRequest:
-      description: The information used to create a new vote.
-      properties:
-        battleId:
-          description: Unique identifier (UUID) of the battle.
-          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-          format: uuid
-          type: string
-        preference:
-          $ref: '#/components/schemas/VotePreference'
-      required:
-        - battleId
-        - preference
+        - outcome
       type: object
     adminStats_200_response:
       example:

@@ -1,11 +1,9 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.EvaluationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.EvaluationDto;
 import java.util.UUID;
-import org.sagebionetworks.bixarena.api.model.dto.VoteCreateRequestDto;
-import org.sagebionetworks.bixarena.api.model.dto.VoteDto;
-import org.sagebionetworks.bixarena.api.model.dto.VotePageDto;
-import org.sagebionetworks.bixarena.api.model.dto.VoteSearchQueryDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +32,16 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
 @RequestMapping("${openapi.bixArenaAPIService.base-path:/v1}")
-public class VoteApiController implements VoteApi {
+public class EvaluationApiController implements EvaluationApi {
 
-    private final VoteApiDelegate delegate;
+    private final EvaluationApiDelegate delegate;
 
-    public VoteApiController(@Autowired(required = false) VoteApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new VoteApiDelegate() {});
+    public EvaluationApiController(@Autowired(required = false) EvaluationApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new EvaluationApiDelegate() {});
     }
 
     @Override
-    public VoteApiDelegate getDelegate() {
+    public EvaluationApiDelegate getDelegate() {
         return delegate;
     }
 

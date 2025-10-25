@@ -16,17 +16,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * What to sort votes by.
+ * The outcome of the evaluation between model1 and model2
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public enum VoteSortDto {
+public enum EvaluationOutcomeDto {
   
-  CREATED_AT("created_at");
+  MODEL1("model1"),
+  
+  MODEL2("model2"),
+  
+  TIE("tie");
 
   private final String value;
 
-  VoteSortDto(String value) {
+  EvaluationOutcomeDto(String value) {
     this.value = value;
   }
 
@@ -41,8 +45,8 @@ public enum VoteSortDto {
   }
 
   @JsonCreator
-  public static VoteSortDto fromValue(String value) {
-    for (VoteSortDto b : VoteSortDto.values()) {
+  public static EvaluationOutcomeDto fromValue(String value) {
+    for (EvaluationOutcomeDto b : EvaluationOutcomeDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

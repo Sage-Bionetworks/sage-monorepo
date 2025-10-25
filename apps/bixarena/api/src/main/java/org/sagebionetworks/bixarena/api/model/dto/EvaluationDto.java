@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
 import java.util.UUID;
-import org.sagebionetworks.bixarena.api.model.dto.VotePreferenceDto;
+import org.sagebionetworks.bixarena.api.model.dto.EvaluationOutcomeDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -21,48 +21,45 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A vote entity representing a user&#39;s preference in a battle between two AI models.
+ * An evaluation entity representing a user&#39;s assessment in a battle between two AI models.
  */
 
-@Schema(name = "Vote", description = "A vote entity representing a user's preference in a battle between two AI models.")
-@JsonTypeName("Vote")
+@Schema(name = "Evaluation", description = "An evaluation entity representing a user's assessment in a battle between two AI models.")
+@JsonTypeName("Evaluation")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class VoteDto {
+public class EvaluationDto {
 
   private UUID id;
 
-  private UUID battleId;
-
-  private VotePreferenceDto preference;
+  private EvaluationOutcomeDto outcome;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  public VoteDto() {
+  public EvaluationDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public VoteDto(UUID id, UUID battleId, VotePreferenceDto preference, OffsetDateTime createdAt) {
+  public EvaluationDto(UUID id, EvaluationOutcomeDto outcome, OffsetDateTime createdAt) {
     this.id = id;
-    this.battleId = battleId;
-    this.preference = preference;
+    this.outcome = outcome;
     this.createdAt = createdAt;
   }
 
-  public VoteDto id(UUID id) {
+  public EvaluationDto id(UUID id) {
     this.id = id;
     return this;
   }
 
   /**
-   * The unique identifier of the vote
+   * The unique identifier of the evaluation
    * @return id
    */
   @NotNull @Valid 
-  @Schema(name = "id", description = "The unique identifier of the vote", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "id", description = "The unique identifier of the evaluation", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -72,47 +69,27 @@ public class VoteDto {
     this.id = id;
   }
 
-  public VoteDto battleId(UUID battleId) {
-    this.battleId = battleId;
+  public EvaluationDto outcome(EvaluationOutcomeDto outcome) {
+    this.outcome = outcome;
     return this;
   }
 
   /**
-   * Unique identifier (UUID) of the battle.
-   * @return battleId
+   * Get outcome
+   * @return outcome
    */
   @NotNull @Valid 
-  @Schema(name = "battleId", example = "5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f", description = "Unique identifier (UUID) of the battle.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("battleId")
-  public UUID getBattleId() {
-    return battleId;
+  @Schema(name = "outcome", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("outcome")
+  public EvaluationOutcomeDto getOutcome() {
+    return outcome;
   }
 
-  public void setBattleId(UUID battleId) {
-    this.battleId = battleId;
+  public void setOutcome(EvaluationOutcomeDto outcome) {
+    this.outcome = outcome;
   }
 
-  public VoteDto preference(VotePreferenceDto preference) {
-    this.preference = preference;
-    return this;
-  }
-
-  /**
-   * Get preference
-   * @return preference
-   */
-  @NotNull @Valid 
-  @Schema(name = "preference", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("preference")
-  public VotePreferenceDto getPreference() {
-    return preference;
-  }
-
-  public void setPreference(VotePreferenceDto preference) {
-    this.preference = preference;
-  }
-
-  public VoteDto createdAt(OffsetDateTime createdAt) {
+  public EvaluationDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -140,25 +117,23 @@ public class VoteDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    VoteDto vote = (VoteDto) o;
-    return Objects.equals(this.id, vote.id) &&
-        Objects.equals(this.battleId, vote.battleId) &&
-        Objects.equals(this.preference, vote.preference) &&
-        Objects.equals(this.createdAt, vote.createdAt);
+    EvaluationDto evaluation = (EvaluationDto) o;
+    return Objects.equals(this.id, evaluation.id) &&
+        Objects.equals(this.outcome, evaluation.outcome) &&
+        Objects.equals(this.createdAt, evaluation.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, battleId, preference, createdAt);
+    return Objects.hash(id, outcome, createdAt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class VoteDto {\n");
+    sb.append("class EvaluationDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    battleId: ").append(toIndentedString(battleId)).append("\n");
-    sb.append("    preference: ").append(toIndentedString(preference)).append("\n");
+    sb.append("    outcome: ").append(toIndentedString(outcome)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -177,50 +152,44 @@ public class VoteDto {
   
   public static class Builder {
 
-    private VoteDto instance;
+    private EvaluationDto instance;
 
     public Builder() {
-      this(new VoteDto());
+      this(new EvaluationDto());
     }
 
-    protected Builder(VoteDto instance) {
+    protected Builder(EvaluationDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(VoteDto value) { 
+    protected Builder copyOf(EvaluationDto value) { 
       this.instance.setId(value.id);
-      this.instance.setBattleId(value.battleId);
-      this.instance.setPreference(value.preference);
+      this.instance.setOutcome(value.outcome);
       this.instance.setCreatedAt(value.createdAt);
       return this;
     }
 
-    public VoteDto.Builder id(UUID id) {
+    public EvaluationDto.Builder id(UUID id) {
       this.instance.id(id);
       return this;
     }
     
-    public VoteDto.Builder battleId(UUID battleId) {
-      this.instance.battleId(battleId);
+    public EvaluationDto.Builder outcome(EvaluationOutcomeDto outcome) {
+      this.instance.outcome(outcome);
       return this;
     }
     
-    public VoteDto.Builder preference(VotePreferenceDto preference) {
-      this.instance.preference(preference);
-      return this;
-    }
-    
-    public VoteDto.Builder createdAt(OffsetDateTime createdAt) {
+    public EvaluationDto.Builder createdAt(OffsetDateTime createdAt) {
       this.instance.createdAt(createdAt);
       return this;
     }
     
     /**
-    * returns a built VoteDto instance.
+    * returns a built EvaluationDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public VoteDto build() {
+    public EvaluationDto build() {
       try {
         return this.instance;
       } finally {
@@ -238,15 +207,15 @@ public class VoteDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static VoteDto.Builder builder() {
-    return new VoteDto.Builder();
+  public static EvaluationDto.Builder builder() {
+    return new EvaluationDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public VoteDto.Builder toBuilder() {
-    VoteDto.Builder builder = new VoteDto.Builder();
+  public EvaluationDto.Builder toBuilder() {
+    EvaluationDto.Builder builder = new EvaluationDto.Builder();
     return builder.copyOf(this);
   }
 
