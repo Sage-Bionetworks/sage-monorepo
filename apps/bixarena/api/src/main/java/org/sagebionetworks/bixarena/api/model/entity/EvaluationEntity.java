@@ -2,6 +2,8 @@ package org.sagebionetworks.bixarena.api.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,34 +17,32 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "battle", schema = "api")
+@Table(name = "battle_evaluation", schema = "api")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BattleEntity {
+public class EvaluationEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "id")
   private UUID id;
 
-  @Column(name = "title", length = 255)
-  private String title;
+  @Column(name = "battle_id", nullable = false)
+  private UUID battleId;
 
-  @Column(name = "user_id", nullable = false)
-  private UUID userId;
-
-  @Column(name = "model_1_id", nullable = false)
-  private UUID model1Id;
-
-  @Column(name = "model_2_id", nullable = false)
-  private UUID model2Id;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "outcome", nullable = false, length = 20)
+  private Outcome outcome;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;
 
-  @Column(name = "ended_at")
-  private OffsetDateTime endedAt;
+  public enum Outcome {
+    MODEL_1,
+    MODEL_2,
+    TIE,
+  }
 }

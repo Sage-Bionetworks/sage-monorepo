@@ -95,8 +95,14 @@ CREATE INDEX idx_api_battle_created_at ON api.battle(created_at DESC);
 -- Create round table
 CREATE TABLE api.battle_evaluation (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
   outcome VARCHAR(20) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   -- Table constraints
-  CONSTRAINT chk_vote_preference CHECK (outcome IN ('MODEL_1', 'MODEL_2', 'TIE'))
+  CONSTRAINT unique_battle_evaluation UNIQUE (battle_id),
+  CONSTRAINT chk_evaluation_outcome CHECK (outcome IN ('MODEL_1', 'MODEL_2', 'TIE'))
 );
+
+-- Indexes for evaluation queries
+CREATE INDEX idx_api_battle_evaluation_outcome ON api.battle_evaluation(outcome);
+CREATE INDEX idx_api_battle_evaluation_created_at ON api.battle_evaluation(created_at DESC);

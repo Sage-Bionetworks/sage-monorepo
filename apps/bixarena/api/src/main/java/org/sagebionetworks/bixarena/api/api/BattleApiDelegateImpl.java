@@ -51,8 +51,8 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
     log.info(
       "User {} is creating battle with models: {} vs {}",
       authentication.getName(),
-      battleCreateRequestDto.getLeftModelId(),
-      battleCreateRequestDto.getRightModelId()
+      battleCreateRequestDto.getModel1Id(),
+      battleCreateRequestDto.getModel2Id()
     );
 
     // Pass authentication to service for security validation
