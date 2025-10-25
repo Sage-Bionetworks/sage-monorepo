@@ -141,7 +141,7 @@ public class LeaderboardService {
     String entityField =
       switch (sortField) {
         case "bt_score" -> "btScore";
-        case "vote_count" -> "voteCount";
+        case "evaluation_count" -> "evaluationCount";
         case "created_at" -> "createdAt";
         case "model_name" -> "model.name";
         default -> "rank";

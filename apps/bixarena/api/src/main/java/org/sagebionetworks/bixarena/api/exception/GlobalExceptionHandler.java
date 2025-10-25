@@ -68,34 +68,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
-  @ExceptionHandler(VoteNotFoundException.class)
-  protected ResponseEntity<BasicErrorDto> handleVoteNotFound(
-    VoteNotFoundException ex,
-    Locale locale
-  ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-      BasicErrorDto.builder()
-        .title("Vote Not Found")
-        .status(HttpStatus.NOT_FOUND.value())
-        .detail(ex.getMessage())
-        .build()
-    );
-  }
-
-  @ExceptionHandler(DuplicateVoteException.class)
-  protected ResponseEntity<BasicErrorDto> handleDuplicateVote(
-    DuplicateVoteException ex,
-    Locale locale
-  ) {
-    return ResponseEntity.status(HttpStatus.CONFLICT).body(
-      BasicErrorDto.builder()
-        .title("Duplicate Vote")
-        .status(HttpStatus.CONFLICT.value())
-        .detail(ex.getMessage())
-        .build()
-    );
-  }
-
   @ExceptionHandler(AccessDeniedException.class)
   protected ResponseEntity<BasicErrorDto> handleAccessDenied(
     AccessDeniedException ex,

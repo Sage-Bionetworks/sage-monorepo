@@ -15,7 +15,7 @@ public class LeaderboardModelHistoryMapper {
     return HistoricalLeaderboardEntryDto.builder()
       .snapshotId(entity.getSnapshot().getSnapshotIdentifier())
       .btScore(entity.getBtScore().doubleValue())
-      .voteCount(entity.getVoteCount())
+      .evaluationCount(entity.getEvaluationCount())
       .rank(entity.getRank())
       .createdAt(entity.getCreatedAt())
       .build();
