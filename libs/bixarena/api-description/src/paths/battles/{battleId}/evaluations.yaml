@@ -8,11 +8,11 @@ post:
   description: Create a new battle evaluation for a battle.
   operationId: createBattleEvaluation
   requestBody:
+    required: true
     content:
       application/json:
         schema:
           $ref: ../../../components/schemas/BattleEvaluationCreateRequest.yaml
-    required: true
   responses:
     '201':
       content:
