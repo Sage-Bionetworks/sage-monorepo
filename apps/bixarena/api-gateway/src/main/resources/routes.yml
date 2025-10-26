@@ -44,6 +44,9 @@ app:
       audience: 'urn:bixarena:api'
       anonymousAccess: true
     - method: 'GET'
+      path: '/api/v1/users/me/stats'
+      audience: 'urn:bixarena:api'
+    - method: 'GET'
       path: '/auth/callback'
       audience: 'urn:bixarena:auth'
       anonymousAccess: true

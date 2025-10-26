@@ -24,6 +24,8 @@ tags:
     name: Leaderboard
   - description: Operations about models.
     name: Model
+  - description: Operations about the authenticated user.
+    name: User
 paths:
   /admin/stats:
     get:
@@ -464,6 +466,27 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Model
+  /users/me/stats:
+    get:
+      description: Returns statistics about the authenticated user's battle participation.
+      operationId: getUserStats
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStats'
+          description: User statistics retrieved successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      summary: Get current user's statistics
+      tags:
+        - User
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: User
 components:
   parameters:
     battleSearchQuery:
@@ -1548,6 +1571,47 @@ components:
         hasPrevious: true
         hasNext: true
         totalElements: 99
+      type: object
+    UserStats:
+      description: Statistics about a user's participation in battles.
+      example:
+        totalBattles: 42
+        completedBattles: 38
+        activeBattles: 4
+        firstBattleAt: 2024-01-15T10:30:00Z
+        latestBattleAt: 2024-10-26T14:23:00Z
+      properties:
+        totalBattles:
+          description: Total number of battles the user has participated in (as arbiter)
+          example: 42
+          format: int64
+          type: integer
+        completedBattles:
+          description: Number of battles that have been completed (endedAt is set)
+          example: 38
+          format: int64
+          type: integer
+        activeBattles:
+          description: Number of battles currently in progress (endedAt is null)
+          example: 4
+          format: int64
+          type: integer
+        firstBattleAt:
+          description: Timestamp of the user's first battle
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          nullable: true
+          type: string
+        latestBattleAt:
+          description: Timestamp of the user's most recent battle
+          example: 2024-10-26T14:23:00Z
+          format: date-time
+          nullable: true
+          type: string
+      required:
+        - activeBattles
+        - completedBattles
+        - totalBattles
       type: object
     adminStats_200_response:
       example:

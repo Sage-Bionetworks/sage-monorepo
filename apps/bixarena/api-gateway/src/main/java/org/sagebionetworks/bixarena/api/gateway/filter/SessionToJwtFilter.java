@@ -36,7 +36,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class SessionToJwtFilter implements WebFilter {
 
-  private static final String SESSION_COOKIE_NAME = "BIXARENA_SESSION";
+  private static final String SESSION_COOKIE_NAME = "JSESSIONID";
   private static final String AUTH_SERVICE_AUDIENCE = "urn:bixarena:auth";
 
   private final RouteConfigRegistry routeConfigRegistry;
@@ -203,9 +203,23 @@ public class SessionToJwtFilter implements WebFilter {
    */
   private Mono<Void> handleAuthError(ServerWebExchange exchange, Throwable e, String method, String path) {
     log.error("Authentication error for {} {}: {}", method, path, e.getMessage());
-    if (e instanceof WebClientResponseException.Unauthorized) {
-      return unauthorized(exchange, "Session invalid or expired");
+
+    // Handle WebClient errors from auth service
+    if (e instanceof WebClientResponseException webClientEx) {
+      int statusCode = webClientEx.getStatusCode().value();
+      // Auth service returned 401 or 403 -> invalid/expired session
+      if (statusCode == 401 || statusCode == 403) {
+        return unauthorized(exchange, "Session invalid or expired");
+      }
+      // Auth service returned other 4xx -> client error
+      if (statusCode >= 400 && statusCode < 500) {
+        return unauthorized(exchange, "Authentication failed");
+      }
+      // Auth service returned 5xx -> service unavailable
+      log.error("Auth service error: {} {}", statusCode, webClientEx.getResponseBodyAsString());
     }
+
+    // Network errors, timeouts, or other issues
     exchange.getResponse().setStatusCode(HttpStatus.SERVICE_UNAVAILABLE);
     return exchange.getResponse().setComplete();
   }
