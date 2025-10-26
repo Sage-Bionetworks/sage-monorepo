@@ -1,7 +1,11 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolService,
+  PlatformService,
+  provideComparisonToolFilterService,
+} from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import {
@@ -37,6 +41,8 @@ async function setup() {
           getModelOverviews: jest.fn().mockReturnValue(of([])),
         },
       },
+      ComparisonToolService,
+      ...provideComparisonToolFilterService(),
     ],
   });
 

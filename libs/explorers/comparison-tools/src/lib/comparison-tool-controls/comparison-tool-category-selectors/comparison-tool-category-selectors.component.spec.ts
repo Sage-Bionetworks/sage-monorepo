@@ -7,13 +7,13 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { mockComparisonToolConfigs } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
-import { ComparisonToolSelectorsComponent } from './comparison-tool-selectors.component';
+import { ComparisonToolCategorySelectorsComponent } from './comparison-tool-category-selectors.component';
 
 async function setup(
   pageConfigs: ComparisonToolConfig[] = mockComparisonToolConfigs,
   initialSelection?: string[],
 ) {
-  const component = await render(ComparisonToolSelectorsComponent, {
+  const component = await render(ComparisonToolCategorySelectorsComponent, {
     providers: [
       provideHttpClient(),
       provideRouter([]),

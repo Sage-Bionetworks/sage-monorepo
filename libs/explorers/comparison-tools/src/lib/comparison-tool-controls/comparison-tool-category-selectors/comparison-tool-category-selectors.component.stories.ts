@@ -8,10 +8,10 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
-import { ComparisonToolSelectorsComponent } from './comparison-tool-selectors.component';
+import { ComparisonToolCategorySelectorsComponent } from './comparison-tool-category-selectors.component';
 
-const meta: Meta<ComparisonToolSelectorsComponent> = {
-  component: ComparisonToolSelectorsComponent,
+const meta: Meta<ComparisonToolCategorySelectorsComponent> = {
+  component: ComparisonToolCategorySelectorsComponent,
   title: 'Comparison Tools/ComparisonToolSelectorsComponent',
   decorators: [
     applicationConfig({
@@ -24,7 +24,7 @@ const meta: Meta<ComparisonToolSelectorsComponent> = {
   ],
 };
 export default meta;
-type Story = StoryObj<ComparisonToolSelectorsComponent>;
+type Story = StoryObj<ComparisonToolCategorySelectorsComponent>;
 
 export const MultipleDropdowns: Story = {
   decorators: [

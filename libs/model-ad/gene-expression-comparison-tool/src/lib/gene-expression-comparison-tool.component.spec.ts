@@ -8,6 +8,10 @@ import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { GeneExpressionComparisonToolComponent } from './gene-expression-comparison-tool.component';
+import {
+  ComparisonToolService,
+  provideComparisonToolFilterService,
+} from '@sagebionetworks/explorers/services';
 
 async function setup() {
   const { fixture } = await render(GeneExpressionComparisonToolComponent, {
@@ -23,6 +27,8 @@ async function setup() {
           getComparisonToolConfig: jest.fn().mockReturnValue(of([])),
         },
       },
+      ComparisonToolService,
+      ...provideComparisonToolFilterService(),
     ],
   });
 

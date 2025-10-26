@@ -41,11 +41,22 @@ export interface ComparisonToolConfigColumn {
   link_url?: string;
 }
 
+export interface ComparisonToolColumn {
+  name: string;
+  selected: boolean;
+  width?: number;
+}
+
+export interface ComparisonToolColumns {
+  dropdowns: string[];
+  columns: ComparisonToolColumn[];
+}
+
 export interface ComparisonToolConfig {
   page: ComparisonToolPage;
-  dropdowns: Array<string>;
-  columns: Array<ComparisonToolConfigColumn>;
-  filters?: Array<ComparisonToolConfigFilter>;
+  dropdowns: string[];
+  columns: ComparisonToolConfigColumn[];
+  filters?: ComparisonToolConfigFilter[];
 }
 
 export type HeatmapCircleData<ColorKey extends string = string> = {

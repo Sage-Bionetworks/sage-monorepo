@@ -3,11 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import {
-  ComparisonToolFilterService,
-  ComparisonToolService,
-  PlatformService,
-} from '@sagebionetworks/explorers/services';
+import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -17,13 +13,13 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
+import { shareReplay } from 'rxjs';
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
   imports: [BaseComparisonToolComponent, DiseaseCorrelationHelpLinksComponent],
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
-  providers: [ComparisonToolService, ComparisonToolFilterService],
 })
 export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   private readonly platformService = inject(PlatformService);
@@ -62,9 +58,14 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   }
 
   getConfigs() {
+    // Skip if already initialized (service persists at route level)
+    if (this.comparisonToolService.configs().length > 0) {
+      return;
+    }
+
     this.comparisonToolConfigService
       .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
           this.comparisonToolService.initialize(configs, undefined, this.selectorsWikiParams);

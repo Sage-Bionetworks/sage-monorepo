@@ -12,6 +12,7 @@ import { TooltipModule } from 'primeng/tooltip';
 export class ComparisonToolColumnsComponent implements AfterViewInit {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
+  columns = this.comparisonToolService.columns;
   currentConfig = this.comparisonToolService.currentConfig;
   resultsCount = this.comparisonToolService.totalResultsCount;
   columnWidth = 'auto';

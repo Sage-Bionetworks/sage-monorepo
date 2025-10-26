@@ -2,11 +2,7 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import {
-  ComparisonToolFilterService,
-  ComparisonToolService,
-  PlatformService,
-} from '@sagebionetworks/explorers/services';
+import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -17,6 +13,7 @@ import {
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
 import { ModelOverviewMainTableComponent } from './components/model-overview-main-table/model-overview-main-table.component';
+import { shareReplay } from 'rxjs';
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
@@ -25,7 +22,6 @@ import { ModelOverviewMainTableComponent } from './components/model-overview-mai
     ModelOverviewMainTableComponent,
     ModelOverviewHelpLinksComponent,
   ],
-  providers: [ComparisonToolService, ComparisonToolFilterService],
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })
@@ -49,9 +45,14 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   }
 
   getConfigs() {
+    // Skip if already initialized (service persists at route level)
+    if (this.comparisonToolService.configs().length > 0) {
+      return;
+    }
+
     this.comparisonToolConfigService
       .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
           this.comparisonToolService.initialize(configs);

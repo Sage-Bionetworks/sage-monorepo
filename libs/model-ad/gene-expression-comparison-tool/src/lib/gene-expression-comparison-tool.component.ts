@@ -3,10 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import {
-  ComparisonToolFilterService,
-  ComparisonToolService,
-} from '@sagebionetworks/explorers/services';
+import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -14,19 +11,21 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { GeneExpressionHelpLinksComponent } from './components/gene-expression-help-links/gene-expression-help-links.component';
+import { shareReplay } from 'rxjs';
 
 @Component({
   selector: 'model-ad-gene-expression-comparison-tool',
   imports: [BaseComparisonToolComponent, GeneExpressionHelpLinksComponent],
   templateUrl: './gene-expression-comparison-tool.component.html',
   styleUrls: ['./gene-expression-comparison-tool.component.scss'],
-  providers: [ComparisonToolService, ComparisonToolFilterService],
 })
 export class GeneExpressionComparisonToolComponent implements OnInit {
+  private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly comparisonToolService = inject(ComparisonToolService);
+  // private readonly geneExpressionService = inject(GeneExpressionService)
 
   isLoading = signal(true);
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
@@ -37,14 +36,21 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   };
 
   ngOnInit() {
-    // TODO - Replace with actual data fetching logic
-    setTimeout(() => {
-      this.isLoading.set(false);
-    }, 300);
+    if (this.platformService.isBrowser) {
+      this.getConfigs();
+      this.getData();
+    }
+  }
+
+  getConfigs() {
+    // Skip if already initialized (service persists at route level)
+    if (this.comparisonToolService.configs().length > 0) {
+      return;
+    }
 
     this.comparisonToolConfigService
       .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
           this.comparisonToolService.initialize(configs, undefined, this.selectorsWikiParams);
@@ -55,5 +61,24 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
           this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
         },
       });
+  }
+
+  getData() {
+    // this.geneExpressionService
+    //   .getModelOverviews()
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe({
+    //     next: (data) => {
+    //       this.data = data;
+    //       this.comparisonToolService.totalResultsCount.set(data.length);
+    //     },
+    //     error: (error) => {
+    //       throw new Error('Error fetching model overview data:', { cause: error });
+    //     },
+    //     complete: () => {
+    //       this.isLoading.set(false);
+    //     },
+    //   });
+    this.isLoading.set(false);
   }
 }

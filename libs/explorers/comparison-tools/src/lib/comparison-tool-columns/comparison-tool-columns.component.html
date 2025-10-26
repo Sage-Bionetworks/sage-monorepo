@@ -2,8 +2,7 @@
   <ng-template pTemplate="header">
     <tr>
       <th></th>
-      @let columns = currentConfig()?.columns || [];
-      @for (column of columns; track column) {
+      @for (column of columns(); track column) {
         <th [pSortableColumn]="column.name" [style]="{ width: columnWidth }">
           <div class="column-header">
             <div class="column-header-text">

@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { PlatformService } from '@sagebionetworks/explorers/services';
+import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import {
   ComparisonToolConfigService,
@@ -37,6 +37,7 @@ async function setup() {
           getDiseaseCorrelations: jest.fn().mockReturnValue(of([])),
         },
       },
+      ComparisonToolService,
     ],
   });
 
