@@ -71,12 +71,34 @@ public class SecurityConfiguration {
     String jwksUri = appProperties.authService().baseUrl() + "/.well-known/jwks.json";
     NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri(jwksUri).build();
 
-    // Add issuer validation
-    decoder.setJwtValidator(
-      org.springframework.security.oauth2.jwt.JwtValidators.createDefaultWithIssuer(
-        appProperties.jwt().expectedIssuer()
-      )
+    // Create validators for issuer and audience
+    var issuerValidator = org.springframework.security.oauth2.jwt.JwtValidators.createDefaultWithIssuer(
+      appProperties.jwt().expectedIssuer()
     );
+
+    // Custom audience validator - only accept urn:bixarena:api
+    org.springframework.security.oauth2.core.OAuth2TokenValidator<org.springframework.security.oauth2.jwt.Jwt> audienceValidator =
+      token -> {
+        var audiences = token.getAudience();
+        if (audiences != null && audiences.contains(appProperties.jwt().expectedAudience())) {
+          return org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.success();
+        }
+        return org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.failure(
+          new org.springframework.security.oauth2.core.OAuth2Error(
+            "invalid_token",
+            "Token audience must be " + appProperties.jwt().expectedAudience(),
+            null
+          )
+        );
+      };
+
+    // Combine validators
+    var validators = new org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator<>(
+      issuerValidator,
+      audienceValidator
+    );
+
+    decoder.setJwtValidator(validators);
 
     return decoder;
   }

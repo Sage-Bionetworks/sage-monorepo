@@ -61,21 +61,29 @@ public class SessionToJwtFilter implements WebFilter {
         .contextWrite(ReactiveSecurityContextHolder.withAuthentication(anonymousAuth));
     }
 
-    // Step 2: Extract session cookie
-    String sessionId = extractSessionCookie(exchange);
-    if (sessionId == null) {
-      log.debug("Session cookie missing for: {} {}", method, path);
-      return unauthorized(exchange, "Session cookie missing");
+    // Step 2: Check if request already has a Bearer token
+    // (e.g., from server-side clients like Gradio app)
+    String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+      log.debug("Request already has Bearer token, passing through: {} {}", method, path);
+      return chain.filter(exchange);
     }
 
-    // Step 3: Get target audience
+    // Step 3: Extract session cookie for browser requests
+    String sessionId = extractSessionCookie(exchange);
+    if (sessionId == null) {
+      log.debug("No Bearer token or session cookie found for: {} {}", method, path);
+      return unauthorized(exchange, "Authentication required");
+    }
+
+    // Step 4: Get target audience
     Optional<String> audience = routeConfigRegistry.getAudienceForRoute(method, path);
     if (audience.isEmpty()) {
       log.error("No audience configured for route: {} {}", method, path);
       return Mono.error(new IllegalStateException("No audience for route: " + method + " " + path));
     }
 
-    // Step 4: Special handling for auth-service endpoints (skip JWT minting)
+    // Step 5: Special handling for auth-service endpoints (skip JWT minting)
     if (AUTH_SERVICE_AUDIENCE.equals(audience.get())) {
       log.debug("Auth service endpoint, validating session only: {} {}", method, path);
       return validateSession(sessionId)
@@ -87,7 +95,7 @@ public class SessionToJwtFilter implements WebFilter {
         .onErrorResume(e -> handleAuthError(exchange, e, method, path));
     }
 
-    // Step 5: For other services, validate session, mint JWT, and strip session cookie
+    // Step 6: For other services, validate session, mint JWT, and strip session cookie
     log.debug("Resource service endpoint, minting JWT with audience: {}", audience.get());
     return validateSession(sessionId)
       .flatMap(userInfo -> mintJwt(sessionId, audience.get())

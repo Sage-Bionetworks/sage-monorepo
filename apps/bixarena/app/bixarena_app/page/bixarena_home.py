@@ -1,4 +1,41 @@
+import logging
+
 import gradio as gr
+
+from bixarena_api_client import UserApi
+from bixarena_app.api.api_client_helper import create_authenticated_api_client
+
+logger = logging.getLogger(__name__)
+
+
+def fetch_user_stats(request: gr.Request) -> int | None:
+    """Fetch user's battle statistics from the API.
+
+    Args:
+        request: Gradio request object
+
+    Returns:
+        Total number of battles arbitrated, or None if not authenticated or error
+    """
+    try:
+        # Extract session cookie from request
+        jsessionid = request.cookies.get("JSESSIONID") if request else None
+        if not jsessionid:
+            logger.debug("No JSESSIONID cookie, user not authenticated")
+            return None
+
+        # Call API gateway with session cookie
+        # The gateway will validate the session and mint a JWT for the API service
+        cookies = {"JSESSIONID": jsessionid}
+        with create_authenticated_api_client(cookies) as client:
+            api = UserApi(client)
+            user_stats = api.get_user_stats()
+            logger.info(f"Fetched user stats: {user_stats.total_battles} battles")
+            return user_stats.total_battles
+
+    except Exception as e:
+        logger.error(f"Error fetching user stats: {e}")
+        return None
 
 
 def create_intro_section():
@@ -21,6 +58,28 @@ def create_intro_section():
                 </p>
             </div>
             """)
+
+
+def render_user_battles_box(total_battles: int | None) -> str:
+    """Render the user's battles arbitrated box.
+
+    Args:
+        total_battles: Number of battles arbitrated, or None if not authenticated
+
+    Returns:
+        HTML string for the box, or empty string if not authenticated
+    """
+    if total_battles is None:
+        return ""
+
+    return f"""
+    <div style="text-align: center; padding: 20px;">
+        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
+            BATTLES ARBITRATED
+        </p>
+        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">{total_battles}</h2>
+    </div>
+    """
 
 
 def build_stats_section():
@@ -59,6 +118,13 @@ def build_stats_section():
                     <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">450</h2>
                 </div>
                 """)
+
+        # Fourth box: User's battles arbitrated (only shown when logged in)
+        with gr.Column():
+            with gr.Group():
+                user_battles_box = gr.HTML("", visible=True)
+
+    return user_battles_box
 
 
 def build_cta_section():
@@ -100,9 +166,9 @@ def build_home_page():
             create_intro_section()
 
             # Stats Section
-            build_stats_section()
+            user_battles_box = build_stats_section()
 
             # Call to Action Section
             start_btn = build_cta_section()
 
-    return home_page, start_btn
+    return home_page, start_btn, user_battles_box

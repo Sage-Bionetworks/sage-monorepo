@@ -12,7 +12,11 @@ from bixarena_app.page.bixarena_header import (
     handle_login_click,
     update_login_button,
 )
-from bixarena_app.page.bixarena_home import build_home_page
+from bixarena_app.page.bixarena_home import (
+    build_home_page,
+    fetch_user_stats,
+    render_user_battles_box,
+)
 from bixarena_app.page.bixarena_leaderboard import build_leaderboard_page
 from bixarena_app.page.bixarena_user import (
     build_user_page,
@@ -141,6 +145,21 @@ def sync_backend_session_on_load(request: gr.Request):
     return update_login_button(), *update_user_page(), gr.HTML("")
 
 
+def load_user_stats_on_page_load(request: gr.Request):
+    """Load user statistics when the page loads.
+
+    This function is called by demo.load() and receives the request object
+    from Gradio, which contains the session cookie needed to fetch user stats.
+
+    Args:
+        request: Gradio request object containing cookies and headers
+
+    Returns:
+        HTML string for the user battles box (empty if not authenticated)
+    """
+    return render_user_battles_box(fetch_user_stats(request))
+
+
 def parse_args():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser()
@@ -185,7 +204,7 @@ def build_app(moderate=False):
         _, battle_btn, leaderboard_btn, login_btn = build_header()
 
         with gr.Column(visible=True) as home_page:
-            _, cta_btn = build_home_page()
+            _, cta_btn, user_battles_box = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
             build_battle_page(moderate)
@@ -269,6 +288,13 @@ def build_app(moderate=False):
             sync_backend_session_on_load,
             outputs=[login_btn, welcome_display, logout_btn, cookie_html],
             js=cleanup_js,
+        )
+
+        # Load user stats on page load (for the fourth stats box)
+        demo.load(
+            fn=load_user_stats_on_page_load,
+            inputs=None,
+            outputs=user_battles_box,
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
