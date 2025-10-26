@@ -1,0 +1,65 @@
+# Environment files
+.env
+.env.*
+*.env
+.envrc
+
+# Secrets and credentials
+secrets.json
+credentials.json
+**/secrets/
+**/credentials/
+cookies.txt
+
+# Private keys and certificates
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+*.crt
+*.cer
+
+# API keys and tokens
+*token*
+*apikey*
+*api-key*
+
+# AWS credentials
+.aws/credentials
+.aws/config
+
+# SSH config
+.ssh/
+
+# Database dumps
+*.sql
+*.dump
+
+# Backup files that might contain sensitive data
+*.bak
+*.backup
+
+# Node modules (performance)
+node_modules/
+
+# Build outputs (performance)
+dist/
+build/
+.next/
+out/
+
+# Logs that might contain sensitive data
+*.log
+logs/
+
+# IDE and editor files (performance)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git directory
+.git/
