@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "denials": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(./**/*.env)",
+      "Read(./secrets/**)",
+      "Read(./**/secrets/**)",
+      "Read(./cookies.txt)",
+      "Read(./**/*token*)",
+      "Read(./**/*apikey*)",
+      "Read(./**/*api-key*)",
+      "Read(./**/*.key)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.p12)",
+      "Read(./**/*.pfx)",
+      "Read(./credentials.json)",
+      "Read(./**/credentials.json)",
+      "Read(./.aws/credentials)",
+      "Read(./.aws/config)"
+    ]
+  }
+}
