@@ -1,6 +1,6 @@
 # bixarena_api_client.AuthApi
 
-All URIs are relative to *https://bixarena.ai/api/v1*
+All URIs are relative to _http://localhost_
 
 | Method                                        | HTTP request                   | Description                                |
 | --------------------------------------------- | ------------------------------ | ------------------------------------------ |
@@ -27,10 +27,10 @@ from bixarena_api_client.models.callback200_response import Callback200Response
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 
@@ -96,10 +96,10 @@ from bixarena_api_client.models.get_jwks200_response import GetJwks200Response
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 
@@ -164,10 +164,10 @@ from bixarena_api_client.models.user_info import UserInfo
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -235,10 +235,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 
@@ -298,10 +298,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -354,11 +354,13 @@ void (empty response body)
 
 # **token**
 
-> Token200Response token()
+> Token200Response token(audience=audience)
 
 Mint short-lived internal JWT
 
 Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+
+The optional audience parameter specifies the target service for the JWT.
 
 ### Example
 
@@ -368,10 +370,10 @@ from bixarena_api_client.models.token200_response import Token200Response
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 
@@ -379,10 +381,11 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.AuthApi(api_client)
+    audience = 'audience_example' # str | Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.  (optional)
 
     try:
         # Mint short-lived internal JWT
-        api_response = api_instance.token()
+        api_response = api_instance.token(audience=audience)
         print("The response of AuthApi->token:\n")
         pprint(api_response)
     except Exception as e:
@@ -391,7 +394,9 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-This endpoint does not need any parameter.
+| Name         | Type    | Description                                                                   | Notes      |
+| ------------ | ------- | ----------------------------------------------------------------------------- | ---------- |
+| **audience** | **str** | Target audience for the JWT. If not specified, defaults to urn:bixarena:auth. | [optional] |
 
 ### Return type
 

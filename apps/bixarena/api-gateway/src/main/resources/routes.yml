@@ -69,7 +69,6 @@ app:
     - method: 'POST'
       path: '/auth/logout'
       audience: 'urn:bixarena:auth'
-      anonymousAccess: true
     - method: 'POST'
       path: '/oauth2/token'
       audience: 'urn:bixarena:auth'

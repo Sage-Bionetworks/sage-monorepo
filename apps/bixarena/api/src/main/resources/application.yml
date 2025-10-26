@@ -65,3 +65,8 @@ app:
   welcome-message: 'Welcome to BixArena API'
   auth-service:
     base-url: ${AUTH_SERVICE_BASE_URL:http://bixarena-auth-service:8115}
+  jwt:
+    # Expected issuer claim value (URN format)
+    expected-issuer: urn:bixarena:auth
+    # Expected audience claim value
+    expected-audience: urn:bixarena:api

@@ -1,6 +1,6 @@
 # bixarena_api_client.BattleApi
 
-All URIs are relative to *https://bixarena.ai/api/v1*
+All URIs are relative to _http://localhost_
 
 | Method                                          | HTTP request                   | Description        |
 | ----------------------------------------------- | ------------------------------ | ------------------ |
@@ -29,10 +29,10 @@ from bixarena_api_client.models.battle_create_request import BattleCreateRequest
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -110,10 +110,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -188,10 +188,10 @@ from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -268,10 +268,10 @@ from bixarena_api_client.models.battle_search_query import BattleSearchQuery
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -348,10 +348,10 @@ from bixarena_api_client.models.battle_update_request import BattleUpdateRequest
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 # The client must configure the authentication and authorization parameters

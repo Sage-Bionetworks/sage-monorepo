@@ -69,7 +69,16 @@ public class SecurityConfiguration {
   @Bean
   public JwtDecoder jwtDecoder() {
     String jwksUri = appProperties.authService().baseUrl() + "/.well-known/jwks.json";
-    return NimbusJwtDecoder.withJwkSetUri(jwksUri).build();
+    NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri(jwksUri).build();
+
+    // Add issuer validation
+    decoder.setJwtValidator(
+      org.springframework.security.oauth2.jwt.JwtValidators.createDefaultWithIssuer(
+        appProperties.jwt().expectedIssuer()
+      )
+    );
+
+    return decoder;
   }
 
   @Bean

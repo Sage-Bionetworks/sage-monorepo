@@ -37,7 +37,7 @@ public interface AuthApiDelegate {
      * @param code  (required)
      * @param state  (required)
      * @return Authentication successful (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      * @see AuthApi#callback
      */
@@ -55,9 +55,9 @@ public interface AuthApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
             }
@@ -71,7 +71,7 @@ public interface AuthApiDelegate {
      * Returns the public keys used to verify internally issued JWTs.
      *
      * @return JWKS document (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      * @see AuthApi#getJwks
      */
     default ResponseEntity<GetJwks200ResponseDto> getJwks() {
@@ -109,9 +109,9 @@ public interface AuthApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
             }
@@ -126,7 +126,7 @@ public interface AuthApiDelegate {
      *
      * @return Flow started (no content; clients should follow redirect) (status code 204)
      *         or Redirect to Synapse login (status code 302)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      * @see AuthApi#login
      */
     default ResponseEntity<Void> login() {
@@ -154,9 +154,9 @@ public interface AuthApiDelegate {
     default ResponseEntity<Void> logout() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
             }
@@ -167,13 +167,14 @@ public interface AuthApiDelegate {
 
     /**
      * POST /oauth2/token : Mint short-lived internal JWT
-     * Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+     * Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).  The optional audience parameter specifies the target service for the JWT. 
      *
+     * @param audience Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.  (optional)
      * @return Access token response (status code 200)
      *         or Unauthorized (status code 401)
      * @see AuthApi#token
      */
-    default ResponseEntity<Token200ResponseDto> token() {
+    default ResponseEntity<Token200ResponseDto> token(String audience) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -181,9 +182,9 @@ public interface AuthApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"instance\" : \"instance\", \"detail\" : \"detail\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
             }

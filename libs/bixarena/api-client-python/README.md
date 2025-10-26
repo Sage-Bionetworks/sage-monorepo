@@ -62,10 +62,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "https://bixarena.ai/api/v1"
+    host = "http://localhost"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -96,7 +96,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://bixarena.ai/api/v1*
+All URIs are relative to _http://localhost_
 
 | Class              | Method                                                                            | HTTP request                                            | Description                                |
 | ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------ |

@@ -393,7 +393,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /auth/logout:
     post:
-      x-anonymous-access: true
+      x-anonymous-access: false
       tags:
         - Auth
       summary: Logout current session
@@ -412,9 +412,24 @@ paths:
       tags:
         - Auth
       summary: Mint short-lived internal JWT
-      description: Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+      description: |
+        Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+
+        The optional audience parameter specifies the target service for the JWT.
       operationId: token
       security: []
+      parameters:
+        - in: query
+          name: audience
+          required: false
+          schema:
+            type: string
+            enum:
+              - urn:bixarena:auth
+              - urn:bixarena:api
+              - urn:bixarena:ai
+          description: |
+            Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
       responses:
         '200':
           description: Access token response

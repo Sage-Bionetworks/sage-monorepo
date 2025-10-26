@@ -1,6 +1,5 @@
 post:
-  # TODO: Remove anonymous accessl; must be authenticated to logout
-  x-anonymous-access: true
+  x-anonymous-access: false
   tags:
     - Auth
   summary: Logout current session

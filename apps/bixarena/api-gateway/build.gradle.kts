@@ -14,6 +14,9 @@ dependencies {
   implementation(libs.spring.cloud.starter.gateway.server.webflux)
   implementation(libs.spring.security.oauth2.jose)
 
+  // Caffeine cache for session and JWT caching
+  implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
 }

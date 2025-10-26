@@ -55,7 +55,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Token200ResponseDto> token() {
+  public ResponseEntity<Token200ResponseDto> token(String audience) {
     HttpServletRequest req =
       ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     HttpSession session = req.getSession(false);
@@ -68,7 +68,13 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     if (subject == null || roles == null) {
       return ResponseEntity.status(401).build();
     }
-    var minted = jwtService.mint(subject, roles);
+
+    // Use default audience if not specified
+    String targetAudience = (audience != null && !audience.isBlank())
+      ? audience
+      : "urn:bixarena:auth";
+
+    var minted = jwtService.mint(subject, roles, targetAudience);
     long expiresIn = Duration.between(Instant.now(), minted.expiresAt()).getSeconds();
     var body = Token200ResponseDto.builder()
       .accessToken(minted.token())
