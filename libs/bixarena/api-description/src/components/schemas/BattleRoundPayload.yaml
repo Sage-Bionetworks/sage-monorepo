@@ -1,0 +1,12 @@
+type: object
+description: The request payload for a battle round.
+properties:
+  prompt:
+    $ref: 'MessageCreate.yaml'
+    nullable: true
+  response1:
+    $ref: 'MessageCreate.yaml'
+    nullable: true
+  response2:
+    $ref: 'MessageCreate.yaml'
+    nullable: true

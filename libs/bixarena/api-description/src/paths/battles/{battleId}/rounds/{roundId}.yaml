@@ -1,0 +1,33 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/battleId.yaml
+  - $ref: ../../../../components/parameters/path/roundId.yaml
+
+patch:
+  tags:
+    - Battle
+  summary: Update a battle round
+  description: Update an existing battle round.
+  operationId: updateBattleRound
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../components/schemas/BattleRoundPayload.yaml
+  responses:
+    '200':
+      description: Battle round updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/BattleRound.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

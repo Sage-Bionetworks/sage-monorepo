@@ -1,0 +1,10 @@
+type: object
+description: Payload used to create a message.
+properties:
+  role:
+    $ref: MessageRole.yaml
+  content:
+    $ref: MessageContent.yaml
+required:
+  - role
+  - content

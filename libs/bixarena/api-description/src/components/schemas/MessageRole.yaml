@@ -1,0 +1,7 @@
+type: string
+description: The role of a message.
+enum:
+  - system
+  - user
+  - assistant
+example: user

@@ -1,0 +1,16 @@
+type: object
+description: A message object.
+properties:
+  id:
+    $ref: MessageId.yaml
+  role:
+    $ref: MessageRole.yaml
+  content:
+    $ref: MessageContent.yaml
+  createdAt:
+    $ref: CreatedAt.yaml
+required:
+  - id
+  - role
+  - content
+  - createdAt
