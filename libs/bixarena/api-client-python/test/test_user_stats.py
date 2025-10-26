@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.token200_response import Token200Response
+from bixarena_api_client.models.user_stats import UserStats
 
 
-class TestToken200Response(unittest.TestCase):
-    """Token200Response unit test stubs"""
+class TestUserStats(unittest.TestCase):
+    """UserStats unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,30 +25,32 @@ class TestToken200Response(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> Token200Response:
-        """Test Token200Response
+    def make_instance(self, include_optional) -> UserStats:
+        """Test UserStats
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `Token200Response`
+        # uncomment below to create an instance of `UserStats`
         """
-        model = Token200Response()
+        model = UserStats()
         if include_optional:
-            return Token200Response(
-                access_token = '',
-                token_type = 'Bearer',
-                expires_in = 600
+            return UserStats(
+                total_battles = 42,
+                completed_battles = 38,
+                active_battles = 4,
+                first_battle_at = '2024-01-15T10:30Z',
+                latest_battle_at = '2024-10-26T14:23Z'
             )
         else:
-            return Token200Response(
-                access_token = '',
-                token_type = 'Bearer',
-                expires_in = 600,
+            return UserStats(
+                total_battles = 42,
+                completed_battles = 38,
+                active_battles = 4,
         )
         """
 
-    def testToken200Response(self):
-        """Test Token200Response"""
+    def testUserStats(self):
+        """Test UserStats"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

@@ -62,10 +62,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://bixarena.ai/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -96,7 +96,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ## Documentation for API Endpoints
 
-All URIs are relative to _http://localhost_
+All URIs are relative to *https://bixarena.ai/api/v1*
 
 | Class              | Method                                                                            | HTTP request                                            | Description                                |
 | ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------ |
@@ -118,6 +118,7 @@ All URIs are relative to _http://localhost_
 | _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
 | _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
 | _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
+| _UserApi_          | [**get_user_stats**](docs/UserApi.md#get_user_stats)                              | **GET** /users/me/stats                                 | Get current user&#39;s statistics          |
 
 ## Documentation For Models
 
@@ -158,6 +159,7 @@ All URIs are relative to _http://localhost_
 - [SortDirection](docs/SortDirection.md)
 - [Token200Response](docs/Token200Response.md)
 - [UserInfo](docs/UserInfo.md)
+- [UserStats](docs/UserStats.md)
 
 <a id="documentation-for-authorization"></a>
 

@@ -1,18 +1,18 @@
-# bixarena_api_client.AdminApi
+# bixarena_api_client.UserApi
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                     | HTTP request         | Description      |
-| ------------------------------------------ | -------------------- | ---------------- |
-| [**admin_stats**](AdminApi.md#admin_stats) | **GET** /admin/stats | Admin statistics |
+| Method                                          | HTTP request            | Description                       |
+| ----------------------------------------------- | ----------------------- | --------------------------------- |
+| [**get_user_stats**](UserApi.md#get_user_stats) | **GET** /users/me/stats | Get current user&#39;s statistics |
 
-# **admin_stats**
+# **get_user_stats**
 
-> AdminStats200Response admin_stats()
+> UserStats get_user_stats()
 
-Admin statistics
+Get current user's statistics
 
-Administrative operations requiring admin role.
+Returns statistics about the authenticated user's battle participation.
 
 ### Example
 
@@ -20,7 +20,7 @@ Administrative operations requiring admin role.
 
 ```python
 import bixarena_api_client
-from bixarena_api_client.models.admin_stats200_response import AdminStats200Response
+from bixarena_api_client.models.user_stats import UserStats
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
@@ -43,15 +43,15 @@ configuration = bixarena_api_client.Configuration(
 # Enter a context with an instance of the API client
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = bixarena_api_client.AdminApi(api_client)
+    api_instance = bixarena_api_client.UserApi(api_client)
 
     try:
-        # Admin statistics
-        api_response = api_instance.admin_stats()
-        print("The response of AdminApi->admin_stats:\n")
+        # Get current user's statistics
+        api_response = api_instance.get_user_stats()
+        print("The response of UserApi->get_user_stats:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling AdminApi->admin_stats: %s\n" % e)
+        print("Exception when calling UserApi->get_user_stats: %s\n" % e)
 ```
 
 ### Parameters
@@ -60,7 +60,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**AdminStats200Response**](AdminStats200Response.md)
+[**UserStats**](UserStats.md)
 
 ### Authorization
 
@@ -73,10 +73,9 @@ This endpoint does not need any parameter.
 
 ### HTTP response details
 
-| Status code | Description                                                  | Response headers |
-| ----------- | ------------------------------------------------------------ | ---------------- |
-| **200**     | Success                                                      | -                |
-| **401**     | Unauthorized                                                 | -                |
-| **403**     | The user does not have the permission to perform this action | -                |
+| Status code | Description                            | Response headers |
+| ----------- | -------------------------------------- | ---------------- |
+| **200**     | User statistics retrieved successfully | -                |
+| **401**     | Unauthorized                           | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena AI Service
+BixArena API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 

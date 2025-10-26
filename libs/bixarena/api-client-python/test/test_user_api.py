@@ -13,22 +13,22 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.api.model_api import ModelApi
+from bixarena_api_client.api.user_api import UserApi
 
 
-class TestModelApi(unittest.TestCase):
-    """ModelApi unit test stubs"""
+class TestUserApi(unittest.TestCase):
+    """UserApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = ModelApi()
+        self.api = UserApi()
 
     def tearDown(self) -> None:
         pass
 
-    def test_list_models(self) -> None:
-        """Test case for list_models
+    def test_get_user_stats(self) -> None:
+        """Test case for get_user_stats
 
-        List models
+        Get current user's statistics
         """
         pass
 

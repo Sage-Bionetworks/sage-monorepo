@@ -16,46 +16,46 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
-from bixarena_api_client.models.leaderboard_sort import LeaderboardSort
-from bixarena_api_client.models.sort_direction import SortDirection
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class LeaderboardSearchQuery(BaseModel):
+class UserStats(BaseModel):
     """
-    A leaderboard search query with pagination and filtering options.
+    Statistics about a user's participation in battles.
     """  # noqa: E501
 
-    page_number: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
-        default=0, description="The page number.", alias="pageNumber"
+    total_battles: StrictInt = Field(
+        description="Total number of battles the user has participated in (as arbiter)",
+        alias="totalBattles",
     )
-    page_size: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
-        default=100,
-        description="The number of items in a single page.",
-        alias="pageSize",
+    completed_battles: StrictInt = Field(
+        description="Number of battles that have been completed (endedAt is set)",
+        alias="completedBattles",
     )
-    sort: Optional[LeaderboardSort] = LeaderboardSort.RANK
-    direction: Optional[SortDirection] = SortDirection.ASC
-    search: Optional[StrictStr] = Field(
+    active_battles: StrictInt = Field(
+        description="Number of battles currently in progress (endedAt is null)",
+        alias="activeBattles",
+    )
+    first_battle_at: Optional[datetime] = Field(
         default=None,
-        description="Search by model name (case-insensitive partial match).",
+        description="Timestamp of the user's first battle",
+        alias="firstBattleAt",
     )
-    snapshot_id: Optional[StrictStr] = Field(
+    latest_battle_at: Optional[datetime] = Field(
         default=None,
-        description="Get a specific historical snapshot instead of latest.",
-        alias="snapshotId",
+        description="Timestamp of the user's most recent battle",
+        alias="latestBattleAt",
     )
     __properties: ClassVar[List[str]] = [
-        "pageNumber",
-        "pageSize",
-        "sort",
-        "direction",
-        "search",
-        "snapshotId",
+        "totalBattles",
+        "completedBattles",
+        "activeBattles",
+        "firstBattleAt",
+        "latestBattleAt",
     ]
 
     model_config = ConfigDict(
@@ -75,7 +75,7 @@ class LeaderboardSearchQuery(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of LeaderboardSearchQuery from a JSON string"""
+        """Create an instance of UserStats from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -95,21 +95,24 @@ class LeaderboardSearchQuery(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if search (nullable) is None
+        # set to None if first_battle_at (nullable) is None
         # and model_fields_set contains the field
-        if self.search is None and "search" in self.model_fields_set:
-            _dict["search"] = None
+        if self.first_battle_at is None and "first_battle_at" in self.model_fields_set:
+            _dict["firstBattleAt"] = None
 
-        # set to None if snapshot_id (nullable) is None
+        # set to None if latest_battle_at (nullable) is None
         # and model_fields_set contains the field
-        if self.snapshot_id is None and "snapshot_id" in self.model_fields_set:
-            _dict["snapshotId"] = None
+        if (
+            self.latest_battle_at is None
+            and "latest_battle_at" in self.model_fields_set
+        ):
+            _dict["latestBattleAt"] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of LeaderboardSearchQuery from a dict"""
+        """Create an instance of UserStats from a dict"""
         if obj is None:
             return None
 
@@ -118,20 +121,11 @@ class LeaderboardSearchQuery(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "pageNumber": obj.get("pageNumber")
-                if obj.get("pageNumber") is not None
-                else 0,
-                "pageSize": obj.get("pageSize")
-                if obj.get("pageSize") is not None
-                else 100,
-                "sort": obj.get("sort")
-                if obj.get("sort") is not None
-                else LeaderboardSort.RANK,
-                "direction": obj.get("direction")
-                if obj.get("direction") is not None
-                else SortDirection.ASC,
-                "search": obj.get("search"),
-                "snapshotId": obj.get("snapshotId"),
+                "totalBattles": obj.get("totalBattles"),
+                "completedBattles": obj.get("completedBattles"),
+                "activeBattles": obj.get("activeBattles"),
+                "firstBattleAt": obj.get("firstBattleAt"),
+                "latestBattleAt": obj.get("latestBattleAt"),
             }
         )
         return _obj

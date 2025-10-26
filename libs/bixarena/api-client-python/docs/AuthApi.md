@@ -1,6 +1,6 @@
 # bixarena_api_client.AuthApi
 
-All URIs are relative to _http://localhost_
+All URIs are relative to *https://bixarena.ai/api/v1*
 
 | Method                                        | HTTP request                   | Description                                |
 | --------------------------------------------- | ------------------------------ | ------------------------------------------ |
@@ -27,10 +27,10 @@ from bixarena_api_client.models.callback200_response import Callback200Response
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://bixarena.ai/api/v1"
 )
 
 
@@ -96,10 +96,10 @@ from bixarena_api_client.models.get_jwks200_response import GetJwks200Response
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://bixarena.ai/api/v1"
 )
 
 
@@ -164,10 +164,10 @@ from bixarena_api_client.models.user_info import UserInfo
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://bixarena.ai/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -235,10 +235,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://bixarena.ai/api/v1"
 )
 
 
@@ -298,10 +298,10 @@ import bixarena_api_client
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://bixarena.ai/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -370,10 +370,10 @@ from bixarena_api_client.models.token200_response import Token200Response
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = bixarena_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://bixarena.ai/api/v1"
 )
 
 

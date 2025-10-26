@@ -3,7 +3,7 @@
 # flake8: noqa
 
 """
-BixArena AI Service
+BixArena API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -23,6 +23,7 @@ __all__ = [
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
+    "UserApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -69,6 +70,7 @@ __all__ = [
     "SortDirection",
     "Token200Response",
     "UserInfo",
+    "UserStats",
 ]
 
 # import apis into sdk package
@@ -80,6 +82,7 @@ from bixarena_api_client.api.example_prompt_api import (
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
+from bixarena_api_client.api.user_api import UserApi as UserApi
 
 # import ApiClient
 from bixarena_api_client.api_response import ApiResponse as ApiResponse
@@ -180,3 +183,4 @@ from bixarena_api_client.models.token200_response import (
     Token200Response as Token200Response,
 )
 from bixarena_api_client.models.user_info import UserInfo as UserInfo
+from bixarena_api_client.models.user_stats import UserStats as UserStats

@@ -2,7 +2,7 @@
 
 # flake8: noqa
 """
-BixArena AI Service
+BixArena API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -60,3 +60,4 @@ from bixarena_api_client.models.page_metadata import PageMetadata
 from bixarena_api_client.models.sort_direction import SortDirection
 from bixarena_api_client.models.token200_response import Token200Response
 from bixarena_api_client.models.user_info import UserInfo
+from bixarena_api_client.models.user_stats import UserStats
