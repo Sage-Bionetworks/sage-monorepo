@@ -14,8 +14,7 @@ from bixarena_app.page.bixarena_header import (
 )
 from bixarena_app.page.bixarena_home import (
     build_home_page,
-    fetch_user_stats,
-    render_user_battles_box,
+    load_user_battles_on_page_load,
 )
 from bixarena_app.page.bixarena_leaderboard import build_leaderboard_page
 from bixarena_app.page.bixarena_user import (
@@ -145,21 +144,6 @@ def sync_backend_session_on_load(request: gr.Request):
     return update_login_button(), *update_user_page(), gr.HTML("")
 
 
-def load_user_stats_on_page_load(request: gr.Request):
-    """Load user statistics when the page loads.
-
-    This function is called by demo.load() and receives the request object
-    from Gradio, which contains the session cookie needed to fetch user stats.
-
-    Args:
-        request: Gradio request object containing cookies and headers
-
-    Returns:
-        HTML string for the user battles box (empty if not authenticated)
-    """
-    return render_user_battles_box(fetch_user_stats(request))
-
-
 def parse_args():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser()
@@ -204,7 +188,7 @@ def build_app(moderate=False):
         _, battle_btn, leaderboard_btn, login_btn = build_header()
 
         with gr.Column(visible=True) as home_page:
-            _, cta_btn, user_battles_box = build_home_page()
+            _, cta_btn, user_battles_column, user_battles_box = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
             build_battle_page(moderate)
@@ -292,9 +276,9 @@ def build_app(moderate=False):
 
         # Load user stats on page load (for the fourth stats box)
         demo.load(
-            fn=load_user_stats_on_page_load,
+            fn=load_user_battles_on_page_load,
             inputs=None,
-            outputs=user_battles_box,
+            outputs=[user_battles_column, user_battles_box],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
