@@ -7,8 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundPayloadDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import org.sagebionetworks.bixarena.api.service.BattleRoundService;
 import org.sagebionetworks.bixarena.api.service.BattleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +26,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 public class BattleApiDelegateImpl implements BattleApiDelegate {
 
   private final BattleService battleService;
+  private final BattleRoundService battleRoundService;
   private final NativeWebRequest request;
 
   @Override
@@ -61,6 +65,17 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
+  public ResponseEntity<BattleRoundDto> createBattleRound(
+    UUID battleId,
+    BattleRoundPayloadDto battleRoundPayloadDto
+  ) {
+    // Create the round (and its messages) and return DTO
+    log.info("Creating round for battle {}", battleId);
+    BattleRoundDto created = battleRoundService.createBattleRound(battleId, battleRoundPayloadDto);
+    return ResponseEntity.status(201).body(created);
+  }
+
+  @Override
   // @PreAuthorize("hasAuthority('SCOPE_update:battles')") // Disabled for anonymous access
   public ResponseEntity<BattleDto> updateBattle(
     UUID battleId,
@@ -72,6 +87,21 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
 
     BattleDto updatedBattle = battleService.updateBattle(battleId, battleUpdateRequestDto);
     return ResponseEntity.ok(updatedBattle);
+  }
+
+  @Override
+  public ResponseEntity<BattleRoundDto> updateBattleRound(
+    UUID battleId,
+    UUID roundId,
+    BattleRoundPayloadDto battleRoundPayloadDto
+  ) {
+    log.info("Updating round {} for battle {}", roundId, battleId);
+    BattleRoundDto updated = battleRoundService.updateBattleRound(
+      battleId,
+      roundId,
+      battleRoundPayloadDto
+    );
+    return ResponseEntity.ok(updated);
   }
 
   @Override
