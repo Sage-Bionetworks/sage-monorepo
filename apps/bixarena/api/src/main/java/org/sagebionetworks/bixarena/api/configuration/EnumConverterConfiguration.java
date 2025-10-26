@@ -7,6 +7,7 @@ import org.sagebionetworks.bixarena.api.model.dto.LeaderboardHistorySortDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
+import org.sagebionetworks.bixarena.api.model.dto.MessageRoleDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.SortDirectionDto;
 
@@ -77,6 +78,15 @@ public class EnumConverterConfiguration {
             @Override
             public LicenseDto convert(String source) {
                 return LicenseDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.messageRoleConverter")
+    Converter<String, MessageRoleDto> messageRoleConverter() {
+        return new Converter<String, MessageRoleDto>() {
+            @Override
+            public MessageRoleDto convert(String source) {
+                return MessageRoleDto.fromValue(source);
             }
         };
     }
