@@ -98,7 +98,6 @@ CREATE TABLE api.message (
   role VARCHAR(20) NOT NULL,
   content VARCHAR(5000) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   -- Table constraints
   CONSTRAINT chk_message_role CHECK (role IN ('system', 'user', 'assistant'))
 );
