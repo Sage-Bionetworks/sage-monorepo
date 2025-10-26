@@ -18,6 +18,8 @@ from bixarena_api_client.models.basic_error import BasicError
 from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
 from bixarena_api_client.models.battle_page import BattlePage
+from bixarena_api_client.models.battle_round import BattleRound
+from bixarena_api_client.models.battle_round_payload import BattleRoundPayload
 from bixarena_api_client.models.battle_search_query import BattleSearchQuery
 from bixarena_api_client.models.battle_sort import BattleSort
 from bixarena_api_client.models.battle_update_request import BattleUpdateRequest
@@ -52,6 +54,8 @@ from bixarena_api_client.models.leaderboard_snapshot_query import (
 from bixarena_api_client.models.leaderboard_snapshot_sort import LeaderboardSnapshotSort
 from bixarena_api_client.models.leaderboard_sort import LeaderboardSort
 from bixarena_api_client.models.license import License
+from bixarena_api_client.models.message_create import MessageCreate
+from bixarena_api_client.models.message_role import MessageRole
 from bixarena_api_client.models.model import Model
 from bixarena_api_client.models.model_page import ModelPage
 from bixarena_api_client.models.model_search_query import ModelSearchQuery

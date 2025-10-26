@@ -32,6 +32,13 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_create_battle_round(self) -> None:
+        """Test case for create_battle_round
+
+        Create a battle round
+        """
+        pass
+
     def test_delete_battle(self) -> None:
         """Test case for delete_battle
 
@@ -57,6 +64,13 @@ class TestBattleApi(unittest.TestCase):
         """Test case for update_battle
 
         Update a battle
+        """
+        pass
+
+    def test_update_battle_round(self) -> None:
+        """Test case for update_battle_round
+
+        Update a battle round
         """
         pass
 
