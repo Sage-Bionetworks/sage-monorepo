@@ -12,6 +12,7 @@ export const routes: Routes = [
     component: DiseaseCorrelationComparisonToolComponent,
     providers: [
       { provide: ComparisonToolService, useExisting: DiseaseCorrelationComparisonToolService },
+      DiseaseCorrelationComparisonToolService,
       ComparisonToolFilterService,
     ],
   },

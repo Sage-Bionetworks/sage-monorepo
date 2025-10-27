@@ -12,6 +12,7 @@ export const routes: Routes = [
     component: ModelOverviewComparisonToolComponent,
     providers: [
       { provide: ComparisonToolService, useExisting: ModelOverviewComparisonToolService },
+      ModelOverviewComparisonToolService,
       ComparisonToolFilterService,
     ],
   },

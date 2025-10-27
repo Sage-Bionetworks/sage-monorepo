@@ -12,6 +12,7 @@ export const routes: Routes = [
     component: GeneExpressionComparisonToolComponent,
     providers: [
       { provide: ComparisonToolService, useExisting: GeneExpressionComparisonToolService },
+      GeneExpressionComparisonToolService,
       ComparisonToolFilterService,
     ],
   },
