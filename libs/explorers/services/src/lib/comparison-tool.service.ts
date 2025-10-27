@@ -101,6 +101,9 @@ export class ComparisonToolService {
   hasMaxPinnedItems = computed(() => {
     return this.pinnedResultsCount() >= this.maxPinnedItems();
   });
+  disabledPinTooltip = computed(() => {
+    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
+  });
 
   setLegendVisibility(visible: boolean) {
     this.isLegendVisibleSignal.set(visible);

@@ -32,7 +32,7 @@ export class PrimaryIdentifierControlsComponent {
     const isPinned = this.isPinned();
 
     if (!isPinned && isPinDisabled) {
-      return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
+      return this.comparisonToolService.disabledPinTooltip();
     }
 
     return isPinned ? 'Unpin this row' : 'Pin this row to the top of the list';
