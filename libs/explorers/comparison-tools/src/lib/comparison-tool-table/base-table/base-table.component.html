@@ -23,9 +23,9 @@
 
     <ng-template pTemplate="body" let-rowData>
       <tr>
-        @for (columnConfig of currentConfig()?.columns; track columnConfig) {
-          @let columnType = columnConfig.type;
-          @let cellData = rowData[columnConfig.column_key];
+        @for (column of selectedColumnConfigs(); track column) {
+          @let columnType = column.type;
+          @let cellData = rowData[column.column_key];
           <td [style]="{ width: columnWidth }" [class]="columnType">
             @if (columnType === 'primary') {
               <explorers-primary-identifier-controls
@@ -42,8 +42,8 @@
             }
             @if (columnType.startsWith('link_')) {
               <explorers-comparison-tool-table-link
-                [linkText]="cellData?.link_text || columnConfig.link_text"
-                [linkUrl]="cellData?.link_url || columnConfig.link_url"
+                [linkText]="cellData?.link_text || column.link_text"
+                [linkUrl]="cellData?.link_url || column.link_url"
               />
             }
           </td>

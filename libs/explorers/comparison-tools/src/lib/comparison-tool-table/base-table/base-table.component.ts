@@ -33,7 +33,7 @@ interface PaginationOptions {
 export class BaseTableComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
-  currentConfig = this.comparisonToolService.currentConfig;
+  selectedColumnConfigs = this.comparisonToolService.selectedColumnConfigs;
 
   data = input.required<Record<string, any>[]>();
   shouldPaginate = input<boolean>(true);

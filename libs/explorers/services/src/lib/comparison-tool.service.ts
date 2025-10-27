@@ -11,7 +11,7 @@ import { isEqual } from 'lodash';
  * Shared state contract for comparison tools.
  *
  * - Call {@link initialize} when configs load to seed dropdowns, reset counts, and wiki params.
- * - Read derived state via {@link configs}, {@link dropdownSelection}, {@link currentConfig}, and {@link columns}.
+ * - Read derived state via {@link configs}, {@link dropdownSelection}, {@link currentConfig}, and {@link columnConfigs}.
  * - Update user selections through {@link setDropdownSelection}; consumers can read the latest value via {@link dropdownSelection}.
  * - Manage result totals via {@link totalResultsCount} and {@link pinnedResultsCount}.
  */
@@ -64,7 +64,7 @@ export class ComparisonToolService {
     return prefixMatch ?? configs[0];
   });
 
-  readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
+  readonly columnConfigs: Signal<ComparisonToolColumn[]> = computed(() => {
     const config = this.currentConfig();
     if (!config) return [];
 
@@ -75,8 +75,12 @@ export class ComparisonToolService {
     );
   });
 
+  selectedColumnConfigs = computed(() => {
+    return this.columnConfigs().filter((col) => col.selected);
+  });
+
   hasHiddenColumns(): boolean {
-    return this.columns().some((col) => !col.selected);
+    return this.columnConfigs().some((col) => !col.selected);
   }
 
   totalResultsCount = signal<number>(0);
@@ -119,12 +123,7 @@ export class ComparisonToolService {
 
     const columnsData: ComparisonToolColumns[] = this.configs().map((config) => ({
       dropdowns: config.dropdowns,
-      columns: config.columns
-        .filter((column) => column.name !== undefined)
-        .map((column) => ({
-          name: column.name as string,
-          selected: true,
-        })),
+      columns: config.columns.map((column) => ({ ...column, selected: true })),
     }));
     this.columnsForDropdownsSignal.set(columnsData);
   }
@@ -156,12 +155,7 @@ export class ComparisonToolService {
         // New dropdown combination - initialize with all columns selected
         const newColumnsData: ComparisonToolColumns = {
           dropdowns: currentDropdowns,
-          columns: config.columns
-            .filter((column) => column.name !== undefined)
-            .map((column) => ({
-              name: column.name as string,
-              selected: true,
-            })),
+          columns: config.columns.map((column) => ({ ...column, selected: true })),
         };
 
         return [...columnsData, newColumnsData];
@@ -221,7 +215,9 @@ export class ComparisonToolService {
 
       if (columnsIndex !== -1) {
         const columnsData = cols[columnsIndex];
-        const colIndex = columnsData.columns.findIndex((col) => col.name === column.name);
+        const colIndex = columnsData.columns.findIndex(
+          (col) => col.column_key === column.column_key,
+        );
 
         if (colIndex !== -1) {
           const newCols = [...columnsData.columns];

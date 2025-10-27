@@ -41,10 +41,8 @@ export interface ComparisonToolConfigColumn {
   link_url?: string;
 }
 
-export interface ComparisonToolColumn {
-  name: string;
+export interface ComparisonToolColumn extends ComparisonToolConfigColumn {
   selected: boolean;
-  width?: number;
 }
 
 export interface ComparisonToolColumns {
