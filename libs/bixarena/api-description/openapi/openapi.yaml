@@ -202,7 +202,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BattleRoundPayload'
+              $ref: '#/components/schemas/BattleRoundCreateRequest'
       responses:
         '201':
           description: Battle round created successfully
@@ -237,7 +237,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BattleRoundPayload'
+              $ref: '#/components/schemas/BattleRoundUpdateRequest'
       responses:
         '200':
           description: Battle round updated successfully
@@ -780,19 +780,14 @@ components:
       required:
         - role
         - content
-    BattleRoundPayload:
+    BattleRoundCreateRequest:
       type: object
-      description: The request payload for a battle round.
+      description: Payload to create a new battle round with the user prompt.
       properties:
         promptMessage:
           $ref: '#/components/schemas/MessageCreate'
-          nullable: true
-        model1Message:
-          $ref: '#/components/schemas/MessageCreate'
-          nullable: true
-        model2Message:
-          $ref: '#/components/schemas/MessageCreate'
-          nullable: true
+      required:
+        - promptMessage
     BattleRoundId:
       type: string
       format: uuid
@@ -842,6 +837,17 @@ components:
         - roundNumber
         - createdAt
         - updatedAt
+    BattleRoundUpdateRequest:
+      type: object
+      description: Payload to update model responses for an existing battle round.
+      properties:
+        model1Message:
+          $ref: '#/components/schemas/MessageCreate'
+        model2Message:
+          $ref: '#/components/schemas/MessageCreate'
+      required:
+        - model1Message
+        - model2Message
     ExamplePromptSort:
       type: string
       description: The field to sort example prompts by.

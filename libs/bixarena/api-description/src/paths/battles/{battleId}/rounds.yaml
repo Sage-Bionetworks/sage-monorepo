@@ -12,7 +12,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: ../../../components/schemas/BattleRoundPayload.yaml
+          $ref: ../../../components/schemas/BattleRoundCreateRequest.yaml
   responses:
     '201':
       description: Battle round created successfully

@@ -1,0 +1,7 @@
+type: object
+description: Payload to create a new battle round with the user prompt.
+properties:
+  promptMessage:
+    $ref: 'MessageCreate.yaml'
+required:
+  - promptMessage

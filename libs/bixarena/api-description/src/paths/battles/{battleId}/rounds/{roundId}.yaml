@@ -13,7 +13,7 @@ patch:
     content:
       application/json:
         schema:
-          $ref: ../../../../components/schemas/BattleRoundPayload.yaml
+          $ref: ../../../../components/schemas/BattleRoundUpdateRequest.yaml
   responses:
     '200':
       description: Battle round updated successfully
