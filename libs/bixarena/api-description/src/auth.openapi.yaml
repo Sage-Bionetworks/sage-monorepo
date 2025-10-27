@@ -12,7 +12,7 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
 
 # Vendor extensions at the top level
-x-oauth2-audience: 'urn:bixarena:api'
+x-oauth2-audience: 'urn:bixarena:auth'
 
 servers:
   - url: http://localhost

@@ -11,5 +11,8 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
 servers:
   - url: http://localhost
+security:
+  - jwtBearer: []
 paths: {}
 components: {}
+x-oauth2-audience: urn:bixarena:ai

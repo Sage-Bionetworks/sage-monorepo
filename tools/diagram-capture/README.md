@@ -25,13 +25,13 @@ Playwright browsers (Chromium) are automatically installed on first run using `p
 If you prefer to install manually beforehand:
 
 ```bash
-pnpx playwright install chromium --with-deps
+playwright install chromium --with-deps
 ```
 
 Or install all Playwright browsers:
 
 ```bash
-pnpx playwright install --with-deps
+playwright install --with-deps
 ```
 
 ### FFmpeg (for GIF conversion)

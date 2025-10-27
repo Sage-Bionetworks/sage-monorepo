@@ -48,6 +48,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
   /battles:
     get:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: List battles
@@ -69,12 +70,12 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Create a battle
       description: Create a new battle between two AI models.
       operationId: createBattle
-      x-anonymous-access: true
       requestBody:
         content:
           application/json:
@@ -104,6 +105,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     get:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Get a battle by ID
@@ -123,12 +125,12 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     patch:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Update a battle
       description: Update a battle's end time or other properties
       operationId: updateBattle
-      x-anonymous-access: true
       requestBody:
         content:
           application/json:
@@ -153,6 +155,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Delete a battle

@@ -1,5 +1,5 @@
 app:
-  welcome-message: 'Welcome to BixArena API Gateway!'
+  welcome-message: 'Welcome to BixArena API Gateway'
 
 server:
   port: 8113
@@ -51,17 +51,25 @@ spring:
             - id: bixarena-api
               uri: http://bixarena-api:8112
               predicates:
-                - Path=/api/v1/leaderboards/**
+                - Path=/api/v1/**
               filters:
                 - StripPrefix=1
+            - id: bixarena-auth-service
+              uri: http://bixarena-auth-service:8115
+              predicates:
+                - Path=/auth/**,/.well-known/jwks.json,/oauth2/token,/userinfo
   profiles:
     active: dev
+  config:
+    import: 'classpath:routes.yml'
 
 logging:
   level:
     org.sagebionetworks.bixarena.api.gateway: DEBUG
-    org.springframework.security: DEBUG
     org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher: OFF
+    org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher: OFF
 
 management:
   endpoints:

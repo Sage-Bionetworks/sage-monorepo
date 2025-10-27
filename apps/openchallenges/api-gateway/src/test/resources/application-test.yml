@@ -9,9 +9,6 @@ app:
       scopes: []
       audience: 'test'
 
-openchallenges-organization-service:
-  welcome-message: 'Welcome to OpenChallenges API Gateway (test)'
-
 spring:
   application:
     name: openchallenges-api-gateway-test
