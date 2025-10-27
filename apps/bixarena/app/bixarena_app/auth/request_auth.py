@@ -12,15 +12,18 @@ from bixarena_app.auth.user_state import get_user_state
 def is_authenticated(request: gr.Request | None) -> bool:
     """Check if the request is from an authenticated user.
 
-    This checks both:
-    1. If the request has a valid JSESSIONID cookie
-    2. If the global UserState indicates an authenticated session
+    This function only checks if the request has a JSESSIONID cookie,
+    making it suitable for use in page load handlers that run before
+    UserState is populated.
+
+    For handlers that need verified user info from UserState, use
+    is_authenticated_with_state() instead.
 
     Args:
         request: Gradio request object (can be None)
 
     Returns:
-        True if the user is authenticated, False otherwise
+        True if the request has a JSESSIONID cookie, False otherwise
 
     Example:
         >>> import gradio as gr
@@ -36,8 +39,29 @@ def is_authenticated(request: gr.Request | None) -> bool:
         return False
 
     # Check if request has JSESSIONID cookie
+    # This is sufficient to indicate authentication since the cookie
+    # will be validated by the API gateway when making API calls
     jsessionid = request.cookies.get("JSESSIONID")
-    if not jsessionid:
+    return jsessionid is not None and jsessionid != ""
+
+
+def is_authenticated_with_state(request: gr.Request | None) -> bool:
+    """Check if the request is from an authenticated user with verified state.
+
+    This function checks both the JSESSIONID cookie AND verifies that
+    the global UserState has been populated. Use this when you need
+    to access user information from UserState.
+
+    Note: This may return False during initial page load if UserState
+    hasn't been populated yet by sync_backend_session_on_load().
+
+    Args:
+        request: Gradio request object (can be None)
+
+    Returns:
+        True if authenticated and UserState is populated, False otherwise
+    """
+    if not is_authenticated(request):
         return False
 
     # Verify against global user state (synced by main.py on page load)
