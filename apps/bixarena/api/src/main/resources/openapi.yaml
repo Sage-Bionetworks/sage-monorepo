@@ -1084,6 +1084,9 @@ components:
           $ref: '#/components/schemas/MessageCreate'
         model2Message:
           $ref: '#/components/schemas/MessageCreate'
+      required:
+        - model1Message
+        - model2Message
       type: object
     ExamplePromptSort:
       default: created_at

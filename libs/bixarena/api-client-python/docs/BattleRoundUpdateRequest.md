@@ -4,10 +4,10 @@ Payload to update model responses for an existing battle round.
 
 ## Properties
 
-| Name               | Type                                  | Description | Notes      |
-| ------------------ | ------------------------------------- | ----------- | ---------- |
-| **model1_message** | [**MessageCreate**](MessageCreate.md) |             | [optional] |
-| **model2_message** | [**MessageCreate**](MessageCreate.md) |             | [optional] |
+| Name               | Type                                  | Description | Notes |
+| ------------------ | ------------------------------------- | ----------- | ----- |
+| **model1_message** | [**MessageCreate**](MessageCreate.md) |             |
+| **model2_message** | [**MessageCreate**](MessageCreate.md) |             |
 
 ## Example
 

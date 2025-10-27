@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List
 from bixarena_api_client.models.message_create import MessageCreate
 from typing import Optional, Set
 from typing_extensions import Self
@@ -28,8 +28,8 @@ class BattleRoundUpdateRequest(BaseModel):
     Payload to update model responses for an existing battle round.
     """  # noqa: E501
 
-    model1_message: Optional[MessageCreate] = Field(default=None, alias="model1Message")
-    model2_message: Optional[MessageCreate] = Field(default=None, alias="model2Message")
+    model1_message: MessageCreate = Field(alias="model1Message")
+    model2_message: MessageCreate = Field(alias="model2Message")
     __properties: ClassVar[List[str]] = ["model1Message", "model2Message"]
 
     model_config = ConfigDict(
