@@ -53,8 +53,9 @@ export interface ComparisonToolColumns {
 export interface ComparisonToolConfig {
   page: ComparisonToolPage;
   dropdowns: string[];
+  row_count: string;
   columns: ComparisonToolConfigColumn[];
-  filters?: ComparisonToolConfigFilter[];
+  filters: ComparisonToolConfigFilter[];
 }
 
 export type HeatmapCircleData<ColorKey extends string = string> = {

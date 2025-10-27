@@ -1,4 +1,5 @@
 import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { mockComparisonToolConfigFilters } from './comparison-tool-config-mocks';
 
 export const mockComparisonToolSelectorsWikiParams: { [key: string]: SynapseWikiParams } = {
   Red: {
@@ -15,6 +16,7 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
   {
     page: 'Model Overview',
     dropdowns: [],
+    row_count: 'over 200000',
     columns: [
       {
         type: 'primary',
@@ -72,6 +74,7 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         sort_tooltip: 'Sort by correlation value',
       },
     ],
+    filters: mockComparisonToolConfigFilters,
   },
 ];
 

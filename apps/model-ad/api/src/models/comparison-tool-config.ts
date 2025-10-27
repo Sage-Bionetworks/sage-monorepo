@@ -7,7 +7,8 @@ import { Schema, model } from 'mongoose';
 
 const ComparisonToolConfigFilterSchema = new Schema<ComparisonToolConfigFilter>({
   name: { type: String, required: true },
-  field: { type: String, required: true },
+  data_key: { type: String, required: true },
+  short_name: { type: String, required: false },
   values: { type: [String], required: true },
 });
 
@@ -25,6 +26,7 @@ const ComparisonToolConfigSchema = new Schema<ComparisonToolConfig>(
   {
     page: { type: String, required: true },
     dropdowns: { type: [String], required: true },
+    row_count: { type: String, required: true },
     columns: {
       type: [ComparisonToolConfigColumnSchema],
       required: true,
