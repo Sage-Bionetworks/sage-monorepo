@@ -2,18 +2,20 @@
   <p-popover #columnPopover styleClass="toggle-columns">
     <ul id="columns">
       @for (column of columns; track column) {
-        <li>
-          <div class="column-toggle" (click)="toggleColumn(column)">
-            <div class="column-toggle-status">
-              @if (column.selected) {
-                <span class="pi pi-check"></span>
-              }
+        @if (column.type !== 'primary') {
+          <li>
+            <div class="column-toggle" (click)="toggleColumn(column)">
+              <div class="column-toggle-status">
+                @if (column.selected) {
+                  <span class="pi pi-check"></span>
+                }
+              </div>
+              <div>
+                <span>{{ column.name }}</span>
+              </div>
             </div>
-            <div>
-              <span>{{ column.name }}</span>
-            </div>
-          </div>
-        </li>
+          </li>
+        }
       }
     </ul>
   </p-popover>

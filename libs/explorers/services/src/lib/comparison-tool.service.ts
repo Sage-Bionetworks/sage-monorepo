@@ -1,9 +1,9 @@
 import { computed, Injectable, signal, Signal } from '@angular/core';
 import {
-  ComparisonToolConfig,
   ComparisonToolColumn,
-  SynapseWikiParams,
   ComparisonToolColumns,
+  ComparisonToolConfig,
+  SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 
@@ -18,12 +18,16 @@ import { isEqual } from 'lodash';
 
 @Injectable()
 export class ComparisonToolService {
+  private readonly DEFAULT_SORT_ORDER = -1;
+
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly selectorsWikiParamsSignal = signal<Record<string, SynapseWikiParams>>({});
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
+  private readonly sortFieldSignal = signal<string | undefined>(undefined);
+  private readonly sortOrderSignal = signal<number>(this.DEFAULT_SORT_ORDER);
   private readonly columnsForDropdownsSignal = signal<ComparisonToolColumns[]>([]);
 
   readonly configs = this.configsSignal.asReadonly();
@@ -32,6 +36,8 @@ export class ComparisonToolService {
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
+  readonly sortField = this.sortFieldSignal.asReadonly();
+  readonly sortOrder = this.sortOrderSignal.asReadonly();
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -69,6 +75,10 @@ export class ComparisonToolService {
     );
   });
 
+  selectedColumns = computed(() => {
+    return this.columns().filter((col) => col.selected);
+  });
+
   hasHiddenColumns(): boolean {
     return this.columns().some((col) => !col.selected);
   }
@@ -100,6 +110,7 @@ export class ComparisonToolService {
     this.totalResultsCount.set(0);
     this.pinnedItemsSignal.set(new Set());
     this.setSelectorsWikiParams(selectorsWikiParams);
+    this.setSort(undefined, this.DEFAULT_SORT_ORDER);
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);
@@ -112,12 +123,7 @@ export class ComparisonToolService {
 
     const columnsData: ComparisonToolColumns[] = this.configs().map((config) => ({
       dropdowns: config.dropdowns,
-      columns: config.columns
-        .filter((column) => column.name !== undefined)
-        .map((column) => ({
-          name: column.name as string,
-          selected: true,
-        })),
+      columns: config.columns.map((column) => ({ ...column, selected: true })),
     }));
     this.columnsForDropdownsSignal.set(columnsData);
   }
@@ -149,12 +155,7 @@ export class ComparisonToolService {
         // New dropdown combination - initialize with all columns selected
         const newColumnsData: ComparisonToolColumns = {
           dropdowns: currentDropdowns,
-          columns: config.columns
-            .filter((column) => column.name !== undefined)
-            .map((column) => ({
-              name: column.name as string,
-              selected: true,
-            })),
+          columns: config.columns.map((column) => ({ ...column, selected: true })),
         };
 
         return [...columnsData, newColumnsData];
@@ -214,7 +215,9 @@ export class ComparisonToolService {
 
       if (columnsIndex !== -1) {
         const columnsData = cols[columnsIndex];
-        const colIndex = columnsData.columns.findIndex((col) => col.name === column.name);
+        const colIndex = columnsData.columns.findIndex(
+          (col) => col.column_key === column.column_key,
+        );
 
         if (colIndex !== -1) {
           const newCols = [...columnsData.columns];
@@ -268,5 +271,10 @@ export class ComparisonToolService {
     }
 
     return prefix.every((value, index) => normalizedTarget[index] === value);
+  }
+
+  setSort(sortField: string | undefined, sortOrder: number | undefined) {
+    this.sortFieldSignal.set(sortField);
+    this.sortOrderSignal.set(sortOrder || this.DEFAULT_SORT_ORDER);
   }
 }

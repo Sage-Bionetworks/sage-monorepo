@@ -2,9 +2,9 @@ import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { ComparisonToolColumn } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { PopoverModule } from 'primeng/popover';
 import { TooltipModule } from 'primeng/tooltip';
-import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
 @Component({
   selector: 'explorers-comparison-tool-column-selector',

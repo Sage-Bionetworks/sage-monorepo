@@ -144,7 +144,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const firstColumn = columns[0];
     const initialSelectedState = firstColumn.selected;
 
-    const columnName = screen.getByText(firstColumn.name);
+    const columnName = screen.getByText(firstColumn.name as string);
     await user.click(columnName);
 
     const updatedColumns = service.columns();
@@ -167,7 +167,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const columns = service.columns();
     const firstColumn = columns[0];
 
-    const columnName = screen.getByText(firstColumn.name);
+    const columnName = screen.getByText(firstColumn.name as string);
     await user.click(columnName);
 
     expect(toggleSpy).toHaveBeenCalledWith(expect.objectContaining({ name: firstColumn.name }));
@@ -189,7 +189,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
       throw new Error('No selected column found');
     }
 
-    const columnName = screen.getByText(selectedColumn.name);
+    const columnName = screen.getByText(selectedColumn.name as string);
     const columnItem = columnName.closest('li');
 
     expect(columnItem).not.toBeNull();
@@ -219,7 +219,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const columnsToToggle = columns.slice(0, 3);
 
     for (const column of columnsToToggle) {
-      const columnName = screen.getByText(column.name);
+      const columnName = screen.getByText(column.name as string);
       await user.click(columnName);
     }
 
@@ -242,7 +242,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const columns = service.columns();
 
     columns.forEach((column) => {
-      expect(screen.getByText(column.name)).toBeInTheDocument();
+      expect(screen.getByText(column.name as string)).toBeInTheDocument();
     });
   });
 
@@ -345,7 +345,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     service.toggleColumn(firstColumn);
 
     // Wait for update
-    await screen.findByText(firstColumn.name);
+    await screen.findByText(firstColumn.name as string);
 
     const updatedColumns = service.columns();
     const updatedFirstColumn = updatedColumns.find((col) => col.name === firstColumn.name);
