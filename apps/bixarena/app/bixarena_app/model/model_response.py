@@ -7,7 +7,7 @@ import requests
 from bixarena_api_client import (
     ApiClient,
     BattleApi,
-    BattleRoundPayload,
+    BattleRoundUpdateRequest,
     Configuration,
     MessageCreate,
     MessageRole,
@@ -115,8 +115,22 @@ def _update_battle_round_with_responses(
     round_id = battle_session.round_id
     if not battle_id or not round_id:
         return
+    # Capture successful responses
     model1_message = left_state.last_assistant_message()
     model2_message = right_state.last_assistant_message()
+
+    # When a model errors, add a system message so we still persist context
+    if left_state.has_error:
+        error_content = model1_message.content if model1_message else None
+        if not error_content:
+            error_content = "Model response unavailable due to an error."
+        model1_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
+    if right_state.has_error:
+        error_content = model2_message.content if model2_message else None
+        if not error_content:
+            error_content = "Model response unavailable due to an error."
+        model2_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
+
     if not model1_message and not model2_message:
         battle_session.round_id = None
         return
@@ -128,7 +142,7 @@ def _update_battle_round_with_responses(
             battle_api.update_battle_round(
                 battle_id,
                 round_id,
-                BattleRoundPayload(
+                BattleRoundUpdateRequest(
                     model1_message=model1_message,
                     model2_message=model2_message,
                 ),
@@ -367,9 +381,10 @@ def bot_response_multi(
         if stop:
             break
 
+    _update_battle_round_with_responses(states[0], states[1], battle_session)
+
     # At least one model had an error -> keep voting buttons disabled
     if any(state.has_error for state in states):
-        battle_session.round_id = None
         yield (
             states
             + [battle_session]
@@ -378,5 +393,4 @@ def bot_response_multi(
         )
     else:
         # Both models succeeded -> enable all buttons including voting
-        _update_battle_round_with_responses(states[0], states[1], battle_session)
         yield states + [battle_session] + chatbots + [enable_btn] * 4

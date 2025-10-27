@@ -14,7 +14,7 @@ from bixarena_api_client import (
     ApiClient,
     BattleApi,
     BattleCreateRequest,
-    BattleRoundPayload,
+    BattleRoundCreateRequest,
     BattleUpdateRequest,
     Configuration,
     MessageCreate,
@@ -109,7 +109,7 @@ def create_battle_round(battle_id: str, prompt: str) -> str | None:
             battle_api = BattleApi(api_client)
             battle_round = battle_api.create_battle_round(
                 battle_id,
-                BattleRoundPayload(
+                BattleRoundCreateRequest(
                     prompt_message=MessageCreate(role=MessageRole.USER, content=prompt)
                 ),
             )
