@@ -57,6 +57,14 @@ class State:
         )
         return base
 
+    def last_assistant_message(self) -> MessageCreate | None:
+        """Return the last completed assistant response as a MessageCreate."""
+        assistant_role = self.conv.roles[1] if len(self.conv.roles) > 1 else "assistant"
+        for role, content in reversed(self.conv.messages):
+            if role == assistant_role and content:
+                return MessageCreate(role=MessageRole.ASSISTANT, content=content)
+        return None
+
 
 class BattleSession:
     """Track the active battle and round identifiers for the Gradio session."""
@@ -99,21 +107,6 @@ def validate_responses(states: list) -> tuple[bool, str]:
     return True, ""
 
 
-def _get_last_assistant_response(state: State) -> str | None:
-    """Return the last assistant message content for a given state."""
-    assistant_role = state.conv.roles[1] if len(state.conv.roles) > 1 else "assistant"
-    for role, content in reversed(state.conv.messages):
-        if role == assistant_role and content:
-            return content
-    return None
-
-
-def _message_from_content(content: str | None) -> MessageCreate | None:
-    if content is None:
-        return None
-    return MessageCreate(role=MessageRole.ASSISTANT, content=content)
-
-
 def _update_battle_round_with_responses(
     left_state: State, right_state: State, battle_session: BattleSession
 ) -> None:
@@ -122,8 +115,8 @@ def _update_battle_round_with_responses(
     round_id = battle_session.round_id
     if not battle_id or not round_id:
         return
-    response1 = _message_from_content(_get_last_assistant_response(left_state))
-    response2 = _message_from_content(_get_last_assistant_response(right_state))
+    response1 = left_state.last_assistant_message()
+    response2 = right_state.last_assistant_message()
     if not response1 and not response2:
         battle_session.round_id = None
         return
@@ -240,8 +233,6 @@ def bot_response(
     top_p,
     max_new_tokens,
 ):
-    logger.info("bot_response. ")
-    # start_tstamp = time.time()
     temperature = float(temperature)
     top_p = float(top_p)
     max_new_tokens = int(max_new_tokens)
@@ -318,25 +309,6 @@ def bot_response(
         )
         return
 
-    # finish_tstamp = time.time()
-    logger.info(f"{output}")
-
-    # # Log the exact same data to console instead of file
-    # data = {
-    #     "tstamp": round(finish_tstamp, 4),
-    #     "type": "chat",
-    #     "model": model_name,
-    #     "gen_params": {
-    #         "temperature": temperature,
-    #         "top_p": top_p,
-    #         "max_new_tokens": max_new_tokens,
-    #     },
-    #     "start": round(start_tstamp, 4),
-    #     "finish": round(finish_tstamp, 4),
-    #     "state": state.dict(),
-    # }
-    # logger.info(f"Conversation data: {json.dumps(data)}")
-
 
 def bot_response_multi(
     state0,
@@ -346,7 +318,6 @@ def bot_response_multi(
     top_p=1.0,
     max_new_tokens=1024,
 ):
-    logger.info("bot_response_multi (anony).")
     num_sides = 2
     if state0 is None or state0.skip_next:
         # This generate call is skipped due to invalid inputs
