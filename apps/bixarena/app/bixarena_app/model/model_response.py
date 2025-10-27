@@ -1,7 +1,5 @@
-import json
 import logging
 import os
-import time
 import uuid
 
 import gradio as gr
@@ -243,7 +241,7 @@ def bot_response(
     max_new_tokens,
 ):
     logger.info("bot_response. ")
-    start_tstamp = time.time()
+    # start_tstamp = time.time()
     temperature = float(temperature)
     top_p = float(top_p)
     max_new_tokens = int(max_new_tokens)
@@ -320,24 +318,24 @@ def bot_response(
         )
         return
 
-    finish_tstamp = time.time()
+    # finish_tstamp = time.time()
     logger.info(f"{output}")
 
-    # Log the exact same data to console instead of file
-    data = {
-        "tstamp": round(finish_tstamp, 4),
-        "type": "chat",
-        "model": model_name,
-        "gen_params": {
-            "temperature": temperature,
-            "top_p": top_p,
-            "max_new_tokens": max_new_tokens,
-        },
-        "start": round(start_tstamp, 4),
-        "finish": round(finish_tstamp, 4),
-        "state": state.dict(),
-    }
-    logger.info(f"Conversation data: {json.dumps(data)}")
+    # # Log the exact same data to console instead of file
+    # data = {
+    #     "tstamp": round(finish_tstamp, 4),
+    #     "type": "chat",
+    #     "model": model_name,
+    #     "gen_params": {
+    #         "temperature": temperature,
+    #         "top_p": top_p,
+    #         "max_new_tokens": max_new_tokens,
+    #     },
+    #     "start": round(start_tstamp, 4),
+    #     "finish": round(finish_tstamp, 4),
+    #     "state": state.dict(),
+    # }
+    # logger.info(f"Conversation data: {json.dumps(data)}")
 
 
 def bot_response_multi(
