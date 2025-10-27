@@ -4,11 +4,11 @@ The request payload for a battle round.
 
 ## Properties
 
-| Name          | Type                                  | Description | Notes      |
-| ------------- | ------------------------------------- | ----------- | ---------- |
-| **prompt**    | [**MessageCreate**](MessageCreate.md) |             | [optional] |
-| **response1** | [**MessageCreate**](MessageCreate.md) |             | [optional] |
-| **response2** | [**MessageCreate**](MessageCreate.md) |             | [optional] |
+| Name               | Type                                  | Description | Notes      |
+| ------------------ | ------------------------------------- | ----------- | ---------- |
+| **prompt_message** | [**MessageCreate**](MessageCreate.md) |             | [optional] |
+| **model1_message** | [**MessageCreate**](MessageCreate.md) |             | [optional] |
+| **model2_message** | [**MessageCreate**](MessageCreate.md) |             | [optional] |
 
 ## Example
 

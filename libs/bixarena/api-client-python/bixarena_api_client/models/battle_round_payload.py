@@ -16,7 +16,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from bixarena_api_client.models.message_create import MessageCreate
 from typing import Optional, Set
@@ -28,10 +28,14 @@ class BattleRoundPayload(BaseModel):
     The request payload for a battle round.
     """  # noqa: E501
 
-    prompt: Optional[MessageCreate] = None
-    response1: Optional[MessageCreate] = None
-    response2: Optional[MessageCreate] = None
-    __properties: ClassVar[List[str]] = ["prompt", "response1", "response2"]
+    prompt_message: Optional[MessageCreate] = Field(default=None, alias="promptMessage")
+    model1_message: Optional[MessageCreate] = Field(default=None, alias="model1Message")
+    model2_message: Optional[MessageCreate] = Field(default=None, alias="model2Message")
+    __properties: ClassVar[List[str]] = [
+        "promptMessage",
+        "model1Message",
+        "model2Message",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -70,15 +74,15 @@ class BattleRoundPayload(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of prompt
-        if self.prompt:
-            _dict["prompt"] = self.prompt.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of response1
-        if self.response1:
-            _dict["response1"] = self.response1.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of response2
-        if self.response2:
-            _dict["response2"] = self.response2.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of prompt_message
+        if self.prompt_message:
+            _dict["promptMessage"] = self.prompt_message.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of model1_message
+        if self.model1_message:
+            _dict["model1Message"] = self.model1_message.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of model2_message
+        if self.model2_message:
+            _dict["model2Message"] = self.model2_message.to_dict()
         return _dict
 
     @classmethod
@@ -92,14 +96,14 @@ class BattleRoundPayload(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "prompt": MessageCreate.from_dict(obj["prompt"])
-                if obj.get("prompt") is not None
+                "promptMessage": MessageCreate.from_dict(obj["promptMessage"])
+                if obj.get("promptMessage") is not None
                 else None,
-                "response1": MessageCreate.from_dict(obj["response1"])
-                if obj.get("response1") is not None
+                "model1Message": MessageCreate.from_dict(obj["model1Message"])
+                if obj.get("model1Message") is not None
                 else None,
-                "response2": MessageCreate.from_dict(obj["response2"])
-                if obj.get("response2") is not None
+                "model2Message": MessageCreate.from_dict(obj["model2Message"])
+                if obj.get("model2Message") is not None
                 else None,
             }
         )

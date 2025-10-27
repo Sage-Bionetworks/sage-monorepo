@@ -37,9 +37,10 @@ class TestBattleRound(unittest.TestCase):
             return BattleRound(
                 id = '3fa85f64-5717-4562-b3fc-2c963f66afa6',
                 battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
+                round_number = 1,
                 prompt_message_id = 'd290f1ee-6c54-4b01-90e6-d701748f0851',
-                response1_message_id = 'd290f1ee-6c54-4b01-90e6-d701748f0851',
-                response2_message_id = 'd290f1ee-6c54-4b01-90e6-d701748f0851',
+                model1_message_id = 'd290f1ee-6c54-4b01-90e6-d701748f0851',
+                model2_message_id = 'd290f1ee-6c54-4b01-90e6-d701748f0851',
                 created_at = '2024-01-15T10:30Z',
                 updated_at = '2024-01-15T10:45Z'
             )
@@ -47,6 +48,7 @@ class TestBattleRound(unittest.TestCase):
             return BattleRound(
                 id = '3fa85f64-5717-4562-b3fc-2c963f66afa6',
                 battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
+                round_number = 1,
                 created_at = '2024-01-15T10:30Z',
                 updated_at = '2024-01-15T10:45Z',
         )

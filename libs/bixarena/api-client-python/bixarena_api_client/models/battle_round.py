@@ -19,6 +19,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from uuid import UUID
 from typing import Optional, Set
 from typing_extensions import Self
@@ -26,27 +27,31 @@ from typing_extensions import Self
 
 class BattleRound(BaseModel):
     """
-    A battle round containing the IDs of prompt and responses.
+    A battle round linking the prompt and model responses for a battle.
     """  # noqa: E501
 
     id: UUID = Field(description="Unique identifier (UUID) of the battle round.")
     battle_id: UUID = Field(
         description="Unique identifier (UUID) of the battle.", alias="battleId"
     )
+    round_number: Annotated[int, Field(strict=True, ge=1)] = Field(
+        description="Sequential round number within a battle. Starts at 1.",
+        alias="roundNumber",
+    )
     prompt_message_id: Optional[UUID] = Field(
         default=None,
         description="Unique identifier (UUID) of the message.",
         alias="promptMessageId",
     )
-    response1_message_id: Optional[UUID] = Field(
+    model1_message_id: Optional[UUID] = Field(
         default=None,
         description="Unique identifier (UUID) of the message.",
-        alias="response1MessageId",
+        alias="model1MessageId",
     )
-    response2_message_id: Optional[UUID] = Field(
+    model2_message_id: Optional[UUID] = Field(
         default=None,
         description="Unique identifier (UUID) of the message.",
-        alias="response2MessageId",
+        alias="model2MessageId",
     )
     created_at: datetime = Field(
         description="Timestamp when the entity was created.", alias="createdAt"
@@ -57,9 +62,10 @@ class BattleRound(BaseModel):
     __properties: ClassVar[List[str]] = [
         "id",
         "battleId",
+        "roundNumber",
         "promptMessageId",
-        "response1MessageId",
-        "response2MessageId",
+        "model1MessageId",
+        "model2MessageId",
         "createdAt",
         "updatedAt",
     ]
@@ -116,9 +122,10 @@ class BattleRound(BaseModel):
             {
                 "id": obj.get("id"),
                 "battleId": obj.get("battleId"),
+                "roundNumber": obj.get("roundNumber"),
                 "promptMessageId": obj.get("promptMessageId"),
-                "response1MessageId": obj.get("response1MessageId"),
-                "response2MessageId": obj.get("response2MessageId"),
+                "model1MessageId": obj.get("model1MessageId"),
+                "model2MessageId": obj.get("model2MessageId"),
                 "createdAt": obj.get("createdAt"),
                 "updatedAt": obj.get("updatedAt"),
             }

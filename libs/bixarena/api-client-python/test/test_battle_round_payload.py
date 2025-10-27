@@ -35,13 +35,13 @@ class TestBattleRoundPayload(unittest.TestCase):
         model = BattleRoundPayload()
         if include_optional:
             return BattleRoundPayload(
-                prompt = bixarena_api_client.models.message_create.MessageCreate(
+                prompt_message = bixarena_api_client.models.message_create.MessageCreate(
                     role = 'user', 
                     content = 'What is the capital of France?', ),
-                response1 = bixarena_api_client.models.message_create.MessageCreate(
+                model1_message = bixarena_api_client.models.message_create.MessageCreate(
                     role = 'user', 
                     content = 'What is the capital of France?', ),
-                response2 = bixarena_api_client.models.message_create.MessageCreate(
+                model2_message = bixarena_api_client.models.message_create.MessageCreate(
                     role = 'user', 
                     content = 'What is the capital of France?', )
             )

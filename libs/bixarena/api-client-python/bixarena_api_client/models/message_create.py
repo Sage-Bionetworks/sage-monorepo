@@ -16,8 +16,9 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List
+from typing_extensions import Annotated
 from bixarena_api_client.models.message_role import MessageRole
 from typing import Optional, Set
 from typing_extensions import Self
@@ -29,7 +30,9 @@ class MessageCreate(BaseModel):
     """  # noqa: E501
 
     role: MessageRole
-    content: StrictStr = Field(description="The content of a message.")
+    content: Annotated[str, Field(strict=True, max_length=5000)] = Field(
+        description="The content of a message."
+    )
     __properties: ClassVar[List[str]] = ["role", "content"]
 
     model_config = ConfigDict(

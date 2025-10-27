@@ -1,18 +1,19 @@
 # BattleRound
 
-A battle round containing the IDs of prompt and responses.
+A battle round linking the prompt and model responses for a battle.
 
 ## Properties
 
-| Name                     | Type         | Description                                   | Notes      |
-| ------------------------ | ------------ | --------------------------------------------- | ---------- |
-| **id**                   | **str**      | Unique identifier (UUID) of the battle round. |
-| **battle_id**            | **str**      | Unique identifier (UUID) of the battle.       |
-| **prompt_message_id**    | **str**      | Unique identifier (UUID) of the message.      | [optional] |
-| **response1_message_id** | **str**      | Unique identifier (UUID) of the message.      | [optional] |
-| **response2_message_id** | **str**      | Unique identifier (UUID) of the message.      | [optional] |
-| **created_at**           | **datetime** | Timestamp when the entity was created.        |
-| **updated_at**           | **datetime** | Timestamp when the entity was last updated.   |
+| Name                  | Type         | Description                                           | Notes      |
+| --------------------- | ------------ | ----------------------------------------------------- | ---------- |
+| **id**                | **str**      | Unique identifier (UUID) of the battle round.         |
+| **battle_id**         | **str**      | Unique identifier (UUID) of the battle.               |
+| **round_number**      | **int**      | Sequential round number within a battle. Starts at 1. |
+| **prompt_message_id** | **str**      | Unique identifier (UUID) of the message.              | [optional] |
+| **model1_message_id** | **str**      | Unique identifier (UUID) of the message.              | [optional] |
+| **model2_message_id** | **str**      | Unique identifier (UUID) of the message.              | [optional] |
+| **created_at**        | **datetime** | Timestamp when the entity was created.                |
+| **updated_at**        | **datetime** | Timestamp when the entity was last updated.           |
 
 ## Example
 
