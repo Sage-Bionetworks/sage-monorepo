@@ -115,9 +115,9 @@ def _update_battle_round_with_responses(
     round_id = battle_session.round_id
     if not battle_id or not round_id:
         return
-    response1 = left_state.last_assistant_message()
-    response2 = right_state.last_assistant_message()
-    if not response1 and not response2:
+    model1_message = left_state.last_assistant_message()
+    model2_message = right_state.last_assistant_message()
+    if not model1_message and not model2_message:
         battle_session.round_id = None
         return
     try:
@@ -128,7 +128,10 @@ def _update_battle_round_with_responses(
             battle_api.update_battle_round(
                 battle_id,
                 round_id,
-                BattleRoundPayload(response1=response1, response2=response2),
+                BattleRoundPayload(
+                    model1_message=model1_message,
+                    model2_message=model2_message,
+                ),
             )
             logger.info(f"✅ Battle round updated: battle={battle_id} round={round_id}")
     except Exception as e:

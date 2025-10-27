@@ -110,7 +110,7 @@ def create_battle_round(battle_id: str, prompt: str) -> str | None:
             battle_round = battle_api.create_battle_round(
                 battle_id,
                 BattleRoundPayload(
-                    prompt=MessageCreate(role=MessageRole.USER, content=prompt)
+                    prompt_message=MessageCreate(role=MessageRole.USER, content=prompt)
                 ),
             )
             if battle_round and battle_round.id:
