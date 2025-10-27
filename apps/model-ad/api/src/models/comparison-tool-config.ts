@@ -14,7 +14,7 @@ const ComparisonToolConfigFilterSchema = new Schema<ComparisonToolConfigFilter>(
 const ComparisonToolConfigColumnSchema = new Schema<ComparisonToolConfigColumn>({
   name: { type: String, required: false },
   type: { type: String, required: true },
-  column_key: { type: String, required: true },
+  data_key: { type: String, required: true },
   tooltip: { type: String, required: false },
   sort_tooltip: { type: String, required: false },
   link_text: { type: String, required: false },
