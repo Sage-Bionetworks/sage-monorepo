@@ -4,11 +4,15 @@ import {
   ComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import { DiseaseCorrelationComparisonToolComponent } from './disease-correlation-comparison-tool.component';
+import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 export const routes: Routes = [
   {
     path: '',
     component: DiseaseCorrelationComparisonToolComponent,
-    providers: [ComparisonToolService, ComparisonToolFilterService],
+    providers: [
+      { provide: ComparisonToolService, useExisting: DiseaseCorrelationComparisonToolService },
+      ComparisonToolFilterService,
+    ],
   },
 ];

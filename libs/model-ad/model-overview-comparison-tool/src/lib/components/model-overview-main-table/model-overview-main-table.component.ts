@@ -1,10 +1,10 @@
 import { Component, ViewChild, inject, input } from '@angular/core';
 import { ComparisonToolTableLinkComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
 import { ModelOverview } from '@sagebionetworks/model-ad/api-client';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
+import { ModelOverviewComparisonToolService } from '../../services/model-overview-comparison-tool.service';
 
 @Component({
   selector: 'model-ad-model-overview-main-table',
@@ -13,7 +13,7 @@ import { TooltipModule } from 'primeng/tooltip';
   styleUrls: ['./model-overview-main-table.component.scss'],
 })
 export class ModelOverviewMainTableComponent {
-  private readonly comparisonToolService = inject(ComparisonToolService);
+  private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
 
   data = input.required<ModelOverview[]>();
 

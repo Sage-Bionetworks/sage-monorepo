@@ -11,13 +11,10 @@ import { isEqual } from 'lodash';
  * Shared state contract for comparison tools.
  *
  * - Call {@link initialize} when configs load to seed dropdowns, reset counts, and wiki params.
- * - Read derived state via {@link configs}, {@link dropdownSelection}, {@link currentConfig}, and {@link columns}.
- * - Update user selections through {@link setDropdownSelection}; consumers can read the latest value via {@link dropdownSelection}.
- * - Manage result totals via {@link totalResultsCount} and {@link pinnedResultsCount}.
  */
 
 @Injectable()
-export class ComparisonToolService {
+export class ComparisonToolService<T> {
   private readonly DEFAULT_SORT_ORDER = -1;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
@@ -39,8 +36,8 @@ export class ComparisonToolService {
   private readonly sortFieldSignal = signal<string | undefined>(undefined);
   private readonly sortOrderSignal = signal<number>(this.DEFAULT_SORT_ORDER);
   private readonly columnsForDropdownsSignal = signal<ComparisonToolColumns[]>([]);
-  private readonly unpinnedDataSignal = signal<Record<string, unknown>[]>([]);
-  private readonly pinnedDataSignal = signal<Record<string, unknown>[]>([]);
+  private readonly unpinnedDataSignal = signal<T[]>([]);
+  private readonly pinnedDataSignal = signal<T[]>([]);
 
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
@@ -253,11 +250,11 @@ export class ComparisonToolService {
     });
   }
 
-  setUnpinnedData(unpinnedData: Record<string, unknown>[]) {
+  setUnpinnedData(unpinnedData: T[]) {
     this.unpinnedDataSignal.set(unpinnedData);
   }
 
-  setPinnedData(pinnedData: Record<string, unknown>[]) {
+  setPinnedData(pinnedData: T[]) {
     this.pinnedDataSignal.set(pinnedData);
   }
 

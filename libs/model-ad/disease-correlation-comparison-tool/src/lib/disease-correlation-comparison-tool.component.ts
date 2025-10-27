@@ -3,18 +3,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolViewConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
+import { PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
-  DiseaseCorrelation,
   DiseaseCorrelationService,
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
 import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
+import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
@@ -28,9 +28,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
-  private readonly comparisonToolService = inject(ComparisonToolService);
-
-  data: DiseaseCorrelation[] = [];
+  private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
 
   isLoading = signal(true);
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
@@ -100,7 +98,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
-          this.data = data;
+          this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(data.length);
         },
         error: (error) => {

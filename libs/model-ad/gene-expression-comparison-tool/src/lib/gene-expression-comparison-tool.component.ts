@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolViewConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
+import { PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -12,6 +12,10 @@ import {
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
 import { GeneExpressionHelpLinksComponent } from './components/gene-expression-help-links/gene-expression-help-links.component';
+import { GeneExpressionComparisonToolService } from './services/gene-expression-comparison-tool.service';
+
+// TODO: Replace with actual gene expression data model (MG-238)
+export type GeneExpression = [];
 
 @Component({
   selector: 'model-ad-gene-expression-comparison-tool',
@@ -24,8 +28,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly comparisonToolService = inject(ComparisonToolService);
-  // private readonly geneExpressionService = inject(GeneExpressionService)
+  private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
 
   isLoading = signal(true);
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
@@ -73,21 +76,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   }
 
   getData() {
-    // this.geneExpressionService
-    //   .getModelOverviews()
-    //   .pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe({
-    //     next: (data) => {
-    //       this.data = data;
-    //       this.comparisonToolService.totalResultsCount.set(data.length);
-    //     },
-    //     error: (error) => {
-    //       throw new Error('Error fetching model overview data:', { cause: error });
-    //     },
-    //     complete: () => {
-    //       this.isLoading.set(false);
-    //     },
-    //   });
     this.isLoading.set(false);
   }
 }
