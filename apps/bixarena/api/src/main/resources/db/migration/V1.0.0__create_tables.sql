@@ -109,16 +109,15 @@ CREATE INDEX idx_api_message_role ON api.message(role);
 CREATE TABLE api.battle_round (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
+  round_number INTEGER NOT NULL DEFAULT 1,
   prompt_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
-  response_1_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
-  response_2_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
+  model1_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
+  model2_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 -- Indexes for battle round
 CREATE INDEX idx_api_battle_round_battle_id ON api.battle_round(battle_id);
-CREATE INDEX idx_api_battle_round_prompt_message_id ON api.battle_round(prompt_message_id);
-CREATE INDEX idx_api_battle_round_response_1_message_id ON api.battle_round(response_1_message_id);
-CREATE INDEX idx_api_battle_round_response_2_message_id ON api.battle_round(response_2_message_id);
+CREATE INDEX idx_api_battle_round_round_number ON api.battle_round(round_number);
 CREATE INDEX idx_api_battle_round_created_at ON api.battle_round(created_at DESC);
