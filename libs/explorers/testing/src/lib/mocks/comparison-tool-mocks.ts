@@ -1,5 +1,4 @@
 import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { mockComparisonToolConfigFilters } from './comparison-tool-config-mocks';
 
 export const mockComparisonToolSelectorsWikiParams: { [key: string]: SynapseWikiParams } = {
   Red: {
@@ -74,7 +73,18 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         sort_tooltip: 'Sort by correlation value',
       },
     ],
-    filters: mockComparisonToolConfigFilters,
+    filters: [
+      {
+        name: 'Model Type',
+        data_key: 'model_type',
+        values: ['Familial AD', 'Late Onset AD'],
+      },
+      {
+        name: 'Age',
+        data_key: 'age',
+        values: ['4 months', '8 months', '12 months'],
+      },
+    ],
   },
 ];
 

@@ -39,6 +39,8 @@ export class ComparisonToolService {
   private readonly sortFieldSignal = signal<string | undefined>(undefined);
   private readonly sortOrderSignal = signal<number>(this.DEFAULT_SORT_ORDER);
   private readonly columnsForDropdownsSignal = signal<ComparisonToolColumns[]>([]);
+  private readonly unpinnedDataSignal = signal<Record<string, unknown>[]>([]);
+  private readonly pinnedDataSignal = signal<Record<string, unknown>[]>([]);
 
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
@@ -48,6 +50,8 @@ export class ComparisonToolService {
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
   readonly sortField = this.sortFieldSignal.asReadonly();
   readonly sortOrder = this.sortOrderSignal.asReadonly();
+  readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
+  readonly pinnedData = this.pinnedDataSignal.asReadonly();
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -122,6 +126,8 @@ export class ComparisonToolService {
     this.totalResultsCount.set(0);
     this.pinnedItemsSignal.set(new Set());
     this.setSort(undefined, this.DEFAULT_SORT_ORDER);
+    this.setUnpinnedData([]);
+    this.setPinnedData([]);
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);
@@ -245,6 +251,14 @@ export class ComparisonToolService {
       }
       return cols;
     });
+  }
+
+  setUnpinnedData(unpinnedData: Record<string, unknown>[]) {
+    this.unpinnedDataSignal.set(unpinnedData);
+  }
+
+  setPinnedData(pinnedData: Record<string, unknown>[]) {
+    this.pinnedDataSignal.set(pinnedData);
   }
 
   private updateDropdownSelectionIfChanged(selection: string[]) {

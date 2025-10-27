@@ -1,0 +1,71 @@
+<div class="comparison-tool-table">
+  <explorers-comparison-tool-columns />
+
+  @if (pinnedItems().size > 0) {
+    <div class="table-divider table-divider-1">
+      <div class="table-divider-inner">
+        <div id="pinned-genes-header">
+          <span> Pinned Items ({{ pinnedItems().size }}/{{ maxPinnedItems() }}) </span>
+        </div>
+        <div class="csv-download-button">
+          <button (click)="downloadPinnedCsv()">
+            <explorers-svg-icon
+              imagePath="/explorers-assets/icons/download.svg"
+              altText="download"
+            />
+            Download as CSV
+          </button>
+        </div>
+        <div class="clear-all-button">
+          <button (click)="clearAllPinned()">Clear All</button>
+        </div>
+      </div>
+    </div>
+  }
+  <explorers-base-table
+    [data]="pinnedData()"
+    [shouldPaginate]="false"
+    [shouldShowNoDataMessage]="false"
+    [viewDetailsTooltip]="viewDetailsTooltip()"
+    (viewDetailsEvent)="viewDetailsEvent.emit($event)"
+  />
+
+  @if (searchTerm() || hasSelectedFilters()) {
+    <div class="table-divider">
+      <div class="table-divider-inner">
+        <div>{{`${searchTerm() ? 'Matching' : 'Filtered'} Results`}}</div>
+        @if (unpinnedData().length) {
+          <div>
+            <button
+              class="pin-all-button"
+              [disabled]="hasMaxPinnedItems()"
+              (click)="pinAll()"
+              [pTooltip]="
+                hasMaxPinnedItems() ? disabledPinTooltip() : 'Pin all matching rows to the top.'
+              "
+              tooltipPosition="left"
+            >
+              <explorers-svg-icon imagePath="/explorers-assets/icons/pin.svg" altText="pin" />
+              <span>Pin All</span>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+  @if (!searchTerm() && !hasSelectedFilters() && pinnedItems().size > 0) {
+    <div class="table-divider">
+      <div class="table-divider-inner">
+        <div>All Items</div>
+      </div>
+    </div>
+  }
+
+  <explorers-base-table
+    [data]="unpinnedData()"
+    [shouldPaginate]="true"
+    [shouldShowNoDataMessage]="true"
+    [viewDetailsTooltip]="viewDetailsTooltip()"
+    (viewDetailsEvent)="viewDetailsEvent.emit($event)"
+  />
+</div>

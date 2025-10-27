@@ -5,6 +5,7 @@ import {
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import {
+  mockComparisonToolData,
   mockComparisonToolDataConfig,
   mockComparisonToolSelectorsWikiParams,
   provideLoadingIconColors,
@@ -34,6 +35,9 @@ const meta: Meta<BaseComparisonToolComponent> = {
             '68fff1aaeb12b9674515fd59',
             '68fff1aaeb12b9674515fd5a',
           ],
+          maxPinnedItems: 5,
+          pinnedData: mockComparisonToolData.slice(0, 3),
+          unpinnedData: mockComparisonToolData.slice(3),
         }),
         ...provideComparisonToolFilterService(),
         ...provideLoadingIconColors(),

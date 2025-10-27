@@ -10,6 +10,8 @@ export type ComparisonToolServiceOptions = {
   viewConfig?: Partial<ComparisonToolViewConfig>;
   maxPinnedItems?: number;
   pinnedItems?: string[];
+  unpinnedData?: Record<string, unknown>[];
+  pinnedData?: Record<string, unknown>[];
 };
 
 export const provideComparisonToolService = (
@@ -49,6 +51,14 @@ export const provideComparisonToolService = (
 
         if (options.pinnedItems !== undefined) {
           service.setPinnedItems(options.pinnedItems);
+        }
+
+        if (options.unpinnedData !== undefined) {
+          service.setUnpinnedData(options.unpinnedData);
+        }
+
+        if (options.pinnedData !== undefined) {
+          service.setPinnedData(options.pinnedData);
         }
 
         return service;
