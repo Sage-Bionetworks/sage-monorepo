@@ -24,7 +24,7 @@ app:
       audience: 'urn:bixarena:api'
       anonymousAccess: true
     - method: 'GET'
-      path: '/leaderboards'
+      path: '/api/v1/leaderboards'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
     - method: 'GET'
@@ -76,11 +76,3 @@ app:
       path: '/oauth2/token'
       audience: 'urn:bixarena:auth'
       anonymousAccess: true
-      audience: 'urn:bixarena:api'
-      anonymousAccess: true
-    - method: 'POST'
-      path: '/auth/logout'
-      audience: 'urn:bixarena:auth'
-    - method: 'POST'
-      path: '/oauth2/token'
-      audience: 'urn:bixarena:auth'
