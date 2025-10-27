@@ -30,7 +30,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
 
+  pinnedItems = this.comparisonToolService.pinnedItems;
+
   isLoading = signal(true);
+
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'CONSENSUS NETWORK MODULES': {
       ownerId: 'syn66271427',
@@ -58,7 +61,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       }
 
       this.isLoading.set(true);
-      this.getData();
+      this.getUnpinnedData();
+      this.getPinnedData();
     });
   }
 
@@ -88,7 +92,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       });
   }
 
-  getData() {
+  getUnpinnedData() {
     this.diseaseCorrelationService
       .getDiseaseCorrelations(
         this.comparisonToolService.dropdownSelection(),
@@ -100,6 +104,27 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
         next: (data) => {
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(data.length);
+        },
+        error: (error) => {
+          throw new Error('Error fetching disease correlation data:', { cause: error });
+        },
+        complete: () => {
+          this.isLoading.set(false);
+        },
+      });
+  }
+
+  getPinnedData() {
+    this.diseaseCorrelationService
+      .getDiseaseCorrelations(
+        this.comparisonToolService.dropdownSelection(),
+        Array.from(this.pinnedItems()),
+        ItemFilterTypeQuery.Include,
+      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.comparisonToolService.setPinnedData(data);
         },
         error: (error) => {
           throw new Error('Error fetching disease correlation data:', { cause: error });

@@ -9,22 +9,16 @@ import {
   ComparisonToolConfigService,
   ComparisonToolPage,
   ItemFilterTypeQuery,
-  ModelOverview,
   ModelOverviewService,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
 import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
-import { ModelOverviewMainTableComponent } from './components/model-overview-main-table/model-overview-main-table.component';
 import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
-  imports: [
-    BaseComparisonToolComponent,
-    ModelOverviewMainTableComponent,
-    ModelOverviewHelpLinksComponent,
-  ],
+  imports: [BaseComparisonToolComponent, ModelOverviewHelpLinksComponent],
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })
@@ -36,7 +30,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly modelOverviewService = inject(ModelOverviewService);
 
-  data: ModelOverview[] = [];
+  pinnedItems = this.comparisonToolService.pinnedItems;
 
   isLoading = signal(true);
 
@@ -58,7 +52,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   ngOnInit() {
     if (this.platformService.isBrowser) {
       this.getConfigs();
-      this.getData();
+      this.getUnpinnedData();
+      this.getPinnedData();
     }
   }
 
@@ -82,7 +77,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       });
   }
 
-  getData() {
+  getUnpinnedData() {
     this.modelOverviewService
       .getModelOverviews([], ItemFilterTypeQuery.Exclude)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -90,6 +85,23 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
         next: (data) => {
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(data.length);
+        },
+        error: (error) => {
+          throw new Error('Error fetching model overview data:', { cause: error });
+        },
+        complete: () => {
+          this.isLoading.set(false);
+        },
+      });
+  }
+
+  getPinnedData() {
+    this.modelOverviewService
+      .getModelOverviews(Array.from(this.pinnedItems()), ItemFilterTypeQuery.Include)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.comparisonToolService.setPinnedData(data);
         },
         error: (error) => {
           throw new Error('Error fetching model overview data:', { cause: error });
