@@ -304,7 +304,13 @@ describe('ComparisonToolColumnSelectorComponent', () => {
 
   it('should handle empty columns array', async () => {
     const emptyConfigs: ComparisonToolConfig[] = [
-      { page: 'Disease Correlation', dropdowns: ['Test'], columns: [], filters: [] },
+      {
+        page: 'Disease Correlation',
+        dropdowns: ['Test'],
+        row_count: '20',
+        columns: [],
+        filters: [],
+      },
     ];
 
     const user = userEvent.setup();

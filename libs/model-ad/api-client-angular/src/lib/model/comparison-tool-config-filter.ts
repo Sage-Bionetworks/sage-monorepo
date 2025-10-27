@@ -19,7 +19,11 @@ export interface ComparisonToolConfigFilter {
   /**
    * Field to filter on
    */
-  field: string;
+  data_key: string;
+  /**
+   * Short name of the filter group
+   */
+  short_name?: string;
   /**
    * List of filter values
    */

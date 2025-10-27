@@ -1,4 +1,5 @@
 import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { mockComparisonToolConfigFilters } from './comparison-tool-config-mocks';
 
 export const mockComparisonToolSelectorsWikiParams: { [key: string]: SynapseWikiParams } = {
   Red: {
@@ -15,29 +16,30 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
   {
     page: 'Model Overview',
     dropdowns: [],
+    row_count: 'over 200000',
     columns: [
       {
         type: 'primary',
-        column_key: 'name',
+        data_key: 'name',
       },
       {
         name: 'Model Type',
         type: 'text',
-        column_key: 'model_type',
+        data_key: 'model_type',
         tooltip: '',
         sort_tooltip: 'Sort by Model Type value',
       },
       {
         name: 'Matched Control',
         type: 'text',
-        column_key: 'matched_controls',
+        data_key: 'matched_controls',
         tooltip: '',
         sort_tooltip: 'Sort by Matched Control value',
       },
       {
         name: 'Disease Correlation',
         type: 'link_internal',
-        column_key: 'disease_correlation',
+        data_key: 'disease_correlation',
         tooltip: '',
         sort_tooltip: 'Sort by Disease Correlation value',
         link_text: 'Results',
@@ -45,7 +47,7 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
       {
         name: 'Center',
         type: 'link_external',
-        column_key: 'center',
+        data_key: 'center',
         tooltip: '',
         sort_tooltip: 'Sort by Center value',
         link_url: 'https://www.model-ad.org/',
@@ -53,25 +55,26 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
       {
         name: 'Age',
         type: 'text',
-        column_key: 'age',
+        data_key: 'age',
         tooltip: '',
         sort_tooltip: 'Sort by Age value',
       },
       {
         name: 'IFG',
         type: 'heat_map',
-        column_key: 'IFG',
+        data_key: 'IFG',
         tooltip: 'Inferior Frontal Gyrus',
         sort_tooltip: 'Sort by correlation value',
       },
       {
         name: 'PHG',
         type: 'heat_map',
-        column_key: 'PHG',
+        data_key: 'PHG',
         tooltip: 'Parahippocampal Gyrus',
         sort_tooltip: 'Sort by correlation value',
       },
     ],
+    filters: mockComparisonToolConfigFilters,
   },
 ];
 

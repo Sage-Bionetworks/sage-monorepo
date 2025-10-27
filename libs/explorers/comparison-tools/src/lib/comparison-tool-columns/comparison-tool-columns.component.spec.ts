@@ -75,18 +75,18 @@ describe('ComparisonToolColumnsComponent', () => {
     const firstColumnHeader = screen.getByRole('columnheader', { name: firstColumnToSort.name });
 
     await user.click(firstColumnHeader);
-    expect(service.sortField()).toBe(firstColumnToSort.column_key);
+    expect(service.sortField()).toBe(firstColumnToSort.data_key);
     expect(service.sortOrder()).toBe(-1);
 
     await user.click(firstColumnHeader);
-    expect(service.sortField()).toBe(firstColumnToSort.column_key);
+    expect(service.sortField()).toBe(firstColumnToSort.data_key);
     expect(service.sortOrder()).toBe(1);
 
     const secondColumnToSort = mockComparisonToolColumns[1];
     const secondColumnHeader = screen.getByRole('columnheader', { name: secondColumnToSort.name });
 
     await user.click(secondColumnHeader);
-    expect(service.sortField()).toBe(secondColumnToSort.column_key);
+    expect(service.sortField()).toBe(secondColumnToSort.data_key);
     expect(service.sortOrder()).toBe(-1);
   });
 });

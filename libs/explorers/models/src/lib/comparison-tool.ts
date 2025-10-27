@@ -5,13 +5,15 @@ export interface ComparisonToolFilterOption {
 
 export interface ComparisonToolFilter {
   name: string;
-  field: string;
+  data_key: string;
+  short_name?: string;
   options: ComparisonToolFilterOption[];
 }
 
 export interface ComparisonToolConfigFilter {
   name: string;
-  field: string;
+  data_key: string;
+  short_name?: string;
   values: string[];
 }
 
@@ -34,7 +36,7 @@ export const ComparisonToolConfigColumnTypeEnum = {
 export interface ComparisonToolConfigColumn {
   name?: string;
   type: ComparisonToolConfigColumnType;
-  column_key: string;
+  data_key: string;
   tooltip?: string;
   sort_tooltip?: string;
   link_text?: string;
@@ -53,8 +55,9 @@ export interface ComparisonToolColumns {
 export interface ComparisonToolConfig {
   page: ComparisonToolPage;
   dropdowns: string[];
+  row_count: string;
   columns: ComparisonToolConfigColumn[];
-  filters?: ComparisonToolConfigFilter[];
+  filters: ComparisonToolConfigFilter[];
 }
 
 export type HeatmapCircleData<ColorKey extends string = string> = {

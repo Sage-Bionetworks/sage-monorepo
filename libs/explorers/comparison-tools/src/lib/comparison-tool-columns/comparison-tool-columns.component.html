@@ -12,7 +12,7 @@
         @if (column.type === 'primary') {
           <th></th>
         } @else {
-          <th [pSortableColumn]="column.column_key" [style]="{ width: columnWidth }">
+          <th [pSortableColumn]="column.data_key" [style]="{ width: columnWidth }">
             <div class="column-header">
               <div class="column-header-text">
                 <span [pTooltip]="column.tooltip" tooltipPosition="top">
@@ -21,7 +21,7 @@
               </div>
               <div class="column-header-sort">
                 <p-sortIcon
-                  [field]="column.column_key"
+                  [field]="column.data_key"
                   [pTooltip]="column.sort_tooltip"
                   tooltipPosition="top"
                 />

@@ -34,7 +34,8 @@ export class ComparisonToolFilterPanelComponent {
     return this.filterConfigs().map((config) => {
       const filter: ComparisonToolFilter = {
         name: config.name,
-        field: config.field,
+        data_key: config.data_key,
+        short_name: config.short_name,
         options: config.values.map((value) => ({
           label: value,
           selected: false,

@@ -14,7 +14,7 @@ properties:
     description: The data type of the column. Must be 'text', 'heat_map', 'link_internal',
       'link_external', or 'primary', where 'primary' is the primary key column that uniquely
       identifies each record in the table.
-  column_key:
+  data_key:
     type: string
     description: The key used to retrieve data for this column from the data source.
   tooltip:
@@ -31,4 +31,4 @@ properties:
     description: The default URL for this column.
 required:
   - type
-  - column_key
+  - data_key
