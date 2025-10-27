@@ -4,8 +4,9 @@ import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
-import org.sagebionetworks.bixarena.api.model.dto.BattleRoundPayloadDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import java.util.UUID;
@@ -97,7 +98,7 @@ public interface BattleApiDelegate {
      * Create a new round for a given battle.
      *
      * @param battleId The unique identifier of the battle (required)
-     * @param battleRoundPayloadDto  (required)
+     * @param battleRoundCreateRequestDto  (required)
      * @return Battle round created successfully (status code 201)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
@@ -107,7 +108,7 @@ public interface BattleApiDelegate {
      * @see BattleApi#createBattleRound
      */
     default ResponseEntity<BattleRoundDto> createBattleRound(UUID battleId,
-        BattleRoundPayloadDto battleRoundPayloadDto) {
+        BattleRoundCreateRequestDto battleRoundCreateRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -327,7 +328,7 @@ public interface BattleApiDelegate {
      *
      * @param battleId The unique identifier of the battle (required)
      * @param roundId The unique identifier of the battle round (required)
-     * @param battleRoundPayloadDto  (required)
+     * @param battleRoundUpdateRequestDto  (required)
      * @return Battle round updated successfully (status code 200)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
@@ -338,7 +339,7 @@ public interface BattleApiDelegate {
      */
     default ResponseEntity<BattleRoundDto> updateBattleRound(UUID battleId,
         UUID roundId,
-        BattleRoundPayloadDto battleRoundPayloadDto) {
+        BattleRoundUpdateRequestDto battleRoundUpdateRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

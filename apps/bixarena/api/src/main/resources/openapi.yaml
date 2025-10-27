@@ -246,7 +246,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BattleRoundPayload'
+              $ref: '#/components/schemas/BattleRoundCreateRequest'
         required: true
       responses:
         '201':
@@ -299,7 +299,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BattleRoundPayload'
+              $ref: '#/components/schemas/BattleRoundUpdateRequest'
         required: true
       responses:
         '200':
@@ -990,15 +990,13 @@ components:
         - content
         - role
       type: object
-    BattleRoundPayload:
-      description: The request payload for a battle round.
+    BattleRoundCreateRequest:
+      description: Payload to create a new battle round with the user prompt.
       properties:
         promptMessage:
           $ref: '#/components/schemas/MessageCreate'
-        model1Message:
-          $ref: '#/components/schemas/MessageCreate'
-        model2Message:
-          $ref: '#/components/schemas/MessageCreate'
+      required:
+        - promptMessage
       type: object
     BattleRoundId:
       description: Unique identifier (UUID) of the battle round.
@@ -1078,6 +1076,17 @@ components:
         - id
         - roundNumber
         - updatedAt
+      type: object
+    BattleRoundUpdateRequest:
+      description: Payload to update model responses for an existing battle round.
+      properties:
+        model1Message:
+          $ref: '#/components/schemas/MessageCreate'
+        model2Message:
+          $ref: '#/components/schemas/MessageCreate'
+      required:
+        - model1Message
+        - model2Message
       type: object
     ExamplePromptSort:
       default: created_at

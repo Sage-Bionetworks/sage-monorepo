@@ -9,8 +9,9 @@ import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
-import org.sagebionetworks.bixarena.api.model.dto.BattleRoundPayloadDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import java.util.UUID;
@@ -118,7 +119,7 @@ public interface BattleApi {
      * Create a new round for a given battle.
      *
      * @param battleId The unique identifier of the battle (required)
-     * @param battleRoundPayloadDto  (required)
+     * @param battleRoundCreateRequestDto  (required)
      * @return Battle round created successfully (status code 201)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
@@ -170,9 +171,9 @@ public interface BattleApi {
     
     default ResponseEntity<BattleRoundDto> createBattleRound(
         @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
-        @Parameter(name = "BattleRoundPayloadDto", description = "", required = true) @Valid @RequestBody BattleRoundPayloadDto battleRoundPayloadDto
+        @Parameter(name = "BattleRoundCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleRoundCreateRequestDto battleRoundCreateRequestDto
     ) {
-        return getDelegate().createBattleRound(battleId, battleRoundPayloadDto);
+        return getDelegate().createBattleRound(battleId, battleRoundCreateRequestDto);
     }
 
 
@@ -393,7 +394,7 @@ public interface BattleApi {
      *
      * @param battleId The unique identifier of the battle (required)
      * @param roundId The unique identifier of the battle round (required)
-     * @param battleRoundPayloadDto  (required)
+     * @param battleRoundUpdateRequestDto  (required)
      * @return Battle round updated successfully (status code 200)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
@@ -446,9 +447,9 @@ public interface BattleApi {
     default ResponseEntity<BattleRoundDto> updateBattleRound(
         @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
         @Parameter(name = "roundId", description = "The unique identifier of the battle round", required = true, in = ParameterIn.PATH) @PathVariable("roundId") UUID roundId,
-        @Parameter(name = "BattleRoundPayloadDto", description = "", required = true) @Valid @RequestBody BattleRoundPayloadDto battleRoundPayloadDto
+        @Parameter(name = "BattleRoundUpdateRequestDto", description = "", required = true) @Valid @RequestBody BattleRoundUpdateRequestDto battleRoundUpdateRequestDto
     ) {
-        return getDelegate().updateBattleRound(battleId, roundId, battleRoundPayloadDto);
+        return getDelegate().updateBattleRound(battleId, roundId, battleRoundUpdateRequestDto);
     }
 
 }
