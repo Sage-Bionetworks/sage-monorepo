@@ -56,69 +56,6 @@
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.tabSize": 4
   },
-  "sqltools.autoOpenSessionFiles": false,
-  "sqltools.connections": [
-    {
-      "previewLimit": 50,
-      "server": "iatlas-postgres",
-      "port": 2432,
-      "driver": "PostgreSQL",
-      "name": "iatlas-postgres",
-      "database": "iatlas",
-      "username": "postgres",
-      "password": "changeme"
-    },
-    {
-      "previewLimit": 50,
-      "server": "amp-als-postgres",
-      "port": 8401,
-      "driver": "PostgreSQL",
-      "name": "amp-als-dataset-service",
-      "database": "dataset_service",
-      "username": "dataset_service",
-      "password": "changeme"
-    },
-    {
-      "previewLimit": 50,
-      "server": "bixarena-postgres",
-      "port": 21000,
-      "driver": "PostgreSQL",
-      "name": "bixarena-postgres",
-      "database": "bixarena",
-      "username": "postgres",
-      "password": "changeme"
-    },
-    {
-      "previewLimit": 50,
-      "server": "openchallenges-postgres",
-      "port": 8091,
-      "driver": "PostgreSQL",
-      "name": "openchallenges-organization-service",
-      "database": "organization_service",
-      "username": "organization_service",
-      "password": "changeme"
-    },
-    {
-      "previewLimit": 50,
-      "server": "openchallenges-postgres",
-      "port": 8091,
-      "driver": "PostgreSQL",
-      "name": "openchallenges-challenge-service",
-      "database": "challenge_service",
-      "username": "challenge_service",
-      "password": "changeme"
-    },
-    {
-      "previewLimit": 50,
-      "server": "openchallenges-postgres",
-      "port": 8091,
-      "driver": "PostgreSQL",
-      "name": "openchallenges-auth-service",
-      "database": "auth_service",
-      "username": "auth_service",
-      "password": "changeme"
-    }
-  ],
   "terminal.integrated.showExitAlert": false,
   "rewrap.wrappingColumn": 100,
   "jest.runMode": "on-demand",
