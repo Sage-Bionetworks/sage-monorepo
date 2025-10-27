@@ -42,7 +42,7 @@ public class BattleRoundService {
     UUID promptId = messageService.createMessage(request.getPromptMessage());
 
     Integer nextRoundNumber = battleRoundRepository
-      .findByBattleIdOrderByRoundNumberDesc(battleId)
+      .findTopByBattleIdOrderByRoundNumberDesc(battleId)
       .map(BattleRoundEntity::getRoundNumber)
       .map(last -> last + 1)
       .orElse(1);

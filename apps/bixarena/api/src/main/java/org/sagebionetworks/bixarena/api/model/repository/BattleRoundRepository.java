@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BattleRoundRepository extends JpaRepository<BattleRoundEntity, UUID> {
-  Optional<BattleRoundEntity> findByBattleIdOrderByRoundNumberDesc(UUID battleId);
+  Optional<BattleRoundEntity> findTopByBattleIdOrderByRoundNumberDesc(UUID battleId);
 }

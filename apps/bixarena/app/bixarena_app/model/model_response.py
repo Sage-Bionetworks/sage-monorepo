@@ -120,15 +120,13 @@ def _update_battle_round_with_responses(
     model2_message = right_state.last_assistant_message()
 
     # When a model errors, add a system message so we still persist context
-    if left_state.has_error:
-        error_content = model1_message.content if model1_message else None
-        if not error_content:
-            error_content = "Model response unavailable due to an error."
+    # If the model errored and we didn't get any assistant content, persist a SYSTEM message
+    # If there is an assistant message (e.g., a successful follow-up), keep it as ASSISTANT.
+    if left_state.has_error and not model1_message:
+        error_content = "Model response unavailable due to an error."
         model1_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
-    if right_state.has_error:
-        error_content = model2_message.content if model2_message else None
-        if not error_content:
-            error_content = "Model response unavailable due to an error."
+    if right_state.has_error and not model2_message:
+        error_content = "Model response unavailable due to an error."
         model2_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
 
     if not model1_message and not model2_message:
