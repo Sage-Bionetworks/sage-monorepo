@@ -49,7 +49,7 @@ public class BattleRoundService {
       : null;
 
     Integer nextRoundNumber = battleRoundRepository
-      .findFirstByBattleIdOrderByRoundNumberDesc(battleId)
+      .findByBattleIdOrderByRoundNumberDesc(battleId)
       .map(BattleRoundEntity::getRoundNumber)
       .map(last -> last + 1)
       .orElse(1);
