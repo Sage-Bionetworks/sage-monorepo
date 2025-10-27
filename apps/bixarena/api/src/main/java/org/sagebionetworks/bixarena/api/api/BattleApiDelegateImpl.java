@@ -7,8 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
-import org.sagebionetworks.bixarena.api.model.dto.BattleRoundPayloadDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
@@ -67,11 +68,14 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   @Override
   public ResponseEntity<BattleRoundDto> createBattleRound(
     UUID battleId,
-    BattleRoundPayloadDto battleRoundPayloadDto
+    BattleRoundCreateRequestDto battleRoundCreateRequestDto
   ) {
     // Create the round (and its messages) and return DTO
     log.info("Creating round for battle {}", battleId);
-    BattleRoundDto created = battleRoundService.createBattleRound(battleId, battleRoundPayloadDto);
+    BattleRoundDto created = battleRoundService.createBattleRound(
+      battleId,
+      battleRoundCreateRequestDto
+    );
     return ResponseEntity.status(201).body(created);
   }
 
@@ -93,13 +97,13 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   public ResponseEntity<BattleRoundDto> updateBattleRound(
     UUID battleId,
     UUID roundId,
-    BattleRoundPayloadDto battleRoundPayloadDto
+    BattleRoundUpdateRequestDto battleRoundUpdateRequestDto
   ) {
     log.info("Updating round {} for battle {}", roundId, battleId);
     BattleRoundDto updated = battleRoundService.updateBattleRound(
       battleId,
       roundId,
-      battleRoundPayloadDto
+      battleRoundUpdateRequestDto
     );
     return ResponseEntity.ok(updated);
   }

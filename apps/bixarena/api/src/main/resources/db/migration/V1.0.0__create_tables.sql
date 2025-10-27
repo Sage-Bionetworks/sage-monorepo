@@ -110,7 +110,7 @@ CREATE TABLE api.battle_round (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
   round_number INTEGER NOT NULL DEFAULT 1,
-  prompt_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
+  prompt_message_id UUID NOT NULL REFERENCES api.message(id) ON DELETE CASCADE,
   model1_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
   model2_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),

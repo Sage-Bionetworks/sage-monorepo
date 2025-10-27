@@ -34,7 +34,7 @@ public class BattleRoundEntity {
   @Column(name = "round_number", nullable = false)
   private Integer roundNumber;
 
-  @Column(name = "prompt_message_id")
+  @Column(name = "prompt_message_id", nullable = false)
   private UUID promptMessageId;
 
   @Column(name = "model1_message_id")

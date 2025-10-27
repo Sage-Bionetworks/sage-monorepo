@@ -5,8 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleRoundNotFoundException;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
-import org.sagebionetworks.bixarena.api.model.dto.BattleRoundPayloadDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.BattleRoundEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.BattleRoundMapper;
@@ -26,7 +27,7 @@ public class BattleRoundService {
   private final BattleRoundMapper battleRoundMapper = new BattleRoundMapper();
 
   @Transactional
-  public BattleRoundDto createBattleRound(UUID battleId, BattleRoundPayloadDto payload) {
+  public BattleRoundDto createBattleRound(UUID battleId, BattleRoundCreateRequestDto request) {
     log.info("Creating battle round for battle {}", battleId);
 
     BattleEntity battle = battleRepository
@@ -37,16 +38,8 @@ public class BattleRoundService {
         )
       );
 
-    // Create messages as needed
-    UUID promptId = payload.getPromptMessage() != null
-      ? messageService.createMessage(payload.getPromptMessage())
-      : null;
-    UUID r1 = payload.getModel1Message() != null
-      ? messageService.createMessage(payload.getModel1Message())
-      : null;
-    UUID r2 = payload.getModel2Message() != null
-      ? messageService.createMessage(payload.getModel2Message())
-      : null;
+    // Create the prompt message (required for round creation)
+    UUID promptId = messageService.createMessage(request.getPromptMessage());
 
     Integer nextRoundNumber = battleRoundRepository
       .findByBattleIdOrderByRoundNumberDesc(battleId)
@@ -58,8 +51,6 @@ public class BattleRoundService {
       .battleId(battle.getId())
       .roundNumber(nextRoundNumber)
       .promptMessageId(promptId)
-      .model1MessageId(r1)
-      .model2MessageId(r2)
       .build();
 
     BattleRoundEntity saved = battleRoundRepository.save(entity);
@@ -74,7 +65,7 @@ public class BattleRoundService {
   public BattleRoundDto updateBattleRound(
     UUID battleId,
     UUID roundId,
-    BattleRoundPayloadDto payload
+    BattleRoundUpdateRequestDto request
   ) {
     log.info("Updating battle round {} for battle {}", roundId, battleId);
 
@@ -102,16 +93,9 @@ public class BattleRoundService {
       );
     }
 
-    // If payload contains new messages, create them and set the corresponding ids
-    if (payload.getPromptMessage() != null) {
-      existing.setPromptMessageId(messageService.createMessage(payload.getPromptMessage()));
-    }
-    if (payload.getModel1Message() != null) {
-      existing.setModel1MessageId(messageService.createMessage(payload.getModel1Message()));
-    }
-    if (payload.getModel2Message() != null) {
-      existing.setModel2MessageId(messageService.createMessage(payload.getModel2Message()));
-    }
+    // Replace model messages (both required in update request)
+    existing.setModel1MessageId(messageService.createMessage(request.getModel1Message()));
+    existing.setModel2MessageId(messageService.createMessage(request.getModel2Message()));
 
     BattleRoundEntity saved = battleRoundRepository.save(existing);
     log.info("Updated battle round {}", saved.getId());
