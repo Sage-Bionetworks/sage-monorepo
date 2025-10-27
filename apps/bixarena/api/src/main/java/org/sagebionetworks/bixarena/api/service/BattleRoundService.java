@@ -38,21 +38,28 @@ public class BattleRoundService {
       );
 
     // Create messages as needed
-    UUID promptId = payload.getPrompt() != null
-      ? messageService.createMessage(payload.getPrompt())
+    UUID promptId = payload.getPromptMessage() != null
+      ? messageService.createMessage(payload.getPromptMessage())
       : null;
-    UUID r1 = payload.getResponse1() != null
-      ? messageService.createMessage(payload.getResponse1())
+    UUID r1 = payload.getModel1Message() != null
+      ? messageService.createMessage(payload.getModel1Message())
       : null;
-    UUID r2 = payload.getResponse2() != null
-      ? messageService.createMessage(payload.getResponse2())
+    UUID r2 = payload.getModel2Message() != null
+      ? messageService.createMessage(payload.getModel2Message())
       : null;
+
+    Integer nextRoundNumber = battleRoundRepository
+      .findFirstByBattleIdOrderByRoundNumberDesc(battleId)
+      .map(BattleRoundEntity::getRoundNumber)
+      .map(last -> last + 1)
+      .orElse(1);
 
     BattleRoundEntity entity = BattleRoundEntity.builder()
       .battleId(battle.getId())
+      .roundNumber(nextRoundNumber)
       .promptMessageId(promptId)
-      .response1MessageId(r1)
-      .response2MessageId(r2)
+      .model1MessageId(r1)
+      .model2MessageId(r2)
       .build();
 
     BattleRoundEntity saved = battleRoundRepository.save(entity);
@@ -96,14 +103,14 @@ public class BattleRoundService {
     }
 
     // If payload contains new messages, create them and set the corresponding ids
-    if (payload.getPrompt() != null) {
-      existing.setPromptMessageId(messageService.createMessage(payload.getPrompt()));
+    if (payload.getPromptMessage() != null) {
+      existing.setPromptMessageId(messageService.createMessage(payload.getPromptMessage()));
     }
-    if (payload.getResponse1() != null) {
-      existing.setResponse1MessageId(messageService.createMessage(payload.getResponse1()));
+    if (payload.getModel1Message() != null) {
+      existing.setModel1MessageId(messageService.createMessage(payload.getModel1Message()));
     }
-    if (payload.getResponse2() != null) {
-      existing.setResponse2MessageId(messageService.createMessage(payload.getResponse2()));
+    if (payload.getModel2Message() != null) {
+      existing.setModel2MessageId(messageService.createMessage(payload.getModel2Message()));
     }
 
     BattleRoundEntity saved = battleRoundRepository.save(existing);

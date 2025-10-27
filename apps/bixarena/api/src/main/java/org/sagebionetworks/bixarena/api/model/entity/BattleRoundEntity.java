@@ -31,14 +31,17 @@ public class BattleRoundEntity {
   @Column(name = "battle_id", nullable = false)
   private UUID battleId;
 
+  @Column(name = "round_number", nullable = false)
+  private Integer roundNumber;
+
   @Column(name = "prompt_message_id")
   private UUID promptMessageId;
 
-  @Column(name = "response_1_message_id")
-  private UUID response1MessageId;
+  @Column(name = "model1_message_id")
+  private UUID model1MessageId;
 
-  @Column(name = "response_2_message_id")
-  private UUID response2MessageId;
+  @Column(name = "model2_message_id")
+  private UUID model2MessageId;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)

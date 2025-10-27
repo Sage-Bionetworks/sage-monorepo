@@ -12,9 +12,10 @@ public class BattleRoundMapper {
     return BattleRoundDto.builder()
       .id(entity.getId())
       .battleId(entity.getBattleId())
+      .roundNumber(entity.getRoundNumber())
       .promptMessageId(entity.getPromptMessageId())
-      .response1MessageId(entity.getResponse1MessageId())
-      .response2MessageId(entity.getResponse2MessageId())
+      .model1MessageId(entity.getModel1MessageId())
+      .model2MessageId(entity.getModel2MessageId())
       .createdAt(entity.getCreatedAt())
       .updatedAt(entity.getUpdatedAt())
       .build();
