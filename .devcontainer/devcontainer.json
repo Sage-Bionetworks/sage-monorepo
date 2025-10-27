@@ -221,6 +221,7 @@
       "extensions": [
         "alefragnani.Bookmarks",
         "Angular.ng-template",
+        "Anthropic.claude-code",
         "charliermarsh.ruff",
         "dbaeumer.vscode-eslint",
         "eamodio.gitlens",
@@ -238,9 +239,6 @@
         "ms-playwright.playwright",
         "ms-python.python",
         "ms-toolsai.jupyter",
-        "mtxr.sqltools-driver-mysql",
-        "mtxr.sqltools-driver-pg",
-        "mtxr.sqltools",
         "njpwerner.autodocstring",
         "Orta.vscode-jest",
         "pranaygp.vscode-css-peek",
