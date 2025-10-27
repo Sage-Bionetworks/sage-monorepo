@@ -448,10 +448,14 @@ components:
           type: string
           description: Name of the filter group
           example: Biological Domain
-        field:
+        data_key:
           type: string
           description: Field to filter on
           example: model_type
+        short_name:
+          type: string
+          description: Short name of the filter group
+          example: Biodomain
         values:
           type: array
           description: List of filter values
@@ -460,7 +464,7 @@ components:
             example: Apoptosis
       required:
         - name
-        - field
+        - data_key
         - values
     ComparisonToolConfig:
       type: object

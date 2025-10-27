@@ -5,13 +5,15 @@ export interface ComparisonToolFilterOption {
 
 export interface ComparisonToolFilter {
   name: string;
-  field: string;
+  data_key: string;
+  short_name?: string;
   options: ComparisonToolFilterOption[];
 }
 
 export interface ComparisonToolConfigFilter {
   name: string;
-  field: string;
+  data_key: string;
+  short_name?: string;
   values: string[];
 }
 

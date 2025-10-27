@@ -8,17 +8,18 @@ import {
 export const mockComparisonToolConfigFilters: ComparisonToolConfigFilter[] = [
   {
     name: 'Age',
-    field: 'age',
+    data_key: 'age',
     values: ['4 months', '8 months', '12 months'],
   },
   {
     name: 'Model Type',
-    field: 'model_type',
+    data_key: 'model_type',
+    short_name: 'Type',
     values: ['Familial AD', 'Late Onset AD'],
   },
   {
     name: 'Sex',
-    field: 'sex',
+    data_key: 'sex',
     values: ['Female', 'Male'],
   },
 ];
@@ -26,7 +27,7 @@ export const mockComparisonToolConfigFilters: ComparisonToolConfigFilter[] = [
 export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   {
     name: 'Age',
-    field: 'age',
+    data_key: 'age',
     options: [
       { label: '4 months', selected: false },
       { label: '8 months', selected: false },
@@ -35,7 +36,8 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   },
   {
     name: 'Model Type',
-    field: 'model_type',
+    data_key: 'model_type',
+    short_name: 'Type',
     options: [
       { label: 'Familial AD', selected: false },
       { label: 'Late Onset AD', selected: false },
@@ -43,7 +45,7 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   },
   {
     name: 'Sex',
-    field: 'sex',
+    data_key: 'sex',
     options: [
       { label: 'Female', selected: false },
       { label: 'Male', selected: false },
@@ -54,7 +56,8 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
 export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   {
     name: 'Available Data',
-    field: 'available_data',
+    data_key: 'available_data',
+    short_name: 'Data',
     options: [
       { label: 'Biomarkers', selected: true },
       { label: 'Disease Correlation', selected: true },
@@ -64,7 +67,8 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   },
   {
     name: 'Contributing Center',
-    field: 'center',
+    data_key: 'center',
+    short_name: 'Center',
     options: [
       { label: 'IU/Jax/Pitt', selected: false },
       { label: 'UCI', selected: false },
@@ -72,7 +76,8 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   },
   {
     name: 'Model Type',
-    field: 'model_type',
+    data_key: 'model_type',
+    short_name: 'Type',
     options: [
       { label: 'Familial AD', selected: false },
       { label: 'Late Onset AD', selected: false },
