@@ -5,10 +5,10 @@ plugins {
 }
 
 dependencies {
+  implementation(libs.caffeine)
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.spring.boot.starter.actuator)
-  // implementation(libs.spring.boot.starter.oauth2.resource.server)
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.webflux)
   implementation(libs.spring.cloud.starter.gateway.server.webflux)

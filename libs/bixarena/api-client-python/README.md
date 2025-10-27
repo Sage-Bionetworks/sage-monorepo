@@ -118,6 +118,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
 | _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
 | _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
+| _UserApi_          | [**get_user_stats**](docs/UserApi.md#get_user_stats)                              | **GET** /users/me/stats                                 | Get current user&#39;s statistics          |
 
 ## Documentation For Models
 
@@ -158,6 +159,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [SortDirection](docs/SortDirection.md)
 - [Token200Response](docs/Token200Response.md)
 - [UserInfo](docs/UserInfo.md)
+- [UserStats](docs/UserStats.md)
 
 <a id="documentation-for-authorization"></a>
 

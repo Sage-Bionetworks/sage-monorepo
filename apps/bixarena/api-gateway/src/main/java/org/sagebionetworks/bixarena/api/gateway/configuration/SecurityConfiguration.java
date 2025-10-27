@@ -1,18 +1,21 @@
 package org.sagebionetworks.bixarena.api.gateway.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.sagebionetworks.bixarena.api.gateway.routing.RouteConfigRegistry;
+import org.sagebionetworks.bixarena.api.gateway.filter.SessionToJwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 /**
  * Spring Security configuration for the API Gateway.
  *
- * Backend services use method-level authorization (@PreAuthorize) based on JWT scopes.
+ * Uses filter-based authentication (SessionToJwtFilter) to handle both anonymous
+ * and authenticated routes. The filter runs BEFORE Spring Security's authorization
+ * check and sets authentication context appropriately.
  */
 @Configuration
 @EnableWebFluxSecurity
@@ -20,29 +23,20 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-  private final RouteConfigRegistry routeConfigRegistry;
+  private final SessionToJwtFilter sessionToJwtFilter;
 
   @Bean
   SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-    // Dynamically collect all anonymous endpoints from the route config registry
-    var anonymousPaths = routeConfigRegistry.getAnonymousPaths();
-
-    http
+    return http
       .csrf(ServerHttpSecurity.CsrfSpec::disable)
-      // .oauth2ResourceServer(ServerHttpSecurity.OAuth2ResourceServerSpec::jwt) // enable if you use JWT
-      .authorizeExchange(exchanges -> {
-        // Always allow actuator probes
-        exchanges.pathMatchers("/actuator/health", "/actuator/metrics").permitAll();
-
-        // Guard: only register matchers when there's at least one
-        if (anonymousPaths.length > 0) {
-          exchanges.pathMatchers(anonymousPaths).permitAll();
-        }
-
-        // Everything else requires auth
-        exchanges.anyExchange().authenticated();
-      });
-
-    return http.build();
+      // Add filter BEFORE authorization check
+      .addFilterBefore(sessionToJwtFilter, SecurityWebFiltersOrder.AUTHORIZATION)
+      .authorizeExchange(exchanges -> exchanges
+        // Only actuator needs explicit permitAll
+        .pathMatchers("/actuator/health", "/actuator/metrics").permitAll()
+        // Everything else requires authentication (set by filter)
+        .anyExchange().authenticated()
+      )
+      .build();
   }
 }

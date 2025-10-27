@@ -7,6 +7,7 @@ bixarena_api_client/api/battle_api.py
 bixarena_api_client/api/example_prompt_api.py
 bixarena_api_client/api/leaderboard_api.py
 bixarena_api_client/api/model_api.py
+bixarena_api_client/api/user_api.py
 bixarena_api_client/api_client.py
 bixarena_api_client/api_response.py
 bixarena_api_client/configuration.py
@@ -49,6 +50,7 @@ bixarena_api_client/models/page_metadata.py
 bixarena_api_client/models/sort_direction.py
 bixarena_api_client/models/token200_response.py
 bixarena_api_client/models/user_info.py
+bixarena_api_client/models/user_stats.py
 bixarena_api_client/py.typed
 bixarena_api_client/rest.py
 docs/AdminApi.md
@@ -93,7 +95,9 @@ docs/ModelSort.md
 docs/PageMetadata.md
 docs/SortDirection.md
 docs/Token200Response.md
+docs/UserApi.md
 docs/UserInfo.md
+docs/UserStats.md
 test/__init__.py
 test/test_admin_api.py
 test/test_admin_stats200_response.py
@@ -137,4 +141,6 @@ test/test_model_sort.py
 test/test_page_metadata.py
 test/test_sort_direction.py
 test/test_token200_response.py
+test/test_user_api.py
 test/test_user_info.py
+test/test_user_stats.py

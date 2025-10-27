@@ -28,6 +28,9 @@ tags:
   - name: Model
     description: Operations about models.
     x-displayName: Model
+  - name: User
+    description: Operations about the authenticated user.
+    x-displayName: User
   - name: Auth
     description: Authentication and token minting operations.
     x-displayName: Auth
@@ -340,6 +343,24 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
+  /users/me/stats:
+    get:
+      tags:
+        - User
+      summary: Get current user's statistics
+      description: Returns statistics about the authenticated user's battle participation.
+      operationId: getUserStats
+      responses:
+        '200':
+          description: User statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStats'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - jwtBearer: []
   /auth/login:
     get:
       x-anonymous-access: true
@@ -393,7 +414,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /auth/logout:
     post:
-      x-anonymous-access: true
+      x-anonymous-access: false
       tags:
         - Auth
       summary: Logout current session
@@ -412,9 +433,24 @@ paths:
       tags:
         - Auth
       summary: Mint short-lived internal JWT
-      description: Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+      description: |
+        Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+
+        The optional audience parameter specifies the target service for the JWT.
       operationId: token
       security: []
+      parameters:
+        - in: query
+          name: audience
+          required: false
+          schema:
+            type: string
+            enum:
+              - urn:bixarena:auth
+              - urn:bixarena:api
+              - urn:bixarena:ai
+          description: |
+            Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
       responses:
         '200':
           description: Access token response
@@ -1253,6 +1289,41 @@ components:
                 $ref: '#/components/schemas/Model'
           required:
             - models
+    UserStats:
+      type: object
+      description: Statistics about a user's participation in battles.
+      properties:
+        totalBattles:
+          type: integer
+          format: int64
+          description: Total number of battles the user has participated in (as arbiter)
+          example: 42
+        completedBattles:
+          type: integer
+          format: int64
+          description: Number of battles that have been completed (endedAt is set)
+          example: 38
+        activeBattles:
+          type: integer
+          format: int64
+          description: Number of battles currently in progress (endedAt is null)
+          example: 4
+        firstBattleAt:
+          type: string
+          format: date-time
+          description: Timestamp of the user's first battle
+          example: '2024-01-15T10:30:00Z'
+          nullable: true
+        latestBattleAt:
+          type: string
+          format: date-time
+          description: Timestamp of the user's most recent battle
+          example: '2024-10-26T14:23:00Z'
+          nullable: true
+      required:
+        - totalBattles
+        - completedBattles
+        - activeBattles
     UserInfo:
       type: object
       description: OIDC-compliant user information response
@@ -1403,6 +1474,7 @@ x-tagGroups:
       - Example Prompt
       - Leaderboard
       - Model
+      - User
   - name: BixArena Auth Service
     tags:
       - Auth

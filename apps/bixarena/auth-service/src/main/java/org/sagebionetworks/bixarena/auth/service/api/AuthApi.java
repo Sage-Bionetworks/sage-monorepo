@@ -50,7 +50,7 @@ public interface AuthApi {
      * @param code  (required)
      * @param state  (required)
      * @return Authentication successful (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      */
     @Operation(
@@ -63,7 +63,7 @@ public interface AuthApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Callback200ResponseDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = Callback200ResponseDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
@@ -92,7 +92,7 @@ public interface AuthApi {
      * Returns the public keys used to verify internally issued JWTs.
      *
      * @return JWKS document (status code 200)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      */
     @Operation(
         operationId = "getJwks",
@@ -104,7 +104,7 @@ public interface AuthApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = GetJwks200ResponseDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = GetJwks200ResponseDto.class))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
@@ -137,10 +137,12 @@ public interface AuthApi {
         tags = { "Auth" },
         responses = {
             @ApiResponse(responseCode = "200", description = "User profile information", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = UserInfoDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserInfoDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = UserInfoDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
@@ -150,7 +152,7 @@ public interface AuthApi {
     @RequestMapping(
         method = RequestMethod.GET,
         value = "/userinfo",
-        produces = { "application/json" }
+        produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<UserInfoDto> getUserInfo(
@@ -166,7 +168,7 @@ public interface AuthApi {
      *
      * @return Flow started (no content; clients should follow redirect) (status code 204)
      *         or Redirect to Synapse login (status code 302)
-     *         or Invalid request parameters (status code 400)
+     *         or Invalid request (status code 400)
      */
     @Operation(
         operationId = "login",
@@ -176,7 +178,7 @@ public interface AuthApi {
         responses = {
             @ApiResponse(responseCode = "204", description = "Flow started (no content; clients should follow redirect)"),
             @ApiResponse(responseCode = "302", description = "Redirect to Synapse login"),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         }
@@ -209,7 +211,7 @@ public interface AuthApi {
         responses = {
             @ApiResponse(responseCode = "204", description = "Logged out successfully"),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
@@ -219,7 +221,7 @@ public interface AuthApi {
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/auth/logout",
-        produces = { "application/json" }
+        produces = { "application/problem+json" }
     )
     
     default ResponseEntity<Void> logout(
@@ -231,35 +233,38 @@ public interface AuthApi {
 
     /**
      * POST /oauth2/token : Mint short-lived internal JWT
-     * Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+     * Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).  The optional audience parameter specifies the target service for the JWT. 
      *
+     * @param audience Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.  (optional)
      * @return Access token response (status code 200)
      *         or Unauthorized (status code 401)
      */
     @Operation(
         operationId = "token",
         summary = "Mint short-lived internal JWT",
-        description = "Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).",
+        description = "Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).  The optional audience parameter specifies the target service for the JWT. ",
         tags = { "Auth" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Access token response", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Token200ResponseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Token200ResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = Token200ResponseDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         }
     )
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/oauth2/token",
-        produces = { "application/json" }
+        produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<Token200ResponseDto> token(
-        
+        @Parameter(name = "audience", description = "Target audience for the JWT. If not specified, defaults to urn:bixarena:auth. ", in = ParameterIn.QUERY) @Valid @RequestParam(value = "audience", required = false) @Nullable String audience
     ) {
-        return getDelegate().token();
+        return getDelegate().token(audience);
     }
 
 }

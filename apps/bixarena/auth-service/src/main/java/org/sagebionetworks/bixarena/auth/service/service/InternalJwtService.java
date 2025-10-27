@@ -23,14 +23,22 @@ public class InternalJwtService {
 
   public record Minted(String token, Instant expiresAt) {}
 
-  public Minted mint(String sub, List<String> roles) {
+  /**
+   * Mints a JWT with the specified subject, roles, and audience.
+   *
+   * @param sub BixArena user ID (from auth.user.id)
+   * @param roles User roles (from auth.user.role)
+   * @param audience Target audience for the JWT (e.g., "urn:bixarena:api")
+   * @return Minted JWT token and expiration time
+   */
+  public Minted mint(String sub, List<String> roles, String audience) {
     try {
       var key = keyStore.current();
       Instant now = Instant.now();
       Instant exp = now.plusSeconds(appProperties.auth().tokenTtlSeconds());
       JWTClaimsSet claims = new JWTClaimsSet.Builder()
         .issuer(appProperties.auth().internalIssuer())
-        .audience(appProperties.auth().audience())
+        .audience(audience != null ? audience : appProperties.auth().audience())
         .subject(sub)
         .claim("roles", roles)
         .issueTime(Date.from(now))

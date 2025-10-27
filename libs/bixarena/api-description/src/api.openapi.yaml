@@ -31,6 +31,8 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
+  - name: User
+    description: Operations about the authenticated user.
 
 paths:
   /admin/stats:
@@ -51,6 +53,8 @@ paths:
     $ref: paths/leaderboards/{leaderboardId}/snapshots.yaml
   /models:
     $ref: paths/models.yaml
+  /users/me/stats:
+    $ref: paths/users-me-stats.yaml
 
 components:
   securitySchemes:

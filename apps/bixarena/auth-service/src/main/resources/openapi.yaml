@@ -33,6 +33,7 @@ paths:
       summary: Start Synapse OIDC authorization code flow
       tags:
         - Auth
+      x-anonymous-access: true
       x-accepts:
         - application/problem+json
       x-tags:
@@ -72,6 +73,7 @@ paths:
       summary: OIDC redirect callback
       tags:
         - Auth
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -90,15 +92,32 @@ paths:
       summary: Logout current session
       tags:
         - Auth
+      x-anonymous-access: false
       x-accepts:
-        - application/json
+        - application/problem+json
       x-tags:
         - tag: Auth
   /oauth2/token:
     post:
-      description: Exchanges an authenticated session (cookie) for an internal JWT
-        (OAuth2-style endpoint).
+      description: |
+        Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+
+        The optional audience parameter specifies the target service for the JWT.
       operationId: token
+      parameters:
+        - description: |
+            Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
+          explode: true
+          in: query
+          name: audience
+          required: false
+          schema:
+            enum:
+              - urn:bixarena:auth
+              - urn:bixarena:api
+              - urn:bixarena:ai
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -112,8 +131,10 @@ paths:
       summary: Mint short-lived internal JWT
       tags:
         - Auth
+      x-anonymous-access: true
       x-accepts:
         - application/json
+        - application/problem+json
       x-tags:
         - tag: Auth
   /userinfo:
@@ -138,6 +159,7 @@ paths:
         - Auth
       x-accepts:
         - application/json
+        - application/problem+json
       x-tags:
         - tag: Auth
   /.well-known/jwks.json:
@@ -157,6 +179,7 @@ paths:
       summary: JSON Web Key Set
       tags:
         - Auth
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -169,22 +192,16 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-      description: Invalid request parameters
+      description: Invalid request
     Unauthorized:
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Unauthorized
   schemas:
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
-      example:
-        instance: instance
-        detail: detail
-        title: title
-        type: type
-        status: 0
       properties:
         title:
           description: A human readable documentation for the problem type
@@ -293,4 +310,4 @@ components:
         Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
       scheme: bearer
       type: http
-x-oauth2-audience: urn:bixarena:api
+x-oauth2-audience: urn:bixarena:auth
