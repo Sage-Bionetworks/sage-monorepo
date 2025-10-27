@@ -12,8 +12,8 @@ import {
   DiseaseCorrelationService,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
 import { shareReplay } from 'rxjs';
+import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
@@ -77,32 +77,9 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       });
   }
 
-  // TODO: remove fixDropdownSelection and replaceWordsSingleOccurrence as part of next data release (MG-416)
-  fixDropdownSelection(dropdownSelection: string[]) {
-    const [category, subcategory] = dropdownSelection;
-    const replacements = {
-      System: 'system',
-      'Stress Response': 'stress response',
-      Organization: 'organization',
-      Biogenesis: 'Biogensis',
-    };
-
-    const fixedSubcategory =
-      this.replaceWordsSingleOccurrence(subcategory, replacements).replace(' - ', ' (') + ')';
-    return [category, fixedSubcategory];
-  }
-  replaceWordsSingleOccurrence(input: string, replacements: { [key: string]: string }): string {
-    for (const [word, replacement] of Object.entries(replacements)) {
-      input = input.replace(word, replacement);
-    }
-    return input;
-  }
-
   getData() {
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(
-        this.fixDropdownSelection(this.comparisonToolService.dropdownSelection()),
-      )
+      .getDiseaseCorrelations(this.comparisonToolService.dropdownSelection())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
