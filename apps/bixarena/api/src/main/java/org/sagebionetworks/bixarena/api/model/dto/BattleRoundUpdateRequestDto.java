@@ -25,23 +25,11 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class BattleRoundUpdateRequestDto {
 
-  private MessageCreateDto model1Message;
+  private @Nullable MessageCreateDto model1Message;
 
-  private MessageCreateDto model2Message;
+  private @Nullable MessageCreateDto model2Message;
 
-  public BattleRoundUpdateRequestDto() {
-    super();
-  }
-
-  /**
-   * Constructor with only required parameters
-   */
-  public BattleRoundUpdateRequestDto(MessageCreateDto model1Message, MessageCreateDto model2Message) {
-    this.model1Message = model1Message;
-    this.model2Message = model2Message;
-  }
-
-  public BattleRoundUpdateRequestDto model1Message(MessageCreateDto model1Message) {
+  public BattleRoundUpdateRequestDto model1Message(@Nullable MessageCreateDto model1Message) {
     this.model1Message = model1Message;
     return this;
   }
@@ -50,18 +38,18 @@ public class BattleRoundUpdateRequestDto {
    * Get model1Message
    * @return model1Message
    */
-  @NotNull @Valid 
-  @Schema(name = "model1Message", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Valid 
+  @Schema(name = "model1Message", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("model1Message")
-  public MessageCreateDto getModel1Message() {
+  public @Nullable MessageCreateDto getModel1Message() {
     return model1Message;
   }
 
-  public void setModel1Message(MessageCreateDto model1Message) {
+  public void setModel1Message(@Nullable MessageCreateDto model1Message) {
     this.model1Message = model1Message;
   }
 
-  public BattleRoundUpdateRequestDto model2Message(MessageCreateDto model2Message) {
+  public BattleRoundUpdateRequestDto model2Message(@Nullable MessageCreateDto model2Message) {
     this.model2Message = model2Message;
     return this;
   }
@@ -70,14 +58,14 @@ public class BattleRoundUpdateRequestDto {
    * Get model2Message
    * @return model2Message
    */
-  @NotNull @Valid 
-  @Schema(name = "model2Message", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Valid 
+  @Schema(name = "model2Message", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("model2Message")
-  public MessageCreateDto getModel2Message() {
+  public @Nullable MessageCreateDto getModel2Message() {
     return model2Message;
   }
 
-  public void setModel2Message(MessageCreateDto model2Message) {
+  public void setModel2Message(@Nullable MessageCreateDto model2Message) {
     this.model2Message = model2Message;
   }
 

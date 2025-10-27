@@ -5,6 +5,3 @@ properties:
     $ref: 'MessageCreate.yaml'
   model2Message:
     $ref: 'MessageCreate.yaml'
-required:
-  - model1Message
-  - model2Message

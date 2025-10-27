@@ -93,9 +93,12 @@ public class BattleRoundService {
       );
     }
 
-    // Replace model messages (both required in update request)
-    existing.setModel1MessageId(messageService.createMessage(request.getModel1Message()));
-    existing.setModel2MessageId(messageService.createMessage(request.getModel2Message()));
+    if (request.getModel1Message() != null) {
+      existing.setModel1MessageId(messageService.createMessage(request.getModel1Message()));
+    }
+    if (request.getModel2Message() != null) {
+      existing.setModel2MessageId(messageService.createMessage(request.getModel2Message()));
+    }
 
     BattleRoundEntity saved = battleRoundRepository.save(existing);
     log.info("Updated battle round {}", saved.getId());

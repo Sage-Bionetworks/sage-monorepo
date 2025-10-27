@@ -845,9 +845,6 @@ components:
           $ref: '#/components/schemas/MessageCreate'
         model2Message:
           $ref: '#/components/schemas/MessageCreate'
-      required:
-        - model1Message
-        - model2Message
     ExamplePromptSort:
       type: string
       description: The field to sort example prompts by.

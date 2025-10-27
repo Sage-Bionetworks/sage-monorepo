@@ -46,12 +46,6 @@ class TestBattleRoundUpdateRequest(unittest.TestCase):
             )
         else:
             return BattleRoundUpdateRequest(
-                model1_message = bixarena_api_client.models.message_create.MessageCreate(
-                    role = 'user', 
-                    content = 'What is the capital of France?', ),
-                model2_message = bixarena_api_client.models.message_create.MessageCreate(
-                    role = 'user', 
-                    content = 'What is the capital of France?', ),
         )
         """
 
