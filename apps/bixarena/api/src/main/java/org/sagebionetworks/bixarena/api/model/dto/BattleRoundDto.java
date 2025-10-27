@@ -19,10 +19,10 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A battle round containing the IDs of prompt and responses.
+ * A battle round linking the prompt and model responses for a battle.
  */
 
-@Schema(name = "BattleRound", description = "A battle round containing the IDs of prompt and responses.")
+@Schema(name = "BattleRound", description = "A battle round linking the prompt and model responses for a battle.")
 @JsonTypeName("BattleRound")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class BattleRoundDto {
@@ -31,11 +31,13 @@ public class BattleRoundDto {
 
   private UUID battleId;
 
+  private Integer roundNumber;
+
   private @Nullable UUID promptMessageId;
 
-  private @Nullable UUID response1MessageId;
+  private @Nullable UUID model1MessageId;
 
-  private @Nullable UUID response2MessageId;
+  private @Nullable UUID model2MessageId;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -50,9 +52,10 @@ public class BattleRoundDto {
   /**
    * Constructor with only required parameters
    */
-  public BattleRoundDto(UUID id, UUID battleId, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+  public BattleRoundDto(UUID id, UUID battleId, Integer roundNumber, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
     this.id = id;
     this.battleId = battleId;
+    this.roundNumber = roundNumber;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -97,6 +100,27 @@ public class BattleRoundDto {
     this.battleId = battleId;
   }
 
+  public BattleRoundDto roundNumber(Integer roundNumber) {
+    this.roundNumber = roundNumber;
+    return this;
+  }
+
+  /**
+   * Sequential round number within a battle. Starts at 1.
+   * minimum: 1
+   * @return roundNumber
+   */
+  @NotNull @Min(1) 
+  @Schema(name = "roundNumber", example = "1", description = "Sequential round number within a battle. Starts at 1.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("roundNumber")
+  public Integer getRoundNumber() {
+    return roundNumber;
+  }
+
+  public void setRoundNumber(Integer roundNumber) {
+    this.roundNumber = roundNumber;
+  }
+
   public BattleRoundDto promptMessageId(@Nullable UUID promptMessageId) {
     this.promptMessageId = promptMessageId;
     return this;
@@ -117,44 +141,44 @@ public class BattleRoundDto {
     this.promptMessageId = promptMessageId;
   }
 
-  public BattleRoundDto response1MessageId(@Nullable UUID response1MessageId) {
-    this.response1MessageId = response1MessageId;
+  public BattleRoundDto model1MessageId(@Nullable UUID model1MessageId) {
+    this.model1MessageId = model1MessageId;
     return this;
   }
 
   /**
    * Unique identifier (UUID) of the message.
-   * @return response1MessageId
+   * @return model1MessageId
    */
   @Valid 
-  @Schema(name = "response1MessageId", example = "d290f1ee-6c54-4b01-90e6-d701748f0851", description = "Unique identifier (UUID) of the message.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("response1MessageId")
-  public @Nullable UUID getResponse1MessageId() {
-    return response1MessageId;
+  @Schema(name = "model1MessageId", example = "d290f1ee-6c54-4b01-90e6-d701748f0851", description = "Unique identifier (UUID) of the message.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("model1MessageId")
+  public @Nullable UUID getModel1MessageId() {
+    return model1MessageId;
   }
 
-  public void setResponse1MessageId(@Nullable UUID response1MessageId) {
-    this.response1MessageId = response1MessageId;
+  public void setModel1MessageId(@Nullable UUID model1MessageId) {
+    this.model1MessageId = model1MessageId;
   }
 
-  public BattleRoundDto response2MessageId(@Nullable UUID response2MessageId) {
-    this.response2MessageId = response2MessageId;
+  public BattleRoundDto model2MessageId(@Nullable UUID model2MessageId) {
+    this.model2MessageId = model2MessageId;
     return this;
   }
 
   /**
    * Unique identifier (UUID) of the message.
-   * @return response2MessageId
+   * @return model2MessageId
    */
   @Valid 
-  @Schema(name = "response2MessageId", example = "d290f1ee-6c54-4b01-90e6-d701748f0851", description = "Unique identifier (UUID) of the message.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("response2MessageId")
-  public @Nullable UUID getResponse2MessageId() {
-    return response2MessageId;
+  @Schema(name = "model2MessageId", example = "d290f1ee-6c54-4b01-90e6-d701748f0851", description = "Unique identifier (UUID) of the message.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("model2MessageId")
+  public @Nullable UUID getModel2MessageId() {
+    return model2MessageId;
   }
 
-  public void setResponse2MessageId(@Nullable UUID response2MessageId) {
-    this.response2MessageId = response2MessageId;
+  public void setModel2MessageId(@Nullable UUID model2MessageId) {
+    this.model2MessageId = model2MessageId;
   }
 
   public BattleRoundDto createdAt(OffsetDateTime createdAt) {
@@ -208,16 +232,17 @@ public class BattleRoundDto {
     BattleRoundDto battleRound = (BattleRoundDto) o;
     return Objects.equals(this.id, battleRound.id) &&
         Objects.equals(this.battleId, battleRound.battleId) &&
+        Objects.equals(this.roundNumber, battleRound.roundNumber) &&
         Objects.equals(this.promptMessageId, battleRound.promptMessageId) &&
-        Objects.equals(this.response1MessageId, battleRound.response1MessageId) &&
-        Objects.equals(this.response2MessageId, battleRound.response2MessageId) &&
+        Objects.equals(this.model1MessageId, battleRound.model1MessageId) &&
+        Objects.equals(this.model2MessageId, battleRound.model2MessageId) &&
         Objects.equals(this.createdAt, battleRound.createdAt) &&
         Objects.equals(this.updatedAt, battleRound.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, battleId, promptMessageId, response1MessageId, response2MessageId, createdAt, updatedAt);
+    return Objects.hash(id, battleId, roundNumber, promptMessageId, model1MessageId, model2MessageId, createdAt, updatedAt);
   }
 
   @Override
@@ -226,9 +251,10 @@ public class BattleRoundDto {
     sb.append("class BattleRoundDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    battleId: ").append(toIndentedString(battleId)).append("\n");
+    sb.append("    roundNumber: ").append(toIndentedString(roundNumber)).append("\n");
     sb.append("    promptMessageId: ").append(toIndentedString(promptMessageId)).append("\n");
-    sb.append("    response1MessageId: ").append(toIndentedString(response1MessageId)).append("\n");
-    sb.append("    response2MessageId: ").append(toIndentedString(response2MessageId)).append("\n");
+    sb.append("    model1MessageId: ").append(toIndentedString(model1MessageId)).append("\n");
+    sb.append("    model2MessageId: ").append(toIndentedString(model2MessageId)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
@@ -261,9 +287,10 @@ public class BattleRoundDto {
     protected Builder copyOf(BattleRoundDto value) { 
       this.instance.setId(value.id);
       this.instance.setBattleId(value.battleId);
+      this.instance.setRoundNumber(value.roundNumber);
       this.instance.setPromptMessageId(value.promptMessageId);
-      this.instance.setResponse1MessageId(value.response1MessageId);
-      this.instance.setResponse2MessageId(value.response2MessageId);
+      this.instance.setModel1MessageId(value.model1MessageId);
+      this.instance.setModel2MessageId(value.model2MessageId);
       this.instance.setCreatedAt(value.createdAt);
       this.instance.setUpdatedAt(value.updatedAt);
       return this;
@@ -279,18 +306,23 @@ public class BattleRoundDto {
       return this;
     }
     
+    public BattleRoundDto.Builder roundNumber(Integer roundNumber) {
+      this.instance.roundNumber(roundNumber);
+      return this;
+    }
+    
     public BattleRoundDto.Builder promptMessageId(UUID promptMessageId) {
       this.instance.promptMessageId(promptMessageId);
       return this;
     }
     
-    public BattleRoundDto.Builder response1MessageId(UUID response1MessageId) {
-      this.instance.response1MessageId(response1MessageId);
+    public BattleRoundDto.Builder model1MessageId(UUID model1MessageId) {
+      this.instance.model1MessageId(model1MessageId);
       return this;
     }
     
-    public BattleRoundDto.Builder response2MessageId(UUID response2MessageId) {
-      this.instance.response2MessageId(response2MessageId);
+    public BattleRoundDto.Builder model2MessageId(UUID model2MessageId) {
+      this.instance.model2MessageId(model2MessageId);
       return this;
     }
     

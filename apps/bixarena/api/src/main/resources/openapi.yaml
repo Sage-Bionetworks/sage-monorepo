@@ -969,10 +969,12 @@ components:
         - user
         - assistant
       example: user
+      maxLength: 20
       type: string
     MessageContent:
       description: The content of a message.
       example: What is the capital of France?
+      maxLength: 5000
       type: string
     MessageCreate:
       description: Payload used to create a message.
@@ -982,6 +984,7 @@ components:
         content:
           description: The content of a message.
           example: What is the capital of France?
+          maxLength: 5000
           type: string
       required:
         - content
@@ -990,11 +993,11 @@ components:
     BattleRoundPayload:
       description: The request payload for a battle round.
       properties:
-        prompt:
+        promptMessage:
           $ref: '#/components/schemas/MessageCreate'
-        response1:
+        model1Message:
           $ref: '#/components/schemas/MessageCreate'
-        response2:
+        model2Message:
           $ref: '#/components/schemas/MessageCreate'
       type: object
     BattleRoundId:
@@ -1002,6 +1005,11 @@ components:
       example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
       format: uuid
       type: string
+    BattleRoundNumber:
+      description: Sequential round number within a battle. Starts at 1.
+      example: 1
+      minimum: 1
+      type: integer
     MessageId:
       description: Unique identifier (UUID) of the message.
       example: d290f1ee-6c54-4b01-90e6-d701748f0851
@@ -1013,13 +1021,14 @@ components:
       format: date-time
       type: string
     BattleRound:
-      description: A battle round containing the IDs of prompt and responses.
+      description: A battle round linking the prompt and model responses for a battle.
       example:
         createdAt: 2024-01-15T10:30:00Z
+        roundNumber: 1
         battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-        response2MessageId: d290f1ee-6c54-4b01-90e6-d701748f0851
+        model2MessageId: d290f1ee-6c54-4b01-90e6-d701748f0851
         promptMessageId: d290f1ee-6c54-4b01-90e6-d701748f0851
-        response1MessageId: d290f1ee-6c54-4b01-90e6-d701748f0851
+        model1MessageId: d290f1ee-6c54-4b01-90e6-d701748f0851
         id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         updatedAt: 2024-01-15T10:45:00Z
       properties:
@@ -1033,17 +1042,22 @@ components:
           example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
           format: uuid
           type: string
+        roundNumber:
+          description: Sequential round number within a battle. Starts at 1.
+          example: 1
+          minimum: 1
+          type: integer
         promptMessageId:
           description: Unique identifier (UUID) of the message.
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
           format: uuid
           type: string
-        response1MessageId:
+        model1MessageId:
           description: Unique identifier (UUID) of the message.
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
           format: uuid
           type: string
-        response2MessageId:
+        model2MessageId:
           description: Unique identifier (UUID) of the message.
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
           format: uuid
@@ -1062,6 +1076,7 @@ components:
         - battleId
         - createdAt
         - id
+        - roundNumber
         - updatedAt
       type: object
     ExamplePromptSort:

@@ -585,6 +585,7 @@ components:
     MessageRole:
       type: string
       description: The role of a message.
+      maxLength: 20
       enum:
         - system
         - user
@@ -593,6 +594,7 @@ components:
     MessageContent:
       type: string
       description: The content of a message.
+      maxLength: 5000
       example: What is the capital of France?
     MessageCreate:
       type: object
@@ -609,13 +611,13 @@ components:
       type: object
       description: The request payload for a battle round.
       properties:
-        prompt:
+        promptMessage:
           $ref: '#/components/schemas/MessageCreate'
           nullable: true
-        response1:
+        model1Message:
           $ref: '#/components/schemas/MessageCreate'
           nullable: true
-        response2:
+        model2Message:
           $ref: '#/components/schemas/MessageCreate'
           nullable: true
     BattleRoundId:
@@ -623,6 +625,11 @@ components:
       format: uuid
       description: Unique identifier (UUID) of the battle round.
       example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+    BattleRoundNumber:
+      type: integer
+      description: Sequential round number within a battle. Starts at 1.
+      example: 1
+      minimum: 1
     MessageId:
       type: string
       format: uuid
@@ -635,19 +642,21 @@ components:
       example: '2024-01-15T10:45:00Z'
     BattleRound:
       type: object
-      description: A battle round containing the IDs of prompt and responses.
+      description: A battle round linking the prompt and model responses for a battle.
       properties:
         id:
           $ref: '#/components/schemas/BattleRoundId'
         battleId:
           $ref: '#/components/schemas/BattleId'
+        roundNumber:
+          $ref: '#/components/schemas/BattleRoundNumber'
         promptMessageId:
           $ref: '#/components/schemas/MessageId'
           nullable: true
-        response1MessageId:
+        model1MessageId:
           $ref: '#/components/schemas/MessageId'
           nullable: true
-        response2MessageId:
+        model2MessageId:
           $ref: '#/components/schemas/MessageId'
           nullable: true
         createdAt:
@@ -657,6 +666,7 @@ components:
       required:
         - id
         - battleId
+        - roundNumber
         - createdAt
         - updatedAt
     ExamplePromptSort:

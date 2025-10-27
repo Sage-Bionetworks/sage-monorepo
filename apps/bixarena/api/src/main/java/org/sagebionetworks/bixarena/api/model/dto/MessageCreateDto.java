@@ -71,7 +71,7 @@ public class MessageCreateDto {
    * The content of a message.
    * @return content
    */
-  @NotNull 
+  @NotNull @Size(max = 5000) 
   @Schema(name = "content", example = "What is the capital of France?", description = "The content of a message.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("content")
   public String getContent() {

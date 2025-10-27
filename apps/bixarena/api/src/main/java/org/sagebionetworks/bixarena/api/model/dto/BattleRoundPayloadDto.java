@@ -25,70 +25,70 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class BattleRoundPayloadDto {
 
-  private @Nullable MessageCreateDto prompt;
+  private @Nullable MessageCreateDto promptMessage;
 
-  private @Nullable MessageCreateDto response1;
+  private @Nullable MessageCreateDto model1Message;
 
-  private @Nullable MessageCreateDto response2;
+  private @Nullable MessageCreateDto model2Message;
 
-  public BattleRoundPayloadDto prompt(@Nullable MessageCreateDto prompt) {
-    this.prompt = prompt;
+  public BattleRoundPayloadDto promptMessage(@Nullable MessageCreateDto promptMessage) {
+    this.promptMessage = promptMessage;
     return this;
   }
 
   /**
-   * Get prompt
-   * @return prompt
+   * Get promptMessage
+   * @return promptMessage
    */
   @Valid 
-  @Schema(name = "prompt", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("prompt")
-  public @Nullable MessageCreateDto getPrompt() {
-    return prompt;
+  @Schema(name = "promptMessage", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("promptMessage")
+  public @Nullable MessageCreateDto getPromptMessage() {
+    return promptMessage;
   }
 
-  public void setPrompt(@Nullable MessageCreateDto prompt) {
-    this.prompt = prompt;
+  public void setPromptMessage(@Nullable MessageCreateDto promptMessage) {
+    this.promptMessage = promptMessage;
   }
 
-  public BattleRoundPayloadDto response1(@Nullable MessageCreateDto response1) {
-    this.response1 = response1;
+  public BattleRoundPayloadDto model1Message(@Nullable MessageCreateDto model1Message) {
+    this.model1Message = model1Message;
     return this;
   }
 
   /**
-   * Get response1
-   * @return response1
+   * Get model1Message
+   * @return model1Message
    */
   @Valid 
-  @Schema(name = "response1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("response1")
-  public @Nullable MessageCreateDto getResponse1() {
-    return response1;
+  @Schema(name = "model1Message", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("model1Message")
+  public @Nullable MessageCreateDto getModel1Message() {
+    return model1Message;
   }
 
-  public void setResponse1(@Nullable MessageCreateDto response1) {
-    this.response1 = response1;
+  public void setModel1Message(@Nullable MessageCreateDto model1Message) {
+    this.model1Message = model1Message;
   }
 
-  public BattleRoundPayloadDto response2(@Nullable MessageCreateDto response2) {
-    this.response2 = response2;
+  public BattleRoundPayloadDto model2Message(@Nullable MessageCreateDto model2Message) {
+    this.model2Message = model2Message;
     return this;
   }
 
   /**
-   * Get response2
-   * @return response2
+   * Get model2Message
+   * @return model2Message
    */
   @Valid 
-  @Schema(name = "response2", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("response2")
-  public @Nullable MessageCreateDto getResponse2() {
-    return response2;
+  @Schema(name = "model2Message", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("model2Message")
+  public @Nullable MessageCreateDto getModel2Message() {
+    return model2Message;
   }
 
-  public void setResponse2(@Nullable MessageCreateDto response2) {
-    this.response2 = response2;
+  public void setModel2Message(@Nullable MessageCreateDto model2Message) {
+    this.model2Message = model2Message;
   }
 
   @Override
@@ -100,23 +100,23 @@ public class BattleRoundPayloadDto {
       return false;
     }
     BattleRoundPayloadDto battleRoundPayload = (BattleRoundPayloadDto) o;
-    return Objects.equals(this.prompt, battleRoundPayload.prompt) &&
-        Objects.equals(this.response1, battleRoundPayload.response1) &&
-        Objects.equals(this.response2, battleRoundPayload.response2);
+    return Objects.equals(this.promptMessage, battleRoundPayload.promptMessage) &&
+        Objects.equals(this.model1Message, battleRoundPayload.model1Message) &&
+        Objects.equals(this.model2Message, battleRoundPayload.model2Message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(prompt, response1, response2);
+    return Objects.hash(promptMessage, model1Message, model2Message);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BattleRoundPayloadDto {\n");
-    sb.append("    prompt: ").append(toIndentedString(prompt)).append("\n");
-    sb.append("    response1: ").append(toIndentedString(response1)).append("\n");
-    sb.append("    response2: ").append(toIndentedString(response2)).append("\n");
+    sb.append("    promptMessage: ").append(toIndentedString(promptMessage)).append("\n");
+    sb.append("    model1Message: ").append(toIndentedString(model1Message)).append("\n");
+    sb.append("    model2Message: ").append(toIndentedString(model2Message)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -145,24 +145,24 @@ public class BattleRoundPayloadDto {
     }
 
     protected Builder copyOf(BattleRoundPayloadDto value) { 
-      this.instance.setPrompt(value.prompt);
-      this.instance.setResponse1(value.response1);
-      this.instance.setResponse2(value.response2);
+      this.instance.setPromptMessage(value.promptMessage);
+      this.instance.setModel1Message(value.model1Message);
+      this.instance.setModel2Message(value.model2Message);
       return this;
     }
 
-    public BattleRoundPayloadDto.Builder prompt(MessageCreateDto prompt) {
-      this.instance.prompt(prompt);
+    public BattleRoundPayloadDto.Builder promptMessage(MessageCreateDto promptMessage) {
+      this.instance.promptMessage(promptMessage);
       return this;
     }
     
-    public BattleRoundPayloadDto.Builder response1(MessageCreateDto response1) {
-      this.instance.response1(response1);
+    public BattleRoundPayloadDto.Builder model1Message(MessageCreateDto model1Message) {
+      this.instance.model1Message(model1Message);
       return this;
     }
     
-    public BattleRoundPayloadDto.Builder response2(MessageCreateDto response2) {
-      this.instance.response2(response2);
+    public BattleRoundPayloadDto.Builder model2Message(MessageCreateDto model2Message) {
+      this.instance.model2Message(model2Message);
       return this;
     }
     

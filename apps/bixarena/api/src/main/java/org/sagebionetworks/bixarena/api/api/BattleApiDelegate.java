@@ -111,7 +111,7 @@ public interface BattleApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"battleId\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"response2MessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"promptMessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"response1MessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"id\" : \"3fa85f64-5717-4562-b3fc-2c963f66afa6\", \"updatedAt\" : \"2024-01-15T10:45:00Z\" }";
+                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"roundNumber\" : 1, \"battleId\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"model2MessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"promptMessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"model1MessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"id\" : \"3fa85f64-5717-4562-b3fc-2c963f66afa6\", \"updatedAt\" : \"2024-01-15T10:45:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -342,7 +342,7 @@ public interface BattleApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"battleId\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"response2MessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"promptMessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"response1MessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"id\" : \"3fa85f64-5717-4562-b3fc-2c963f66afa6\", \"updatedAt\" : \"2024-01-15T10:45:00Z\" }";
+                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"roundNumber\" : 1, \"battleId\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"model2MessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"promptMessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"model1MessageId\" : \"d290f1ee-6c54-4b01-90e6-d701748f0851\", \"id\" : \"3fa85f64-5717-4562-b3fc-2c963f66afa6\", \"updatedAt\" : \"2024-01-15T10:45:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
