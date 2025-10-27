@@ -18,7 +18,8 @@ bixarena_api_client/models/battle.py
 bixarena_api_client/models/battle_create_request.py
 bixarena_api_client/models/battle_page.py
 bixarena_api_client/models/battle_round.py
-bixarena_api_client/models/battle_round_payload.py
+bixarena_api_client/models/battle_round_create_request.py
+bixarena_api_client/models/battle_round_update_request.py
 bixarena_api_client/models/battle_search_query.py
 bixarena_api_client/models/battle_sort.py
 bixarena_api_client/models/battle_update_request.py
@@ -64,7 +65,8 @@ docs/BattleApi.md
 docs/BattleCreateRequest.md
 docs/BattlePage.md
 docs/BattleRound.md
-docs/BattleRoundPayload.md
+docs/BattleRoundCreateRequest.md
+docs/BattleRoundUpdateRequest.md
 docs/BattleSearchQuery.md
 docs/BattleSort.md
 docs/BattleUpdateRequest.md
@@ -112,7 +114,8 @@ test/test_battle_api.py
 test/test_battle_create_request.py
 test/test_battle_page.py
 test/test_battle_round.py
-test/test_battle_round_payload.py
+test/test_battle_round_create_request.py
+test/test_battle_round_update_request.py
 test/test_battle_search_query.py
 test/test_battle_sort.py
 test/test_battle_update_request.py

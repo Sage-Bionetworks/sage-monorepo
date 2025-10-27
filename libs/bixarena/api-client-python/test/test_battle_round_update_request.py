@@ -13,11 +13,13 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.battle_round_payload import BattleRoundPayload
+from bixarena_api_client.models.battle_round_update_request import (
+    BattleRoundUpdateRequest,
+)
 
 
-class TestBattleRoundPayload(unittest.TestCase):
-    """BattleRoundPayload unit test stubs"""
+class TestBattleRoundUpdateRequest(unittest.TestCase):
+    """BattleRoundUpdateRequest unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,19 +27,16 @@ class TestBattleRoundPayload(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> BattleRoundPayload:
-        """Test BattleRoundPayload
+    def make_instance(self, include_optional) -> BattleRoundUpdateRequest:
+        """Test BattleRoundUpdateRequest
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `BattleRoundPayload`
+        # uncomment below to create an instance of `BattleRoundUpdateRequest`
         """
-        model = BattleRoundPayload()
+        model = BattleRoundUpdateRequest()
         if include_optional:
-            return BattleRoundPayload(
-                prompt_message = bixarena_api_client.models.message_create.MessageCreate(
-                    role = 'user', 
-                    content = 'What is the capital of France?', ),
+            return BattleRoundUpdateRequest(
                 model1_message = bixarena_api_client.models.message_create.MessageCreate(
                     role = 'user', 
                     content = 'What is the capital of France?', ),
@@ -46,12 +45,18 @@ class TestBattleRoundPayload(unittest.TestCase):
                     content = 'What is the capital of France?', )
             )
         else:
-            return BattleRoundPayload(
+            return BattleRoundUpdateRequest(
+                model1_message = bixarena_api_client.models.message_create.MessageCreate(
+                    role = 'user', 
+                    content = 'What is the capital of France?', ),
+                model2_message = bixarena_api_client.models.message_create.MessageCreate(
+                    role = 'user', 
+                    content = 'What is the capital of France?', ),
         )
         """
 
-    def testBattleRoundPayload(self):
-        """Test BattleRoundPayload"""
+    def testBattleRoundUpdateRequest(self):
+        """Test BattleRoundUpdateRequest"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

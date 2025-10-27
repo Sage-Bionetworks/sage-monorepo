@@ -38,7 +38,8 @@ __all__ = [
     "BattleCreateRequest",
     "BattlePage",
     "BattleRound",
-    "BattleRoundPayload",
+    "BattleRoundCreateRequest",
+    "BattleRoundUpdateRequest",
     "BattleSearchQuery",
     "BattleSort",
     "BattleUpdateRequest",
@@ -107,8 +108,11 @@ from bixarena_api_client.models.battle_create_request import (
 )
 from bixarena_api_client.models.battle_page import BattlePage as BattlePage
 from bixarena_api_client.models.battle_round import BattleRound as BattleRound
-from bixarena_api_client.models.battle_round_payload import (
-    BattleRoundPayload as BattleRoundPayload,
+from bixarena_api_client.models.battle_round_create_request import (
+    BattleRoundCreateRequest as BattleRoundCreateRequest,
+)
+from bixarena_api_client.models.battle_round_update_request import (
+    BattleRoundUpdateRequest as BattleRoundUpdateRequest,
 )
 from bixarena_api_client.models.battle_search_query import (
     BattleSearchQuery as BattleSearchQuery,

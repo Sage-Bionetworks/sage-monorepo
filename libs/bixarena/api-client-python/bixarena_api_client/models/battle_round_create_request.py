@@ -17,25 +17,19 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List
 from bixarena_api_client.models.message_create import MessageCreate
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class BattleRoundPayload(BaseModel):
+class BattleRoundCreateRequest(BaseModel):
     """
-    The request payload for a battle round.
+    Payload to create a new battle round with the user prompt.
     """  # noqa: E501
 
-    prompt_message: Optional[MessageCreate] = Field(default=None, alias="promptMessage")
-    model1_message: Optional[MessageCreate] = Field(default=None, alias="model1Message")
-    model2_message: Optional[MessageCreate] = Field(default=None, alias="model2Message")
-    __properties: ClassVar[List[str]] = [
-        "promptMessage",
-        "model1Message",
-        "model2Message",
-    ]
+    prompt_message: MessageCreate = Field(alias="promptMessage")
+    __properties: ClassVar[List[str]] = ["promptMessage"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -54,7 +48,7 @@ class BattleRoundPayload(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of BattleRoundPayload from a JSON string"""
+        """Create an instance of BattleRoundCreateRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,17 +71,11 @@ class BattleRoundPayload(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of prompt_message
         if self.prompt_message:
             _dict["promptMessage"] = self.prompt_message.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of model1_message
-        if self.model1_message:
-            _dict["model1Message"] = self.model1_message.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of model2_message
-        if self.model2_message:
-            _dict["model2Message"] = self.model2_message.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of BattleRoundPayload from a dict"""
+        """Create an instance of BattleRoundCreateRequest from a dict"""
         if obj is None:
             return None
 
@@ -98,13 +86,7 @@ class BattleRoundPayload(BaseModel):
             {
                 "promptMessage": MessageCreate.from_dict(obj["promptMessage"])
                 if obj.get("promptMessage") is not None
-                else None,
-                "model1Message": MessageCreate.from_dict(obj["model1Message"])
-                if obj.get("model1Message") is not None
-                else None,
-                "model2Message": MessageCreate.from_dict(obj["model2Message"])
-                if obj.get("model2Message") is not None
-                else None,
+                else None
             }
         )
         return _obj

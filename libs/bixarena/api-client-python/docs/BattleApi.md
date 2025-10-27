@@ -97,7 +97,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 # **create_battle_round**
 
-> BattleRound create_battle_round(battle_id, battle_round_payload)
+> BattleRound create_battle_round(battle_id, battle_round_create_request)
 
 Create a battle round
 
@@ -110,7 +110,7 @@ Create a new round for a given battle.
 ```python
 import bixarena_api_client
 from bixarena_api_client.models.battle_round import BattleRound
-from bixarena_api_client.models.battle_round_payload import BattleRoundPayload
+from bixarena_api_client.models.battle_round_create_request import BattleRoundCreateRequest
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
@@ -135,11 +135,11 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.BattleApi(api_client)
     battle_id = 'battle_id_example' # str | The unique identifier of the battle
-    battle_round_payload = bixarena_api_client.BattleRoundPayload() # BattleRoundPayload |
+    battle_round_create_request = bixarena_api_client.BattleRoundCreateRequest() # BattleRoundCreateRequest |
 
     try:
         # Create a battle round
-        api_response = api_instance.create_battle_round(battle_id, battle_round_payload)
+        api_response = api_instance.create_battle_round(battle_id, battle_round_create_request)
         print("The response of BattleApi->create_battle_round:\n")
         pprint(api_response)
     except Exception as e:
@@ -148,10 +148,10 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-| Name                     | Type                                            | Description                         | Notes |
-| ------------------------ | ----------------------------------------------- | ----------------------------------- | ----- |
-| **battle_id**            | **str**                                         | The unique identifier of the battle |
-| **battle_round_payload** | [**BattleRoundPayload**](BattleRoundPayload.md) |                                     |
+| Name                            | Type                                                        | Description                         | Notes |
+| ------------------------------- | ----------------------------------------------------------- | ----------------------------------- | ----- |
+| **battle_id**                   | **str**                                                     | The unique identifier of the battle |
+| **battle_round_create_request** | [**BattleRoundCreateRequest**](BattleRoundCreateRequest.md) |                                     |
 
 ### Return type
 
@@ -501,7 +501,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 # **update_battle_round**
 
-> BattleRound update_battle_round(battle_id, round_id, battle_round_payload)
+> BattleRound update_battle_round(battle_id, round_id, battle_round_update_request)
 
 Update a battle round
 
@@ -514,7 +514,7 @@ Update an existing battle round.
 ```python
 import bixarena_api_client
 from bixarena_api_client.models.battle_round import BattleRound
-from bixarena_api_client.models.battle_round_payload import BattleRoundPayload
+from bixarena_api_client.models.battle_round_update_request import BattleRoundUpdateRequest
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
@@ -540,11 +540,11 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     api_instance = bixarena_api_client.BattleApi(api_client)
     battle_id = 'battle_id_example' # str | The unique identifier of the battle
     round_id = 'round_id_example' # str | The unique identifier of the battle round
-    battle_round_payload = bixarena_api_client.BattleRoundPayload() # BattleRoundPayload |
+    battle_round_update_request = bixarena_api_client.BattleRoundUpdateRequest() # BattleRoundUpdateRequest |
 
     try:
         # Update a battle round
-        api_response = api_instance.update_battle_round(battle_id, round_id, battle_round_payload)
+        api_response = api_instance.update_battle_round(battle_id, round_id, battle_round_update_request)
         print("The response of BattleApi->update_battle_round:\n")
         pprint(api_response)
     except Exception as e:
@@ -553,11 +553,11 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-| Name                     | Type                                            | Description                               | Notes |
-| ------------------------ | ----------------------------------------------- | ----------------------------------------- | ----- |
-| **battle_id**            | **str**                                         | The unique identifier of the battle       |
-| **round_id**             | **str**                                         | The unique identifier of the battle round |
-| **battle_round_payload** | [**BattleRoundPayload**](BattleRoundPayload.md) |                                           |
+| Name                            | Type                                                        | Description                               | Notes |
+| ------------------------------- | ----------------------------------------------------------- | ----------------------------------------- | ----- |
+| **battle_id**                   | **str**                                                     | The unique identifier of the battle       |
+| **round_id**                    | **str**                                                     | The unique identifier of the battle round |
+| **battle_round_update_request** | [**BattleRoundUpdateRequest**](BattleRoundUpdateRequest.md) |                                           |
 
 ### Return type
 

@@ -19,7 +19,12 @@ from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
 from bixarena_api_client.models.battle_page import BattlePage
 from bixarena_api_client.models.battle_round import BattleRound
-from bixarena_api_client.models.battle_round_payload import BattleRoundPayload
+from bixarena_api_client.models.battle_round_create_request import (
+    BattleRoundCreateRequest,
+)
+from bixarena_api_client.models.battle_round_update_request import (
+    BattleRoundUpdateRequest,
+)
 from bixarena_api_client.models.battle_search_query import BattleSearchQuery
 from bixarena_api_client.models.battle_sort import BattleSort
 from bixarena_api_client.models.battle_update_request import BattleUpdateRequest

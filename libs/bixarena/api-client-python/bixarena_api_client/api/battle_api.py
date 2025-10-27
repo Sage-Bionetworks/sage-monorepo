@@ -24,7 +24,12 @@ from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
 from bixarena_api_client.models.battle_page import BattlePage
 from bixarena_api_client.models.battle_round import BattleRound
-from bixarena_api_client.models.battle_round_payload import BattleRoundPayload
+from bixarena_api_client.models.battle_round_create_request import (
+    BattleRoundCreateRequest,
+)
+from bixarena_api_client.models.battle_round_update_request import (
+    BattleRoundUpdateRequest,
+)
 from bixarena_api_client.models.battle_search_query import BattleSearchQuery
 from bixarena_api_client.models.battle_update_request import BattleUpdateRequest
 
@@ -320,7 +325,7 @@ class BattleApi:
         battle_id: Annotated[
             UUID, Field(description="The unique identifier of the battle")
         ],
-        battle_round_payload: BattleRoundPayload,
+        battle_round_create_request: BattleRoundCreateRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -339,8 +344,8 @@ class BattleApi:
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
-        :param battle_round_payload: (required)
-        :type battle_round_payload: BattleRoundPayload
+        :param battle_round_create_request: (required)
+        :type battle_round_create_request: BattleRoundCreateRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -365,7 +370,7 @@ class BattleApi:
 
         _param = self._create_battle_round_serialize(
             battle_id=battle_id,
-            battle_round_payload=battle_round_payload,
+            battle_round_create_request=battle_round_create_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -395,7 +400,7 @@ class BattleApi:
         battle_id: Annotated[
             UUID, Field(description="The unique identifier of the battle")
         ],
-        battle_round_payload: BattleRoundPayload,
+        battle_round_create_request: BattleRoundCreateRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -414,8 +419,8 @@ class BattleApi:
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
-        :param battle_round_payload: (required)
-        :type battle_round_payload: BattleRoundPayload
+        :param battle_round_create_request: (required)
+        :type battle_round_create_request: BattleRoundCreateRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -440,7 +445,7 @@ class BattleApi:
 
         _param = self._create_battle_round_serialize(
             battle_id=battle_id,
-            battle_round_payload=battle_round_payload,
+            battle_round_create_request=battle_round_create_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -470,7 +475,7 @@ class BattleApi:
         battle_id: Annotated[
             UUID, Field(description="The unique identifier of the battle")
         ],
-        battle_round_payload: BattleRoundPayload,
+        battle_round_create_request: BattleRoundCreateRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -489,8 +494,8 @@ class BattleApi:
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
-        :param battle_round_payload: (required)
-        :type battle_round_payload: BattleRoundPayload
+        :param battle_round_create_request: (required)
+        :type battle_round_create_request: BattleRoundCreateRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -515,7 +520,7 @@ class BattleApi:
 
         _param = self._create_battle_round_serialize(
             battle_id=battle_id,
-            battle_round_payload=battle_round_payload,
+            battle_round_create_request=battle_round_create_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -538,7 +543,7 @@ class BattleApi:
     def _create_battle_round_serialize(
         self,
         battle_id,
-        battle_round_payload,
+        battle_round_create_request,
         _request_auth,
         _content_type,
         _headers,
@@ -564,8 +569,8 @@ class BattleApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if battle_round_payload is not None:
-            _body_params = battle_round_payload
+        if battle_round_create_request is not None:
+            _body_params = battle_round_create_request
 
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
@@ -1675,7 +1680,7 @@ class BattleApi:
         round_id: Annotated[
             UUID, Field(description="The unique identifier of the battle round")
         ],
-        battle_round_payload: BattleRoundPayload,
+        battle_round_update_request: BattleRoundUpdateRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1696,8 +1701,8 @@ class BattleApi:
         :type battle_id: str
         :param round_id: The unique identifier of the battle round (required)
         :type round_id: str
-        :param battle_round_payload: (required)
-        :type battle_round_payload: BattleRoundPayload
+        :param battle_round_update_request: (required)
+        :type battle_round_update_request: BattleRoundUpdateRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1723,7 +1728,7 @@ class BattleApi:
         _param = self._update_battle_round_serialize(
             battle_id=battle_id,
             round_id=round_id,
-            battle_round_payload=battle_round_payload,
+            battle_round_update_request=battle_round_update_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1756,7 +1761,7 @@ class BattleApi:
         round_id: Annotated[
             UUID, Field(description="The unique identifier of the battle round")
         ],
-        battle_round_payload: BattleRoundPayload,
+        battle_round_update_request: BattleRoundUpdateRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1777,8 +1782,8 @@ class BattleApi:
         :type battle_id: str
         :param round_id: The unique identifier of the battle round (required)
         :type round_id: str
-        :param battle_round_payload: (required)
-        :type battle_round_payload: BattleRoundPayload
+        :param battle_round_update_request: (required)
+        :type battle_round_update_request: BattleRoundUpdateRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1804,7 +1809,7 @@ class BattleApi:
         _param = self._update_battle_round_serialize(
             battle_id=battle_id,
             round_id=round_id,
-            battle_round_payload=battle_round_payload,
+            battle_round_update_request=battle_round_update_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1837,7 +1842,7 @@ class BattleApi:
         round_id: Annotated[
             UUID, Field(description="The unique identifier of the battle round")
         ],
-        battle_round_payload: BattleRoundPayload,
+        battle_round_update_request: BattleRoundUpdateRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1858,8 +1863,8 @@ class BattleApi:
         :type battle_id: str
         :param round_id: The unique identifier of the battle round (required)
         :type round_id: str
-        :param battle_round_payload: (required)
-        :type battle_round_payload: BattleRoundPayload
+        :param battle_round_update_request: (required)
+        :type battle_round_update_request: BattleRoundUpdateRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1885,7 +1890,7 @@ class BattleApi:
         _param = self._update_battle_round_serialize(
             battle_id=battle_id,
             round_id=round_id,
-            battle_round_payload=battle_round_payload,
+            battle_round_update_request=battle_round_update_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1909,7 +1914,7 @@ class BattleApi:
         self,
         battle_id,
         round_id,
-        battle_round_payload,
+        battle_round_update_request,
         _request_auth,
         _content_type,
         _headers,
@@ -1937,8 +1942,8 @@ class BattleApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if battle_round_payload is not None:
-            _body_params = battle_round_payload
+        if battle_round_update_request is not None:
+            _body_params = battle_round_update_request
 
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
