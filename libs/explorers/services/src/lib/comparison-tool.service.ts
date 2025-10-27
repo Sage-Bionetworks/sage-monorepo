@@ -215,9 +215,7 @@ export class ComparisonToolService {
 
       if (columnsIndex !== -1) {
         const columnsData = cols[columnsIndex];
-        const colIndex = columnsData.columns.findIndex(
-          (col) => col.column_key === column.column_key,
-        );
+        const colIndex = columnsData.columns.findIndex((col) => col.data_key === column.data_key);
 
         if (colIndex !== -1) {
           const newCols = [...columnsData.columns];
