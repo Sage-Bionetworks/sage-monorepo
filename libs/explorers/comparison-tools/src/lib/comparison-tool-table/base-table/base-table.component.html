@@ -23,7 +23,7 @@
 
     <ng-template pTemplate="body" let-rowData>
       <tr>
-        @for (column of selectedColumnConfigs(); track column) {
+        @for (column of selectedColumns(); track column) {
           @let columnType = column.type;
           @let cellData = rowData[column.column_key];
           <td [style]="{ width: columnWidth }" [class]="columnType">

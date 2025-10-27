@@ -11,7 +11,7 @@ import { isEqual } from 'lodash';
  * Shared state contract for comparison tools.
  *
  * - Call {@link initialize} when configs load to seed dropdowns, reset counts, and wiki params.
- * - Read derived state via {@link configs}, {@link dropdownSelection}, {@link currentConfig}, and {@link columnConfigs}.
+ * - Read derived state via {@link configs}, {@link dropdownSelection}, {@link currentConfig}, and {@link columns}.
  * - Update user selections through {@link setDropdownSelection}; consumers can read the latest value via {@link dropdownSelection}.
  * - Manage result totals via {@link totalResultsCount} and {@link pinnedResultsCount}.
  */
@@ -64,7 +64,7 @@ export class ComparisonToolService {
     return prefixMatch ?? configs[0];
   });
 
-  readonly columnConfigs: Signal<ComparisonToolColumn[]> = computed(() => {
+  readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
     const config = this.currentConfig();
     if (!config) return [];
 
@@ -75,12 +75,12 @@ export class ComparisonToolService {
     );
   });
 
-  selectedColumnConfigs = computed(() => {
-    return this.columnConfigs().filter((col) => col.selected);
+  selectedColumns = computed(() => {
+    return this.columns().filter((col) => col.selected);
   });
 
   hasHiddenColumns(): boolean {
-    return this.columnConfigs().some((col) => !col.selected);
+    return this.columns().some((col) => !col.selected);
   }
 
   totalResultsCount = signal<number>(0);

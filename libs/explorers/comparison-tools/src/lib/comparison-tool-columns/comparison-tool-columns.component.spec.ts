@@ -33,8 +33,8 @@ describe('ComparisonToolColumnsComponent', () => {
   it('should display column headers', async () => {
     await setup();
     const namedColumns = mockComparisonToolColumns.filter((column) => column.name);
-    for (const columnConfig of namedColumns) {
-      expect(screen.getByRole('columnheader', { name: columnConfig.name })).toBeVisible();
+    for (const column of namedColumns) {
+      expect(screen.getByRole('columnheader', { name: column.name })).toBeVisible();
     }
   });
 
@@ -43,11 +43,11 @@ describe('ComparisonToolColumnsComponent', () => {
     const namedColumnsWithTooltips = mockComparisonToolColumns.filter(
       (column) => column.name && column.tooltip,
     );
-    for (const columnConfig of namedColumnsWithTooltips) {
-      const column = screen.getByRole('columnheader', { name: columnConfig.name });
+    for (const namedColumnWithTooltip of namedColumnsWithTooltips) {
+      const column = screen.getByRole('columnheader', { name: namedColumnWithTooltip.name });
       const span = column.querySelector('span') as HTMLElement;
       await user.hover(span);
-      expect(screen.getByRole('tooltip', { name: columnConfig.tooltip })).toBeVisible();
+      expect(screen.getByRole('tooltip', { name: namedColumnWithTooltip.tooltip })).toBeVisible();
     }
   });
 
@@ -56,11 +56,13 @@ describe('ComparisonToolColumnsComponent', () => {
     const namedColumnsWithSortTooltips = mockComparisonToolColumns.filter(
       (column) => column.name && column.sort_tooltip,
     );
-    for (const columnConfig of namedColumnsWithSortTooltips) {
-      const column = screen.getByRole('columnheader', { name: columnConfig.name });
+    for (const namedColumnWithSortTooltip of namedColumnsWithSortTooltips) {
+      const column = screen.getByRole('columnheader', { name: namedColumnWithSortTooltip.name });
       const span = column.querySelector('p-sorticon') as HTMLElement;
       await user.hover(span);
-      expect(screen.getByRole('tooltip', { name: columnConfig.sort_tooltip })).toBeVisible();
+      expect(
+        screen.getByRole('tooltip', { name: namedColumnWithSortTooltip.sort_tooltip }),
+      ).toBeVisible();
     }
   });
 

@@ -16,8 +16,8 @@ import { TooltipModule } from 'primeng/tooltip';
 export class ComparisonToolColumnSelectorComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
-  get columnConfigs() {
-    return this.comparisonToolService.columnConfigs();
+  get columns() {
+    return this.comparisonToolService.columns();
   }
 
   toggleColumn(column: ComparisonToolColumn) {

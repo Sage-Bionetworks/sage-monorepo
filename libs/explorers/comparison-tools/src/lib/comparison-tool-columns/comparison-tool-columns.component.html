@@ -8,21 +8,21 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      @for (columnConfig of selectedColumnConfigs(); track columnConfig) {
-        @if (columnConfig.type === 'primary') {
+      @for (column of selectedColumns(); track column) {
+        @if (column.type === 'primary') {
           <th></th>
         } @else {
-          <th [pSortableColumn]="columnConfig.column_key" [style]="{ width: columnWidth }">
+          <th [pSortableColumn]="column.column_key" [style]="{ width: columnWidth }">
             <div class="column-header">
               <div class="column-header-text">
-                <span [pTooltip]="columnConfig.tooltip" tooltipPosition="top">
-                  {{ columnConfig.name }}
+                <span [pTooltip]="column.tooltip" tooltipPosition="top">
+                  {{ column.name }}
                 </span>
               </div>
               <div class="column-header-sort">
                 <p-sortIcon
-                  [field]="columnConfig.column_key"
-                  [pTooltip]="columnConfig.sort_tooltip"
+                  [field]="column.column_key"
+                  [pTooltip]="column.sort_tooltip"
                   tooltipPosition="top"
                 />
               </div>

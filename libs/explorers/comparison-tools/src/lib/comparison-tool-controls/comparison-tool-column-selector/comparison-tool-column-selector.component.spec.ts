@@ -62,7 +62,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const { service } = await setup();
 
     // Toggle a column to hide it
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     if (columns.length > 0) {
       service.toggleColumn(columns[0]);
     }
@@ -76,7 +76,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const { service } = await setup();
 
     // Ensure all columns are visible
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     columns.forEach((col) => {
       if (!col.selected) {
         service.toggleColumn(col);
@@ -105,7 +105,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const button = getColumnSelectorButton();
     await user.click(button);
 
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     const columnsList = await screen.findByRole('list', { hidden: true });
     const listItems = within(columnsList).getAllByRole('listitem', { hidden: true });
 
@@ -119,7 +119,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const button = getColumnSelectorButton();
     await user.click(button);
 
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     const selectedColumns = columns.filter((col) => col.selected);
 
     const columnsList = await screen.findByRole('list', { hidden: true });
@@ -140,14 +140,14 @@ describe('ComparisonToolColumnSelectorComponent', () => {
 
     await screen.findByRole('list', { hidden: true }); // Wait for popover to render
 
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     const firstColumn = columns[0];
     const initialSelectedState = firstColumn.selected;
 
     const columnName = screen.getByText(firstColumn.name as string);
     await user.click(columnName);
 
-    const updatedColumns = service.columnConfigs();
+    const updatedColumns = service.columns();
     const updatedFirstColumn = updatedColumns.find((col) => col.name === firstColumn.name);
 
     expect(updatedFirstColumn?.selected).toBe(!initialSelectedState);
@@ -164,7 +164,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
 
     await screen.findByRole('list', { hidden: true }); // Wait for popover to render
 
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     const firstColumn = columns[0];
 
     const columnName = screen.getByText(firstColumn.name as string);
@@ -182,7 +182,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
 
     await screen.findByRole('list', { hidden: true }); // Wait for popover to render
 
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     const selectedColumn = columns.find((col) => col.selected);
 
     if (!selectedColumn) {
@@ -215,7 +215,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
 
     await screen.findByRole('list', { hidden: true }); // Wait for popover to render
 
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     const columnsToToggle = columns.slice(0, 3);
 
     for (const column of columnsToToggle) {
@@ -223,7 +223,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
       await user.click(columnName);
     }
 
-    const updatedColumns = service.columnConfigs();
+    const updatedColumns = service.columns();
     columnsToToggle.forEach((originalColumn) => {
       const updatedColumn = updatedColumns.find((col) => col.name === originalColumn.name);
       expect(updatedColumn?.selected).toBe(!originalColumn.selected);
@@ -239,7 +239,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
 
     await screen.findByRole('list', { hidden: true }); // Wait for popover to render
 
-    const columns = service.columnConfigs();
+    const columns = service.columns();
 
     columns.forEach((column) => {
       expect(screen.getByText(column.name as string)).toBeInTheDocument();
@@ -255,7 +255,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
 
     await screen.findByRole('list', { hidden: true }); // Wait for popover to render
 
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     const selectedColumn = columns.find((col) => col.selected);
 
     expect(selectedColumn).toBeDefined();
@@ -275,7 +275,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const { service } = await setup();
 
     // First toggle a column to make it unselected
-    const columns = service.columnConfigs();
+    const columns = service.columns();
     const columnToHide = columns.find((col) => col.selected);
     expect(columnToHide).toBeDefined();
 
@@ -288,7 +288,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
 
     await screen.findByRole('list', { hidden: true }); // Wait for popover to render
 
-    const updatedColumns = service.columnConfigs();
+    const updatedColumns = service.columns();
     const unselectedColumn = updatedColumns.find((col) => !col.selected);
     expect(unselectedColumn).toBeDefined();
 
@@ -323,7 +323,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     const { instance, service } = await setup();
 
     // Test that getter returns service columns
-    expect(instance.columnConfigs).toBe(service.columnConfigs());
+    expect(instance.columns).toBe(service.columns());
 
     // Test that hasHiddenColumns returns correct value
     expect(instance.hasHiddenColumns()).toBe(service.hasHiddenColumns());
@@ -338,7 +338,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
 
     await screen.findByRole('list', { hidden: true }); // Wait for popover to render
 
-    const initialColumns = service.columnConfigs();
+    const initialColumns = service.columns();
     const firstColumn = initialColumns[0];
 
     // Toggle column through service
@@ -347,7 +347,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     // Wait for update
     await screen.findByText(firstColumn.name as string);
 
-    const updatedColumns = service.columnConfigs();
+    const updatedColumns = service.columns();
     const updatedFirstColumn = updatedColumns.find((col) => col.name === firstColumn.name);
 
     expect(updatedFirstColumn?.selected).toBe(!firstColumn.selected);

@@ -1,7 +1,7 @@
 <div class="column-selector">
   <p-popover #columnPopover styleClass="toggle-columns">
     <ul id="columns">
-      @for (column of columnConfigs; track column) {
+      @for (column of columns; track column) {
         @if (column.type !== 'primary') {
           <li>
             <div class="column-toggle" (click)="toggleColumn(column)">
