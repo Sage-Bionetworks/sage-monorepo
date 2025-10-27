@@ -42,7 +42,7 @@ interface HeatmapCircleStoryArgs {
 
 const meta: Meta<HeatmapCircleStoryArgs> = {
   component: HeatmapCircleStoryHostComponent,
-  title: 'Comparison Tools/HeatmapCircleComponent',
+  title: 'Comparison Tools/ComparisonToolTable/HeatmapCircleComponent',
   argTypes: {
     significanceThreshold: {
       control: { type: 'number', min: 0, step: 0.01 },
