@@ -46,7 +46,7 @@ describe('ComparisonToolSelectorsComponent', () => {
 
   it('should display no dropdowns when all configs have empty dropdowns arrays', async () => {
     const emptyConfigs: ComparisonToolConfig[] = [
-      { page: 'Disease Correlation', dropdowns: [], columns: [], filters: [] },
+      { page: 'Disease Correlation', dropdowns: [], row_count: '0', columns: [], filters: [] },
     ];
     await setup(emptyConfigs);
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
@@ -84,8 +84,20 @@ describe('ComparisonToolSelectorsComponent', () => {
 
   it('should handle single level dropdown configurations', async () => {
     const singleLevelConfigs: ComparisonToolConfig[] = [
-      { page: 'Disease Correlation', dropdowns: ['Option1'], columns: [], filters: [] },
-      { page: 'Disease Correlation', dropdowns: ['Option2'], columns: [], filters: [] },
+      {
+        page: 'Disease Correlation',
+        dropdowns: ['Option1'],
+        row_count: '20',
+        columns: [],
+        filters: [],
+      },
+      {
+        page: 'Disease Correlation',
+        dropdowns: ['Option2'],
+        row_count: '30',
+        columns: [],
+        filters: [],
+      },
     ];
 
     const { service } = await setup(singleLevelConfigs, ['Option1']);
@@ -99,6 +111,7 @@ describe('ComparisonToolSelectorsComponent', () => {
       {
         page: 'Disease Correlation',
         dropdowns: ['Level1', 'Level2', 'Level3', 'Level4', 'Level5'],
+        row_count: '10',
         columns: [],
         filters: [],
       },
