@@ -234,6 +234,104 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Battle
+  /battles/{battleId}/rounds:
+    post:
+      description: Create a new round for a given battle.
+      operationId: createBattleRound
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleRoundCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleRound'
+          description: Battle round created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Create a battle round
+      tags:
+        - Battle
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
+  /battles/{battleId}/rounds/{roundId}:
+    patch:
+      description: Update an existing battle round.
+      operationId: updateBattleRound
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+        - description: The unique identifier of the battle round
+          explode: false
+          in: path
+          name: roundId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleRoundId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleRoundUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleRound'
+          description: Battle round updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Update a battle round
+      tags:
+        - Battle
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
   /example-prompts:
     get:
       description: Get a list of example prompts with comprehensive filtering options
@@ -506,6 +604,15 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/BattleId'
+      style: simple
+    roundId:
+      description: The unique identifier of the battle round
+      explode: false
+      in: path
+      name: roundId
+      required: true
+      schema:
+        $ref: '#/components/schemas/BattleRoundId'
       style: simple
     examplePromptSearchQuery:
       description: The search query used to find and filter example prompts.
@@ -880,6 +987,132 @@ components:
           example: 2024-01-15T11:45:00Z
           format: date-time
           type: string
+      type: object
+    MessageRole:
+      description: The role of a message.
+      enum:
+        - system
+        - user
+        - assistant
+      example: user
+      maxLength: 20
+      type: string
+    MessageContent:
+      description: The content of a message.
+      example: What is the capital of France?
+      maxLength: 5000
+      type: string
+    MessageCreate:
+      description: Payload used to create a message.
+      properties:
+        role:
+          $ref: '#/components/schemas/MessageRole'
+        content:
+          description: The content of a message.
+          example: What is the capital of France?
+          maxLength: 5000
+          type: string
+      required:
+        - content
+        - role
+      type: object
+    BattleRoundCreateRequest:
+      description: Payload to create a new battle round with the user prompt.
+      properties:
+        promptMessage:
+          $ref: '#/components/schemas/MessageCreate'
+      required:
+        - promptMessage
+      type: object
+    BattleRoundId:
+      description: Unique identifier (UUID) of the battle round.
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      format: uuid
+      type: string
+    BattleRoundNumber:
+      description: Sequential round number within a battle. Starts at 1.
+      example: 1
+      minimum: 1
+      type: integer
+    MessageId:
+      description: Unique identifier (UUID) of the message.
+      example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      format: uuid
+      type: string
+    UpdatedAt:
+      description: Timestamp when the entity was last updated.
+      example: 2024-01-15T10:45:00Z
+      format: date-time
+      type: string
+    BattleRound:
+      description: A battle round linking the prompt and model responses for a battle.
+      example:
+        createdAt: 2024-01-15T10:30:00Z
+        roundNumber: 1
+        battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+        model2MessageId: d290f1ee-6c54-4b01-90e6-d701748f0851
+        promptMessageId: d290f1ee-6c54-4b01-90e6-d701748f0851
+        model1MessageId: d290f1ee-6c54-4b01-90e6-d701748f0851
+        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        updatedAt: 2024-01-15T10:45:00Z
+      properties:
+        id:
+          description: Unique identifier (UUID) of the battle round.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          format: uuid
+          type: string
+        battleId:
+          description: Unique identifier (UUID) of the battle.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+          format: uuid
+          type: string
+        roundNumber:
+          description: Sequential round number within a battle. Starts at 1.
+          example: 1
+          minimum: 1
+          type: integer
+        promptMessageId:
+          description: Unique identifier (UUID) of the message.
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+          format: uuid
+          type: string
+        model1MessageId:
+          description: Unique identifier (UUID) of the message.
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+          format: uuid
+          type: string
+        model2MessageId:
+          description: Unique identifier (UUID) of the message.
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+          format: uuid
+          type: string
+        createdAt:
+          description: Timestamp when the entity was created.
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          type: string
+        updatedAt:
+          description: Timestamp when the entity was last updated.
+          example: 2024-01-15T10:45:00Z
+          format: date-time
+          type: string
+      required:
+        - battleId
+        - createdAt
+        - id
+        - roundNumber
+        - updatedAt
+      type: object
+    BattleRoundUpdateRequest:
+      description: Payload to update model responses for an existing battle round.
+      properties:
+        model1Message:
+          $ref: '#/components/schemas/MessageCreate'
+        model2Message:
+          $ref: '#/components/schemas/MessageCreate'
+      required:
+        - model1Message
+        - model2Message
       type: object
     ExamplePromptSort:
       default: created_at

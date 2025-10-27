@@ -9,6 +9,9 @@ import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import java.util.UUID;
@@ -108,6 +111,69 @@ public interface BattleApi {
         @Parameter(name = "BattleCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleCreateRequestDto battleCreateRequestDto
     ) {
         return getDelegate().createBattle(battleCreateRequestDto);
+    }
+
+
+    /**
+     * POST /battles/{battleId}/rounds : Create a battle round
+     * Create a new round for a given battle.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param battleRoundCreateRequestDto  (required)
+     * @return Battle round created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createBattleRound",
+        summary = "Create a battle round",
+        description = "Create a new round for a given battle.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Battle round created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleRoundDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleRoundDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/battles/{battleId}/rounds",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<BattleRoundDto> createBattleRound(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
+        @Parameter(name = "BattleRoundCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleRoundCreateRequestDto battleRoundCreateRequestDto
+    ) {
+        return getDelegate().createBattleRound(battleId, battleRoundCreateRequestDto);
     }
 
 
@@ -319,6 +385,71 @@ public interface BattleApi {
         @Parameter(name = "BattleUpdateRequestDto", description = "", required = true) @Valid @RequestBody BattleUpdateRequestDto battleUpdateRequestDto
     ) {
         return getDelegate().updateBattle(battleId, battleUpdateRequestDto);
+    }
+
+
+    /**
+     * PATCH /battles/{battleId}/rounds/{roundId} : Update a battle round
+     * Update an existing battle round.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param roundId The unique identifier of the battle round (required)
+     * @param battleRoundUpdateRequestDto  (required)
+     * @return Battle round updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "updateBattleRound",
+        summary = "Update a battle round",
+        description = "Update an existing battle round.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Battle round updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleRoundDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleRoundDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/battles/{battleId}/rounds/{roundId}",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<BattleRoundDto> updateBattleRound(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
+        @Parameter(name = "roundId", description = "The unique identifier of the battle round", required = true, in = ParameterIn.PATH) @PathVariable("roundId") UUID roundId,
+        @Parameter(name = "BattleRoundUpdateRequestDto", description = "", required = true) @Valid @RequestBody BattleRoundUpdateRequestDto battleRoundUpdateRequestDto
+    ) {
+        return getDelegate().updateBattleRound(battleId, roundId, battleRoundUpdateRequestDto);
     }
 
 }

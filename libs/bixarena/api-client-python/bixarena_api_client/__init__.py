@@ -38,6 +38,9 @@ __all__ = [
     "Battle",
     "BattleCreateRequest",
     "BattlePage",
+    "BattleRound",
+    "BattleRoundCreateRequest",
+    "BattleRoundUpdateRequest",
     "BattleSearchQuery",
     "BattleSort",
     "BattleUpdateRequest",
@@ -62,6 +65,8 @@ __all__ = [
     "LeaderboardSnapshotSort",
     "LeaderboardSort",
     "License",
+    "MessageCreate",
+    "MessageRole",
     "Model",
     "ModelPage",
     "ModelSearchQuery",
@@ -105,6 +110,13 @@ from bixarena_api_client.models.battle_create_request import (
     BattleCreateRequest as BattleCreateRequest,
 )
 from bixarena_api_client.models.battle_page import BattlePage as BattlePage
+from bixarena_api_client.models.battle_round import BattleRound as BattleRound
+from bixarena_api_client.models.battle_round_create_request import (
+    BattleRoundCreateRequest as BattleRoundCreateRequest,
+)
+from bixarena_api_client.models.battle_round_update_request import (
+    BattleRoundUpdateRequest as BattleRoundUpdateRequest,
+)
 from bixarena_api_client.models.battle_search_query import (
     BattleSearchQuery as BattleSearchQuery,
 )
@@ -171,6 +183,8 @@ from bixarena_api_client.models.leaderboard_sort import (
     LeaderboardSort as LeaderboardSort,
 )
 from bixarena_api_client.models.license import License as License
+from bixarena_api_client.models.message_create import MessageCreate as MessageCreate
+from bixarena_api_client.models.message_role import MessageRole as MessageRole
 from bixarena_api_client.models.model import Model as Model
 from bixarena_api_client.models.model_page import ModelPage as ModelPage
 from bixarena_api_client.models.model_search_query import (

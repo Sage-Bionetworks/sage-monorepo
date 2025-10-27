@@ -91,3 +91,33 @@ CREATE TABLE api.battle (
 -- Indexes for performance
 CREATE INDEX idx_api_battle_user_id ON api.battle(user_id);
 CREATE INDEX idx_api_battle_created_at ON api.battle(created_at DESC);
+
+-- Message table
+CREATE TABLE api.message (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  role VARCHAR(20) NOT NULL,
+  content VARCHAR(5000) NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  -- Table constraints
+  CONSTRAINT chk_message_role CHECK (role IN ('system', 'user', 'assistant'))
+);
+
+-- Indexes for message
+CREATE INDEX idx_api_message_role ON api.message(role);
+
+-- Battle round table
+CREATE TABLE api.battle_round (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
+  round_number INTEGER NOT NULL DEFAULT 1,
+  prompt_message_id UUID NOT NULL REFERENCES api.message(id) ON DELETE CASCADE,
+  model1_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
+  model2_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Indexes for battle round
+CREATE INDEX idx_api_battle_round_battle_id ON api.battle_round(battle_id);
+CREATE INDEX idx_api_battle_round_round_number ON api.battle_round(round_number);
+CREATE INDEX idx_api_battle_round_created_at ON api.battle_round(created_at DESC);

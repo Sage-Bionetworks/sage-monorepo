@@ -41,6 +41,10 @@ paths:
     $ref: paths/battles.yaml
   /battles/{battleId}:
     $ref: paths/battles/{battleId}.yaml
+  /battles/{battleId}/rounds:
+    $ref: paths/battles/{battleId}/rounds.yaml
+  /battles/{battleId}/rounds/{roundId}:
+    $ref: paths/battles/{battleId}/rounds/{roundId}.yaml
   /example-prompts:
     $ref: paths/example-prompts.yaml
   /leaderboards:

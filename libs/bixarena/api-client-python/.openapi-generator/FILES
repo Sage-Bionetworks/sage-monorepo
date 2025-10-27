@@ -18,6 +18,9 @@ bixarena_api_client/models/basic_error.py
 bixarena_api_client/models/battle.py
 bixarena_api_client/models/battle_create_request.py
 bixarena_api_client/models/battle_page.py
+bixarena_api_client/models/battle_round.py
+bixarena_api_client/models/battle_round_create_request.py
+bixarena_api_client/models/battle_round_update_request.py
 bixarena_api_client/models/battle_search_query.py
 bixarena_api_client/models/battle_sort.py
 bixarena_api_client/models/battle_update_request.py
@@ -42,6 +45,8 @@ bixarena_api_client/models/leaderboard_snapshot_query.py
 bixarena_api_client/models/leaderboard_snapshot_sort.py
 bixarena_api_client/models/leaderboard_sort.py
 bixarena_api_client/models/license.py
+bixarena_api_client/models/message_create.py
+bixarena_api_client/models/message_role.py
 bixarena_api_client/models/model.py
 bixarena_api_client/models/model_page.py
 bixarena_api_client/models/model_search_query.py
@@ -61,6 +66,9 @@ docs/Battle.md
 docs/BattleApi.md
 docs/BattleCreateRequest.md
 docs/BattlePage.md
+docs/BattleRound.md
+docs/BattleRoundCreateRequest.md
+docs/BattleRoundUpdateRequest.md
 docs/BattleSearchQuery.md
 docs/BattleSort.md
 docs/BattleUpdateRequest.md
@@ -87,6 +95,8 @@ docs/LeaderboardSnapshotQuery.md
 docs/LeaderboardSnapshotSort.md
 docs/LeaderboardSort.md
 docs/License.md
+docs/MessageCreate.md
+docs/MessageRole.md
 docs/Model.md
 docs/ModelApi.md
 docs/ModelPage.md
@@ -107,6 +117,9 @@ test/test_battle.py
 test/test_battle_api.py
 test/test_battle_create_request.py
 test/test_battle_page.py
+test/test_battle_round.py
+test/test_battle_round_create_request.py
+test/test_battle_round_update_request.py
 test/test_battle_search_query.py
 test/test_battle_sort.py
 test/test_battle_update_request.py
@@ -133,6 +146,8 @@ test/test_leaderboard_snapshot_query.py
 test/test_leaderboard_snapshot_sort.py
 test/test_leaderboard_sort.py
 test/test_license.py
+test/test_message_create.py
+test/test_message_role.py
 test/test_model.py
 test/test_model_api.py
 test/test_model_page.py

@@ -174,6 +174,71 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /battles/{battleId}/rounds:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    post:
+      tags:
+        - Battle
+      summary: Create a battle round
+      description: Create a new round for a given battle.
+      operationId: createBattleRound
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleRoundCreateRequest'
+      responses:
+        '201':
+          description: Battle round created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleRound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /battles/{battleId}/rounds/{roundId}:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+      - $ref: '#/components/parameters/roundId'
+    patch:
+      tags:
+        - Battle
+      summary: Update a battle round
+      description: Update an existing battle round.
+      operationId: updateBattleRound
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleRoundUpdateRequest'
+      responses:
+        '200':
+          description: Battle round updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleRound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /example-prompts:
     get:
       x-anonymous-access: true
@@ -538,6 +603,99 @@ components:
         endedAt:
           $ref: '#/components/schemas/EndedAt'
           nullable: true
+    MessageRole:
+      type: string
+      description: The role of a message.
+      maxLength: 20
+      enum:
+        - system
+        - user
+        - assistant
+      example: user
+    MessageContent:
+      type: string
+      description: The content of a message.
+      maxLength: 5000
+      example: What is the capital of France?
+    MessageCreate:
+      type: object
+      description: Payload used to create a message.
+      properties:
+        role:
+          $ref: '#/components/schemas/MessageRole'
+        content:
+          $ref: '#/components/schemas/MessageContent'
+      required:
+        - role
+        - content
+    BattleRoundCreateRequest:
+      type: object
+      description: Payload to create a new battle round with the user prompt.
+      properties:
+        promptMessage:
+          $ref: '#/components/schemas/MessageCreate'
+      required:
+        - promptMessage
+    BattleRoundId:
+      type: string
+      format: uuid
+      description: Unique identifier (UUID) of the battle round.
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+    BattleRoundNumber:
+      type: integer
+      description: Sequential round number within a battle. Starts at 1.
+      example: 1
+      minimum: 1
+    MessageId:
+      type: string
+      format: uuid
+      description: Unique identifier (UUID) of the message.
+      example: d290f1ee-6c54-4b01-90e6-d701748f0851
+    UpdatedAt:
+      description: Timestamp when the entity was last updated.
+      type: string
+      format: date-time
+      example: '2024-01-15T10:45:00Z'
+    BattleRound:
+      type: object
+      description: A battle round linking the prompt and model responses for a battle.
+      properties:
+        id:
+          $ref: '#/components/schemas/BattleRoundId'
+        battleId:
+          $ref: '#/components/schemas/BattleId'
+        roundNumber:
+          $ref: '#/components/schemas/BattleRoundNumber'
+        promptMessageId:
+          $ref: '#/components/schemas/MessageId'
+          nullable: true
+        model1MessageId:
+          $ref: '#/components/schemas/MessageId'
+          nullable: true
+        model2MessageId:
+          $ref: '#/components/schemas/MessageId'
+          nullable: true
+        createdAt:
+          $ref: '#/components/schemas/CreatedAt'
+        updatedAt:
+          $ref: '#/components/schemas/UpdatedAt'
+      required:
+        - id
+        - battleId
+        - roundNumber
+        - createdAt
+        - updatedAt
+    BattleRoundUpdateRequest:
+      type: object
+      description: Payload to update model responses for an existing battle round.
+      properties:
+        model1Message:
+          $ref: '#/components/schemas/MessageCreate'
+        model2Message:
+          $ref: '#/components/schemas/MessageCreate'
+      required:
+        - model1Message
+        - model2Message
     ExamplePromptSort:
       type: string
       description: The field to sort example prompts by.
@@ -1185,6 +1343,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/BattleId'
+    roundId:
+      name: roundId
+      description: The unique identifier of the battle round
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/BattleRoundId'
     examplePromptSearchQuery:
       name: examplePromptSearchQuery
       description: The search query used to find and filter example prompts.

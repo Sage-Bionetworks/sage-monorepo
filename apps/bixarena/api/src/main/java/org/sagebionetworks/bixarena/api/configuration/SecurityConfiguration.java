@@ -51,7 +51,7 @@ public class SecurityConfiguration {
             "/v3/api-docs/**"
           )
           .permitAll()
-          .requestMatchers(HttpMethod.POST, "/v1/battles")
+          .requestMatchers(HttpMethod.POST, "/v1/battles/**")
           .permitAll()
           .requestMatchers(HttpMethod.PATCH, "/v1/battles/**")
           .permitAll()

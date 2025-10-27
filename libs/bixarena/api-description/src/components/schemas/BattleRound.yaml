@@ -1,0 +1,28 @@
+type: object
+description: A battle round linking the prompt and model responses for a battle.
+properties:
+  id:
+    $ref: BattleRoundId.yaml
+  battleId:
+    $ref: BattleId.yaml
+  roundNumber:
+    $ref: BattleRoundNumber.yaml
+  promptMessageId:
+    $ref: MessageId.yaml
+    nullable: true
+  model1MessageId:
+    $ref: MessageId.yaml
+    nullable: true
+  model2MessageId:
+    $ref: MessageId.yaml
+    nullable: true
+  createdAt:
+    $ref: CreatedAt.yaml
+  updatedAt:
+    $ref: UpdatedAt.yaml
+required:
+  - id
+  - battleId
+  - roundNumber
+  - createdAt
+  - updatedAt

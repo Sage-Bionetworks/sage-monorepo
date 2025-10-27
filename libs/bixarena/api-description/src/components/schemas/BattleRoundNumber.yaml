@@ -1,0 +1,4 @@
+type: integer
+description: Sequential round number within a battle. Starts at 1.
+example: 1
+minimum: 1
