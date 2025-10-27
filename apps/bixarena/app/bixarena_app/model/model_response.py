@@ -6,9 +6,19 @@ import uuid
 
 import gradio as gr
 import requests
-from bixarena_api_client import ApiClient, Configuration, ModelApi, ModelSearchQuery
+from bixarena_api_client import (
+    ApiClient,
+    BattleApi,
+    BattleRoundPayload,
+    Configuration,
+    MessageCreate,
+    MessageRole,
+    ModelApi,
+    ModelSearchQuery,
+)
 from bixarena_api_client.exceptions import ApiException
 
+from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
 from bixarena_app.model.model_adapter import get_conversation_template
@@ -35,6 +45,8 @@ class State:
         self.skip_next = False
         self.model_name = model_name
         self.has_error = False
+        self.battle_id: str | None = None
+        self.round_id: str | None = None
 
     def to_gradio_chatbot(self):
         return self.conv.to_gradio_chatbot()
@@ -77,6 +89,56 @@ def validate_responses(states: list) -> tuple[bool, str]:
                 return False, f"identity_leak:{leaked_word}"
 
     return True, ""
+
+
+def _get_last_assistant_response(state: State) -> str | None:
+    """Return the last assistant message content for a given state."""
+    assistant_role = state.conv.roles[1] if len(state.conv.roles) > 1 else "assistant"
+    for role, content in reversed(state.conv.messages):
+        if role == assistant_role and content:
+            return content
+    return None
+
+
+def _message_from_content(content: str | None) -> MessageCreate | None:
+    if content is None:
+        return None
+    return MessageCreate(role=MessageRole.ASSISTANT, content=content)
+
+
+def _update_battle_round_with_responses(left_state: State, right_state: State) -> None:
+    """Persist both LLM responses to the current battle round."""
+    battle_id = left_state.battle_id
+    round_id = left_state.round_id
+    if (
+        not battle_id
+        or not round_id
+        or right_state.battle_id != battle_id
+        or right_state.round_id != round_id
+    ):
+        return
+    response1 = _message_from_content(_get_last_assistant_response(left_state))
+    response2 = _message_from_content(_get_last_assistant_response(right_state))
+    if not response1 and not response2:
+        left_state.round_id = None
+        right_state.round_id = None
+        return
+    try:
+        api_base_url = _get_api_base_url()
+        configuration = Configuration(host=api_base_url)
+        with ApiClient(configuration) as api_client:
+            battle_api = BattleApi(api_client)
+            battle_api.update_battle_round(
+                battle_id,
+                round_id,
+                BattleRoundPayload(response1=response1, response2=response2),
+            )
+            logger.info(f"✅ Battle round updated: battle={battle_id} round={round_id}")
+    except Exception as e:
+        logger.warning(f"❌ Failed to update battle round {round_id}: {e}")
+    finally:
+        left_state.round_id = None
+        right_state.round_id = None
 
 
 def get_model_list():
@@ -328,7 +390,10 @@ def bot_response_multi(
 
     # At least one model had an error -> keep voting buttons disabled
     if any(state.has_error for state in states):
+        for state in states:
+            state.round_id = None
         yield states + chatbots + [disable_btn, disable_btn, disable_btn, enable_btn]
     else:
         # Both models succeeded -> enable all buttons including voting
+        _update_battle_round_with_responses(states[0], states[1])
         yield states + chatbots + [enable_btn] * 4

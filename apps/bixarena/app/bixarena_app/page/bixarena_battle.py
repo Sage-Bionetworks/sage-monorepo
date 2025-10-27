@@ -14,8 +14,11 @@ from bixarena_api_client import (
     ApiClient,
     BattleApi,
     BattleCreateRequest,
+    BattleRoundPayload,
     BattleUpdateRequest,
     Configuration,
+    MessageCreate,
+    MessageRole,
 )
 
 from bixarena_app.config.constants import (
@@ -91,6 +94,30 @@ def create_battle(
     except Exception as e:
         logger.warning(f"❌ Failed to create battle: {e}")
 
+    return None
+
+
+def create_battle_round(battle_id: str, prompt: str) -> str | None:
+    """Create a battle round with the submitted prompt."""
+    if not battle_id:
+        logger.warning("⚠️ Cannot create round without battle_id")
+        return None
+    try:
+        api_base_url = _get_api_base_url()
+        configuration = Configuration(host=api_base_url)
+        with ApiClient(configuration) as api_client:
+            battle_api = BattleApi(api_client)
+            battle_round = battle_api.create_battle_round(
+                battle_id,
+                BattleRoundPayload(
+                    prompt=MessageCreate(role=MessageRole.USER, content=prompt)
+                ),
+            )
+            if battle_round and battle_round.id:
+                logger.info(f"✅ Battle round created: {battle_round.id}")
+                return str(battle_round.id)
+    except Exception as e:
+        logger.warning(f"❌ Failed to create battle round for battle {battle_id}: {e}")
     return None
 
 
@@ -309,8 +336,14 @@ def add_text(
         battle_title = text[:50] + "..." if len(text) > 50 else text
         current_battle_id = create_battle(left_model, right_model, battle_title)
 
+    round_id = None
+    if current_battle_id:
+        round_id = create_battle_round(current_battle_id, text)
+
     for i in range(num_sides):
         states[i].conv.append_message(states[i].conv.roles[0], text)
+        states[i].battle_id = current_battle_id
+        states[i].round_id = round_id
         states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
         states[i].skip_next = False
 
