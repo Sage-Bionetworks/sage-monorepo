@@ -45,8 +45,6 @@ class State:
         self.skip_next = False
         self.model_name = model_name
         self.has_error = False
-        self.battle_id: str | None = None
-        self.round_id: str | None = None
 
     def to_gradio_chatbot(self):
         return self.conv.to_gradio_chatbot()
@@ -60,6 +58,18 @@ class State:
             }
         )
         return base
+
+
+class BattleSession:
+    """Track the active battle and round identifiers for the Gradio session."""
+
+    def __init__(self):
+        self.battle_id: str | None = None
+        self.round_id: str | None = None
+
+    def reset(self):
+        self.battle_id = None
+        self.round_id = None
 
 
 def set_global_vars_anony(enable_moderation_):
@@ -106,22 +116,18 @@ def _message_from_content(content: str | None) -> MessageCreate | None:
     return MessageCreate(role=MessageRole.ASSISTANT, content=content)
 
 
-def _update_battle_round_with_responses(left_state: State, right_state: State) -> None:
+def _update_battle_round_with_responses(
+    left_state: State, right_state: State, battle_session: BattleSession
+) -> None:
     """Persist both LLM responses to the current battle round."""
-    battle_id = left_state.battle_id
-    round_id = left_state.round_id
-    if (
-        not battle_id
-        or not round_id
-        or right_state.battle_id != battle_id
-        or right_state.round_id != round_id
-    ):
+    battle_id = battle_session.battle_id
+    round_id = battle_session.round_id
+    if not battle_id or not round_id:
         return
     response1 = _message_from_content(_get_last_assistant_response(left_state))
     response2 = _message_from_content(_get_last_assistant_response(right_state))
     if not response1 and not response2:
-        left_state.round_id = None
-        right_state.round_id = None
+        battle_session.round_id = None
         return
     try:
         api_base_url = _get_api_base_url()
@@ -137,8 +143,7 @@ def _update_battle_round_with_responses(left_state: State, right_state: State) -
     except Exception as e:
         logger.warning(f"❌ Failed to update battle round {round_id}: {e}")
     finally:
-        left_state.round_id = None
-        right_state.round_id = None
+        battle_session.round_id = None
 
 
 def get_model_list():
@@ -338,6 +343,7 @@ def bot_response(
 def bot_response_multi(
     state0,
     state1,
+    battle_session: BattleSession,
     temperature=0.7,
     top_p=1.0,
     max_new_tokens=1024,
@@ -349,6 +355,7 @@ def bot_response_multi(
         yield (
             state0,
             state1,
+            battle_session,
             state0.to_gradio_chatbot(),
             state1.to_gradio_chatbot(),
         ) + (no_change_btn,) * 4
@@ -384,16 +391,20 @@ def bot_response_multi(
                 stop = False
             except StopIteration:
                 pass
-        yield states + chatbots + [disable_btn] * 4
+        yield states + [battle_session] + chatbots + [disable_btn] * 4
         if stop:
             break
 
     # At least one model had an error -> keep voting buttons disabled
     if any(state.has_error for state in states):
-        for state in states:
-            state.round_id = None
-        yield states + chatbots + [disable_btn, disable_btn, disable_btn, enable_btn]
+        battle_session.round_id = None
+        yield (
+            states
+            + [battle_session]
+            + chatbots
+            + [disable_btn, disable_btn, disable_btn, enable_btn]
+        )
     else:
         # Both models succeeded -> enable all buttons including voting
-        _update_battle_round_with_responses(states[0], states[1])
-        yield states + chatbots + [enable_btn] * 4
+        _update_battle_round_with_responses(states[0], states[1], battle_session)
+        yield states + [battle_session] + chatbots + [enable_btn] * 4

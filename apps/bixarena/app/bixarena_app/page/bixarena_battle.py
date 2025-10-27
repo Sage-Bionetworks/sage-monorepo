@@ -31,6 +31,7 @@ from bixarena_app.config.constants import (
 from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model import model_response
 from bixarena_app.model.model_response import (
+    BattleSession,
     State,
     bot_response_multi,
     disable_btn,
@@ -55,7 +56,6 @@ logger = logging.getLogger(__name__)
 num_sides = 2
 anony_names = ["", ""]
 models = []
-current_battle_id = None
 
 
 def create_battle(
@@ -152,13 +152,13 @@ def load_demo_side_by_side_anony(models_, _):
     return states + selector_updates
 
 
-def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
-    global current_battle_id
-
+def vote_last_response(
+    states, battle_session: BattleSession, vote_type, model_selectors, _: gr.Request
+):
     # End the battle when voting happens
-    if current_battle_id:
-        end_battle(current_battle_id)
-        current_battle_id = None
+    if battle_session.battle_id:
+        end_battle(battle_session.battle_id)
+        battle_session.reset()
 
     is_valid, reason = validate_responses(states)
 
@@ -204,48 +204,75 @@ def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
 
 
 def leftvote_last_response(
-    state0, state1, model_selector0, model_selector1, request: gr.Request
+    state0,
+    state1,
+    battle_session: BattleSession,
+    model_selector0,
+    model_selector1,
+    request: gr.Request,
 ):
     logger.info("leftvote (anony).")
     for x in vote_last_response(
-        [state0, state1], "leftvote", [model_selector0, model_selector1], request
+        [state0, state1],
+        battle_session,
+        "leftvote",
+        [model_selector0, model_selector1],
+        request,
     ):
         yield x
 
 
 def rightvote_last_response(
-    state0, state1, model_selector0, model_selector1, request: gr.Request
+    state0,
+    state1,
+    battle_session: BattleSession,
+    model_selector0,
+    model_selector1,
+    request: gr.Request,
 ):
     logger.info("rightvote (anony).")
     for x in vote_last_response(
-        [state0, state1], "rightvote", [model_selector0, model_selector1], request
+        [state0, state1],
+        battle_session,
+        "rightvote",
+        [model_selector0, model_selector1],
+        request,
     ):
         yield x
 
 
 def tievote_last_response(
-    state0, state1, model_selector0, model_selector1, request: gr.Request
+    state0,
+    state1,
+    battle_session: BattleSession,
+    model_selector0,
+    model_selector1,
+    request: gr.Request,
 ):
     logger.info("tievote (anony).")
     for x in vote_last_response(
-        [state0, state1], "tievote", [model_selector0, model_selector1], request
+        [state0, state1],
+        battle_session,
+        "tievote",
+        [model_selector0, model_selector1],
+        request,
     ):
         yield x
 
 
-def clear_history(request: gr.Request):
+def clear_history(battle_session: BattleSession, request: gr.Request):
     """Clear battle history and end the active battle."""
-    global current_battle_id
-
     logger.info("clear_history (anony).")
 
     # End the active battle if one exists
-    if current_battle_id:
-        end_battle(current_battle_id)
-        current_battle_id = None
+    if battle_session.battle_id:
+        end_battle(battle_session.battle_id)
+
+    battle_session.reset()
 
     return (
         [None] * num_sides  # states
+        + [battle_session]
         + [None] * num_sides  # chatbots
         + anony_names  # model_selectors
         + [
@@ -264,10 +291,14 @@ def clear_history(request: gr.Request):
 
 
 def add_text(
-    state0, state1, model_selector0, model_selector1, text, request: gr.Request
+    state0,
+    state1,
+    battle_session: BattleSession,
+    model_selector0,
+    model_selector1,
+    text,
+    request: gr.Request,
 ):
-    global current_battle_id
-
     logger.info(f"add_text (anony). len: {len(text)}")
     states = [state0, state1]
 
@@ -280,12 +311,14 @@ def add_text(
             State(left_model),
             State(right_model),
         ]
+        battle_session.reset()
 
     if len(text) <= 0:
         for i in range(num_sides):
             states[i].skip_next = True
         return (
             states
+            + [battle_session]
             + [x.to_gradio_chatbot() for x in states]
             + [""]
             + [
@@ -313,6 +346,7 @@ def add_text(
             states[i].skip_next = True
         return (
             states
+            + [battle_session]
             + [x.to_gradio_chatbot() for x in states]
             + [CONVERSATION_LIMIT_MSG]
             + [
@@ -329,23 +363,26 @@ def add_text(
     text = text[:INPUT_CHAR_LEN_LIMIT]  # Hard cut-off
 
     # Create battle with first prompt as title (only for first message)
-    if not current_battle_id and states[0] and states[1]:
+    if battle_session.battle_id is None and states[0] and states[1]:
         left_model = states[0].model_name
         right_model = states[1].model_name
         # Use first 50 characters of prompt as battle title
         battle_title = text[:50] + "..." if len(text) > 50 else text
-        current_battle_id = create_battle(left_model, right_model, battle_title)
+        battle_id = create_battle(left_model, right_model, battle_title)
+        if battle_id:
+            battle_session.battle_id = battle_id
+    battle_id = battle_session.battle_id
 
     round_id = None
-    if current_battle_id:
-        round_id = create_battle_round(current_battle_id, text)
+    if battle_id:
+        round_id = create_battle_round(battle_id, text)
 
     for i in range(num_sides):
         states[i].conv.append_message(states[i].conv.roles[0], text)
-        states[i].battle_id = current_battle_id
-        states[i].round_id = round_id
         states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
         states[i].skip_next = False
+
+    battle_session.round_id = round_id
 
     hint_msg = ""
     for i in range(num_sides):
@@ -353,6 +390,7 @@ def add_text(
             hint_msg = SLOW_MODEL_MSG
     return (
         states
+        + [battle_session]
         + [x.to_gradio_chatbot() for x in states]
         + [gr.update(value="", placeholder="Ask followups...")]
         + [
@@ -384,6 +422,7 @@ def build_side_by_side_ui_anony():
     """
 
     states = [gr.State() for _ in range(num_sides)]
+    battle_session = gr.State(BattleSession())
     model_selectors = []
     chatbots = []
 
@@ -478,23 +517,24 @@ def build_side_by_side_ui_anony():
     ]
     leftvote_btn.click(
         leftvote_last_response,
-        states + model_selectors,
+        states + [battle_session] + model_selectors,
         model_selectors + [textbox] + btn_list,
     )
     rightvote_btn.click(
         rightvote_last_response,
-        states + model_selectors,
+        states + [battle_session] + model_selectors,
         model_selectors + [textbox] + btn_list,
     )
     tie_btn.click(
         tievote_last_response,
-        states + model_selectors,
+        states + [battle_session] + model_selectors,
         model_selectors + [textbox] + btn_list,
     )
     clear_btn.click(
         clear_history,
-        None,
+        [battle_session],
         states
+        + [battle_session]
         + chatbots
         + model_selectors
         + [textbox]
@@ -542,8 +582,9 @@ def build_side_by_side_ui_anony():
 
     textbox.submit(
         add_text,
-        states + model_selectors + [textbox],
+        states + [battle_session] + model_selectors + [textbox],
         states
+        + [battle_session]
         + chatbots
         + [textbox]
         + btn_list
@@ -556,8 +597,8 @@ def build_side_by_side_ui_anony():
         js=disable_enter_js,
     ).then(
         bot_response_multi,
-        states,
-        states + chatbots + btn_list,
+        states + [battle_session],
+        states + [battle_session] + chatbots + btn_list,
     ).then(
         lambda: None,  # Enable enter key
         [],
@@ -571,8 +612,9 @@ def build_side_by_side_ui_anony():
     for card in prompt_cards:
         card.click(lambda v: v, inputs=[card], outputs=[textbox]).then(
             add_text,
-            states + model_selectors + [textbox],
+            states + [battle_session] + model_selectors + [textbox],
             states
+            + [battle_session]
             + chatbots
             + [textbox]
             + btn_list
@@ -585,8 +627,8 @@ def build_side_by_side_ui_anony():
             js=disable_enter_js,
         ).then(
             bot_response_multi,
-            states,
-            states + chatbots + btn_list,
+            states + [battle_session],
+            states + [battle_session] + chatbots + btn_list,
         ).then(
             lambda: None,
             [],
