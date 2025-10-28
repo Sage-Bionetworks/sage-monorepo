@@ -3,9 +3,12 @@ import logging
 import gradio as gr
 
 from bixarena_api_client import StatsApi, UserApi
-from bixarena_api_client.api_client import ApiClient
-from bixarena_app.api.api_client_helper import create_authenticated_api_client
+from bixarena_app.api.api_client_helper import (
+    create_authenticated_api_client,
+    get_api_configuration,
+)
 from bixarena_app.auth.request_auth import is_authenticated, get_session_cookie
+from bixarena_api_client.api_client import ApiClient
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +22,9 @@ def fetch_public_stats() -> dict:
     """
     try:
         # Create an unauthenticated API client for public endpoint
-        with ApiClient() as client:
+        # Use the same configuration helper to get the correct API base URL
+        configuration = get_api_configuration()
+        with ApiClient(configuration) as client:
             api = StatsApi(client)
             stats = api.get_public_stats()
             logger.info(

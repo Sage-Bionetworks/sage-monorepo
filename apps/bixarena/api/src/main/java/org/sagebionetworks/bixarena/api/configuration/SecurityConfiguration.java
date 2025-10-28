@@ -48,6 +48,7 @@ public class SecurityConfiguration {
             "/v1/leaderboards/**",
             "/v1/models",
             "/v1/models/**",
+            "/v1/stats",
             "/v3/api-docs/**"
           )
           .permitAll()
@@ -72,25 +73,27 @@ public class SecurityConfiguration {
     NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri(jwksUri).build();
 
     // Create validators for issuer and audience
-    var issuerValidator = org.springframework.security.oauth2.jwt.JwtValidators.createDefaultWithIssuer(
-      appProperties.jwt().expectedIssuer()
-    );
+    var issuerValidator =
+      org.springframework.security.oauth2.jwt.JwtValidators.createDefaultWithIssuer(
+        appProperties.jwt().expectedIssuer()
+      );
 
     // Custom audience validator - only accept urn:bixarena:api
-    org.springframework.security.oauth2.core.OAuth2TokenValidator<org.springframework.security.oauth2.jwt.Jwt> audienceValidator =
-      token -> {
-        var audiences = token.getAudience();
-        if (audiences != null && audiences.contains(appProperties.jwt().expectedAudience())) {
-          return org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.success();
-        }
-        return org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.failure(
-          new org.springframework.security.oauth2.core.OAuth2Error(
-            "invalid_token",
-            "Token audience must be " + appProperties.jwt().expectedAudience(),
-            null
-          )
-        );
-      };
+    org.springframework.security.oauth2.core.OAuth2TokenValidator<
+      org.springframework.security.oauth2.jwt.Jwt
+    > audienceValidator = token -> {
+      var audiences = token.getAudience();
+      if (audiences != null && audiences.contains(appProperties.jwt().expectedAudience())) {
+        return org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.success();
+      }
+      return org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.failure(
+        new org.springframework.security.oauth2.core.OAuth2Error(
+          "invalid_token",
+          "Token audience must be " + appProperties.jwt().expectedAudience(),
+          null
+        )
+      );
+    };
 
     // Combine validators
     var validators = new org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator<>(
