@@ -31,7 +31,7 @@ export class ComparisonToolTableComponent {
   unpinnedData = this.comparisonToolService.unpinnedData;
 
   downloadPinnedCsv() {
-    // TODO
+    // TODO: MG-451
   }
 
   pinAll() {
@@ -39,6 +39,6 @@ export class ComparisonToolTableComponent {
   }
 
   clearAllPinned() {
-    // TODO: this.comparisonToolService.clearAllPinned();
+    this.comparisonToolService.resetPinnedItems();
   }
 }
