@@ -2,7 +2,7 @@ import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { ComparisonToolViewConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
@@ -38,6 +38,9 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       wikiId: '632874',
     },
   };
+  viewConfig: ComparisonToolViewConfig = {
+    selectorsWikiParams: this.selectorsWikiParams,
+  };
 
   constructor() {
     effect(() => {
@@ -68,7 +71,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs, undefined, this.selectorsWikiParams);
+          this.comparisonToolService.initialize(configs, undefined, this.viewConfig);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);

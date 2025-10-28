@@ -24,7 +24,7 @@ const meta: Meta<BaseComparisonToolComponent> = {
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
           totalResultsCount: 1000,
-          selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
+          viewConfig: { selectorsWikiParams: mockComparisonToolSelectorsWikiParams },
           pinnedItems: [
             '68fff1aaeb12b9674515fd58',
             '68fff1aaeb12b9674515fd59',

@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { ComparisonToolViewConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
@@ -10,8 +10,8 @@ import {
   ComparisonToolPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { GeneExpressionHelpLinksComponent } from './components/gene-expression-help-links/gene-expression-help-links.component';
 import { shareReplay } from 'rxjs';
+import { GeneExpressionHelpLinksComponent } from './components/gene-expression-help-links/gene-expression-help-links.component';
 
 @Component({
   selector: 'model-ad-gene-expression-comparison-tool',
@@ -34,6 +34,9 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
       wikiId: '632873',
     },
   };
+  viewConfig: ComparisonToolViewConfig = {
+    selectorsWikiParams: this.selectorsWikiParams,
+  };
 
   ngOnInit() {
     if (this.platformService.isBrowser) {
@@ -53,7 +56,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
       .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs, undefined, this.selectorsWikiParams);
+          this.comparisonToolService.initialize(configs, undefined, this.viewConfig);
           this.comparisonToolService.totalResultsCount.set(50000);
         },
         error: (error) => {

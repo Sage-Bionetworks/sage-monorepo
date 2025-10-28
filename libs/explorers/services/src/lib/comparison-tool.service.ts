@@ -3,7 +3,7 @@ import {
   ComparisonToolColumn,
   ComparisonToolColumns,
   ComparisonToolConfig,
-  SynapseWikiParams,
+  ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 
@@ -19,20 +19,23 @@ import { isEqual } from 'lodash';
 @Injectable()
 export class ComparisonToolService {
   private readonly DEFAULT_SORT_ORDER = -1;
+  private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
+    selectorsWikiParams: {},
+  };
 
+  private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
-  private readonly selectorsWikiParamsSignal = signal<Record<string, SynapseWikiParams>>({});
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
   private readonly sortFieldSignal = signal<string | undefined>(undefined);
   private readonly sortOrderSignal = signal<number>(this.DEFAULT_SORT_ORDER);
   private readonly columnsForDropdownsSignal = signal<ComparisonToolColumns[]>([]);
 
+  readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
-  readonly selectorsWikiParams = this.selectorsWikiParamsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
@@ -107,13 +110,13 @@ export class ComparisonToolService {
   initialize(
     configs: ComparisonToolConfig[],
     selection?: string[],
-    selectorsWikiParams: Record<string, SynapseWikiParams> = {},
+    viewConfig: ComparisonToolViewConfig = this.DEFAULT_VIEW_CONFIG,
   ) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
     this.pinnedItemsSignal.set(new Set());
-    this.setSelectorsWikiParams(selectorsWikiParams);
     this.setSort(undefined, this.DEFAULT_SORT_ORDER);
+    this.setViewConfig(viewConfig);
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);
@@ -169,8 +172,8 @@ export class ComparisonToolService {
     }
   }
 
-  setSelectorsWikiParams(params: Record<string, SynapseWikiParams>) {
-    this.selectorsWikiParamsSignal.set(params ?? {});
+  setViewConfig(viewConfig: ComparisonToolViewConfig) {
+    this.viewConfigSignal.set(viewConfig);
   }
 
   isPinned(id: string): boolean {

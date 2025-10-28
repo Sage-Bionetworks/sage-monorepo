@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { ComparisonToolConfig, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService } from './comparison-tool.service';
 
 export type ComparisonToolServiceOptions = {
@@ -7,7 +7,7 @@ export type ComparisonToolServiceOptions = {
   selection?: string[];
   totalResultsCount?: number;
   legendVisible?: boolean;
-  selectorsWikiParams?: Record<string, SynapseWikiParams>;
+  viewConfig?: ComparisonToolViewConfig;
   maxPinnedItems?: number;
   pinnedItems?: string[];
 };
@@ -26,13 +26,13 @@ export const provideComparisonToolService = (
         const service = new ComparisonToolService();
 
         if (options.configs) {
-          service.initialize(options.configs, options.selection, options.selectorsWikiParams);
+          service.initialize(options.configs, options.selection, options.viewConfig);
         } else if (options.selection) {
           service.setDropdownSelection(options.selection);
         }
 
-        if (!options.configs && options.selectorsWikiParams) {
-          service.setSelectorsWikiParams(options.selectorsWikiParams);
+        if (!options.configs && options.viewConfig) {
+          service.setViewConfig(options.viewConfig);
         }
 
         if (options.totalResultsCount !== undefined) {
