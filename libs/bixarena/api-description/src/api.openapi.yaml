@@ -31,6 +31,8 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
+  - name: Stats
+    description: Public statistics about the platform.
   - name: User
     description: Operations about the authenticated user.
 
@@ -59,6 +61,8 @@ paths:
     $ref: paths/models.yaml
   /battles/{battleId}/evaluations:
     $ref: paths/battles/{battleId}/evaluations.yaml
+  /stats:
+    $ref: paths/stats.yaml
   /users/me/stats:
     $ref: paths/users-me-stats.yaml
 

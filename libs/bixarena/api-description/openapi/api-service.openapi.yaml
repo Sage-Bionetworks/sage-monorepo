@@ -24,6 +24,8 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
+  - name: Stats
+    description: Public statistics about the platform.
   - name: User
     description: Operations about the authenticated user.
 paths:
@@ -406,6 +408,27 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /stats:
+    get:
+      tags:
+        - Stats
+      summary: Get public platform statistics
+      description: |
+        Retrieve publicly accessible statistics about the BixArena platform.
+        This endpoint can be accessed without authentication and is designed
+        for use on the home page to showcase platform activity.
+      operationId: getPublicStats
+      x-anonymous-access: true
+      security: []
+      responses:
+        '200':
+          description: Public statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicStats'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /users/me/stats:
@@ -1324,6 +1347,29 @@ components:
         - battleId
         - outcome
         - createdAt
+    PublicStats:
+      type: object
+      description: Public statistics about the BixArena platform.
+      properties:
+        modelsEvaluated:
+          type: integer
+          format: int64
+          description: Total number of unique models that have been evaluated on the platform
+          example: 42
+        totalBattles:
+          type: integer
+          format: int64
+          description: Total number of battles conducted on the platform
+          example: 1337
+        totalUsers:
+          type: integer
+          format: int64
+          description: Total number of registered users on the platform
+          example: 256
+      required:
+        - modelsEvaluated
+        - totalBattles
+        - totalUsers
     UserStats:
       type: object
       description: Statistics about a user's participation in battles.

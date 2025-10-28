@@ -32,6 +32,13 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_create_battle_evaluation(self) -> None:
+        """Test case for create_battle_evaluation
+
+        Create a battle evaluation
+        """
+        pass
+
     def test_create_battle_round(self) -> None:
         """Test case for create_battle_round
 

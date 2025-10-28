@@ -71,6 +71,7 @@ from bixarena_api_client.models.model_page import ModelPage
 from bixarena_api_client.models.model_search_query import ModelSearchQuery
 from bixarena_api_client.models.model_sort import ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata
+from bixarena_api_client.models.public_stats import PublicStats
 from bixarena_api_client.models.sort_direction import SortDirection
 from bixarena_api_client.models.token200_response import Token200Response
 from bixarena_api_client.models.user_info import UserInfo

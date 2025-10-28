@@ -13,22 +13,22 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.api.battle_evaluation_api import BattleEvaluationApi
+from bixarena_api_client.api.stats_api import StatsApi
 
 
-class TestBattleEvaluationApi(unittest.TestCase):
-    """BattleEvaluationApi unit test stubs"""
+class TestStatsApi(unittest.TestCase):
+    """StatsApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = BattleEvaluationApi()
+        self.api = StatsApi()
 
     def tearDown(self) -> None:
         pass
 
-    def test_create_battle_evaluation(self) -> None:
-        """Test case for create_battle_evaluation
+    def test_get_public_stats(self) -> None:
+        """Test case for get_public_stats
 
-        Create a battle evaluation
+        Get public platform statistics
         """
         pass
 

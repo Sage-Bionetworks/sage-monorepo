@@ -4,10 +4,10 @@ bixarena_api_client/api/__init__.py
 bixarena_api_client/api/admin_api.py
 bixarena_api_client/api/auth_api.py
 bixarena_api_client/api/battle_api.py
-bixarena_api_client/api/battle_evaluation_api.py
 bixarena_api_client/api/example_prompt_api.py
 bixarena_api_client/api/leaderboard_api.py
 bixarena_api_client/api/model_api.py
+bixarena_api_client/api/stats_api.py
 bixarena_api_client/api/user_api.py
 bixarena_api_client/api_client.py
 bixarena_api_client/api_response.py
@@ -56,6 +56,7 @@ bixarena_api_client/models/model_page.py
 bixarena_api_client/models/model_search_query.py
 bixarena_api_client/models/model_sort.py
 bixarena_api_client/models/page_metadata.py
+bixarena_api_client/models/public_stats.py
 bixarena_api_client/models/sort_direction.py
 bixarena_api_client/models/token200_response.py
 bixarena_api_client/models/user_info.py
@@ -70,7 +71,6 @@ docs/Battle.md
 docs/BattleApi.md
 docs/BattleCreateRequest.md
 docs/BattleEvaluation.md
-docs/BattleEvaluationApi.md
 docs/BattleEvaluationCreateRequest.md
 docs/BattleEvaluationOutcome.md
 docs/BattlePage.md
@@ -111,7 +111,9 @@ docs/ModelPage.md
 docs/ModelSearchQuery.md
 docs/ModelSort.md
 docs/PageMetadata.md
+docs/PublicStats.md
 docs/SortDirection.md
+docs/StatsApi.md
 docs/Token200Response.md
 docs/UserApi.md
 docs/UserInfo.md
@@ -125,7 +127,6 @@ test/test_battle.py
 test/test_battle_api.py
 test/test_battle_create_request.py
 test/test_battle_evaluation.py
-test/test_battle_evaluation_api.py
 test/test_battle_evaluation_create_request.py
 test/test_battle_evaluation_outcome.py
 test/test_battle_page.py
@@ -166,7 +167,9 @@ test/test_model_page.py
 test/test_model_search_query.py
 test/test_model_sort.py
 test/test_page_metadata.py
+test/test_public_stats.py
 test/test_sort_direction.py
+test/test_stats_api.py
 test/test_token200_response.py
 test/test_user_api.py
 test/test_user_info.py

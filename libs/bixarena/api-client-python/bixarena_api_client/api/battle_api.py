@@ -22,6 +22,10 @@ from typing_extensions import Annotated
 from uuid import UUID
 from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
+from bixarena_api_client.models.battle_evaluation import BattleEvaluation
+from bixarena_api_client.models.battle_evaluation_create_request import (
+    BattleEvaluationCreateRequest,
+)
 from bixarena_api_client.models.battle_page import BattlePage
 from bixarena_api_client.models.battle_round import BattleRound
 from bixarena_api_client.models.battle_round_create_request import (
@@ -307,6 +311,293 @@ class BattleApi:
         return self.api_client.param_serialize(
             method="POST",
             resource_path="/battles",
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth,
+        )
+
+    @validate_call
+    def create_battle_evaluation(
+        self,
+        battle_id: Annotated[
+            UUID, Field(description="The unique identifier of the battle")
+        ],
+        battle_evaluation_create_request: BattleEvaluationCreateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> BattleEvaluation:
+        """Create a battle evaluation
+
+        Record the outcome of a battle.
+
+        :param battle_id: The unique identifier of the battle (required)
+        :type battle_id: str
+        :param battle_evaluation_create_request: (required)
+        :type battle_evaluation_create_request: BattleEvaluationCreateRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._create_battle_evaluation_serialize(
+            battle_id=battle_id,
+            battle_evaluation_create_request=battle_evaluation_create_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "201": "BattleEvaluation",
+            "400": "BasicError",
+            "401": "BasicError",
+            "403": "BasicError",
+            "404": "BasicError",
+            "500": "BasicError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+    @validate_call
+    def create_battle_evaluation_with_http_info(
+        self,
+        battle_id: Annotated[
+            UUID, Field(description="The unique identifier of the battle")
+        ],
+        battle_evaluation_create_request: BattleEvaluationCreateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[BattleEvaluation]:
+        """Create a battle evaluation
+
+        Record the outcome of a battle.
+
+        :param battle_id: The unique identifier of the battle (required)
+        :type battle_id: str
+        :param battle_evaluation_create_request: (required)
+        :type battle_evaluation_create_request: BattleEvaluationCreateRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._create_battle_evaluation_serialize(
+            battle_id=battle_id,
+            battle_evaluation_create_request=battle_evaluation_create_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "201": "BattleEvaluation",
+            "400": "BasicError",
+            "401": "BasicError",
+            "403": "BasicError",
+            "404": "BasicError",
+            "500": "BasicError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+    @validate_call
+    def create_battle_evaluation_without_preload_content(
+        self,
+        battle_id: Annotated[
+            UUID, Field(description="The unique identifier of the battle")
+        ],
+        battle_evaluation_create_request: BattleEvaluationCreateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Create a battle evaluation
+
+        Record the outcome of a battle.
+
+        :param battle_id: The unique identifier of the battle (required)
+        :type battle_id: str
+        :param battle_evaluation_create_request: (required)
+        :type battle_evaluation_create_request: BattleEvaluationCreateRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._create_battle_evaluation_serialize(
+            battle_id=battle_id,
+            battle_evaluation_create_request=battle_evaluation_create_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "201": "BattleEvaluation",
+            "400": "BasicError",
+            "401": "BasicError",
+            "403": "BasicError",
+            "404": "BasicError",
+            "500": "BasicError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+    def _create_battle_evaluation_serialize(
+        self,
+        battle_id,
+        battle_evaluation_create_request,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+        _host = None
+
+        _collection_formats: Dict[str, str] = {}
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if battle_id is not None:
+            _path_params["battleId"] = battle_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if battle_evaluation_create_request is not None:
+            _body_params = battle_evaluation_create_request
+
+        # set the HTTP header `Accept`
+        if "Accept" not in _header_params:
+            _header_params["Accept"] = self.api_client.select_header_accept(
+                ["application/json", "application/problem+json"]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params["Content-Type"] = _content_type
+        else:
+            _default_content_type = self.api_client.select_header_content_type(
+                ["application/json"]
+            )
+            if _default_content_type is not None:
+                _header_params["Content-Type"] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = ["jwtBearer"]
+
+        return self.api_client.param_serialize(
+            method="POST",
+            resource_path="/battles/{battleId}/evaluations",
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

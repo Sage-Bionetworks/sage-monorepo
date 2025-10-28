@@ -20,10 +20,10 @@ __all__ = [
     "AdminApi",
     "AuthApi",
     "BattleApi",
-    "BattleEvaluationApi",
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
+    "StatsApi",
     "UserApi",
     "ApiResponse",
     "ApiClient",
@@ -76,6 +76,7 @@ __all__ = [
     "ModelSearchQuery",
     "ModelSort",
     "PageMetadata",
+    "PublicStats",
     "SortDirection",
     "Token200Response",
     "UserInfo",
@@ -86,14 +87,12 @@ __all__ = [
 from bixarena_api_client.api.admin_api import AdminApi as AdminApi
 from bixarena_api_client.api.auth_api import AuthApi as AuthApi
 from bixarena_api_client.api.battle_api import BattleApi as BattleApi
-from bixarena_api_client.api.battle_evaluation_api import (
-    BattleEvaluationApi as BattleEvaluationApi,
-)
 from bixarena_api_client.api.example_prompt_api import (
     ExamplePromptApi as ExamplePromptApi,
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
+from bixarena_api_client.api.stats_api import StatsApi as StatsApi
 from bixarena_api_client.api.user_api import UserApi as UserApi
 
 # import ApiClient
@@ -208,6 +207,7 @@ from bixarena_api_client.models.model_search_query import (
 )
 from bixarena_api_client.models.model_sort import ModelSort as ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
+from bixarena_api_client.models.public_stats import PublicStats as PublicStats
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection
 from bixarena_api_client.models.token200_response import (
     Token200Response as Token200Response,

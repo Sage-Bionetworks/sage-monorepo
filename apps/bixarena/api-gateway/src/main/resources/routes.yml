@@ -44,6 +44,10 @@ app:
       audience: 'urn:bixarena:api'
       anonymousAccess: true
     - method: 'GET'
+      path: '/api/v1/stats'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
       path: '/api/v1/users/me/stats'
       audience: 'urn:bixarena:api'
     - method: 'GET'

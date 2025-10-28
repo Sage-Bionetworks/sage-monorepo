@@ -88,5 +88,6 @@
     "version": {
       "versionActions": "@nxlv/python/src/release/version-actions"
     }
-  }
+  },
+  "implicitDependencies": ["bixarena-api-description"]
 }
