@@ -9,4 +9,3 @@ from bixarena_api_client.api.leaderboard_api import LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi
 from bixarena_api_client.api.stats_api import StatsApi
 from bixarena_api_client.api.user_api import UserApi
-
