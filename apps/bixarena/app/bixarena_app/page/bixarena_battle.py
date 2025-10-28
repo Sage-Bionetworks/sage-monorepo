@@ -14,7 +14,6 @@ from bixarena_api_client import (
     ApiClient,
     BattleApi,
     BattleCreateRequest,
-    BattleEvaluationApi,
     BattleEvaluationCreateRequest,
     BattleEvaluationOutcome,
     BattleRoundCreateRequest,
@@ -160,11 +159,11 @@ def create_battle_evaluation(
         api_base_url = _get_api_base_url()
         configuration = Configuration(host=api_base_url)
         with ApiClient(configuration) as api_client:
-            evaluation_api = BattleEvaluationApi(api_client)
+            battle_api = BattleApi(api_client)
             evaluation_request = BattleEvaluationCreateRequest(
                 outcome=outcome,
             )
-            evaluation = evaluation_api.create_battle_evaluation(
+            evaluation = battle_api.create_battle_evaluation(
                 battle_id, evaluation_request
             )
             if evaluation and evaluation.id:
