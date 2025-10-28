@@ -13,6 +13,7 @@ export class PrimaryIdentifierControlsComponent {
   comparisonToolService = inject(ComparisonToolService);
 
   id = input.required<string>();
+  label = input.required<string>();
   viewDetailsTooltip = input<string>('View detailed results');
   viewDetailsEvent = output<string>();
 

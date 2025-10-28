@@ -80,6 +80,7 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
 
 export const mockComparisonToolData: Record<string, any>[] = [
   {
+    _id: '68fff1aaeb12b9674515fd58',
     name: '3xTg-AD',
     model_type: 'Familial AD',
     matched_controls: ['B6129'],
@@ -99,6 +100,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
     },
   },
   {
+    _id: '68fff1aaeb12b9674515fd59',
     name: '5xFAD (UCI)',
     model_type: 'Familial AD',
     matched_controls: ['C57BL/6J'],
@@ -118,6 +120,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
     },
   },
   {
+    _id: '68fff1aaeb12b9674515fd5a',
     name: '5xFAD (IU/Jax/Pitt)',
     model_type: 'Familial AD',
     matched_controls: ['C57BL/6J'],
@@ -139,6 +142,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
     },
   },
   {
+    _id: '68fff1aaeb12b9674515fd5b',
     name: 'Abca7*V1599M',
     model_type: 'Familial AD',
     matched_controls: ['C57BL/6J', '5xFAD'],
@@ -158,6 +162,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
     },
   },
   {
+    _id: '68fff1aaeb12b9674515fd5c',
     name: 'APOE4',
     model_type: 'Late Onset AD',
     matched_controls: ['C57BL/6J'],

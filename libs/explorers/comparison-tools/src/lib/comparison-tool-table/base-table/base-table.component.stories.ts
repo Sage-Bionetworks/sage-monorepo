@@ -22,7 +22,7 @@ const meta: Meta<BaseTableComponent> = {
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
-          pinnedItems: ['3xTg-AD', 'APOE4'],
+          pinnedItems: ['68fff1aaeb12b9674515fd58', '68fff1aaeb12b9674515fd5c'],
         }),
         ...provideComparisonToolFilterService({
           significanceThresholdActive: false,

@@ -25,7 +25,8 @@ async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
     componentInputs: {
-      id: '3xTg-AD',
+      label: '3xTg-AD',
+      id: '68fff1aaeb12b9674515fd58',
       viewDetailsTooltip: 'View detailed results',
     },
   });
@@ -57,7 +58,7 @@ describe('PrimaryIdentifierControlsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display the id', async () => {
+  it('should display the label', async () => {
     await setup();
     expect(screen.getByText('3xTg-AD')).toBeInTheDocument();
   });
@@ -65,30 +66,32 @@ describe('PrimaryIdentifierControlsComponent', () => {
   it('should emit viewDetailsEvent when view details button is clicked', async () => {
     const { user, viewDetailsButton, viewDetailsEventSpy } = await setup();
     await user.click(viewDetailsButton);
-    expect(viewDetailsEventSpy).toHaveBeenCalledWith('3xTg-AD');
+    expect(viewDetailsEventSpy).toHaveBeenCalledWith('68fff1aaeb12b9674515fd58');
   });
 
   it('should toggle pin state when pin button is clicked', async () => {
     const { user, pinButton, service } = await setup();
-    expect(service.isPinned('3xTg-AD')).toBe(false);
+    expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(false);
 
     await user.click(pinButton);
-    expect(service.isPinned('3xTg-AD')).toBe(true);
+    expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(true);
 
     await user.click(pinButton);
-    expect(service.isPinned('3xTg-AD')).toBe(false);
+    expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(false);
   });
 
   it('should show item as pinned when initialized with pinnedItems', async () => {
-    const { service } = await setup({ pinnedItems: ['3xTg-AD', 'item2'] });
-    expect(service.isPinned('3xTg-AD')).toBe(true);
+    const { service } = await setup({
+      pinnedItems: ['68fff1aaeb12b9674515fd58', '68fff1aaeb12b9674515fd59'],
+    });
+    expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(true);
     expect(service.pinnedResultsCount()).toBe(2);
   });
 
-  it('should disable pin button when max pinned items is reached', async () => {
+  it('should disable pin button when max pinned items is reached and not currently pinned', async () => {
     const { pinButton } = await setup({
       maxPinnedItems: 2,
-      pinnedItems: ['item1', 'item2'],
+      pinnedItems: ['68fff1aaeb12b9674515fd5a', '68fff1aaeb12b9674515fd59'],
     });
     expect(pinButton).toBeDisabled();
   });
@@ -96,14 +99,14 @@ describe('PrimaryIdentifierControlsComponent', () => {
   it('should allow unpinning when max pinned items is reached and item is pinned', async () => {
     const { pinButton, user, service } = await setup({
       maxPinnedItems: 2,
-      pinnedItems: ['3xTg-AD', 'item2'],
+      pinnedItems: ['68fff1aaeb12b9674515fd58', '68fff1aaeb12b9674515fd59'],
     });
     expect(pinButton).not.toBeDisabled();
-    expect(service.isPinned('3xTg-AD')).toBe(true);
+    expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(true);
 
     await user.click(pinButton);
 
-    expect(service.isPinned('3xTg-AD')).toBe(false);
+    expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(false);
     expect(service.pinnedResultsCount()).toBe(1);
   });
 
@@ -116,7 +119,7 @@ describe('PrimaryIdentifierControlsComponent', () => {
   });
 
   it('should update pinnedResultsCount when items are unpinned', async () => {
-    const { user, pinButton, service } = await setup({ pinnedItems: ['3xTg-AD'] });
+    const { user, pinButton, service } = await setup({ pinnedItems: ['68fff1aaeb12b9674515fd58'] });
     expect(service.pinnedResultsCount()).toBe(1);
 
     await user.click(pinButton);
@@ -131,16 +134,16 @@ describe('PrimaryIdentifierControlsComponent', () => {
   });
 
   it('should display correct tooltip for unpin button', async () => {
-    const { pinButton, user } = await setup({ pinnedItems: ['3xTg-AD'] });
+    const { pinButton, user } = await setup({ pinnedItems: ['68fff1aaeb12b9674515fd58'] });
     await user.hover(pinButton);
     const tooltip = screen.getByRole('tooltip');
     expect(tooltip).toHaveTextContent('Unpin this row');
   });
 
-  it('should display correct tooltip when max pinned items reached', async () => {
+  it('should display correct tooltip when max pinned items reached and not currently pinned', async () => {
     const { pinButton, user } = await setup({
       maxPinnedItems: 2,
-      pinnedItems: ['item1', 'item2'],
+      pinnedItems: ['68fff1aaeb12b9674515fd5a', '68fff1aaeb12b9674515fd59'],
     });
     await user.hover(pinButton);
     const tooltip = screen.getByRole('tooltip');
