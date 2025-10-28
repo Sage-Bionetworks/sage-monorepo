@@ -1,6 +1,8 @@
 import { Provider } from '@angular/core';
 import { ComparisonToolConfig, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolService } from './comparison-tool.service';
+import { NotificationService } from './notification.service';
 
 export type ComparisonToolServiceOptions = {
   configs?: ComparisonToolConfig[];
@@ -22,6 +24,8 @@ export const provideComparisonToolService = (
   }
 
   return [
+    MessageService,
+    NotificationService,
     {
       provide: ComparisonToolService,
       useFactory: () => {

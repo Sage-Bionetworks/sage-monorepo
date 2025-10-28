@@ -35,7 +35,8 @@ export class ComparisonToolTableComponent {
   }
 
   pinAll() {
-    // TODO: this.comparisonToolService.pinAll();
+    // TODO: handle pagination (i.e. unpinnedData only contains the first page of data, rather than all unpinned data)
+    this.comparisonToolService.pinList(this.unpinnedData().map((item) => item._id));
   }
 
   clearAllPinned() {

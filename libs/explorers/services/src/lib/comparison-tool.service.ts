@@ -1,4 +1,4 @@
-import { computed, Injectable, signal, Signal } from '@angular/core';
+import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import {
   ComparisonToolColumn,
   ComparisonToolColumns,
@@ -6,15 +6,16 @@ import {
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
+import { NotificationService } from './notification.service';
 
 /**
  * Shared state contract for comparison tools.
- *
- * - Call {@link initialize} when configs load to seed dropdowns, reset counts, and wiki params.
  */
 
 @Injectable()
 export class ComparisonToolService<T> {
+  private readonly notificationService = inject(NotificationService);
+
   private readonly DEFAULT_SORT_ORDER = -1;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
@@ -189,29 +190,53 @@ export class ComparisonToolService<T> {
   }
 
   togglePin(id: string) {
-    this.pinnedItemsSignal.update((pinnedItems) => {
-      const newSet = new Set(pinnedItems);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
+    if (this.isPinned(id)) {
+      this.unpinItem(id);
+      return;
+    }
+    this.pinItem(id);
   }
 
   pinItem(id: string) {
-    this.pinnedItemsSignal.update((pinnedItems) => {
-      const newSet = new Set(pinnedItems);
-      newSet.add(id);
-      return newSet;
-    });
+    if (this.hasMaxPinnedItems()) {
+      this.notificationService.showWarning(
+        `You have reached the maximum number of pinned items (${this.maxPinnedItems()}). Please unpin an item before pinning a new one.`,
+      );
+    } else {
+      this.pinnedItemsSignal.update((pinnedItems) => {
+        const newSet = new Set(pinnedItems);
+        newSet.add(id);
+        return newSet;
+      });
+    }
   }
 
   unpinItem(id: string) {
     this.pinnedItemsSignal.update((pinnedItems) => {
       const newSet = new Set(pinnedItems);
       newSet.delete(id);
+      return newSet;
+    });
+  }
+
+  pinList(ids: string[]) {
+    this.pinnedItemsSignal.update((pinnedItems) => {
+      const newSet = new Set(pinnedItems);
+      let itemsAdded = 0;
+      for (const id of ids) {
+        if (newSet.size >= this.maxPinnedItems()) {
+          const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
+          this.notificationService.showWarning(
+            `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
+          );
+          break;
+        }
+        if (newSet.has(id)) {
+          continue;
+        }
+        newSet.add(id);
+        itemsAdded++;
+      }
       return newSet;
     });
   }
