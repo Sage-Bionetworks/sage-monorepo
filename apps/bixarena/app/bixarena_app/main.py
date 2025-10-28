@@ -333,13 +333,17 @@ def build_app(moderate=False):
     return demo
 
 
-# Parse args at module level so both `python` and `gradio` CLI can use them
+# Initialize app at module level for both `python` and `gradio` CLI
+# Note: When using `gradio` CLI, this code runs twice:
+# 1. During module inspection to find the `demo` variable
+# 2. During actual script execution to launch the server
+# This is normal Gradio behavior and unavoidable without complex workarounds
 args = parse_args()
 demo = build_app(args.moderate)
 demo.queue(default_concurrency_limit=args.concurrency_count)
 
+# Only launch when running directly with python (not via gradio CLI)
 if __name__ == "__main__":
-    # Only launch when running directly with python
     demo.launch(
         server_name=args.host,
         server_port=args.port,
