@@ -4,16 +4,16 @@ A model search query with pagination and filtering options.
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**page_number** | **int** | The page number. | [optional] [default to 0]
-**page_size** | **int** | The number of items in a single page. | [optional] [default to 25]
-**sort** | [**ModelSort**](ModelSort.md) |  | [optional] [default to ModelSort.NAME]
-**direction** | [**SortDirection**](SortDirection.md) |  | [optional] [default to SortDirection.ASC]
-**search** | **str** | Search by model name or slug (case-insensitive partial match). | [optional] 
-**active** | **bool** | Filter by active status (true returns only active models; false only inactive; omit for all). | [optional] 
-**license** | [**License**](License.md) |  | [optional] 
-**organization** | **str** | Filter by organization name (case-insensitive partial match). | [optional] 
+| Name             | Type                                  | Description                                                                                   | Notes                                     |
+| ---------------- | ------------------------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| **page_number**  | **int**                               | The page number.                                                                              | [optional] [default to 0]                 |
+| **page_size**    | **int**                               | The number of items in a single page.                                                         | [optional] [default to 25]                |
+| **sort**         | [**ModelSort**](ModelSort.md)         |                                                                                               | [optional] [default to ModelSort.NAME]    |
+| **direction**    | [**SortDirection**](SortDirection.md) |                                                                                               | [optional] [default to SortDirection.ASC] |
+| **search**       | **str**                               | Search by model name or slug (case-insensitive partial match).                                | [optional]                                |
+| **active**       | **bool**                              | Filter by active status (true returns only active models; false only inactive; omit for all). | [optional]                                |
+| **license**      | [**License**](License.md)             |                                                                                               | [optional]                                |
+| **organization** | **str**                               | Filter by organization name (case-insensitive partial match).                                 | [optional]                                |
 
 ## Example
 
@@ -32,6 +32,5 @@ model_search_query_dict = model_search_query_instance.to_dict()
 # create an instance of ModelSearchQuery from a dict
 model_search_query_from_dict = ModelSearchQuery.from_dict(model_search_query_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

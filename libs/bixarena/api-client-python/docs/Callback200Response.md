@@ -1,11 +1,10 @@
 # Callback200Response
 
-
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**status** | **str** |  | [optional] 
+| Name       | Type    | Description | Notes      |
+| ---------- | ------- | ----------- | ---------- |
+| **status** | **str** |             | [optional] |
 
 ## Example
 
@@ -24,6 +23,5 @@ callback200_response_dict = callback200_response_instance.to_dict()
 # create an instance of Callback200Response from a dict
 callback200_response_from_dict = Callback200Response.from_dict(callback200_response_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

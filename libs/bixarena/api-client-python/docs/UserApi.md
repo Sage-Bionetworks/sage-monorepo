@@ -2,12 +2,12 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**get_user_stats**](UserApi.md#get_user_stats) | **GET** /users/me/stats | Get current user&#39;s statistics
-
+| Method                                          | HTTP request            | Description                       |
+| ----------------------------------------------- | ----------------------- | --------------------------------- |
+| [**get_user_stats**](UserApi.md#get_user_stats) | **GET** /users/me/stats | Get current user&#39;s statistics |
 
 # **get_user_stats**
+
 > UserStats get_user_stats()
 
 Get current user's statistics
@@ -16,7 +16,7 @@ Returns statistics about the authenticated user's battle participation.
 
 ### Example
 
-* Bearer (JWT) Authentication (jwtBearer):
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -54,8 +54,6 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling UserApi->get_user_stats: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
 This endpoint does not need any parameter.
@@ -70,15 +68,14 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | User statistics retrieved successfully |  -  |
-**401** | Unauthorized |  -  |
+| Status code | Description                            | Response headers |
+| ----------- | -------------------------------------- | ---------------- |
+| **200**     | User statistics retrieved successfully | -                |
+| **401**     | Unauthorized                           | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

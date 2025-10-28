@@ -1,11 +1,10 @@
 # GetJwks200Response
 
-
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**keys** | **List[object]** |  | [optional] 
+| Name     | Type             | Description | Notes      |
+| -------- | ---------------- | ----------- | ---------- |
+| **keys** | **List[object]** |             | [optional] |
 
 ## Example
 
@@ -24,6 +23,5 @@ get_jwks200_response_dict = get_jwks200_response_instance.to_dict()
 # create an instance of GetJwks200Response from a dict
 get_jwks200_response_from_dict = GetJwks200Response.from_dict(get_jwks200_response_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

@@ -2,12 +2,12 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**list_example_prompts**](ExamplePromptApi.md#list_example_prompts) | **GET** /example-prompts | List example prompts
-
+| Method                                                               | HTTP request             | Description          |
+| -------------------------------------------------------------------- | ------------------------ | -------------------- |
+| [**list_example_prompts**](ExamplePromptApi.md#list_example_prompts) | **GET** /example-prompts | List example prompts |
 
 # **list_example_prompts**
+
 > ExamplePromptPage list_example_prompts(example_prompt_search_query=example_prompt_search_query)
 
 List example prompts
@@ -16,7 +16,7 @@ Get a list of example prompts with comprehensive filtering options
 
 ### Example
 
-* Bearer (JWT) Authentication (jwtBearer):
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -56,14 +56,11 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling ExamplePromptApi->list_example_prompts: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **example_prompt_search_query** | [**ExamplePromptSearchQuery**](.md)| The search query used to find and filter example prompts. | [optional] 
+| Name                            | Type                                | Description                                               | Notes      |
+| ------------------------------- | ----------------------------------- | --------------------------------------------------------- | ---------- |
+| **example_prompt_search_query** | [**ExamplePromptSearchQuery**](.md) | The search query used to find and filter example prompts. | [optional] |
 
 ### Return type
 
@@ -75,16 +72,15 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**400** | Invalid request |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

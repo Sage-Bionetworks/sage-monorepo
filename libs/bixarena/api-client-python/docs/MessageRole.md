@@ -4,12 +4,10 @@ The role of a message.
 
 ## Enum
 
-* `SYSTEM` (value: `'system'`)
+- `SYSTEM` (value: `'system'`)
 
-* `USER` (value: `'user'`)
+- `USER` (value: `'user'`)
 
-* `ASSISTANT` (value: `'assistant'`)
+- `ASSISTANT` (value: `'assistant'`)
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

@@ -2,12 +2,12 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**admin_stats**](AdminApi.md#admin_stats) | **GET** /admin/stats | Admin statistics
-
+| Method                                     | HTTP request         | Description      |
+| ------------------------------------------ | -------------------- | ---------------- |
+| [**admin_stats**](AdminApi.md#admin_stats) | **GET** /admin/stats | Admin statistics |
 
 # **admin_stats**
+
 > AdminStats200Response admin_stats()
 
 Admin statistics
@@ -16,7 +16,7 @@ Administrative operations requiring admin role.
 
 ### Example
 
-* Bearer (JWT) Authentication (jwtBearer):
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -54,8 +54,6 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling AdminApi->admin_stats: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
 This endpoint does not need any parameter.
@@ -70,16 +68,15 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**401** | Unauthorized |  -  |
-**403** | The user does not have the permission to perform this action |  -  |
+| Status code | Description                                                  | Response headers |
+| ----------- | ------------------------------------------------------------ | ---------------- |
+| **200**     | Success                                                      | -                |
+| **401**     | Unauthorized                                                 | -                |
+| **403**     | The user does not have the permission to perform this action | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

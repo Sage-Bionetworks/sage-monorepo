@@ -2,17 +2,17 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**callback**](AuthApi.md#callback) | **GET** /auth/callback | OIDC redirect callback
-[**get_jwks**](AuthApi.md#get_jwks) | **GET** /.well-known/jwks.json | JSON Web Key Set
-[**get_user_info**](AuthApi.md#get_user_info) | **GET** /userinfo | Get current user profile
-[**login**](AuthApi.md#login) | **GET** /auth/login | Start Synapse OIDC authorization code flow
-[**logout**](AuthApi.md#logout) | **POST** /auth/logout | Logout current session
-[**token**](AuthApi.md#token) | **POST** /oauth2/token | Mint short-lived internal JWT
-
+| Method                                        | HTTP request                   | Description                                |
+| --------------------------------------------- | ------------------------------ | ------------------------------------------ |
+| [**callback**](AuthApi.md#callback)           | **GET** /auth/callback         | OIDC redirect callback                     |
+| [**get_jwks**](AuthApi.md#get_jwks)           | **GET** /.well-known/jwks.json | JSON Web Key Set                           |
+| [**get_user_info**](AuthApi.md#get_user_info) | **GET** /userinfo              | Get current user profile                   |
+| [**login**](AuthApi.md#login)                 | **GET** /auth/login            | Start Synapse OIDC authorization code flow |
+| [**logout**](AuthApi.md#logout)               | **POST** /auth/logout          | Logout current session                     |
+| [**token**](AuthApi.md#token)                 | **POST** /oauth2/token         | Mint short-lived internal JWT              |
 
 # **callback**
+
 > Callback200Response callback(code, state)
 
 OIDC redirect callback
@@ -20,7 +20,6 @@ OIDC redirect callback
 Handles redirect from Synapse, validates state and nonce, establishes authenticated session.
 
 ### Example
-
 
 ```python
 import bixarena_api_client
@@ -39,8 +38,8 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.AuthApi(api_client)
-    code = 'code_example' # str | 
-    state = 'state_example' # str | 
+    code = 'code_example' # str |
+    state = 'state_example' # str |
 
     try:
         # OIDC redirect callback
@@ -51,15 +50,12 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling AuthApi->callback: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **code** | **str**|  | 
- **state** | **str**|  | 
+| Name      | Type    | Description | Notes |
+| --------- | ------- | ----------- | ----- |
+| **code**  | **str** |             |
+| **state** | **str** |             |
 
 ### Return type
 
@@ -71,20 +67,21 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Authentication successful |  -  |
-**400** | Invalid request |  -  |
-**401** | Unauthorized |  -  |
+| Status code | Description               | Response headers |
+| ----------- | ------------------------- | ---------------- |
+| **200**     | Authentication successful | -                |
+| **400**     | Invalid request           | -                |
+| **401**     | Unauthorized              | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_jwks**
+
 > GetJwks200Response get_jwks()
 
 JSON Web Key Set
@@ -92,7 +89,6 @@ JSON Web Key Set
 Returns the public keys used to verify internally issued JWTs.
 
 ### Example
-
 
 ```python
 import bixarena_api_client
@@ -121,8 +117,6 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling AuthApi->get_jwks: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
 This endpoint does not need any parameter.
@@ -137,19 +131,20 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | JWKS document |  -  |
-**400** | Invalid request |  -  |
+| Status code | Description     | Response headers |
+| ----------- | --------------- | ---------------- |
+| **200**     | JWKS document   | -                |
+| **400**     | Invalid request | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_user_info**
+
 > UserInfo get_user_info()
 
 Get current user profile
@@ -159,10 +154,9 @@ This is an OIDC-compliant UserInfo endpoint that provides details about the curr
 
 Requires a valid JWT obtained via the `/token` endpoint or an active session.
 
-
 ### Example
 
-* Bearer (JWT) Authentication (jwtBearer):
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -200,8 +194,6 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling AuthApi->get_user_info: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
 This endpoint does not need any parameter.
@@ -216,19 +208,20 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | User profile information |  -  |
-**401** | Unauthorized |  -  |
+| Status code | Description              | Response headers |
+| ----------- | ------------------------ | ---------------- |
+| **200**     | User profile information | -                |
+| **401**     | Unauthorized             | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **login**
+
 > login()
 
 Start Synapse OIDC authorization code flow
@@ -236,7 +229,6 @@ Start Synapse OIDC authorization code flow
 Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
 
 ### Example
-
 
 ```python
 import bixarena_api_client
@@ -262,8 +254,6 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling AuthApi->login: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
 This endpoint does not need any parameter.
@@ -278,20 +268,21 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | Flow started (no content; clients should follow redirect) |  -  |
-**302** | Redirect to Synapse login |  -  |
-**400** | Invalid request |  -  |
+| Status code | Description                                               | Response headers |
+| ----------- | --------------------------------------------------------- | ---------------- |
+| **204**     | Flow started (no content; clients should follow redirect) | -                |
+| **302**     | Redirect to Synapse login                                 | -                |
+| **400**     | Invalid request                                           | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **logout**
+
 > logout()
 
 Logout current session
@@ -300,7 +291,7 @@ Invalidate the current authenticated session. Requires an active session.
 
 ### Example
 
-* Bearer (JWT) Authentication (jwtBearer):
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -335,8 +326,6 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling AuthApi->logout: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
 This endpoint does not need any parameter.
@@ -351,19 +340,20 @@ void (empty response body)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | Logged out successfully |  -  |
-**401** | Unauthorized |  -  |
+| Status code | Description             | Response headers |
+| ----------- | ----------------------- | ---------------- |
+| **204**     | Logged out successfully | -                |
+| **401**     | Unauthorized            | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **token**
+
 > Token200Response token(audience=audience)
 
 Mint short-lived internal JWT
@@ -372,9 +362,7 @@ Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style en
 
 The optional audience parameter specifies the target service for the JWT.
 
-
 ### Example
-
 
 ```python
 import bixarena_api_client
@@ -404,14 +392,11 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling AuthApi->token: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **audience** | **str**| Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.  | [optional] 
+| Name         | Type    | Description                                                                   | Notes      |
+| ------------ | ------- | ----------------------------------------------------------------------------- | ---------- |
+| **audience** | **str** | Target audience for the JWT. If not specified, defaults to urn:bixarena:auth. | [optional] |
 
 ### Return type
 
@@ -423,15 +408,14 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Access token response |  -  |
-**401** | Unauthorized |  -  |
+| Status code | Description           | Response headers |
+| ----------- | --------------------- | ---------------- |
+| **200**     | Access token response | -                |
+| **401**     | Unauthorized          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
