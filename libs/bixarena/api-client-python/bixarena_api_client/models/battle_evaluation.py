@@ -18,8 +18,7 @@ import json
 
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
-from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
+from typing import Any, ClassVar, Dict, List
 from uuid import UUID
 from bixarena_api_client.models.battle_evaluation_outcome import BattleEvaluationOutcome
 from typing import Optional, Set
@@ -28,26 +27,26 @@ from typing_extensions import Self
 
 class BattleEvaluation(BaseModel):
     """
-    A battle evaluation entity representing a user's assessment in a battle between two AI models.
+    A battle evaluation describing the outcome of a matchup.
     """  # noqa: E501
 
     id: UUID = Field(description="The unique identifier of the battle evaluation")
+    battle_id: UUID = Field(
+        description="Unique identifier (UUID) of the battle.", alias="battleId"
+    )
     outcome: BattleEvaluationOutcome
     created_at: datetime = Field(
         description="Timestamp when the entity was created.", alias="createdAt"
     )
-    is_valid: StrictBool = Field(
-        description="Indicates whether the resource passed server-side validation."
-    )
-    validation_error: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = (
-        Field(default=None, description="Short validation error message or reason")
+    valid: StrictBool = Field(
+        description="Indicates whether the battle evaluation passed the configured validation checks."
     )
     __properties: ClassVar[List[str]] = [
         "id",
+        "battleId",
         "outcome",
         "createdAt",
-        "is_valid",
-        "validation_error",
+        "valid",
     ]
 
     model_config = ConfigDict(
@@ -101,12 +100,10 @@ class BattleEvaluation(BaseModel):
         _obj = cls.model_validate(
             {
                 "id": obj.get("id"),
+                "battleId": obj.get("battleId"),
                 "outcome": obj.get("outcome"),
                 "createdAt": obj.get("createdAt"),
-                "is_valid": obj.get("is_valid")
-                if obj.get("is_valid") is not None
-                else False,
-                "validation_error": obj.get("validation_error"),
+                "valid": obj.get("valid") if obj.get("valid") is not None else False,
             }
         )
         return _obj

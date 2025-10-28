@@ -18,7 +18,6 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
 from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
 from bixarena_api_client.models.battle_evaluation_outcome import BattleEvaluationOutcome
 from typing import Optional, Set
 from typing_extensions import Self
@@ -30,14 +29,11 @@ class BattleEvaluationCreateRequest(BaseModel):
     """  # noqa: E501
 
     outcome: BattleEvaluationOutcome
-    is_valid: Optional[StrictBool] = Field(
+    valid: Optional[StrictBool] = Field(
         default=False,
-        description="Indicates whether the resource passed server-side validation.",
+        description="Indicates whether the battle evaluation passed the configured validation checks.",
     )
-    validation_error: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = (
-        Field(default=None, description="Short validation error message or reason")
-    )
-    __properties: ClassVar[List[str]] = ["outcome", "is_valid", "validation_error"]
+    __properties: ClassVar[List[str]] = ["outcome", "valid"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -90,10 +86,7 @@ class BattleEvaluationCreateRequest(BaseModel):
         _obj = cls.model_validate(
             {
                 "outcome": obj.get("outcome"),
-                "is_valid": obj.get("is_valid")
-                if obj.get("is_valid") is not None
-                else False,
-                "validation_error": obj.get("validation_error"),
+                "valid": obj.get("valid") if obj.get("valid") is not None else False,
             }
         )
         return _obj

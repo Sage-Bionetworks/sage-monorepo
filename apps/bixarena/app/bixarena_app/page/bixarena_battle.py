@@ -144,15 +144,13 @@ def create_battle_evaluation(
     battle_id: UUID,
     outcome: BattleEvaluationOutcome,
     is_valid: bool | None = None,
-    validation_error: str | None = None,
 ) -> UUID | None:
     """Create a battleevaluation record for the battle.
 
     Args:
         battle_id: The battle ID to evaluate
-        outcome: BattleEvaluationOutcome enum (MODEL_1, MODEL_2, or TIE)
-        is_valid: boolean indicating whether the responses passed validation
-        validation_error: validation error message
+        outcome: BattleEvaluationOutcome enum (MODEL1, MODEL2, or TIE)
+        kvalid: boolean indicating whether the responses passed validation
 
     Returns:
         Battle Evaluation ID if created successfully, None otherwise
@@ -168,8 +166,7 @@ def create_battle_evaluation(
             evaluation_api = BattleEvaluationApi(api_client)
             evaluation_request = BattleEvaluationCreateRequest(
                 outcome=outcome,
-                is_valid=is_valid,
-                validation_error=validation_error,
+                valid=is_valid,
             )
             evaluation = evaluation_api.create_battle_evaluation(
                 battle_id, evaluation_request
@@ -209,7 +206,6 @@ def vote_last_response(
             battle_session.battle_id,
             outcome,
             is_valid=is_valid,
-            validation_error=validation_error,
         )
         end_battle(battle_session.battle_id)
         battle_session.reset()

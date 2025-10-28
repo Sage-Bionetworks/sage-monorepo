@@ -1,16 +1,16 @@
 # BattleEvaluation
 
-A battle evaluation entity representing a user's assessment in a battle between two AI models.
+A battle evaluation describing the outcome of a matchup.
 
 ## Properties
 
-| Name                 | Type                                                      | Description                                                   | Notes              |
-| -------------------- | --------------------------------------------------------- | ------------------------------------------------------------- | ------------------ |
-| **id**               | **str**                                                   | The unique identifier of the battle evaluation                |
-| **outcome**          | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |                                                               |
-| **created_at**       | **datetime**                                              | Timestamp when the entity was created.                        |
-| **is_valid**         | **bool**                                                  | Indicates whether the resource passed server-side validation. | [default to False] |
-| **validation_error** | **str**                                                   | Short validation error message or reason                      | [optional]         |
+| Name           | Type                                                      | Description                                                                      | Notes              |
+| -------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------ |
+| **id**         | **str**                                                   | The unique identifier of the battle evaluation                                   |
+| **battle_id**  | **str**                                                   | Unique identifier (UUID) of the battle.                                          |
+| **outcome**    | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |                                                                                  |
+| **created_at** | **datetime**                                              | Timestamp when the entity was created.                                           |
+| **valid**      | **bool**                                                  | Indicates whether the battle evaluation passed the configured validation checks. | [default to False] |
 
 ## Example
 

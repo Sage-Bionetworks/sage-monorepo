@@ -1,6 +1,6 @@
 # BattleEvaluationOutcome
 
-The outcome of the battle evaluation between model1 and model2
+The outcome of the battle evaluation between model1 and model2.
 
 ## Enum
 

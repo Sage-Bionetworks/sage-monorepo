@@ -19,7 +19,7 @@ from typing_extensions import Self
 
 class BattleEvaluationOutcome(str, Enum):
     """
-    The outcome of the battle evaluation between model1 and model2
+    The outcome of the battle evaluation between model1 and model2.
     """
 
     """

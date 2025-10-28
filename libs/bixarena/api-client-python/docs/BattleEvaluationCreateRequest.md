@@ -4,11 +4,10 @@ The information used to create a new battle evaluation.
 
 ## Properties
 
-| Name                 | Type                                                      | Description                                                   | Notes                         |
-| -------------------- | --------------------------------------------------------- | ------------------------------------------------------------- | ----------------------------- |
-| **outcome**          | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |                                                               |
-| **is_valid**         | **bool**                                                  | Indicates whether the resource passed server-side validation. | [optional] [default to False] |
-| **validation_error** | **str**                                                   | Short validation error message or reason                      | [optional]                    |
+| Name        | Type                                                      | Description                                                                      | Notes                         |
+| ----------- | --------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------- |
+| **outcome** | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |                                                                                  |
+| **valid**   | **bool**                                                  | Indicates whether the battle evaluation passed the configured validation checks. | [optional] [default to False] |
 
 ## Example
 

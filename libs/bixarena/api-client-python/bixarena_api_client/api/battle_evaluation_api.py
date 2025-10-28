@@ -62,7 +62,7 @@ class BattleEvaluationApi:
     ) -> BattleEvaluation:
         """Create a battle evaluation
 
-        Create a new battle evaluation for a battle.
+        Record the outcome of a battle along with optional validation results.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
@@ -137,7 +137,7 @@ class BattleEvaluationApi:
     ) -> ApiResponse[BattleEvaluation]:
         """Create a battle evaluation
 
-        Create a new battle evaluation for a battle.
+        Record the outcome of a battle along with optional validation results.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
@@ -212,7 +212,7 @@ class BattleEvaluationApi:
     ) -> RESTResponseType:
         """Create a battle evaluation
 
-        Create a new battle evaluation for a battle.
+        Record the outcome of a battle along with optional validation results.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str

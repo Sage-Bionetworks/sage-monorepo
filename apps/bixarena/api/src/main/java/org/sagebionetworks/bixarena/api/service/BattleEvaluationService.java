@@ -39,14 +39,10 @@ public class BattleEvaluationService {
     // Validate battle exists
     getBattleEntity(battleId);
 
-    // Map outcome to BattleEvaluationEntity.Outcome
-    BattleEvaluationEntity.Outcome outcome = mapOutcomeToEntityOutcome(request.getOutcome());
-
     BattleEvaluationEntity entity = BattleEvaluationEntity.builder()
       .battleId(battleId)
-      .outcome(outcome)
-      .isValid(Boolean.TRUE.equals(request.getIsValid()))
-      .validationError(request.getValidationError())
+      .outcome(mapOutcomeToEntityOutcome(request.getOutcome()))
+      .valid(Boolean.TRUE.equals(request.getValid()))
       .build();
 
     try {
@@ -71,14 +67,8 @@ public class BattleEvaluationService {
       );
   }
 
-  private BattleEvaluationEntity.Outcome mapOutcomeToEntityOutcome(
-    BattleEvaluationOutcomeDto outcome
-  ) {
+  private String mapOutcomeToEntityOutcome(BattleEvaluationOutcomeDto outcome) {
     if (outcome == null) return null;
-    return switch (outcome) {
-      case MODEL1 -> BattleEvaluationEntity.Outcome.MODEL_1;
-      case MODEL2 -> BattleEvaluationEntity.Outcome.MODEL_2;
-      case TIE -> BattleEvaluationEntity.Outcome.TIE;
-    };
+    return outcome.getValue();
   }
 }

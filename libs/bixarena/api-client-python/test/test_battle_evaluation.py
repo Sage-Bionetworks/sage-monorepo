@@ -36,17 +36,18 @@ class TestBattleEvaluation(unittest.TestCase):
         if include_optional:
             return BattleEvaluation(
                 id = '',
+                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
                 outcome = 'model1',
                 created_at = '2024-01-15T10:30Z',
-                is_valid = True,
-                validation_error = ''
+                valid = True
             )
         else:
             return BattleEvaluation(
                 id = '',
+                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
                 outcome = 'model1',
                 created_at = '2024-01-15T10:30Z',
-                is_valid = True,
+                valid = True,
         )
         """
 

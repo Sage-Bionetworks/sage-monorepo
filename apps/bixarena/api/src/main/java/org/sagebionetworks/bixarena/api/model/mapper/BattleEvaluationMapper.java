@@ -13,14 +13,14 @@ public class BattleEvaluationMapper {
   public BattleEvaluationDto convertToDto(BattleEvaluationEntity entity) {
     if (entity == null) return null;
 
-    BattleEvaluationOutcomeDto outcomeDto = mapEntityOutcomeToDto(entity.getOutcome());
+    BattleEvaluationOutcomeDto outcomeDto = BattleEvaluationOutcomeDto.fromValue(entity.getOutcome());
 
     return BattleEvaluationDto.builder()
       .id(entity.getId())
+      .battleId(entity.getBattleId())
       .outcome(outcomeDto)
       .createdAt(entity.getCreatedAt())
-      .isValid(entity.getIsValid())
-      .validationError(entity.getValidationError())
+      .valid(entity.getValid())
       .build();
   }
 
@@ -28,12 +28,4 @@ public class BattleEvaluationMapper {
     return entities.stream().map(this::convertToDto).toList();
   }
 
-  private BattleEvaluationOutcomeDto mapEntityOutcomeToDto(BattleEvaluationEntity.Outcome outcome) {
-    if (outcome == null) return null;
-    return switch (outcome) {
-      case MODEL_1 -> BattleEvaluationOutcomeDto.MODEL1;
-      case MODEL_2 -> BattleEvaluationOutcomeDto.MODEL2;
-      case TIE -> BattleEvaluationOutcomeDto.TIE;
-    };
-  }
 }
