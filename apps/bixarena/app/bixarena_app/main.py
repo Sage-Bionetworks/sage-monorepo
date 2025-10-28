@@ -13,6 +13,7 @@ from bixarena_app.page.bixarena_header import (
 )
 from bixarena_app.page.bixarena_home import (
     build_home_page,
+    load_public_stats_on_page_load,
     load_user_battles_on_page_load,
 )
 from bixarena_app.page.bixarena_leaderboard import build_leaderboard_page
@@ -235,7 +236,15 @@ def build_app(moderate=False):
         _, battle_btn, leaderboard_btn, login_btn = build_header()
 
         with gr.Column(visible=True) as home_page:
-            _, cta_btn, user_battles_column, user_battles_box = build_home_page()
+            (
+                _,
+                cta_btn,
+                models_evaluated_box,
+                total_battles_box,
+                total_users_box,
+                user_battles_column,
+                user_battles_box,
+            ) = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
             build_battle_page(moderate)
@@ -319,6 +328,13 @@ def build_app(moderate=False):
             sync_backend_session_on_load,
             outputs=[login_btn, welcome_display, logout_btn, cookie_html],
             js=cleanup_js,
+        )
+
+        # Load public stats on page load (for the first three stats boxes)
+        demo.load(
+            fn=load_public_stats_on_page_load,
+            inputs=None,
+            outputs=[models_evaluated_box, total_battles_box, total_users_box],
         )
 
         # Load user stats on page load (for the fourth stats box)
