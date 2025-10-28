@@ -19,7 +19,6 @@ export class ComparisonToolTableComponent {
   comparisonToolService = inject(ComparisonToolService);
   comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  viewDetailsTooltip = input<string>('View detailed results');
   viewDetailsEvent = output<string>();
 
   pinnedItems = this.comparisonToolService.pinnedItems;

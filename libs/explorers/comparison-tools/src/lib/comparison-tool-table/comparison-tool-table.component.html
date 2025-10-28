@@ -26,7 +26,6 @@
     [data]="pinnedData()"
     [shouldPaginate]="false"
     [shouldShowNoDataMessage]="false"
-    [viewDetailsTooltip]="viewDetailsTooltip()"
     (viewDetailsEvent)="viewDetailsEvent.emit($event)"
   />
 
@@ -65,7 +64,6 @@
     [data]="unpinnedData()"
     [shouldPaginate]="true"
     [shouldShowNoDataMessage]="true"
-    [viewDetailsTooltip]="viewDetailsTooltip()"
     (viewDetailsEvent)="viewDetailsEvent.emit($event)"
   />
 </div>

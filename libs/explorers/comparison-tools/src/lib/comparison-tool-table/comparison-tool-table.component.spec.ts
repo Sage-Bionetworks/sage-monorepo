@@ -31,9 +31,6 @@ async function setup(
       }),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
-    componentInputs: {
-      viewDetailsTooltip: 'View detailed results',
-    },
   });
 
   const fixture = component.fixture;
