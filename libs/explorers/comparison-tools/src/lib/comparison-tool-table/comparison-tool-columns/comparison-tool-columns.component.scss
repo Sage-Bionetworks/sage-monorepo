@@ -7,7 +7,6 @@
     font-size: 16px;
     display: flex;
     align-items: center;
-    justify-content: center;
     border-top: none !important;
     border-bottom: none !important;
 
@@ -22,11 +21,20 @@
     .column-header {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      width: 100%;
+    }
 
-      .column-header-text {
-        padding-left: 10px;
-      }
+    .column-header-text {
+      padding-left: 10px;
+      flex-grow: 1;
+      text-align: left;
+    }
+
+    .column-header-sort {
+      flex-shrink: 0;
+      margin-left: 8px;
+      margin-right: 22px;
     }
 
     span:hover {
