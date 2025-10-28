@@ -5,7 +5,6 @@ import gradio as gr
 import requests
 
 from bixarena_app.auth.user_state import get_user_state
-from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.page.bixarena_battle import build_battle_page
 from bixarena_app.page.bixarena_header import (
     build_header,
@@ -145,15 +144,63 @@ def sync_backend_session_on_load(request: gr.Request):
 
 
 def parse_args():
-    """Parse command line arguments"""
+    """Parse command line arguments or environment variables.
+
+    Supports two modes:
+    1. Direct execution: python main.py --host 0.0.0.0 --port 7860
+    2. Gradio CLI (dev mode): APP_PORT=7860 gradio main.py
+
+    When using the `gradio` CLI for auto-reload, command-line arguments
+    are not passed through, so environment variables are used instead.
+
+    Environment variables (used when running with `gradio` CLI):
+    - APP_HOST: Server host (default: 127.0.0.1)
+    - APP_PORT: Server port (default: None, Gradio will auto-select)
+    - APP_SHARE: Enable sharing (true/1/yes, default: false)
+    - APP_CONCURRENCY_COUNT: Concurrency limit (default: 10)
+    - APP_MODERATE: Enable moderation (true/1/yes, default: false)
+    - APP_GRADIO_ROOT_PATH: Root path for Gradio (default: None)
+    """
+
+    # Helper to parse environment variable for port
+    def get_port_default():
+        port_env = os.environ.get("APP_PORT")
+        return int(port_env) if port_env else None
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("--host", type=str, default="127.0.0.1")
-    parser.add_argument("--port", type=int)
-    parser.add_argument("--share", action="store_true")
-    parser.add_argument("--concurrency-count", type=int, default=10)
-    parser.add_argument("--moderate", action="store_true")
-    parser.add_argument("--gradio-root-path", type=str)
-    return parser.parse_args()
+    parser.add_argument(
+        "--host",
+        type=str,
+        default=os.environ.get("APP_HOST", "127.0.0.1"),
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=get_port_default(),
+    )
+    parser.add_argument(
+        "--share",
+        action="store_true",
+        default=os.environ.get("APP_SHARE", "").lower() in ("true", "1", "yes"),
+    )
+    parser.add_argument(
+        "--concurrency-count",
+        type=int,
+        default=int(os.environ.get("APP_CONCURRENCY_COUNT", "10")),
+    )
+    parser.add_argument(
+        "--moderate",
+        action="store_true",
+        default=os.environ.get("APP_MODERATE", "").lower() in ("true", "1", "yes"),
+    )
+    parser.add_argument(
+        "--gradio-root-path",
+        type=str,
+        default=os.environ.get("APP_GRADIO_ROOT_PATH"),
+    )
+    # Use parse_known_args to ignore unknown args (like demo path from gradio CLI)
+    args, _ = parser.parse_known_args()
+    return args
 
 
 def build_app(moderate=False):
@@ -286,10 +333,18 @@ def build_app(moderate=False):
     return demo
 
 
+# Initialize app at module level for both `python` and `gradio` CLI
+# Note: When using `gradio` CLI, this code runs twice:
+# 1. During module inspection to find the `demo` variable
+# 2. During actual script execution to launch the server
+# This is normal Gradio behavior and unavoidable without complex workarounds
+args = parse_args()
+demo = build_app(args.moderate)
+demo.queue(default_concurrency_limit=args.concurrency_count)
+
+# Only launch when running directly with python (not via gradio CLI)
 if __name__ == "__main__":
-    args = parse_args()
-    app = build_app(args.moderate)
-    app.queue(default_concurrency_limit=args.concurrency_count).launch(
+    demo.launch(
         server_name=args.host,
         server_port=args.port,
         share=args.share,
