@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface ExamplePromptRepository
   extends JpaRepository<ExamplePromptEntity, UUID>, JpaSpecificationExecutor<ExamplePromptEntity> {
   @Query(
-    value = "SELECT * FROM example_prompt ep " +
+    value = "SELECT * FROM api.example_prompt ep " +
     "WHERE ep.active = TRUE " +
     "ORDER BY random() LIMIT :page_size",
     nativeQuery = true
