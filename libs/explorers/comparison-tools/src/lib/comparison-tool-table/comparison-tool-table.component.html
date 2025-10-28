@@ -1,11 +1,11 @@
 <div class="comparison-tool-table">
   <explorers-comparison-tool-columns />
 
-  @if (pinnedItems().size > 0) {
+  @if (pinnedResultsCount() > 0) {
     <div class="table-divider table-divider-1">
       <div class="table-divider-inner">
         <div id="pinned-genes-header">
-          <span> Pinned Items ({{ pinnedItems().size }}/{{ maxPinnedItems() }}) </span>
+          <span> Pinned Items ({{ pinnedResultsCount() }}/{{ maxPinnedItems() }}) </span>
         </div>
         <div class="csv-download-button">
           <button (click)="downloadPinnedCsv()">
@@ -51,7 +51,7 @@
       </div>
     </div>
   }
-  @if (!searchTerm() && !hasSelectedFilters() && pinnedItems().size > 0) {
+  @if (!searchTerm() && !hasSelectedFilters() && pinnedResultsCount() > 0) {
     <div class="table-divider">
       <div class="table-divider-inner">
         <div>All Items</div>

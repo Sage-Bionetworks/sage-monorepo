@@ -51,11 +51,7 @@ export const PinnedWithoutSearchTerm: Story = {
     applicationConfig({
       providers: [
         ...provideComparisonToolService({
-          pinnedItems: [
-            '68fff1aaeb12b9674515fd58',
-            '68fff1aaeb12b9674515fd59',
-            '68fff1aaeb12b9674515fd5a',
-          ],
+          pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
           maxPinnedItems: 5,
           pinnedData: mockComparisonToolData.slice(0, 3),
           unpinnedData: mockComparisonToolData.slice(3),
@@ -72,11 +68,7 @@ export const SearchTermActive: Story = {
     applicationConfig({
       providers: [
         ...provideComparisonToolService({
-          pinnedItems: [
-            '68fff1aaeb12b9674515fd58',
-            '68fff1aaeb12b9674515fd59',
-            '68fff1aaeb12b9674515fd5a',
-          ],
+          pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
           maxPinnedItems: 5,
           pinnedData: mockComparisonToolData.slice(0, 3),
           unpinnedData: mockComparisonToolData.slice(3),

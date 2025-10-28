@@ -19,7 +19,7 @@ export class ComparisonToolTableComponent {
   comparisonToolService = inject(ComparisonToolService);
   comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  pinnedItems = this.comparisonToolService.pinnedItems;
+  pinnedResultsCount = this.comparisonToolService.pinnedResultsCount;
   maxPinnedItems = this.comparisonToolService.maxPinnedItems;
   hasMaxPinnedItems = this.comparisonToolService.hasMaxPinnedItems;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
