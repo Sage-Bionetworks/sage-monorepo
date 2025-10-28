@@ -1,91 +1,91 @@
 app:
   routes:
-  - method: "DELETE"
-    path: "/api/v1/battles/{battleId}"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/.well-known/jwks.json"
-    audience: "urn:bixarena:auth"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/admin/stats"
-    audience: "urn:bixarena:api"
-  - method: "GET"
-    path: "/api/v1/battles"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/battles/{battleId}"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/example-prompts"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/leaderboards"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/leaderboards/{leaderboardId}"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/leaderboards/{leaderboardId}/history/{modelId}"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/leaderboards/{leaderboardId}/snapshots"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/models"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/stats"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/api/v1/users/me/stats"
-    audience: "urn:bixarena:api"
-  - method: "GET"
-    path: "/auth/callback"
-    audience: "urn:bixarena:auth"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/auth/login"
-    audience: "urn:bixarena:auth"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/health-check"
-    audience: "urn:bixarena:ai"
-    anonymousAccess: true
-  - method: "GET"
-    path: "/userinfo"
-    audience: "urn:bixarena:auth"
-  - method: "PATCH"
-    path: "/api/v1/battles/{battleId}"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "PATCH"
-    path: "/api/v1/battles/{battleId}/rounds/{roundId}"
-    audience: "urn:bixarena:api"
-  - method: "POST"
-    path: "/api/v1/battles"
-    audience: "urn:bixarena:api"
-    anonymousAccess: true
-  - method: "POST"
-    path: "/api/v1/battles/{battleId}/evaluations"
-    audience: "urn:bixarena:api"
-  - method: "POST"
-    path: "/api/v1/battles/{battleId}/rounds"
-    audience: "urn:bixarena:api"
-  - method: "POST"
-    path: "/auth/logout"
-    audience: "urn:bixarena:auth"
-  - method: "POST"
-    path: "/oauth2/token"
-    audience: "urn:bixarena:auth"
-    anonymousAccess: true
+    - method: 'DELETE'
+      path: '/api/v1/battles/{battleId}'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/.well-known/jwks.json'
+      audience: 'urn:bixarena:auth'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/admin/stats'
+      audience: 'urn:bixarena:api'
+    - method: 'GET'
+      path: '/api/v1/battles'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/battles/{battleId}'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/example-prompts'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/leaderboards'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/leaderboards/{leaderboardId}'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/leaderboards/{leaderboardId}/history/{modelId}'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/leaderboards/{leaderboardId}/snapshots'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/models'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/stats'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/api/v1/users/me/stats'
+      audience: 'urn:bixarena:api'
+    - method: 'GET'
+      path: '/auth/callback'
+      audience: 'urn:bixarena:auth'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/auth/login'
+      audience: 'urn:bixarena:auth'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/health-check'
+      audience: 'urn:bixarena:ai'
+      anonymousAccess: true
+    - method: 'GET'
+      path: '/userinfo'
+      audience: 'urn:bixarena:auth'
+    - method: 'PATCH'
+      path: '/api/v1/battles/{battleId}'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'PATCH'
+      path: '/api/v1/battles/{battleId}/rounds/{roundId}'
+      audience: 'urn:bixarena:api'
+    - method: 'POST'
+      path: '/api/v1/battles'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+    - method: 'POST'
+      path: '/api/v1/battles/{battleId}/evaluations'
+      audience: 'urn:bixarena:api'
+    - method: 'POST'
+      path: '/api/v1/battles/{battleId}/rounds'
+      audience: 'urn:bixarena:api'
+    - method: 'POST'
+      path: '/auth/logout'
+      audience: 'urn:bixarena:auth'
+    - method: 'POST'
+      path: '/oauth2/token'
+      audience: 'urn:bixarena:auth'
+      anonymousAccess: true
