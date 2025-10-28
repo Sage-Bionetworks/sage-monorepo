@@ -3,7 +3,7 @@ parameters:
 
 post:
   tags:
-    - BattleEvaluation
+    - Battle
   summary: Create a battle evaluation
   description: Record the outcome of a battle.
   operationId: createBattleEvaluation

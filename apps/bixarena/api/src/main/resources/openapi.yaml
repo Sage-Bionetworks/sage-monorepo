@@ -24,8 +24,6 @@ tags:
     name: Leaderboard
   - description: Operations about models.
     name: Model
-  - description: Operations about battle evaluations.
-    name: BattleEvaluation
   - description: Operations about the authenticated user.
     name: User
 paths:
@@ -604,13 +602,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       summary: Create a battle evaluation
       tags:
-        - BattleEvaluation
+        - Battle
       x-content-type: application/json
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: BattleEvaluation
+        - tag: Battle
   /users/me/stats:
     get:
       description: Returns statistics about the authenticated user's battle participation.

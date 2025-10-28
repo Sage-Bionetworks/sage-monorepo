@@ -3,6 +3,8 @@ package org.sagebionetworks.bixarena.api.api;
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;

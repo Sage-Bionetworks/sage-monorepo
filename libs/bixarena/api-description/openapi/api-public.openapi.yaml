@@ -24,8 +24,6 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
-  - name: BattleEvaluation
-    description: Operations about battle evaluations.
   - name: User
     description: Operations about the authenticated user.
 paths:
@@ -383,7 +381,7 @@ paths:
       - $ref: '#/components/parameters/battleId'
     post:
       tags:
-        - BattleEvaluation
+        - Battle
       summary: Create a battle evaluation
       description: Record the outcome of a battle.
       operationId: createBattleEvaluation

@@ -28,9 +28,6 @@ tags:
   - name: Model
     description: Operations about models.
     x-displayName: Model
-  - name: BattleEvaluation
-    description: Operations about battle evaluations.
-    x-displayName: BattleEvaluation
   - name: User
     description: Operations about the authenticated user.
     x-displayName: User
@@ -420,7 +417,7 @@ paths:
       - $ref: '#/components/parameters/battleId'
     post:
       tags:
-        - BattleEvaluation
+        - Battle
       summary: Create a battle evaluation
       description: Record the outcome of a battle.
       operationId: createBattleEvaluation
@@ -1717,7 +1714,6 @@ x-tagGroups:
       - Example Prompt
       - Leaderboard
       - Model
-      - BattleEvaluation
       - User
   - name: BixArena Auth Service
     tags:

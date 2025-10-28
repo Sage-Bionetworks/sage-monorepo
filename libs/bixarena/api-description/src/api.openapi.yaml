@@ -31,8 +31,6 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
-  - name: BattleEvaluation
-    description: Operations about battle evaluations.
   - name: User
     description: Operations about the authenticated user.
 
