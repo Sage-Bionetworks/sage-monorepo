@@ -82,8 +82,8 @@ CREATE TABLE api.battle (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(255),
   user_id UUID NOT NULL,
-  model_1_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
-  model_2_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  model1_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  model2_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   ended_at TIMESTAMPTZ
 );
@@ -92,7 +92,37 @@ CREATE TABLE api.battle (
 CREATE INDEX idx_api_battle_user_id ON api.battle(user_id);
 CREATE INDEX idx_api_battle_created_at ON api.battle(created_at DESC);
 
--- Create round table
+-- Message table
+CREATE TABLE api.message (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  role VARCHAR(20) NOT NULL,
+  content VARCHAR(5000) NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  -- Table constraints
+  CONSTRAINT chk_message_role CHECK (role IN ('system', 'user', 'assistant'))
+);
+
+-- Indexes for message
+CREATE INDEX idx_api_message_role ON api.message(role);
+
+-- Battle round table
+CREATE TABLE api.battle_round (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
+  round_number INTEGER NOT NULL DEFAULT 1,
+  prompt_message_id UUID NOT NULL REFERENCES api.message(id) ON DELETE CASCADE,
+  model1_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
+  model2_message_id UUID REFERENCES api.message(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Indexes for battle round
+CREATE INDEX idx_api_battle_round_battle_id ON api.battle_round(battle_id);
+CREATE INDEX idx_api_battle_round_round_number ON api.battle_round(round_number);
+CREATE INDEX idx_api_battle_round_created_at ON api.battle_round(created_at DESC);
+
+-- Battle evaluation table
 CREATE TABLE api.battle_evaluation (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
@@ -102,10 +132,10 @@ CREATE TABLE api.battle_evaluation (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   -- Table constraints
   CONSTRAINT unique_battle_evaluation UNIQUE (battle_id),
-  CONSTRAINT chk_battle_evaluation_outcome CHECK (outcome IN ('MODEL_1', 'MODEL_2', 'TIE'))
+  CONSTRAINT chk_battle_evaluation_outcome CHECK (outcome IN ('MODEL1', 'MODEL2', 'TIE'))
 );
 
--- Indexes for evaluation queries
+-- Indexes for battle evaluation
 CREATE INDEX idx_api_battle_evaluation_outcome ON api.battle_evaluation(outcome);
 CREATE INDEX idx_api_battle_evaluation_created_at ON api.battle_evaluation(created_at DESC);
 CREATE INDEX idx_api_battle_evaluation_is_valid ON api.battle_evaluation(is_valid);

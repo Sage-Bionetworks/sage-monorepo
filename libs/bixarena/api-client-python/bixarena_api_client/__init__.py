@@ -24,6 +24,7 @@ __all__ = [
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
+    "UserApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -41,6 +42,9 @@ __all__ = [
     "BattleEvaluationCreateRequest",
     "BattleEvaluationOutcome",
     "BattlePage",
+    "BattleRound",
+    "BattleRoundCreateRequest",
+    "BattleRoundUpdateRequest",
     "BattleSearchQuery",
     "BattleSort",
     "BattleUpdateRequest",
@@ -65,6 +69,8 @@ __all__ = [
     "LeaderboardSnapshotSort",
     "LeaderboardSort",
     "License",
+    "MessageCreate",
+    "MessageRole",
     "Model",
     "ModelPage",
     "ModelSearchQuery",
@@ -73,6 +79,7 @@ __all__ = [
     "SortDirection",
     "Token200Response",
     "UserInfo",
+    "UserStats",
 ]
 
 # import apis into sdk package
@@ -87,6 +94,7 @@ from bixarena_api_client.api.example_prompt_api import (
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
+from bixarena_api_client.api.user_api import UserApi as UserApi
 
 # import ApiClient
 from bixarena_api_client.api_response import ApiResponse as ApiResponse
@@ -118,6 +126,13 @@ from bixarena_api_client.models.battle_evaluation_outcome import (
     BattleEvaluationOutcome as BattleEvaluationOutcome,
 )
 from bixarena_api_client.models.battle_page import BattlePage as BattlePage
+from bixarena_api_client.models.battle_round import BattleRound as BattleRound
+from bixarena_api_client.models.battle_round_create_request import (
+    BattleRoundCreateRequest as BattleRoundCreateRequest,
+)
+from bixarena_api_client.models.battle_round_update_request import (
+    BattleRoundUpdateRequest as BattleRoundUpdateRequest,
+)
 from bixarena_api_client.models.battle_search_query import (
     BattleSearchQuery as BattleSearchQuery,
 )
@@ -184,6 +199,8 @@ from bixarena_api_client.models.leaderboard_sort import (
     LeaderboardSort as LeaderboardSort,
 )
 from bixarena_api_client.models.license import License as License
+from bixarena_api_client.models.message_create import MessageCreate as MessageCreate
+from bixarena_api_client.models.message_role import MessageRole as MessageRole
 from bixarena_api_client.models.model import Model as Model
 from bixarena_api_client.models.model_page import ModelPage as ModelPage
 from bixarena_api_client.models.model_search_query import (
@@ -196,3 +213,4 @@ from bixarena_api_client.models.token200_response import (
     Token200Response as Token200Response,
 )
 from bixarena_api_client.models.user_info import UserInfo as UserInfo
+from bixarena_api_client.models.user_stats import UserStats as UserStats

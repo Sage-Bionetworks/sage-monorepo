@@ -1,0 +1,8 @@
+type: string
+description: The role of a message.
+maxLength: 20
+enum:
+  - system
+  - user
+  - assistant
+example: user

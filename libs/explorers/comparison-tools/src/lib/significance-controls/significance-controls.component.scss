@@ -6,8 +6,7 @@
   flex-direction: row;
   font-size: 14px;
   color: gray;
-  height: 20px;
-  margin-bottom: 8px;
+  height: 28px;
 
   button {
     @include mixins.reset-button;
@@ -23,7 +22,7 @@
 
   .toggle-switch {
     display: flex;
-    align-items: start;
+    align-items: end;
   }
 }
 

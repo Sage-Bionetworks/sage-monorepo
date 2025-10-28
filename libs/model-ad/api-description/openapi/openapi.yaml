@@ -422,7 +422,7 @@ components:
             - link_external
             - primary
           description: The data type of the column. Must be 'text', 'heat_map', 'link_internal', 'link_external', or 'primary', where 'primary' is the primary key column that uniquely identifies each record in the table.
-        column_key:
+        data_key:
           type: string
           description: The key used to retrieve data for this column from the data source.
         tooltip:
@@ -439,7 +439,7 @@ components:
           description: The default URL for this column.
       required:
         - type
-        - column_key
+        - data_key
     ComparisonToolConfigFilter:
       type: object
       description: Comparison Tool Config Filter
@@ -448,10 +448,14 @@ components:
           type: string
           description: Name of the filter group
           example: Biological Domain
-        field:
+        data_key:
           type: string
           description: Field to filter on
           example: model_type
+        short_name:
+          type: string
+          description: Short name of the filter group
+          example: Biodomain
         values:
           type: array
           description: List of filter values
@@ -460,7 +464,7 @@ components:
             example: Apoptosis
       required:
         - name
-        - field
+        - data_key
         - values
     ComparisonToolConfig:
       type: object
@@ -473,6 +477,9 @@ components:
           items:
             type: string
             example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
+        row_count:
+          type: string
+          description: Relative description of the total number of rows in the data
         columns:
           type: array
           description: List of column definitions
@@ -486,7 +493,9 @@ components:
       required:
         - page
         - dropdowns
+        - row_count
         - columns
+        - filters
     ModelOverviewLink:
       type: object
       description: Model Overview Link

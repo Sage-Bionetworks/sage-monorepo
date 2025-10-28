@@ -108,10 +108,12 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _AuthApi_             | [**logout**](docs/AuthApi.md#logout)                                                 | **POST** /auth/logout                                   | Logout current session                     |
 | _AuthApi_             | [**token**](docs/AuthApi.md#token)                                                   | **POST** /oauth2/token                                  | Mint short-lived internal JWT              |
 | _BattleApi_           | [**create_battle**](docs/BattleApi.md#create_battle)                                 | **POST** /battles                                       | Create a battle                            |
+| _BattleApi_           | [**create_battle_round**](docs/BattleApi.md#create_battle_round)                     | **POST** /battles/{battleId}/rounds                     | Create a battle round                      |
 | _BattleApi_           | [**delete_battle**](docs/BattleApi.md#delete_battle)                                 | **DELETE** /battles/{battleId}                          | Delete a battle                            |
 | _BattleApi_           | [**get_battle**](docs/BattleApi.md#get_battle)                                       | **GET** /battles/{battleId}                             | Get a battle by ID                         |
 | _BattleApi_           | [**list_battles**](docs/BattleApi.md#list_battles)                                   | **GET** /battles                                        | List battles                               |
 | _BattleApi_           | [**update_battle**](docs/BattleApi.md#update_battle)                                 | **PATCH** /battles/{battleId}                           | Update a battle                            |
+| _BattleApi_           | [**update_battle_round**](docs/BattleApi.md#update_battle_round)                     | **PATCH** /battles/{battleId}/rounds/{roundId}          | Update a battle round                      |
 | _BattleEvaluationApi_ | [**create_battle_evaluation**](docs/BattleEvaluationApi.md#create_battle_evaluation) | **POST** /battles/{battleId}/evaluations                | Create a battle evaluation                 |
 | _ExamplePromptApi_    | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)            | **GET** /example-prompts                                | List example prompts                       |
 | _LeaderboardApi_      | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                        | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
@@ -119,6 +121,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _LeaderboardApi_      | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                    | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
 | _LeaderboardApi_      | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                    | **GET** /leaderboards                                   | List all available leaderboards            |
 | _ModelApi_            | [**list_models**](docs/ModelApi.md#list_models)                                      | **GET** /models                                         | List models                                |
+| _UserApi_             | [**get_user_stats**](docs/UserApi.md#get_user_stats)                                 | **GET** /users/me/stats                                 | Get current user&#39;s statistics          |
 
 ## Documentation For Models
 
@@ -130,6 +133,9 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [BattleEvaluationCreateRequest](docs/BattleEvaluationCreateRequest.md)
 - [BattleEvaluationOutcome](docs/BattleEvaluationOutcome.md)
 - [BattlePage](docs/BattlePage.md)
+- [BattleRound](docs/BattleRound.md)
+- [BattleRoundCreateRequest](docs/BattleRoundCreateRequest.md)
+- [BattleRoundUpdateRequest](docs/BattleRoundUpdateRequest.md)
 - [BattleSearchQuery](docs/BattleSearchQuery.md)
 - [BattleSort](docs/BattleSort.md)
 - [BattleUpdateRequest](docs/BattleUpdateRequest.md)
@@ -154,6 +160,8 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [LeaderboardSnapshotSort](docs/LeaderboardSnapshotSort.md)
 - [LeaderboardSort](docs/LeaderboardSort.md)
 - [License](docs/License.md)
+- [MessageCreate](docs/MessageCreate.md)
+- [MessageRole](docs/MessageRole.md)
 - [Model](docs/Model.md)
 - [ModelPage](docs/ModelPage.md)
 - [ModelSearchQuery](docs/ModelSearchQuery.md)
@@ -162,6 +170,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [SortDirection](docs/SortDirection.md)
 - [Token200Response](docs/Token200Response.md)
 - [UserInfo](docs/UserInfo.md)
+- [UserStats](docs/UserStats.md)
 
 <a id="documentation-for-authorization"></a>
 

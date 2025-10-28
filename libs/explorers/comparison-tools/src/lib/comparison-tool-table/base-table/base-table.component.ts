@@ -31,9 +31,9 @@ interface PaginationOptions {
   encapsulation: ViewEncapsulation.None,
 })
 export class BaseTableComponent {
-  comparisonToolService = inject(ComparisonToolService);
+  private readonly comparisonToolService = inject(ComparisonToolService);
 
-  currentConfig = this.comparisonToolService.currentConfig;
+  selectedColumns = this.comparisonToolService.selectedColumns;
 
   data = input.required<Record<string, any>[]>();
   shouldPaginate = input<boolean>(true);
@@ -51,6 +51,6 @@ export class BaseTableComponent {
   };
 
   sortCallback(event: SortEvent) {
-    // TODO: implement Sort (MG-459)
+    this.comparisonToolService.setSort(event.field, event.order);
   }
 }

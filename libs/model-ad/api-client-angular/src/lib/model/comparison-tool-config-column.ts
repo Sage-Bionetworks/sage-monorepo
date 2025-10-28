@@ -20,7 +20,7 @@ export interface ComparisonToolConfigColumn {
   /**
    * The key used to retrieve data for this column from the data source.
    */
-  column_key: string;
+  data_key: string;
   /**
    * Tooltip text for the column.
    */

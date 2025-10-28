@@ -1,4 +1,5 @@
 get:
+  x-anonymous-access: true
   tags:
     - Auth
   summary: OIDC redirect callback

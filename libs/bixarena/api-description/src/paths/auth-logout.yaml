@@ -1,4 +1,5 @@
 post:
+  x-anonymous-access: false
   tags:
     - Auth
   summary: Logout current session

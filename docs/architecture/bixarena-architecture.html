@@ -50,54 +50,24 @@
       flowchart TD
         user[User Browser]
 
-        %% Edge (pick one)
-        caddy@{shape: icon, icon: 'catppuccin:caddy', label: 'Caddy / AWS ALB<br>(TLS, static, vanity DNS)'}
         gw@{shape: icon, icon: 'logos:spring-icon', label: 'Spring Cloud Gateway'}
 
         web@{shape: icon, icon: 'logos:gradio-icon', label: 'Gradio App'}
         auth@{shape: icon, icon: 'logos:spring-icon', label: 'Auth Service<br>(Spring Boot)'}
         api@{shape: icon, icon: 'logos:spring-icon', label: 'API Service<br>(Spring Boot)'}
         ai@{shape: icon, icon: 'logos:fastapi-icon', label: 'AI Service<br>(FastAPI)'}
-        db@{shape: icon, icon: 'logos:postgresql', label: 'RDS PostgreSQL'}
-        cache@{shape: icon, icon: 'logos:redis', label: 'Redis / ElastiCache'}
-        or@{shape: icon, icon: 'system-uicons:fork-git', label: 'OpenRouter<br>(LLM Proxy)'}
-        %% claude@{shape: icon, icon: 'logos:claude-icon', label: 'Claude'}
 
-        user user_caddy@-->|"HTTPS"| caddy
-        caddy caddy_gw@-->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| gw
-        caddy caddy_web@-->|"/**"| web
+        user user_web@-->|"HTTP"| web
+        web web_gw@-->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| gw
 
         gw gw_auth@-.->|"HTTP /auth/\*\*"| auth
         gw gw_api@-->|"HTTP /api/**"| api
         gw gw_ai@-.->|"HTTP/WS /ai/**"| ai
-        gw gw_cache@-.-> cache
 
-        %% web -->|"/api/\*\*, /ai/\*\*, /auth/\*\*"| caddy
-        web web_or@--> or
-
-        %% or --> claude
-
-        auth auth_db@--> db
-        api api_db@--> db
-        ai ai_db@-.-> db
-        auth auth_cache@-.-> cache
-        api api_cache@-.-> cache
-        ai ai_cache@-.-> cache
-
-        user_caddy@{ animate: true }
-        caddy_gw@{ animate: true }
-        caddy_web@{ animate: true }
+        user_web@{ animate: true }
+        web_gw@{ animate: true }
         gw_auth@{ animate: true }
         gw_api@{ animate: true }
-        gw_ai@{ animate: false }
-        gw_cache@{ animate: false }
-        web_or@{ animate: true }
-        auth_db@{ animate: true }
-        api_db@{ animate: true }
-        ai_db@{ animate: false }
-        auth_cache@{ animate: false }
-        api_cache@{ animate: false }
-        ai_cache@{ animate: false }
       </div>
     </div>
 

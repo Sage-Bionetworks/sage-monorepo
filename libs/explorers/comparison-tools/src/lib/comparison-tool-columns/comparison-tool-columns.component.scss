@@ -1,0 +1,28 @@
+.p-datatable-thead {
+  th {
+    font-size: 16px;
+
+    .column-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .column-header-text {
+        text-align: right;
+        padding-right: 3px;
+      }
+    }
+
+    span:hover {
+      color: var(--color-action-primary);
+    }
+  }
+
+  .p-sortable-column-icon {
+    font-size: 14px;
+
+    &:hover {
+      color: var(--color-action-primary);
+    }
+  }
+}

@@ -2,6 +2,7 @@ parameters:
   - $ref: ../../components/parameters/path/battleId.yaml
 
 get:
+  x-anonymous-access: true
   tags:
     - Battle
   summary: Get a battle by ID
@@ -22,6 +23,7 @@ get:
       $ref: ../../components/responses/InternalServerError.yaml
 
 patch:
+  x-anonymous-access: true
   tags:
     - Battle
   summary: Update a battle
@@ -52,6 +54,7 @@ patch:
       $ref: ../../components/responses/InternalServerError.yaml
 
 delete:
+  x-anonymous-access: true
   tags:
     - Battle
   summary: Delete a battle

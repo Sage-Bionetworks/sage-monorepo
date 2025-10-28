@@ -8,6 +8,9 @@ properties:
     items:
       type: string
       example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
+  row_count:
+    type: string
+    description: Relative description of the total number of rows in the data
   columns:
     type: array
     description: List of column definitions
@@ -21,4 +24,6 @@ properties:
 required:
   - page
   - dropdowns
+  - row_count
   - columns
+  - filters

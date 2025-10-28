@@ -1,0 +1,6 @@
+name: roundId
+description: The unique identifier of the battle round
+in: path
+required: true
+schema:
+  $ref: ../../schemas/BattleRoundId.yaml

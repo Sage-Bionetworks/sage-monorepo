@@ -8,6 +8,7 @@ bixarena_api_client/api/battle_evaluation_api.py
 bixarena_api_client/api/example_prompt_api.py
 bixarena_api_client/api/leaderboard_api.py
 bixarena_api_client/api/model_api.py
+bixarena_api_client/api/user_api.py
 bixarena_api_client/api_client.py
 bixarena_api_client/api_response.py
 bixarena_api_client/configuration.py
@@ -21,6 +22,9 @@ bixarena_api_client/models/battle_evaluation.py
 bixarena_api_client/models/battle_evaluation_create_request.py
 bixarena_api_client/models/battle_evaluation_outcome.py
 bixarena_api_client/models/battle_page.py
+bixarena_api_client/models/battle_round.py
+bixarena_api_client/models/battle_round_create_request.py
+bixarena_api_client/models/battle_round_update_request.py
 bixarena_api_client/models/battle_search_query.py
 bixarena_api_client/models/battle_sort.py
 bixarena_api_client/models/battle_update_request.py
@@ -45,6 +49,8 @@ bixarena_api_client/models/leaderboard_snapshot_query.py
 bixarena_api_client/models/leaderboard_snapshot_sort.py
 bixarena_api_client/models/leaderboard_sort.py
 bixarena_api_client/models/license.py
+bixarena_api_client/models/message_create.py
+bixarena_api_client/models/message_role.py
 bixarena_api_client/models/model.py
 bixarena_api_client/models/model_page.py
 bixarena_api_client/models/model_search_query.py
@@ -53,6 +59,7 @@ bixarena_api_client/models/page_metadata.py
 bixarena_api_client/models/sort_direction.py
 bixarena_api_client/models/token200_response.py
 bixarena_api_client/models/user_info.py
+bixarena_api_client/models/user_stats.py
 bixarena_api_client/py.typed
 bixarena_api_client/rest.py
 docs/AdminApi.md
@@ -67,6 +74,9 @@ docs/BattleEvaluationApi.md
 docs/BattleEvaluationCreateRequest.md
 docs/BattleEvaluationOutcome.md
 docs/BattlePage.md
+docs/BattleRound.md
+docs/BattleRoundCreateRequest.md
+docs/BattleRoundUpdateRequest.md
 docs/BattleSearchQuery.md
 docs/BattleSort.md
 docs/BattleUpdateRequest.md
@@ -93,6 +103,8 @@ docs/LeaderboardSnapshotQuery.md
 docs/LeaderboardSnapshotSort.md
 docs/LeaderboardSort.md
 docs/License.md
+docs/MessageCreate.md
+docs/MessageRole.md
 docs/Model.md
 docs/ModelApi.md
 docs/ModelPage.md
@@ -101,7 +113,9 @@ docs/ModelSort.md
 docs/PageMetadata.md
 docs/SortDirection.md
 docs/Token200Response.md
+docs/UserApi.md
 docs/UserInfo.md
+docs/UserStats.md
 test/__init__.py
 test/test_admin_api.py
 test/test_admin_stats200_response.py
@@ -115,6 +129,9 @@ test/test_battle_evaluation_api.py
 test/test_battle_evaluation_create_request.py
 test/test_battle_evaluation_outcome.py
 test/test_battle_page.py
+test/test_battle_round.py
+test/test_battle_round_create_request.py
+test/test_battle_round_update_request.py
 test/test_battle_search_query.py
 test/test_battle_sort.py
 test/test_battle_update_request.py
@@ -141,6 +158,8 @@ test/test_leaderboard_snapshot_query.py
 test/test_leaderboard_snapshot_sort.py
 test/test_leaderboard_sort.py
 test/test_license.py
+test/test_message_create.py
+test/test_message_role.py
 test/test_model.py
 test/test_model_api.py
 test/test_model_page.py
@@ -149,4 +168,6 @@ test/test_model_sort.py
 test/test_page_metadata.py
 test/test_sort_direction.py
 test/test_token200_response.py
+test/test_user_api.py
 test/test_user_info.py
+test/test_user_stats.py

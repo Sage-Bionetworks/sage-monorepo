@@ -33,11 +33,8 @@ spring:
           time_zone: UTC
         default_schema: api
     open-in-view: false
-  # autoconfigure:
-  #   # Prevent Spring Boot from auto-configuring a default Elasticsearch client,
-  #   # which Hibernate Search might incorrectly use, leading to node sniffing errors
-  #   # when a local cluster is not available.
-  #   exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+  profiles:
+    active: dev
 
 management:
   endpoints:
@@ -68,3 +65,8 @@ app:
   welcome-message: 'Welcome to BixArena API'
   auth-service:
     base-url: ${AUTH_SERVICE_BASE_URL:http://bixarena-auth-service:8115}
+  jwt:
+    # Expected issuer claim value (URN format)
+    expected-issuer: urn:bixarena:auth
+    # Expected audience claim value
+    expected-audience: urn:bixarena:api

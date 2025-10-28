@@ -1,0 +1,15 @@
+get:
+  tags:
+    - User
+  summary: Get current user's statistics
+  description: Returns statistics about the authenticated user's battle participation.
+  operationId: getUserStats
+  responses:
+    '200':
+      description: User statistics retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserStats.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml

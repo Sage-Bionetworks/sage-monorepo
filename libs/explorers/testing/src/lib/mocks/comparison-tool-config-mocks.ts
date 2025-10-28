@@ -8,17 +8,18 @@ import {
 export const mockComparisonToolConfigFilters: ComparisonToolConfigFilter[] = [
   {
     name: 'Age',
-    field: 'age',
+    data_key: 'age',
     values: ['4 months', '8 months', '12 months'],
   },
   {
     name: 'Model Type',
-    field: 'model_type',
+    data_key: 'model_type',
+    short_name: 'Type',
     values: ['Familial AD', 'Late Onset AD'],
   },
   {
     name: 'Sex',
-    field: 'sex',
+    data_key: 'sex',
     values: ['Female', 'Male'],
   },
 ];
@@ -26,7 +27,7 @@ export const mockComparisonToolConfigFilters: ComparisonToolConfigFilter[] = [
 export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   {
     name: 'Age',
-    field: 'age',
+    data_key: 'age',
     options: [
       { label: '4 months', selected: false },
       { label: '8 months', selected: false },
@@ -35,7 +36,8 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   },
   {
     name: 'Model Type',
-    field: 'model_type',
+    data_key: 'model_type',
+    short_name: 'Type',
     options: [
       { label: 'Familial AD', selected: false },
       { label: 'Late Onset AD', selected: false },
@@ -43,7 +45,7 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
   },
   {
     name: 'Sex',
-    field: 'sex',
+    data_key: 'sex',
     options: [
       { label: 'Female', selected: false },
       { label: 'Male', selected: false },
@@ -54,7 +56,8 @@ export const mockComparisonToolFilters: ComparisonToolFilter[] = [
 export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   {
     name: 'Available Data',
-    field: 'available_data',
+    data_key: 'available_data',
+    short_name: 'Data',
     options: [
       { label: 'Biomarkers', selected: true },
       { label: 'Disease Correlation', selected: true },
@@ -64,7 +67,8 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   },
   {
     name: 'Contributing Center',
-    field: 'center',
+    data_key: 'center',
+    short_name: 'Center',
     options: [
       { label: 'IU/Jax/Pitt', selected: false },
       { label: 'UCI', selected: false },
@@ -72,7 +76,8 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
   },
   {
     name: 'Model Type',
-    field: 'model_type',
+    data_key: 'model_type',
+    short_name: 'Type',
     options: [
       { label: 'Familial AD', selected: false },
       { label: 'Late Onset AD', selected: false },
@@ -84,35 +89,35 @@ export const mockComparisonToolColumns: ComparisonToolConfigColumn[] = [
   {
     name: 'Age',
     type: 'text',
-    column_key: 'age',
+    data_key: 'age',
     tooltip: '',
     sort_tooltip: 'Sort by Age value',
   },
   {
     name: 'Sex',
     type: 'text',
-    column_key: 'sex',
+    data_key: 'sex',
     tooltip: '',
     sort_tooltip: 'Sort by Sex value',
   },
   {
     name: 'CBE',
     type: 'heat_map',
-    column_key: 'CBE',
+    data_key: 'CBE',
     tooltip: 'Cerebellum',
     sort_tooltip: 'Sort by correlation value',
   },
   {
     name: 'DLPFC',
     type: 'heat_map',
-    column_key: 'DLPFC',
+    data_key: 'DLPFC',
     tooltip: 'Dorsolateral Prefrontal Cortex',
     sort_tooltip: 'Sort by correlation value',
   },
   {
     name: 'PHG',
     type: 'heat_map',
-    column_key: 'PHG',
+    data_key: 'PHG',
     tooltip: 'Parahippocampal Gyrus',
     sort_tooltip: 'Sort by correlation value',
   },
@@ -122,36 +127,42 @@ export const mockComparisonToolConfigs: ComparisonToolConfig[] = [
   {
     page: 'Disease Correlation',
     dropdowns: ['Red', 'Crimson'],
+    row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
   },
   {
     page: 'Disease Correlation',
     dropdowns: ['Red', 'Maroon'],
+    row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
   },
   {
     page: 'Disease Correlation',
     dropdowns: ['Blue', 'Light Blue', 'Powder Blue'],
+    row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
   },
   {
     page: 'Disease Correlation',
     dropdowns: ['Blue', 'Light Blue', 'Sky Blue'],
+    row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
   },
   {
     page: 'Disease Correlation',
     dropdowns: ['Blue', 'Dark Blue', 'Navy Blue'],
+    row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
   },
   {
     page: 'Disease Correlation',
     dropdowns: ['Blue', 'Dark Blue', 'Midnight Blue'],
+    row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
   },

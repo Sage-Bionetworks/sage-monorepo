@@ -40,7 +40,7 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
         200: {"model": HealthCheck, "description": "Success"},
         404: {
             "model": BasicError,
-            "description": "The requested resource was not found",
+            "description": "The specified resource was not found",
         },
         500: {
             "model": BasicError,

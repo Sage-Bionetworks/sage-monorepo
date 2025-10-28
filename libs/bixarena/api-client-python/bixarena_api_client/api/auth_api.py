@@ -16,7 +16,9 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import StrictStr
+from pydantic import Field, StrictStr, field_validator
+from typing import Optional
+from typing_extensions import Annotated
 from bixarena_api_client.models.callback200_response import Callback200Response
 from bixarena_api_client.models.get_jwks200_response import GetJwks200Response
 from bixarena_api_client.models.token200_response import Token200Response
@@ -1225,6 +1227,12 @@ class AuthApi:
     @validate_call
     def token(
         self,
+        audience: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Target audience for the JWT. If not specified, defaults to urn:bixarena:auth. "
+            ),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1239,8 +1247,10 @@ class AuthApi:
     ) -> Token200Response:
         """Mint short-lived internal JWT
 
-        Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+        Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).  The optional audience parameter specifies the target service for the JWT.
 
+        :param audience: Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
+        :type audience: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1264,6 +1274,7 @@ class AuthApi:
         """  # noqa: E501
 
         _param = self._token_serialize(
+            audience=audience,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1286,6 +1297,12 @@ class AuthApi:
     @validate_call
     def token_with_http_info(
         self,
+        audience: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Target audience for the JWT. If not specified, defaults to urn:bixarena:auth. "
+            ),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1300,8 +1317,10 @@ class AuthApi:
     ) -> ApiResponse[Token200Response]:
         """Mint short-lived internal JWT
 
-        Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+        Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).  The optional audience parameter specifies the target service for the JWT.
 
+        :param audience: Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
+        :type audience: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1325,6 +1344,7 @@ class AuthApi:
         """  # noqa: E501
 
         _param = self._token_serialize(
+            audience=audience,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1347,6 +1367,12 @@ class AuthApi:
     @validate_call
     def token_without_preload_content(
         self,
+        audience: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Target audience for the JWT. If not specified, defaults to urn:bixarena:auth. "
+            ),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1361,8 +1387,10 @@ class AuthApi:
     ) -> RESTResponseType:
         """Mint short-lived internal JWT
 
-        Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+        Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).  The optional audience parameter specifies the target service for the JWT.
 
+        :param audience: Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
+        :type audience: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1386,6 +1414,7 @@ class AuthApi:
         """  # noqa: E501
 
         _param = self._token_serialize(
+            audience=audience,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1403,6 +1432,7 @@ class AuthApi:
 
     def _token_serialize(
         self,
+        audience,
         _request_auth,
         _content_type,
         _headers,
@@ -1423,6 +1453,9 @@ class AuthApi:
 
         # process the path parameters
         # process the query parameters
+        if audience is not None:
+            _query_params.append(("audience", audience))
+
         # process the header parameters
         # process the form parameters
         # process the body parameter

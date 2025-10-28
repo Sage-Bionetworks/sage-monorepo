@@ -18,12 +18,16 @@ export interface ComparisonToolConfig {
    */
   dropdowns: Array<string>;
   /**
+   * Relative description of the total number of rows in the data
+   */
+  row_count: string;
+  /**
    * List of column definitions
    */
   columns: Array<ComparisonToolConfigColumn>;
   /**
    * List of filter configurations
    */
-  filters?: Array<ComparisonToolConfigFilter>;
+  filters: Array<ComparisonToolConfigFilter>;
 }
 export namespace ComparisonToolConfig {}

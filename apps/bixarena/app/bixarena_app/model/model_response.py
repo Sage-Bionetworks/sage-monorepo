@@ -1,14 +1,23 @@
-import json
 import logging
 import os
-import time
 import uuid
+from uuid import UUID
 
 import gradio as gr
 import requests
-from bixarena_api_client import ApiClient, Configuration, ModelApi, ModelSearchQuery
+from bixarena_api_client import (
+    ApiClient,
+    BattleApi,
+    BattleRoundUpdateRequest,
+    Configuration,
+    MessageCreate,
+    MessageRole,
+    ModelApi,
+    ModelSearchQuery,
+)
 from bixarena_api_client.exceptions import ApiException
 
+from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
 from bixarena_app.model.model_adapter import get_conversation_template
@@ -49,6 +58,26 @@ class State:
         )
         return base
 
+    def last_assistant_message(self) -> MessageCreate | None:
+        """Return the last completed assistant response as a MessageCreate."""
+        assistant_role = self.conv.roles[1] if len(self.conv.roles) > 1 else "assistant"
+        for role, content in reversed(self.conv.messages):
+            if role == assistant_role and content:
+                return MessageCreate(role=MessageRole.ASSISTANT, content=content)
+        return None
+
+
+class BattleSession:
+    """Track the active battle and round identifiers for the Gradio session."""
+
+    def __init__(self):
+        self.battle_id: UUID | None = None
+        self.round_id: UUID | None = None
+
+    def reset(self):
+        self.battle_id = None
+        self.round_id = None
+
 
 def set_global_vars_anony(enable_moderation_):
     global enable_moderation
@@ -77,6 +106,51 @@ def validate_responses(states: list) -> tuple[bool, str | None]:
                 return False, f"identity_leak:{leaked_word}"
 
     return True, None
+
+
+def _update_battle_round_with_responses(
+    state1: State, state2: State, battle_session: BattleSession
+) -> None:
+    """Persist both LLM responses to the current battle round."""
+    battle_id = battle_session.battle_id
+    round_id = battle_session.round_id
+    if not battle_id or not round_id:
+        return
+    # Capture successful responses
+    model1_message = state1.last_assistant_message()
+    model2_message = state2.last_assistant_message()
+
+    # When a model errors, add a system message so we still persist context
+    # If the model errored and we didn't get any assistant content, persist a SYSTEM message
+    # If there is an assistant message (e.g., a successful follow-up), keep it as ASSISTANT.
+    if state1.has_error and not model1_message:
+        error_content = "Model response unavailable due to an error."
+        model1_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
+    if state2.has_error and not model2_message:
+        error_content = "Model response unavailable due to an error."
+        model2_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
+
+    if not model1_message and not model2_message:
+        battle_session.round_id = None
+        return
+    try:
+        api_base_url = _get_api_base_url()
+        configuration = Configuration(host=api_base_url)
+        with ApiClient(configuration) as api_client:
+            battle_api = BattleApi(api_client)
+            battle_api.update_battle_round(
+                battle_id,
+                round_id,
+                BattleRoundUpdateRequest(
+                    model1_message=model1_message,
+                    model2_message=model2_message,
+                ),
+            )
+            logger.info(f"✅ Battle round updated: battle={battle_id} round={round_id}")
+    except Exception as e:
+        logger.warning(f"❌ Failed to update battle round {round_id}: {e}")
+    finally:
+        battle_session.round_id = None
 
 
 def get_model_list():
@@ -175,8 +249,6 @@ def bot_response(
     top_p,
     max_new_tokens,
 ):
-    logger.info("bot_response. ")
-    start_tstamp = time.time()
     temperature = float(temperature)
     top_p = float(top_p)
     max_new_tokens = int(max_new_tokens)
@@ -253,40 +325,22 @@ def bot_response(
         )
         return
 
-    finish_tstamp = time.time()
-    logger.info(f"{output}")
-
-    # Log the exact same data to console instead of file
-    data = {
-        "tstamp": round(finish_tstamp, 4),
-        "type": "chat",
-        "model": model_name,
-        "gen_params": {
-            "temperature": temperature,
-            "top_p": top_p,
-            "max_new_tokens": max_new_tokens,
-        },
-        "start": round(start_tstamp, 4),
-        "finish": round(finish_tstamp, 4),
-        "state": state.dict(),
-    }
-    logger.info(f"Conversation data: {json.dumps(data)}")
-
 
 def bot_response_multi(
     state0,
     state1,
+    battle_session: BattleSession,
     temperature=0.7,
     top_p=1.0,
     max_new_tokens=1024,
 ):
-    logger.info("bot_response_multi (anony).")
     num_sides = 2
     if state0 is None or state0.skip_next:
         # This generate call is skipped due to invalid inputs
         yield (
             state0,
             state1,
+            battle_session,
             state0.to_gradio_chatbot(),
             state1.to_gradio_chatbot(),
         ) + (no_change_btn,) * 4
@@ -322,13 +376,20 @@ def bot_response_multi(
                 stop = False
             except StopIteration:
                 pass
-        yield states + chatbots + [disable_btn] * 4
+        yield states + [battle_session] + chatbots + [disable_btn] * 4
         if stop:
             break
 
+    _update_battle_round_with_responses(states[0], states[1], battle_session)
+
     # At least one model had an error -> keep voting buttons disabled
     if any(state.has_error for state in states):
-        yield states + chatbots + [disable_btn, disable_btn, disable_btn, enable_btn]
+        yield (
+            states
+            + [battle_session]
+            + chatbots
+            + [disable_btn, disable_btn, disable_btn, enable_btn]
+        )
     else:
         # Both models succeeded -> enable all buttons including voting
-        yield states + chatbots + [enable_btn] * 4
+        yield states + [battle_session] + chatbots + [enable_btn] * 4

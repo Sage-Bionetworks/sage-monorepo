@@ -1,0 +1,32 @@
+parameters:
+  - $ref: ../../../components/parameters/path/battleId.yaml
+
+post:
+  tags:
+    - Battle
+  summary: Create a battle round
+  description: Create a new round for a given battle.
+  operationId: createBattleRound
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/BattleRoundCreateRequest.yaml
+  responses:
+    '201':
+      description: Battle round created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/BattleRound.yaml
+    '400':
+      $ref: ../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

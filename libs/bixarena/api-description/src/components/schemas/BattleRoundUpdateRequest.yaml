@@ -1,0 +1,10 @@
+type: object
+description: Payload to update model responses for an existing battle round.
+properties:
+  model1Message:
+    $ref: 'MessageCreate.yaml'
+  model2Message:
+    $ref: 'MessageCreate.yaml'
+required:
+  - model1Message
+  - model2Message

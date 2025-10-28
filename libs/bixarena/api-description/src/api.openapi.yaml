@@ -33,6 +33,8 @@ tags:
     description: Operations about models.
   - name: BattleEvaluation
     description: Operations about battle evaluations.
+  - name: User
+    description: Operations about the authenticated user.
 
 paths:
   /admin/stats:
@@ -41,6 +43,10 @@ paths:
     $ref: paths/battles.yaml
   /battles/{battleId}:
     $ref: paths/battles/{battleId}.yaml
+  /battles/{battleId}/rounds:
+    $ref: paths/battles/{battleId}/rounds.yaml
+  /battles/{battleId}/rounds/{roundId}:
+    $ref: paths/battles/{battleId}/rounds/{roundId}.yaml
   /example-prompts:
     $ref: paths/example-prompts.yaml
   /leaderboards:
@@ -55,6 +61,8 @@ paths:
     $ref: paths/models.yaml
   /battles/{battleId}/evaluations:
     $ref: paths/battles/{battleId}/evaluations.yaml
+  /users/me/stats:
+    $ref: paths/users-me-stats.yaml
 
 components:
   securitySchemes:

@@ -354,11 +354,13 @@ void (empty response body)
 
 # **token**
 
-> Token200Response token()
+> Token200Response token(audience=audience)
 
 Mint short-lived internal JWT
 
 Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
+
+The optional audience parameter specifies the target service for the JWT.
 
 ### Example
 
@@ -379,10 +381,11 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.AuthApi(api_client)
+    audience = 'audience_example' # str | Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.  (optional)
 
     try:
         # Mint short-lived internal JWT
-        api_response = api_instance.token()
+        api_response = api_instance.token(audience=audience)
         print("The response of AuthApi->token:\n")
         pprint(api_response)
     except Exception as e:
@@ -391,7 +394,9 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-This endpoint does not need any parameter.
+| Name         | Type    | Description                                                                   | Notes      |
+| ------------ | ------- | ----------------------------------------------------------------------------- | ---------- |
+| **audience** | **str** | Target audience for the JWT. If not specified, defaults to urn:bixarena:auth. | [optional] |
 
 ### Return type
 
