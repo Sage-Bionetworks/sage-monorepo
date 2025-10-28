@@ -2,11 +2,43 @@ import logging
 
 import gradio as gr
 
-from bixarena_api_client import UserApi
+from bixarena_api_client import StatsApi, UserApi
+from bixarena_api_client.api_client import ApiClient
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.request_auth import is_authenticated, get_session_cookie
 
 logger = logging.getLogger(__name__)
+
+
+def fetch_public_stats() -> dict:
+    """Fetch public platform statistics from the API.
+
+    Returns:
+        Dictionary with models_evaluated, total_battles, and total_users.
+        Returns default values if API call fails.
+    """
+    try:
+        # Create an unauthenticated API client for public endpoint
+        with ApiClient() as client:
+            api = StatsApi(client)
+            stats = api.get_public_stats()
+            logger.info(
+                f"Fetched public stats: {stats.models_evaluated} models, "
+                f"{stats.total_battles} battles, {stats.total_users} users"
+            )
+            return {
+                "models_evaluated": stats.models_evaluated,
+                "total_battles": stats.total_battles,
+                "total_users": stats.total_users,
+            }
+    except Exception as e:
+        logger.error(f"Error fetching public stats: {e}")
+        # Return fallback values if API call fails
+        return {
+            "models_evaluated": 0,
+            "total_battles": 0,
+            "total_users": 0,
+        }
 
 
 def fetch_user_stats(request: gr.Request) -> int | None:
@@ -96,37 +128,40 @@ def load_user_battles_on_page_load(request: gr.Request) -> tuple[dict, dict]:
 def build_stats_section():
     """Create the statistics section with metrics"""
 
+    # Fetch public stats from API
+    public_stats = fetch_public_stats()
+
     with gr.Row():
         with gr.Column():
             with gr.Group():
-                gr.HTML("""
+                gr.HTML(f"""
                 <div style="text-align: center; padding: 20px;">
                     <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-                        MODELS SUPPORTED
+                        MODELS EVALUATED
                     </p>
-                    <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">15</h2>
+                    <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["models_evaluated"]:,}</h2>
                 </div>
                 """)
 
         with gr.Column():
             with gr.Group():
-                gr.HTML("""
+                gr.HTML(f"""
                 <div style="text-align: center; padding: 20px;">
                     <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-                        VOTES COLLECTED
+                        TOTAL BATTLES
                     </p>
-                    <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">12,500</h2>
+                    <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["total_battles"]:,}</h2>
                 </div>
                 """)
 
         with gr.Column():
             with gr.Group():
-                gr.HTML("""
+                gr.HTML(f"""
                 <div style="text-align: center; padding: 20px;">
                     <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-                        PARTICIPANTS
+                        TOTAL USERS
                     </p>
-                    <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">450</h2>
+                    <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["total_users"]:,}</h2>
                 </div>
                 """)
 

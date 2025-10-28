@@ -1,0 +1,22 @@
+type: object
+description: Public statistics about the BixArena platform.
+properties:
+  modelsEvaluated:
+    type: integer
+    format: int64
+    description: Total number of unique models that have been evaluated on the platform
+    example: 42
+  totalBattles:
+    type: integer
+    format: int64
+    description: Total number of battles conducted on the platform
+    example: 1337
+  totalUsers:
+    type: integer
+    format: int64
+    description: Total number of registered users on the platform
+    example: 256
+required:
+  - modelsEvaluated
+  - totalBattles
+  - totalUsers

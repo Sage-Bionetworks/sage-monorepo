@@ -2,15 +2,15 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                                                       | HTTP request                                            | Description                     |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------- |
-| [**get_leaderboard**](LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries         |
-| [**get_leaderboard_snapshots**](LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots       |
-| [**get_model_history**](LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history   |
-| [**list_leaderboards**](LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**get_leaderboard**](LeaderboardApi.md#get_leaderboard) | **GET** /leaderboards/{leaderboardId} | Get leaderboard entries
+[**get_leaderboard_snapshots**](LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots | Get leaderboard snapshots
+[**get_model_history**](LeaderboardApi.md#get_model_history) | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history
+[**list_leaderboards**](LeaderboardApi.md#list_leaderboards) | **GET** /leaderboards | List all available leaderboards
+
 
 # **get_leaderboard**
-
 > LeaderboardEntryPage get_leaderboard(leaderboard_id, leaderboard_search_query=leaderboard_search_query)
 
 Get leaderboard entries
@@ -19,7 +19,7 @@ Get paginated leaderboard entries for a specific leaderboard
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -60,12 +60,15 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling LeaderboardApi->get_leaderboard: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                         | Type                              | Description                                                   | Notes      |
-| ---------------------------- | --------------------------------- | ------------------------------------------------------------- | ---------- |
-| **leaderboard_id**           | **str**                           | The unique identifier of a leaderboard                        |
-| **leaderboard_search_query** | [**LeaderboardSearchQuery**](.md) | The search query used to find and filter leaderboard entries. | [optional] |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **leaderboard_id** | **str**| The unique identifier of a leaderboard | 
+ **leaderboard_search_query** | [**LeaderboardSearchQuery**](.md)| The search query used to find and filter leaderboard entries. | [optional] 
 
 ### Return type
 
@@ -77,22 +80,21 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Success                                                           | -                |
-| **400**     | Invalid request                                                   | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Invalid request |  -  |
+**404** | The specified resource was not found |  -  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_leaderboard_snapshots**
-
 > LeaderboardSnapshotPage get_leaderboard_snapshots(leaderboard_id, leaderboard_snapshot_query=leaderboard_snapshot_query)
 
 Get leaderboard snapshots
@@ -101,7 +103,7 @@ Get a paginated list of available snapshots for a leaderboard
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -142,12 +144,15 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling LeaderboardApi->get_leaderboard_snapshots: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                           | Type                                | Description                                                  | Notes      |
-| ------------------------------ | ----------------------------------- | ------------------------------------------------------------ | ---------- |
-| **leaderboard_id**             | **str**                             | The unique identifier of a leaderboard                       |
-| **leaderboard_snapshot_query** | [**LeaderboardSnapshotQuery**](.md) | The query used to filter and paginate leaderboard snapshots. | [optional] |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **leaderboard_id** | **str**| The unique identifier of a leaderboard | 
+ **leaderboard_snapshot_query** | [**LeaderboardSnapshotQuery**](.md)| The query used to filter and paginate leaderboard snapshots. | [optional] 
 
 ### Return type
 
@@ -159,22 +164,21 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Success                                                           | -                |
-| **400**     | Invalid request                                                   | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Invalid request |  -  |
+**404** | The specified resource was not found |  -  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_model_history**
-
 > LeaderboardModelHistoryPage get_model_history(leaderboard_id, model_id, leaderboard_model_history_query=leaderboard_model_history_query)
 
 Get model performance history
@@ -183,7 +187,7 @@ Get historical performance data for a specific model in a leaderboard
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -225,13 +229,16 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling LeaderboardApi->get_model_history: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                                | Type                                    | Description                                                              | Notes      |
-| ----------------------------------- | --------------------------------------- | ------------------------------------------------------------------------ | ---------- |
-| **leaderboard_id**                  | **str**                                 | The unique identifier of a leaderboard                                   |
-| **model_id**                        | **str**                                 | The unique identifier of a model                                         |
-| **leaderboard_model_history_query** | [**LeaderboardModelHistoryQuery**](.md) | The query used to filter and paginate historical model performance data. | [optional] |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **leaderboard_id** | **str**| The unique identifier of a leaderboard | 
+ **model_id** | **str**| The unique identifier of a model | 
+ **leaderboard_model_history_query** | [**LeaderboardModelHistoryQuery**](.md)| The query used to filter and paginate historical model performance data. | [optional] 
 
 ### Return type
 
@@ -243,22 +250,21 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Success                                                           | -                |
-| **400**     | Invalid request                                                   | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Invalid request |  -  |
+**404** | The specified resource was not found |  -  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_leaderboards**
-
 > List[LeaderboardListInner] list_leaderboards()
 
 List all available leaderboards
@@ -267,7 +273,7 @@ Get a list of all available leaderboards with their metadata
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -305,6 +311,8 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling LeaderboardApi->list_leaderboards: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
 This endpoint does not need any parameter.
@@ -319,15 +327,16 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Success                                                           | -                |
-| **400**     | Invalid request                                                   | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Invalid request |  -  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
