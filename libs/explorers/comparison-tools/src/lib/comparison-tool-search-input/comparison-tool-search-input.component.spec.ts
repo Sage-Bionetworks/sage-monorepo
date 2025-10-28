@@ -1,11 +1,12 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
+import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
+import { ComparisonToolFilterService, SvgIconService } from '@sagebionetworks/explorers/services';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { ComparisonToolSearchInputComponent } from './comparison-tool-search-input.component';
-import { ComparisonToolFilterService } from '@sagebionetworks/explorers/services';
-import { signal } from '@angular/core';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
 
 const DEBOUNCE_TIME_FOR_TESTING = DEBOUNCE_TIME_MS + 100;
 
@@ -25,6 +26,7 @@ async function setup(searchTerm = '') {
         provide: ComparisonToolFilterService,
         useValue: mockComparisonToolFilterService,
       },
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
   });
 

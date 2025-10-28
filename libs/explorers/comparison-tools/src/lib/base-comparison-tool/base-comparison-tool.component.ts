@@ -25,8 +25,6 @@ export class BaseComparisonToolComponent {
 
   isLoading = input(true);
   showSignificanceControls = input(true);
-  headerTitle = input.required<string>();
-  filterResultsButtonTooltip = input.required<string>();
 
   currentConfig = this.comparisonToolService.currentConfig;
   resultsCount = this.comparisonToolService.totalResultsCount;

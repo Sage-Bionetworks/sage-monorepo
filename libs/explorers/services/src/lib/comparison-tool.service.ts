@@ -21,6 +21,8 @@ export class ComparisonToolService {
   private readonly DEFAULT_SORT_ORDER = -1;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
+    headerTitle: 'Comparison Tool',
+    filterResultsButtonTooltip: 'Filter results',
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
@@ -110,13 +112,13 @@ export class ComparisonToolService {
   initialize(
     configs: ComparisonToolConfig[],
     selection?: string[],
-    viewConfig: ComparisonToolViewConfig = this.DEFAULT_VIEW_CONFIG,
+    viewConfig: Partial<ComparisonToolViewConfig> = {},
   ) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
     this.pinnedItemsSignal.set(new Set());
     this.setSort(undefined, this.DEFAULT_SORT_ORDER);
-    this.setViewConfig(viewConfig);
+    this.setViewConfig({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);

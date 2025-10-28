@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
@@ -11,9 +12,9 @@ import {
   ModelOverviewService,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { shareReplay } from 'rxjs';
 import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
 import { ModelOverviewMainTableComponent } from './components/model-overview-main-table/model-overview-main-table.component';
-import { shareReplay } from 'rxjs';
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
@@ -36,6 +37,11 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   data: ModelOverview[] = [];
 
   isLoading = signal(true);
+  viewConfig: ComparisonToolViewConfig = {
+    selectorsWikiParams: {},
+    headerTitle: 'Model Overview',
+    filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
+  };
 
   ngOnInit() {
     if (this.platformService.isBrowser) {
@@ -55,7 +61,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs);
+          this.comparisonToolService.initialize(configs, undefined, this.viewConfig);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);

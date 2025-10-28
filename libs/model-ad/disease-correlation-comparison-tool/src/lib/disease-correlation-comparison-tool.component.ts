@@ -40,6 +40,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   };
   viewConfig: ComparisonToolViewConfig = {
     selectorsWikiParams: this.selectorsWikiParams,
+    headerTitle: 'Disease Correlation',
+    filterResultsButtonTooltip: 'Filter results by Age, Sex, Modified Gene, and more',
   };
 
   constructor() {

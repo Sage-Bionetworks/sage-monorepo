@@ -1,13 +1,15 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import {
   ComparisonToolFilterService,
   ComparisonToolService,
+  SvgIconService,
 } from '@sagebionetworks/explorers/services';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { SignificanceControlsComponent } from './significance-controls.component';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 const mockComparisonToolFilterService = {
   significanceThreshold: signal(0.05),
@@ -29,6 +31,7 @@ async function setup(threshold = 0.05, active = false) {
         useValue: mockComparisonToolFilterService,
       },
       ComparisonToolService,
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
   });
 

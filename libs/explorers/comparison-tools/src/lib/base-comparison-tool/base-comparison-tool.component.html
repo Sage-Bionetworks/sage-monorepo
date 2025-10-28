@@ -4,11 +4,7 @@
       <explorers-loading-container [count]="resultsCount()"></explorers-loading-container>
     </div>
   } @else {
-    <explorers-comparison-tool-header
-      [filterResultsButtonTooltip]="filterResultsButtonTooltip()"
-      [headerTitle]="headerTitle()"
-      (filterToggle)="toggleFilterPanel()"
-    />
+    <explorers-comparison-tool-header (filterToggle)="toggleFilterPanel()" />
     <explorers-comparison-tool-filter-list />
     <div class="comparison-tool-body">
       <div class="comparison-tool-body-inner">

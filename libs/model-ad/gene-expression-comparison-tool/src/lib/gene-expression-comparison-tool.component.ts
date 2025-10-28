@@ -36,6 +36,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   };
   viewConfig: ComparisonToolViewConfig = {
     selectorsWikiParams: this.selectorsWikiParams,
+    headerTitle: 'Gene Expression',
+    filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
   };
 
   ngOnInit() {

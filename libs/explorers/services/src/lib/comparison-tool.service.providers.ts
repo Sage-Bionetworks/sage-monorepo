@@ -7,7 +7,7 @@ export type ComparisonToolServiceOptions = {
   selection?: string[];
   totalResultsCount?: number;
   legendVisible?: boolean;
-  viewConfig?: ComparisonToolViewConfig;
+  viewConfig?: Partial<ComparisonToolViewConfig>;
   maxPinnedItems?: number;
   pinnedItems?: string[];
 };
@@ -32,7 +32,7 @@ export const provideComparisonToolService = (
         }
 
         if (!options.configs && options.viewConfig) {
-          service.setViewConfig(options.viewConfig);
+          service.setViewConfig({ ...service.viewConfig(), ...options.viewConfig });
         }
 
         if (options.totalResultsCount !== undefined) {

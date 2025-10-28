@@ -2,6 +2,8 @@ import { SynapseWikiParams } from './synapse-wiki';
 
 export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
+  headerTitle: string;
+  filterResultsButtonTooltip: string;
 }
 
 export interface ComparisonToolFilterOption {

@@ -1,9 +1,4 @@
-<explorers-base-comparison-tool
-  [isLoading]="isLoading()"
-  headerTitle="Model Overview"
-  filterResultsButtonTooltip="Filter results by Model Type, Modified Gene, and more"
-  [showSignificanceControls]="false"
->
+<explorers-base-comparison-tool [isLoading]="isLoading()" [showSignificanceControls]="false">
   <div class="model-overview-comparison-tool">
     <model-ad-model-overview-main-table [data]="data" />
     <model-ad-model-overview-help-links />
