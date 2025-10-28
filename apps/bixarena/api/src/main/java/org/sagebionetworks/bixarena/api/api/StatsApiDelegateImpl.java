@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.bixarena.api.model.dto.PublicStatsDto;
+import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.UserStatsRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class StatsApiDelegateImpl implements StatsApiDelegate {
 
   private final UserStatsRepository userStatsRepository;
+  private final BattleRepository battleRepository;
 
   /**
    * Get public platform statistics.
@@ -24,13 +26,14 @@ public class StatsApiDelegateImpl implements StatsApiDelegate {
    */
   @Override
   public ResponseEntity<PublicStatsDto> getPublicStats() {
-    // Query actual user count from auth.user table
+    // Query actual counts from database
     Long totalUsers = userStatsRepository.count();
+    Long totalBattles = battleRepository.count();
+    Long modelsEvaluated = battleRepository.countDistinctModelsEvaluated();
 
-    // TODO: Replace remaining mock data with real queries
     PublicStatsDto stats = PublicStatsDto.builder()
-        .modelsEvaluated(42L)
-        .totalBattles(1337L)
+        .modelsEvaluated(modelsEvaluated)
+        .totalBattles(totalBattles)
         .totalUsers(totalUsers)
         .build();
 
