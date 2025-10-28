@@ -83,7 +83,7 @@ describe('PrimaryIdentifierControlsComponent', () => {
       pinnedItems: ['68fff1aaeb12b9674515fd58', '68fff1aaeb12b9674515fd59'],
     });
     expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(true);
-    expect(service.pinnedResultsCount()).toBe(2);
+    expect(service.pinnedItems().size).toBe(2);
   });
 
   it('should disable pin button when max pinned items is reached and not currently pinned', async () => {
@@ -105,23 +105,23 @@ describe('PrimaryIdentifierControlsComponent', () => {
     await user.click(pinButton);
 
     expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(false);
-    expect(service.pinnedResultsCount()).toBe(1);
+    expect(service.pinnedItems().size).toBe(1);
   });
 
-  it('should update pinnedResultsCount when items are pinned', async () => {
+  it('should update pinnedItems when items are pinned', async () => {
     const { user, pinButton, service } = await setup();
-    expect(service.pinnedResultsCount()).toBe(0);
+    expect(service.pinnedItems().size).toBe(0);
 
     await user.click(pinButton);
-    expect(service.pinnedResultsCount()).toBe(1);
+    expect(service.pinnedItems().size).toBe(1);
   });
 
-  it('should update pinnedResultsCount when items are unpinned', async () => {
+  it('should update pinnedItems when items are unpinned', async () => {
     const { user, pinButton, service } = await setup({ pinnedItems: ['68fff1aaeb12b9674515fd58'] });
-    expect(service.pinnedResultsCount()).toBe(1);
+    expect(service.pinnedItems().size).toBe(1);
 
     await user.click(pinButton);
-    expect(service.pinnedResultsCount()).toBe(0);
+    expect(service.pinnedItems().size).toBe(0);
   });
 
   it('should display correct tooltip for pin button when not at max', async () => {

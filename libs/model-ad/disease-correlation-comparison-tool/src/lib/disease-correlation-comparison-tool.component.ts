@@ -120,6 +120,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.comparisonToolService.setPinnedData(data);
+          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: (error) => {
           throw new Error('Error fetching disease correlation data:', { cause: error });

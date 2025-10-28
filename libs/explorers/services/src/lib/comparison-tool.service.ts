@@ -98,7 +98,7 @@ export class ComparisonToolService<T> {
   }
 
   totalResultsCount = signal<number>(0);
-  pinnedResultsCount = computed(() => this.pinnedItemsSignal().size);
+  pinnedResultsCount = signal<number>(0);
   hasMaxPinnedItems = computed(() => {
     return this.pinnedResultsCount() >= this.maxPinnedItems();
   });

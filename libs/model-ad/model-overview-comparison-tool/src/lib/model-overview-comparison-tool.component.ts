@@ -109,6 +109,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.comparisonToolService.setPinnedData(data);
+          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: (error) => {
           throw new Error('Error fetching model overview data:', { cause: error });
