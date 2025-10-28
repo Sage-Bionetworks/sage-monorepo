@@ -5,6 +5,7 @@ export interface ComparisonToolViewConfig {
   headerTitle: string;
   filterResultsButtonTooltip: string;
   showSignificanceControls: boolean;
+  viewDetailsTooltip: string;
 }
 
 export interface ComparisonToolFilterOption {

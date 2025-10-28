@@ -13,7 +13,9 @@ const meta: Meta<PrimaryIdentifierControlsComponent> = {
       providers: [
         provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
-        ...provideComparisonToolService(),
+        ...provideComparisonToolService({
+          viewConfig: { viewDetailsTooltip: 'View detailed results' },
+        }),
       ],
     }),
   ],
@@ -25,7 +27,6 @@ export const Unpinned: Story = {
   args: {
     label: '3xTg-AD',
     id: '68fff1aaeb12b9674515fd58',
-    viewDetailsTooltip: 'Open model details page',
   },
 };
 
@@ -33,7 +34,6 @@ export const Pinned: Story = {
   args: {
     label: '3xTg-AD',
     id: '68fff1aaeb12b9674515fd58',
-    viewDetailsTooltip: 'Open model details page',
   },
   decorators: [
     applicationConfig({
@@ -55,7 +55,6 @@ export const MaxPinnedReached: Story = {
   args: {
     label: '3xTg-AD',
     id: '68fff1aaeb12b9674515fd58',
-    viewDetailsTooltip: 'Open model details page',
   },
   decorators: [
     applicationConfig({

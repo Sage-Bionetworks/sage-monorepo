@@ -27,7 +27,6 @@ async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number
     componentInputs: {
       label: '3xTg-AD',
       id: '68fff1aaeb12b9674515fd58',
-      viewDetailsTooltip: 'View detailed results',
     },
   });
 

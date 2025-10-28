@@ -42,6 +42,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     headerTitle: 'Model Overview',
     filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
     showSignificanceControls: false,
+    viewDetailsTooltip: 'Open model details page',
   };
 
   ngOnInit() {
