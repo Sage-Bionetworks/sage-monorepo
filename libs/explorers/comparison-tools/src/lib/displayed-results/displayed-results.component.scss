@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   height: 100px;
-  width: 300px;
+  width: var(--comparison-tool-primary-column-width);
   border: 1px solid var(--color-gray-300);
 
   h5 {

@@ -1,5 +1,5 @@
-<div class="comparison-tool-table">
-  <explorers-comparison-tool-columns />
+<div class="comparison-tool-table" #table>
+  <explorers-comparison-tool-columns [columnWidth]="columnWidth" />
 
   @if (pinnedResultsCount() > 0) {
     <div class="table-divider table-divider-1">
@@ -7,17 +7,16 @@
         <div id="pinned-genes-header">
           <span> Pinned Items ({{ pinnedResultsCount() }}/{{ maxPinnedItems() }}) </span>
         </div>
-        <div class="csv-download-button">
-          <button (click)="downloadPinnedCsv()">
+        <div class="pinned-items-controls">
+          <button (click)="downloadPinned()" class="csv-download-button">
             <explorers-svg-icon
               imagePath="/explorers-assets/icons/download.svg"
               altText="download"
+              [enableHoverEffects]="true"
             />
-            Download as CSV
+            Download
           </button>
-        </div>
-        <div class="clear-all-button">
-          <button (click)="clearAllPinned()">Clear All</button>
+          <button (click)="clearAllPinned()" class="clear-all-button">Clear All</button>
         </div>
       </div>
     </div>
@@ -26,6 +25,7 @@
     [data]="pinnedData()"
     [shouldPaginate]="false"
     [shouldShowNoDataMessage]="false"
+    [columnWidth]="columnWidth"
   />
 
   @if (searchTerm() || hasSelectedFilters()) {
@@ -63,5 +63,6 @@
     [data]="unpinnedData()"
     [shouldPaginate]="true"
     [shouldShowNoDataMessage]="true"
+    [columnWidth]="columnWidth"
   />
 </div>

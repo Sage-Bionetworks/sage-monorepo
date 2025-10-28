@@ -2,6 +2,7 @@
   #headerTable
   id="table-header"
   breakpoint="0"
+  showGridlines
   [customSort]="true"
   (sortFunction)="sortCallback($event)"
   [defaultSortOrder]="-1"
@@ -10,9 +11,9 @@
     <tr>
       @for (column of selectedColumns(); track column) {
         @if (column.type === 'primary') {
-          <th></th>
+          <th [class]="column.type"></th>
         } @else {
-          <th [pSortableColumn]="column.data_key" [style]="{ width: columnWidth }">
+          <th [pSortableColumn]="column.data_key" [style]="{ width: columnWidth() }">
             <div class="column-header">
               <div class="column-header-text">
                 <span [pTooltip]="column.tooltip" tooltipPosition="top">

@@ -1,71 +1,114 @@
 @use 'explorers/styles/src/lib/variables' as vars;
 @use 'explorers/styles/src/lib/mixins';
 
-button {
-  @include mixins.reset-button;
-}
+.comparison-tool-table {
+  button {
+    @include mixins.reset-button;
+  }
 
-.table-divider {
-  background-color: var(--color-gray-300);
-  margin-left: -44px;
-  margin-right: -44px;
-  font-size: var(--font-size-sm);
+  .table-divider {
+    background-color: var(--color-gray-300);
+    margin-left: -44px;
+    margin-right: -44px;
+    font-size: var(--font-size-sm);
 
-  .table-divider-inner {
-    display: flex;
-    padding: 17px 44px;
-    margin-left: 30px;
-    margin-right: 30px;
+    .table-divider-inner {
+      display: flex;
+      padding: 17px 44px;
+      margin-left: 30px;
+      margin-right: 30px;
 
-    > div {
+      > div {
+        display: flex;
+        align-items: center;
+
+        &:first-child {
+          color: #1a1c29;
+          text-transform: uppercase;
+          font-size: 15px;
+          font-weight: 700;
+          flex-grow: 1;
+        }
+      }
+
+      .pinned-items-controls {
+        display: flex;
+        gap: 30px;
+      }
+    }
+
+    button {
+      cursor: pointer;
+
+      &:hover {
+        color: var(--color-primary);
+        transition: vars.$transition-duration;
+      }
+    }
+
+    .pin-all-button,
+    .csv-download-button {
       display: flex;
       align-items: center;
 
-      &:first-child {
-        color: #1a1c29;
-        text-transform: uppercase;
-        font-size: 15px;
-        font-weight: 700;
-        flex-grow: 1;
+      &:not(:disabled) {
+        &:hover {
+          @include mixins.link-hover;
+        }
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: default;
+
+        .svg-icon {
+          color: inherit;
+
+          .svg-icon-bg {
+            display: none;
+          }
+        }
+      }
+
+      explorers-svg-icon {
+        height: 14px;
+        margin-right: 8px;
       }
     }
-  }
 
-  button {
-    cursor: pointer;
-
-    &:hover {
-      color: var(--color-primary);
-      transition: vars.$transition-duration;
-    }
-  }
-
-  .pin-all-button {
-    display: flex;
-    align-items: center;
-
-    .svg-icon {
-      height: 14px;
-      margin-right: 8px;
-      transform: translateY(2px);
-    }
-
-    &:not(.disabled) {
+    .clear-all-button {
       &:hover {
         @include mixins.link-hover;
       }
     }
+  }
 
-    &.disabled {
-      opacity: 0.5;
-      cursor: default;
+  .p-datatable-table-container {
+    overflow: hidden !important;
+  }
 
-      .svg-icon {
-        color: inherit;
+  .p-datatable-thead,
+  .p-datatable-tbody {
+    tr {
+      display: flex;
+    }
 
-        .svg-icon-bg {
-          display: none;
-        }
+    td,
+    th {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      &.primary {
+        width: var(--comparison-tool-primary-column-width) !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        justify-content: end;
+      }
+
+      /* stylelint-disable-next-line selector-class-pattern */
+      &.heat_map {
+        justify-content: center;
       }
     }
   }
