@@ -21,7 +21,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run python -m bixarena_app --port ${APP_PORT}",
+        "command": "uv run gradio bixarena_app/main.py",
         "cwd": "{projectRoot}"
       }
     },
