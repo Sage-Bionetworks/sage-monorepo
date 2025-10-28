@@ -43,6 +43,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
     showSignificanceControls: false,
     viewDetailsTooltip: 'Open model details page',
+    viewDetailsClick: (id: string, label: string) => {
+      const url = this.router.serializeUrl(this.router.createUrlTree([ROUTE_PATHS.MODELS, label]));
+      window.open(url, '_blank');
+    },
   };
 
   ngOnInit() {

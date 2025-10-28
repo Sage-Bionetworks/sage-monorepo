@@ -12,6 +12,7 @@ import { PrimaryIdentifierControlsComponent } from './primary-identifier-control
 
 async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number }) {
   const user = userEvent.setup();
+  const viewDetailsClickSpy = jest.fn();
 
   const component = await render(PrimaryIdentifierControlsComponent, {
     imports: [RouterModule],
@@ -21,6 +22,7 @@ async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number
       ...provideComparisonToolService({
         pinnedItems: options?.pinnedItems,
         maxPinnedItems: options?.maxPinnedItems,
+        viewConfig: { viewDetailsClick: viewDetailsClickSpy },
       }),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
@@ -36,16 +38,13 @@ async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number
   const pinButton = screen.getByRole('button', { name: /pin/i });
   const viewDetailsButton = screen.getByRole('button', { name: /view details/i });
 
-  const viewDetailsEventSpy = jest.fn();
-  instance.viewDetailsEvent.subscribe(viewDetailsEventSpy);
-
   return {
     component,
     fixture,
     instance,
     service,
     user,
-    viewDetailsEventSpy,
+    viewDetailsClickSpy,
     pinButton,
     viewDetailsButton,
   };
@@ -62,10 +61,10 @@ describe('PrimaryIdentifierControlsComponent', () => {
     expect(screen.getByText('3xTg-AD')).toBeInTheDocument();
   });
 
-  it('should emit viewDetailsEvent when view details button is clicked', async () => {
-    const { user, viewDetailsButton, viewDetailsEventSpy } = await setup();
+  it('should call viewDetailsClick when view details button is clicked', async () => {
+    const { user, viewDetailsButton, viewDetailsClickSpy } = await setup();
     await user.click(viewDetailsButton);
-    expect(viewDetailsEventSpy).toHaveBeenCalledWith('68fff1aaeb12b9674515fd58');
+    expect(viewDetailsClickSpy).toHaveBeenCalledWith('68fff1aaeb12b9674515fd58', '3xTg-AD');
   });
 
   it('should toggle pin state when pin button is clicked', async () => {

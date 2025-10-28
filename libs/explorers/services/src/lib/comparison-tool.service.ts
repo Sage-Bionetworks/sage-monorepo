@@ -25,6 +25,9 @@ export class ComparisonToolService {
     filterResultsButtonTooltip: 'Filter results',
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
+    viewDetailsClick: (id: string, label: string) => {
+      return;
+    },
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);

@@ -43,6 +43,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
     headerTitle: 'Disease Correlation',
     filterResultsButtonTooltip: 'Filter results by Age, Sex, Modified Gene, and more',
     viewDetailsTooltip: 'Open model details page',
+    viewDetailsClick: (id: string, label: string) => {
+      const url = this.router.serializeUrl(this.router.createUrlTree([ROUTE_PATHS.MODELS, label]));
+      window.open(url, '_blank');
+    },
   };
 
   constructor() {

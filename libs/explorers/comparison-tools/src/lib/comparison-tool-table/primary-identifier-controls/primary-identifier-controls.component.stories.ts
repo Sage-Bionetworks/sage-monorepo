@@ -42,13 +42,15 @@ export const Pinned: Story = {
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService({
           pinnedItems: ['68fff1aaeb12b9674515fd58', '68fff1aaeb12b9674515fd59'],
+          viewConfig: {
+            viewDetailsClick: (id: string, label: string) => {
+              console.log(`id: ${id}, label: ${label}`);
+            },
+          },
         }),
       ],
     }),
   ],
-  argTypes: {
-    viewDetailsEvent: { control: false },
-  },
 };
 
 export const MaxPinnedReached: Story = {
