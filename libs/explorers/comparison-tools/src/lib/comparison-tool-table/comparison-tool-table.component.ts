@@ -1,4 +1,4 @@
-import { Component, inject, input, output, ViewEncapsulation } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import {
   ComparisonToolFilterService,
   ComparisonToolService,
@@ -18,8 +18,6 @@ import { BaseTableComponent } from './base-table/base-table.component';
 export class ComparisonToolTableComponent {
   comparisonToolService = inject(ComparisonToolService);
   comparisonToolFilterService = inject(ComparisonToolFilterService);
-
-  viewDetailsEvent = output<string>();
 
   pinnedItems = this.comparisonToolService.pinnedItems;
   maxPinnedItems = this.comparisonToolService.maxPinnedItems;
