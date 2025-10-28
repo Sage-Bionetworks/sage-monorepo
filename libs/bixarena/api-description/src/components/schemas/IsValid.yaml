@@ -1,3 +1,3 @@
 type: boolean
-description: Indicates whether the resource passed server-side validation.
+description: Indicates whether the battle evaluation passed the configured validation checks.
 default: false
