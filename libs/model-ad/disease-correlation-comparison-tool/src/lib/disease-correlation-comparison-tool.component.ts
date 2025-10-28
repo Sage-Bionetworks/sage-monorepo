@@ -53,18 +53,21 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
+  }
 
-    effect(() => {
+  readonly onUpdateEffect = effect(() => {
+    if (this.platformService.isBrowser) {
       const selection = this.comparisonToolService.dropdownSelection();
       if (!selection.length) {
         return;
       }
 
       this.isLoading.set(true);
-      this.getUnpinnedData();
-      this.getPinnedData();
-    });
-  }
+      const pinnedItems = Array.from(this.pinnedItems());
+      this.getUnpinnedData(selection, pinnedItems);
+      this.getPinnedData(selection, pinnedItems);
+    }
+  });
 
   ngOnInit() {
     if (this.platformService.isBrowser) {
@@ -92,13 +95,9 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       });
   }
 
-  getUnpinnedData() {
+  getUnpinnedData(selection: string[], pinnedItems: string[]) {
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(
-        this.comparisonToolService.dropdownSelection(),
-        [],
-        ItemFilterTypeQuery.Exclude,
-      )
+      .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Exclude)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
@@ -114,13 +113,9 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       });
   }
 
-  getPinnedData() {
+  getPinnedData(selection: string[], pinnedItems: string[]) {
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(
-        this.comparisonToolService.dropdownSelection(),
-        Array.from(this.pinnedItems()),
-        ItemFilterTypeQuery.Include,
-      )
+      .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Include)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {

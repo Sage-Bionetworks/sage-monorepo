@@ -121,7 +121,7 @@ export class ComparisonToolService<T> {
   initialize(configs: ComparisonToolConfig[], selection?: string[]) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
-    this.pinnedItemsSignal.set(new Set());
+    this.resetPinnedItems();
     this.setSort(undefined, this.DEFAULT_SORT_ORDER);
     this.setUnpinnedData([]);
     this.setPinnedData([]);
@@ -220,6 +220,10 @@ export class ComparisonToolService<T> {
     this.pinnedItemsSignal.set(new Set(items));
   }
 
+  resetPinnedItems() {
+    this.setPinnedItems([]);
+  }
+
   toggleColumn(column: ComparisonToolColumn) {
     const config = this.currentConfig();
     if (!config) return;
@@ -264,6 +268,7 @@ export class ComparisonToolService<T> {
     }
 
     this.dropdownSelectionSignal.set(selection);
+    this.resetPinnedItems();
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {

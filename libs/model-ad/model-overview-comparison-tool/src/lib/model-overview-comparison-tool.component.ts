@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
@@ -49,11 +49,18 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
+  readonly onUpdateEffect = effect(() => {
+    if (this.platformService.isBrowser) {
+      this.isLoading.set(true);
+      const pinnedItems = Array.from(this.pinnedItems());
+      this.getPinnedData(pinnedItems);
+      this.getUnpinnedData(pinnedItems);
+    }
+  });
+
   ngOnInit() {
     if (this.platformService.isBrowser) {
       this.getConfigs();
-      this.getUnpinnedData();
-      this.getPinnedData();
     }
   }
 
@@ -77,9 +84,9 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       });
   }
 
-  getUnpinnedData() {
+  getUnpinnedData(pinnedItems: string[]) {
     this.modelOverviewService
-      .getModelOverviews([], ItemFilterTypeQuery.Exclude)
+      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Exclude)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
@@ -95,9 +102,9 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       });
   }
 
-  getPinnedData() {
+  getPinnedData(pinnedItems: string[]) {
     this.modelOverviewService
-      .getModelOverviews(Array.from(this.pinnedItems()), ItemFilterTypeQuery.Include)
+      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Include)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {

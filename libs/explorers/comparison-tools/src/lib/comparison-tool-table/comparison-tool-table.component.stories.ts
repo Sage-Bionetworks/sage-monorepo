@@ -51,7 +51,11 @@ export const PinnedWithoutSearchTerm: Story = {
     applicationConfig({
       providers: [
         ...provideComparisonToolService({
-          pinnedItems: ['3xTg-AD', '5xFAD (UCI)', '5xFAD (IU/Jax/Pitt)'],
+          pinnedItems: [
+            '68fff1aaeb12b9674515fd58',
+            '68fff1aaeb12b9674515fd59',
+            '68fff1aaeb12b9674515fd5a',
+          ],
           maxPinnedItems: 5,
           pinnedData: mockComparisonToolData.slice(0, 3),
           unpinnedData: mockComparisonToolData.slice(3),
@@ -68,7 +72,11 @@ export const SearchTermActive: Story = {
     applicationConfig({
       providers: [
         ...provideComparisonToolService({
-          pinnedItems: ['3xTg-AD', '5xFAD (UCI)', '5xFAD (IU/Jax/Pitt)'],
+          pinnedItems: [
+            '68fff1aaeb12b9674515fd58',
+            '68fff1aaeb12b9674515fd59',
+            '68fff1aaeb12b9674515fd5a',
+          ],
           maxPinnedItems: 5,
           pinnedData: mockComparisonToolData.slice(0, 3),
           unpinnedData: mockComparisonToolData.slice(3),
