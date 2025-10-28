@@ -108,7 +108,7 @@ def validate_responses(states: list) -> tuple[bool, str]:
 
 
 def _update_battle_round_with_responses(
-    left_state: State, right_state: State, battle_session: BattleSession
+    state1: State, state2: State, battle_session: BattleSession
 ) -> None:
     """Persist both LLM responses to the current battle round."""
     battle_id = battle_session.battle_id
@@ -116,16 +116,16 @@ def _update_battle_round_with_responses(
     if not battle_id or not round_id:
         return
     # Capture successful responses
-    model1_message = left_state.last_assistant_message()
-    model2_message = right_state.last_assistant_message()
+    model1_message = state1.last_assistant_message()
+    model2_message = state2.last_assistant_message()
 
     # When a model errors, add a system message so we still persist context
     # If the model errored and we didn't get any assistant content, persist a SYSTEM message
     # If there is an assistant message (e.g., a successful follow-up), keep it as ASSISTANT.
-    if left_state.has_error and not model1_message:
+    if state1.has_error and not model1_message:
         error_content = "Model response unavailable due to an error."
         model1_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
-    if right_state.has_error and not model2_message:
+    if state2.has_error and not model2_message:
         error_content = "Model response unavailable due to an error."
         model2_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
 

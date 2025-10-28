@@ -58,14 +58,12 @@ anony_names = ["", ""]
 models = []
 
 
-def create_battle(
-    left_model: str, right_model: str, title: str | None = None
-) -> str | None:
+def create_battle(model1: str, model2: str, title: str | None = None) -> str | None:
     """Create a new battle record in the database.
 
     Args:
-        left_model: Name of left model
-        right_model: Name of right model
+        model1: Name of model1
+        model2: Name of model2
         title: Optional battle title (first prompt snippet)
 
     Returns:
@@ -75,15 +73,15 @@ def create_battle(
         api_base_url = _get_api_base_url()
 
         # Runtime lookup model info
-        left_model_info = model_response.api_endpoint_info[left_model]
-        right_model_info = model_response.api_endpoint_info[right_model]
+        model1_info = model_response.api_endpoint_info[model1]
+        model2_info = model_response.api_endpoint_info[model2]
 
         configuration = Configuration(host=api_base_url)
         with ApiClient(configuration) as api_client:
             battle_api = BattleApi(api_client)
             battle_request = BattleCreateRequest(
-                left_model_id=left_model_info["model_id"],
-                right_model_id=right_model_info["model_id"],
+                model1_id=model1_info["model_id"],
+                model2_id=model2_info["model_id"],
                 title=title,
             )
             battle = battle_api.create_battle(battle_request)
@@ -306,10 +304,10 @@ def add_text(
     if states[0] is None:
         assert states[1] is None
 
-        left_model, right_model = get_battle_pair(models)
+        model1, model2 = get_battle_pair(models)
         states = [
-            State(left_model),
-            State(right_model),
+            State(model1),
+            State(model2),
         ]
         battle_session.reset()
 
@@ -364,11 +362,11 @@ def add_text(
 
     # Create battle with first prompt as title (only for first message)
     if battle_session.battle_id is None and states[0] and states[1]:
-        left_model = states[0].model_name
-        right_model = states[1].model_name
+        model1 = states[0].model_name
+        model2 = states[1].model_name
         # Use first 50 characters of prompt as battle title
         battle_title = text[:50] + "..." if len(text) > 50 else text
-        battle_id = create_battle(left_model, right_model, battle_title)
+        battle_id = create_battle(model1, model2, battle_title)
         if battle_id:
             battle_session.battle_id = battle_id
     battle_id = battle_session.battle_id

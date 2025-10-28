@@ -707,9 +707,9 @@ components:
           nullable: true
         userId:
           $ref: '#/components/schemas/UserId'
-        leftModelId:
+        model1Id:
           $ref: '#/components/schemas/ModelId'
-        rightModelId:
+        model2Id:
           $ref: '#/components/schemas/ModelId'
         createdAt:
           $ref: '#/components/schemas/CreatedAt'
@@ -719,8 +719,8 @@ components:
       required:
         - id
         - userId
-        - leftModelId
-        - rightModelId
+        - model1Id
+        - model2Id
         - createdAt
     PageMetadata:
       type: object
@@ -782,13 +782,13 @@ components:
         title:
           $ref: '#/components/schemas/BattleTitle'
           nullable: true
-        leftModelId:
+        model1Id:
           $ref: '#/components/schemas/ModelId'
-        rightModelId:
+        model2Id:
           $ref: '#/components/schemas/ModelId'
       required:
-        - leftModelId
-        - rightModelId
+        - model1Id
+        - model2Id
     BattleUpdateRequest:
       type: object
       description: The information used to update a battle.

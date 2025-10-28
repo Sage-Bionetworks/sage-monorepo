@@ -36,13 +36,13 @@ class TestBattleCreateRequest(unittest.TestCase):
         if include_optional:
             return BattleCreateRequest(
                 title = 'Gene Expression Analysis Comparison',
-                left_model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
-                right_model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d'
+                model1_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
+                model2_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d'
             )
         else:
             return BattleCreateRequest(
-                left_model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
-                right_model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
+                model1_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
+                model2_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
         )
         """
 
