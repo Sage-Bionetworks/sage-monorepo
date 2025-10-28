@@ -27,7 +27,7 @@ class LeaderboardSort(str, Enum):
     """
     RANK = "rank"
     BT_SCORE = "bt_score"
-    EVALUATION_COUNT = "evaluation_count"
+    VOTE_COUNT = "vote_count"
     CREATED_AT = "created_at"
     MODEL_NAME = "model_name"
 

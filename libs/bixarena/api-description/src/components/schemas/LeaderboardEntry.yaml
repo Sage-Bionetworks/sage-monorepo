@@ -22,9 +22,9 @@ properties:
     format: double
     description: Primary scoring metric (higher is better)
     example: 0.925
-  evaluationCount:
+  voteCount:
     type: integer
-    description: Number of evaluations
+    description: Number of votes/evaluations
     example: 1250
   rank:
     type: integer
@@ -41,6 +41,6 @@ required:
   - modelName
   - license
   - btScore
-  - evaluationCount
+  - voteCount
   - rank
   - createdAt

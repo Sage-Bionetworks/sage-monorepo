@@ -36,7 +36,7 @@ public class LeaderboardEntryDto {
 
   private Double btScore;
 
-  private Integer evaluationCount;
+  private Integer voteCount;
 
   private Integer rank;
 
@@ -50,13 +50,13 @@ public class LeaderboardEntryDto {
   /**
    * Constructor with only required parameters
    */
-  public LeaderboardEntryDto(String id, String modelId, String modelName, String license, Double btScore, Integer evaluationCount, Integer rank, OffsetDateTime createdAt) {
+  public LeaderboardEntryDto(String id, String modelId, String modelName, String license, Double btScore, Integer voteCount, Integer rank, OffsetDateTime createdAt) {
     this.id = id;
     this.modelId = modelId;
     this.modelName = modelName;
     this.license = license;
     this.btScore = btScore;
-    this.evaluationCount = evaluationCount;
+    this.voteCount = voteCount;
     this.rank = rank;
     this.createdAt = createdAt;
   }
@@ -161,24 +161,24 @@ public class LeaderboardEntryDto {
     this.btScore = btScore;
   }
 
-  public LeaderboardEntryDto evaluationCount(Integer evaluationCount) {
-    this.evaluationCount = evaluationCount;
+  public LeaderboardEntryDto voteCount(Integer voteCount) {
+    this.voteCount = voteCount;
     return this;
   }
 
   /**
-   * Number of evaluations
-   * @return evaluationCount
+   * Number of votes/evaluations
+   * @return voteCount
    */
   @NotNull 
-  @Schema(name = "evaluationCount", example = "1250", description = "Number of evaluations", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("evaluationCount")
-  public Integer getEvaluationCount() {
-    return evaluationCount;
+  @Schema(name = "voteCount", example = "1250", description = "Number of votes/evaluations", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("voteCount")
+  public Integer getVoteCount() {
+    return voteCount;
   }
 
-  public void setEvaluationCount(Integer evaluationCount) {
-    this.evaluationCount = evaluationCount;
+  public void setVoteCount(Integer voteCount) {
+    this.voteCount = voteCount;
   }
 
   public LeaderboardEntryDto rank(Integer rank) {
@@ -235,14 +235,14 @@ public class LeaderboardEntryDto {
         Objects.equals(this.modelName, leaderboardEntry.modelName) &&
         Objects.equals(this.license, leaderboardEntry.license) &&
         Objects.equals(this.btScore, leaderboardEntry.btScore) &&
-        Objects.equals(this.evaluationCount, leaderboardEntry.evaluationCount) &&
+        Objects.equals(this.voteCount, leaderboardEntry.voteCount) &&
         Objects.equals(this.rank, leaderboardEntry.rank) &&
         Objects.equals(this.createdAt, leaderboardEntry.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, modelId, modelName, license, btScore, evaluationCount, rank, createdAt);
+    return Objects.hash(id, modelId, modelName, license, btScore, voteCount, rank, createdAt);
   }
 
   @Override
@@ -254,7 +254,7 @@ public class LeaderboardEntryDto {
     sb.append("    modelName: ").append(toIndentedString(modelName)).append("\n");
     sb.append("    license: ").append(toIndentedString(license)).append("\n");
     sb.append("    btScore: ").append(toIndentedString(btScore)).append("\n");
-    sb.append("    evaluationCount: ").append(toIndentedString(evaluationCount)).append("\n");
+    sb.append("    voteCount: ").append(toIndentedString(voteCount)).append("\n");
     sb.append("    rank: ").append(toIndentedString(rank)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
@@ -290,7 +290,7 @@ public class LeaderboardEntryDto {
       this.instance.setModelName(value.modelName);
       this.instance.setLicense(value.license);
       this.instance.setBtScore(value.btScore);
-      this.instance.setEvaluationCount(value.evaluationCount);
+      this.instance.setVoteCount(value.voteCount);
       this.instance.setRank(value.rank);
       this.instance.setCreatedAt(value.createdAt);
       return this;
@@ -321,8 +321,8 @@ public class LeaderboardEntryDto {
       return this;
     }
     
-    public LeaderboardEntryDto.Builder evaluationCount(Integer evaluationCount) {
-      this.instance.evaluationCount(evaluationCount);
+    public LeaderboardEntryDto.Builder voteCount(Integer voteCount) {
+      this.instance.voteCount(voteCount);
       return this;
     }
     

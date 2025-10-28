@@ -49,7 +49,7 @@ class TestLeaderboardModelHistoryPage(unittest.TestCase):
                     bixarena_api_client.models.historical_leaderboard_entry.HistoricalLeaderboardEntry(
                         snapshot_id = 'snapshot_2025-08-15_10-00', 
                         bt_score = 0.915, 
-                        evaluation_count = 1180, 
+                        vote_count = 1180, 
                         rank = 2, 
                         created_at = '2025-08-15T10:00Z', )
                     ]
@@ -68,7 +68,7 @@ class TestLeaderboardModelHistoryPage(unittest.TestCase):
                     bixarena_api_client.models.historical_leaderboard_entry.HistoricalLeaderboardEntry(
                         snapshot_id = 'snapshot_2025-08-15_10-00', 
                         bt_score = 0.915, 
-                        evaluation_count = 1180, 
+                        vote_count = 1180, 
                         rank = 2, 
                         created_at = '2025-08-15T10:00Z', )
                     ],

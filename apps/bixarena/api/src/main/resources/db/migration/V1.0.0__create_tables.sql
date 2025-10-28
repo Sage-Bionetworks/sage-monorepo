@@ -46,7 +46,7 @@ CREATE TABLE api.leaderboard_entry (
   model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
   snapshot_id UUID NOT NULL REFERENCES api.leaderboard_snapshot(id) ON DELETE CASCADE,
   bt_score DECIMAL(10,6) NOT NULL,
-  evaluation_count INTEGER NOT NULL DEFAULT 0,
+  vote_count INTEGER NOT NULL DEFAULT 0,
   rank INTEGER NOT NULL,
   secondary_score DECIMAL(10,6),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),

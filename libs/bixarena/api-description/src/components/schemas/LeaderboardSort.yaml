@@ -3,7 +3,7 @@ description: The field to sort leaderboard entries by.
 enum:
   - rank
   - bt_score
-  - evaluation_count
+  - vote_count
   - created_at
   - model_name
 default: rank

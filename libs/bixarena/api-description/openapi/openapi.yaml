@@ -1061,7 +1061,7 @@ components:
       enum:
         - rank
         - bt_score
-        - evaluation_count
+        - vote_count
         - created_at
         - model_name
       default: rank
@@ -1124,9 +1124,9 @@ components:
           format: double
           description: Primary scoring metric (higher is better)
           example: 0.925
-        evaluationCount:
+        voteCount:
           type: integer
-          description: Number of evaluations
+          description: Number of votes/evaluations
           example: 1250
         rank:
           type: integer
@@ -1143,7 +1143,7 @@ components:
         - modelName
         - license
         - btScore
-        - evaluationCount
+        - voteCount
         - rank
         - createdAt
     LeaderboardEntryPage:
@@ -1228,9 +1228,9 @@ components:
           format: double
           description: Primary scoring metric at this point in time
           example: 0.915
-        evaluationCount:
+        voteCount:
           type: integer
-          description: Number of evaluations at this point in time
+          description: Number of votes/evaluations at this point in time
           example: 1180
         rank:
           type: integer
@@ -1244,7 +1244,7 @@ components:
       required:
         - snapshotId
         - btScore
-        - evaluationCount
+        - voteCount
         - rank
         - createdAt
     LeaderboardModelHistoryPage:

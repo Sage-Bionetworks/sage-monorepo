@@ -1294,7 +1294,7 @@ components:
       enum:
         - rank
         - bt_score
-        - evaluation_count
+        - vote_count
         - created_at
         - model_name
       example: bt_score
@@ -1338,11 +1338,11 @@ components:
         modelName: GPT-4o
         license: MIT
         createdAt: 2025-08-16T10:30:00Z
-        evaluationCount: 1250
         modelId: model_456
         btScore: 0.925
         rank: 1
         id: entry_123
+        voteCount: 1250
       properties:
         id:
           description: Unique identifier for this leaderboard entry
@@ -1365,8 +1365,8 @@ components:
           example: 0.925
           format: double
           type: number
-        evaluationCount:
-          description: Number of evaluations
+        voteCount:
+          description: Number of votes/evaluations
           example: 1250
           type: integer
         rank:
@@ -1381,12 +1381,12 @@ components:
       required:
         - btScore
         - createdAt
-        - evaluationCount
         - id
         - license
         - modelId
         - modelName
         - rank
+        - voteCount
       type: object
     LeaderboardEntryPage:
       allOf:
@@ -1418,19 +1418,19 @@ components:
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
-            evaluationCount: 1250
             modelId: model_456
             btScore: 0.925
             rank: 1
             id: entry_123
+            voteCount: 1250
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
-            evaluationCount: 1250
             modelId: model_456
             btScore: 0.925
             rank: 1
             id: entry_123
+            voteCount: 1250
         snapshotId: snapshot_2025-08-16_14-30
         size: 99
         totalPages: 99
@@ -1489,9 +1489,9 @@ components:
       example:
         createdAt: 2025-08-15T10:00:00Z
         snapshotId: snapshot_2025-08-15_10-00
-        evaluationCount: 1180
         btScore: 0.915
         rank: 2
+        voteCount: 1180
       properties:
         snapshotId:
           description: Identifier for the snapshot/timepoint
@@ -1502,8 +1502,8 @@ components:
           example: 0.915
           format: double
           type: number
-        evaluationCount:
-          description: Number of evaluations at this point in time
+        voteCount:
+          description: Number of votes/evaluations at this point in time
           example: 1180
           type: integer
         rank:
@@ -1518,9 +1518,9 @@ components:
       required:
         - btScore
         - createdAt
-        - evaluationCount
         - rank
         - snapshotId
+        - voteCount
       type: object
     LeaderboardModelHistoryPage:
       allOf:
@@ -1556,14 +1556,14 @@ components:
         history:
           - createdAt: 2025-08-15T10:00:00Z
             snapshotId: snapshot_2025-08-15_10-00
-            evaluationCount: 1180
             btScore: 0.915
             rank: 2
+            voteCount: 1180
           - createdAt: 2025-08-15T10:00:00Z
             snapshotId: snapshot_2025-08-15_10-00
-            evaluationCount: 1180
             btScore: 0.915
             rank: 2
+            voteCount: 1180
         totalElements: 99
       type: object
     LeaderboardSnapshotSort:

@@ -34,9 +34,9 @@ class HistoricalLeaderboardEntry(BaseModel):
     bt_score: Union[StrictFloat, StrictInt] = Field(
         description="Primary scoring metric at this point in time", alias="btScore"
     )
-    evaluation_count: StrictInt = Field(
-        description="Number of evaluations at this point in time",
-        alias="evaluationCount",
+    vote_count: StrictInt = Field(
+        description="Number of votes/evaluations at this point in time",
+        alias="voteCount",
     )
     rank: StrictInt = Field(description="Rank position at this point in time (1-based)")
     created_at: datetime = Field(
@@ -45,7 +45,7 @@ class HistoricalLeaderboardEntry(BaseModel):
     __properties: ClassVar[List[str]] = [
         "snapshotId",
         "btScore",
-        "evaluationCount",
+        "voteCount",
         "rank",
         "createdAt",
     ]
@@ -102,7 +102,7 @@ class HistoricalLeaderboardEntry(BaseModel):
             {
                 "snapshotId": obj.get("snapshotId"),
                 "btScore": obj.get("btScore"),
-                "evaluationCount": obj.get("evaluationCount"),
+                "voteCount": obj.get("voteCount"),
                 "rank": obj.get("rank"),
                 "createdAt": obj.get("createdAt"),
             }

@@ -37,8 +37,8 @@ class LeaderboardEntry(BaseModel):
     bt_score: Union[StrictFloat, StrictInt] = Field(
         description="Primary scoring metric (higher is better)", alias="btScore"
     )
-    evaluation_count: StrictInt = Field(
-        description="Number of evaluations", alias="evaluationCount"
+    vote_count: StrictInt = Field(
+        description="Number of votes/evaluations", alias="voteCount"
     )
     rank: StrictInt = Field(description="Current rank position (1-based)")
     created_at: datetime = Field(
@@ -50,7 +50,7 @@ class LeaderboardEntry(BaseModel):
         "modelName",
         "license",
         "btScore",
-        "evaluationCount",
+        "voteCount",
         "rank",
         "createdAt",
     ]
@@ -110,7 +110,7 @@ class LeaderboardEntry(BaseModel):
                 "modelName": obj.get("modelName"),
                 "license": obj.get("license"),
                 "btScore": obj.get("btScore"),
-                "evaluationCount": obj.get("evaluationCount"),
+                "voteCount": obj.get("voteCount"),
                 "rank": obj.get("rank"),
                 "createdAt": obj.get("createdAt"),
             }

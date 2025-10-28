@@ -18,7 +18,7 @@ public class LeaderboardEntryMapper {
       .modelName(entity.getModel().getName())
       .license(entity.getModel().getLicense())
       .btScore(entity.getBtScore().doubleValue())
-      .evaluationCount(entity.getEvaluationCount())
+      .voteCount(entity.getVoteCount())
       .rank(entity.getRank())
       .createdAt(entity.getCreatedAt())
       .build();

@@ -30,7 +30,7 @@ public class HistoricalLeaderboardEntryDto {
 
   private Double btScore;
 
-  private Integer evaluationCount;
+  private Integer voteCount;
 
   private Integer rank;
 
@@ -44,10 +44,10 @@ public class HistoricalLeaderboardEntryDto {
   /**
    * Constructor with only required parameters
    */
-  public HistoricalLeaderboardEntryDto(String snapshotId, Double btScore, Integer evaluationCount, Integer rank, OffsetDateTime createdAt) {
+  public HistoricalLeaderboardEntryDto(String snapshotId, Double btScore, Integer voteCount, Integer rank, OffsetDateTime createdAt) {
     this.snapshotId = snapshotId;
     this.btScore = btScore;
-    this.evaluationCount = evaluationCount;
+    this.voteCount = voteCount;
     this.rank = rank;
     this.createdAt = createdAt;
   }
@@ -92,24 +92,24 @@ public class HistoricalLeaderboardEntryDto {
     this.btScore = btScore;
   }
 
-  public HistoricalLeaderboardEntryDto evaluationCount(Integer evaluationCount) {
-    this.evaluationCount = evaluationCount;
+  public HistoricalLeaderboardEntryDto voteCount(Integer voteCount) {
+    this.voteCount = voteCount;
     return this;
   }
 
   /**
-   * Number of evaluations at this point in time
-   * @return evaluationCount
+   * Number of votes/evaluations at this point in time
+   * @return voteCount
    */
   @NotNull 
-  @Schema(name = "evaluationCount", example = "1180", description = "Number of evaluations at this point in time", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("evaluationCount")
-  public Integer getEvaluationCount() {
-    return evaluationCount;
+  @Schema(name = "voteCount", example = "1180", description = "Number of votes/evaluations at this point in time", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("voteCount")
+  public Integer getVoteCount() {
+    return voteCount;
   }
 
-  public void setEvaluationCount(Integer evaluationCount) {
-    this.evaluationCount = evaluationCount;
+  public void setVoteCount(Integer voteCount) {
+    this.voteCount = voteCount;
   }
 
   public HistoricalLeaderboardEntryDto rank(Integer rank) {
@@ -163,14 +163,14 @@ public class HistoricalLeaderboardEntryDto {
     HistoricalLeaderboardEntryDto historicalLeaderboardEntry = (HistoricalLeaderboardEntryDto) o;
     return Objects.equals(this.snapshotId, historicalLeaderboardEntry.snapshotId) &&
         Objects.equals(this.btScore, historicalLeaderboardEntry.btScore) &&
-        Objects.equals(this.evaluationCount, historicalLeaderboardEntry.evaluationCount) &&
+        Objects.equals(this.voteCount, historicalLeaderboardEntry.voteCount) &&
         Objects.equals(this.rank, historicalLeaderboardEntry.rank) &&
         Objects.equals(this.createdAt, historicalLeaderboardEntry.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(snapshotId, btScore, evaluationCount, rank, createdAt);
+    return Objects.hash(snapshotId, btScore, voteCount, rank, createdAt);
   }
 
   @Override
@@ -179,7 +179,7 @@ public class HistoricalLeaderboardEntryDto {
     sb.append("class HistoricalLeaderboardEntryDto {\n");
     sb.append("    snapshotId: ").append(toIndentedString(snapshotId)).append("\n");
     sb.append("    btScore: ").append(toIndentedString(btScore)).append("\n");
-    sb.append("    evaluationCount: ").append(toIndentedString(evaluationCount)).append("\n");
+    sb.append("    voteCount: ").append(toIndentedString(voteCount)).append("\n");
     sb.append("    rank: ").append(toIndentedString(rank)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
@@ -212,7 +212,7 @@ public class HistoricalLeaderboardEntryDto {
     protected Builder copyOf(HistoricalLeaderboardEntryDto value) { 
       this.instance.setSnapshotId(value.snapshotId);
       this.instance.setBtScore(value.btScore);
-      this.instance.setEvaluationCount(value.evaluationCount);
+      this.instance.setVoteCount(value.voteCount);
       this.instance.setRank(value.rank);
       this.instance.setCreatedAt(value.createdAt);
       return this;
@@ -228,8 +228,8 @@ public class HistoricalLeaderboardEntryDto {
       return this;
     }
     
-    public HistoricalLeaderboardEntryDto.Builder evaluationCount(Integer evaluationCount) {
-      this.instance.evaluationCount(evaluationCount);
+    public HistoricalLeaderboardEntryDto.Builder voteCount(Integer voteCount) {
+      this.instance.voteCount(voteCount);
       return this;
     }
     

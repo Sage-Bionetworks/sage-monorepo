@@ -50,7 +50,7 @@ public interface LeaderboardApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"entries\" : [ { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"evaluationCount\" : 1250, \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"rank\" : 1, \"id\" : \"entry_123\" }, { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"evaluationCount\" : 1250, \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"rank\" : 1, \"id\" : \"entry_123\" } ], \"snapshotId\" : \"snapshot_2025-08-16_14-30\", \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99, \"updatedAt\" : \"2025-08-16T14:30:00Z\" }";
+                    String exampleString = "{ \"number\" : 99, \"entries\" : [ { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"rank\" : 1, \"id\" : \"entry_123\", \"voteCount\" : 1250 }, { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"rank\" : 1, \"id\" : \"entry_123\", \"voteCount\" : 1250 } ], \"snapshotId\" : \"snapshot_2025-08-16_14-30\", \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99, \"updatedAt\" : \"2025-08-16T14:30:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -136,7 +136,7 @@ public interface LeaderboardApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"modelName\" : \"GPT-4o\", \"size\" : 99, \"modelId\" : \"model_456\", \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"history\" : [ { \"createdAt\" : \"2025-08-15T10:00:00Z\", \"snapshotId\" : \"snapshot_2025-08-15_10-00\", \"evaluationCount\" : 1180, \"btScore\" : 0.915, \"rank\" : 2 }, { \"createdAt\" : \"2025-08-15T10:00:00Z\", \"snapshotId\" : \"snapshot_2025-08-15_10-00\", \"evaluationCount\" : 1180, \"btScore\" : 0.915, \"rank\" : 2 } ], \"totalElements\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"modelName\" : \"GPT-4o\", \"size\" : 99, \"modelId\" : \"model_456\", \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"history\" : [ { \"createdAt\" : \"2025-08-15T10:00:00Z\", \"snapshotId\" : \"snapshot_2025-08-15_10-00\", \"btScore\" : 0.915, \"rank\" : 2, \"voteCount\" : 1180 }, { \"createdAt\" : \"2025-08-15T10:00:00Z\", \"snapshotId\" : \"snapshot_2025-08-15_10-00\", \"btScore\" : 0.915, \"rank\" : 2, \"voteCount\" : 1180 } ], \"totalElements\" : 99 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
