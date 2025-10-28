@@ -32,7 +32,6 @@ async function setup(
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
     componentInputs: {
-      id: '3xTg-AD',
       viewDetailsTooltip: 'View detailed results',
     },
   });
