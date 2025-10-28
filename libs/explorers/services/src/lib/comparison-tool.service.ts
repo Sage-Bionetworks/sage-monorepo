@@ -23,6 +23,7 @@ export class ComparisonToolService {
     selectorsWikiParams: {},
     headerTitle: 'Comparison Tool',
     filterResultsButtonTooltip: 'Filter results',
+    showSignificanceControls: true,
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);

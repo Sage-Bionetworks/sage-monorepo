@@ -41,6 +41,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: 'Model Overview',
     filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
+    showSignificanceControls: false,
   };
 
   ngOnInit() {

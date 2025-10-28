@@ -24,7 +24,6 @@ export class BaseComparisonToolComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
   isLoading = input(true);
-  showSignificanceControls = input(true);
 
   currentConfig = this.comparisonToolService.currentConfig;
   resultsCount = this.comparisonToolService.totalResultsCount;

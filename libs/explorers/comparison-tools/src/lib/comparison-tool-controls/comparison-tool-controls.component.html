@@ -5,7 +5,7 @@
   </div>
   <div class="controls-right">
     <explorers-comparison-tool-category-selectors />
-    @if (showSignificanceControls()) {
+    @if (viewConfig().showSignificanceControls) {
       <div class="significance-and-column-selector">
         <div>
           <explorers-significance-controls />

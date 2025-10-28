@@ -4,6 +4,7 @@ export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
   headerTitle: string;
   filterResultsButtonTooltip: string;
+  showSignificanceControls: boolean;
 }
 
 export interface ComparisonToolFilterOption {
