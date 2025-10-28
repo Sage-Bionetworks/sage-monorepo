@@ -37,8 +37,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   data: ModelOverview[] = [];
 
   isLoading = signal(true);
-  viewConfig: ComparisonToolViewConfig = {
-    selectorsWikiParams: {},
+
+  viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: 'Model Overview',
     filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
   };
@@ -61,7 +61,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs, undefined, this.viewConfig);
+          this.comparisonToolService.initialize(configs);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);

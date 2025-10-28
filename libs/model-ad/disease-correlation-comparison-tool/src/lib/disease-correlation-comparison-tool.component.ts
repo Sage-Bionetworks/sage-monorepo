@@ -38,13 +38,15 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       wikiId: '632874',
     },
   };
-  viewConfig: ComparisonToolViewConfig = {
+  viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
     headerTitle: 'Disease Correlation',
     filterResultsButtonTooltip: 'Filter results by Age, Sex, Modified Gene, and more',
   };
 
   constructor() {
+    this.comparisonToolService.setViewConfig(this.viewConfig);
+
     effect(() => {
       const selection = this.comparisonToolService.dropdownSelection();
       if (!selection.length) {
@@ -73,7 +75,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs, undefined, this.viewConfig);
+          this.comparisonToolService.initialize(configs);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);

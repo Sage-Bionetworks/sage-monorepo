@@ -34,11 +34,15 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
       wikiId: '632873',
     },
   };
-  viewConfig: ComparisonToolViewConfig = {
+  viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
     headerTitle: 'Gene Expression',
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
   };
+
+  constructor() {
+    this.comparisonToolService.setViewConfig(this.viewConfig);
+  }
 
   ngOnInit() {
     if (this.platformService.isBrowser) {
@@ -58,7 +62,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
       .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs, undefined, this.viewConfig);
+          this.comparisonToolService.initialize(configs);
           this.comparisonToolService.totalResultsCount.set(50000);
         },
         error: (error) => {

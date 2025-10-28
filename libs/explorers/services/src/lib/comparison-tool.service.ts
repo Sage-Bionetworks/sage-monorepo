@@ -109,16 +109,11 @@ export class ComparisonToolService {
     this.isLegendVisibleSignal.update((visible) => !visible);
   }
 
-  initialize(
-    configs: ComparisonToolConfig[],
-    selection?: string[],
-    viewConfig: Partial<ComparisonToolViewConfig> = {},
-  ) {
+  initialize(configs: ComparisonToolConfig[], selection?: string[]) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
     this.pinnedItemsSignal.set(new Set());
     this.setSort(undefined, this.DEFAULT_SORT_ORDER);
-    this.setViewConfig({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);
@@ -174,8 +169,8 @@ export class ComparisonToolService {
     }
   }
 
-  setViewConfig(viewConfig: ComparisonToolViewConfig) {
-    this.viewConfigSignal.set(viewConfig);
+  setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {
+    this.viewConfigSignal.set({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
   }
 
   isPinned(id: string): boolean {

@@ -26,13 +26,13 @@ export const provideComparisonToolService = (
         const service = new ComparisonToolService();
 
         if (options.configs) {
-          service.initialize(options.configs, options.selection, options.viewConfig);
+          service.initialize(options.configs, options.selection);
         } else if (options.selection) {
           service.setDropdownSelection(options.selection);
         }
 
-        if (!options.configs && options.viewConfig) {
-          service.setViewConfig({ ...service.viewConfig(), ...options.viewConfig });
+        if (options.viewConfig) {
+          service.setViewConfig(options.viewConfig);
         }
 
         if (options.totalResultsCount !== undefined) {
