@@ -16,8 +16,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict
+from typing import Any, ClassVar, Dict, List
 from bixarena_api_client.models.battle_evaluation_outcome import BattleEvaluationOutcome
 from typing import Optional, Set
 from typing_extensions import Self
@@ -29,11 +29,7 @@ class BattleEvaluationCreateRequest(BaseModel):
     """  # noqa: E501
 
     outcome: BattleEvaluationOutcome
-    valid: Optional[StrictBool] = Field(
-        default=False,
-        description="Indicates whether the battle evaluation passed the configured validation checks.",
-    )
-    __properties: ClassVar[List[str]] = ["outcome", "valid"]
+    __properties: ClassVar[List[str]] = ["outcome"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -83,10 +79,5 @@ class BattleEvaluationCreateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "outcome": obj.get("outcome"),
-                "valid": obj.get("valid") if obj.get("valid") is not None else False,
-            }
-        )
+        _obj = cls.model_validate({"outcome": obj.get("outcome")})
         return _obj

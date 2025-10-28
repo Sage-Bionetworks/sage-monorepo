@@ -385,7 +385,7 @@ paths:
       tags:
         - BattleEvaluation
       summary: Create a battle evaluation
-      description: Record the outcome of a battle along with optional validation results.
+      description: Record the outcome of a battle.
       operationId: createBattleEvaluation
       requestBody:
         required: true
@@ -1297,18 +1297,12 @@ components:
         - model1
         - model2
         - tie
-    Valid:
-      type: boolean
-      description: Indicates whether the battle evaluation passed the configured validation checks.
-      default: false
     BattleEvaluationCreateRequest:
       type: object
       description: The information used to create a new battle evaluation.
       properties:
         outcome:
           $ref: '#/components/schemas/BattleEvaluationOutcome'
-        valid:
-          $ref: '#/components/schemas/Valid'
       required:
         - outcome
     BattleEvaluationId:
@@ -1327,13 +1321,10 @@ components:
           $ref: '#/components/schemas/BattleEvaluationOutcome'
         createdAt:
           $ref: '#/components/schemas/CreatedAt'
-        valid:
-          $ref: '#/components/schemas/Valid'
       required:
         - id
         - battleId
         - outcome
-        - valid
         - createdAt
     UserStats:
       type: object

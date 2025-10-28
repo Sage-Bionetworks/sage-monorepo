@@ -38,8 +38,7 @@ class TestBattleEvaluation(unittest.TestCase):
                 id = '',
                 battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
                 outcome = 'model1',
-                created_at = '2024-01-15T10:30Z',
-                valid = True
+                created_at = '2024-01-15T10:30Z'
             )
         else:
             return BattleEvaluation(
@@ -47,7 +46,6 @@ class TestBattleEvaluation(unittest.TestCase):
                 battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
                 outcome = 'model1',
                 created_at = '2024-01-15T10:30Z',
-                valid = True,
         )
         """
 

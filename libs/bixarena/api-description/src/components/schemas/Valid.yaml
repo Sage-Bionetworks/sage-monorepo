@@ -1,3 +1,0 @@
-type: boolean
-description: Indicates whether the battle evaluation passed the configured validation checks.
-default: false

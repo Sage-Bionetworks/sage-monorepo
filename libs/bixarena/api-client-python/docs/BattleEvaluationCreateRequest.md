@@ -4,10 +4,9 @@ The information used to create a new battle evaluation.
 
 ## Properties
 
-| Name        | Type                                                      | Description                                                                      | Notes                         |
-| ----------- | --------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------- |
-| **outcome** | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |                                                                                  |
-| **valid**   | **bool**                                                  | Indicates whether the battle evaluation passed the configured validation checks. | [optional] [default to False] |
+| Name        | Type                                                      | Description | Notes |
+| ----------- | --------------------------------------------------------- | ----------- | ----- |
+| **outcome** | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |             |
 
 ## Example
 

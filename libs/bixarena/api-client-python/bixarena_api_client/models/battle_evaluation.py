@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictBool
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List
 from uuid import UUID
 from bixarena_api_client.models.battle_evaluation_outcome import BattleEvaluationOutcome
@@ -38,16 +38,7 @@ class BattleEvaluation(BaseModel):
     created_at: datetime = Field(
         description="Timestamp when the entity was created.", alias="createdAt"
     )
-    valid: StrictBool = Field(
-        description="Indicates whether the battle evaluation passed the configured validation checks."
-    )
-    __properties: ClassVar[List[str]] = [
-        "id",
-        "battleId",
-        "outcome",
-        "createdAt",
-        "valid",
-    ]
+    __properties: ClassVar[List[str]] = ["id", "battleId", "outcome", "createdAt"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -103,7 +94,6 @@ class BattleEvaluation(BaseModel):
                 "battleId": obj.get("battleId"),
                 "outcome": obj.get("outcome"),
                 "createdAt": obj.get("createdAt"),
-                "valid": obj.get("valid") if obj.get("valid") is not None else False,
             }
         )
         return _obj

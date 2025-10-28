@@ -9,11 +9,8 @@ properties:
     $ref: BattleEvaluationOutcome.yaml
   createdAt:
     $ref: CreatedAt.yaml
-  valid:
-    $ref: Valid.yaml
 required:
   - id
   - battleId
   - outcome
-  - valid
   - createdAt

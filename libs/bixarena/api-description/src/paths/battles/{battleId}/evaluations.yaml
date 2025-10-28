@@ -5,7 +5,7 @@ post:
   tags:
     - BattleEvaluation
   summary: Create a battle evaluation
-  description: Record the outcome of a battle along with optional validation results.
+  description: Record the outcome of a battle.
   operationId: createBattleEvaluation
   requestBody:
     required: true

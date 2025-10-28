@@ -4,13 +4,12 @@ A battle evaluation describing the outcome of a matchup.
 
 ## Properties
 
-| Name           | Type                                                      | Description                                                                      | Notes              |
-| -------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------ |
-| **id**         | **str**                                                   | The unique identifier of the battle evaluation                                   |
-| **battle_id**  | **str**                                                   | Unique identifier (UUID) of the battle.                                          |
-| **outcome**    | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |                                                                                  |
-| **created_at** | **datetime**                                              | Timestamp when the entity was created.                                           |
-| **valid**      | **bool**                                                  | Indicates whether the battle evaluation passed the configured validation checks. | [default to False] |
+| Name           | Type                                                      | Description                                    | Notes |
+| -------------- | --------------------------------------------------------- | ---------------------------------------------- | ----- |
+| **id**         | **str**                                                   | The unique identifier of the battle evaluation |
+| **battle_id**  | **str**                                                   | Unique identifier (UUID) of the battle.        |
+| **outcome**    | [**BattleEvaluationOutcome**](BattleEvaluationOutcome.md) |                                                |
+| **created_at** | **datetime**                                              | Timestamp when the entity was created.         |
 
 ## Example
 

@@ -43,7 +43,6 @@ from bixarena_app.model.model_response import (
     invisible_btn,
     no_change_btn,
     set_global_vars_anony,
-    validate_responses,
 )
 from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
 from bixarena_app.page.battle_page_css import (
@@ -143,14 +142,12 @@ def create_battle_round(battle_id: UUID, prompt: str) -> UUID | None:
 def create_battle_evaluation(
     battle_id: UUID,
     outcome: BattleEvaluationOutcome,
-    is_valid: bool | None = None,
 ) -> UUID | None:
     """Create a battleevaluation record for the battle.
 
     Args:
         battle_id: The battle ID to evaluate
         outcome: BattleEvaluationOutcome enum (MODEL1, MODEL2, or TIE)
-        kvalid: boolean indicating whether the responses passed validation
 
     Returns:
         Battle Evaluation ID if created successfully, None otherwise
@@ -166,7 +163,6 @@ def create_battle_evaluation(
             evaluation_api = BattleEvaluationApi(api_client)
             evaluation_request = BattleEvaluationCreateRequest(
                 outcome=outcome,
-                valid=is_valid,
             )
             evaluation = evaluation_api.create_battle_evaluation(
                 battle_id, evaluation_request
@@ -200,12 +196,11 @@ def vote_last_response(
 ):
     # Create evaluation record and end the battle
     if battle_session.battle_id:
-        # TODO: Move the messages validation for identify leaking to backend
-        is_valid, validation_error = validate_responses(states)
+        # Identity leak validation currently disabled since we no longer tag evaluations
+        # is_valid, validation_error = validate_responses(states)
         create_battle_evaluation(
             battle_session.battle_id,
             outcome,
-            is_valid=is_valid,
         )
         end_battle(battle_session.battle_id)
         battle_session.reset()

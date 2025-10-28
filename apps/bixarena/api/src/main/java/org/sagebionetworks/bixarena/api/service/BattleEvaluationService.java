@@ -42,7 +42,6 @@ public class BattleEvaluationService {
     BattleEvaluationEntity entity = BattleEvaluationEntity.builder()
       .battleId(battleId)
       .outcome(mapOutcomeToEntityOutcome(request.getOutcome()))
-      .valid(Boolean.TRUE.equals(request.getValid()))
       .build();
 
     try {

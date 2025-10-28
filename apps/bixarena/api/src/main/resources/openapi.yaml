@@ -568,7 +568,7 @@ paths:
         - tag: Model
   /battles/{battleId}/evaluations:
     post:
-      description: Record the outcome of a battle along with optional validation results.
+      description: Record the outcome of a battle.
       operationId: createBattleEvaluation
       parameters:
         - description: The unique identifier of the battle
@@ -1860,21 +1860,11 @@ components:
         - tie
       maxLength: 20
       type: string
-    Valid:
-      default: false
-      description: Indicates whether the battle evaluation passed the configured validation
-        checks.
-      type: boolean
     BattleEvaluationCreateRequest:
       description: The information used to create a new battle evaluation.
       properties:
         outcome:
           $ref: '#/components/schemas/BattleEvaluationOutcome'
-        valid:
-          default: false
-          description: Indicates whether the battle evaluation passed the configured
-            validation checks.
-          type: boolean
       required:
         - outcome
       type: object
@@ -1885,7 +1875,6 @@ components:
     BattleEvaluation:
       description: A battle evaluation describing the outcome of a matchup.
       example:
-        valid: false
         createdAt: 2024-01-15T10:30:00Z
         battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -1907,17 +1896,11 @@ components:
           example: 2024-01-15T10:30:00Z
           format: date-time
           type: string
-        valid:
-          default: false
-          description: Indicates whether the battle evaluation passed the configured
-            validation checks.
-          type: boolean
       required:
         - battleId
         - createdAt
         - id
         - outcome
-        - valid
       type: object
     UserStats:
       description: Statistics about a user's participation in battles.

@@ -20,7 +20,6 @@ public class BattleEvaluationMapper {
       .battleId(entity.getBattleId())
       .outcome(outcomeDto)
       .createdAt(entity.getCreatedAt())
-      .valid(entity.getValid())
       .build();
   }
 

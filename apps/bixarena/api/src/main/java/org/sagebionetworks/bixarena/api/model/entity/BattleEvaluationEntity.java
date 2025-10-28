@@ -33,9 +33,6 @@ public class BattleEvaluationEntity {
   @Column(name = "outcome", nullable = false, length = 20)
   private String outcome;
 
-  @Column(name = "valid", nullable = false)
-  private Boolean valid;
-
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;

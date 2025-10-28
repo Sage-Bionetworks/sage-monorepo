@@ -41,7 +41,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(LeaderboardModelNotFoundException.class)
-  protected ResponseEntity<BasicErrorDto> handleModelNotFound(
+  protected ResponseEntity<BasicErrorDto> handleLeaderboardModelNotFoundException(
     LeaderboardModelNotFoundException ex,
     Locale locale
   ) {
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(ModelNotFoundException.class)
-  protected ResponseEntity<BasicErrorDto> handleModelNotFound(
+  protected ResponseEntity<BasicErrorDto> handleModelNotFoundException(
     ModelNotFoundException ex,
     Locale locale
   ) {

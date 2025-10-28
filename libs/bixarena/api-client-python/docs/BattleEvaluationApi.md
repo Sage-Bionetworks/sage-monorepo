@@ -12,7 +12,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 
 Create a battle evaluation
 
-Record the outcome of a battle along with optional validation results.
+Record the outcome of a battle.
 
 ### Example
 

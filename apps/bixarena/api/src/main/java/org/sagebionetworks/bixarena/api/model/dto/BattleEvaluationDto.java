@@ -38,8 +38,6 @@ public class BattleEvaluationDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  private Boolean valid = false;
-
   public BattleEvaluationDto() {
     super();
   }
@@ -47,12 +45,11 @@ public class BattleEvaluationDto {
   /**
    * Constructor with only required parameters
    */
-  public BattleEvaluationDto(UUID id, UUID battleId, BattleEvaluationOutcomeDto outcome, OffsetDateTime createdAt, Boolean valid) {
+  public BattleEvaluationDto(UUID id, UUID battleId, BattleEvaluationOutcomeDto outcome, OffsetDateTime createdAt) {
     this.id = id;
     this.battleId = battleId;
     this.outcome = outcome;
     this.createdAt = createdAt;
-    this.valid = valid;
   }
 
   public BattleEvaluationDto id(UUID id) {
@@ -135,26 +132,6 @@ public class BattleEvaluationDto {
     this.createdAt = createdAt;
   }
 
-  public BattleEvaluationDto valid(Boolean valid) {
-    this.valid = valid;
-    return this;
-  }
-
-  /**
-   * Indicates whether the battle evaluation passed the configured validation checks.
-   * @return valid
-   */
-  @NotNull 
-  @Schema(name = "valid", description = "Indicates whether the battle evaluation passed the configured validation checks.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("valid")
-  public Boolean getValid() {
-    return valid;
-  }
-
-  public void setValid(Boolean valid) {
-    this.valid = valid;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -167,13 +144,12 @@ public class BattleEvaluationDto {
     return Objects.equals(this.id, battleEvaluation.id) &&
         Objects.equals(this.battleId, battleEvaluation.battleId) &&
         Objects.equals(this.outcome, battleEvaluation.outcome) &&
-        Objects.equals(this.createdAt, battleEvaluation.createdAt) &&
-        Objects.equals(this.valid, battleEvaluation.valid);
+        Objects.equals(this.createdAt, battleEvaluation.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, battleId, outcome, createdAt, valid);
+    return Objects.hash(id, battleId, outcome, createdAt);
   }
 
   @Override
@@ -184,7 +160,6 @@ public class BattleEvaluationDto {
     sb.append("    battleId: ").append(toIndentedString(battleId)).append("\n");
     sb.append("    outcome: ").append(toIndentedString(outcome)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
-    sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -217,7 +192,6 @@ public class BattleEvaluationDto {
       this.instance.setBattleId(value.battleId);
       this.instance.setOutcome(value.outcome);
       this.instance.setCreatedAt(value.createdAt);
-      this.instance.setValid(value.valid);
       return this;
     }
 
@@ -238,11 +212,6 @@ public class BattleEvaluationDto {
     
     public BattleEvaluationDto.Builder createdAt(OffsetDateTime createdAt) {
       this.instance.createdAt(createdAt);
-      return this;
-    }
-    
-    public BattleEvaluationDto.Builder valid(Boolean valid) {
-      this.instance.valid(valid);
       return this;
     }
     

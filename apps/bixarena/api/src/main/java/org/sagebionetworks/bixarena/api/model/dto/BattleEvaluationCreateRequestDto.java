@@ -28,8 +28,6 @@ public class BattleEvaluationCreateRequestDto {
 
   private BattleEvaluationOutcomeDto outcome;
 
-  private Boolean valid = false;
-
   public BattleEvaluationCreateRequestDto() {
     super();
   }
@@ -61,26 +59,6 @@ public class BattleEvaluationCreateRequestDto {
     this.outcome = outcome;
   }
 
-  public BattleEvaluationCreateRequestDto valid(Boolean valid) {
-    this.valid = valid;
-    return this;
-  }
-
-  /**
-   * Indicates whether the battle evaluation passed the configured validation checks.
-   * @return valid
-   */
-  
-  @Schema(name = "valid", description = "Indicates whether the battle evaluation passed the configured validation checks.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("valid")
-  public Boolean getValid() {
-    return valid;
-  }
-
-  public void setValid(Boolean valid) {
-    this.valid = valid;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -90,13 +68,12 @@ public class BattleEvaluationCreateRequestDto {
       return false;
     }
     BattleEvaluationCreateRequestDto battleEvaluationCreateRequest = (BattleEvaluationCreateRequestDto) o;
-    return Objects.equals(this.outcome, battleEvaluationCreateRequest.outcome) &&
-        Objects.equals(this.valid, battleEvaluationCreateRequest.valid);
+    return Objects.equals(this.outcome, battleEvaluationCreateRequest.outcome);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(outcome, valid);
+    return Objects.hash(outcome);
   }
 
   @Override
@@ -104,7 +81,6 @@ public class BattleEvaluationCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class BattleEvaluationCreateRequestDto {\n");
     sb.append("    outcome: ").append(toIndentedString(outcome)).append("\n");
-    sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -134,17 +110,11 @@ public class BattleEvaluationCreateRequestDto {
 
     protected Builder copyOf(BattleEvaluationCreateRequestDto value) { 
       this.instance.setOutcome(value.outcome);
-      this.instance.setValid(value.valid);
       return this;
     }
 
     public BattleEvaluationCreateRequestDto.Builder outcome(BattleEvaluationOutcomeDto outcome) {
       this.instance.outcome(outcome);
-      return this;
-    }
-    
-    public BattleEvaluationCreateRequestDto.Builder valid(Boolean valid) {
-      this.instance.valid(valid);
       return this;
     }
     

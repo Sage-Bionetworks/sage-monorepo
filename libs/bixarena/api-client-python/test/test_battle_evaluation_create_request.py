@@ -37,8 +37,7 @@ class TestBattleEvaluationCreateRequest(unittest.TestCase):
         model = BattleEvaluationCreateRequest()
         if include_optional:
             return BattleEvaluationCreateRequest(
-                outcome = 'model1',
-                valid = True
+                outcome = 'model1'
             )
         else:
             return BattleEvaluationCreateRequest(
