@@ -1,5 +1,4 @@
 export * from './lib/base-comparison-tool/base-comparison-tool.component';
-export * from './lib/comparison-tool-columns/comparison-tool-columns.component';
 export * from './lib/comparison-tool-controls/comparison-tool-controls.component';
 export * from './lib/comparison-tool-header/comparison-tool-header.component';
 export * from './lib/comparison-tool-table-link/comparison-tool-table-link.component';
