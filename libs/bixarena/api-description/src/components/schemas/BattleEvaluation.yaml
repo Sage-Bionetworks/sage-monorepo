@@ -1,5 +1,5 @@
 type: object
-description: A battle evaluation describing the outcome of a matchup and any validation performed on it.
+description: A battle evaluation describing the outcome of a matchup.
 properties:
   id:
     $ref: BattleEvaluationId.yaml
@@ -9,14 +9,11 @@ properties:
     $ref: BattleEvaluationOutcome.yaml
   createdAt:
     $ref: CreatedAt.yaml
-  isValid:
-    $ref: IsValid.yaml
-  validationError:
-    $ref: ValidationError.yaml
-    nullable: true
+  valid:
+    $ref: Valid.yaml
 required:
   - id
   - battleId
   - outcome
-  - isValid
+  - valid
   - createdAt

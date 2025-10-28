@@ -44,7 +44,7 @@ public interface BattleEvaluationApi {
 
     /**
      * POST /battles/{battleId}/evaluations : Create a battle evaluation
-     * Create a new battle evaluation for a battle.
+     * Record the outcome of a battle along with optional validation results.
      *
      * @param battleId The unique identifier of the battle (required)
      * @param battleEvaluationCreateRequestDto  (required)
@@ -58,7 +58,7 @@ public interface BattleEvaluationApi {
     @Operation(
         operationId = "createBattleEvaluation",
         summary = "Create a battle evaluation",
-        description = "Create a new battle evaluation for a battle.",
+        description = "Record the outcome of a battle along with optional validation results.",
         tags = { "BattleEvaluation" },
         responses = {
             @ApiResponse(responseCode = "201", description = "BattleEvaluation created successfully", content = {

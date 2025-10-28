@@ -3,10 +3,7 @@ description: The information used to create a new battle evaluation.
 properties:
   outcome:
     $ref: BattleEvaluationOutcome.yaml
-  isValid:
-    $ref: IsValid.yaml
-  validationError:
-    $ref: ValidationError.yaml
-    nullable: true
+  valid:
+    $ref: Valid.yaml
 required:
   - outcome

@@ -31,7 +31,7 @@ public interface BattleEvaluationApiDelegate {
 
     /**
      * POST /battles/{battleId}/evaluations : Create a battle evaluation
-     * Create a new battle evaluation for a battle.
+     * Record the outcome of a battle along with optional validation results.
      *
      * @param battleId The unique identifier of the battle (required)
      * @param battleEvaluationCreateRequestDto  (required)
@@ -48,7 +48,7 @@ public interface BattleEvaluationApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"validation_error\" : \"validation_error\", \"is_valid\" : false, \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"outcome\" : \"model1\" }";
+                    String exampleString = "{ \"valid\" : false, \"createdAt\" : \"2024-01-15T10:30:00Z\", \"battleId\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"outcome\" : \"model1\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

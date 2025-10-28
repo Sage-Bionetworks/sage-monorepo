@@ -28,9 +28,7 @@ public class BattleEvaluationCreateRequestDto {
 
   private BattleEvaluationOutcomeDto outcome;
 
-  private Boolean isValid = false;
-
-  private @Nullable String validationError;
+  private Boolean valid = false;
 
   public BattleEvaluationCreateRequestDto() {
     super();
@@ -63,44 +61,24 @@ public class BattleEvaluationCreateRequestDto {
     this.outcome = outcome;
   }
 
-  public BattleEvaluationCreateRequestDto isValid(Boolean isValid) {
-    this.isValid = isValid;
+  public BattleEvaluationCreateRequestDto valid(Boolean valid) {
+    this.valid = valid;
     return this;
   }
 
   /**
-   * Indicates whether the resource passed server-side validation.
-   * @return isValid
+   * Indicates whether the battle evaluation passed the configured validation checks.
+   * @return valid
    */
   
-  @Schema(name = "is_valid", description = "Indicates whether the resource passed server-side validation.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("is_valid")
-  public Boolean getIsValid() {
-    return isValid;
+  @Schema(name = "valid", description = "Indicates whether the battle evaluation passed the configured validation checks.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("valid")
+  public Boolean getValid() {
+    return valid;
   }
 
-  public void setIsValid(Boolean isValid) {
-    this.isValid = isValid;
-  }
-
-  public BattleEvaluationCreateRequestDto validationError(@Nullable String validationError) {
-    this.validationError = validationError;
-    return this;
-  }
-
-  /**
-   * Short validation error message or reason
-   * @return validationError
-   */
-  @Size(max = 1000) 
-  @Schema(name = "validation_error", description = "Short validation error message or reason", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("validation_error")
-  public @Nullable String getValidationError() {
-    return validationError;
-  }
-
-  public void setValidationError(@Nullable String validationError) {
-    this.validationError = validationError;
+  public void setValid(Boolean valid) {
+    this.valid = valid;
   }
 
   @Override
@@ -113,13 +91,12 @@ public class BattleEvaluationCreateRequestDto {
     }
     BattleEvaluationCreateRequestDto battleEvaluationCreateRequest = (BattleEvaluationCreateRequestDto) o;
     return Objects.equals(this.outcome, battleEvaluationCreateRequest.outcome) &&
-        Objects.equals(this.isValid, battleEvaluationCreateRequest.isValid) &&
-        Objects.equals(this.validationError, battleEvaluationCreateRequest.validationError);
+        Objects.equals(this.valid, battleEvaluationCreateRequest.valid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(outcome, isValid, validationError);
+    return Objects.hash(outcome, valid);
   }
 
   @Override
@@ -127,8 +104,7 @@ public class BattleEvaluationCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class BattleEvaluationCreateRequestDto {\n");
     sb.append("    outcome: ").append(toIndentedString(outcome)).append("\n");
-    sb.append("    isValid: ").append(toIndentedString(isValid)).append("\n");
-    sb.append("    validationError: ").append(toIndentedString(validationError)).append("\n");
+    sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -158,8 +134,7 @@ public class BattleEvaluationCreateRequestDto {
 
     protected Builder copyOf(BattleEvaluationCreateRequestDto value) { 
       this.instance.setOutcome(value.outcome);
-      this.instance.setIsValid(value.isValid);
-      this.instance.setValidationError(value.validationError);
+      this.instance.setValid(value.valid);
       return this;
     }
 
@@ -168,13 +143,8 @@ public class BattleEvaluationCreateRequestDto {
       return this;
     }
     
-    public BattleEvaluationCreateRequestDto.Builder isValid(Boolean isValid) {
-      this.instance.isValid(isValid);
-      return this;
-    }
-    
-    public BattleEvaluationCreateRequestDto.Builder validationError(String validationError) {
-      this.instance.validationError(validationError);
+    public BattleEvaluationCreateRequestDto.Builder valid(Boolean valid) {
+      this.instance.valid(valid);
       return this;
     }
     

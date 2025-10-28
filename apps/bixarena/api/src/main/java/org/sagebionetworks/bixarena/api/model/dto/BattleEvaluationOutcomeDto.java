@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * The outcome of the battle evaluation between model1 and model2
+ * The outcome of the battle evaluation between model1 and model2.
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")

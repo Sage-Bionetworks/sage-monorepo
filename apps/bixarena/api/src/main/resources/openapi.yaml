@@ -568,7 +568,7 @@ paths:
         - tag: Model
   /battles/{battleId}/evaluations:
     post:
-      description: Create a new battle evaluation for a battle.
+      description: Record the outcome of a battle along with optional validation results.
       operationId: createBattleEvaluation
       parameters:
         - description: The unique identifier of the battle
@@ -1853,33 +1853,28 @@ components:
         totalElements: 99
       type: object
     BattleEvaluationOutcome:
-      description: The outcome of the battle evaluation between model1 and model2
+      description: The outcome of the battle evaluation between model1 and model2.
       enum:
         - model1
         - model2
         - tie
+      maxLength: 20
       type: string
-    IsValid:
+    Valid:
       default: false
-      description: Indicates whether the resource passed server-side validation.
+      description: Indicates whether the battle evaluation passed the configured validation
+        checks.
       type: boolean
-    ValidationError:
-      description: Short validation error message or reason
-      maxLength: 1000
-      type: string
     BattleEvaluationCreateRequest:
       description: The information used to create a new battle evaluation.
       properties:
         outcome:
           $ref: '#/components/schemas/BattleEvaluationOutcome'
-        is_valid:
+        valid:
           default: false
-          description: Indicates whether the resource passed server-side validation.
+          description: Indicates whether the battle evaluation passed the configured
+            validation checks.
           type: boolean
-        validation_error:
-          description: Short validation error message or reason
-          maxLength: 1000
-          type: string
       required:
         - outcome
       type: object
@@ -1888,17 +1883,21 @@ components:
       format: uuid
       type: string
     BattleEvaluation:
-      description: A battle evaluation entity representing a user's assessment in
-        a battle between two AI models.
+      description: A battle evaluation describing the outcome of a matchup.
       example:
+        valid: false
         createdAt: 2024-01-15T10:30:00Z
-        validation_error: validation_error
-        is_valid: false
+        battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         outcome: model1
       properties:
         id:
           description: The unique identifier of the battle evaluation
+          format: uuid
+          type: string
+        battleId:
+          description: Unique identifier (UUID) of the battle.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
           format: uuid
           type: string
         outcome:
@@ -1908,19 +1907,17 @@ components:
           example: 2024-01-15T10:30:00Z
           format: date-time
           type: string
-        is_valid:
+        valid:
           default: false
-          description: Indicates whether the resource passed server-side validation.
+          description: Indicates whether the battle evaluation passed the configured
+            validation checks.
           type: boolean
-        validation_error:
-          description: Short validation error message or reason
-          maxLength: 1000
-          type: string
       required:
+        - battleId
         - createdAt
         - id
-        - is_valid
         - outcome
+        - valid
       type: object
     UserStats:
       description: Statistics about a user's participation in battles.

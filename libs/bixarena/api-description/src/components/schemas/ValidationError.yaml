@@ -1,3 +1,0 @@
-type: string
-maxLength: 1000
-description: Optional human-readable reason when validation fails.

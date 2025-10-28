@@ -385,7 +385,7 @@ paths:
       tags:
         - BattleEvaluation
       summary: Create a battle evaluation
-      description: Create a new battle evaluation for a battle.
+      description: Record the outcome of a battle along with optional validation results.
       operationId: createBattleEvaluation
       requestBody:
         required: true
@@ -1291,30 +1291,24 @@ components:
             - models
     BattleEvaluationOutcome:
       type: string
-      description: The outcome of the battle evaluation between model1 and model2
+      description: The outcome of the battle evaluation between model1 and model2.
+      maxLength: 20
       enum:
         - model1
         - model2
         - tie
-    IsValid:
+    Valid:
       type: boolean
-      description: Indicates whether the resource passed server-side validation.
+      description: Indicates whether the battle evaluation passed the configured validation checks.
       default: false
-    ValidationError:
-      type: string
-      maxLength: 1000
-      description: Short validation error message or reason
     BattleEvaluationCreateRequest:
       type: object
       description: The information used to create a new battle evaluation.
       properties:
         outcome:
           $ref: '#/components/schemas/BattleEvaluationOutcome'
-        is_valid:
-          $ref: '#/components/schemas/IsValid'
-        validation_error:
-          $ref: '#/components/schemas/ValidationError'
-          nullable: true
+        valid:
+          $ref: '#/components/schemas/Valid'
       required:
         - outcome
     BattleEvaluationId:
@@ -1323,23 +1317,23 @@ components:
       description: The unique identifier of the battle evaluation
     BattleEvaluation:
       type: object
-      description: A battle evaluation entity representing a user's assessment in a battle between two AI models.
+      description: A battle evaluation describing the outcome of a matchup.
       properties:
         id:
           $ref: '#/components/schemas/BattleEvaluationId'
+        battleId:
+          $ref: '#/components/schemas/BattleId'
         outcome:
           $ref: '#/components/schemas/BattleEvaluationOutcome'
         createdAt:
           $ref: '#/components/schemas/CreatedAt'
-        is_valid:
-          $ref: '#/components/schemas/IsValid'
-        validation_error:
-          $ref: '#/components/schemas/ValidationError'
-          nullable: true
+        valid:
+          $ref: '#/components/schemas/Valid'
       required:
         - id
+        - battleId
         - outcome
-        - is_valid
+        - valid
         - createdAt
     UserStats:
       type: object
