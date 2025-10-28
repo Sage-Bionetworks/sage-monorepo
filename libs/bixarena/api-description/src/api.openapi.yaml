@@ -57,6 +57,8 @@ paths:
     $ref: paths/leaderboards/{leaderboardId}/snapshots.yaml
   /models:
     $ref: paths/models.yaml
+  /battles/{battleId}/evaluations:
+    $ref: paths/battles/{battleId}/evaluations.yaml
   /users/me/stats:
     $ref: paths/users-me-stats.yaml
 

@@ -564,6 +564,51 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Model
+  /battles/{battleId}/evaluations:
+    post:
+      description: Record the outcome of a battle.
+      operationId: createBattleEvaluation
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleEvaluationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleEvaluation'
+          description: BattleEvaluation created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Create a battle evaluation
+      tags:
+        - Battle
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
   /users/me/stats:
     get:
       description: Returns statistics about the authenticated user's battle participation.
@@ -1804,6 +1849,56 @@ components:
         hasPrevious: true
         hasNext: true
         totalElements: 99
+      type: object
+    BattleEvaluationOutcome:
+      description: The outcome of the battle evaluation between model1 and model2.
+      enum:
+        - model1
+        - model2
+        - tie
+      maxLength: 20
+      type: string
+    BattleEvaluationCreateRequest:
+      description: The information used to create a new battle evaluation.
+      properties:
+        outcome:
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
+      required:
+        - outcome
+      type: object
+    BattleEvaluationId:
+      description: The unique identifier of the battle evaluation
+      format: uuid
+      type: string
+    BattleEvaluation:
+      description: A battle evaluation describing the outcome of a matchup.
+      example:
+        createdAt: 2024-01-15T10:30:00Z
+        battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        outcome: model1
+      properties:
+        id:
+          description: The unique identifier of the battle evaluation
+          format: uuid
+          type: string
+        battleId:
+          description: Unique identifier (UUID) of the battle.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+          format: uuid
+          type: string
+        outcome:
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
+        createdAt:
+          description: Timestamp when the entity was created.
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          type: string
+      required:
+        - battleId
+        - createdAt
+        - id
+        - outcome
       type: object
     UserStats:
       description: Statistics about a user's participation in battles.

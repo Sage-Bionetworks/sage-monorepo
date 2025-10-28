@@ -121,3 +121,18 @@ CREATE TABLE api.battle_round (
 CREATE INDEX idx_api_battle_round_battle_id ON api.battle_round(battle_id);
 CREATE INDEX idx_api_battle_round_round_number ON api.battle_round(round_number);
 CREATE INDEX idx_api_battle_round_created_at ON api.battle_round(created_at DESC);
+
+-- Battle evaluation table
+CREATE TABLE api.battle_evaluation (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
+  outcome VARCHAR(20) NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  -- Table constraints
+  CONSTRAINT unique_battle_evaluation UNIQUE (battle_id),
+  CONSTRAINT chk_battle_evaluation_outcome CHECK (outcome IN ('model1', 'model2', 'tie'))
+);
+
+-- Indexes for battle evaluation
+CREATE INDEX idx_api_battle_evaluation_outcome ON api.battle_evaluation(outcome);
+CREATE INDEX idx_api_battle_evaluation_created_at ON api.battle_evaluation(created_at DESC);

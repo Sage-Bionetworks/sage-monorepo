@@ -4,6 +4,7 @@ bixarena_api_client/api/__init__.py
 bixarena_api_client/api/admin_api.py
 bixarena_api_client/api/auth_api.py
 bixarena_api_client/api/battle_api.py
+bixarena_api_client/api/battle_evaluation_api.py
 bixarena_api_client/api/example_prompt_api.py
 bixarena_api_client/api/leaderboard_api.py
 bixarena_api_client/api/model_api.py
@@ -17,6 +18,9 @@ bixarena_api_client/models/admin_stats200_response.py
 bixarena_api_client/models/basic_error.py
 bixarena_api_client/models/battle.py
 bixarena_api_client/models/battle_create_request.py
+bixarena_api_client/models/battle_evaluation.py
+bixarena_api_client/models/battle_evaluation_create_request.py
+bixarena_api_client/models/battle_evaluation_outcome.py
 bixarena_api_client/models/battle_page.py
 bixarena_api_client/models/battle_round.py
 bixarena_api_client/models/battle_round_create_request.py
@@ -65,6 +69,10 @@ docs/BasicError.md
 docs/Battle.md
 docs/BattleApi.md
 docs/BattleCreateRequest.md
+docs/BattleEvaluation.md
+docs/BattleEvaluationApi.md
+docs/BattleEvaluationCreateRequest.md
+docs/BattleEvaluationOutcome.md
 docs/BattlePage.md
 docs/BattleRound.md
 docs/BattleRoundCreateRequest.md
@@ -116,6 +124,10 @@ test/test_basic_error.py
 test/test_battle.py
 test/test_battle_api.py
 test/test_battle_create_request.py
+test/test_battle_evaluation.py
+test/test_battle_evaluation_api.py
+test/test_battle_evaluation_create_request.py
+test/test_battle_evaluation_outcome.py
 test/test_battle_page.py
 test/test_battle_round.py
 test/test_battle_round_create_request.py

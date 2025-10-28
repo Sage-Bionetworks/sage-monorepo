@@ -1,0 +1,16 @@
+type: object
+description: A battle evaluation describing the outcome of a matchup.
+properties:
+  id:
+    $ref: BattleEvaluationId.yaml
+  battleId:
+    $ref: BattleId.yaml
+  outcome:
+    $ref: BattleEvaluationOutcome.yaml
+  createdAt:
+    $ref: CreatedAt.yaml
+required:
+  - id
+  - battleId
+  - outcome
+  - createdAt

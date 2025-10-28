@@ -1,0 +1,7 @@
+type: object
+description: The information used to create a new battle evaluation.
+properties:
+  outcome:
+    $ref: BattleEvaluationOutcome.yaml
+required:
+  - outcome

@@ -41,7 +41,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(LeaderboardModelNotFoundException.class)
-  protected ResponseEntity<BasicErrorDto> handleModelNotFound(
+  protected ResponseEntity<BasicErrorDto> handleLeaderboardModelNotFoundException(
     LeaderboardModelNotFoundException ex,
     Locale locale
   ) {
@@ -77,6 +77,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       BasicErrorDto.builder()
         .title("Model Not Found")
         .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(DuplicateBattleEvaluationException.class)
+  protected ResponseEntity<BasicErrorDto> handleDuplicateBattleEvaluation(
+    DuplicateBattleEvaluationException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(
+      BasicErrorDto.builder()
+        .title("Duplicate Battle Evaluation")
+        .status(HttpStatus.CONFLICT.value())
         .detail(ex.getMessage())
         .build()
     );

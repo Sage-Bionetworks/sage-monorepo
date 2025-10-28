@@ -17,6 +17,11 @@ from bixarena_api_client.models.admin_stats200_response import AdminStats200Resp
 from bixarena_api_client.models.basic_error import BasicError
 from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
+from bixarena_api_client.models.battle_evaluation import BattleEvaluation
+from bixarena_api_client.models.battle_evaluation_create_request import (
+    BattleEvaluationCreateRequest,
+)
+from bixarena_api_client.models.battle_evaluation_outcome import BattleEvaluationOutcome
 from bixarena_api_client.models.battle_page import BattlePage
 from bixarena_api_client.models.battle_round import BattleRound
 from bixarena_api_client.models.battle_round_create_request import (

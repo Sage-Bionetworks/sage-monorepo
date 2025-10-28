@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
@@ -14,6 +16,8 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
 import org.sagebionetworks.bixarena.api.service.BattleService;
+import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -28,6 +32,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
 
   private final BattleService battleService;
   private final BattleRoundService battleRoundService;
+  private final BattleEvaluationService battleEvaluationService;
   private final NativeWebRequest request;
 
   @Override
@@ -63,6 +68,19 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
     // Pass authentication to service for security validation
     BattleDto createdBattle = battleService.createBattle(battleCreateRequestDto, authentication);
     return ResponseEntity.status(201).body(createdBattle);
+  }
+
+  @Override
+  public ResponseEntity<BattleEvaluationDto> createBattleEvaluation(
+    UUID battleId,
+    BattleEvaluationCreateRequestDto battleEvaluationCreateRequestDto
+  ) {
+    log.info("Creating battle evaluation for battle {}", battleId);
+    BattleEvaluationDto created = battleEvaluationService.createBattleEvaluation(
+      battleId,
+      battleEvaluationCreateRequestDto
+    );
+    return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
   @Override

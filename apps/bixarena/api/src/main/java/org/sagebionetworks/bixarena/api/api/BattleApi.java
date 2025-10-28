@@ -8,6 +8,8 @@ package org.sagebionetworks.bixarena.api.api;
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
@@ -111,6 +113,69 @@ public interface BattleApi {
         @Parameter(name = "BattleCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleCreateRequestDto battleCreateRequestDto
     ) {
         return getDelegate().createBattle(battleCreateRequestDto);
+    }
+
+
+    /**
+     * POST /battles/{battleId}/evaluations : Create a battle evaluation
+     * Record the outcome of a battle.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param battleEvaluationCreateRequestDto  (required)
+     * @return BattleEvaluation created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createBattleEvaluation",
+        summary = "Create a battle evaluation",
+        description = "Record the outcome of a battle.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "BattleEvaluation created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleEvaluationDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleEvaluationDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/battles/{battleId}/evaluations",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<BattleEvaluationDto> createBattleEvaluation(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
+        @Parameter(name = "BattleEvaluationCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleEvaluationCreateRequestDto battleEvaluationCreateRequestDto
+    ) {
+        return getDelegate().createBattleEvaluation(battleId, battleEvaluationCreateRequestDto);
     }
 
 

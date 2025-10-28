@@ -98,29 +98,30 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Class              | Method                                                                            | HTTP request                                            | Description                                |
-| ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------ |
-| _AdminApi_         | [**admin_stats**](docs/AdminApi.md#admin_stats)                                   | **GET** /admin/stats                                    | Admin statistics                           |
-| _AuthApi_          | [**callback**](docs/AuthApi.md#callback)                                          | **GET** /auth/callback                                  | OIDC redirect callback                     |
-| _AuthApi_          | [**get_jwks**](docs/AuthApi.md#get_jwks)                                          | **GET** /.well-known/jwks.json                          | JSON Web Key Set                           |
-| _AuthApi_          | [**get_user_info**](docs/AuthApi.md#get_user_info)                                | **GET** /userinfo                                       | Get current user profile                   |
-| _AuthApi_          | [**login**](docs/AuthApi.md#login)                                                | **GET** /auth/login                                     | Start Synapse OIDC authorization code flow |
-| _AuthApi_          | [**logout**](docs/AuthApi.md#logout)                                              | **POST** /auth/logout                                   | Logout current session                     |
-| _AuthApi_          | [**token**](docs/AuthApi.md#token)                                                | **POST** /oauth2/token                                  | Mint short-lived internal JWT              |
-| _BattleApi_        | [**create_battle**](docs/BattleApi.md#create_battle)                              | **POST** /battles                                       | Create a battle                            |
-| _BattleApi_        | [**create_battle_round**](docs/BattleApi.md#create_battle_round)                  | **POST** /battles/{battleId}/rounds                     | Create a battle round                      |
-| _BattleApi_        | [**delete_battle**](docs/BattleApi.md#delete_battle)                              | **DELETE** /battles/{battleId}                          | Delete a battle                            |
-| _BattleApi_        | [**get_battle**](docs/BattleApi.md#get_battle)                                    | **GET** /battles/{battleId}                             | Get a battle by ID                         |
-| _BattleApi_        | [**list_battles**](docs/BattleApi.md#list_battles)                                | **GET** /battles                                        | List battles                               |
-| _BattleApi_        | [**update_battle**](docs/BattleApi.md#update_battle)                              | **PATCH** /battles/{battleId}                           | Update a battle                            |
-| _BattleApi_        | [**update_battle_round**](docs/BattleApi.md#update_battle_round)                  | **PATCH** /battles/{battleId}/rounds/{roundId}          | Update a battle round                      |
-| _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts                       |
-| _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
-| _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |
-| _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
-| _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
-| _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
-| _UserApi_          | [**get_user_stats**](docs/UserApi.md#get_user_stats)                              | **GET** /users/me/stats                                 | Get current user&#39;s statistics          |
+| Class                 | Method                                                                               | HTTP request                                            | Description                                |
+| --------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- | ------------------------------------------ |
+| _AdminApi_            | [**admin_stats**](docs/AdminApi.md#admin_stats)                                      | **GET** /admin/stats                                    | Admin statistics                           |
+| _AuthApi_             | [**callback**](docs/AuthApi.md#callback)                                             | **GET** /auth/callback                                  | OIDC redirect callback                     |
+| _AuthApi_             | [**get_jwks**](docs/AuthApi.md#get_jwks)                                             | **GET** /.well-known/jwks.json                          | JSON Web Key Set                           |
+| _AuthApi_             | [**get_user_info**](docs/AuthApi.md#get_user_info)                                   | **GET** /userinfo                                       | Get current user profile                   |
+| _AuthApi_             | [**login**](docs/AuthApi.md#login)                                                   | **GET** /auth/login                                     | Start Synapse OIDC authorization code flow |
+| _AuthApi_             | [**logout**](docs/AuthApi.md#logout)                                                 | **POST** /auth/logout                                   | Logout current session                     |
+| _AuthApi_             | [**token**](docs/AuthApi.md#token)                                                   | **POST** /oauth2/token                                  | Mint short-lived internal JWT              |
+| _BattleApi_           | [**create_battle**](docs/BattleApi.md#create_battle)                                 | **POST** /battles                                       | Create a battle                            |
+| _BattleApi_           | [**create_battle_round**](docs/BattleApi.md#create_battle_round)                     | **POST** /battles/{battleId}/rounds                     | Create a battle round                      |
+| _BattleApi_           | [**delete_battle**](docs/BattleApi.md#delete_battle)                                 | **DELETE** /battles/{battleId}                          | Delete a battle                            |
+| _BattleApi_           | [**get_battle**](docs/BattleApi.md#get_battle)                                       | **GET** /battles/{battleId}                             | Get a battle by ID                         |
+| _BattleApi_           | [**list_battles**](docs/BattleApi.md#list_battles)                                   | **GET** /battles                                        | List battles                               |
+| _BattleApi_           | [**update_battle**](docs/BattleApi.md#update_battle)                                 | **PATCH** /battles/{battleId}                           | Update a battle                            |
+| _BattleApi_           | [**update_battle_round**](docs/BattleApi.md#update_battle_round)                     | **PATCH** /battles/{battleId}/rounds/{roundId}          | Update a battle round                      |
+| _BattleEvaluationApi_ | [**create_battle_evaluation**](docs/BattleEvaluationApi.md#create_battle_evaluation) | **POST** /battles/{battleId}/evaluations                | Create a battle evaluation                 |
+| _ExamplePromptApi_    | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)            | **GET** /example-prompts                                | List example prompts                       |
+| _LeaderboardApi_      | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                        | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
+| _LeaderboardApi_      | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots)    | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |
+| _LeaderboardApi_      | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                    | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
+| _LeaderboardApi_      | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                    | **GET** /leaderboards                                   | List all available leaderboards            |
+| _ModelApi_            | [**list_models**](docs/ModelApi.md#list_models)                                      | **GET** /models                                         | List models                                |
+| _UserApi_             | [**get_user_stats**](docs/UserApi.md#get_user_stats)                                 | **GET** /users/me/stats                                 | Get current user&#39;s statistics          |
 
 ## Documentation For Models
 
@@ -128,6 +129,9 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [BasicError](docs/BasicError.md)
 - [Battle](docs/Battle.md)
 - [BattleCreateRequest](docs/BattleCreateRequest.md)
+- [BattleEvaluation](docs/BattleEvaluation.md)
+- [BattleEvaluationCreateRequest](docs/BattleEvaluationCreateRequest.md)
+- [BattleEvaluationOutcome](docs/BattleEvaluationOutcome.md)
 - [BattlePage](docs/BattlePage.md)
 - [BattleRound](docs/BattleRound.md)
 - [BattleRoundCreateRequest](docs/BattleRoundCreateRequest.md)

@@ -20,6 +20,7 @@ __all__ = [
     "AdminApi",
     "AuthApi",
     "BattleApi",
+    "BattleEvaluationApi",
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
@@ -37,6 +38,9 @@ __all__ = [
     "BasicError",
     "Battle",
     "BattleCreateRequest",
+    "BattleEvaluation",
+    "BattleEvaluationCreateRequest",
+    "BattleEvaluationOutcome",
     "BattlePage",
     "BattleRound",
     "BattleRoundCreateRequest",
@@ -82,6 +86,9 @@ __all__ = [
 from bixarena_api_client.api.admin_api import AdminApi as AdminApi
 from bixarena_api_client.api.auth_api import AuthApi as AuthApi
 from bixarena_api_client.api.battle_api import BattleApi as BattleApi
+from bixarena_api_client.api.battle_evaluation_api import (
+    BattleEvaluationApi as BattleEvaluationApi,
+)
 from bixarena_api_client.api.example_prompt_api import (
     ExamplePromptApi as ExamplePromptApi,
 )
@@ -108,6 +115,15 @@ from bixarena_api_client.models.basic_error import BasicError as BasicError
 from bixarena_api_client.models.battle import Battle as Battle
 from bixarena_api_client.models.battle_create_request import (
     BattleCreateRequest as BattleCreateRequest,
+)
+from bixarena_api_client.models.battle_evaluation import (
+    BattleEvaluation as BattleEvaluation,
+)
+from bixarena_api_client.models.battle_evaluation_create_request import (
+    BattleEvaluationCreateRequest as BattleEvaluationCreateRequest,
+)
+from bixarena_api_client.models.battle_evaluation_outcome import (
+    BattleEvaluationOutcome as BattleEvaluationOutcome,
 )
 from bixarena_api_client.models.battle_page import BattlePage as BattlePage
 from bixarena_api_client.models.battle_round import BattleRound as BattleRound

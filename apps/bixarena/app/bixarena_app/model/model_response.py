@@ -1,6 +1,7 @@
 import logging
 import os
 import uuid
+from uuid import UUID
 
 import gradio as gr
 import requests
@@ -70,8 +71,8 @@ class BattleSession:
     """Track the active battle and round identifiers for the Gradio session."""
 
     def __init__(self):
-        self.battle_id: str | None = None
-        self.round_id: str | None = None
+        self.battle_id: UUID | None = None
+        self.round_id: UUID | None = None
 
     def reset(self):
         self.battle_id = None
@@ -83,7 +84,7 @@ def set_global_vars_anony(enable_moderation_):
     enable_moderation = enable_moderation_
 
 
-def validate_responses(states: list) -> tuple[bool, str]:
+def validate_responses(states: list) -> tuple[bool, str | None]:
     """Validate battle responses for identity leaking."""
     for state in states:
         if not state:
@@ -104,7 +105,7 @@ def validate_responses(states: list) -> tuple[bool, str]:
             if leaked_word:
                 return False, f"identity_leak:{leaked_word}"
 
-    return True, ""
+    return True, None
 
 
 def _update_battle_round_with_responses(

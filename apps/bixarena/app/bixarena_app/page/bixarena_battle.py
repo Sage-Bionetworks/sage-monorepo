@@ -5,15 +5,18 @@ Adapted from FastChat's gradio_web_server_multi.py and
 simplified to a single function for a single-page LLM comparison arena.
 """
 
-import json
 import logging
 import time
+from uuid import UUID
 
 import gradio as gr
 from bixarena_api_client import (
     ApiClient,
     BattleApi,
     BattleCreateRequest,
+    BattleEvaluationApi,
+    BattleEvaluationCreateRequest,
+    BattleEvaluationOutcome,
     BattleRoundCreateRequest,
     BattleUpdateRequest,
     Configuration,
@@ -40,7 +43,6 @@ from bixarena_app.model.model_response import (
     invisible_btn,
     no_change_btn,
     set_global_vars_anony,
-    validate_responses,
 )
 from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
 from bixarena_app.page.battle_page_css import (
@@ -58,12 +60,12 @@ anony_names = ["", ""]
 models = []
 
 
-def create_battle(model1: str, model2: str, title: str | None = None) -> str | None:
+def create_battle(model1: str, model2: str, title: str | None = None) -> UUID | None:
     """Create a new battle record in the database.
 
     Args:
-        model1: Name of model1
-        model2: Name of model2
+        model1: Name of model 1
+        model2: Name of model 2
         title: Optional battle title (first prompt snippet)
 
     Returns:
@@ -95,31 +97,7 @@ def create_battle(model1: str, model2: str, title: str | None = None) -> str | N
     return None
 
 
-def create_battle_round(battle_id: str, prompt: str) -> str | None:
-    """Create a battle round with the submitted prompt."""
-    if not battle_id:
-        logger.warning("⚠️ Cannot create round without battle_id")
-        return None
-    try:
-        api_base_url = _get_api_base_url()
-        configuration = Configuration(host=api_base_url)
-        with ApiClient(configuration) as api_client:
-            battle_api = BattleApi(api_client)
-            battle_round = battle_api.create_battle_round(
-                battle_id,
-                BattleRoundCreateRequest(
-                    prompt_message=MessageCreate(role=MessageRole.USER, content=prompt)
-                ),
-            )
-            if battle_round and battle_round.id:
-                logger.info(f"✅ Battle round created: {battle_round.id}")
-                return str(battle_round.id)
-    except Exception as e:
-        logger.warning(f"❌ Failed to create battle round for battle {battle_id}: {e}")
-    return None
-
-
-def end_battle(battle_id: str) -> None:
+def end_battle(battle_id: UUID) -> None:
     """Update battle endedAt timestamp when voting completes."""
     if not battle_id:
         logger.warning("⚠️ No battle_id to end")
@@ -137,6 +115,69 @@ def end_battle(battle_id: str) -> None:
         logger.warning(f"❌ Failed to end battle {battle_id}: {e}")
 
 
+def create_battle_round(battle_id: UUID, prompt: str) -> UUID | None:
+    """Create a battle round with the submitted prompt."""
+    if not battle_id:
+        logger.warning("⚠️ Cannot create round without battle_id")
+        return None
+    try:
+        api_base_url = _get_api_base_url()
+        configuration = Configuration(host=api_base_url)
+        with ApiClient(configuration) as api_client:
+            battle_api = BattleApi(api_client)
+            battle_round = battle_api.create_battle_round(
+                battle_id,
+                BattleRoundCreateRequest(
+                    prompt_message=MessageCreate(role=MessageRole.USER, content=prompt)
+                ),
+            )
+            if battle_round and battle_round.id:
+                logger.info(f"✅ Battle round created: {battle_round.id}")
+                return battle_round.id
+    except Exception as e:
+        logger.warning(f"❌ Failed to create battle round for battle {battle_id}: {e}")
+    return None
+
+
+def create_battle_evaluation(
+    battle_id: UUID,
+    outcome: BattleEvaluationOutcome,
+) -> UUID | None:
+    """Create a battleevaluation record for the battle.
+
+    Args:
+        battle_id: The battle ID to evaluate
+        outcome: BattleEvaluationOutcome enum (MODEL1, MODEL2, or TIE)
+
+    Returns:
+        Battle Evaluation ID if created successfully, None otherwise
+    """
+    if not battle_id:
+        logger.warning("⚠️ No battle_id to evaluate")
+        return None
+
+    try:
+        api_base_url = _get_api_base_url()
+        configuration = Configuration(host=api_base_url)
+        with ApiClient(configuration) as api_client:
+            evaluation_api = BattleEvaluationApi(api_client)
+            evaluation_request = BattleEvaluationCreateRequest(
+                outcome=outcome,
+            )
+            evaluation = evaluation_api.create_battle_evaluation(
+                battle_id, evaluation_request
+            )
+            if evaluation and evaluation.id:
+                logger.info(
+                    f"✅ Evaluation created: {evaluation.id} for battle {battle_id}"
+                )
+                return evaluation.id
+    except Exception as e:
+        logger.warning(f"❌ Failed to create evaluation for battle {battle_id}: {e}")
+
+    return None
+
+
 def load_demo_side_by_side_anony(models_, _):
     global models
     models = models_
@@ -151,31 +192,24 @@ def load_demo_side_by_side_anony(models_, _):
 
 
 def vote_last_response(
-    states, battle_session: BattleSession, vote_type, model_selectors, _: gr.Request
+    states, battle_session: BattleSession, outcome, model_selectors, _: gr.Request
 ):
-    # End the battle when voting happens
+    # Create evaluation record and end the battle
     if battle_session.battle_id:
+        # Identity leak validation currently disabled since we no longer tag evaluations
+        # is_valid, validation_error = validate_responses(states)
+        create_battle_evaluation(
+            battle_session.battle_id,
+            outcome,
+        )
         end_battle(battle_session.battle_id)
         battle_session.reset()
-
-    is_valid, reason = validate_responses(states)
-
-    # Log the exact same data to console instead of file
-    data = {
-        "tstamp": round(time.time(), 4),
-        "type": vote_type,
-        "models": model_selectors,
-        "states": [state.dict() for state in states],
-        "is_valid": is_valid,
-        "invalid_reason": reason or "",
-    }
-    logger.info(f"Vote data: {json.dumps(data)}")
 
     if ":" not in model_selectors[0]:
         for _ in range(5):
             names = (
-                "### Model A: " + states[0].model_name,
-                "### Model B: " + states[1].model_name,
+                "### Model 1: " + states[0].model_name,
+                "### Model 2: " + states[1].model_name,
             )
             yield (
                 names
@@ -190,8 +224,8 @@ def vote_last_response(
             time.sleep(0.1)
     else:
         names = (
-            "### Model A: " + states[0].model_name,
-            "### Model B: " + states[1].model_name,
+            "### Model 1: " + states[0].model_name,
+            "### Model 2: " + states[1].model_name,
         )
         yield (
             names
@@ -213,7 +247,7 @@ def leftvote_last_response(
     for x in vote_last_response(
         [state0, state1],
         battle_session,
-        "leftvote",
+        BattleEvaluationOutcome.MODEL1,
         [model_selector0, model_selector1],
         request,
     ):
@@ -232,7 +266,7 @@ def rightvote_last_response(
     for x in vote_last_response(
         [state0, state1],
         battle_session,
-        "rightvote",
+        BattleEvaluationOutcome.MODEL2,
         [model_selector0, model_selector1],
         request,
     ):
@@ -251,7 +285,7 @@ def tievote_last_response(
     for x in vote_last_response(
         [state0, state1],
         battle_session,
-        "tievote",
+        BattleEvaluationOutcome.TIE,
         [model_selector0, model_selector1],
         request,
     ):
@@ -439,7 +473,7 @@ def build_side_by_side_ui_anony():
         with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
             with gr.Row():
                 for i in range(num_sides):
-                    label = "Model A" if i == 0 else "Model B"
+                    label = "Model 1" if i == 0 else "Model 2"
                     with gr.Column():
                         chatbot = gr.Chatbot(
                             label=label,
