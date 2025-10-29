@@ -1,4 +1,10 @@
 spring:
+  cache:
+    type: none # Disable caching for tests
+  data:
+    redis:
+      repositories:
+        enabled: false # Disable Redis repositories for tests
   datasource:
     url: jdbc:h2:mem:testdb
     username: sa

@@ -10,6 +10,7 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
  * user is registered in the auth service).
  */
 @Component
+@ConditionalOnProperty(name = "spring.cache.type", havingValue = "redis")
 @RequiredArgsConstructor
 @Slf4j
 public class EventSubscriber implements MessageListener {
