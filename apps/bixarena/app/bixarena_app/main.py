@@ -9,6 +9,7 @@ from bixarena_app.page.bixarena_battle import build_battle_page
 from bixarena_app.page.bixarena_header import (
     build_header,
     handle_login_click,
+    update_battle_button,
     update_login_button,
 )
 from bixarena_app.page.bixarena_home import (
@@ -118,6 +119,7 @@ def sync_backend_session_on_load(request: gr.Request):
                                 f"preferred_username={preferred_username}"
                             )
                             return (
+                                update_battle_button(),
                                 update_login_button(),
                                 *update_user_page(),
                                 gr.HTML(""),
@@ -141,7 +143,12 @@ def sync_backend_session_on_load(request: gr.Request):
             else:
                 print("[auth-sync] No cookie header; skipping identity fetch")
 
-    return update_login_button(), *update_user_page(), gr.HTML("")
+    return (
+        update_battle_button(),
+        update_login_button(),
+        *update_user_page(),
+        gr.HTML(""),
+    )
 
 
 def parse_args():
@@ -332,7 +339,7 @@ def build_app(moderate=False):
         # Initial identity sync (not an OAuth callback—just a passive identity fetch)
         demo.load(
             sync_backend_session_on_load,
-            outputs=[login_btn, welcome_display, logout_btn, cookie_html],
+            outputs=[battle_btn, login_btn, welcome_display, logout_btn, cookie_html],
             js=cleanup_js,
         )
 
