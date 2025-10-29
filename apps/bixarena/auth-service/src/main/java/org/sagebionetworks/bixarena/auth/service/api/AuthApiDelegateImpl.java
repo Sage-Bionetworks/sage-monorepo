@@ -271,9 +271,15 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       );
 
       // Establish authenticated session principal
-      session.setAttribute("AUTH_SUBJECT", persistedUser.getUsername());
+      // AUTH_SUBJECT: BixArena User ID (UUID) - stable immutable identifier per OIDC spec
+      session.setAttribute("AUTH_SUBJECT", persistedUser.getId().toString());
+      // AUTH_USERNAME: Synapse username - for logging and debugging
+      session.setAttribute("AUTH_USERNAME", persistedUser.getUsername());
+      // AUTH_PREFERRED_USERNAME: OIDC standard field for display name
       session.setAttribute("AUTH_PREFERRED_USERNAME", persistedUser.getUsername());
       session.setAttribute("AUTH_EMAIL", persistedUser.getEmail());
+      Boolean emailVerified = (Boolean) idClaims.get("email_verified");
+      session.setAttribute("AUTH_EMAIL_VERIFIED", emailVerified != null ? emailVerified : false);
       session.setAttribute("AUTH_ROLES", List.of(persistedUser.getRole().name()));
       session.removeAttribute("OIDC_STATE");
       session.removeAttribute("OIDC_NONCE");

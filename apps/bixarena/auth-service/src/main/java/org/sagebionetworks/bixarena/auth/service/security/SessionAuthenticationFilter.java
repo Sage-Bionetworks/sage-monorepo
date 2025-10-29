@@ -20,10 +20,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * Populates the Spring SecurityContext from session attributes set after OIDC login.
  *
- * <p>The OIDC callback sets AUTH_SUBJECT and AUTH_ROLES in the HttpSession. Because we are not
- * delegating to a Spring Security Authentication mechanism, subsequent requests would otherwise
- * appear unauthenticated. This filter bridges the gap by turning those session attributes into an
- * Authentication object for the lifetime of the request.</p>
+ * <p>The OIDC callback sets AUTH_SUBJECT (BixArena User ID UUID) and AUTH_ROLES in the HttpSession.
+ * Because we are not delegating to a Spring Security Authentication mechanism, subsequent requests
+ * would otherwise appear unauthenticated. This filter bridges the gap by turning those session
+ * attributes into an Authentication object for the lifetime of the request.</p>
+ *
+ * <p>The principal (subject) is the BixArena User ID (UUID), which is a stable immutable identifier
+ * per OIDC spec requirements.</p>
  */
 @Component
 @Slf4j

@@ -26,7 +26,7 @@ public class InternalJwtService {
   /**
    * Mints a JWT with the specified subject, roles, and audience.
    *
-   * @param sub BixArena user ID (from auth.user.id)
+   * @param sub BixArena user ID (UUID from auth.user.id) - stable immutable identifier per OIDC spec
    * @param roles User roles (from auth.user.role)
    * @param audience Target audience for the JWT (e.g., "urn:bixarena:api")
    * @return Minted JWT token and expiration time
