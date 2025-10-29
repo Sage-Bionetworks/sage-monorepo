@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.configuration.CacheNames;
 import org.sagebionetworks.bixarena.api.model.dto.PublicStatsDto;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.UserStatsRepository;
@@ -40,7 +41,7 @@ public class StatsApiDelegateImpl implements StatsApiDelegate {
    *
    * @return Public statistics DTO
    */
-  @Cacheable(value = "publicStats", key = "'stats'")
+  @Cacheable(value = CacheNames.PUBLIC_STATS, key = "'" + CacheNames.PUBLIC_STATS_KEY + "'")
   private PublicStatsDto getPublicStatsDto() {
     log.info("Cache miss - querying database for public stats");
 

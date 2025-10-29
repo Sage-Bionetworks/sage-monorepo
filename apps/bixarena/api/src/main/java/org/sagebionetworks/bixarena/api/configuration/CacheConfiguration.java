@@ -12,6 +12,11 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * Configuration for Redis-backed caching in the BixArena API service.
+ * All cache names are namespaced with "bixarena:api:" prefix to avoid collisions
+ * with other services (auth, ai, etc.) using the shared Valkey instance.
+ */
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
