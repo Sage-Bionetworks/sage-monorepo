@@ -1,7 +1,16 @@
 import { DiseaseCorrelation, ItemFilterTypeQuery } from '@sagebionetworks/model-ad/api-client';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { cache, normalizeToStringArray, setHeaders } from '../helpers';
+import {
+  buildCacheKey,
+  buildIdQuery,
+  cache,
+  normalizeToStringArray,
+  sendProblemJson,
+  setHeaders,
+  validateItemFilterType,
+  validateItems,
+} from '../helpers';
 import { DiseaseCorrelationCollection } from '../models';
 
 enum KNOWN_CATEGORIES {
@@ -18,8 +27,7 @@ export async function getDiseaseCorrelations(
   items: string[] = [],
   itemFilterType: ItemFilterTypeQuery = ItemFilterTypeQuery.Include,
 ) {
-  const cacheKey =
-    'diseaseCorrelations-' + cluster + '-' + JSON.stringify(items) + '-' + itemFilterType;
+  const cacheKey = buildCacheKey('diseaseCorrelations', cluster, items, itemFilterType);
   const cachedResult: DiseaseCorrelation[] | null | undefined = cache.get(cacheKey);
 
   if (cachedResult !== undefined) {
@@ -31,11 +39,8 @@ export async function getDiseaseCorrelations(
   }
 
   const query: DiseaseCorrelationQuery = { cluster };
-  const objectIds = items.map((id) => new mongoose.Types.ObjectId(id));
-  if (itemFilterType === ItemFilterTypeQuery.Include) {
-    query._id = { $in: objectIds };
-  } else {
-    query._id = { $nin: objectIds };
+  if (items.length > 0) {
+    query._id = buildIdQuery(items, itemFilterType);
   }
   const result = await DiseaseCorrelationCollection.find(query).lean().exec();
 
@@ -51,75 +56,61 @@ export async function diseaseCorrelationRoute(req: Request, res: Response, next:
     categories.length !== 2 ||
     !categories.every((f) => typeof f === 'string')
   ) {
-    res
-      .status(400)
-      .contentType('application/problem+json')
-      .json({
-        title: 'Bad Request',
-        status: 400,
-        detail: `Query parameter category must repeat twice (e.g. ?category=${KNOWN_CATEGORIES.CONSENSUS_NETWORK_MODULES}&category=subcategory) and each value must be a string`,
-        instance: req.path,
-      });
+    sendProblemJson(
+      res,
+      400,
+      'Bad Request',
+      `Query parameter category must repeat twice (e.g. ?category=${KNOWN_CATEGORIES.CONSENSUS_NETWORK_MODULES}&category=subcategory) and each value must be a string`,
+      req.path,
+    );
     return;
   }
 
   const [category, subcategory] = categories;
 
   if (category !== KNOWN_CATEGORIES.CONSENSUS_NETWORK_MODULES) {
-    res
-      .status(400)
-      .contentType('application/problem+json')
-      .json({
-        title: 'Bad Request',
-        status: 400,
-        detail: `Only ${KNOWN_CATEGORIES.CONSENSUS_NETWORK_MODULES} category is supported`,
-        instance: req.path,
-      });
+    sendProblemJson(
+      res,
+      400,
+      'Bad Request',
+      `Only ${KNOWN_CATEGORIES.CONSENSUS_NETWORK_MODULES} category is supported`,
+      req.path,
+    );
     return;
   }
 
   const itemFilterType = req.query.itemFilterType as ItemFilterTypeQuery | undefined;
   const items = normalizeToStringArray(req.query.item as string[] | string | undefined);
 
-  if (
-    itemFilterType &&
-    itemFilterType !== ItemFilterTypeQuery.Include &&
-    itemFilterType !== ItemFilterTypeQuery.Exclude
-  ) {
-    res
-      .status(400)
-      .contentType('application/problem+json')
-      .json({
-        title: 'Bad Request',
-        status: 400,
-        detail: `Query parameter itemFilterType must be either ${ItemFilterTypeQuery.Include} or ${ItemFilterTypeQuery.Exclude} if provided`,
-        instance: req.path,
-      });
+  const itemFilterTypeError = validateItemFilterType(itemFilterType, req.path);
+  if (itemFilterTypeError) {
+    sendProblemJson(
+      res,
+      itemFilterTypeError.status,
+      itemFilterTypeError.title,
+      itemFilterTypeError.detail,
+      itemFilterTypeError.instance,
+    );
     return;
   }
 
-  if (items) {
-    if (!Array.isArray(items) || !items.every((f) => typeof f === 'string')) {
-      res.status(400).contentType('application/problem+json').json({
-        title: 'Bad Request',
-        status: 400,
-        detail: `Query parameter items must be a list of strings`,
-        instance: req.path,
-      });
-      return;
-    }
+  const itemsError = validateItems(items, req.path);
+  if (itemsError) {
+    sendProblemJson(
+      res,
+      itemsError.status,
+      itemsError.title,
+      itemsError.detail,
+      itemsError.instance,
+    );
+    return;
   }
 
   try {
     const result = await getDiseaseCorrelations(subcategory, items, itemFilterType);
 
     if (!result) {
-      res.status(404).contentType('application/problem+json').json({
-        title: 'Not Found',
-        status: 404,
-        detail: 'Disease Correlation data not found',
-        instance: req.path,
-      });
+      sendProblemJson(res, 404, 'Not Found', 'Disease Correlation data not found', req.path);
       return;
     }
 

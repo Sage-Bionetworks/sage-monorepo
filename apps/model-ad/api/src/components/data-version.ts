@@ -1,10 +1,10 @@
 import { DataVersion } from '@sagebionetworks/model-ad/api-client';
 import { NextFunction, Request, Response } from 'express';
-import { cache, setHeaders } from '../helpers';
+import { buildCacheKey, cache, sendProblemJson, setHeaders } from '../helpers';
 import { DataVersionCollection } from '../models';
 
 export async function getDataVersion() {
-  const cacheKey = 'dataVersion';
+  const cacheKey = buildCacheKey('dataVersion');
   const cachedResult: DataVersion | null | undefined = cache.get(cacheKey);
 
   if (cachedResult !== undefined) {
@@ -27,12 +27,7 @@ export async function dataVersionRoute(req: Request, res: Response, next: NextFu
     const result = await getDataVersion();
 
     if (!result) {
-      res.status(404).contentType('application/problem+json').json({
-        title: 'Not Found',
-        status: 404,
-        detail: 'Data Version not found',
-        instance: req.path,
-      });
+      sendProblemJson(res, 404, 'Not Found', 'Data Version not found', req.path);
       return;
     }
 
