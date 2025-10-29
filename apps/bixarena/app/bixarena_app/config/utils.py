@@ -53,6 +53,17 @@ class StreamToLogger:
 def build_logger(logger_name, logger_filename):
     global handler
 
+    # Get log level from environment variable, default to INFO
+    log_level_str = os.environ.get("LOG_LEVEL", "INFO").upper()
+    log_level_map = {
+        "DEBUG": logging.DEBUG,
+        "INFO": logging.INFO,
+        "WARNING": logging.WARNING,
+        "ERROR": logging.ERROR,
+        "CRITICAL": logging.CRITICAL,
+    }
+    log_level = log_level_map.get(log_level_str, logging.INFO)
+
     formatter = logging.Formatter(
         fmt="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
@@ -62,20 +73,20 @@ def build_logger(logger_name, logger_filename):
     if not logging.getLogger().handlers:
         if sys.version_info[1] >= 9:
             # This is for windows
-            logging.basicConfig(level=logging.INFO, encoding="utf-8")
+            logging.basicConfig(level=log_level, encoding="utf-8")
         else:
             if platform.system() == "Windows":
                 warnings.warn(
                     "If you are running on Windows, "
                     "we recommend you use Python >= 3.9 for UTF-8 encoding."
                 )
-            logging.basicConfig(level=logging.INFO)
+            logging.basicConfig(level=log_level)
     logging.getLogger().handlers[0].setFormatter(formatter)
 
     # Redirect stdout and stderr to loggers
     stdout_logger = logging.getLogger("stdout")
-    stdout_logger.setLevel(logging.INFO)
-    sl = StreamToLogger(stdout_logger, logging.INFO)
+    stdout_logger.setLevel(log_level)
+    sl = StreamToLogger(stdout_logger, log_level)
     sys.stdout = sl
 
     stderr_logger = logging.getLogger("stderr")
@@ -85,7 +96,7 @@ def build_logger(logger_name, logger_filename):
 
     # Get logger
     logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(log_level)
 
     # Avoid httpx flooding POST logs
     logging.getLogger("httpx").setLevel(logging.WARNING)
