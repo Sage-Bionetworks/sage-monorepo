@@ -76,6 +76,7 @@ class UserServiceTest {
       EXTERNAL_ID,
       USERNAME,
       EMAIL,
+      true,
       FIRST_NAME,
       LAST_NAME
     );
@@ -153,6 +154,7 @@ class UserServiceTest {
       EXTERNAL_ID,
       USERNAME,
       EMAIL,
+      true,
       FIRST_NAME,
       LAST_NAME
     );
@@ -223,6 +225,7 @@ class UserServiceTest {
       EXTERNAL_ID,
       USERNAME,
       EMAIL,
+      true,
       FIRST_NAME,
       LAST_NAME
     );
@@ -264,6 +267,7 @@ class UserServiceTest {
       EXTERNAL_ID,
       USERNAME,
       EMAIL,
+      true,
       FIRST_NAME,
       LAST_NAME
     );
