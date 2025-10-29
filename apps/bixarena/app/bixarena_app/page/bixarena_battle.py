@@ -7,6 +7,7 @@ simplified to a single function for a single-page LLM comparison arena.
 
 import logging
 import time
+import warnings
 from uuid import UUID
 
 import gradio as gr
@@ -292,7 +293,7 @@ def tievote_last_response(
 
 
 def clear_history(
-    battle_session: BattleSession, request: gr.Request, example_prompt_ui=None
+    battle_session: BattleSession, request: gr.Request = None, example_prompt_ui=None
 ):
     """Clear battle history and end the active battle."""
     logger.info("clear_history (anony).")
@@ -486,12 +487,20 @@ def build_side_by_side_ui_anony():
                 for i in range(num_sides):
                     label = "Model 1" if i == 0 else "Model 2"
                     with gr.Column():
-                        chatbot = gr.Chatbot(
-                            label=label,
-                            elem_id="chatbot",
-                            height=550,
-                            show_copy_button=True,
-                        )
+                        # Suppress tuples deprecation warning until we migrate to messages format
+                        with warnings.catch_warnings():
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*tuples.*format.*chatbot.*deprecated.*",
+                                category=UserWarning,
+                            )
+                            chatbot = gr.Chatbot(
+                                label=label,
+                                elem_id="chatbot",
+                                height=550,
+                                show_copy_button=True,
+                                type="tuples",
+                            )
                         chatbots.append(chatbot)
 
             with gr.Row():
@@ -574,9 +583,7 @@ def build_side_by_side_ui_anony():
         model_selectors + [textbox] + btn_list,
     )
     clear_btn.click(
-        lambda battle_session, request: clear_history(
-            battle_session, request, example_prompt_ui
-        ),
+        lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
         [battle_session],
         states
         + [battle_session]
