@@ -59,19 +59,6 @@ anony_names = ["", ""]
 models = []
 
 
-def _ensure_battle_cookies(
-    battle_session: BattleSession, request: gr.Request | None
-) -> dict[str, str] | None:
-    """Refresh and return auth cookies associated with the current session."""
-    if request is not None:
-        jsessionid = get_session_cookie(request)
-        if jsessionid:
-            battle_session.auth_cookies = {"JSESSIONID": jsessionid}
-        else:
-            battle_session.auth_cookies = None
-    return battle_session.auth_cookies
-
-
 def create_battle(
     model1: str,
     model2: str,
@@ -109,8 +96,7 @@ def create_battle(
             logger.warning("❌ Failed to create battle.")
     except Exception as e:
         logger.warning(f"❌ Failed to create battle: {e}")
-
-        return None
+    return None
 
 
 def end_battle(battle_id: UUID, cookies: dict[str, str] | None = None) -> None:
@@ -150,10 +136,9 @@ def create_battle_round(
                 logger.info(f"✅ Battle round created: {battle_round.id}")
                 return battle_round.id
             logger.warning(f"❌ Failed to create battle round for battle {battle_id}.")
-            return None
     except Exception as e:
         logger.warning(f"❌ Failed to create battle round for battle {battle_id}: {e}")
-        return None
+    return None
 
 
 def create_battle_evaluation(
@@ -190,10 +175,9 @@ def create_battle_evaluation(
                 )
                 return evaluation.id
             logger.warning(f"❌ Failed to create evaluation for battle {battle_id}.")
-            return None
     except Exception as e:
         logger.warning(f"❌ Failed to create evaluation for battle {battle_id}: {e}")
-        return None
+    return None
 
 
 def load_demo_side_by_side_anony(models_, _):
@@ -213,7 +197,7 @@ def vote_last_response(
     states, battle_session: BattleSession, outcome, model_selectors, request: gr.Request
 ):
     # Create evaluation record and end the battle
-    cookies = _ensure_battle_cookies(battle_session, request)
+    cookies = get_session_cookie(request)
 
     if battle_session.battle_id:
         create_battle_evaluation(
@@ -317,7 +301,7 @@ def clear_history(
     """Clear battle history and end the active battle."""
     logger.info("clear_history (anony).")
 
-    cookies = _ensure_battle_cookies(battle_session, request)
+    cookies = get_session_cookie(request)
 
     # End the active battle if one exists
     if battle_session.battle_id:
@@ -364,7 +348,7 @@ def add_text(
     logger.info(f"add_text (anony). len: {len(text)}")
     states = [state0, state1]
 
-    cookies = _ensure_battle_cookies(battle_session, request)
+    cookies = get_session_cookie(request)
 
     # Init states if necessary
     if states[0] is None:

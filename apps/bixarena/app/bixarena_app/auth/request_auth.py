@@ -122,14 +122,14 @@ def get_user_display_name(request: gr.Request | None) -> str:
     return user_state.get_display_name()
 
 
-def get_session_cookie(request: gr.Request | None) -> str | None:
-    """Extract the JSESSIONID cookie from the request.
+def get_session_cookie(request: gr.Request | None) -> dict[str, str] | None:
+    """Extract the JSESSIONID cookie from the request as a cookie dict.
 
     Args:
         request: Gradio request object (can be None)
 
     Returns:
-        JSESSIONID value if present, None otherwise
+        A cookies dict suitable for API calls, e.g. {"JSESSIONID": "..."}, or None
 
     Example:
         >>> from bixarena_app.auth.request_auth import get_session_cookie
@@ -143,4 +143,7 @@ def get_session_cookie(request: gr.Request | None) -> str | None:
     if not request:
         return None
 
-    return request.cookies.get("JSESSIONID")
+    jsessionid = request.cookies.get("JSESSIONID")
+    if jsessionid:
+        return {"JSESSIONID": jsessionid}
+    return None
