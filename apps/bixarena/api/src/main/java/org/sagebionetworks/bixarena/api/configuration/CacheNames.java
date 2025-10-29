@@ -13,7 +13,8 @@ public final class CacheNames {
   /**
    * Cache for public statistics (total users, battles, models evaluated).
    * Key format: bixarena:api:publicStats::stats
-   * TTL: 5 minutes
+   * TTL: 1 minute (to keep battle/model counts fresh during early platform growth)
+   * Invalidation: Event-driven on new user registration
    */
   public static final String PUBLIC_STATS = "bixarena:api:publicStats";
 

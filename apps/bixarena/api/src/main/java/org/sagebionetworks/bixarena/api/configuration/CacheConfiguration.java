@@ -37,7 +37,7 @@ public class CacheConfiguration {
     // Default cache configuration
     RedisCacheConfiguration defaultConfig =
         RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(Duration.ofMinutes(5)) // Default 5 minutes
+            .entryTtl(Duration.ofMinutes(1)) // 1 minute TTL (configurable via application.yml)
             .serializeKeysWith(
                 RedisSerializationContext.SerializationPair.fromSerializer(
                     new StringRedisSerializer()))

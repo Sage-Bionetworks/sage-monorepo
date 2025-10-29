@@ -10,7 +10,7 @@ spring:
   cache:
     type: redis
     redis:
-      time-to-live: 300000 # 5 minutes in milliseconds
+      time-to-live: 60000 # 1 minute in milliseconds
       cache-null-values: false
   data:
     redis:
