@@ -1,0 +1,15 @@
+services:
+  bixarena-valkey:
+    image: ghcr.io/sage-bionetworks/bixarena-valkey:${BIXARENA_VERSION:-local}
+    container_name: bixarena-valkey
+    restart: always
+    env_file:
+      - ../../../apps/bixarena/valkey/.env
+    networks:
+      - bixarena
+    ports:
+      - '8116:6379'
+    deploy:
+      resources:
+        limits:
+          memory: 500M
