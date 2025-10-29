@@ -26,6 +26,8 @@ import { Observable } from 'rxjs';
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
 import { DiseaseCorrelation } from '../model/disease-correlation';
+// @ts-ignore
+import { ItemFilterTypeQuery } from '../model/item-filter-type-query';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -109,12 +111,16 @@ export class DiseaseCorrelationService {
   /**
    * Get disease correlation comparison data
    * Returns a list of disease correlation objects for use in comparison tools.
-   * @param category An ordered list of categories used to filter the disease correlation data, where the first value is the category and the second is the subcategory. Pass each value by repeating the \&#39;category\&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA.
+   * @param category An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the \&#39;category\&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA.
+   * @param item A list of items to filter the data by.
+   * @param itemFilterType The type of filter to apply to the items. Possible values are \&#39;include\&#39; or \&#39;exclude\&#39;.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getDiseaseCorrelations(
     category: Array<string>,
+    item?: Array<string>,
+    itemFilterType?: ItemFilterTypeQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -125,6 +131,8 @@ export class DiseaseCorrelationService {
   ): Observable<Array<DiseaseCorrelation>>;
   public getDiseaseCorrelations(
     category: Array<string>,
+    item?: Array<string>,
+    itemFilterType?: ItemFilterTypeQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -135,6 +143,8 @@ export class DiseaseCorrelationService {
   ): Observable<HttpResponse<Array<DiseaseCorrelation>>>;
   public getDiseaseCorrelations(
     category: Array<string>,
+    item?: Array<string>,
+    itemFilterType?: ItemFilterTypeQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -145,6 +155,8 @@ export class DiseaseCorrelationService {
   ): Observable<HttpEvent<Array<DiseaseCorrelation>>>;
   public getDiseaseCorrelations(
     category: Array<string>,
+    item?: Array<string>,
+    itemFilterType?: ItemFilterTypeQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -168,6 +180,22 @@ export class DiseaseCorrelationService {
           'category',
         );
       });
+    }
+    if (item) {
+      item.forEach((element) => {
+        localVarQueryParameters = this.addToHttpParams(
+          localVarQueryParameters,
+          <any>element,
+          'item',
+        );
+      });
+    }
+    if (itemFilterType !== undefined && itemFilterType !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>itemFilterType,
+        'itemFilterType',
+      );
     }
 
     let localVarHeaders = this.defaultHeaders;

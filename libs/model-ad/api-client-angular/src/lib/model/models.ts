@@ -8,6 +8,7 @@ export * from './data-version';
 export * from './disease-correlation';
 export * from './genetic-info';
 export * from './individual-data';
+export * from './item-filter-type-query';
 export * from './model';
 export * from './model-data';
 export * from './model-overview';

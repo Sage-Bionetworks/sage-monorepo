@@ -1,6 +1,9 @@
 type: object
 description: Disease Correlation
 properties:
+  _id:
+    type: string
+    description: Unique identifier for the disease correlation object
   name:
     type: string
     description: Model name
@@ -38,6 +41,7 @@ properties:
   STG:
     $ref: './CorrelationResult.yaml'
 required:
+  - _id
   - name
   - matched_control
   - model_type

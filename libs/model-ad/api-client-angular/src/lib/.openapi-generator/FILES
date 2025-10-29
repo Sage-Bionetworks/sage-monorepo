@@ -21,6 +21,7 @@ model/data-version.ts
 model/disease-correlation.ts
 model/genetic-info.ts
 model/individual-data.ts
+model/item-filter-type-query.ts
 model/model-data.ts
 model/model-overview-link.ts
 model/model-overview.ts

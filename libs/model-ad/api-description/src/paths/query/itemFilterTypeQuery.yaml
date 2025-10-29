@@ -1,0 +1,6 @@
+name: itemFilterType
+description: The type of filter to apply to the items. Possible values are 'include' or 'exclude'.
+in: query
+required: false
+schema:
+  $ref: ../../components/schemas/ItemFilterTypeQuery.yaml

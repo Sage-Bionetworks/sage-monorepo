@@ -135,6 +135,9 @@ paths:
       summary: Get model overview for comparison tools
       description: Returns a list of model overview objects for use in comparison tools.
       operationId: getModelOverviews
+      parameters:
+        - $ref: '#/components/parameters/itemQuery'
+        - $ref: '#/components/parameters/itemFilterTypeQuery'
       responses:
         '200':
           description: A list of model overview objects
@@ -158,16 +161,9 @@ paths:
       description: Returns a list of disease correlation objects for use in comparison tools.
       operationId: getDiseaseCorrelations
       parameters:
-        - in: query
-          name: category
-          description: An ordered list of categories used to filter the disease correlation data, where the first value is the category and the second is the subcategory. Pass each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA.
-          required: true
-          schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: true
+        - $ref: '#/components/parameters/categoryQuery'
+        - $ref: '#/components/parameters/itemQuery'
+        - $ref: '#/components/parameters/itemFilterTypeQuery'
       responses:
         '200':
           description: A list of disease correlation objects
@@ -496,6 +492,15 @@ components:
         - row_count
         - columns
         - filters
+    ItemFilterTypeQuery:
+      type: string
+      enum:
+        - include
+        - exclude
+      description: |
+        - include: Include only the specified items.
+        - exclude: Exclude the specified items.
+      default: include
     ModelOverviewLink:
       type: object
       description: Model Overview Link
@@ -510,6 +515,9 @@ components:
       type: object
       description: Model Overview object for comparison tools
       properties:
+        _id:
+          type: string
+          description: Unique identifier for the model overview object
         name:
           type: string
           description: Model name
@@ -557,6 +565,7 @@ components:
               - Biomarkers
               - Disease Correlation
       required:
+        - _id
         - name
         - model_type
         - matched_controls
@@ -582,6 +591,9 @@ components:
       type: object
       description: Disease Correlation
       properties:
+        _id:
+          type: string
+          description: Unique identifier for the disease correlation object
         name:
           type: string
           description: Model name
@@ -619,6 +631,7 @@ components:
         STG:
           $ref: '#/components/schemas/CorrelationResult'
       required:
+        - _id
         - name
         - matched_control
         - model_type
@@ -645,3 +658,33 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+  parameters:
+    itemQuery:
+      name: item
+      description: A list of items to filter the data by.
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      style: form
+      explode: true
+    itemFilterTypeQuery:
+      name: itemFilterType
+      description: The type of filter to apply to the items. Possible values are 'include' or 'exclude'.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/ItemFilterTypeQuery'
+    categoryQuery:
+      name: category
+      description: An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA.
+      in: query
+      style: form
+      explode: true
+      required: true
+      schema:
+        type: array
+        items:
+          type: string

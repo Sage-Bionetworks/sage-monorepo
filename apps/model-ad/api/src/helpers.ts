@@ -29,3 +29,16 @@ class AlternativeCache {
 }
 
 export const altCache = new AlternativeCache();
+
+// -------------------------------------------------------------------------- //
+// Helpers
+// -------------------------------------------------------------------------- //
+export function normalizeToStringArray(param: string | string[] | undefined): string[] | undefined {
+  if (param === undefined) {
+    return undefined;
+  }
+  if (Array.isArray(param)) {
+    return param;
+  }
+  return [param];
+}

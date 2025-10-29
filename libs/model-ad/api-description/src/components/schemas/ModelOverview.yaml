@@ -1,6 +1,9 @@
 type: object
 description: Model Overview object for comparison tools
 properties:
+  _id:
+    type: string
+    description: Unique identifier for the model overview object
   name:
     type: string
     description: Model name
@@ -48,6 +51,7 @@ properties:
         - Biomarkers
         - Disease Correlation
 required:
+  - _id
   - name
   - model_type
   - matched_controls
