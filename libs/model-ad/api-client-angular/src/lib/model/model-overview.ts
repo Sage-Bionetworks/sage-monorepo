@@ -14,6 +14,10 @@ import { ModelOverviewLink } from './model-overview-link';
  */
 export interface ModelOverview {
   /**
+   * Unique identifier for the model overview object
+   */
+  _id: string;
+  /**
    * Model name
    */
   name: string;

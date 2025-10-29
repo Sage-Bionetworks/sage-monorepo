@@ -25,6 +25,8 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
+import { ItemFilterTypeQuery } from '../model/item-filter-type-query';
+// @ts-ignore
 import { ModelOverview } from '../model/model-overview';
 
 // @ts-ignore
@@ -109,10 +111,14 @@ export class ModelOverviewService {
   /**
    * Get model overview for comparison tools
    * Returns a list of model overview objects for use in comparison tools.
+   * @param item A list of items to filter the data by.
+   * @param itemFilterType The type of filter to apply to the items. Possible values are \&#39;include\&#39; or \&#39;exclude\&#39;.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getModelOverviews(
+    item?: Array<string>,
+    itemFilterType?: ItemFilterTypeQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -122,6 +128,8 @@ export class ModelOverviewService {
     },
   ): Observable<Array<ModelOverview>>;
   public getModelOverviews(
+    item?: Array<string>,
+    itemFilterType?: ItemFilterTypeQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -131,6 +139,8 @@ export class ModelOverviewService {
     },
   ): Observable<HttpResponse<Array<ModelOverview>>>;
   public getModelOverviews(
+    item?: Array<string>,
+    itemFilterType?: ItemFilterTypeQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -140,6 +150,8 @@ export class ModelOverviewService {
     },
   ): Observable<HttpEvent<Array<ModelOverview>>>;
   public getModelOverviews(
+    item?: Array<string>,
+    itemFilterType?: ItemFilterTypeQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -148,6 +160,24 @@ export class ModelOverviewService {
       transferCache?: boolean;
     },
   ): Observable<any> {
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (item) {
+      item.forEach((element) => {
+        localVarQueryParameters = this.addToHttpParams(
+          localVarQueryParameters,
+          <any>element,
+          'item',
+        );
+      });
+    }
+    if (itemFilterType !== undefined && itemFilterType !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>itemFilterType,
+        'itemFilterType',
+      );
+    }
+
     let localVarHeaders = this.defaultHeaders;
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -187,6 +217,7 @@ export class ModelOverviewService {
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
+        params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

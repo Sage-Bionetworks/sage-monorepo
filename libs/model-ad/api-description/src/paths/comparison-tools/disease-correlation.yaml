@@ -5,18 +5,9 @@ get:
   description: Returns a list of disease correlation objects for use in comparison tools.
   operationId: getDiseaseCorrelations
   parameters:
-    - in: query
-      name: category
-      description: An ordered list of categories used to filter the disease correlation data,
-        where the first value is the category and the second is the subcategory. Pass each value
-        by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA.
-      required: true
-      schema:
-        type: array
-        items:
-          type: string
-      style: form
-      explode: true
+    - $ref: ../query/categoryQuery.yaml
+    - $ref: ../query/itemQuery.yaml
+    - $ref: ../query/itemFilterTypeQuery.yaml
   responses:
     '200':
       description: A list of disease correlation objects

@@ -15,6 +15,10 @@ import { CorrelationResult } from './correlation-result';
  */
 export interface DiseaseCorrelation {
   /**
+   * Unique identifier for the disease correlation object
+   */
+  _id: string;
+  /**
    * Model name
    */
   name: string;

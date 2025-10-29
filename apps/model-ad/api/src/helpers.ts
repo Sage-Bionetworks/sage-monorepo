@@ -1,4 +1,6 @@
+import { ItemFilterTypeQuery } from '@sagebionetworks/model-ad/api-client';
 import { Response } from 'express';
+import mongoose from 'mongoose';
 import NodeCache from 'node-cache';
 
 export function setHeaders(res: Response) {
@@ -6,6 +8,82 @@ export function setHeaders(res: Response) {
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', 0);
   res.setHeader('Content-Type', 'application/json');
+}
+
+// -------------------------------------------------------------------------- //
+// Problem+JSON error response helper
+// -------------------------------------------------------------------------- //
+export function sendProblemJson(
+  res: Response,
+  status: number,
+  title: string,
+  detail: string,
+  instance: string,
+) {
+  res.status(status).contentType('application/problem+json').json({
+    title,
+    status,
+    detail,
+    instance,
+  });
+}
+
+// -------------------------------------------------------------------------- //
+// Query parameter validation helpers
+// -------------------------------------------------------------------------- //
+export function validateItemFilterType(
+  itemFilterType: any,
+  reqPath: string,
+): { status: number; title: string; detail: string; instance: string } | undefined {
+  if (
+    itemFilterType &&
+    itemFilterType !== ItemFilterTypeQuery.Include &&
+    itemFilterType !== ItemFilterTypeQuery.Exclude
+  ) {
+    return {
+      status: 400,
+      title: 'Bad Request',
+      detail: `Query parameter itemFilterType must be either '${ItemFilterTypeQuery.Include}' or '${ItemFilterTypeQuery.Exclude}' if provided`,
+      instance: reqPath,
+    };
+  }
+  return undefined;
+}
+
+export function validateItems(
+  items: any,
+  reqPath: string,
+): { status: number; title: string; detail: string; instance: string } | undefined {
+  if (items) {
+    if (!Array.isArray(items) || !items.every((f) => typeof f === 'string')) {
+      return {
+        status: 400,
+        title: 'Bad Request',
+        detail: `Query parameter items must be a list of strings`,
+        instance: reqPath,
+      };
+    }
+  }
+  return undefined;
+}
+
+// -------------------------------------------------------------------------- //
+// Query builder helper
+// -------------------------------------------------------------------------- //
+export function buildIdQuery(items: string[], itemFilterType: ItemFilterTypeQuery) {
+  const objectIds = items.map((id) => new mongoose.Types.ObjectId(id));
+  if (itemFilterType === ItemFilterTypeQuery.Include) {
+    return { $in: objectIds };
+  } else {
+    return { $nin: objectIds };
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Cache key builder
+// -------------------------------------------------------------------------- //
+export function buildCacheKey(prefix: string, ...args: any[]) {
+  return prefix + '-' + args.map((a) => JSON.stringify(a)).join('-');
 }
 
 // -------------------------------------------------------------------------- //
@@ -29,3 +107,16 @@ class AlternativeCache {
 }
 
 export const altCache = new AlternativeCache();
+
+// -------------------------------------------------------------------------- //
+// Helpers
+// -------------------------------------------------------------------------- //
+export function normalizeToStringArray(param: string | string[] | undefined): string[] | undefined {
+  if (param === undefined) {
+    return undefined;
+  }
+  if (Array.isArray(param)) {
+    return param;
+  }
+  return [param];
+}

@@ -1,7 +1,7 @@
 import { SearchResult } from '@sagebionetworks/model-ad/api-client';
 import { escapeRegexChars } from '@sagebionetworks/shared/util';
 import { NextFunction, Request, Response } from 'express';
-import { cache, setHeaders } from '../helpers';
+import { buildCacheKey, cache, sendProblemJson, setHeaders } from '../helpers';
 import { ModelCollection } from '../models';
 
 export async function searchModels(query: string) {
@@ -10,7 +10,7 @@ export async function searchModels(query: string) {
     throw new Error('Query must be a string');
   }
 
-  const cacheKey = 'model-search-' + Buffer.from(query).toString('base64');
+  const cacheKey = buildCacheKey('model-search', Buffer.from(query).toString('base64'));
   const cachedResult: SearchResult[] | null | undefined = cache.get(cacheKey);
 
   // If we have a cached result (including null), return it
@@ -81,24 +81,26 @@ export async function searchModels(query: string) {
 
 export async function modelsSearchRoute(req: Request, res: Response, next: NextFunction) {
   if (!req.query.q || typeof req.query.q !== 'string') {
-    res.status(400).contentType('application/problem+json').json({
-      title: 'Bad Request',
-      status: 400,
-      detail: 'Query parameter q is required and must be a string',
-      instance: req.path,
-    });
+    sendProblemJson(
+      res,
+      400,
+      'Bad Request',
+      'Query parameter q is required and must be a string',
+      req.path,
+    );
     return;
   }
 
   const query = req.query.q;
 
   if (query.length < 3 || query.length > 100) {
-    res.status(400).contentType('application/problem+json').json({
-      title: 'Bad Request',
-      status: 400,
-      detail: 'Query parameter q must be between 3 and 100 characters',
-      instance: req.path,
-    });
+    sendProblemJson(
+      res,
+      400,
+      'Bad Request',
+      'Query parameter q must be between 3 and 100 characters',
+      req.path,
+    );
     return;
   }
 
