@@ -20,6 +20,7 @@ import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEnt
 import org.sagebionetworks.bixarena.auth.service.model.entity.UserEntity;
 import org.sagebionetworks.bixarena.auth.service.model.repository.ExternalAccountRepository;
 import org.sagebionetworks.bixarena.auth.service.model.repository.UserRepository;
+import org.sagebionetworks.bixarena.auth.service.event.EventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -29,6 +30,9 @@ class UserServiceTest {
 
   @Mock
   private ExternalAccountRepository externalAccountRepository;
+
+  @Mock
+  private EventPublisher eventPublisher;
 
   @InjectMocks
   private UserService userService;
@@ -41,7 +45,7 @@ class UserServiceTest {
 
   @BeforeEach
   void setUp() {
-    reset(userRepository, externalAccountRepository);
+    reset(userRepository, externalAccountRepository, eventPublisher);
   }
 
   @Test

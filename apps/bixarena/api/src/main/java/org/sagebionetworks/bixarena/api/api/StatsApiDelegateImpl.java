@@ -2,8 +2,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.bixarena.api.model.dto.PublicStatsDto;
-import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
-import org.sagebionetworks.bixarena.api.model.repository.UserStatsRepository;
+import org.sagebionetworks.bixarena.api.service.PublicStatsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -15,28 +14,18 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class StatsApiDelegateImpl implements StatsApiDelegate {
 
-  private final UserStatsRepository userStatsRepository;
-  private final BattleRepository battleRepository;
+  private final PublicStatsService publicStatsService;
 
   /**
    * Get public platform statistics.
    * This endpoint is publicly accessible without authentication.
+   * Results are cached for 5 minutes to reduce database load.
    *
    * @return Public statistics response
    */
   @Override
   public ResponseEntity<PublicStatsDto> getPublicStats() {
-    // Query actual counts from database
-    Long totalUsers = userStatsRepository.count();
-    Long totalBattles = battleRepository.count();
-    Long modelsEvaluated = battleRepository.countDistinctModelsEvaluated();
-
-    PublicStatsDto stats = PublicStatsDto.builder()
-        .modelsEvaluated(modelsEvaluated)
-        .totalBattles(totalBattles)
-        .totalUsers(totalUsers)
-        .build();
-
+    PublicStatsDto stats = publicStatsService.getPublicStats();
     return ResponseEntity.ok(stats);
   }
 }
