@@ -25,13 +25,13 @@ from bixarena_api_client import (
 
 from bixarena_app.config.constants import (
     BATTLE_ROUND_LIMIT,
-    CONVERSATION_LIMIT_MSG,
     MODERATION_MSG,
     PROMPT_LEN_LIMIT,
     SLOW_MODEL_MSG,
 )
 from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model import model_response
+from bixarena_app.model.error_handler import get_battle_round_limit_message
 from bixarena_app.model.model_response import (
     BattleSession,
     State,
@@ -372,14 +372,20 @@ def add_text(
 
     conv = states[0].conv
     if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
-        logger.info(f"conversation turn limit. text: {text}")
+        logger.info(
+            f"🛑 Battle round limit reached: battle_id={battle_session.battle_id}"
+        )
+        round_limit_msg = get_battle_round_limit_message()
         for i in range(num_sides):
-            states[i].skip_next = True
+            if states[i]:
+                states[i].conv.append_message("user", text)
+                states[i].conv.append_message("assistant", round_limit_msg)
+                states[i].skip_next = True
         return (
             states
             + [battle_session]
             + [x.to_gradio_chatbot() for x in states]
-            + [CONVERSATION_LIMIT_MSG]
+            + [""]
             + [
                 no_change_btn,
             ]

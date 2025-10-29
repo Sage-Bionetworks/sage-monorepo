@@ -20,7 +20,23 @@ from openai import (
     RateLimitError,
 )
 
+from bixarena_app.config.constants import BATTLE_ROUND_LIMIT
+
 logger = logging.getLogger(__name__)
+
+
+def get_battle_round_limit_message() -> str:
+    """
+    Provide a user-facing message when the battle round cap is reached.
+
+    Returns:
+        Markdown formatted message consistent with other error responses.
+    """
+    message = (
+        "**You've reached the round limit for this battle.**\n\n"
+        "Please wrap up this matchup or start a fresh battle!"
+    )
+    return f"{message}\n\n_Round limit: {BATTLE_ROUND_LIMIT}_"
 
 
 def handle_error_message(error: Exception) -> str:
