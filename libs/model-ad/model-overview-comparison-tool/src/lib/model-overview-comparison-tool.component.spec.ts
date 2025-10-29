@@ -7,15 +7,16 @@ import {
   provideComparisonToolFilterService,
 } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
-import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import {
   ComparisonToolConfigService,
   ModelOverviewService,
 } from '@sagebionetworks/model-ad/api-client';
+import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { ModelOverviewComparisonToolComponent } from './model-overview-comparison-tool.component';
+import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
 
 async function setup() {
   const { fixture } = await render(ModelOverviewComparisonToolComponent, {
@@ -43,6 +44,7 @@ async function setup() {
       },
       ComparisonToolService,
       ...provideComparisonToolFilterService(),
+      ModelOverviewComparisonToolService,
     ],
   });
 
