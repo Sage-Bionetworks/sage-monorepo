@@ -239,6 +239,7 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       }
 
       String email = (String) idClaims.get("email");
+      Boolean emailVerified = (Boolean) idClaims.get("email_verified");
       String givenName = (String) idClaims.getOrDefault("given_name", null);
       String familyName = (String) idClaims.getOrDefault("family_name", null);
       String preferredUsername = (String) idClaims.getOrDefault("preferred_username", sub);
@@ -249,11 +250,12 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       String synapseUsername = userName != null ? userName : preferredUsername;
 
       log.info(
-        "OIDC callback: ID token claims - sub={}, user_name={}, preferred_username={}, email={}, given_name={}, family_name={}",
+        "OIDC callback: ID token claims - sub={}, user_name={}, preferred_username={}, email={}, email_verified={}, given_name={}, family_name={}",
         sub,
         userName,
         preferredUsername,
         email,
+        emailVerified,
         givenName,
         familyName
       );
@@ -266,14 +268,20 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
         sub,
         synapseUsername,
         email,
+        emailVerified,
         givenName,
         familyName
       );
 
       // Establish authenticated session principal
-      session.setAttribute("AUTH_SUBJECT", persistedUser.getUsername());
+      // AUTH_SUBJECT: BixArena User ID (UUID) - stable immutable identifier per OIDC spec
+      session.setAttribute("AUTH_SUBJECT", persistedUser.getId().toString());
+      // AUTH_USERNAME: Synapse username - for logging and debugging
+      session.setAttribute("AUTH_USERNAME", persistedUser.getUsername());
+      // AUTH_PREFERRED_USERNAME: OIDC standard field for display name
       session.setAttribute("AUTH_PREFERRED_USERNAME", persistedUser.getUsername());
       session.setAttribute("AUTH_EMAIL", persistedUser.getEmail());
+      session.setAttribute("AUTH_EMAIL_VERIFIED", persistedUser.getEmailVerified());
       session.setAttribute("AUTH_ROLES", List.of(persistedUser.getRole().name()));
       session.removeAttribute("OIDC_STATE");
       session.removeAttribute("OIDC_NONCE");

@@ -3,6 +3,7 @@ CREATE TABLE auth.user (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   username VARCHAR(255) UNIQUE NOT NULL,
   email VARCHAR(255) UNIQUE,
+  email_verified BOOLEAN NOT NULL DEFAULT false,
   first_name VARCHAR(255),
   last_name VARCHAR(255),
   role VARCHAR(50) NOT NULL DEFAULT 'user',
