@@ -20,7 +20,7 @@ def build_header():
                 """
             )
         with gr.Column(scale=1):
-            battle_btn = gr.Button("Battle", variant="secondary")
+            battle_btn = gr.Button("Battle", variant="secondary", visible=False)
         with gr.Column(scale=1):
             leaderboard_btn = gr.Button("Leaderboard", variant="secondary")
         with gr.Column(scale=1):
@@ -48,6 +48,17 @@ def update_login_button():
     if state.is_authenticated():
         return gr.update(value="Logout", variant="primary")
     return gr.update(value="Login", variant="primary")
+
+
+def update_battle_button():
+    """Return gr.update for battle button based on Python-side auth state.
+
+    The Battle button should only be visible when the user is authenticated.
+    """
+    state = get_user_state()
+    if state.is_authenticated():
+        return gr.update(visible=True)
+    return gr.update(visible=False)
 
 
 def handle_login_click(navigator, update_login_button, update_user_page):
