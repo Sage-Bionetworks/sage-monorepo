@@ -7,6 +7,22 @@ server:
 spring:
   application:
     name: bixarena-api
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000 # 5 minutes in milliseconds
+      cache-null-values: false
+  data:
+    redis:
+      host: bixarena-valkey
+      port: 8116
+      database: 0
+      timeout: 2000ms
+      jedis:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
   datasource:
     url: jdbc:postgresql://bixarena-postgres:21000/bixarena
     username: postgres

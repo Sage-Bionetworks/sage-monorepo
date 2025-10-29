@@ -15,3 +15,4 @@ services:
           memory: 1GB
     depends_on:
       - bixarena-postgres
+      - bixarena-valkey
