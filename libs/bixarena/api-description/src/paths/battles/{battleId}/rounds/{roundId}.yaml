@@ -3,7 +3,6 @@ parameters:
   - $ref: ../../../../components/parameters/path/roundId.yaml
 
 patch:
-  x-anonymous-access: true
   tags:
     - Battle
   summary: Update a battle round

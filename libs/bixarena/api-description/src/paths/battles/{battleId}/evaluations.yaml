@@ -2,7 +2,6 @@ parameters:
   - $ref: ../../../components/parameters/path/battleId.yaml
 
 post:
-  x-anonymous-access: true
   tags:
     - Battle
   summary: Create a battle evaluation

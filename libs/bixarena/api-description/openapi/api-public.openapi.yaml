@@ -52,7 +52,6 @@ paths:
           $ref: '#/components/responses/Forbidden'
   /battles:
     get:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: List battles
@@ -74,7 +73,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Create a battle
@@ -109,7 +107,6 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     get:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Get a battle by ID
@@ -129,7 +126,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     patch:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Update a battle
@@ -159,7 +155,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Delete a battle
@@ -180,7 +175,6 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     post:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Create a battle round
@@ -214,7 +208,6 @@ paths:
       - $ref: '#/components/parameters/battleId'
       - $ref: '#/components/parameters/roundId'
     patch:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Update a battle round
@@ -384,7 +377,6 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     post:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Create a battle evaluation

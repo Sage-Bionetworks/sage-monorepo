@@ -81,7 +81,6 @@ paths:
       summary: List battles
       tags:
         - Battle
-      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -118,7 +117,6 @@ paths:
       summary: Create a battle
       tags:
         - Battle
-      x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -152,7 +150,6 @@ paths:
       summary: Delete a battle
       tags:
         - Battle
-      x-anonymous-access: true
       x-accepts:
         - application/problem+json
       x-tags:
@@ -185,7 +182,6 @@ paths:
       summary: Get a battle by ID
       tags:
         - Battle
-      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -229,7 +225,6 @@ paths:
       summary: Update a battle
       tags:
         - Battle
-      x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -275,7 +270,6 @@ paths:
       summary: Create a battle round
       tags:
         - Battle
-      x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -329,7 +323,6 @@ paths:
       summary: Update a battle round
       tags:
         - Battle
-      x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -607,7 +600,6 @@ paths:
       summary: Create a battle evaluation
       tags:
         - Battle
-      x-anonymous-access: true
       x-content-type: application/json
       x-accepts:
         - application/json
