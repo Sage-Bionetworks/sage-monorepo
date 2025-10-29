@@ -17,6 +17,7 @@ from bixarena_api_client import (
 )
 from bixarena_api_client.exceptions import ApiException
 
+from bixarena_app.config.constants import MAX_RESPONSE_TOKENS
 from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
@@ -332,7 +333,7 @@ def bot_response_multi(
     battle_session: BattleSession,
     temperature=0.7,
     top_p=1.0,
-    max_new_tokens=1024,
+    max_new_tokens=MAX_RESPONSE_TOKENS,
 ):
     num_sides = 2
     if state0 is None or state0.skip_next:
