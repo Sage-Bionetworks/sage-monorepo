@@ -524,7 +524,7 @@ def build_side_by_side_ui_anony():
                 value="👉 B is better", visible=False, interactive=False
             )
 
-        # Prompt input - always visible
+        # Prompt input - always visible, centered with 80% width via CSS
         with gr.Row():
             textbox = gr.Textbox(
                 show_label=False,
