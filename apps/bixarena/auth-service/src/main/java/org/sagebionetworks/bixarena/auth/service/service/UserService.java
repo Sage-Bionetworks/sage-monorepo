@@ -34,6 +34,7 @@ public class UserService {
    * @param externalId The user's ID from the external provider
    * @param username The preferred username
    * @param email The user's email address
+   * @param emailVerified Whether the email has been verified by the provider
    * @param firstName The user's first name (given name)
    * @param lastName The user's last name (family name)
    * @return The UserEntity representing the logged-in user
@@ -44,6 +45,7 @@ public class UserService {
     String externalId,
     String username,
     String email,
+    Boolean emailVerified,
     String firstName,
     String lastName
   ) {
@@ -68,6 +70,10 @@ public class UserService {
       boolean updated = false;
       if (email != null && !email.equals(user.getEmail())) {
         user.setEmail(email);
+        updated = true;
+      }
+      if (emailVerified != null && !emailVerified.equals(user.getEmailVerified())) {
+        user.setEmailVerified(emailVerified);
         updated = true;
       }
       if (firstName != null && !firstName.equals(user.getFirstName())) {
@@ -119,6 +125,7 @@ public class UserService {
         user = UserEntity.builder()
           .username(username)
           .email(email)
+          .emailVerified(emailVerified != null ? emailVerified : false)
           .firstName(firstName)
           .lastName(lastName)
           .lastLoginAt(OffsetDateTime.now())
