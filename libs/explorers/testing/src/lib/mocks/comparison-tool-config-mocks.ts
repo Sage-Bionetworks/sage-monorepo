@@ -83,6 +83,14 @@ export const mockComparisonToolFiltersWithSelections: ComparisonToolFilter[] = [
       { label: 'Late Onset AD', selected: false },
     ],
   },
+  {
+    name: 'Sex',
+    data_key: 'sex',
+    options: [
+      { label: 'Female', selected: true },
+      { label: 'Male', selected: false },
+    ],
+  },
 ];
 
 export const mockComparisonToolColumns: ComparisonToolConfigColumn[] = [

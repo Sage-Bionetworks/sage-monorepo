@@ -24,7 +24,7 @@
           @for (option of filter.options; track option; let j = $index) {
             <explorers-comparison-tool-filter-list-item
               [item]="option"
-              [title]="filter.name || ''"
+              [title]="filter.short_name || filter.name || ''"
               [description]="option.label"
               [isVisible]="option.selected || false"
               (clearEvent)="clearSelectedFilters(option)"
