@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, input, model, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   ComparisonToolConfigFilter,
@@ -30,23 +30,28 @@ export class ComparisonToolFilterPanelComponent {
   filterConfigs = input<ComparisonToolConfigFilter[]>([]);
   isOpen = model<boolean>(false);
 
-  filters = computed(() => {
-    return this.filterConfigs().map((config) => {
-      const filter: ComparisonToolFilter = {
-        name: config.name,
-        data_key: config.data_key,
-        short_name: config.short_name,
-        options: config.values.map((value) => ({
-          label: value,
-          selected: false,
-        })),
-      };
-      return filter;
-    });
-  });
+  filters = this.comparisonToolFilterService.filters;
 
   activePane = signal(-1);
   hasActivePane = computed(() => this.activePane() !== -1);
+
+  constructor() {
+    effect(() => {
+      const filters = this.filterConfigs().map((config) => {
+        const filter: ComparisonToolFilter = {
+          name: config.name,
+          data_key: config.data_key,
+          short_name: config.short_name,
+          options: config.values.map((value) => ({
+            label: value,
+            selected: false,
+          })),
+        };
+        return filter;
+      });
+      this.comparisonToolFilterService.setFilters(filters);
+    });
+  }
 
   handleChange() {
     this.comparisonToolFilterService.setFilters(this.filters());

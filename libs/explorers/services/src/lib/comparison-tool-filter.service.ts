@@ -1,8 +1,9 @@
-import { inject, signal } from '@angular/core';
+import { computed, inject, signal } from '@angular/core';
 import {
   ComparisonToolFilter,
   ComparisonToolFilterOption,
 } from '@sagebionetworks/explorers/models';
+import { cloneDeep } from 'lodash';
 import { FilterService } from 'primeng/api';
 
 export class ComparisonToolFilterService {
@@ -19,8 +20,13 @@ export class ComparisonToolFilterService {
   readonly significanceThreshold = this.significanceThresholdSignal.asReadonly();
   readonly significanceThresholdActive = this.significanceThresholdActiveSignal.asReadonly();
 
+  readonly hasSelectedFilters = computed(() => {
+    return this.filters().some((filter) => filter.options.some((option) => option.selected));
+  });
+
   setFilters(filters: ComparisonToolFilter[]) {
-    this.filtersSignal.set(filters);
+    // Use cloneDeep to ensure a new reference is created
+    this.filtersSignal.set(cloneDeep(filters));
   }
 
   updateSearchTerm(term: string) {
