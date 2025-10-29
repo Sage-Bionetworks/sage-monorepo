@@ -103,6 +103,48 @@ def create_intro_section():
             """)
 
 
+def load_public_stats_on_page_load() -> tuple[dict, dict, dict]:
+    """Load public stats and update the HTML boxes.
+
+    Returns:
+        Tuple of (models_html, battles_html, users_html) updates
+    """
+    public_stats = fetch_public_stats()
+
+    models_html = f"""
+    <div style="text-align: center; padding: 20px;">
+        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
+            MODELS EVALUATED
+        </p>
+        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["models_evaluated"]:,}</h2>
+    </div>
+    """
+
+    battles_html = f"""
+    <div style="text-align: center; padding: 20px;">
+        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
+            TOTAL BATTLES
+        </p>
+        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["total_battles"]:,}</h2>
+    </div>
+    """
+
+    users_html = f"""
+    <div style="text-align: center; padding: 20px;">
+        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
+            TOTAL USERS
+        </p>
+        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["total_users"]:,}</h2>
+    </div>
+    """
+
+    return (
+        gr.update(value=models_html),
+        gr.update(value=battles_html),
+        gr.update(value=users_html),
+    )
+
+
 def load_user_battles_on_page_load(request: gr.Request) -> tuple[dict, dict]:
     """Load user battles data and control column visibility.
 
@@ -133,49 +175,31 @@ def load_user_battles_on_page_load(request: gr.Request) -> tuple[dict, dict]:
 def build_stats_section():
     """Create the statistics section with metrics"""
 
-    # Fetch public stats from API
-    public_stats = fetch_public_stats()
-
     with gr.Row():
         with gr.Column():
             with gr.Group():
-                gr.HTML(f"""
-                <div style="text-align: center; padding: 20px;">
-                    <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-                        MODELS EVALUATED
-                    </p>
-                    <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["models_evaluated"]:,}</h2>
-                </div>
-                """)
+                models_evaluated_box = gr.HTML("")
 
         with gr.Column():
             with gr.Group():
-                gr.HTML(f"""
-                <div style="text-align: center; padding: 20px;">
-                    <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-                        TOTAL BATTLES
-                    </p>
-                    <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["total_battles"]:,}</h2>
-                </div>
-                """)
+                total_battles_box = gr.HTML("")
 
         with gr.Column():
             with gr.Group():
-                gr.HTML(f"""
-                <div style="text-align: center; padding: 20px;">
-                    <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-                        TOTAL USERS
-                    </p>
-                    <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["total_users"]:,}</h2>
-                </div>
-                """)
+                total_users_box = gr.HTML("")
 
         # Fourth box: User's battles arbitrated (only shown when logged in)
         with gr.Column(visible=False) as user_battles_column:
             with gr.Group():
                 user_battles_box = gr.HTML("")
 
-    return user_battles_column, user_battles_box
+    return (
+        models_evaluated_box,
+        total_battles_box,
+        total_users_box,
+        user_battles_column,
+        user_battles_box,
+    )
 
 
 def build_cta_section():
@@ -217,9 +241,23 @@ def build_home_page():
             create_intro_section()
 
             # Stats Section
-            user_battles_column, user_battles_box = build_stats_section()
+            (
+                models_evaluated_box,
+                total_battles_box,
+                total_users_box,
+                user_battles_column,
+                user_battles_box,
+            ) = build_stats_section()
 
             # Call to Action Section
             start_btn = build_cta_section()
 
-    return home_page, start_btn, user_battles_column, user_battles_box
+    return (
+        home_page,
+        start_btn,
+        models_evaluated_box,
+        total_battles_box,
+        total_users_box,
+        user_battles_column,
+        user_battles_box,
+    )
