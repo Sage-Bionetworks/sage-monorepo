@@ -201,6 +201,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     post:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Create a battle round
@@ -236,6 +237,7 @@ paths:
       - $ref: '#/components/parameters/battleId'
       - $ref: '#/components/parameters/roundId'
     patch:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Update a battle round
@@ -419,6 +421,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     post:
+      x-anonymous-access: true
       tags:
         - Battle
       summary: Create a battle evaluation

@@ -72,6 +72,7 @@ app:
     - method: 'PATCH'
       path: '/api/v1/battles/{battleId}/rounds/{roundId}'
       audience: 'urn:bixarena:api'
+      anonymousAccess: true
     - method: 'POST'
       path: '/api/v1/battles'
       audience: 'urn:bixarena:api'
@@ -79,9 +80,11 @@ app:
     - method: 'POST'
       path: '/api/v1/battles/{battleId}/evaluations'
       audience: 'urn:bixarena:api'
+      anonymousAccess: true
     - method: 'POST'
       path: '/api/v1/battles/{battleId}/rounds'
       audience: 'urn:bixarena:api'
+      anonymousAccess: true
     - method: 'POST'
       path: '/auth/logout'
       audience: 'urn:bixarena:auth'
