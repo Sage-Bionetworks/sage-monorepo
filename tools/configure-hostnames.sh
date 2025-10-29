@@ -19,6 +19,7 @@ declare -a hostnames=(
   "127.0.0.1 bixarena-app"
   "127.0.0.1 bixarena-auth-service"
   "127.0.0.1 bixarena-postgres"
+  "127.0.0.1 bixarena-valkey"
   "127.0.0.1 iatlas-api"
   "127.0.0.1 iatlas-postgres"
   "127.0.0.1 model-ad-api"

@@ -7,6 +7,7 @@ simplified to a single function for a single-page LLM comparison arena.
 
 import logging
 import time
+import warnings
 from uuid import UUID
 
 import gradio as gr
@@ -24,14 +25,14 @@ from bixarena_api_client import (
 )
 
 from bixarena_app.config.constants import (
-    CONVERSATION_LIMIT_MSG,
-    CONVERSATION_TURN_LIMIT,
-    INPUT_CHAR_LEN_LIMIT,
+    BATTLE_ROUND_LIMIT,
     MODERATION_MSG,
+    PROMPT_LEN_LIMIT,
     SLOW_MODEL_MSG,
 )
 from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model import model_response
+from bixarena_app.model.error_handler import get_battle_round_limit_message
 from bixarena_app.model.model_response import (
     BattleSession,
     State,
@@ -49,7 +50,7 @@ from bixarena_app.page.battle_page_css import (
     EXAMPLE_PROMPTS_CSS,
     INPUT_PROMPT_CSS,
 )
-from bixarena_app.page.example_prompt_ui import example_prompt_cards
+from bixarena_app.page.example_prompt_ui import ExamplePromptUI
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -291,7 +292,9 @@ def tievote_last_response(
         yield x
 
 
-def clear_history(battle_session: BattleSession, request: gr.Request):
+def clear_history(
+    battle_session: BattleSession, request: gr.Request = None, example_prompt_ui=None
+):
     """Clear battle history and end the active battle."""
     logger.info("clear_history (anony).")
 
@@ -301,7 +304,7 @@ def clear_history(battle_session: BattleSession, request: gr.Request):
 
     battle_session.reset()
 
-    return (
+    base_outputs = (
         [None] * num_sides  # states
         + [battle_session]
         + [None] * num_sides  # chatbots
@@ -319,6 +322,13 @@ def clear_history(battle_session: BattleSession, request: gr.Request):
         + [gr.Row(visible=False)]  # hide next_battle_row
         + [gr.Column(visible=True)]  # show suggested_prompts_group
     )
+
+    # If example_prompt_ui is provided, also refresh the prompts
+    if example_prompt_ui:
+        prompt_updates = example_prompt_ui.refresh_prompts()
+        return base_outputs + prompt_updates
+
+    return base_outputs
 
 
 def add_text(
@@ -371,15 +381,21 @@ def add_text(
         text = MODERATION_MSG
 
     conv = states[0].conv
-    if (len(conv.messages) - conv.offset) // 2 >= CONVERSATION_TURN_LIMIT:
-        logger.info(f"conversation turn limit. text: {text}")
+    if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
+        logger.info(
+            f"🛑 Battle round limit reached: battle_id={battle_session.battle_id}"
+        )
+        round_limit_msg = get_battle_round_limit_message()
         for i in range(num_sides):
-            states[i].skip_next = True
+            if states[i]:
+                states[i].conv.append_message("user", text)
+                states[i].conv.append_message("assistant", round_limit_msg)
+                states[i].skip_next = True
         return (
             states
             + [battle_session]
             + [x.to_gradio_chatbot() for x in states]
-            + [CONVERSATION_LIMIT_MSG]
+            + [""]
             + [
                 no_change_btn,
             ]
@@ -391,7 +407,7 @@ def add_text(
             + [gr.Column(visible=False)]  # hide suggested_prompts_group
         )
 
-    text = text[:INPUT_CHAR_LEN_LIMIT]  # Hard cut-off
+    text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
 
     # Create battle with first prompt as title (only for first message)
     if battle_session.battle_id is None and states[0] and states[1]:
@@ -457,6 +473,9 @@ def build_side_by_side_ui_anony():
     model_selectors = []
     chatbots = []
 
+    # Create ExamplePromptUI instance to manage prompts across battle rounds
+    example_prompt_ui = ExamplePromptUI()
+
     # Page content
     with gr.Column(elem_classes=["content-wrapper"]):
         gr.HTML(page_header_html)
@@ -464,9 +483,9 @@ def build_side_by_side_ui_anony():
         (
             example_prompts_group,
             prompt_cards,
-            _prev_btn,
-            _next_btn,
-        ) = example_prompt_cards(textbox=None)
+            prev_btn,
+            next_btn,
+        ) = example_prompt_ui.build(textbox=None)
 
         # Battle interface - will appear once a prompt is submitted
         with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
@@ -474,12 +493,20 @@ def build_side_by_side_ui_anony():
                 for i in range(num_sides):
                     label = "Model 1" if i == 0 else "Model 2"
                     with gr.Column():
-                        chatbot = gr.Chatbot(
-                            label=label,
-                            elem_id="chatbot",
-                            height=550,
-                            show_copy_button=True,
-                        )
+                        # Suppress tuples deprecation warning until we migrate to messages format
+                        with warnings.catch_warnings():
+                            warnings.filterwarnings(
+                                "ignore",
+                                message=".*tuples.*format.*chatbot.*deprecated.*",
+                                category=UserWarning,
+                            )
+                            chatbot = gr.Chatbot(
+                                label=label,
+                                elem_id="chatbot",
+                                height=550,
+                                show_copy_button=True,
+                                type="tuples",
+                            )
                         chatbots.append(chatbot)
 
             with gr.Row():
@@ -503,7 +530,7 @@ def build_side_by_side_ui_anony():
                 value="👉 B is better", visible=False, interactive=False
             )
 
-        # Prompt input - always visible
+        # Prompt input - always visible, centered with 80% width via CSS
         with gr.Row():
             textbox = gr.Textbox(
                 show_label=False,
@@ -562,7 +589,7 @@ def build_side_by_side_ui_anony():
         model_selectors + [textbox] + btn_list,
     )
     clear_btn.click(
-        clear_history,
+        lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
         [battle_session],
         states
         + [battle_session]
@@ -571,7 +598,9 @@ def build_side_by_side_ui_anony():
         + [textbox]
         + btn_list
         + [slow_warning]
-        + [battle_interface, voting_row, next_battle_row, example_prompts_group],
+        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
+        + [prev_btn, next_btn]
+        + prompt_cards,
     )
 
     # Direct JavaScript functions for enter key control
@@ -667,7 +696,11 @@ def build_side_by_side_ui_anony():
             js=enable_enter_js,
         )
 
-    return states + model_selectors
+    return (
+        states + model_selectors,
+        example_prompt_ui,
+        [prev_btn, next_btn] + prompt_cards,
+    )
 
 
 def build_battle_page(
@@ -677,6 +710,9 @@ def build_battle_page(
 
     Args:
         moderate (bool): Enable content moderation
+
+    Returns:
+        tuple: (battle_page, example_prompt_ui, prompt_outputs) for hooking up navigation refresh
     """
     # Set global variables
     set_global_vars_anony(moderate)
@@ -688,6 +724,12 @@ def build_battle_page(
     load_demo_side_by_side_anony(models, {})
 
     with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
-        build_side_by_side_ui_anony()
+        _, example_prompt_ui, prompt_outputs = build_side_by_side_ui_anony()
 
-    return battle_page
+        # Refresh example prompts when page loads to ensure each user sees different prompts
+        battle_page.load(
+            example_prompt_ui.refresh_prompts,
+            outputs=prompt_outputs,
+        )
+
+    return battle_page, example_prompt_ui, prompt_outputs

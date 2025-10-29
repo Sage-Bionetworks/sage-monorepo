@@ -1,0 +1,1 @@
+FROM mirror.gcr.io/valkey/valkey:8.1.4

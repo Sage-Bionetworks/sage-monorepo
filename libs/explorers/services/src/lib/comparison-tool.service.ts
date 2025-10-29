@@ -68,10 +68,13 @@ export class ComparisonToolService {
     const config = this.currentConfig();
     if (!config) return [];
 
+    const dropdownsToMatch = this.getDropdownsForMatching(config.dropdowns);
+
     // Match on dropdowns only (each service instance is page-specific)
     return (
-      this.columnsForDropdownsSignal().find((c) => isEqual(c.dropdowns, config.dropdowns))
-        ?.columns ?? []
+      this.columnsForDropdownsSignal().find((c) =>
+        isEqual(this.getDropdownsForMatching(c.dropdowns), dropdownsToMatch),
+      )?.columns ?? []
     );
   });
 
@@ -142,10 +145,13 @@ export class ComparisonToolService {
     const config = this.currentConfig();
     if (config?.columns && config.columns.length > 0) {
       const currentDropdowns = config.dropdowns;
+      const dropdownsToMatch = this.getDropdownsForMatching(currentDropdowns);
 
       this.columnsForDropdownsSignal.update((columnsData) => {
         // Match on dropdowns only (each service instance is page-specific)
-        const existingIndex = columnsData.findIndex((c) => isEqual(c.dropdowns, currentDropdowns));
+        const existingIndex = columnsData.findIndex((c) =>
+          isEqual(this.getDropdownsForMatching(c.dropdowns), dropdownsToMatch),
+        );
 
         // If this dropdown combination exists, preserve its column state
         if (existingIndex !== -1) {
@@ -208,10 +214,13 @@ export class ComparisonToolService {
     if (!config) return;
 
     const currentDropdowns = config.dropdowns;
+    const dropdownsToMatch = this.getDropdownsForMatching(currentDropdowns);
 
     this.columnsForDropdownsSignal.update((cols) => {
       // Match on dropdowns only (each service instance is page-specific)
-      const columnsIndex = cols.findIndex((c) => isEqual(c.dropdowns, currentDropdowns));
+      const columnsIndex = cols.findIndex((c) =>
+        isEqual(this.getDropdownsForMatching(c.dropdowns), dropdownsToMatch),
+      );
 
       if (columnsIndex !== -1) {
         const columnsData = cols[columnsIndex];
@@ -269,6 +278,19 @@ export class ComparisonToolService {
     }
 
     return prefix.every((value, index) => normalizedTarget[index] === value);
+  }
+
+  /**
+   * Returns the dropdown array slice to use for matching column state.
+   * For arrays with 2+ elements, returns first n-1 elements.
+   * For arrays with 0-1 elements, returns the full array.
+   */
+  private getDropdownsForMatching(dropdowns: string[] | undefined): string[] {
+    const normalized = dropdowns ?? [];
+    if (normalized.length >= 2) {
+      return normalized.slice(0, -1);
+    }
+    return normalized;
   }
 
   setSort(sortField: string | undefined, sortOrder: number | undefined) {

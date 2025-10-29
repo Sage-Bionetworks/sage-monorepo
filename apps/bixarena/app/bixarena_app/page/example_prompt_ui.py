@@ -46,9 +46,7 @@ class ExamplePromptUI:
                     example_prompt_search_query=search_query
                 )
                 prompts = [p.question for p in resp.example_prompts]
-                logger.info(
-                    f"✅ Fetched {len(prompts)} example prompts",
-                )
+                logger.debug(f"Fetched {len(prompts)} example prompts")
                 return prompts
         except Exception as e:  # noqa: BLE001
             logger.error(f"Example prompt fetch failed: {e}")
@@ -86,6 +84,13 @@ class ExamplePromptUI:
             self.history.append(prompts)
             self.index = len(self.history) - 1
         prompts = self.history[self.index]
+        return self._nav_state_updates(prompts)
+
+    def refresh_prompts(self):  # bound as handler for page refresh/reset
+        """Fetch new random prompts and reset navigation state."""
+        prompts = self._fetch_random_prompts(3)
+        self.history = [prompts]
+        self.index = 0
         return self._nav_state_updates(prompts)
 
     # ----------------------------- Build Method --------------------------- #

@@ -11,6 +11,7 @@ args=(
   --file docker/"$product_name"/services/app.yml
   --file docker/"$product_name"/services/auth-service.yml
   --file docker/"$product_name"/services/postgres.yml
+  --file docker/"$product_name"/services/valkey.yml
 
   --file docker/"$product_name"/networks.yml
   --file docker/"$product_name"/volumes.yml
