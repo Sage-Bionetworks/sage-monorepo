@@ -34,6 +34,9 @@ EXAMPLE_PROMPTS_CSS = """
     min-width: 0;
     width: auto;
     margin: 0;
+    height: 83px;
+    display: flex;
+    align-items: center;
 }
 
 .gradio-container .prompt-card-container:hover {
