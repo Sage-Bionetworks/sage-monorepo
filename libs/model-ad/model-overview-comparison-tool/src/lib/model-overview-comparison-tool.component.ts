@@ -8,6 +8,7 @@ import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
+  ItemFilterTypeQuery,
   ModelOverview,
   ModelOverviewService,
 } from '@sagebionetworks/model-ad/api-client';
@@ -78,7 +79,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
 
   getData() {
     this.modelOverviewService
-      .getModelOverviews()
+      .getModelOverviews([], ItemFilterTypeQuery.Exclude)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {

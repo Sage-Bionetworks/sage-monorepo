@@ -10,6 +10,7 @@ import {
   ComparisonToolPage,
   DiseaseCorrelation,
   DiseaseCorrelationService,
+  ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
@@ -91,7 +92,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
 
   getData() {
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(this.comparisonToolService.dropdownSelection())
+      .getDiseaseCorrelations(
+        this.comparisonToolService.dropdownSelection(),
+        [],
+        ItemFilterTypeQuery.Exclude,
+      )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
