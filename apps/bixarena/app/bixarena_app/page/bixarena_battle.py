@@ -24,10 +24,10 @@ from bixarena_api_client import (
 )
 
 from bixarena_app.config.constants import (
+    BATTLE_ROUND_LIMIT,
     CONVERSATION_LIMIT_MSG,
-    CONVERSATION_TURN_LIMIT,
-    INPUT_CHAR_LEN_LIMIT,
     MODERATION_MSG,
+    PROMPT_LEN_LIMIT,
     SLOW_MODEL_MSG,
 )
 from bixarena_app.config.utils import _get_api_base_url
@@ -371,7 +371,7 @@ def add_text(
         text = MODERATION_MSG
 
     conv = states[0].conv
-    if (len(conv.messages) - conv.offset) // 2 >= CONVERSATION_TURN_LIMIT:
+    if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
         logger.info(f"conversation turn limit. text: {text}")
         for i in range(num_sides):
             states[i].skip_next = True
@@ -391,7 +391,7 @@ def add_text(
             + [gr.Column(visible=False)]  # hide suggested_prompts_group
         )
 
-    text = text[:INPUT_CHAR_LEN_LIMIT]  # Hard cut-off
+    text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
 
     # Create battle with first prompt as title (only for first message)
     if battle_session.battle_id is None and states[0] and states[1]:

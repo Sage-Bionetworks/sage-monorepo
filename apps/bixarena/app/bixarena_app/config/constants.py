@@ -12,10 +12,12 @@ SERVER_ERROR_MSG = (
 MODERATION_MSG = "$MODERATION$ YOUR INPUT VIOLATES OUR CONTENT MODERATION GUIDELINES."
 CONVERSATION_LIMIT_MSG = "YOU HAVE REACHED THE CONVERSATION LENGTH LIMIT. PLEASE CLEAR HISTORY AND START A NEW CONVERSATION."
 SLOW_MODEL_MSG = "⚠️  Both models will show the responses all at once. Please stay patient as it may take over 30 seconds."
-# Maximum input length
-INPUT_CHAR_LEN_LIMIT = int(os.getenv("INPUT_CHAR_LEN_LIMIT", 1000))
-# Maximum conversation turns
-CONVERSATION_TURN_LIMIT = 50
+# Maximum characters allowed in a single user prompt to keep requests lightweight.
+PROMPT_LEN_LIMIT = int(os.getenv("INPUT_CHAR_LEN_LIMIT", 1000))
+# Maximum number of turns (user + model pairs) permitted within one battle session.
+BATTLE_ROUND_LIMIT = int(os.getenv("CONVERSATION_TURN_LIMIT", 50))
+# Maximum tokens generated per model response.
+MAX_RESPONSE_TOKENS = int(os.getenv("MAX_RESPONSE_TOKENS", 1024))
 # The output dir of log files (default to print console logging only)
 LOGDIR = os.getenv("LOGDIR", "")
 
