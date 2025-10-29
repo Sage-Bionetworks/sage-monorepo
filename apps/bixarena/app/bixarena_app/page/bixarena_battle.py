@@ -12,25 +12,24 @@ from uuid import UUID
 
 import gradio as gr
 from bixarena_api_client import (
-    ApiClient,
     BattleApi,
     BattleCreateRequest,
     BattleEvaluationCreateRequest,
     BattleEvaluationOutcome,
     BattleRoundCreateRequest,
     BattleUpdateRequest,
-    Configuration,
     MessageCreate,
     MessageRole,
 )
 
+from bixarena_app.api.api_client_helper import create_authenticated_api_client
+from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import (
     BATTLE_ROUND_LIMIT,
     MODERATION_MSG,
     PROMPT_LEN_LIMIT,
     SLOW_MODEL_MSG,
 )
-from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model import model_response
 from bixarena_app.model.error_handler import get_battle_round_limit_message
 from bixarena_app.model.model_response import (
@@ -60,7 +59,25 @@ anony_names = ["", ""]
 models = []
 
 
-def create_battle(model1: str, model2: str, title: str | None = None) -> UUID | None:
+def _ensure_battle_cookies(
+    battle_session: BattleSession, request: gr.Request | None
+) -> dict[str, str] | None:
+    """Refresh and return auth cookies associated with the current session."""
+    if request is not None:
+        jsessionid = get_session_cookie(request)
+        if jsessionid:
+            battle_session.auth_cookies = {"JSESSIONID": jsessionid}
+        else:
+            battle_session.auth_cookies = None
+    return battle_session.auth_cookies
+
+
+def create_battle(
+    model1: str,
+    model2: str,
+    title: str | None = None,
+    cookies: dict[str, str] | None = None,
+) -> UUID | None:
     """Create a new battle record in the database.
 
     Args:
@@ -71,77 +88,78 @@ def create_battle(model1: str, model2: str, title: str | None = None) -> UUID | 
     Returns:
         Battle ID if successful, None otherwise
     """
-    try:
-        api_base_url = _get_api_base_url()
 
+    try:
         # Runtime lookup model info
         model1_info = model_response.api_endpoint_info[model1]
         model2_info = model_response.api_endpoint_info[model2]
 
-        configuration = Configuration(host=api_base_url)
-        with ApiClient(configuration) as api_client:
+        battle_request = BattleCreateRequest(
+            model1_id=model1_info["model_id"],
+            model2_id=model2_info["model_id"],
+            title=title,
+        )
+
+        with create_authenticated_api_client(cookies) as api_client:
             battle_api = BattleApi(api_client)
-            battle_request = BattleCreateRequest(
-                model1_id=model1_info["model_id"],
-                model2_id=model2_info["model_id"],
-                title=title,
-            )
             battle = battle_api.create_battle(battle_request)
             if battle and battle.id:
                 logger.info(f"✅ Battle created: {battle.id} - '{title}'")
                 return battle.id
-
+            logger.warning("❌ Failed to create battle.")
     except Exception as e:
         logger.warning(f"❌ Failed to create battle: {e}")
 
-    return None
+        return None
 
 
-def end_battle(battle_id: UUID) -> None:
+def end_battle(battle_id: UUID, cookies: dict[str, str] | None = None) -> None:
     """Update battle endedAt timestamp when voting completes."""
     if not battle_id:
         logger.warning("⚠️ No battle_id to end")
         return
 
     try:
-        api_base_url = _get_api_base_url()
-        configuration = Configuration(host=api_base_url)
-        with ApiClient(configuration) as api_client:
+        with create_authenticated_api_client(cookies) as api_client:
             battle_api = BattleApi(api_client)
-            # PATCH with empty body will trigger backend to set endedAt
             battle_api.update_battle(battle_id, BattleUpdateRequest())
             logger.info(f"✅ Battle ended: {battle_id}")
     except Exception as e:
         logger.warning(f"❌ Failed to end battle {battle_id}: {e}")
 
 
-def create_battle_round(battle_id: UUID, prompt: str) -> UUID | None:
+def create_battle_round(
+    battle_id: UUID,
+    prompt: str,
+    cookies: dict[str, str] | None = None,
+) -> UUID | None:
     """Create a battle round with the submitted prompt."""
     if not battle_id:
         logger.warning("⚠️ Cannot create round without battle_id")
         return None
+
     try:
-        api_base_url = _get_api_base_url()
-        configuration = Configuration(host=api_base_url)
-        with ApiClient(configuration) as api_client:
+        prompt_message = BattleRoundCreateRequest(
+            prompt_message=MessageCreate(role=MessageRole.USER, content=prompt)
+        )
+
+        with create_authenticated_api_client(cookies) as api_client:
             battle_api = BattleApi(api_client)
-            battle_round = battle_api.create_battle_round(
-                battle_id,
-                BattleRoundCreateRequest(
-                    prompt_message=MessageCreate(role=MessageRole.USER, content=prompt)
-                ),
-            )
+            battle_round = battle_api.create_battle_round(battle_id, prompt_message)
             if battle_round and battle_round.id:
                 logger.info(f"✅ Battle round created: {battle_round.id}")
                 return battle_round.id
+            logger.warning(f"❌ Failed to create battle round for battle {battle_id}.")
+            return None
     except Exception as e:
         logger.warning(f"❌ Failed to create battle round for battle {battle_id}: {e}")
-    return None
+        return None
 
 
 def create_battle_evaluation(
     battle_id: UUID,
     outcome: BattleEvaluationOutcome,
+    cookies: dict[str, str] | None = None,
 ) -> UUID | None:
     """Create a battleevaluation record for the battle.
 
@@ -156,14 +174,13 @@ def create_battle_evaluation(
         logger.warning("⚠️ No battle_id to evaluate")
         return None
 
+    evaluation_request = BattleEvaluationCreateRequest(
+        outcome=outcome,
+    )
+
     try:
-        api_base_url = _get_api_base_url()
-        configuration = Configuration(host=api_base_url)
-        with ApiClient(configuration) as api_client:
+        with create_authenticated_api_client(cookies) as api_client:
             battle_api = BattleApi(api_client)
-            evaluation_request = BattleEvaluationCreateRequest(
-                outcome=outcome,
-            )
             evaluation = battle_api.create_battle_evaluation(
                 battle_id, evaluation_request
             )
@@ -172,10 +189,11 @@ def create_battle_evaluation(
                     f"✅ Evaluation created: {evaluation.id} for battle {battle_id}"
                 )
                 return evaluation.id
+            logger.warning(f"❌ Failed to create evaluation for battle {battle_id}.")
+            return None
     except Exception as e:
         logger.warning(f"❌ Failed to create evaluation for battle {battle_id}: {e}")
-
-    return None
+        return None
 
 
 def load_demo_side_by_side_anony(models_, _):
@@ -192,17 +210,18 @@ def load_demo_side_by_side_anony(models_, _):
 
 
 def vote_last_response(
-    states, battle_session: BattleSession, outcome, model_selectors, _: gr.Request
+    states, battle_session: BattleSession, outcome, model_selectors, request: gr.Request
 ):
     # Create evaluation record and end the battle
+    cookies = _ensure_battle_cookies(battle_session, request)
+
     if battle_session.battle_id:
-        # Identity leak validation currently disabled since we no longer tag evaluations
-        # is_valid, validation_error = validate_responses(states)
         create_battle_evaluation(
             battle_session.battle_id,
             outcome,
+            cookies,
         )
-        end_battle(battle_session.battle_id)
+        end_battle(battle_session.battle_id, cookies)
         battle_session.reset()
 
     if ":" not in model_selectors[0]:
@@ -298,9 +317,11 @@ def clear_history(
     """Clear battle history and end the active battle."""
     logger.info("clear_history (anony).")
 
+    cookies = _ensure_battle_cookies(battle_session, request)
+
     # End the active battle if one exists
     if battle_session.battle_id:
-        end_battle(battle_session.battle_id)
+        end_battle(battle_session.battle_id, cookies)
 
     battle_session.reset()
 
@@ -342,6 +363,8 @@ def add_text(
 ):
     logger.info(f"add_text (anony). len: {len(text)}")
     states = [state0, state1]
+
+    cookies = _ensure_battle_cookies(battle_session, request)
 
     # Init states if necessary
     if states[0] is None:
@@ -415,14 +438,14 @@ def add_text(
         model2 = states[1].model_name
         # Use first 50 characters of prompt as battle title
         battle_title = text[:50] + "..." if len(text) > 50 else text
-        battle_id = create_battle(model1, model2, battle_title)
+        battle_id = create_battle(model1, model2, battle_title, cookies)
         if battle_id:
             battle_session.battle_id = battle_id
     battle_id = battle_session.battle_id
 
     round_id = None
     if battle_id:
-        round_id = create_battle_round(battle_id, text)
+        round_id = create_battle_round(battle_id, text, cookies)
 
     for i in range(num_sides):
         states[i].conv.append_message(states[i].conv.roles[0], text)

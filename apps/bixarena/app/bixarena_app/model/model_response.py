@@ -17,8 +17,8 @@ from bixarena_api_client import (
 )
 from bixarena_api_client.exceptions import ApiException
 
+from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.config.constants import MAX_RESPONSE_TOKENS
-from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
 from bixarena_app.model.model_adapter import get_conversation_template
@@ -74,6 +74,7 @@ class BattleSession:
     def __init__(self):
         self.battle_id: UUID | None = None
         self.round_id: UUID | None = None
+        self.auth_cookies: dict[str, str] | None = None
 
     def reset(self):
         self.battle_id = None
@@ -134,10 +135,11 @@ def _update_battle_round_with_responses(
     if not model1_message and not model2_message:
         battle_session.round_id = None
         return
+
+    cookies = battle_session.auth_cookies
+
     try:
-        api_base_url = _get_api_base_url()
-        configuration = Configuration(host=api_base_url)
-        with ApiClient(configuration) as api_client:
+        with create_authenticated_api_client(cookies) as api_client:
             battle_api = BattleApi(api_client)
             battle_api.update_battle_round(
                 battle_id,
@@ -147,9 +149,9 @@ def _update_battle_round_with_responses(
                     model2_message=model2_message,
                 ),
             )
-            logger.info(f"✅ Battle round updated: battle={battle_id} round={round_id}")
+            logger.info(f"✅ Battle round updated: round={round_id}")
     except Exception as e:
-        logger.warning(f"❌ Failed to update battle round {round_id}: {e}")
+        logger.warning(f"❌ Failed to update battle round: round={round_id} {e}")
     finally:
         battle_session.round_id = None
 

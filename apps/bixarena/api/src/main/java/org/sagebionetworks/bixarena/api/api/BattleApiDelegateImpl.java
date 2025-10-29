@@ -14,9 +14,9 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
 import org.sagebionetworks.bixarena.api.service.BattleService;
-import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,20 +41,21 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
-  @PreAuthorize("hasAuthority('SCOPE_read:battles')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<BattlePageDto> listBattles(BattleSearchQueryDto battleSearchQuery) {
     log.info("Listing battles with query: {}", battleSearchQuery);
     return ResponseEntity.ok(battleService.listBattles(battleSearchQuery));
   }
 
   @Override
-  @PreAuthorize("hasAuthority('SCOPE_read:battles')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<BattleDto> getBattle(UUID battleId) {
     log.info("Getting battle with ID: {}", battleId);
     return ResponseEntity.ok(battleService.getBattle(battleId));
   }
 
   @Override
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<BattleDto> createBattle(BattleCreateRequestDto battleCreateRequestDto) {
     // Get the authenticated user (SOURCE OF TRUTH from Spring Security)
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -71,6 +72,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<BattleEvaluationDto> createBattleEvaluation(
     UUID battleId,
     BattleEvaluationCreateRequestDto battleEvaluationCreateRequestDto
@@ -84,6 +86,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<BattleRoundDto> createBattleRound(
     UUID battleId,
     BattleRoundCreateRequestDto battleRoundCreateRequestDto
@@ -98,7 +101,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
-  // @PreAuthorize("hasAuthority('SCOPE_update:battles')") // Disabled for anonymous access
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<BattleDto> updateBattle(
     UUID battleId,
     BattleUpdateRequestDto battleUpdateRequestDto
@@ -112,6 +115,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<BattleRoundDto> updateBattleRound(
     UUID battleId,
     UUID roundId,
@@ -127,9 +131,8 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
-  @PreAuthorize("hasAuthority('SCOPE_delete:battles')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<Void> deleteBattle(UUID battleId) {
-    // Log the authenticated user for audit purposes
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     log.info("User {} is deleting battle: {}", authentication.getName(), battleId);
 
