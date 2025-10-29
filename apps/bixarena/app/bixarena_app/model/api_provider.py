@@ -7,6 +7,7 @@ import time
 
 import requests
 
+from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.utils import build_logger
 from bixarena_app.model.error_handler import handle_error_message
 
@@ -123,16 +124,29 @@ def openai_api_stream_iter(
         "top_p": top_p,
         "max_new_tokens": max_new_tokens,
     }
-    logger.info(f"==== request ====\n{gen_params}")
+
+    username = None
+    state = get_user_state()
+    current = state.get_current_user()
+    if current:
+        username = current.get("userName")
+
+    logger.info("==== request ====\n%s", gen_params)
 
     try:
-        res = client.chat.completions.create(
-            model=model_name,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_new_tokens,
-            stream=True,
-        )
+        create_kwargs = {
+            "model": model_name,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_new_tokens,
+            "stream": True,
+        }
+
+        if username:
+            create_kwargs["user"] = username
+
+        res = client.chat.completions.create(**create_kwargs)
+
         text = ""
         for chunk in res:
             if len(chunk.choices) > 0:
