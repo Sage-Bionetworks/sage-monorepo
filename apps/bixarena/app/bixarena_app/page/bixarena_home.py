@@ -62,14 +62,13 @@ def fetch_user_stats(request: gr.Request) -> int | None:
             return None
 
         # Get session cookie
-        jsessionid = get_session_cookie(request)
-        if not jsessionid:
+        cookies = get_session_cookie(request)
+        if not cookies:
             logger.debug("No JSESSIONID cookie")
             return None
 
         # Call API gateway with session cookie
         # The gateway will validate the session and mint a JWT for the API service
-        cookies = {"JSESSIONID": jsessionid}
         with create_authenticated_api_client(cookies) as client:
             api = UserApi(client)
             user_stats = api.get_user_stats()

@@ -17,8 +17,9 @@ from bixarena_api_client import (
 )
 from bixarena_api_client.exceptions import ApiException
 
+from bixarena_app.api.api_client_helper import create_authenticated_api_client
+from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import MAX_RESPONSE_TOKENS
-from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
 from bixarena_app.model.model_adapter import get_conversation_template
@@ -110,7 +111,10 @@ def validate_responses(states: list) -> tuple[bool, str | None]:
 
 
 def _update_battle_round_with_responses(
-    state1: State, state2: State, battle_session: BattleSession
+    state1: State,
+    state2: State,
+    battle_session: BattleSession,
+    cookies: dict[str, str] | None,
 ) -> None:
     """Persist both LLM responses to the current battle round."""
     battle_id = battle_session.battle_id
@@ -134,10 +138,9 @@ def _update_battle_round_with_responses(
     if not model1_message and not model2_message:
         battle_session.round_id = None
         return
+
     try:
-        api_base_url = _get_api_base_url()
-        configuration = Configuration(host=api_base_url)
-        with ApiClient(configuration) as api_client:
+        with create_authenticated_api_client(cookies) as api_client:
             battle_api = BattleApi(api_client)
             battle_api.update_battle_round(
                 battle_id,
@@ -147,9 +150,9 @@ def _update_battle_round_with_responses(
                     model2_message=model2_message,
                 ),
             )
-            logger.info(f"✅ Battle round updated: battle={battle_id} round={round_id}")
+            logger.info(f"✅ Battle round updated: round={round_id}")
     except Exception as e:
-        logger.warning(f"❌ Failed to update battle round {round_id}: {e}")
+        logger.warning(f"❌ Failed to update battle round: round={round_id} {e}")
     finally:
         battle_session.round_id = None
 
@@ -334,6 +337,7 @@ def bot_response_multi(
     temperature=0.7,
     top_p=1.0,
     max_new_tokens=MAX_RESPONSE_TOKENS,
+    request: gr.Request | None = None,
 ):
     num_sides = 2
     if state0 is None or state0.skip_next:
@@ -381,7 +385,8 @@ def bot_response_multi(
         if stop:
             break
 
-    _update_battle_round_with_responses(states[0], states[1], battle_session)
+    cookies = get_session_cookie(request) if request else None
+    _update_battle_round_with_responses(states[0], states[1], battle_session, cookies)
 
     # At least one model had an error -> keep voting buttons disabled
     if any(state.has_error for state in states):

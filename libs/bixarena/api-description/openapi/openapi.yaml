@@ -63,7 +63,6 @@ paths:
         - jwtBearer: []
   /battles:
     get:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: List battles
@@ -87,7 +86,6 @@ paths:
       security:
         - jwtBearer: []
     post:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Create a battle
@@ -124,7 +122,6 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     get:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Get a battle by ID
@@ -146,7 +143,6 @@ paths:
       security:
         - jwtBearer: []
     patch:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Update a battle
@@ -178,7 +174,6 @@ paths:
       security:
         - jwtBearer: []
     delete:
-      x-anonymous-access: true
       tags:
         - Battle
       summary: Delete a battle

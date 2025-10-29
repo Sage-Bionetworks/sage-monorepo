@@ -10,83 +10,82 @@ info:
   title: BixArena API Service
   version: 1.0.0
 servers:
-- url: http://localhost/v1
+  - url: http://localhost/v1
 security:
-- jwtBearer: []
+  - jwtBearer: []
 tags:
-- description: Administrative endpoints requiring elevated roles.
-  name: Admin
-- description: Operations about battles between AI models.
-  name: Battle
-- description: Operations about example prompts for biomedical relevance detection.
-  name: Example Prompt
-- description: Operations about leaderboards.
-  name: Leaderboard
-- description: Operations about models.
-  name: Model
-- description: Public statistics about the platform.
-  name: Stats
-- description: Operations about the authenticated user.
-  name: User
+  - description: Administrative endpoints requiring elevated roles.
+    name: Admin
+  - description: Operations about battles between AI models.
+    name: Battle
+  - description: Operations about example prompts for biomedical relevance detection.
+    name: Example Prompt
+  - description: Operations about leaderboards.
+    name: Leaderboard
+  - description: Operations about models.
+    name: Model
+  - description: Public statistics about the platform.
+    name: Stats
+  - description: Operations about the authenticated user.
+    name: User
 paths:
   /admin/stats:
     get:
       description: Administrative operations requiring admin role.
       operationId: adminStats
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/adminStats_200_response"
+                $ref: '#/components/schemas/adminStats_200_response'
           description: Success
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
       summary: Admin statistics
       tags:
-      - Admin
+        - Admin
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Admin
+        - tag: Admin
   /battles:
     get:
       description: List battles with optional filtering and pagination
       operationId: listBattles
       parameters:
-      - description: The search query used to find and filter battles.
-        explode: true
-        in: query
-        name: battleSearchQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/BattleSearchQuery"
-        style: deepObject
+        - description: The search query used to find and filter battles.
+          explode: true
+          in: query
+          name: battleSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/BattleSearchQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BattlePage"
+                $ref: '#/components/schemas/BattlePage'
           description: Success
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: List battles
       tags:
-      - Battle
-      x-anonymous-access: true
+        - Battle
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Battle
+        - tag: Battle
     post:
       description: Create a new battle between two AI models.
       operationId: createBattle
@@ -94,523 +93,519 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BattleCreateRequest"
+              $ref: '#/components/schemas/BattleCreateRequest'
         required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Battle"
+                $ref: '#/components/schemas/Battle'
           description: Battle created successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "409":
-          $ref: "#/components/responses/Conflict"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Create a battle
       tags:
-      - Battle
-      x-anonymous-access: true
+        - Battle
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Battle
+        - tag: Battle
   /battles/{battleId}:
     delete:
       description: Delete a battle by its unique identifier
       operationId: deleteBattle
       parameters:
-      - description: The unique identifier of the battle
-        explode: false
-        in: path
-        name: battleId
-        required: true
-        schema:
-          $ref: "#/components/schemas/BattleId"
-        style: simple
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
       responses:
-        "204":
+        '204':
           description: Battle deleted successfully
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Delete a battle
       tags:
-      - Battle
-      x-anonymous-access: true
+        - Battle
       x-accepts:
-      - application/problem+json
+        - application/problem+json
       x-tags:
-      - tag: Battle
+        - tag: Battle
     get:
       description: Returns a single battle by its unique identifier
       operationId: getBattle
       parameters:
-      - description: The unique identifier of the battle
-        explode: false
-        in: path
-        name: battleId
-        required: true
-        schema:
-          $ref: "#/components/schemas/BattleId"
-        style: simple
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Battle"
+                $ref: '#/components/schemas/Battle'
           description: Success
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get a battle by ID
       tags:
-      - Battle
-      x-anonymous-access: true
+        - Battle
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Battle
+        - tag: Battle
     patch:
       description: Update a battle's end time or other properties
       operationId: updateBattle
       parameters:
-      - description: The unique identifier of the battle
-        explode: false
-        in: path
-        name: battleId
-        required: true
-        schema:
-          $ref: "#/components/schemas/BattleId"
-        style: simple
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BattleUpdateRequest"
+              $ref: '#/components/schemas/BattleUpdateRequest'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Battle"
+                $ref: '#/components/schemas/Battle'
           description: Battle updated successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Update a battle
       tags:
-      - Battle
-      x-anonymous-access: true
+        - Battle
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Battle
+        - tag: Battle
   /battles/{battleId}/rounds:
     post:
       description: Create a new round for a given battle.
       operationId: createBattleRound
       parameters:
-      - description: The unique identifier of the battle
-        explode: false
-        in: path
-        name: battleId
-        required: true
-        schema:
-          $ref: "#/components/schemas/BattleId"
-        style: simple
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BattleRoundCreateRequest"
+              $ref: '#/components/schemas/BattleRoundCreateRequest'
         required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BattleRound"
+                $ref: '#/components/schemas/BattleRound'
           description: Battle round created successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Create a battle round
       tags:
-      - Battle
+        - Battle
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Battle
+        - tag: Battle
   /battles/{battleId}/rounds/{roundId}:
     patch:
       description: Update an existing battle round.
       operationId: updateBattleRound
       parameters:
-      - description: The unique identifier of the battle
-        explode: false
-        in: path
-        name: battleId
-        required: true
-        schema:
-          $ref: "#/components/schemas/BattleId"
-        style: simple
-      - description: The unique identifier of the battle round
-        explode: false
-        in: path
-        name: roundId
-        required: true
-        schema:
-          $ref: "#/components/schemas/BattleRoundId"
-        style: simple
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+        - description: The unique identifier of the battle round
+          explode: false
+          in: path
+          name: roundId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleRoundId'
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BattleRoundUpdateRequest"
+              $ref: '#/components/schemas/BattleRoundUpdateRequest'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BattleRound"
+                $ref: '#/components/schemas/BattleRound'
           description: Battle round updated successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Update a battle round
       tags:
-      - Battle
+        - Battle
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Battle
+        - tag: Battle
   /example-prompts:
     get:
       description: Get a list of example prompts with comprehensive filtering options
       operationId: listExamplePrompts
       parameters:
-      - description: The search query used to find and filter example prompts.
-        explode: true
-        in: query
-        name: examplePromptSearchQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/ExamplePromptSearchQuery"
-        style: deepObject
+        - description: The search query used to find and filter example prompts.
+          explode: true
+          in: query
+          name: examplePromptSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ExamplePromptSearchQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ExamplePromptPage"
+                $ref: '#/components/schemas/ExamplePromptPage'
           description: Success
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: List example prompts
       tags:
-      - Example Prompt
+        - Example Prompt
       x-anonymous-access: true
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Example Prompt
+        - tag: Example Prompt
   /leaderboards:
     get:
       description: Get a list of all available leaderboards with their metadata
       operationId: listLeaderboards
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LeaderboardList"
+                $ref: '#/components/schemas/LeaderboardList'
           description: Success
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: List all available leaderboards
       tags:
-      - Leaderboard
+        - Leaderboard
       x-anonymous-access: true
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Leaderboard
+        - tag: Leaderboard
   /leaderboards/{leaderboardId}:
     get:
       description: Get paginated leaderboard entries for a specific leaderboard
       operationId: getLeaderboard
       parameters:
-      - description: The unique identifier of a leaderboard
-        explode: false
-        in: path
-        name: leaderboardId
-        required: true
-        schema:
-          example: open-source
-          type: string
-        style: simple
-      - description: The search query used to find and filter leaderboard entries.
-        explode: true
-        in: query
-        name: leaderboardSearchQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/LeaderboardSearchQuery"
-        style: deepObject
+        - description: The unique identifier of a leaderboard
+          explode: false
+          in: path
+          name: leaderboardId
+          required: true
+          schema:
+            example: open-source
+            type: string
+          style: simple
+        - description: The search query used to find and filter leaderboard entries.
+          explode: true
+          in: query
+          name: leaderboardSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/LeaderboardSearchQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LeaderboardEntryPage"
+                $ref: '#/components/schemas/LeaderboardEntryPage'
           description: Success
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get leaderboard entries
       tags:
-      - Leaderboard
+        - Leaderboard
       x-anonymous-access: true
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Leaderboard
+        - tag: Leaderboard
   /leaderboards/{leaderboardId}/history/{modelId}:
     get:
       description: Get historical performance data for a specific model in a leaderboard
       operationId: getModelHistory
       parameters:
-      - description: The unique identifier of a leaderboard
-        explode: false
-        in: path
-        name: leaderboardId
-        required: true
-        schema:
-          example: open-source
-          type: string
-        style: simple
-      - description: The unique identifier of a model
-        explode: false
-        in: path
-        name: modelId
-        required: true
-        schema:
-          example: model_456
-          type: string
-        style: simple
-      - description: The query used to filter and paginate historical model performance
-          data.
-        explode: true
-        in: query
-        name: leaderboardModelHistoryQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/LeaderboardModelHistoryQuery"
-        style: deepObject
+        - description: The unique identifier of a leaderboard
+          explode: false
+          in: path
+          name: leaderboardId
+          required: true
+          schema:
+            example: open-source
+            type: string
+          style: simple
+        - description: The unique identifier of a model
+          explode: false
+          in: path
+          name: modelId
+          required: true
+          schema:
+            example: model_456
+            type: string
+          style: simple
+        - description: The query used to filter and paginate historical model performance
+            data.
+          explode: true
+          in: query
+          name: leaderboardModelHistoryQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/LeaderboardModelHistoryQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LeaderboardModelHistoryPage"
+                $ref: '#/components/schemas/LeaderboardModelHistoryPage'
           description: Success
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get model performance history
       tags:
-      - Leaderboard
+        - Leaderboard
       x-anonymous-access: true
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Leaderboard
+        - tag: Leaderboard
   /leaderboards/{leaderboardId}/snapshots:
     get:
       description: Get a paginated list of available snapshots for a leaderboard
       operationId: getLeaderboardSnapshots
       parameters:
-      - description: The unique identifier of a leaderboard
-        explode: false
-        in: path
-        name: leaderboardId
-        required: true
-        schema:
-          example: open-source
-          type: string
-        style: simple
-      - description: The query used to filter and paginate leaderboard snapshots.
-        explode: true
-        in: query
-        name: leaderboardSnapshotQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/LeaderboardSnapshotQuery"
-        style: deepObject
+        - description: The unique identifier of a leaderboard
+          explode: false
+          in: path
+          name: leaderboardId
+          required: true
+          schema:
+            example: open-source
+            type: string
+          style: simple
+        - description: The query used to filter and paginate leaderboard snapshots.
+          explode: true
+          in: query
+          name: leaderboardSnapshotQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/LeaderboardSnapshotQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LeaderboardSnapshotPage"
+                $ref: '#/components/schemas/LeaderboardSnapshotPage'
           description: Success
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get leaderboard snapshots
       tags:
-      - Leaderboard
+        - Leaderboard
       x-anonymous-access: true
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Leaderboard
+        - tag: Leaderboard
   /models:
     get:
-      description: "Get a paginated list of models with optional filters (e.g., active)"
+      description: 'Get a paginated list of models with optional filters (e.g., active)'
       operationId: listModels
       parameters:
-      - description: The search query used to find and filter models.
-        explode: true
-        in: query
-        name: modelSearchQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/ModelSearchQuery"
-        style: deepObject
+        - description: The search query used to find and filter models.
+          explode: true
+          in: query
+          name: modelSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ModelSearchQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ModelPage"
+                $ref: '#/components/schemas/ModelPage'
           description: Success
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: List models
       tags:
-      - Model
+        - Model
       x-anonymous-access: true
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Model
+        - tag: Model
   /battles/{battleId}/evaluations:
     post:
       description: Record the outcome of a battle.
       operationId: createBattleEvaluation
       parameters:
-      - description: The unique identifier of the battle
-        explode: false
-        in: path
-        name: battleId
-        required: true
-        schema:
-          $ref: "#/components/schemas/BattleId"
-        style: simple
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BattleEvaluationCreateRequest"
+              $ref: '#/components/schemas/BattleEvaluationCreateRequest'
         required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BattleEvaluation"
+                $ref: '#/components/schemas/BattleEvaluation'
           description: BattleEvaluation created successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Create a battle evaluation
       tags:
-      - Battle
+        - Battle
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Battle
+        - tag: Battle
   /stats:
     get:
       description: |
@@ -619,45 +614,45 @@ paths:
         for use on the home page to showcase platform activity.
       operationId: getPublicStats
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PublicStats"
+                $ref: '#/components/schemas/PublicStats'
           description: Public statistics retrieved successfully
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security: []
       summary: Get public platform statistics
       tags:
-      - Stats
+        - Stats
       x-anonymous-access: true
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Stats
+        - tag: Stats
   /users/me/stats:
     get:
       description: Returns statistics about the authenticated user's battle participation.
       operationId: getUserStats
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserStats"
+                $ref: '#/components/schemas/UserStats'
           description: User statistics retrieved successfully
-        "401":
-          $ref: "#/components/responses/Unauthorized"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
       summary: Get current user's statistics
       tags:
-      - User
+        - User
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: User
+        - tag: User
 components:
   parameters:
     battleSearchQuery:
@@ -667,7 +662,7 @@ components:
       name: battleSearchQuery
       required: false
       schema:
-        $ref: "#/components/schemas/BattleSearchQuery"
+        $ref: '#/components/schemas/BattleSearchQuery'
       style: deepObject
     battleId:
       description: The unique identifier of the battle
@@ -676,7 +671,7 @@ components:
       name: battleId
       required: true
       schema:
-        $ref: "#/components/schemas/BattleId"
+        $ref: '#/components/schemas/BattleId'
       style: simple
     roundId:
       description: The unique identifier of the battle round
@@ -685,7 +680,7 @@ components:
       name: roundId
       required: true
       schema:
-        $ref: "#/components/schemas/BattleRoundId"
+        $ref: '#/components/schemas/BattleRoundId'
       style: simple
     examplePromptSearchQuery:
       description: The search query used to find and filter example prompts.
@@ -694,7 +689,7 @@ components:
       name: examplePromptSearchQuery
       required: false
       schema:
-        $ref: "#/components/schemas/ExamplePromptSearchQuery"
+        $ref: '#/components/schemas/ExamplePromptSearchQuery'
       style: deepObject
     leaderboardId:
       description: The unique identifier of a leaderboard
@@ -713,7 +708,7 @@ components:
       name: leaderboardSearchQuery
       required: false
       schema:
-        $ref: "#/components/schemas/LeaderboardSearchQuery"
+        $ref: '#/components/schemas/LeaderboardSearchQuery'
       style: deepObject
     modelId:
       description: The unique identifier of a model
@@ -733,7 +728,7 @@ components:
       name: leaderboardModelHistoryQuery
       required: false
       schema:
-        $ref: "#/components/schemas/LeaderboardModelHistoryQuery"
+        $ref: '#/components/schemas/LeaderboardModelHistoryQuery'
       style: deepObject
     leaderboardSnapshotQuery:
       description: The query used to filter and paginate leaderboard snapshots.
@@ -742,7 +737,7 @@ components:
       name: leaderboardSnapshotQuery
       required: false
       schema:
-        $ref: "#/components/schemas/LeaderboardSnapshotQuery"
+        $ref: '#/components/schemas/LeaderboardSnapshotQuery'
       style: deepObject
     modelSearchQuery:
       description: The search query used to find and filter models.
@@ -751,44 +746,44 @@ components:
       name: modelSearchQuery
       required: false
       schema:
-        $ref: "#/components/schemas/ModelSearchQuery"
+        $ref: '#/components/schemas/ModelSearchQuery'
       style: deepObject
   responses:
     Unauthorized:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: Unauthorized
     Forbidden:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The user does not have the permission to perform this action
     BadRequest:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: Invalid request
     InternalServerError:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
     NotFound:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
     Conflict:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The request conflicts with current state of the target resource
   schemas:
     BasicError:
@@ -812,22 +807,22 @@ components:
             the problem
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       type: object
     BattleSort:
       default: created_at
       description: What to sort battles by.
       enum:
-      - created_at
+        - created_at
       example: created_at
       type: string
     SortDirection:
       default: asc
       description: The direction to sort results.
       enum:
-      - asc
-      - desc
+        - asc
+        - desc
       example: desc
       type: string
     BattleSearchQuery:
@@ -848,9 +843,9 @@ components:
           minimum: 1
           type: integer
         sort:
-          $ref: "#/components/schemas/BattleSort"
+          $ref: '#/components/schemas/BattleSort'
         direction:
-          $ref: "#/components/schemas/SortDirection"
+          $ref: '#/components/schemas/SortDirection'
         userId:
           description: Filter by user ID.
           example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
@@ -858,10 +853,10 @@ components:
           nullable: true
           type: string
       required:
-      - direction
-      - pageNumber
-      - pageSize
-      - sort
+        - direction
+        - pageNumber
+        - pageSize
+        - sort
       type: object
     BattleId:
       description: Unique identifier (UUID) of the battle.
@@ -938,11 +933,11 @@ components:
           format: date-time
           type: string
       required:
-      - createdAt
-      - id
-      - model1Id
-      - model2Id
-      - userId
+        - createdAt
+        - id
+        - model1Id
+        - model2Id
+        - userId
       type: object
     PageMetadata:
       description: The metadata of a page.
@@ -983,31 +978,31 @@ components:
           example: true
           type: boolean
       required:
-      - hasNext
-      - hasPrevious
-      - number
-      - size
-      - totalElements
-      - totalPages
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
       type: object
     BattlePage:
       description: A page of battles.
       example:
         battles:
-        - createdAt: 2024-01-15T10:30:00Z
-          endedAt: 2024-01-15T11:45:00Z
-          model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-          id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-          title: Gene Expression Analysis Comparison
-          userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-          model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-        - createdAt: 2024-01-15T10:30:00Z
-          endedAt: 2024-01-15T11:45:00Z
-          model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-          id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-          title: Gene Expression Analysis Comparison
-          userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-          model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          - createdAt: 2024-01-15T10:30:00Z
+            endedAt: 2024-01-15T11:45:00Z
+            model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+            id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            title: Gene Expression Analysis Comparison
+            userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+            model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          - createdAt: 2024-01-15T10:30:00Z
+            endedAt: 2024-01-15T11:45:00Z
+            model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+            id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            title: Gene Expression Analysis Comparison
+            userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+            model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         page:
           number: 99
           size: 99
@@ -1019,13 +1014,13 @@ components:
         battles:
           description: List of battles in this page.
           items:
-            $ref: "#/components/schemas/Battle"
+            $ref: '#/components/schemas/Battle'
           type: array
         page:
-          $ref: "#/components/schemas/PageMetadata"
+          $ref: '#/components/schemas/PageMetadata'
       required:
-      - battles
-      - page
+        - battles
+        - page
       type: object
     BattleCreateRequest:
       description: The information used to create a new battle.
@@ -1045,8 +1040,8 @@ components:
           format: uuid
           type: string
       required:
-      - model1Id
-      - model2Id
+        - model1Id
+        - model2Id
       type: object
     BattleUpdateRequest:
       description: The information used to update a battle.
@@ -1064,9 +1059,9 @@ components:
     MessageRole:
       description: The role of a message.
       enum:
-      - system
-      - user
-      - assistant
+        - system
+        - user
+        - assistant
       example: user
       maxLength: 20
       type: string
@@ -1079,23 +1074,23 @@ components:
       description: Payload used to create a message.
       properties:
         role:
-          $ref: "#/components/schemas/MessageRole"
+          $ref: '#/components/schemas/MessageRole'
         content:
           description: The content of a message.
           example: What is the capital of France?
           maxLength: 5000
           type: string
       required:
-      - content
-      - role
+        - content
+        - role
       type: object
     BattleRoundCreateRequest:
       description: Payload to create a new battle round with the user prompt.
       properties:
         promptMessage:
-          $ref: "#/components/schemas/MessageCreate"
+          $ref: '#/components/schemas/MessageCreate'
       required:
-      - promptMessage
+        - promptMessage
       type: object
     BattleRoundId:
       description: Unique identifier (UUID) of the battle round.
@@ -1170,37 +1165,37 @@ components:
           format: date-time
           type: string
       required:
-      - battleId
-      - createdAt
-      - id
-      - roundNumber
-      - updatedAt
+        - battleId
+        - createdAt
+        - id
+        - roundNumber
+        - updatedAt
       type: object
     BattleRoundUpdateRequest:
       description: Payload to update model responses for an existing battle round.
       properties:
         model1Message:
-          $ref: "#/components/schemas/MessageCreate"
+          $ref: '#/components/schemas/MessageCreate'
         model2Message:
-          $ref: "#/components/schemas/MessageCreate"
+          $ref: '#/components/schemas/MessageCreate'
       required:
-      - model1Message
-      - model2Message
+        - model1Message
+        - model2Message
       type: object
     ExamplePromptSort:
       default: created_at
       description: The field to sort example prompts by.
       enum:
-      - created_at
-      - random
+        - created_at
+        - random
       example: random
       type: string
     ExamplePromptSource:
       description: The source dataset or origin of the example prompt.
       enum:
-      - pubmedqa
-      - bixbench
-      - bixarena
+        - pubmedqa
+        - bixbench
+        - bixarena
       example: pubmedqa
       type: string
     ExamplePromptSearchQuery:
@@ -1222,11 +1217,11 @@ components:
           minimum: 1
           type: integer
         sort:
-          $ref: "#/components/schemas/ExamplePromptSort"
+          $ref: '#/components/schemas/ExamplePromptSort'
         direction:
-          $ref: "#/components/schemas/SortDirection"
+          $ref: '#/components/schemas/SortDirection'
         source:
-          $ref: "#/components/schemas/ExamplePromptSource"
+          $ref: '#/components/schemas/ExamplePromptSource'
         active:
           description: Filter by active status (true returns only active prompts;
             false only inactive; omit for all).
@@ -1259,7 +1254,7 @@ components:
           minLength: 1
           type: string
         source:
-          $ref: "#/components/schemas/ExamplePromptSource"
+          $ref: '#/components/schemas/ExamplePromptSource'
         active:
           description: Whether this example prompt is currently active/visible for
             use.
@@ -1271,24 +1266,24 @@ components:
           format: date-time
           type: string
       required:
-      - active
-      - createdAt
-      - id
-      - question
-      - source
+        - active
+        - createdAt
+        - id
+        - question
+        - source
       type: object
     ExamplePromptPage:
       allOf:
-      - $ref: "#/components/schemas/PageMetadata"
-      - properties:
-          examplePrompts:
-            description: A list of example prompts.
-            items:
-              $ref: "#/components/schemas/ExamplePrompt"
-            type: array
-        required:
-        - examplePrompts
-        type: object
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            examplePrompts:
+              description: A list of example prompts.
+              items:
+                $ref: '#/components/schemas/ExamplePrompt'
+              type: array
+          required:
+            - examplePrompts
+          type: object
       description: A page of example prompts.
       example:
         number: 99
@@ -1296,33 +1291,33 @@ components:
         totalPages: 99
         hasPrevious: true
         examplePrompts:
-        - createdAt: 2025-08-01T09:00:00Z
-          question: What are the main symptoms of Type 2 diabetes?
-          active: true
-          id: 123e4567-e89b-12d3-a456-426614174000
-          source: pubmedqa
-        - createdAt: 2025-08-01T09:00:00Z
-          question: What are the main symptoms of Type 2 diabetes?
-          active: true
-          id: 123e4567-e89b-12d3-a456-426614174000
-          source: pubmedqa
+          - createdAt: 2025-08-01T09:00:00Z
+            question: What are the main symptoms of Type 2 diabetes?
+            active: true
+            id: 123e4567-e89b-12d3-a456-426614174000
+            source: pubmedqa
+          - createdAt: 2025-08-01T09:00:00Z
+            question: What are the main symptoms of Type 2 diabetes?
+            active: true
+            id: 123e4567-e89b-12d3-a456-426614174000
+            source: pubmedqa
         hasNext: true
         totalElements: 99
       type: object
     LeaderboardList:
       description: A list of leaderboards.
       items:
-        $ref: "#/components/schemas/LeaderboardList_inner"
+        $ref: '#/components/schemas/LeaderboardList_inner'
       type: array
     LeaderboardSort:
       default: rank
       description: The field to sort leaderboard entries by.
       enum:
-      - rank
-      - bt_score
-      - vote_count
-      - created_at
-      - model_name
+        - rank
+        - bt_score
+        - vote_count
+        - created_at
+        - model_name
       example: bt_score
       type: string
     LeaderboardSearchQuery:
@@ -1344,9 +1339,9 @@ components:
           minimum: 1
           type: integer
         sort:
-          $ref: "#/components/schemas/LeaderboardSort"
+          $ref: '#/components/schemas/LeaderboardSort'
         direction:
-          $ref: "#/components/schemas/SortDirection"
+          $ref: '#/components/schemas/SortDirection'
         search:
           description: Search by model name (case-insensitive partial match).
           example: gpt
@@ -1405,58 +1400,58 @@ components:
           format: date-time
           type: string
       required:
-      - btScore
-      - createdAt
-      - id
-      - license
-      - modelId
-      - modelName
-      - rank
-      - voteCount
+        - btScore
+        - createdAt
+        - id
+        - license
+        - modelId
+        - modelName
+        - rank
+        - voteCount
       type: object
     LeaderboardEntryPage:
       allOf:
-      - $ref: "#/components/schemas/PageMetadata"
-      - properties:
-          updatedAt:
-            description: When this leaderboard was last updated
-            example: 2025-08-16T14:30:00Z
-            format: date-time
-            type: string
-          snapshotId:
-            description: Identifier for this snapshot/timepoint
-            example: snapshot_2025-08-16_14-30
-            type: string
-          entries:
-            description: A list of leaderboard entries.
-            items:
-              $ref: "#/components/schemas/LeaderboardEntry"
-            type: array
-        required:
-        - entries
-        - snapshotId
-        - updatedAt
-        type: object
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            updatedAt:
+              description: When this leaderboard was last updated
+              example: 2025-08-16T14:30:00Z
+              format: date-time
+              type: string
+            snapshotId:
+              description: Identifier for this snapshot/timepoint
+              example: snapshot_2025-08-16_14-30
+              type: string
+            entries:
+              description: A list of leaderboard entries.
+              items:
+                $ref: '#/components/schemas/LeaderboardEntry'
+              type: array
+          required:
+            - entries
+            - snapshotId
+            - updatedAt
+          type: object
       description: A page of leaderboard entries.
       example:
         number: 99
         entries:
-        - modelName: GPT-4o
-          license: MIT
-          createdAt: 2025-08-16T10:30:00Z
-          modelId: model_456
-          btScore: 0.925
-          rank: 1
-          id: entry_123
-          voteCount: 1250
-        - modelName: GPT-4o
-          license: MIT
-          createdAt: 2025-08-16T10:30:00Z
-          modelId: model_456
-          btScore: 0.925
-          rank: 1
-          id: entry_123
-          voteCount: 1250
+          - modelName: GPT-4o
+            license: MIT
+            createdAt: 2025-08-16T10:30:00Z
+            modelId: model_456
+            btScore: 0.925
+            rank: 1
+            id: entry_123
+            voteCount: 1250
+          - modelName: GPT-4o
+            license: MIT
+            createdAt: 2025-08-16T10:30:00Z
+            modelId: model_456
+            btScore: 0.925
+            rank: 1
+            id: entry_123
+            voteCount: 1250
         snapshotId: snapshot_2025-08-16_14-30
         size: 99
         totalPages: 99
@@ -1469,9 +1464,9 @@ components:
       default: created_at
       description: The field to sort historical entries by.
       enum:
-      - created_at
-      - bt_score
-      - rank
+        - created_at
+        - bt_score
+        - rank
       example: created_at
       type: string
     LeaderboardModelHistoryQuery:
@@ -1493,9 +1488,9 @@ components:
           minimum: 1
           type: integer
         sort:
-          $ref: "#/components/schemas/LeaderboardHistorySort"
+          $ref: '#/components/schemas/LeaderboardHistorySort'
         direction:
-          $ref: "#/components/schemas/SortDirection"
+          $ref: '#/components/schemas/SortDirection'
         fromDate:
           description: Include only entries created on or after this date.
           example: 2025-08-01
@@ -1542,34 +1537,34 @@ components:
           format: date-time
           type: string
       required:
-      - btScore
-      - createdAt
-      - rank
-      - snapshotId
-      - voteCount
+        - btScore
+        - createdAt
+        - rank
+        - snapshotId
+        - voteCount
       type: object
     LeaderboardModelHistoryPage:
       allOf:
-      - $ref: "#/components/schemas/PageMetadata"
-      - properties:
-          modelId:
-            description: Identifier for the model
-            example: model_456
-            type: string
-          modelName:
-            description: Display name of the model
-            example: GPT-4o
-            type: string
-          history:
-            description: A list of historical leaderboard entries.
-            items:
-              $ref: "#/components/schemas/HistoricalLeaderboardEntry"
-            type: array
-        required:
-        - history
-        - modelId
-        - modelName
-        type: object
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            modelId:
+              description: Identifier for the model
+              example: model_456
+              type: string
+            modelName:
+              description: Display name of the model
+              example: GPT-4o
+              type: string
+            history:
+              description: A list of historical leaderboard entries.
+              items:
+                $ref: '#/components/schemas/HistoricalLeaderboardEntry'
+              type: array
+          required:
+            - history
+            - modelId
+            - modelName
+          type: object
       description: A page of historical leaderboard entries for a specific model.
       example:
         number: 99
@@ -1580,23 +1575,23 @@ components:
         hasPrevious: true
         hasNext: true
         history:
-        - createdAt: 2025-08-15T10:00:00Z
-          snapshotId: snapshot_2025-08-15_10-00
-          btScore: 0.915
-          rank: 2
-          voteCount: 1180
-        - createdAt: 2025-08-15T10:00:00Z
-          snapshotId: snapshot_2025-08-15_10-00
-          btScore: 0.915
-          rank: 2
-          voteCount: 1180
+          - createdAt: 2025-08-15T10:00:00Z
+            snapshotId: snapshot_2025-08-15_10-00
+            btScore: 0.915
+            rank: 2
+            voteCount: 1180
+          - createdAt: 2025-08-15T10:00:00Z
+            snapshotId: snapshot_2025-08-15_10-00
+            btScore: 0.915
+            rank: 2
+            voteCount: 1180
         totalElements: 99
       type: object
     LeaderboardSnapshotSort:
       default: created_at
       description: The field to sort snapshots by.
       enum:
-      - created_at
+        - created_at
       example: created_at
       type: string
     LeaderboardSnapshotQuery:
@@ -1618,9 +1613,9 @@ components:
           minimum: 1
           type: integer
         sort:
-          $ref: "#/components/schemas/LeaderboardSnapshotSort"
+          $ref: '#/components/schemas/LeaderboardSnapshotSort'
         direction:
-          $ref: "#/components/schemas/SortDirection"
+          $ref: '#/components/schemas/SortDirection'
       type: object
     LeaderboardSnapshot:
       description: A snapshot representing the state of a leaderboard at a specific
@@ -1650,33 +1645,33 @@ components:
           nullable: true
           type: string
       required:
-      - createdAt
-      - entryCount
-      - id
+        - createdAt
+        - entryCount
+        - id
       type: object
     LeaderboardSnapshotPage:
       allOf:
-      - $ref: "#/components/schemas/PageMetadata"
-      - properties:
-          snapshots:
-            description: A list of leaderboard snapshots.
-            items:
-              $ref: "#/components/schemas/LeaderboardSnapshot"
-            type: array
-        required:
-        - snapshots
-        type: object
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            snapshots:
+              description: A list of leaderboard snapshots.
+              items:
+                $ref: '#/components/schemas/LeaderboardSnapshot'
+              type: array
+          required:
+            - snapshots
+          type: object
       description: A page of leaderboard snapshots.
       example:
         snapshots:
-        - createdAt: 2025-08-16T14:30:00Z
-          entryCount: 50
-          description: Weekly evaluation run
-          id: snapshot_2025-08-16_14-30
-        - createdAt: 2025-08-16T14:30:00Z
-          entryCount: 50
-          description: Weekly evaluation run
-          id: snapshot_2025-08-16_14-30
+          - createdAt: 2025-08-16T14:30:00Z
+            entryCount: 50
+            description: Weekly evaluation run
+            id: snapshot_2025-08-16_14-30
+          - createdAt: 2025-08-16T14:30:00Z
+            entryCount: 50
+            description: Weekly evaluation run
+            id: snapshot_2025-08-16_14-30
         number: 99
         size: 99
         totalPages: 99
@@ -1688,19 +1683,19 @@ components:
       default: name
       description: The field to sort models by.
       enum:
-      - name
-      - created_at
-      - updated_at
-      - slug
-      - license
-      - active
+        - name
+        - created_at
+        - updated_at
+        - slug
+        - license
+        - active
       example: created_at
       type: string
     License:
       description: The license of the model
       enum:
-      - open-source
-      - commercial
+        - open-source
+        - commercial
       example: open-source
       type: string
     ModelSearchQuery:
@@ -1722,9 +1717,9 @@ components:
           minimum: 1
           type: integer
         sort:
-          $ref: "#/components/schemas/ModelSort"
+          $ref: '#/components/schemas/ModelSort'
         direction:
-          $ref: "#/components/schemas/SortDirection"
+          $ref: '#/components/schemas/SortDirection'
         search:
           description: Search by model name or slug (case-insensitive partial match).
           example: vision
@@ -1737,7 +1732,7 @@ components:
           nullable: true
           type: boolean
         license:
-          $ref: "#/components/schemas/License"
+          $ref: '#/components/schemas/License'
         organization:
           description: Filter by organization name (case-insensitive partial match).
           example: OpenAI
@@ -1784,7 +1779,7 @@ components:
           nullable: true
           type: string
         license:
-          $ref: "#/components/schemas/License"
+          $ref: '#/components/schemas/License'
         active:
           description: Whether the model is active/visible.
           example: true
@@ -1819,59 +1814,59 @@ components:
           format: date-time
           type: string
       required:
-      - active
-      - apiBase
-      - apiModelName
-      - createdAt
-      - externalLink
-      - id
-      - license
-      - name
-      - slug
-      - updatedAt
+        - active
+        - apiBase
+        - apiModelName
+        - createdAt
+        - externalLink
+        - id
+        - license
+        - name
+        - slug
+        - updatedAt
       type: object
     ModelPage:
       allOf:
-      - $ref: "#/components/schemas/PageMetadata"
-      - properties:
-          models:
-            description: A list of models.
-            items:
-              $ref: "#/components/schemas/Model"
-            type: array
-        required:
-        - models
-        type: object
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            models:
+              description: A list of models.
+              items:
+                $ref: '#/components/schemas/Model'
+              type: array
+          required:
+            - models
+          type: object
       description: A page of models.
       example:
         number: 99
         models:
-        - externalLink: https://openrouter.ai/models/openai/gpt-4
-          active: true
-          description: A large multimodal model that can process text and images.
-          apiBase: https://openrouter.ai/api/v1
-          apiModelName: anthropic/claude-sonnet-4.5
-          license: open-source
-          createdAt: 2025-09-15T12:00:00Z
-          organization: OpenAI
-          name: My Awesome Model
-          alias: awesome-model-v2
-          id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-          slug: my-awesome-model
-          updatedAt: 2025-09-20T08:30:00Z
-        - externalLink: https://openrouter.ai/models/openai/gpt-4
-          active: true
-          description: A large multimodal model that can process text and images.
-          apiBase: https://openrouter.ai/api/v1
-          apiModelName: anthropic/claude-sonnet-4.5
-          license: open-source
-          createdAt: 2025-09-15T12:00:00Z
-          organization: OpenAI
-          name: My Awesome Model
-          alias: awesome-model-v2
-          id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
-          slug: my-awesome-model
-          updatedAt: 2025-09-20T08:30:00Z
+          - externalLink: https://openrouter.ai/models/openai/gpt-4
+            active: true
+            description: A large multimodal model that can process text and images.
+            apiBase: https://openrouter.ai/api/v1
+            apiModelName: anthropic/claude-sonnet-4.5
+            license: open-source
+            createdAt: 2025-09-15T12:00:00Z
+            organization: OpenAI
+            name: My Awesome Model
+            alias: awesome-model-v2
+            id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            slug: my-awesome-model
+            updatedAt: 2025-09-20T08:30:00Z
+          - externalLink: https://openrouter.ai/models/openai/gpt-4
+            active: true
+            description: A large multimodal model that can process text and images.
+            apiBase: https://openrouter.ai/api/v1
+            apiModelName: anthropic/claude-sonnet-4.5
+            license: open-source
+            createdAt: 2025-09-15T12:00:00Z
+            organization: OpenAI
+            name: My Awesome Model
+            alias: awesome-model-v2
+            id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            slug: my-awesome-model
+            updatedAt: 2025-09-20T08:30:00Z
         size: 99
         totalPages: 99
         hasPrevious: true
@@ -1881,18 +1876,18 @@ components:
     BattleEvaluationOutcome:
       description: The outcome of the battle evaluation between model1 and model2.
       enum:
-      - model1
-      - model2
-      - tie
+        - model1
+        - model2
+        - tie
       maxLength: 20
       type: string
     BattleEvaluationCreateRequest:
       description: The information used to create a new battle evaluation.
       properties:
         outcome:
-          $ref: "#/components/schemas/BattleEvaluationOutcome"
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
       required:
-      - outcome
+        - outcome
       type: object
     BattleEvaluationId:
       description: The unique identifier of the battle evaluation
@@ -1916,17 +1911,17 @@ components:
           format: uuid
           type: string
         outcome:
-          $ref: "#/components/schemas/BattleEvaluationOutcome"
+          $ref: '#/components/schemas/BattleEvaluationOutcome'
         createdAt:
           description: Timestamp when the entity was created.
           example: 2024-01-15T10:30:00Z
           format: date-time
           type: string
       required:
-      - battleId
-      - createdAt
-      - id
-      - outcome
+        - battleId
+        - createdAt
+        - id
+        - outcome
       type: object
     PublicStats:
       description: Public statistics about the BixArena platform.
@@ -1952,9 +1947,9 @@ components:
           format: int64
           type: integer
       required:
-      - modelsEvaluated
-      - totalBattles
-      - totalUsers
+        - modelsEvaluated
+        - totalBattles
+        - totalUsers
       type: object
     UserStats:
       description: Statistics about a user's participation in battles.
@@ -1993,9 +1988,9 @@ components:
           nullable: true
           type: string
       required:
-      - activeBattles
-      - completedBattles
-      - totalBattles
+        - activeBattles
+        - completedBattles
+        - totalBattles
       type: object
     adminStats_200_response:
       example:
@@ -2029,10 +2024,10 @@ components:
           format: date-time
           type: string
       required:
-      - description
-      - id
-      - name
-      - updatedAt
+        - description
+        - id
+        - name
+        - updatedAt
       type: object
   securitySchemes:
     jwtBearer:

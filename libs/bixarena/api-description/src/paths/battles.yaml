@@ -1,5 +1,4 @@
 get:
-  x-anonymous-access: true
   tags:
     - Battle
   summary: List battles
@@ -22,7 +21,6 @@ get:
       $ref: ../components/responses/InternalServerError.yaml
 
 post:
-  x-anonymous-access: true
   tags:
     - Battle
   summary: Create a battle
