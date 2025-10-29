@@ -1,0 +1,21 @@
+{
+  "name": "bixarena-valkey",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/bixarena/serve-detach.sh {projectName}"
+      }
+    }
+  },
+  "tags": ["type:db", "scope:backend"]
+}
