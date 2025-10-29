@@ -1,6 +1,7 @@
 package org.sagebionetworks.bixarena.api.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import java.time.Duration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,14 @@ public class CacheConfiguration {
   public RedisCacheManager cacheManager(
       RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
 
+    // Create ObjectMapper configured for caching with type information
+    ObjectMapper cacheObjectMapper = objectMapper.copy();
+    cacheObjectMapper.activateDefaultTyping(
+        BasicPolymorphicTypeValidator.builder()
+            .allowIfBaseType(Object.class)
+            .build(),
+        ObjectMapper.DefaultTyping.NON_FINAL);
+
     // Default cache configuration
     RedisCacheConfiguration defaultConfig =
         RedisCacheConfiguration.defaultCacheConfig()
@@ -34,7 +43,7 @@ public class CacheConfiguration {
                     new StringRedisSerializer()))
             .serializeValuesWith(
                 RedisSerializationContext.SerializationPair.fromSerializer(
-                    new GenericJackson2JsonRedisSerializer(objectMapper)))
+                    new GenericJackson2JsonRedisSerializer(cacheObjectMapper)))
             .disableCachingNullValues();
 
     return RedisCacheManager.builder(connectionFactory).cacheDefaults(defaultConfig).build();

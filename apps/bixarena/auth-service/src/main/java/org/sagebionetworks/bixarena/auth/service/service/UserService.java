@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.auth.service.event.EventPublisher;
 import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity;
 import org.sagebionetworks.bixarena.auth.service.model.entity.ExternalAccountEntity.Provider;
 import org.sagebionetworks.bixarena.auth.service.model.entity.UserEntity;
@@ -22,6 +23,7 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final ExternalAccountRepository externalAccountRepository;
+  private final EventPublisher eventPublisher;
 
   /**
    * Handles user login from an external OAuth2 provider (e.g., Synapse).
@@ -128,6 +130,9 @@ public class UserService {
           user.getUsername(),
           email
         );
+
+        // Publish event after new user is persisted (affects total user count)
+        eventPublisher.publishUserRegistered(user.getId());
       }
 
       // Create external account link
