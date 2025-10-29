@@ -50,6 +50,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     },
   };
 
+  constructor() {
+    this.comparisonToolService.setViewConfig(this.viewConfig);
+  }
+
   ngOnInit() {
     if (this.platformService.isBrowser) {
       this.getConfigs();
