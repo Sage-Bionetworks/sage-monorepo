@@ -7,11 +7,11 @@ EXAMPLE_PROMPTS_CSS = """
 
 /* Example prompt UI section */
 #prompt-card-section > .row {
-    display: flex;           
-    flex-direction: row;      
-    flex-wrap: nowrap;      
-    align-items: center;     
-    gap: 16px; 
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 16px;
     width: 100%;
 }
 
@@ -34,6 +34,9 @@ EXAMPLE_PROMPTS_CSS = """
     min-width: 0;
     width: auto;
     margin: 0;
+    height: 83px;
+    display: flex;
+    align-items: center;
 }
 
 .gradio-container .prompt-card-container:hover {
@@ -97,8 +100,12 @@ EXAMPLE_PROMPTS_CSS = """
 
 # CSS for input textbox styling
 INPUT_PROMPT_CSS = """
+/* Container for the input textbox - limit width and center */
 #input_box.prompt_input {
     background: var(--background-fill-primary);
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 #input_box.prompt_input textarea {
@@ -109,6 +116,12 @@ INPUT_PROMPT_CSS = """
 .form:has(.prompt_input) {
     border: none;
     box-shadow: none;
+}
+
+/* Also limit the parent row container */
+.row:has(#input_box.prompt_input) {
+    max-width: 700px;
+    margin: 0 auto;
 }
 """
 
