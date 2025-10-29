@@ -246,10 +246,8 @@ def build_app(moderate=False):
                 user_battles_box,
             ) = build_home_page()
 
-        with gr.Column(visible=False) as battle_page_col:
-            battle_page_blocks, example_prompt_ui, prompt_outputs = build_battle_page(
-                moderate
-            )
+        with gr.Column(visible=False) as battle_page:
+            _, example_prompt_ui, prompt_outputs = build_battle_page(moderate)
 
         with gr.Column(visible=False) as leaderboard_page:
             build_leaderboard_page()
@@ -277,7 +275,7 @@ def build_app(moderate=False):
             + "</span>"
         )
 
-        pages = [home_page, battle_page_col, leaderboard_page, user_page]
+        pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(pages)
 
         # Navigation - also refresh example prompts when navigating to battle page
