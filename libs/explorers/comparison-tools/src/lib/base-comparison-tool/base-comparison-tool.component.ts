@@ -26,7 +26,7 @@ export class BaseComparisonToolComponent {
   isLoading = input(true);
 
   currentConfig = this.comparisonToolService.currentConfig;
-  resultsCount = this.comparisonToolService.totalResultsCount;
+  resultsCount = this.comparisonToolService.loadingResultsCount;
 
   isFilterPanelOpen = model(false);
 

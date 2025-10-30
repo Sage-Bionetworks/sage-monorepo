@@ -96,6 +96,8 @@ export class ComparisonToolService {
     return this.columns().some((col) => !col.selected);
   }
 
+  loadingResultsCount = signal(''); // this could be a string like 'over 200,000'
+
   totalResultsCount = signal<number>(0);
   pinnedResultsCount = computed(() => this.pinnedItemsSignal().size);
   hasMaxPinnedItems = computed(() => {
@@ -131,9 +133,16 @@ export class ComparisonToolService {
 
     const columnsData: ComparisonToolColumns[] = this.configs().map((config) => ({
       dropdowns: config.dropdowns,
+      row_count: config.row_count,
       columns: config.columns.map((column) => ({ ...column, selected: true })),
     }));
     this.columnsForDropdownsSignal.set(columnsData);
+
+    // Set initial total results count based on the current config
+    const currentConfig = this.currentConfig();
+    if (currentConfig?.row_count !== undefined) {
+      this.loadingResultsCount.set(currentConfig.row_count);
+    }
   }
 
   setDropdownSelection(selection: string[]) {
@@ -166,11 +175,17 @@ export class ComparisonToolService {
         // New dropdown combination - initialize with all columns selected
         const newColumnsData: ComparisonToolColumns = {
           dropdowns: currentDropdowns,
+          row_count: config.row_count,
           columns: config.columns.map((column) => ({ ...column, selected: true })),
         };
 
         return [...columnsData, newColumnsData];
       });
+    }
+
+    // Update total results count based on the current config's row_count
+    if (config?.row_count !== undefined) {
+      this.loadingResultsCount.set(config.row_count);
     }
   }
 
