@@ -1,6 +1,4 @@
 import logging
-import os
-import uuid
 from uuid import UUID
 
 import gradio as gr
@@ -19,12 +17,16 @@ from bixarena_api_client.exceptions import ApiException
 
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.request_auth import get_session_cookie
-from bixarena_app.config.constants import MAX_RESPONSE_TOKENS
+from bixarena_app.config.constants import (
+    DEFAULT_TEMPERATURE,
+    DEFAULT_TOP_P,
+    MAX_RESPONSE_TOKENS,
+)
+from bixarena_app.config.conversation import Conversation
+from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
-from bixarena_app.model.model_adapter import get_conversation_template
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 no_change_btn = gr.Button()
@@ -32,33 +34,19 @@ enable_btn = gr.Button(interactive=True, visible=True)
 disable_btn = gr.Button(interactive=False)
 invisible_btn = gr.Button(interactive=False, visible=False)
 
-controller_url = ""
-enable_moderation = False
-
 api_endpoint_info = {}
-identity_words = set()  # Populated from model list
 
 
 class State:
     def __init__(self, model_name):
-        self.conv = get_conversation_template(model_name)
-        self.conv_id = uuid.uuid4().hex
+        # All models use OpenRouter/OpenAI API format with default roles
+        self.conv = Conversation()
         self.skip_next = False
         self.model_name = model_name
         self.has_error = False
 
     def to_gradio_chatbot(self):
         return self.conv.to_gradio_chatbot()
-
-    def dict(self):
-        base = self.conv.dict()
-        base.update(
-            {
-                "conv_id": self.conv_id,
-                "model_name": self.model_name,
-            }
-        )
-        return base
 
     def last_assistant_message(self) -> MessageCreate | None:
         """Return the last completed assistant response as a MessageCreate."""
@@ -79,35 +67,6 @@ class BattleSession:
     def reset(self):
         self.battle_id = None
         self.round_id = None
-
-
-def set_global_vars_anony(enable_moderation_):
-    global enable_moderation
-    enable_moderation = enable_moderation_
-
-
-def validate_responses(states: list) -> tuple[bool, str | None]:
-    """Validate battle responses for identity leaking."""
-    for state in states:
-        if not state:
-            continue
-
-        # Collect the messages from both models
-        assistant_messages = [
-            content.lower()
-            for role, content in state.conv.messages
-            if content and role.lower() in ["assistant", "model"]
-        ]
-
-        # Check if any identity word appears in both models' responses
-        for content_lower in assistant_messages:
-            leaked_word = next(
-                (word for word in identity_words if word in content_lower), None
-            )
-            if leaked_word:
-                return False, f"identity_leak:{leaked_word}"
-
-    return True, None
 
 
 def _update_battle_round_with_responses(
@@ -163,8 +122,8 @@ def get_model_list():
     models = []  # Initiate models list
 
     try:
-        # Configure the API client
-        configuration = Configuration(host="http://bixarena-api:8112/v1")
+        api_base = _get_api_base_url()
+        configuration = Configuration(host=api_base)
 
         # Create API client and model API instance
         with ApiClient(configuration) as api_client:
@@ -181,48 +140,24 @@ def get_model_list():
 
             api_endpoint_info = {}
 
-            # Populate identity words for validation
-            global identity_words
-            identity_words = set()
-
             for model in visible_models_response.models:
                 model_name = model.name
                 model_id = model.id
 
-                # Add model identifiers for identity leak detection
-                if model.slug:
-                    identity_words.add(model.slug.lower())
-                if model.name:
-                    identity_words.add(model.name.lower())
-                if model.alias:
-                    identity_words.add(model.alias.lower())
-                if model.organization:
-                    identity_words.add(model.organization.lower())
-
-                # Check required fields for API configuration
+                # Get API configuration from model
                 api_model_name = model.api_model_name
                 api_base = model.api_base
                 api_type = "openai"
-                api_key = os.getenv("OPENAI_API_KEY", "")
-
-                if not api_key:
-                    logger.warning(
-                        f"Skipping model '{model_name}' - missing OPENAI_API_KEY"
-                    )
-                    continue
 
                 # Add model's display name to the model list
                 models.append(model_name)
 
-                # Convert to FastChat API-based format (text-only models)
+                # Store model API configuration
                 api_endpoint_info[model_name] = {
                     "model_id": model_id,
                     "api_type": api_type,
                     "api_base": api_base,
-                    "api_key": api_key,
                     "model_name": api_model_name,
-                    "anony_only": False,
-                    "multimodal": False,
                 }
         logger.info(f"✅ Fetched {len(models)} visible models from BixArena API.")
 
@@ -287,7 +222,7 @@ def bot_response(
     yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
 
     try:
-        for _i, data in enumerate(stream_iter):
+        for data in stream_iter:
             if data["error_code"] == 0:
                 output = data["text"].strip()
                 conv.update_last_message(output + "▌")
@@ -334,8 +269,8 @@ def bot_response_multi(
     state0,
     state1,
     battle_session: BattleSession,
-    temperature=0.7,
-    top_p=1.0,
+    temperature=DEFAULT_TEMPERATURE,
+    top_p=DEFAULT_TOP_P,
     max_new_tokens=MAX_RESPONSE_TOKENS,
     request: gr.Request | None = None,
 ):

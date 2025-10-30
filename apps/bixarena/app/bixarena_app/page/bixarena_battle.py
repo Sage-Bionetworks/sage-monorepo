@@ -6,6 +6,7 @@ simplified to a single function for a single-page LLM comparison arena.
 """
 
 import logging
+import random
 import time
 import warnings
 from uuid import UUID
@@ -26,7 +27,6 @@ from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import (
     BATTLE_ROUND_LIMIT,
-    MODERATION_MSG,
     PROMPT_LEN_LIMIT,
     SLOW_MODEL_MSG,
 )
@@ -41,9 +41,7 @@ from bixarena_app.model.model_response import (
     get_model_list,
     invisible_btn,
     no_change_btn,
-    set_global_vars_anony,
 )
-from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
 from bixarena_app.page.battle_page_css import (
     DISCLAIMER_CSS,
     EXAMPLE_PROMPTS_CSS,
@@ -51,12 +49,23 @@ from bixarena_app.page.battle_page_css import (
 )
 from bixarena_app.page.example_prompt_ui import ExamplePromptUI
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 num_sides = 2
 anony_names = ["", ""]
-models = []
+
+
+def get_battle_pair():
+    """Get a pair of models for a new battle.
+
+    Returns:
+        Tuple of two model names (model1, model2)
+    """
+    # TODO: Replace with backend endpoint when ready
+
+    models, _ = get_model_list()
+    # Randomly select two different models
+    return tuple(random.sample(models, 2))
 
 
 def create_battle(
@@ -180,10 +189,12 @@ def create_battle_evaluation(
     return None
 
 
-def load_demo_side_by_side_anony(models_, _):
-    global models
-    models = models_
+def load_demo_side_by_side_anony():
+    """Initialize the battle demo with empty states.
 
+    Returns:
+        Tuple of initial states and selector updates for Gradio UI
+    """
     states = (None,) * num_sides
     selector_updates = (
         gr.Markdown(visible=True),
@@ -354,7 +365,7 @@ def add_text(
     if states[0] is None:
         assert states[1] is None
 
-        model1, model2 = get_battle_pair(models)
+        model1, model2 = get_battle_pair()
         states = [
             State(model1),
             State(model2),
@@ -379,13 +390,6 @@ def add_text(
             + [gr.Row(visible=False)]  # keep next_battle_row hidden
             + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
         )
-
-    model_list = [states[i].model_name for i in range(num_sides)]
-    flagged = moderation_filter(text, model_list)
-    if flagged:
-        logger.info(f"violate moderation (anony). text: {text}")
-        # overwrite the original text
-        text = MODERATION_MSG
 
     conv = states[0].conv
     if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
@@ -710,25 +714,14 @@ def build_side_by_side_ui_anony():
     )
 
 
-def build_battle_page(
-    moderate=False,
-):
+def build_battle_page():
     """Build the battle page
-
-    Args:
-        moderate (bool): Enable content moderation
 
     Returns:
         tuple: (battle_page, example_prompt_ui, prompt_outputs) for hooking up navigation refresh
     """
-    # Set global variables
-    set_global_vars_anony(moderate)
-
-    # Load models once (text-only models)
-    models, _ = get_model_list()
-
-    # Initialize the demo (this sets up global variables in the original module)
-    load_demo_side_by_side_anony(models, {})
+    # Initialize the demo with empty states
+    load_demo_side_by_side_anony()
 
     with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
         _, example_prompt_ui, prompt_outputs = build_side_by_side_ui_anony()

@@ -1,8 +1,8 @@
 """Utilities for configuring BixArena API clients with authentication."""
 
-import os
-
 from bixarena_api_client import ApiClient, Configuration
+
+from bixarena_app.config.utils import _get_api_base_url
 
 
 def get_api_configuration(cookies: dict[str, str] | None = None) -> Configuration:
@@ -15,7 +15,9 @@ def get_api_configuration(cookies: dict[str, str] | None = None) -> Configuratio
     Returns:
         Configured Configuration object
     """
-    api_base = os.environ.get("API_BASE_URL", "http://bixarena-api:8112/v1")
+    api_base = _get_api_base_url()
+    if not api_base:
+        raise RuntimeError("API_BASE_URL not configured")
     configuration = Configuration(host=api_base)
 
     # Store cookies in configuration for later use
