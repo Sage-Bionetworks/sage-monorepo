@@ -24,6 +24,7 @@ from bixarena_app.config.constants import (
     MAX_RESPONSE_TOKENS,
 )
 from bixarena_app.config.conversation import Conversation
+from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
 
@@ -131,8 +132,8 @@ def get_model_list():
     models = []  # Initiate models list
 
     try:
-        # Configure the API client
-        configuration = Configuration(host="http://bixarena-api:8112/v1")
+        api_base = _get_api_base_url()
+        configuration = Configuration(host=api_base)
 
         # Create API client and model API instance
         with ApiClient(configuration) as api_client:
@@ -241,7 +242,7 @@ def bot_response(
     yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
 
     try:
-        for _i, data in enumerate(stream_iter):
+        for data in stream_iter:
             if data["error_code"] == 0:
                 output = data["text"].strip()
                 conv.update_last_message(output + "▌")

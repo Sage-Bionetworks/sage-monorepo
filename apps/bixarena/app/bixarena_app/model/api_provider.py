@@ -1,14 +1,14 @@
 """Call API providers."""
 
+import logging
 import os
 
 from openai import OpenAI
 
 from bixarena_app.auth.user_state import get_user_state
-from bixarena_app.config.utils import build_logger
 from bixarena_app.model.error_handler import handle_error_message
 
-logger = build_logger("gradio_web_server", "gradio_web_server.log")
+logger = logging.getLogger(__name__)
 
 
 # Only support OpenAI API for now
