@@ -7,6 +7,7 @@ import {
 import {
   mockComparisonToolData,
   mockComparisonToolDataConfig,
+  mockComparisonToolFiltersWithSelections,
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
@@ -76,6 +77,26 @@ export const SearchTermActive: Story = {
         }),
         ...provideComparisonToolFilterService({
           searchTerm: '5xFAD',
+        }),
+      ],
+    }),
+  ],
+};
+
+export const FiltersActiveMaxPinned: Story = {
+  args: {},
+  decorators: [
+    applicationConfig({
+      providers: [
+        ...provideComparisonToolService({
+          pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
+          maxPinnedItems: 3,
+          pinnedData: mockComparisonToolData.slice(0, 3),
+          unpinnedData: mockComparisonToolData.slice(3),
+          configs: mockComparisonToolDataConfig,
+        }),
+        ...provideComparisonToolFilterService({
+          filters: mockComparisonToolFiltersWithSelections,
         }),
       ],
     }),
