@@ -20,7 +20,12 @@ public class RouteConfigConfiguration {
 
     for (RouteSpec r : props.routes()) {
       RouteKey key = RouteKey.of(r.method(), r.path());
-      RouteConfig cfg = new RouteConfig(r.scopes(), r.audience(), r.anonymousAccess());
+      RouteConfig cfg = new RouteConfig(
+          r.scopes(),
+          r.audience(),
+          r.anonymousAccess(),
+          r.rateLimitRequestsPerMinute()
+      );
 
       if (typed.putIfAbsent(key, cfg) != null) {
         throw new IllegalArgumentException(

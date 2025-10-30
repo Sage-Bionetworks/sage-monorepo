@@ -9,10 +9,12 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.spring.boot.starter.actuator)
+  implementation(libs.spring.boot.starter.data.redis)
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.webflux)
   implementation(libs.spring.cloud.starter.gateway.server.webflux)
   implementation(libs.spring.security.oauth2.jose)
+  implementation(libs.jedis)
 
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)

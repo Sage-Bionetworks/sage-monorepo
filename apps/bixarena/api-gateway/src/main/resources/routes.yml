@@ -1,86 +1,123 @@
 app:
   routes:
+    # === AUTHENTICATED WRITE ENDPOINTS ===
+    # Battle management endpoints - authenticated users
     - method: 'DELETE'
       path: '/api/v1/battles/{battleId}'
       audience: 'urn:bixarena:api'
-    - method: 'GET'
-      path: '/.well-known/jwks.json'
-      audience: 'urn:bixarena:auth'
-      anonymousAccess: true
-    - method: 'GET'
-      path: '/api/v1/admin/stats'
+      rateLimitRequestsPerMinute: 30 # Authenticated write operations
+    - method: 'PATCH'
+      path: '/api/v1/battles/{battleId}'
       audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'PATCH'
+      path: '/api/v1/battles/{battleId}/rounds/{roundId}'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'POST'
+      path: '/api/v1/battles'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30 # Battle creation
+    - method: 'POST'
+      path: '/api/v1/battles/{battleId}/evaluations'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60 # Evaluations may be more frequent
+    - method: 'POST'
+      path: '/api/v1/battles/{battleId}/rounds'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60 # Rounds may be more frequent
+
+    # === AUTHENTICATED READ ENDPOINTS ===
+    # User-specific data - authenticated users
+    - method: 'GET'
+      path: '/api/v1/users/me/stats'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 300 # Authenticated read operations
     - method: 'GET'
       path: '/api/v1/battles'
       audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 300
     - method: 'GET'
       path: '/api/v1/battles/{battleId}'
       audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 300
+    - method: 'GET'
+      path: '/api/v1/admin/stats'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60 # Admin endpoints - lower limit
+    - method: 'GET'
+      path: '/userinfo'
+      audience: 'urn:bixarena:auth'
+      rateLimitRequestsPerMinute: 60 # Session validation
+
+    # === ANONYMOUS READ ENDPOINTS ===
+    # Public data - anonymous users (IP-based rate limiting)
     - method: 'GET'
       path: '/api/v1/example-prompts'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
+      rateLimitRequestsPerMinute: 100 # Anonymous read operations
     - method: 'GET'
       path: '/api/v1/leaderboards'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
+      rateLimitRequestsPerMinute: 100
     - method: 'GET'
       path: '/api/v1/leaderboards/{leaderboardId}'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
+      rateLimitRequestsPerMinute: 100
     - method: 'GET'
       path: '/api/v1/leaderboards/{leaderboardId}/history/{modelId}'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
+      rateLimitRequestsPerMinute: 100
     - method: 'GET'
       path: '/api/v1/leaderboards/{leaderboardId}/snapshots'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
+      rateLimitRequestsPerMinute: 100
     - method: 'GET'
       path: '/api/v1/models'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
+      rateLimitRequestsPerMinute: 100
     - method: 'GET'
       path: '/api/v1/stats'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
-    - method: 'GET'
-      path: '/api/v1/users/me/stats'
-      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 100
+
+    # === AUTH ENDPOINTS ===
+    # Authentication flow - anonymous access with rate limiting
     - method: 'GET'
       path: '/auth/callback'
       audience: 'urn:bixarena:auth'
       anonymousAccess: true
+      rateLimitRequestsPerMinute: 20 # OAuth callbacks - lower limit to prevent abuse
     - method: 'GET'
       path: '/auth/login'
       audience: 'urn:bixarena:auth'
       anonymousAccess: true
-    - method: 'GET'
-      path: '/health-check'
-      audience: 'urn:bixarena:ai'
-      anonymousAccess: true
-    - method: 'GET'
-      path: '/userinfo'
-      audience: 'urn:bixarena:auth'
-    - method: 'PATCH'
-      path: '/api/v1/battles/{battleId}'
-      audience: 'urn:bixarena:api'
-    - method: 'PATCH'
-      path: '/api/v1/battles/{battleId}/rounds/{roundId}'
-      audience: 'urn:bixarena:api'
-    - method: 'POST'
-      path: '/api/v1/battles'
-      audience: 'urn:bixarena:api'
-    - method: 'POST'
-      path: '/api/v1/battles/{battleId}/evaluations'
-      audience: 'urn:bixarena:api'
-    - method: 'POST'
-      path: '/api/v1/battles/{battleId}/rounds'
-      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 20 # Login attempts - lower limit to prevent abuse
     - method: 'POST'
       path: '/auth/logout'
       audience: 'urn:bixarena:auth'
+      rateLimitRequestsPerMinute: 60 # Logout
     - method: 'POST'
       path: '/oauth2/token'
       audience: 'urn:bixarena:auth'
+      anonymousAccess: true
+      rateLimitRequestsPerMinute: 60 # Token minting - internal use by gateway
+    - method: 'GET'
+      path: '/.well-known/jwks.json'
+      audience: 'urn:bixarena:auth'
+      anonymousAccess: true
+      rateLimitRequestsPerMinute: 100 # JWKS public key retrieval
+
+    # === HEALTH CHECK ===
+    # Health check endpoint - no rate limiting (handled separately in filter)
+    - method: 'GET'
+      path: '/health-check'
+      audience: 'urn:bixarena:ai'
       anonymousAccess: true

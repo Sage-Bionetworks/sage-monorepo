@@ -23,5 +23,7 @@ public record RouteSpec(
 
   String audience,
 
-  boolean anonymousAccess
+  boolean anonymousAccess,
+
+  Integer rateLimitRequestsPerMinute
 ) {}
