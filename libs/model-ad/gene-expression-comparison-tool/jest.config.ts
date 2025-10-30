@@ -14,6 +14,7 @@ export default {
       },
     ],
   },
+  testEnvironment: 'jest-fixed-jsdom',
   transformIgnorePatterns: [
     'node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|@octokit/.*|universal-user-agent|before-after-hook))',
   ],
