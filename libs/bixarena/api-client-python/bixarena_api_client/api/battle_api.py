@@ -113,6 +113,7 @@ class BattleApi:
             "403": "BasicError",
             "404": "BasicError",
             "409": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -183,6 +184,7 @@ class BattleApi:
             "403": "BasicError",
             "404": "BasicError",
             "409": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -253,6 +255,7 @@ class BattleApi:
             "403": "BasicError",
             "404": "BasicError",
             "409": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -387,6 +390,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -462,6 +466,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -537,6 +542,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -674,6 +680,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -749,6 +756,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -824,6 +832,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -956,6 +965,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1026,6 +1036,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1096,6 +1107,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1135,7 +1147,7 @@ class BattleApi:
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
             _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/problem+json"]
+                ["application/problem+json", "application/json"]
             )
 
         # authentication setting
@@ -1214,6 +1226,7 @@ class BattleApi:
             "200": "Battle",
             "401": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1283,6 +1296,7 @@ class BattleApi:
             "200": "Battle",
             "401": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1352,6 +1366,7 @@ class BattleApi:
             "200": "Battle",
             "401": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1471,6 +1486,7 @@ class BattleApi:
             "200": "BattlePage",
             "400": "BasicError",
             "401": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1541,6 +1557,7 @@ class BattleApi:
             "200": "BattlePage",
             "400": "BasicError",
             "401": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1611,6 +1628,7 @@ class BattleApi:
             "200": "BattlePage",
             "400": "BasicError",
             "401": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1739,6 +1757,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1814,6 +1833,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -1889,6 +1909,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -2032,6 +2053,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -2113,6 +2135,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -2194,6 +2217,7 @@ class BattleApi:
             "401": "BasicError",
             "403": "BasicError",
             "404": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(

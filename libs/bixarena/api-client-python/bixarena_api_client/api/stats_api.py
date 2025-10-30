@@ -85,6 +85,7 @@ class StatsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "PublicStats",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -146,6 +147,7 @@ class StatsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "PublicStats",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -207,6 +209,7 @@ class StatsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "PublicStats",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(

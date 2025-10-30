@@ -3,6 +3,7 @@ package org.sagebionetworks.bixarena.auth.service.api;
 import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.Callback200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.RateLimitErrorDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.Token200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
 

@@ -1,5 +1,6 @@
 post:
   x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 60
   tags:
     - Auth
   summary: Mint short-lived internal JWT

@@ -87,6 +87,8 @@ class AdminApi:
             "200": "AdminStats200Response",
             "401": "BasicError",
             "403": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -149,6 +151,8 @@ class AdminApi:
             "200": "AdminStats200Response",
             "401": "BasicError",
             "403": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -211,6 +215,8 @@ class AdminApi:
             "200": "AdminStats200Response",
             "401": "BasicError",
             "403": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout

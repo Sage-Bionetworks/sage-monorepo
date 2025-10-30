@@ -1,5 +1,13 @@
 app:
   welcome-message: 'Welcome to BixArena API Gateway'
+  rate-limit:
+    enabled: true
+    # Fail open: allow requests if Valkey is unavailable
+    fail-open: true
+    # Default rate limits (can be overridden per route)
+    default-requests-per-minute: 100
+    # Key prefix for rate limit data in Valkey
+    key-prefix: 'bixarena:gateway:ratelimit'
 
 server:
   port: 8113
@@ -7,6 +15,17 @@ server:
 spring:
   application:
     name: bixarena-api-gateway
+  data:
+    redis:
+      host: bixarena-valkey
+      port: 8116
+      database: 1 # Use database 1 for gateway (auth uses 0, api uses 0)
+      timeout: 2000ms
+      jedis:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
   cloud:
     gateway:
       default-filters:

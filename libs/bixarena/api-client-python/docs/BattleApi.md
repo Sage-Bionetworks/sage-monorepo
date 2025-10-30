@@ -84,15 +84,16 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **201**     | Battle created successfully                                       | -                |
-| **400**     | Invalid request                                                   | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **403**     | The user does not have the permission to perform this action      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **409**     | The request conflicts with current state of the target resource   | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **201**     | Battle created successfully                                                                       | -                                                                                                                                                                                                                                                                     |
+| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
+| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
+| **409**     | The request conflicts with current state of the target resource                                   | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -169,14 +170,15 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **201**     | BattleEvaluation created successfully                             | -                |
-| **400**     | Invalid request                                                   | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **403**     | The user does not have the permission to perform this action      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **201**     | BattleEvaluation created successfully                                                             | -                                                                                                                                                                                                                                                                     |
+| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
+| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -253,14 +255,15 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **201**     | Battle round created successfully                                 | -                |
-| **400**     | Invalid request                                                   | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **403**     | The user does not have the permission to perform this action      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **201**     | Battle round created successfully                                                                 | -                                                                                                                                                                                                                                                                     |
+| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
+| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -327,17 +330,18 @@ void (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/problem+json
+- **Accept**: application/problem+json, application/json
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **204**     | Battle deleted successfully                                       | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **403**     | The user does not have the permission to perform this action      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **204**     | Battle deleted successfully                                                                       | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
+| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -411,12 +415,13 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Success                                                           | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **200**     | Success                                                                                           | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -491,12 +496,13 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Success                                                           | -                |
-| **400**     | Invalid request                                                   | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **200**     | Success                                                                                           | -                                                                                                                                                                                                                                                                     |
+| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -573,14 +579,15 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Battle updated successfully                                       | -                |
-| **400**     | Invalid request                                                   | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **403**     | The user does not have the permission to perform this action      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **200**     | Battle updated successfully                                                                       | -                                                                                                                                                                                                                                                                     |
+| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
+| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -659,13 +666,14 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP response details
 
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Battle round updated successfully                                 | -                |
-| **400**     | Invalid request                                                   | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **403**     | The user does not have the permission to perform this action      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **200**     | Battle round updated successfully                                                                 | -                                                                                                                                                                                                                                                                     |
+| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
+| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

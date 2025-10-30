@@ -73,10 +73,12 @@ This endpoint does not need any parameter.
 
 ### HTTP response details
 
-| Status code | Description                                                  | Response headers |
-| ----------- | ------------------------------------------------------------ | ---------------- |
-| **200**     | Success                                                      | -                |
-| **401**     | Unauthorized                                                 | -                |
-| **403**     | The user does not have the permission to perform this action | -                |
+| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **200**     | Success                                                                                           | -                                                                                                                                                                                                                                                                     |
+| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
+| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
+| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
+| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

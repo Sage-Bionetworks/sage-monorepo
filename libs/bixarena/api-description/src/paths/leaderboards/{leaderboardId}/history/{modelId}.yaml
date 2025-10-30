@@ -4,6 +4,7 @@ parameters:
 
 get:
   x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 100
   tags:
     - Leaderboard
   summary: Get model performance history
@@ -22,5 +23,7 @@ get:
       $ref: ../../../../components/responses/BadRequest.yaml
     '404':
       $ref: ../../../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../../../components/responses/InternalServerError.yaml

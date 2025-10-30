@@ -101,6 +101,7 @@ class ExamplePromptApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "ExamplePromptPage",
             "400": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -172,6 +173,7 @@ class ExamplePromptApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "ExamplePromptPage",
             "400": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(
@@ -243,6 +245,7 @@ class ExamplePromptApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "ExamplePromptPage",
             "400": "BasicError",
+            "429": "RateLimitError",
             "500": "BasicError",
         }
         response_data = self.api_client.call_api(

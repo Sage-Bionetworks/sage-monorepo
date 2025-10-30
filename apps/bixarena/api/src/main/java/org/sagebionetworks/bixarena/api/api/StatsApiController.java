@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.PublicStatsDto;
+import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

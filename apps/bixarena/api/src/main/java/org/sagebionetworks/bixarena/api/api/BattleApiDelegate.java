@@ -11,6 +11,7 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,6 +49,7 @@ public interface BattleApiDelegate {
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
      *         or The request conflicts with current state of the target resource (status code 409)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#createBattle
      */
@@ -84,6 +86,11 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
@@ -106,6 +113,7 @@ public interface BattleApiDelegate {
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#createBattleEvaluation
      */
@@ -138,6 +146,11 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
@@ -160,6 +173,7 @@ public interface BattleApiDelegate {
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#createBattleRound
      */
@@ -192,6 +206,11 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
@@ -212,6 +231,7 @@ public interface BattleApiDelegate {
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#deleteBattle
      */
@@ -233,6 +253,11 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
@@ -252,6 +277,7 @@ public interface BattleApiDelegate {
      * @return Success (status code 200)
      *         or Unauthorized (status code 401)
      *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#getBattle
      */
@@ -273,6 +299,11 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
@@ -292,6 +323,7 @@ public interface BattleApiDelegate {
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#listBattles
      */
@@ -311,6 +343,11 @@ public interface BattleApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -335,6 +372,7 @@ public interface BattleApiDelegate {
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#updateBattle
      */
@@ -367,6 +405,11 @@ public interface BattleApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
@@ -390,6 +433,7 @@ public interface BattleApiDelegate {
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#updateBattleRound
      */
@@ -421,6 +465,11 @@ public interface BattleApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

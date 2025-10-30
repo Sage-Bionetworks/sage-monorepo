@@ -8,6 +8,7 @@ import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryQueryDt
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotQueryDto;
+import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,7 @@ public interface LeaderboardApiDelegate {
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see LeaderboardApi#getLeaderboard
      */
@@ -64,6 +66,11 @@ public interface LeaderboardApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
@@ -84,6 +91,7 @@ public interface LeaderboardApiDelegate {
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see LeaderboardApi#getLeaderboardSnapshots
      */
@@ -104,6 +112,11 @@ public interface LeaderboardApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -127,6 +140,7 @@ public interface LeaderboardApiDelegate {
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see LeaderboardApi#getModelHistory
      */
@@ -150,6 +164,11 @@ public interface LeaderboardApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
@@ -167,6 +186,7 @@ public interface LeaderboardApiDelegate {
      *
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see LeaderboardApi#listLeaderboards
      */
@@ -181,6 +201,11 @@ public interface LeaderboardApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/problem+json";
                     ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

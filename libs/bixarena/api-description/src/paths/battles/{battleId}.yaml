@@ -2,6 +2,7 @@ parameters:
   - $ref: ../../components/parameters/path/battleId.yaml
 
 get:
+  x-rate-limit-requests-per-minute: 300
   tags:
     - Battle
   summary: Get a battle by ID
@@ -18,10 +19,13 @@ get:
       $ref: ../../components/responses/Unauthorized.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
 
 patch:
+  x-rate-limit-requests-per-minute: 30
   tags:
     - Battle
   summary: Update a battle
@@ -48,10 +52,13 @@ patch:
       $ref: ../../components/responses/Forbidden.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
 
 delete:
+  x-rate-limit-requests-per-minute: 30
   tags:
     - Battle
   summary: Delete a battle
@@ -66,5 +73,7 @@ delete:
       $ref: ../../components/responses/Forbidden.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml

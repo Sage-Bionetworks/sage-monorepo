@@ -1,5 +1,10 @@
 app:
   welcome-message: 'Welcome to BixArena API Gateway'
+  rate-limit:
+    enabled: false
+    fail-open: true
+    default-requests-per-minute: 100
+    key-prefix: 'bixarena:gateway:ratelimit:test'
   routes:
     - method: 'GET'
       path: '/api/v1/test'

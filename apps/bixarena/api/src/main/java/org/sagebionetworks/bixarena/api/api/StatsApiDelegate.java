@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.PublicStatsDto;
+import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public interface StatsApiDelegate {
      * Retrieve publicly accessible statistics about the BixArena platform. This endpoint can be accessed without authentication and is designed for use on the home page to showcase platform activity. 
      *
      * @return Public statistics retrieved successfully (status code 200)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see StatsApi#getPublicStats
      */
@@ -40,6 +42,11 @@ public interface StatsApiDelegate {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"totalBattles\" : 1337, \"totalUsers\" : 256, \"modelsEvaluated\" : 42 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

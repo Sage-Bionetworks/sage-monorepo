@@ -2,6 +2,7 @@ parameters:
   - $ref: ../../../components/parameters/path/battleId.yaml
 
 post:
+  x-rate-limit-requests-per-minute: 60
   tags:
     - Battle
   summary: Create a battle round
@@ -28,5 +29,7 @@ post:
       $ref: ../../../components/responses/Forbidden.yaml
     '404':
       $ref: ../../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../../components/responses/InternalServerError.yaml

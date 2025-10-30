@@ -20,6 +20,7 @@ paths:
   /auth/login:
     get:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 20
       tags:
         - Auth
       summary: Start Synapse OIDC authorization code flow
@@ -33,9 +34,14 @@ paths:
           description: Redirect to Synapse login
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /auth/callback:
     get:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 20
       tags:
         - Auth
       summary: OIDC redirect callback
@@ -68,9 +74,14 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /auth/logout:
     post:
       x-anonymous-access: false
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Auth
       summary: Logout current session
@@ -81,9 +92,14 @@ paths:
           description: Logged out successfully
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /oauth2/token:
     post:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Auth
       summary: Mint short-lived internal JWT
@@ -130,6 +146,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /userinfo:
     get:
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Auth
       summary: Get current user profile
@@ -148,9 +165,14 @@ paths:
                 $ref: '#/components/schemas/UserInfo'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /.well-known/jwks.json:
     get:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       tags:
         - Auth
       summary: JSON Web Key Set
@@ -171,6 +193,10 @@ paths:
                       type: object
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     jwtBearer:
@@ -202,6 +228,27 @@ components:
       required:
         - title
         - status
+    RateLimitError:
+      allOf:
+        - $ref: '#/components/schemas/BasicError'
+        - type: object
+          properties:
+            limit:
+              type: integer
+              description: Maximum requests allowed per window
+              example: 100
+            window:
+              type: string
+              description: Time window for rate limiting
+              example: 1 minute
+            retryAfterSeconds:
+              type: integer
+              description: Seconds to wait before retrying
+              example: 18
+          required:
+            - limit
+            - window
+            - retryAfterSeconds
     UserInfo:
       type: object
       description: OIDC-compliant user information response
@@ -238,6 +285,39 @@ components:
   responses:
     BadRequest:
       description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    TooManyRequests:
+      description: Too many requests. Rate limit exceeded. The client should wait before making additional requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RateLimitError'
+      headers:
+        Retry-After:
+          description: Seconds to wait before making a new request
+          schema:
+            type: integer
+            example: 18
+        X-RateLimit-Limit:
+          description: Maximum requests allowed per minute
+          schema:
+            type: integer
+            example: 100
+        X-RateLimit-Remaining:
+          description: Remaining requests in current window
+          schema:
+            type: integer
+            example: 0
+        X-RateLimit-Reset:
+          description: Seconds until rate limit window resets
+          schema:
+            type: integer
+            example: 18
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:

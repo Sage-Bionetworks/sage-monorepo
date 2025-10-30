@@ -1,4 +1,6 @@
 get:
+  x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 100
   tags:
     - Stats
   summary: Get public platform statistics
@@ -7,7 +9,6 @@ get:
     This endpoint can be accessed without authentication and is designed
     for use on the home page to showcase platform activity.
   operationId: getPublicStats
-  x-anonymous-access: true
   security: [] # Override global security to allow anonymous access
   responses:
     '200':
@@ -16,5 +17,7 @@ get:
         application/json:
           schema:
             $ref: ../components/schemas/PublicStats.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml

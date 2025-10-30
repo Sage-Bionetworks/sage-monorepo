@@ -22,11 +22,12 @@ description = "BixArena Tools"
 requires-python = "==3.13.3"
 readme = 'README.md'
 dependencies = [
+    "locust>=2.35.0",
     "numpy>=1.26.0",
-    "scipy>=1.11.0", 
+    "rich>=13.7.0",
+    "scipy>=1.11.0",
     "tqdm>=4.60.0",
-    "typer>=0.12.3",
-    "rich>=13.7.0"
+    "typer>=0.12.3"
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -70,3 +71,15 @@ ignore = []
 
 fixable = ["ALL"]
 unfixable = []
+
+[tool.locust]
+# locustfile = ""
+headless = false
+# master = false
+# expect-workers = 5
+# host = ""
+users = 1
+spawn-rate = 1
+run-time = "2m"
+csv = "locust"
+# tags = ["Critical", "Normal"]

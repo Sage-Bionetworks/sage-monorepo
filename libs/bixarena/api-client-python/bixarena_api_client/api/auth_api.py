@@ -101,6 +101,8 @@ class AuthApi:
             "200": "Callback200Response",
             "400": "BasicError",
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -171,6 +173,8 @@ class AuthApi:
             "200": "Callback200Response",
             "400": "BasicError",
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -241,6 +245,8 @@ class AuthApi:
             "200": "Callback200Response",
             "400": "BasicError",
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -356,6 +362,8 @@ class AuthApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "GetJwks200Response",
             "400": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -417,6 +425,8 @@ class AuthApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "GetJwks200Response",
             "400": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -478,6 +488,8 @@ class AuthApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "GetJwks200Response",
             "400": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -585,6 +597,8 @@ class AuthApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "UserInfo",
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -646,6 +660,8 @@ class AuthApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "UserInfo",
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -707,6 +723,8 @@ class AuthApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "UserInfo",
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -815,6 +833,8 @@ class AuthApi:
             "204": None,
             "302": None,
             "400": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -877,6 +897,8 @@ class AuthApi:
             "204": None,
             "302": None,
             "400": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -939,6 +961,8 @@ class AuthApi:
             "204": None,
             "302": None,
             "400": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -974,7 +998,7 @@ class AuthApi:
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
             _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/problem+json"]
+                ["application/problem+json", "application/json"]
             )
 
         # authentication setting
@@ -1046,6 +1070,8 @@ class AuthApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "204": None,
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -1107,6 +1133,8 @@ class AuthApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "204": None,
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -1168,6 +1196,8 @@ class AuthApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "204": None,
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -1203,7 +1233,7 @@ class AuthApi:
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
             _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/problem+json"]
+                ["application/problem+json", "application/json"]
             )
 
         # authentication setting

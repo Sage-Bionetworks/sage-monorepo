@@ -57,6 +57,7 @@ bixarena_api_client/models/model_search_query.py
 bixarena_api_client/models/model_sort.py
 bixarena_api_client/models/page_metadata.py
 bixarena_api_client/models/public_stats.py
+bixarena_api_client/models/rate_limit_error.py
 bixarena_api_client/models/sort_direction.py
 bixarena_api_client/models/token200_response.py
 bixarena_api_client/models/user_info.py
@@ -112,6 +113,7 @@ docs/ModelSearchQuery.md
 docs/ModelSort.md
 docs/PageMetadata.md
 docs/PublicStats.md
+docs/RateLimitError.md
 docs/SortDirection.md
 docs/StatsApi.md
 docs/Token200Response.md
@@ -168,6 +170,7 @@ test/test_model_search_query.py
 test/test_model_sort.py
 test/test_page_metadata.py
 test/test_public_stats.py
+test/test_rate_limit_error.py
 test/test_sort_direction.py
 test/test_stats_api.py
 test/test_token200_response.py

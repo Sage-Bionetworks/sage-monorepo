@@ -8,6 +8,7 @@ package org.sagebionetworks.bixarena.api.api;
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
+import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -48,6 +49,7 @@ public interface ExamplePromptApi {
      * @param examplePromptSearchQuery The search query used to find and filter example prompts. (optional)
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -63,6 +65,10 @@ public interface ExamplePromptApi {
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
             }),
             @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),

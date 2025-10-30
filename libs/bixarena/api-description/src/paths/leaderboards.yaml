@@ -1,5 +1,6 @@
 get:
   x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 100
   tags:
     - Leaderboard
   summary: List all available leaderboards
@@ -14,5 +15,7 @@ get:
             $ref: ../components/schemas/LeaderboardList.yaml
     '400':
       $ref: ../components/responses/BadRequest.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml

@@ -1,5 +1,6 @@
 get:
   x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 20
   tags:
     - Auth
   summary: OIDC redirect callback
@@ -32,3 +33,7 @@ get:
       $ref: ../components/responses/BadRequest.yaml
     '401':
       $ref: ../components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
