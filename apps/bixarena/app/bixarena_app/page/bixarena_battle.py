@@ -6,6 +6,7 @@ simplified to a single function for a single-page LLM comparison arena.
 """
 
 import logging
+import random
 import time
 import warnings
 from uuid import UUID
@@ -41,7 +42,6 @@ from bixarena_app.model.model_response import (
     invisible_btn,
     no_change_btn,
 )
-from bixarena_app.model.model_selection import get_battle_pair
 from bixarena_app.page.battle_page_css import (
     DISCLAIMER_CSS,
     EXAMPLE_PROMPTS_CSS,
@@ -54,6 +54,22 @@ logger = logging.getLogger(__name__)
 num_sides = 2
 anony_names = ["", ""]
 models = []
+
+
+def get_battle_pair(models):
+    """Select two models randomly for a battle.
+
+    Args:
+        models: List of available model names
+
+    Returns:
+        Tuple of two model names (model1, model2)
+    """
+    if len(models) == 1:
+        return models[0], models[0]
+
+    # Randomly select two different models
+    return tuple(random.sample(models, 2))
 
 
 def create_battle(
