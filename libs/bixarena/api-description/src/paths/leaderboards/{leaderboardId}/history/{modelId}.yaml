@@ -4,6 +4,7 @@ parameters:
 
 get:
   x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 100
   tags:
     - Leaderboard
   summary: Get model performance history

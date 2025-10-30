@@ -1,5 +1,6 @@
 get:
   x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 100
   tags:
     - Model
   summary: List models

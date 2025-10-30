@@ -31,6 +31,7 @@ tags:
 paths:
   /admin/stats:
     get:
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Admin
       summary: Admin statistics
@@ -52,6 +53,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
   /battles:
     get:
+      x-rate-limit-requests-per-minute: 300
       tags:
         - Battle
       summary: List battles
@@ -73,6 +75,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      x-rate-limit-requests-per-minute: 30
       tags:
         - Battle
       summary: Create a battle
@@ -107,6 +110,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     get:
+      x-rate-limit-requests-per-minute: 300
       tags:
         - Battle
       summary: Get a battle by ID
@@ -126,6 +130,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     patch:
+      x-rate-limit-requests-per-minute: 30
       tags:
         - Battle
       summary: Update a battle
@@ -155,6 +160,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      x-rate-limit-requests-per-minute: 30
       tags:
         - Battle
       summary: Delete a battle
@@ -175,6 +181,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     post:
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Battle
       summary: Create a battle round
@@ -208,6 +215,7 @@ paths:
       - $ref: '#/components/parameters/battleId'
       - $ref: '#/components/parameters/roundId'
     patch:
+      x-rate-limit-requests-per-minute: 30
       tags:
         - Battle
       summary: Update a battle round
@@ -239,6 +247,7 @@ paths:
   /example-prompts:
     get:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       tags:
         - Example Prompt
       summary: List example prompts
@@ -260,6 +269,7 @@ paths:
   /leaderboards:
     get:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       tags:
         - Leaderboard
       summary: List all available leaderboards
@@ -281,6 +291,7 @@ paths:
       - $ref: '#/components/parameters/leaderboardId'
     get:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       tags:
         - Leaderboard
       summary: Get leaderboard entries
@@ -307,6 +318,7 @@ paths:
       - $ref: '#/components/parameters/modelId'
     get:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       tags:
         - Leaderboard
       summary: Get model performance history
@@ -332,6 +344,7 @@ paths:
       - $ref: '#/components/parameters/leaderboardId'
     get:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       tags:
         - Leaderboard
       summary: Get leaderboard snapshots
@@ -355,6 +368,7 @@ paths:
   /models:
     get:
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       tags:
         - Model
       summary: List models
@@ -377,6 +391,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/battleId'
     post:
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Battle
       summary: Create a battle evaluation
@@ -407,6 +422,8 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /stats:
     get:
+      x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       tags:
         - Stats
       summary: Get public platform statistics
@@ -415,7 +432,6 @@ paths:
         This endpoint can be accessed without authentication and is designed
         for use on the home page to showcase platform activity.
       operationId: getPublicStats
-      x-anonymous-access: true
       security: []
       responses:
         '200':
@@ -428,6 +444,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /users/me/stats:
     get:
+      x-rate-limit-requests-per-minute: 300
       tags:
         - User
       summary: Get current user's statistics

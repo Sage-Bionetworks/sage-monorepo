@@ -3,6 +3,7 @@ parameters:
   - $ref: ../../../../components/parameters/path/roundId.yaml
 
 patch:
+  x-rate-limit-requests-per-minute: 30
   tags:
     - Battle
   summary: Update a battle round

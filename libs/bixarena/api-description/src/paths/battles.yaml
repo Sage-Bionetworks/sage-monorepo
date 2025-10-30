@@ -1,4 +1,5 @@
 get:
+  x-rate-limit-requests-per-minute: 300
   tags:
     - Battle
   summary: List battles
@@ -21,6 +22,7 @@ get:
       $ref: ../components/responses/InternalServerError.yaml
 
 post:
+  x-rate-limit-requests-per-minute: 30
   tags:
     - Battle
   summary: Create a battle

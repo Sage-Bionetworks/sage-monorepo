@@ -1,4 +1,5 @@
 get:
+  x-rate-limit-requests-per-minute: 60
   tags:
     - Auth
   summary: Get current user profile

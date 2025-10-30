@@ -1,4 +1,5 @@
 get:
+  x-rate-limit-requests-per-minute: 300
   tags:
     - User
   summary: Get current user's statistics
