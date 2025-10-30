@@ -18,6 +18,8 @@ get:
       $ref: ../components/responses/BadRequest.yaml
     '401':
       $ref: ../components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml
 
@@ -51,5 +53,7 @@ post:
       $ref: ../components/responses/NotFound.yaml
     '409':
       $ref: ../components/responses/Conflict.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml

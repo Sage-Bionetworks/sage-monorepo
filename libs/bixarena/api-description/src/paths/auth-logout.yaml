@@ -11,3 +11,7 @@ post:
       description: Logged out successfully
     '401':
       $ref: ../components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

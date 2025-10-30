@@ -19,6 +19,8 @@ get:
       $ref: ../../components/responses/Unauthorized.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
 
@@ -50,6 +52,8 @@ patch:
       $ref: ../../components/responses/Forbidden.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
 
@@ -69,5 +73,7 @@ delete:
       $ref: ../../components/responses/Forbidden.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml

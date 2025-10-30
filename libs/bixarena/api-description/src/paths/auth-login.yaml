@@ -14,3 +14,7 @@ get:
       description: Redirect to Synapse login
     '400':
       $ref: ../components/responses/BadRequest.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

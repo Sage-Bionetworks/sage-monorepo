@@ -51,6 +51,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /battles:
     get:
       x-rate-limit-requests-per-minute: 300
@@ -72,6 +76,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
@@ -104,6 +110,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '409':
           $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /battles/{battleId}:
@@ -127,6 +135,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
     patch:
@@ -157,6 +167,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
@@ -175,6 +187,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /battles/{battleId}/rounds:
@@ -208,6 +222,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /battles/{battleId}/rounds/{roundId}:
@@ -242,6 +258,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /example-prompts:
@@ -264,6 +282,8 @@ paths:
                 $ref: '#/components/schemas/ExamplePromptPage'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards:
@@ -284,6 +304,8 @@ paths:
                 $ref: '#/components/schemas/LeaderboardList'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}:
@@ -310,6 +332,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}/history/{modelId}:
@@ -337,6 +361,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}/snapshots:
@@ -363,6 +389,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /models:
@@ -385,6 +413,8 @@ paths:
                 $ref: '#/components/schemas/ModelPage'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /battles/{battleId}/evaluations:
@@ -418,6 +448,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /stats:
@@ -440,6 +472,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PublicStats'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /users/me/stats:
@@ -459,6 +493,10 @@ paths:
                 $ref: '#/components/schemas/UserStats'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     jwtBearer:
@@ -1430,14 +1468,60 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    BadRequest:
-      description: Invalid request
+    TooManyRequests:
+      description: Too many requests. Rate limit exceeded. The client should wait before making additional requests.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BasicError'
+              - type: object
+                properties:
+                  limit:
+                    type: integer
+                    description: Maximum requests allowed per window
+                    example: 100
+                  window:
+                    type: string
+                    description: Time window for rate limiting
+                    example: 1 minute
+                  retryAfterSeconds:
+                    type: integer
+                    description: Seconds to wait before retrying
+                    example: 18
+                required:
+                  - limit
+                  - window
+                  - retryAfterSeconds
+      headers:
+        Retry-After:
+          description: Seconds to wait before making a new request
+          schema:
+            type: integer
+            example: 18
+        X-RateLimit-Limit:
+          description: Maximum requests allowed per minute
+          schema:
+            type: integer
+            example: 100
+        X-RateLimit-Remaining:
+          description: Remaining requests in current window
+          schema:
+            type: integer
+            example: 0
+        X-RateLimit-Reset:
+          description: Seconds until rate limit window resets
+          schema:
+            type: integer
+            example: 18
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
+    BadRequest:
+      description: Invalid request
       content:
         application/problem+json:
           schema:

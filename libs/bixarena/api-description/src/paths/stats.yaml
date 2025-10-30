@@ -17,5 +17,7 @@ get:
         application/json:
           schema:
             $ref: ../components/schemas/PublicStats.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml

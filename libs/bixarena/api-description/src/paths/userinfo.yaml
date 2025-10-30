@@ -18,3 +18,7 @@ get:
             $ref: ../components/schemas/UserInfo.yaml
     '401':
       $ref: ../components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

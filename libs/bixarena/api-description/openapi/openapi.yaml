@@ -60,6 +60,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
   /battles:
@@ -83,6 +87,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -117,6 +123,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '409':
           $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -142,6 +150,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -174,6 +184,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -194,6 +206,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -229,6 +243,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -265,6 +281,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -289,6 +307,8 @@ paths:
                 $ref: '#/components/schemas/ExamplePromptPage'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -311,6 +331,8 @@ paths:
                 $ref: '#/components/schemas/LeaderboardList'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -339,6 +361,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -368,6 +392,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -396,6 +422,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -420,6 +448,8 @@ paths:
                 $ref: '#/components/schemas/ModelPage'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -455,6 +485,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -479,6 +511,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PublicStats'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /users/me/stats:
@@ -498,6 +532,10 @@ paths:
                 $ref: '#/components/schemas/UserStats'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
   /auth/login:
@@ -517,6 +555,10 @@ paths:
           description: Redirect to Synapse login
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /auth/callback:
     get:
       x-anonymous-access: true
@@ -553,6 +595,10 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /auth/logout:
     post:
       x-anonymous-access: false
@@ -567,6 +613,10 @@ paths:
           description: Logged out successfully
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
   /oauth2/token:
@@ -638,6 +688,10 @@ paths:
                 $ref: '#/components/schemas/UserInfo'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
   /.well-known/jwks.json:
@@ -664,6 +718,10 @@ paths:
                       type: object
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     jwtBearer:
@@ -1668,14 +1726,60 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    BadRequest:
-      description: Invalid request
+    TooManyRequests:
+      description: Too many requests. Rate limit exceeded. The client should wait before making additional requests.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BasicError'
+              - type: object
+                properties:
+                  limit:
+                    type: integer
+                    description: Maximum requests allowed per window
+                    example: 100
+                  window:
+                    type: string
+                    description: Time window for rate limiting
+                    example: 1 minute
+                  retryAfterSeconds:
+                    type: integer
+                    description: Seconds to wait before retrying
+                    example: 18
+                required:
+                  - limit
+                  - window
+                  - retryAfterSeconds
+      headers:
+        Retry-After:
+          description: Seconds to wait before making a new request
+          schema:
+            type: integer
+            example: 18
+        X-RateLimit-Limit:
+          description: Maximum requests allowed per minute
+          schema:
+            type: integer
+            example: 100
+        X-RateLimit-Remaining:
+          description: Remaining requests in current window
+          schema:
+            type: integer
+            example: 0
+        X-RateLimit-Reset:
+          description: Seconds until rate limit window resets
+          schema:
+            type: integer
+            example: 18
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
+    BadRequest:
+      description: Invalid request
       content:
         application/problem+json:
           schema:
