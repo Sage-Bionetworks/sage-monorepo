@@ -28,7 +28,6 @@ from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 no_change_btn = gr.Button()

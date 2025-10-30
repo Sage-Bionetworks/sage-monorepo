@@ -1,11 +1,17 @@
 import argparse
+import logging
 import os
 
 import gradio as gr
 import requests
 
 from bixarena_app.auth.user_state import get_user_state
+from bixarena_app.config.utils import setup_logging
 from bixarena_app.page.bixarena_battle import build_battle_page
+
+# Configure logging first
+setup_logging()
+logger = logging.getLogger(__name__)
 from bixarena_app.page.bixarena_header import (
     build_header,
     handle_login_click,

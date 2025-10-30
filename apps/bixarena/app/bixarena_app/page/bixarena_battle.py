@@ -51,7 +51,6 @@ from bixarena_app.page.battle_page_css import (
 )
 from bixarena_app.page.example_prompt_ui import ExamplePromptUI
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 num_sides = 2

@@ -1,3 +1,5 @@
+import logging
+
 import gradio as gr
 import pandas as pd
 from bixarena_api_client import LeaderboardApi
@@ -5,7 +7,7 @@ from bixarena_api_client.exceptions import ApiException
 
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 
-print("🚀 bixarena_leaderboard.py module loaded successfully!")
+logger = logging.getLogger(__name__)
 
 
 def fetch_leaderboard_data(jwt_token: str | None = None):
@@ -15,21 +17,21 @@ def fetch_leaderboard_data(jwt_token: str | None = None):
         jwt_token: Optional JWT token for authenticated API calls
     """
     try:
-        print("📊 Fetching leaderboard data for 'open-source'...")
+        logger.info("📊 Fetching leaderboard data for 'open-source'...")
         if jwt_token:
-            print("🔑 Using JWT token for authenticated API call")
+            logger.debug("🔑 Using JWT token for authenticated API call")
 
         # Create API client and leaderboard API instance
         with create_authenticated_api_client(jwt_token) as api_client:
             api_instance = LeaderboardApi(api_client)
 
             # Fetch leaderboard entries for "open-source" leaderboard
-            print("📊 Fetching leaderboard data for 'open-source'...")
+            logger.debug("📊 Fetching leaderboard data for 'open-source'...")
             leaderboard_response = api_instance.get_leaderboard(
                 leaderboard_id="open-source"
             )
 
-            print(
+            logger.info(
                 f"✅ API call successful! Received {len(leaderboard_response.entries)} entries"
             )
 
@@ -55,17 +57,19 @@ def fetch_leaderboard_data(jwt_token: str | None = None):
                 # API doesn't provide organization, using placeholder
                 data["Organization"].append("Unknown")
 
-            print(f"📋 Converted to DataFrame with {len(data['Rank'])} rows")
+            logger.info(f"📋 Converted to DataFrame with {len(data['Rank'])} rows")
             return pd.DataFrame(data)
 
     except ApiException as e:
-        print(f"❌ API Exception when calling LeaderboardApi->get_leaderboard: {e}")
-        print("🔄 Falling back to dummy data...")
+        logger.error(
+            f"❌ API Exception when calling LeaderboardApi->get_leaderboard: {e}"
+        )
+        logger.info("🔄 Falling back to dummy data...")
         # Fallback to dummy data if API call fails
         return create_dummy_leaderboard_data()
     except Exception as e:
-        print(f"❌ Unexpected error fetching leaderboard data: {e}")
-        print("🔄 Falling back to dummy data...")
+        logger.error(f"❌ Unexpected error fetching leaderboard data: {e}")
+        logger.info("🔄 Falling back to dummy data...")
         # Fallback to dummy data if any other error occurs
         return create_dummy_leaderboard_data()
 
@@ -173,14 +177,13 @@ def filter_dataframe(df, model_filter):
 
 def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
-    print("📊 Building leaderboard page...")
+    logger.info("📊 Building leaderboard page...")
 
     # Get initial data from API
-    print("🔄 Calling fetch_leaderboard_data()...")
     df = fetch_leaderboard_data()
     total_votes = df["Total Votes"].sum()
     total_models = len(df)
-    print(
+    logger.info(
         f"📈 Leaderboard built with {total_models} models and {total_votes} total votes"
     )
 
