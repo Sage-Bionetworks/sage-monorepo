@@ -14,7 +14,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run locust -f src/locustfile.py --host=http://localhost:8000",
+        "command": "uv run locust -f src/bixarena/locustfile.py --host=http://localhost:8000",
         "cwd": "{projectRoot}"
       }
     }
