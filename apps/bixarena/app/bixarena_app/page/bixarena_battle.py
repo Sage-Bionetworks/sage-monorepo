@@ -26,7 +26,6 @@ from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import (
     BATTLE_ROUND_LIMIT,
-    MODERATION_MSG,
     PROMPT_LEN_LIMIT,
     SLOW_MODEL_MSG,
 )
@@ -41,9 +40,8 @@ from bixarena_app.model.model_response import (
     get_model_list,
     invisible_btn,
     no_change_btn,
-    set_global_vars_anony,
 )
-from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
+from bixarena_app.model.model_selection import get_battle_pair
 from bixarena_app.page.battle_page_css import (
     DISCLAIMER_CSS,
     EXAMPLE_PROMPTS_CSS,
@@ -379,13 +377,6 @@ def add_text(
             + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
         )
 
-    model_list = [states[i].model_name for i in range(num_sides)]
-    flagged = moderation_filter(text, model_list)
-    if flagged:
-        logger.info(f"violate moderation (anony). text: {text}")
-        # overwrite the original text
-        text = MODERATION_MSG
-
     conv = states[0].conv
     if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
         logger.info(
@@ -709,20 +700,12 @@ def build_side_by_side_ui_anony():
     )
 
 
-def build_battle_page(
-    moderate=False,
-):
+def build_battle_page():
     """Build the battle page
-
-    Args:
-        moderate (bool): Enable content moderation
 
     Returns:
         tuple: (battle_page, example_prompt_ui, prompt_outputs) for hooking up navigation refresh
     """
-    # Set global variables
-    set_global_vars_anony(moderate)
-
     # Load models once (text-only models)
     models, _ = get_model_list()
 

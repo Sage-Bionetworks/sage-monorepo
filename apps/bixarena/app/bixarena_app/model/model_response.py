@@ -35,9 +35,6 @@ enable_btn = gr.Button(interactive=True, visible=True)
 disable_btn = gr.Button(interactive=False)
 invisible_btn = gr.Button(interactive=False, visible=False)
 
-controller_url = ""
-enable_moderation = False
-
 api_endpoint_info = {}
 
 
@@ -71,11 +68,6 @@ class BattleSession:
     def reset(self):
         self.battle_id = None
         self.round_id = None
-
-
-def set_global_vars_anony(enable_moderation_):
-    global enable_moderation
-    enable_moderation = enable_moderation_
 
 
 def _update_battle_round_with_responses(

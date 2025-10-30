@@ -172,7 +172,6 @@ def parse_args():
     - APP_PORT: Server port (default: None, Gradio will auto-select)
     - APP_SHARE: Enable sharing (true/1/yes, default: false)
     - APP_CONCURRENCY_COUNT: Concurrency limit (default: 10)
-    - APP_MODERATE: Enable moderation (true/1/yes, default: false)
     - APP_GRADIO_ROOT_PATH: Root path for Gradio (default: None)
     """
 
@@ -203,11 +202,6 @@ def parse_args():
         default=int(os.environ.get("APP_CONCURRENCY_COUNT", "10")),
     )
     parser.add_argument(
-        "--moderate",
-        action="store_true",
-        default=os.environ.get("APP_MODERATE", "").lower() in ("true", "1", "yes"),
-    )
-    parser.add_argument(
         "--gradio-root-path",
         type=str,
         default=os.environ.get("APP_GRADIO_ROOT_PATH"),
@@ -217,7 +211,7 @@ def parse_args():
     return args
 
 
-def build_app(moderate=False):
+def build_app():
     """Create the main application"""
 
     cleanup_js = """
@@ -260,7 +254,7 @@ def build_app(moderate=False):
             ) = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
-            _, example_prompt_ui, prompt_outputs = build_battle_page(moderate)
+            _, example_prompt_ui, prompt_outputs = build_battle_page()
 
         with gr.Column(visible=False) as leaderboard_page:
             build_leaderboard_page()
@@ -374,7 +368,7 @@ def build_app(moderate=False):
 # 2. During actual script execution to launch the server
 # This is normal Gradio behavior and unavoidable without complex workarounds
 args = parse_args()
-demo = build_app(args.moderate)
+demo = build_app()
 demo.queue(default_concurrency_limit=args.concurrency_count)
 
 # Only launch when running directly with python (not via gradio CLI)

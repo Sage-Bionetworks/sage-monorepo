@@ -5,7 +5,6 @@ Global constants.
 import os
 
 ##### For the gradio web server
-MODERATION_MSG = "$MODERATION$ YOUR INPUT VIOLATES OUR CONTENT MODERATION GUIDELINES."
 SLOW_MODEL_MSG = "⚠️  Both models will show the responses all at once. Please stay patient as it may take over 30 seconds."
 
 # User input limits
