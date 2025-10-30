@@ -20,9 +20,9 @@ def build_header():
                 """
             )
         with gr.Column(scale=1):
-            battle_btn = gr.Button("Battle", variant="secondary", visible=False)
+            battle_btn = gr.Button("⚔️ Battle", variant="primary", visible=False)
         with gr.Column(scale=1):
-            leaderboard_btn = gr.Button("Leaderboard", variant="secondary")
+            leaderboard_btn = gr.Button("🏆 Leaderboard", variant="secondary")
         with gr.Column(scale=1):
             # Start as Login; value updated by load / callback events
             login_btn = gr.Button("Login", variant="primary", elem_id="login-btn")
@@ -46,7 +46,7 @@ def update_login_button():
     """Return gr.update for login button based on Python-side auth state."""
     state = get_user_state()
     if state.is_authenticated():
-        return gr.update(value="Logout", variant="primary")
+        return gr.update(value="Logout", variant="secondary")
     return gr.update(value="Login", variant="primary")
 
 
