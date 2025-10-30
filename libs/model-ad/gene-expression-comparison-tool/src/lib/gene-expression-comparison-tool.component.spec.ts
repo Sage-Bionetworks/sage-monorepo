@@ -1,6 +1,10 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import {
+  ComparisonToolService,
+  provideComparisonToolFilterService,
+} from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { ComparisonToolConfigService } from '@sagebionetworks/model-ad/api-client';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
@@ -8,10 +12,7 @@ import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { GeneExpressionComparisonToolComponent } from './gene-expression-comparison-tool.component';
-import {
-  ComparisonToolService,
-  provideComparisonToolFilterService,
-} from '@sagebionetworks/explorers/services';
+import { GeneExpressionComparisonToolService } from './services/gene-expression-comparison-tool.service';
 
 async function setup() {
   const { fixture } = await render(GeneExpressionComparisonToolComponent, {
@@ -29,6 +30,7 @@ async function setup() {
       },
       ComparisonToolService,
       ...provideComparisonToolFilterService(),
+      GeneExpressionComparisonToolService,
     ],
   });
 

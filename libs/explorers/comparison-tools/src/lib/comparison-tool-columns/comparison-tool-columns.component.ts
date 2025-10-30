@@ -1,4 +1,4 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, input, ViewEncapsulation } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { SortEvent } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -14,10 +14,11 @@ import { TooltipModule } from 'primeng/tooltip';
 export class ComparisonToolColumnsComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
+  columnWidth = input<string>('auto');
+
   selectedColumns = this.comparisonToolService.selectedColumns;
   currentConfig = this.comparisonToolService.currentConfig;
   resultsCount = this.comparisonToolService.totalResultsCount;
-  columnWidth = 'auto';
 
   sortCallback(event: SortEvent) {
     this.comparisonToolService.setSort(event.field, event.order);

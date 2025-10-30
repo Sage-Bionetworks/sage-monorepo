@@ -1,4 +1,4 @@
-import { computed, Injectable, signal, Signal } from '@angular/core';
+import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import {
   ComparisonToolColumn,
   ComparisonToolColumns,
@@ -6,18 +6,16 @@ import {
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
+import { NotificationService } from './notification.service';
 
 /**
  * Shared state contract for comparison tools.
- *
- * - Call {@link initialize} when configs load to seed dropdowns, reset counts, and wiki params.
- * - Read derived state via {@link configs}, {@link dropdownSelection}, {@link currentConfig}, and {@link columns}.
- * - Update user selections through {@link setDropdownSelection}; consumers can read the latest value via {@link dropdownSelection}.
- * - Manage result totals via {@link totalResultsCount} and {@link pinnedResultsCount}.
  */
 
 @Injectable()
-export class ComparisonToolService {
+export class ComparisonToolService<T> {
+  private readonly notificationService = inject(NotificationService);
+
   private readonly DEFAULT_SORT_ORDER = -1;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
@@ -39,6 +37,8 @@ export class ComparisonToolService {
   private readonly sortFieldSignal = signal<string | undefined>(undefined);
   private readonly sortOrderSignal = signal<number>(this.DEFAULT_SORT_ORDER);
   private readonly columnsForDropdownsSignal = signal<ComparisonToolColumns[]>([]);
+  private readonly unpinnedDataSignal = signal<T[]>([]);
+  private readonly pinnedDataSignal = signal<T[]>([]);
 
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
@@ -48,6 +48,8 @@ export class ComparisonToolService {
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
   readonly sortField = this.sortFieldSignal.asReadonly();
   readonly sortOrder = this.sortOrderSignal.asReadonly();
+  readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
+  readonly pinnedData = this.pinnedDataSignal.asReadonly();
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -97,9 +99,12 @@ export class ComparisonToolService {
   }
 
   totalResultsCount = signal<number>(0);
-  pinnedResultsCount = computed(() => this.pinnedItemsSignal().size);
+  pinnedResultsCount = signal<number>(0);
   hasMaxPinnedItems = computed(() => {
     return this.pinnedResultsCount() >= this.maxPinnedItems();
+  });
+  disabledPinTooltip = computed(() => {
+    return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
   });
 
   setLegendVisibility(visible: boolean) {
@@ -117,8 +122,10 @@ export class ComparisonToolService {
   initialize(configs: ComparisonToolConfig[], selection?: string[]) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
-    this.pinnedItemsSignal.set(new Set());
+    this.resetPinnedItems();
     this.setSort(undefined, this.DEFAULT_SORT_ORDER);
+    this.setUnpinnedData([]);
+    this.setPinnedData([]);
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);
@@ -183,23 +190,25 @@ export class ComparisonToolService {
   }
 
   togglePin(id: string) {
-    this.pinnedItemsSignal.update((pinnedItems) => {
-      const newSet = new Set(pinnedItems);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
+    if (this.isPinned(id)) {
+      this.unpinItem(id);
+      return;
+    }
+    this.pinItem(id);
   }
 
   pinItem(id: string) {
-    this.pinnedItemsSignal.update((pinnedItems) => {
-      const newSet = new Set(pinnedItems);
-      newSet.add(id);
-      return newSet;
-    });
+    if (this.hasMaxPinnedItems()) {
+      this.notificationService.showWarning(
+        `You have reached the maximum number of pinned items (${this.maxPinnedItems()}). Please unpin an item before pinning a new one.`,
+      );
+    } else {
+      this.pinnedItemsSignal.update((pinnedItems) => {
+        const newSet = new Set(pinnedItems);
+        newSet.add(id);
+        return newSet;
+      });
+    }
   }
 
   unpinItem(id: string) {
@@ -210,8 +219,34 @@ export class ComparisonToolService {
     });
   }
 
+  pinList(ids: string[]) {
+    this.pinnedItemsSignal.update((pinnedItems) => {
+      const newSet = new Set(pinnedItems);
+      let itemsAdded = 0;
+      for (const id of ids) {
+        if (newSet.size >= this.maxPinnedItems()) {
+          const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
+          this.notificationService.showWarning(
+            `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
+          );
+          break;
+        }
+        if (newSet.has(id)) {
+          continue;
+        }
+        newSet.add(id);
+        itemsAdded++;
+      }
+      return newSet;
+    });
+  }
+
   setPinnedItems(items: string[]) {
     this.pinnedItemsSignal.set(new Set(items));
+  }
+
+  resetPinnedItems() {
+    this.setPinnedItems([]);
   }
 
   toggleColumn(column: ComparisonToolColumn) {
@@ -244,12 +279,21 @@ export class ComparisonToolService {
     });
   }
 
+  setUnpinnedData(unpinnedData: T[]) {
+    this.unpinnedDataSignal.set(unpinnedData);
+  }
+
+  setPinnedData(pinnedData: T[]) {
+    this.pinnedDataSignal.set(pinnedData);
+  }
+
   private updateDropdownSelectionIfChanged(selection: string[]) {
     if (isEqual(this.dropdownSelectionSignal(), selection)) {
       return;
     }
 
     this.dropdownSelectionSignal.set(selection);
+    this.resetPinnedItems();
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {

@@ -7,7 +7,7 @@
   .controls-left {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: var(--comparison-tool-primary-column-width);
   }
 
   .controls-right {

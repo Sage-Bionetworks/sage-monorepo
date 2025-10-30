@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { DiseaseCorrelationLegendComponent } from '../disease-correlation-legend/disease-correlation-legend.component';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { DiseaseCorrelationComparisonToolService } from '../../services/disease-correlation-comparison-tool.service';
+import { DiseaseCorrelationLegendComponent } from '../disease-correlation-legend/disease-correlation-legend.component';
 
 @Component({
   selector: 'model-ad-disease-correlation-help-links',
@@ -10,7 +10,7 @@ import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tools'
   styleUrls: ['./disease-correlation-help-links.component.scss'],
 })
 export class DiseaseCorrelationHelpLinksComponent {
-  private legendService = inject(ComparisonToolService);
+  private readonly legendService = inject(DiseaseCorrelationComparisonToolService);
 
   toggleLegend() {
     this.legendService.toggleLegend();

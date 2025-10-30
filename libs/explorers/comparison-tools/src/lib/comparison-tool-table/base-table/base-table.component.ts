@@ -38,8 +38,8 @@ export class BaseTableComponent {
   data = input.required<Record<string, any>[]>();
   shouldPaginate = input<boolean>(true);
   shouldShowNoDataMessage = input<boolean>(true);
+  columnWidth = input<string>('auto');
 
-  columnWidth = 'auto';
   paginationConfig: PaginationOptions = {
     rows: 10,
     showCurrentPageReport: true,

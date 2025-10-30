@@ -1,29 +1,24 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
-import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
+import { PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
   ItemFilterTypeQuery,
-  ModelOverview,
   ModelOverviewService,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
 import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
-import { ModelOverviewMainTableComponent } from './components/model-overview-main-table/model-overview-main-table.component';
+import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
-  imports: [
-    BaseComparisonToolComponent,
-    ModelOverviewMainTableComponent,
-    ModelOverviewHelpLinksComponent,
-  ],
+  imports: [BaseComparisonToolComponent, ModelOverviewHelpLinksComponent],
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })
@@ -31,11 +26,11 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   private readonly platformService = inject(PlatformService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly comparisonToolService = inject(ComparisonToolService);
+  private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly modelOverviewService = inject(ModelOverviewService);
 
-  data: ModelOverview[] = [];
+  pinnedItems = this.comparisonToolService.pinnedItems;
 
   isLoading = signal(true);
 
@@ -54,10 +49,18 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
+  readonly onUpdateEffect = effect(() => {
+    if (this.platformService.isBrowser) {
+      this.isLoading.set(true);
+      const pinnedItems = Array.from(this.pinnedItems());
+      this.getPinnedData(pinnedItems);
+      this.getUnpinnedData(pinnedItems);
+    }
+  });
+
   ngOnInit() {
     if (this.platformService.isBrowser) {
       this.getConfigs();
-      this.getData();
     }
   }
 
@@ -81,14 +84,32 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       });
   }
 
-  getData() {
+  getUnpinnedData(pinnedItems: string[]) {
     this.modelOverviewService
-      .getModelOverviews([], ItemFilterTypeQuery.Exclude)
+      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Exclude)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
-          this.data = data;
+          this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(data.length);
+        },
+        error: (error) => {
+          throw new Error('Error fetching model overview data:', { cause: error });
+        },
+        complete: () => {
+          this.isLoading.set(false);
+        },
+      });
+  }
+
+  getPinnedData(pinnedItems: string[]) {
+    this.modelOverviewService
+      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Include)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.comparisonToolService.setPinnedData(data);
+          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: (error) => {
           throw new Error('Error fetching model overview data:', { cause: error });

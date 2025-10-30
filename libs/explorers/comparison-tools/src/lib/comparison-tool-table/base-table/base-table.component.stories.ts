@@ -14,7 +14,7 @@ import { BaseTableComponent } from './base-table.component';
 
 const meta: Meta<BaseTableComponent> = {
   component: BaseTableComponent,
-  title: 'Comparison Tools/BaseTableComponent',
+  title: 'Comparison Tools/ComparisonToolTable/BaseTableComponent',
   decorators: [
     applicationConfig({
       providers: [

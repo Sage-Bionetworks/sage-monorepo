@@ -1,6 +1,8 @@
 import { Provider } from '@angular/core';
 import { ComparisonToolConfig, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolService } from './comparison-tool.service';
+import { NotificationService } from './notification.service';
 
 export type ComparisonToolServiceOptions = {
   configs?: ComparisonToolConfig[];
@@ -10,6 +12,8 @@ export type ComparisonToolServiceOptions = {
   viewConfig?: Partial<ComparisonToolViewConfig>;
   maxPinnedItems?: number;
   pinnedItems?: string[];
+  unpinnedData?: Record<string, unknown>[];
+  pinnedData?: Record<string, unknown>[];
 };
 
 export const provideComparisonToolService = (
@@ -20,6 +24,8 @@ export const provideComparisonToolService = (
   }
 
   return [
+    MessageService,
+    NotificationService,
     {
       provide: ComparisonToolService,
       useFactory: () => {
@@ -49,6 +55,15 @@ export const provideComparisonToolService = (
 
         if (options.pinnedItems !== undefined) {
           service.setPinnedItems(options.pinnedItems);
+          service.pinnedResultsCount.set(options.pinnedItems.length);
+        }
+
+        if (options.unpinnedData !== undefined) {
+          service.setUnpinnedData(options.unpinnedData);
+        }
+
+        if (options.pinnedData !== undefined) {
+          service.setPinnedData(options.pinnedData);
         }
 
         return service;

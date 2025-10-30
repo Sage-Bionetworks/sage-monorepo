@@ -12,6 +12,7 @@ import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { DiseaseCorrelationComparisonToolComponent } from './disease-correlation-comparison-tool.component';
+import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 async function setup() {
   const { fixture } = await render(DiseaseCorrelationComparisonToolComponent, {
@@ -38,6 +39,7 @@ async function setup() {
         },
       },
       ComparisonToolService,
+      DiseaseCorrelationComparisonToolService,
     ],
   });
 

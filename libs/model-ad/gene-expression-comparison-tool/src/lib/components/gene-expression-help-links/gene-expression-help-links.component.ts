@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { GeneExpressionLegendComponent } from '../gene-expression-legend/gene-expression-legend.component';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { GeneExpressionComparisonToolService } from '../../services/gene-expression-comparison-tool.service';
+import { GeneExpressionLegendComponent } from '../gene-expression-legend/gene-expression-legend.component';
 
 @Component({
   selector: 'model-ad-gene-expression-help-links',
@@ -10,7 +10,7 @@ import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tools'
   styleUrls: ['./gene-expression-help-links.component.scss'],
 })
 export class GeneExpressionHelpLinksComponent {
-  private legendService = inject(ComparisonToolService);
+  private readonly legendService = inject(GeneExpressionComparisonToolService);
 
   toggleLegend() {
     this.legendService.toggleLegend();

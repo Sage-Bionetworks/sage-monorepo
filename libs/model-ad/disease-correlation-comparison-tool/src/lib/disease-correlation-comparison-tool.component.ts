@@ -3,18 +3,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolViewConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
+import { PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
-  DiseaseCorrelation,
   DiseaseCorrelationService,
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
 import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
+import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
@@ -28,11 +28,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
-  private readonly comparisonToolService = inject(ComparisonToolService);
+  private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
 
-  data: DiseaseCorrelation[] = [];
+  pinnedItems = this.comparisonToolService.pinnedItems;
 
   isLoading = signal(true);
+
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'CONSENSUS NETWORK MODULES': {
       ownerId: 'syn66271427',
@@ -52,17 +53,21 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
+  }
 
-    effect(() => {
+  readonly onUpdateEffect = effect(() => {
+    if (this.platformService.isBrowser) {
       const selection = this.comparisonToolService.dropdownSelection();
       if (!selection.length) {
         return;
       }
 
       this.isLoading.set(true);
-      this.getData();
-    });
-  }
+      const pinnedItems = Array.from(this.pinnedItems());
+      this.getUnpinnedData(selection, pinnedItems);
+      this.getPinnedData(selection, pinnedItems);
+    }
+  });
 
   ngOnInit() {
     if (this.platformService.isBrowser) {
@@ -90,18 +95,32 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       });
   }
 
-  getData() {
+  getUnpinnedData(selection: string[], pinnedItems: string[]) {
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(
-        this.comparisonToolService.dropdownSelection(),
-        [],
-        ItemFilterTypeQuery.Exclude,
-      )
+      .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Exclude)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
-          this.data = data;
+          this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(data.length);
+        },
+        error: (error) => {
+          throw new Error('Error fetching disease correlation data:', { cause: error });
+        },
+        complete: () => {
+          this.isLoading.set(false);
+        },
+      });
+  }
+
+  getPinnedData(selection: string[], pinnedItems: string[]) {
+    this.diseaseCorrelationService
+      .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Include)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.comparisonToolService.setPinnedData(data);
+          this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: (error) => {
           throw new Error('Error fetching disease correlation data:', { cause: error });
