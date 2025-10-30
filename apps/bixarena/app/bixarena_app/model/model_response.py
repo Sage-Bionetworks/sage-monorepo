@@ -203,11 +203,11 @@ def get_model_list():
                 api_model_name = model.api_model_name
                 api_base = model.api_base
                 api_type = "openai"
-                api_key = os.getenv("OPENAI_API_KEY", "")
+                api_key = os.getenv("OPENROUTER_API_KEY", "")
 
                 if not api_key:
                     logger.warning(
-                        f"Skipping model '{model_name}' - missing OPENAI_API_KEY"
+                        f"Skipping model '{model_name}' - missing OPENROUTER_API_KEY"
                     )
                     continue
 
