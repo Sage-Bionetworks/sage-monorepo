@@ -26,36 +26,9 @@ class OpenAIAdapter(BaseModelAdapter):
     def get_default_conv_template(self, model_path: str) -> Conversation:
         return get_conv_template("chatgpt")
 
-
-class AnthropicAdapter(BaseModelAdapter):
-    """Anthropic models adapter."""
-
-    def match(self, model_path: str) -> bool:
-        return "claude" in model_path.lower() or model_path.lower().startswith(
-            "anthropic/"
-        )
-
-    def get_default_conv_template(self, model_path: str) -> Conversation:
-        return get_conv_template("claude")
-
-
-class GeminiAdapter(BaseModelAdapter):
-    """Google Gemini models adapter."""
-
-    def match(self, model_path: str) -> bool:
-        return "gemini" in model_path.lower() or model_path.lower().startswith(
-            "google/"
-        )
-
-    def get_default_conv_template(self, model_path: str) -> Conversation:
-        return get_conv_template("gemini")
-
-
 # Register model adapters
 model_adapters = [
     OpenAIAdapter(),
-    AnthropicAdapter(),
-    GeminiAdapter(),
     BaseModelAdapter(),  # Default fallback
 ]
 
