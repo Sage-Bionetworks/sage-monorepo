@@ -77,6 +77,7 @@ __all__ = [
     "ModelSort",
     "PageMetadata",
     "PublicStats",
+    "RateLimitError",
     "SortDirection",
     "Token200Response",
     "UserInfo",
@@ -208,6 +209,7 @@ from bixarena_api_client.models.model_search_query import (
 from bixarena_api_client.models.model_sort import ModelSort as ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
 from bixarena_api_client.models.public_stats import PublicStats as PublicStats
+from bixarena_api_client.models.rate_limit_error import RateLimitError as RateLimitError
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection
 from bixarena_api_client.models.token200_response import (
     Token200Response as Token200Response,

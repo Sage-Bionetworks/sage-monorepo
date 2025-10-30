@@ -7,6 +7,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.PublicStatsDto;
+import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,6 +46,7 @@ public interface StatsApi {
      * Retrieve publicly accessible statistics about the BixArena platform. This endpoint can be accessed without authentication and is designed for use on the home page to showcase platform activity. 
      *
      * @return Public statistics retrieved successfully (status code 200)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -56,6 +58,10 @@ public interface StatsApi {
             @ApiResponse(responseCode = "200", description = "Public statistics retrieved successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = PublicStatsDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = PublicStatsDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
             }),
             @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),

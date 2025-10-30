@@ -8,6 +8,7 @@ package org.sagebionetworks.bixarena.auth.service.api;
 import org.sagebionetworks.bixarena.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.Callback200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.GetJwks200ResponseDto;
+import org.sagebionetworks.bixarena.auth.service.model.dto.RateLimitErrorDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.Token200ResponseDto;
 import org.sagebionetworks.bixarena.auth.service.model.dto.UserInfoDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -52,6 +53,8 @@ public interface AuthApi {
      * @return Authentication successful (status code 200)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "callback",
@@ -68,6 +71,14 @@ public interface AuthApi {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
@@ -93,6 +104,8 @@ public interface AuthApi {
      *
      * @return JWKS document (status code 200)
      *         or Invalid request (status code 400)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "getJwks",
@@ -105,6 +118,14 @@ public interface AuthApi {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = GetJwks200ResponseDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
@@ -129,6 +150,8 @@ public interface AuthApi {
      *
      * @return User profile information (status code 200)
      *         or Unauthorized (status code 401)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "getUserInfo",
@@ -141,6 +164,14 @@ public interface AuthApi {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = UserInfoDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
@@ -169,6 +200,8 @@ public interface AuthApi {
      * @return Flow started (no content; clients should follow redirect) (status code 204)
      *         or Redirect to Synapse login (status code 302)
      *         or Invalid request (status code 400)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "login",
@@ -179,14 +212,23 @@ public interface AuthApi {
             @ApiResponse(responseCode = "204", description = "Flow started (no content; clients should follow redirect)"),
             @ApiResponse(responseCode = "302", description = "Redirect to Synapse login"),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
         value = "/auth/login",
-        produces = { "application/problem+json" }
+        produces = { "application/problem+json", "application/json" }
     )
     
     default ResponseEntity<Void> login(
@@ -202,6 +244,8 @@ public interface AuthApi {
      *
      * @return Logged out successfully (status code 204)
      *         or Unauthorized (status code 401)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
         operationId = "logout",
@@ -211,7 +255,16 @@ public interface AuthApi {
         responses = {
             @ApiResponse(responseCode = "204", description = "Logged out successfully"),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         },
         security = {
@@ -221,7 +274,7 @@ public interface AuthApi {
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/auth/logout",
-        produces = { "application/problem+json" }
+        produces = { "application/problem+json", "application/json" }
     )
     
     default ResponseEntity<Void> logout(

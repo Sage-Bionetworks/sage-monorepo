@@ -169,6 +169,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [ModelSort](docs/ModelSort.md)
 - [PageMetadata](docs/PageMetadata.md)
 - [PublicStats](docs/PublicStats.md)
+- [RateLimitError](docs/RateLimitError.md)
 - [SortDirection](docs/SortDirection.md)
 - [Token200Response](docs/Token200Response.md)
 - [UserInfo](docs/UserInfo.md)

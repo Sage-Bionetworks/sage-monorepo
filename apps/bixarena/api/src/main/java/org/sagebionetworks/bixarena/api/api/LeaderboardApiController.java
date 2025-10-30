@@ -8,6 +8,7 @@ import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryQueryDt
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotQueryDto;
+import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

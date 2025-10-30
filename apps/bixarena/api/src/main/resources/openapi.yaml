@@ -44,9 +44,14 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Admin statistics
       tags:
         - Admin
+      x-rate-limit-requests-per-minute: 60
       x-accepts:
         - application/json
         - application/problem+json
@@ -76,11 +81,14 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: List battles
       tags:
         - Battle
+      x-rate-limit-requests-per-minute: 300
       x-accepts:
         - application/json
         - application/problem+json
@@ -112,11 +120,14 @@ paths:
           $ref: '#/components/responses/NotFound'
         '409':
           $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Create a battle
       tags:
         - Battle
+      x-rate-limit-requests-per-minute: 30
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -145,12 +156,16 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Delete a battle
       tags:
         - Battle
+      x-rate-limit-requests-per-minute: 30
       x-accepts:
+        - application/json
         - application/problem+json
       x-tags:
         - tag: Battle
@@ -177,11 +192,14 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Get a battle by ID
       tags:
         - Battle
+      x-rate-limit-requests-per-minute: 300
       x-accepts:
         - application/json
         - application/problem+json
@@ -220,11 +238,14 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Update a battle
       tags:
         - Battle
+      x-rate-limit-requests-per-minute: 30
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -265,11 +286,14 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Create a battle round
       tags:
         - Battle
+      x-rate-limit-requests-per-minute: 60
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -318,11 +342,14 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Update a battle round
       tags:
         - Battle
+      x-rate-limit-requests-per-minute: 30
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -351,12 +378,15 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: List example prompts
       tags:
         - Example Prompt
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       x-accepts:
         - application/json
         - application/problem+json
@@ -375,12 +405,15 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: List all available leaderboards
       tags:
         - Leaderboard
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       x-accepts:
         - application/json
         - application/problem+json
@@ -419,12 +452,15 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Get leaderboard entries
       tags:
         - Leaderboard
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       x-accepts:
         - application/json
         - application/problem+json
@@ -473,12 +509,15 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Get model performance history
       tags:
         - Leaderboard
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       x-accepts:
         - application/json
         - application/problem+json
@@ -517,12 +556,15 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Get leaderboard snapshots
       tags:
         - Leaderboard
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       x-accepts:
         - application/json
         - application/problem+json
@@ -550,12 +592,15 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: List models
       tags:
         - Model
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       x-accepts:
         - application/json
         - application/problem+json
@@ -595,11 +640,14 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Create a battle evaluation
       tags:
         - Battle
+      x-rate-limit-requests-per-minute: 60
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -620,6 +668,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/PublicStats'
           description: Public statistics retrieved successfully
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security: []
@@ -627,6 +677,7 @@ paths:
       tags:
         - Stats
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       x-accepts:
         - application/json
         - application/problem+json
@@ -645,9 +696,14 @@ paths:
           description: User statistics retrieved successfully
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get current user's statistics
       tags:
         - User
+      x-rate-limit-requests-per-minute: 300
       x-accepts:
         - application/json
         - application/problem+json
@@ -761,18 +817,54 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The user does not have the permission to perform this action
-    BadRequest:
+    TooManyRequests:
       content:
-        application/problem+json:
+        application/json:
           schema:
-            $ref: '#/components/schemas/BasicError'
-      description: Invalid request
+            $ref: '#/components/schemas/RateLimitError'
+      description: Too many requests. Rate limit exceeded. The client should wait
+        before making additional requests.
+      headers:
+        Retry-After:
+          description: Seconds to wait before making a new request
+          explode: false
+          schema:
+            example: 18
+            type: integer
+          style: simple
+        X-RateLimit-Limit:
+          description: Maximum requests allowed per minute
+          explode: false
+          schema:
+            example: 100
+            type: integer
+          style: simple
+        X-RateLimit-Remaining:
+          description: Remaining requests in current window
+          explode: false
+          schema:
+            example: 0
+            type: integer
+          style: simple
+        X-RateLimit-Reset:
+          description: Seconds until rate limit window resets
+          explode: false
+          schema:
+            example: 18
+            type: integer
+          style: simple
     InternalServerError:
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
     NotFound:
       content:
         application/problem+json:
@@ -810,6 +902,36 @@ components:
         - status
         - title
       type: object
+    RateLimitError:
+      allOf:
+        - $ref: '#/components/schemas/BasicError'
+        - properties:
+            limit:
+              description: Maximum requests allowed per window
+              example: 100
+              type: integer
+            window:
+              description: Time window for rate limiting
+              example: 1 minute
+              type: string
+            retryAfterSeconds:
+              description: Seconds to wait before retrying
+              example: 18
+              type: integer
+          required:
+            - limit
+            - retryAfterSeconds
+            - window
+          type: object
+      example:
+        instance: instance
+        retryAfterSeconds: 18
+        limit: 100
+        detail: detail
+        window: 1 minute
+        title: title
+        type: type
+        status: 0
     BattleSort:
       default: created_at
       description: What to sort battles by.

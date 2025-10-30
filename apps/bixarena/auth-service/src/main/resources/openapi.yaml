@@ -10,12 +10,12 @@ info:
   title: BixArena Auth Service
   version: 1.0.0
 servers:
-- url: http://localhost
+  - url: http://localhost
 security:
-- jwtBearer: []
+  - jwtBearer: []
 tags:
-- description: Authentication and token minting operations.
-  name: Auth
+  - description: Authentication and token minting operations.
+    name: Auth
 paths:
   /auth/login:
     get:
@@ -23,80 +23,97 @@ paths:
         state and nonce.
       operationId: login
       responses:
-        "204":
+        '204':
           description: Flow started (no content; clients should follow redirect)
-        "302":
+        '302':
           description: Redirect to Synapse login
-        "400":
-          $ref: "#/components/responses/BadRequest"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security: []
       summary: Start Synapse OIDC authorization code flow
       tags:
-      - Auth
+        - Auth
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 20
       x-accepts:
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Auth
+        - tag: Auth
   /auth/callback:
     get:
       description: "Handles redirect from Synapse, validates state and nonce, establishes\
         \ authenticated session."
       operationId: callback
       parameters:
-      - explode: true
-        in: query
-        name: code
-        required: true
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: state
-        required: true
-        schema:
-          type: string
-        style: form
+        - explode: true
+          in: query
+          name: code
+          required: true
+          schema:
+            type: string
+          style: form
+        - explode: true
+          in: query
+          name: state
+          required: true
+          schema:
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/callback_200_response"
+                $ref: '#/components/schemas/callback_200_response'
           description: Authentication successful
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security: []
       summary: OIDC redirect callback
       tags:
-      - Auth
+        - Auth
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 20
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Auth
+        - tag: Auth
   /auth/logout:
     post:
       description: Invalidate the current authenticated session. Requires an active
         session.
       operationId: logout
       responses:
-        "204":
+        '204':
           description: Logged out successfully
-        "401":
-          $ref: "#/components/responses/Unauthorized"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Logout current session
       tags:
-      - Auth
+        - Auth
       x-anonymous-access: false
+      x-rate-limit-requests-per-minute: 60
       x-accepts:
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Auth
+        - tag: Auth
   /oauth2/token:
     post:
       description: |
@@ -105,38 +122,39 @@ paths:
         The optional audience parameter specifies the target service for the JWT.
       operationId: token
       parameters:
-      - description: |
-          Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
-        explode: true
-        in: query
-        name: audience
-        required: false
-        schema:
-          enum:
-          - urn:bixarena:auth
-          - urn:bixarena:api
-          - urn:bixarena:ai
-          type: string
-        style: form
+        - description: |
+            Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
+          explode: true
+          in: query
+          name: audience
+          required: false
+          schema:
+            enum:
+              - urn:bixarena:auth
+              - urn:bixarena:api
+              - urn:bixarena:ai
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/token_200_response"
+                $ref: '#/components/schemas/token_200_response'
           description: Access token response
-        "401":
-          $ref: "#/components/responses/Unauthorized"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
       security: []
       summary: Mint short-lived internal JWT
       tags:
-      - Auth
+        - Auth
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 60
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Auth
+        - tag: Auth
   /userinfo:
     get:
       description: |
@@ -146,58 +164,110 @@ paths:
         Requires a valid JWT obtained via the `/token` endpoint or an active session.
       operationId: getUserInfo
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserInfo"
+                $ref: '#/components/schemas/UserInfo'
           description: User profile information
-        "401":
-          $ref: "#/components/responses/Unauthorized"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get current user profile
       tags:
-      - Auth
+        - Auth
+      x-rate-limit-requests-per-minute: 60
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Auth
+        - tag: Auth
   /.well-known/jwks.json:
     get:
       description: Returns the public keys used to verify internally issued JWTs.
       operationId: getJwks
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/getJwks_200_response"
+                $ref: '#/components/schemas/getJwks_200_response'
           description: JWKS document
-        "400":
-          $ref: "#/components/responses/BadRequest"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security: []
       summary: JSON Web Key Set
       tags:
-      - Auth
+        - Auth
       x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Auth
+        - tag: Auth
 components:
   responses:
     BadRequest:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: Invalid request
+    TooManyRequests:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RateLimitError'
+      description: Too many requests. Rate limit exceeded. The client should wait
+        before making additional requests.
+      headers:
+        Retry-After:
+          description: Seconds to wait before making a new request
+          explode: false
+          schema:
+            example: 18
+            type: integer
+          style: simple
+        X-RateLimit-Limit:
+          description: Maximum requests allowed per minute
+          explode: false
+          schema:
+            example: 100
+            type: integer
+          style: simple
+        X-RateLimit-Remaining:
+          description: Remaining requests in current window
+          explode: false
+          schema:
+            example: 0
+            type: integer
+          style: simple
+        X-RateLimit-Reset:
+          description: Seconds until rate limit window resets
+          explode: false
+          schema:
+            example: 18
+            type: integer
+          style: simple
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
     Unauthorized:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: Unauthorized
   schemas:
     BasicError:
@@ -221,22 +291,52 @@ components:
             the problem
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       type: object
+    RateLimitError:
+      allOf:
+        - $ref: '#/components/schemas/BasicError'
+        - properties:
+            limit:
+              description: Maximum requests allowed per window
+              example: 100
+              type: integer
+            window:
+              description: Time window for rate limiting
+              example: 1 minute
+              type: string
+            retryAfterSeconds:
+              description: Seconds to wait before retrying
+              example: 18
+              type: integer
+          required:
+            - limit
+            - retryAfterSeconds
+            - window
+          type: object
+      example:
+        instance: instance
+        retryAfterSeconds: 18
+        limit: 100
+        detail: detail
+        window: 1 minute
+        title: title
+        type: type
+        status: 0
     UserInfo:
       description: OIDC-compliant user information response
       example:
-        sub: "3350396"
+        sub: '3350396'
         email_verified: true
         roles:
-        - user
+          - user
         preferred_username: john.doe
         email: john.doe@example.com
       properties:
         sub:
           description: Subject identifier - the Synapse user ID
-          example: "3350396"
+          example: '3350396'
           type: string
         preferred_username:
           description: Preferred username for display
@@ -254,15 +354,15 @@ components:
         roles:
           description: User roles assigned within BixArena
           example:
-          - user
+            - user
           items:
             enum:
-            - user
-            - admin
+              - user
+              - admin
             type: string
           type: array
       required:
-      - sub
+        - sub
       type: object
     callback_200_response:
       example:
@@ -282,21 +382,21 @@ components:
           type: string
         token_type:
           enum:
-          - Bearer
+            - Bearer
           type: string
         expires_in:
           example: 600
           type: integer
       required:
-      - access_token
-      - expires_in
-      - token_type
+        - access_token
+        - expires_in
+        - token_type
       type: object
     getJwks_200_response:
       example:
         keys:
-        - "{}"
-        - "{}"
+          - '{}'
+          - '{}'
       properties:
         keys:
           items:

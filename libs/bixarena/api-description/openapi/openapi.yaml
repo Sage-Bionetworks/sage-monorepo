@@ -753,6 +753,27 @@ components:
       required:
         - title
         - status
+    RateLimitError:
+      allOf:
+        - $ref: '#/components/schemas/BasicError'
+        - type: object
+          properties:
+            limit:
+              type: integer
+              description: Maximum requests allowed per window
+              example: 100
+            window:
+              type: string
+              description: Time window for rate limiting
+              example: 1 minute
+            retryAfterSeconds:
+              type: integer
+              description: Seconds to wait before retrying
+              example: 18
+          required:
+            - limit
+            - window
+            - retryAfterSeconds
     BattleSort:
       description: What to sort battles by.
       type: string
@@ -1731,26 +1752,7 @@ components:
       content:
         application/json:
           schema:
-            allOf:
-              - $ref: '#/components/schemas/BasicError'
-              - type: object
-                properties:
-                  limit:
-                    type: integer
-                    description: Maximum requests allowed per window
-                    example: 100
-                  window:
-                    type: string
-                    description: Time window for rate limiting
-                    example: 1 minute
-                  retryAfterSeconds:
-                    type: integer
-                    description: Seconds to wait before retrying
-                    example: 18
-                required:
-                  - limit
-                  - window
-                  - retryAfterSeconds
+            $ref: '#/components/schemas/RateLimitError'
       headers:
         Retry-After:
           description: Seconds to wait before making a new request

@@ -86,6 +86,8 @@ class UserApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "UserStats",
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -147,6 +149,8 @@ class UserApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "UserStats",
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -208,6 +212,8 @@ class UserApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "UserStats",
             "401": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout

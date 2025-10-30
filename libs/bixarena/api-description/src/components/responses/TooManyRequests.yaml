@@ -2,26 +2,7 @@ description: Too many requests. Rate limit exceeded. The client should wait befo
 content:
   application/json:
     schema:
-      allOf:
-        - $ref: ../schemas/BasicError.yaml
-        - type: object
-          properties:
-            limit:
-              type: integer
-              description: Maximum requests allowed per window
-              example: 100
-            window:
-              type: string
-              description: Time window for rate limiting
-              example: 1 minute
-            retryAfterSeconds:
-              type: integer
-              description: Seconds to wait before retrying
-              example: 18
-          required:
-            - limit
-            - window
-            - retryAfterSeconds
+      $ref: ../schemas/RateLimitError.yaml
 headers:
   Retry-After:
     description: Seconds to wait before making a new request
