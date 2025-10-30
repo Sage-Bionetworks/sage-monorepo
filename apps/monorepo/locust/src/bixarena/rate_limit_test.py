@@ -31,6 +31,11 @@ import time
 from locust import HttpUser, task, tag, events, between
 from locust.exception import StopUser
 
+# Global counters for custom metrics
+rate_limited_requests = 0
+successful_requests = 0
+total_requests = 0
+
 
 class RateLimitTestUser(HttpUser):
     """
@@ -193,14 +198,17 @@ class RateLimitTestUser(HttpUser):
             response: Locust response object
             expected_limit: Expected rate limit per minute
         """
+        global rate_limited_requests, successful_requests, total_requests
+        total_requests += 1
+
         # Check for rate limit headers
         headers = response.headers
         rate_limit = headers.get("X-RateLimit-Limit")
         remaining = headers.get("X-RateLimit-Remaining")
         reset = headers.get("X-RateLimit-Reset")
 
-        # Log rate limit headers for debugging
-        if rate_limit:
+        # Log rate limit headers for debugging (only every 5th request to reduce noise)
+        if rate_limit and total_requests % 5 == 0:
             print(
                 f"[{response.request.method} {response.request.url}] "
                 f"Limit: {rate_limit}, Remaining: {remaining}, Reset: {reset}s"
@@ -209,6 +217,17 @@ class RateLimitTestUser(HttpUser):
         if response.status_code == 429:
             # Rate limit exceeded - this is expected behavior
             self.rate_limit_hits += 1
+            rate_limited_requests += 1
+
+            # Fire custom event for rate limit hit
+            events.request.fire(
+                request_type="RATE_LIMITED",
+                name=f"{response.request.method} {response.request.path_url}",
+                response_time=response.elapsed.total_seconds() * 1000,
+                response_length=len(response.content),
+                exception=None,
+                context=self.context(),
+            )
 
             # Validate rate limit response
             retry_after = headers.get("Retry-After")
@@ -276,6 +295,7 @@ class RateLimitTestUser(HttpUser):
         elif response.status_code in [200, 201, 204, 302]:
             # Successful response
             self.successful_requests += 1
+            successful_requests += 1
 
             # Verify rate limit headers are present
             if not rate_limit:
@@ -313,9 +333,17 @@ class RateLimitBurstTestUser(HttpUser):
 
     def on_start(self):
         """Initialize burst test user."""
-        print(f"Starting BURST test user: {id(self)}")
+        print("\n" + "=" * 70)
+        print("🚀 Starting BURST TEST - Rapid Fire Mode")
+        print("=" * 70)
+        print("Target: /auth/login (20 req/min limit)")
+        print("Strategy: Send requests as fast as possible")
+        print("Expected: Rate limit hit around request 20")
+        print("=" * 70 + "\n")
         self.requests_sent = 0
         self.rate_limited_at = None
+        self.success_count = 0
+        self.rate_limited_count = 0
 
     @task
     @tag("burst", "low-limit")
@@ -334,26 +362,46 @@ class RateLimitBurstTestUser(HttpUser):
             allow_redirects=False,
         ) as response:
             if response.status_code == 429:
+                self.rate_limited_count += 1
                 if not self.rate_limited_at:
                     self.rate_limited_at = self.requests_sent
-                    print(f"🚫 Rate limit hit after {self.requests_sent} requests")
+                    print(f"\n🚫 RATE LIMIT HIT after {self.requests_sent} requests!\n")
+                    print(f"   Successful requests: {self.success_count}")
+                    print(
+                        f"   Rate limited from request {self.requests_sent} onwards\n"
+                    )
+
+                # Fire custom event
+                events.request.fire(
+                    request_type="RATE_LIMITED",
+                    name="BURST /auth/login (429)",
+                    response_time=response.elapsed.total_seconds() * 1000,
+                    response_length=len(response.content),
+                    exception=None,
+                    context=self.context(),
+                )
                 response.success()
             elif response.status_code in [200, 204, 302]:
+                self.success_count += 1
                 response.success()
                 if self.requests_sent % 5 == 0:
                     remaining = response.headers.get("X-RateLimit-Remaining")
                     print(
-                        f"✓ Request {self.requests_sent} succeeded "
-                        f"({remaining} remaining)"
+                        f"✓ Request #{self.requests_sent:>3} succeeded - "
+                        f"{remaining} requests remaining"
                     )
             else:
                 response.failure(f"Unexpected status: {response.status_code}")
 
         # Stop after demonstrating rate limit
         if self.rate_limited_at and self.requests_sent > self.rate_limited_at + 5:
-            print(
-                f"Burst test complete. Rate limited at request {self.rate_limited_at}"
-            )
+            # Store results for the test_stop event to print
+            self.environment.burst_test_results = {
+                "total": self.requests_sent,
+                "successful": self.success_count,
+                "rate_limited": self.rate_limited_count,
+                "triggered_at": self.rate_limited_at,
+            }
             raise StopUser()
 
 
@@ -470,8 +518,62 @@ def on_test_start(environment, **kwargs):
 @events.test_stop.add_listener
 def on_test_stop(environment, **kwargs):
     """Print summary when test completes."""
+    global rate_limited_requests, successful_requests, total_requests
+
     print("\n" + "=" * 70)
-    print("Test Complete")
+
+    # Check if this was a burst test
+    if hasattr(environment, "burst_test_results"):
+        results = environment.burst_test_results
+        print("🎯 BURST TEST COMPLETE")
+        print("=" * 70)
+        print(f"  Total requests sent:     {results['total']}")
+        print(f"  ✅ Successful:            {results['successful']}")
+        print(f"  🚫 Rate limited:          {results['rate_limited']}")
+        print(f"  Rate limit triggered at: Request #{results['triggered_at']}")
+        print("=" * 70)
+        print("\n✓ Rate limiting demonstrated successfully!")
+        print("  The /auth/login endpoint (20 req/min limit) correctly")
+        print(
+            f"  rate limited requests starting at request #{results['triggered_at']}."
+        )
+    else:
+        # Regular test summary
+        print("Test Complete - Rate Limiting Statistics")
+        print("=" * 70)
+
+        if total_requests > 0:
+            rate_limit_percentage = (rate_limited_requests / total_requests) * 100
+            success_percentage = (successful_requests / total_requests) * 100
+
+            print(f"\n📊 Request Summary:")
+            print(f"  Total Requests:      {total_requests:>6}")
+            print(
+                f"  ✅ Successful:        {successful_requests:>6} ({success_percentage:>5.1f}%)"
+            )
+            print(
+                f"  🚫 Rate Limited:      {rate_limited_requests:>6} ({rate_limit_percentage:>5.1f}%)"
+            )
+
+            if rate_limited_requests > 0:
+                print(
+                    f"\n✓ Rate limiting is working! {rate_limited_requests} requests were "
+                    f"rate limited as expected."
+                )
+            else:
+                print(
+                    "\n⚠ No rate limits hit. Try running longer or with more users "
+                    "to exceed the limits."
+                )
+        else:
+            print("\nNo requests were made during the test.")
+
+    print("\n" + "=" * 70)
+    print("📈 Locust Statistics Summary (above)")
     print("=" * 70)
-    print("Check the Locust web UI or CSV output for detailed statistics.")
+    print("Note: In Locust stats, rate-limited (429) requests appear as")
+    print("      'RATE_LIMITED' request type for better visibility.")
+    print("\nBoth successful and rate-limited requests show 0% failures")
+    print("because we're validating they work correctly, not treating")
+    print("rate limits as errors.")
     print("=" * 70 + "\n")
