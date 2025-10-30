@@ -1,9 +1,12 @@
 package org.sagebionetworks.bixarena.api.gateway.filter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.gateway.configuration.AppProperties;
+import org.sagebionetworks.bixarena.api.gateway.model.dto.RateLimitErrorDto;
 import org.sagebionetworks.bixarena.api.gateway.ratelimit.RateLimitKeyResolver;
 import org.sagebionetworks.bixarena.api.gateway.ratelimit.RateLimitMetrics;
 import org.sagebionetworks.bixarena.api.gateway.ratelimit.ValkeyRateLimiter;
@@ -54,6 +57,7 @@ public class RateLimitingFilter implements WebFilter {
   private final RouteConfigRegistry routeConfigRegistry;
   private final AppProperties appProperties;
   private final RateLimitMetrics metrics;
+  private final ObjectMapper objectMapper;
 
   private static final Duration WINDOW = Duration.ofMinutes(1);
 
@@ -163,23 +167,33 @@ public class RateLimitingFilter implements WebFilter {
       response.getHeaders().add("Retry-After", String.valueOf(result.retryAfterSeconds()));
     }
 
-    // Return JSON error response
+    // Return JSON error response using RateLimitErrorDto schema
     response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-    String body =
-        String.format(
-            """
-            {
-              "error": "rate_limit_exceeded",
-              "message": "Too many requests. Please try again later.",
-              "limit": %d,
-              "window": "1 minute",
-              "retry_after_seconds": %d
-            }
-            """,
-            result.limit(), result.retryAfterSeconds());
 
-    var buffer = response.bufferFactory().wrap(body.getBytes());
-    return response.writeWith(Mono.just(buffer));
+    // Build error response matching OpenAPI schema
+    RateLimitErrorDto errorDto =
+        RateLimitErrorDto.builder()
+            .title("Rate Limit Exceeded")
+            .status(429)
+            .detail("Too many requests. Please try again later.")
+            .limit((int) result.limit())
+            .window("1 minute")
+            .retryAfterSeconds((int) result.retryAfterSeconds())
+            .build();
+
+    try {
+      String body = objectMapper.writeValueAsString(errorDto);
+      var buffer = response.bufferFactory().wrap(body.getBytes());
+      return response.writeWith(Mono.just(buffer));
+    } catch (JsonProcessingException e) {
+      log.error("Failed to serialize rate limit error response", e);
+      // Fallback to simple error message
+      var buffer =
+          response
+              .bufferFactory()
+              .wrap("{\"error\":\"rate_limit_exceeded\"}".getBytes());
+      return response.writeWith(Mono.just(buffer));
+    }
   }
 
   /**
