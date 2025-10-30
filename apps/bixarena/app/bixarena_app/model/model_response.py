@@ -19,7 +19,11 @@ from bixarena_api_client.exceptions import ApiException
 
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.request_auth import get_session_cookie
-from bixarena_app.config.constants import MAX_RESPONSE_TOKENS
+from bixarena_app.config.constants import (
+    DEFAULT_TEMPERATURE,
+    DEFAULT_TOP_P,
+    MAX_RESPONSE_TOKENS,
+)
 from bixarena_app.config.conversation import Conversation
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
@@ -36,7 +40,6 @@ controller_url = ""
 enable_moderation = False
 
 api_endpoint_info = {}
-identity_words = set()  # Populated from model list
 
 
 class State:
@@ -85,30 +88,6 @@ class BattleSession:
 def set_global_vars_anony(enable_moderation_):
     global enable_moderation
     enable_moderation = enable_moderation_
-
-
-def validate_responses(states: list) -> tuple[bool, str | None]:
-    """Validate battle responses for identity leaking."""
-    for state in states:
-        if not state:
-            continue
-
-        # Collect the messages from both models
-        assistant_messages = [
-            content.lower()
-            for role, content in state.conv.messages
-            if content and role.lower() in ["assistant", "model"]
-        ]
-
-        # Check if any identity word appears in both models' responses
-        for content_lower in assistant_messages:
-            leaked_word = next(
-                (word for word in identity_words if word in content_lower), None
-            )
-            if leaked_word:
-                return False, f"identity_leak:{leaked_word}"
-
-    return True, None
 
 
 def _update_battle_round_with_responses(
@@ -182,23 +161,9 @@ def get_model_list():
 
             api_endpoint_info = {}
 
-            # Populate identity words for validation
-            global identity_words
-            identity_words = set()
-
             for model in visible_models_response.models:
                 model_name = model.name
                 model_id = model.id
-
-                # Add model identifiers for identity leak detection
-                if model.slug:
-                    identity_words.add(model.slug.lower())
-                if model.name:
-                    identity_words.add(model.name.lower())
-                if model.alias:
-                    identity_words.add(model.alias.lower())
-                if model.organization:
-                    identity_words.add(model.organization.lower())
 
                 # Check required fields for API configuration
                 api_model_name = model.api_model_name
@@ -335,8 +300,8 @@ def bot_response_multi(
     state0,
     state1,
     battle_session: BattleSession,
-    temperature=0.7,
-    top_p=1.0,
+    temperature=DEFAULT_TEMPERATURE,
+    top_p=DEFAULT_TOP_P,
     max_new_tokens=MAX_RESPONSE_TOKENS,
     request: gr.Request | None = None,
 ):

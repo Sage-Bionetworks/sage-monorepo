@@ -3,16 +3,10 @@ Utility functions for bixarena_app.
 """
 
 import logging
-import logging.handlers
 import os
 import platform
 import sys
 import warnings
-
-from bixarena_app.config.constants import LOGDIR
-
-handler = None
-visited_loggers = set()
 
 
 class StreamToLogger:
@@ -51,8 +45,7 @@ class StreamToLogger:
 
 
 def build_logger(logger_name, logger_filename):
-    global handler
-
+    """Build a logger for console output only."""
     # Get log level from environment variable, default to INFO
     log_level_str = os.environ.get("LOG_LEVEL", "INFO").upper()
     log_level_map = {
@@ -100,21 +93,6 @@ def build_logger(logger_name, logger_filename):
 
     # Avoid httpx flooding POST logs
     logging.getLogger("httpx").setLevel(logging.WARNING)
-
-    # if LOGDIR is empty, then don't try output log to local file
-    if LOGDIR != "":
-        os.makedirs(LOGDIR, exist_ok=True)
-        filename = os.path.join(LOGDIR, logger_filename)
-        handler = logging.handlers.TimedRotatingFileHandler(
-            filename, when="D", utc=True, encoding="utf-8"
-        )
-        handler.setFormatter(formatter)
-
-        for l in [stdout_logger, stderr_logger, logger]:
-            if l in visited_loggers:
-                continue
-            visited_loggers.add(l)
-            l.addHandler(handler)
 
     return logger
 
