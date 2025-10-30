@@ -457,12 +457,13 @@ class RateLimitRecoveryTestUser(HttpUser):
 
         elif self.phase == "waiting":
             # Phase 2: Wait for window to reset (60 seconds)
-            elapsed = time.time() - self.wait_started_at
-            if elapsed < 65:  # Wait 65 seconds to be safe
-                time.sleep(1)
-            else:
-                print("⏰ Window should have reset. Verifying recovery...")
-                self.phase = "verifying_recovery"
+            if self.wait_started_at is not None:
+                elapsed = time.time() - self.wait_started_at
+                if elapsed < 65:  # Wait 65 seconds to be safe
+                    time.sleep(1)
+                else:
+                    print("⏰ Window should have reset. Verifying recovery...")
+                    self.phase = "verifying_recovery"
 
         elif self.phase == "verifying_recovery":
             # Phase 3: Verify requests succeed again
