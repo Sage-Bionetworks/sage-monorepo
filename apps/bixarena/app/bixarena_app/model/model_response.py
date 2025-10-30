@@ -20,9 +20,9 @@ from bixarena_api_client.exceptions import ApiException
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import MAX_RESPONSE_TOKENS
+from bixarena_app.config.conversation import Conversation
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
-from bixarena_app.model.model_adapter import get_conversation_template
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -41,7 +41,8 @@ identity_words = set()  # Populated from model list
 
 class State:
     def __init__(self, model_name):
-        self.conv = get_conversation_template(model_name)
+        # All models use OpenRouter/OpenAI API format with default roles
+        self.conv = Conversation()
         self.conv_id = uuid.uuid4().hex
         self.skip_next = False
         self.model_name = model_name
