@@ -1,4 +1,8 @@
 <div class="loading-container">
   <explorers-loading-icon />
-  <p>Loading {{ count() }} results for you</p>
+  @if (count()) {
+    <p>Loading {{ count() }} results for you</p>
+  } @else {
+    <p>Loading results for you</p>
+  }
 </div>

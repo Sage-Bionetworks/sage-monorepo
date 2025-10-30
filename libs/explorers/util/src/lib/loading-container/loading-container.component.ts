@@ -10,5 +10,5 @@ import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
   encapsulation: ViewEncapsulation.None,
 })
 export class LoadingContainerComponent {
-  count = input<string>();
+  count = input<string | undefined>();
 }

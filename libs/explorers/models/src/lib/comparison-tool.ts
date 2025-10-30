@@ -60,7 +60,6 @@ export interface ComparisonToolColumn extends ComparisonToolConfigColumn {
 
 export interface ComparisonToolColumns {
   dropdowns: string[];
-  row_count: string;
   columns: ComparisonToolColumn[];
 }
 
