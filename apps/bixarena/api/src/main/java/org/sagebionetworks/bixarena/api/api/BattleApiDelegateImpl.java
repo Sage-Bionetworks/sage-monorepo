@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleCreateResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationDto;
@@ -56,18 +57,21 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
 
   @Override
   @PreAuthorize("hasRole('USER')")
-  public ResponseEntity<BattleDto> createBattle(BattleCreateRequestDto battleCreateRequestDto) {
+  public ResponseEntity<BattleCreateResponseDto> createBattle(
+    BattleCreateRequestDto battleCreateRequestDto
+  ) {
     // Get the authenticated user (SOURCE OF TRUTH from Spring Security)
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     log.info(
-      "User {} is creating battle with models: {} vs {}",
-      authentication.getName(),
-      battleCreateRequestDto.getModel1Id(),
-      battleCreateRequestDto.getModel2Id()
+      "User {} is creating battle with randomly selected models",
+      authentication.getName()
     );
 
     // Pass authentication to service for security validation
-    BattleDto createdBattle = battleService.createBattle(battleCreateRequestDto, authentication);
+    BattleCreateResponseDto createdBattle = battleService.createBattle(
+      battleCreateRequestDto,
+      authentication
+    );
     return ResponseEntity.status(201).body(createdBattle);
   }
 

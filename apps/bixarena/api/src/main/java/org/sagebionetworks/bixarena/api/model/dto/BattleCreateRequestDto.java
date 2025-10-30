@@ -5,7 +5,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -27,22 +26,6 @@ public class BattleCreateRequestDto {
 
   private @Nullable String title;
 
-  private UUID model1Id;
-
-  private UUID model2Id;
-
-  public BattleCreateRequestDto() {
-    super();
-  }
-
-  /**
-   * Constructor with only required parameters
-   */
-  public BattleCreateRequestDto(UUID model1Id, UUID model2Id) {
-    this.model1Id = model1Id;
-    this.model2Id = model2Id;
-  }
-
   public BattleCreateRequestDto title(@Nullable String title) {
     this.title = title;
     return this;
@@ -63,46 +46,6 @@ public class BattleCreateRequestDto {
     this.title = title;
   }
 
-  public BattleCreateRequestDto model1Id(UUID model1Id) {
-    this.model1Id = model1Id;
-    return this;
-  }
-
-  /**
-   * UUID of an AI model.
-   * @return model1Id
-   */
-  @NotNull @Valid 
-  @Schema(name = "model1Id", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of an AI model.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("model1Id")
-  public UUID getModel1Id() {
-    return model1Id;
-  }
-
-  public void setModel1Id(UUID model1Id) {
-    this.model1Id = model1Id;
-  }
-
-  public BattleCreateRequestDto model2Id(UUID model2Id) {
-    this.model2Id = model2Id;
-    return this;
-  }
-
-  /**
-   * UUID of an AI model.
-   * @return model2Id
-   */
-  @NotNull @Valid 
-  @Schema(name = "model2Id", example = "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", description = "UUID of an AI model.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("model2Id")
-  public UUID getModel2Id() {
-    return model2Id;
-  }
-
-  public void setModel2Id(UUID model2Id) {
-    this.model2Id = model2Id;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -112,14 +55,12 @@ public class BattleCreateRequestDto {
       return false;
     }
     BattleCreateRequestDto battleCreateRequest = (BattleCreateRequestDto) o;
-    return Objects.equals(this.title, battleCreateRequest.title) &&
-        Objects.equals(this.model1Id, battleCreateRequest.model1Id) &&
-        Objects.equals(this.model2Id, battleCreateRequest.model2Id);
+    return Objects.equals(this.title, battleCreateRequest.title);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, model1Id, model2Id);
+    return Objects.hash(title);
   }
 
   @Override
@@ -127,8 +68,6 @@ public class BattleCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class BattleCreateRequestDto {\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("    model1Id: ").append(toIndentedString(model1Id)).append("\n");
-    sb.append("    model2Id: ").append(toIndentedString(model2Id)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -158,23 +97,11 @@ public class BattleCreateRequestDto {
 
     protected Builder copyOf(BattleCreateRequestDto value) { 
       this.instance.setTitle(value.title);
-      this.instance.setModel1Id(value.model1Id);
-      this.instance.setModel2Id(value.model2Id);
       return this;
     }
 
     public BattleCreateRequestDto.Builder title(String title) {
       this.instance.title(title);
-      return this;
-    }
-    
-    public BattleCreateRequestDto.Builder model1Id(UUID model1Id) {
-      this.instance.model1Id(model1Id);
-      return this;
-    }
-    
-    public BattleCreateRequestDto.Builder model2Id(UUID model2Id) {
-      this.instance.model2Id(model2Id);
       return this;
     }
     

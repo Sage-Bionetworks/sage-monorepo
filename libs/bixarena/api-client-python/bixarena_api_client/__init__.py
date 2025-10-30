@@ -38,6 +38,7 @@ __all__ = [
     "BasicError",
     "Battle",
     "BattleCreateRequest",
+    "BattleCreateResponse",
     "BattleEvaluation",
     "BattleEvaluationCreateRequest",
     "BattleEvaluationOutcome",
@@ -115,6 +116,9 @@ from bixarena_api_client.models.basic_error import BasicError as BasicError
 from bixarena_api_client.models.battle import Battle as Battle
 from bixarena_api_client.models.battle_create_request import (
     BattleCreateRequest as BattleCreateRequest,
+)
+from bixarena_api_client.models.battle_create_response import (
+    BattleCreateResponse as BattleCreateResponse,
 )
 from bixarena_api_client.models.battle_evaluation import (
     BattleEvaluation as BattleEvaluation,

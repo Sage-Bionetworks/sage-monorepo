@@ -17,6 +17,7 @@ from bixarena_api_client.models.admin_stats200_response import AdminStats200Resp
 from bixarena_api_client.models.basic_error import BasicError
 from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
+from bixarena_api_client.models.battle_create_response import BattleCreateResponse
 from bixarena_api_client.models.battle_evaluation import BattleEvaluation
 from bixarena_api_client.models.battle_evaluation_create_request import (
     BattleEvaluationCreateRequest,

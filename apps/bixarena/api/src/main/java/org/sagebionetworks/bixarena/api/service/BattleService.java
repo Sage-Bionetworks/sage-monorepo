@@ -1,5 +1,6 @@
 package org.sagebionetworks.bixarena.api.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ModelNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleCreateResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattlePageDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
@@ -69,26 +71,35 @@ public class BattleService {
   }
 
   @Transactional
-  public BattleDto createBattle(BattleCreateRequestDto request, Authentication authentication) {
+  public BattleCreateResponseDto createBattle(
+    BattleCreateRequestDto request,
+    Authentication authentication
+  ) {
     // MOCK: Hardcoded userId for development
     UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
     log.info("Creating battle for MOCK user: {}", userId);
 
-    // Validate that both models exist
-    UUID model1Id = request.getModel1Id();
-    UUID model2Id = request.getModel2Id();
+    // Randomly select 2 active models
+    List<ModelEntity> randomModels = modelRepository.findRandomActiveModels(2);
 
-    // Verify models exist (throws exception if not found)
-    getModelEntity(model1Id);
-    getModelEntity(model2Id);
+    if (randomModels.size() < 2) {
+      throw new IllegalStateException(
+        "Not enough active models available. Found: " + randomModels.size()
+      );
+    }
+
+    ModelEntity model1 = randomModels.get(0);
+    ModelEntity model2 = randomModels.get(1);
+
+    log.info("Randomly selected models: {} vs {}", model1.getName(), model2.getName());
 
     // Create new battle entity
     BattleEntity battle = BattleEntity.builder()
       .title(request.getTitle())
       .userId(userId)
-      .model1Id(model1Id)
-      .model2Id(model2Id)
+      .model1Id(model1.getId())
+      .model2Id(model2.getId())
       .build();
 
     // Save the battle
@@ -97,7 +108,8 @@ public class BattleService {
 
     log.info("Successfully created battle with ID: {}", savedBattle.getId());
 
-    return battleMapper.convertToDto(savedBattle);
+    // Convert to response DTO with full model information
+    return battleMapper.convertToCreateResponseDto(savedBattle, model1, model2);
   }
 
   @Transactional

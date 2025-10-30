@@ -7,6 +7,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleCreateResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleEvaluationDto;
@@ -72,8 +73,8 @@ public interface BattleApi {
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Battle created successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleCreateResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleCreateResponseDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -115,7 +116,7 @@ public interface BattleApi {
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<BattleDto> createBattle(
+    default ResponseEntity<BattleCreateResponseDto> createBattle(
         @Parameter(name = "BattleCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleCreateRequestDto battleCreateRequestDto
     ) {
         return getDelegate().createBattle(battleCreateRequestDto);

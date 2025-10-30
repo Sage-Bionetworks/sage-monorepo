@@ -130,6 +130,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [BasicError](docs/BasicError.md)
 - [Battle](docs/Battle.md)
 - [BattleCreateRequest](docs/BattleCreateRequest.md)
+- [BattleCreateResponse](docs/BattleCreateResponse.md)
 - [BattleEvaluation](docs/BattleEvaluation.md)
 - [BattleEvaluationCreateRequest](docs/BattleEvaluationCreateRequest.md)
 - [BattleEvaluationOutcome](docs/BattleEvaluationOutcome.md)
