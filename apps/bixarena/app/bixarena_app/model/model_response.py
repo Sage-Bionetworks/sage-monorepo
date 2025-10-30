@@ -1,6 +1,5 @@
 import logging
 import os
-import uuid
 from uuid import UUID
 
 import gradio as gr
@@ -46,23 +45,12 @@ class State:
     def __init__(self, model_name):
         # All models use OpenRouter/OpenAI API format with default roles
         self.conv = Conversation()
-        self.conv_id = uuid.uuid4().hex
         self.skip_next = False
         self.model_name = model_name
         self.has_error = False
 
     def to_gradio_chatbot(self):
         return self.conv.to_gradio_chatbot()
-
-    def dict(self):
-        base = self.conv.dict()
-        base.update(
-            {
-                "conv_id": self.conv_id,
-                "model_name": self.model_name,
-            }
-        )
-        return base
 
     def last_assistant_message(self) -> MessageCreate | None:
         """Return the last completed assistant response as a MessageCreate."""
