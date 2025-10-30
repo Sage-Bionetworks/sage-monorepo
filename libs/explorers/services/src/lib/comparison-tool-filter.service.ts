@@ -1,4 +1,4 @@
-import { inject, signal } from '@angular/core';
+import { computed, inject, signal } from '@angular/core';
 import {
   ComparisonToolFilter,
   ComparisonToolFilterOption,
@@ -19,8 +19,13 @@ export class ComparisonToolFilterService {
   readonly significanceThreshold = this.significanceThresholdSignal.asReadonly();
   readonly significanceThresholdActive = this.significanceThresholdActiveSignal.asReadonly();
 
+  readonly hasSelectedFilters = computed(() => {
+    return this.filters().some((filter) => filter.options.some((option) => option.selected));
+  });
+
   setFilters(filters: ComparisonToolFilter[]) {
-    this.filtersSignal.set(filters);
+    // Use structuredClone to ensure a new reference is created
+    this.filtersSignal.set(structuredClone(filters));
   }
 
   updateSearchTerm(term: string) {

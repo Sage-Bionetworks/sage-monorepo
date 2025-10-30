@@ -71,4 +71,17 @@ describe('Component: Comparison Tool - Filter List', () => {
       expect(screen.queryByText(option.label)).toBeNull();
     }
   });
+
+  it('should use short name if available for filter title', async () => {
+    const filterWithShortName = mockComparisonToolFiltersWithSelections[0];
+    await setup();
+    const filterTitles = screen.getAllByText(`${filterWithShortName.short_name}:`);
+    expect(filterTitles).toHaveLength(filterWithShortName.options.length);
+  });
+
+  it('should fall back to name if short name is not available for filter title', async () => {
+    await setup();
+    const filterTitle = screen.getByText(`${mockComparisonToolFiltersWithSelections[3].name}:`);
+    expect(filterTitle).toBeVisible();
+  });
 });

@@ -15,6 +15,7 @@ export class ComparisonToolFilterListComponent {
   private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
   filters = this.comparisonToolFilterService.filters;
+  hasSelectedFilters = this.comparisonToolFilterService.hasSelectedFilters;
   significanceThresholdActive = this.comparisonToolFilterService.significanceThresholdActive;
   significanceThreshold = this.comparisonToolFilterService.significanceThreshold;
 
@@ -25,10 +26,6 @@ export class ComparisonToolFilterListComponent {
   clearList() {
     this.removeSignificanceThresholdFilter();
     this.clearSelectedFilters();
-  }
-
-  hasSelectedFilters() {
-    return this.filters().some((filter) => filter.options.some((option) => option.selected));
   }
 
   clearSelectedFilters(option?: ComparisonToolFilterOption) {
