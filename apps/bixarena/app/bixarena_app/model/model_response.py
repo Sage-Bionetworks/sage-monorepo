@@ -1,5 +1,4 @@
 import logging
-import os
 from uuid import UUID
 
 import gradio as gr
@@ -145,17 +144,10 @@ def get_model_list():
                 model_name = model.name
                 model_id = model.id
 
-                # Check required fields for API configuration
+                # Get API configuration from model
                 api_model_name = model.api_model_name
                 api_base = model.api_base
                 api_type = "openai"
-                api_key = os.getenv("OPENROUTER_API_KEY", "")
-
-                if not api_key:
-                    logger.warning(
-                        f"Skipping model '{model_name}' - missing OPENROUTER_API_KEY"
-                    )
-                    continue
 
                 # Add model's display name to the model list
                 models.append(model_name)
@@ -165,7 +157,6 @@ def get_model_list():
                     "model_id": model_id,
                     "api_type": api_type,
                     "api_base": api_base,
-                    "api_key": api_key,
                     "model_name": api_model_name,
                 }
         logger.info(f"✅ Fetched {len(models)} visible models from BixArena API.")

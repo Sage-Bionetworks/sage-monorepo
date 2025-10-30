@@ -53,21 +53,17 @@ logger = logging.getLogger(__name__)
 
 num_sides = 2
 anony_names = ["", ""]
-models = []
 
 
-def get_battle_pair(models):
-    """Select two models randomly for a battle.
-
-    Args:
-        models: List of available model names
+def get_battle_pair():
+    """Get a pair of models for a new battle.
 
     Returns:
         Tuple of two model names (model1, model2)
     """
-    if len(models) == 1:
-        return models[0], models[0]
+    # TODO: Replace with backend endpoint when ready
 
+    models, _ = get_model_list()
     # Randomly select two different models
     return tuple(random.sample(models, 2))
 
@@ -193,10 +189,12 @@ def create_battle_evaluation(
     return None
 
 
-def load_demo_side_by_side_anony(models_, _):
-    global models
-    models = models_
+def load_demo_side_by_side_anony():
+    """Initialize the battle demo with empty states.
 
+    Returns:
+        Tuple of initial states and selector updates for Gradio UI
+    """
     states = (None,) * num_sides
     selector_updates = (
         gr.Markdown(visible=True),
@@ -367,7 +365,7 @@ def add_text(
     if states[0] is None:
         assert states[1] is None
 
-        model1, model2 = get_battle_pair(models)
+        model1, model2 = get_battle_pair()
         states = [
             State(model1),
             State(model2),
@@ -722,11 +720,8 @@ def build_battle_page():
     Returns:
         tuple: (battle_page, example_prompt_ui, prompt_outputs) for hooking up navigation refresh
     """
-    # Load models once (text-only models)
-    models, _ = get_model_list()
-
-    # Initialize the demo (this sets up global variables in the original module)
-    load_demo_side_by_side_anony(models, {})
+    # Initialize the demo with empty states
+    load_demo_side_by_side_anony()
 
     with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
         _, example_prompt_ui, prompt_outputs = build_side_by_side_ui_anony()

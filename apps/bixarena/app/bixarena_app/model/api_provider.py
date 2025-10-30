@@ -46,9 +46,15 @@ def openai_api_stream_iter(
     api_base=None,
     api_key=None,
 ):
+    # Get OPENROUTER_API_KEY from environment if not provided
+    if not api_key:
+        api_key = os.getenv("OPENROUTER_API_KEY")
+        if not api_key:
+            raise ValueError("API_KEY environment variable is required but not set")
+
     client = OpenAI(
         base_url=api_base or "https://api.openai.com/v1",
-        api_key=api_key or os.environ["OPENAI_API_KEY"],
+        api_key=api_key,
     )
 
     # Make requests
