@@ -3,7 +3,6 @@ import {
   ComparisonToolFilter,
   ComparisonToolFilterOption,
 } from '@sagebionetworks/explorers/models';
-import { cloneDeep } from 'lodash';
 import { FilterService } from 'primeng/api';
 
 export class ComparisonToolFilterService {
@@ -25,8 +24,8 @@ export class ComparisonToolFilterService {
   });
 
   setFilters(filters: ComparisonToolFilter[]) {
-    // Use cloneDeep to ensure a new reference is created
-    this.filtersSignal.set(cloneDeep(filters));
+    // Use structuredClone to ensure a new reference is created
+    this.filtersSignal.set(structuredClone(filters));
   }
 
   updateSearchTerm(term: string) {
