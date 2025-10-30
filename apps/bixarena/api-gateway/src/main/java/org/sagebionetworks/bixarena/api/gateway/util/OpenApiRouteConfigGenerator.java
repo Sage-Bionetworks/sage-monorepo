@@ -61,6 +61,7 @@ public final class OpenApiRouteConfigGenerator {
 
   private static final String OAUTH2_AUDIENCE_EXTENSION = "x-oauth2-audience";
   private static final String ANONYMOUS_ACCESS_EXTENSION = "x-anonymous-access";
+  private static final String RATE_LIMIT_EXTENSION = "x-rate-limit-requests-per-minute";
 
   private static final ObjectMapper YAML = new ObjectMapper(
     new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
@@ -165,6 +166,7 @@ public final class OpenApiRouteConfigGenerator {
             boolean anonymousAccess = extractAnonymous(operation);
             String audience = extractAudience(operation);
             if (audience == null) audience = globalAudience;
+            Integer rateLimit = extractRateLimit(operation);
 
             // Fix: avoid passing null as key to getOrDefault
             String prefix = AUDIENCE_PREFIX_MAP.getOrDefault(
@@ -173,9 +175,9 @@ public final class OpenApiRouteConfigGenerator {
             );
 
             // We include a route if any of the fields matter to the gateway.
-            if (audience != null || anonymousAccess) {
+            if (audience != null || anonymousAccess || rateLimit != null) {
               String normalizedPath = normalizePath(prefix + rawPath);
-              RouteSpec entry = new RouteSpec(method, normalizedPath, audience, anonymousAccess);
+              RouteSpec entry = new RouteSpec(method, normalizedPath, audience, anonymousAccess, rateLimit);
               out.add(entry);
             }
           });
@@ -200,6 +202,15 @@ public final class OpenApiRouteConfigGenerator {
     if (n != null && n.isTextual()) {
       String a = n.asText().trim();
       return a.isEmpty() ? null : a;
+    }
+    return null;
+  }
+
+  private static Integer extractRateLimit(JsonNode operation) {
+    JsonNode n = operation.get(RATE_LIMIT_EXTENSION);
+    if (n != null && n.isNumber()) {
+      int value = n.asInt();
+      return value > 0 ? value : null;
     }
     return null;
   }
@@ -229,6 +240,7 @@ public final class OpenApiRouteConfigGenerator {
       item.put("path", r.path());
       if (r.audience() != null) item.put("audience", r.audience());
       if (r.anonymousAccess()) item.put("anonymousAccess", true);
+      if (r.rateLimitRequestsPerMinute() != null) item.put("rateLimitRequestsPerMinute", r.rateLimitRequestsPerMinute());
       list.add(item);
     }
 
@@ -244,7 +256,8 @@ public final class OpenApiRouteConfigGenerator {
     String method,
     String path,
     String audience,
-    boolean anonymousAccess
+    boolean anonymousAccess,
+    Integer rateLimitRequestsPerMinute
   ) {}
 
   // ----- RouteKey -----
