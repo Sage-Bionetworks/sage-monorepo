@@ -35,9 +35,9 @@ describe('Base Comparison Tool Component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have default values', async () => {
+  it('should have loading results count while loading', async () => {
     const { component } = await setup();
     expect(component.isLoading()).toBe(true);
-    expect(component.resultsCount()).toBe(0);
+    expect(component.loadingResultsCount()).toBe(mockComparisonToolConfigs[0].row_count);
   });
 });

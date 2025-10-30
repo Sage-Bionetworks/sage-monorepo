@@ -1,7 +1,7 @@
 <main>
   @if (isLoading()) {
     <div id="loading">
-      <explorers-loading-container [count]="resultsCount()"></explorers-loading-container>
+      <explorers-loading-container [count]="loadingResultsCount()"></explorers-loading-container>
     </div>
   } @else {
     <explorers-comparison-tool-header (filterToggle)="toggleFilterPanel()" />

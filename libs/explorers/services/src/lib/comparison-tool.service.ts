@@ -98,6 +98,8 @@ export class ComparisonToolService<T> {
     return this.columns().some((col) => !col.selected);
   }
 
+  loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
+
   totalResultsCount = signal<number>(0);
   pinnedResultsCount = signal<number>(0);
   hasMaxPinnedItems = computed(() => {
