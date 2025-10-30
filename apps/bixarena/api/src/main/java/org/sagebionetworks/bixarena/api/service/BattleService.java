@@ -75,10 +75,17 @@ public class BattleService {
     BattleCreateRequestDto request,
     Authentication authentication
   ) {
-    // MOCK: Hardcoded userId for development
-    UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+    // Extract user ID from JWT token's 'sub' claim
+    String sub = authentication.getName();
+    UUID userId;
+    try {
+      userId = UUID.fromString(sub);
+    } catch (IllegalArgumentException e) {
+      log.error("Invalid UUID format in JWT sub claim: {}", sub);
+      throw new IllegalStateException("Invalid user ID in authentication token");
+    }
 
-    log.info("Creating battle for MOCK user: {}", userId);
+    log.info("Creating battle for user: {}", userId);
 
     // Randomly select 2 active models
     List<ModelEntity> randomModels = modelRepository.findRandomActiveModels(2);
