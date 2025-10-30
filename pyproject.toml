@@ -72,6 +72,7 @@ members = [
   "apps/bixarena/app",
   "apps/bixarena/infra/cdk",
   "apps/bixarena/tools",
+  "apps/monorepo/locust",
   "apps/openchallenges/infra/cdk",
   "apps/openchallenges/tools",
   "libs/bixarena/api-client-python",

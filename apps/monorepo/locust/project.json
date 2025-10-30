@@ -1,0 +1,23 @@
+{
+  "name": "monorepo-locust",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/monorepo/locust/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv sync",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run locust -f src/locustfile.py --host=http://localhost:8000",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["type:app", "language:python", "package-manager:uv"]
+}
