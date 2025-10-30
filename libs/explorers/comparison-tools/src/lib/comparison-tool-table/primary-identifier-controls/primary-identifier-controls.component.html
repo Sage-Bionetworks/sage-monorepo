@@ -1,12 +1,12 @@
 <div class="primary-identifier-controls">
   <div>
-    {{ id() }}
+    {{ label() }}
   </div>
 
   <div class="primary-control-icons">
     <button
       (click)="viewDetailsWasClicked()"
-      [pTooltip]="viewDetailsTooltip()"
+      [pTooltip]="viewConfig().viewDetailsTooltip"
       tooltipPosition="top"
       tooltipStyleClass="tooltip"
       [ariaLabel]="'View Details'"

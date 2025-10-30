@@ -24,7 +24,16 @@ const meta: Meta<BaseComparisonToolComponent> = {
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
           totalResultsCount: 1000,
-          selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
+          viewConfig: {
+            selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
+            headerTitle: 'Gene Comparison',
+            filterResultsButtonTooltip: 'Filter the results based on the selected criteria',
+          },
+          pinnedItems: [
+            '68fff1aaeb12b9674515fd58',
+            '68fff1aaeb12b9674515fd59',
+            '68fff1aaeb12b9674515fd5a',
+          ],
         }),
         ...provideComparisonToolFilterService(),
         ...provideLoadingIconColors(),
@@ -38,7 +47,5 @@ type Story = StoryObj<BaseComparisonToolComponent>;
 export const Demo: Story = {
   args: {
     isLoading: false,
-    headerTitle: 'Gene Comparison',
-    filterResultsButtonTooltip: 'Filter the results based on the selected criteria',
   },
 };

@@ -1,3 +1,14 @@
+import { SynapseWikiParams } from './synapse-wiki';
+
+export interface ComparisonToolViewConfig {
+  selectorsWikiParams: Record<string, SynapseWikiParams>;
+  headerTitle: string;
+  filterResultsButtonTooltip: string;
+  showSignificanceControls: boolean;
+  viewDetailsTooltip: string;
+  viewDetailsClick: (id: string, label: string) => void;
+}
+
 export interface ComparisonToolFilterOption {
   label: string;
   selected: boolean;

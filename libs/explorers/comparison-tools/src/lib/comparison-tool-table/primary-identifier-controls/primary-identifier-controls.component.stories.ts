@@ -13,7 +13,9 @@ const meta: Meta<PrimaryIdentifierControlsComponent> = {
       providers: [
         provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
-        ...provideComparisonToolService(),
+        ...provideComparisonToolService({
+          viewConfig: { viewDetailsTooltip: 'View detailed results' },
+        }),
       ],
     }),
   ],
@@ -23,34 +25,38 @@ type Story = StoryObj<PrimaryIdentifierControlsComponent>;
 
 export const Unpinned: Story = {
   args: {
-    id: '3xTg-AD',
-    viewDetailsTooltip: 'Open model details page',
+    label: '3xTg-AD',
+    id: '68fff1aaeb12b9674515fd58',
   },
 };
 
 export const Pinned: Story = {
   args: {
-    id: '3xTg-AD',
-    viewDetailsTooltip: 'Open model details page',
+    label: '3xTg-AD',
+    id: '68fff1aaeb12b9674515fd58',
   },
   decorators: [
     applicationConfig({
       providers: [
         provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
-        ...provideComparisonToolService({ pinnedItems: ['3xTg-AD', 'item2'] }),
+        ...provideComparisonToolService({
+          pinnedItems: ['68fff1aaeb12b9674515fd58', '68fff1aaeb12b9674515fd59'],
+          viewConfig: {
+            viewDetailsClick: (id: string, label: string) => {
+              console.log(`id: ${id}, label: ${label}`);
+            },
+          },
+        }),
       ],
     }),
   ],
-  argTypes: {
-    viewDetailsEvent: { control: false },
-  },
 };
 
 export const MaxPinnedReached: Story = {
   args: {
-    id: '3xTg-AD',
-    viewDetailsTooltip: 'Open model details page',
+    label: '3xTg-AD',
+    id: '68fff1aaeb12b9674515fd58',
   },
   decorators: [
     applicationConfig({
@@ -59,7 +65,11 @@ export const MaxPinnedReached: Story = {
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService({
           maxPinnedItems: 3,
-          pinnedItems: ['item1', 'item2', 'item3'],
+          pinnedItems: [
+            '68fff1aaeb12b9674515fd59',
+            '68fff1aaeb12b9674515fd5a',
+            '68fff1aaeb12b9674515fd61',
+          ],
         }),
       ],
     }),

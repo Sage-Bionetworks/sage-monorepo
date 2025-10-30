@@ -3,10 +3,12 @@ import { provideRouter, RouterModule } from '@angular/router';
 import {
   provideComparisonToolFilterService,
   provideComparisonToolService,
+  SvgIconService,
 } from '@sagebionetworks/explorers/services';
 import {
   mockComparisonToolData,
   mockComparisonToolDataConfig,
+  SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { BaseTableComponent } from './base-table.component';
@@ -19,6 +21,7 @@ async function setup() {
       provideHttpClient(withInterceptorsFromDi()),
       ...provideComparisonToolService({ configs: mockComparisonToolDataConfig }),
       ...provideComparisonToolFilterService({ significanceThresholdActive: false }),
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
     componentInputs: {
       data: mockComparisonToolData,

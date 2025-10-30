@@ -21,7 +21,7 @@ export class ComparisonToolCategorySelectorsComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
   pageConfigs = computed(() => this.comparisonToolService.configs());
-  selectorsWikiParams = computed(() => this.comparisonToolService.selectorsWikiParams());
+  selectorsWikiParams = computed(() => this.comparisonToolService.viewConfig().selectorsWikiParams);
 
   dropdownTree = computed(() => {
     const configs = this.pageConfigs();

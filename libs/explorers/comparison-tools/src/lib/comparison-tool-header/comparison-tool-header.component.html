@@ -2,9 +2,9 @@
   <div class="comparison-tool-header-inner">
     <explorers-comparison-tool-filter-results-button
       (filterToggle)="onFilterToggle()"
-      [tooltip]="filterResultsButtonTooltip()"
+      [tooltip]="viewConfig().filterResultsButtonTooltip"
     />
-    <h1>{{ headerTitle() }}</h1>
+    <h1>{{ viewConfig().headerTitle }}</h1>
     <explorers-comparison-tool-share-url-button />
   </div>
 </div>

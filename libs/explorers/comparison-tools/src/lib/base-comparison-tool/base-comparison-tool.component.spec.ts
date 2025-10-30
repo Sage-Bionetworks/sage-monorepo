@@ -1,10 +1,12 @@
 import {
   provideComparisonToolFilterService,
   provideComparisonToolService,
+  SvgIconService,
 } from '@sagebionetworks/explorers/services';
 import {
   mockComparisonToolConfigs,
   provideLoadingIconColors,
+  SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { render } from '@testing-library/angular';
@@ -19,6 +21,7 @@ async function setup() {
         configs: mockComparisonToolConfigs,
       }),
       ...provideComparisonToolFilterService(),
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
   });
 

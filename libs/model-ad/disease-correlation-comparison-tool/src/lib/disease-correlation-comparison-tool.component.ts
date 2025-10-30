@@ -2,7 +2,7 @@ import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { ComparisonToolViewConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
@@ -10,6 +10,7 @@ import {
   ComparisonToolPage,
   DiseaseCorrelation,
   DiseaseCorrelationService,
+  ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
@@ -38,8 +39,20 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       wikiId: '632874',
     },
   };
+  viewConfig: Partial<ComparisonToolViewConfig> = {
+    selectorsWikiParams: this.selectorsWikiParams,
+    headerTitle: 'Disease Correlation',
+    filterResultsButtonTooltip: 'Filter results by Age, Sex, Modified Gene, and more',
+    viewDetailsTooltip: 'Open model details page',
+    viewDetailsClick: (id: string, label: string) => {
+      const url = this.router.serializeUrl(this.router.createUrlTree([ROUTE_PATHS.MODELS, label]));
+      window.open(url, '_blank');
+    },
+  };
 
   constructor() {
+    this.comparisonToolService.setViewConfig(this.viewConfig);
+
     effect(() => {
       const selection = this.comparisonToolService.dropdownSelection();
       if (!selection.length) {
@@ -68,7 +81,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs, undefined, this.selectorsWikiParams);
+          this.comparisonToolService.initialize(configs);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
@@ -79,7 +92,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
 
   getData() {
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(this.comparisonToolService.dropdownSelection())
+      .getDiseaseCorrelations(
+        this.comparisonToolService.dropdownSelection(),
+        [],
+        ItemFilterTypeQuery.Exclude,
+      )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {

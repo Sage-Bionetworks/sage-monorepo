@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
@@ -13,11 +13,11 @@ export class PrimaryIdentifierControlsComponent {
   comparisonToolService = inject(ComparisonToolService);
 
   id = input.required<string>();
-  viewDetailsTooltip = input<string>('View detailed results');
-  viewDetailsEvent = output<string>();
+  label = input.required<string>();
 
   maxPinnedItems = this.comparisonToolService.maxPinnedItems;
   hasMaxPinnedItems = this.comparisonToolService.hasMaxPinnedItems;
+  viewConfig = this.comparisonToolService.viewConfig;
 
   isPinned = computed(() => {
     return this.comparisonToolService.isPinned(this.id());
@@ -39,7 +39,7 @@ export class PrimaryIdentifierControlsComponent {
   });
 
   viewDetailsWasClicked() {
-    this.viewDetailsEvent.emit(this.id());
+    this.viewConfig().viewDetailsClick(this.id(), this.label());
   }
 
   pinToggle() {

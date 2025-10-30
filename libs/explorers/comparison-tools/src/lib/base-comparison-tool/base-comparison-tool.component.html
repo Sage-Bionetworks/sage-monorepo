@@ -4,18 +4,12 @@
       <explorers-loading-container [count]="resultsCount()"></explorers-loading-container>
     </div>
   } @else {
-    <explorers-comparison-tool-header
-      [filterResultsButtonTooltip]="filterResultsButtonTooltip()"
-      [headerTitle]="headerTitle()"
-      (filterToggle)="toggleFilterPanel()"
-    />
+    <explorers-comparison-tool-header (filterToggle)="toggleFilterPanel()" />
     <explorers-comparison-tool-filter-list />
     <div class="comparison-tool-body">
       <div class="comparison-tool-body-inner">
         <div class="comparison-tool-tables">
-          <explorers-comparison-tool-controls
-            [showSignificanceControls]="showSignificanceControls()"
-          />
+          <explorers-comparison-tool-controls />
           <explorers-comparison-tool-columns />
           <ng-content></ng-content>
           <explorers-comparison-tool-filter-panel
