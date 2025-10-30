@@ -168,15 +168,13 @@ def get_model_list():
                 # Add model's display name to the model list
                 models.append(model_name)
 
-                # Convert to FastChat API-based format (text-only models)
+                # Store model API configuration
                 api_endpoint_info[model_name] = {
                     "model_id": model_id,
                     "api_type": api_type,
                     "api_base": api_base,
                     "api_key": api_key,
                     "model_name": api_model_name,
-                    "anony_only": False,
-                    "multimodal": False,
                 }
         logger.info(f"✅ Fetched {len(models)} visible models from BixArena API.")
 
