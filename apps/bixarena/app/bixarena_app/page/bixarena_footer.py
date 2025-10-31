@@ -5,10 +5,8 @@ import gradio as gr
 
 def build_footer():
     """Build footer with branding and links."""
-    # Get app version from environment variable or default to v1.0.0
-    app_version = os.environ.get("APP_VERSION", "1.0.0")
-
     # Footer configuration
+    app_version = os.environ.get("APP_VERSION", "")
     tos_url = os.environ.get("APP_TOS_URL", "")
     contact_url = os.environ.get("APP_CONTACT_URL", "")
     issues_url = os.environ.get("APP_ISSUE_URL", "")
