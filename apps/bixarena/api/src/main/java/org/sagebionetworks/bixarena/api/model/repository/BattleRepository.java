@@ -81,4 +81,36 @@ public interface BattleRepository
       "SELECT MAX(b.createdAt) FROM BattleEntity b WHERE b.userId = :userId"
   )
   OffsetDateTime findLatestBattleTimestampByUserId(@Param("userId") UUID userId);
+
+  /**
+   * Calculate user's rank based on completed battles using standard competition ranking.
+   * Users with the same number of completed battles share the same rank.
+   * All authenticated users have a rank, including those with 0 completed battles.
+   *
+   * @param userId The user ID to calculate rank for
+   * @return The user's rank (never null for authenticated users)
+   */
+  @Query(
+    value =
+      "WITH user_battle_counts AS ( " +
+      "  SELECT " +
+      "    u.id as user_id, " +
+      "    COUNT(CASE WHEN b.ended_at IS NOT NULL THEN 1 END) as completed_battles " +
+      "  FROM auth.user u " +
+      "  LEFT JOIN api.battle b ON u.id = b.user_id " +
+      "  GROUP BY u.id " +
+      "), " +
+      "ranked_users AS ( " +
+      "  SELECT " +
+      "    user_id, " +
+      "    completed_battles, " +
+      "    RANK() OVER (ORDER BY completed_battles DESC) as rank " +
+      "  FROM user_battle_counts " +
+      ") " +
+      "SELECT rank " +
+      "FROM ranked_users " +
+      "WHERE user_id = :userId",
+    nativeQuery = true
+  )
+  Long findUserRankByCompletedBattles(@Param("userId") UUID userId);
 }

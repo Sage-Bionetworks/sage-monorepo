@@ -4,13 +4,14 @@ Statistics about a user's participation in battles.
 
 ## Properties
 
-| Name                  | Type         | Description                                                       | Notes      |
-| --------------------- | ------------ | ----------------------------------------------------------------- | ---------- |
-| **total_battles**     | **int**      | Total number of battles the user has participated in (as arbiter) |
-| **completed_battles** | **int**      | Number of battles that have been completed (endedAt is set)       |
-| **active_battles**    | **int**      | Number of battles currently in progress (endedAt is null)         |
-| **first_battle_at**   | **datetime** | Timestamp of the user&#39;s first battle                          | [optional] |
-| **latest_battle_at**  | **datetime** | Timestamp of the user&#39;s most recent battle                    | [optional] |
+| Name                  | Type         | Description                                                                                                                                                                                                          | Notes      |
+| --------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **total_battles**     | **int**      | Total number of battles the user has participated in (as arbiter)                                                                                                                                                    |
+| **completed_battles** | **int**      | Number of battles that have been completed (endedAt is set)                                                                                                                                                          |
+| **active_battles**    | **int**      | Number of battles currently in progress (endedAt is null)                                                                                                                                                            |
+| **first_battle_at**   | **datetime** | Timestamp of the user&#39;s first battle                                                                                                                                                                             | [optional] |
+| **latest_battle_at**  | **datetime** | Timestamp of the user&#39;s most recent battle                                                                                                                                                                       | [optional] |
+| **rank**              | **int**      | User&#39;s rank based on completed battles using standard competition ranking. Users with the same number of completed battles share the same rank. All users have a rank, including those with 0 completed battles. |
 
 ## Example
 

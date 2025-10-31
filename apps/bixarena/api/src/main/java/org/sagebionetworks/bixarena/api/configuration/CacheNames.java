@@ -22,4 +22,12 @@ public final class CacheNames {
    * Cache key for the global public stats.
    */
   public static final String PUBLIC_STATS_KEY = "stats";
+
+  /**
+   * Cache for user ranks based on completed battles.
+   * Key format: bixarena:api:userRanks::{userId}
+   * TTL: 5 minutes (balances freshness with query performance)
+   * Invalidation: Event-driven when user completes a battle
+   */
+  public static final String USER_RANKS = "bixarena:api:userRanks";
 }

@@ -38,6 +38,8 @@ public class UserStatsDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private @Nullable OffsetDateTime latestBattleAt = null;
 
+  private Long rank;
+
   public UserStatsDto() {
     super();
   }
@@ -45,10 +47,11 @@ public class UserStatsDto {
   /**
    * Constructor with only required parameters
    */
-  public UserStatsDto(Long totalBattles, Long completedBattles, Long activeBattles) {
+  public UserStatsDto(Long totalBattles, Long completedBattles, Long activeBattles, Long rank) {
     this.totalBattles = totalBattles;
     this.completedBattles = completedBattles;
     this.activeBattles = activeBattles;
+    this.rank = rank;
   }
 
   public UserStatsDto totalBattles(Long totalBattles) {
@@ -151,6 +154,26 @@ public class UserStatsDto {
     this.latestBattleAt = latestBattleAt;
   }
 
+  public UserStatsDto rank(Long rank) {
+    this.rank = rank;
+    return this;
+  }
+
+  /**
+   * User's rank based on completed battles using standard competition ranking. Users with the same number of completed battles share the same rank. All users have a rank, including those with 0 completed battles. 
+   * @return rank
+   */
+  @NotNull 
+  @Schema(name = "rank", example = "42", description = "User's rank based on completed battles using standard competition ranking. Users with the same number of completed battles share the same rank. All users have a rank, including those with 0 completed battles. ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("rank")
+  public Long getRank() {
+    return rank;
+  }
+
+  public void setRank(Long rank) {
+    this.rank = rank;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -164,12 +187,13 @@ public class UserStatsDto {
         Objects.equals(this.completedBattles, userStats.completedBattles) &&
         Objects.equals(this.activeBattles, userStats.activeBattles) &&
         Objects.equals(this.firstBattleAt, userStats.firstBattleAt) &&
-        Objects.equals(this.latestBattleAt, userStats.latestBattleAt);
+        Objects.equals(this.latestBattleAt, userStats.latestBattleAt) &&
+        Objects.equals(this.rank, userStats.rank);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalBattles, completedBattles, activeBattles, firstBattleAt, latestBattleAt);
+    return Objects.hash(totalBattles, completedBattles, activeBattles, firstBattleAt, latestBattleAt, rank);
   }
 
   @Override
@@ -181,6 +205,7 @@ public class UserStatsDto {
     sb.append("    activeBattles: ").append(toIndentedString(activeBattles)).append("\n");
     sb.append("    firstBattleAt: ").append(toIndentedString(firstBattleAt)).append("\n");
     sb.append("    latestBattleAt: ").append(toIndentedString(latestBattleAt)).append("\n");
+    sb.append("    rank: ").append(toIndentedString(rank)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -214,6 +239,7 @@ public class UserStatsDto {
       this.instance.setActiveBattles(value.activeBattles);
       this.instance.setFirstBattleAt(value.firstBattleAt);
       this.instance.setLatestBattleAt(value.latestBattleAt);
+      this.instance.setRank(value.rank);
       return this;
     }
 
@@ -239,6 +265,11 @@ public class UserStatsDto {
     
     public UserStatsDto.Builder latestBattleAt(OffsetDateTime latestBattleAt) {
       this.instance.latestBattleAt(latestBattleAt);
+      return this;
+    }
+    
+    public UserStatsDto.Builder rank(Long rank) {
+      this.instance.rank(rank);
       return this;
     }
     
