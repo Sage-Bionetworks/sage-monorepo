@@ -13,9 +13,10 @@ export class ComparisonToolHelperService {
     data: Record<string, unknown>[],
     config: ComparisonToolConfig,
     siteUrl: string,
+    heatmapCategoryColumnName = 'tissue',
   ): string[][] {
     const columns = config.columns;
-    const heatmapCols = this.getHeatmapColumns(columns, data);
+    const heatmapCols = this.getHeatmapColumns(columns, data, heatmapCategoryColumnName);
     const headerRow = this.getHeaderRow(columns, heatmapCols);
     const rows = this.getDataRows(data, columns, heatmapCols, siteUrl);
     return [headerRow, ...rows];
@@ -24,12 +25,13 @@ export class ComparisonToolHelperService {
   protected getHeatmapColumns(
     columns: ComparisonToolConfig['columns'],
     data: Record<string, unknown>[],
+    heatmapCategoryColumnName = 'tissue',
   ): string[] {
     let hasHeatmapCol = false;
     const heatmapCols: string[] = [];
     for (const col of columns) {
       if (col.type === 'heat_map' && !hasHeatmapCol) {
-        heatmapCols.push('tissue');
+        heatmapCols.push(heatmapCategoryColumnName);
         const heatmapData = data[0][col.data_key] as HeatmapCircleData;
         const heatmapKeys = Object.keys(heatmapData);
         heatmapCols.push(...heatmapKeys);

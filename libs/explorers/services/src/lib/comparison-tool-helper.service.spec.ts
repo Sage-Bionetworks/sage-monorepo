@@ -12,11 +12,12 @@ describe('Service: ComparisonToolHelper', () => {
     ctHelperService = new ComparisonToolHelperService();
   });
 
-  it('should reshape comparison tool data with heatmap data into one row per tissue', () => {
+  it('should reshape comparison tool data with heatmap data into one row per heatmap category', () => {
     const csvData = ctHelperService.reshapeComparisonToolDataToStringArray(
       mockComparisonToolData.slice(1, 3),
       mockComparisonToolDataConfig[0],
       'https://www.modeladexplorer.org',
+      'human_gene_module',
     );
     expect(csvData).toEqual([
       [
@@ -26,7 +27,7 @@ describe('Service: ComparisonToolHelper', () => {
         'disease_correlation',
         'center',
         'age',
-        'tissue',
+        'human_gene_module',
         'correlation',
         'adj_p_val',
       ],
