@@ -2140,6 +2140,7 @@ components:
         activeBattles: 4
         firstBattleAt: 2024-01-15T10:30:00Z
         latestBattleAt: 2024-10-26T14:23:00Z
+        rank: 42
       properties:
         totalBattles:
           description: Total number of battles the user has participated in (as arbiter)
@@ -2168,9 +2169,16 @@ components:
           format: date-time
           nullable: true
           type: string
+        rank:
+          description: |
+            User's rank based on completed battles using standard competition ranking. Users with the same number of completed battles share the same rank. All users have a rank, including those with 0 completed battles.
+          example: 42
+          format: int64
+          type: integer
       required:
         - activeBattles
         - completedBattles
+        - rank
         - totalBattles
       type: object
     adminStats_200_response:

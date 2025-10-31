@@ -263,6 +263,8 @@ def build_app():
                 total_users_box,
                 user_battles_column,
                 user_battles_box,
+                user_rank_column,  # New
+                user_rank_box,  # New
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
@@ -375,11 +377,16 @@ def build_app():
             ],
         )
 
-        # Load user stats on page load (for the fourth stats box)
+        # Load user stats on page load (for the fourth and fifth stats boxes)
         demo.load(
             fn=load_user_battles_on_page_load,
             inputs=None,
-            outputs=[user_battles_column, user_battles_box],
+            outputs=[
+                user_battles_column,
+                user_battles_box,
+                user_rank_column,  # New
+                user_rank_box,  # New
+            ],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)

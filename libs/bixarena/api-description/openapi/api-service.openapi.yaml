@@ -1491,10 +1491,17 @@ components:
           description: Timestamp of the user's most recent battle
           example: '2024-10-26T14:23:00Z'
           nullable: true
+        rank:
+          type: integer
+          format: int64
+          description: |
+            User's rank based on completed battles using standard competition ranking. Users with the same number of completed battles share the same rank. All users have a rank, including those with 0 completed battles.
+          example: 42
       required:
         - totalBattles
         - completedBattles
         - activeBattles
+        - rank
   responses:
     Unauthorized:
       description: Unauthorized
