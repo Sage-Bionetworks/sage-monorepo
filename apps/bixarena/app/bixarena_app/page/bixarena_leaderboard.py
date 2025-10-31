@@ -143,40 +143,26 @@ def load_leaderboard_stats_on_page_load() -> dict:
     last_updated = datetime.now().strftime("%b %d, %Y")
 
     metrics_html = f"""
-        <div style="
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-evenly;
-            padding: 1.5rem 0;
-        ">
-            <!-- Last Updated -->
-            <div style="text-align: center;">
-                <div style="font-size: 2rem; font-weight: 500; margin-bottom: 4px;">{last_updated}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Last Updated</div>
+        <div style="display: flex;">
+            <div style="flex: 1;">
+                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin: 10px;">
+                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 5px;">{last_updated}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">Last Updated</div>
+                </div>
             </div>
-
-            <div style="width: 2px; height: 3rem; background: rgba(255, 255, 255, 0.2); display: none;" class="separator"></div>
-
-            <!-- Total Battles -->
-            <div style="text-align: center;">
-                <div style="font-size: 2rem; font-weight: 500; margin-bottom: 4px;">{total_battles:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
+            <div style="flex: 1;">
+                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin: 10px;">
+                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 5px;">{total_battles:,}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">Total Battles</div>
+                </div>
             </div>
-
-            <div style="width: 2px; height: 3rem; background: rgba(255, 255, 255, 0.2); display: none;" class="separator"></div>
-
-            <!-- Models Evaluated -->
-            <div style="text-align: center;">
-                <div style="font-size: 2rem; font-weight: 500; margin-bottom: 4px;">{models_evaluated}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
+            <div style="flex: 1;">
+                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin: 10px;">
+                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 5px;">{models_evaluated}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">Models Evaluated</div>
+                </div>
             </div>
         </div>
-        <style>
-            @media (min-width: 768px) {{
-                .separator {{ display: block !important; }}
-            }}
-        </style>
         """
 
     return gr.update(value=metrics_html)
