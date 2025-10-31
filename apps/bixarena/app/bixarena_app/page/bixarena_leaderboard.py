@@ -130,7 +130,7 @@ def build_leaderboard_page():
                 <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Last Updated</div>
             </div>
 
-            <div style="width: 1px; height: 3rem; background: rgba(255, 255, 255, 0.1); display: none;" class="separator"></div>
+            <div style="width: 2px; height: 3rem; background: rgba(255, 255, 255, 0.2); display: none;" class="separator"></div>
 
             <!-- Total Votes -->
             <div style="text-align: center;">
@@ -138,7 +138,7 @@ def build_leaderboard_page():
                 <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Votes</div>
             </div>
 
-            <div style="width: 1px; height: 3rem; background: rgba(255, 255, 255, 0.1); display: none;" class="separator"></div>
+            <div style="width: 2px; height: 3rem; background: rgba(255, 255, 255, 0.2); display: none;" class="separator"></div>
 
             <!-- Total Models -->
             <div style="text-align: center;">
@@ -157,7 +157,7 @@ def build_leaderboard_page():
         gr.HTML("""
         <div style="
             background: rgba(15, 15, 15, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 64px 48px;
         ">
