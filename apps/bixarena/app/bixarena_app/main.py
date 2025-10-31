@@ -244,11 +244,14 @@ def build_app():
         .footer-no-padding .html-container {
             padding: 0 !important;
         }
+        .page-content {
+            min-height: calc(100vh - 200px);
+        }
         """,
     ) as demo:
         _, battle_btn, leaderboard_btn, login_btn = build_header()
 
-        with gr.Column(visible=True) as home_page:
+        with gr.Column(visible=True, elem_classes=["page-content"]) as home_page:
             (
                 _,
                 cta_btn,
@@ -259,13 +262,15 @@ def build_app():
                 user_battles_box,
             ) = build_home_page()
 
-        with gr.Column(visible=False) as battle_page:
+        with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
             _, example_prompt_ui, prompt_outputs = build_battle_page()
 
-        with gr.Column(visible=False) as leaderboard_page:
+        with gr.Column(
+            visible=False, elem_classes=["page-content"]
+        ) as leaderboard_page:
             build_leaderboard_page()
 
-        with gr.Column(visible=False) as user_page:
+        with gr.Column(visible=False, elem_classes=["page-content"]) as user_page:
             _, welcome_display, logout_btn = build_user_page()
 
         # Footer
