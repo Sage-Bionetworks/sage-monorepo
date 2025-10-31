@@ -4,16 +4,11 @@ from uuid import UUID
 import gradio as gr
 import requests
 from bixarena_api_client import (
-    ApiClient,
     BattleApi,
     BattleRoundUpdateRequest,
-    Configuration,
     MessageCreate,
     MessageRole,
-    ModelApi,
-    ModelSearchQuery,
 )
-from bixarena_api_client.exceptions import ApiException
 
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.request_auth import get_session_cookie
@@ -23,7 +18,6 @@ from bixarena_app.config.constants import (
     MAX_RESPONSE_TOKENS,
 )
 from bixarena_app.config.conversation import Conversation
-from bixarena_app.config.utils import _get_api_base_url
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
 
@@ -116,70 +110,10 @@ def _update_battle_round_with_responses(
         battle_session.round_id = None
 
 
-def get_model_list():
-    """Fetch models from the BixArena API using the proper API client"""
-    global api_endpoint_info
-    models = []  # Initiate models list
-
-    try:
-        api_base = _get_api_base_url()
-        configuration = Configuration(host=api_base)
-
-        # Create API client and model API instance
-        with ApiClient(configuration) as api_client:
-            api_instance = ModelApi(api_client)
-
-            # Fetch only visible models (100 for now)
-            visible_models_search_query = ModelSearchQuery(
-                page_size=100,
-                active=True,
-            )
-            visible_models_response = api_instance.list_models(
-                model_search_query=visible_models_search_query
-            )
-
-            api_endpoint_info = {}
-
-            for model in visible_models_response.models:
-                model_name = model.name
-                model_id = model.id
-
-                # Get API configuration from model
-                api_model_name = model.api_model_name
-                api_base = model.api_base
-                api_type = "openai"
-
-                # Add model's display name to the model list
-                models.append(model_name)
-
-                # Store model API configuration
-                api_endpoint_info[model_name] = {
-                    "model_id": model_id,
-                    "api_type": api_type,
-                    "api_base": api_base,
-                    "model_name": api_model_name,
-                }
-        logger.info(f"✅ Fetched {len(models)} visible models from BixArena API.")
-
-    except ApiException as e:
-        logger.error(f"❌ API Exception when calling ModelApi->list_models: {e}")
-        models = []
-        api_endpoint_info = {}
-    except Exception as e:
-        logger.error(f"❌ Unexpected error fetching models: {e}")
-        models = []
-        api_endpoint_info = {}
-
-    # Sort models alphabetically
-    models.sort()
-
-    if models:
-        logger.info(f"\n🚀 Available models: {models}")
-    else:
-        logger.warning("⚠️ No visible models found")
-
-    # Return models twice for compatibility with FastChat interface expectations
-    return models, models
+# NOTE: get_model_list() function has been removed
+# Model information is now dynamically populated when battles are created.
+# The backend randomly selects models and returns their full details in the
+# battle creation response, which are then stored in api_endpoint_info.
 
 
 def bot_response(

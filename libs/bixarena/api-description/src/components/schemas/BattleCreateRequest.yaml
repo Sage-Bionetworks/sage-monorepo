@@ -4,10 +4,3 @@ properties:
   title:
     $ref: BattleTitle.yaml
     nullable: true
-  model1Id:
-    $ref: ModelId.yaml
-  model2Id:
-    $ref: ModelId.yaml
-required:
-  - model1Id
-  - model2Id

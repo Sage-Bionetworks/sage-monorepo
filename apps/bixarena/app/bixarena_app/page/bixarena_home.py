@@ -102,11 +102,11 @@ def create_intro_section():
             """)
 
 
-def load_public_stats_on_page_load() -> tuple[dict, dict, dict]:
+def load_public_stats_on_page_load() -> tuple[dict, dict, dict, dict, dict, dict]:
     """Load public stats and update the HTML boxes.
 
     Returns:
-        Tuple of (models_html, battles_html, users_html) updates
+        Tuple of (models_column, models_html, battles_column, battles_html, users_column, users_html) updates
     """
     public_stats = fetch_public_stats()
 
@@ -138,9 +138,12 @@ def load_public_stats_on_page_load() -> tuple[dict, dict, dict]:
     """
 
     return (
-        gr.update(value=models_html),
-        gr.update(value=battles_html),
-        gr.update(value=users_html),
+        gr.update(visible=True),  # models_evaluated_column
+        gr.update(value=models_html),  # models_evaluated_box
+        gr.update(visible=True),  # total_battles_column
+        gr.update(value=battles_html),  # total_battles_box
+        gr.update(visible=True),  # total_users_column
+        gr.update(value=users_html),  # total_users_box
     )
 
 
@@ -175,15 +178,15 @@ def build_stats_section():
     """Create the statistics section with metrics"""
 
     with gr.Row():
-        with gr.Column():
+        with gr.Column(visible=False) as models_evaluated_column:
             with gr.Group():
                 models_evaluated_box = gr.HTML("")
 
-        with gr.Column():
+        with gr.Column(visible=False) as total_battles_column:
             with gr.Group():
                 total_battles_box = gr.HTML("")
 
-        with gr.Column():
+        with gr.Column(visible=False) as total_users_column:
             with gr.Group():
                 total_users_box = gr.HTML("")
 
@@ -193,8 +196,11 @@ def build_stats_section():
                 user_battles_box = gr.HTML("")
 
     return (
+        models_evaluated_column,
         models_evaluated_box,
+        total_battles_column,
         total_battles_box,
+        total_users_column,
         total_users_box,
         user_battles_column,
         user_battles_box,
@@ -241,8 +247,11 @@ def build_home_page():
 
             # Stats Section
             (
+                models_evaluated_column,
                 models_evaluated_box,
+                total_battles_column,
                 total_battles_box,
+                total_users_column,
                 total_users_box,
                 user_battles_column,
                 user_battles_box,
@@ -254,8 +263,11 @@ def build_home_page():
     return (
         home_page,
         start_btn,
+        models_evaluated_column,
         models_evaluated_box,
+        total_battles_column,
         total_battles_box,
+        total_users_column,
         total_users_box,
         user_battles_column,
         user_battles_box,

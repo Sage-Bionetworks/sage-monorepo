@@ -16,19 +16,40 @@ import pprint
 import re  # noqa: F401
 import json
 
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from uuid import UUID
+from bixarena_api_client.models.model import Model
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class BattleCreateRequest(BaseModel):
+class BattleCreateResponse(BaseModel):
     """
-    The information used to create a new battle.
+    A battle between two AI models.
     """  # noqa: E501
 
+    id: UUID = Field(description="Unique identifier (UUID) of the battle.")
     title: Optional[StrictStr] = Field(default=None, description="Title of the battle.")
-    __properties: ClassVar[List[str]] = ["title"]
+    user_id: UUID = Field(description="UUID of a user.", alias="userId")
+    model1: Model
+    model2: Model
+    created_at: datetime = Field(
+        description="Timestamp when the entity was created.", alias="createdAt"
+    )
+    ended_at: Optional[datetime] = Field(
+        default=None, description="Timestamp when the entity ended.", alias="endedAt"
+    )
+    __properties: ClassVar[List[str]] = [
+        "id",
+        "title",
+        "userId",
+        "model1",
+        "model2",
+        "createdAt",
+        "endedAt",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +68,7 @@ class BattleCreateRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of BattleCreateRequest from a JSON string"""
+        """Create an instance of BattleCreateResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -67,16 +88,36 @@ class BattleCreateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of model1
+        if self.model1:
+            _dict["model1"] = self.model1.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of model2
+        if self.model2:
+            _dict["model2"] = self.model2.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of BattleCreateRequest from a dict"""
+        """Create an instance of BattleCreateResponse from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"title": obj.get("title")})
+        _obj = cls.model_validate(
+            {
+                "id": obj.get("id"),
+                "title": obj.get("title"),
+                "userId": obj.get("userId"),
+                "model1": Model.from_dict(obj["model1"])
+                if obj.get("model1") is not None
+                else None,
+                "model2": Model.from_dict(obj["model2"])
+                if obj.get("model2") is not None
+                else None,
+                "createdAt": obj.get("createdAt"),
+                "endedAt": obj.get("endedAt"),
+            }
+        )
         return _obj

@@ -18,6 +18,7 @@ bixarena_api_client/models/admin_stats200_response.py
 bixarena_api_client/models/basic_error.py
 bixarena_api_client/models/battle.py
 bixarena_api_client/models/battle_create_request.py
+bixarena_api_client/models/battle_create_response.py
 bixarena_api_client/models/battle_evaluation.py
 bixarena_api_client/models/battle_evaluation_create_request.py
 bixarena_api_client/models/battle_evaluation_outcome.py
@@ -71,6 +72,7 @@ docs/BasicError.md
 docs/Battle.md
 docs/BattleApi.md
 docs/BattleCreateRequest.md
+docs/BattleCreateResponse.md
 docs/BattleEvaluation.md
 docs/BattleEvaluationCreateRequest.md
 docs/BattleEvaluationOutcome.md
@@ -128,6 +130,7 @@ test/test_basic_error.py
 test/test_battle.py
 test/test_battle_api.py
 test/test_battle_create_request.py
+test/test_battle_create_response.py
 test/test_battle_evaluation.py
 test/test_battle_evaluation_create_request.py
 test/test_battle_evaluation_outcome.py

@@ -22,6 +22,7 @@ from typing_extensions import Annotated
 from uuid import UUID
 from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
+from bixarena_api_client.models.battle_create_response import BattleCreateResponse
 from bixarena_api_client.models.battle_evaluation import BattleEvaluation
 from bixarena_api_client.models.battle_evaluation_create_request import (
     BattleEvaluationCreateRequest,
@@ -69,7 +70,7 @@ class BattleApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Battle:
+    ) -> BattleCreateResponse:
         """Create a battle
 
         Create a new battle between two AI models.
@@ -107,7 +108,7 @@ class BattleApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "201": "Battle",
+            "201": "BattleCreateResponse",
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
@@ -140,7 +141,7 @@ class BattleApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Battle]:
+    ) -> ApiResponse[BattleCreateResponse]:
         """Create a battle
 
         Create a new battle between two AI models.
@@ -178,7 +179,7 @@ class BattleApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "201": "Battle",
+            "201": "BattleCreateResponse",
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
@@ -249,7 +250,7 @@ class BattleApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "201": "Battle",
+            "201": "BattleCreateResponse",
             "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
