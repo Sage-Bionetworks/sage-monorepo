@@ -12,6 +12,7 @@ from bixarena_app.page.bixarena_battle import build_battle_page
 # Configure logging first
 setup_logging()
 logger = logging.getLogger(__name__)
+from bixarena_app.page.bixarena_footer import build_footer
 from bixarena_app.page.bixarena_header import (
     build_header,
     handle_login_click,
@@ -235,8 +236,13 @@ def build_app():
             max-width: 1200px;
             margin: 0 auto;
         }
+        /* Hide Gradio's default footer */
         footer {
-            visibility: hidden;
+            display: none !important;
+        }
+        /* Remove padding from footer HTML containers */
+        .footer-no-padding .html-container {
+            padding: 0 !important;
         }
         """,
     ) as demo:
@@ -262,6 +268,9 @@ def build_app():
         with gr.Column(visible=False) as user_page:
             _, welcome_display, logout_btn = build_user_page()
 
+        # Footer
+        build_footer()
+
         # Hidden HTML component(s) for cookie scripts / future use
         cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
 
@@ -279,7 +288,8 @@ def build_app():
             + start_endpoint
             + "</span><span id='backend-base' style='display:none'>"
             + base_markup
-            + "</span>"
+            + "</span>",
+            elem_classes="footer-no-padding",
         )
 
         pages = [home_page, battle_page, leaderboard_page, user_page]
