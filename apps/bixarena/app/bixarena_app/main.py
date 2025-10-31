@@ -287,6 +287,12 @@ def build_app():
 
         # Hidden HTML component(s) for cookie scripts / future use
         cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
+        auth_marker = gr.HTML(
+            "",
+            visible=False,
+            elem_id="auth-marker",
+            elem_classes="footer-no-padding",
+        )
 
         # Expose start endpoint to login button JS for immediate redirect
         auth_base = _get_auth_base_url_csr()
@@ -322,22 +328,19 @@ def build_app():
             lambda: handle_start_evaluation_click(
                 navigator, example_prompt_ui.refresh_prompts
             ),
-            outputs=pages + prompt_outputs,
+            outputs=pages + prompt_outputs + [auth_marker],
             js="""
 () => {
-  // Check if user is authenticated by checking if login button says "Logout"
-  const loginBtn = document.querySelector('#login-btn button,#login-btn');
-  if(loginBtn) {
-    const label = loginBtn.innerText.trim();
-    if(label === 'Login') {
-      // Not authenticated, redirect to login
-      setTimeout(() => {
-        const el = document.getElementById('login-start-endpoint');
-        const url = el ? el.textContent.trim() : '';
-        if(url){ window.location.href = url; }
-      }, 50);
+  setTimeout(() => {
+    const marker = document.getElementById('auth-marker');
+    if (marker && marker.textContent.trim() === 'UNAUTHORIZED') {
+      const el = document.getElementById('login-start-endpoint');
+      const url = el ? el.textContent.trim() : '';
+      if (url) {
+        window.location.href = url;
+      }
     }
-  }
+  }, 200);
 }
                 """,
         )
