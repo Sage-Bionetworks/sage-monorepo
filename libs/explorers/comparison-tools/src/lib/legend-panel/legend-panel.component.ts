@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, inject, input } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { DialogModule } from 'primeng/dialog';
 import { LegendComponent } from './legend/legend.component';
@@ -13,12 +13,7 @@ import { LegendComponent } from './legend/legend.component';
 export class LegendPanelComponent {
   comparisonToolService = inject(ComparisonToolService);
 
-  colorChartLowerLabel = input('');
-  colorChartUpperLabel = input('');
-  colorChartText = input('');
-  sizeChartLowerLabel = input('');
-  sizeChartUpperLabel = input('');
-  sizeChartText = input('');
+  viewConfig = this.comparisonToolService.viewConfig;
 
   onHowToClick() {
     //TODO implement

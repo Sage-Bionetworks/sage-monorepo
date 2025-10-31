@@ -9,12 +9,12 @@
   styleClass="legend-panel"
 >
   <explorers-legend
-    [colorChartLowerLabel]="colorChartLowerLabel()"
-    [colorChartUpperLabel]="colorChartUpperLabel()"
-    [colorChartText]="colorChartText()"
-    [sizeChartLowerLabel]="sizeChartLowerLabel()"
-    [sizeChartUpperLabel]="sizeChartUpperLabel()"
-    [sizeChartText]="sizeChartText()"
+    [colorChartLowerLabel]="viewConfig().legendPanelConfig.colorChartLowerLabel"
+    [colorChartUpperLabel]="viewConfig().legendPanelConfig.colorChartUpperLabel"
+    [colorChartText]="viewConfig().legendPanelConfig.colorChartText"
+    [sizeChartLowerLabel]="viewConfig().legendPanelConfig.sizeChartLowerLabel"
+    [sizeChartUpperLabel]="viewConfig().legendPanelConfig.sizeChartUpperLabel"
+    [sizeChartText]="viewConfig().legendPanelConfig.sizeChartText"
   ></explorers-legend>
   <ng-template #footer>
     <a (click)="onHowToClick()">Visualization Overview</a>

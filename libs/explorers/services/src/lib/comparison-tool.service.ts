@@ -26,6 +26,14 @@ export class ComparisonToolService<T> {
     viewDetailsClick: (id: string, label: string) => {
       return;
     },
+    legendPanelConfig: {
+      colorChartLowerLabel: '',
+      colorChartUpperLabel: '',
+      colorChartText: '',
+      sizeChartLowerLabel: '',
+      sizeChartUpperLabel: '',
+      sizeChartText: '',
+    },
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
