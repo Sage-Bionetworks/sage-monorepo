@@ -33,7 +33,7 @@ def build_header():
 #header-row {
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 20px;
 }
 </style>
