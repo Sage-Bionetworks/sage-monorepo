@@ -34,10 +34,10 @@ public class CacheConfiguration {
             .build(),
         ObjectMapper.DefaultTyping.NON_FINAL);
 
-    // Default cache configuration
+    // Default cache configuration (1 minute TTL)
     RedisCacheConfiguration defaultConfig =
         RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(Duration.ofMinutes(1)) // 1 minute TTL (configurable via application.yml)
+            .entryTtl(Duration.ofMinutes(1))
             .serializeKeysWith(
                 RedisSerializationContext.SerializationPair.fromSerializer(
                     new StringRedisSerializer()))
@@ -46,6 +46,12 @@ public class CacheConfiguration {
                     new GenericJackson2JsonRedisSerializer(cacheObjectMapper)))
             .disableCachingNullValues();
 
-    return RedisCacheManager.builder(connectionFactory).cacheDefaults(defaultConfig).build();
+    // Custom configuration for user ranks (5 minute TTL for better performance)
+    RedisCacheConfiguration userRanksConfig = defaultConfig.entryTtl(Duration.ofMinutes(5));
+
+    return RedisCacheManager.builder(connectionFactory)
+        .cacheDefaults(defaultConfig)
+        .withCacheConfiguration(CacheNames.USER_RANKS, userRanksConfig)
+        .build();
   }
 }
