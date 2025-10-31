@@ -22,6 +22,7 @@ describe('Service: ComparisonToolHelper', () => {
     expect(csvData).toEqual([
       [
         'name',
+        'cluster',
         'model_type',
         'matched_controls',
         'disease_correlation',
@@ -33,6 +34,7 @@ describe('Service: ComparisonToolHelper', () => {
       ],
       [
         '5xFAD (UCI)',
+        'Cluster A',
         'Familial AD',
         'C57BL/6J',
         '',
@@ -44,6 +46,7 @@ describe('Service: ComparisonToolHelper', () => {
       ],
       [
         '5xFAD (UCI)',
+        'Cluster A',
         'Familial AD',
         'C57BL/6J',
         '',
@@ -55,6 +58,7 @@ describe('Service: ComparisonToolHelper', () => {
       ],
       [
         '5xFAD (IU/Jax/Pitt)',
+        'Cluster A',
         'Familial AD',
         'C57BL/6J',
         'https://www.modeladexplorer.org/comparison/correlation?model=5xFAD (IU/Jax/Pitt)',
@@ -66,6 +70,7 @@ describe('Service: ComparisonToolHelper', () => {
       ],
       [
         '5xFAD (IU/Jax/Pitt)',
+        'Cluster A',
         'Familial AD',
         'C57BL/6J',
         'https://www.modeladexplorer.org/comparison/correlation?model=5xFAD (IU/Jax/Pitt)',
@@ -89,8 +94,8 @@ describe('Service: ComparisonToolHelper', () => {
       dropdowns: [],
       row_count: 'over 200000',
       columns: [
-        { type: 'primary', data_key: 'name' },
-        { name: 'Column 1', type: 'text', data_key: 'column_1' },
+        { type: 'primary', data_key: 'name', download: true },
+        { name: 'Column 1', type: 'text', data_key: 'column_1', download: true },
       ],
       filters: [],
     };

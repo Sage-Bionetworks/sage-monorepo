@@ -3,6 +3,7 @@ import {
   ComparisonToolColumn,
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
+  ComparisonToolConfigColumnTypeEnum,
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
@@ -109,7 +110,9 @@ export class ComparisonToolService<T> {
   });
 
   selectedColumns = computed(() => {
-    return this.columns().filter((col) => col.selected);
+    return this.columns().filter(
+      (col) => col.selected && col.type !== ComparisonToolConfigColumnTypeEnum.Hidden,
+    );
   });
 
   hasHiddenColumns(): boolean {

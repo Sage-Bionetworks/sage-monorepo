@@ -15,7 +15,7 @@ export class ComparisonToolHelperService {
     siteUrl: string,
     heatmapCategoryColumnName = 'tissue',
   ): string[][] {
-    const columns = config.columns;
+    const columns = config.columns.filter((col) => col.download !== false);
     const heatmapCols = this.getHeatmapColumns(columns, data, heatmapCategoryColumnName);
     const headerRow = this.getHeaderRow(columns, heatmapCols);
     const rows = this.getDataRows(data, columns, heatmapCols, siteUrl);
