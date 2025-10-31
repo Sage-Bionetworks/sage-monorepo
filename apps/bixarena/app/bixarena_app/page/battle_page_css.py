@@ -127,10 +127,8 @@ INPUT_PROMPT_CSS = """
 
 # CSS for disclaimer
 DISCLAIMER_CSS = """
-#disclaimer-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+#disclaimer {
     padding: 16px 24px;
-    margin-top: 32px;
 }
 
 #disclaimer-content {

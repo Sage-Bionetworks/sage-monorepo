@@ -562,7 +562,7 @@ def build_side_by_side_ui_anony():
         # Disclaimer
         gr.HTML(
             """
-            <div id="disclaimer-footer">
+            <div id="disclaimer">
                 <div id="disclaimer-content">
                     <div id="disclaimer-text">
                         <div class="pulse-dot"></div>
