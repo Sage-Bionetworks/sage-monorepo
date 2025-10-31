@@ -100,15 +100,15 @@ def filter_dataframe(df, model_filter):
 
 def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
-    logger.info("📊 Building leaderboard page...")
-
     # Get initial data from API
-    df = fetch_leaderboard_data()
-    total_votes = df["Total Votes"].sum()
-    total_models = len(df)
-    logger.info(
-        f"📈 Leaderboard built with {total_models} models and {total_votes} total votes"
-    )
+    # df = fetch_leaderboard_data()
+    # total_votes = df["Total Votes"].sum()
+    # total_models = len(df)
+    # logger.info(
+    #     f"📈 Leaderboard built with {total_models} models and {total_votes} total votes"
+    # )
+    total_votes = 10
+    total_models = 5
 
     with gr.Column():
         # Title and stats
@@ -141,42 +141,104 @@ def build_leaderboard_page():
 
         gr.Markdown("---")
 
-        # Disclaimer sections
-        with gr.Accordion("⚠️ Important Disclaimer", open=True):
-            gr.Markdown("""
-            **This is demonstration data only.** The scores and rankings shown are for demo purposes
-            and do not represent actual performance comparisons of these models.
-            """)
+        # Coming soon message
+        gr.HTML("""
+        <div style="
+            background: rgba(15, 15, 15, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 64px 48px;
+            margin: 40px 0;
+        ">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <!-- Icon -->
+                <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+                    <div style="
+                        width: 56px;
+                        height: 56px;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                        <span style="font-size: 28px;">⏰</span>
+                    </div>
+                </div>
 
-        # Filter controls
-        with gr.Row():
-            model_filter = gr.Textbox(
-                show_label=False, placeholder="Search models...", scale=3
-            )
+                <!-- Title -->
+                <h3 style="
+                    font-size: 1.25rem;
+                    color: #e5e7eb;
+                    font-weight: 500;
+                    margin-bottom: 16px;
+                    line-height: 1.5;
+                ">
+                    Leaderboard Rankings Coming Soon
+                </h3>
 
-        # Main leaderboard table
-        leaderboard_table = gr.Dataframe(
-            value=df,
-            interactive=False,
-            wrap=True,
-            headers=[
-                "Rank",
-                "Model",
-                "BT Score",
-                "95% CI",
-                "Total Votes",
-                "Organization",
-            ],
-        )
+                <!-- Description -->
+                <p style="
+                    color: rgba(229, 231, 235, 0.7);
+                    line-height: 1.625;
+                    margin-bottom: 0;
+                    font-size: 1rem;
+                ">
+                    The leaderboard will be published once we have sufficient evaluations to 
+                    ensure statistically meaningful model rankings.
+                </p>
+                <div style="padding-top: 16px;">
+                    <p style="
+                        font-size: 0.875rem;
+                        color: rgba(229, 231, 235, 0.5);
+                        line-height: 1.625;
+                        margin: 0;
+                    ">
+                        Keep battling to help us build a comprehensive benchmark
+                    </p>
+                </div>
+            </div>
+        </div>
+        """)
 
-        # Update functions
-        def update_table(filter_text):
-            filtered_df = filter_dataframe(df, filter_text)
-            return filtered_df
+        # # Disclaimer sections
+        # with gr.Accordion("⚠️ Important Disclaimer", open=True):
+        #     gr.Markdown("""
+        #     **This is demonstration data only.** The scores and rankings shown are for demo purposes
+        #     and do not represent actual performance comparisons of these models.
+        #     """)
 
-        # Event handlers
-        model_filter.change(
-            fn=update_table, inputs=[model_filter], outputs=[leaderboard_table]
-        )
+        # # Filter controls
+        # with gr.Row():
+        #     model_filter = gr.Textbox(
+        #         show_label=False, placeholder="Search models...", scale=3
+        #     )
+
+        # # Main leaderboard table
+        # leaderboard_table = gr.Dataframe(
+        #     value=df,
+        #     interactive=False,
+        #     wrap=True,
+        #     headers=[
+        #         "Rank",
+        #         "Model",
+        #         "BT Score",
+        #         "95% CI",
+        #         "Total Votes",
+        #         "Organization",
+        #     ],
+        # )
+
+        # # Update functions
+        # def update_table(filter_text):
+        #     filtered_df = filter_dataframe(df, filter_text)
+        #     return filtered_df
+
+        # # Event handlers
+        # model_filter.change(
+        #     fn=update_table, inputs=[model_filter], outputs=[leaderboard_table]
+        # )
+
+    leaderboard_table = None
 
     return leaderboard_table
