@@ -73,7 +73,7 @@ def fetch_user_stats(request: gr.Request):
             api = UserApi(client)
             user_stats = api.get_user_stats()
             logger.info(
-                f"Fetched user stats: {user_stats.total_battles} battles, rank #{user_stats.rank}"
+                f"Fetched user stats: {user_stats.completed_battles} completed battles, rank #{user_stats.rank}"
             )
             return user_stats
 
@@ -171,13 +171,13 @@ def load_user_battles_on_page_load(
             gr.update(value=""),
         )
 
-    # Battles Arbitrated box
+    # Battles Completed box
     battles_html = f"""
     <div style="text-align: center; padding: 20px;">
         <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            BATTLES ARBITRATED
+            BATTLES COMPLETED
         </p>
-        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">{user_stats.total_battles}</h2>
+        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">{user_stats.completed_battles}</h2>
     </div>
     """
 
