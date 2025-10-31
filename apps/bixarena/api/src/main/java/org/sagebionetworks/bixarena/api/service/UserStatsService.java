@@ -36,14 +36,9 @@ public class UserStatsService {
     OffsetDateTime firstBattleAt = battleRepository.findFirstBattleTimestampByUserId(userId);
     OffsetDateTime latestBattleAt = battleRepository.findLatestBattleTimestampByUserId(userId);
 
-    // Calculate rank based on completed battles (includes users with 0 completed battles)
+    // Calculate rank based on completed battles
+    // All authenticated users are ranked (from auth.user table)
     Long rank = battleRepository.findUserRankByCompletedBattles(userId);
-
-    // If rank is null, user has no battles yet - assign rank 1 (they're tied for first with 0 battles)
-    if (rank == null) {
-      rank = 1L;
-      log.info("User {} has no battles yet, assigning default rank 1", userId);
-    }
 
     log.info(
         "User {} stats: total={}, completed={}, active={}, rank={}, first={}, latest={}",
@@ -60,7 +55,7 @@ public class UserStatsService {
         .totalBattles(totalBattles != null ? totalBattles : 0L)
         .completedBattles(completedBattles != null ? completedBattles : 0L)
         .activeBattles(activeBattles != null ? activeBattles : 0L)
-        .rank(rank)  // Always has a value (defaults to 1 for new users)
+        .rank(rank)  // Never null - all authenticated users are ranked
         .firstBattleAt(firstBattleAt)
         .latestBattleAt(latestBattleAt)
         .build();

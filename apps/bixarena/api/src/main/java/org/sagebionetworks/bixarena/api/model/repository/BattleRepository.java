@@ -85,23 +85,20 @@ public interface BattleRepository
   /**
    * Calculate user's rank based on completed battles using standard competition ranking.
    * Users with the same number of completed battles share the same rank.
-   * All users have a rank, including those with 0 completed battles.
+   * All authenticated users have a rank, including those with 0 completed battles.
    *
    * @param userId The user ID to calculate rank for
-   * @return The user's rank (never null for existing users)
+   * @return The user's rank (never null for authenticated users)
    */
   @Query(
     value =
-      "WITH all_users AS ( " +
-      "  SELECT DISTINCT user_id FROM api.battle " +
-      "), " +
-      "user_battle_counts AS ( " +
+      "WITH user_battle_counts AS ( " +
       "  SELECT " +
-      "    u.user_id, " +
-      "    COALESCE(COUNT(b.id), 0) as completed_battles " +
-      "  FROM all_users u " +
-      "  LEFT JOIN api.battle b ON u.user_id = b.user_id AND b.ended_at IS NOT NULL " +
-      "  GROUP BY u.user_id " +
+      "    u.id as user_id, " +
+      "    COUNT(CASE WHEN b.ended_at IS NOT NULL THEN 1 END) as completed_battles " +
+      "  FROM auth.user u " +
+      "  LEFT JOIN api.battle b ON u.id = b.user_id " +
+      "  GROUP BY u.id " +
       "), " +
       "ranked_users AS ( " +
       "  SELECT " +
