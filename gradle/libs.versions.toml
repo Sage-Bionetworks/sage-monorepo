@@ -63,6 +63,7 @@ spring-context = { module = "org.springframework:spring-context", version.ref = 
 spring-data-commons = { module = "org.springframework.data:spring-data-commons", version.ref = "spring-data" }
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose", version.ref = "spring-security" }
 spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "spring-security" }
+spring-session-data-redis = { module = "org.springframework.session:spring-session-data-redis" }
 spring-web = { module = "org.springframework:spring-web", version.ref = "spring" }
 
 # Other libraries

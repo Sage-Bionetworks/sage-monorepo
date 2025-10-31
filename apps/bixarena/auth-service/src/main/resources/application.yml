@@ -7,11 +7,16 @@ server:
 spring:
   application:
     name: bixarena-auth-service
+  session:
+    store-type: redis
+    redis:
+      namespace: bixarena:session
+    timeout: 7d
   data:
     redis:
       host: bixarena-valkey
       port: 8116
-      database: 0
+      database: 2
       timeout: 2000ms
       jedis:
         pool:
