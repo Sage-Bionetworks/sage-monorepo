@@ -17,6 +17,7 @@ export interface ComparisonToolViewConfig {
   viewDetailsTooltip: string;
   viewDetailsClick: (id: string, label: string) => void;
   legendPanelConfig: LegendPanelConfig;
+  legendEnabled: boolean;
 }
 
 export interface ComparisonToolFilterOption {

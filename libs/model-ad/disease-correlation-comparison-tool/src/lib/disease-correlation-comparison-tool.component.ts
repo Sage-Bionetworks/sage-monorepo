@@ -17,12 +17,11 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
-import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
-  imports: [BaseComparisonToolComponent, DiseaseCorrelationHelpLinksComponent],
+  imports: [BaseComparisonToolComponent],
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
 })

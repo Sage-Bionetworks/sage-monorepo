@@ -1,4 +1,5 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 
 @Component({
   selector: 'explorers-help-links',
@@ -6,15 +7,7 @@ import { Component, input, output } from '@angular/core';
   styleUrls: ['./help-links.component.scss'],
 })
 export class HelpLinksComponent {
-  legendEnabled = input(true);
-  legendToggle = output<void>();
-  visualizationOverviewToggle = output<void>();
+  comparisonToolService = inject(ComparisonToolService);
 
-  toggleLegend() {
-    this.legendToggle.emit();
-  }
-
-  toggleVisualizationOverview() {
-    this.visualizationOverviewToggle.emit();
-  }
+  viewConfig = this.comparisonToolService.viewConfig;
 }

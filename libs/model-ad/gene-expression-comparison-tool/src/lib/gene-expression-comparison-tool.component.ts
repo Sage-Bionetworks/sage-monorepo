@@ -15,7 +15,6 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
-import { GeneExpressionHelpLinksComponent } from './components/gene-expression-help-links/gene-expression-help-links.component';
 import { GeneExpressionComparisonToolService } from './services/gene-expression-comparison-tool.service';
 
 // TODO: Replace with actual gene expression data model (MG-238)
@@ -23,7 +22,7 @@ export type GeneExpression = [];
 
 @Component({
   selector: 'model-ad-gene-expression-comparison-tool',
-  imports: [BaseComparisonToolComponent, GeneExpressionHelpLinksComponent],
+  imports: [BaseComparisonToolComponent],
   templateUrl: './gene-expression-comparison-tool.component.html',
   styleUrls: ['./gene-expression-comparison-tool.component.scss'],
 })
