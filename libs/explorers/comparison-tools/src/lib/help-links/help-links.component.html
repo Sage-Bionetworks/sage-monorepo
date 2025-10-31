@@ -1,12 +1,14 @@
 <div class="help-links">
   <div class="help-links-inner">
-    @if (legendEnabled()) {
+    @if (viewConfig().legendEnabled) {
       <div>
-        <a class="help-link" (click)="toggleLegend()">Legend</a>
+        <a class="help-link" (click)="comparisonToolService.toggleLegend()">Legend</a>
       </div>
     }
     <div>
-      <a class="help-link" (click)="toggleVisualizationOverview()">Visualization Overview</a>
+      <a class="help-link" (click)="comparisonToolService.toggleVisualizationOverview()"
+        >Visualization Overview</a
+      >
     </div>
   </div>
 </div>

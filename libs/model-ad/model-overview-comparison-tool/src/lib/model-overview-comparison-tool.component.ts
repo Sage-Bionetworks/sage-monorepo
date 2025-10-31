@@ -13,12 +13,11 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
-import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
 import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
-  imports: [BaseComparisonToolComponent, ModelOverviewHelpLinksComponent],
+  imports: [BaseComparisonToolComponent],
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })
@@ -43,6 +42,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       const url = this.router.serializeUrl(this.router.createUrlTree([ROUTE_PATHS.MODELS, label]));
       window.open(url, '_blank');
     },
+    legendEnabled: false,
   };
 
   constructor() {

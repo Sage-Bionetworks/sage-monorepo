@@ -34,12 +34,14 @@ export class ComparisonToolService<T> {
       sizeChartUpperLabel: '',
       sizeChartText: '',
     },
+    legendEnabled: true,
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
+  private readonly isVisualizationOverviewVisibleSignal = signal(false);
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
   private readonly sortFieldSignal = signal<string | undefined>(undefined);
@@ -52,6 +54,7 @@ export class ComparisonToolService<T> {
   readonly configs = this.configsSignal.asReadonly();
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
+  readonly isVisualizationOverviewVisible = this.isVisualizationOverviewVisibleSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
   readonly sortField = this.sortFieldSignal.asReadonly();
@@ -117,16 +120,8 @@ export class ComparisonToolService<T> {
     return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
   });
 
-  setLegendVisibility(visible: boolean) {
-    this.isLegendVisibleSignal.set(visible);
-  }
-
   setMaxPinnedItems(count: number) {
     this.maxPinnedItemsSignal.set(count);
-  }
-
-  toggleLegend() {
-    this.isLegendVisibleSignal.update((visible) => !visible);
   }
 
   initialize(configs: ComparisonToolConfig[], selection?: string[]) {
@@ -191,8 +186,26 @@ export class ComparisonToolService<T> {
     }
   }
 
+  setLegendVisibility(visible: boolean) {
+    this.isLegendVisibleSignal.set(visible);
+  }
+
+  toggleLegend() {
+    this.isLegendVisibleSignal.update((visible) => !visible);
+  }
+
+  setVisualizationOverviewVisibility(visible: boolean) {
+    this.isVisualizationOverviewVisibleSignal.set(visible);
+  }
+
+  toggleVisualizationOverview() {
+    this.isVisualizationOverviewVisibleSignal.update((visible) => !visible);
+  }
+
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {
     this.viewConfigSignal.set({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
+    this.setLegendVisibility(false);
+    this.setVisualizationOverviewVisibility(false);
   }
 
   isPinned(id: string): boolean {
