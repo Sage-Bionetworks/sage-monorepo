@@ -102,9 +102,17 @@ def build_footer():
     <div class="footer-container">
         <!-- Left section - Branding -->
         <div class="footer-left">
-            <span>Powered by</span>
-            <a href="{brand_url}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; text-decoration: none;">
-                <svg class="footer-logo" viewBox="0 0 568 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {"<span>Powered by</span>" if brand_url else ""}
+            {
+            f'''<a href='{brand_url}' target='_blank'
+                rel='noopener noreferrer'
+                style='display: inline-flex; align-items: center;
+                text-decoration: none;'>'''
+            if brand_url
+            else ""
+        }
+                <svg class="footer-logo" viewBox="0 0 568 94"
+                    fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_28_15)">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M42.9927 1.95264L71.3556 18.4282L77.1556 21.8282L74.8443 25.7711L69.0521 22.3756L69.0443 22.3711L45.2851 8.56982V43.9996H40.7147V8.5951L16.9314 22.5853L11.1039 25.8005L8.896 21.7987L14.6684 18.614L42.9927 1.95264Z" fill="#FD9701"/>
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M2.11497 40.4344L1.91602 33.869L6.48432 33.7306L6.68537 40.3652V67.9205L37.2552 50.2221L39.5451 54.1775L8.86773 71.9381L32.923 85.8094L38.7041 88.9989L36.4962 93.0007L30.6773 89.7902L2.11497 73.32V40.4344Z" fill="#219CEA"/>
@@ -117,27 +125,48 @@ def build_footer():
                         </clipPath>
                     </defs>
                 </svg>
-            </a>
+            {"</a>" if brand_url else ""}
         </div>
 
         <!-- Center section - Links -->
         <div class="footer-center">
-            <a href="{tos_url}" class="footer-link" target="_blank" rel="noopener noreferrer">
-                Terms of Service
-            </a>
-            <span class="footer-separator">•</span>
-            <a href="{contact_url}" class="footer-link" target="_blank" rel="noopener noreferrer">
-                Contact Us
-            </a>
-            <span class="footer-separator">•</span>
-            <a href="{issues_url}" class="footer-link" target="_blank" rel="noopener noreferrer">
-                Report Issue
-            </a>
+            {
+            f"<a href='{tos_url}' class='footer-link' target='_blank' "
+            f"rel='noopener noreferrer'>Terms of Service</a>"
+            if tos_url
+            else ""
+        }
+            {
+            (
+                "<span class='footer-separator'>•</span>"
+                if tos_url and contact_url
+                else ""
+            )
+        }
+            {
+            f"<a href='{contact_url}' class='footer-link' "
+            f"target='_blank' rel='noopener noreferrer'>Contact Us</a>"
+            if contact_url
+            else ""
+        }
+            {
+            (
+                "<span class='footer-separator'>•</span>"
+                if contact_url and issues_url
+                else ""
+            )
+        }
+            {
+            f"<a href='{issues_url}' class='footer-link' "
+            f"target='_blank' rel='noopener noreferrer'>Report Issue</a>"
+            if issues_url
+            else ""
+        }
         </div>
 
         <!-- Right section - Version -->
         <div class="footer-right">
-            <span>v{app_version}</span>
+            {f"<span>v{app_version}</span>" if app_version else ""}
         </div>
     </div>
 </div>
