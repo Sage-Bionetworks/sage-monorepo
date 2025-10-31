@@ -43,6 +43,7 @@ def build_footer():
     align-items: center;
     gap: 12px;
     font-size: 14px;
+    flex: 1;
 }}
 
 .footer-logo {{
@@ -55,11 +56,22 @@ def build_footer():
     color: #52525b !important;
 }}
 
-.footer-right {{
+.footer-center {{
     display: flex;
     align-items: center;
     gap: 24px;
     font-size: 14px;
+    flex: 1;
+    justify-content: center;
+}}
+
+.footer-right {{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    flex: 1;
+    justify-content: flex-end;
 }}
 
 .footer-link {{
@@ -79,7 +91,7 @@ def build_footer():
         gap: 24px;
     }}
 
-    .footer-left, .footer-right {{
+    .footer-left, .footer-center, .footer-right {{
         flex-direction: column;
         text-align: center;
     }}
@@ -106,12 +118,10 @@ def build_footer():
                     </defs>
                 </svg>
             </a>
-            <span class="footer-separator">•</span>
-            <span>v{app_version}</span>
         </div>
 
-        <!-- Right section - Links -->
-        <div class="footer-right">
+        <!-- Center section - Links -->
+        <div class="footer-center">
             <a href="{tos_url}" class="footer-link" target="_blank" rel="noopener noreferrer">
                 Terms of Service
             </a>
@@ -123,6 +133,11 @@ def build_footer():
             <a href="{issues_url}" class="footer-link" target="_blank" rel="noopener noreferrer">
                 Report Issue
             </a>
+        </div>
+
+        <!-- Right section - Version -->
+        <div class="footer-right">
+            <span>v{app_version}</span>
         </div>
     </div>
 </div>
