@@ -6,6 +6,8 @@ import { ComparisonToolFilterListComponent } from '../comparison-tool-filter-lis
 import { ComparisonToolFilterPanelComponent } from '../comparison-tool-filter-panel/comparison-tool-filter-panel.component';
 import { ComparisonToolHeaderComponent } from '../comparison-tool-header/comparison-tool-header.component';
 import { ComparisonToolTableComponent } from '../comparison-tool-table/comparison-tool-table.component';
+import { HelpLinksComponent } from '../help-links/help-links.component';
+import { LegendPanelComponent } from '../legend-panel/legend-panel.component';
 
 @Component({
   selector: 'explorers-base-comparison-tool',
@@ -16,6 +18,8 @@ import { ComparisonToolTableComponent } from '../comparison-tool-table/compariso
     ComparisonToolControlsComponent,
     ComparisonToolFilterListComponent,
     ComparisonToolTableComponent,
+    LegendPanelComponent,
+    HelpLinksComponent,
   ],
   templateUrl: './base-comparison-tool.component.html',
   styleUrls: ['./base-comparison-tool.component.scss'],

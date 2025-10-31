@@ -2,7 +2,11 @@ import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolViewConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolViewConfig,
+  LegendPanelConfig,
+  SynapseWikiParams,
+} from '@sagebionetworks/explorers/models';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
@@ -13,12 +17,11 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
-import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
-  imports: [BaseComparisonToolComponent, DiseaseCorrelationHelpLinksComponent],
+  imports: [BaseComparisonToolComponent],
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
 })
@@ -40,6 +43,14 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       wikiId: '632874',
     },
   };
+  legendPanelConfig: LegendPanelConfig = {
+    colorChartLowerLabel: 'Negative Correlation',
+    colorChartUpperLabel: 'Positive Correlation',
+    colorChartText: `Circle color indicates the correlation between changes in gene expression in the model versus in humans with AD. Red shades indicate a negative correlation, while blue shades indicate a positive correlation.`,
+    sizeChartLowerLabel: 'Significant',
+    sizeChartUpperLabel: 'Insignificant',
+    sizeChartText: `Circle diameter indicates P-value. Larger circles indicate higher statistical significance, while smaller circles indicate lower statistical significance.`,
+  };
   viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
     headerTitle: 'Disease Correlation',
@@ -49,6 +60,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       const url = this.router.serializeUrl(this.router.createUrlTree([ROUTE_PATHS.MODELS, label]));
       window.open(url, '_blank');
     },
+    legendPanelConfig: this.legendPanelConfig,
   };
 
   constructor() {

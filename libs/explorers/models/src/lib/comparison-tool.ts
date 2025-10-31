@@ -1,5 +1,14 @@
 import { SynapseWikiParams } from './synapse-wiki';
 
+export interface LegendPanelConfig {
+  colorChartLowerLabel: string;
+  colorChartUpperLabel: string;
+  colorChartText: string;
+  sizeChartLowerLabel: string;
+  sizeChartUpperLabel: string;
+  sizeChartText: string;
+}
+
 export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
   headerTitle: string;
@@ -7,6 +16,8 @@ export interface ComparisonToolViewConfig {
   showSignificanceControls: boolean;
   viewDetailsTooltip: string;
   viewDetailsClick: (id: string, label: string) => void;
+  legendPanelConfig: LegendPanelConfig;
+  legendEnabled: boolean;
 }
 
 export interface ComparisonToolFilterOption {
