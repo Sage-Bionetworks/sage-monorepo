@@ -24,7 +24,10 @@ from bixarena_app.page.bixarena_home import (
     load_public_stats_on_page_load,
     load_user_battles_on_page_load,
 )
-from bixarena_app.page.bixarena_leaderboard import build_leaderboard_page
+from bixarena_app.page.bixarena_leaderboard import (
+    build_leaderboard_page,
+    load_leaderboard_stats_on_page_load,
+)
 from bixarena_app.page.bixarena_user import (
     build_user_page,
     handle_logout_click,
@@ -273,7 +276,7 @@ def build_app():
         with gr.Column(
             visible=False, elem_classes=["page-content"]
         ) as leaderboard_page:
-            build_leaderboard_page()
+            leaderboard_metrics = build_leaderboard_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as user_page:
             _, welcome_display, logout_btn = build_user_page()
@@ -310,7 +313,10 @@ def build_app():
             lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
             outputs=pages + prompt_outputs,
         )
-        leaderboard_btn.click(lambda: navigator.show_page(2), outputs=pages)
+        leaderboard_btn.click(
+            lambda: navigator.show_page(2) + [load_leaderboard_stats_on_page_load()],
+            outputs=pages + [leaderboard_metrics],
+        )
         cta_btn.click(
             lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
             outputs=pages + prompt_outputs,
