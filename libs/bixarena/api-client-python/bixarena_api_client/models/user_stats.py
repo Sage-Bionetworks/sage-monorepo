@@ -50,12 +50,16 @@ class UserStats(BaseModel):
         description="Timestamp of the user's most recent battle",
         alias="latestBattleAt",
     )
+    rank: StrictInt = Field(
+        description="User's rank based on completed battles using standard competition ranking. Users with the same number of completed battles share the same rank. All users have a rank, including those with 0 completed battles. "
+    )
     __properties: ClassVar[List[str]] = [
         "totalBattles",
         "completedBattles",
         "activeBattles",
         "firstBattleAt",
         "latestBattleAt",
+        "rank",
     ]
 
     model_config = ConfigDict(
@@ -126,6 +130,7 @@ class UserStats(BaseModel):
                 "activeBattles": obj.get("activeBattles"),
                 "firstBattleAt": obj.get("firstBattleAt"),
                 "latestBattleAt": obj.get("latestBattleAt"),
+                "rank": obj.get("rank"),
             }
         )
         return _obj

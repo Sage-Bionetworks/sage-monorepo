@@ -46,14 +46,14 @@ def fetch_public_stats() -> dict:
         }
 
 
-def fetch_user_stats(request: gr.Request) -> int | None:
+def fetch_user_stats(request: gr.Request):
     """Fetch user's battle statistics from the API.
 
     Args:
         request: Gradio request object
 
     Returns:
-        Total number of battles arbitrated, or None if not authenticated or error
+        UserStats object, or None if not authenticated or error
     """
     try:
         # Check if user is authenticated
@@ -72,8 +72,10 @@ def fetch_user_stats(request: gr.Request) -> int | None:
         with create_authenticated_api_client(cookies) as client:
             api = UserApi(client)
             user_stats = api.get_user_stats()
-            logger.info(f"Fetched user stats: {user_stats.total_battles} battles")
-            return user_stats.total_battles
+            logger.info(
+                f"Fetched user stats: {user_stats.total_battles} battles, rank #{user_stats.rank}"
+            )
+            return user_stats
 
     except Exception as e:
         logger.error(f"Error fetching user stats: {e}")
@@ -147,36 +149,60 @@ def load_public_stats_on_page_load() -> tuple[dict, dict, dict, dict, dict, dict
     )
 
 
-def load_user_battles_on_page_load(request: gr.Request) -> tuple[dict, dict]:
-    """Load user battles data and control column visibility.
+def load_user_battles_on_page_load(
+    request: gr.Request,
+) -> tuple[dict, dict, dict, dict]:
+    """Load user battles and rank data and control column visibility.
 
     Args:
         request: Gradio request object
 
     Returns:
-        Tuple of (column_update, html_update) to control visibility and content
+        Tuple of (battles_column_update, battles_html_update, rank_column_update, rank_html_update)
     """
-    total_battles = fetch_user_stats(request)
+    user_stats = fetch_user_stats(request)
 
-    if total_battles is None:
-        # Hide the entire column when user is not authenticated
-        return gr.update(visible=False), gr.update(value="")
+    if user_stats is None:
+        # Hide both columns when user is not authenticated
+        return (
+            gr.update(visible=False),
+            gr.update(value=""),
+            gr.update(visible=False),
+            gr.update(value=""),
+        )
 
-    # Show the column and set HTML content
-    html = f"""
+    # Battles Arbitrated box
+    battles_html = f"""
     <div style="text-align: center; padding: 20px;">
         <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
             BATTLES ARBITRATED
         </p>
-        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">{total_battles}</h2>
+        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">{user_stats.total_battles}</h2>
     </div>
     """
-    return gr.update(visible=True), gr.update(value=html)
+
+    # User Rank box - always show for authenticated users
+    rank_html = f"""
+    <div style="text-align: center; padding: 20px;">
+        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
+            YOUR RANK
+        </p>
+        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">#{user_stats.rank}</h2>
+    </div>
+    """
+
+    return (
+        gr.update(visible=True),
+        gr.update(value=battles_html),
+        gr.update(visible=True),  # Always show rank for authenticated users
+        gr.update(value=rank_html),
+    )
 
 
 def build_stats_section():
     """Create the statistics section with metrics"""
 
+    # First row: Public stats
     with gr.Row():
         with gr.Column(visible=False) as models_evaluated_column:
             with gr.Group():
@@ -190,10 +216,16 @@ def build_stats_section():
             with gr.Group():
                 total_users_box = gr.HTML("")
 
-        # Fourth box: User's battles arbitrated (only shown when logged in)
+    # Second row: User-specific stats (only shown when logged in)
+    with gr.Row():
         with gr.Column(visible=False) as user_battles_column:
             with gr.Group():
                 user_battles_box = gr.HTML("")
+
+        # New: User rank box
+        with gr.Column(visible=False) as user_rank_column:
+            with gr.Group():
+                user_rank_box = gr.HTML("")
 
     return (
         models_evaluated_column,
@@ -204,6 +236,8 @@ def build_stats_section():
         total_users_box,
         user_battles_column,
         user_battles_box,
+        user_rank_column,  # New
+        user_rank_box,  # New
     )
 
 
@@ -255,6 +289,8 @@ def build_home_page():
                 total_users_box,
                 user_battles_column,
                 user_battles_box,
+                user_rank_column,  # New
+                user_rank_box,  # New
             ) = build_stats_section()
 
             # Call to Action Section
@@ -271,4 +307,6 @@ def build_home_page():
         total_users_box,
         user_battles_column,
         user_battles_box,
+        user_rank_column,  # New
+        user_rank_box,  # New
     )

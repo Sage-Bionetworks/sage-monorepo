@@ -39,13 +39,15 @@ class TestUserStats(unittest.TestCase):
                 completed_battles = 38,
                 active_battles = 4,
                 first_battle_at = '2024-01-15T10:30Z',
-                latest_battle_at = '2024-10-26T14:23Z'
+                latest_battle_at = '2024-10-26T14:23Z',
+                rank = 42
             )
         else:
             return UserStats(
                 total_battles = 42,
                 completed_battles = 38,
                 active_battles = 4,
+                rank = 42,
         )
         """
 

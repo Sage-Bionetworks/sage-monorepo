@@ -42,7 +42,7 @@ public interface UserApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"totalBattles\" : 42, \"completedBattles\" : 38, \"activeBattles\" : 4, \"firstBattleAt\" : \"2024-01-15T10:30:00Z\", \"latestBattleAt\" : \"2024-10-26T14:23:00Z\" }";
+                    String exampleString = "{ \"totalBattles\" : 42, \"completedBattles\" : 38, \"activeBattles\" : 4, \"firstBattleAt\" : \"2024-01-15T10:30:00Z\", \"latestBattleAt\" : \"2024-10-26T14:23:00Z\", \"rank\" : 42 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
