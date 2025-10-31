@@ -147,19 +147,19 @@ def load_leaderboard_stats_on_page_load() -> dict:
             <div style="flex: 1;">
                 <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin: 10px;">
                     <div style="font-size: 2rem; font-weight: bold; margin-bottom: 5px;">{last_updated}</div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">Last Updated</div>
+                    <div style="font-size: 1.1rem; opacity: 0.9;">Last Updated</div>
                 </div>
             </div>
             <div style="flex: 1;">
                 <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin: 10px;">
                     <div style="font-size: 2rem; font-weight: bold; margin-bottom: 5px;">{total_battles:,}</div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">Total Battles</div>
+                    <div style="font-size: 1.1rem; opacity: 0.9;">Total Battles</div>
                 </div>
             </div>
             <div style="flex: 1;">
                 <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin: 10px;">
                     <div style="font-size: 2rem; font-weight: bold; margin-bottom: 5px;">{models_evaluated}</div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">Models Evaluated</div>
+                    <div style="font-size: 1.1rem; opacity: 0.9;">Models Evaluated</div>
                 </div>
             </div>
         </div>
