@@ -139,8 +139,6 @@ def build_leaderboard_page():
                 </div>
                 """)
 
-        gr.Markdown("---")
-
         # Coming soon message
         gr.HTML("""
         <div style="
