@@ -9,3 +9,8 @@ logging:
   level:
     org.sagebionetworks.bixarena: WARN
     org.springframework.security: WARN
+# Production: session cookie uses secure defaults from application.yml
+# - domain: null (host-only)
+# - same-site: Strict
+# - secure: true
+# - http-only: true

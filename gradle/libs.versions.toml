@@ -15,6 +15,7 @@ jedis = "5.1.0"
 junit = "5.13.4"
 junit-platform = "1.13.4"
 lombok = "1.18.40"
+nimbus = "10.5"
 nx-gradle = "0.1.7"
 postgresql = "42.7.7"
 spring = "6.2.11"
@@ -23,10 +24,10 @@ spring-boot = "3.5.5"
 spring-cloud = "4.3.0" # Using Spring Cloud OpenFeign 4.3.0 because 4.3.1 is not yet released
 spring-data = "3.5.4"
 spring-security = "6.5.4"
+spring-session = "3.5.2"
 springdoc = "2.8.13"
 squareup = "3.0.0"
 testcontainers = "1.21.3"
-nimbus = "10.5"
 
 [libraries]
 # Jackson libraries
@@ -63,6 +64,7 @@ spring-context = { module = "org.springframework:spring-context", version.ref = 
 spring-data-commons = { module = "org.springframework.data:spring-data-commons", version.ref = "spring-data" }
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose", version.ref = "spring-security" }
 spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "spring-security" }
+spring-session-data-redis = { module = "org.springframework.session:spring-session-data-redis", version.ref = "spring-session" }
 spring-web = { module = "org.springframework:spring-web", version.ref = "spring" }
 
 # Other libraries

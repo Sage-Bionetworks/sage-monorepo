@@ -8,3 +8,8 @@ spring:
 logging:
   level:
     org.sagebionetworks.bixarena: INFO
+# Staging: session cookie uses secure defaults from application.yml
+# - domain: null (host-only)
+# - same-site: Strict
+# - secure: true
+# - http-only: true
