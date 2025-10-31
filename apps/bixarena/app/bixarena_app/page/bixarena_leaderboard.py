@@ -1,11 +1,16 @@
 import logging
+from datetime import datetime
 
 import gradio as gr
 import pandas as pd
-from bixarena_api_client import LeaderboardApi
+from bixarena_api_client import LeaderboardApi, StatsApi
+from bixarena_api_client.api_client import ApiClient
 from bixarena_api_client.exceptions import ApiException
 
-from bixarena_app.api.api_client_helper import create_authenticated_api_client
+from bixarena_app.api.api_client_helper import (
+    create_authenticated_api_client,
+    get_api_configuration,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +95,34 @@ def fetch_leaderboard_data(jwt_token: str | None = None):
         )
 
 
+def fetch_public_stats() -> dict:
+    """Fetch public platform statistics from the API.
+
+    Returns:
+        Dictionary with models_evaluated and total_battles.
+        Returns default values if API call fails.
+    """
+    try:
+        configuration = get_api_configuration()
+        with ApiClient(configuration) as client:
+            api = StatsApi(client)
+            stats = api.get_public_stats()
+            logger.info(
+                f"Fetched public stats: {stats.models_evaluated} models, "
+                f"{stats.total_battles} battles"
+            )
+            return {
+                "models_evaluated": stats.models_evaluated,
+                "total_battles": stats.total_battles,
+            }
+    except Exception as e:
+        logger.error(f"Error fetching public stats: {e}")
+        return {
+            "models_evaluated": 0,
+            "total_battles": 0,
+        }
+
+
 def filter_dataframe(df, model_filter):
     """Filter dataframe by model name"""
     if model_filter:
@@ -102,13 +135,17 @@ def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
     # Get initial data from API
     # df = fetch_leaderboard_data()
-    # total_votes = df["Total Votes"].sum()
-    # total_models = len(df)
     # logger.info(
-    #     f"📈 Leaderboard built with {total_models} models and {total_votes} total votes"
+    #     f"📈 Leaderboard built with {len(df)} models"
     # )
-    total_votes = 10
-    total_models = 5
+
+    # Fetch public stats
+    stats = fetch_public_stats()
+    total_battles = stats["total_battles"]
+    models_evaluated = stats["models_evaluated"]
+
+    # Get current date for "Last Updated"
+    last_updated = datetime.now().strftime("%b %d, %Y")
 
     with gr.Column():
         # Title and stats
@@ -122,28 +159,28 @@ def build_leaderboard_page():
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-evenly;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
         ">
             <!-- Last Updated -->
             <div style="text-align: center;">
-                <div style="font-size: 1.5rem; margin-bottom: 4px;">Aug 16, 2025</div>
+                <div style="font-size: 2rem; font-weight: 500; margin-bottom: 4px;">{last_updated}</div>
                 <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Last Updated</div>
             </div>
 
             <div style="width: 2px; height: 3rem; background: rgba(255, 255, 255, 0.2); display: none;" class="separator"></div>
 
-            <!-- Total Votes -->
+            <!-- Total Battles -->
             <div style="text-align: center;">
-                <div style="font-size: 1.5rem; margin-bottom: 4px;">{total_votes:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Votes</div>
+                <div style="font-size: 2rem; font-weight: 500; margin-bottom: 4px;">{total_battles:,}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
             </div>
 
             <div style="width: 2px; height: 3rem; background: rgba(255, 255, 255, 0.2); display: none;" class="separator"></div>
 
-            <!-- Total Models -->
+            <!-- Models Evaluated -->
             <div style="text-align: center;">
-                <div style="font-size: 1.5rem; margin-bottom: 4px;">{total_models}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Models</div>
+                <div style="font-size: 2rem; font-weight: 500; margin-bottom: 4px;">{models_evaluated}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
             </div>
         </div>
         <style>
