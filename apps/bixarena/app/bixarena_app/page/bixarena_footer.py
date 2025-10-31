@@ -27,6 +27,7 @@ def build_footer():
     padding: 32px 40px;
     margin-top: 60px;
     pointer-events: auto !important;
+    letter-spacing: 0.3px;
 }}
 
 .footer-container {{
@@ -66,6 +67,7 @@ def build_footer():
     text-decoration: none !important;
     transition: color 0.2s ease;
     color: var(--body-text-color) !important;
+    letter-spacing: 0.3px;
 }}
 
 .footer-link:hover {{
