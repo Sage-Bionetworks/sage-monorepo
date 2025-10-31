@@ -61,6 +61,24 @@ def update_battle_button():
     return gr.update(visible=False)
 
 
+def handle_start_evaluation_click(navigator, refresh_prompts_fn):
+    """Handle start evaluation button click with authentication check.
+
+    If authenticated: navigate to battle page
+    If not authenticated: stay on home page (JS will handle redirect)
+
+    Returns: list of (*pages, *prompt_outputs)
+    """
+    state = get_user_state()
+
+    if state.is_authenticated():
+        # User is authenticated, navigate to battle page (index 1)
+        return navigator.show_page(1) + refresh_prompts_fn()
+
+    # Not authenticated, stay on home page (JS will redirect to login)
+    return navigator.show_page(0) + refresh_prompts_fn()
+
+
 def handle_login_click(navigator, update_login_button, update_user_page):
     """Unified login/logout handler (Option A implementation).
 

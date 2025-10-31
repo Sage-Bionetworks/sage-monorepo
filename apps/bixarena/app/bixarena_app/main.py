@@ -16,6 +16,7 @@ from bixarena_app.page.bixarena_footer import build_footer
 from bixarena_app.page.bixarena_header import (
     build_header,
     handle_login_click,
+    handle_start_evaluation_click,
     update_battle_button,
     update_login_button,
 )
@@ -318,8 +319,27 @@ def build_app():
             outputs=pages + [leaderboard_metrics],
         )
         cta_btn.click(
-            lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
+            lambda: handle_start_evaluation_click(
+                navigator, example_prompt_ui.refresh_prompts
+            ),
             outputs=pages + prompt_outputs,
+            js="""
+() => {
+  // Check if user is authenticated by checking if login button says "Logout"
+  const loginBtn = document.querySelector('#login-btn button,#login-btn');
+  if(loginBtn) {
+    const label = loginBtn.innerText.trim();
+    if(label === 'Login') {
+      // Not authenticated, redirect to login
+      setTimeout(() => {
+        const el = document.getElementById('login-start-endpoint');
+        const url = el ? el.textContent.trim() : '';
+        if(url){ window.location.href = url; }
+      }, 50);
+    }
+  }
+}
+                """,
         )
 
         # Login
