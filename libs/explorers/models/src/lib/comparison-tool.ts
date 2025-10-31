@@ -87,3 +87,8 @@ export type HeatmapCircleColorKey<T extends HeatmapCircleData> = Extract<
   Exclude<keyof T, 'adj_p_val'>,
   string
 >;
+
+export type ComparisonToolLink = {
+  link_text?: string;
+  link_url?: string;
+};
