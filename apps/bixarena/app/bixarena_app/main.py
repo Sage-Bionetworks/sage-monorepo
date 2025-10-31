@@ -23,7 +23,10 @@ from bixarena_app.page.bixarena_home import (
     load_public_stats_on_page_load,
     load_user_battles_on_page_load,
 )
-from bixarena_app.page.bixarena_leaderboard import build_leaderboard_page
+from bixarena_app.page.bixarena_leaderboard import (
+    build_leaderboard_page,
+    load_leaderboard_stats_on_page_load,
+)
 from bixarena_app.page.bixarena_user import (
     build_user_page,
     handle_logout_click,
@@ -260,7 +263,7 @@ def build_app():
             _, example_prompt_ui, prompt_outputs = build_battle_page()
 
         with gr.Column(visible=False) as leaderboard_page:
-            build_leaderboard_page()
+            leaderboard_metrics = build_leaderboard_page()
 
         with gr.Column(visible=False) as user_page:
             _, welcome_display, logout_btn = build_user_page()
@@ -365,6 +368,13 @@ def build_app():
             fn=load_user_battles_on_page_load,
             inputs=None,
             outputs=[user_battles_column, user_battles_box],
+        )
+
+        # Load leaderboard stats on page load
+        demo.load(
+            fn=load_leaderboard_stats_on_page_load,
+            inputs=None,
+            outputs=[leaderboard_metrics],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)

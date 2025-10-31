@@ -108,7 +108,7 @@ def fetch_public_stats() -> dict:
             api = StatsApi(client)
             stats = api.get_public_stats()
             logger.info(
-                f"Fetched public stats: {stats.models_evaluated} models, "
+                f"Fetched Leaderboard public stats: {stats.models_evaluated} models, "
                 f"{stats.total_battles} battles"
             )
             return {
@@ -131,29 +131,18 @@ def filter_dataframe(df, model_filter):
     return df
 
 
-def build_leaderboard_page():
-    """Build the BixArena leaderboard page"""
-    # Get initial data from API
-    # df = fetch_leaderboard_data()
-    # logger.info(
-    #     f"📈 Leaderboard built with {len(df)} models"
-    # )
+def load_leaderboard_stats_on_page_load() -> dict:
+    """Load leaderboard stats and update the metrics HTML.
 
-    # Fetch public stats
+    Returns:
+        Gradio update dict for the metrics HTML component
+    """
     stats = fetch_public_stats()
     total_battles = stats["total_battles"]
     models_evaluated = stats["models_evaluated"]
-
-    # Get current date for "Last Updated"
     last_updated = datetime.now().strftime("%b %d, %Y")
 
-    with gr.Column():
-        # Title and stats
-        gr.Markdown("# 🏆 BixArena Leaderboard")
-        gr.Markdown("Community-driven evaluation of biomedical LLMs by Synapse users")
-
-        # Metrics
-        gr.HTML(f"""
+    metrics_html = f"""
         <div style="
             display: flex;
             flex-wrap: wrap;
@@ -188,7 +177,26 @@ def build_leaderboard_page():
                 .separator {{ display: block !important; }}
             }}
         </style>
-        """)
+        """
+
+    return gr.update(value=metrics_html)
+
+
+def build_leaderboard_page():
+    """Build the BixArena leaderboard page"""
+    # Get initial data from API
+    # df = fetch_leaderboard_data()
+    # logger.info(
+    #     f"📈 Leaderboard built with {len(df)} models"
+    # )
+
+    with gr.Column():
+        # Title and stats
+        gr.Markdown("# 🏆 BixArena Leaderboard")
+        gr.Markdown("Community-driven evaluation of biomedical LLMs by Synapse users")
+
+        # Metrics - will be populated dynamically on page load
+        leaderboard_metrics = gr.HTML("")
 
         # Coming soon message
         gr.HTML("""
@@ -286,6 +294,4 @@ def build_leaderboard_page():
         #     fn=update_table, inputs=[model_filter], outputs=[leaderboard_table]
         # )
 
-    leaderboard_table = None
-
-    return leaderboard_table
+    return leaderboard_metrics
