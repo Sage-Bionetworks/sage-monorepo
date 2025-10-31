@@ -41,7 +41,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/Battle.yaml
+            $ref: ../components/schemas/BattleCreateResponse.yaml
       description: Battle created successfully
     '400':
       $ref: ../components/responses/BadRequest.yaml

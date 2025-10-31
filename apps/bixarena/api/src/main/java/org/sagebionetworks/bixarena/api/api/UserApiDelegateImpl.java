@@ -1,8 +1,10 @@
 package org.sagebionetworks.bixarena.api.api;
 
-import java.time.OffsetDateTime;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.UserStatsDto;
+import org.sagebionetworks.bixarena.api.service.UserStatsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -14,15 +16,15 @@ import org.springframework.stereotype.Component;
  * Handles user-specific operations requiring authentication.
  */
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class UserApiDelegateImpl implements UserApiDelegate {
+
+  private final UserStatsService userStatsService;
 
   /**
    * Get current user's battle statistics.
    * Requires USER role (any authenticated user).
-   *
-   * <p>Currently returns mock data for testing purposes.
-   * Real implementation will query the Battle entity for actual stats.</p>
    *
    * @return User statistics response
    */
@@ -31,27 +33,32 @@ public class UserApiDelegateImpl implements UserApiDelegate {
   public ResponseEntity<UserStatsDto> getUserStats() {
     // Extract authenticated user from Spring Security context
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth != null ? auth.getName() : "unknown";
+    String sub = auth != null ? auth.getName() : null;
 
-    log.info("Fetching stats for user: {} (roles: {})",
-      username,
-      auth != null ? auth.getAuthorities() : "none"
+    if (sub == null) {
+      log.warn("No authentication context found");
+      throw new IllegalStateException("User not authenticated");
+    }
+
+    log.info(
+        "Fetching stats for user: {} (roles: {})",
+        sub,
+        auth.getAuthorities()
     );
 
-    // TODO: Replace with actual database query
-    // Query battles table: SELECT COUNT(*), MIN(created_at), MAX(created_at)
-    // WHERE user_id = current_user_id
-    // GROUP BY ended_at IS NULL
+    // Parse user ID from JWT sub claim
+    UUID userId;
+    try {
+      userId = UUID.fromString(sub);
+    } catch (IllegalArgumentException e) {
+      log.error("Invalid UUID format in JWT sub claim: {}", sub);
+      throw new IllegalStateException("Invalid user ID in authentication token");
+    }
 
-    UserStatsDto mockStats = UserStatsDto.builder()
-      .totalBattles(42L)
-      .completedBattles(38L)
-      .activeBattles(4L)
-      .firstBattleAt(OffsetDateTime.parse("2024-01-15T10:30:00Z"))
-      .latestBattleAt(OffsetDateTime.parse("2024-10-26T14:23:00Z"))
-      .build();
+    // Fetch real stats from database
+    UserStatsDto stats = userStatsService.getUserStats(userId);
 
-    log.info("Returning mock stats for user: {}", username);
-    return ResponseEntity.ok(mockStats);
+    log.info("Returning stats for user {}: {} total battles", userId, stats.getTotalBattles());
+    return ResponseEntity.ok(stats);
   }
 }

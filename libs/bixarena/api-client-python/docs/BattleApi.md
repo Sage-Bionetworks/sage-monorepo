@@ -15,7 +15,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 
 # **create_battle**
 
-> Battle create_battle(battle_create_request)
+> BattleCreateResponse create_battle(battle_create_request)
 
 Create a battle
 
@@ -27,8 +27,8 @@ Create a new battle between two AI models.
 
 ```python
 import bixarena_api_client
-from bixarena_api_client.models.battle import Battle
 from bixarena_api_client.models.battle_create_request import BattleCreateRequest
+from bixarena_api_client.models.battle_create_response import BattleCreateResponse
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
@@ -71,7 +71,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### Return type
 
-[**Battle**](Battle.md)
+[**BattleCreateResponse**](BattleCreateResponse.md)
 
 ### Authorization
 

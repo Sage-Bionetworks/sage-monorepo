@@ -246,8 +246,11 @@ def build_app():
             (
                 _,
                 cta_btn,
+                models_evaluated_column,
                 models_evaluated_box,
+                total_battles_column,
                 total_battles_box,
+                total_users_column,
                 total_users_box,
                 user_battles_column,
                 user_battles_box,
@@ -347,7 +350,14 @@ def build_app():
         demo.load(
             fn=load_public_stats_on_page_load,
             inputs=None,
-            outputs=[models_evaluated_box, total_battles_box, total_users_box],
+            outputs=[
+                models_evaluated_column,
+                models_evaluated_box,
+                total_battles_column,
+                total_battles_box,
+                total_users_column,
+                total_users_box,
+            ],
         )
 
         # Load user stats on page load (for the fourth stats box)

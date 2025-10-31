@@ -35,14 +35,10 @@ class TestBattleCreateRequest(unittest.TestCase):
         model = BattleCreateRequest()
         if include_optional:
             return BattleCreateRequest(
-                title = 'Gene Expression Analysis Comparison',
-                model1_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
-                model2_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d'
+                title = 'Gene Expression Analysis Comparison'
             )
         else:
             return BattleCreateRequest(
-                model1_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
-                model2_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
         )
         """
 

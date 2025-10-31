@@ -1,0 +1,25 @@
+type: object
+description: A battle between two AI models.
+properties:
+  id:
+    $ref: BattleId.yaml
+  title:
+    $ref: BattleTitle.yaml
+    nullable: true
+  userId:
+    $ref: UserId.yaml
+  model1:
+    $ref: Model.yaml
+  model2:
+    $ref: Model.yaml
+  createdAt:
+    $ref: CreatedAt.yaml
+  endedAt:
+    $ref: EndedAt.yaml
+    nullable: true
+required:
+  - id
+  - userId
+  - model1
+  - model2
+  - createdAt

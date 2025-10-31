@@ -6,7 +6,6 @@ simplified to a single function for a single-page LLM comparison arena.
 """
 
 import logging
-import random
 import time
 import warnings
 from uuid import UUID
@@ -38,7 +37,6 @@ from bixarena_app.model.model_response import (
     bot_response_multi,
     disable_btn,
     enable_btn,
-    get_model_list,
     invisible_btn,
     no_change_btn,
 )
@@ -55,57 +53,54 @@ num_sides = 2
 anony_names = ["", ""]
 
 
-def get_battle_pair():
-    """Get a pair of models for a new battle.
-
-    Returns:
-        Tuple of two model names (model1, model2)
-    """
-    # TODO: Replace with backend endpoint when ready
-
-    models, _ = get_model_list()
-    # Randomly select two different models
-    return tuple(random.sample(models, 2))
-
-
 def create_battle(
-    model1: str,
-    model2: str,
     title: str | None = None,
     cookies: dict[str, str] | None = None,
-) -> UUID | None:
+) -> tuple[UUID | None, str | None, str | None]:
     """Create a new battle record in the database.
 
+    The backend randomly selects two models and returns the battle with full model information.
+
     Args:
-        model1: Name of model 1
-        model2: Name of model 2
         title: Optional battle title (first prompt snippet)
+        cookies: Session cookies for authentication
 
     Returns:
-        Battle ID if successful, None otherwise
+        Tuple of (battle_id, model1_name, model2_name) if successful, (None, None, None) otherwise
     """
 
     try:
-        # Runtime lookup model info
-        model1_info = model_response.api_endpoint_info[model1]
-        model2_info = model_response.api_endpoint_info[model2]
-
-        battle_request = BattleCreateRequest(
-            model1_id=model1_info["model_id"],
-            model2_id=model2_info["model_id"],
-            title=title,
-        )
+        battle_request = BattleCreateRequest(title=title)
 
         with create_authenticated_api_client(cookies) as api_client:
             battle_api = BattleApi(api_client)
             battle = battle_api.create_battle(battle_request)
-            if battle and battle.id:
-                logger.info(f"✅ Battle created: {battle.id} - '{title}'")
-                return battle.id
+            if battle and battle.id and battle.model1 and battle.model2:
+                model1_name = battle.model1.name
+                model2_name = battle.model2.name
+
+                # Update api_endpoint_info with the selected models
+                model_response.api_endpoint_info[model1_name] = {
+                    "model_id": battle.model1.id,
+                    "api_type": "openai",
+                    "api_base": battle.model1.api_base,
+                    "model_name": battle.model1.api_model_name,
+                }
+                model_response.api_endpoint_info[model2_name] = {
+                    "model_id": battle.model2.id,
+                    "api_type": "openai",
+                    "api_base": battle.model2.api_base,
+                    "model_name": battle.model2.api_model_name,
+                }
+
+                logger.info(
+                    f"✅ Battle created: {battle.id} - '{title}' - {model1_name} vs {model2_name}"
+                )
+                return battle.id, model1_name, model2_name
             logger.warning("❌ Failed to create battle.")
     except Exception as e:
         logger.warning(f"❌ Failed to create battle: {e}")
-    return None
+    return None, None, None
 
 
 def end_battle(battle_id: UUID, cookies: dict[str, str] | None = None) -> None:
@@ -361,24 +356,19 @@ def add_text(
 
     cookies = get_session_cookie(request)
 
-    # Init states if necessary
+    # Init states if necessary (will be initialized when battle is created)
     if states[0] is None:
         assert states[1] is None
-
-        model1, model2 = get_battle_pair()
-        states = [
-            State(model1),
-            State(model2),
-        ]
         battle_session.reset()
 
     if len(text) <= 0:
-        for i in range(num_sides):
-            states[i].skip_next = True
+        if states[0] is not None:
+            for i in range(num_sides):
+                states[i].skip_next = True
         return (
             states
             + [battle_session]
-            + [x.to_gradio_chatbot() for x in states]
+            + [x.to_gradio_chatbot() if x else [] for x in states]
             + [""]
             + [
                 no_change_btn,
@@ -391,44 +381,73 @@ def add_text(
             + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
         )
 
-    conv = states[0].conv
-    if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
-        logger.info(
-            f"🛑 Battle round limit reached: battle_id={battle_session.battle_id}"
-        )
-        round_limit_msg = get_battle_round_limit_message()
-        for i in range(num_sides):
-            if states[i]:
-                states[i].conv.append_message("user", text)
-                states[i].conv.append_message("assistant", round_limit_msg)
-                states[i].skip_next = True
-        return (
-            states
-            + [battle_session]
-            + [x.to_gradio_chatbot() for x in states]
-            + [""]
-            + [
-                no_change_btn,
-            ]
-            * 4
-            + [""]  # slow_warning
-            + [gr.Group(visible=True)]  # show battle_interface (conversation exists)
-            + [gr.Row(visible=True)]  # show voting_row
-            + [gr.Row(visible=True)]  # show next_battle_row
-            + [gr.Column(visible=False)]  # hide suggested_prompts_group
-        )
+    # Check battle round limit only if states are initialized
+    if states[0] is not None:
+        conv = states[0].conv
+        if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
+            logger.info(
+                f"🛑 Battle round limit reached: battle_id={battle_session.battle_id}"
+            )
+            round_limit_msg = get_battle_round_limit_message()
+            for i in range(num_sides):
+                if states[i]:
+                    states[i].conv.append_message("user", text)
+                    states[i].conv.append_message("assistant", round_limit_msg)
+                    states[i].skip_next = True
+            return (
+                states
+                + [battle_session]
+                + [x.to_gradio_chatbot() for x in states]
+                + [""]
+                + [
+                    no_change_btn,
+                ]
+                * 4
+                + [""]  # slow_warning
+                + [
+                    gr.Group(visible=True)
+                ]  # show battle_interface (conversation exists)
+                + [gr.Row(visible=True)]  # show voting_row
+                + [gr.Row(visible=True)]  # show next_battle_row
+                + [gr.Column(visible=False)]  # hide suggested_prompts_group
+            )
 
     text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
 
     # Create battle with first prompt as title (only for first message)
-    if battle_session.battle_id is None and states[0] and states[1]:
-        model1 = states[0].model_name
-        model2 = states[1].model_name
+    # Backend will randomly select two models
+    if battle_session.battle_id is None:
         # Use first 50 characters of prompt as battle title
         battle_title = text[:50] + "..." if len(text) > 50 else text
-        battle_id = create_battle(model1, model2, battle_title, cookies)
-        if battle_id:
+        battle_id, model1, model2 = create_battle(battle_title, cookies)
+        if battle_id and model1 and model2:
             battle_session.battle_id = battle_id
+            # Initialize states with the models selected by the backend
+            states = [
+                State(model1),
+                State(model2),
+            ]
+        else:
+            # Failed to create battle, return error state
+            logger.error("Failed to create battle - cannot proceed")
+            return (
+                [state0, state1]
+                + [battle_session]
+                + [x.to_gradio_chatbot() if x else [] for x in [state0, state1]]
+                + [
+                    gr.update(
+                        value="",
+                        interactive=True,
+                        placeholder="Error creating battle. Please try again.",
+                    )
+                ]
+                + [no_change_btn] * 4
+                + [""]  # slow_warning
+                + [gr.Group(visible=False)]  # keep battle_interface hidden
+                + [gr.Row(visible=False)]  # keep voting_row hidden
+                + [gr.Row(visible=False)]  # keep next_battle_row hidden
+                + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
+            )
     battle_id = battle_session.battle_id
 
     round_id = None
