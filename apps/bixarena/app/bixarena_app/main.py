@@ -311,7 +311,10 @@ def build_app():
             lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
             outputs=pages + prompt_outputs,
         )
-        leaderboard_btn.click(lambda: navigator.show_page(2), outputs=pages)
+        leaderboard_btn.click(
+            lambda: navigator.show_page(2) + [load_leaderboard_stats_on_page_load()],
+            outputs=pages + [leaderboard_metrics],
+        )
         cta_btn.click(
             lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
             outputs=pages + prompt_outputs,
@@ -383,13 +386,6 @@ def build_app():
             fn=load_user_battles_on_page_load,
             inputs=None,
             outputs=[user_battles_column, user_battles_box],
-        )
-
-        # Load leaderboard stats on page load
-        demo.load(
-            fn=load_leaderboard_stats_on_page_load,
-            inputs=None,
-            outputs=[leaderboard_metrics],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
