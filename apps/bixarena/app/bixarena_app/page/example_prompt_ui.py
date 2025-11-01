@@ -51,7 +51,6 @@ class ExamplePromptUI:
         self.prev_btn: gr.Button | None = None
         self.next_btn: gr.Button | None = None
         self.prompt_cards: list[gr.Button] = []
-        self.container: gr.Row | None = None
 
     # ----------------------------- Data Layer ----------------------------- #
     def _fetch_random_prompts(self, num_prompts: int = 3) -> list[str]:
@@ -89,9 +88,6 @@ class ExamplePromptUI:
     # --------------------------- Navigation Logic ------------------------- #
     def _nav_state_updates(self, prompts: list[str]) -> list[object]:
         has_history = self.index > 0
-        # Hide entire container if no valid prompts (empty or all empty strings)
-        has_prompts = any(p.strip() for p in prompts)
-
         # Build class list explicitly; previous inline conditional
         # inadvertently replaced the base classes when no history.
         prev_upd = gr.update(
@@ -103,9 +99,7 @@ class ExamplePromptUI:
             gr.update(value=self._generate_prompt_button_html(i, p))
             for i, p in enumerate(prompts)
         ]
-        # Add container visibility update at the beginning
-        container_upd = gr.update(visible=has_prompts)
-        return [container_upd, prev_upd, next_upd, *prompt_card_upds]
+        return [prev_upd, next_upd, *prompt_card_upds]
 
     def _go_prev(self):  # bound as click handler
         if self.index > 0:
@@ -118,9 +112,6 @@ class ExamplePromptUI:
             self.index += 1
         else:
             prompts = self._fetch_random_prompts(3)
-            # If no prompts fetched, use empty strings to hide the container
-            if not prompts:
-                prompts = ["", "", ""]
             # Truncate forward history (if any) then append
             self.history = self.history[: self.index + 1]
             self.history.append(prompts)
@@ -131,9 +122,6 @@ class ExamplePromptUI:
     def refresh_prompts(self):  # bound as handler for page refresh/reset
         """Fetch new random prompts and reset navigation state."""
         prompts = self._fetch_random_prompts(3)
-        # If no prompts fetched, use empty strings to hide the container
-        if not prompts:
-            prompts = ["", "", ""]
         self.history = [prompts]
         self.index = 0
         return self._nav_state_updates(prompts)
@@ -149,13 +137,11 @@ class ExamplePromptUI:
         Returns:
             tuple: (row_container, prompt_cards, prev_button, next_button)
         """
-        # Start with empty prompts to avoid API call during UI construction
-        initial = ["", "", ""]
+        initial = self._fetch_random_prompts(num_prompts)
         self.history = [initial]
         self.index = 0
 
-        with gr.Row(elem_id="prompt-card-section", visible=False) as group, gr.Row():
-            self.container = group
+        with gr.Row(elem_id="prompt-card-section", visible=True) as group, gr.Row():
             self.prev_btn = gr.Button(
                 value="←",
                 elem_classes=["nav-button", "left", "hidden"],
@@ -174,11 +160,10 @@ class ExamplePromptUI:
                 value="→", elem_classes=["nav-button", "right"], interactive=True
             )
 
-        # Arrow handlers produce updates for container, prev, next, and prompt card buttons
+        # Arrow handlers produce updates for prev, next, and prompt card buttons
         self.prev_btn.click(
             self._go_prev,
             outputs=[
-                self.container,
                 self.prev_btn,
                 self.next_btn,
                 *self.prompt_cards,
@@ -188,7 +173,6 @@ class ExamplePromptUI:
         self.next_btn.click(
             self._go_next,
             outputs=[
-                self.container,
                 self.prev_btn,
                 self.next_btn,
                 *self.prompt_cards,
