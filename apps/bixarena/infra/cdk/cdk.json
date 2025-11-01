@@ -1,5 +1,5 @@
 {
-  "app": "uv run bixarena-infra-cdk",
+  "app": "uv run python -m bixarena_infra_cdk.${ENV}.app",
   "watch": {
     "include": ["**"],
     "exclude": [
@@ -56,6 +56,30 @@
     "@aws-cdk/aws-codepipeline:crossAccountKeysDefaultValueToFalse": true,
     "@aws-cdk/aws-codepipeline:defaultPipelineTypeToV2": true,
     "@aws-cdk/aws-kms:reduceCrossAccountRegionPolicyScope": true,
-    "@aws-cdk/aws-eks:nodegroupNameAttribute": true
+    "@aws-cdk/aws-eks:nodegroupNameAttribute": true,
+    "dev": {
+      "VPC_CIDR": "10.255.92.0/24",
+      "FQDN": "dev.bixarena.ai",
+      "CERTIFICATE_ARN": "arn:aws:acm:us-east-1:221082174873:certificate/4bd9e6ac-0951-485e-a132-e842aaf2ec58"
+    },
+    "stage": {
+      "VPC_CIDR": "10.255.93.0/24",
+      "FQDN": "stage.bixarena.ai",
+      "CERTIFICATE_ARN": "arn:aws:acm:us-east-1:528757786185:certificate/7018402f-7774-4890-84d8-43b8748eba53"
+    },
+    "prod": {
+      "VPC_CIDR": "10.255.94.0/24",
+      "FQDN": "prod.bixarena.ai",
+      "CERTIFICATE_ARN": "arn:aws:acm:us-east-1:528757786185:certificate/6d591cce-5097-42ef-9d3d-e746f01e33a7"
+    },
+    "secrets": {
+      "MARIADB_PASSWORD": "/bixarena/MARIADB_PASSWORD",
+      "MARIADB_ROOT_PASSWORD": "/bixarena/MARIADB_ROOT_PASSWORD",
+      "GIT_HOST_KEY": "/bixarena/GIT_HOST_KEY",
+      "GIT_PRIVATE_KEY": "/bixarena/GIT_PRIVATE_KEY",
+      "AWS_LOADER_S3_ACCESS_KEY_ID": "/bixarena/AWS_LOADER_S3_ACCESS_KEY_ID",
+      "AWS_LOADER_S3_SECRET_ACCESS_KEY": "/bixarena/AWS_LOADER_S3_SECRET_ACCESS_KEY",
+      "SECURITY_KEY": "/bixarena/SECURITY_KEY"
+    }
   }
 }
