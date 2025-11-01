@@ -334,7 +334,6 @@ def clear_history(
         + [gr.Group(visible=False)]  # hide battle_interface
         + [gr.Row(visible=False)]  # hide voting_row
         + [gr.Row(visible=False)]  # hide next_battle_row
-        + [gr.Column(visible=True)]  # show suggested_prompts_group
     )
 
     # If example_prompt_ui is provided, also refresh the prompts
@@ -513,6 +512,7 @@ def build_side_by_side_ui_anony():
     with gr.Column(elem_classes=["content-wrapper"]):
         gr.HTML(page_header_html)
         # Example prompts (cards + arrows) now provided by helper (textbox bound later)
+        # Start with empty prompts - will be loaded when page is navigated to
         (
             example_prompts_group,
             prompt_cards,
@@ -631,8 +631,8 @@ def build_side_by_side_ui_anony():
         + [textbox]
         + btn_list
         + [slow_warning]
-        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [prev_btn, next_btn]
+        + [battle_interface, voting_row, next_battle_row]
+        + [example_prompts_group, prev_btn, next_btn]
         + prompt_cards,
     )
 
@@ -732,7 +732,7 @@ def build_side_by_side_ui_anony():
     return (
         states + model_selectors,
         example_prompt_ui,
-        [prev_btn, next_btn] + prompt_cards,
+        [example_prompts_group, prev_btn, next_btn] + prompt_cards,
     )
 
 
