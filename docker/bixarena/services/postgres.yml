@@ -17,3 +17,9 @@ services:
           memory: 500M
     # set shared memory limit when using docker compose
     shm_size: 128mb
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d bixarena']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s

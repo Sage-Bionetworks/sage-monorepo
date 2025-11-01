@@ -20,6 +20,8 @@ services:
         condition: service_started
       bixarena-auth-service:
         condition: service_started
+      bixarena-valkey:
+        condition: service_healthy
     extra_hosts:
       - 'bixarena-ai-service:host-gateway'
       - 'bixarena-api:host-gateway'
