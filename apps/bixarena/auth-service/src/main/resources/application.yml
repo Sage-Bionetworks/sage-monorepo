@@ -7,11 +7,16 @@ server:
 spring:
   application:
     name: bixarena-auth-service
+  session:
+    store-type: redis
+    redis:
+      namespace: bixarena:session
+    timeout: 7d
   data:
     redis:
       host: bixarena-valkey
       port: 8116
-      database: 0
+      database: 2
       timeout: 2000ms
       jedis:
         pool:
@@ -75,6 +80,13 @@ info:
 app:
   welcome-message: 'Welcome to BixArena Auth Service'
   ui-base-url: http://127.0.0.1:8100
+  session-cookie:
+    name: JSESSIONID
+    path: /
+    domain: null # Host-only cookie by default (secure for production)
+    same-site: Strict # Strictest setting by default
+    secure: true # Require HTTPS by default
+    http-only: true # Prevent JavaScript access
   auth:
     # Synapse OAuth endpoints (adjusted to known working endpoints)
     # Authorize endpoint: root sign-in portal with query params

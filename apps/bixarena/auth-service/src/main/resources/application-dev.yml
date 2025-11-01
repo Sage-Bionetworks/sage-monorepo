@@ -7,3 +7,12 @@ logging:
   level:
     org.sagebionetworks.bixarena: DEBUG
     org.springframework.security: DEBUG
+
+app:
+  session-cookie:
+    # Development: share cookies across localhost ports (Gradio:7860, Gateway:8113)
+    domain: 127.0.0.1
+    # Lax allows cookies in top-level navigation (redirects) while still providing CSRF protection
+    same-site: Lax
+    # Secure must be false for HTTP in local development
+    secure: false
