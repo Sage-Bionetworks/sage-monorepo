@@ -1,5 +1,5 @@
 {
-  "app": "uv run bixarena-infra-cdk",
+  "app": "uv run python -m bixarena_infra_cdk.${ENV}.app",
   "watch": {
     "include": ["**"],
     "exclude": [
