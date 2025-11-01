@@ -24,7 +24,8 @@ EXAMPLE_PROMPTS_CSS = """
 /* Example prompt card wrapper */
 #prompt-card-section .prompt-card-wrapper {
     flex: 1 1 0;
-    min-width: 0;
+    min-width: 320px;
+    max-width: 450px;
 }
 
 /* Example prompt card button */
@@ -35,7 +36,7 @@ EXAMPLE_PROMPTS_CSS = """
     padding: 12px 16px;
     transition: all 0.2s ease;
     width: 100%;
-    height: 83px;
+    height: 115px;
     display: flex;
     align-items: flex-start;
     cursor: pointer;
@@ -53,10 +54,10 @@ EXAMPLE_PROMPTS_CSS = """
 #prompt-card-section button.prompt-card .prompt-text {
     text-align: left;
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.45;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     overflow: hidden;
 }
 
