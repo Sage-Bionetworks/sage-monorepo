@@ -9,45 +9,44 @@ EXAMPLE_PROMPTS_CSS = """
 #prompt-card-section > .row {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
     align-items: center;
     gap: 16px;
-    width: 100%;
+    flex-wrap: nowrap;
 }
 
 #prompt-card-section > .row > .row {
     flex: 1 1 auto;
     min-width: 0;
-    display: flex;
-    flex-direction: row;
     gap: 16px;
-    align-items: center;
 }
 
-/* Example prompt card */
-.prompt-card-container {
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.2s ease;
+/* Example prompt card wrapper */
+#prompt-card-section .prompt-card-wrapper {
     flex: 1 1 0;
     min-width: 0;
-    width: auto;
-    margin: 0;
-    height: 83px;
-    display: flex;
-    align-items: center;
 }
 
-.gradio-container .prompt-card-container:hover {
+/* Example prompt card button */
+#prompt-card-section button.prompt-card {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    transition: all 0.2s ease;
+    width: 100%;
+    height: 83px;
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+#prompt-card-section button.prompt-card:hover {
     background: rgba(255, 255, 255, 0.08);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.gradio-container button.prompt-card {
-    background: transparent !important;
-    padding: 0px;
+#prompt-card-section button.prompt-card .prompt-text {
     text-align: left;
     font-size: 14px;
     line-height: 1.4;
@@ -76,13 +75,8 @@ EXAMPLE_PROMPTS_CSS = """
 }
 
 .nav-button {
-    aspect-ratio: 1 / 1;
-    box-sizing: border-box;
     user-select: none;
 }
-
-.nav-button.left { margin-right: 8px; }
-.nav-button.right { margin-left: 8px; }
 
 #prompt-card-section > .row > .nav-button:not(:disabled):hover {
     background: rgba(255, 255, 255, 0.08);
