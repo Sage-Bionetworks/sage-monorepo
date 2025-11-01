@@ -13,3 +13,9 @@ services:
       resources:
         limits:
           memory: 500M
+    healthcheck:
+      test: ['CMD', 'valkey-cli', '-p', '8116', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s

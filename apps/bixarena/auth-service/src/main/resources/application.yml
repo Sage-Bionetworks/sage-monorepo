@@ -28,11 +28,15 @@ spring:
     username: postgres
     password: changeme
     driver-class-name: org.postgresql.Driver
+    hikari:
+      initialization-fail-timeout: -1 # Retry indefinitely during startup
   flyway:
     enabled: true
     clean-disabled: false
     schemas: auth
     default-schema: auth
+    connect-retries: 60 # Retry connection 60 times
+    connect-retries-interval: 1s # Wait 1 second between retries
   jackson:
     date-format: org.sagebionetworks.bixarena.auth.service.RFC3339DateFormat
     serialization:

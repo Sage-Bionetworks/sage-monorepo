@@ -14,5 +14,7 @@ services:
         limits:
           memory: 1GB
     depends_on:
-      - bixarena-postgres
-      - bixarena-valkey
+      bixarena-postgres:
+        condition: service_healthy
+      bixarena-valkey:
+        condition: service_healthy
