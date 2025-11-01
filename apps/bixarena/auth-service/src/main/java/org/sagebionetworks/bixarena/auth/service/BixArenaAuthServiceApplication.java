@@ -7,8 +7,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @ConfigurationPropertiesScan
+@EnableRedisHttpSession(
+  maxInactiveIntervalInSeconds = 604800,
+  redisNamespace = "${spring.session.redis.namespace}"
+)
 @RequiredArgsConstructor
 @Slf4j
 @SpringBootApplication

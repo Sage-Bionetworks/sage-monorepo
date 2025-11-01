@@ -25,6 +25,7 @@ dependencies {
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
+  implementation(libs.spring.session.data.redis)
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
   runtimeOnly(libs.flyway.database.postgresql)

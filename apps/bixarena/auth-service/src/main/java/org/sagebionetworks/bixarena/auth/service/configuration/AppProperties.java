@@ -17,7 +17,8 @@ public record AppProperties(
   @NotBlank(message = "Welcome message must not be blank") String welcomeMessage,
   /** Base URL of UI (Gradio) used for post-login redirect */
   @NotBlank(message = "UI base URL must not be blank") String uiBaseUrl,
-  @Valid @NotNull Auth auth
+  @Valid @NotNull Auth auth,
+  @Valid @NotNull SessionCookie sessionCookie
 ) {
   @Validated
   public record Auth(
@@ -30,5 +31,16 @@ public record AppProperties(
     @NotBlank(message = "Internal issuer must not be blank") String internalIssuer,
     @NotBlank(message = "Audience must not be blank") String audience,
     @NotNull(message = "Token TTL seconds must not be null") Long tokenTtlSeconds
+  ) {}
+
+  @Validated
+  public record SessionCookie(
+    @NotBlank(message = "Cookie name must not be blank") String name,
+    @NotBlank(message = "Cookie path must not be blank") String path,
+    /** Cookie domain (null for host-only cookie) */
+    String domain,
+    @NotBlank(message = "SameSite attribute must not be blank") String sameSite,
+    @NotNull(message = "Secure flag must not be null") Boolean secure,
+    @NotNull(message = "HttpOnly flag must not be null") Boolean httpOnly
   ) {}
 }
