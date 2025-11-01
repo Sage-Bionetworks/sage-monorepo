@@ -71,10 +71,31 @@ spring:
                 - Path=/api/v1/**
               filters:
                 - StripPrefix=1
+                - name: Retry
+                  args:
+                    retries: 3
+                    statuses: BAD_GATEWAY,SERVICE_UNAVAILABLE
+                    methods: GET,POST,PUT,DELETE
+                    backoff:
+                      firstBackoff: 50ms
+                      maxBackoff: 500ms
+                      factor: 2
+                      basedOnPreviousValue: false
             - id: bixarena-auth-service
               uri: http://bixarena-auth-service:8115
               predicates:
                 - Path=/auth/**,/.well-known/jwks.json,/oauth2/token,/userinfo
+              filters:
+                - name: Retry
+                  args:
+                    retries: 3
+                    statuses: BAD_GATEWAY,SERVICE_UNAVAILABLE
+                    methods: GET,POST,PUT,DELETE
+                    backoff:
+                      firstBackoff: 50ms
+                      maxBackoff: 500ms
+                      factor: 2
+                      basedOnPreviousValue: false
   profiles:
     active: dev
   config:
