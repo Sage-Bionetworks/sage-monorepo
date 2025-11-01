@@ -632,7 +632,7 @@ def build_side_by_side_ui_anony():
         + btn_list
         + [slow_warning]
         + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [prev_btn, next_btn]
+        + [example_prompts_group, prev_btn, next_btn]
         + prompt_cards,
     )
 
@@ -732,7 +732,7 @@ def build_side_by_side_ui_anony():
     return (
         states + model_selectors,
         example_prompt_ui,
-        [prev_btn, next_btn] + prompt_cards,
+        [example_prompts_group, prev_btn, next_btn] + prompt_cards,
     )
 
 
