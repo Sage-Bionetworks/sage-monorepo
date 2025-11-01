@@ -3503,6 +3503,63 @@
         }
       }
     },
+    "/repo/v1/download/list/add/stats/async/start": {
+      "post": {
+        "tags": ["Download List Services"],
+        "operationId": "post-/repo/v1/download/list/add/stats/async/start",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListStatsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/download/list/add/stats/async/get/{asyncToken}": {
+      "get": {
+        "tags": ["Download List Services"],
+        "operationId": "get-/repo/v1/download/list/add/stats/async/get/{asyncToken}",
+        "parameters": [
+          {
+            "name": "asyncToken",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListStatsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/repo/v1/download/list/package/async/start": {
       "post": {
         "tags": ["Download List Services"],
@@ -17955,7 +18012,8 @@
           "USE_NEW_ASYNC_GOOGLE_MULTIPART_UPLOAD",
           "ENFORCE_PROJECT_STORAGE_LIMITS",
           "ALLOW_AGENT_WRITES",
-          "DISABLE_2FA_REQUIREMENT"
+          "DISABLE_2FA_REQUIREMENT",
+          "DISABLE_INACTIVE_USERS"
         ]
       },
       "org.sagebionetworks.repo.model.dataaccess.AccessApprovalNotificationResponse": {
@@ -20734,7 +20792,7 @@
           "provider": {
             "type": "string",
             "description": "Supported OAuth providers",
-            "enum": ["GOOGLE_OAUTH_2_0", "ORCID"]
+            "enum": ["GOOGLE_OAUTH_2_0", "ORCID", "ARCUS_BIOSCIENCES"]
           },
           "authenticationCode": {
             "type": "string",
@@ -21651,6 +21709,22 @@
         "type": "string",
         "enum": ["MUST_AGREE_NOW", "MUST_AGREE_SOON", "UP_TO_DATE"]
       },
+      "org.sagebionetworks.repo.model.grid.query.SelectByName": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "description": "Required. Full name of the exact type used.",
+            "enum": ["org.sagebionetworks.repo.model.grid.query.SelectByName"]
+          },
+          "columnName": {
+            "type": "string",
+            "description": "The name of the column to include in the select."
+          }
+        },
+        "description": "A SelectItem that will result in the selection of a single column by its name.",
+        "required": ["concreteType"]
+      },
       "org.sagebionetworks.repo.model.download.ActionRequiredCount": {
         "type": "object",
         "properties": {
@@ -21816,6 +21890,10 @@
           "validationResults": {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.result.ValidationResults",
             "description": "Results of a grid row against a JSON schema"
+          },
+          "rowId": {
+            "type": "string",
+            "description": "Logical timestamp identifying the row in compact form `replicaId.sequenceNumber` (e.g. `123.456`). Used in filters (RowIdFilter) and patch/update operations."
           }
         },
         "description": "A single row of a grid query result."
@@ -22275,7 +22353,8 @@
           { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.SelectAll" },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.function.CountStar"
-          }
+          },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.SelectByName" }
         ],
         "required": ["concreteType"],
         "discriminator": { "propertyName": "concreteType" }
@@ -22613,6 +22692,31 @@
         "description": "JSON schema for metadata that is submitted to DataCite and can later be retrieved via DOI in Synapse, with the DataCite REST API, or with external citation services.",
         "oneOf": [{ "$ref": "#/components/schemas/org.sagebionetworks.repo.model.doi.v2.Doi" }],
         "discriminator": { "propertyName": "concreteType" }
+      },
+      "org.sagebionetworks.repo.model.download.AddToDownloadListStatsResponse": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.download.AddToDownloadListStatsResponse"]
+          },
+          "fileCount": {
+            "type": "integer",
+            "description": "The number of files that a AddToDownloadListRequest request would attempt to add to the download list. Note that this might exceed the maximum number of files that can be added to the download list.",
+            "format": "int32"
+          },
+          "fileSize": {
+            "type": "integer",
+            "description": "The total size that a AddToDownloadListRequest would attempt to add to the download list.",
+            "format": "int32"
+          },
+          "isFileCountAndSizeEstimate": {
+            "type": "boolean",
+            "description": "When true the actual count and size might be greater than reported."
+          }
+        },
+        "description": "The results of a job to compute the estimate of number and size of files from a AddToDownloadListRequest request.",
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.table.TableUpdateResponse": {
         "type": "object",
@@ -24071,6 +24175,9 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListQueryRequest"
           },
           { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatRequest" },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListStatsRequest"
+          },
           { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.CreateGridRequest" },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleRestoreRequest"
@@ -24631,7 +24738,8 @@
               "USE_NEW_ASYNC_GOOGLE_MULTIPART_UPLOAD",
               "ENFORCE_PROJECT_STORAGE_LIMITS",
               "ALLOW_AGENT_WRITES",
-              "DISABLE_2FA_REQUIREMENT"
+              "DISABLE_2FA_REQUIREMENT",
+              "DISABLE_INACTIVE_USERS"
             ]
           },
           "enabled": {
@@ -24817,7 +24925,7 @@
           "provider": {
             "type": "string",
             "description": "Supported OAuth providers",
-            "enum": ["GOOGLE_OAUTH_2_0", "ORCID"]
+            "enum": ["GOOGLE_OAUTH_2_0", "ORCID", "ARCUS_BIOSCIENCES"]
           },
           "authenticationCode": {
             "type": "string",
@@ -25014,22 +25122,6 @@
           }
         },
         "description": "Metadata for a paginated list of personal access token records."
-      },
-      "org.sagebionetworks.repo.model.migration.BackfillLastSeenOnResponse": {
-        "type": "object",
-        "properties": {
-          "concreteType": {
-            "type": "string",
-            "enum": ["org.sagebionetworks.repo.model.migration.BackfillLastSeenOnResponse"]
-          },
-          "count": {
-            "type": "integer",
-            "description": "The count of users processed in the request.",
-            "format": "int32"
-          }
-        },
-        "description": "Results for a lastSeenOn backfill request.",
-        "required": ["concreteType"]
       },
       "PaginatedResultsOfSubmissionStatus": {
         "type": "object",
@@ -26248,7 +26340,7 @@
           "oauthProvider": {
             "type": "string",
             "description": "Supported OAuth providers",
-            "enum": ["GOOGLE_OAUTH_2_0", "ORCID"]
+            "enum": ["GOOGLE_OAUTH_2_0", "ORCID", "ARCUS_BIOSCIENCES"]
           },
           "subject": {
             "type": "string",
@@ -27483,7 +27575,7 @@
         "properties": {
           "concreteType": {
             "type": "string",
-            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", or \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\"",
+            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIdFilter\"",
             "enum": ["org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter"]
           },
           "operator": {
@@ -27982,7 +28074,7 @@
         "properties": {
           "concreteType": {
             "type": "string",
-            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", or \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\"",
+            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIdFilter\"",
             "enum": ["org.sagebionetworks.repo.model.grid.query.CellValueFilter"]
           },
           "columnName": {
@@ -28018,7 +28110,7 @@
       },
       "org.sagebionetworks.repo.model.oauth.OAuthProvider": {
         "type": "string",
-        "enum": ["GOOGLE_OAUTH_2_0", "ORCID"]
+        "enum": ["GOOGLE_OAUTH_2_0", "ORCID", "ARCUS_BIOSCIENCES"]
       },
       "org.sagebionetworks.repo.model.table.ColumnType": {
         "type": "string",
@@ -28414,6 +28506,33 @@
         },
         "description": "Used to login via username, password, and previous authentication receipt."
       },
+      "org.sagebionetworks.repo.model.grid.update.Update": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.update.SetValue",
+              "description": "Represents a single column assignment (one entry of the SQL SET clause)."
+            },
+            "description": "Required. Array representing the SQL SET clause; each object specifies a target column and the literal value to assign for all selected rows."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.Filter",
+              "description": "All filter objects must use valid JSON syntax with double quotes around all strings. There are five different types of filters that can be applied to a grid query. For example, a filter to find all rows where column named: 'someInt' has a value greater than 12, the following filter would be used:[{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.CellValueFilter\",\"columnName\":\"someInt\",\"operator\":\"GREATER_THAN\",\"value\":[12]}]. In order to find all rows with a JSON schema validation error use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\",\"value\":false}].  In order to find all rows with JSON schema validation error message that indicates the wrong type was provided, you could use the filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\",\"operator\":\"LIKE\",\"validationResultValue\":\"%expected type%\"}]. In order to find all rows that are currently selected by the user, you would use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\",\"isSelected\":true}]."
+            },
+            "description": "Optional. Array of Filter objects selecting the rows to update (acts like the SQL WHERE clause). If omitted, all rows are eligible. Multiple filters are combined with logical AND. Use when the user constrains target rows (e.g., \"where columnThree is null\" or \"only rows with status='ACTIVE'\")."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Optional. Maximum number of matching rows to update (analogous to SQL LIMIT). Use only when the user explicitly requests a cap (e.g., limit 10). If omitted, all filtered rows are updated. Valid range: 1-100.",
+            "format": "int32"
+          }
+        },
+        "description": "Request to update one or more cells in a grid (SQL UPDATE style)."
+      },
       "org.sagebionetworks.repo.model.download.FilesStatisticsResponse": {
         "type": "object",
         "properties": {
@@ -28521,11 +28640,6 @@
           "columnName": {
             "type": "string",
             "description": "The name of the column.  Will be the alias if one is provide in the select item."
-          },
-          "columnIndex": {
-            "type": "integer",
-            "description": "The index of this column. The first column will have an index of zero.",
-            "format": "int32"
           }
         },
         "description": "Information about a single selected column."
@@ -28605,7 +28719,7 @@
         "properties": {
           "concreteType": {
             "type": "string",
-            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", or \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\"",
+            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIdFilter\"",
             "enum": ["org.sagebionetworks.repo.model.grid.query.RowSelectionFilter"]
           },
           "isSelected": {
@@ -28741,7 +28855,7 @@
           "provider": {
             "type": "string",
             "description": "Supported OAuth providers",
-            "enum": ["GOOGLE_OAUTH_2_0", "ORCID"]
+            "enum": ["GOOGLE_OAUTH_2_0", "ORCID", "ARCUS_BIOSCIENCES"]
           },
           "authenticationCode": {
             "type": "string",
@@ -28777,6 +28891,16 @@
         },
         "description": "Async Migration requests will implement this type of AsynchronousRequestBody",
         "required": ["concreteType"]
+      },
+      "org.sagebionetworks.repo.model.grid.update.GridUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "update": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.update.Update",
+            "description": "Request to update one or more cells in a grid (SQL UPDATE style)."
+          }
+        },
+        "description": "Request to update the cells of the current grid session."
       },
       "org.sagebionetworks.repo.model.auth.TotpSecret": {
         "type": "object",
@@ -29012,6 +29136,11 @@
             "type": "integer",
             "description": "Required. The calling user's grid replica ID.",
             "format": "int32"
+          },
+          "agentsReplicaId": {
+            "type": "integer",
+            "description": "The replica ID issued to the user's agent.",
+            "format": "int32"
           }
         },
         "description": "Additional context provided for grid agent chat sessions.",
@@ -29117,6 +29246,9 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.AddFileToDownloadListResponse"
           },
           { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.doi.v2.DoiResponse" },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListStatsResponse"
+          },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.TableSearchChangeResponse"
           },
@@ -31448,7 +31580,7 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.Filter",
-              "description": "All filter objects must use valid JSON syntax with double quotes around all strings. There are four different types of filters that can be applied to a grid query. For example, a filter to find all rows where column named: 'someInt' has a value greater than 12, the following filter would be used:[{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.CellValueFilter\",\"columnName\":\"someInt\",\"operator\":\"GREATER_THAN\",\"value\":[12]}]. In order to find all rows with a JSON schema validation error use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\",\"value\":false}].  In order to find all rows with JSON schema validation error message that indicates the wrong type was provided, you could use the filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\",\"operator\":\"LIKE\",\"validationResultValue\":\"%expected type%\"}]. In order to find all rows that are currently selected by the user, you would use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\",\"isSelected\":true}]."
+              "description": "All filter objects must use valid JSON syntax with double quotes around all strings. There are five different types of filters that can be applied to a grid query. For example, a filter to find all rows where column named: 'someInt' has a value greater than 12, the following filter would be used:[{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.CellValueFilter\",\"columnName\":\"someInt\",\"operator\":\"GREATER_THAN\",\"value\":[12]}]. In order to find all rows with a JSON schema validation error use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\",\"value\":false}].  In order to find all rows with JSON schema validation error message that indicates the wrong type was provided, you could use the filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\",\"operator\":\"LIKE\",\"validationResultValue\":\"%expected type%\"}]. In order to find all rows that are currently selected by the user, you would use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\",\"isSelected\":true}]."
             },
             "description": "Optional. Each filter must be a complete JSON object with the required 'concreteType' property. IMPORTANT: Do not use SQL syntax - use the predefined filter objects. Examples: To find invalid rows: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\",\"value\":false}]. To find rows where 'age' > 25: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.CellValueFilter\",\"columnName\":\"age\",\"operator\":\"GREATER_THAN\",\"value\":[25]}]. Multiple filters are combined with AND logic."
           },
@@ -31956,14 +32088,22 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.MigrationTypeCount"
           },
           {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.BackfillLastSeenOnResponse"
-          },
-          {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.BatchChecksumResponse"
           }
         ],
         "required": ["concreteType"],
         "discriminator": { "propertyName": "concreteType" }
+      },
+      "org.sagebionetworks.repo.model.grid.update.GridUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "rowsUpdated": {
+            "type": "integer",
+            "description": "Number of rows actually updated (after applying any limit).",
+            "format": "int32"
+          }
+        },
+        "description": "Response summarizing the outcome of a grid update operation."
       },
       "org.sagebionetworks.repo.model.table.EntityRefCollectionView": {
         "type": "object",
@@ -32510,7 +32650,7 @@
           "provider": {
             "type": "string",
             "description": "Supported OAuth providers",
-            "enum": ["GOOGLE_OAUTH_2_0", "ORCID"]
+            "enum": ["GOOGLE_OAUTH_2_0", "ORCID", "ARCUS_BIOSCIENCES"]
           },
           "redirectUrl": {
             "type": "string",
@@ -33282,7 +33422,7 @@
         "properties": {
           "concreteType": {
             "type": "string",
-            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", or \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\"",
+            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIdFilter\"",
             "enum": ["org.sagebionetworks.repo.model.grid.query.RowIsValidFilter"]
           },
           "value": {
@@ -34037,6 +34177,16 @@
             "description": "See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.3.2\">minLength</a>",
             "format": "int32"
           },
+          "maxItems": {
+            "type": "integer",
+            "description": "See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.4.1\">maxItems</a>",
+            "format": "int32"
+          },
+          "minItems": {
+            "type": "integer",
+            "description": "See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.4.2\">minItems</a>",
+            "format": "int32"
+          },
           "uniqueItems": {
             "type": "boolean",
             "description": "See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.4.3\">uniqueItems</a>"
@@ -34103,6 +34253,21 @@
           }
         },
         "description": "JSON schema for a change message"
+      },
+      "org.sagebionetworks.repo.model.download.AddToDownloadListStatsRequest": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.download.AddToDownloadListStatsRequest"]
+          },
+          "request": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListRequest",
+            "description": "Start an asynchronous job to add files from the given view query or folder to the user's download list,"
+          }
+        },
+        "description": "Start an asynchronous job that computes an estimate of the number and size of files from the given AddToDownloadListRequest request.",
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.CurationTrackingData": {
         "type": "object",
@@ -36405,9 +36570,6 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationTypeCountsRequest"
           },
           {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.BackfillLastSeenOnRequest"
-          },
-          {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationRangeChecksumRequest"
           },
           {
@@ -36806,6 +36968,19 @@
         "type": "string",
         "enum": ["entityview", "submissionview", "dataset", "datasetcollection"]
       },
+      "org.sagebionetworks.repo.model.grid.update.SetValue": {
+        "type": "object",
+        "properties": {
+          "columnName": {
+            "type": "string",
+            "description": "Target column name or ID to update."
+          },
+          "value": {
+            "description": "Literal JSON value to assign to the column for all selected rows. Supports string, number, boolean, object, array, or null (use null to clear)"
+          }
+        },
+        "description": "Represents a single column assignment (one entry of the SQL SET clause)."
+      },
       "org.sagebionetworks.repo.model.auth.AccessTokenRecord": {
         "type": "object",
         "properties": {
@@ -36982,22 +37157,6 @@
       "org.sagebionetworks.repo.model.entity.SortBy": {
         "type": "string",
         "enum": ["NAME", "CREATED_ON", "MODIFIED_ON"]
-      },
-      "org.sagebionetworks.repo.model.migration.BackfillLastSeenOnRequest": {
-        "type": "object",
-        "properties": {
-          "concreteType": {
-            "type": "string",
-            "enum": ["org.sagebionetworks.repo.model.migration.BackfillLastSeenOnRequest"]
-          },
-          "maxUsersCount": {
-            "type": "integer",
-            "description": "The maximum number of users to process in the request, at least 500;",
-            "format": "int32"
-          }
-        },
-        "description": "Request to backfill the lastSeenOn status for existing users.",
-        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.table.TableSearchChangeResponse": {
         "type": "object",
@@ -37455,10 +37614,10 @@
         "properties": {
           "concreteType": {
             "type": "string",
-            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", or \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\""
+            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIdFilter\""
           }
         },
-        "description": "All filter objects must use valid JSON syntax with double quotes around all strings. There are four different types of filters that can be applied to a grid query. For example, a filter to find all rows where column named: 'someInt' has a value greater than 12, the following filter would be used:[{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.CellValueFilter\",\"columnName\":\"someInt\",\"operator\":\"GREATER_THAN\",\"value\":[12]}]. In order to find all rows with a JSON schema validation error use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\",\"value\":false}].  In order to find all rows with JSON schema validation error message that indicates the wrong type was provided, you could use the filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\",\"operator\":\"LIKE\",\"validationResultValue\":\"%expected type%\"}]. In order to find all rows that are currently selected by the user, you would use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\",\"isSelected\":true}].",
+        "description": "All filter objects must use valid JSON syntax with double quotes around all strings. There are five different types of filters that can be applied to a grid query. For example, a filter to find all rows where column named: 'someInt' has a value greater than 12, the following filter would be used:[{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.CellValueFilter\",\"columnName\":\"someInt\",\"operator\":\"GREATER_THAN\",\"value\":[12]}]. In order to find all rows with a JSON schema validation error use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\",\"value\":false}].  In order to find all rows with JSON schema validation error message that indicates the wrong type was provided, you could use the filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\",\"operator\":\"LIKE\",\"validationResultValue\":\"%expected type%\"}]. In order to find all rows that are currently selected by the user, you would use the following filter: [{\"concreteType\":\"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\",\"isSelected\":true}].",
         "oneOf": [
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter"
@@ -37471,7 +37630,8 @@
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.CellValueFilter"
-          }
+          },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.RowIdFilter" }
         ],
         "required": ["concreteType"],
         "discriminator": { "propertyName": "concreteType" }
@@ -37619,6 +37779,23 @@
           }
         },
         "description": "A single page of the JSON schema validation results."
+      },
+      "org.sagebionetworks.repo.model.grid.query.RowIdFilter": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "description": "Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIdFilter\"",
+            "enum": ["org.sagebionetworks.repo.model.grid.query.RowIdFilter"]
+          },
+          "rowIdsIn": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Array of explicit row IDs. The result will include any row whose ID appears in this list (logical OR). Provide only IDs previously obtained from a grid query. Omit this filter if you do not know the IDs. Do not include duplicates or IDs not present in the current grid."
+          }
+        },
+        "description": "Row ID inclusion filter. Use when you need to operate on specific existing rows by their explicit row IDs obtained from a prior grid query (e.g., an update). The filter matches any row whose ID is in the provided list (logical OR semantics). Do not use for pattern matching or broad selection; supply only the exact row IDs you intend to modify or retrieve.",
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.schema.BoundObjectType": {
         "type": "string",
@@ -41975,28 +42152,6 @@
         },
         "description": "This upload destination contains information to start an upload to an external external S3 bucket connected with Synapse. The destination is mapped from an <a href=\"${org.sagebionetworks.repo.model.project.ExternalS3StorageLocationSetting}\">ExternalS3StorageLocationSetting</a>.",
         "required": ["concreteType"]
-      },
-      "org.sagebionetworks.repo.model.grid.query.SelectClause": {
-        "type": "object",
-        "properties": {
-          "selectAll": {
-            "type": "boolean",
-            "description": "When true, all columns will be selected (*). The selectList will be ignored."
-          },
-          "distinct": {
-            "type": "boolean",
-            "description": "Optional. When true, DISTINCT will be used."
-          },
-          "selectList": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.query.SelectItem",
-              "description": "A generic select item."
-            },
-            "description": "One or more select items. This list is ignored if 'selectAll' is true."
-          }
-        },
-        "description": "Defines the SELECT clause of the query. Use 'selectAll' for a 'SELECT *' query, otherwise provide a list of columns and functions in 'selectList'."
       },
       "org.sagebionetworks.evaluation.model.EvaluationRoundLimit": {
         "type": "object",

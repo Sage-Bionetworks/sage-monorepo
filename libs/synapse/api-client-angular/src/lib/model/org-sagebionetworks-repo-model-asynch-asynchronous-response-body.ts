@@ -57,6 +57,7 @@ import { OrgSagebionetworksRepoModelTableSelectColumn } from './org-sagebionetwo
 import { OrgSagebionetworksRepoModelTableTableSearchChangeResponse } from './org-sagebionetworks-repo-model-table-table-search-change-response';
 import { OrgSagebionetworksRepoModelGridGridSession } from './org-sagebionetworks-repo-model-grid-grid-session';
 import { OrgSagebionetworksRepoModelTableRowReferenceSetResults } from './org-sagebionetworks-repo-model-table-row-reference-set-results';
+import { OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse } from './org-sagebionetworks-repo-model-download-add-to-download-list-stats-response';
 
 /**
  * The body of an Asynchronous job response.
@@ -70,6 +71,7 @@ export type OrgSagebionetworksRepoModelAsynchAsynchronousResponseBody =
   | OrgSagebionetworksRepoModelAgentAgentChatResponse
   | OrgSagebionetworksRepoModelDoiV2DoiResponse
   | OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse
+  | OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse
   | OrgSagebionetworksRepoModelDownloadDownloadListManifestResponse
   | OrgSagebionetworksRepoModelDownloadDownloadListPackageResponse
   | OrgSagebionetworksRepoModelDownloadDownloadListQueryResponse
