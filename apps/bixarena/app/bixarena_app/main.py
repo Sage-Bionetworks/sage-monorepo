@@ -16,6 +16,7 @@ from bixarena_app.page.bixarena_footer import build_footer
 from bixarena_app.page.bixarena_header import (
     build_header,
     handle_login_click,
+    handle_start_evaluation_click,
     update_battle_button,
     update_login_button,
 )
@@ -23,6 +24,7 @@ from bixarena_app.page.bixarena_home import (
     build_home_page,
     load_public_stats_on_page_load,
     load_user_battles_on_page_load,
+    update_cta_buttons_on_page_load,
 )
 from bixarena_app.page.bixarena_leaderboard import (
     build_leaderboard_page,
@@ -257,7 +259,8 @@ def build_app():
         with gr.Column(visible=True, elem_classes=["page-content"]) as home_page:
             (
                 _,
-                cta_btn,
+                cta_btn_authenticated,
+                cta_btn_login,
                 models_evaluated_column,
                 models_evaluated_box,
                 total_battles_column,
@@ -317,9 +320,22 @@ def build_app():
             lambda: navigator.show_page(2) + [load_leaderboard_stats_on_page_load()],
             outputs=pages + [leaderboard_metrics],
         )
-        cta_btn.click(
+        # Authenticated CTA button - navigates to battle page
+        cta_btn_authenticated.click(
             lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
             outputs=pages + prompt_outputs,
+        )
+
+        # Login CTA button - redirects to login page
+        cta_btn_login.click(
+            None,
+            js="""
+() => {
+  const el = document.getElementById('login-start-endpoint');
+  const url = el ? el.textContent.trim() : '';
+  if (url) window.location.href = url;
+}
+            """,
         )
 
         # Login
@@ -393,6 +409,13 @@ def build_app():
                 user_rank_column,  # New
                 user_rank_box,  # New
             ],
+        )
+
+        # Load CTA button visibility based on authentication
+        demo.load(
+            fn=update_cta_buttons_on_page_load,
+            inputs=None,
+            outputs=[cta_btn_authenticated, cta_btn_login],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
