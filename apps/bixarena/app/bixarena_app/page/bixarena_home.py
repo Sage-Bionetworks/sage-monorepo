@@ -199,6 +199,23 @@ def load_user_battles_on_page_load(
     )
 
 
+def update_cta_buttons_on_page_load(request: gr.Request) -> tuple[dict, dict]:
+    """Update CTA button visibility based on authentication state.
+
+    Args:
+        request: Gradio request object
+
+    Returns:
+        Tuple of (authenticated_btn_update, login_btn_update)
+    """
+    if is_authenticated(request):
+        # Show authenticated button, hide login button
+        return (gr.update(visible=True), gr.update(visible=False))
+    else:
+        # Hide authenticated button, show login button
+        return (gr.update(visible=False), gr.update(visible=True))
+
+
 def build_stats_section():
     """Create the statistics section with metrics"""
 
@@ -242,7 +259,7 @@ def build_stats_section():
 
 
 def build_cta_section():
-    """Create the call-to-action section"""
+    """Create the call-to-action section with conditional buttons"""
 
     with gr.Row():
         with gr.Column():
@@ -257,18 +274,32 @@ def build_cta_section():
             </div>
             """)
 
-    # Button will take to the battle page
+    # Two buttons - one for authenticated, one for unauthenticated users
+    # Visibility will be controlled based on authentication state
     with gr.Row():
         with gr.Column(scale=2):
             pass
         with gr.Column(scale=1):
-            start_btn = gr.Button(
-                "Start Evaluating Models", variant="primary", size="lg"
+            # Button for authenticated users - navigates to battle page
+            start_btn_authenticated = gr.Button(
+                "Start Evaluating Models",
+                variant="primary",
+                size="lg",
+                visible=False,
+                elem_id="cta-btn-authenticated",
+            )
+            # Button for unauthenticated users - redirects to login
+            start_btn_login = gr.Button(
+                "Start Evaluating Models",
+                variant="primary",
+                size="lg",
+                visible=False,
+                elem_id="cta-btn-login",
             )
         with gr.Column(scale=2):
             pass
 
-    return start_btn
+    return start_btn_authenticated, start_btn_login
 
 
 def build_home_page():
@@ -294,11 +325,12 @@ def build_home_page():
             ) = build_stats_section()
 
             # Call to Action Section
-            start_btn = build_cta_section()
+            start_btn_authenticated, start_btn_login = build_cta_section()
 
     return (
         home_page,
-        start_btn,
+        start_btn_authenticated,
+        start_btn_login,
         models_evaluated_column,
         models_evaluated_box,
         total_battles_column,
