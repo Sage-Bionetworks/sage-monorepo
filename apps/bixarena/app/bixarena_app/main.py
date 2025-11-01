@@ -24,6 +24,7 @@ from bixarena_app.page.bixarena_home import (
     build_home_page,
     load_public_stats_on_page_load,
     load_user_battles_on_page_load,
+    update_cta_buttons_on_page_load,
 )
 from bixarena_app.page.bixarena_leaderboard import (
     build_leaderboard_page,
@@ -258,7 +259,8 @@ def build_app():
         with gr.Column(visible=True, elem_classes=["page-content"]) as home_page:
             (
                 _,
-                cta_btn,
+                cta_btn_authenticated,
+                cta_btn_login,
                 models_evaluated_column,
                 models_evaluated_box,
                 total_battles_column,
@@ -287,12 +289,6 @@ def build_app():
 
         # Hidden HTML component(s) for cookie scripts / future use
         cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
-        auth_marker = gr.HTML(
-            "",
-            visible=False,
-            elem_id="auth-marker",
-            elem_classes="footer-no-padding",
-        )
 
         # Expose start endpoint to login button JS for immediate redirect
         auth_base = _get_auth_base_url_csr()
@@ -324,25 +320,22 @@ def build_app():
             lambda: navigator.show_page(2) + [load_leaderboard_stats_on_page_load()],
             outputs=pages + [leaderboard_metrics],
         )
-        cta_btn.click(
-            lambda: handle_start_evaluation_click(
-                navigator, example_prompt_ui.refresh_prompts
-            ),
-            outputs=pages + prompt_outputs + [auth_marker],
+        # Authenticated CTA button - navigates to battle page
+        cta_btn_authenticated.click(
+            lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
+            outputs=pages + prompt_outputs,
+        )
+
+        # Login CTA button - redirects to login page
+        cta_btn_login.click(
+            None,
             js="""
 () => {
-  setTimeout(() => {
-    const marker = document.getElementById('auth-marker');
-    if (marker && marker.textContent.trim() === 'UNAUTHORIZED') {
-      const el = document.getElementById('login-start-endpoint');
-      const url = el ? el.textContent.trim() : '';
-      if (url) {
-        window.location.href = url;
-      }
-    }
-  }, 200);
+  const el = document.getElementById('login-start-endpoint');
+  const url = el ? el.textContent.trim() : '';
+  if (url) window.location.href = url;
 }
-                """,
+            """,
         )
 
         # Login
@@ -416,6 +409,13 @@ def build_app():
                 user_rank_column,  # New
                 user_rank_box,  # New
             ],
+        )
+
+        # Load CTA button visibility based on authentication
+        demo.load(
+            fn=update_cta_buttons_on_page_load,
+            inputs=None,
+            outputs=[cta_btn_authenticated, cta_btn_login],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
