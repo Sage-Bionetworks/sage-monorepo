@@ -31,6 +31,7 @@ class ExamplePromptUI:
         self.prev_btn: gr.Button | None = None
         self.next_btn: gr.Button | None = None
         self.prompt_cards: list[gr.Button] = []
+        self.group: gr.Row | None = None
 
     # ----------------------------- Data Layer ----------------------------- #
     def _fetch_random_prompts(self, num_prompts: int = 3) -> list[str]:
@@ -57,7 +58,9 @@ class ExamplePromptUI:
             ]
 
     # --------------------------- Navigation Logic ------------------------- #
-    def _nav_state_updates(self, prompts: list[str]) -> list[object]:
+    def _nav_state_updates(
+        self, prompts: list[str], show_group: bool = True
+    ) -> list[object]:
         has_history = self.index > 0
         # Build class list explicitly; previous inline conditional
         # inadvertently replaced the base classes when no history.
@@ -66,7 +69,8 @@ class ExamplePromptUI:
         )
         next_upd = gr.update(interactive=True, elem_classes=["nav-button", "right"])
         prompt_upds = [gr.update(value=p) for p in prompts]
-        return [prev_upd, next_upd, *prompt_upds]
+        group_upd = gr.update(visible=show_group)
+        return [group_upd, prev_upd, next_upd, *prompt_upds]
 
     def _go_prev(self):  # bound as click handler
         if self.index > 0:
@@ -101,14 +105,19 @@ class ExamplePromptUI:
     ) -> tuple[gr.Row, list[gr.Button], gr.Button, gr.Button]:
         """Create the example prompt section UI.
 
+        Args:
+            textbox: Optional textbox to populate when a prompt is clicked
+            num_prompts: Number of prompts to display
+
         Returns:
             tuple: (row_container, prompt_cards, prev_button, next_button)
         """
-        initial = self._fetch_random_prompts(num_prompts)
+        # Start with empty prompts - will be loaded when page is navigated to
+        initial = [""] * num_prompts
         self.history = [initial]
         self.index = 0
 
-        with gr.Row(elem_id="prompt-card-section", visible=True) as group, gr.Row():
+        with gr.Row(elem_id="prompt-card-section", visible=False) as group, gr.Row():
             self.prev_btn = gr.Button(
                 value="←",
                 elem_classes=["nav-button", "left", "hidden"],
@@ -127,14 +136,17 @@ class ExamplePromptUI:
                 value="→", elem_classes=["nav-button", "right"], interactive=True
             )
 
-        # Arrow handlers produce updates for prev, next, and each prompt button
+        # Store group reference for visibility updates
+        self.group = group
+
+        # Arrow handlers produce updates for group, prev, next, and each prompt button
         self.prev_btn.click(
             self._go_prev,
-            outputs=[self.prev_btn, self.next_btn, *self.prompt_cards],
+            outputs=[self.group, self.prev_btn, self.next_btn, *self.prompt_cards],
         )
         self.next_btn.click(
             self._go_next,
-            outputs=[self.prev_btn, self.next_btn, *self.prompt_cards],
+            outputs=[self.group, self.prev_btn, self.next_btn, *self.prompt_cards],
         )
 
         return group, self.prompt_cards, self.prev_btn, self.next_btn
