@@ -87,6 +87,14 @@ export interface OrgSagebionetworksRepoModelSchemaJsonSchema {
    */
   minLength?: number;
   /**
+   * See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.4.1\">maxItems</a>
+   */
+  maxItems?: number;
+  /**
+   * See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.4.2\">minItems</a>
+   */
+  minItems?: number;
+  /**
    * See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.4.3\">uniqueItems</a>
    */
   uniqueItems?: boolean;

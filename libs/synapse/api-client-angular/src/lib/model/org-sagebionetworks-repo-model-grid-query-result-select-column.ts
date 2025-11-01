@@ -16,8 +16,4 @@ export interface OrgSagebionetworksRepoModelGridQueryResultSelectColumn {
    * The name of the column.  Will be the alias if one is provide in the select item.
    */
   columnName?: string;
-  /**
-   * The index of this column. The first column will have an index of zero.
-   */
-  columnIndex?: number;
 }

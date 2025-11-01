@@ -36,6 +36,7 @@ import { OrgSagebionetworksRepoModelGridCreateGridRequest } from './org-sagebion
 import { OrgSagebionetworksRepoModelTableAppendableRowSet } from './org-sagebionetworks-repo-model-table-appendable-row-set';
 import { OrgSagebionetworksRepoModelTableAppendableRowSetRequest } from './org-sagebionetworks-repo-model-table-appendable-row-set-request';
 import { OrgSagebionetworksRepoModelTableQueryFilter } from './org-sagebionetworks-repo-model-table-query-filter';
+import { OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest } from './org-sagebionetworks-repo-model-download-add-to-download-list-stats-request';
 import { OrgSagebionetworksRepoModelTableDownloadPFBRequest } from './org-sagebionetworks-repo-model-table-download-pfb-request';
 import { OrgSagebionetworksRepoModelDownloadQueryRequestDetails } from './org-sagebionetworks-repo-model-download-query-request-details';
 import { OrgSagebionetworksRepoModelTableSnapshotRequest } from './org-sagebionetworks-repo-model-table-snapshot-request';
@@ -63,6 +64,7 @@ export type OrgSagebionetworksRepoModelAsynchAsynchronousRequestBody =
   | OrgSagebionetworksRepoModelAgentAgentChatRequest
   | OrgSagebionetworksRepoModelDoiV2DoiRequest
   | OrgSagebionetworksRepoModelDownloadAddToDownloadListRequest
+  | OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest
   | OrgSagebionetworksRepoModelDownloadDownloadListManifestRequest
   | OrgSagebionetworksRepoModelDownloadDownloadListPackageRequest
   | OrgSagebionetworksRepoModelDownloadDownloadListQueryRequest

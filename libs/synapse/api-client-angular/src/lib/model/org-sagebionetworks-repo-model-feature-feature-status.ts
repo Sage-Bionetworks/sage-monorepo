@@ -31,7 +31,8 @@ export namespace OrgSagebionetworksRepoModelFeatureFeatureStatus {
     | 'USE_NEW_ASYNC_GOOGLE_MULTIPART_UPLOAD'
     | 'ENFORCE_PROJECT_STORAGE_LIMITS'
     | 'ALLOW_AGENT_WRITES'
-    | 'DISABLE_2FA_REQUIREMENT';
+    | 'DISABLE_2FA_REQUIREMENT'
+    | 'DISABLE_INACTIVE_USERS';
   export const FeatureEnum = {
     DataAccessNotifications: 'DATA_ACCESS_NOTIFICATIONS' as FeatureEnum,
     DataAccessAutoRevocation: 'DATA_ACCESS_AUTO_REVOCATION' as FeatureEnum,
@@ -42,5 +43,6 @@ export namespace OrgSagebionetworksRepoModelFeatureFeatureStatus {
     EnforceProjectStorageLimits: 'ENFORCE_PROJECT_STORAGE_LIMITS' as FeatureEnum,
     AllowAgentWrites: 'ALLOW_AGENT_WRITES' as FeatureEnum,
     Disable2FaRequirement: 'DISABLE_2FA_REQUIREMENT' as FeatureEnum,
+    DisableInactiveUsers: 'DISABLE_INACTIVE_USERS' as FeatureEnum,
   };
 }
