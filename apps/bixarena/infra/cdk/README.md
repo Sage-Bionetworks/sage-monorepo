@@ -39,13 +39,13 @@ Generate CloudFormation templates from the CDK code:
 
 ```bash
 # Development (requires DEVELOPER_NAME in .env.dev)
-nx synth bixarena-infra-cdk:dev
+nx run bixarena-infra-cdk:synth:dev
 
 # Staging
-nx synth bixarena-infra-cdk:stage
+nx run bixarena-infra-cdk:synth:stage
 
 # Production
-nx synth bixarena-infra-cdk:prod
+nx run bixarena-infra-cdk:synth:prod
 ```
 
 ### List Stacks
@@ -64,13 +64,13 @@ Deploy the CDK stacks to AWS:
 
 ```bash
 # Development
-nx deploy bixarena-infra-cdk:dev
+nx run bixarena-infra-cdk:deploy:dev
 
 # Staging
-nx deploy bixarena-infra-cdk:stage
+nx run bixarena-infra-cdk:deploy:stage
 
 # Production
-nx deploy bixarena-infra-cdk:prod
+nx run bixarena-infra-cdk:deploy:prod
 ```
 
 ### Testing the Application Load Balancer
@@ -83,7 +83,7 @@ After deployment, the ALB DNS name will be displayed in the CloudFormation outpu
 
 ```bash
 # Look for the "HealthCheckUrl" output
-nx deploy bixarena-infra-cdk:dev
+nx run bixarena-infra-cdk:deploy:dev
 ```
 
 Or retrieve it from the CloudFormation stack:
@@ -142,13 +142,13 @@ Remove all deployed resources:
 
 ```bash
 # Development
-nx destroy bixarena-infra-cdk:dev
+nx run bixarena-infra-cdk:destroy:dev
 
 # Staging
-nx destroy bixarena-infra-cdk:stage
+nx run bixarena-infra-cdk:destroy:stage
 
 # Production
-nx destroy bixarena-infra-cdk:prod
+nx run bixarena-infra-cdk:destroy:prod
 ```
 
 ## Developer Workflow
@@ -175,23 +175,23 @@ nx destroy bixarena-infra-cdk:prod
 
 4. **Synthesize and deploy**:
    ```bash
-   nx synth bixarena-infra-cdk:dev
-   nx deploy bixarena-infra-cdk:dev
+   nx run bixarena-infra-cdk:synth:dev
+   nx run bixarena-infra-cdk:deploy:dev
    ```
 
 ### Making Changes
 
 1. Make changes to constructs or stacks in the `shared/` directory
-2. Test synthesis: `nx synth bixarena-infra-cdk:dev`
+2. Test synthesis: `nx run bixarena-infra-cdk:synth:dev`
 3. Review diff: `nx diff bixarena-infra-cdk:dev`
-4. Deploy changes: `nx deploy bixarena-infra-cdk:dev`
+4. Deploy changes: `nx run bixarena-infra-cdk:deploy:dev`
 
 ### Cleaning Up
 
 When you're done with your development stack, destroy it to avoid charges:
 
 ```bash
-nx destroy bixarena-infra-cdk:dev
+nx run bixarena-infra-cdk:destroy:dev
 ```
 
 **Note on GuardDuty**: The CDK app now manages the GuardDuty VPC endpoint to ensure clean stack deletion. In earlier versions, GuardDuty created AWS-managed resources (VPC endpoints and security groups) outside of CloudFormation, which blocked VPC deletion. These are now explicitly managed by the CDK stack.
@@ -201,7 +201,7 @@ nx destroy bixarena-infra-cdk:dev
 When you're done testing, destroy your development stack:
 
 ```bash
-nx destroy bixarena-infra-cdk:dev
+nx run bixarena-infra-cdk:destroy:dev
 ```
 
 ## Phase 0: Minimal Infrastructure
@@ -369,7 +369,7 @@ Examples:
 Make sure you're running commands with a configuration:
 
 ```bash
-nx synth bixarena-infra-cdk:dev  # Not just 'bixarena-infra-cdk'
+nx run bixarena-infra-cdk:synth:dev  # Not just 'bixarena-infra-cdk'
 ```
 
 ### "DEVELOPER_NAME environment variable is required for dev"
@@ -394,19 +394,19 @@ You can target specific environments by providing a configuration:
 
 ```bash
 # Development (default)
-nx synth bixarena-infra-cdk
-nx ls bixarena-infra-cdk
-nx deploy bixarena-infra-cdk
+nx run bixarena-infra-cdk:synth
+nx run bixarena-infra-cdk:ls
+nx run bixarena-infra-cdk:deploy
 
 # Staging
-nx synth bixarena-infra-cdk:stage
-nx ls bixarena-infra-cdk:stage
-nx deploy bixarena-infra-cdk:stage
+nx run bixarena-infra-cdk:synth:stage
+nx run bixarena-infra-cdk:ls:stage
+nx run bixarena-infra-cdk:deploy:stage
 
 # Production
-nx synth bixarena-infra-cdk:prod
-nx ls bixarena-infra-cdk:prod
-nx deploy bixarena-infra-cdk:prod
+nx run bixarena-infra-cdk:synth:prod
+nx run bixarena-infra-cdk:ls:prod
+nx run bixarena-infra-cdk:deploy:prod
 ```
 
 ### Environment Variable Precedence
