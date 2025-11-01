@@ -12,6 +12,7 @@ EXAMPLE_PROMPTS_CSS = """
     align-items: center;
     gap: 16px;
     flex-wrap: nowrap;
+    margin-top: 16px;
 }
 
 #prompt-card-section > .row > .row {
@@ -39,6 +40,9 @@ EXAMPLE_PROMPTS_CSS = """
     align-items: flex-start;
     cursor: pointer;
 }
+
+.nav-button.left { margin-right: 8px; }
+.nav-button.right { margin-left: 8px; }
 
 #prompt-card-section button.prompt-card:hover {
     background: rgba(255, 255, 255, 0.08);

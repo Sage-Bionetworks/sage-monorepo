@@ -162,7 +162,7 @@ class ExamplePromptUI:
                     # Create HTML button with JavaScript to set textbox value
                     html_btn = gr.HTML(
                         self._generate_prompt_button_html(i, p),
-                        elem_classes=["prompt-card-wrapper"],
+                        elem_classes=["prompt-card-wrapper", "footer-no-padding"],
                     )
                     self.prompt_cards.append(html_btn)
             self.next_btn = gr.Button(
