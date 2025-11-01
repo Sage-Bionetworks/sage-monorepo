@@ -21,11 +21,9 @@ spring:
       port: 8116
       database: 1 # Use database 1 for gateway (auth uses 0, api uses 0)
       timeout: 2000ms
-      jedis:
-        pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 2
+      connect-timeout: 5000ms # 5 seconds connection timeout
+      lettuce:
+        shutdown-timeout: 100ms
   cloud:
     gateway:
       default-filters:

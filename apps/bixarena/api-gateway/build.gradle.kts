@@ -8,7 +8,6 @@ dependencies {
   implementation(libs.caffeine)
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
-  implementation(libs.jedis)
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.redis)
   implementation(libs.spring.boot.starter.security)
