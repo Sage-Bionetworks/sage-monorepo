@@ -45,7 +45,10 @@ from bixarena_app.page.battle_page_css import (
     EXAMPLE_PROMPTS_CSS,
     INPUT_PROMPT_CSS,
 )
-from bixarena_app.page.example_prompt_ui import ExamplePromptUI
+from bixarena_app.page.example_prompt_ui import (
+    ExamplePromptUI,
+    PROMPT_CARD_CLICK_JS,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -750,5 +753,8 @@ def build_battle_page():
             example_prompt_ui.refresh_prompts,
             outputs=prompt_outputs,
         )
+
+        # Load JavaScript for prompt card click handlers
+        battle_page.load(lambda: None, None, None, js=PROMPT_CARD_CLICK_JS)
 
     return battle_page, example_prompt_ui, prompt_outputs

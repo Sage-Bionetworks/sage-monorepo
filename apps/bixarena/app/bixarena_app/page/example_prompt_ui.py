@@ -8,6 +8,7 @@ prompt cards with left/right arrow navigation.
 from __future__ import annotations
 
 import logging
+from html import escape
 
 import gradio as gr
 from bixarena_api_client import ApiClient, Configuration, ExamplePromptApi
@@ -19,6 +20,25 @@ from bixarena_api_client.models.example_prompt_sort import ExamplePromptSort
 from bixarena_app.config.utils import _get_api_base_url
 
 logger = logging.getLogger(__name__)
+
+# JavaScript for handling prompt card clicks via event delegation
+PROMPT_CARD_CLICK_JS = """
+() => {
+    document.addEventListener('click', (e) => {
+        const card = e.target.closest('button.prompt-card');
+        if (!card) return;
+
+        const promptText = card.getAttribute('data-prompt');
+        if (!promptText) return;
+
+        const textbox = document.querySelector('#input_box textarea');
+        if (textbox) {
+            textbox.value = promptText;
+            textbox.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }, true);
+}
+"""
 
 
 class ExamplePromptUI:
@@ -57,6 +77,15 @@ class ExamplePromptUI:
                 "What is the role of genetics in heart disease?",
             ]
 
+    # ------------------------- Helper Methods ---------------------------- #
+    @staticmethod
+    def _generate_prompt_button_html(index: int, prompt: str) -> str:
+        """Generate HTML for a prompt card button with data attribute."""
+        escaped_prompt = escape(prompt)
+        return f"""<button class="prompt-card" data-prompt="{escaped_prompt}">
+            <div class="prompt-text">{escaped_prompt}</div>
+        </button>"""
+
     # --------------------------- Navigation Logic ------------------------- #
     def _nav_state_updates(
         self, prompts: list[str], show_group: bool = True
@@ -68,9 +97,13 @@ class ExamplePromptUI:
             interactive=has_history, elem_classes=["nav-button", "left"]
         )
         next_upd = gr.update(interactive=True, elem_classes=["nav-button", "right"])
-        prompt_upds = [gr.update(value=p) for p in prompts]
+        # Update prompt card HTML buttons
+        prompt_card_upds = [
+            gr.update(value=self._generate_prompt_button_html(i, p))
+            for i, p in enumerate(prompts)
+        ]
         group_upd = gr.update(visible=show_group)
-        return [group_upd, prev_upd, next_upd, *prompt_upds]
+        return [group_upd, prev_upd, next_upd, *prompt_card_upds]
 
     def _go_prev(self):  # bound as click handler
         if self.index > 0:
@@ -125,13 +158,13 @@ class ExamplePromptUI:
             )
             with gr.Row():
                 self.prompt_cards = []
-                for p in initial:
-                    with gr.Column(elem_classes=["prompt-card-container"]):
-                        btn = gr.Button(value=p, elem_classes=["prompt-card"])
-                        # Bind value population only if textbox provided now
-                        if textbox is not None:
-                            btn.click(lambda val: val, inputs=[btn], outputs=[textbox])
-                        self.prompt_cards.append(btn)
+                for i, p in enumerate(initial):
+                    # Create HTML button with JavaScript to set textbox value
+                    html_btn = gr.HTML(
+                        self._generate_prompt_button_html(i, p),
+                        elem_classes=["prompt-card-wrapper", "footer-no-padding"],
+                    )
+                    self.prompt_cards.append(html_btn)
             self.next_btn = gr.Button(
                 value="→", elem_classes=["nav-button", "right"], interactive=True
             )
@@ -139,14 +172,16 @@ class ExamplePromptUI:
         # Store group reference for visibility updates
         self.group = group
 
-        # Arrow handlers produce updates for group, prev, next, and each prompt button
+        # Arrow handlers produce updates for group, prev, next, and prompt card buttons
         self.prev_btn.click(
             self._go_prev,
             outputs=[self.group, self.prev_btn, self.next_btn, *self.prompt_cards],
+            show_progress=False,
         )
         self.next_btn.click(
             self._go_next,
             outputs=[self.group, self.prev_btn, self.next_btn, *self.prompt_cards],
+            show_progress=False,
         )
 
         return group, self.prompt_cards, self.prev_btn, self.next_btn

@@ -16,7 +16,6 @@ from bixarena_app.page.bixarena_footer import build_footer
 from bixarena_app.page.bixarena_header import (
     build_header,
     handle_login_click,
-    handle_start_evaluation_click,
     update_battle_button,
     update_login_button,
 )
@@ -311,10 +310,10 @@ def build_app():
         pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(pages)
 
-        # Navigation - also refresh example prompts when navigating to battle page
+        # Navigation - battle page will refresh prompts via its own load handler
         battle_btn.click(
-            lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
-            outputs=pages + prompt_outputs,
+            lambda: navigator.show_page(1),
+            outputs=pages,
         )
         leaderboard_btn.click(
             lambda: navigator.show_page(2) + [load_leaderboard_stats_on_page_load()],
@@ -322,7 +321,7 @@ def build_app():
         )
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(
-            lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
+            lambda: navigator.show_page(1),
             outputs=pages + prompt_outputs,
         )
 
