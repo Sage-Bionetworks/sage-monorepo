@@ -3,6 +3,7 @@ import {
   ComparisonToolColumn,
   ComparisonToolColumns,
   ComparisonToolConfig,
+  ComparisonToolConfigColumn,
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
@@ -91,14 +92,21 @@ export class ComparisonToolService<T> {
     const config = this.currentConfig();
     if (!config) return [];
 
-    const dropdownsToMatch = this.getDropdownsForMatching(config.dropdowns);
+    // Get columns from current config (the source of truth from database)
+    const configColumns = config.columns;
+    if (!configColumns || configColumns.length === 0) return [];
 
-    // Match on dropdowns only (each service instance is page-specific)
-    return (
-      this.columnsForDropdownsSignal().find((c) =>
-        isEqual(this.getDropdownsForMatching(c.dropdowns), dropdownsToMatch),
-      )?.columns ?? []
-    );
+    if (!this.hasDropdowns(config.dropdowns)) {
+      const savedColumns = this.columnsForDropdownsSignal()[0]?.columns;
+      return this.applyColumnPreferences(configColumns, savedColumns);
+    }
+
+    // Find saved column preferences for this EXACT dropdown combination
+    const savedColumns = this.columnsForDropdownsSignal().find((c) =>
+      isEqual(c.dropdowns, config.dropdowns),
+    )?.columns;
+
+    return this.applyColumnPreferences(configColumns, savedColumns);
   });
 
   selectedColumns = computed(() => {
@@ -141,11 +149,26 @@ export class ComparisonToolService<T> {
     const normalizedSelection = this.normalizeSelection(selection ?? [], configs);
     this.updateDropdownSelectionIfChanged(normalizedSelection);
 
-    const columnsData: ComparisonToolColumns[] = this.configs().map((config) => ({
-      dropdowns: config.dropdowns,
-      columns: config.columns.map((column) => ({ ...column, selected: true })),
-    }));
-    this.columnsForDropdownsSignal.set(columnsData);
+    // Initialize columns for dropdowns based on the first config.
+    const firstConfig = configs[0];
+
+    // If there are no dropdowns or only one dropdown, we can just set the columns for that config.
+    if (!this.hasDropdowns(firstConfig.dropdowns)) {
+      const columnsData: ComparisonToolColumns[] = [
+        {
+          dropdowns: [],
+          columns: firstConfig.columns.map((column) => ({ ...column, selected: true })),
+        },
+      ];
+      this.columnsForDropdownsSignal.set(columnsData);
+    } else {
+      // For multiple dropdowns, we need to initialize the columns for each dropdown combination.
+      const columnsData: ComparisonToolColumns[] = this.configs().map((config) => ({
+        dropdowns: config.dropdowns,
+        columns: config.columns.map((column) => ({ ...column, selected: true })),
+      }));
+      this.columnsForDropdownsSignal.set(columnsData);
+    }
   }
 
   setDropdownSelection(selection: string[]) {
@@ -161,18 +184,36 @@ export class ComparisonToolService<T> {
 
     const config = this.currentConfig();
     if (config?.columns && config.columns.length > 0) {
+      if (!this.hasDropdowns(config.dropdowns)) {
+        // No dropdowns: always reset to all columns selected
+        this.columnsForDropdownsSignal.set([
+          {
+            dropdowns: [],
+            columns: config.columns.map((column) => ({ ...column, selected: true })),
+          },
+        ]);
+        return;
+      }
+
+      // For dropdowns, we need to find the matching dropdown combination and update the columns accordingly.
       const currentDropdowns = config.dropdowns;
-      const dropdownsToMatch = this.getDropdownsForMatching(currentDropdowns);
 
       this.columnsForDropdownsSignal.update((columnsData) => {
-        // Match on dropdowns only (each service instance is page-specific)
-        const existingIndex = columnsData.findIndex((c) =>
-          isEqual(this.getDropdownsForMatching(c.dropdowns), dropdownsToMatch),
-        );
+        // Match on EXACT dropdown combination
+        const existingIndex = columnsData.findIndex((c) => isEqual(c.dropdowns, currentDropdowns));
 
-        // If this dropdown combination exists, preserve its column state
+        // If this dropdown combination exists, update it with current config columns
+        // while preserving user preferences
         if (existingIndex !== -1) {
-          return columnsData; // State already exists, don't modify
+          const updatedCols = [...columnsData];
+          updatedCols[existingIndex] = {
+            dropdowns: currentDropdowns,
+            columns: this.applyColumnPreferences(
+              config.columns,
+              columnsData[existingIndex].columns,
+            ),
+          };
+          return updatedCols;
         }
 
         // New dropdown combination - initialize with all columns selected
@@ -276,30 +317,41 @@ export class ComparisonToolService<T> {
     const config = this.currentConfig();
     if (!config) return;
 
-    const currentDropdowns = config.dropdowns;
-    const dropdownsToMatch = this.getDropdownsForMatching(currentDropdowns);
+    const hasCategoryDropdowns = this.hasDropdowns(config.dropdowns);
 
     this.columnsForDropdownsSignal.update((cols) => {
-      // Match on dropdowns only (each service instance is page-specific)
-      const columnsIndex = cols.findIndex((c) =>
-        isEqual(this.getDropdownsForMatching(c.dropdowns), dropdownsToMatch),
-      );
+      // If there are category dropdowns, find the index of the current dropdown combination.
+      // If not, we will always target the first (and only) entry in columnsForDropdowns.
+      const targetIndex = hasCategoryDropdowns
+        ? cols.findIndex((c) => isEqual(c.dropdowns, config.dropdowns))
+        : 0;
 
-      if (columnsIndex !== -1) {
-        const columnsData = cols[columnsIndex];
-        const colIndex = columnsData.columns.findIndex((col) => col.data_key === column.data_key);
+      // If no dropdowns or single dropdown, targetIndex will be 0. If multiple dropdowns, find the matching dropdown combination.
+      if (targetIndex === -1 || targetIndex >= cols.length) return cols;
 
-        if (colIndex !== -1) {
-          const newCols = [...columnsData.columns];
-          newCols[colIndex] = { ...newCols[colIndex], selected: !newCols[colIndex].selected };
-
-          const updatedCols = [...cols];
-          updatedCols[columnsIndex] = { ...columnsData, columns: newCols };
-          return updatedCols;
-        }
-      }
-      return cols;
+      return this.updateColumnSelection(cols, targetIndex, column.data_key);
     });
+  }
+
+  private updateColumnSelection(
+    cols: ComparisonToolColumns[],
+    targetIndex: number,
+    dataKey: string,
+  ): ComparisonToolColumns[] {
+    const columnsData = cols[targetIndex];
+    const colIndex = columnsData.columns.findIndex((col) => col.data_key === dataKey);
+
+    if (colIndex === -1) return cols;
+
+    const updatedColumns = [...columnsData.columns];
+    updatedColumns[colIndex] = {
+      ...updatedColumns[colIndex],
+      selected: !updatedColumns[colIndex].selected,
+    };
+
+    const updatedCols = [...cols];
+    updatedCols[targetIndex] = { ...columnsData, columns: updatedColumns };
+    return updatedCols;
   }
 
   setUnpinnedData(unpinnedData: T[]) {
@@ -353,16 +405,34 @@ export class ComparisonToolService<T> {
   }
 
   /**
-   * Returns the dropdown array slice to use for matching column state.
-   * For arrays with 2+ elements, returns first n-1 elements.
-   * For arrays with 0-1 elements, returns the full array.
+   * Applies saved column selection preferences to config columns.
+   * If no saved preferences exist, all columns are marked as selected.
+   * This ensures we always show the columns from the config, but preserve user's show/hide preferences.
    */
-  private getDropdownsForMatching(dropdowns: string[] | undefined): string[] {
-    const normalized = dropdowns ?? [];
-    if (normalized.length >= 2) {
-      return normalized.slice(0, -1);
+  private applyColumnPreferences(
+    configColumns: ComparisonToolConfigColumn[],
+    savedColumns?: ComparisonToolColumn[],
+  ): ComparisonToolColumn[] {
+    if (!savedColumns?.length) {
+      return configColumns.map((column) => ({ ...column, selected: true }));
     }
-    return normalized;
+
+    const selectionMap = new Map(savedColumns.map((col) => [col.data_key, col.selected]));
+
+    return configColumns.map((column) => ({
+      ...column,
+      selected: selectionMap.get(column.data_key) ?? true,
+    }));
+  }
+
+  /**
+   * Determines if there are category dropdowns present in the config.
+   */
+  private hasDropdowns(dropdowns: string[] | undefined): boolean {
+    if (!dropdowns || dropdowns.length === 0) {
+      return false;
+    }
+    return dropdowns.length >= 1;
   }
 
   setSort(sortField: string | undefined, sortOrder: number | undefined) {

@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  effect,
   ElementRef,
   HostListener,
   inject,
@@ -55,6 +56,16 @@ export class ComparisonToolTableComponent implements AfterViewInit {
         '--comparison-tool-primary-column-width',
       ),
     );
+
+    // Recalculate column widths whenever selected columns change
+    effect(() => {
+      // Access selectedColumns to track changes
+      this.selectedColumns();
+      // Recalculate widths on next tick to ensure DOM is updated
+      setTimeout(() => {
+        this.onWindowResize();
+      }, 0);
+    });
   }
 
   ngAfterViewInit() {
