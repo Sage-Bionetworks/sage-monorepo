@@ -46,8 +46,8 @@ from bixarena_app.page.battle_page_css import (
     INPUT_PROMPT_CSS,
 )
 from bixarena_app.page.example_prompt_ui import (
-    ExamplePromptUI,
     PROMPT_CARD_CLICK_JS,
+    ExamplePromptUI,
 )
 
 logger = logging.getLogger(__name__)
@@ -509,7 +509,7 @@ def build_side_by_side_ui_anony():
     example_prompt_ui = ExamplePromptUI()
 
     # Page content
-    with gr.Column(elem_classes=["content-wrapper"]):
+    with gr.Column():
         gr.HTML(page_header_html)
         # Example prompts (cards + arrows) now provided by helper (textbox bound later)
         # Start with empty prompts - will be loaded when page is navigated to

@@ -235,11 +235,6 @@ def build_app():
     with gr.Blocks(
         title="BixArena - Biomedical LLM Evaluation",
         css="""
-        .content-wrapper {
-            padding: 0 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
         /* Hide Gradio's default footer */
         footer {
             display: none !important;
@@ -250,6 +245,9 @@ def build_app():
         }
         .page-content {
             min-height: calc(100vh - 200px);
+            padding: 0 40px;
+            max-width: 1440px;
+            margin: 0 auto;
         }
         """,
     ) as demo:
