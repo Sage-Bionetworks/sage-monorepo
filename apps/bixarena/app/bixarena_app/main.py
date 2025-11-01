@@ -308,18 +308,18 @@ def build_app():
         pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(pages)
 
-        # Navigation - also refresh example prompts when navigating to battle page
+        # Navigation - battle page will refresh prompts via its own load handler
         battle_btn.click(
-            lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
-            outputs=pages + prompt_outputs,
+            lambda: navigator.show_page(1),
+            outputs=pages,
         )
         leaderboard_btn.click(
             lambda: navigator.show_page(2) + [load_leaderboard_stats_on_page_load()],
             outputs=pages + [leaderboard_metrics],
         )
         cta_btn.click(
-            lambda: navigator.show_page(1) + example_prompt_ui.refresh_prompts(),
-            outputs=pages + prompt_outputs,
+            lambda: navigator.show_page(1),
+            outputs=pages,
         )
 
         # Login
