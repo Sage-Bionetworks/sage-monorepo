@@ -250,12 +250,13 @@ def bot_response_multi(
                 stop = False
             except StopIteration:
                 pass
+        # State 2: Models streaming responses
         yield (
-            states
-            + [battle_session]
-            + chatbots
-            + [disable_btn] * 4
-            + [gr.Row(visible=False)]
+            states  # state0, state1: streaming
+            + [battle_session]  # battle_session: unchanged
+            + chatbots  # chatbot0, chatbot1: show streaming text with "▌"
+            + [disable_btn] * 4  # leftvote, rightvote, tie, clear_btn: disable
+            + [gr.Row(visible=False)]  # next_battle_row: hide
         )
         if stop:
             break
@@ -263,21 +264,26 @@ def bot_response_multi(
     cookies = get_session_cookie(request) if request else None
     _update_battle_round_with_responses(states[0], states[1], battle_session, cookies)
 
-    # At least one model had an error -> keep voting buttons disabled, show next_battle_row
+    # State 3B: Error occurred
     if any(state.has_error for state in states):
         yield (
-            states
-            + [battle_session]
-            + chatbots
-            + [disable_btn, disable_btn, disable_btn, enable_btn]
-            + [gr.Row(visible=True)]  # show next_battle_row on error
+            states  # state0, state1: error state
+            + [battle_session]  # battle_session: unchanged
+            + chatbots  # chatbot0, chatbot1: show error message
+            + [
+                disable_btn,
+                disable_btn,
+                disable_btn,
+                enable_btn,
+            ]  # leftvote, rightvote, tie: disable; clear_btn: enable
+            + [gr.Row(visible=True)]  # next_battle_row: show
         )
     else:
-        # Both models succeeded -> enable voting, hide next_battle_row
+        # State 3A: Both models succeeded
         yield (
-            states
-            + [battle_session]
-            + chatbots
-            + [enable_btn] * 4
-            + [gr.Row(visible=False)]
+            states  # state0, state1: complete
+            + [battle_session]  # battle_session: unchanged
+            + chatbots  # chatbot0, chatbot1: show complete responses
+            + [enable_btn] * 4  # leftvote, rightvote, tie, clear_btn: enable
+            + [gr.Row(visible=False)]  # next_battle_row: hide
         )

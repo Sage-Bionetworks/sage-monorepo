@@ -214,6 +214,7 @@ def vote_last_response(
         end_battle(battle_session.battle_id, cookies)
         battle_session.reset()
 
+    # State 4: User voted
     if ":" not in model_selectors[0]:
         for _ in range(5):
             names = (
@@ -221,15 +222,15 @@ def vote_last_response(
                 "### Model 2: " + states[1].model_name,
             )
             yield (
-                names
+                names  # model_selector0, model_selector1: reveal model names
                 + (
                     gr.update(
                         interactive=False, placeholder="Ready for the next battle?"
                     ),
-                )
-                + (disable_btn,) * 3
-                + (enable_btn,)
-                + (gr.Row(visible=True),)  # show next_battle_row after voting
+                )  # textbox: disable
+                + (disable_btn,) * 3  # leftvote, rightvote, tie: disable
+                + (enable_btn,)  # clear_btn: enable
+                + (gr.Row(visible=True),)  # next_battle_row: show
             )
             time.sleep(0.1)
     else:
@@ -238,11 +239,13 @@ def vote_last_response(
             "### Model 2: " + states[1].model_name,
         )
         yield (
-            names
-            + (gr.update(interactive=False, placeholder="Ready for the next battle?"),)
-            + (disable_btn,) * 3
-            + (enable_btn,)
-            + (gr.Row(visible=True),)  # show next_battle_row after voting
+            names  # model_selector0, model_selector1: reveal model names
+            + (
+                gr.update(interactive=False, placeholder="Ready for the next battle?"),
+            )  # textbox: disable
+            + (disable_btn,) * 3  # leftvote, rightvote, tie: disable
+            + (enable_btn,)  # clear_btn: enable
+            + (gr.Row(visible=True),)  # next_battle_row: show
         )
 
 
@@ -317,22 +320,23 @@ def clear_history(
 
     battle_session.reset()
 
+    # State 0: Reset to initial (Next Battle clicked or page load)
     base_outputs = (
-        [None] * num_sides  # states
-        + [battle_session]
-        + [None] * num_sides  # chatbots
-        + anony_names  # model_selectors
+        [None] * num_sides  # state0, state1: reset
+        + [battle_session]  # battle_session: reset
+        + [None] * num_sides  # chatbot0, chatbot1: clear
+        + anony_names  # model_selector0, model_selector1: clear names
         + [
             gr.update(
                 value="", interactive=True, placeholder="Ask anything biomedical..."
             )
-        ]  # re-enable textbox
-        + [invisible_btn] * 3  # voting buttons (leftvote, rightvote, tie)
-        + [disable_btn] * 1  # clear button
-        + [""]  # slow_warning
-        + [gr.Group(visible=False)]  # hide battle_interface
-        + [gr.Row(visible=False)]  # hide voting_row
-        + [gr.Row(visible=False)]  # hide next_battle_row
+        ]  # textbox: enable
+        + [invisible_btn] * 3  # leftvote, rightvote, tie: hide
+        + [disable_btn]  # clear_btn: disable
+        + [""]  # slow_warning: clear
+        + [gr.Group(visible=False)]  # battle_interface: hide
+        + [gr.Row(visible=False)]  # voting_row: hide
+        + [gr.Row(visible=False)]  # next_battle_row: hide
     )
 
     # If example_prompt_ui is provided, also refresh the prompts
@@ -362,27 +366,27 @@ def add_text(
         assert states[1] is None
         battle_session.reset()
 
+    # State: Edge case - empty text submitted
     if len(text) <= 0:
         if states[0] is not None:
             for i in range(num_sides):
                 states[i].skip_next = True
         return (
-            states
-            + [battle_session]
-            + [x.to_gradio_chatbot() if x else [] for x in states]
-            + [""]
+            states  # state0, state1: unchanged
+            + [battle_session]  # battle_session: unchanged
             + [
-                no_change_btn,
-            ]
-            * 4
-            + [""]  # slow_warning
-            + [gr.Group(visible=False)]  # keep battle_interface hidden
-            + [gr.Row(visible=False)]  # keep voting_row hidden
-            + [gr.Row(visible=False)]  # keep next_battle_row hidden
-            + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
+                x.to_gradio_chatbot() if x else [] for x in states
+            ]  # chatbot0, chatbot1: unchanged
+            + [""]  # textbox: clear
+            + [no_change_btn] * 4  # all buttons: no change
+            + [""]  # slow_warning: clear
+            + [gr.Group(visible=False)]  # battle_interface: hide
+            + [gr.Row(visible=False)]  # voting_row: hide
+            + [gr.Row(visible=False)]  # next_battle_row: hide
+            + [gr.Column(visible=True)]  # example_prompts_group: show
         )
 
-    # Check battle round limit only if states are initialized
+    # State: Edge case - battle round limit reached
     if states[0] is not None:
         conv = states[0].conv
         if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
@@ -396,21 +400,16 @@ def add_text(
                     states[i].conv.append_message("assistant", round_limit_msg)
                     states[i].skip_next = True
             return (
-                states
-                + [battle_session]
-                + [x.to_gradio_chatbot() for x in states]
-                + [""]
-                + [
-                    no_change_btn,
-                ]
-                * 4
-                + [""]  # slow_warning
-                + [
-                    gr.Group(visible=True)
-                ]  # show battle_interface (conversation exists)
-                + [gr.Row(visible=True)]  # show voting_row
-                + [gr.Row(visible=True)]  # show next_battle_row
-                + [gr.Column(visible=False)]  # hide suggested_prompts_group
+                states  # state0, state1: updated with error msg
+                + [battle_session]  # battle_session: unchanged
+                + [x.to_gradio_chatbot() for x in states]  # chatbots: show limit msg
+                + [""]  # textbox: clear
+                + [no_change_btn] * 4  # all buttons: no change
+                + [""]  # slow_warning: clear
+                + [gr.Group(visible=True)]  # battle_interface: show
+                + [gr.Row(visible=True)]  # voting_row: show
+                + [gr.Row(visible=True)]  # next_battle_row: show (error state)
+                + [gr.Column(visible=False)]  # example_prompts_group: hide
             )
 
     text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
@@ -429,25 +428,27 @@ def add_text(
                 State(model2),
             ]
         else:
-            # Failed to create battle, return error state
+            # State: Edge case - failed to create battle
             logger.error("Failed to create battle - cannot proceed")
             return (
-                [state0, state1]
-                + [battle_session]
-                + [x.to_gradio_chatbot() if x else [] for x in [state0, state1]]
+                [state0, state1]  # state0, state1: unchanged
+                + [battle_session]  # battle_session: unchanged
+                + [
+                    x.to_gradio_chatbot() if x else [] for x in [state0, state1]
+                ]  # chatbot0, chatbot1: unchanged
                 + [
                     gr.update(
                         value="",
                         interactive=True,
                         placeholder="Error creating battle. Please try again.",
                     )
-                ]
-                + [no_change_btn] * 4
-                + [""]  # slow_warning
-                + [gr.Group(visible=False)]  # keep battle_interface hidden
-                + [gr.Row(visible=False)]  # keep voting_row hidden
-                + [gr.Row(visible=False)]  # keep next_battle_row hidden
-                + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
+                ]  # textbox: clear with error message
+                + [no_change_btn] * 4  # leftvote, rightvote, tie, clear_btn: no change
+                + [""]  # slow_warning: clear
+                + [gr.Group(visible=False)]  # battle_interface: hide
+                + [gr.Row(visible=False)]  # voting_row: hide
+                + [gr.Row(visible=False)]  # next_battle_row: hide
+                + [gr.Column(visible=True)]  # example_prompts_group: show
             )
     battle_id = battle_session.battle_id
 
@@ -466,22 +467,18 @@ def add_text(
     for i in range(num_sides):
         if "deluxe" in states[i].model_name:
             hint_msg = SLOW_MODEL_MSG
+    # State 1: User submits prompt (battle started)
     return (
-        states
-        + [battle_session]
-        + [x.to_gradio_chatbot() for x in states]
-        + [gr.update(value="", placeholder="Ask followups...")]
-        + [
-            disable_btn,
-        ]
-        * 4
-        + [hint_msg]
-        + [gr.Group(visible=True)]  # show battle_interface
-        + [gr.Row(visible=True)]  # show voting_row
-        + [
-            gr.Row(visible=False)
-        ]  # hide next_battle_row (only show after vote or error)
-        + [gr.Column(visible=False)]  # hide example_prompts_group
+        states  # state0, state1: updated with prompt
+        + [battle_session]  # battle_session: updated with battle_id, round_id
+        + [x.to_gradio_chatbot() for x in states]  # chatbot0, chatbot1: show prompt
+        + [gr.update(value="", placeholder="Ask followups...")]  # textbox: clear
+        + [disable_btn] * 4  # leftvote, rightvote, tie, clear_btn: disable
+        + [hint_msg]  # slow_warning: show if deluxe model
+        + [gr.Group(visible=True)]  # battle_interface: show
+        + [gr.Row(visible=True)]  # voting_row: show
+        + [gr.Row(visible=False)]  # next_battle_row: hide
+        + [gr.Column(visible=False)]  # example_prompts_group: hide
     )
 
 
