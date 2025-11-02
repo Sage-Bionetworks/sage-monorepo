@@ -24,7 +24,6 @@ EXAMPLE_PROMPTS_CSS = """
 /* Example prompt card wrapper */
 #prompt-card-section .prompt-card-wrapper {
     flex: 1 1 0;
-    min-width: 320px;
 }
 
 /* Example prompt card button */
@@ -40,9 +39,6 @@ EXAMPLE_PROMPTS_CSS = """
     align-items: flex-start;
     cursor: pointer;
 }
-
-.nav-button.left { margin-right: 8px; }
-.nav-button.right { margin-left: 8px; }
 
 #prompt-card-section button.prompt-card:hover {
     background: rgba(255, 255, 255, 0.08);
@@ -93,6 +89,48 @@ EXAMPLE_PROMPTS_CSS = """
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
+}
+
+/* Mobile responsive layout */
+@media (max-width: 640px) {
+    /* Stack outer container vertically and hide arrows */
+    #prompt-card-section > .row {
+        flex-direction: column;
+    }
+
+    /* Hide navigation arrows on mobile */
+    #prompt-card-section > .row > button.nav-button {
+        display: none !important;
+    }
+
+    /* Stack cards vertically on mobile */
+    #prompt-card-section > .row > .row {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    /* Override Gradio's hide-container class - force all cards visible */
+    #prompt-card-section .hide-container {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* Full width cards on mobile - force visibility */
+    #prompt-card-section .prompt-card-wrapper {
+        width: 100%;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* Force all cards to be visible */
+    #prompt-card-section button.prompt-card {
+        display: flex !important;
+        visibility: visible !important;
+    }
 }
 """
 
