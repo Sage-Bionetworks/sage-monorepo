@@ -91,8 +91,8 @@ EXAMPLE_PROMPTS_CSS = """
     pointer-events: none;
 }
 
-/* Mobile responsive layout */
-@media (max-width: 640px) {
+/* Responsive layout */
+@media (max-width: 1024px) {
     /* Stack outer container vertically and hide arrows */
     #prompt-card-section > .row {
         flex-direction: column;
@@ -139,7 +139,7 @@ INPUT_PROMPT_CSS = """
 /* Container for the input textbox - limit width and center */
 #input_box.prompt_input {
     background: var(--background-fill-primary);
-    max-width: 700px;
+    max-width: 900px;
     margin: 0 auto;
     width: 100%;
 }
@@ -156,7 +156,7 @@ INPUT_PROMPT_CSS = """
 
 /* Also limit the parent row container */
 .row:has(#input_box.prompt_input) {
-    max-width: 700px;
+    max-width: 900px;
     margin: 0 auto;
 }
 """
