@@ -1,26 +1,13 @@
-"""BixArena Infrastructure CDK package."""
+"""BixArena Infrastructure CDK package.
 
-from .app import build_app
-from .ecs_stack import EcsStack
-from .load_balancer_stack import LoadBalancerStack
-from .network_stack import NetworkStack
-from .service_props import (
-    CONTAINER_LOCATION_PATH_ID,
-    ContainerVolume,
-    ServiceProps,
-    ServiceSecret,
-)
-from .service_stack import LoadBalancedServiceStack, ServiceStack
+This package contains AWS CDK infrastructure code for deploying BixArena
+across multiple environments (dev, stage, prod).
 
-__all__ = [
-    "build_app",
-    "EcsStack",
-    "LoadBalancerStack",
-    "NetworkStack",
-    "ServiceProps",
-    "ServiceSecret",
-    "ContainerVolume",
-    "ServiceStack",
-    "LoadBalancedServiceStack",
-    "CONTAINER_LOCATION_PATH_ID",
-]
+Structure:
+- dev/app.py: Development environment CDK app
+- stage/app.py: Staging environment CDK app
+- prod/app.py: Production environment CDK app
+- shared/: Shared libraries, constructs, and stacks
+"""
+
+__version__ = "1.0.0"
