@@ -1524,7 +1524,7 @@ components:
         question:
           description: The biomedical question text.
           example: What are the main symptoms of Type 2 diabetes?
-          maxLength: 1000
+          maxLength: 160
           minLength: 1
           type: string
         source:

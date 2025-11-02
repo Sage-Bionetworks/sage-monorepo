@@ -10,7 +10,7 @@ EXAMPLE_PROMPTS_CSS = """
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     flex-wrap: nowrap;
     margin-top: 16px;
 }
@@ -18,14 +18,13 @@ EXAMPLE_PROMPTS_CSS = """
 #prompt-card-section > .row > .row {
     flex: 1 1 auto;
     min-width: 0;
-    gap: 16px;
+    gap: 12px;
 }
 
 /* Example prompt card wrapper */
 #prompt-card-section .prompt-card-wrapper {
     flex: 1 1 0;
     min-width: 320px;
-    max-width: 450px;
 }
 
 /* Example prompt card button */
@@ -36,7 +35,7 @@ EXAMPLE_PROMPTS_CSS = """
     padding: 12px 16px;
     transition: all 0.2s ease;
     width: 100%;
-    height: 115px;
+    height: 87px;
     display: flex;
     align-items: flex-start;
     cursor: pointer;
@@ -54,10 +53,10 @@ EXAMPLE_PROMPTS_CSS = """
 #prompt-card-section button.prompt-card .prompt-text {
     text-align: left;
     font-size: 14px;
-    line-height: 1.45;
+    line-height: 1.5;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     overflow: hidden;
 }
 

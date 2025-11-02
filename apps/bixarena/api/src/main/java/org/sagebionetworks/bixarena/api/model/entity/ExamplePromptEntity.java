@@ -27,7 +27,7 @@ public class ExamplePromptEntity {
   @Column(name = "id")
   private UUID id;
 
-  @Column(name = "question", nullable = false, length = 1000)
+  @Column(name = "question", nullable = false, length = 160)
   private String question;
 
   @Column(name = "source", nullable = false, length = 100)

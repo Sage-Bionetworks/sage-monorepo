@@ -246,7 +246,7 @@ def build_app():
         .page-content {
             min-height: calc(100vh - 200px);
             padding: 0 40px;
-            max-width: 1440px;
+            max-width: 1400px;
             margin: 0 auto;
         }
         """,
