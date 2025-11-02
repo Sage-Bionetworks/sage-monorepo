@@ -42,7 +42,7 @@ def main() -> None:
         cdk.Tags.of(app).add("Developer", developer_name)
 
     # Create VPC stack
-    # Dev uses 1 NAT gateway for cost optimization (~$32/month vs ~$65/month)
+    # Dev uses 1 NAT gateway for cost optimization (cheaper but single point of failure)
     vpc_stack = VpcStack(
         app,
         f"{stack_prefix}-vpc",

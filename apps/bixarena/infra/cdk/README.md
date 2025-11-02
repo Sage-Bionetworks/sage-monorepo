@@ -197,12 +197,12 @@ This phase deploys the core networking infrastructure and application load balan
 
   - **Development**: 1 NAT Gateway
 
-    - Cost-optimized: ~$32.50/month
+    - Cost-optimized configuration
     - Trade-off: Single point of failure for internet access from private subnets
     - Suitable for dev/test environments where cost is prioritized over uptime
 
   - **Stage/Production**: NAT Gateways = Number of Availability Zones (default: 2)
-    - High availability: ~$32.50/month per NAT Gateway
+    - High availability configuration (more expensive but redundant)
     - One NAT Gateway per AZ ensures redundancy
     - If one NAT or AZ fails, the other continues to provide internet access
     - Recommended for production workloads requiring high uptime
