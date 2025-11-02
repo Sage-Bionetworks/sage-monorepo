@@ -1,16 +1,22 @@
--- Insert example prompt records
+-- Insert example prompt records (sorted alphabetically by question)
 INSERT INTO api.example_prompt (id, question, source, active, created_at) VALUES
   ('01111111-1111-1111-1111-111111111111', 'Are serum leptin levels a prognostic factor in advanced lung cancer?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('0aaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Can the condition of the cell microenvironment of mediastinal lymph nodes help predict the risk of metastases in non-small cell lung cancer?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
   ('03333333-3333-3333-3333-333333333333', 'Compare and contrast marker-gene versus whole-genome alignment approaches for metagenomic taxonomic profiling.', 'bixarena', TRUE, '2025-10-30 00:00:00+00'),
   ('04444444-4444-4444-4444-444444444444', 'Do mutations causing low HDL-C promote increased carotid intima-media thickness?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('02222222-2222-2222-2222-222222222222', 'Do preoperative serum C-reactive protein levels predict the definitive pathological stage in patients with clinically localized prostate cancer?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('06666666-6666-6666-6666-666666666666', 'Does HER2 immunoreactivity provide prognostic information in locally advanced urothelial carcinoma patients receiving adjuvant M-VEC chemotherapy?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
   ('05555555-5555-5555-5555-555555555555', 'Does hypoglycaemia increase the risk of cardiovascular events?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('07777777-7777-7777-7777-777777777777', 'Does the lipid-lowering peroxisome proliferator-activated receptors ligand bezafibrate prevent colon cancer in patients with coronary artery disease?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
   ('08888888-8888-8888-8888-888888888888', 'HIF1A as a major vascular endothelial growth factor regulator: do its polymorphisms have an association with age-related macular degeneration?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
   ('09999999-9999-9999-9999-999999999999', 'How would you compute the Bonferroni corrected p-value for a genetics study?', 'bixarena', TRUE, '2025-10-30 00:00:00+00'),
   ('0fffffff-ffff-ffff-ffff-ffffffffffff', 'I need to convert a set of VCF files into a PLINK-formatted .bed, .bim, and .fam file set. What is the command-line tool and syntax to do this correctly?', 'bixarena', TRUE, '2025-10-30 00:00:00+00'),
   ('12222222-2222-2222-2222-222222222222', 'Is Alveolar Macrophage Phagocytic Dysfunction in Children With Protracted Bacterial Bronchitis a Forerunner to Bronchiectasis?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
   ('13333333-3333-3333-3333-333333333333', 'Is CA72-4 a useful biomarker in differential diagnosis between ovarian endometrioma and epithelial ovarian cancer?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('10000000-0000-0000-0000-000000000000', 'Is first-line single-agent mitoxantrone in the treatment of high-risk metastatic breast cancer patients as effective as combination chemotherapy?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
   ('14444444-4444-4444-4444-444444444444', 'Is human cytomegalovirus infection associated with hypertension?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
   ('15555555-5555-5555-5555-555555555555', 'Is late-night salivary cortisol a better screening test for possible cortisol excess than standard screening tests in obese patients with Type 2 diabetes?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
   ('16666666-6666-6666-6666-666666666666', 'Is non-HDL-cholesterol a better predictor of long-term outcome in patients after acute myocardial infarction compared to LDL-cholesterol?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
-  ('19999999-9999-9999-9999-999999999999', 'What are the key differences between whole-genome sequencing (WGS) and whole-exome sequencing (WES)', 'bixarena', TRUE, '2025-10-30 00:00:00+00'),
+  ('11111111-1111-1111-1111-111111111111', 'Is there a uniform basal endometrial gene expression profile during the implantation window in women who became pregnant in a subsequent ICSI cycle?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('19999999-9999-9999-9999-999999999999', 'What are the key differences between whole-genome sequencing (WGS) and whole-exome sequencing (WES)?', 'bixarena', TRUE, '2025-10-30 00:00:00+00'),
   ('1fffffff-ffff-ffff-ffff-ffffffffffff', 'Women with synchronous primary cancers of the endometrium and ovary: do they have Lynch syndrome?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00');
