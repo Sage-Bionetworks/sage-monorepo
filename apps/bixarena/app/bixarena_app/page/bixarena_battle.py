@@ -35,10 +35,6 @@ from bixarena_app.model.model_response import (
     BattleSession,
     State,
     bot_response_multi,
-    disable_btn,
-    enable_btn,
-    invisible_btn,
-    no_change_btn,
 )
 from bixarena_app.page.battle_page_css import (
     DISCLAIMER_CSS,
@@ -228,9 +224,10 @@ def vote_last_response(
                         interactive=False, placeholder="Ready for the next battle?"
                     ),
                 )  # textbox: disable
-                + (disable_btn,) * 3  # leftvote, rightvote, tie: disable
-                + (enable_btn,)  # clear_btn: enable
+                + (gr.Row(visible=False),)  # voting_row: hide
                 + (gr.Row(visible=True),)  # next_battle_row: show
+                + (gr.HTML(visible=False),)  # page_header: hide
+                + (gr.Row(visible=False),)  # textbox_row: hide
             )
             time.sleep(0.1)
     else:
@@ -243,9 +240,10 @@ def vote_last_response(
             + (
                 gr.update(interactive=False, placeholder="Ready for the next battle?"),
             )  # textbox: disable
-            + (disable_btn,) * 3  # leftvote, rightvote, tie: disable
-            + (enable_btn,)  # clear_btn: enable
+            + (gr.Row(visible=False),)  # voting_row: hide
             + (gr.Row(visible=True),)  # next_battle_row: show
+            + (gr.HTML(visible=False),)  # page_header: hide
+            + (gr.Row(visible=False),)  # textbox_row: hide
         )
 
 
@@ -331,12 +329,12 @@ def clear_history(
                 value="", interactive=True, placeholder="Ask anything biomedical..."
             )
         ]  # textbox: enable
-        + [invisible_btn] * 3  # leftvote, rightvote, tie: hide
-        + [disable_btn]  # clear_btn: disable
         + [""]  # slow_warning: clear
         + [gr.Group(visible=False)]  # battle_interface: hide
         + [gr.Row(visible=False)]  # voting_row: hide
         + [gr.Row(visible=False)]  # next_battle_row: hide
+        + [gr.HTML(visible=True)]  # page_header: show
+        + [gr.Row(visible=True)]  # textbox_row: show
     )
 
     # If example_prompt_ui is provided, also refresh the prompts
@@ -378,12 +376,13 @@ def add_text(
                 x.to_gradio_chatbot() if x else [] for x in states
             ]  # chatbot0, chatbot1: unchanged
             + [""]  # textbox: clear
-            + [no_change_btn] * 4  # all buttons: no change
             + [""]  # slow_warning: clear
             + [gr.Group(visible=False)]  # battle_interface: hide
             + [gr.Row(visible=False)]  # voting_row: hide
             + [gr.Row(visible=False)]  # next_battle_row: hide
             + [gr.Column(visible=True)]  # example_prompts_group: show
+            + [gr.HTML(visible=True)]  # page_header: show
+            + [gr.Row(visible=True)]  # textbox_row: show
         )
 
     # State: Edge case - battle round limit reached
@@ -404,12 +403,13 @@ def add_text(
                 + [battle_session]  # battle_session: unchanged
                 + [x.to_gradio_chatbot() for x in states]  # chatbots: show limit msg
                 + [""]  # textbox: clear
-                + [no_change_btn] * 4  # all buttons: no change
                 + [""]  # slow_warning: clear
                 + [gr.Group(visible=True)]  # battle_interface: show
                 + [gr.Row(visible=True)]  # voting_row: show
                 + [gr.Row(visible=True)]  # next_battle_row: show (error state)
                 + [gr.Column(visible=False)]  # example_prompts_group: hide
+                + [gr.HTML(visible=False)]  # page_header: hide
+                + [gr.Row(visible=True)]  # textbox_row: show
             )
 
     text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
@@ -443,12 +443,13 @@ def add_text(
                         placeholder="Error creating battle. Please try again.",
                     )
                 ]  # textbox: clear with error message
-                + [no_change_btn] * 4  # leftvote, rightvote, tie, clear_btn: no change
                 + [""]  # slow_warning: clear
                 + [gr.Group(visible=False)]  # battle_interface: hide
                 + [gr.Row(visible=False)]  # voting_row: hide
                 + [gr.Row(visible=False)]  # next_battle_row: hide
                 + [gr.Column(visible=True)]  # example_prompts_group: show
+                + [gr.HTML(visible=True)]  # page_header: show
+                + [gr.Row(visible=True)]  # textbox_row: show
             )
     battle_id = battle_session.battle_id
 
@@ -473,12 +474,13 @@ def add_text(
         + [battle_session]  # battle_session: updated with battle_id, round_id
         + [x.to_gradio_chatbot() for x in states]  # chatbot0, chatbot1: show prompt
         + [gr.update(value="", placeholder="Ask followups...")]  # textbox: clear
-        + [disable_btn] * 4  # leftvote, rightvote, tie, clear_btn: disable
         + [hint_msg]  # slow_warning: show if deluxe model
         + [gr.Group(visible=True)]  # battle_interface: show
         + [gr.Row(visible=True)]  # voting_row: show
         + [gr.Row(visible=False)]  # next_battle_row: hide
         + [gr.Column(visible=False)]  # example_prompts_group: hide
+        + [gr.HTML(visible=False)]  # page_header: hide
+        + [gr.Row(visible=True)]  # textbox_row: show
     )
 
 
@@ -508,7 +510,7 @@ def build_side_by_side_ui_anony():
 
     # Page content
     with gr.Column(elem_classes=["content-wrapper"]):
-        gr.HTML(page_header_html)
+        page_header = gr.HTML(page_header_html, visible=True)
         # Example prompts (cards + arrows) now provided by helper (textbox bound later)
         # Start with empty prompts - will be loaded when page is navigated to
         (
@@ -552,17 +554,12 @@ def build_side_by_side_ui_anony():
 
         # Voting buttons
         with gr.Row(visible=False) as voting_row:
-            leftvote_btn = gr.Button(
-                value="A is better 👈 ", visible=False, interactive=False
-            )
-            tie_btn = gr.Button(value="🤝 Tie", visible=False, interactive=False)
-
-            rightvote_btn = gr.Button(
-                value="👉 B is better", visible=False, interactive=False
-            )
+            leftvote_btn = gr.Button(value="A is better 👈 ")
+            tie_btn = gr.Button(value="🤝 Tie")
+            rightvote_btn = gr.Button(value="👉 B is better")
 
         # Prompt input - always visible, centered with 80% width via CSS
-        with gr.Row():
+        with gr.Row(visible=True) as textbox_row:
             textbox = gr.Textbox(
                 show_label=False,
                 placeholder="Ask anything biomedical...",
@@ -575,7 +572,7 @@ def build_side_by_side_ui_anony():
             with gr.Column(scale=2):
                 gr.HTML("")
             with gr.Column(scale=1):
-                clear_btn = gr.Button(value="🧪 Next Battle", interactive=False)
+                clear_btn = gr.Button(value="Next Battle", variant="primary")
             with gr.Column(scale=2):
                 gr.HTML("")
 
@@ -598,26 +595,26 @@ def build_side_by_side_ui_anony():
         )
 
     # Register listeners
-    btn_list = [
-        leftvote_btn,
-        rightvote_btn,
-        tie_btn,
-        clear_btn,
-    ]
     leftvote_btn.click(
         leftvote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors + [textbox] + btn_list + [next_battle_row],
+        model_selectors
+        + [textbox]
+        + [voting_row, next_battle_row, page_header, textbox_row],
     )
     rightvote_btn.click(
         rightvote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors + [textbox] + btn_list + [next_battle_row],
+        model_selectors
+        + [textbox]
+        + [voting_row, next_battle_row, page_header, textbox_row],
     )
     tie_btn.click(
         tievote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors + [textbox] + btn_list + [next_battle_row],
+        model_selectors
+        + [textbox]
+        + [voting_row, next_battle_row, page_header, textbox_row],
     )
     clear_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
@@ -626,10 +623,9 @@ def build_side_by_side_ui_anony():
         + [battle_session]
         + chatbots
         + model_selectors
-        + [textbox]
-        + btn_list
-        + [slow_warning]
+        + [textbox, slow_warning]
         + [battle_interface, voting_row, next_battle_row]
+        + [page_header, textbox_row]
         + [example_prompts_group, prev_btn, next_btn]
         + prompt_cards,
     )
@@ -677,10 +673,9 @@ def build_side_by_side_ui_anony():
         states
         + [battle_session]
         + chatbots
-        + [textbox]
-        + btn_list
-        + [slow_warning]
-        + [battle_interface, voting_row, next_battle_row, example_prompts_group],
+        + [textbox, slow_warning]
+        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
+        + [page_header, textbox_row],
     ).then(
         lambda: None,  # Disable enter key
         [],
@@ -689,7 +684,10 @@ def build_side_by_side_ui_anony():
     ).then(
         bot_response_multi,
         states + [battle_session],
-        states + [battle_session] + chatbots + btn_list + [next_battle_row],
+        states
+        + [battle_session]
+        + chatbots
+        + [next_battle_row, page_header, textbox_row],
     ).then(
         lambda: None,  # Enable enter key
         [],
@@ -707,10 +705,9 @@ def build_side_by_side_ui_anony():
             states
             + [battle_session]
             + chatbots
-            + [textbox]
-            + btn_list
-            + [slow_warning]
-            + [battle_interface, voting_row, next_battle_row, example_prompts_group],
+            + [textbox, slow_warning]
+            + [battle_interface, voting_row, next_battle_row, example_prompts_group]
+            + [page_header, textbox_row],
         ).then(
             lambda: None,
             [],
@@ -719,7 +716,10 @@ def build_side_by_side_ui_anony():
         ).then(
             bot_response_multi,
             states + [battle_session],
-            states + [battle_session] + chatbots + btn_list + [next_battle_row],
+            states
+            + [battle_session]
+            + chatbots
+            + [next_battle_row, page_header, textbox_row],
         ).then(
             lambda: None,
             [],
