@@ -10,112 +10,94 @@ TODO
 
 ### Prerequisites
 
-- AWS CLI configured with appropriate credentials
+- AWS CLI installed
 - Python 3.11 or later
 - Node.js and pnpm (for Nx commands)
 
-### Environment Configuration
+### Setup Instructions
 
-The project uses environment variables for configuration. Nx automatically loads variables from `.env` files based on the target configuration.
+#### 1. Configure AWS SSO
 
-#### Development Environment
-
-For the development environment, you must set `DEVELOPER_NAME` to create unique resource names:
+Create the AWS config file `~/.aws/config` (the `~/.aws` directory may not exist yet):
 
 ```bash
-# .env.dev
-DEVELOPER_NAME=jsmith
+mkdir -p ~/.aws
+cat > ~/.aws/config << 'EOF'
+[sso-session org-sagebase]
+sso_start_url = https://d-906769aa66.awsapps.com/start
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access
+
+[profile bixarena-dev-Developer]
+sso_session = org-sagebase
+sso_account_id = 864020296088
+sso_role_name = Developer
+region = us-east-1
+output = json
+cli_pager =
+EOF
 ```
 
-Resources will be named with the pattern: `bixarena-dev-{developer-name}-{resource}`
-
-#### Stage and Production Environments
-
-No developer name is required for stage and production. Resources use the pattern: `bixarena-{env}-{resource}`
-
-### Synthesize CloudFormation Templates
-
-Generate CloudFormation templates from the CDK code:
+Then login with AWS SSO:
 
 ```bash
-# Development (requires DEVELOPER_NAME in .env.dev)
+aws sso login --profile bixarena-dev-Developer
+```
+
+#### 2. Configure Environment Variables
+
+Create the configuration files:
+
+```bash
+nx create-config bixarena-infra-cdk
+```
+
+This will generate `.env`, `.env.dev`, `.env.stage`, and `.env.prod` files with default values.
+
+Then edit `.env.dev` and set your developer name:
+
+```bash
+# Open .env.dev in your editor and set:
+DEVELOPER_NAME=your-github-username
+AWS_PROFILE=bixarena-dev-Developer
+```
+
+Your resources will be named: `bixarena-dev-{your-name}-{resource}`
+
+### Common Commands
+
+**Synthesize CloudFormation templates:**
+
+```bash
 nx run bixarena-infra-cdk:synth:dev
-
-# Staging
-nx run bixarena-infra-cdk:synth:stage
-
-# Production
-nx run bixarena-infra-cdk:synth:prod
 ```
 
-### List Stacks
-
-View all available CDK stacks for an environment:
+**List stacks:**
 
 ```bash
 nx run bixarena-infra-cdk:ls:dev
-nx run bixarena-infra-cdk:ls:stage
-nx run bixarena-infra-cdk:ls:prod
 ```
 
-### Deploy Infrastructure
-
-Deploy the CDK stacks to AWS:
+**Deploy infrastructure:**
 
 ```bash
-# Development
 nx run bixarena-infra-cdk:deploy:dev
+```
 
-# Staging
-nx run bixarena-infra-cdk:deploy:stage
+**Destroy infrastructure:**
 
-# Production
-nx run bixarena-infra-cdk:deploy:prod
+```bash
+nx run bixarena-infra-cdk:destroy:dev
 ```
 
 ### Testing the Application Load Balancer
 
-After deploying, you can test the ALB health endpoint:
-
-#### 1. Get the ALB DNS Name
-
-After deployment, the ALB DNS name will be displayed in the CloudFormation outputs:
+After deploying, test the ALB health endpoint:
 
 ```bash
-# Look for the "HealthCheckUrl" output
-nx run bixarena-infra-cdk:deploy:dev
-```
-
-Or retrieve it from the CloudFormation stack:
-
-```bash
-# Using AWS CLI
-aws cloudformation describe-stacks \
-  --stack-name bixarena-dev-{your-name}-alb \
-  --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerDnsName`].OutputValue' \
-  --output text
-```
-
-#### 2. Test the `/health` Endpoint
-
-**Using HTTP (no certificate configured):**
-
-```bash
-# From your terminal
+# Get the ALB DNS name from deployment outputs (look for "HealthCheckUrl")
+# Then test the health endpoint:
 curl http://<alb-dns-name>/health
-
-# Or open in browser
-# http://<alb-dns-name>/health
-```
-
-**Using HTTPS (with certificate configured):**
-
-```bash
-# From your terminal
-curl https://<alb-dns-name>/health
-
-# Or open in browser
-# https://<alb-dns-name>/health
 ```
 
 **Expected Response:**
@@ -127,63 +109,13 @@ curl https://<alb-dns-name>/health
 }
 ```
 
-#### 3. Test Other Paths
-
-Since no backend services are configured yet, other paths will return 503:
-
-```bash
-curl http://<alb-dns-name>/api/v1/challenges
-# Returns: {"error":"Service Unavailable","message":"No backend services configured"}
-```
-
-### Destroy Infrastructure
-
-Remove all deployed resources:
-
-```bash
-# Development
-nx run bixarena-infra-cdk:destroy:dev
-
-# Staging
-nx run bixarena-infra-cdk:destroy:stage
-
-# Production
-nx run bixarena-infra-cdk:destroy:prod
-```
-
 ## Developer Workflow
-
-### Setting Up Your Development Stack
-
-1. **Set your developer name** in `.env.dev`:
-
-   ```bash
-   echo "DEVELOPER_NAME=your-github-username" >> .env.dev
-   ```
-
-2. **Configure AWS credentials** for the development account:
-
-   ```bash
-   aws configure --profile bixarena-dev
-   ```
-
-3. **Bootstrap CDK** (first-time only):
-
-   ```bash
-   ENV=dev cdk bootstrap --profile bixarena-dev
-   ```
-
-4. **Synthesize and deploy**:
-   ```bash
-   nx run bixarena-infra-cdk:synth:dev
-   nx run bixarena-infra-cdk:deploy:dev
-   ```
 
 ### Making Changes
 
 1. Make changes to constructs or stacks in the `shared/` directory
 2. Test synthesis: `nx run bixarena-infra-cdk:synth:dev`
-3. Review diff: `nx diff bixarena-infra-cdk:dev`
+3. Review diff: `nx run bixarena-infra-cdk:diff:dev`
 4. Deploy changes: `nx run bixarena-infra-cdk:deploy:dev`
 
 ### Cleaning Up
@@ -194,15 +126,23 @@ When you're done with your development stack, destroy it to avoid charges:
 nx run bixarena-infra-cdk:destroy:dev
 ```
 
-**Note on GuardDuty**: The CDK app now manages the GuardDuty VPC endpoint to ensure clean stack deletion. In earlier versions, GuardDuty created AWS-managed resources (VPC endpoints and security groups) outside of CloudFormation, which blocked VPC deletion. These are now explicitly managed by the CDK stack.
+**Note on GuardDuty**: The CDK app manages the GuardDuty VPC endpoint to ensure clean stack deletion and prevent orphaned AWS-managed resources.
 
-### Troubleshooting Stack Deletion
+### Deploying to Stage/Prod
 
-When you're done testing, destroy your development stack:
+To deploy to staging or production environments, use the corresponding configuration:
 
 ```bash
-nx run bixarena-infra-cdk:destroy:dev
+# Staging
+nx run bixarena-infra-cdk:synth:stage
+nx run bixarena-infra-cdk:deploy:stage
+
+# Production
+nx run bixarena-infra-cdk:synth:prod
+nx run bixarena-infra-cdk:deploy:prod
 ```
+
+**Note**: Stage and production don't require a `DEVELOPER_NAME`. Resources use the pattern: `bixarena-{env}-{resource}`
 
 ## Phase 0: Minimal Infrastructure
 
@@ -238,9 +178,13 @@ This phase deploys the core networking infrastructure and application load balan
 - **Configuration**:
 
   - 2 Availability Zones for redundancy
-  - CIDR block: 10.0.0.0/16 (configurable via `VPC_CIDR` environment variable)
-  - Public subnets (/24): For ALB and NAT Gateway(s)
-  - Private subnets (/24): For ECS tasks and backend services
+  - CIDR block: Configurable via `VPC_CIDR` environment variable
+    - Dev: `10.254.172.0/24`
+    - Stage: `10.254.173.0/24`
+    - Prod: `10.254.174.0/24`
+  - Subnets: Auto-calculated to evenly divide the VPC CIDR
+    - Public subnets: For ALB and NAT Gateway(s) (1 per AZ)
+    - Private subnets: For ECS tasks and backend services (1 per AZ)
   - DNS support: Enabled
 
 > [!NOTE]
@@ -387,33 +331,3 @@ Developer names must contain only alphanumeric characters, hyphens, and undersco
 ### Stack name too long
 
 If your developer name is very long, CDK may reject the stack name. Try using a shorter name or abbreviation.
-
-### Environment-Specific Commands
-
-You can target specific environments by providing a configuration:
-
-```bash
-# Development (default)
-nx run bixarena-infra-cdk:synth
-nx run bixarena-infra-cdk:ls
-nx run bixarena-infra-cdk:deploy
-
-# Staging
-nx run bixarena-infra-cdk:synth:stage
-nx run bixarena-infra-cdk:ls:stage
-nx run bixarena-infra-cdk:deploy:stage
-
-# Production
-nx run bixarena-infra-cdk:synth:prod
-nx run bixarena-infra-cdk:ls:prod
-nx run bixarena-infra-cdk:deploy:prod
-```
-
-### Environment Variable Precedence
-
-Environment variables are loaded by Nx with the following precedence (highest to lowest):
-
-1. Environment-specific file (`.env.dev`, `.env.stage`, or `.env.prod`)
-2. Base environment file (`.env`)
-
-Variables defined in environment-specific files will override any matching variables in the base `.env` file.
