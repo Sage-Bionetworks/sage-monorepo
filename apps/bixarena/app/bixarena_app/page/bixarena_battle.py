@@ -229,6 +229,7 @@ def vote_last_response(
                 )
                 + (disable_btn,) * 3
                 + (enable_btn,)
+                + (gr.Row(visible=True),)  # show next_battle_row after voting
             )
             time.sleep(0.1)
     else:
@@ -241,6 +242,7 @@ def vote_last_response(
             + (gr.update(interactive=False, placeholder="Ready for the next battle?"),)
             + (disable_btn,) * 3
             + (enable_btn,)
+            + (gr.Row(visible=True),)  # show next_battle_row after voting
         )
 
 
@@ -476,7 +478,9 @@ def add_text(
         + [hint_msg]
         + [gr.Group(visible=True)]  # show battle_interface
         + [gr.Row(visible=True)]  # show voting_row
-        + [gr.Row(visible=True)]  # show next_battle_row
+        + [
+            gr.Row(visible=False)
+        ]  # hide next_battle_row (only show after vote or error)
         + [gr.Column(visible=False)]  # hide example_prompts_group
     )
 
@@ -606,17 +610,17 @@ def build_side_by_side_ui_anony():
     leftvote_btn.click(
         leftvote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors + [textbox] + btn_list,
+        model_selectors + [textbox] + btn_list + [next_battle_row],
     )
     rightvote_btn.click(
         rightvote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors + [textbox] + btn_list,
+        model_selectors + [textbox] + btn_list + [next_battle_row],
     )
     tie_btn.click(
         tievote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors + [textbox] + btn_list,
+        model_selectors + [textbox] + btn_list + [next_battle_row],
     )
     clear_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
@@ -688,7 +692,7 @@ def build_side_by_side_ui_anony():
     ).then(
         bot_response_multi,
         states + [battle_session],
-        states + [battle_session] + chatbots + btn_list,
+        states + [battle_session] + chatbots + btn_list + [next_battle_row],
     ).then(
         lambda: None,  # Enable enter key
         [],
@@ -718,7 +722,7 @@ def build_side_by_side_ui_anony():
         ).then(
             bot_response_multi,
             states + [battle_session],
-            states + [battle_session] + chatbots + btn_list,
+            states + [battle_session] + chatbots + btn_list + [next_battle_row],
         ).then(
             lambda: None,
             [],

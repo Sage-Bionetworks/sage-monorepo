@@ -250,21 +250,34 @@ def bot_response_multi(
                 stop = False
             except StopIteration:
                 pass
-        yield states + [battle_session] + chatbots + [disable_btn] * 4
+        yield (
+            states
+            + [battle_session]
+            + chatbots
+            + [disable_btn] * 4
+            + [gr.Row(visible=False)]
+        )
         if stop:
             break
 
     cookies = get_session_cookie(request) if request else None
     _update_battle_round_with_responses(states[0], states[1], battle_session, cookies)
 
-    # At least one model had an error -> keep voting buttons disabled
+    # At least one model had an error -> keep voting buttons disabled, show next_battle_row
     if any(state.has_error for state in states):
         yield (
             states
             + [battle_session]
             + chatbots
             + [disable_btn, disable_btn, disable_btn, enable_btn]
+            + [gr.Row(visible=True)]  # show next_battle_row on error
         )
     else:
-        # Both models succeeded -> enable all buttons including voting
-        yield states + [battle_session] + chatbots + [enable_btn] * 4
+        # Both models succeeded -> enable voting, hide next_battle_row
+        yield (
+            states
+            + [battle_session]
+            + chatbots
+            + [enable_btn] * 4
+            + [gr.Row(visible=False)]
+        )
