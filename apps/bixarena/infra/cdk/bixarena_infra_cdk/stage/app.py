@@ -15,6 +15,7 @@ from bixarena_infra_cdk.shared.stacks.app_service_stack import AppServiceStack
 from bixarena_infra_cdk.shared.stacks.bucket_stack import BucketStack
 from bixarena_infra_cdk.shared.stacks.database_stack import DatabaseStack
 from bixarena_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
+from bixarena_infra_cdk.shared.stacks.valkey_stack import ValkeyStack
 from bixarena_infra_cdk.shared.stacks.vpc_stack import VpcStack
 
 
@@ -63,6 +64,18 @@ def main() -> None:
         description=f"PostgreSQL database for BixArena {environment} environment",
     )
     database_stack.add_dependency(vpc_stack)
+
+    # Create Valkey cache stack (depends on VPC)
+    # Stage uses multi-node deployment for high availability testing
+    valkey_stack = ValkeyStack(
+        app,
+        f"{stack_prefix}-valkey",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        vpc=vpc_stack.vpc,
+        description=f"Valkey cache cluster for BixArena {environment} environment",
+    )
+    valkey_stack.add_dependency(vpc_stack)
 
     # Create ALB stack (depends on VPC)
     alb_stack = AlbStack(
