@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   ComparisonToolConfig,
+  ComparisonToolConfigColumn,
   ComparisonToolLink,
   HeatmapCircleData,
 } from '@sagebionetworks/explorers/models';
@@ -13,89 +14,117 @@ export class ComparisonToolHelperService {
     data: Record<string, unknown>[],
     config: ComparisonToolConfig,
     siteUrl: string,
-    heatmapCategoryColumnName = 'tissue',
+    heatmapCategoryColumnName = 'heatmap',
   ): string[][] {
-    const columns = config.columns.filter((col) => col.is_exported !== false);
-    const heatmapCols = this.getHeatmapColumns(columns, data, heatmapCategoryColumnName);
-    const headerRow = this.getHeaderRow(columns, heatmapCols);
-    const rows = this.getDataRows(data, columns, heatmapCols, siteUrl);
+    const exportedColumns = config.columns.filter((col) => col.is_exported !== false);
+    const heatmapColumns = exportedColumns.filter((col) => col.type === 'heat_map');
+    const baseColumns = exportedColumns.filter((col) => col.type !== 'heat_map');
+
+    const heatmapMetrics = heatmapColumns.length
+      ? this.collectHeatmapMetrics(data, heatmapColumns)
+      : [];
+
+    const headerRow = this.buildHeaderRow(
+      exportedColumns,
+      heatmapMetrics,
+      heatmapCategoryColumnName,
+    );
+
+    const rows = data.flatMap((item) =>
+      this.buildRows(
+        item,
+        baseColumns,
+        heatmapColumns,
+        heatmapMetrics,
+        headerRow,
+        siteUrl,
+        heatmapCategoryColumnName,
+      ),
+    );
+
     return [headerRow, ...rows];
   }
 
-  protected getHeatmapColumns(
-    columns: ComparisonToolConfig['columns'],
-    data: Record<string, unknown>[],
-    heatmapCategoryColumnName = 'tissue',
-  ): string[] {
-    let hasHeatmapCol = false;
-    const heatmapCols: string[] = [];
-    for (const col of columns) {
-      if (col.type === 'heat_map' && !hasHeatmapCol) {
-        heatmapCols.push(heatmapCategoryColumnName);
-        const heatmapData = data[0][col.data_key] as HeatmapCircleData;
-        const heatmapKeys = Object.keys(heatmapData);
-        heatmapCols.push(...heatmapKeys);
-        hasHeatmapCol = true;
-      }
-    }
-    return heatmapCols;
-  }
-
-  protected getHeaderRow(
-    columns: ComparisonToolConfig['columns'],
-    heatmapCols: string[],
+  protected buildHeaderRow(
+    columns: ComparisonToolConfigColumn[],
+    heatmapMetrics: string[],
+    heatmapCategoryColumnName: string,
   ): string[] {
     const headerRow: string[] = [];
-    for (const col of columns) {
-      if (col.type === 'heat_map') {
-        continue;
+    let heatmapInserted = false;
+
+    for (const column of columns) {
+      if (column.type === 'heat_map') {
+        if (!heatmapInserted) {
+          headerRow.push(heatmapCategoryColumnName, ...heatmapMetrics);
+          heatmapInserted = true;
+        }
       } else {
-        headerRow.push(col.data_key);
+        headerRow.push(column.data_key);
       }
     }
-    headerRow.push(...heatmapCols); // ensure heatmap columns are at the end
+
     return headerRow;
   }
 
-  protected getDataRows(
+  protected collectHeatmapMetrics(
     data: Record<string, unknown>[],
-    columns: ComparisonToolConfig['columns'],
-    heatmapCols: string[],
-    siteUrl: string,
-  ): string[][] {
-    return data.flatMap((item) => {
-      const nonHeatmapValues = columns
-        .filter((col) => col.type !== 'heat_map')
-        .map((col) => {
-          const itemData = item[col.data_key];
-          return itemData === null || itemData === undefined
-            ? ''
-            : this.getNonHeatmapValue(col.type, itemData, col, siteUrl);
-        });
-      const allRows = this.getHeatmapRows(item, columns, heatmapCols, nonHeatmapValues);
-      return allRows.length > 0 ? allRows : [nonHeatmapValues];
-    });
+    heatmapColumns: ComparisonToolConfigColumn[],
+  ): string[] {
+    const firstRecord = data[0];
+    if (!firstRecord) {
+      return [];
+    }
+
+    for (const column of heatmapColumns) {
+      const heatmapData = firstRecord[column.data_key] as HeatmapCircleData | undefined;
+      if (heatmapData) {
+        return Object.keys(heatmapData);
+      }
+    }
+
+    return [];
   }
 
-  protected getHeatmapRows(
+  protected buildRows(
     item: Record<string, unknown>,
-    columns: ComparisonToolConfig['columns'],
-    heatmapCols: string[],
-    nonHeatmapValues: string[],
+    baseColumns: ComparisonToolConfigColumn[],
+    heatmapColumns: ComparisonToolConfigColumn[],
+    heatmapMetrics: string[],
+    headerRow: string[],
+    siteUrl: string,
+    heatmapCategoryColumnName: string,
   ): string[][] {
-    return columns
-      .filter((col) => col.type === 'heat_map')
-      .flatMap((col) => {
-        const heatmapData = item[col.data_key] as HeatmapCircleData;
-        if (!heatmapData) return [];
-        return [
-          [
-            ...nonHeatmapValues,
-            col.data_key,
-            ...heatmapCols.slice(1).map((key) => String(heatmapData[key])),
-          ],
-        ];
-      });
+    const baseValues: Record<string, string> = {};
+
+    for (const column of baseColumns) {
+      const itemData = item[column.data_key];
+      baseValues[column.data_key] =
+        itemData === null || itemData === undefined
+          ? ''
+          : this.getNonHeatmapValue(column.type, itemData, column, siteUrl);
+    }
+
+    if (heatmapColumns.length === 0) {
+      return [headerRow.map((key) => baseValues[key] ?? '')];
+    }
+
+    return heatmapColumns.map((column) => {
+      const rowValues: Record<string, string> = { ...baseValues };
+      const heatmapData = item[column.data_key] as
+        | Record<string, number | null | undefined>
+        | undefined;
+
+      rowValues[heatmapCategoryColumnName] = column.data_key;
+
+      for (const metric of heatmapMetrics) {
+        const metricValue = heatmapData?.[metric];
+        rowValues[metric] =
+          metricValue === null || metricValue === undefined ? '' : String(metricValue);
+      }
+
+      return headerRow.map((key) => rowValues[key] ?? '');
+    });
   }
 
   protected getNonHeatmapValue(
@@ -107,10 +136,9 @@ export class ComparisonToolHelperService {
     switch (colType) {
       case 'text':
         if (Array.isArray(itemData)) {
-          return (itemData as string[]).join('; ');
-        } else {
-          return itemData as string;
+          return (itemData as string[]).join(',');
         }
+        return String(itemData);
       case 'link_external':
       case 'link_internal': {
         const linkUrlData = (itemData as ComparisonToolLink).link_url || col.link_url;
@@ -118,7 +146,7 @@ export class ComparisonToolHelperService {
         return linkUrl;
       }
       default:
-        return itemData as string;
+        return String(itemData);
     }
   }
 }

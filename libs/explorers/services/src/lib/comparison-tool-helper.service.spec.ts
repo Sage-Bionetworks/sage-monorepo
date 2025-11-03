@@ -17,7 +17,6 @@ describe('Service: ComparisonToolHelper', () => {
       mockComparisonToolData.slice(1, 3),
       mockComparisonToolDataConfig[0],
       'https://www.modeladexplorer.org',
-      'human_gene_module',
     );
     expect(csvData).toEqual([
       [
@@ -28,9 +27,10 @@ describe('Service: ComparisonToolHelper', () => {
         'disease_correlation',
         'center',
         'age',
-        'human_gene_module',
+        'heatmap',
         'correlation',
         'adj_p_val',
+        'modified_genes',
       ],
       [
         '5xFAD (UCI)',
@@ -43,6 +43,7 @@ describe('Service: ComparisonToolHelper', () => {
         'IFG',
         '0.180202547119964',
         '0.107436343673528',
+        'APP,Psen1',
       ],
       [
         '5xFAD (UCI)',
@@ -55,6 +56,7 @@ describe('Service: ComparisonToolHelper', () => {
         'PHG',
         '0.120000548192961',
         '0.239210931286464',
+        'APP,Psen1',
       ],
       [
         '5xFAD (IU/Jax/Pitt)',
@@ -67,6 +69,7 @@ describe('Service: ComparisonToolHelper', () => {
         'IFG',
         '0.0829228557717284',
         '0.46174597641461',
+        'APP,Psen1',
       ],
       [
         '5xFAD (IU/Jax/Pitt)',
@@ -79,6 +82,7 @@ describe('Service: ComparisonToolHelper', () => {
         'PHG',
         '0.0555691060937462',
         '0.586807542376288',
+        'APP,Psen1',
       ],
     ]);
   });

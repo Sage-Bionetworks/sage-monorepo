@@ -99,6 +99,12 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         is_exported: false,
         is_hidden: true,
       },
+      {
+        type: 'text',
+        data_key: 'modified_genes',
+        is_exported: true,
+        is_hidden: true,
+      },
     ],
     filters: [
       {
@@ -137,6 +143,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.409231075552908,
     },
     available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
+    modified_genes: ['APP', 'MAPT', 'Psen1'],
   },
   {
     _id: '68fff1aaeb12b9674515fd59',
@@ -159,6 +166,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.239210931286464,
     },
     available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
+    modified_genes: ['APP', 'Psen1'],
   },
   {
     _id: '68fff1aaeb12b9674515fd5a',
@@ -183,6 +191,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.586807542376288,
     },
     available_data: ['Gene Expression', 'Disease Correlation'],
+    modified_genes: ['APP', 'Psen1'],
   },
   {
     _id: '68fff1aaeb12b9674515fd5b',
@@ -205,6 +214,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.463613681499704,
     },
     available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
+    modified_genes: ['Abca7'],
   },
   {
     _id: '68fff1aaeb12b9674515fd5c',
@@ -229,5 +239,6 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.638623415843113,
     },
     available_data: ['Gene Expression', 'Disease Correlation'],
+    modified_genes: ['APOE'],
   },
 ];
