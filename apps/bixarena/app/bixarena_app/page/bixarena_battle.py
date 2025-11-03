@@ -385,10 +385,10 @@ def add_text(
                 + [""]  # slow_warning: clear
                 + [gr.Group(visible=True)]  # battle_interface: show
                 + [gr.Row(visible=True)]  # voting_row: show
-                + [gr.Row(visible=True)]  # next_battle_row: show (error state)
+                + [gr.Row(visible=False)]  # next_battle_row: hide
                 + [gr.Column(visible=False)]  # example_prompts_group: hide
                 + [gr.HTML(visible=False)]  # page_header: hide
-                + [gr.Row(visible=True)]  # textbox_row: show
+                + [gr.Row(visible=False)]  # textbox_row: hide
             )
 
     text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off

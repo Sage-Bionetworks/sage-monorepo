@@ -190,7 +190,7 @@ def bot_response_multi(
 ):
     num_sides = 2
     if state0 is None or state0.skip_next:
-        # This generate call is skipped due to invalid inputs
+        # State: Edge case - battle round limit reached
         yield (
             state0,
             state1,
@@ -199,7 +199,7 @@ def bot_response_multi(
             state1.to_gradio_chatbot(),
             gr.Row(visible=False),  # next_battle_row: hide
             gr.HTML(visible=False),  # page_header: hide
-            gr.Row(visible=True),  # textbox_row: show
+            gr.Row(visible=False),  # textbox_row: hide
         )
         return
 
