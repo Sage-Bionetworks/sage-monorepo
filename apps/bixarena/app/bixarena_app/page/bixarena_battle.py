@@ -6,7 +6,6 @@ simplified to a single function for a single-page LLM comparison arena.
 """
 
 import logging
-import time
 import warnings
 from uuid import UUID
 
@@ -27,7 +26,6 @@ from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import (
     BATTLE_ROUND_LIMIT,
     PROMPT_LEN_LIMIT,
-    SLOW_MODEL_MSG,
 )
 from bixarena_app.model import model_response
 from bixarena_app.model.error_handler import get_battle_round_limit_message
@@ -35,10 +33,6 @@ from bixarena_app.model.model_response import (
     BattleSession,
     State,
     bot_response_multi,
-    disable_btn,
-    enable_btn,
-    invisible_btn,
-    no_change_btn,
 )
 from bixarena_app.page.battle_page_css import (
     DISCLAIMER_CSS,
@@ -217,37 +211,39 @@ def vote_last_response(
         end_battle(battle_session.battle_id, cookies)
         battle_session.reset()
 
-    if ":" not in model_selectors[0]:
-        for _ in range(5):
-            names = (
-                "### Model 1: " + states[0].model_name,
-                "### Model 2: " + states[1].model_name,
-            )
-            yield (
-                names
-                + (
-                    gr.update(
-                        interactive=False, placeholder="Ready for the next battle?"
-                    ),
-                )
-                + (disable_btn,) * 3
-                + (enable_btn,)
-            )
-            time.sleep(0.1)
-    else:
-        names = (
-            "### Model 1: " + states[0].model_name,
-            "### Model 2: " + states[1].model_name,
-        )
-        yield (
-            names
-            + (gr.update(interactive=False, placeholder="Ready for the next battle?"),)
-            + (disable_btn,) * 3
-            + (enable_btn,)
-        )
+    # State 4: User voted
+    left_vote_variant = (
+        "primary" if outcome == BattleEvaluationOutcome.MODEL1 else "secondary"
+    )
+    tie_vote_variant = (
+        "primary" if outcome == BattleEvaluationOutcome.TIE else "secondary"
+    )
+    right_vote_variant = (
+        "primary" if outcome == BattleEvaluationOutcome.MODEL2 else "secondary"
+    )
+
+    names = (
+        "### Model 1: " + states[0].model_name,
+        "### Model 2: " + states[1].model_name,
+    )
+    yield (
+        names  # model_selector0, model_selector1: reveal model names
+        + (
+            gr.update(interactive=False, placeholder="Ready for the next battle?"),
+        )  # textbox: disable
+        + (
+            gr.Button(variant=left_vote_variant, interactive=False),
+            gr.Button(variant=tie_vote_variant, interactive=False),
+            gr.Button(variant=right_vote_variant, interactive=False),
+        )  # buttons: show which was clicked, disable all
+        + (gr.Row(visible=True),)  # voting_row: keep visible
+        + (gr.Row(visible=True),)  # next_battle_row: show
+        + (gr.HTML(visible=False),)  # page_header: hide
+        + (gr.Row(visible=False),)  # textbox_row: hide
+    )
 
 
-def leftvote_last_response(
+def left_vote_last_response(
     state0,
     state1,
     battle_session: BattleSession,
@@ -255,7 +251,6 @@ def leftvote_last_response(
     model_selector1,
     request: gr.Request,
 ):
-    logger.info("leftvote (anony).")
     for x in vote_last_response(
         [state0, state1],
         battle_session,
@@ -266,7 +261,7 @@ def leftvote_last_response(
         yield x
 
 
-def rightvote_last_response(
+def right_vote_last_response(
     state0,
     state1,
     battle_session: BattleSession,
@@ -274,7 +269,6 @@ def rightvote_last_response(
     model_selector1,
     request: gr.Request,
 ):
-    logger.info("rightvote (anony).")
     for x in vote_last_response(
         [state0, state1],
         battle_session,
@@ -285,7 +279,7 @@ def rightvote_last_response(
         yield x
 
 
-def tievote_last_response(
+def tie_vote_last_response(
     state0,
     state1,
     battle_session: BattleSession,
@@ -293,7 +287,6 @@ def tievote_last_response(
     model_selector1,
     request: gr.Request,
 ):
-    logger.info("tievote (anony).")
     for x in vote_last_response(
         [state0, state1],
         battle_session,
@@ -318,22 +311,27 @@ def clear_history(
 
     battle_session.reset()
 
+    # State 0: Reset to initial (Next Battle clicked or page load)
     base_outputs = (
-        [None] * num_sides  # states
-        + [battle_session]
-        + [None] * num_sides  # chatbots
-        + anony_names  # model_selectors
+        [None] * num_sides  # state0, state1: reset
+        + [battle_session]  # battle_session: reset
+        + [None] * num_sides  # chatbot0, chatbot1: clear
+        + anony_names  # model_selector0, model_selector1: clear names
         + [
             gr.update(
                 value="", interactive=True, placeholder="Ask anything biomedical..."
             )
-        ]  # re-enable textbox
-        + [invisible_btn] * 3  # voting buttons (leftvote, rightvote, tie)
-        + [disable_btn] * 1  # clear button
-        + [""]  # slow_warning
-        + [gr.Group(visible=False)]  # hide battle_interface
-        + [gr.Row(visible=False)]  # hide voting_row
-        + [gr.Row(visible=False)]  # hide next_battle_row
+        ]  # textbox: enable
+        + [
+            gr.Button(variant="secondary", interactive=True),
+            gr.Button(variant="secondary", interactive=True),
+            gr.Button(variant="secondary", interactive=True),
+        ]  # voting buttons: reset to default state
+        + [gr.Group(visible=False)]  # battle_interface: hide
+        + [gr.Row(visible=False)]  # voting_row: hide
+        + [gr.Row(visible=False)]  # next_battle_row: hide
+        + [gr.HTML(visible=True)]  # page_header: show
+        + [gr.Row(visible=True)]  # textbox_row: show
     )
 
     # If example_prompt_ui is provided, also refresh the prompts
@@ -363,27 +361,7 @@ def add_text(
         assert states[1] is None
         battle_session.reset()
 
-    if len(text) <= 0:
-        if states[0] is not None:
-            for i in range(num_sides):
-                states[i].skip_next = True
-        return (
-            states
-            + [battle_session]
-            + [x.to_gradio_chatbot() if x else [] for x in states]
-            + [""]
-            + [
-                no_change_btn,
-            ]
-            * 4
-            + [""]  # slow_warning
-            + [gr.Group(visible=False)]  # keep battle_interface hidden
-            + [gr.Row(visible=False)]  # keep voting_row hidden
-            + [gr.Row(visible=False)]  # keep next_battle_row hidden
-            + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
-        )
-
-    # Check battle round limit only if states are initialized
+    # State: Edge case - battle round limit reached
     if states[0] is not None:
         conv = states[0].conv
         if (len(conv.messages) - conv.offset) // 2 >= BATTLE_ROUND_LIMIT:
@@ -396,23 +374,6 @@ def add_text(
                     states[i].conv.append_message("user", text)
                     states[i].conv.append_message("assistant", round_limit_msg)
                     states[i].skip_next = True
-            return (
-                states
-                + [battle_session]
-                + [x.to_gradio_chatbot() for x in states]
-                + [""]
-                + [
-                    no_change_btn,
-                ]
-                * 4
-                + [""]  # slow_warning
-                + [
-                    gr.Group(visible=True)
-                ]  # show battle_interface (conversation exists)
-                + [gr.Row(visible=True)]  # show voting_row
-                + [gr.Row(visible=True)]  # show next_battle_row
-                + [gr.Column(visible=False)]  # hide suggested_prompts_group
-            )
 
     text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
 
@@ -430,57 +391,54 @@ def add_text(
                 State(model2),
             ]
         else:
-            # Failed to create battle, return error state
+            # State: Edge case - failed to create battle
             logger.error("Failed to create battle - cannot proceed")
             return (
-                [state0, state1]
-                + [battle_session]
-                + [x.to_gradio_chatbot() if x else [] for x in [state0, state1]]
+                [state0, state1]  # state0, state1: unchanged
+                + [battle_session]  # battle_session: unchanged
+                + [
+                    x.to_gradio_chatbot() if x else [] for x in [state0, state1]
+                ]  # chatbot0, chatbot1: unchanged
                 + [
                     gr.update(
                         value="",
                         interactive=True,
                         placeholder="Error creating battle. Please try again.",
                     )
-                ]
-                + [no_change_btn] * 4
-                + [""]  # slow_warning
-                + [gr.Group(visible=False)]  # keep battle_interface hidden
-                + [gr.Row(visible=False)]  # keep voting_row hidden
-                + [gr.Row(visible=False)]  # keep next_battle_row hidden
-                + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
+                ]  # textbox: clear with error message
+                + [gr.Group(visible=False)]  # battle_interface: hide
+                + [gr.Row(visible=False)]  # voting_row: hide
+                + [gr.Row(visible=False)]  # next_battle_row: hide
+                + [gr.Column(visible=True)]  # example_prompts_group: show
+                + [gr.HTML(visible=True)]  # page_header: show
+                + [gr.Row(visible=True)]  # textbox_row: show
             )
     battle_id = battle_session.battle_id
 
-    round_id = None
-    if battle_id:
-        round_id = create_battle_round(battle_id, text, cookies)
+    if not states[0].skip_next:
+        round_id = None
+        if battle_id:
+            round_id = create_battle_round(battle_id, text, cookies)
 
-    for i in range(num_sides):
-        states[i].conv.append_message(states[i].conv.roles[0], text)
-        states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
-        states[i].skip_next = False
+        for i in range(num_sides):
+            states[i].conv.append_message(states[i].conv.roles[0], text)
+            states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
+            states[i].skip_next = False
 
-    battle_session.round_id = round_id
+        battle_session.round_id = round_id
 
-    hint_msg = ""
-    for i in range(num_sides):
-        if "deluxe" in states[i].model_name:
-            hint_msg = SLOW_MODEL_MSG
+    # State 1: User submits prompt (battle started)
     return (
-        states
-        + [battle_session]
-        + [x.to_gradio_chatbot() for x in states]
-        + [gr.update(value="", placeholder="Ask followups...")]
-        + [
-            disable_btn,
-        ]
-        * 4
-        + [hint_msg]
-        + [gr.Group(visible=True)]  # show battle_interface
-        + [gr.Row(visible=True)]  # show voting_row
-        + [gr.Row(visible=True)]  # show next_battle_row
-        + [gr.Column(visible=False)]  # hide example_prompts_group
+        states  # state0, state1: updated with prompt
+        + [battle_session]  # battle_session: updated with battle_id, round_id
+        + [x.to_gradio_chatbot() for x in states]  # chatbot0, chatbot1: show prompt
+        + [gr.update(value="", placeholder="Ask followups...")]  # textbox: clear
+        + [gr.Group(visible=True)]  # battle_interface: show
+        + [gr.Row(visible=False)]  # voting_row: hide
+        + [gr.Row(visible=False)]  # next_battle_row: hide
+        + [gr.Column(visible=False)]  # example_prompts_group: hide
+        + [gr.HTML(visible=False)]  # page_header: hide
+        + [gr.Row(visible=True)]  # textbox_row: show
     )
 
 
@@ -510,7 +468,7 @@ def build_side_by_side_ui_anony():
 
     # Page content
     with gr.Column():
-        gr.HTML(page_header_html)
+        page_header = gr.HTML(page_header_html, visible=True)
         # Example prompts (cards + arrows) now provided by helper (textbox bound later)
         # Start with empty prompts - will be loaded when page is navigated to
         (
@@ -549,22 +507,15 @@ def build_side_by_side_ui_anony():
                             anony_names[i], elem_id="model_selector_md"
                         )
                         model_selectors.append(model_selector)
-            with gr.Row():
-                slow_warning = gr.Markdown("", elem_id="notice_markdown")
 
         # Voting buttons
         with gr.Row(visible=False) as voting_row:
-            leftvote_btn = gr.Button(
-                value="A is better 👈 ", visible=False, interactive=False
-            )
-            tie_btn = gr.Button(value="🤝 Tie", visible=False, interactive=False)
-
-            rightvote_btn = gr.Button(
-                value="👉 B is better", visible=False, interactive=False
-            )
+            left_vote_btn = gr.Button(value="A is better 👈 ")
+            tie_btn = gr.Button(value="🤝 Tie")
+            right_vote_btn = gr.Button(value="👉 B is better")
 
         # Prompt input - always visible, centered with 80% width via CSS
-        with gr.Row():
+        with gr.Row(visible=True) as textbox_row:
             textbox = gr.Textbox(
                 show_label=False,
                 placeholder="Ask anything biomedical...",
@@ -577,7 +528,7 @@ def build_side_by_side_ui_anony():
             with gr.Column(scale=2):
                 gr.HTML("")
             with gr.Column(scale=1):
-                clear_btn = gr.Button(value="🧪 Next Battle", interactive=False)
+                clear_btn = gr.Button(value="Next Battle", variant="primary")
             with gr.Column(scale=2):
                 gr.HTML("")
 
@@ -600,26 +551,29 @@ def build_side_by_side_ui_anony():
         )
 
     # Register listeners
-    btn_list = [
-        leftvote_btn,
-        rightvote_btn,
-        tie_btn,
-        clear_btn,
-    ]
-    leftvote_btn.click(
-        leftvote_last_response,
+    left_vote_btn.click(
+        left_vote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors + [textbox] + btn_list,
+        model_selectors
+        + [textbox]
+        + [left_vote_btn, tie_btn, right_vote_btn]
+        + [voting_row, next_battle_row, page_header, textbox_row],
     )
-    rightvote_btn.click(
-        rightvote_last_response,
+    right_vote_btn.click(
+        right_vote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors + [textbox] + btn_list,
+        model_selectors
+        + [textbox]
+        + [left_vote_btn, tie_btn, right_vote_btn]
+        + [voting_row, next_battle_row, page_header, textbox_row],
     )
     tie_btn.click(
-        tievote_last_response,
+        tie_vote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors + [textbox] + btn_list,
+        model_selectors
+        + [textbox]
+        + [left_vote_btn, tie_btn, right_vote_btn]
+        + [voting_row, next_battle_row, page_header, textbox_row],
     )
     clear_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
@@ -629,9 +583,9 @@ def build_side_by_side_ui_anony():
         + chatbots
         + model_selectors
         + [textbox]
-        + btn_list
-        + [slow_warning]
+        + [left_vote_btn, tie_btn, right_vote_btn]
         + [battle_interface, voting_row, next_battle_row]
+        + [page_header, textbox_row]
         + [example_prompts_group, prev_btn, next_btn]
         + prompt_cards,
     )
@@ -673,6 +627,30 @@ def build_side_by_side_ui_anony():
     }
     """
 
+    # Setup empty prompt validation - prevent submission at keydown level
+    prevent_empty_prompt_js = """
+    () => {
+        const textbox = document.querySelector('#input_box textarea');
+        if (textbox && !textbox._emptyValidationInstalled) {
+            textbox._emptyValidationInstalled = true;
+
+            // Prevent Enter key submission when input is empty
+            textbox.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    const value = textbox.value.trim();
+                    if (value === '') {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        return false;
+                    }
+                }
+            }, true);
+        }
+        return [];
+    }
+    """
+
     textbox.submit(
         add_text,
         states + [battle_session] + model_selectors + [textbox],
@@ -680,9 +658,8 @@ def build_side_by_side_ui_anony():
         + [battle_session]
         + chatbots
         + [textbox]
-        + btn_list
-        + [slow_warning]
-        + [battle_interface, voting_row, next_battle_row, example_prompts_group],
+        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
+        + [page_header, textbox_row],
     ).then(
         lambda: None,  # Disable enter key
         [],
@@ -691,7 +668,10 @@ def build_side_by_side_ui_anony():
     ).then(
         bot_response_multi,
         states + [battle_session],
-        states + [battle_session] + chatbots + btn_list,
+        states
+        + [battle_session]
+        + chatbots
+        + [voting_row, next_battle_row, page_header, textbox_row],
     ).then(
         lambda: None,  # Enable enter key
         [],
@@ -710,9 +690,8 @@ def build_side_by_side_ui_anony():
             + [battle_session]
             + chatbots
             + [textbox]
-            + btn_list
-            + [slow_warning]
-            + [battle_interface, voting_row, next_battle_row, example_prompts_group],
+            + [battle_interface, voting_row, next_battle_row, example_prompts_group]
+            + [page_header, textbox_row],
         ).then(
             lambda: None,
             [],
@@ -721,7 +700,10 @@ def build_side_by_side_ui_anony():
         ).then(
             bot_response_multi,
             states + [battle_session],
-            states + [battle_session] + chatbots + btn_list,
+            states
+            + [battle_session]
+            + chatbots
+            + [voting_row, next_battle_row, page_header, textbox_row],
         ).then(
             lambda: None,
             [],
@@ -733,6 +715,7 @@ def build_side_by_side_ui_anony():
         states + model_selectors,
         example_prompt_ui,
         [example_prompts_group, prev_btn, next_btn] + prompt_cards,
+        prevent_empty_prompt_js,
     )
 
 
@@ -746,12 +729,22 @@ def build_battle_page():
     load_demo_side_by_side_anony()
 
     with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
-        _, example_prompt_ui, prompt_outputs = build_side_by_side_ui_anony()
+        (
+            _,
+            example_prompt_ui,
+            prompt_outputs,
+            empty_prompt_js,
+        ) = build_side_by_side_ui_anony()
 
         # Refresh example prompts when page loads to ensure each user sees different prompts
         battle_page.load(
             example_prompt_ui.refresh_prompts,
             outputs=prompt_outputs,
+        ).then(
+            lambda: None,  # Install empty input validation
+            [],
+            [],
+            js=empty_prompt_js,
         )
 
         # Load JavaScript for prompt card click handlers
