@@ -26,7 +26,6 @@ from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import (
     BATTLE_ROUND_LIMIT,
     PROMPT_LEN_LIMIT,
-    SLOW_MODEL_MSG,
 )
 from bixarena_app.model import model_response
 from bixarena_app.model.error_handler import get_battle_round_limit_message
@@ -321,7 +320,6 @@ def clear_history(
                 value="", interactive=True, placeholder="Ask anything biomedical..."
             )
         ]  # textbox: enable
-        + [""]  # slow_warning: clear
         + [
             gr.Button(variant="secondary", interactive=True),
             gr.Button(variant="secondary", interactive=True),
@@ -406,7 +404,6 @@ def add_text(
                         placeholder="Error creating battle. Please try again.",
                     )
                 ]  # textbox: clear with error message
-                + [""]  # slow_warning: clear
                 + [gr.Group(visible=False)]  # battle_interface: hide
                 + [gr.Row(visible=False)]  # voting_row: hide
                 + [gr.Row(visible=False)]  # next_battle_row: hide
@@ -428,17 +425,12 @@ def add_text(
 
         battle_session.round_id = round_id
 
-    hint_msg = ""
-    for i in range(num_sides):
-        if "deluxe" in states[i].model_name:
-            hint_msg = SLOW_MODEL_MSG
     # State 1: User submits prompt (battle started)
     return (
         states  # state0, state1: updated with prompt
         + [battle_session]  # battle_session: updated with battle_id, round_id
         + [x.to_gradio_chatbot() for x in states]  # chatbot0, chatbot1: show prompt
         + [gr.update(value="", placeholder="Ask followups...")]  # textbox: clear
-        + [hint_msg]  # slow_warning: show if deluxe model
         + [gr.Group(visible=True)]  # battle_interface: show
         + [gr.Row(visible=False)]  # voting_row: hide
         + [gr.Row(visible=False)]  # next_battle_row: hide
@@ -513,8 +505,6 @@ def build_side_by_side_ui_anony():
                             anony_names[i], elem_id="model_selector_md"
                         )
                         model_selectors.append(model_selector)
-            with gr.Row():
-                slow_warning = gr.Markdown("", elem_id="notice_markdown")
 
         # Voting buttons
         with gr.Row(visible=False) as voting_row:
@@ -590,7 +580,7 @@ def build_side_by_side_ui_anony():
         + [battle_session]
         + chatbots
         + model_selectors
-        + [textbox, slow_warning]
+        + [textbox]
         + [leftvote_btn, tie_btn, rightvote_btn]
         + [battle_interface, voting_row, next_battle_row]
         + [page_header, textbox_row]
@@ -665,7 +655,7 @@ def build_side_by_side_ui_anony():
         states
         + [battle_session]
         + chatbots
-        + [textbox, slow_warning]
+        + [textbox]
         + [battle_interface, voting_row, next_battle_row, example_prompts_group]
         + [page_header, textbox_row],
     ).then(
@@ -697,7 +687,7 @@ def build_side_by_side_ui_anony():
             states
             + [battle_session]
             + chatbots
-            + [textbox, slow_warning]
+            + [textbox]
             + [battle_interface, voting_row, next_battle_row, example_prompts_group]
             + [page_header, textbox_row],
         ).then(
