@@ -41,9 +41,7 @@
       "@sagebionetworks/amp-als/api-client": ["libs/amp-als/api-client-angular/src/index.ts"],
       "@sagebionetworks/explorers/charts": ["libs/explorers/charts/src/index.ts"],
       "@sagebionetworks/explorers/charts-angular": ["libs/explorers/charts-angular/src/index.ts"],
-      "@sagebionetworks/explorers/comparison-tools": [
-        "libs/explorers/comparison-tools/src/index.ts"
-      ],
+      "@sagebionetworks/explorers/comparison-tool": ["libs/explorers/comparison-tool/src/index.ts"],
       "@sagebionetworks/explorers/constants": ["libs/explorers/constants/src/index.ts"],
       "@sagebionetworks/explorers/models": ["libs/explorers/models/src/index.ts"],
       "@sagebionetworks/explorers/services": ["libs/explorers/services/src/index.ts"],

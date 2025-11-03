@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolService,
   PlatformService,
@@ -20,7 +20,7 @@ import { ModelOverviewComparisonToolService } from './services/model-overview-co
 
 async function setup() {
   const { fixture } = await render(ModelOverviewComparisonToolComponent, {
-    imports: [BaseComparisonToolComponent],
+    imports: [ComparisonToolComponent],
     providers: [
       MessageService,
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),

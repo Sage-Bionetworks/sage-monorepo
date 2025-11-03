@@ -2,7 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { HeatmapCircleColorKey, HeatmapCircleData } from '@sagebionetworks/explorers/models';
 import { ComparisonToolFilterService, HelperService } from '@sagebionetworks/explorers/services';
 import { TooltipModule } from 'primeng/tooltip';
-import { knownColorMetricToDisplayName } from '../../base-comparison-tool/base-comparison-tool.variables';
+import { knownColorMetricToDisplayName } from '../../comparison-tool.variables';
 
 @Component({
   selector: 'explorers-heatmap-circle',

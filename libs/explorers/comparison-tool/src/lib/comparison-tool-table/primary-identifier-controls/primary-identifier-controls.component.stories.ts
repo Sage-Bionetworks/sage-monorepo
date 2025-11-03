@@ -7,7 +7,7 @@ import { PrimaryIdentifierControlsComponent } from './primary-identifier-control
 
 const meta: Meta<PrimaryIdentifierControlsComponent> = {
   component: PrimaryIdentifierControlsComponent,
-  title: 'Comparison Tools/ComparisonToolTable/PrimaryIdentifierControlsComponent',
+  title: 'Comparison Tool/ComparisonToolTable/PrimaryIdentifierControlsComponent',
   decorators: [
     applicationConfig({
       providers: [

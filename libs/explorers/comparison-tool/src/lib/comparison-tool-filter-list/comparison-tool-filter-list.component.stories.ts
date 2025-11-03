@@ -8,7 +8,7 @@ import { ComparisonToolFilterListComponent } from './comparison-tool-filter-list
 
 const meta: Meta<ComparisonToolFilterListComponent> = {
   component: ComparisonToolFilterListComponent,
-  title: 'Comparison Tools/ComparisonToolFilterListComponent',
+  title: 'Comparison Tool/ComparisonToolFilterListComponent',
   decorators: [
     applicationConfig({
       providers: [
