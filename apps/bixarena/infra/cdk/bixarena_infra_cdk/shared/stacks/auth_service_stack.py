@@ -61,45 +61,24 @@ class AuthServiceStack(cdk.Stack):
         image = f"ghcr.io/sage-bionetworks/bixarena-auth-service:{auth_version}"
 
         # Environment variables for the Auth service container
-        # Based on application.yml configuration
+        # Only override values that depend on CDK infrastructure
+        # Most configuration is already defined in application.yml
         container_env = {
+            # Set active profile (loads application-{profile}.yml)
             "SPRING_PROFILES_ACTIVE": environment,
-            "SPRING_APPLICATION_NAME": "bixarena-auth-service",
-            "SERVER_PORT": "8115",
-            # PostgreSQL configuration
+            # PostgreSQL connection (override defaults with actual endpoints)
             "SPRING_DATASOURCE_URL": (
                 f"jdbc:postgresql://{database.db_instance_endpoint_address}:"
                 f"{database.db_instance_endpoint_port}/bixarena"
             ),
-            # Will use secrets manager
             "SPRING_DATASOURCE_USERNAME": database_secret.unsafe_unwrap(),
-            "SPRING_DATASOURCE_DRIVER_CLASS_NAME": "org.postgresql.Driver",
-            # Valkey/Redis configuration (database 2 for auth sessions)
+            # Valkey/Redis connection (override defaults with actual endpoints)
             "SPRING_DATA_REDIS_HOST": valkey_endpoint,
             "SPRING_DATA_REDIS_PORT": valkey_port,
-            "SPRING_DATA_REDIS_DATABASE": "2",
-            "SPRING_DATA_REDIS_TIMEOUT": "2000ms",
-            # Session configuration
-            "SPRING_SESSION_STORE_TYPE": "redis",
-            "SPRING_SESSION_REDIS_NAMESPACE": "bixarena:session",
-            "SPRING_SESSION_TIMEOUT": "7d",
-            # Flyway configuration
-            "SPRING_FLYWAY_ENABLED": "true",
-            "SPRING_FLYWAY_SCHEMAS": "auth",
-            "SPRING_FLYWAY_DEFAULT_SCHEMA": "auth",
-            # JPA/Hibernate configuration
-            "SPRING_JPA_HIBERNATE_DDL_AUTO": "validate",
-            "SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA": "auth",
-            # Application-specific configuration
+            # Application-specific configuration (infrastructure-dependent)
             "APP_UI_BASE_URL": ui_base_url,
             "APP_AUTH_CLIENT_ID": synapse_client_id,
             "APP_AUTH_CLIENT_SECRET": synapse_client_secret,
-            "APP_AUTH_AUTHORIZE_URL": "https://signin.synapse.org",
-            "APP_AUTH_TOKEN_URL": "https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token",
-            "APP_AUTH_JWKS_URL": "https://repo-prod.prod.sagebase.org/auth/v1/openid/jwks",
-            "APP_AUTH_INTERNAL_ISSUER": "urn:bixarena:auth",
-            "APP_AUTH_AUDIENCE": "urn:bixarena:auth",
-            "APP_AUTH_TOKEN_TTL_SECONDS": "600",
         }
 
         # Create Fargate service for the Auth service

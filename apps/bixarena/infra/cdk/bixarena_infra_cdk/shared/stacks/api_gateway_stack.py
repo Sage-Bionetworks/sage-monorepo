@@ -50,32 +50,21 @@ class ApiGatewayStack(cdk.Stack):
         image = f"ghcr.io/sage-bionetworks/bixarena-api-gateway:{gateway_version}"
 
         # Environment variables for the API Gateway container
-        # Based on application.yml configuration
+        # Only override values that depend on CDK infrastructure
+        # Most configuration is already defined in application.yml
         container_env = {
+            # Set active profile (loads application-{profile}.yml)
             "SPRING_PROFILES_ACTIVE": environment,
-            "SPRING_APPLICATION_NAME": "bixarena-api-gateway",
-            "SERVER_PORT": "8113",
-            # Valkey/Redis configuration (database 1 for rate limiting)
+            # Valkey/Redis connection (override defaults with actual endpoints)
             "SPRING_DATA_REDIS_HOST": valkey_endpoint,
             "SPRING_DATA_REDIS_PORT": valkey_port,
-            "SPRING_DATA_REDIS_DATABASE": "1",
-            "SPRING_DATA_REDIS_TIMEOUT": "2000ms",
-            "SPRING_DATA_REDIS_CONNECT_TIMEOUT": "5000ms",
-            # Rate limiting configuration
-            "APP_RATE_LIMIT_ENABLED": "true",
-            "APP_RATE_LIMIT_FAIL_OPEN": "true",
-            "APP_RATE_LIMIT_DEFAULT_REQUESTS_PER_MINUTE": "100",
-            "APP_RATE_LIMIT_KEY_PREFIX": "bixarena:gateway:ratelimit",
-            # Gateway routes (using ECS service discovery)
-            "SPRING_CLOUD_GATEWAY_ROUTES_0_ID": "bixarena-api",
-            "SPRING_CLOUD_GATEWAY_ROUTES_0_URI": f"http://bixarena-api.{cluster.cluster_name}.local:8112",
-            "SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0": "Path=/api/v1/**",
-            "SPRING_CLOUD_GATEWAY_ROUTES_1_ID": "bixarena-auth-service",
+            # Gateway routes: override URIs to use ECS service discovery
+            # Route IDs and predicates are already defined in application.yml
+            "SPRING_CLOUD_GATEWAY_ROUTES_0_URI": (
+                f"http://bixarena-api.{cluster.cluster_name}.local:8112"
+            ),
             "SPRING_CLOUD_GATEWAY_ROUTES_1_URI": (
                 f"http://bixarena-auth-service.{cluster.cluster_name}.local:8115"
-            ),
-            "SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0": (
-                "Path=/auth/**,/.well-known/jwks.json,/oauth2/token,/userinfo"
             ),
         }
 

@@ -55,33 +55,24 @@ class ApiServiceStack(cdk.Stack):
         image = f"ghcr.io/sage-bionetworks/bixarena-api:{api_version}"
 
         # Environment variables for the API container
-        # Based on application.yml configuration
+        # Only override values that depend on CDK infrastructure
+        # Most configuration is already defined in application.yml
         container_env = {
+            # Set active profile (loads application-{profile}.yml)
             "SPRING_PROFILES_ACTIVE": environment,
-            "SPRING_APPLICATION_NAME": "bixarena-api",
-            "SERVER_PORT": "8112",
-            # PostgreSQL configuration
+            # PostgreSQL connection (override defaults with actual endpoints)
             "SPRING_DATASOURCE_URL": (
                 f"jdbc:postgresql://{database.db_instance_endpoint_address}:"
                 f"{database.db_instance_endpoint_port}/bixarena"
             ),
-            # Will use secrets manager
             "SPRING_DATASOURCE_USERNAME": database_secret.unsafe_unwrap(),
-            "SPRING_DATASOURCE_DRIVER_CLASS_NAME": "org.postgresql.Driver",
-            # Valkey/Redis configuration (database 0 for API caching)
+            # Valkey/Redis connection (override defaults with actual endpoints)
             "SPRING_DATA_REDIS_HOST": valkey_endpoint,
             "SPRING_DATA_REDIS_PORT": valkey_port,
-            "SPRING_DATA_REDIS_DATABASE": "0",
-            "SPRING_DATA_REDIS_TIMEOUT": "2000ms",
-            # Flyway configuration
-            "SPRING_FLYWAY_ENABLED": "true",
-            "SPRING_FLYWAY_SCHEMAS": "api",
-            "SPRING_FLYWAY_DEFAULT_SCHEMA": "api",
-            # JPA/Hibernate configuration
-            "SPRING_JPA_HIBERNATE_DDL_AUTO": "validate",
-            "SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA": "api",
-            # Auth service URL (will be internal ECS service discovery later)
-            "AUTH_SERVICE_BASE_URL": f"http://bixarena-auth-service.{cluster.cluster_name}.local:8115",
+            # Auth service URL: override to use ECS service discovery
+            "AUTH_SERVICE_BASE_URL": (
+                f"http://bixarena-auth-service.{cluster.cluster_name}.local:8115"
+            ),
         }
 
         # Create Fargate service for the API
