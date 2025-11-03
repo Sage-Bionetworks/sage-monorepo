@@ -6,7 +6,6 @@ simplified to a single function for a single-page LLM comparison arena.
 """
 
 import logging
-import time
 import warnings
 from uuid import UUID
 
@@ -211,40 +210,33 @@ def vote_last_response(
         battle_session.reset()
 
     # State 4: User voted
-    if ":" not in model_selectors[0]:
-        for _ in range(5):
-            names = (
-                "### Model 1: " + states[0].model_name,
-                "### Model 2: " + states[1].model_name,
-            )
-            yield (
-                names  # model_selector0, model_selector1: reveal model names
-                + (
-                    gr.update(
-                        interactive=False, placeholder="Ready for the next battle?"
-                    ),
-                )  # textbox: disable
-                + (gr.Row(visible=False),)  # voting_row: hide
-                + (gr.Row(visible=True),)  # next_battle_row: show
-                + (gr.HTML(visible=False),)  # page_header: hide
-                + (gr.Row(visible=False),)  # textbox_row: hide
-            )
-            time.sleep(0.1)
-    else:
-        names = (
-            "### Model 1: " + states[0].model_name,
-            "### Model 2: " + states[1].model_name,
-        )
-        yield (
-            names  # model_selector0, model_selector1: reveal model names
-            + (
-                gr.update(interactive=False, placeholder="Ready for the next battle?"),
-            )  # textbox: disable
-            + (gr.Row(visible=False),)  # voting_row: hide
-            + (gr.Row(visible=True),)  # next_battle_row: show
-            + (gr.HTML(visible=False),)  # page_header: hide
-            + (gr.Row(visible=False),)  # textbox_row: hide
-        )
+    leftvote_variant = (
+        "primary" if outcome == BattleEvaluationOutcome.MODEL1 else "secondary"
+    )
+    tie_variant = "primary" if outcome == BattleEvaluationOutcome.TIE else "secondary"
+    rightvote_variant = (
+        "primary" if outcome == BattleEvaluationOutcome.MODEL2 else "secondary"
+    )
+
+    names = (
+        "### Model 1: " + states[0].model_name,
+        "### Model 2: " + states[1].model_name,
+    )
+    yield (
+        names  # model_selector0, model_selector1: reveal model names
+        + (
+            gr.update(interactive=False, placeholder="Ready for the next battle?"),
+        )  # textbox: disable
+        + (
+            gr.Button(variant=leftvote_variant, interactive=False),
+            gr.Button(variant=tie_variant, interactive=False),
+            gr.Button(variant=rightvote_variant, interactive=False),
+        )  # buttons: show which was clicked, disable all
+        + (gr.Row(visible=True),)  # voting_row: keep visible
+        + (gr.Row(visible=True),)  # next_battle_row: show
+        + (gr.HTML(visible=False),)  # page_header: hide
+        + (gr.Row(visible=False),)  # textbox_row: hide
+    )
 
 
 def leftvote_last_response(
@@ -330,6 +322,11 @@ def clear_history(
             )
         ]  # textbox: enable
         + [""]  # slow_warning: clear
+        + [
+            gr.Button(variant="secondary", interactive=True),
+            gr.Button(variant="secondary", interactive=True),
+            gr.Button(variant="secondary", interactive=True),
+        ]  # voting buttons: reset to default state
         + [gr.Group(visible=False)]  # battle_interface: hide
         + [gr.Row(visible=False)]  # voting_row: hide
         + [gr.Row(visible=False)]  # next_battle_row: hide
@@ -567,6 +564,7 @@ def build_side_by_side_ui_anony():
         states + [battle_session] + model_selectors,
         model_selectors
         + [textbox]
+        + [leftvote_btn, tie_btn, rightvote_btn]
         + [voting_row, next_battle_row, page_header, textbox_row],
     )
     rightvote_btn.click(
@@ -574,6 +572,7 @@ def build_side_by_side_ui_anony():
         states + [battle_session] + model_selectors,
         model_selectors
         + [textbox]
+        + [leftvote_btn, tie_btn, rightvote_btn]
         + [voting_row, next_battle_row, page_header, textbox_row],
     )
     tie_btn.click(
@@ -581,6 +580,7 @@ def build_side_by_side_ui_anony():
         states + [battle_session] + model_selectors,
         model_selectors
         + [textbox]
+        + [leftvote_btn, tie_btn, rightvote_btn]
         + [voting_row, next_battle_row, page_header, textbox_row],
     )
     clear_btn.click(
@@ -591,6 +591,7 @@ def build_side_by_side_ui_anony():
         + chatbots
         + model_selectors
         + [textbox, slow_warning]
+        + [leftvote_btn, tie_btn, rightvote_btn]
         + [battle_interface, voting_row, next_battle_row]
         + [page_header, textbox_row]
         + [example_prompts_group, prev_btn, next_btn]
