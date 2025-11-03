@@ -7,7 +7,7 @@ from aws_cdk.aws_elasticloadbalancingv2 import IApplicationTargetGroup
 from constructs import Construct
 
 from bixarena_infra_cdk.shared.constructs.fargate_service_construct import (
-    OpenchalllengesFargateService,
+    BixArenaFargateService,
 )
 
 
@@ -74,7 +74,7 @@ class AppServiceStack(cdk.Stack):
         }
 
         # Create Fargate service for the app
-        service_construct = OpenchalllengesFargateService(
+        service_construct = BixArenaFargateService(
             self,
             "AppService",
             vpc=vpc,

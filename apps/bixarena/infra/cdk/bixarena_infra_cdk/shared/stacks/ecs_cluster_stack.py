@@ -5,7 +5,7 @@ from aws_cdk import aws_ec2 as ec2
 from constructs import Construct
 
 from bixarena_infra_cdk.shared.constructs.ecs_cluster_construct import (
-    OpenchallengesEcsCluster,
+    BixArenaEcsCluster,
 )
 
 
@@ -35,7 +35,7 @@ class EcsClusterStack(cdk.Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # Create ECS cluster
-        cluster_construct = OpenchallengesEcsCluster(
+        cluster_construct = BixArenaEcsCluster(
             self,
             "Cluster",
             vpc=vpc,

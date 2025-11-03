@@ -9,7 +9,7 @@ from aws_cdk.aws_elasticloadbalancingv2 import IApplicationTargetGroup
 from constructs import Construct
 
 
-class OpenchalllengesFargateService(Construct):
+class BixArenaFargateService(Construct):
     """Reusable Fargate service construct for deploying containers."""
 
     def __init__(
@@ -122,6 +122,11 @@ class OpenchalllengesFargateService(Construct):
             health_check_grace_period=(Duration.seconds(60) if target_group else None),
             # Enable ECS Exec for debugging and database access via port forwarding
             enable_execute_command=True,
+            # Deployment configuration to maintain availability during deployments
+            # For single-task services (desired_count=1), this ensures
+            # zero-downtime deployments
+            min_healthy_percent=100,  # Keep all tasks running during deployment
+            max_healthy_percent=200,  # Allow double capacity during deployment
         )
 
         # Add SSM permissions for ECS Exec

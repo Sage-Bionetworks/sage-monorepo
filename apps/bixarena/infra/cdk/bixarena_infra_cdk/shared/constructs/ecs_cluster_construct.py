@@ -5,7 +5,7 @@ from aws_cdk import aws_ecs as ecs
 from constructs import Construct
 
 
-class OpenchallengesEcsCluster(Construct):
+class BixArenaEcsCluster(Construct):
     """Reusable ECS cluster construct with CloudWatch Container Insights."""
 
     def __init__(
@@ -26,13 +26,13 @@ class OpenchallengesEcsCluster(Construct):
         """
         super().__init__(scope, construct_id, **kwargs)
 
-        # Create ECS cluster with Container Insights enabled
+        # Create ECS cluster with Container Insights V2 enabled
         self.cluster = ecs.Cluster(
             self,
             "Cluster",
             vpc=vpc,
-            # Enable CloudWatch Container Insights for monitoring
-            container_insights=True,
+            # Enable CloudWatch Container Insights with enhanced observability
+            container_insights_v2=ecs.ContainerInsights.ENHANCED,
         )
 
         # Export cluster attributes for use in service stacks

@@ -11,7 +11,10 @@ from bixarena_infra_cdk.shared.config import (
     get_stack_prefix,
 )
 from bixarena_infra_cdk.shared.stacks.alb_stack import AlbStack
+from bixarena_infra_cdk.shared.stacks.api_gateway_stack import ApiGatewayStack
+from bixarena_infra_cdk.shared.stacks.api_service_stack import ApiServiceStack
 from bixarena_infra_cdk.shared.stacks.app_service_stack import AppServiceStack
+from bixarena_infra_cdk.shared.stacks.auth_service_stack import AuthServiceStack
 from bixarena_infra_cdk.shared.stacks.bucket_stack import BucketStack
 from bixarena_infra_cdk.shared.stacks.database_stack import DatabaseStack
 from bixarena_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
@@ -123,6 +126,68 @@ def main() -> None:
     )
     app_service_stack.add_dependency(ecs_cluster_stack)
     app_service_stack.add_dependency(alb_stack)
+
+    # Create API service stack (depends on database, valkey, and ECS cluster)
+    _api_service_stack = ApiServiceStack(
+        app,
+        f"{stack_prefix}-api-service",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        database=database_stack.database,
+        database_secret_arn=database_stack.database_secret.secret_arn,
+        valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
+        valkey_port=valkey_stack.valkey_construct.cluster_port,
+        api_version=app_version,  # Use same version tag as app
+        description=f"API service for BixArena {environment} environment",
+    )
+    # Note: Dependencies are automatic via CloudFormation references
+    # (database endpoint, etc.)
+    # Don't add manual add_dependency() calls to avoid cyclic dependencies
+    # with security group rules
+
+    # Create Auth service stack (depends on database, valkey, and ECS cluster)
+    _auth_service_stack = AuthServiceStack(
+        app,
+        f"{stack_prefix}-auth-service",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        database=database_stack.database,
+        database_secret_arn=database_stack.database_secret.secret_arn,
+        valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
+        valkey_port=valkey_stack.valkey_construct.cluster_port,
+        auth_version=app_version,  # Use same version tag as app
+        ui_base_url=(
+            f"{'https' if use_https else 'http'}://"
+            f"{fqdn if fqdn else alb_stack.alb.load_balancer_dns_name}"
+        ),
+        synapse_client_id=os.getenv("SYNAPSE_CLIENT_ID", "changeme"),
+        synapse_client_secret=os.getenv("SYNAPSE_CLIENT_SECRET", "changeme"),
+        description=f"Auth service for BixArena {environment} environment",
+    )
+    # Note: Dependencies are automatic via CloudFormation references
+
+    # Create API Gateway stack (depends on API, Auth, Valkey, ECS cluster, and ALB)
+    _api_gateway_stack = ApiGatewayStack(
+        app,
+        f"{stack_prefix}-api-gateway",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        target_group=alb_stack.api_gateway_target_group,
+        valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
+        valkey_port=valkey_stack.valkey_construct.cluster_port,
+        gateway_version=app_version,  # Use same version tag as app
+        description=f"API Gateway for BixArena {environment} environment",
+    )
+    # Note: Dependencies are automatic via CloudFormation references
+
+    # Note: Security group rules are configured within the constructs to allow
+    # connections from the VPC CIDR range, avoiding cyclic dependencies
 
     # Create bucket stack
     BucketStack(

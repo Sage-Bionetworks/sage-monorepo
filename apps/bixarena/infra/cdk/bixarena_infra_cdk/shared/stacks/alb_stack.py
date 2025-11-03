@@ -6,7 +6,7 @@ from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_elasticloadbalancingv2 as elbv2
 from constructs import Construct
 
-from bixarena_infra_cdk.shared.constructs.alb_construct import OpenchallengesAlb
+from bixarena_infra_cdk.shared.constructs.alb_construct import BixArenaAlb
 
 
 class AlbStack(cdk.Stack):
@@ -37,7 +37,7 @@ class AlbStack(cdk.Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # Create ALB
-        alb_construct = OpenchallengesAlb(
+        alb_construct = BixArenaAlb(
             self,
             "Alb",
             vpc=vpc,
@@ -58,6 +58,25 @@ class AlbStack(cdk.Stack):
             target_type=elbv2.TargetType.IP,
             health_check=elbv2.HealthCheck(
                 path="/",
+                interval=cdk.Duration.seconds(30),
+                timeout=cdk.Duration.seconds(5),
+                healthy_threshold_count=2,
+                unhealthy_threshold_count=3,
+            ),
+            deregistration_delay=cdk.Duration.seconds(30),
+        )
+
+        # Create target group for the API Gateway service
+        # API Gateway routes traffic to API and Auth services
+        self.api_gateway_target_group = elbv2.ApplicationTargetGroup(
+            self,
+            "ApiGatewayTargetGroup",
+            vpc=vpc,
+            port=8113,  # API Gateway port
+            protocol=elbv2.ApplicationProtocol.HTTP,
+            target_type=elbv2.TargetType.IP,
+            health_check=elbv2.HealthCheck(
+                path="/actuator/health",  # Spring Boot Actuator health endpoint
                 interval=cdk.Duration.seconds(30),
                 timeout=cdk.Duration.seconds(5),
                 healthy_threshold_count=2,
@@ -98,6 +117,16 @@ class AlbStack(cdk.Stack):
                     content_type="application/json",
                     message_body='{"status":"healthy","service":"bixarena-alb"}',
                 ),
+            )
+
+            # Route /api/* and /auth/* to API Gateway (priority 2)
+            https_listener.add_action(
+                "ApiGatewayHttps",
+                priority=2,
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(["/api/*", "/auth/*"])
+                ],
+                action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
             )
 
             # Default action for HTTPS: forward to app service
@@ -147,6 +176,16 @@ class AlbStack(cdk.Stack):
                     content_type="application/json",
                     message_body='{"status":"healthy","service":"bixarena-alb"}',
                 ),
+            )
+
+            # Route /api/* and /auth/* to API Gateway (priority 2)
+            http_listener.add_action(
+                "ApiGatewayHttp",
+                priority=2,
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(["/api/*", "/auth/*"])
+                ],
+                action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
             )
 
             # Default action for HTTP: forward to app service

@@ -5,7 +5,7 @@ from aws_cdk import aws_elasticloadbalancingv2 as elbv2
 from constructs import Construct
 
 
-class OpenchallengesAlb(Construct):
+class BixArenaAlb(Construct):
     """Reusable Application Load Balancer construct."""
 
     def __init__(

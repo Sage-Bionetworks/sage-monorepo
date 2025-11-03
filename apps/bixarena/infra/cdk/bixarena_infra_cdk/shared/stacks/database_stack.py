@@ -108,3 +108,4 @@ class DatabaseStack(cdk.Stack):
         self.database = self.database_construct.database
         self.database_connections = self.database_construct.database_connections
         self.database_secret = database_secret
+        self.security_group = self.database_construct.security_group

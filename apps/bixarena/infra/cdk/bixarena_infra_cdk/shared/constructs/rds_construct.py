@@ -54,6 +54,13 @@ class PostgresDatabase(Construct):
             allow_all_outbound=False,  # No outbound access needed
         )
 
+        # Allow inbound connections on PostgreSQL port from VPC
+        self.security_group.add_ingress_rule(
+            peer=ec2.Peer.ipv4(vpc.vpc_cidr_block),
+            connection=ec2.Port.tcp(5432),
+            description="Allow PostgreSQL access from VPC",
+        )
+
         # Create database instance
         self.database = rds.DatabaseInstance(
             self,

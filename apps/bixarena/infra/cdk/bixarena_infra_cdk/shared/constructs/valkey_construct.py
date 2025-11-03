@@ -45,6 +45,13 @@ class ValkeyCluster(Construct):
             allow_all_outbound=False,  # No outbound access needed
         )
 
+        # Allow inbound connections on Valkey/Redis port from VPC
+        self.security_group.add_ingress_rule(
+            peer=ec2.Peer.ipv4(vpc.vpc_cidr_block),
+            connection=ec2.Port.tcp(6379),
+            description="Allow Valkey access from VPC",
+        )
+
         # Create subnet group for ElastiCache
         # Use isolated subnets for cost savings (no NAT charges)
         self.subnet_group = elasticache.CfnSubnetGroup(
