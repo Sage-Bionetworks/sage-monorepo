@@ -12,7 +12,7 @@ A model error entity representing a failure that occurred during model interacti
 | **error_message** | **str**      | The error message from the API or exception with full details.                         |
 | **battle_id**     | **str**      | Unique identifier (UUID) of the battle.                                                | [optional] |
 | **round_id**      | **str**      | Unique identifier (UUID) of the battle round.                                          | [optional] |
-| **created_at**    | **datetime** | When the error was reported by the Gradio app.                                         |
+| **created_at**    | **datetime** | Timestamp when the entity was created.                                                 |
 
 ## Example
 

@@ -1733,10 +1733,7 @@ components:
           $ref: '#/components/schemas/BattleRoundId'
           nullable: true
         createdAt:
-          type: string
-          format: date-time
-          description: When the error was reported by the Gradio app.
-          example: '2025-10-29T21:03:53Z'
+          $ref: '#/components/schemas/CreatedAt'
       required:
         - id
         - modelId

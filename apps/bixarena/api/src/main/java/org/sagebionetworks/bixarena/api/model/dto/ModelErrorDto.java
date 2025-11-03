@@ -182,11 +182,11 @@ public class ModelErrorDto {
   }
 
   /**
-   * When the error was reported by the Gradio app.
+   * Timestamp when the entity was created.
    * @return createdAt
    */
   @NotNull @Valid 
-  @Schema(name = "createdAt", example = "2025-10-29T21:03:53Z", description = "When the error was reported by the Gradio app.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "createdAt", example = "2024-01-15T10:30Z", description = "Timestamp when the entity was created.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("createdAt")
   public OffsetDateTime getCreatedAt() {
     return createdAt;

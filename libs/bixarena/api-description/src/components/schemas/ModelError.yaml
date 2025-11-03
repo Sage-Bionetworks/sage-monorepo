@@ -17,10 +17,7 @@ properties:
     $ref: ./BattleRoundId.yaml
     nullable: true
   createdAt:
-    type: string
-    format: date-time
-    description: When the error was reported by the Gradio app.
-    example: '2025-10-29T21:03:53Z'
+    $ref: ./CreatedAt.yaml
 required:
   - id
   - modelId

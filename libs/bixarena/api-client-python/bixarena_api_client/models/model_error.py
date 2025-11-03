@@ -54,7 +54,7 @@ class ModelError(BaseModel):
         alias="roundId",
     )
     created_at: datetime = Field(
-        description="When the error was reported by the Gradio app.", alias="createdAt"
+        description="Timestamp when the entity was created.", alias="createdAt"
     )
     __properties: ClassVar[List[str]] = [
         "id",

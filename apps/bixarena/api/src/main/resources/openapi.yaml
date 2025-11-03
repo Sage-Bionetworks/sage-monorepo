@@ -2171,7 +2171,7 @@ components:
       description: |
         A model error entity representing a failure that occurred during model interaction.
       example:
-        createdAt: 2025-10-29T21:03:53Z
+        createdAt: 2024-01-15T10:30:00Z
         battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         modelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         errorMessage: Rate limit exceeded
@@ -2212,8 +2212,8 @@ components:
           format: uuid
           type: string
         createdAt:
-          description: When the error was reported by the Gradio app.
-          example: 2025-10-29T21:03:53Z
+          description: Timestamp when the entity was created.
+          example: 2024-01-15T10:30:00Z
           format: date-time
           type: string
       required:
