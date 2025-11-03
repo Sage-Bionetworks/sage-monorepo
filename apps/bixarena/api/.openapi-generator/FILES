@@ -61,6 +61,8 @@ src/main/java/org/sagebionetworks/bixarena/api/model/dto/LicenseDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/MessageCreateDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/MessageRoleDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelDto.java
+src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelErrorCreateRequestDto.java
+src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelErrorDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelPageDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelSearchQueryDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelSortDto.java

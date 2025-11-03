@@ -29,6 +29,21 @@ CREATE TABLE api.model (
 CREATE INDEX idx_api_model_license ON api.model(license);
 CREATE INDEX idx_api_model_active ON api.model(active);
 
+-- Model errors table
+CREATE TABLE api.model_error (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
+  error_code INTEGER,
+  error_message VARCHAR(1000) NOT NULL,
+  battle_id UUID,
+  round_id UUID,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Indexes for model_error
+CREATE INDEX idx_api_model_error_model_id ON api.model_error(model_id);
+CREATE INDEX idx_api_model_error_created_at ON api.model_error(created_at DESC);
+
 -- Leaderboard snapshots table
 CREATE TABLE api.leaderboard_snapshot (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

@@ -59,6 +59,8 @@ paths:
     $ref: paths/leaderboards/{leaderboardId}/snapshots.yaml
   /models:
     $ref: paths/models.yaml
+  /models/{modelId}/errors:
+    $ref: paths/models/{modelId}/errors.yaml
   /battles/{battleId}/evaluations:
     $ref: paths/battles/{battleId}/evaluations.yaml
   /stats:

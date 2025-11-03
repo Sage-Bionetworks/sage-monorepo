@@ -53,6 +53,8 @@ bixarena_api_client/models/license.py
 bixarena_api_client/models/message_create.py
 bixarena_api_client/models/message_role.py
 bixarena_api_client/models/model.py
+bixarena_api_client/models/model_error.py
+bixarena_api_client/models/model_error_create_request.py
 bixarena_api_client/models/model_page.py
 bixarena_api_client/models/model_search_query.py
 bixarena_api_client/models/model_sort.py
@@ -110,6 +112,8 @@ docs/MessageCreate.md
 docs/MessageRole.md
 docs/Model.md
 docs/ModelApi.md
+docs/ModelError.md
+docs/ModelErrorCreateRequest.md
 docs/ModelPage.md
 docs/ModelSearchQuery.md
 docs/ModelSort.md
@@ -168,6 +172,8 @@ test/test_message_create.py
 test/test_message_role.py
 test/test_model.py
 test/test_model_api.py
+test/test_model_error.py
+test/test_model_error_create_request.py
 test/test_model_page.py
 test/test_model_search_query.py
 test/test_model_sort.py

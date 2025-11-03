@@ -1,6 +1,8 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.ModelErrorCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.ModelErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
@@ -27,6 +29,60 @@ public interface ModelApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
+    }
+
+    /**
+     * POST /models/{modelId}/errors : Report a model error
+     * Report an error that occurred during model interaction.
+     *
+     * @param modelId The unique identifier of a model (required)
+     * @param modelErrorCreateRequestDto  (required)
+     * @return Model error reported successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see ModelApi#createModelError
+     */
+    default ResponseEntity<ModelErrorDto> createModelError(String modelId,
+        ModelErrorCreateRequestDto modelErrorCreateRequestDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"createdAt\" : \"2025-10-29T21:03:53Z\", \"battleId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"modelId\" : \"123e4567-e89b-12d3-a456-426614174002\", \"errorMessage\" : \"Rate limit exceeded\", \"errorCode\" : 429, \"id\" : \"98765432-e89b-12d3-a456-426614174099\", \"roundId\" : \"123e4567-e89b-12d3-a456-426614174001\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
     }
 
     /**

@@ -1,0 +1,28 @@
+type: object
+description: |
+  Request body for reporting a model error from the Gradio app. This enables tracking
+  model failures, monitoring error rates, and potentially auto-disabling unreliable models.
+properties:
+  errorCode:
+    type: integer
+    nullable: true
+    description: HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503). May be null for network errors or client-side exceptions.
+    example: 429
+  errorMessage:
+    type: string
+    description: The error message from the API or exception with full details
+    minLength: 1
+    maxLength: 1000
+    example: 'Rate limit exceeded'
+  battleId:
+    type: string
+    nullable: true
+    description: The battle ID (UUID) if the error occurred during a battle (for tracking impact)
+    example: '123e4567-e89b-12d3-a456-426614174000'
+  roundId:
+    type: string
+    nullable: true
+    description: The round ID (UUID) if the error occurred during a specific round
+    example: '123e4567-e89b-12d3-a456-426614174001'
+required:
+  - errorMessage
