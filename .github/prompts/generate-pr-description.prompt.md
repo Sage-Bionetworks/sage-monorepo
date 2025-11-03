@@ -71,19 +71,24 @@ The [component/service/application] now has:
 - If no related issue exists, omit this section
 
 ### Changelog Section
+- **CRITICAL: Use a single-level flat list with NO sub-bullets or nested items**
+- **Keep items coarse-grained and high-level** - avoid excessive technical detail
 - Use imperative form (e.g., "Add feature X", "Remove deprecated Y")
-- Be concise - each item should be a single clear action
-- Create a single flat list without sub-items or grouping by topics
-- Include specific technical details (class names, file types, etc.)
+- Each item should represent a significant, user-facing or system-level change
+- Group multiple related low-level changes into one high-level bullet point
+- Avoid listing individual file changes or implementation details
 - Order from most important to least important changes
+- Aim for 3-7 bullet points total, not an exhaustive list
 
 ### Preview Section
-- Focus on the end result and benefits
+- **CRITICAL: Use a single-level flat list with NO sub-bullets or nested items**
+- **Keep items coarse-grained and high-level** - focus on major outcomes, not detailed changes
+- Focus on the end result and benefits from a user or system perspective
 - **DO NOT use checkmark emojis (✅) or green checkboxes**
 - Use simple bullet points with dashes (-)
-- Highlight key improvements, features, or fixes
+- Highlight key improvements, features, or fixes that matter to end users
 - Mention metrics if applicable (test coverage, performance, etc.)
-- Keep items concise but descriptive
+- Aim for 3-5 bullet points total describing major accomplishments
 
 ## Technical Details to Include
 
