@@ -128,6 +128,8 @@ def main() -> None:
     app_service_stack.add_dependency(alb_stack)
 
     # Create API service stack (depends on database, valkey, and ECS cluster)
+    # Database secret is guaranteed to exist since we use from_generated_secret()
+    assert database_stack.database_secret is not None
     _api_service_stack = ApiServiceStack(
         app,
         f"{stack_prefix}-api-service",
