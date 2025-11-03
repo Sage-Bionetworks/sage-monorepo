@@ -39,7 +39,10 @@ from bixarena_app.page.battle_page_css import (
     EXAMPLE_PROMPTS_CSS,
     INPUT_PROMPT_CSS,
 )
-from bixarena_app.page.example_prompt_ui import ExamplePromptUI
+from bixarena_app.page.example_prompt_ui import (
+    PROMPT_CARD_CLICK_JS,
+    ExamplePromptUI,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -465,7 +468,7 @@ def build_side_by_side_ui_anony():
     example_prompt_ui = ExamplePromptUI()
 
     # Page content
-    with gr.Column(elem_classes=["content-wrapper"]):
+    with gr.Column():
         page_header = gr.HTML(page_header_html, visible=True)
         # Example prompts (cards + arrows) now provided by helper (textbox bound later)
         # Start with empty prompts - will be loaded when page is navigated to
@@ -744,5 +747,8 @@ def build_battle_page():
             [],
             js=empty_prompt_js,
         )
+
+        # Load JavaScript for prompt card click handlers
+        battle_page.load(lambda: None, None, None, js=PROMPT_CARD_CLICK_JS)
 
     return battle_page, example_prompt_ui, prompt_outputs
