@@ -26,7 +26,7 @@ public class PublicStatsDto {
 
   private Long modelsEvaluated;
 
-  private Long totalBattles;
+  private Long completedBattles;
 
   private Long totalUsers;
 
@@ -37,9 +37,9 @@ public class PublicStatsDto {
   /**
    * Constructor with only required parameters
    */
-  public PublicStatsDto(Long modelsEvaluated, Long totalBattles, Long totalUsers) {
+  public PublicStatsDto(Long modelsEvaluated, Long completedBattles, Long totalUsers) {
     this.modelsEvaluated = modelsEvaluated;
-    this.totalBattles = totalBattles;
+    this.completedBattles = completedBattles;
     this.totalUsers = totalUsers;
   }
 
@@ -63,24 +63,24 @@ public class PublicStatsDto {
     this.modelsEvaluated = modelsEvaluated;
   }
 
-  public PublicStatsDto totalBattles(Long totalBattles) {
-    this.totalBattles = totalBattles;
+  public PublicStatsDto completedBattles(Long completedBattles) {
+    this.completedBattles = completedBattles;
     return this;
   }
 
   /**
-   * Total number of battles conducted on the platform
-   * @return totalBattles
+   * Total number of completed battles on the platform
+   * @return completedBattles
    */
   @NotNull 
-  @Schema(name = "totalBattles", example = "1337", description = "Total number of battles conducted on the platform", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("totalBattles")
-  public Long getTotalBattles() {
-    return totalBattles;
+  @Schema(name = "completedBattles", example = "1337", description = "Total number of completed battles on the platform", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("completedBattles")
+  public Long getCompletedBattles() {
+    return completedBattles;
   }
 
-  public void setTotalBattles(Long totalBattles) {
-    this.totalBattles = totalBattles;
+  public void setCompletedBattles(Long completedBattles) {
+    this.completedBattles = completedBattles;
   }
 
   public PublicStatsDto totalUsers(Long totalUsers) {
@@ -113,13 +113,13 @@ public class PublicStatsDto {
     }
     PublicStatsDto publicStats = (PublicStatsDto) o;
     return Objects.equals(this.modelsEvaluated, publicStats.modelsEvaluated) &&
-        Objects.equals(this.totalBattles, publicStats.totalBattles) &&
+        Objects.equals(this.completedBattles, publicStats.completedBattles) &&
         Objects.equals(this.totalUsers, publicStats.totalUsers);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelsEvaluated, totalBattles, totalUsers);
+    return Objects.hash(modelsEvaluated, completedBattles, totalUsers);
   }
 
   @Override
@@ -127,7 +127,7 @@ public class PublicStatsDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class PublicStatsDto {\n");
     sb.append("    modelsEvaluated: ").append(toIndentedString(modelsEvaluated)).append("\n");
-    sb.append("    totalBattles: ").append(toIndentedString(totalBattles)).append("\n");
+    sb.append("    completedBattles: ").append(toIndentedString(completedBattles)).append("\n");
     sb.append("    totalUsers: ").append(toIndentedString(totalUsers)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -158,7 +158,7 @@ public class PublicStatsDto {
 
     protected Builder copyOf(PublicStatsDto value) { 
       this.instance.setModelsEvaluated(value.modelsEvaluated);
-      this.instance.setTotalBattles(value.totalBattles);
+      this.instance.setCompletedBattles(value.completedBattles);
       this.instance.setTotalUsers(value.totalUsers);
       return this;
     }
@@ -168,8 +168,8 @@ public class PublicStatsDto {
       return this;
     }
     
-    public PublicStatsDto.Builder totalBattles(Long totalBattles) {
-      this.instance.totalBattles(totalBattles);
+    public PublicStatsDto.Builder completedBattles(Long completedBattles) {
+      this.instance.completedBattles(completedBattles);
       return this;
     }
     

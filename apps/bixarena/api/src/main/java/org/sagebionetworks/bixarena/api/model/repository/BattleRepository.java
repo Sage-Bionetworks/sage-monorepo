@@ -34,6 +34,14 @@ public interface BattleRepository
   Long countDistinctModelsEvaluated();
 
   /**
+   * Count all completed battles (with ended_at set).
+   *
+   * @return Total number of completed battles
+   */
+  @Query("SELECT COUNT(b) FROM BattleEntity b WHERE b.endedAt IS NOT NULL")
+  Long countCompleted();
+
+  /**
    * Count total battles created by a specific user.
    *
    * @param userId The user's UUID

@@ -3,13 +3,12 @@ from datetime import datetime
 
 import gradio as gr
 import pandas as pd
-from bixarena_api_client import LeaderboardApi, StatsApi
-from bixarena_api_client.api_client import ApiClient
+from bixarena_api_client import LeaderboardApi
 from bixarena_api_client.exceptions import ApiException
 
 from bixarena_app.api.api_client_helper import (
     create_authenticated_api_client,
-    get_api_configuration,
+    fetch_public_stats,
 )
 
 logger = logging.getLogger(__name__)
@@ -95,34 +94,6 @@ def fetch_leaderboard_data(jwt_token: str | None = None):
         )
 
 
-def fetch_public_stats() -> dict:
-    """Fetch public platform statistics from the API.
-
-    Returns:
-        Dictionary with models_evaluated and total_battles.
-        Returns default values if API call fails.
-    """
-    try:
-        configuration = get_api_configuration()
-        with ApiClient(configuration) as client:
-            api = StatsApi(client)
-            stats = api.get_public_stats()
-            logger.info(
-                f"Fetched Leaderboard public stats: {stats.models_evaluated} models, "
-                f"{stats.total_battles} battles"
-            )
-            return {
-                "models_evaluated": stats.models_evaluated,
-                "total_battles": stats.total_battles,
-            }
-    except Exception as e:
-        logger.error(f"Error fetching public stats: {e}")
-        return {
-            "models_evaluated": 0,
-            "total_battles": 0,
-        }
-
-
 def filter_dataframe(df, model_filter):
     """Filter dataframe by model name"""
     if model_filter:
@@ -138,7 +109,7 @@ def load_leaderboard_stats_on_page_load() -> dict:
         Gradio update dict for the metrics HTML component
     """
     stats = fetch_public_stats()
-    total_battles = stats["total_battles"]
+    total_battles = stats["completed_battles"]
     models_evaluated = stats["models_evaluated"]
     last_updated = datetime.now().strftime("%b %d, %Y")
 

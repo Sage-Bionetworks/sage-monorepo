@@ -33,13 +33,13 @@ public class PublicStatsService {
 
     // These queries only execute on cache miss
     Long totalUsers = userStatsRepository.count();
-    Long totalBattles = battleRepository.count();
+    Long completedBattles = battleRepository.countCompleted();
     Long modelsEvaluated = battleRepository.countDistinctModelsEvaluated();
 
     PublicStatsDto stats =
         PublicStatsDto.builder()
             .modelsEvaluated(modelsEvaluated)
-            .totalBattles(totalBattles)
+            .completedBattles(completedBattles)
             .totalUsers(totalUsers)
             .build();
 

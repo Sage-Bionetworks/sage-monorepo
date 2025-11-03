@@ -2107,7 +2107,7 @@ components:
     PublicStats:
       description: Public statistics about the BixArena platform.
       example:
-        totalBattles: 1337
+        completedBattles: 1337
         totalUsers: 256
         modelsEvaluated: 42
       properties:
@@ -2117,8 +2117,8 @@ components:
           example: 42
           format: int64
           type: integer
-        totalBattles:
-          description: Total number of battles conducted on the platform
+        completedBattles:
+          description: Total number of completed battles on the platform
           example: 1337
           format: int64
           type: integer
@@ -2128,8 +2128,8 @@ components:
           format: int64
           type: integer
       required:
+        - completedBattles
         - modelsEvaluated
-        - totalBattles
         - totalUsers
       type: object
     UserStats:
