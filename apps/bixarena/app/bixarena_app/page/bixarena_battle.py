@@ -364,27 +364,6 @@ def add_text(
         assert states[1] is None
         battle_session.reset()
 
-    # State: Edge case - empty text submitted
-    if len(text) <= 0:
-        if states[0] is not None:
-            for i in range(num_sides):
-                states[i].skip_next = True
-        return (
-            states  # state0, state1: unchanged
-            + [battle_session]  # battle_session: unchanged
-            + [
-                x.to_gradio_chatbot() if x else [] for x in states
-            ]  # chatbot0, chatbot1: unchanged
-            + [""]  # textbox: clear
-            + [""]  # slow_warning: clear
-            + [gr.Group(visible=False)]  # battle_interface: hide
-            + [gr.Row(visible=False)]  # voting_row: hide
-            + [gr.Row(visible=False)]  # next_battle_row: hide
-            + [gr.Column(visible=True)]  # example_prompts_group: show
-            + [gr.HTML(visible=True)]  # page_header: show
-            + [gr.Row(visible=True)]  # textbox_row: show
-        )
-
     # State: Edge case - battle round limit reached
     if states[0] is not None:
         conv = states[0].conv
@@ -667,6 +646,30 @@ def build_side_by_side_ui_anony():
     }
     """
 
+    # Install empty prompt validation - prevent submission at keydown level
+    prevent_empty_prompt_js = """
+    () => {
+        const textbox = document.querySelector('#input_box textarea');
+        if (textbox && !textbox._emptyValidationInstalled) {
+            textbox._emptyValidationInstalled = true;
+
+            // Prevent Enter key submission when input is empty
+            textbox.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    const value = textbox.value.trim();
+                    if (value === '') {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        return false;
+                    }
+                }
+            }, true);
+        }
+        return [];
+    }
+    """
+
     textbox.submit(
         add_text,
         states + [battle_session] + model_selectors + [textbox],
@@ -731,6 +734,7 @@ def build_side_by_side_ui_anony():
         states + model_selectors,
         example_prompt_ui,
         [example_prompts_group, prev_btn, next_btn] + prompt_cards,
+        prevent_empty_prompt_js,
     )
 
 
@@ -744,12 +748,22 @@ def build_battle_page():
     load_demo_side_by_side_anony()
 
     with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
-        _, example_prompt_ui, prompt_outputs = build_side_by_side_ui_anony()
+        (
+            _,
+            example_prompt_ui,
+            prompt_outputs,
+            empty_prompt_js,
+        ) = build_side_by_side_ui_anony()
 
         # Refresh example prompts when page loads to ensure each user sees different prompts
         battle_page.load(
             example_prompt_ui.refresh_prompts,
             outputs=prompt_outputs,
+        ).then(
+            lambda: None,  # Install empty input validation
+            [],
+            [],
+            js=empty_prompt_js,
         )
 
     return battle_page, example_prompt_ui, prompt_outputs
