@@ -83,7 +83,7 @@ public class ExamplePromptDto {
    * The biomedical question text.
    * @return question
    */
-  @NotNull @Size(min = 1, max = 1000) 
+  @NotNull @Size(min = 1, max = 160) 
   @Schema(name = "question", example = "What are the main symptoms of Type 2 diabetes?", description = "The biomedical question text.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("question")
   public String getQuestion() {

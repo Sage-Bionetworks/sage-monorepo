@@ -65,7 +65,7 @@ CREATE INDEX idx_api_leaderboard_snapshot_created_at ON api.leaderboard_snapshot
 -- Example prompts table (self-contained biomedical example prompts)
 CREATE TABLE api.example_prompt (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  question VARCHAR(1000) NOT NULL,
+  question VARCHAR(160) NOT NULL,
   source VARCHAR(100) NOT NULL,
   active BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
