@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
+import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolViewConfig,
   LegendPanelConfig,
@@ -21,7 +21,7 @@ import { DiseaseCorrelationComparisonToolService } from './services/disease-corr
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
-  imports: [BaseComparisonToolComponent],
+  imports: [ComparisonToolComponent],
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
 })

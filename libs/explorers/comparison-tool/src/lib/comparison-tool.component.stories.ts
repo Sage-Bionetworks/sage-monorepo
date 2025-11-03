@@ -12,11 +12,11 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
-import { BaseComparisonToolComponent } from './base-comparison-tool.component';
+import { ComparisonToolComponent } from './comparison-tool.component';
 
-const meta: Meta<BaseComparisonToolComponent> = {
-  component: BaseComparisonToolComponent,
-  title: 'Comparison Tools/BaseComparisonToolComponent',
+const meta: Meta<ComparisonToolComponent> = {
+  component: ComparisonToolComponent,
+  title: 'Comparison Tools/ComparisonToolComponent',
   decorators: [
     applicationConfig({
       providers: [
@@ -46,7 +46,7 @@ const meta: Meta<BaseComparisonToolComponent> = {
   ],
 };
 export default meta;
-type Story = StoryObj<BaseComparisonToolComponent>;
+type Story = StoryObj<ComparisonToolComponent>;
 
 export const Demo: Story = {
   args: {

@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
+import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolService,
   provideComparisonToolFilterService,
@@ -16,7 +16,7 @@ import { GeneExpressionComparisonToolService } from './services/gene-expression-
 
 async function setup() {
   const { fixture } = await render(GeneExpressionComparisonToolComponent, {
-    imports: [BaseComparisonToolComponent],
+    imports: [ComparisonToolComponent],
     providers: [
       MessageService,
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),

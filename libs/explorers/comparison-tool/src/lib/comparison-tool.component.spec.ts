@@ -10,10 +10,10 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { render } from '@testing-library/angular';
-import { BaseComparisonToolComponent } from './base-comparison-tool.component';
+import { ComparisonToolComponent } from './comparison-tool.component';
 
 async function setup() {
-  const { fixture } = await render(BaseComparisonToolComponent, {
+  const { fixture } = await render(ComparisonToolComponent, {
     imports: [LoadingContainerComponent],
     providers: [
       provideLoadingIconColors(),

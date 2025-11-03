@@ -1,7 +1,7 @@
 import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
+import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import {
@@ -17,7 +17,7 @@ import { ModelOverviewComparisonToolService } from './services/model-overview-co
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
-  imports: [BaseComparisonToolComponent],
+  imports: [ComparisonToolComponent],
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })
