@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolViewConfig,
   LegendPanelConfig,

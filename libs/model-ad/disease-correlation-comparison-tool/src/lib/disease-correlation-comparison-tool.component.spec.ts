@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import {

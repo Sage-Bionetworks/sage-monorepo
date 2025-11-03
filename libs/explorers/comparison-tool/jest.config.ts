@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'explorers-comparison-tools',
+  displayName: 'explorers-comparison-tool',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../coverage/libs/explorers/comparison-tools',
+  coverageDirectory: '../../../coverage/libs/explorers/comparison-tool',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
