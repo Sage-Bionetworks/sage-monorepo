@@ -212,11 +212,13 @@ def vote_last_response(
         battle_session.reset()
 
     # State 4: User voted
-    leftvote_variant = (
+    left_vote_variant = (
         "primary" if outcome == BattleEvaluationOutcome.MODEL1 else "secondary"
     )
-    tie_variant = "primary" if outcome == BattleEvaluationOutcome.TIE else "secondary"
-    rightvote_variant = (
+    tie_vote_variant = (
+        "primary" if outcome == BattleEvaluationOutcome.TIE else "secondary"
+    )
+    right_vote_variant = (
         "primary" if outcome == BattleEvaluationOutcome.MODEL2 else "secondary"
     )
 
@@ -230,9 +232,9 @@ def vote_last_response(
             gr.update(interactive=False, placeholder="Ready for the next battle?"),
         )  # textbox: disable
         + (
-            gr.Button(variant=leftvote_variant, interactive=False),
-            gr.Button(variant=tie_variant, interactive=False),
-            gr.Button(variant=rightvote_variant, interactive=False),
+            gr.Button(variant=left_vote_variant, interactive=False),
+            gr.Button(variant=tie_vote_variant, interactive=False),
+            gr.Button(variant=right_vote_variant, interactive=False),
         )  # buttons: show which was clicked, disable all
         + (gr.Row(visible=True),)  # voting_row: keep visible
         + (gr.Row(visible=True),)  # next_battle_row: show
@@ -241,7 +243,7 @@ def vote_last_response(
     )
 
 
-def leftvote_last_response(
+def left_vote_last_response(
     state0,
     state1,
     battle_session: BattleSession,
@@ -249,7 +251,6 @@ def leftvote_last_response(
     model_selector1,
     request: gr.Request,
 ):
-    logger.info("leftvote (anony).")
     for x in vote_last_response(
         [state0, state1],
         battle_session,
@@ -260,7 +261,7 @@ def leftvote_last_response(
         yield x
 
 
-def rightvote_last_response(
+def right_vote_last_response(
     state0,
     state1,
     battle_session: BattleSession,
@@ -268,7 +269,6 @@ def rightvote_last_response(
     model_selector1,
     request: gr.Request,
 ):
-    logger.info("rightvote (anony).")
     for x in vote_last_response(
         [state0, state1],
         battle_session,
@@ -279,7 +279,7 @@ def rightvote_last_response(
         yield x
 
 
-def tievote_last_response(
+def tie_vote_last_response(
     state0,
     state1,
     battle_session: BattleSession,
@@ -287,7 +287,6 @@ def tievote_last_response(
     model_selector1,
     request: gr.Request,
 ):
-    logger.info("tievote (anony).")
     for x in vote_last_response(
         [state0, state1],
         battle_session,
@@ -511,9 +510,9 @@ def build_side_by_side_ui_anony():
 
         # Voting buttons
         with gr.Row(visible=False) as voting_row:
-            leftvote_btn = gr.Button(value="A is better 👈 ")
+            left_vote_btn = gr.Button(value="A is better 👈 ")
             tie_btn = gr.Button(value="🤝 Tie")
-            rightvote_btn = gr.Button(value="👉 B is better")
+            right_vote_btn = gr.Button(value="👉 B is better")
 
         # Prompt input - always visible, centered with 80% width via CSS
         with gr.Row(visible=True) as textbox_row:
@@ -552,28 +551,28 @@ def build_side_by_side_ui_anony():
         )
 
     # Register listeners
-    leftvote_btn.click(
-        leftvote_last_response,
+    left_vote_btn.click(
+        left_vote_last_response,
         states + [battle_session] + model_selectors,
         model_selectors
         + [textbox]
-        + [leftvote_btn, tie_btn, rightvote_btn]
+        + [left_vote_btn, tie_btn, right_vote_btn]
         + [voting_row, next_battle_row, page_header, textbox_row],
     )
-    rightvote_btn.click(
-        rightvote_last_response,
+    right_vote_btn.click(
+        right_vote_last_response,
         states + [battle_session] + model_selectors,
         model_selectors
         + [textbox]
-        + [leftvote_btn, tie_btn, rightvote_btn]
+        + [left_vote_btn, tie_btn, right_vote_btn]
         + [voting_row, next_battle_row, page_header, textbox_row],
     )
     tie_btn.click(
-        tievote_last_response,
+        tie_vote_last_response,
         states + [battle_session] + model_selectors,
         model_selectors
         + [textbox]
-        + [leftvote_btn, tie_btn, rightvote_btn]
+        + [left_vote_btn, tie_btn, right_vote_btn]
         + [voting_row, next_battle_row, page_header, textbox_row],
     )
     clear_btn.click(
@@ -584,7 +583,7 @@ def build_side_by_side_ui_anony():
         + chatbots
         + model_selectors
         + [textbox]
-        + [leftvote_btn, tie_btn, rightvote_btn]
+        + [left_vote_btn, tie_btn, right_vote_btn]
         + [battle_interface, voting_row, next_battle_row]
         + [page_header, textbox_row]
         + [example_prompts_group, prev_btn, next_btn]
