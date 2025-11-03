@@ -36,13 +36,13 @@ class TestPublicStats(unittest.TestCase):
         if include_optional:
             return PublicStats(
                 models_evaluated = 42,
-                total_battles = 1337,
+                completed_battles = 1337,
                 total_users = 256
             )
         else:
             return PublicStats(
                 models_evaluated = 42,
-                total_battles = 1337,
+                completed_battles = 1337,
                 total_users = 256,
         )
         """

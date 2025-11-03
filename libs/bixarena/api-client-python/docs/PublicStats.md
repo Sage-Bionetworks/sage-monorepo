@@ -4,11 +4,11 @@ Public statistics about the BixArena platform.
 
 ## Properties
 
-| Name                 | Type    | Description                                                            | Notes |
-| -------------------- | ------- | ---------------------------------------------------------------------- | ----- |
-| **models_evaluated** | **int** | Total number of unique models that have been evaluated on the platform |
-| **total_battles**    | **int** | Total number of battles conducted on the platform                      |
-| **total_users**      | **int** | Total number of registered users on the platform                       |
+| Name                  | Type    | Description                                                            | Notes |
+| --------------------- | ------- | ---------------------------------------------------------------------- | ----- |
+| **models_evaluated**  | **int** | Total number of unique models that have been evaluated on the platform |
+| **completed_battles** | **int** | Total number of completed battles on the platform                      |
+| **total_users**       | **int** | Total number of registered users on the platform                       |
 
 ## Example
 

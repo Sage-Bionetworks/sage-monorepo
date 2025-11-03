@@ -41,7 +41,7 @@ public interface StatsApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"totalBattles\" : 1337, \"totalUsers\" : 256, \"modelsEvaluated\" : 42 }";
+                    String exampleString = "{ \"completedBattles\" : 1337, \"totalUsers\" : 256, \"modelsEvaluated\" : 42 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

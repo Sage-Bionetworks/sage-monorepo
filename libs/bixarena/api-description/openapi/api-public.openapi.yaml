@@ -1446,10 +1446,10 @@ components:
           format: int64
           description: Total number of unique models that have been evaluated on the platform
           example: 42
-        totalBattles:
+        completedBattles:
           type: integer
           format: int64
-          description: Total number of battles conducted on the platform
+          description: Total number of completed battles on the platform
           example: 1337
         totalUsers:
           type: integer
@@ -1458,7 +1458,7 @@ components:
           example: 256
       required:
         - modelsEvaluated
-        - totalBattles
+        - completedBattles
         - totalUsers
     UserStats:
       type: object
