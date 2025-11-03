@@ -89,7 +89,7 @@ class PostgresDatabase(Construct):
             monitoring_interval=cdk.Duration.seconds(60),
             # Enable performance insights for query analysis
             enable_performance_insights=True,
-            performance_insights_retention=rds.PerformanceInsightsRetention.DEFAULT,
+            performance_insight_retention=rds.PerformanceInsightRetention.DEFAULT,
         )
 
         # Export database attributes
