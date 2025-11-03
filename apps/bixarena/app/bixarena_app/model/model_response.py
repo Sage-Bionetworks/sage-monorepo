@@ -121,6 +121,8 @@ def bot_response(
     temperature,
     top_p,
     max_new_tokens,
+    battle_session: BattleSession | None = None,
+    cookies: dict[str, str] | None = None,
 ):
     temperature = float(temperature)
     top_p = float(top_p)
@@ -142,14 +144,15 @@ def bot_response(
         yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 4
         return
 
-    # Use API provider stream
+    # Use API provider stream with battle context
     stream_iter = get_api_provider_stream_iter(
         conv,
-        model_name,
         model_api_dict,
         temperature,
         top_p,
         max_new_tokens,
+        battle_session=battle_session,
+        cookies=cookies,
     )
 
     conv.update_last_message("▌")
@@ -222,6 +225,7 @@ def bot_response_multi(
 
     states = [state0, state1]
     gen = []
+    cookies = get_session_cookie(request) if request else None
     for i in range(num_sides):
         gen.append(
             bot_response(
@@ -229,6 +233,8 @@ def bot_response_multi(
                 temperature,
                 top_p,
                 max_new_tokens,
+                battle_session=battle_session,
+                cookies=cookies,
             )
         )
 
@@ -254,7 +260,6 @@ def bot_response_multi(
         if stop:
             break
 
-    cookies = get_session_cookie(request) if request else None
     _update_battle_round_with_responses(states[0], states[1], battle_session, cookies)
 
     # At least one model had an error -> keep voting buttons disabled

@@ -24,7 +24,7 @@ public class ModelApiDelegateImpl implements ModelApiDelegate {
   }
 
   @Override
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<ModelErrorDto> createModelError(
     String modelId,
     ModelErrorCreateRequestDto modelErrorCreateRequest

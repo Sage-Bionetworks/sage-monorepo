@@ -36,17 +36,17 @@ class TestModelError(unittest.TestCase):
         if include_optional:
             return ModelError(
                 id = '98765432-e89b-12d3-a456-426614174099',
-                model_id = '123e4567-e89b-12d3-a456-426614174002',
+                model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
                 error_code = 429,
                 error_message = 'Rate limit exceeded',
-                battle_id = '123e4567-e89b-12d3-a456-426614174000',
-                round_id = '123e4567-e89b-12d3-a456-426614174001',
+                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
+                round_id = '3fa85f64-5717-4562-b3fc-2c963f66afa6',
                 created_at = '2025-10-29T21:03:53Z'
             )
         else:
             return ModelError(
                 id = '98765432-e89b-12d3-a456-426614174099',
-                model_id = '123e4567-e89b-12d3-a456-426614174002',
+                model_id = '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
                 error_message = 'Rate limit exceeded',
                 created_at = '2025-10-29T21:03:53Z',
         )

@@ -1,18 +1,18 @@
 # ModelError
 
-A model error entity representing a failure that occurred during model interaction. Used for monitoring error rates and potentially auto-disabling unreliable models.
+A model error entity representing a failure that occurred during model interaction.
 
 ## Properties
 
-| Name              | Type         | Description                                                        | Notes      |
-| ----------------- | ------------ | ------------------------------------------------------------------ | ---------- |
-| **id**            | **str**      | Unique identifier (UUID) of the model error record.                |
-| **model_id**      | **str**      | The ID of the model that experienced the error.                    |
-| **error_code**    | **int**      | HTTP status code from the API response.                            | [optional] |
-| **error_message** | **str**      | The error message from the API or exception with full details.     |
-| **battle_id**     | **str**      | The battle ID (UUID) if the error occurred during a battle.        | [optional] |
-| **round_id**      | **str**      | The round ID (UUID) if the error occurred during a specific round. | [optional] |
-| **created_at**    | **datetime** | When the error was reported by the Gradio app.                     |
+| Name              | Type         | Description                                                                            | Notes      |
+| ----------------- | ------------ | -------------------------------------------------------------------------------------- | ---------- |
+| **id**            | **str**      | Unique identifier (UUID) of the model error record.                                    |
+| **model_id**      | **str**      | UUID of an AI model.                                                                   |
+| **error_code**    | **int**      | HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.). | [optional] |
+| **error_message** | **str**      | The error message from the API or exception with full details.                         |
+| **battle_id**     | **str**      | Unique identifier (UUID) of the battle.                                                | [optional] |
+| **round_id**      | **str**      | Unique identifier (UUID) of the battle round.                                          | [optional] |
+| **created_at**    | **datetime** | When the error was reported by the Gradio app.                                         |
 
 ## Example
 

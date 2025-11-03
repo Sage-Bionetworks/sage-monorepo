@@ -142,8 +142,14 @@ public class ModelService {
 
     // Save the error
     ModelErrorEntity savedEntity = modelErrorRepository.save(entity);
+    modelErrorRepository.flush();
+
+    // Log to debug createdAt issue
+    log.info("Saved model error entity: id={}, createdAt={}", savedEntity.getId(), savedEntity.getCreatedAt());
 
     // Convert back to DTO for response
-    return modelErrorMapper.convertToDto(savedEntity);
+    ModelErrorDto responseDto = modelErrorMapper.convertToDto(savedEntity);
+    log.info("Response DTO: id={}, createdAt={}", responseDto.getId(), responseDto.getCreatedAt());
+    return responseDto;
   }
 }

@@ -1452,6 +1452,17 @@ components:
                 $ref: '#/components/schemas/Model'
           required:
             - models
+    ModelErrorCode:
+      type: integer
+      nullable: true
+      description: HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).
+      example: 429
+    ModelErrorMessage:
+      type: string
+      description: The error message from the API or exception with full details.
+      minLength: 1
+      maxLength: 1000
+      example: Rate limit exceeded
     ModelErrorCreateRequest:
       type: object
       description: |
@@ -1459,61 +1470,41 @@ components:
         model failures, monitoring error rates, and potentially auto-disabling unreliable models.
       properties:
         errorCode:
-          type: integer
-          nullable: true
-          description: HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503). May be null for network errors or client-side exceptions.
-          example: 429
+          $ref: '#/components/schemas/ModelErrorCode'
         errorMessage:
-          type: string
-          description: The error message from the API or exception with full details
-          minLength: 1
-          maxLength: 1000
-          example: Rate limit exceeded
+          $ref: '#/components/schemas/ModelErrorMessage'
         battleId:
-          type: string
+          $ref: '#/components/schemas/BattleId'
           nullable: true
-          description: The battle ID (UUID) if the error occurred during a battle (for tracking impact)
-          example: 123e4567-e89b-12d3-a456-426614174000
         roundId:
-          type: string
+          $ref: '#/components/schemas/BattleRoundId'
           nullable: true
-          description: The round ID (UUID) if the error occurred during a specific round
-          example: 123e4567-e89b-12d3-a456-426614174001
       required:
         - errorMessage
+    ModelErrorId:
+      type: string
+      format: uuid
+      description: Unique identifier (UUID) of the model error record.
+      example: 98765432-e89b-12d3-a456-426614174099
     ModelError:
       type: object
       description: |
         A model error entity representing a failure that occurred during model interaction.
-        Used for monitoring error rates and potentially auto-disabling unreliable models.
       properties:
         id:
-          type: string
-          description: Unique identifier (UUID) of the model error record.
-          example: 98765432-e89b-12d3-a456-426614174099
+          $ref: '#/components/schemas/ModelErrorId'
         modelId:
-          type: string
-          description: The ID of the model that experienced the error.
-          example: 123e4567-e89b-12d3-a456-426614174002
+          $ref: '#/components/schemas/ModelId'
         errorCode:
-          type: integer
-          nullable: true
-          description: HTTP status code from the API response.
-          example: 429
+          $ref: '#/components/schemas/ModelErrorCode'
         errorMessage:
-          type: string
-          description: The error message from the API or exception with full details.
-          example: Rate limit exceeded
+          $ref: '#/components/schemas/ModelErrorMessage'
         battleId:
-          type: string
+          $ref: '#/components/schemas/BattleId'
           nullable: true
-          description: The battle ID (UUID) if the error occurred during a battle.
-          example: 123e4567-e89b-12d3-a456-426614174000
         roundId:
-          type: string
+          $ref: '#/components/schemas/BattleRoundId'
           nullable: true
-          description: The round ID (UUID) if the error occurred during a specific round.
-          example: 123e4567-e89b-12d3-a456-426614174001
         createdAt:
           type: string
           format: date-time

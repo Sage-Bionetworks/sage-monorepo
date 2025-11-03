@@ -16,9 +16,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from uuid import UUID
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,23 +31,23 @@ class ModelErrorCreateRequest(BaseModel):
 
     error_code: Optional[StrictInt] = Field(
         default=None,
-        description="HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503). May be null for network errors or client-side exceptions.",
+        description="HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).",
         alias="errorCode",
     )
     error_message: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = (
         Field(
-            description="The error message from the API or exception with full details",
+            description="The error message from the API or exception with full details.",
             alias="errorMessage",
         )
     )
-    battle_id: Optional[StrictStr] = Field(
+    battle_id: Optional[UUID] = Field(
         default=None,
-        description="The battle ID (UUID) if the error occurred during a battle (for tracking impact)",
+        description="Unique identifier (UUID) of the battle.",
         alias="battleId",
     )
-    round_id: Optional[StrictStr] = Field(
+    round_id: Optional[UUID] = Field(
         default=None,
-        description="The round ID (UUID) if the error occurred during a specific round",
+        description="Unique identifier (UUID) of the battle round.",
         alias="roundId",
     )
     __properties: ClassVar[List[str]] = [
@@ -97,16 +98,6 @@ class ModelErrorCreateRequest(BaseModel):
         # and model_fields_set contains the field
         if self.error_code is None and "error_code" in self.model_fields_set:
             _dict["errorCode"] = None
-
-        # set to None if battle_id (nullable) is None
-        # and model_fields_set contains the field
-        if self.battle_id is None and "battle_id" in self.model_fields_set:
-            _dict["battleId"] = None
-
-        # set to None if round_id (nullable) is None
-        # and model_fields_set contains the field
-        if self.round_id is None and "round_id" in self.model_fields_set:
-            _dict["roundId"] = None
 
         return _dict
 

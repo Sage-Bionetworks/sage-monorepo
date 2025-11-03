@@ -34,8 +34,8 @@ public class ModelErrorMapper {
       .modelId(modelId)
       .errorCode(dto.getErrorCode())
       .errorMessage(truncateErrorMessage(dto.getErrorMessage()))
-      .battleId(dto.getBattleId() != null ? UUID.fromString(dto.getBattleId()) : null)
-      .roundId(dto.getRoundId() != null ? UUID.fromString(dto.getRoundId()) : null)
+      .battleId(dto.getBattleId())
+      .roundId(dto.getRoundId())
       .build();
   }
 
@@ -45,12 +45,12 @@ public class ModelErrorMapper {
     }
 
     return ModelErrorDto.builder()
-      .id(entity.getId().toString())
-      .modelId(entity.getModelId().toString())
+      .id(entity.getId())
+      .modelId(entity.getModelId())
       .errorCode(entity.getErrorCode())
       .errorMessage(entity.getErrorMessage())
-      .battleId(entity.getBattleId() != null ? entity.getBattleId().toString() : null)
-      .roundId(entity.getRoundId() != null ? entity.getRoundId().toString() : null)
+      .battleId(entity.getBattleId())
+      .roundId(entity.getRoundId())
       .createdAt(entity.getCreatedAt())
       .build();
   }

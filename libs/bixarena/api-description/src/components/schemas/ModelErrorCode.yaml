@@ -1,0 +1,4 @@
+type: integer
+nullable: true
+description: HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).
+example: 429

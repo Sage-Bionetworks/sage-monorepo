@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -28,9 +29,9 @@ public class ModelErrorCreateRequestDto {
 
   private String errorMessage;
 
-  private @Nullable String battleId = null;
+  private @Nullable UUID battleId;
 
-  private @Nullable String roundId = null;
+  private @Nullable UUID roundId;
 
   public ModelErrorCreateRequestDto() {
     super();
@@ -49,11 +50,11 @@ public class ModelErrorCreateRequestDto {
   }
 
   /**
-   * HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503). May be null for network errors or client-side exceptions.
+   * HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).
    * @return errorCode
    */
   
-  @Schema(name = "errorCode", example = "429", description = "HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503). May be null for network errors or client-side exceptions.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "errorCode", example = "429", description = "HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("errorCode")
   public @Nullable Integer getErrorCode() {
     return errorCode;
@@ -69,11 +70,11 @@ public class ModelErrorCreateRequestDto {
   }
 
   /**
-   * The error message from the API or exception with full details
+   * The error message from the API or exception with full details.
    * @return errorMessage
    */
   @NotNull @Size(min = 1, max = 1000) 
-  @Schema(name = "errorMessage", example = "Rate limit exceeded", description = "The error message from the API or exception with full details", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "errorMessage", example = "Rate limit exceeded", description = "The error message from the API or exception with full details.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("errorMessage")
   public String getErrorMessage() {
     return errorMessage;
@@ -83,43 +84,43 @@ public class ModelErrorCreateRequestDto {
     this.errorMessage = errorMessage;
   }
 
-  public ModelErrorCreateRequestDto battleId(@Nullable String battleId) {
+  public ModelErrorCreateRequestDto battleId(@Nullable UUID battleId) {
     this.battleId = battleId;
     return this;
   }
 
   /**
-   * The battle ID (UUID) if the error occurred during a battle (for tracking impact)
+   * Unique identifier (UUID) of the battle.
    * @return battleId
    */
-  
-  @Schema(name = "battleId", example = "123e4567-e89b-12d3-a456-426614174000", description = "The battle ID (UUID) if the error occurred during a battle (for tracking impact)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Valid 
+  @Schema(name = "battleId", example = "5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f", description = "Unique identifier (UUID) of the battle.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("battleId")
-  public @Nullable String getBattleId() {
+  public @Nullable UUID getBattleId() {
     return battleId;
   }
 
-  public void setBattleId(@Nullable String battleId) {
+  public void setBattleId(@Nullable UUID battleId) {
     this.battleId = battleId;
   }
 
-  public ModelErrorCreateRequestDto roundId(@Nullable String roundId) {
+  public ModelErrorCreateRequestDto roundId(@Nullable UUID roundId) {
     this.roundId = roundId;
     return this;
   }
 
   /**
-   * The round ID (UUID) if the error occurred during a specific round
+   * Unique identifier (UUID) of the battle round.
    * @return roundId
    */
-  
-  @Schema(name = "roundId", example = "123e4567-e89b-12d3-a456-426614174001", description = "The round ID (UUID) if the error occurred during a specific round", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Valid 
+  @Schema(name = "roundId", example = "3fa85f64-5717-4562-b3fc-2c963f66afa6", description = "Unique identifier (UUID) of the battle round.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("roundId")
-  public @Nullable String getRoundId() {
+  public @Nullable UUID getRoundId() {
     return roundId;
   }
 
-  public void setRoundId(@Nullable String roundId) {
+  public void setRoundId(@Nullable UUID roundId) {
     this.roundId = roundId;
   }
 
@@ -196,12 +197,12 @@ public class ModelErrorCreateRequestDto {
       return this;
     }
     
-    public ModelErrorCreateRequestDto.Builder battleId(String battleId) {
+    public ModelErrorCreateRequestDto.Builder battleId(UUID battleId) {
       this.instance.battleId(battleId);
       return this;
     }
     
-    public ModelErrorCreateRequestDto.Builder roundId(String roundId) {
+    public ModelErrorCreateRequestDto.Builder roundId(UUID roundId) {
       this.instance.roundId(roundId);
       return this;
     }

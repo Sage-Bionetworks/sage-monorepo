@@ -1,0 +1,5 @@
+type: string
+description: The error message from the API or exception with full details.
+minLength: 1
+maxLength: 1000
+example: 'Rate limit exceeded'

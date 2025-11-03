@@ -17,40 +17,40 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
+from uuid import UUID
 from typing import Optional, Set
 from typing_extensions import Self
 
 
 class ModelError(BaseModel):
     """
-    A model error entity representing a failure that occurred during model interaction. Used for monitoring error rates and potentially auto-disabling unreliable models.
+    A model error entity representing a failure that occurred during model interaction.
     """  # noqa: E501
 
-    id: StrictStr = Field(
-        description="Unique identifier (UUID) of the model error record."
-    )
-    model_id: StrictStr = Field(
-        description="The ID of the model that experienced the error.", alias="modelId"
-    )
+    id: UUID = Field(description="Unique identifier (UUID) of the model error record.")
+    model_id: UUID = Field(description="UUID of an AI model.", alias="modelId")
     error_code: Optional[StrictInt] = Field(
         default=None,
-        description="HTTP status code from the API response.",
+        description="HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).",
         alias="errorCode",
     )
-    error_message: StrictStr = Field(
-        description="The error message from the API or exception with full details.",
-        alias="errorMessage",
+    error_message: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = (
+        Field(
+            description="The error message from the API or exception with full details.",
+            alias="errorMessage",
+        )
     )
-    battle_id: Optional[StrictStr] = Field(
+    battle_id: Optional[UUID] = Field(
         default=None,
-        description="The battle ID (UUID) if the error occurred during a battle.",
+        description="Unique identifier (UUID) of the battle.",
         alias="battleId",
     )
-    round_id: Optional[StrictStr] = Field(
+    round_id: Optional[UUID] = Field(
         default=None,
-        description="The round ID (UUID) if the error occurred during a specific round.",
+        description="Unique identifier (UUID) of the battle round.",
         alias="roundId",
     )
     created_at: datetime = Field(
@@ -107,16 +107,6 @@ class ModelError(BaseModel):
         # and model_fields_set contains the field
         if self.error_code is None and "error_code" in self.model_fields_set:
             _dict["errorCode"] = None
-
-        # set to None if battle_id (nullable) is None
-        # and model_fields_set contains the field
-        if self.battle_id is None and "battle_id" in self.model_fields_set:
-            _dict["battleId"] = None
-
-        # set to None if round_id (nullable) is None
-        # and model_fields_set contains the field
-        if self.round_id is None and "round_id" in self.model_fields_set:
-            _dict["roundId"] = None
 
         return _dict
 

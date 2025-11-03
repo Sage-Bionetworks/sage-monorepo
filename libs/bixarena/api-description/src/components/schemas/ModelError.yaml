@@ -1,35 +1,21 @@
 type: object
 description: |
   A model error entity representing a failure that occurred during model interaction.
-  Used for monitoring error rates and potentially auto-disabling unreliable models.
 properties:
   id:
-    type: string
-    description: Unique identifier (UUID) of the model error record.
-    example: '98765432-e89b-12d3-a456-426614174099'
+    $ref: ./ModelErrorId.yaml
   modelId:
-    type: string
-    description: The ID of the model that experienced the error.
-    example: '123e4567-e89b-12d3-a456-426614174002'
+    $ref: ./ModelId.yaml
   errorCode:
-    type: integer
-    nullable: true
-    description: HTTP status code from the API response.
-    example: 429
+    $ref: ./ModelErrorCode.yaml
   errorMessage:
-    type: string
-    description: The error message from the API or exception with full details.
-    example: 'Rate limit exceeded'
+    $ref: ./ModelErrorMessage.yaml
   battleId:
-    type: string
+    $ref: ./BattleId.yaml
     nullable: true
-    description: The battle ID (UUID) if the error occurred during a battle.
-    example: '123e4567-e89b-12d3-a456-426614174000'
   roundId:
-    type: string
+    $ref: ./BattleRoundId.yaml
     nullable: true
-    description: The round ID (UUID) if the error occurred during a specific round.
-    example: '123e4567-e89b-12d3-a456-426614174001'
   createdAt:
     type: string
     format: date-time
