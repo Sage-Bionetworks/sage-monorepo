@@ -377,19 +377,6 @@ def add_text(
                     states[i].conv.append_message("user", text)
                     states[i].conv.append_message("assistant", round_limit_msg)
                     states[i].skip_next = True
-            return (
-                states  # state0, state1: updated with error msg
-                + [battle_session]  # battle_session: unchanged
-                + [x.to_gradio_chatbot() for x in states]  # chatbots: show limit msg
-                + [""]  # textbox: clear
-                + [""]  # slow_warning: clear
-                + [gr.Group(visible=True)]  # battle_interface: show
-                + [gr.Row(visible=True)]  # voting_row: show
-                + [gr.Row(visible=False)]  # next_battle_row: hide
-                + [gr.Column(visible=False)]  # example_prompts_group: hide
-                + [gr.HTML(visible=False)]  # page_header: hide
-                + [gr.Row(visible=False)]  # textbox_row: hide
-            )
 
     text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
 
@@ -432,16 +419,17 @@ def add_text(
             )
     battle_id = battle_session.battle_id
 
-    round_id = None
-    if battle_id:
-        round_id = create_battle_round(battle_id, text, cookies)
+    if not states[0].skip_next:
+        round_id = None
+        if battle_id:
+            round_id = create_battle_round(battle_id, text, cookies)
 
-    for i in range(num_sides):
-        states[i].conv.append_message(states[i].conv.roles[0], text)
-        states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
-        states[i].skip_next = False
+        for i in range(num_sides):
+            states[i].conv.append_message(states[i].conv.roles[0], text)
+            states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
+            states[i].skip_next = False
 
-    battle_session.round_id = round_id
+        battle_session.round_id = round_id
 
     hint_msg = ""
     for i in range(num_sides):
@@ -455,7 +443,7 @@ def add_text(
         + [gr.update(value="", placeholder="Ask followups...")]  # textbox: clear
         + [hint_msg]  # slow_warning: show if deluxe model
         + [gr.Group(visible=True)]  # battle_interface: show
-        + [gr.Row(visible=True)]  # voting_row: show
+        + [gr.Row(visible=False)]  # voting_row: hide
         + [gr.Row(visible=False)]  # next_battle_row: hide
         + [gr.Column(visible=False)]  # example_prompts_group: hide
         + [gr.HTML(visible=False)]  # page_header: hide
@@ -690,7 +678,7 @@ def build_side_by_side_ui_anony():
         states
         + [battle_session]
         + chatbots
-        + [next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row],
     ).then(
         lambda: None,  # Enable enter key
         [],
@@ -722,7 +710,7 @@ def build_side_by_side_ui_anony():
             states
             + [battle_session]
             + chatbots
-            + [next_battle_row, page_header, textbox_row],
+            + [voting_row, next_battle_row, page_header, textbox_row],
         ).then(
             lambda: None,
             [],

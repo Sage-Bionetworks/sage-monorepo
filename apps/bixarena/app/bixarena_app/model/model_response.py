@@ -189,7 +189,7 @@ def bot_response_multi(
     request: gr.Request | None = None,
 ):
     num_sides = 2
-    if state0 is None or state0.skip_next:
+    if state0 and state0.skip_next:
         # State: Edge case - battle round limit reached
         yield (
             state0,
@@ -197,6 +197,7 @@ def bot_response_multi(
             battle_session,
             state0.to_gradio_chatbot(),
             state1.to_gradio_chatbot(),
+            gr.Row(visible=True),  # voting_row: show
             gr.Row(visible=False),  # next_battle_row: hide
             gr.HTML(visible=False),  # page_header: hide
             gr.Row(visible=False),  # textbox_row: hide
@@ -238,6 +239,7 @@ def bot_response_multi(
             states  # state0, state1: streaming
             + [battle_session]  # battle_session: unchanged
             + chatbots  # chatbot0, chatbot1: show streaming text with "▌"
+            + [gr.Row(visible=False)]  # voting_row: hide during streaming
             + [gr.Row(visible=False)]  # next_battle_row: hide
             + [gr.HTML(visible=False)]  # page_header: hide
             + [gr.Row(visible=True)]  # textbox_row: show
@@ -254,6 +256,7 @@ def bot_response_multi(
             states  # state0, state1: error state
             + [battle_session]  # battle_session: unchanged
             + chatbots  # chatbot0, chatbot1: show error message
+            + [gr.Row(visible=False)]  # voting_row: hide on error
             + [gr.Row(visible=True)]  # next_battle_row: show
             + [gr.HTML(visible=False)]  # page_header: hide
             + [gr.Row(visible=True)]  # textbox_row: show
@@ -264,6 +267,7 @@ def bot_response_multi(
             states  # state0, state1: complete
             + [battle_session]  # battle_session: unchanged
             + chatbots  # chatbot0, chatbot1: show complete responses
+            + [gr.Row(visible=True)]  # voting_row: show on success
             + [gr.Row(visible=False)]  # next_battle_row: hide
             + [gr.HTML(visible=False)]  # page_header: hide
             + [gr.Row(visible=True)]  # textbox_row: show
