@@ -69,11 +69,6 @@ export interface ComparisonToolColumn extends ComparisonToolConfigColumn {
   selected: boolean;
 }
 
-export interface ComparisonToolColumns {
-  dropdowns: string[];
-  columns: ComparisonToolColumn[];
-}
-
 export interface ComparisonToolConfig {
   page: ComparisonToolPage;
   dropdowns: string[];
