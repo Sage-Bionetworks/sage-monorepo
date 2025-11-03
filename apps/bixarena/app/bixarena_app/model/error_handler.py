@@ -52,8 +52,8 @@ def handle_error_message(error: Exception) -> str:
     Returns:
         A user-friendly error message with error code reference
     """
-    # Log the full error server-side for debugging
-    logger.error(f"API Error: {error}", exc_info=True)
+    # Log the full error server-side for debugging (without traceback)
+    logger.error(f"API Error: {error}")
 
     # Extract HTTP status code if available
     status_code = getattr(error, "status_code", None)

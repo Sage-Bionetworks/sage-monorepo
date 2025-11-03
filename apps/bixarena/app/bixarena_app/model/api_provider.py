@@ -133,11 +133,11 @@ def openai_api_stream_iter(
                         yield {"text": text, "error_code": 0}
                 return
             except Exception as retry_e:
-                logger.error(f"Retry also failed: {retry_e}", exc_info=True)
+                logger.error(f"Retry also failed: {retry_e}")
                 e = retry_e
 
         # Handle error
-        logger.error(f"OpenAI API error: {e}", exc_info=True)
+        logger.error(f"OpenAI API error: {e}")
         display_error_msg = handle_error_message(e)
         yield {
             "text": display_error_msg,
