@@ -110,9 +110,7 @@ export class ComparisonToolService<T> {
   });
 
   selectedColumns = computed(() => {
-    return this.columns().filter(
-      (col) => col.selected && col.type !== ComparisonToolConfigColumnTypeEnum.Hidden,
-    );
+    return this.columns().filter((col) => col.selected && col.is_hidden !== true);
   });
 
   hasHiddenColumns(): boolean {

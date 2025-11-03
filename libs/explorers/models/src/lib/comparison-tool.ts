@@ -46,15 +46,13 @@ export type ComparisonToolConfigColumnType =
   | 'heat_map'
   | 'link_internal'
   | 'link_external'
-  | 'primary'
-  | 'hidden';
+  | 'primary';
 export const ComparisonToolConfigColumnTypeEnum = {
   Text: 'text' as ComparisonToolConfigColumnType,
   HeatMap: 'heat_map' as ComparisonToolConfigColumnType,
   LinkInternal: 'link_internal' as ComparisonToolConfigColumnType,
   LinkExternal: 'link_external' as ComparisonToolConfigColumnType,
   Primary: 'primary' as ComparisonToolConfigColumnType,
-  Hidden: 'hidden' as ComparisonToolConfigColumnType,
 } as const;
 
 export interface ComparisonToolConfigColumn {

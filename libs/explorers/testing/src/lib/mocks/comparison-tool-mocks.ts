@@ -24,13 +24,13 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         is_hidden: false,
       },
       {
-        type: 'hidden',
+        type: 'text',
         data_key: 'cluster',
         is_exported: true,
         is_hidden: true,
       },
       {
-        type: 'hidden',
+        type: 'text',
         data_key: 'model_type',
         tooltip: '',
         sort_tooltip: 'Sort by Model Type value',

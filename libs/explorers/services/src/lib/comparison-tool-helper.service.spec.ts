@@ -94,8 +94,14 @@ describe('Service: ComparisonToolHelper', () => {
       dropdowns: [],
       row_count: 'over 200000',
       columns: [
-        { type: 'primary', data_key: 'name', download: true },
-        { name: 'Column 1', type: 'text', data_key: 'column_1', download: true },
+        { type: 'primary', data_key: 'name', is_exported: true, is_hidden: false },
+        {
+          name: 'Column 1',
+          type: 'text',
+          data_key: 'column_1',
+          is_exported: true,
+          is_hidden: false,
+        },
       ],
       filters: [],
     };
