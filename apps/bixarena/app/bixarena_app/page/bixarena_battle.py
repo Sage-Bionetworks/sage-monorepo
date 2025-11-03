@@ -627,7 +627,7 @@ def build_side_by_side_ui_anony():
     }
     """
 
-    # Install empty prompt validation - prevent submission at keydown level
+    # Setup empty prompt validation - prevent submission at keydown level
     prevent_empty_prompt_js = """
     () => {
         const textbox = document.querySelector('#input_box textarea');
