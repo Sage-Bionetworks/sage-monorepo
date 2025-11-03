@@ -1,10 +1,10 @@
-import { Component, inject, input, output, ViewEncapsulation } from '@angular/core';
+import { Component, inject, input, ViewEncapsulation } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
 import { SortEvent } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { ComparisonToolTableLinkComponent } from '../../comparison-tool-table-link/comparison-tool-table-link.component';
+import { ComparisonToolTableLinkComponent } from '../comparison-tool-table-link/comparison-tool-table-link.component';
 import { HeatmapCircleComponent } from '../heatmap-circle/heatmap-circle.component';
 import { PrimaryIdentifierControlsComponent } from '../primary-identifier-controls/primary-identifier-controls.component';
 
