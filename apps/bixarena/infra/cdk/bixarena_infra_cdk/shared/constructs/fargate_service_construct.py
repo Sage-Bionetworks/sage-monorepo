@@ -120,6 +120,22 @@ class OpenchalllengesFargateService(Construct):
             ),
             # Health check grace period for ALB health checks
             health_check_grace_period=(Duration.seconds(60) if target_group else None),
+            # Enable ECS Exec for debugging and database access via port forwarding
+            enable_execute_command=True,
+        )
+
+        # Add SSM permissions for ECS Exec
+        task_definition.add_to_task_role_policy(
+            iam.PolicyStatement(
+                effect=iam.Effect.ALLOW,
+                actions=[
+                    "ssmmessages:CreateControlChannel",
+                    "ssmmessages:CreateDataChannel",
+                    "ssmmessages:OpenControlChannel",
+                    "ssmmessages:OpenDataChannel",
+                ],
+                resources=["*"],
+            )
         )
 
         # Attach to target group if provided

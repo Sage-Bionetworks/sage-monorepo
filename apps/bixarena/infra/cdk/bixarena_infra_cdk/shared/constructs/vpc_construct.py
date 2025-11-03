@@ -31,9 +31,10 @@ class OpenchallengesVpc(Construct):
         """
         super().__init__(scope, construct_id, **kwargs)
 
-        # Create VPC with public and private subnets
+        # Create VPC with public, private, and isolated subnets
         # Public subnets: For load balancers and NAT gateways
         # Private subnets: For application workloads (ECS tasks, etc.)
+        # Isolated subnets: For databases (no internet access, no NAT costs)
         self.vpc = ec2.Vpc(
             self,
             "Vpc",
@@ -42,9 +43,9 @@ class OpenchallengesVpc(Construct):
             # Enable DNS support for ECS service discovery
             enable_dns_hostnames=True,
             enable_dns_support=True,
-            # Create public and private subnets with NAT gateways
+            # Create public, private, and isolated subnets
             # Note: cidr_mask is not specified, so CDK will auto-calculate and evenly
-            # divide the VPC CIDR space among all subnets (1 public + 1 private per AZ)
+            # divide the VPC CIDR space among all subnets (1 of each type per AZ)
             subnet_configuration=[
                 ec2.SubnetConfiguration(
                     name="Public",
@@ -53,6 +54,10 @@ class OpenchallengesVpc(Construct):
                 ec2.SubnetConfiguration(
                     name="Private",
                     subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS,
+                ),
+                ec2.SubnetConfiguration(
+                    name="Isolated",
+                    subnet_type=ec2.SubnetType.PRIVATE_ISOLATED,
                 ),
             ],
             # NAT gateways for internet access from private subnets
@@ -80,3 +85,4 @@ class OpenchallengesVpc(Construct):
         self.availability_zones = self.vpc.availability_zones
         self.public_subnets = self.vpc.public_subnets
         self.private_subnets = self.vpc.private_subnets
+        self.isolated_subnets = self.vpc.isolated_subnets
