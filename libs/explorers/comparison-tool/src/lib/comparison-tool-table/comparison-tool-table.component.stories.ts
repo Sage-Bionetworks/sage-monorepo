@@ -15,7 +15,7 @@ import { ComparisonToolTableComponent } from './comparison-tool-table.component'
 
 const meta: Meta<ComparisonToolTableComponent> = {
   component: ComparisonToolTableComponent,
-  title: 'Comparison Tools/ComparisonToolTable/ComparisonToolTableComponent',
+  title: 'Comparison Tool/ComparisonToolTable/ComparisonToolTableComponent',
   decorators: [
     applicationConfig({
       providers: [
