@@ -1210,7 +1210,7 @@ components:
           type: string
           description: The biomedical question text.
           minLength: 1
-          maxLength: 1000
+          maxLength: 160
           example: What are the main symptoms of Type 2 diabetes?
         source:
           $ref: '#/components/schemas/ExamplePromptSource'

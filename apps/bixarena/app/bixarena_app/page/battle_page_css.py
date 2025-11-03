@@ -9,48 +9,47 @@ EXAMPLE_PROMPTS_CSS = """
 #prompt-card-section > .row {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
     align-items: center;
-    gap: 16px;
-    width: 100%;
+    gap: 12px;
+    flex-wrap: nowrap;
+    margin-top: 16px;
 }
 
 #prompt-card-section > .row > .row {
     flex: 1 1 auto;
     min-width: 0;
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    align-items: center;
+    gap: 12px;
 }
 
-/* Example prompt card */
-.prompt-card-container {
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.2s ease;
+/* Example prompt card wrapper */
+#prompt-card-section .prompt-card-wrapper {
     flex: 1 1 0;
-    min-width: 0;
-    width: auto;
-    margin: 0;
-    height: 83px;
-    display: flex;
-    align-items: center;
 }
 
-.gradio-container .prompt-card-container:hover {
+/* Example prompt card button */
+#prompt-card-section button.prompt-card {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    transition: all 0.2s ease;
+    width: 100%;
+    height: 87px;
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+#prompt-card-section button.prompt-card:hover {
     background: rgba(255, 255, 255, 0.08);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.gradio-container button.prompt-card {
-    background: transparent !important;
-    padding: 0px;
+#prompt-card-section button.prompt-card .prompt-text {
     text-align: left;
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.5;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
@@ -76,13 +75,8 @@ EXAMPLE_PROMPTS_CSS = """
 }
 
 .nav-button {
-    aspect-ratio: 1 / 1;
-    box-sizing: border-box;
     user-select: none;
 }
-
-.nav-button.left { margin-right: 8px; }
-.nav-button.right { margin-left: 8px; }
 
 #prompt-card-section > .row > .nav-button:not(:disabled):hover {
     background: rgba(255, 255, 255, 0.08);
@@ -96,6 +90,48 @@ EXAMPLE_PROMPTS_CSS = """
     opacity: 0;
     pointer-events: none;
 }
+
+/* Responsive layout */
+@media (max-width: 1024px) {
+    /* Stack outer container vertically and hide arrows */
+    #prompt-card-section > .row {
+        flex-direction: column;
+    }
+
+    /* Hide navigation arrows on mobile */
+    #prompt-card-section > .row > button.nav-button {
+        display: none !important;
+    }
+
+    /* Stack cards vertically on mobile */
+    #prompt-card-section > .row > .row {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    /* Override Gradio's hide-container class - force all cards visible */
+    #prompt-card-section .hide-container {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* Full width cards on mobile - force visibility */
+    #prompt-card-section .prompt-card-wrapper {
+        width: 100%;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* Force all cards to be visible */
+    #prompt-card-section button.prompt-card {
+        display: flex !important;
+        visibility: visible !important;
+    }
+}
 """
 
 # CSS for input textbox styling
@@ -103,7 +139,7 @@ INPUT_PROMPT_CSS = """
 /* Container for the input textbox - limit width and center */
 #input_box.prompt_input {
     background: var(--background-fill-primary);
-    max-width: 700px;
+    max-width: 900px;
     margin: 0 auto;
     width: 100%;
 }
@@ -120,7 +156,7 @@ INPUT_PROMPT_CSS = """
 
 /* Also limit the parent row container */
 .row:has(#input_box.prompt_input) {
-    max-width: 700px;
+    max-width: 900px;
     margin: 0 auto;
 }
 """
