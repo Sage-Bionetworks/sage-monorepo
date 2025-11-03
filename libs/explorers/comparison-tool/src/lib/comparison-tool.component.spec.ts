@@ -29,7 +29,7 @@ async function setup() {
   return { component, fixture };
 }
 
-describe('Base Comparison Tool Component', () => {
+describe('Comparison Tool Component', () => {
   it('should create', async () => {
     const { component } = await setup();
     expect(component).toBeTruthy();
