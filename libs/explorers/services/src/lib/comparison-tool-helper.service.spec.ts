@@ -12,8 +12,23 @@ describe('Service: ComparisonToolHelper', () => {
     ctHelperService = new ComparisonToolHelperService();
   });
 
+  it('should create filename for ct without any dropdowns', () => {
+    const filename = ctHelperService.getComparisonToolDataFilename(mockComparisonToolDataConfig[0]);
+    expect(filename).toBe('model_overview');
+  });
+
+  it('should create filename for ct with primary dropdown', () => {
+    const config: ComparisonToolConfig = {
+      ...mockComparisonToolDataConfig[0],
+      page: 'Gene Expression',
+      dropdowns: ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain', 'Sex - Females & Males'],
+    };
+    const filename = ctHelperService.getComparisonToolDataFilename(config);
+    expect(filename).toBe('gene_expression_rna_differential_expression');
+  });
+
   it('should reshape comparison tool data with heatmap data into one row per heatmap category', () => {
-    const csvData = ctHelperService.reshapeComparisonToolDataToStringArray(
+    const csvData = ctHelperService.buildComparisonToolCsvRows(
       mockComparisonToolData.slice(1, 3),
       mockComparisonToolDataConfig[0],
       'https://www.modeladexplorer.org',
@@ -110,7 +125,7 @@ describe('Service: ComparisonToolHelper', () => {
       filters: [],
     };
 
-    const csvData = ctHelperService.reshapeComparisonToolDataToStringArray(
+    const csvData = ctHelperService.buildComparisonToolCsvRows(
       data,
       config,
       'https://www.modeladexplorer.org',

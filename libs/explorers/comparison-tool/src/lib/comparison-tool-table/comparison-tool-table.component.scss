@@ -75,12 +75,6 @@
         margin-right: 8px;
       }
     }
-
-    .clear-all-button {
-      &:hover {
-        @include mixins.link-hover;
-      }
-    }
   }
 
   .p-datatable-table-container {

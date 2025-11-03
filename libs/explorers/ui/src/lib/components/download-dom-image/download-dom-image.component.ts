@@ -15,9 +15,7 @@ export class DownloadDomImageComponent {
   filename = input.required();
   buttonLabel = input('');
   hasCsvDownload = input<boolean>(false);
-  getData = input<() => string[][]>(() => {
-    return [];
-  });
+  data = input<string[][]>([]);
 
   performDownload = async (fileType: string): Promise<void> => {
     if (fileType === '.jpeg' || fileType === '.png') {
@@ -41,7 +39,7 @@ export class DownloadDomImageComponent {
 
   downloadCsvData = async (fileType: string): Promise<void> => {
     const csvType = 'text/csv;charset=utf-8;';
-    const data = this.getData()();
+    const data = this.data();
 
     console.log('data', data);
 

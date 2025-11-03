@@ -10,7 +10,21 @@ import {
   providedIn: 'root',
 })
 export class ComparisonToolHelperService {
-  reshapeComparisonToolDataToStringArray(
+  getComparisonToolDataFilename(config: ComparisonToolConfig): string {
+    const pageName = config.page.toLowerCase().replaceAll(' ', '_');
+    const primaryCategory = config.dropdowns?.[0];
+    if (primaryCategory) {
+      const categoryName = primaryCategory
+        .toLowerCase()
+        .replaceAll('-', '')
+        .replaceAll(/\s+/g, ' ')
+        .replaceAll(' ', '_');
+      return `${pageName}_${categoryName}`;
+    }
+    return pageName;
+  }
+
+  buildComparisonToolCsvRows(
     data: Record<string, unknown>[],
     config: ComparisonToolConfig,
     siteUrl: string,
