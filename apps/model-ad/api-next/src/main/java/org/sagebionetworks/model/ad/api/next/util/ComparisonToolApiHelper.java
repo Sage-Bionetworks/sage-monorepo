@@ -16,6 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 public final class ComparisonToolApiHelper {
 
   private static final String CACHE_CONTROL_VALUE = "no-cache, no-store, must-revalidate";
+  public static final String CATEGORY_REQUIREMENT_MESSAGE =
+    "Query parameter category must repeat twice (e.g. ?category=CONSENSUS NETWORK MODULES" +
+    "&category=subcategory) and each value must be a string";
 
   private ComparisonToolApiHelper() {}
 
