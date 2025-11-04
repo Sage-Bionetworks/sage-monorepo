@@ -100,6 +100,8 @@ export const mockComparisonToolColumns: ComparisonToolConfigColumn[] = [
     data_key: 'age',
     tooltip: '',
     sort_tooltip: 'Sort by Age value',
+    is_exported: true,
+    is_hidden: false,
   },
   {
     name: 'Sex',
@@ -107,6 +109,8 @@ export const mockComparisonToolColumns: ComparisonToolConfigColumn[] = [
     data_key: 'sex',
     tooltip: '',
     sort_tooltip: 'Sort by Sex value',
+    is_exported: true,
+    is_hidden: false,
   },
   {
     name: 'CBE',
@@ -114,6 +118,8 @@ export const mockComparisonToolColumns: ComparisonToolConfigColumn[] = [
     data_key: 'CBE',
     tooltip: 'Cerebellum',
     sort_tooltip: 'Sort by correlation value',
+    is_exported: true,
+    is_hidden: false,
   },
   {
     name: 'DLPFC',
@@ -121,6 +127,8 @@ export const mockComparisonToolColumns: ComparisonToolConfigColumn[] = [
     data_key: 'DLPFC',
     tooltip: 'Dorsolateral Prefrontal Cortex',
     sort_tooltip: 'Sort by correlation value',
+    is_exported: true,
+    is_hidden: false,
   },
   {
     name: 'PHG',
@@ -128,6 +136,8 @@ export const mockComparisonToolColumns: ComparisonToolConfigColumn[] = [
     data_key: 'PHG',
     tooltip: 'Parahippocampal Gyrus',
     sort_tooltip: 'Sort by correlation value',
+    is_exported: true,
+    is_hidden: false,
   },
 ];
 

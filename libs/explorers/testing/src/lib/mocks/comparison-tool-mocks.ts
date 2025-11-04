@@ -20,6 +20,8 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
       {
         type: 'primary',
         data_key: 'name',
+        is_exported: true,
+        is_hidden: false,
       },
       {
         name: 'Model Type',
@@ -27,6 +29,8 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         data_key: 'model_type',
         tooltip: '',
         sort_tooltip: 'Sort by Model Type value',
+        is_exported: true,
+        is_hidden: false,
       },
       {
         name: 'Matched Control',
@@ -34,6 +38,8 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         data_key: 'matched_controls',
         tooltip: '',
         sort_tooltip: 'Sort by Matched Control value',
+        is_exported: true,
+        is_hidden: false,
       },
       {
         name: 'Disease Correlation',
@@ -42,6 +48,8 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         tooltip: '',
         sort_tooltip: 'Sort by Disease Correlation value',
         link_text: 'Results',
+        is_exported: true,
+        is_hidden: false,
       },
       {
         name: 'Center',
@@ -50,6 +58,8 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         tooltip: '',
         sort_tooltip: 'Sort by Center value',
         link_url: 'https://www.model-ad.org/',
+        is_exported: true,
+        is_hidden: false,
       },
       {
         name: 'Age',
@@ -57,6 +67,8 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         data_key: 'age',
         tooltip: '',
         sort_tooltip: 'Sort by Age value',
+        is_exported: true,
+        is_hidden: false,
       },
       {
         name: 'IFG',
@@ -64,6 +76,8 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         data_key: 'IFG',
         tooltip: 'Inferior Frontal Gyrus',
         sort_tooltip: 'Sort by correlation value',
+        is_exported: true,
+        is_hidden: false,
       },
       {
         name: 'PHG',
@@ -71,6 +85,14 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         data_key: 'PHG',
         tooltip: 'Parahippocampal Gyrus',
         sort_tooltip: 'Sort by correlation value',
+        is_exported: true,
+        is_hidden: false,
+      },
+      {
+        type: 'text',
+        data_key: 'available_data',
+        is_exported: false,
+        is_hidden: true,
       },
     ],
     filters: [
@@ -108,6 +130,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.084295638183579,
       adj_p_val: 0.409231075552908,
     },
+    available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
   },
   {
     _id: '68fff1aaeb12b9674515fd59',
@@ -128,6 +151,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.120000548192961,
       adj_p_val: 0.239210931286464,
     },
+    available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
   },
   {
     _id: '68fff1aaeb12b9674515fd5a',
@@ -150,6 +174,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.0555691060937462,
       adj_p_val: 0.586807542376288,
     },
+    available_data: ['Gene Expression', 'Disease Correlation'],
   },
   {
     _id: '68fff1aaeb12b9674515fd5b',
@@ -170,6 +195,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.0748918760876008,
       adj_p_val: 0.463613681499704,
     },
+    available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
   },
   {
     _id: '68fff1aaeb12b9674515fd5c',
@@ -192,5 +218,6 @@ export const mockComparisonToolData: Record<string, any>[] = [
       correlation: 0.0472918655548024,
       adj_p_val: 0.638623415843113,
     },
+    available_data: ['Gene Expression', 'Disease Correlation'],
   },
 ];
