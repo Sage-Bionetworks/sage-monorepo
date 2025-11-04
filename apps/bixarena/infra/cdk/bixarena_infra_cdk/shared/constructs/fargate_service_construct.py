@@ -24,6 +24,7 @@ class BixArenaFargateService(Construct):
         cpu: int = 256,
         memory_limit_mib: int = 512,
         environment: dict[str, str] | None = None,
+        secrets: dict[str, ecs.Secret] | None = None,
         desired_count: int = 1,
         target_group: IApplicationTargetGroup | None = None,
         log_retention: logs.RetentionDays = logs.RetentionDays.ONE_WEEK,
@@ -43,6 +44,7 @@ class BixArenaFargateService(Construct):
             cpu: CPU units (256 = 0.25 vCPU, 512 = 0.5 vCPU, etc.)
             memory_limit_mib: Memory limit in MiB
             environment: Environment variables for the container
+            secrets: Secrets from AWS Secrets Manager for the container
             desired_count: Number of tasks to run
             target_group: Optional ALB target group to attach to
             log_retention: CloudWatch Logs retention period
@@ -95,6 +97,7 @@ class BixArenaFargateService(Construct):
             "Container",
             image=ecs.ContainerImage.from_registry(container_image),
             environment=environment or {},
+            secrets=secrets or {},  # Secrets from AWS Secrets Manager
             logging=ecs.LogDrivers.aws_logs(
                 stream_prefix=service_name,
                 log_retention=log_retention,
@@ -109,7 +112,7 @@ class BixArenaFargateService(Construct):
             )
         )
 
-        # Create Fargate service
+        # Create Fargate service with service discovery
         self.service = ecs.FargateService(
             self,
             "Service",
@@ -134,6 +137,12 @@ class BixArenaFargateService(Construct):
             # zero-downtime deployments
             min_healthy_percent=100,  # Keep all tasks running during deployment
             max_healthy_percent=200,  # Allow double capacity during deployment
+            # Enable service discovery via Cloud Map
+            # DNS A records are created automatically for service discovery
+            cloud_map_options=ecs.CloudMapOptions(
+                name=service_name,  # DNS name within the namespace
+                dns_ttl=Duration.seconds(10),  # Short TTL for faster updates
+            ),
         )
 
         # Add SSM permissions for ECS Exec

@@ -173,7 +173,7 @@ def main() -> None:
     # Note: Dependencies are automatic via CloudFormation references
 
     # Create API Gateway stack (depends on API, Auth, Valkey, ECS cluster, and ALB)
-    _api_gateway_stack = ApiGatewayStack(
+    api_gateway_stack = ApiGatewayStack(
         app,
         f"{stack_prefix}-api-gateway",
         stack_prefix=stack_prefix,
@@ -186,7 +186,10 @@ def main() -> None:
         gateway_version=app_version,  # Use same version tag as app
         description=f"API Gateway for BixArena {environment} environment",
     )
-    # Note: Dependencies are automatic via CloudFormation references
+    # Explicit dependencies: Gateway must deploy AFTER backend services
+    # This ensures backend services are available when Gateway starts
+    api_gateway_stack.add_dependency(_api_service_stack)
+    api_gateway_stack.add_dependency(_auth_service_stack)
 
     # Note: Security group rules are configured within the constructs to allow
     # connections from the VPC CIDR range, avoiding cyclic dependencies

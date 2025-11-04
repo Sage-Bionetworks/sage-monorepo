@@ -34,11 +34,12 @@ class EcsClusterStack(cdk.Stack):
         """
         super().__init__(scope, construct_id, **kwargs)
 
-        # Create ECS cluster
+        # Create ECS cluster with service discovery
         cluster_construct = BixArenaEcsCluster(
             self,
             "Cluster",
             vpc=vpc,
+            cluster_name=stack_prefix,  # Use stack prefix as cluster name
         )
 
         # Export cluster for use in service stacks
