@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  effect,
   ElementRef,
   HostListener,
   inject,
@@ -15,8 +16,8 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
-import { ComparisonToolColumnsComponent } from '../comparison-tool-columns/comparison-tool-columns.component';
 import { BaseTableComponent } from './base-table/base-table.component';
+import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
 
 @Component({
   selector: 'explorers-comparison-tool-table',
@@ -55,6 +56,16 @@ export class ComparisonToolTableComponent implements AfterViewInit {
         '--comparison-tool-primary-column-width',
       ),
     );
+
+    // Recalculate column widths whenever selected columns change
+    effect(() => {
+      // Access selectedColumns to track changes
+      this.selectedColumns();
+      // Recalculate widths on next tick to ensure DOM is updated
+      setTimeout(() => {
+        this.onWindowResize();
+      }, 0);
+    });
   }
 
   ngAfterViewInit() {

@@ -1,17 +1,17 @@
 {
-  "name": "explorers-comparison-tools",
+  "name": "explorers-comparison-tool",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/explorers/comparison-tools/src",
+  "sourceRoot": "libs/explorers/comparison-tool/src",
   "prefix": "explorers",
   "tags": ["type:feature", "scope:explorers", "language:typescript"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/explorers/comparison-tools"],
+      "outputs": ["{workspaceRoot}/coverage/libs/explorers/comparison-tool"],
       "options": {
-        "jestConfig": "libs/explorers/comparison-tools/jest.config.ts",
-        "tsConfig": "libs/explorers/comparison-tools/tsconfig.spec.json"
+        "jestConfig": "libs/explorers/comparison-tool/jest.config.ts",
+        "tsConfig": "libs/explorers/comparison-tool/tsconfig.spec.json"
       }
     },
     "lint": {

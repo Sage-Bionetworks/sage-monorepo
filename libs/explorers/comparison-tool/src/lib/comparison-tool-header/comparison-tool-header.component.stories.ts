@@ -7,7 +7,7 @@ import { ComparisonToolHeaderComponent } from './comparison-tool-header.componen
 
 const meta: Meta<ComparisonToolHeaderComponent> = {
   component: ComparisonToolHeaderComponent,
-  title: 'Comparison Tools/ComparisonToolHeaderComponent',
+  title: 'Comparison Tool/ComparisonToolHeaderComponent',
   decorators: [
     applicationConfig({
       providers: [

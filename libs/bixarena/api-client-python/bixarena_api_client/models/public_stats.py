@@ -31,9 +31,9 @@ class PublicStats(BaseModel):
         description="Total number of unique models that have been evaluated on the platform",
         alias="modelsEvaluated",
     )
-    total_battles: StrictInt = Field(
-        description="Total number of battles conducted on the platform",
-        alias="totalBattles",
+    completed_battles: StrictInt = Field(
+        description="Total number of completed battles on the platform",
+        alias="completedBattles",
     )
     total_users: StrictInt = Field(
         description="Total number of registered users on the platform",
@@ -41,7 +41,7 @@ class PublicStats(BaseModel):
     )
     __properties: ClassVar[List[str]] = [
         "modelsEvaluated",
-        "totalBattles",
+        "completedBattles",
         "totalUsers",
     ]
 
@@ -96,7 +96,7 @@ class PublicStats(BaseModel):
         _obj = cls.model_validate(
             {
                 "modelsEvaluated": obj.get("modelsEvaluated"),
-                "totalBattles": obj.get("totalBattles"),
+                "completedBattles": obj.get("completedBattles"),
                 "totalUsers": obj.get("totalUsers"),
             }
         )

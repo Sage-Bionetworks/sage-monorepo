@@ -433,9 +433,17 @@ components:
         link_url:
           type: string
           description: The default URL for this column.
+        is_exported:
+          type: boolean
+          description: Indicates whether the column is included in data exports.
+        is_hidden:
+          type: boolean
+          description: Indicates whether the column is shown in the comparison table UI.
       required:
         - type
         - data_key
+        - is_exported
+        - is_hidden
     ComparisonToolConfigFilter:
       type: object
       description: Comparison Tool Config Filter

@@ -23,11 +23,6 @@ from bixarena_app.model.error_handler import handle_error_message
 
 logger = logging.getLogger(__name__)
 
-no_change_btn = gr.Button()
-enable_btn = gr.Button(interactive=True, visible=True)
-disable_btn = gr.Button(interactive=False)
-invisible_btn = gr.Button(interactive=False, visible=False)
-
 api_endpoint_info = {}
 
 
@@ -131,7 +126,7 @@ def bot_response(
     if state.skip_next:
         # This generate call is skipped due to invalid inputs
         state.skip_next = False
-        yield (state, state.to_gradio_chatbot()) + (no_change_btn,) * 4
+        yield (state, state.to_gradio_chatbot())
         return
 
     conv, model_name = state.conv, state.model_name
@@ -141,7 +136,7 @@ def bot_response(
     if model_api_dict is None:
         logger.error(f"UNEXPECTED: Model {model_name} not in api_endpoint_info.")
         conv.update_last_message(f"Configuration error: Model {model_name} not found")
-        yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 4
+        yield (state, state.to_gradio_chatbot())
         return
 
     # Use API provider stream with battle context
@@ -156,49 +151,34 @@ def bot_response(
     )
 
     conv.update_last_message("▌")
-    yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
+    yield (state, state.to_gradio_chatbot())
 
     try:
         for data in stream_iter:
             if data["error_code"] == 0:
                 output = data["text"].strip()
                 conv.update_last_message(output + "▌")
-                yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
+                yield (state, state.to_gradio_chatbot())
             else:
                 output = data["text"]
                 conv.update_last_message(output)
                 state.has_error = True
-                yield (state, state.to_gradio_chatbot()) + (
-                    disable_btn,
-                    disable_btn,
-                    disable_btn,
-                    enable_btn,
-                )
+                yield (state, state.to_gradio_chatbot())
                 return
         output = data["text"].strip()
         conv.update_last_message(output)
-        yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 4
+        yield (state, state.to_gradio_chatbot())
     except requests.exceptions.RequestException as e:
         display_error_msg = handle_error_message(e)
         conv.update_last_message(display_error_msg)
         state.has_error = True  # Mark this state as having an error
-        yield (state, state.to_gradio_chatbot()) + (
-            disable_btn,
-            disable_btn,
-            disable_btn,
-            enable_btn,
-        )
+        yield (state, state.to_gradio_chatbot())
         return
     except Exception as e:
         display_error_msg = handle_error_message(e)
         conv.update_last_message(display_error_msg)
         state.has_error = True  # Mark this state as having an error
-        yield (state, state.to_gradio_chatbot()) + (
-            disable_btn,
-            disable_btn,
-            disable_btn,
-            enable_btn,
-        )
+        yield (state, state.to_gradio_chatbot())
         return
 
 
@@ -212,15 +192,19 @@ def bot_response_multi(
     request: gr.Request | None = None,
 ):
     num_sides = 2
-    if state0 is None or state0.skip_next:
-        # This generate call is skipped due to invalid inputs
+    if state0 and state0.skip_next:
+        # State: Edge case - battle round limit reached
         yield (
             state0,
             state1,
             battle_session,
             state0.to_gradio_chatbot(),
             state1.to_gradio_chatbot(),
-        ) + (no_change_btn,) * 4
+            gr.Row(visible=True),  # voting_row: show
+            gr.Row(visible=False),  # next_battle_row: hide
+            gr.HTML(visible=False),  # page_header: hide
+            gr.Row(visible=False),  # textbox_row: hide
+        )
         return
 
     states = [state0, state1]
@@ -256,20 +240,40 @@ def bot_response_multi(
                 stop = False
             except StopIteration:
                 pass
-        yield states + [battle_session] + chatbots + [disable_btn] * 4
+        # State 2: Models streaming responses
+        yield (
+            states  # state0, state1: streaming
+            + [battle_session]  # battle_session: unchanged
+            + chatbots  # chatbot0, chatbot1: show streaming text with "▌"
+            + [gr.Row(visible=False)]  # voting_row: hide during streaming
+            + [gr.Row(visible=False)]  # next_battle_row: hide
+            + [gr.HTML(visible=False)]  # page_header: hide
+            + [gr.Row(visible=True)]  # textbox_row: show
+        )
         if stop:
             break
 
     _update_battle_round_with_responses(states[0], states[1], battle_session, cookies)
 
-    # At least one model had an error -> keep voting buttons disabled
+    # State 3B: Error occurred
     if any(state.has_error for state in states):
         yield (
-            states
-            + [battle_session]
-            + chatbots
-            + [disable_btn, disable_btn, disable_btn, enable_btn]
+            states  # state0, state1: error state
+            + [battle_session]  # battle_session: unchanged
+            + chatbots  # chatbot0, chatbot1: show error message
+            + [gr.Row(visible=False)]  # voting_row: hide on error
+            + [gr.Row(visible=True)]  # next_battle_row: show
+            + [gr.HTML(visible=False)]  # page_header: hide
+            + [gr.Row(visible=True)]  # textbox_row: show
         )
     else:
-        # Both models succeeded -> enable all buttons including voting
-        yield states + [battle_session] + chatbots + [enable_btn] * 4
+        # State 3A: Both models succeeded
+        yield (
+            states  # state0, state1: complete
+            + [battle_session]  # battle_session: unchanged
+            + chatbots  # chatbot0, chatbot1: show complete responses
+            + [gr.Row(visible=True)]  # voting_row: show on success
+            + [gr.Row(visible=False)]  # next_battle_row: hide
+            + [gr.HTML(visible=False)]  # page_header: hide
+            + [gr.Row(visible=True)]  # textbox_row: show
+        )

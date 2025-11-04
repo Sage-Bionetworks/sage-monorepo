@@ -1,49 +1,15 @@
 import logging
 
 import gradio as gr
+from bixarena_api_client import UserApi
 
-from bixarena_api_client import StatsApi, UserApi
 from bixarena_app.api.api_client_helper import (
     create_authenticated_api_client,
-    get_api_configuration,
+    fetch_public_stats,
 )
-from bixarena_app.auth.request_auth import is_authenticated, get_session_cookie
-from bixarena_api_client.api_client import ApiClient
+from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
 
 logger = logging.getLogger(__name__)
-
-
-def fetch_public_stats() -> dict:
-    """Fetch public platform statistics from the API.
-
-    Returns:
-        Dictionary with models_evaluated, total_battles, and total_users.
-        Returns default values if API call fails.
-    """
-    try:
-        # Create an unauthenticated API client for public endpoint
-        # Use the same configuration helper to get the correct API base URL
-        configuration = get_api_configuration()
-        with ApiClient(configuration) as client:
-            api = StatsApi(client)
-            stats = api.get_public_stats()
-            logger.info(
-                f"Fetched public stats: {stats.models_evaluated} models, "
-                f"{stats.total_battles} battles, {stats.total_users} users"
-            )
-            return {
-                "models_evaluated": stats.models_evaluated,
-                "total_battles": stats.total_battles,
-                "total_users": stats.total_users,
-            }
-    except Exception as e:
-        logger.error(f"Error fetching public stats: {e}")
-        # Return fallback values if API call fails
-        return {
-            "models_evaluated": 0,
-            "total_battles": 0,
-            "total_users": 0,
-        }
 
 
 def fetch_user_stats(request: gr.Request):
@@ -126,7 +92,7 @@ def load_public_stats_on_page_load() -> tuple[dict, dict, dict, dict, dict, dict
         <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
             TOTAL BATTLES
         </p>
-        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["total_battles"]:,}</h2>
+        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["completed_battles"]:,}</h2>
     </div>
     """
 
@@ -221,28 +187,23 @@ def build_stats_section():
 
     # First row: Public stats
     with gr.Row():
-        with gr.Column(visible=False) as models_evaluated_column:
-            with gr.Group():
-                models_evaluated_box = gr.HTML("")
+        with gr.Column(visible=False) as models_evaluated_column, gr.Group():
+            models_evaluated_box = gr.HTML("")
 
-        with gr.Column(visible=False) as total_battles_column:
-            with gr.Group():
-                total_battles_box = gr.HTML("")
+        with gr.Column(visible=False) as total_battles_column, gr.Group():
+            total_battles_box = gr.HTML("")
 
-        with gr.Column(visible=False) as total_users_column:
-            with gr.Group():
-                total_users_box = gr.HTML("")
+        with gr.Column(visible=False) as total_users_column, gr.Group():
+            total_users_box = gr.HTML("")
 
     # Second row: User-specific stats (only shown when logged in)
     with gr.Row():
-        with gr.Column(visible=False) as user_battles_column:
-            with gr.Group():
-                user_battles_box = gr.HTML("")
+        with gr.Column(visible=False) as user_battles_column, gr.Group():
+            user_battles_box = gr.HTML("")
 
         # New: User rank box
-        with gr.Column(visible=False) as user_rank_column:
-            with gr.Group():
-                user_rank_box = gr.HTML("")
+        with gr.Column(visible=False) as user_rank_column, gr.Group():
+            user_rank_box = gr.HTML("")
 
     return (
         models_evaluated_column,
@@ -305,27 +266,26 @@ def build_cta_section():
 def build_home_page():
     """Create the complete home page layout"""
 
-    with gr.Column() as home_page:
-        with gr.Column(elem_classes=["content-wrapper"]):
-            # Intro Section
-            create_intro_section()
+    with gr.Column() as home_page, gr.Column():
+        # Intro Section
+        create_intro_section()
 
-            # Stats Section
-            (
-                models_evaluated_column,
-                models_evaluated_box,
-                total_battles_column,
-                total_battles_box,
-                total_users_column,
-                total_users_box,
-                user_battles_column,
-                user_battles_box,
-                user_rank_column,  # New
-                user_rank_box,  # New
-            ) = build_stats_section()
+        # Stats Section
+        (
+            models_evaluated_column,
+            models_evaluated_box,
+            total_battles_column,
+            total_battles_box,
+            total_users_column,
+            total_users_box,
+            user_battles_column,
+            user_battles_box,
+            user_rank_column,  # New
+            user_rank_box,  # New
+        ) = build_stats_section()
 
-            # Call to Action Section
-            start_btn_authenticated, start_btn_login = build_cta_section()
+        # Call to Action Section
+        start_btn_authenticated, start_btn_login = build_cta_section()
 
     return (
         home_page,

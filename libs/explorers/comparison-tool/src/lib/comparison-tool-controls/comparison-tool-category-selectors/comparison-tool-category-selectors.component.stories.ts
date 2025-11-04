@@ -12,7 +12,7 @@ import { ComparisonToolCategorySelectorsComponent } from './comparison-tool-cate
 
 const meta: Meta<ComparisonToolCategorySelectorsComponent> = {
   component: ComparisonToolCategorySelectorsComponent,
-  title: 'Comparison Tools/ComparisonToolSelectorsComponent',
+  title: 'Comparison Tool/ComparisonToolSelectorsComponent',
   decorators: [
     applicationConfig({
       providers: [

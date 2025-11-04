@@ -37,6 +37,14 @@ export interface ComparisonToolConfigColumn {
    * The default URL for this column.
    */
   link_url?: string;
+  /**
+   * Indicates whether the column is included in data exports.
+   */
+  is_exported: boolean;
+  /**
+   * Indicates whether the column is shown in the comparison table UI.
+   */
+  is_hidden: boolean;
 }
 export namespace ComparisonToolConfigColumn {
   export type TypeEnum = 'text' | 'heat_map' | 'link_internal' | 'link_external' | 'primary';

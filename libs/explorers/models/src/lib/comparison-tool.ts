@@ -63,15 +63,12 @@ export interface ComparisonToolConfigColumn {
   sort_tooltip?: string;
   link_text?: string;
   link_url?: string;
+  is_exported: boolean;
+  is_hidden: boolean;
 }
 
 export interface ComparisonToolColumn extends ComparisonToolConfigColumn {
   selected: boolean;
-}
-
-export interface ComparisonToolColumns {
-  dropdowns: string[];
-  columns: ComparisonToolColumn[];
 }
 
 export interface ComparisonToolConfig {

@@ -1,8 +1,8 @@
 import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import {
   ComparisonToolColumn,
-  ComparisonToolColumns,
   ComparisonToolConfig,
+  ComparisonToolConfigColumn,
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
@@ -16,6 +16,12 @@ import { NotificationService } from './notification.service';
 export class ComparisonToolService<T> {
   private readonly notificationService = inject(NotificationService);
 
+  // Cache column selections only for dropdown selections up to this length
+  // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
+  // for the first 2 levels. Disease Correlation has 2 dropdowns, so all selections are cached.
+  // If future tools have more dropdowns and different column selection caching requirements,
+  // this cutoff may need to be included in the ui_config instead, so the cutoff can be set per tool.
+  private readonly DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL = 2;
   private readonly DEFAULT_SORT_ORDER = -1;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
@@ -46,7 +52,9 @@ export class ComparisonToolService<T> {
   private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
   private readonly sortFieldSignal = signal<string | undefined>(undefined);
   private readonly sortOrderSignal = signal<number>(this.DEFAULT_SORT_ORDER);
-  private readonly columnsForDropdownsSignal = signal<ComparisonToolColumns[]>([]);
+  private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
+    new Map(),
+  );
   private readonly unpinnedDataSignal = signal<T[]>([]);
   private readonly pinnedDataSignal = signal<T[]>([]);
 
@@ -91,14 +99,13 @@ export class ComparisonToolService<T> {
     const config = this.currentConfig();
     if (!config) return [];
 
-    const dropdownsToMatch = this.getDropdownsForMatching(config.dropdowns);
+    // Get columns from current config (the source of truth from database)
+    const configColumns = config.columns;
+    if (!configColumns || configColumns.length === 0) return [];
 
-    // Match on dropdowns only (each service instance is page-specific)
-    return (
-      this.columnsForDropdownsSignal().find((c) =>
-        isEqual(this.getDropdownsForMatching(c.dropdowns), dropdownsToMatch),
-      )?.columns ?? []
-    );
+    const savedColumns = this.columnsForDropdownsSignal().get(this.dropdownKey(config.dropdowns));
+
+    return this.applyColumnPreferences(configColumns, savedColumns);
   });
 
   selectedColumns = computed(() => {
@@ -134,18 +141,22 @@ export class ComparisonToolService<T> {
 
     if (!configs?.length) {
       this.updateDropdownSelectionIfChanged([]);
-      this.columnsForDropdownsSignal.set([]);
+      this.columnsForDropdownsSignal.set(new Map());
       return;
     }
 
     const normalizedSelection = this.normalizeSelection(selection ?? [], configs);
     this.updateDropdownSelectionIfChanged(normalizedSelection);
 
-    const columnsData: ComparisonToolColumns[] = this.configs().map((config) => ({
-      dropdowns: config.dropdowns,
-      columns: config.columns.map((column) => ({ ...column, selected: true })),
-    }));
-    this.columnsForDropdownsSignal.set(columnsData);
+    const columnsMap = new Map<string, ComparisonToolColumn[]>();
+    for (const config of configs) {
+      columnsMap.set(
+        this.dropdownKey(config.dropdowns),
+        this.applyColumnPreferences(config.columns),
+      );
+    }
+
+    this.columnsForDropdownsSignal.set(columnsMap);
   }
 
   setDropdownSelection(selection: string[]) {
@@ -161,27 +172,15 @@ export class ComparisonToolService<T> {
 
     const config = this.currentConfig();
     if (config?.columns && config.columns.length > 0) {
-      const currentDropdowns = config.dropdowns;
-      const dropdownsToMatch = this.getDropdownsForMatching(currentDropdowns);
+      const key = this.dropdownKey(config.dropdowns);
 
-      this.columnsForDropdownsSignal.update((columnsData) => {
-        // Match on dropdowns only (each service instance is page-specific)
-        const existingIndex = columnsData.findIndex((c) =>
-          isEqual(this.getDropdownsForMatching(c.dropdowns), dropdownsToMatch),
-        );
+      this.columnsForDropdownsSignal.update((columnsMap) => {
+        const next = new Map(columnsMap);
+        const savedColumns = columnsMap.get(key);
 
-        // If this dropdown combination exists, preserve its column state
-        if (existingIndex !== -1) {
-          return columnsData; // State already exists, don't modify
-        }
+        next.set(key, this.applyColumnPreferences(config.columns, savedColumns));
 
-        // New dropdown combination - initialize with all columns selected
-        const newColumnsData: ComparisonToolColumns = {
-          dropdowns: currentDropdowns,
-          columns: config.columns.map((column) => ({ ...column, selected: true })),
-        };
-
-        return [...columnsData, newColumnsData];
+        return next;
       });
     }
   }
@@ -276,29 +275,27 @@ export class ComparisonToolService<T> {
     const config = this.currentConfig();
     if (!config) return;
 
-    const currentDropdowns = config.dropdowns;
-    const dropdownsToMatch = this.getDropdownsForMatching(currentDropdowns);
-
     this.columnsForDropdownsSignal.update((cols) => {
-      // Match on dropdowns only (each service instance is page-specific)
-      const columnsIndex = cols.findIndex((c) =>
-        isEqual(this.getDropdownsForMatching(c.dropdowns), dropdownsToMatch),
-      );
-
-      if (columnsIndex !== -1) {
-        const columnsData = cols[columnsIndex];
-        const colIndex = columnsData.columns.findIndex((col) => col.data_key === column.data_key);
-
-        if (colIndex !== -1) {
-          const newCols = [...columnsData.columns];
-          newCols[colIndex] = { ...newCols[colIndex], selected: !newCols[colIndex].selected };
-
-          const updatedCols = [...cols];
-          updatedCols[columnsIndex] = { ...columnsData, columns: newCols };
-          return updatedCols;
-        }
+      const key = this.dropdownKey(config.dropdowns);
+      const columns = cols.get(key);
+      if (!columns) {
+        return cols;
       }
-      return cols;
+
+      const targetIndex = columns.findIndex((col) => col.data_key === column.data_key);
+      if (targetIndex === -1) {
+        return cols;
+      }
+
+      const updatedColumns = [...columns];
+      updatedColumns[targetIndex] = {
+        ...updatedColumns[targetIndex],
+        selected: !updatedColumns[targetIndex].selected,
+      };
+
+      const next = new Map(cols);
+      next.set(key, updatedColumns);
+      return next;
     });
   }
 
@@ -353,16 +350,36 @@ export class ComparisonToolService<T> {
   }
 
   /**
-   * Returns the dropdown array slice to use for matching column state.
-   * For arrays with 2+ elements, returns first n-1 elements.
-   * For arrays with 0-1 elements, returns the full array.
+   * Applies saved column selection preferences to config columns.
+   * If no saved preferences exist, all columns are marked as selected.
+   * This ensures we always show the columns from the config, but preserve user's show/hide preferences.
    */
-  private getDropdownsForMatching(dropdowns: string[] | undefined): string[] {
-    const normalized = dropdowns ?? [];
-    if (normalized.length >= 2) {
-      return normalized.slice(0, -1);
+  private applyColumnPreferences(
+    configColumns: ComparisonToolConfigColumn[],
+    savedColumns?: ComparisonToolColumn[],
+  ): ComparisonToolColumn[] {
+    const visibleColumns = configColumns.filter((column) => !column.is_hidden);
+
+    if (!savedColumns?.length) {
+      return visibleColumns.map((column) => ({ ...column, selected: true }));
     }
-    return normalized;
+
+    const selectionMap = new Map(savedColumns.map((col) => [col.data_key, col.selected]));
+
+    return visibleColumns.map((column) => ({
+      ...column,
+      selected: selectionMap.get(column.data_key) ?? true,
+    }));
+  }
+
+  private dropdownKey(dropdowns: string[] | undefined): string {
+    const normalized = dropdowns ?? [];
+    if (normalized.length <= this.DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL) {
+      return JSON.stringify(normalized);
+    }
+    return JSON.stringify(
+      normalized.slice(0, this.DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL),
+    );
   }
 
   setSort(sortField: string | undefined, sortOrder: number | undefined) {

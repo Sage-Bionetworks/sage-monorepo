@@ -31,7 +31,7 @@ class ExamplePrompt(BaseModel):
     """  # noqa: E501
 
     id: StrictStr = Field(description="The unique identifier of the example prompt.")
-    question: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = Field(
+    question: Annotated[str, Field(min_length=1, strict=True, max_length=160)] = Field(
         description="The biomedical question text."
     )
     source: ExamplePromptSource
