@@ -3,6 +3,9 @@ rootProject.name = "sagebionetworks"
 // Include the Agora projects as submodules
 include(":agora-api-next")
 
+// Include the Model-AD projects as submodules
+include(":model-ad-api-next")
+
 // Include the AMP-ALS projects as submodules
 include(":amp-als-app-config-data")
 include(":amp-als-dataset-service")
@@ -27,6 +30,7 @@ include(":sagebionetworks-util")
 
 // Set the project directories
 project(":agora-api-next").projectDir = file("apps/agora/api-next")
+project(":model-ad-api-next").projectDir = file("apps/model-ad/api-next")
 project(":amp-als-app-config-data").projectDir = file("libs/amp-als/app-config-data")
 project(":amp-als-dataset-service").projectDir = file("apps/amp-als/dataset-service")
 project(":amp-als-user-service").projectDir = file("apps/amp-als/user-service")

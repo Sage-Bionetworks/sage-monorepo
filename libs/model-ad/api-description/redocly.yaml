@@ -43,3 +43,9 @@ apis:
         property: x-audience
         value: [public, internal]
         matchStrategy: any
+  api-next-service:
+    root: ./src/api.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [api-next]

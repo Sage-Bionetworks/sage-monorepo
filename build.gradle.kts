@@ -61,6 +61,10 @@ subprojects {
       group = "org.sagebionetworks.bixarena"
       version = "0.0.1-SNAPSHOT"
     }
+    name.startsWith("model-ad") -> {
+      group = "org.sagebionetworks.model.ad"
+      version = "0.0.1-SNAPSHOT"
+    }
     name.startsWith("openchallenges") -> {
       group = "org.sagebionetworks.openchallenges"
       version = "0.0.1-SNAPSHOT"

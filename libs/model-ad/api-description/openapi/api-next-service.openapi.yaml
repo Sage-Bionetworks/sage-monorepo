@@ -1,0 +1,310 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Model-AD API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  x-logo:
+    url: https://dev.modeladexplorer.org/opengraph/opengraph.png
+    altText: Model-AD Explorer
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: Data Version
+    description: Operations about the data version.
+  - name: Model
+    description: Operations about models.
+  - name: Model Overview
+    description: Operations about Model Overview.
+  - name: Comparison Tool Config
+    description: Operations about Comparison Tool UI configuration.
+  - name: Disease Correlation
+    description: Operations about Disease Correlation results.
+paths:
+  /comparison-tools/model-overview:
+    x-audience:
+      - public
+      - api-next
+    get:
+      tags:
+        - Model Overview
+      summary: Get model overview for comparison tools
+      description: Returns a list of model overview objects for use in comparison tools.
+      operationId: getModelOverviews
+      parameters:
+        - $ref: '#/components/parameters/itemQuery'
+        - $ref: '#/components/parameters/itemFilterTypeQuery'
+      responses:
+        '200':
+          description: A list of model overview objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelOverview'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/disease-correlation:
+    x-audience:
+      - public
+      - api-next
+    get:
+      tags:
+        - Disease Correlation
+      summary: Get disease correlation comparison data
+      description: Returns a list of disease correlation objects for use in comparison tools.
+      operationId: getDiseaseCorrelations
+      parameters:
+        - $ref: '#/components/parameters/categoryQuery'
+        - $ref: '#/components/parameters/itemQuery'
+        - $ref: '#/components/parameters/itemFilterTypeQuery'
+      responses:
+        '200':
+          description: A list of disease correlation objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiseaseCorrelation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  parameters:
+    itemQuery:
+      name: item
+      description: A list of items to filter the data by.
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      style: form
+      explode: true
+    itemFilterTypeQuery:
+      name: itemFilterType
+      description: The type of filter to apply to the items. Possible values are 'include' or 'exclude'.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/ItemFilterTypeQuery'
+    categoryQuery:
+      name: category
+      description: An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA.
+      in: query
+      style: form
+      explode: true
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+  schemas:
+    ItemFilterTypeQuery:
+      type: string
+      enum:
+        - include
+        - exclude
+      description: |
+        - include: Include only the specified items.
+        - exclude: Exclude the specified items.
+      default: include
+    ModelOverviewLink:
+      type: object
+      description: Model Overview Link
+      properties:
+        link_text:
+          type: string
+          description: Link text
+        link_url:
+          type: string
+          description: URL for the related resource
+    ModelOverview:
+      type: object
+      description: Model Overview object for comparison tools
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the model overview object
+        name:
+          type: string
+          description: Model name
+        model_type:
+          type: string
+          description: Model type (e.g., Late Onset AD, Familial AD)
+        matched_controls:
+          type: array
+          items:
+            type: string
+          description: List of matched control models
+        gene_expression:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        disease_correlation:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        biomarkers:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        pathology:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        study_data:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        jax_strain:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        center:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        modified_genes:
+          type: array
+          items:
+            type: string
+          description: List of modified genes in the model
+        available_data:
+          type: array
+          items:
+            type: string
+            enum:
+              - Gene Expression
+              - Pathology
+              - Biomarkers
+              - Disease Correlation
+      required:
+        - _id
+        - name
+        - model_type
+        - matched_controls
+        - study_data
+        - jax_strain
+        - center
+        - modified_genes
+        - available_data
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
+    Sex:
+      type: string
+      description: Sex
+      enum:
+        - Female
+        - Male
+    CorrelationResult:
+      type: object
+      description: Correlation result
+      properties:
+        correlation:
+          type: number
+          description: Correlation value
+        adj_p_value:
+          type: number
+          description: Adjusted p-value
+      required:
+        - correlation
+        - adj_p_value
+    DiseaseCorrelation:
+      type: object
+      description: Disease Correlation
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the disease correlation object
+        name:
+          type: string
+          description: Model name
+        matched_control:
+          type: string
+          description: Matched control for the model
+        model_type:
+          type: string
+          description: Type of model
+        modified_genes:
+          type: array
+          items:
+            type: string
+          description: List of modified genes
+        cluster:
+          type: string
+          description: Cluster information
+        age:
+          type: string
+          description: Age of the model
+        sex:
+          $ref: '#/components/schemas/Sex'
+        IFG:
+          $ref: '#/components/schemas/CorrelationResult'
+        PHG:
+          $ref: '#/components/schemas/CorrelationResult'
+        TCX:
+          $ref: '#/components/schemas/CorrelationResult'
+        CBE:
+          $ref: '#/components/schemas/CorrelationResult'
+        DLPFC:
+          $ref: '#/components/schemas/CorrelationResult'
+        FP:
+          $ref: '#/components/schemas/CorrelationResult'
+        STG:
+          $ref: '#/components/schemas/CorrelationResult'
+      required:
+        - _id
+        - name
+        - matched_control
+        - model_type
+        - modified_genes
+        - cluster
+        - age
+        - sex
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'

@@ -1,3 +1,5 @@
+x-audience:
+  - public
 get:
   tags:
     - Comparison Tool Config

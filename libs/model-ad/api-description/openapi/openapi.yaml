@@ -26,6 +26,8 @@ tags:
     description: Operations about Disease Correlation results.
 paths:
   /data-version:
+    x-audience:
+      - public
     get:
       tags:
         - Data Version
@@ -46,6 +48,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /models/search:
+    x-audience:
+      - public
     get:
       tags:
         - Model
@@ -73,6 +77,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /models/{name}:
+    x-audience:
+      - public
     get:
       tags:
         - Model
@@ -100,6 +106,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /comparison-tool-config:
+    x-audience:
+      - public
     get:
       tags:
         - Comparison Tool Config
@@ -129,6 +137,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /comparison-tools/model-overview:
+    x-audience:
+      - public
+      - api-next
     get:
       tags:
         - Model Overview
@@ -154,6 +165,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /comparison-tools/disease-correlation:
+    x-audience:
+      - public
+      - api-next
     get:
       tags:
         - Disease Correlation

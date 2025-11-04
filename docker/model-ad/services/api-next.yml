@@ -1,0 +1,18 @@
+services:
+  model-ad-api-next:
+    image: ghcr.io/sage-bionetworks/model-ad-api-next:${MODEL_AD_API_JAVA_VERSION:-local}
+    container_name: model-ad-api-next
+    restart: always
+    env_file:
+      - ../../../apps/model-ad/api-next/.env
+    networks:
+      - model-ad
+    ports:
+      - '3334:3334'
+    depends_on:
+      model-ad-mongo:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 1G

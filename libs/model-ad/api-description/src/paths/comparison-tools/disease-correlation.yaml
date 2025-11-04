@@ -1,3 +1,6 @@
+x-audience:
+  - public
+  - api-next
 get:
   tags:
     - Disease Correlation

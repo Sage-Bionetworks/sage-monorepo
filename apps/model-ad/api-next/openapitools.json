@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.14.0",
+    "generators": {
+      "model-ad-api-next": {
+        "generatorName": "spring",
+        "inputSpec": "#{cwd}/../../../libs/model-ad/api-description/openapi/api-next-service.openapi.yaml",
+        "output": "#{cwd}",
+        "additionalProperties": {
+          "apiPackage": "org.sagebionetworks.model.ad.api.next.api",
+          "basePackage": "org.sagebionetworks.model.ad.api.next",
+          "configPackage": "org.sagebionetworks.model.ad.api.next.configuration",
+          "delegatePattern": true,
+          "hideGenerationTimestamp": true,
+          "library": "spring-boot",
+          "modelNameSuffix": "Dto",
+          "modelPackage": "org.sagebionetworks.model.ad.api.next.model.dto",
+          "useTags": true,
+          "openApiNullable": false,
+          "useSpringBoot3": true,
+          "generateBuilders": true
+        }
+      }
+    }
+  }
+}
