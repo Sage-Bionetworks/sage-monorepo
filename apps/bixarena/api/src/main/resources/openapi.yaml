@@ -606,6 +606,72 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Model
+  /models/{modelId}/errors:
+    post:
+      description: Report an error that occurred during model interaction.
+      operationId: createModelError
+      parameters:
+        - description: The unique identifier of a model
+          explode: false
+          in: path
+          name: modelId
+          required: true
+          schema:
+            example: model_456
+            type: string
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              rateLimitError:
+                summary: Rate limit error
+                value:
+                  code: 429
+                  message: Rate limit exceeded
+                  battleId: 123e4567-e89b-12d3-a456-426614174000
+                  roundId: 123e4567-e89b-12d3-a456-426614174001
+            schema:
+              $ref: '#/components/schemas/ModelErrorCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              examples:
+                rateLimitError:
+                  summary: Rate limit error recorded
+                  value:
+                    id: 98765432-e89b-12d3-a456-426614174099
+                    modelId: 123e4567-e89b-12d3-a456-426614174002
+                    code: 429
+                    message: Rate limit exceeded
+                    battleId: 123e4567-e89b-12d3-a456-426614174000
+                    roundId: 123e4567-e89b-12d3-a456-426614174001
+                    createdAt: 2025-10-29T21:03:53Z
+              schema:
+                $ref: '#/components/schemas/ModelError'
+          description: Model error reported successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Report a model error
+      tags:
+        - Model
+      x-rate-limit-requests-per-minute: 60
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Model
   /battles/{battleId}/evaluations:
     post:
       description: Record the outcome of a battle.
@@ -2053,6 +2119,106 @@ components:
         hasPrevious: true
         hasNext: true
         totalElements: 99
+      type: object
+    ModelErrorCode:
+      description: HTTP status code from the error response.
+      example: 429
+      nullable: true
+      type: integer
+    ModelErrorMessage:
+      description: Error message describing what went wrong.
+      example: Rate limit exceeded
+      maxLength: 1000
+      minLength: 1
+      type: string
+    ModelErrorCreateRequest:
+      description: Request to report a model error.
+      properties:
+        code:
+          description: HTTP status code from the error response.
+          example: 429
+          nullable: true
+          type: integer
+        message:
+          description: Error message describing what went wrong.
+          example: Rate limit exceeded
+          maxLength: 1000
+          minLength: 1
+          type: string
+        battleId:
+          description: Unique identifier (UUID) of the battle.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+          format: uuid
+          type: string
+        roundId:
+          description: Unique identifier (UUID) of the battle round.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          format: uuid
+          type: string
+      required:
+        - battleId
+        - message
+        - roundId
+      type: object
+    ModelErrorId:
+      description: Unique identifier of the model error record.
+      example: 98765432-e89b-12d3-a456-426614174099
+      format: uuid
+      type: string
+    ModelError:
+      description: Record of a model error that occurred during interaction.
+      example:
+        createdAt: 2024-01-15T10:30:00Z
+        code: 429
+        battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+        modelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+        id: 98765432-e89b-12d3-a456-426614174099
+        message: Rate limit exceeded
+        roundId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      properties:
+        id:
+          description: Unique identifier of the model error record.
+          example: 98765432-e89b-12d3-a456-426614174099
+          format: uuid
+          type: string
+        modelId:
+          description: UUID of an AI model.
+          example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+          format: uuid
+          type: string
+        code:
+          description: HTTP status code from the error response.
+          example: 429
+          nullable: true
+          type: integer
+        message:
+          description: Error message describing what went wrong.
+          example: Rate limit exceeded
+          maxLength: 1000
+          minLength: 1
+          type: string
+        battleId:
+          description: Unique identifier (UUID) of the battle.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+          format: uuid
+          type: string
+        roundId:
+          description: Unique identifier (UUID) of the battle round.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          format: uuid
+          type: string
+        createdAt:
+          description: Timestamp when the entity was created.
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          type: string
+      required:
+        - battleId
+        - createdAt
+        - id
+        - message
+        - modelId
+        - roundId
       type: object
     BattleEvaluationOutcome:
       description: The outcome of the battle evaluation between model1 and model2.

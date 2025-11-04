@@ -68,6 +68,10 @@ from bixarena_api_client.models.license import License
 from bixarena_api_client.models.message_create import MessageCreate
 from bixarena_api_client.models.message_role import MessageRole
 from bixarena_api_client.models.model import Model
+from bixarena_api_client.models.model_error import ModelError
+from bixarena_api_client.models.model_error_create_request import (
+    ModelErrorCreateRequest,
+)
 from bixarena_api_client.models.model_page import ModelPage
 from bixarena_api_client.models.model_search_query import ModelSearchQuery
 from bixarena_api_client.models.model_sort import ModelSort

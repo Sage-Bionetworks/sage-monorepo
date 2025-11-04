@@ -1,0 +1,4 @@
+type: string
+format: uuid
+description: Unique identifier of the model error record.
+example: '98765432-e89b-12d3-a456-426614174099'

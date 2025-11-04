@@ -6,6 +6,8 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.ModelErrorCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.ModelErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
@@ -41,6 +43,75 @@ public interface ModelApi {
     default ModelApiDelegate getDelegate() {
         return new ModelApiDelegate() {};
     }
+
+    /**
+     * POST /models/{modelId}/errors : Report a model error
+     * Report an error that occurred during model interaction.
+     *
+     * @param modelId The unique identifier of a model (required)
+     * @param modelErrorCreateRequestDto  (required)
+     * @return Model error reported successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createModelError",
+        summary = "Report a model error",
+        description = "Report an error that occurred during model interaction.",
+        tags = { "Model" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Model error reported successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ModelErrorDto.class), examples = {
+                    @ExampleObject(
+                        name = "",
+                        value = "{\"id\":\"98765432-e89b-12d3-a456-426614174099\",\"modelId\":\"123e4567-e89b-12d3-a456-426614174002\",\"code\":429,\"message\":\"Rate limit exceeded\",\"battleId\":\"123e4567-e89b-12d3-a456-426614174000\",\"roundId\":\"123e4567-e89b-12d3-a456-426614174001\",\"createdAt\":\"2025-10-29T21:03:53Z\"}"
+                    )
+                }),
+                
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ModelErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/models/{modelId}/errors",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ModelErrorDto> createModelError(
+        @Parameter(name = "modelId", description = "The unique identifier of a model", required = true, in = ParameterIn.PATH) @PathVariable("modelId") String modelId,
+        @Parameter(name = "ModelErrorCreateRequestDto", description = "", required = true) @Valid @RequestBody ModelErrorCreateRequestDto modelErrorCreateRequestDto
+    ) {
+        return getDelegate().createModelError(modelId, modelErrorCreateRequestDto);
+    }
+
 
     /**
      * GET /models : List models

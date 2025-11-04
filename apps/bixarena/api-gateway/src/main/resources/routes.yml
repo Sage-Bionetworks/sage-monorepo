@@ -99,6 +99,10 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
     - method: 'POST'
+      path: '/api/v1/models/{modelId}/errors'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 60
+    - method: 'POST'
       path: '/auth/logout'
       audience: 'urn:bixarena:auth'
       rateLimitRequestsPerMinute: 60

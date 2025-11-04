@@ -1,0 +1,15 @@
+type: object
+description: Request to report a model error.
+properties:
+  code:
+    $ref: ./ModelErrorCode.yaml
+  message:
+    $ref: ./ModelErrorMessage.yaml
+  battleId:
+    $ref: ./BattleId.yaml
+  roundId:
+    $ref: ./BattleRoundId.yaml
+required:
+  - message
+  - battleId
+  - roundId

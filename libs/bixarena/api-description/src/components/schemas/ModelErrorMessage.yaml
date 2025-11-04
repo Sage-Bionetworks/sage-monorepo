@@ -1,0 +1,5 @@
+type: string
+description: Error message describing what went wrong.
+minLength: 1
+maxLength: 1000
+example: 'Rate limit exceeded'

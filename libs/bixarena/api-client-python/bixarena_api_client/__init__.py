@@ -73,6 +73,8 @@ __all__ = [
     "MessageCreate",
     "MessageRole",
     "Model",
+    "ModelError",
+    "ModelErrorCreateRequest",
     "ModelPage",
     "ModelSearchQuery",
     "ModelSort",
@@ -206,6 +208,10 @@ from bixarena_api_client.models.license import License as License
 from bixarena_api_client.models.message_create import MessageCreate as MessageCreate
 from bixarena_api_client.models.message_role import MessageRole as MessageRole
 from bixarena_api_client.models.model import Model as Model
+from bixarena_api_client.models.model_error import ModelError as ModelError
+from bixarena_api_client.models.model_error_create_request import (
+    ModelErrorCreateRequest as ModelErrorCreateRequest,
+)
 from bixarena_api_client.models.model_page import ModelPage as ModelPage
 from bixarena_api_client.models.model_search_query import (
     ModelSearchQuery as ModelSearchQuery,

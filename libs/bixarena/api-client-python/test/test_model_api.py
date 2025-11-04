@@ -25,6 +25,13 @@ class TestModelApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_create_model_error(self) -> None:
+        """Test case for create_model_error
+
+        Report a model error
+        """
+        pass
+
     def test_list_models(self) -> None:
         """Test case for list_models
 

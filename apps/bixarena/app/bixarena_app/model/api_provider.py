@@ -3,22 +3,70 @@
 import logging
 import os
 
+from bixarena_api_client import ModelApi, ModelErrorCreateRequest
 from openai import OpenAI
 
+from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.model.error_handler import handle_error_message
 
 logger = logging.getLogger(__name__)
 
 
+def report_model_error(
+    model_api_dict: dict,
+    error: Exception,
+    battle_session=None,
+    cookies: dict[str, str] | None = None,
+) -> None:
+    """
+    Report a model error to the backend API.
+
+    Args:
+        model_api_dict: Model information dict containing model_id and other details
+        error: The exception that occurred
+        battle_session: BattleSession object containing battle_id and round_id
+        cookies: Optional session cookies for authentication
+    """
+    try:
+        # Validate required fields
+        model_id = model_api_dict.get("model_id")
+        if (
+            not model_id
+            or not battle_session
+            or not battle_session.battle_id
+            or not battle_session.round_id
+        ):
+            logger.warning("⚠️ Cannot report error: missing required fields")
+            return
+
+        # Create error request
+        error_request = ModelErrorCreateRequest(
+            code=getattr(error, "code", None),
+            message=getattr(error, "message", str(error)),
+            battle_id=battle_session.battle_id,
+            round_id=battle_session.round_id,
+        )
+
+        # Report to backend
+        with create_authenticated_api_client(cookies) as api_client:
+            model_api = ModelApi(api_client)
+            response = model_api.create_model_error(model_id, error_request)
+            logger.info(f"✅ Model error reported: {response}")
+    except Exception as e:
+        # Don't let error reporting break the user experience
+        logger.warning(f"❌ Failed to report model error: {e}")
+
+
 # Only support OpenAI API for now
 def get_api_provider_stream_iter(
     conv,
-    model_name,
     model_api_dict,
     temperature,
     top_p,
     max_new_tokens,
+    battle_session=None,
+    cookies: dict[str, str] | None = None,
 ):
     if model_api_dict["api_type"] == "openai":
         prompt = conv.to_openai_api_messages()
@@ -30,6 +78,9 @@ def get_api_provider_stream_iter(
             max_new_tokens,
             api_base=model_api_dict.get("api_base"),
             api_key=model_api_dict.get("api_key"),
+            model_api_dict=model_api_dict,
+            battle_session=battle_session,
+            cookies=cookies,
         )
     else:
         raise NotImplementedError()
@@ -45,6 +96,9 @@ def openai_api_stream_iter(
     max_new_tokens,
     api_base=None,
     api_key=None,
+    model_api_dict: dict | None = None,
+    battle_session=None,
+    cookies: dict[str, str] | None = None,
 ):
     # Get OPENROUTER_API_KEY from environment if not provided
     if not api_key:
@@ -138,6 +192,11 @@ def openai_api_stream_iter(
 
         # Handle error
         logger.error(f"OpenAI API error: {e}", exc_info=True)
+
+        # Report error to backend if model_api_dict is available
+        if model_api_dict:
+            report_model_error(model_api_dict, e, battle_session, cookies)
+
         display_error_msg = handle_error_message(e)
         yield {
             "text": display_error_msg,

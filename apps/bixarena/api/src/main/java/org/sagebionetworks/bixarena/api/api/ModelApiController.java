@@ -1,6 +1,8 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.ModelErrorCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.ModelErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;

@@ -1,0 +1,4 @@
+type: integer
+nullable: true
+description: HTTP status code from the error response.
+example: 429

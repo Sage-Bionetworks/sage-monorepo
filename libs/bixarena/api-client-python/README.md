@@ -120,6 +120,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |
 | _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
 | _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
+| _ModelApi_         | [**create_model_error**](docs/ModelApi.md#create_model_error)                     | **POST** /models/{modelId}/errors                       | Report a model error                       |
 | _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
 | _StatsApi_         | [**get_public_stats**](docs/StatsApi.md#get_public_stats)                         | **GET** /stats                                          | Get public platform statistics             |
 | _UserApi_          | [**get_user_stats**](docs/UserApi.md#get_user_stats)                              | **GET** /users/me/stats                                 | Get current user&#39;s statistics          |
@@ -165,6 +166,8 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [MessageCreate](docs/MessageCreate.md)
 - [MessageRole](docs/MessageRole.md)
 - [Model](docs/Model.md)
+- [ModelError](docs/ModelError.md)
+- [ModelErrorCreateRequest](docs/ModelErrorCreateRequest.md)
 - [ModelPage](docs/ModelPage.md)
 - [ModelSearchQuery](docs/ModelSearchQuery.md)
 - [ModelSort](docs/ModelSort.md)

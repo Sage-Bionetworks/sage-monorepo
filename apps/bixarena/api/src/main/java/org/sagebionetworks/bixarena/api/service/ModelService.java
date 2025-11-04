@@ -1,12 +1,19 @@
 package org.sagebionetworks.bixarena.api.service;
 
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.exception.ModelNotFoundException;
+import org.sagebionetworks.bixarena.api.model.dto.ModelErrorCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.ModelErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
+import org.sagebionetworks.bixarena.api.model.entity.ModelErrorEntity;
+import org.sagebionetworks.bixarena.api.model.mapper.ModelErrorMapper;
 import org.sagebionetworks.bixarena.api.model.mapper.ModelMapper;
+import org.sagebionetworks.bixarena.api.model.repository.ModelErrorRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ModelService {
 
   private final ModelRepository modelRepository;
+  private final ModelErrorRepository modelErrorRepository;
   private final ModelMapper modelMapper = new ModelMapper();
+  private final ModelErrorMapper modelErrorMapper = new ModelErrorMapper();
 
   @Transactional(readOnly = true)
   public ModelPageDto listModels(ModelSearchQueryDto query) {
@@ -117,5 +126,30 @@ public class ModelService {
     }
     String pattern = "%" + query.getOrganization().trim().toLowerCase() + "%";
     return (root, cq, cb) -> cb.like(cb.lower(root.get("organization")), pattern);
+  }
+
+  @Transactional
+  public ModelErrorDto createModelError(UUID modelId, ModelErrorCreateRequestDto dto) {
+    log.info("Create model error for model {} with error code {}", modelId, dto.getCode());
+
+    // Validate that the model exists
+    modelRepository
+      .findById(modelId)
+      .orElseThrow(() -> new ModelNotFoundException("Model with id " + modelId + " not found"));
+
+    // Convert DTO to entity (with error message truncation)
+    ModelErrorEntity entity = modelErrorMapper.convertToEntity(modelId, dto);
+
+    // Save the error
+    ModelErrorEntity savedEntity = modelErrorRepository.save(entity);
+    modelErrorRepository.flush();
+
+    // Log to debug createdAt issue
+    log.info("Saved model error entity: id={}, createdAt={}", savedEntity.getId(), savedEntity.getCreatedAt());
+
+    // Convert back to DTO for response
+    ModelErrorDto responseDto = modelErrorMapper.convertToDto(savedEntity);
+    log.info("Response DTO: id={}, createdAt={}", responseDto.getId(), responseDto.getCreatedAt());
+    return responseDto;
   }
 }

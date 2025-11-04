@@ -1,0 +1,24 @@
+type: object
+description: Record of a model error that occurred during interaction.
+properties:
+  id:
+    $ref: ./ModelErrorId.yaml
+  modelId:
+    $ref: ./ModelId.yaml
+  code:
+    $ref: ./ModelErrorCode.yaml
+  message:
+    $ref: ./ModelErrorMessage.yaml
+  battleId:
+    $ref: ./BattleId.yaml
+  roundId:
+    $ref: ./BattleRoundId.yaml
+  createdAt:
+    $ref: ./CreatedAt.yaml
+required:
+  - id
+  - modelId
+  - message
+  - battleId
+  - roundId
+  - createdAt

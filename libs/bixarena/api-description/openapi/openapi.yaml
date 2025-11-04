@@ -454,6 +454,60 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
+  /models/{modelId}/errors:
+    parameters:
+      - $ref: '#/components/parameters/modelId'
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Model
+      summary: Report a model error
+      description: Report an error that occurred during model interaction.
+      operationId: createModelError
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelErrorCreateRequest'
+            examples:
+              rateLimitError:
+                summary: Rate limit error
+                value:
+                  code: 429
+                  message: Rate limit exceeded
+                  battleId: 123e4567-e89b-12d3-a456-426614174000
+                  roundId: 123e4567-e89b-12d3-a456-426614174001
+      responses:
+        '201':
+          description: Model error reported successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelError'
+              examples:
+                rateLimitError:
+                  summary: Rate limit error recorded
+                  value:
+                    id: 98765432-e89b-12d3-a456-426614174099
+                    modelId: 123e4567-e89b-12d3-a456-426614174002
+                    code: 429
+                    message: Rate limit exceeded
+                    battleId: 123e4567-e89b-12d3-a456-426614174000
+                    roundId: 123e4567-e89b-12d3-a456-426614174001
+                    createdAt: '2025-10-29T21:03:53Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /battles/{battleId}/evaluations:
     parameters:
       - $ref: '#/components/parameters/battleId'
@@ -1625,6 +1679,63 @@ components:
                 $ref: '#/components/schemas/Model'
           required:
             - models
+    ModelErrorCode:
+      type: integer
+      nullable: true
+      description: HTTP status code from the error response.
+      example: 429
+    ModelErrorMessage:
+      type: string
+      description: Error message describing what went wrong.
+      minLength: 1
+      maxLength: 1000
+      example: Rate limit exceeded
+    ModelErrorCreateRequest:
+      type: object
+      description: Request to report a model error.
+      properties:
+        code:
+          $ref: '#/components/schemas/ModelErrorCode'
+        message:
+          $ref: '#/components/schemas/ModelErrorMessage'
+        battleId:
+          $ref: '#/components/schemas/BattleId'
+        roundId:
+          $ref: '#/components/schemas/BattleRoundId'
+      required:
+        - message
+        - battleId
+        - roundId
+    ModelErrorId:
+      type: string
+      format: uuid
+      description: Unique identifier of the model error record.
+      example: 98765432-e89b-12d3-a456-426614174099
+    ModelError:
+      type: object
+      description: Record of a model error that occurred during interaction.
+      properties:
+        id:
+          $ref: '#/components/schemas/ModelErrorId'
+        modelId:
+          $ref: '#/components/schemas/ModelId'
+        code:
+          $ref: '#/components/schemas/ModelErrorCode'
+        message:
+          $ref: '#/components/schemas/ModelErrorMessage'
+        battleId:
+          $ref: '#/components/schemas/BattleId'
+        roundId:
+          $ref: '#/components/schemas/BattleRoundId'
+        createdAt:
+          $ref: '#/components/schemas/CreatedAt'
+      required:
+        - id
+        - modelId
+        - message
+        - battleId
+        - roundId
+        - createdAt
     BattleEvaluationOutcome:
       type: string
       description: The outcome of the battle evaluation between model1 and model2.
