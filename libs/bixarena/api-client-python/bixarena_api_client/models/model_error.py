@@ -32,16 +32,12 @@ class ModelError(BaseModel):
 
     id: UUID = Field(description="Unique identifier (UUID) of the model error record.")
     model_id: UUID = Field(description="UUID of an AI model.", alias="modelId")
-    error_code: Optional[StrictInt] = Field(
+    code: Optional[StrictInt] = Field(
         default=None,
         description="HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).",
-        alias="errorCode",
     )
-    error_message: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = (
-        Field(
-            description="The error message from the API or exception with full details.",
-            alias="errorMessage",
-        )
+    message: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = Field(
+        description="The error message from the API or exception with full details."
     )
     battle_id: Optional[UUID] = Field(
         default=None,
@@ -59,8 +55,8 @@ class ModelError(BaseModel):
     __properties: ClassVar[List[str]] = [
         "id",
         "modelId",
-        "errorCode",
-        "errorMessage",
+        "code",
+        "message",
         "battleId",
         "roundId",
         "createdAt",
@@ -103,10 +99,10 @@ class ModelError(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if error_code (nullable) is None
+        # set to None if code (nullable) is None
         # and model_fields_set contains the field
-        if self.error_code is None and "error_code" in self.model_fields_set:
-            _dict["errorCode"] = None
+        if self.code is None and "code" in self.model_fields_set:
+            _dict["code"] = None
 
         return _dict
 
@@ -123,8 +119,8 @@ class ModelError(BaseModel):
             {
                 "id": obj.get("id"),
                 "modelId": obj.get("modelId"),
-                "errorCode": obj.get("errorCode"),
-                "errorMessage": obj.get("errorMessage"),
+                "code": obj.get("code"),
+                "message": obj.get("message"),
                 "battleId": obj.get("battleId"),
                 "roundId": obj.get("roundId"),
                 "createdAt": obj.get("createdAt"),

@@ -4,12 +4,12 @@ Request body for reporting a model error from the Gradio app. This enables track
 
 ## Properties
 
-| Name              | Type    | Description                                                                            | Notes      |
-| ----------------- | ------- | -------------------------------------------------------------------------------------- | ---------- |
-| **error_code**    | **int** | HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.). | [optional] |
-| **error_message** | **str** | The error message from the API or exception with full details.                         |
-| **battle_id**     | **str** | Unique identifier (UUID) of the battle.                                                | [optional] |
-| **round_id**      | **str** | Unique identifier (UUID) of the battle round.                                          | [optional] |
+| Name          | Type    | Description                                                                            | Notes      |
+| ------------- | ------- | -------------------------------------------------------------------------------------- | ---------- |
+| **code**      | **int** | HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.). | [optional] |
+| **message**   | **str** | The error message from the API or exception with full details.                         |
+| **battle_id** | **str** | Unique identifier (UUID) of the battle.                                                | [optional] |
+| **round_id**  | **str** | Unique identifier (UUID) of the battle round.                                          | [optional] |
 
 ## Example
 

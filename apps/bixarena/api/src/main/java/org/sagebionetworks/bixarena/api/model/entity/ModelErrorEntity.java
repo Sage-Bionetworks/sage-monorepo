@@ -30,11 +30,11 @@ public class ModelErrorEntity {
   @Column(name = "model_id", nullable = false)
   private UUID modelId;
 
-  @Column(name = "error_code")
-  private Integer errorCode;
+  @Column(name = "code")
+  private Integer code;
 
-  @Column(name = "error_message", nullable = false, length = 1000)
-  private String errorMessage;
+  @Column(name = "message", nullable = false, length = 1000)
+  private String message;
 
   @Column(name = "battle_id")
   private UUID battleId;

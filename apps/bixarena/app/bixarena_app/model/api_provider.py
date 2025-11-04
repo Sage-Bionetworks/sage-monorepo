@@ -35,11 +35,9 @@ def report_model_error(
             logger.warning("Cannot report error: model_id not found in model_api_dict")
             return
 
-        # Extract error code from exception
-        error_code = getattr(error, "status_code", None)
-
-        # Get error message
-        error_message = str(error)
+        # Extract error code and message from exception
+        error_code = getattr(error, "code", None)
+        error_message = getattr(error, "message", str(error))
 
         # Extract battle context
         battle_id = battle_session.battle_id if battle_session else None
@@ -47,8 +45,8 @@ def report_model_error(
 
         # Create error request
         error_request = ModelErrorCreateRequest(
-            error_code=error_code,
-            error_message=error_message,
+            code=error_code,
+            message=error_message,
             battle_id=battle_id,
             round_id=round_id,
         )

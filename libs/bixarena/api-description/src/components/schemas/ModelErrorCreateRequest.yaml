@@ -3,9 +3,9 @@ description: |
   Request body for reporting a model error from the Gradio app. This enables tracking
   model failures, monitoring error rates, and potentially auto-disabling unreliable models.
 properties:
-  errorCode:
+  code:
     $ref: ./ModelErrorCode.yaml
-  errorMessage:
+  message:
     $ref: ./ModelErrorMessage.yaml
   battleId:
     $ref: ./BattleId.yaml
@@ -14,4 +14,4 @@ properties:
     $ref: ./BattleRoundId.yaml
     nullable: true
 required:
-  - errorMessage
+  - message

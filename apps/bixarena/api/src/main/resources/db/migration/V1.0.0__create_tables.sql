@@ -33,8 +33,8 @@ CREATE INDEX idx_api_model_active ON api.model(active);
 CREATE TABLE api.model_error (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
-  error_code INTEGER,
-  error_message VARCHAR(1000) NOT NULL,
+  code INTEGER,
+  message VARCHAR(1000) NOT NULL,
   battle_id UUID,
   round_id UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()

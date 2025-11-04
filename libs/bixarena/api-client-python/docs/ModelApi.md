@@ -47,7 +47,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.ModelApi(api_client)
     model_id = 'model_456' # str | The unique identifier of a model
-    model_error_create_request = {"errorCode":429,"errorMessage":"Rate limit exceeded","battleId":"123e4567-e89b-12d3-a456-426614174000","roundId":"123e4567-e89b-12d3-a456-426614174001"} # ModelErrorCreateRequest |
+    model_error_create_request = {"code":429,"message":"Rate limit exceeded","battleId":"123e4567-e89b-12d3-a456-426614174000","roundId":"123e4567-e89b-12d3-a456-426614174001"} # ModelErrorCreateRequest |
 
     try:
         # Report a model error

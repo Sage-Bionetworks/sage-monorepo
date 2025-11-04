@@ -31,9 +31,9 @@ public class ModelErrorDto {
 
   private UUID modelId;
 
-  private @Nullable Integer errorCode = null;
+  private @Nullable Integer code = null;
 
-  private String errorMessage;
+  private String message;
 
   private @Nullable UUID battleId;
 
@@ -49,10 +49,10 @@ public class ModelErrorDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelErrorDto(UUID id, UUID modelId, String errorMessage, OffsetDateTime createdAt) {
+  public ModelErrorDto(UUID id, UUID modelId, String message, OffsetDateTime createdAt) {
     this.id = id;
     this.modelId = modelId;
-    this.errorMessage = errorMessage;
+    this.message = message;
     this.createdAt = createdAt;
   }
 
@@ -96,44 +96,44 @@ public class ModelErrorDto {
     this.modelId = modelId;
   }
 
-  public ModelErrorDto errorCode(@Nullable Integer errorCode) {
-    this.errorCode = errorCode;
+  public ModelErrorDto code(@Nullable Integer code) {
+    this.code = code;
     return this;
   }
 
   /**
    * HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).
-   * @return errorCode
+   * @return code
    */
   
-  @Schema(name = "errorCode", example = "429", description = "HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("errorCode")
-  public @Nullable Integer getErrorCode() {
-    return errorCode;
+  @Schema(name = "code", example = "429", description = "HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("code")
+  public @Nullable Integer getCode() {
+    return code;
   }
 
-  public void setErrorCode(@Nullable Integer errorCode) {
-    this.errorCode = errorCode;
+  public void setCode(@Nullable Integer code) {
+    this.code = code;
   }
 
-  public ModelErrorDto errorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public ModelErrorDto message(String message) {
+    this.message = message;
     return this;
   }
 
   /**
    * The error message from the API or exception with full details.
-   * @return errorMessage
+   * @return message
    */
   @NotNull @Size(min = 1, max = 1000) 
-  @Schema(name = "errorMessage", example = "Rate limit exceeded", description = "The error message from the API or exception with full details.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("errorMessage")
-  public String getErrorMessage() {
-    return errorMessage;
+  @Schema(name = "message", example = "Rate limit exceeded", description = "The error message from the API or exception with full details.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("message")
+  public String getMessage() {
+    return message;
   }
 
-  public void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public void setMessage(String message) {
+    this.message = message;
   }
 
   public ModelErrorDto battleId(@Nullable UUID battleId) {
@@ -207,8 +207,8 @@ public class ModelErrorDto {
     ModelErrorDto modelError = (ModelErrorDto) o;
     return Objects.equals(this.id, modelError.id) &&
         Objects.equals(this.modelId, modelError.modelId) &&
-        Objects.equals(this.errorCode, modelError.errorCode) &&
-        Objects.equals(this.errorMessage, modelError.errorMessage) &&
+        Objects.equals(this.code, modelError.code) &&
+        Objects.equals(this.message, modelError.message) &&
         Objects.equals(this.battleId, modelError.battleId) &&
         Objects.equals(this.roundId, modelError.roundId) &&
         Objects.equals(this.createdAt, modelError.createdAt);
@@ -216,7 +216,7 @@ public class ModelErrorDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, modelId, errorCode, errorMessage, battleId, roundId, createdAt);
+    return Objects.hash(id, modelId, code, message, battleId, roundId, createdAt);
   }
 
   @Override
@@ -225,8 +225,8 @@ public class ModelErrorDto {
     sb.append("class ModelErrorDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
-    sb.append("    errorCode: ").append(toIndentedString(errorCode)).append("\n");
-    sb.append("    errorMessage: ").append(toIndentedString(errorMessage)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    battleId: ").append(toIndentedString(battleId)).append("\n");
     sb.append("    roundId: ").append(toIndentedString(roundId)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
@@ -260,8 +260,8 @@ public class ModelErrorDto {
     protected Builder copyOf(ModelErrorDto value) { 
       this.instance.setId(value.id);
       this.instance.setModelId(value.modelId);
-      this.instance.setErrorCode(value.errorCode);
-      this.instance.setErrorMessage(value.errorMessage);
+      this.instance.setCode(value.code);
+      this.instance.setMessage(value.message);
       this.instance.setBattleId(value.battleId);
       this.instance.setRoundId(value.roundId);
       this.instance.setCreatedAt(value.createdAt);
@@ -278,13 +278,13 @@ public class ModelErrorDto {
       return this;
     }
     
-    public ModelErrorDto.Builder errorCode(Integer errorCode) {
-      this.instance.errorCode(errorCode);
+    public ModelErrorDto.Builder code(Integer code) {
+      this.instance.code(code);
       return this;
     }
     
-    public ModelErrorDto.Builder errorMessage(String errorMessage) {
-      this.instance.errorMessage(errorMessage);
+    public ModelErrorDto.Builder message(String message) {
+      this.instance.message(message);
       return this;
     }
     

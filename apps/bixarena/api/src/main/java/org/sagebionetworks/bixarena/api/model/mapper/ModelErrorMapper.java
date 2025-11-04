@@ -32,8 +32,8 @@ public class ModelErrorMapper {
 
     return ModelErrorEntity.builder()
       .modelId(modelId)
-      .errorCode(dto.getErrorCode())
-      .errorMessage(truncateErrorMessage(dto.getErrorMessage()))
+      .code(dto.getCode())
+      .message(truncateErrorMessage(dto.getMessage()))
       .battleId(dto.getBattleId())
       .roundId(dto.getRoundId())
       .build();
@@ -47,8 +47,8 @@ public class ModelErrorMapper {
     return ModelErrorDto.builder()
       .id(entity.getId())
       .modelId(entity.getModelId())
-      .errorCode(entity.getErrorCode())
-      .errorMessage(entity.getErrorMessage())
+      .code(entity.getCode())
+      .message(entity.getMessage())
       .battleId(entity.getBattleId())
       .roundId(entity.getRoundId())
       .createdAt(entity.getCreatedAt())

@@ -627,8 +627,8 @@ paths:
               rateLimitError:
                 summary: Rate limit error
                 value:
-                  errorCode: 429
-                  errorMessage: Rate limit exceeded
+                  code: 429
+                  message: Rate limit exceeded
                   battleId: 123e4567-e89b-12d3-a456-426614174000
                   roundId: 123e4567-e89b-12d3-a456-426614174001
             schema:
@@ -644,8 +644,8 @@ paths:
                   value:
                     id: 98765432-e89b-12d3-a456-426614174099
                     modelId: 123e4567-e89b-12d3-a456-426614174002
-                    errorCode: 429
-                    errorMessage: Rate limit exceeded
+                    code: 429
+                    message: Rate limit exceeded
                     battleId: 123e4567-e89b-12d3-a456-426614174000
                     roundId: 123e4567-e89b-12d3-a456-426614174001
                     createdAt: 2025-10-29T21:03:53Z
@@ -2137,13 +2137,13 @@ components:
         Request body for reporting a model error from the Gradio app. This enables tracking
         model failures, monitoring error rates, and potentially auto-disabling unreliable models.
       properties:
-        errorCode:
+        code:
           description: "HTTP status code from the API response (400, 401, 402, 403,\
             \ 408, 429, 502, 503, etc.)."
           example: 429
           nullable: true
           type: integer
-        errorMessage:
+        message:
           description: The error message from the API or exception with full details.
           example: Rate limit exceeded
           maxLength: 1000
@@ -2160,7 +2160,7 @@ components:
           format: uuid
           type: string
       required:
-        - errorMessage
+        - message
       type: object
     ModelErrorId:
       description: Unique identifier (UUID) of the model error record.
@@ -2172,11 +2172,11 @@ components:
         A model error entity representing a failure that occurred during model interaction.
       example:
         createdAt: 2024-01-15T10:30:00Z
+        code: 429
         battleId: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         modelId: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
-        errorMessage: Rate limit exceeded
-        errorCode: 429
         id: 98765432-e89b-12d3-a456-426614174099
+        message: Rate limit exceeded
         roundId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
       properties:
         id:
@@ -2189,13 +2189,13 @@ components:
           example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           format: uuid
           type: string
-        errorCode:
+        code:
           description: "HTTP status code from the API response (400, 401, 402, 403,\
             \ 408, 429, 502, 503, etc.)."
           example: 429
           nullable: true
           type: integer
-        errorMessage:
+        message:
           description: The error message from the API or exception with full details.
           example: Rate limit exceeded
           maxLength: 1000
@@ -2218,8 +2218,8 @@ components:
           type: string
       required:
         - createdAt
-        - errorMessage
         - id
+        - message
         - modelId
       type: object
     BattleEvaluationOutcome:

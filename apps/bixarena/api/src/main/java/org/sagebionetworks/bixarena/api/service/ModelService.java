@@ -130,7 +130,7 @@ public class ModelService {
 
   @Transactional
   public ModelErrorDto createModelError(UUID modelId, ModelErrorCreateRequestDto dto) {
-    log.info("Create model error for model {} with error code {}", modelId, dto.getErrorCode());
+    log.info("Create model error for model {} with error code {}", modelId, dto.getCode());
 
     // Validate that the model exists
     modelRepository

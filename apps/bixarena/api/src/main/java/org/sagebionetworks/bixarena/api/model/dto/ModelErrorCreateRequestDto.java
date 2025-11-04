@@ -25,9 +25,9 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ModelErrorCreateRequestDto {
 
-  private @Nullable Integer errorCode = null;
+  private @Nullable Integer code = null;
 
-  private String errorMessage;
+  private String message;
 
   private @Nullable UUID battleId;
 
@@ -40,48 +40,48 @@ public class ModelErrorCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelErrorCreateRequestDto(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public ModelErrorCreateRequestDto(String message) {
+    this.message = message;
   }
 
-  public ModelErrorCreateRequestDto errorCode(@Nullable Integer errorCode) {
-    this.errorCode = errorCode;
+  public ModelErrorCreateRequestDto code(@Nullable Integer code) {
+    this.code = code;
     return this;
   }
 
   /**
    * HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).
-   * @return errorCode
+   * @return code
    */
   
-  @Schema(name = "errorCode", example = "429", description = "HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("errorCode")
-  public @Nullable Integer getErrorCode() {
-    return errorCode;
+  @Schema(name = "code", example = "429", description = "HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("code")
+  public @Nullable Integer getCode() {
+    return code;
   }
 
-  public void setErrorCode(@Nullable Integer errorCode) {
-    this.errorCode = errorCode;
+  public void setCode(@Nullable Integer code) {
+    this.code = code;
   }
 
-  public ModelErrorCreateRequestDto errorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public ModelErrorCreateRequestDto message(String message) {
+    this.message = message;
     return this;
   }
 
   /**
    * The error message from the API or exception with full details.
-   * @return errorMessage
+   * @return message
    */
   @NotNull @Size(min = 1, max = 1000) 
-  @Schema(name = "errorMessage", example = "Rate limit exceeded", description = "The error message from the API or exception with full details.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("errorMessage")
-  public String getErrorMessage() {
-    return errorMessage;
+  @Schema(name = "message", example = "Rate limit exceeded", description = "The error message from the API or exception with full details.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("message")
+  public String getMessage() {
+    return message;
   }
 
-  public void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public void setMessage(String message) {
+    this.message = message;
   }
 
   public ModelErrorCreateRequestDto battleId(@Nullable UUID battleId) {
@@ -133,23 +133,23 @@ public class ModelErrorCreateRequestDto {
       return false;
     }
     ModelErrorCreateRequestDto modelErrorCreateRequest = (ModelErrorCreateRequestDto) o;
-    return Objects.equals(this.errorCode, modelErrorCreateRequest.errorCode) &&
-        Objects.equals(this.errorMessage, modelErrorCreateRequest.errorMessage) &&
+    return Objects.equals(this.code, modelErrorCreateRequest.code) &&
+        Objects.equals(this.message, modelErrorCreateRequest.message) &&
         Objects.equals(this.battleId, modelErrorCreateRequest.battleId) &&
         Objects.equals(this.roundId, modelErrorCreateRequest.roundId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(errorCode, errorMessage, battleId, roundId);
+    return Objects.hash(code, message, battleId, roundId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ModelErrorCreateRequestDto {\n");
-    sb.append("    errorCode: ").append(toIndentedString(errorCode)).append("\n");
-    sb.append("    errorMessage: ").append(toIndentedString(errorMessage)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    battleId: ").append(toIndentedString(battleId)).append("\n");
     sb.append("    roundId: ").append(toIndentedString(roundId)).append("\n");
     sb.append("}");
@@ -180,20 +180,20 @@ public class ModelErrorCreateRequestDto {
     }
 
     protected Builder copyOf(ModelErrorCreateRequestDto value) { 
-      this.instance.setErrorCode(value.errorCode);
-      this.instance.setErrorMessage(value.errorMessage);
+      this.instance.setCode(value.code);
+      this.instance.setMessage(value.message);
       this.instance.setBattleId(value.battleId);
       this.instance.setRoundId(value.roundId);
       return this;
     }
 
-    public ModelErrorCreateRequestDto.Builder errorCode(Integer errorCode) {
-      this.instance.errorCode(errorCode);
+    public ModelErrorCreateRequestDto.Builder code(Integer code) {
+      this.instance.code(code);
       return this;
     }
     
-    public ModelErrorCreateRequestDto.Builder errorMessage(String errorMessage) {
-      this.instance.errorMessage(errorMessage);
+    public ModelErrorCreateRequestDto.Builder message(String message) {
+      this.instance.message(message);
       return this;
     }
     

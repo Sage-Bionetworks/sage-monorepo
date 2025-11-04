@@ -29,16 +29,12 @@ class ModelErrorCreateRequest(BaseModel):
     Request body for reporting a model error from the Gradio app. This enables tracking model failures, monitoring error rates, and potentially auto-disabling unreliable models.
     """  # noqa: E501
 
-    error_code: Optional[StrictInt] = Field(
+    code: Optional[StrictInt] = Field(
         default=None,
         description="HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).",
-        alias="errorCode",
     )
-    error_message: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = (
-        Field(
-            description="The error message from the API or exception with full details.",
-            alias="errorMessage",
-        )
+    message: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = Field(
+        description="The error message from the API or exception with full details."
     )
     battle_id: Optional[UUID] = Field(
         default=None,
@@ -50,12 +46,7 @@ class ModelErrorCreateRequest(BaseModel):
         description="Unique identifier (UUID) of the battle round.",
         alias="roundId",
     )
-    __properties: ClassVar[List[str]] = [
-        "errorCode",
-        "errorMessage",
-        "battleId",
-        "roundId",
-    ]
+    __properties: ClassVar[List[str]] = ["code", "message", "battleId", "roundId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -94,10 +85,10 @@ class ModelErrorCreateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if error_code (nullable) is None
+        # set to None if code (nullable) is None
         # and model_fields_set contains the field
-        if self.error_code is None and "error_code" in self.model_fields_set:
-            _dict["errorCode"] = None
+        if self.code is None and "code" in self.model_fields_set:
+            _dict["code"] = None
 
         return _dict
 
@@ -112,8 +103,8 @@ class ModelErrorCreateRequest(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "errorCode": obj.get("errorCode"),
-                "errorMessage": obj.get("errorMessage"),
+                "code": obj.get("code"),
+                "message": obj.get("message"),
                 "battleId": obj.get("battleId"),
                 "roundId": obj.get("roundId"),
             }

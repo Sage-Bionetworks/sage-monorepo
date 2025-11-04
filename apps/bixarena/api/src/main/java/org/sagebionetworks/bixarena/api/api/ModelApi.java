@@ -67,7 +67,7 @@ public interface ModelApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ModelErrorDto.class), examples = {
                     @ExampleObject(
                         name = "",
-                        value = "{\"id\":\"98765432-e89b-12d3-a456-426614174099\",\"modelId\":\"123e4567-e89b-12d3-a456-426614174002\",\"errorCode\":429,\"errorMessage\":\"Rate limit exceeded\",\"battleId\":\"123e4567-e89b-12d3-a456-426614174000\",\"roundId\":\"123e4567-e89b-12d3-a456-426614174001\",\"createdAt\":\"2025-10-29T21:03:53Z\"}"
+                        value = "{\"id\":\"98765432-e89b-12d3-a456-426614174099\",\"modelId\":\"123e4567-e89b-12d3-a456-426614174002\",\"code\":429,\"message\":\"Rate limit exceeded\",\"battleId\":\"123e4567-e89b-12d3-a456-426614174000\",\"roundId\":\"123e4567-e89b-12d3-a456-426614174001\",\"createdAt\":\"2025-10-29T21:03:53Z\"}"
                     )
                 }),
                 
