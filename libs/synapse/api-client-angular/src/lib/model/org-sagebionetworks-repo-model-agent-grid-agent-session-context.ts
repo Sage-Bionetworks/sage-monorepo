@@ -21,6 +21,10 @@ export interface OrgSagebionetworksRepoModelAgentGridAgentSessionContext {
    * Required. The calling user\'s grid replica ID.
    */
   usersReplicaId?: number;
+  /**
+   * The replica ID issued to the user\'s agent.
+   */
+  agentsReplicaId?: number;
 }
 export namespace OrgSagebionetworksRepoModelAgentGridAgentSessionContext {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.agent.GridAgentSessionContext';

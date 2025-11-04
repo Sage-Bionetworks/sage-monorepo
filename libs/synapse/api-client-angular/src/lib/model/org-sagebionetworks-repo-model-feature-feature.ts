@@ -17,7 +17,8 @@ export type OrgSagebionetworksRepoModelFeatureFeature =
   | 'USE_NEW_ASYNC_GOOGLE_MULTIPART_UPLOAD'
   | 'ENFORCE_PROJECT_STORAGE_LIMITS'
   | 'ALLOW_AGENT_WRITES'
-  | 'DISABLE_2FA_REQUIREMENT';
+  | 'DISABLE_2FA_REQUIREMENT'
+  | 'DISABLE_INACTIVE_USERS';
 
 export const OrgSagebionetworksRepoModelFeatureFeature = {
   DataAccessNotifications: 'DATA_ACCESS_NOTIFICATIONS' as OrgSagebionetworksRepoModelFeatureFeature,
@@ -34,4 +35,5 @@ export const OrgSagebionetworksRepoModelFeatureFeature = {
     'ENFORCE_PROJECT_STORAGE_LIMITS' as OrgSagebionetworksRepoModelFeatureFeature,
   AllowAgentWrites: 'ALLOW_AGENT_WRITES' as OrgSagebionetworksRepoModelFeatureFeature,
   Disable2FaRequirement: 'DISABLE_2FA_REQUIREMENT' as OrgSagebionetworksRepoModelFeatureFeature,
+  DisableInactiveUsers: 'DISABLE_INACTIVE_USERS' as OrgSagebionetworksRepoModelFeatureFeature,
 };

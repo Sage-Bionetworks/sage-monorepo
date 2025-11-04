@@ -33,6 +33,10 @@ import { OrgSagebionetworksRepoModelDownloadAddToDownloadListRequest } from '../
 // @ts-ignore
 import { OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse } from '../model/org-sagebionetworks-repo-model-download-add-to-download-list-response';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest } from '../model/org-sagebionetworks-repo-model-download-add-to-download-list-stats-request';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse } from '../model/org-sagebionetworks-repo-model-download-add-to-download-list-stats-response';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelDownloadDownloadListManifestRequest } from '../model/org-sagebionetworks-repo-model-download-download-list-manifest-request';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelDownloadDownloadListManifestResponse } from '../model/org-sagebionetworks-repo-model-download-download-list-manifest-response';
@@ -297,6 +301,113 @@ export class DownloadListServicesService {
 
     let localVarPath = `/repo/v1/download/list/add/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
     return this.httpClient.request<OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param asyncToken
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRepoV1DownloadListAddStatsAsyncGetAsyncToken(
+    asyncToken: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse>;
+  public getRepoV1DownloadListAddStatsAsyncGetAsyncToken(
+    asyncToken: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse>>;
+  public getRepoV1DownloadListAddStatsAsyncGetAsyncToken(
+    asyncToken: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse>>;
+  public getRepoV1DownloadListAddStatsAsyncGetAsyncToken(
+    asyncToken: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (asyncToken === null || asyncToken === undefined) {
+      throw new Error(
+        'Required parameter asyncToken was null or undefined when calling getRepoV1DownloadListAddStatsAsyncGetAsyncToken.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/download/list/add/stats/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsResponse>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -864,6 +975,125 @@ export class DownloadListServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelDownloadAddToDownloadListRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param orgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1DownloadListAddStatsAsyncStart(
+    orgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest: OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
+  public postRepoV1DownloadListAddStatsAsyncStart(
+    orgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest: OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
+  public postRepoV1DownloadListAddStatsAsyncStart(
+    orgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest: OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
+  public postRepoV1DownloadListAddStatsAsyncStart(
+    orgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest: OrgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (
+      orgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest === null ||
+      orgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest was null or undefined when calling postRepoV1DownloadListAddStatsAsyncStart.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/download/list/add/stats/async/start`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelDownloadAddToDownloadListStatsRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

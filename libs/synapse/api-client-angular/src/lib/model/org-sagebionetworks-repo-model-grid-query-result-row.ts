@@ -18,4 +18,8 @@ export interface OrgSagebionetworksRepoModelGridQueryResultRow {
    */
   cellValues?: Array<any>;
   validationResults?: OrgSagebionetworksRepoModelGridQueryResultValidationResults;
+  /**
+   * Logical timestamp identifying the row in compact form `replicaId.sequenceNumber` (e.g. `123.456`). Used in filters (RowIdFilter) and patch/update operations.
+   */
+  rowId?: string;
 }
