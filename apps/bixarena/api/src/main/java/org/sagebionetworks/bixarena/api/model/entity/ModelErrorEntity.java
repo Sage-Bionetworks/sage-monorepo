@@ -36,10 +36,10 @@ public class ModelErrorEntity {
   @Column(name = "message", nullable = false, length = 1000)
   private String message;
 
-  @Column(name = "battle_id")
+  @Column(name = "battle_id", nullable = false)
   private UUID battleId;
 
-  @Column(name = "round_id")
+  @Column(name = "round_id", nullable = false)
   private UUID roundId;
 
   @CreationTimestamp

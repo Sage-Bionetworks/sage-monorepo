@@ -45,6 +45,8 @@ class TestModelErrorCreateRequest(unittest.TestCase):
         else:
             return ModelErrorCreateRequest(
                 message = 'Rate limit exceeded',
+                battle_id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f',
+                round_id = '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         )
         """
 

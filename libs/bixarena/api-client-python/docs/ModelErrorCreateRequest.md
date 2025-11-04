@@ -8,8 +8,8 @@ Request to report a model error.
 | ------------- | ------- | --------------------------------------------- | ---------- |
 | **code**      | **int** | HTTP status code from the error response.     | [optional] |
 | **message**   | **str** | Error message describing what went wrong.     |
-| **battle_id** | **str** | Unique identifier (UUID) of the battle.       | [optional] |
-| **round_id**  | **str** | Unique identifier (UUID) of the battle round. | [optional] |
+| **battle_id** | **str** | Unique identifier (UUID) of the battle.       |
+| **round_id**  | **str** | Unique identifier (UUID) of the battle round. |
 
 ## Example
 

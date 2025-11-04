@@ -35,9 +35,9 @@ public class ModelErrorDto {
 
   private String message;
 
-  private @Nullable UUID battleId;
+  private UUID battleId;
 
-  private @Nullable UUID roundId;
+  private UUID roundId;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -49,10 +49,12 @@ public class ModelErrorDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelErrorDto(UUID id, UUID modelId, String message, OffsetDateTime createdAt) {
+  public ModelErrorDto(UUID id, UUID modelId, String message, UUID battleId, UUID roundId, OffsetDateTime createdAt) {
     this.id = id;
     this.modelId = modelId;
     this.message = message;
+    this.battleId = battleId;
+    this.roundId = roundId;
     this.createdAt = createdAt;
   }
 
@@ -136,7 +138,7 @@ public class ModelErrorDto {
     this.message = message;
   }
 
-  public ModelErrorDto battleId(@Nullable UUID battleId) {
+  public ModelErrorDto battleId(UUID battleId) {
     this.battleId = battleId;
     return this;
   }
@@ -145,18 +147,18 @@ public class ModelErrorDto {
    * Unique identifier (UUID) of the battle.
    * @return battleId
    */
-  @Valid 
-  @Schema(name = "battleId", example = "5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f", description = "Unique identifier (UUID) of the battle.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "battleId", example = "5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f", description = "Unique identifier (UUID) of the battle.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("battleId")
-  public @Nullable UUID getBattleId() {
+  public UUID getBattleId() {
     return battleId;
   }
 
-  public void setBattleId(@Nullable UUID battleId) {
+  public void setBattleId(UUID battleId) {
     this.battleId = battleId;
   }
 
-  public ModelErrorDto roundId(@Nullable UUID roundId) {
+  public ModelErrorDto roundId(UUID roundId) {
     this.roundId = roundId;
     return this;
   }
@@ -165,14 +167,14 @@ public class ModelErrorDto {
    * Unique identifier (UUID) of the battle round.
    * @return roundId
    */
-  @Valid 
-  @Schema(name = "roundId", example = "3fa85f64-5717-4562-b3fc-2c963f66afa6", description = "Unique identifier (UUID) of the battle round.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "roundId", example = "3fa85f64-5717-4562-b3fc-2c963f66afa6", description = "Unique identifier (UUID) of the battle round.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("roundId")
-  public @Nullable UUID getRoundId() {
+  public UUID getRoundId() {
     return roundId;
   }
 
-  public void setRoundId(@Nullable UUID roundId) {
+  public void setRoundId(UUID roundId) {
     this.roundId = roundId;
   }
 

@@ -7,9 +7,9 @@ properties:
     $ref: ./ModelErrorMessage.yaml
   battleId:
     $ref: ./BattleId.yaml
-    nullable: true
   roundId:
     $ref: ./BattleRoundId.yaml
-    nullable: true
 required:
   - message
+  - battleId
+  - roundId

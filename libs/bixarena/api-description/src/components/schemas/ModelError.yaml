@@ -11,14 +11,14 @@ properties:
     $ref: ./ModelErrorMessage.yaml
   battleId:
     $ref: ./BattleId.yaml
-    nullable: true
   roundId:
     $ref: ./BattleRoundId.yaml
-    nullable: true
   createdAt:
     $ref: ./CreatedAt.yaml
 required:
   - id
   - modelId
   - message
+  - battleId
+  - roundId
   - createdAt

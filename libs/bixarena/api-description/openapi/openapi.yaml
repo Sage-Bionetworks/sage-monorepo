@@ -1700,12 +1700,12 @@ components:
           $ref: '#/components/schemas/ModelErrorMessage'
         battleId:
           $ref: '#/components/schemas/BattleId'
-          nullable: true
         roundId:
           $ref: '#/components/schemas/BattleRoundId'
-          nullable: true
       required:
         - message
+        - battleId
+        - roundId
     ModelErrorId:
       type: string
       format: uuid
@@ -1725,16 +1725,16 @@ components:
           $ref: '#/components/schemas/ModelErrorMessage'
         battleId:
           $ref: '#/components/schemas/BattleId'
-          nullable: true
         roundId:
           $ref: '#/components/schemas/BattleRoundId'
-          nullable: true
         createdAt:
           $ref: '#/components/schemas/CreatedAt'
       required:
         - id
         - modelId
         - message
+        - battleId
+        - roundId
         - createdAt
     BattleEvaluationOutcome:
       type: string

@@ -10,8 +10,8 @@ Record of a model error that occurred during interaction.
 | **model_id**   | **str**      | UUID of an AI model.                          |
 | **code**       | **int**      | HTTP status code from the error response.     | [optional] |
 | **message**    | **str**      | Error message describing what went wrong.     |
-| **battle_id**  | **str**      | Unique identifier (UUID) of the battle.       | [optional] |
-| **round_id**   | **str**      | Unique identifier (UUID) of the battle round. | [optional] |
+| **battle_id**  | **str**      | Unique identifier (UUID) of the battle.       |
+| **round_id**   | **str**      | Unique identifier (UUID) of the battle round. |
 | **created_at** | **datetime** | Timestamp when the entity was created.        |
 
 ## Example

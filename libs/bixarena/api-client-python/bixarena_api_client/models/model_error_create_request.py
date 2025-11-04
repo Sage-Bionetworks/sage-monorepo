@@ -35,15 +35,11 @@ class ModelErrorCreateRequest(BaseModel):
     message: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = Field(
         description="Error message describing what went wrong."
     )
-    battle_id: Optional[UUID] = Field(
-        default=None,
-        description="Unique identifier (UUID) of the battle.",
-        alias="battleId",
+    battle_id: UUID = Field(
+        description="Unique identifier (UUID) of the battle.", alias="battleId"
     )
-    round_id: Optional[UUID] = Field(
-        default=None,
-        description="Unique identifier (UUID) of the battle round.",
-        alias="roundId",
+    round_id: UUID = Field(
+        description="Unique identifier (UUID) of the battle round.", alias="roundId"
     )
     __properties: ClassVar[List[str]] = ["code", "message", "battleId", "roundId"]
 

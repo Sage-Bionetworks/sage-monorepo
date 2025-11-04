@@ -29,26 +29,23 @@ def report_model_error(
         cookies: Optional session cookies for authentication
     """
     try:
-        # Extract model_id from model_api_dict
+        # Validate required fields
         model_id = model_api_dict.get("model_id")
-        if not model_id:
-            logger.warning("Cannot report error: model_id not found in model_api_dict")
+        if (
+            not model_id
+            or not battle_session
+            or not battle_session.battle_id
+            or not battle_session.round_id
+        ):
+            logger.warning("⚠️ Cannot report error: missing required fields")
             return
-
-        # Extract error code and message from exception
-        error_code = getattr(error, "code", None)
-        error_message = getattr(error, "message", str(error))
-
-        # Extract battle context
-        battle_id = battle_session.battle_id if battle_session else None
-        round_id = battle_session.round_id if battle_session else None
 
         # Create error request
         error_request = ModelErrorCreateRequest(
-            code=error_code,
-            message=error_message,
-            battle_id=battle_id,
-            round_id=round_id,
+            code=getattr(error, "code", None),
+            message=getattr(error, "message", str(error)),
+            battle_id=battle_session.battle_id,
+            round_id=battle_session.round_id,
         )
 
         # Report to backend

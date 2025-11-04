@@ -35,8 +35,8 @@ CREATE TABLE api.model_error (
   model_id UUID NOT NULL REFERENCES api.model(id) ON DELETE CASCADE,
   code INTEGER,
   message VARCHAR(1000) NOT NULL,
-  battle_id UUID,
-  round_id UUID,
+  battle_id UUID NOT NULL REFERENCES api.battle(id) ON DELETE CASCADE,
+  round_id UUID NOT NULL REFERENCES api.battle_round(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
