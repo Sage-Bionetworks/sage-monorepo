@@ -26,6 +26,7 @@ class BixArenaFargateService(Construct):
         environment: dict[str, str] | None = None,
         desired_count: int = 1,
         target_group: IApplicationTargetGroup | None = None,
+        log_retention: logs.RetentionDays = logs.RetentionDays.ONE_WEEK,
         **kwargs,
     ) -> None:
         """
@@ -44,6 +45,7 @@ class BixArenaFargateService(Construct):
             environment: Environment variables for the container
             desired_count: Number of tasks to run
             target_group: Optional ALB target group to attach to
+            log_retention: CloudWatch Logs retention period
             **kwargs: Additional arguments passed to parent Construct
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -95,7 +97,7 @@ class BixArenaFargateService(Construct):
             environment=environment or {},
             logging=ecs.LogDrivers.aws_logs(
                 stream_prefix=service_name,
-                log_retention=logs.RetentionDays.ONE_WEEK,
+                log_retention=log_retention,
             ),
         )
 
