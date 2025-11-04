@@ -152,7 +152,7 @@ export class ComparisonToolService<T> {
     for (const config of configs) {
       columnsMap.set(
         this.dropdownKey(config.dropdowns),
-        config.columns.map((column) => ({ ...column, selected: true })),
+        this.applyColumnPreferences(config.columns),
       );
     }
 
@@ -358,13 +358,15 @@ export class ComparisonToolService<T> {
     configColumns: ComparisonToolConfigColumn[],
     savedColumns?: ComparisonToolColumn[],
   ): ComparisonToolColumn[] {
+    const visibleColumns = configColumns.filter((column) => !column.is_hidden);
+
     if (!savedColumns?.length) {
-      return configColumns.map((column) => ({ ...column, selected: true }));
+      return visibleColumns.map((column) => ({ ...column, selected: true }));
     }
 
     const selectionMap = new Map(savedColumns.map((col) => [col.data_key, col.selected]));
 
-    return configColumns.map((column) => ({
+    return visibleColumns.map((column) => ({
       ...column,
       selected: selectionMap.get(column.data_key) ?? true,
     }));
