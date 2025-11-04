@@ -1,7 +1,9 @@
 package org.sagebionetworks.model.ad.api.next.util;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -62,5 +64,19 @@ public final class ComparisonToolApiHelper {
     }
 
     return builder.toString();
+  }
+
+  public static Map<String, Object> buildProblemJson(
+    HttpStatus status,
+    String title,
+    String detail,
+    String instance
+  ) {
+    Map<String, Object> body = new LinkedHashMap<>();
+    body.put("title", title);
+    body.put("status", status.value());
+    body.put("detail", detail);
+    body.put("instance", instance);
+    return body;
   }
 }
