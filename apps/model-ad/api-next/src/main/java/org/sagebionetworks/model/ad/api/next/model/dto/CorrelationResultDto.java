@@ -27,7 +27,7 @@ public class CorrelationResultDto {
 
   private BigDecimal correlation;
 
-  private BigDecimal adjPValue;
+  private BigDecimal adjPVal;
 
   public CorrelationResultDto() {
     super();
@@ -36,9 +36,9 @@ public class CorrelationResultDto {
   /**
    * Constructor with only required parameters
    */
-  public CorrelationResultDto(BigDecimal correlation, BigDecimal adjPValue) {
+  public CorrelationResultDto(BigDecimal correlation, BigDecimal adjPVal) {
     this.correlation = correlation;
-    this.adjPValue = adjPValue;
+    this.adjPVal = adjPVal;
   }
 
   public CorrelationResultDto correlation(BigDecimal correlation) {
@@ -61,24 +61,24 @@ public class CorrelationResultDto {
     this.correlation = correlation;
   }
 
-  public CorrelationResultDto adjPValue(BigDecimal adjPValue) {
-    this.adjPValue = adjPValue;
+  public CorrelationResultDto adjPVal(BigDecimal adjPVal) {
+    this.adjPVal = adjPVal;
     return this;
   }
 
   /**
    * Adjusted p-value
-   * @return adjPValue
+   * @return adjPVal
    */
   @NotNull @Valid 
-  @Schema(name = "adj_p_value", description = "Adjusted p-value", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("adj_p_value")
-  public BigDecimal getAdjPValue() {
-    return adjPValue;
+  @Schema(name = "adj_p_val", description = "Adjusted p-value", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("adj_p_val")
+  public BigDecimal getAdjPVal() {
+    return adjPVal;
   }
 
-  public void setAdjPValue(BigDecimal adjPValue) {
-    this.adjPValue = adjPValue;
+  public void setAdjPVal(BigDecimal adjPVal) {
+    this.adjPVal = adjPVal;
   }
 
   @Override
@@ -91,12 +91,12 @@ public class CorrelationResultDto {
     }
     CorrelationResultDto correlationResult = (CorrelationResultDto) o;
     return Objects.equals(this.correlation, correlationResult.correlation) &&
-        Objects.equals(this.adjPValue, correlationResult.adjPValue);
+        Objects.equals(this.adjPVal, correlationResult.adjPVal);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(correlation, adjPValue);
+    return Objects.hash(correlation, adjPVal);
   }
 
   @Override
@@ -104,7 +104,7 @@ public class CorrelationResultDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class CorrelationResultDto {\n");
     sb.append("    correlation: ").append(toIndentedString(correlation)).append("\n");
-    sb.append("    adjPValue: ").append(toIndentedString(adjPValue)).append("\n");
+    sb.append("    adjPVal: ").append(toIndentedString(adjPVal)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -134,7 +134,7 @@ public class CorrelationResultDto {
 
     protected Builder copyOf(CorrelationResultDto value) { 
       this.instance.setCorrelation(value.correlation);
-      this.instance.setAdjPValue(value.adjPValue);
+      this.instance.setAdjPVal(value.adjPVal);
       return this;
     }
 
@@ -143,8 +143,8 @@ public class CorrelationResultDto {
       return this;
     }
     
-    public CorrelationResultDto.Builder adjPValue(BigDecimal adjPValue) {
-      this.instance.adjPValue(adjPValue);
+    public CorrelationResultDto.Builder adjPVal(BigDecimal adjPVal) {
+      this.instance.adjPVal(adjPVal);
       return this;
     }
     

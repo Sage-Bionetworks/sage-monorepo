@@ -231,12 +231,12 @@ components:
         correlation:
           type: number
           description: Correlation value
-        adj_p_value:
+        adj_p_val:
           type: number
           description: Adjusted p-value
       required:
         - correlation
-        - adj_p_value
+        - adj_p_val
     DiseaseCorrelation:
       type: object
       description: Disease Correlation

@@ -340,17 +340,17 @@ components:
     CorrelationResult:
       description: Correlation result
       example:
+        adj_p_val: 6.027456183070403
         correlation: 0.8008281904610115
-        adj_p_value: 6.027456183070403
       properties:
         correlation:
           description: Correlation value
           type: number
-        adj_p_value:
+        adj_p_val:
           description: Adjusted p-value
           type: number
       required:
-        - adj_p_value
+        - adj_p_val
         - correlation
       type: object
     DiseaseCorrelation:
@@ -358,32 +358,32 @@ components:
       example:
         cluster: cluster
         DLPFC:
+          adj_p_val: 6.027456183070403
           correlation: 0.8008281904610115
-          adj_p_value: 6.027456183070403
         sex: Female
         CBE:
+          adj_p_val: 6.027456183070403
           correlation: 0.8008281904610115
-          adj_p_value: 6.027456183070403
         STG:
+          adj_p_val: 6.027456183070403
           correlation: 0.8008281904610115
-          adj_p_value: 6.027456183070403
         model_type: model_type
         TCX:
+          adj_p_val: 6.027456183070403
           correlation: 0.8008281904610115
-          adj_p_value: 6.027456183070403
         modified_genes:
           - modified_genes
           - modified_genes
         FP:
+          adj_p_val: 6.027456183070403
           correlation: 0.8008281904610115
-          adj_p_value: 6.027456183070403
         IFG:
+          adj_p_val: 6.027456183070403
           correlation: 0.8008281904610115
-          adj_p_value: 6.027456183070403
         matched_control: matched_control
         PHG:
+          adj_p_val: 6.027456183070403
           correlation: 0.8008281904610115
-          adj_p_value: 6.027456183070403
         name: name
         _id: _id
         age: age
@@ -413,19 +413,19 @@ components:
           type: string
         sex:
           $ref: '#/components/schemas/Sex'
-        IFG:
-          $ref: '#/components/schemas/CorrelationResult'
-        PHG:
-          $ref: '#/components/schemas/CorrelationResult'
-        TCX:
-          $ref: '#/components/schemas/CorrelationResult'
         CBE:
           $ref: '#/components/schemas/CorrelationResult'
         DLPFC:
           $ref: '#/components/schemas/CorrelationResult'
         FP:
           $ref: '#/components/schemas/CorrelationResult'
+        IFG:
+          $ref: '#/components/schemas/CorrelationResult'
+        PHG:
+          $ref: '#/components/schemas/CorrelationResult'
         STG:
+          $ref: '#/components/schemas/CorrelationResult'
+        TCX:
           $ref: '#/components/schemas/CorrelationResult'
       required:
         - _id
