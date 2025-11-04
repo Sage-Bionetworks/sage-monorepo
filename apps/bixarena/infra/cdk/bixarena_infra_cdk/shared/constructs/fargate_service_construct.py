@@ -122,6 +122,11 @@ class BixArenaFargateService(Construct):
             health_check_grace_period=(Duration.seconds(60) if target_group else None),
             # Enable ECS Exec for debugging and database access via port forwarding
             enable_execute_command=True,
+            # Deployment circuit breaker: automatically rollback failed deployments
+            circuit_breaker=ecs.DeploymentCircuitBreaker(
+                enable=True,
+                rollback=True,
+            ),
             # Deployment configuration to maintain availability during deployments
             # For single-task services (desired_count=1), this ensures
             # zero-downtime deployments
