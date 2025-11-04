@@ -42,9 +42,10 @@ export interface OrgSagebionetworksRepoModelAuthNewUser {
   encodedMembershipInvtnSignedToken?: string;
 }
 export namespace OrgSagebionetworksRepoModelAuthNewUser {
-  export type OauthProviderEnum = 'GOOGLE_OAUTH_2_0' | 'ORCID';
+  export type OauthProviderEnum = 'GOOGLE_OAUTH_2_0' | 'ORCID' | 'ARCUS_BIOSCIENCES';
   export const OauthProviderEnum = {
     GoogleOauth20: 'GOOGLE_OAUTH_2_0' as OauthProviderEnum,
     Orcid: 'ORCID' as OauthProviderEnum,
+    ArcusBiosciences: 'ARCUS_BIOSCIENCES' as OauthProviderEnum,
   };
 }

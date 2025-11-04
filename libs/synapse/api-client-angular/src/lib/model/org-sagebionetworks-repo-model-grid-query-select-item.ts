@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelGridQueryFunctionCountStar } from './org-sagebionetworks-repo-model-grid-query-function-count-star';
+import { OrgSagebionetworksRepoModelGridQuerySelectByName } from './org-sagebionetworks-repo-model-grid-query-select-by-name';
 import { OrgSagebionetworksRepoModelGridQuerySelectAll } from './org-sagebionetworks-repo-model-grid-query-select-all';
 
 /**
@@ -20,4 +21,5 @@ import { OrgSagebionetworksRepoModelGridQuerySelectAll } from './org-sagebionetw
  */
 export type OrgSagebionetworksRepoModelGridQuerySelectItem =
   | OrgSagebionetworksRepoModelGridQueryFunctionCountStar
-  | OrgSagebionetworksRepoModelGridQuerySelectAll;
+  | OrgSagebionetworksRepoModelGridQuerySelectAll
+  | OrgSagebionetworksRepoModelGridQuerySelectByName;

@@ -10,7 +10,6 @@
 import { OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeChecksumRequest } from './org-sagebionetworks-repo-model-migration-async-migration-type-checksum-request';
 import { OrgSagebionetworksRepoModelMigrationAsyncMigrationRangeChecksumRequest } from './org-sagebionetworks-repo-model-migration-async-migration-range-checksum-request';
 import { OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeRequest } from './org-sagebionetworks-repo-model-migration-calculate-optimal-range-request';
-import { OrgSagebionetworksRepoModelMigrationBackfillLastSeenOnRequest } from './org-sagebionetworks-repo-model-migration-backfill-last-seen-on-request';
 import { OrgSagebionetworksRepoModelMigrationRestoreTypeRequest } from './org-sagebionetworks-repo-model-migration-restore-type-request';
 import { OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsRequest } from './org-sagebionetworks-repo-model-migration-async-migration-type-counts-request';
 import { OrgSagebionetworksRepoModelMigrationBatchChecksumRequest } from './org-sagebionetworks-repo-model-migration-batch-checksum-request';
@@ -30,7 +29,6 @@ export type OrgSagebionetworksRepoModelMigrationAdminRequest =
   | OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeChecksumRequest
   | OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountRequest
   | OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsRequest
-  | OrgSagebionetworksRepoModelMigrationBackfillLastSeenOnRequest
   | OrgSagebionetworksRepoModelMigrationBackupTypeRangeRequest
   | OrgSagebionetworksRepoModelMigrationBatchChecksumRequest
   | OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeRequest
