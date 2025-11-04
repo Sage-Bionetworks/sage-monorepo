@@ -1,7 +1,5 @@
 type: object
-description: |
-  Request body for reporting a model error from the Gradio app. This enables tracking
-  model failures, monitoring error rates, and potentially auto-disabling unreliable models.
+description: Request to report a model error.
 properties:
   code:
     $ref: ./ModelErrorCode.yaml

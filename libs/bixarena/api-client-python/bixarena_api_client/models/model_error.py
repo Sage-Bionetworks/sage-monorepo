@@ -27,17 +27,16 @@ from typing_extensions import Self
 
 class ModelError(BaseModel):
     """
-    A model error entity representing a failure that occurred during model interaction.
+    Record of a model error that occurred during interaction.
     """  # noqa: E501
 
-    id: UUID = Field(description="Unique identifier (UUID) of the model error record.")
+    id: UUID = Field(description="Unique identifier of the model error record.")
     model_id: UUID = Field(description="UUID of an AI model.", alias="modelId")
     code: Optional[StrictInt] = Field(
-        default=None,
-        description="HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).",
+        default=None, description="HTTP status code from the error response."
     )
     message: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = Field(
-        description="The error message from the API or exception with full details."
+        description="Error message describing what went wrong."
     )
     battle_id: Optional[UUID] = Field(
         default=None,

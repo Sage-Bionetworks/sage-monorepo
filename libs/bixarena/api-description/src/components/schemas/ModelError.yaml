@@ -1,6 +1,5 @@
 type: object
-description: |
-  A model error entity representing a failure that occurred during model interaction.
+description: Record of a model error that occurred during interaction.
 properties:
   id:
     $ref: ./ModelErrorId.yaml

@@ -17,10 +17,10 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * Request body for reporting a model error from the Gradio app. This enables tracking model failures, monitoring error rates, and potentially auto-disabling unreliable models. 
+ * Request to report a model error.
  */
 
-@Schema(name = "ModelErrorCreateRequest", description = "Request body for reporting a model error from the Gradio app. This enables tracking model failures, monitoring error rates, and potentially auto-disabling unreliable models. ")
+@Schema(name = "ModelErrorCreateRequest", description = "Request to report a model error.")
 @JsonTypeName("ModelErrorCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ModelErrorCreateRequestDto {
@@ -50,11 +50,11 @@ public class ModelErrorCreateRequestDto {
   }
 
   /**
-   * HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).
+   * HTTP status code from the error response.
    * @return code
    */
   
-  @Schema(name = "code", example = "429", description = "HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "code", example = "429", description = "HTTP status code from the error response.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("code")
   public @Nullable Integer getCode() {
     return code;
@@ -70,11 +70,11 @@ public class ModelErrorCreateRequestDto {
   }
 
   /**
-   * The error message from the API or exception with full details.
+   * Error message describing what went wrong.
    * @return message
    */
   @NotNull @Size(min = 1, max = 1000) 
-  @Schema(name = "message", example = "Rate limit exceeded", description = "The error message from the API or exception with full details.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "message", example = "Rate limit exceeded", description = "Error message describing what went wrong.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("message")
   public String getMessage() {
     return message;

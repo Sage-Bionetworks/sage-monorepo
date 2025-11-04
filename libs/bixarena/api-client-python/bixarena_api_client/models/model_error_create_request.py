@@ -26,15 +26,14 @@ from typing_extensions import Self
 
 class ModelErrorCreateRequest(BaseModel):
     """
-    Request body for reporting a model error from the Gradio app. This enables tracking model failures, monitoring error rates, and potentially auto-disabling unreliable models.
+    Request to report a model error.
     """  # noqa: E501
 
     code: Optional[StrictInt] = Field(
-        default=None,
-        description="HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).",
+        default=None, description="HTTP status code from the error response."
     )
     message: Annotated[str, Field(min_length=1, strict=True, max_length=1000)] = Field(
-        description="The error message from the API or exception with full details."
+        description="Error message describing what went wrong."
     )
     battle_id: Optional[UUID] = Field(
         default=None,

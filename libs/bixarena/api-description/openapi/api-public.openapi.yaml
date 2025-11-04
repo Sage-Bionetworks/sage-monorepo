@@ -1455,19 +1455,17 @@ components:
     ModelErrorCode:
       type: integer
       nullable: true
-      description: HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).
+      description: HTTP status code from the error response.
       example: 429
     ModelErrorMessage:
       type: string
-      description: The error message from the API or exception with full details.
+      description: Error message describing what went wrong.
       minLength: 1
       maxLength: 1000
       example: Rate limit exceeded
     ModelErrorCreateRequest:
       type: object
-      description: |
-        Request body for reporting a model error from the Gradio app. This enables tracking
-        model failures, monitoring error rates, and potentially auto-disabling unreliable models.
+      description: Request to report a model error.
       properties:
         code:
           $ref: '#/components/schemas/ModelErrorCode'
@@ -1484,12 +1482,11 @@ components:
     ModelErrorId:
       type: string
       format: uuid
-      description: Unique identifier (UUID) of the model error record.
+      description: Unique identifier of the model error record.
       example: 98765432-e89b-12d3-a456-426614174099
     ModelError:
       type: object
-      description: |
-        A model error entity representing a failure that occurred during model interaction.
+      description: Record of a model error that occurred during interaction.
       properties:
         id:
           $ref: '#/components/schemas/ModelErrorId'

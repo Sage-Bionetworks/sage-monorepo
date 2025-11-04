@@ -1,18 +1,18 @@
 # ModelError
 
-A model error entity representing a failure that occurred during model interaction.
+Record of a model error that occurred during interaction.
 
 ## Properties
 
-| Name           | Type         | Description                                                                            | Notes      |
-| -------------- | ------------ | -------------------------------------------------------------------------------------- | ---------- |
-| **id**         | **str**      | Unique identifier (UUID) of the model error record.                                    |
-| **model_id**   | **str**      | UUID of an AI model.                                                                   |
-| **code**       | **int**      | HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.). | [optional] |
-| **message**    | **str**      | The error message from the API or exception with full details.                         |
-| **battle_id**  | **str**      | Unique identifier (UUID) of the battle.                                                | [optional] |
-| **round_id**   | **str**      | Unique identifier (UUID) of the battle round.                                          | [optional] |
-| **created_at** | **datetime** | Timestamp when the entity was created.                                                 |
+| Name           | Type         | Description                                   | Notes      |
+| -------------- | ------------ | --------------------------------------------- | ---------- |
+| **id**         | **str**      | Unique identifier of the model error record.  |
+| **model_id**   | **str**      | UUID of an AI model.                          |
+| **code**       | **int**      | HTTP status code from the error response.     | [optional] |
+| **message**    | **str**      | Error message describing what went wrong.     |
+| **battle_id**  | **str**      | Unique identifier (UUID) of the battle.       | [optional] |
+| **round_id**   | **str**      | Unique identifier (UUID) of the battle round. | [optional] |
+| **created_at** | **datetime** | Timestamp when the entity was created.        |
 
 ## Example
 

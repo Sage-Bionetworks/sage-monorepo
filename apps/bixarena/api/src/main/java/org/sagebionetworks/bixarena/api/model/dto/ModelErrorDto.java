@@ -19,10 +19,10 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A model error entity representing a failure that occurred during model interaction. 
+ * Record of a model error that occurred during interaction.
  */
 
-@Schema(name = "ModelError", description = "A model error entity representing a failure that occurred during model interaction. ")
+@Schema(name = "ModelError", description = "Record of a model error that occurred during interaction.")
 @JsonTypeName("ModelError")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ModelErrorDto {
@@ -62,11 +62,11 @@ public class ModelErrorDto {
   }
 
   /**
-   * Unique identifier (UUID) of the model error record.
+   * Unique identifier of the model error record.
    * @return id
    */
   @NotNull @Valid 
-  @Schema(name = "id", example = "98765432-e89b-12d3-a456-426614174099", description = "Unique identifier (UUID) of the model error record.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "id", example = "98765432-e89b-12d3-a456-426614174099", description = "Unique identifier of the model error record.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -102,11 +102,11 @@ public class ModelErrorDto {
   }
 
   /**
-   * HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).
+   * HTTP status code from the error response.
    * @return code
    */
   
-  @Schema(name = "code", example = "429", description = "HTTP status code from the API response (400, 401, 402, 403, 408, 429, 502, 503, etc.).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "code", example = "429", description = "HTTP status code from the error response.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("code")
   public @Nullable Integer getCode() {
     return code;
@@ -122,11 +122,11 @@ public class ModelErrorDto {
   }
 
   /**
-   * The error message from the API or exception with full details.
+   * Error message describing what went wrong.
    * @return message
    */
   @NotNull @Size(min = 1, max = 1000) 
-  @Schema(name = "message", example = "Rate limit exceeded", description = "The error message from the API or exception with full details.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "message", example = "Rate limit exceeded", description = "Error message describing what went wrong.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("message")
   public String getMessage() {
     return message;

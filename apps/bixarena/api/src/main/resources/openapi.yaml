@@ -2121,30 +2121,26 @@ components:
         totalElements: 99
       type: object
     ModelErrorCode:
-      description: "HTTP status code from the API response (400, 401, 402, 403, 408,\
-        \ 429, 502, 503, etc.)."
+      description: HTTP status code from the error response.
       example: 429
       nullable: true
       type: integer
     ModelErrorMessage:
-      description: The error message from the API or exception with full details.
+      description: Error message describing what went wrong.
       example: Rate limit exceeded
       maxLength: 1000
       minLength: 1
       type: string
     ModelErrorCreateRequest:
-      description: |
-        Request body for reporting a model error from the Gradio app. This enables tracking
-        model failures, monitoring error rates, and potentially auto-disabling unreliable models.
+      description: Request to report a model error.
       properties:
         code:
-          description: "HTTP status code from the API response (400, 401, 402, 403,\
-            \ 408, 429, 502, 503, etc.)."
+          description: HTTP status code from the error response.
           example: 429
           nullable: true
           type: integer
         message:
-          description: The error message from the API or exception with full details.
+          description: Error message describing what went wrong.
           example: Rate limit exceeded
           maxLength: 1000
           minLength: 1
@@ -2163,13 +2159,12 @@ components:
         - message
       type: object
     ModelErrorId:
-      description: Unique identifier (UUID) of the model error record.
+      description: Unique identifier of the model error record.
       example: 98765432-e89b-12d3-a456-426614174099
       format: uuid
       type: string
     ModelError:
-      description: |
-        A model error entity representing a failure that occurred during model interaction.
+      description: Record of a model error that occurred during interaction.
       example:
         createdAt: 2024-01-15T10:30:00Z
         code: 429
@@ -2180,7 +2175,7 @@ components:
         roundId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
       properties:
         id:
-          description: Unique identifier (UUID) of the model error record.
+          description: Unique identifier of the model error record.
           example: 98765432-e89b-12d3-a456-426614174099
           format: uuid
           type: string
@@ -2190,13 +2185,12 @@ components:
           format: uuid
           type: string
         code:
-          description: "HTTP status code from the API response (400, 401, 402, 403,\
-            \ 408, 429, 502, 503, etc.)."
+          description: HTTP status code from the error response.
           example: 429
           nullable: true
           type: integer
         message:
-          description: The error message from the API or exception with full details.
+          description: Error message describing what went wrong.
           example: Rate limit exceeded
           maxLength: 1000
           minLength: 1
