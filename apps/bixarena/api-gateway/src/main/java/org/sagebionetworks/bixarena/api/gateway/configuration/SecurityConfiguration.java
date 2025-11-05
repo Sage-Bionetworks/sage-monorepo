@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.gateway.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.bixarena.api.gateway.filter.SessionToJwtFilter;
+import org.sagebionetworks.bixarena.api.gateway.routing.RouteConfigRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
@@ -24,16 +25,20 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfiguration {
 
   private final SessionToJwtFilter sessionToJwtFilter;
+  private final RouteConfigRegistry routeConfigRegistry;
 
   @Bean
   SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    // Get all anonymous paths from registry (includes both OpenAPI routes and infrastructure endpoints)
+    String[] anonymousPaths = routeConfigRegistry.getAnonymousPaths();
+
     return http
       .csrf(ServerHttpSecurity.CsrfSpec::disable)
       // Add filter BEFORE authorization check
       .addFilterBefore(sessionToJwtFilter, SecurityWebFiltersOrder.AUTHORIZATION)
       .authorizeExchange(exchanges -> exchanges
-        // Only actuator needs explicit permitAll
-        .pathMatchers("/actuator/health", "/actuator/metrics").permitAll()
+        // Allow anonymous access to routes marked as anonymousAccess=true in registry
+        .pathMatchers(anonymousPaths).permitAll()
         // Everything else requires authentication (set by filter)
         .anyExchange().authenticated()
       )
