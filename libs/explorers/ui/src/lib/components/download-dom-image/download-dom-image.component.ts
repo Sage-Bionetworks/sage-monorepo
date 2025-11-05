@@ -41,8 +41,6 @@ export class DownloadDomImageComponent {
     const csvType = 'text/csv;charset=utf-8;';
     const data = this.data();
 
-    console.log('data', data);
-
     if (!data || data.length === 0) {
       const emptyBlob = new Blob([], { type: csvType });
       saveAs(emptyBlob, this.filename() + fileType);

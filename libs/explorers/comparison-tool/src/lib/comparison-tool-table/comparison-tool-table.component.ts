@@ -83,7 +83,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     }, 100);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onWindowResize() {
     if (this.platformService.isBrowser) {
       const tableElementWidth = this.tableElement()?.nativeElement?.offsetWidth || 0;

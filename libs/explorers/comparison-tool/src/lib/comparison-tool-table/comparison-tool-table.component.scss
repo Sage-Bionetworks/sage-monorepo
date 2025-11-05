@@ -2,10 +2,6 @@
 @use 'explorers/styles/src/lib/mixins';
 
 .comparison-tool-table {
-  button {
-    @include mixins.reset-button;
-  }
-
   .table-divider {
     background-color: var(--color-gray-300);
     margin-left: -44px;
@@ -47,6 +43,19 @@
     }
 
     .pin-all-button,
+    .clear-all-button {
+      @include mixins.reset-button;
+    }
+
+    .base-download-dom-image-action-button {
+      button:hover {
+        @include mixins.link-hover;
+
+        background: none;
+      }
+    }
+
+    .pin-all-button,
     .csv-download-button {
       display: flex;
       align-items: center;
@@ -73,6 +82,12 @@
       explorers-svg-icon {
         height: 14px;
         margin-right: 8px;
+      }
+    }
+
+    .clear-all-button {
+      &:hover {
+        @include mixins.link-hover;
       }
     }
   }
