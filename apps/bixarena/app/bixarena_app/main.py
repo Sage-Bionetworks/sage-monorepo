@@ -4,6 +4,8 @@ import os
 
 import gradio as gr
 import requests
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.utils import setup_logging
@@ -425,15 +427,28 @@ def build_app():
 # 2. During actual script execution to launch the server
 # This is normal Gradio behavior and unavoidable without complex workarounds
 args = parse_args()
+
+# Create FastAPI app first with health endpoint
+app = FastAPI()
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for ECS"""
+    return JSONResponse(
+        content={"status": "healthy", "service": "bixarena-gradio-app"}, status_code=200
+    )
+
+
+# Build Gradio app and mount it to FastAPI
 demo = build_app()
 demo.queue(default_concurrency_limit=args.concurrency_count)
 
+# Mount Gradio to the FastAPI app at root path
+app = gr.mount_gradio_app(app, demo, path="/")
+
 # Only launch when running directly with python (not via gradio CLI)
 if __name__ == "__main__":
-    demo.launch(
-        server_name=args.host,
-        server_port=args.port,
-        share=args.share,
-        max_threads=200,
-        root_path=args.gradio_root_path,
-    )
+    import uvicorn
+
+    uvicorn.run(app, host=args.host, port=args.port, log_level="info")

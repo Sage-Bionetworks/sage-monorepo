@@ -540,9 +540,9 @@ def build_side_by_side_ui_anony():
                     <div id="disclaimer-text">
                         <div class="pulse-dot"></div>
                         <span>
-                            AI may make mistakes. Don't include private or 
-                            sensitive information in your prompts, 
-                            and please verify responses. 
+                            AI may make mistakes. Don't include private or
+                            sensitive information in your prompts,
+                            and please verify responses.
                         </span>
                     </div>
                 </div>
@@ -596,7 +596,7 @@ def build_side_by_side_ui_anony():
         const textbox = document.querySelector('#input_box textarea');
         if (textbox) {
             textbox._enterDisabled = true;
-            
+
             if (!textbox._enterHandler) {
                 textbox._enterHandler = function(event) {
                     if (

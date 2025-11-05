@@ -28,6 +28,7 @@ classifiers = [
 ]
 dependencies = [
     "bixarena-api-client",
+    "fastapi>=0.119.0",
     "gradio>=4.10",
     "numpy",
     "openai>=1.0",
