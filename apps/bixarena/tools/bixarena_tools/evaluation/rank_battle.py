@@ -143,27 +143,20 @@ def scale_and_offset(
     models,
     scale=400.0,
     init_rating=1000.0,
-    baseline_model="mixtral-8x7b-instruct-v0.1",
-    baseline_rating=1114,
 ):
     """
-    Convert ratings from natural scale to Elo scale with anchored baseline.
+    Convert ratings from natural scale to Elo scale.
 
     Args:
         ratings: array of model ratings on natural scale
         models: list of model names
         scale: scaling factor (default 400 for Elo scale)
-        init_rating: initial rating offset
-        baseline_model: model to use as baseline anchor
-        baseline_rating: target rating for baseline model
+        init_rating: initial rating offset (scores centered around this value)
 
     Returns:
-        scaled_ratings: ratings on Elo scale
+        scaled_ratings: ratings on Elo scale, centered around init_rating
     """
     scaled_ratings = (ratings * scale) + init_rating
-    if baseline_model in models:
-        baseline_idx = models.index(baseline_model)
-        scaled_ratings += baseline_rating - scaled_ratings[..., [baseline_idx]]
     return scaled_ratings
 
 
