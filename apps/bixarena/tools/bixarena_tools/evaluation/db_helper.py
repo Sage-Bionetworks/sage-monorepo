@@ -248,3 +248,24 @@ def insert_battles_batch(conn, battles: list[dict[str, Any]]) -> int:
         )
 
         return cur.rowcount
+
+
+def fetch_leaderboards(conn) -> list[dict[str, Any]]:
+    """
+    Fetch all leaderboards from the database.
+
+    Args:
+        conn: Database connection
+
+    Returns:
+        List of leaderboard dictionaries
+    """
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT *
+            FROM api.leaderboard
+            ORDER BY slug
+            """
+        )
+        return cur.fetchall()

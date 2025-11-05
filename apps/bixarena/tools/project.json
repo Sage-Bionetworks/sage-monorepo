@@ -94,6 +94,13 @@
         "command": "uv run python -m bixarena_tools.evaluation.simulate_evaluations",
         "cwd": "{projectRoot}"
       }
+    },
+    "update-leaderboard": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "uv run python -m bixarena_tools.evaluation.update_leaderboard",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["language:python", "package-manager:uv"],
