@@ -1,10 +1,13 @@
 .help-links {
-  padding: 10px 80px;
   display: flex;
-  justify-content: start;
   align-items: center;
+  padding: 10px 80px 10px 275px;
   height: 75px;
-  border: 1px solid var(--color-gray-300);
+  position: relative;
+  margin-top: -68px;
+  margin-bottom: 24px;
+  z-index: 100;
+  pointer-events: none;
 
   .help-links-inner {
     display: flex;
