@@ -24,6 +24,7 @@ readme = 'README.md'
 dependencies = [
     "locust>=2.35.0",
     "numpy>=1.26.0",
+    "psycopg[binary]>=3.0.0",
     "rich>=13.7.0",
     "scipy>=1.11.0",
     "tqdm>=4.60.0",
