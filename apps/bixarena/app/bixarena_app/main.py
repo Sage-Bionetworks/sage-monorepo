@@ -320,7 +320,7 @@ def build_app():
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(
             lambda: navigator.show_page(1),
-            outputs=pages + prompt_outputs,
+            outputs=pages,
         )
 
         # Login CTA button - redirects to login page
@@ -411,7 +411,6 @@ def build_app():
         # Load CTA button visibility based on authentication
         demo.load(
             fn=update_cta_buttons_on_page_load,
-            inputs=None,
             outputs=[cta_btn_authenticated, cta_btn_login],
         )
 
