@@ -14,8 +14,19 @@ export class DownloadDomImageComponent {
   heading = input('Download this plot as:');
   filename = input.required();
   buttonLabel = input('');
+  hasCsvDownload = input<boolean>(false);
+  data = input<string[][]>([]);
 
   performDownload = async (fileType: string): Promise<void> => {
+    if (fileType === '.jpeg' || fileType === '.png') {
+      await this.downloadImage(fileType);
+    }
+    if (fileType === '.csv') {
+      await this.downloadCsvData(fileType);
+    }
+  };
+
+  downloadImage = async (fileType: string): Promise<void> => {
     // width and height need to be specified
     // known issue: https://github.com/1904labs/dom-to-image-more/issues/198
     const blob = await domtoimage.toBlob(this.target(), {
@@ -25,4 +36,34 @@ export class DownloadDomImageComponent {
     });
     saveAs(blob, this.filename() + fileType);
   };
+
+  downloadCsvData = async (fileType: string): Promise<void> => {
+    const csvType = 'text/csv;charset=utf-8;';
+    const data = this.data();
+
+    if (!data || data.length === 0) {
+      const emptyBlob = new Blob([], { type: csvType });
+      saveAs(emptyBlob, this.filename() + fileType);
+      return;
+    }
+
+    let csv = '';
+    for (const row of data) {
+      csv += this.arrayToCSVString(row);
+    }
+
+    const blob = new Blob([csv], { type: csvType });
+    saveAs(blob, this.filename() + fileType);
+  };
+
+  arrayToCSVString(values: string[]): string {
+    return (
+      values
+        .map((value) => {
+          const escaped = value.replaceAll('"', '""');
+          return `"${escaped}"`;
+        })
+        .join(',') + '\n'
+    );
+  }
 }

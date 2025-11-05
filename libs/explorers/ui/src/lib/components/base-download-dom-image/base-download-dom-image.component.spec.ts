@@ -50,7 +50,7 @@ describe('BaseDownloadDomImageComponent', () => {
     const overlayPanel = document.querySelector('.base-download-dom-image-panel') as HTMLElement;
 
     expect(overlayPanel).toBeTruthy();
-    expect(overlayPanel.querySelectorAll('p-radiobutton>.p-radiobutton')?.length).toEqual(
+    expect(overlayPanel.querySelectorAll('p-radiobutton>.p-radiobutton-input')?.length).toEqual(
       component.types.length,
     );
   });
