@@ -23,7 +23,7 @@ def preprocess_votes_for_bt(votes: list[dict]):
     Processes BixArena vote to the numeric outcomes used by BT algorithm.
 
     Args:
-        votes: List of vote dicts with model_a, model_b, preference
+        votes: List of vote dicts with model1_name, model2_name, outcome
 
     Returns:
         matchups: array of shape (n_unique_matchups, 2) with model indices
@@ -37,27 +37,29 @@ def preprocess_votes_for_bt(votes: list[dict]):
     # Extract all model names and create mapping
     all_models = set()
     for vote in votes:
-        all_models.add(vote["model_a"])
-        all_models.add(vote["model_b"])
+        all_models.add(vote["model1_name"])
+        all_models.add(vote["model2_name"])
 
     models = sorted(all_models)  # Sort for consistent ordering
     model_to_idx = {model: idx for idx, model in enumerate(models)}
 
-    # Build schedule directly with outcomes: model_a_idx, model_b_idx, outcome
+    # Build schedule directly with outcomes: model1_idx, model2_idx, outcome
+    # Outcome mapping: model1 win → 2 (1.0), tie → 1 (0.5), model2 win → 0 (0.0)
+    outcome_map = {"model1": 2, "model2": 0, "tie": 1}
+
     schedule = []
     for vote in votes:
-        preference = vote["preference"]
-        if preference == "model_a":
-            outcome = 2  # model_a wins → 1.0
-        elif preference == "model_b":
-            outcome = 0  # model_b wins → 0.0
-        elif preference == "tie":
-            outcome = 1  # tie → 0.5
-        else:
-            continue  # Skip invalid preferences
+        outcome_value = vote["outcome"]
+        outcome = outcome_map.get(outcome_value)
+        if outcome is None:
+            continue  # Skip invalid outcomes
 
         schedule.append(
-            [model_to_idx[vote["model_a"]], model_to_idx[vote["model_b"]], outcome]
+            [
+                model_to_idx[vote["model1_name"]],
+                model_to_idx[vote["model2_name"]],
+                outcome,
+            ]
         )
 
     if not schedule:
@@ -289,7 +291,7 @@ def compute_leaderboard_bt(
     # Count votes per model
     vote_counts = {}
     for vote in votes:
-        for model in [vote["model_a"], vote["model_b"]]:
+        for model in [vote["model1_name"], vote["model2_name"]]:
             vote_counts[model] = vote_counts.get(model, 0) + 1
 
     # Compute confidence intervals for all models
