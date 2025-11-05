@@ -1,23 +1,41 @@
-"""Console script entry point wrapper.
-
-This defers to logic defined in the existing flat-layout `main.py` module.
-"""
+"""Console script entry points for running the BixArena application."""
 
 from __future__ import annotations
 
-from bixarena_app.main import build_app, parse_args  # type: ignore
+import uvicorn
+
+from bixarena_app.main import parse_args
 
 
 def main() -> None:  # noqa: D401
-    """Entry point used by the `bixarena-app` console script."""
+    """Production entry point: runs uvicorn without reload.
+
+    Usage: uv run bixarena-app
+    """
     args = parse_args()
-    app = build_app()
-    app.queue(default_concurrency_limit=args.concurrency_count).launch(
-        server_name=args.host,
-        server_port=args.port,
-        share=args.share,
-        max_threads=200,
-        root_path=args.gradio_root_path,
+    uvicorn.run(
+        "bixarena_app.main:app",
+        host=args.host,
+        port=args.port,
+        log_level="info",
+    )
+
+
+def dev() -> None:  # noqa: D401
+    """Development entry point: runs uvicorn with auto-reload.
+
+    Usage: uv run bixarena-app-dev
+
+    Watches for file changes and automatically reloads the server.
+    """
+    args = parse_args()
+    uvicorn.run(
+        "bixarena_app.main:app",
+        host=args.host,
+        port=args.port,
+        log_level="info",
+        reload=True,
+        reload_dirs=["bixarena_app"],
     )
 
 

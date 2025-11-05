@@ -21,7 +21,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run uvicorn bixarena_app.main:app --reload --reload-dir bixarena_app",
+        "command": "uv run bixarena-app-dev",
         "cwd": "{projectRoot}"
       }
     },

@@ -421,34 +421,36 @@ def build_app():
     return demo
 
 
-# Initialize app at module level for both `python` and `gradio` CLI
-# Note: When using `gradio` CLI, this code runs twice:
-# 1. During module inspection to find the `demo` variable
-# 2. During actual script execution to launch the server
-# This is normal Gradio behavior and unavoidable without complex workarounds
+def create_app(concurrency_count: int = 10) -> FastAPI:
+    """Create and configure the FastAPI application with Gradio mounted.
+
+    Args:
+        concurrency_count: Maximum concurrent requests for Gradio queue
+
+    Returns:
+        Configured FastAPI application
+    """
+    # Create FastAPI app with health endpoint
+    fastapi_app = FastAPI()
+
+    @fastapi_app.get("/health")
+    async def health_check():
+        """Health check endpoint for ECS"""
+        return JSONResponse(
+            content={"status": "healthy", "service": "bixarena-app"},
+            status_code=200,
+        )
+
+    # Build Gradio app and mount it to FastAPI
+    demo = build_app()
+    demo.queue(default_concurrency_limit=concurrency_count)
+
+    # Mount Gradio to the FastAPI app at root path
+    fastapi_app = gr.mount_gradio_app(fastapi_app, demo, path="/")
+
+    return fastapi_app
+
+
+# Create app instance at module level for uvicorn imports
 args = parse_args()
-
-# Create FastAPI app first with health endpoint
-app = FastAPI()
-
-
-@app.get("/health")
-async def health_check():
-    """Health check endpoint for ECS"""
-    return JSONResponse(
-        content={"status": "healthy", "service": "bixarena-gradio-app"}, status_code=200
-    )
-
-
-# Build Gradio app and mount it to FastAPI
-demo = build_app()
-demo.queue(default_concurrency_limit=args.concurrency_count)
-
-# Mount Gradio to the FastAPI app at root path
-app = gr.mount_gradio_app(app, demo, path="/")
-
-# Only launch when running directly with python (not via gradio CLI)
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host=args.host, port=args.port, log_level="info")
+app = create_app(concurrency_count=args.concurrency_count)
