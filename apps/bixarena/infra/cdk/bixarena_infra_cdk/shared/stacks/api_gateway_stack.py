@@ -50,21 +50,32 @@ class ApiGatewayStack(cdk.Stack):
         image = f"ghcr.io/sage-bionetworks/bixarena-api-gateway:{gateway_version}"
 
         # Environment variables for the API Gateway container
-        # Only override values that depend on CDK infrastructure
-        # Most configuration is already defined in application.yml
+        # Note: Spring Boot list overrides replace the entire list item, not merge
+        # So we must specify all properties (id, uri, predicates, filters)
         container_env = {
             # Set active profile (loads application-{profile}.yml)
             "SPRING_PROFILES_ACTIVE": environment,
             # Valkey/Redis connection (override defaults with actual endpoints)
             "SPRING_DATA_REDIS_HOST": valkey_endpoint,
             "SPRING_DATA_REDIS_PORT": valkey_port,
-            # Gateway routes: override URIs to use ECS service discovery
-            # Route IDs and predicates are already defined in application.yml
-            "SPRING_CLOUD_GATEWAY_ROUTES_0_URI": (
+            # Route 0: API Service - must specify complete route definition
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_ID": "bixarena-api",
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_URI": (
                 f"http://bixarena-api.{cluster.cluster_name}.local:8112"
             ),
-            "SPRING_CLOUD_GATEWAY_ROUTES_1_URI": (
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_PREDICATES_0": (
+                "Path=/api/v1/**"
+            ),
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_FILTERS_0": ("StripPrefix=1"),
+            # Route 1: Auth Service - must specify complete route definition
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_ID": (
+                "bixarena-auth-service"
+            ),
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_URI": (
                 f"http://bixarena-auth-service.{cluster.cluster_name}.local:8115"
+            ),
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_PREDICATES_0": (
+                "Path=/auth/**,/.well-known/jwks.json,/oauth2/token,/userinfo"
             ),
         }
 
@@ -77,8 +88,8 @@ class ApiGatewayStack(cdk.Stack):
             service_name="bixarena-api-gateway",
             container_image=image,
             container_port=8113,
-            cpu=512,  # 0.5 vCPU - similar to other services
-            memory_limit_mib=1024,  # 1 GB - Spring Cloud Gateway needs memory
+            cpu=1024,  # 1 vCPU - Gateway needs more resources for routing
+            memory_limit_mib=2048,  # 2 GB - Spring Cloud Gateway is memory-intensive
             environment=container_env,
             desired_count=1,
             target_group=target_group,  # Exposed via ALB
