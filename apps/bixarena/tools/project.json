@@ -87,6 +87,13 @@
         "command": "uv run python -m bixarena_tools.evaluation.generate_leaderboard_cli",
         "cwd": "{projectRoot}"
       }
+    },
+    "simulate-eval": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "uv run python -m bixarena_tools.evaluation.simulate_evaluations",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["language:python", "package-manager:uv"],
