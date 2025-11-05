@@ -108,7 +108,7 @@ jobs:
         with:
           branch: synapse/update-synapse-api
           delete-branch: true
-          draft: always-true
+          draft: false
           title: 'chore(synapse): update Synapse API description and generated artifacts'
           commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
           body: |
@@ -120,6 +120,7 @@ jobs:
 
             ## Review checklist
 
+            - [ ] Transition PR from "Ready for Review" -> "Draft" -> "Ready for Review" to trigger CI jobs
             - [ ] Verify that the API changes are expected
             - [ ] Check that generated artifacts build/compile successfully
             - [ ] Run tests to ensure compatibility
