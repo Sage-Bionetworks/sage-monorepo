@@ -16,3 +16,13 @@ spring:
     date-format: org.sagebionetworks.model.ad.api.next.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true

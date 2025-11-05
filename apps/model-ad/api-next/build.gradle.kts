@@ -11,6 +11,7 @@ dependencies {
   implementation(libs.spring.boot.starter.web)
   implementation(libs.spring.boot.starter.data.mongodb)
   implementation(libs.spring.boot.starter.cache)
+  implementation(libs.spring.boot.starter.actuator)
   implementation(libs.springdoc.openapi.ui)
   compileOnly(libs.lombok)
   annotationProcessor(libs.lombok)
