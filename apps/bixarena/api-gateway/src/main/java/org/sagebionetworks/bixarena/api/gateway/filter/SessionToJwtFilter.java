@@ -51,6 +51,13 @@ public class SessionToJwtFilter implements WebFilter {
 
     log.debug("Processing request: {} {}", method, path);
 
+    // Step 0: Bypass filter for infrastructure/static endpoints (not in OpenAPI spec)
+    // These are handled by Spring Security permitAll or will 404 if not found
+    if (path.startsWith("/actuator/") || path.equals("/favicon.ico")) {
+      log.debug("Infrastructure endpoint, bypassing filter: {} {}", method, path);
+      return chain.filter(exchange);
+    }
+
     // Step 1: Check if route allows anonymous access
     if (routeConfigRegistry.isAnonymousAccessAllowed(method, path)) {
       log.debug("Anonymous access allowed for: {} {}", method, path);

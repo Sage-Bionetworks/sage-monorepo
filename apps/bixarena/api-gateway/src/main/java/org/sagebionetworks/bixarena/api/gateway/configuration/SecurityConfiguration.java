@@ -32,8 +32,8 @@ public class SecurityConfiguration {
       // Add filter BEFORE authorization check
       .addFilterBefore(sessionToJwtFilter, SecurityWebFiltersOrder.AUTHORIZATION)
       .authorizeExchange(exchanges -> exchanges
-        // Only actuator needs explicit permitAll
-        .pathMatchers("/actuator/health", "/actuator/metrics").permitAll()
+        // Infrastructure endpoints (not in OpenAPI spec, bypassed by SessionToJwtFilter)
+        .pathMatchers("/actuator/health", "/actuator/metrics", "/favicon.ico").permitAll()
         // Everything else requires authentication (set by filter)
         .anyExchange().authenticated()
       )
