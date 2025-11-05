@@ -58,10 +58,10 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     expect(icon).toBeInTheDocument();
   });
 
-  it('should show overlay badge when there are hidden columns', async () => {
+  it('should show overlay badge when there are unselected columns', async () => {
     const { service } = await setup();
 
-    // Toggle a column to hide it
+    // Toggle a column to unselect it
     const columns = service.columns();
     if (columns.length > 0) {
       service.toggleColumn(columns[0]);
@@ -70,12 +70,12 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     // Wait for re-render
     await screen.findByRole('button');
 
-    expect(service.hasHiddenColumns()).toBe(true);
+    expect(service.hasUnselectedColumns()).toBe(true);
   });
-  it('should not show overlay badge when all columns are visible', async () => {
+  it('should not show overlay badge when all columns are selected', async () => {
     const { service } = await setup();
 
-    // Ensure all columns are visible
+    // Ensure all columns are selected
     const columns = service.columns();
     columns.forEach((col) => {
       if (!col.selected) {
@@ -83,7 +83,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
       }
     });
 
-    expect(service.hasHiddenColumns()).toBe(false);
+    expect(service.hasUnselectedColumns()).toBe(false);
   });
 
   it('should open popover when button is clicked', async () => {
@@ -331,8 +331,8 @@ describe('ComparisonToolColumnSelectorComponent', () => {
     // Test that getter returns service columns
     expect(instance.columns).toBe(service.columns());
 
-    // Test that hasHiddenColumns returns correct value
-    expect(instance.hasHiddenColumns()).toBe(service.hasHiddenColumns());
+    // Test that hasUnselectedColumns returns correct value
+    expect(instance.hasUnselectedColumns()).toBe(service.hasUnselectedColumns());
   });
 
   it('should update UI when columns change in service', async () => {

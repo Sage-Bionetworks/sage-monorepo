@@ -110,10 +110,10 @@ export class ComparisonToolService<T> {
   });
 
   selectedColumns = computed(() => {
-    return this.columns().filter((col) => col.selected && col.is_hidden !== true);
+    return this.columns().filter((col) => col.selected);
   });
 
-  hasHiddenColumns(): boolean {
+  hasUnselectedColumns(): boolean {
     return this.columns().some((col) => !col.selected);
   }
 
