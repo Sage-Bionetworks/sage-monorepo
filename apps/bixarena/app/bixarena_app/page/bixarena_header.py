@@ -19,11 +19,11 @@ def build_header():
 </div>
                 """
             )
-        with gr.Column(scale=1):
+        with gr.Column(scale=1, min_width=180):
             battle_btn = gr.Button("⚔️ Battle", variant="primary", visible=False)
-        with gr.Column(scale=1):
+        with gr.Column(scale=1, min_width=180):
             leaderboard_btn = gr.Button("🏆 Leaderboard", variant="secondary")
-        with gr.Column(scale=1):
+        with gr.Column(scale=1, min_width=180):
             # Start as Login; value updated by load / callback events
             login_btn = gr.Button("Login", variant="primary", elem_id="login-btn")
     # Minimal CSS styling injection (no JS state toggling):
@@ -35,6 +35,14 @@ def build_header():
   padding: 10px 0;
   border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 20px;
+}
+#header-row button {
+  white-space: nowrap;
+}
+@media (min-width: 1024px) {
+  #header-row {
+    flex-wrap: nowrap;
+  }
 }
 </style>
         """
