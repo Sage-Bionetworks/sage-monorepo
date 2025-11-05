@@ -88,7 +88,7 @@ def simulate_battle_outcome(
         return "model2"
 
 
-def generate_battles_and_evaluations(
+def simulate_battles_and_evaluations(
     models: list[dict[str, Any]],
     num_evaluations: int,
     user_id: str,
@@ -96,7 +96,7 @@ def generate_battles_and_evaluations(
     seed: int = 42,
 ) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
     """
-    Generate synthetic battles with evaluations.
+    Simulate synthetic battles with evaluations.
 
     Args:
         models: List of model dictionaries from database
@@ -249,12 +249,12 @@ def main():
                 )
                 sys.exit(1)
 
-            # Generate battles and evaluations
+            # Simulate battles and evaluations
             console.print(
-                f"\n[cyan]Generating {args.num_evaluations} battles with "
+                f"\n[cyan]Simulating {args.num_evaluations} battles with "
                 f"evaluations...[/cyan]"
             )
-            battles, evaluations = generate_battles_and_evaluations(
+            battles, evaluations = simulate_battles_and_evaluations(
                 models,
                 args.num_evaluations,
                 user_id=user_id,
