@@ -42,6 +42,8 @@ class TestLeaderboardEntry(unittest.TestCase):
                 bt_score = 0.925,
                 vote_count = 1250,
                 rank = 1,
+                bootstrap_q025 = 887,
+                bootstrap_q975 = 1063,
                 created_at = '2025-08-16T10:30Z'
             )
         else:
@@ -53,6 +55,8 @@ class TestLeaderboardEntry(unittest.TestCase):
                 bt_score = 0.925,
                 vote_count = 1250,
                 rank = 1,
+                bootstrap_q025 = 887,
+                bootstrap_q975 = 1063,
                 created_at = '2025-08-16T10:30Z',
         )
         """
