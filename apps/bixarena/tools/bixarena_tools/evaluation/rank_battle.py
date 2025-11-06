@@ -1,5 +1,5 @@
 """
-Bradley-Terry ranking implementation optimized for BixArena vote data,
+Bradley-Terry ranking implementation optimized for BixArena evaluation data,
 while preserving the original Bradley-Terry algorithm.
 """
 
@@ -16,14 +16,14 @@ from scipy.special import expit
 from tqdm import tqdm
 
 
-def preprocess_votes_for_bt(votes: list[dict]):
+def preprocess_evaluations_for_bt(evaluations: list[dict]):
     """
-    Convert votes directly to Bradley-Terry format.
+    Convert evaluations directly to Bradley-Terry format.
 
-    Processes BixArena vote to the numeric outcomes used by BT algorithm.
+    Processes BixArena evaluation to the numeric outcomes used by BT algorithm.
 
     Args:
-        votes: List of vote dicts with model1_name, model2_name, outcome
+        evaluations: List of evaluation dicts with model1_name, model2_name, outcome
 
     Returns:
         matchups: array of shape (n_unique_matchups, 2) with model indices
@@ -31,14 +31,14 @@ def preprocess_votes_for_bt(votes: list[dict]):
         models: list of model names
         weights: array of shape (n_unique_matchups,) with occurrence counts
     """
-    if not votes:
+    if not evaluations:
         return np.array([]), np.array([]), [], np.array([])
 
     # Extract all model names and create mapping
     all_models = set()
-    for vote in votes:
-        all_models.add(vote["model1_name"])
-        all_models.add(vote["model2_name"])
+    for evaluation in evaluations:
+        all_models.add(evaluation["model1_name"])
+        all_models.add(evaluation["model2_name"])
 
     models = sorted(all_models)  # Sort for consistent ordering
     model_to_idx = {model: idx for idx, model in enumerate(models)}
@@ -48,16 +48,16 @@ def preprocess_votes_for_bt(votes: list[dict]):
     outcome_map = {"model1": 2, "model2": 0, "tie": 1}
 
     schedule = []
-    for vote in votes:
-        outcome_value = vote["outcome"]
+    for evaluation in evaluations:
+        outcome_value = evaluation["outcome"]
         outcome = outcome_map.get(outcome_value)
         if outcome is None:
             continue  # Skip invalid outcomes
 
         schedule.append(
             [
-                model_to_idx[vote["model1_name"]],
-                model_to_idx[vote["model2_name"]],
+                model_to_idx[evaluation["model1_name"]],
+                model_to_idx[evaluation["model2_name"]],
                 outcome,
             ]
         )
@@ -160,12 +160,14 @@ def scale_and_offset(
     return scaled_ratings
 
 
-def compute_bt(votes: list[dict], base=10.0, scale=400.0, init_rating=1000.0, tol=1e-6):
+def compute_bt(
+    evaluations: list[dict], base=10.0, scale=400.0, init_rating=1000.0, tol=1e-6
+):
     """
-    Compute Bradley-Terry ratings directly from votes.
+    Compute Bradley-Terry ratings directly from evaluations.
 
     Args:
-        votes: List of vote dictionaries with model_a, model_b, preference
+        evaluations: List of evaluation dictionaries with model_a, model_b, preference
         base: base for logarithm (default 10.0)
         scale: scaling factor for final ratings
         init_rating: initial rating offset
@@ -174,7 +176,7 @@ def compute_bt(votes: list[dict], base=10.0, scale=400.0, init_rating=1000.0, to
     Returns:
         dict with model ratings, sorted in descending order by rating
     """
-    matchups, outcomes, models, weights = preprocess_votes_for_bt(votes)
+    matchups, outcomes, models, weights = preprocess_evaluations_for_bt(evaluations)
 
     if len(models) == 0:
         return {}
@@ -190,7 +192,7 @@ def compute_bt(votes: list[dict], base=10.0, scale=400.0, init_rating=1000.0, to
 
 
 def compute_bootstrap_bt(
-    votes: list[dict],
+    evaluations: list[dict],
     num_round: int,
     base=10.0,
     scale=400.0,
@@ -199,10 +201,10 @@ def compute_bootstrap_bt(
     num_cpu=None,
 ):
     """
-    Compute bootstrap confidence intervals for Bradley-Terry ratings from votes.
+    Compute bootstrap confidence intervals for Bradley-Terry ratings from evaluations.
 
     Args:
-        votes: List of vote dictionaries with model_a, model_b, preference
+        evaluations: List of evaluation dictionaries with model_a, model_b, preference
         num_round: number of bootstrap rounds
         base: base for logarithm (default 10.0)
         scale: scaling factor for final ratings
@@ -214,7 +216,7 @@ def compute_bootstrap_bt(
         dict with bootstrap results, keys are models, values are arrays of ratings
         sorted by median rating (descending)
     """
-    matchups, outcomes, models, weights = preprocess_votes_for_bt(votes)
+    matchups, outcomes, models, weights = preprocess_evaluations_for_bt(evaluations)
 
     if len(models) == 0:
         return {}
@@ -222,10 +224,10 @@ def compute_bootstrap_bt(
     # bootstrap sample unique outcomes and counts using multinomial distribution
     rng = np.random.default_rng(seed=0)
     idxs = rng.multinomial(
-        n=len(votes), pvals=weights / weights.sum(), size=(num_round)
+        n=len(evaluations), pvals=weights / weights.sum(), size=(num_round)
     )
     # only occurrence count distribution changes between samples (can be 0)
-    boot_weights = idxs.astype(np.float64) / len(votes)
+    boot_weights = idxs.astype(np.float64) / len(evaluations)
 
     # the only thing different across samples is the distribution of weights
     bt_fn = partial(
@@ -248,7 +250,7 @@ def compute_bootstrap_bt(
 
 
 def compute_leaderboard_bt(
-    votes: list[dict],
+    evaluations: list[dict],
     models: dict[str, dict],
     num_bootstrap: int = 5000,
     base: float = 10.0,
@@ -257,10 +259,10 @@ def compute_leaderboard_bt(
     tol: float = 1e-6,
 ) -> list[dict]:
     """
-    Compute Bradley-Terry leaderboard directly from votes and model data.
+    Compute Bradley-Terry leaderboard directly from evaluations and model data.
 
     Args:
-        votes: List of vote dictionaries with model_a, model_b, preference
+        evaluations: List of evaluation dictionaries with model_a, model_b, preference
         models: Dict mapping model_name -> model_info with id, name, etc.
         num_bootstrap: Number of bootstrap iterations for confidence intervals
         base: Base for logarithm (default 10.0)
@@ -271,21 +273,21 @@ def compute_leaderboard_bt(
     Returns:
         List of leaderboard entry dictionaries ready for API
     """
-    # Compute base scores directly from votes (optimized path)
-    scores = compute_bt(votes, base, scale, init_rating, tol)
+    # Compute base scores directly from evaluations (optimized path)
+    scores = compute_bt(evaluations, base, scale, init_rating, tol)
     if not scores:
         return []
 
-    # Compute bootstrap confidence intervals directly from votes
+    # Compute bootstrap confidence intervals directly from evaluations
     bootstrap_results = compute_bootstrap_bt(
-        votes, num_bootstrap, base, scale, init_rating, tol, num_cpu=1
+        evaluations, num_bootstrap, base, scale, init_rating, tol, num_cpu=1
     )
 
-    # Count votes per model
-    vote_counts = {}
-    for vote in votes:
-        for model in [vote["model1_name"], vote["model2_name"]]:
-            vote_counts[model] = vote_counts.get(model, 0) + 1
+    # Count evaluations per model
+    evaluation_counts = {}
+    for evaluation in evaluations:
+        for model in [evaluation["model1_name"], evaluation["model2_name"]]:
+            evaluation_counts[model] = evaluation_counts.get(model, 0) + 1
 
     # Compute confidence intervals for all models
     model_ci = {}
@@ -324,7 +326,7 @@ def compute_leaderboard_bt(
             "modelName": model_name,
             "license": model_info.get("license", "Unknown"),
             "btScore": float(bt_score),
-            "voteCount": vote_counts.get(model_name, 0),
+            "voteCount": evaluation_counts.get(model_name, 0),
             "rank": final_rank[model_name],
             "createdAt": current_time,
             "bootstrapQ025": ci["lower"],

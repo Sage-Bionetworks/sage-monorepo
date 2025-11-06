@@ -269,3 +269,26 @@ def fetch_leaderboards(conn) -> list[dict[str, Any]]:
             """
         )
         return cur.fetchall()
+
+
+def fetch_leaderboard_ids(conn) -> list[str]:
+    """
+    Fetch all available leaderboard IDs from the database.
+
+    Note: In this context, "ID" actually refers to the slug such as 'overview'.
+
+    Args:
+        conn: Database connection
+
+    Returns:
+        List of leaderboard slugs (human-readable IDs)
+    """
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT slug
+            FROM api.leaderboard
+            ORDER BY slug
+            """
+        )
+        return [row["slug"] for row in cur.fetchall()]
