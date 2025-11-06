@@ -20,7 +20,7 @@ properties:
   btScore:
     type: number
     format: double
-    description: Primary scoring metric (higher is better)
+    description: Bradley-Terry score - primary ranking metric
     example: 0.925
   voteCount:
     type: integer
@@ -30,6 +30,16 @@ properties:
     type: integer
     description: Current rank position (1-based)
     example: 1
+  bootstrapQ025:
+    type: number
+    format: double
+    description: Bootstrap confidence interval lower bound (2.5th percentile)
+    example: 887
+  bootstrapQ975:
+    type: number
+    format: double
+    description: Bootstrap confidence interval upper bound (97.5th percentile)
+    example: 1063
   createdAt:
     type: string
     format: date-time
@@ -43,4 +53,6 @@ required:
   - btScore
   - voteCount
   - rank
+  - bootstrapQ025
+  - bootstrapQ975
   - createdAt

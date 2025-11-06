@@ -40,6 +40,10 @@ public class LeaderboardEntryDto {
 
   private Integer rank;
 
+  private Double bootstrapQ025;
+
+  private Double bootstrapQ975;
+
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
@@ -50,7 +54,7 @@ public class LeaderboardEntryDto {
   /**
    * Constructor with only required parameters
    */
-  public LeaderboardEntryDto(String id, String modelId, String modelName, String license, Double btScore, Integer voteCount, Integer rank, OffsetDateTime createdAt) {
+  public LeaderboardEntryDto(String id, String modelId, String modelName, String license, Double btScore, Integer voteCount, Integer rank, Double bootstrapQ025, Double bootstrapQ975, OffsetDateTime createdAt) {
     this.id = id;
     this.modelId = modelId;
     this.modelName = modelName;
@@ -58,6 +62,8 @@ public class LeaderboardEntryDto {
     this.btScore = btScore;
     this.voteCount = voteCount;
     this.rank = rank;
+    this.bootstrapQ025 = bootstrapQ025;
+    this.bootstrapQ975 = bootstrapQ975;
     this.createdAt = createdAt;
   }
 
@@ -147,11 +153,11 @@ public class LeaderboardEntryDto {
   }
 
   /**
-   * Primary scoring metric (higher is better)
+   * Bradley-Terry score - primary ranking metric
    * @return btScore
    */
   @NotNull 
-  @Schema(name = "btScore", example = "0.925", description = "Primary scoring metric (higher is better)", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "btScore", example = "0.925", description = "Bradley-Terry score - primary ranking metric", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("btScore")
   public Double getBtScore() {
     return btScore;
@@ -201,6 +207,46 @@ public class LeaderboardEntryDto {
     this.rank = rank;
   }
 
+  public LeaderboardEntryDto bootstrapQ025(Double bootstrapQ025) {
+    this.bootstrapQ025 = bootstrapQ025;
+    return this;
+  }
+
+  /**
+   * Bootstrap confidence interval lower bound (2.5th percentile)
+   * @return bootstrapQ025
+   */
+  @NotNull 
+  @Schema(name = "bootstrapQ025", example = "887", description = "Bootstrap confidence interval lower bound (2.5th percentile)", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("bootstrapQ025")
+  public Double getBootstrapQ025() {
+    return bootstrapQ025;
+  }
+
+  public void setBootstrapQ025(Double bootstrapQ025) {
+    this.bootstrapQ025 = bootstrapQ025;
+  }
+
+  public LeaderboardEntryDto bootstrapQ975(Double bootstrapQ975) {
+    this.bootstrapQ975 = bootstrapQ975;
+    return this;
+  }
+
+  /**
+   * Bootstrap confidence interval upper bound (97.5th percentile)
+   * @return bootstrapQ975
+   */
+  @NotNull 
+  @Schema(name = "bootstrapQ975", example = "1063", description = "Bootstrap confidence interval upper bound (97.5th percentile)", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("bootstrapQ975")
+  public Double getBootstrapQ975() {
+    return bootstrapQ975;
+  }
+
+  public void setBootstrapQ975(Double bootstrapQ975) {
+    this.bootstrapQ975 = bootstrapQ975;
+  }
+
   public LeaderboardEntryDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -237,12 +283,14 @@ public class LeaderboardEntryDto {
         Objects.equals(this.btScore, leaderboardEntry.btScore) &&
         Objects.equals(this.voteCount, leaderboardEntry.voteCount) &&
         Objects.equals(this.rank, leaderboardEntry.rank) &&
+        Objects.equals(this.bootstrapQ025, leaderboardEntry.bootstrapQ025) &&
+        Objects.equals(this.bootstrapQ975, leaderboardEntry.bootstrapQ975) &&
         Objects.equals(this.createdAt, leaderboardEntry.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, modelId, modelName, license, btScore, voteCount, rank, createdAt);
+    return Objects.hash(id, modelId, modelName, license, btScore, voteCount, rank, bootstrapQ025, bootstrapQ975, createdAt);
   }
 
   @Override
@@ -256,6 +304,8 @@ public class LeaderboardEntryDto {
     sb.append("    btScore: ").append(toIndentedString(btScore)).append("\n");
     sb.append("    voteCount: ").append(toIndentedString(voteCount)).append("\n");
     sb.append("    rank: ").append(toIndentedString(rank)).append("\n");
+    sb.append("    bootstrapQ025: ").append(toIndentedString(bootstrapQ025)).append("\n");
+    sb.append("    bootstrapQ975: ").append(toIndentedString(bootstrapQ975)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -292,6 +342,8 @@ public class LeaderboardEntryDto {
       this.instance.setBtScore(value.btScore);
       this.instance.setVoteCount(value.voteCount);
       this.instance.setRank(value.rank);
+      this.instance.setBootstrapQ025(value.bootstrapQ025);
+      this.instance.setBootstrapQ975(value.bootstrapQ975);
       this.instance.setCreatedAt(value.createdAt);
       return this;
     }
@@ -328,6 +380,16 @@ public class LeaderboardEntryDto {
     
     public LeaderboardEntryDto.Builder rank(Integer rank) {
       this.instance.rank(rank);
+      return this;
+    }
+    
+    public LeaderboardEntryDto.Builder bootstrapQ025(Double bootstrapQ025) {
+      this.instance.bootstrapQ025(bootstrapQ025);
+      return this;
+    }
+    
+    public LeaderboardEntryDto.Builder bootstrapQ975(Double bootstrapQ975) {
+      this.instance.bootstrapQ975(bootstrapQ975);
       return this;
     }
     
