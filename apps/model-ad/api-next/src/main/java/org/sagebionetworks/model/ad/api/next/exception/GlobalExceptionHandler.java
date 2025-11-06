@@ -2,8 +2,6 @@ package org.sagebionetworks.model.ad.api.next.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
-import org.sagebionetworks.model.ad.api.next.api.DiseaseCorrelationApiController;
-import org.sagebionetworks.model.ad.api.next.api.ModelOverviewApiController;
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,16 +9,14 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@RestControllerAdvice(
-  assignableTypes = { ModelOverviewApiController.class, DiseaseCorrelationApiController.class }
-)
+@ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(ModelOverviewNotFoundException.class)
