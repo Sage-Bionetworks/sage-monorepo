@@ -1,4 +1,5 @@
 package org.sagebionetworks.model.ad.api.next.service;
+import org.sagebionetworks.model.ad.api.next.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,7 +38,7 @@ class ModelOverviewApiDelegateImplTest {
 
   @BeforeEach
   void setUp() {
-    ModelOverviewQueryService queryService = new ModelOverviewQueryService(
+    ModelOverviewService queryService = new ModelOverviewService(
       repository,
       new ModelOverviewMapper()
     );

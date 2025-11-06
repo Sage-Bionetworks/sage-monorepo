@@ -1,12 +1,12 @@
-package org.sagebionetworks.model.ad.api.next.service;
+package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
 import java.util.Objects;
-import org.sagebionetworks.model.ad.api.next.api.DiseaseCorrelationApiDelegate;
 import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.service.DiseaseCorrelationService;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +17,12 @@ import org.springframework.util.StringUtils;
 @Service
 public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiDelegate {
 
-  private final DiseaseCorrelationQueryService diseaseCorrelationQueryService;
+  private final DiseaseCorrelationService diseaseCorrelationService;
 
   public DiseaseCorrelationApiDelegateImpl(
-    DiseaseCorrelationQueryService diseaseCorrelationQueryService
+    DiseaseCorrelationService diseaseCorrelationService
   ) {
-    this.diseaseCorrelationQueryService = diseaseCorrelationQueryService;
+    this.diseaseCorrelationService = diseaseCorrelationService;
   }
 
   @Override
@@ -38,7 +38,7 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<DiseaseCorrelationDto> results = diseaseCorrelationQueryService.loadDiseaseCorrelations(
+    List<DiseaseCorrelationDto> results = diseaseCorrelationService.loadDiseaseCorrelations(
       cluster,
       items,
       effectiveFilter

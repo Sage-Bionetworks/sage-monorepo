@@ -1,9 +1,9 @@
-package org.sagebionetworks.model.ad.api.next.service;
+package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
-import org.sagebionetworks.model.ad.api.next.api.ModelOverviewApiDelegate;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
+import org.sagebionetworks.model.ad.api.next.service.ModelOverviewService;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
 
-  private final ModelOverviewQueryService modelOverviewQueryService;
+  private final ModelOverviewService modelOverviewService;
 
-  public ModelOverviewApiDelegateImpl(ModelOverviewQueryService modelOverviewQueryService) {
-    this.modelOverviewQueryService = modelOverviewQueryService;
+  public ModelOverviewApiDelegateImpl(ModelOverviewService modelOverviewService) {
+    this.modelOverviewService = modelOverviewService;
   }
 
   @Override
@@ -29,7 +29,7 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
       : ItemFilterTypeQueryDto.INCLUDE;
     List<String> items = ApiHelper.sanitizeItems(item);
 
-    List<ModelOverviewDto> dtos = modelOverviewQueryService.loadModelOverviews(
+    List<ModelOverviewDto> dtos = modelOverviewService.loadModelOverviews(
       items,
       effectiveFilter
     );

@@ -1,4 +1,5 @@
 package org.sagebionetworks.model.ad.api.next.service;
+import org.sagebionetworks.model.ad.api.next.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -41,7 +42,7 @@ class DiseaseCorrelationApiDelegateImplTest {
 
   @BeforeEach
   void setUp() {
-    DiseaseCorrelationQueryService queryService = new DiseaseCorrelationQueryService(
+    DiseaseCorrelationService queryService = new DiseaseCorrelationService(
       repository,
       new DiseaseCorrelationMapper()
     );

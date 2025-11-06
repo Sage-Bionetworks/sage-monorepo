@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @CacheConfig(cacheNames = "diseaseCorrelation")
-public class DiseaseCorrelationQueryService {
+public class DiseaseCorrelationService {
 
   private final DiseaseCorrelationRepository repository;
   private final DiseaseCorrelationMapper diseaseCorrelationMapper;
 
-  public DiseaseCorrelationQueryService(
+  public DiseaseCorrelationService(
     DiseaseCorrelationRepository repository,
     DiseaseCorrelationMapper diseaseCorrelationMapper
   ) {

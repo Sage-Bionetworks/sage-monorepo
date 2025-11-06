@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @CacheConfig(cacheNames = "modelOverview")
-public class ModelOverviewQueryService {
+public class ModelOverviewService {
 
   private final ModelOverviewRepository repository;
   private final ModelOverviewMapper modelOverviewMapper;
 
-  public ModelOverviewQueryService(
+  public ModelOverviewService(
     ModelOverviewRepository repository,
     ModelOverviewMapper modelOverviewMapper
   ) {
