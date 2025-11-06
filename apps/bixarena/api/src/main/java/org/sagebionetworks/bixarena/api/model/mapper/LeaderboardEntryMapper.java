@@ -20,6 +20,8 @@ public class LeaderboardEntryMapper {
       .btScore(entity.getBtScore().doubleValue())
       .voteCount(entity.getVoteCount())
       .rank(entity.getRank())
+      .bootstrapQ025(entity.getBootstrapQ025().doubleValue())
+      .bootstrapQ975(entity.getBootstrapQ975().doubleValue())
       .createdAt(entity.getCreatedAt())
       .build();
   }
