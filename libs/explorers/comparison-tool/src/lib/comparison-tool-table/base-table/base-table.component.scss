@@ -4,7 +4,11 @@
   .no-results {
     color: #a6a6a6;
     text-align: center;
-    padding: 15px 20px 20px;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid var(--color-gray-300);
   }
 
   .p-datatable-tbody {
