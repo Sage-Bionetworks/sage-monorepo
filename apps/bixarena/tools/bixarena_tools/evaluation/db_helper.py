@@ -275,7 +275,7 @@ def fetch_leaderboard_ids(conn) -> list[str]:
     """
     Fetch all available leaderboard IDs from the database.
 
-    Note: In this context, "ID" actually refers to the slug such as 'overview'.
+    Note: In this context, "ID" actually refers to the slug such as 'overall'.
 
     Args:
         conn: Database connection

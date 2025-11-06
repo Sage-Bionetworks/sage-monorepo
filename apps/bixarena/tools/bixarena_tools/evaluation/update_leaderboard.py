@@ -83,8 +83,8 @@ def main():
     parser.add_argument(
         "--id",
         type=str,
-        default="overview",
-        help="Leaderboard ID to update (default: 'overview')",
+        default="overall",
+        help="Leaderboard ID to update (default: 'overall')",
     )
 
     args = parser.parse_args()
