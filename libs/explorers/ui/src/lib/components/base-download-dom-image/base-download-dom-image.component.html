@@ -19,7 +19,7 @@
     {{ heading() }}
   </div>
   <div class="base-download-dom-image-body">
-    @for (type of types; track type) {
+    @for (type of types(); track type) {
       <div class="base-download-dom-image-option">
         <p-radiobutton
           value="{{ type.value }}"

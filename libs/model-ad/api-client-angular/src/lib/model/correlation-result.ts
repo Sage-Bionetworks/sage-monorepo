@@ -19,5 +19,5 @@ export interface CorrelationResult {
   /**
    * Adjusted p-value
    */
-  adj_p_value: number;
+  adj_p_val: number;
 }

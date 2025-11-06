@@ -25,7 +25,7 @@
     tooltipPosition="top"
     tooltipStyleClass="tooltip-xs"
   >
-    <p-overlaybadge severity="warn" [badgeDisabled]="!hasHiddenColumns()">
+    <p-overlaybadge severity="warn" [badgeDisabled]="!hasUnselectedColumns()">
       <explorers-svg-icon
         imagePath="/explorers-assets/icons/column.svg"
         [width]="20"

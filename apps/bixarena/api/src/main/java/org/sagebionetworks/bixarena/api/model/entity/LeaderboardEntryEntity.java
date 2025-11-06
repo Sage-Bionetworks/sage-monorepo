@@ -52,6 +52,12 @@ public class LeaderboardEntryEntity {
   @Column(name = "rank", nullable = false)
   private Integer rank;
 
+  @Column(name = "bootstrap_q025", nullable = false, precision = 10, scale = 6)
+  private BigDecimal bootstrapQ025;
+
+  @Column(name = "bootstrap_q975", nullable = false, precision = 10, scale = 6)
+  private BigDecimal bootstrapQ975;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;

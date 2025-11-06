@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { Component, input, signal, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, computed, input, signal, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -25,21 +25,29 @@ export class BaseDownloadDomImageComponent {
   buttonLabel = input('Download');
   filename = input.required();
   performDownload = input.required<(fileType: string) => Promise<void>>();
+  hasCsvDownload = input<boolean>(false);
 
   downloadIcon = faDownload;
   spinnerIcon = faSpinner;
 
   selectedType = '.png';
-  types: Type[] = [
-    {
-      value: '.png',
-      label: 'PNG',
-    },
-    {
-      value: '.jpeg',
-      label: 'JPEG',
-    },
-  ];
+  types = computed(() => {
+    const hasCsvType = this.hasCsvDownload();
+    const imageLabelPostfix = hasCsvType ? ' image' : '';
+
+    const imageTypes: Type[] = [
+      {
+        value: '.png',
+        label: `PNG${imageLabelPostfix}`,
+      },
+      {
+        value: '.jpeg',
+        label: `JPEG${imageLabelPostfix}`,
+      },
+    ];
+    const types = hasCsvType ? [...imageTypes, { value: '.csv', label: 'CSV data' }] : imageTypes;
+    return types;
+  });
 
   error = signal('');
   isLoading = signal(false);

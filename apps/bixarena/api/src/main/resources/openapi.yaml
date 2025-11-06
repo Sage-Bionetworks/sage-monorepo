@@ -1699,8 +1699,10 @@ components:
         modelName: GPT-4o
         license: MIT
         createdAt: 2025-08-16T10:30:00Z
+        bootstrapQ025: 887
         modelId: model_456
         btScore: 0.925
+        bootstrapQ975: 1063
         rank: 1
         id: entry_123
         voteCount: 1250
@@ -1722,7 +1724,7 @@ components:
           example: MIT
           type: string
         btScore:
-          description: Primary scoring metric (higher is better)
+          description: Bradley-Terry score - primary ranking metric
           example: 0.925
           format: double
           type: number
@@ -1734,12 +1736,24 @@ components:
           description: Current rank position (1-based)
           example: 1
           type: integer
+        bootstrapQ025:
+          description: Bootstrap confidence interval lower bound (2.5th percentile)
+          example: 887
+          format: double
+          type: number
+        bootstrapQ975:
+          description: Bootstrap confidence interval upper bound (97.5th percentile)
+          example: 1063
+          format: double
+          type: number
         createdAt:
           description: When this entry was created
           example: 2025-08-16T10:30:00Z
           format: date-time
           type: string
       required:
+        - bootstrapQ025
+        - bootstrapQ975
         - btScore
         - createdAt
         - id
@@ -1779,16 +1793,20 @@ components:
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
+            bootstrapQ025: 887
             modelId: model_456
             btScore: 0.925
+            bootstrapQ975: 1063
             rank: 1
             id: entry_123
             voteCount: 1250
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
+            bootstrapQ025: 887
             modelId: model_456
             btScore: 0.925
+            bootstrapQ975: 1063
             rank: 1
             id: entry_123
             voteCount: 1250
@@ -1849,8 +1867,10 @@ components:
         point in time.
       example:
         createdAt: 2025-08-15T10:00:00Z
+        bootstrapQ025: 875
         snapshotId: snapshot_2025-08-15_10-00
         btScore: 0.915
+        bootstrapQ975: 1055
         rank: 2
         voteCount: 1180
       properties:
@@ -1859,7 +1879,8 @@ components:
           example: snapshot_2025-08-15_10-00
           type: string
         btScore:
-          description: Primary scoring metric at this point in time
+          description: Bradley-Terry score - primary ranking metric at this point
+            in time
           example: 0.915
           format: double
           type: number
@@ -1871,12 +1892,24 @@ components:
           description: Rank position at this point in time (1-based)
           example: 2
           type: integer
+        bootstrapQ025:
+          description: Bootstrap confidence interval lower bound (2.5th percentile)
+          example: 875
+          format: double
+          type: number
+        bootstrapQ975:
+          description: Bootstrap confidence interval upper bound (97.5th percentile)
+          example: 1055
+          format: double
+          type: number
         createdAt:
           description: When this snapshot was created
           example: 2025-08-15T10:00:00Z
           format: date-time
           type: string
       required:
+        - bootstrapQ025
+        - bootstrapQ975
         - btScore
         - createdAt
         - rank
@@ -1916,13 +1949,17 @@ components:
         hasNext: true
         history:
           - createdAt: 2025-08-15T10:00:00Z
+            bootstrapQ025: 875
             snapshotId: snapshot_2025-08-15_10-00
             btScore: 0.915
+            bootstrapQ975: 1055
             rank: 2
             voteCount: 1180
           - createdAt: 2025-08-15T10:00:00Z
+            bootstrapQ025: 875
             snapshotId: snapshot_2025-08-15_10-00
             btScore: 0.915
+            bootstrapQ975: 1055
             rank: 2
             voteCount: 1180
         totalElements: 99

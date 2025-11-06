@@ -1,32 +1,34 @@
 <div class="comparison-tool-table" #table>
-  <explorers-comparison-tool-columns [columnWidth]="columnWidth" />
+  <div class="table-header-and-pinned" #tableHeaderAndPinned>
+    <explorers-comparison-tool-columns [columnWidth]="columnWidth" />
 
-  @if (pinnedResultsCount() > 0) {
-    <div class="table-divider table-divider-1">
-      <div class="table-divider-inner">
-        <div id="pinned-genes-header">
-          <span> Pinned Items ({{ pinnedResultsCount() }}/{{ maxPinnedItems() }}) </span>
-        </div>
-        <div class="pinned-items-controls">
-          <button (click)="downloadPinned()" class="csv-download-button">
-            <explorers-svg-icon
-              imagePath="/explorers-assets/icons/download.svg"
-              altText="download"
-              [enableHoverEffects]="true"
+    @if (pinnedResultsCount() > 0) {
+      <div class="table-divider table-divider-1">
+        <div class="table-divider-inner">
+          <div id="pinned-genes-header">
+            <span> Pinned Items ({{ pinnedResultsCount() }}/{{ maxPinnedItems() }}) </span>
+          </div>
+          <div class="pinned-items-controls">
+            <explorers-download-dom-image
+              [target]="tableHeaderAndPinned"
+              [filename]="getPinnedDataFilename()"
+              [hasCsvDownload]="true"
+              [data]="getPinnedDataForCsv()"
+              [buttonLabel]="'Download'"
+              [heading]="'Download all results as:'"
             />
-            Download
-          </button>
-          <button (click)="clearAllPinned()" class="clear-all-button">Clear All</button>
+            <button (click)="clearAllPinned()" class="clear-all-button">Clear All</button>
+          </div>
         </div>
       </div>
-    </div>
-  }
-  <explorers-base-table
-    [data]="pinnedData()"
-    [shouldPaginate]="false"
-    [shouldShowNoDataMessage]="false"
-    [columnWidth]="columnWidth"
-  />
+    }
+    <explorers-base-table
+      [data]="pinnedData()"
+      [shouldPaginate]="false"
+      [shouldShowNoDataMessage]="false"
+      [columnWidth]="columnWidth"
+    />
+  </div>
 
   @if (searchTerm() || hasSelectedFilters()) {
     <div class="table-divider">

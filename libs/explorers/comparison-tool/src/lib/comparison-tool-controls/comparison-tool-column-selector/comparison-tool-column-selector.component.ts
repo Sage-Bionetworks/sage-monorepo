@@ -24,7 +24,7 @@ export class ComparisonToolColumnSelectorComponent {
     this.comparisonToolService.toggleColumn(column);
   }
 
-  hasHiddenColumns() {
-    return this.comparisonToolService.hasHiddenColumns();
+  hasUnselectedColumns() {
+    return this.comparisonToolService.hasUnselectedColumns();
   }
 }

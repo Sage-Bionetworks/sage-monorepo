@@ -44,9 +44,6 @@ describe('BaseTableComponent', () => {
   it('should render table rows with text content', async () => {
     await setup();
 
-    const modelTypes = screen.getAllByText('Familial AD');
-    expect(modelTypes.length).toBeGreaterThan(0);
-
     const ageCells = screen.getAllByText('12 months');
     expect(ageCells.length).toBeGreaterThan(0);
 

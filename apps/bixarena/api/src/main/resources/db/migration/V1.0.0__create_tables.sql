@@ -48,7 +48,8 @@ CREATE TABLE api.leaderboard_entry (
   bt_score DECIMAL(10,6) NOT NULL,
   vote_count INTEGER NOT NULL DEFAULT 0,
   rank INTEGER NOT NULL,
-  secondary_score DECIMAL(10,6),
+  bootstrap_q025 DECIMAL(10,6) NOT NULL,
+  bootstrap_q975 DECIMAL(10,6) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE(leaderboard_id, model_id, snapshot_id)
 );
