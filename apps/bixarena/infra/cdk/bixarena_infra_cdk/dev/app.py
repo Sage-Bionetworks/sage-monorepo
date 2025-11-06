@@ -15,6 +15,7 @@ from bixarena_infra_cdk.shared.stacks.api_gateway_stack import ApiGatewayStack
 from bixarena_infra_cdk.shared.stacks.api_service_stack import ApiServiceStack
 from bixarena_infra_cdk.shared.stacks.app_service_stack import AppServiceStack
 from bixarena_infra_cdk.shared.stacks.auth_service_stack import AuthServiceStack
+from bixarena_infra_cdk.shared.stacks.bastion_stack import BastionStack
 from bixarena_infra_cdk.shared.stacks.bucket_stack import BucketStack
 from bixarena_infra_cdk.shared.stacks.database_stack import DatabaseStack
 from bixarena_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
@@ -203,6 +204,22 @@ def main() -> None:
         environment=environment,
         developer_name=developer_name,
         description=f"S3 buckets for BixArena {environment} environment",
+    )
+
+    # Create bastion stack for database access (dev environment only)
+    # This creates an ECS service with 1 task for Session Manager port forwarding
+    # Note: Dependencies are automatic via CloudFormation references
+    # (database security group, etc.). Don't add manual add_dependency() calls
+    # to avoid cyclic dependencies with security group rules.
+    BastionStack(
+        app,
+        f"{stack_prefix}-bastion",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        database_security_group=database_stack.security_group,
+        description=f"Database bastion for BixArena {environment} environment",
     )
 
     app.synth()
