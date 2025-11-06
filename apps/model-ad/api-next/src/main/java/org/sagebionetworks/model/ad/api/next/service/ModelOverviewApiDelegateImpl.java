@@ -4,7 +4,7 @@ import java.util.List;
 import org.sagebionetworks.model.ad.api.next.api.ModelOverviewApiDelegate;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
-import org.sagebionetworks.model.ad.api.next.util.ComparisonToolApiHelper;
+import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -27,7 +27,7 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
     ItemFilterTypeQueryDto effectiveFilter = itemFilterType != null
       ? itemFilterType
       : ItemFilterTypeQueryDto.INCLUDE;
-    List<String> items = ComparisonToolApiHelper.sanitizeItems(item);
+    List<String> items = ApiHelper.sanitizeItems(item);
 
     List<ModelOverviewDto> dtos = modelOverviewQueryService.loadModelOverviews(
       items,
@@ -35,7 +35,7 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
     );
     
     return ResponseEntity.ok()
-      .headers(ComparisonToolApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
+      .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
       .body(dtos);
   }
 }

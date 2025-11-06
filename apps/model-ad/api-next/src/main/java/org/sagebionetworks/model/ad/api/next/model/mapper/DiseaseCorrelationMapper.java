@@ -2,15 +2,14 @@ package org.sagebionetworks.model.ad.api.next.model.mapper;
 
 import java.math.BigDecimal;
 import java.util.List;
+import org.sagebionetworks.model.ad.api.next.exception.DataIntegrityException;
 import org.sagebionetworks.model.ad.api.next.model.document.CorrelationResultDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.CorrelationResultDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class DiseaseCorrelationMapper {
@@ -47,16 +46,12 @@ public class DiseaseCorrelationMapper {
 
   private SexDto toSexDto(@Nullable String value) {
     if (value == null) {
-      throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        "Missing sex value in disease correlation record"
-      );
+      throw new DataIntegrityException("Missing sex value in disease correlation record");
     }
     try {
       return SexDto.fromValue(value);
     } catch (IllegalArgumentException ex) {
-      throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR,
+      throw new DataIntegrityException(
         "Unexpected sex value '" + value + "' in disease correlation record",
         ex
       );

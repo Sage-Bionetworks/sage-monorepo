@@ -12,15 +12,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
+import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
+import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.util.ComparisonToolApiHelper;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.server.ResponseStatusException;
 
 class DiseaseCorrelationApiControllerWebTest {
 
@@ -41,7 +41,7 @@ class DiseaseCorrelationApiControllerWebTest {
       }
     );
     mockMvc = MockMvcBuilders.standaloneSetup(controller)
-      .setControllerAdvice(new ComparisonToolApiExceptionHandler())
+      .setControllerAdvice(new GlobalExceptionHandler())
       .setConversionService(conversionService)
       .build();
   }
@@ -55,7 +55,7 @@ class DiseaseCorrelationApiControllerWebTest {
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
       .andExpect(jsonPath("$.title").value("Bad Request"))
       .andExpect(jsonPath("$.status").value(400))
-      .andExpect(jsonPath("$.detail").value(ComparisonToolApiHelper.CATEGORY_REQUIREMENT_MESSAGE))
+      .andExpect(jsonPath("$.detail").value(ErrorConstants.CATEGORY_REQUIREMENT_MESSAGE))
       .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
   }
 
@@ -82,13 +82,10 @@ class DiseaseCorrelationApiControllerWebTest {
   }
 
   @Test
-  @DisplayName("should return bad request problem when delegate raises ResponseStatusException")
-  void shouldReturnBadRequestProblemWhenDelegateRaisesResponseStatusException() throws Exception {
+  @DisplayName("should return bad request problem when delegate raises InvalidObjectIdException")
+  void shouldReturnBadRequestProblemWhenDelegateRaisesInvalidObjectIdException() throws Exception {
     when(delegate.getDiseaseCorrelations(anyList(), any(), any())).thenThrow(
-      new ResponseStatusException(
-        HttpStatus.BAD_REQUEST,
-        "Query parameter item must contain valid ObjectId values"
-      )
+      new InvalidObjectIdException("not-an-id")
     );
 
     mockMvc
@@ -100,11 +97,9 @@ class DiseaseCorrelationApiControllerWebTest {
       )
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-      .andExpect(jsonPath("$.title").value("Bad Request"))
+      .andExpect(jsonPath("$.title").value("Invalid Request Parameter"))
       .andExpect(jsonPath("$.status").value(400))
-      .andExpect(
-        jsonPath("$.detail").value("Query parameter item must contain valid ObjectId values")
-      )
+      .andExpect(jsonPath("$.detail").value("Invalid ObjectId format: not-an-id"))
       .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
   }
 }

@@ -9,7 +9,7 @@ import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.DiseaseCorrelationMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.DiseaseCorrelationRepository;
-import org.sagebionetworks.model.ad.api.next.util.ComparisonToolApiHelper;
+import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class DiseaseCorrelationQueryService {
   }
 
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ComparisonToolApiHelper)" +
+    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('diseaseCorrelation', #filterType, #items, #cluster)"
   )
   public List<DiseaseCorrelationDto> loadDiseaseCorrelations(
@@ -49,13 +49,13 @@ public class DiseaseCorrelationQueryService {
       if (items.isEmpty()) {
         return List.of();
       }
-      List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
+      List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
       documents = repository.findByClusterAndIdIn(cluster, objectIds);
     } else {
       if (items.isEmpty()) {
         documents = repository.findByCluster(cluster);
       } else {
-        List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
+        List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
         documents = repository.findByClusterAndIdNotIn(cluster, objectIds);
       }
     }

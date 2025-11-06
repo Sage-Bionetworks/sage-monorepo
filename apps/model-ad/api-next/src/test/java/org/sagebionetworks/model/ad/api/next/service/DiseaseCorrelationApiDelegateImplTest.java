@@ -17,6 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
+import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
+import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.document.CorrelationResultDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
@@ -27,7 +30,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
 class DiseaseCorrelationApiDelegateImplTest {
@@ -51,14 +53,11 @@ class DiseaseCorrelationApiDelegateImplTest {
   void shouldThrowBadRequestWhenCategoryMissingSubcategory() {
     assertThatThrownBy(() ->
       delegate.getDiseaseCorrelations(
-        List.of(DiseaseCorrelationApiDelegateImpl.SUPPORTED_CATEGORY),
+        List.of(ErrorConstants.SUPPORTED_CATEGORY),
         null,
         ItemFilterTypeQueryDto.INCLUDE
       )
-    )
-      .isInstanceOf(ResponseStatusException.class)
-      .extracting(ex -> ((ResponseStatusException) ex).getStatusCode())
-      .isEqualTo(HttpStatus.BAD_REQUEST);
+    ).isInstanceOf(InvalidCategoryException.class);
 
     verifyNoInteractions(repository);
   }
@@ -72,10 +71,7 @@ class DiseaseCorrelationApiDelegateImplTest {
         null,
         ItemFilterTypeQueryDto.INCLUDE
       )
-    )
-      .isInstanceOf(ResponseStatusException.class)
-      .extracting(ex -> ((ResponseStatusException) ex).getStatusCode())
-      .isEqualTo(HttpStatus.BAD_REQUEST);
+    ).isInstanceOf(InvalidCategoryException.class);
 
     verifyNoInteractions(repository);
   }
@@ -84,7 +80,7 @@ class DiseaseCorrelationApiDelegateImplTest {
   @DisplayName("should return empty list when include filter has no items")
   void shouldReturnEmptyListWhenIncludeFilterHasNoItems() {
     ResponseEntity<List<DiseaseCorrelationDto>> response = delegate.getDiseaseCorrelations(
-      List.of(DiseaseCorrelationApiDelegateImpl.SUPPORTED_CATEGORY, "Cluster A"),
+      List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster A"),
       null,
       ItemFilterTypeQueryDto.INCLUDE
     );
@@ -112,7 +108,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     );
 
     ResponseEntity<List<DiseaseCorrelationDto>> response = delegate.getDiseaseCorrelations(
-      List.of(DiseaseCorrelationApiDelegateImpl.SUPPORTED_CATEGORY, "Cluster A"),
+      List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster A"),
       List.of(objectId.toHexString()),
       ItemFilterTypeQueryDto.INCLUDE
     );
@@ -137,7 +133,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     when(repository.findByCluster("Cluster B")).thenReturn(List.of(buildDocument(objectId)));
 
     ResponseEntity<List<DiseaseCorrelationDto>> response = delegate.getDiseaseCorrelations(
-      List.of(DiseaseCorrelationApiDelegateImpl.SUPPORTED_CATEGORY, "Cluster B"),
+      List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster B"),
       List.of(),
       ItemFilterTypeQueryDto.EXCLUDE
     );
@@ -152,14 +148,11 @@ class DiseaseCorrelationApiDelegateImplTest {
   void shouldThrowBadRequestWhenItemsContainInvalidObjectId() {
     assertThatThrownBy(() ->
       delegate.getDiseaseCorrelations(
-        List.of(DiseaseCorrelationApiDelegateImpl.SUPPORTED_CATEGORY, "Cluster A"),
+        List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster A"),
         List.of("not-an-id"),
         ItemFilterTypeQueryDto.INCLUDE
       )
-    )
-      .isInstanceOf(ResponseStatusException.class)
-      .extracting(ex -> ((ResponseStatusException) ex).getStatusCode())
-      .isEqualTo(HttpStatus.BAD_REQUEST);
+    ).isInstanceOf(InvalidObjectIdException.class);
 
     verifyNoInteractions(repository);
   }
@@ -175,7 +168,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     );
 
     ResponseEntity<List<DiseaseCorrelationDto>> response = delegate.getDiseaseCorrelations(
-      List.of(DiseaseCorrelationApiDelegateImpl.SUPPORTED_CATEGORY, "Cluster C"),
+      List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster C"),
       List.of(objectId.toHexString()),
       ItemFilterTypeQueryDto.INCLUDE
     );
@@ -198,7 +191,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     );
 
     ResponseEntity<List<DiseaseCorrelationDto>> response = delegate.getDiseaseCorrelations(
-      List.of(DiseaseCorrelationApiDelegateImpl.SUPPORTED_CATEGORY, "Cluster D"),
+      List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster D"),
       List.of(excludedId.toHexString()),
       ItemFilterTypeQueryDto.EXCLUDE
     );

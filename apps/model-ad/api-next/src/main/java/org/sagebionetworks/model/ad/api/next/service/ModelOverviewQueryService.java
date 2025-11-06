@@ -9,7 +9,7 @@ import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
-import org.sagebionetworks.model.ad.api.next.util.ComparisonToolApiHelper;
+import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class ModelOverviewQueryService {
   }
 
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ComparisonToolApiHelper)" +
+    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('modelOverview', #filterType, #items)"
   )
   public List<ModelOverviewDto> loadModelOverviews(
@@ -48,13 +48,13 @@ public class ModelOverviewQueryService {
       if (items.isEmpty()) {
         return List.of();
       }
-      List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
+      List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
       documents = repository.findByIdIn(objectIds);
     } else {
       if (items.isEmpty()) {
         documents = repository.findAll();
       } else {
-        List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
+        List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
         documents = repository.findByIdNotIn(objectIds);
       }
     }

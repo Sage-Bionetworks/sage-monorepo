@@ -1,26 +1,20 @@
 package org.sagebionetworks.model.ad.api.next.util;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import org.bson.types.ObjectId;
+import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
-import org.springframework.web.server.ResponseStatusException;
 
-public final class ComparisonToolApiHelper {
+public final class ApiHelper {
 
   private static final String CACHE_CONTROL_VALUE = "no-cache, no-store, must-revalidate";
-  public static final String CATEGORY_REQUIREMENT_MESSAGE =
-    "Query parameter category must repeat twice (e.g. ?category=CONSENSUS NETWORK MODULES" +
-    "&category=subcategory) and each value must be a string";
 
-  private ComparisonToolApiHelper() {}
+  private ApiHelper() {}
 
   public static HttpHeaders createNoCacheHeaders(MediaType mediaType) {
     HttpHeaders headers = new HttpHeaders();
@@ -42,8 +36,7 @@ public final class ComparisonToolApiHelper {
     try {
       return items.stream().map(ObjectId::new).toList();
     } catch (IllegalArgumentException ex) {
-      throw new ResponseStatusException(
-        HttpStatus.BAD_REQUEST,
+      throw new InvalidObjectIdException(
         "Query parameter item must contain valid ObjectId values",
         ex
       );
@@ -67,19 +60,5 @@ public final class ComparisonToolApiHelper {
     }
 
     return builder.toString();
-  }
-
-  public static Map<String, Object> buildProblemJson(
-    HttpStatus status,
-    String title,
-    String detail,
-    String instance
-  ) {
-    Map<String, Object> body = new LinkedHashMap<>();
-    body.put("title", title);
-    body.put("status", status.value());
-    body.put("detail", detail);
-    body.put("instance", instance);
-    return body;
   }
 }

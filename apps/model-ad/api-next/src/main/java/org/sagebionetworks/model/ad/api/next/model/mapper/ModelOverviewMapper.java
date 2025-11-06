@@ -1,14 +1,13 @@
 package org.sagebionetworks.model.ad.api.next.model.mapper;
 
 import java.util.List;
+import org.sagebionetworks.model.ad.api.next.exception.DataIntegrityException;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewLinkDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewLinkDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class ModelOverviewMapper {
@@ -53,10 +52,7 @@ public class ModelOverviewMapper {
 
   private ModelOverviewLinkDto toRequiredLinkDto(@Nullable ModelOverviewLinkDocument linkDocument) {
     if (linkDocument == null) {
-      throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        "Required link data is missing from the database"
-      );
+      throw new DataIntegrityException("Required link data is missing from the database");
     }
     return toNullableLinkDto(linkDocument);
   }

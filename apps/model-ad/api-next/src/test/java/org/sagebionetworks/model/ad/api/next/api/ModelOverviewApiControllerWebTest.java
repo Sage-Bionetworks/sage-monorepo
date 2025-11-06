@@ -12,14 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
+import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.server.ResponseStatusException;
 
 class ModelOverviewApiControllerWebTest {
 
@@ -40,7 +40,7 @@ class ModelOverviewApiControllerWebTest {
       }
     );
     mockMvc = MockMvcBuilders.standaloneSetup(controller)
-      .setControllerAdvice(new ComparisonToolApiExceptionHandler())
+      .setControllerAdvice(new GlobalExceptionHandler())
       .setConversionService(conversionService)
       .build();
   }
@@ -63,24 +63,19 @@ class ModelOverviewApiControllerWebTest {
   }
 
   @Test
-  @DisplayName("should return bad request problem when delegate raises ResponseStatusException")
-  void shouldReturnBadRequestProblemWhenDelegateRaisesResponseStatusException() throws Exception {
+  @DisplayName("should return bad request problem when delegate raises InvalidObjectIdException")
+  void shouldReturnBadRequestProblemWhenDelegateRaisesInvalidObjectIdException() throws Exception {
     when(delegate.getModelOverviews(anyList(), any())).thenThrow(
-      new ResponseStatusException(
-        HttpStatus.BAD_REQUEST,
-        "Query parameter item must contain valid ObjectId values"
-      )
+      new InvalidObjectIdException("not-an-id")
     );
 
     mockMvc
       .perform(get("/v1/comparison-tools/model-overview").param("item", "not-an-id"))
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-      .andExpect(jsonPath("$.title").value("Bad Request"))
+      .andExpect(jsonPath("$.title").value("Invalid Request Parameter"))
       .andExpect(jsonPath("$.status").value(400))
-      .andExpect(
-        jsonPath("$.detail").value("Query parameter item must contain valid ObjectId values")
-      )
+      .andExpect(jsonPath("$.detail").value("Invalid ObjectId format: not-an-id"))
       .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/model-overview"));
   }
 }
