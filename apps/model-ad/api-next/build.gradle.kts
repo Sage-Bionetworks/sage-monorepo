@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+  implementation(libs.caffeine)
   implementation(libs.findbugs.jsr305)
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
