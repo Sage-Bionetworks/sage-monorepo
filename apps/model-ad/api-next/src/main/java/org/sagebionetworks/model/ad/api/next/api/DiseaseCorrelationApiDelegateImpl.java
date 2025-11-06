@@ -8,22 +8,18 @@ import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.service.DiseaseCorrelationService;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-@Service
+@Component
+@RequiredArgsConstructor
 public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiDelegate {
 
   private final DiseaseCorrelationService diseaseCorrelationService;
-
-  public DiseaseCorrelationApiDelegateImpl(
-    DiseaseCorrelationService diseaseCorrelationService
-  ) {
-    this.diseaseCorrelationService = diseaseCorrelationService;
-  }
 
   @Override
   public ResponseEntity<List<DiseaseCorrelationDto>> getDiseaseCorrelations(

@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.service.ModelOverviewService;
@@ -8,16 +9,13 @@ import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
+@RequiredArgsConstructor
 public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
 
   private final ModelOverviewService modelOverviewService;
-
-  public ModelOverviewApiDelegateImpl(ModelOverviewService modelOverviewService) {
-    this.modelOverviewService = modelOverviewService;
-  }
 
   @Override
   public ResponseEntity<List<ModelOverviewDto>> getModelOverviews(

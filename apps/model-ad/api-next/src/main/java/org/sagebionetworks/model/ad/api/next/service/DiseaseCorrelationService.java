@@ -3,6 +3,8 @@ package org.sagebionetworks.model.ad.api.next.service;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
@@ -14,24 +16,18 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 @CacheConfig(cacheNames = "diseaseCorrelation")
 public class DiseaseCorrelationService {
 
   private final DiseaseCorrelationRepository repository;
   private final DiseaseCorrelationMapper diseaseCorrelationMapper;
 
-  public DiseaseCorrelationService(
-    DiseaseCorrelationRepository repository,
-    DiseaseCorrelationMapper diseaseCorrelationMapper
-  ) {
-    this.repository = repository;
-    this.diseaseCorrelationMapper = diseaseCorrelationMapper;
-  }
-
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
-    ".buildCacheKey('diseaseCorrelation', #filterType, #items, #cluster)"
+    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)"
+      + ".buildCacheKey('diseaseCorrelation', #filterType, #items, #cluster)"
   )
   public List<DiseaseCorrelationDto> loadDiseaseCorrelations(
     String cluster,

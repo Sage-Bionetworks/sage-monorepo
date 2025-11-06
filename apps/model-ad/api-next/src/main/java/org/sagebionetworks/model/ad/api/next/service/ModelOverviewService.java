@@ -3,6 +3,8 @@ package org.sagebionetworks.model.ad.api.next.service;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -14,24 +16,18 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 @CacheConfig(cacheNames = "modelOverview")
 public class ModelOverviewService {
 
   private final ModelOverviewRepository repository;
   private final ModelOverviewMapper modelOverviewMapper;
 
-  public ModelOverviewService(
-    ModelOverviewRepository repository,
-    ModelOverviewMapper modelOverviewMapper
-  ) {
-    this.repository = repository;
-    this.modelOverviewMapper = modelOverviewMapper;
-  }
-
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
-    ".buildCacheKey('modelOverview', #filterType, #items)"
+    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)"
+      + ".buildCacheKey('modelOverview', #filterType, #items)"
   )
   public List<ModelOverviewDto> loadModelOverviews(
     List<String> items,
