@@ -26,19 +26,19 @@ properties:
     description: Age of the model
   sex:
     $ref: './Sex.yaml'
+  IFG:
+    $ref: './CorrelationResult.yaml'
+  PHG:
+    $ref: './CorrelationResult.yaml'
+  TCX:
+    $ref: './CorrelationResult.yaml'
   CBE:
     $ref: './CorrelationResult.yaml'
   DLPFC:
     $ref: './CorrelationResult.yaml'
   FP:
     $ref: './CorrelationResult.yaml'
-  IFG:
-    $ref: './CorrelationResult.yaml'
-  PHG:
-    $ref: './CorrelationResult.yaml'
   STG:
-    $ref: './CorrelationResult.yaml'
-  TCX:
     $ref: './CorrelationResult.yaml'
 required:
   - _id

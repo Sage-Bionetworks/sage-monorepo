@@ -47,19 +47,19 @@ public class DiseaseCorrelationDto {
 
   private SexDto sex;
 
+  private @Nullable CorrelationResultDto IFG;
+
+  private @Nullable CorrelationResultDto PHG;
+
+  private @Nullable CorrelationResultDto TCX;
+
   private @Nullable CorrelationResultDto CBE;
 
   private @Nullable CorrelationResultDto DLPFC;
 
   private @Nullable CorrelationResultDto FP;
 
-  private @Nullable CorrelationResultDto IFG;
-
-  private @Nullable CorrelationResultDto PHG;
-
   private @Nullable CorrelationResultDto STG;
-
-  private @Nullable CorrelationResultDto TCX;
 
   public DiseaseCorrelationDto() {
     super();
@@ -247,6 +247,66 @@ public class DiseaseCorrelationDto {
     this.sex = sex;
   }
 
+  public DiseaseCorrelationDto IFG(@Nullable CorrelationResultDto IFG) {
+    this.IFG = IFG;
+    return this;
+  }
+
+  /**
+   * Get IFG
+   * @return IFG
+   */
+  @Valid 
+  @Schema(name = "IFG", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("IFG")
+  public @Nullable CorrelationResultDto getIFG() {
+    return IFG;
+  }
+
+  public void setIFG(@Nullable CorrelationResultDto IFG) {
+    this.IFG = IFG;
+  }
+
+  public DiseaseCorrelationDto PHG(@Nullable CorrelationResultDto PHG) {
+    this.PHG = PHG;
+    return this;
+  }
+
+  /**
+   * Get PHG
+   * @return PHG
+   */
+  @Valid 
+  @Schema(name = "PHG", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("PHG")
+  public @Nullable CorrelationResultDto getPHG() {
+    return PHG;
+  }
+
+  public void setPHG(@Nullable CorrelationResultDto PHG) {
+    this.PHG = PHG;
+  }
+
+  public DiseaseCorrelationDto TCX(@Nullable CorrelationResultDto TCX) {
+    this.TCX = TCX;
+    return this;
+  }
+
+  /**
+   * Get TCX
+   * @return TCX
+   */
+  @Valid 
+  @Schema(name = "TCX", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("TCX")
+  public @Nullable CorrelationResultDto getTCX() {
+    return TCX;
+  }
+
+  public void setTCX(@Nullable CorrelationResultDto TCX) {
+    this.TCX = TCX;
+  }
+
   public DiseaseCorrelationDto CBE(@Nullable CorrelationResultDto CBE) {
     this.CBE = CBE;
     return this;
@@ -307,46 +367,6 @@ public class DiseaseCorrelationDto {
     this.FP = FP;
   }
 
-  public DiseaseCorrelationDto IFG(@Nullable CorrelationResultDto IFG) {
-    this.IFG = IFG;
-    return this;
-  }
-
-  /**
-   * Get IFG
-   * @return IFG
-   */
-  @Valid 
-  @Schema(name = "IFG", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("IFG")
-  public @Nullable CorrelationResultDto getIFG() {
-    return IFG;
-  }
-
-  public void setIFG(@Nullable CorrelationResultDto IFG) {
-    this.IFG = IFG;
-  }
-
-  public DiseaseCorrelationDto PHG(@Nullable CorrelationResultDto PHG) {
-    this.PHG = PHG;
-    return this;
-  }
-
-  /**
-   * Get PHG
-   * @return PHG
-   */
-  @Valid 
-  @Schema(name = "PHG", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("PHG")
-  public @Nullable CorrelationResultDto getPHG() {
-    return PHG;
-  }
-
-  public void setPHG(@Nullable CorrelationResultDto PHG) {
-    this.PHG = PHG;
-  }
-
   public DiseaseCorrelationDto STG(@Nullable CorrelationResultDto STG) {
     this.STG = STG;
     return this;
@@ -367,26 +387,6 @@ public class DiseaseCorrelationDto {
     this.STG = STG;
   }
 
-  public DiseaseCorrelationDto TCX(@Nullable CorrelationResultDto TCX) {
-    this.TCX = TCX;
-    return this;
-  }
-
-  /**
-   * Get TCX
-   * @return TCX
-   */
-  @Valid 
-  @Schema(name = "TCX", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("TCX")
-  public @Nullable CorrelationResultDto getTCX() {
-    return TCX;
-  }
-
-  public void setTCX(@Nullable CorrelationResultDto TCX) {
-    this.TCX = TCX;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -404,18 +404,18 @@ public class DiseaseCorrelationDto {
         Objects.equals(this.cluster, diseaseCorrelation.cluster) &&
         Objects.equals(this.age, diseaseCorrelation.age) &&
         Objects.equals(this.sex, diseaseCorrelation.sex) &&
+        Objects.equals(this.IFG, diseaseCorrelation.IFG) &&
+        Objects.equals(this.PHG, diseaseCorrelation.PHG) &&
+        Objects.equals(this.TCX, diseaseCorrelation.TCX) &&
         Objects.equals(this.CBE, diseaseCorrelation.CBE) &&
         Objects.equals(this.DLPFC, diseaseCorrelation.DLPFC) &&
         Objects.equals(this.FP, diseaseCorrelation.FP) &&
-        Objects.equals(this.IFG, diseaseCorrelation.IFG) &&
-        Objects.equals(this.PHG, diseaseCorrelation.PHG) &&
-        Objects.equals(this.STG, diseaseCorrelation.STG) &&
-        Objects.equals(this.TCX, diseaseCorrelation.TCX);
+        Objects.equals(this.STG, diseaseCorrelation.STG);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, matchedControl, modelType, modifiedGenes, cluster, age, sex, CBE, DLPFC, FP, IFG, PHG, STG, TCX);
+    return Objects.hash(id, name, matchedControl, modelType, modifiedGenes, cluster, age, sex, IFG, PHG, TCX, CBE, DLPFC, FP, STG);
   }
 
   @Override
@@ -430,13 +430,13 @@ public class DiseaseCorrelationDto {
     sb.append("    cluster: ").append(toIndentedString(cluster)).append("\n");
     sb.append("    age: ").append(toIndentedString(age)).append("\n");
     sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
+    sb.append("    IFG: ").append(toIndentedString(IFG)).append("\n");
+    sb.append("    PHG: ").append(toIndentedString(PHG)).append("\n");
+    sb.append("    TCX: ").append(toIndentedString(TCX)).append("\n");
     sb.append("    CBE: ").append(toIndentedString(CBE)).append("\n");
     sb.append("    DLPFC: ").append(toIndentedString(DLPFC)).append("\n");
     sb.append("    FP: ").append(toIndentedString(FP)).append("\n");
-    sb.append("    IFG: ").append(toIndentedString(IFG)).append("\n");
-    sb.append("    PHG: ").append(toIndentedString(PHG)).append("\n");
     sb.append("    STG: ").append(toIndentedString(STG)).append("\n");
-    sb.append("    TCX: ").append(toIndentedString(TCX)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -473,13 +473,13 @@ public class DiseaseCorrelationDto {
       this.instance.setCluster(value.cluster);
       this.instance.setAge(value.age);
       this.instance.setSex(value.sex);
+      this.instance.setIFG(value.IFG);
+      this.instance.setPHG(value.PHG);
+      this.instance.setTCX(value.TCX);
       this.instance.setCBE(value.CBE);
       this.instance.setDLPFC(value.DLPFC);
       this.instance.setFP(value.FP);
-      this.instance.setIFG(value.IFG);
-      this.instance.setPHG(value.PHG);
       this.instance.setSTG(value.STG);
-      this.instance.setTCX(value.TCX);
       return this;
     }
 
@@ -523,6 +523,21 @@ public class DiseaseCorrelationDto {
       return this;
     }
     
+    public DiseaseCorrelationDto.Builder IFG(CorrelationResultDto IFG) {
+      this.instance.IFG(IFG);
+      return this;
+    }
+    
+    public DiseaseCorrelationDto.Builder PHG(CorrelationResultDto PHG) {
+      this.instance.PHG(PHG);
+      return this;
+    }
+    
+    public DiseaseCorrelationDto.Builder TCX(CorrelationResultDto TCX) {
+      this.instance.TCX(TCX);
+      return this;
+    }
+    
     public DiseaseCorrelationDto.Builder CBE(CorrelationResultDto CBE) {
       this.instance.CBE(CBE);
       return this;
@@ -538,23 +553,8 @@ public class DiseaseCorrelationDto {
       return this;
     }
     
-    public DiseaseCorrelationDto.Builder IFG(CorrelationResultDto IFG) {
-      this.instance.IFG(IFG);
-      return this;
-    }
-    
-    public DiseaseCorrelationDto.Builder PHG(CorrelationResultDto PHG) {
-      this.instance.PHG(PHG);
-      return this;
-    }
-    
     public DiseaseCorrelationDto.Builder STG(CorrelationResultDto STG) {
       this.instance.STG(STG);
-      return this;
-    }
-    
-    public DiseaseCorrelationDto.Builder TCX(CorrelationResultDto TCX) {
-      this.instance.TCX(TCX);
       return this;
     }
     

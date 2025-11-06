@@ -413,19 +413,19 @@ components:
           type: string
         sex:
           $ref: '#/components/schemas/Sex'
+        IFG:
+          $ref: '#/components/schemas/CorrelationResult'
+        PHG:
+          $ref: '#/components/schemas/CorrelationResult'
+        TCX:
+          $ref: '#/components/schemas/CorrelationResult'
         CBE:
           $ref: '#/components/schemas/CorrelationResult'
         DLPFC:
           $ref: '#/components/schemas/CorrelationResult'
         FP:
           $ref: '#/components/schemas/CorrelationResult'
-        IFG:
-          $ref: '#/components/schemas/CorrelationResult'
-        PHG:
-          $ref: '#/components/schemas/CorrelationResult'
         STG:
-          $ref: '#/components/schemas/CorrelationResult'
-        TCX:
           $ref: '#/components/schemas/CorrelationResult'
       required:
         - _id
