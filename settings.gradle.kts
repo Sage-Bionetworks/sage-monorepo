@@ -3,9 +3,6 @@ rootProject.name = "sagebionetworks"
 // Include the Agora projects as submodules
 include(":agora-api-next")
 
-// Include the Model-AD projects as submodules
-include(":model-ad-api-next")
-
 // Include the AMP-ALS projects as submodules
 include(":amp-als-app-config-data")
 include(":amp-als-dataset-service")
@@ -15,6 +12,9 @@ include(":amp-als-user-service")
 include(":bixarena-api-gateway")
 include(":bixarena-api")
 include(":bixarena-auth-service")
+
+// Include the Model-AD projects as submodules
+include(":model-ad-api-next")
 
 // Include the OpenChallenges projects as submodules
 include(":openchallenges-api-client-java")
@@ -30,13 +30,13 @@ include(":sagebionetworks-util")
 
 // Set the project directories
 project(":agora-api-next").projectDir = file("apps/agora/api-next")
-project(":model-ad-api-next").projectDir = file("apps/model-ad/api-next")
 project(":amp-als-app-config-data").projectDir = file("libs/amp-als/app-config-data")
 project(":amp-als-dataset-service").projectDir = file("apps/amp-als/dataset-service")
 project(":amp-als-user-service").projectDir = file("apps/amp-als/user-service")
 project(":bixarena-api-gateway").projectDir = file("apps/bixarena/api-gateway")
 project(":bixarena-api").projectDir = file("apps/bixarena/api")
 project(":bixarena-auth-service").projectDir = file("apps/bixarena/auth-service")
+project(":model-ad-api-next").projectDir = file("apps/model-ad/api-next")
 project(":openchallenges-api-client-java").projectDir = file("libs/openchallenges/api-client-java")
 project(":openchallenges-api-gateway").projectDir = file("apps/openchallenges/api-gateway")
 project(":openchallenges-auth-service").projectDir = file("apps/openchallenges/auth-service")

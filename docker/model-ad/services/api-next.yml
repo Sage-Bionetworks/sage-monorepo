@@ -1,6 +1,6 @@
 services:
   model-ad-api-next:
-    image: ghcr.io/sage-bionetworks/model-ad-api-next:${MODEL_AD_API_JAVA_VERSION:-local}
+    image: ghcr.io/sage-bionetworks/model-ad-api-next:${MODEL_AD_VERSION:-local}
     container_name: model-ad-api-next
     restart: always
     env_file:
