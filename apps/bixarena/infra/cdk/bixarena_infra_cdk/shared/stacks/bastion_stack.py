@@ -92,11 +92,11 @@ class BastionStack(cdk.Stack):
             removal_policy=cdk.RemovalPolicy.DESTROY,
         )
 
-        # Add container - simple Alpine container that just sleeps
-        # We use this as a jump host for Session Manager port forwarding
+        # Add container - lightweight container for ECS Exec port forwarding
+        # ECS Exec is handled by the ECS agent, not by installing SSM agent
         task_definition.add_container(
             "bastion",
-            # Use minimal Alpine image - smallest and cheapest
+            # Use Alpine - minimal and lightweight
             image=ecs.ContainerImage.from_registry(
                 "public.ecr.aws/docker/library/alpine:latest"
             ),
@@ -104,7 +104,7 @@ class BastionStack(cdk.Stack):
                 stream_prefix="bastion",
                 log_group=log_group,
             ),
-            # Just keep the container alive - Session Manager handles port forwarding
+            # Keep container alive - ECS Exec handles Session Manager
             command=["/bin/sh", "-c", "while true; do sleep 3600; done"],
         )
 
