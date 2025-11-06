@@ -83,6 +83,7 @@ def main() -> None:
     valkey_stack.add_dependency(vpc_stack)
 
     # Create ALB stack (depends on VPC)
+    # Note: ALB must be created before app/gateway services can attach to it
     alb_stack = AlbStack(
         app,
         f"{stack_prefix}-alb",

@@ -52,28 +52,27 @@ class AppServiceStack(cdk.Stack):
         base_url = fqdn if fqdn else alb_dns_name
         protocol = "https" if use_https else "http"
 
-        # Container image
-        # TEMPORARY: Using nginx for testing - replace with app when ready
-        # image = f"ghcr.io/sage-bionetworks/bixarena-app:{app_version}"
-        image = "nginx:alpine"
+        # Container image - BixArena Gradio app
+        image = f"ghcr.io/sage-bionetworks/bixarena-app:{app_version}"
 
-        # Environment variables for the app container
-        # Based on the original CDK app configuration
+        # Environment variables for the Gradio app container
+        # The app needs access to auth and API services through the gateway
         container_env = {
-            "API_DOCS_URL": f"{protocol}://{base_url}/api-docs",
+            # Server configuration
+            "APP_HOST": "127.0.0.1",
+            "APP_PORT": "8100",
             "APP_VERSION": app_version,
-            "CSR_API_URL": f"{protocol}://{base_url}/api/v1",
-            "DATA_UPDATED_ON": "2025-06-16",
-            "ENVIRONMENT": environment,
-            "GOOGLE_TAG_MANAGER_ID": "GTM-NBR5XD8C",
-            # SSR_API_URL will be updated later when API Gateway is deployed
-            "SSR_API_URL": f"{protocol}://{base_url}/api/v1",
-            "ENABLE_OPERATION_FILTER": "false",
-            "SHOW_ANNOUNCEMENT": "false",
-            "TELEMETRY_ENABLED": "false",
+            "LOG_LEVEL": "INFO",
+            # Auth service URLs (both SSR and CSR point to gateway)
+            "AUTH_BASE_URL_SSR": f"{protocol}://{base_url}",  # Server-side
+            "AUTH_BASE_URL_CSR": f"{protocol}://{base_url}",  # Client-side
+            # API service URL (points to gateway)
+            "API_BASE_URL": f"{protocol}://{base_url}/api/v1",
+            "APP_BRAND_URL": "https://sagebionetworks.org",
+            "APP_CONTACT_URL": "https://sagebionetworks.org/contact",
         }
 
-        # Create Fargate service for the app
+        # Create Fargate service for the Gradio app
         service_construct = BixArenaFargateService(
             self,
             "AppService",
@@ -81,12 +80,13 @@ class AppServiceStack(cdk.Stack):
             cluster=cluster,
             service_name="bixarena-app",
             container_image=image,
-            container_port=80,  # nginx default port (change to 4200 for app)
-            cpu=256,  # 0.25 vCPU
-            memory_limit_mib=512,  # 512 MiB
+            container_port=8100,  # Gradio app default port
+            cpu=512,  # 0.5 vCPU - Gradio needs more than nginx
+            memory_limit_mib=1024,  # 1 GB - Gradio/Python apps need memory
             environment=container_env,
             desired_count=1,
             target_group=target_group,
+            # Note: Health check path is configured on the ALB target group
         )
 
         # Export service for reference

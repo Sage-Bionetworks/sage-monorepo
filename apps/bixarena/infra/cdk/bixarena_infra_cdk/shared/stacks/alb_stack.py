@@ -47,17 +47,17 @@ class AlbStack(cdk.Stack):
         self.alb = alb_construct.alb
         self.security_group = alb_construct.security_group
 
-        # Create target group for the app service
+        # Create target group for the app service (Gradio app)
         # This will be used by the Fargate service
         self.app_target_group = elbv2.ApplicationTargetGroup(
             self,
             "AppTargetGroup",
             vpc=vpc,
-            port=80,  # nginx port (change to 4200 for bixarena-app)
+            port=8100,  # Gradio app port
             protocol=elbv2.ApplicationProtocol.HTTP,
             target_type=elbv2.TargetType.IP,
             health_check=elbv2.HealthCheck(
-                path="/",
+                path="/",  # Root path until /health endpoint is available in image
                 interval=cdk.Duration.seconds(30),
                 timeout=cdk.Duration.seconds(5),
                 healthy_threshold_count=2,
