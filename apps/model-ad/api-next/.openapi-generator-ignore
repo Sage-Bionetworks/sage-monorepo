@@ -25,4 +25,4 @@ pom.xml
 # README.md
 **/application.properties
 **/OpenApiGeneratorApplication.java
-# **/OpenApiGeneratorApplicationTests.java
+**/OpenApiGeneratorApplicationTests.java

@@ -18,4 +18,3 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewDto.j
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewLinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/SexDto.java
 src/main/resources/openapi.yaml
-src/test/java/org/sagebionetworks/model/ad/api/next/OpenApiGeneratorApplicationTests.java

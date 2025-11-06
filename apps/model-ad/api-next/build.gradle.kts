@@ -1,5 +1,6 @@
 plugins {
   id("sage.spring-boot-application")
+  id("sage.lombok")
 }
 
 dependencies {
@@ -14,10 +15,6 @@ dependencies {
   implementation(libs.spring.boot.starter.cache)
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.springdoc.openapi.ui)
-  compileOnly(libs.lombok)
-  annotationProcessor(libs.lombok)
-  testCompileOnly(libs.lombok)
-  testAnnotationProcessor(libs.lombok)
   implementation(platform(libs.spring.boot.dependencies))
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
