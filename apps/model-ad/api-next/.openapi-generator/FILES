@@ -1,5 +1,4 @@
 README.md
-pom.xml
 src/main/java/org/sagebionetworks/model/ad/api/next/RFC3339DateFormat.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ApiUtil.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApi.java
