@@ -29,16 +29,11 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
       : ItemFilterTypeQueryDto.INCLUDE;
     List<String> items = ComparisonToolApiHelper.sanitizeItems(item);
 
-    if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE && items.isEmpty()) {
-      return ResponseEntity.ok()
-        .headers(ComparisonToolApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
-        .body(List.of());
-    }
-
     List<ModelOverviewDto> dtos = modelOverviewQueryService.loadModelOverviews(
       items,
       effectiveFilter
     );
+    
     return ResponseEntity.ok()
       .headers(ComparisonToolApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
       .body(dtos);

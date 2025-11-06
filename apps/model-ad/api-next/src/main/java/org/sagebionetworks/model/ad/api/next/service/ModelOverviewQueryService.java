@@ -8,26 +8,24 @@ import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocumen
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
+import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
 import org.sagebionetworks.model.ad.api.next.util.ComparisonToolApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service
 @CacheConfig(cacheNames = "modelOverview")
 public class ModelOverviewQueryService {
 
-  private final MongoTemplate mongoTemplate;
+  private final ModelOverviewRepository repository;
   private final ModelOverviewMapper modelOverviewMapper;
 
   public ModelOverviewQueryService(
-    MongoTemplate mongoTemplate,
+    ModelOverviewRepository repository,
     ModelOverviewMapper modelOverviewMapper
   ) {
-    this.mongoTemplate = mongoTemplate;
+    this.repository = repository;
     this.modelOverviewMapper = modelOverviewMapper;
   }
 
@@ -44,19 +42,23 @@ public class ModelOverviewQueryService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    Query query = new Query();
-    if (!items.isEmpty()) {
-      List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
-      Criteria idCriteria = Criteria.where("_id");
-      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-        idCriteria.in(objectIds);
-      } else {
-        idCriteria.nin(objectIds);
+    List<ModelOverviewDocument> documents;
+
+    if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
+      if (items.isEmpty()) {
+        return List.of();
       }
-      query.addCriteria(idCriteria);
+      List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
+      documents = repository.findByIdIn(objectIds);
+    } else {
+      if (items.isEmpty()) {
+        documents = repository.findAll();
+      } else {
+        List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
+        documents = repository.findByIdNotIn(objectIds);
+      }
     }
 
-    List<ModelOverviewDocument> documents = mongoTemplate.find(query, ModelOverviewDocument.class);
     return documents
       .stream()
       .map(modelOverviewMapper::toDto)

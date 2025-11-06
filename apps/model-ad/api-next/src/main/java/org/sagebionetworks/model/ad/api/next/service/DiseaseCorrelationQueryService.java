@@ -8,26 +8,24 @@ import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDo
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.DiseaseCorrelationMapper;
+import org.sagebionetworks.model.ad.api.next.model.repository.DiseaseCorrelationRepository;
 import org.sagebionetworks.model.ad.api.next.util.ComparisonToolApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service
 @CacheConfig(cacheNames = "diseaseCorrelation")
 public class DiseaseCorrelationQueryService {
 
-  private final MongoTemplate mongoTemplate;
+  private final DiseaseCorrelationRepository repository;
   private final DiseaseCorrelationMapper diseaseCorrelationMapper;
 
   public DiseaseCorrelationQueryService(
-    MongoTemplate mongoTemplate,
+    DiseaseCorrelationRepository repository,
     DiseaseCorrelationMapper diseaseCorrelationMapper
   ) {
-    this.mongoTemplate = mongoTemplate;
+    this.repository = repository;
     this.diseaseCorrelationMapper = diseaseCorrelationMapper;
   }
 
@@ -45,24 +43,22 @@ public class DiseaseCorrelationQueryService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    Query query = new Query();
-    query.addCriteria(Criteria.where("cluster").is(cluster));
+    List<DiseaseCorrelationDocument> documents;
 
-    if (!items.isEmpty()) {
-      List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
-      Criteria idCriteria = Criteria.where("_id");
-      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-        idCriteria.in(objectIds);
-      } else {
-        idCriteria.nin(objectIds);
+    if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
+      if (items.isEmpty()) {
+        return List.of();
       }
-      query.addCriteria(idCriteria);
+      List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
+      documents = repository.findByClusterAndIdIn(cluster, objectIds);
+    } else {
+      if (items.isEmpty()) {
+        documents = repository.findByCluster(cluster);
+      } else {
+        List<ObjectId> objectIds = ComparisonToolApiHelper.parseObjectIds(items);
+        documents = repository.findByClusterAndIdNotIn(cluster, objectIds);
+      }
     }
-
-    List<DiseaseCorrelationDocument> documents = mongoTemplate.find(
-      query,
-      DiseaseCorrelationDocument.class
-    );
 
     return documents
       .stream()

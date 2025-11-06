@@ -2,7 +2,7 @@ package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -10,13 +10,11 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.List;
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.model.document.CorrelationResultDocument;
@@ -24,8 +22,7 @@ import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDo
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.DiseaseCorrelationMapper;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
+import org.sagebionetworks.model.ad.api.next.model.repository.DiseaseCorrelationRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,14 +33,14 @@ import org.springframework.web.server.ResponseStatusException;
 class DiseaseCorrelationApiDelegateImplTest {
 
   @Mock
-  private MongoTemplate mongoTemplate;
+  private DiseaseCorrelationRepository repository;
 
   private DiseaseCorrelationApiDelegateImpl delegate;
 
   @BeforeEach
   void setUp() {
     DiseaseCorrelationQueryService queryService = new DiseaseCorrelationQueryService(
-      mongoTemplate,
+      repository,
       new DiseaseCorrelationMapper()
     );
     delegate = new DiseaseCorrelationApiDelegateImpl(queryService);
@@ -63,7 +60,7 @@ class DiseaseCorrelationApiDelegateImplTest {
       .extracting(ex -> ((ResponseStatusException) ex).getStatusCode())
       .isEqualTo(HttpStatus.BAD_REQUEST);
 
-    verifyNoInteractions(mongoTemplate);
+    verifyNoInteractions(repository);
   }
 
   @Test
@@ -80,7 +77,7 @@ class DiseaseCorrelationApiDelegateImplTest {
       .extracting(ex -> ((ResponseStatusException) ex).getStatusCode())
       .isEqualTo(HttpStatus.BAD_REQUEST);
 
-    verifyNoInteractions(mongoTemplate);
+    verifyNoInteractions(repository);
   }
 
   @Test
@@ -98,10 +95,10 @@ class DiseaseCorrelationApiDelegateImplTest {
     HttpHeaders headers = response.getHeaders();
     assertThat(headers.getCacheControl()).isEqualTo("no-cache, no-store, must-revalidate");
     assertThat(headers.getPragma()).contains("no-cache");
-    assertThat(headers.getExpires()).isEqualTo(0);
+    assertThat(headers.getExpires()).isZero();
     assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
 
-    verifyNoInteractions(mongoTemplate);
+    verifyNoInteractions(repository);
   }
 
   @Test
@@ -110,7 +107,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     ObjectId objectId = new ObjectId();
     DiseaseCorrelationDocument document = buildDocument(objectId);
 
-    when(mongoTemplate.find(any(Query.class), eq(DiseaseCorrelationDocument.class))).thenReturn(
+    when(repository.findByClusterAndIdIn(eq("Cluster A"), anyList())).thenReturn(
       List.of(document)
     );
 
@@ -130,23 +127,14 @@ class DiseaseCorrelationApiDelegateImplTest {
     assertThat(dto.getIFG().getCorrelation()).isEqualTo(BigDecimal.valueOf(0.87d));
     assertThat(dto.getSex().getValue()).isEqualTo("Female");
 
-    ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
-    verify(mongoTemplate).find(queryCaptor.capture(), eq(DiseaseCorrelationDocument.class));
-    Document queryDocument = queryCaptor.getValue().getQueryObject();
-    Document expectedQuery = new Document("cluster", "Cluster A").append(
-      "_id",
-      new Document("$in", List.of(objectId))
-    );
-    assertThat(queryDocument).isEqualTo(expectedQuery);
+    verify(repository).findByClusterAndIdIn(eq("Cluster A"), eq(List.of(objectId)));
   }
 
   @Test
   @DisplayName("should include cluster filter when exclude filter has no items")
   void shouldIncludeClusterFilterWhenExcludeFilterHasNoItems() {
     ObjectId objectId = new ObjectId();
-    when(mongoTemplate.find(any(Query.class), eq(DiseaseCorrelationDocument.class))).thenReturn(
-      List.of(buildDocument(objectId))
-    );
+    when(repository.findByCluster("Cluster B")).thenReturn(List.of(buildDocument(objectId)));
 
     ResponseEntity<List<DiseaseCorrelationDto>> response = delegate.getDiseaseCorrelations(
       List.of(DiseaseCorrelationApiDelegateImpl.SUPPORTED_CATEGORY, "Cluster B"),
@@ -156,11 +144,7 @@ class DiseaseCorrelationApiDelegateImplTest {
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-    ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
-    verify(mongoTemplate).find(queryCaptor.capture(), eq(DiseaseCorrelationDocument.class));
-    Document queryDocument = queryCaptor.getValue().getQueryObject();
-    Document expectedQuery = new Document("cluster", "Cluster B");
-    assertThat(queryDocument).isEqualTo(expectedQuery);
+    verify(repository).findByCluster("Cluster B");
   }
 
   @Test
@@ -177,7 +161,7 @@ class DiseaseCorrelationApiDelegateImplTest {
       .extracting(ex -> ((ResponseStatusException) ex).getStatusCode())
       .isEqualTo(HttpStatus.BAD_REQUEST);
 
-    verifyNoInteractions(mongoTemplate);
+    verifyNoInteractions(repository);
   }
 
   @Test
@@ -186,7 +170,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     ObjectId objectId = new ObjectId();
     DiseaseCorrelationDocument document = buildDocumentWithPartialCorrelation(objectId);
 
-    when(mongoTemplate.find(any(Query.class), eq(DiseaseCorrelationDocument.class))).thenReturn(
+    when(repository.findByClusterAndIdIn("Cluster C", List.of(objectId))).thenReturn(
       List.of(document)
     );
 
@@ -200,6 +184,31 @@ class DiseaseCorrelationApiDelegateImplTest {
     assertThat(response.getBody()).hasSize(1);
     DiseaseCorrelationDto dto = response.getBody().get(0);
     assertThat(dto.getIFG()).isNull();
+  }
+
+  @Test
+  @DisplayName("should exclude specified items when exclude filter has items")
+  void shouldExcludeSpecifiedItemsWhenExcludeFilterHasItems() {
+    ObjectId excludedId = new ObjectId();
+    ObjectId includedId = new ObjectId();
+    DiseaseCorrelationDocument includedDocument = buildDocument(includedId);
+
+    when(repository.findByClusterAndIdNotIn("Cluster D", List.of(excludedId))).thenReturn(
+      List.of(includedDocument)
+    );
+
+    ResponseEntity<List<DiseaseCorrelationDto>> response = delegate.getDiseaseCorrelations(
+      List.of(DiseaseCorrelationApiDelegateImpl.SUPPORTED_CATEGORY, "Cluster D"),
+      List.of(excludedId.toHexString()),
+      ItemFilterTypeQueryDto.EXCLUDE
+    );
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).hasSize(1);
+    DiseaseCorrelationDto dto = response.getBody().get(0);
+    assertThat(dto.getId()).isEqualTo(includedId.toHexString());
+
+    verify(repository).findByClusterAndIdNotIn("Cluster D", List.of(excludedId));
   }
 
   private DiseaseCorrelationDocument buildDocument(ObjectId objectId) {

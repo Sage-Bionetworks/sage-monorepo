@@ -40,12 +40,6 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE && items.isEmpty()) {
-      return ResponseEntity.ok()
-        .headers(ComparisonToolApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
-        .body(List.of());
-    }
-
     List<DiseaseCorrelationDto> results = diseaseCorrelationQueryService.loadDiseaseCorrelations(
       cluster,
       items,

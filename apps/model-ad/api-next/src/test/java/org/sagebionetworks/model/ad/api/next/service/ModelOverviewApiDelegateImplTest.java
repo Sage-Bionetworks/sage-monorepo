@@ -2,20 +2,17 @@ package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
@@ -23,8 +20,7 @@ import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewLinkDoc
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
+import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,14 +31,14 @@ import org.springframework.web.server.ResponseStatusException;
 class ModelOverviewApiDelegateImplTest {
 
   @Mock
-  private MongoTemplate mongoTemplate;
+  private ModelOverviewRepository repository;
 
   private ModelOverviewApiDelegateImpl delegate;
 
   @BeforeEach
   void setUp() {
     ModelOverviewQueryService queryService = new ModelOverviewQueryService(
-      mongoTemplate,
+      repository,
       new ModelOverviewMapper()
     );
     delegate = new ModelOverviewApiDelegateImpl(queryService);
@@ -62,10 +58,10 @@ class ModelOverviewApiDelegateImplTest {
     HttpHeaders headers = response.getHeaders();
     assertThat(headers.getCacheControl()).isEqualTo("no-cache, no-store, must-revalidate");
     assertThat(headers.getPragma()).contains("no-cache");
-    assertThat(headers.getExpires()).isEqualTo(0);
+    assertThat(headers.getExpires()).isZero();
     assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
 
-    verifyNoInteractions(mongoTemplate);
+    verifyNoInteractions(repository);
   }
 
   @Test
@@ -74,9 +70,7 @@ class ModelOverviewApiDelegateImplTest {
     ObjectId objectId = new ObjectId();
     ModelOverviewDocument document = buildDocument(objectId);
 
-    when(mongoTemplate.find(any(Query.class), eq(ModelOverviewDocument.class))).thenReturn(
-      List.of(document)
-    );
+    when(repository.findByIdIn(anyList())).thenReturn(List.of(document));
 
     ResponseEntity<List<ModelOverviewDto>> response = delegate.getModelOverviews(
       List.of(objectId.toHexString()),
@@ -97,12 +91,6 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(dto.getStudyData().getLinkUrl()).isEqualTo("https://example.org/study");
     assertThat(dto.getGeneExpression()).isNotNull();
 
-    ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
-    verify(mongoTemplate).find(queryCaptor.capture(), eq(ModelOverviewDocument.class));
-    Document queryDocument = queryCaptor.getValue().getQueryObject();
-    Document expectedQuery = new Document("_id", new Document("$in", List.of(objectId)));
-    assertThat(queryDocument).isEqualTo(expectedQuery);
-
     HttpHeaders headers = response.getHeaders();
     assertThat(headers.getCacheControl()).isEqualTo("no-cache, no-store, must-revalidate");
   }
@@ -117,7 +105,50 @@ class ModelOverviewApiDelegateImplTest {
       .extracting(ex -> ((ResponseStatusException) ex).getStatusCode())
       .isEqualTo(HttpStatus.BAD_REQUEST);
 
-    verifyNoInteractions(mongoTemplate);
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should return all items when exclude filter has no items")
+  void shouldReturnAllItemsWhenExcludeFilterHasNoItems() {
+    ObjectId objectId1 = new ObjectId();
+    ObjectId objectId2 = new ObjectId();
+    ModelOverviewDocument document1 = buildDocument(objectId1);
+    ModelOverviewDocument document2 = buildDocument(objectId2);
+
+    when(repository.findAll()).thenReturn(List.of(document1, document2));
+
+    ResponseEntity<List<ModelOverviewDto>> response = delegate.getModelOverviews(
+      null,
+      ItemFilterTypeQueryDto.EXCLUDE
+    );
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).hasSize(2);
+
+    verify(repository).findAll();
+  }
+
+  @Test
+  @DisplayName("should exclude specified items when exclude filter has items")
+  void shouldExcludeSpecifiedItemsWhenExcludeFilterHasItems() {
+    ObjectId excludedId = new ObjectId();
+    ObjectId includedId = new ObjectId();
+    ModelOverviewDocument includedDocument = buildDocument(includedId);
+
+    when(repository.findByIdNotIn(List.of(excludedId))).thenReturn(List.of(includedDocument));
+
+    ResponseEntity<List<ModelOverviewDto>> response = delegate.getModelOverviews(
+      List.of(excludedId.toHexString()),
+      ItemFilterTypeQueryDto.EXCLUDE
+    );
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).hasSize(1);
+    ModelOverviewDto dto = response.getBody().get(0);
+    assertThat(dto.getId()).isEqualTo(includedId.toHexString());
+
+    verify(repository).findByIdNotIn(List.of(excludedId));
   }
 
   private ModelOverviewDocument buildDocument(ObjectId objectId) {
