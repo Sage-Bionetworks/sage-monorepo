@@ -174,18 +174,29 @@ def parse_args():
     When using the `gradio` CLI for auto-reload, command-line arguments
     are not passed through, so environment variables are used instead.
 
-    Environment variables (used when running with `gradio` CLI):
+    Environment variables:
     - APP_HOST: Server host (default: 127.0.0.1)
-    - APP_PORT: Server port (default: None, Gradio will auto-select)
+    - APP_PORT: Server port (default: 8100)
     - APP_SHARE: Enable sharing (true/1/yes, default: false)
     - APP_CONCURRENCY_COUNT: Concurrency limit (default: 10)
     - APP_GRADIO_ROOT_PATH: Root path for Gradio (default: None)
+    - LOG_LEVEL: Logging level for uvicorn (default: info)
+
+    Priority for port selection:
+    1. --port command line argument (if provided)
+    2. APP_PORT environment variable (if set)
+    3. Default value: 8100
+
+    Priority for log level selection:
+    1. --log-level command line argument (if provided)
+    2. LOG_LEVEL environment variable (if set)
+    3. Default value: info
     """
 
-    # Helper to parse environment variable for port
+    # Helper to parse environment variable for port with fallback to 8100
     def get_port_default():
         port_env = os.environ.get("APP_PORT")
-        return int(port_env) if port_env else None
+        return int(port_env) if port_env else 8100
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -197,6 +208,12 @@ def parse_args():
         "--port",
         type=int,
         default=get_port_default(),
+    )
+    parser.add_argument(
+        "--log-level",
+        type=str,
+        default=os.environ.get("LOG_LEVEL", "info"),
+        help="Logging level (critical, error, warning, info, debug, trace)",
     )
     parser.add_argument(
         "--share",
@@ -215,6 +232,10 @@ def parse_args():
     )
     # Use parse_known_args to ignore unknown args (like demo path from gradio CLI)
     args, _ = parser.parse_known_args()
+
+    # Normalize log level to lowercase
+    args.log_level = args.log_level.lower()
+
     return args
 
 

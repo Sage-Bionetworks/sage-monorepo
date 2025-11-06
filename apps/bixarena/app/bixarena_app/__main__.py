@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 import uvicorn
 
 from bixarena_app.main import parse_args
@@ -14,17 +12,15 @@ def main() -> None:  # noqa: D401
 
     Usage: uv run bixarena-app
 
-    Environment variables:
-    - LOG_LEVEL: Logging level (default: info)
+    See parse_args() in main.py for supported environment variables.
     """
     args = parse_args()
-    log_level = os.environ.get("LOG_LEVEL", "info").lower()
 
     uvicorn.run(
         "bixarena_app.main:app",
         host=args.host,
         port=args.port,
-        log_level=log_level,
+        log_level=args.log_level,
     )
 
 
@@ -35,17 +31,15 @@ def dev() -> None:  # noqa: D401
 
     Watches for file changes and automatically reloads the server.
 
-    Environment variables:
-    - LOG_LEVEL: Logging level (default: info)
+    See parse_args() in main.py for supported environment variables.
     """
     args = parse_args()
-    log_level = os.environ.get("LOG_LEVEL", "info").lower()
 
     uvicorn.run(
         "bixarena_app.main:app",
         host=args.host,
         port=args.port,
-        log_level=log_level,
+        log_level=args.log_level,
         reload=True,
         reload_dirs=["bixarena_app"],
     )
