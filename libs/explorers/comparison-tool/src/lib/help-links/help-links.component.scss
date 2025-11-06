@@ -3,11 +3,15 @@
   align-items: center;
   padding: 10px 80px 10px 275px;
   height: 75px;
-  position: relative;
-  margin-top: -68px;
-  margin-bottom: 24px;
   z-index: 100;
   pointer-events: none;
+  border-top: 1px solid var(--color-gray-300);
+
+  &.has-data {
+    position: relative;
+    margin-top: -63px;
+    margin-bottom: 24px;
+  }
 
   .help-links-inner {
     display: flex;
