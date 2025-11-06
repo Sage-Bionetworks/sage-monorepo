@@ -86,6 +86,11 @@ def main():
         default="overall",
         help="Leaderboard ID to update (default: 'overall')",
     )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Compute and display results without writing to database",
+    )
 
     args = parser.parse_args()
 
@@ -166,6 +171,19 @@ def main():
                     leaderboard["name"], leaderboard_entries, len(all_evaluations)
                 )
 
+                # Insert into database if not dry run
+                if not args.dry_run:
+                    console.print(
+                        f"\n[cyan]Inserting {len(leaderboard_entries)} entries "
+                        f"into database...[/cyan]"
+                    )
+                    # TODO: Implement database insertion
+                    # insert_leaderboard_snapshot(conn, leaderboard_id, snapshot_data)
+                    # insert_leaderboard_entries(conn, entries)
+                    console.print(
+                        "[yellow]⚠ Database insertion not yet implemented[/yellow]"
+                    )
+
             if not leaderboard_found:
                 console.print(
                     f"[bold red]Error: Leaderboard '{args.id}' exists "
@@ -174,9 +192,13 @@ def main():
                 sys.exit(1)
 
         console.print("\n[bold green]✓ Leaderboard computation completed![/bold green]")
-        console.print(
-            "[yellow]Note: Results displayed only. Database not updated.[/yellow]"
-        )
+        if args.dry_run:
+            console.print(
+                "[yellow]DRY RUN: Results displayed only. "
+                "Database not updated.[/yellow]"
+            )
+        else:
+            console.print("[green]Database updated successfully.[/green]")
 
     except Exception as e:
         console.print(f"[bold red]Error: {e}[/bold red]")

@@ -43,8 +43,9 @@ def calculate_model_strength(model_name: str, seed: int = 42) -> float:
         Strength score between 0.3 and 0.95
     """
     # Use hash of model name for consistent but varied strengths
-    random.seed(seed + hash(model_name))
-    base_strength = random.uniform(0.3, 0.95)
+    # Create a separate Random instance to avoid affecting global state
+    rng = random.Random(seed + hash(model_name))
+    base_strength = rng.uniform(0.3, 0.95)
     return base_strength
 
 
@@ -266,11 +267,38 @@ def main():
             console.print()
             display_evaluation_summary(evaluations)
 
-            # Insert into database
+            # Insert into database or display sample
             if args.dry_run:
                 console.print(
                     "\n[yellow]DRY RUN: Data not written to database[/yellow]"
                 )
+
+                # Display sample of generated data
+                console.print("\n[cyan]Sample of generated evaluations:[/cyan]")
+                sample_table = Table(title="First 20 Evaluations")
+                sample_table.add_column("#", justify="right", style="dim")
+                sample_table.add_column("Model 1", style="cyan")
+                sample_table.add_column("vs", justify="center", style="dim")
+                sample_table.add_column("Model 2", style="cyan")
+                sample_table.add_column("Outcome", style="yellow")
+
+                for i, eval_data in enumerate(evaluations[:20], 1):
+                    outcome_style = (
+                        "green"
+                        if eval_data["outcome"] == "model1"
+                        else "red"
+                        if eval_data["outcome"] == "model2"
+                        else "blue"
+                    )
+                    sample_table.add_row(
+                        str(i),
+                        eval_data["model1_name"],
+                        "vs",
+                        eval_data["model2_name"],
+                        f"[{outcome_style}]{eval_data['outcome']}[/{outcome_style}]",
+                    )
+
+                console.print(sample_table)
             else:
                 console.print(
                     f"\n[cyan]Inserting {len(battles)} battles and "
