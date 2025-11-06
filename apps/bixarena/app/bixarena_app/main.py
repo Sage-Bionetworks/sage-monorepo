@@ -176,7 +176,7 @@ def parse_args():
 
     Environment variables:
     - APP_HOST: Server host (default: 127.0.0.1)
-    - APP_PORT: Server port (default: 8100)
+    - APP_PORT: Server port (default: None, uvicorn will auto-select)
     - APP_SHARE: Enable sharing (true/1/yes, default: false)
     - APP_CONCURRENCY_COUNT: Concurrency limit (default: 10)
     - APP_GRADIO_ROOT_PATH: Root path for Gradio (default: None)
@@ -185,7 +185,7 @@ def parse_args():
     Priority for port selection:
     1. --port command line argument (if provided)
     2. APP_PORT environment variable (if set)
-    3. Default value: 8100
+    3. Default value: None (uvicorn will auto-select)
 
     Priority for log level selection:
     1. --log-level command line argument (if provided)
@@ -193,10 +193,10 @@ def parse_args():
     3. Default value: info
     """
 
-    # Helper to parse environment variable for port with fallback to 8100
+    # Helper to parse environment variable for port with fallback to None
     def get_port_default():
         port_env = os.environ.get("APP_PORT")
-        return int(port_env) if port_env else 8100
+        return int(port_env) if port_env else None
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
