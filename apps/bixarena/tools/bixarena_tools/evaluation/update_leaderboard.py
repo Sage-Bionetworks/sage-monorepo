@@ -112,7 +112,7 @@ def main():
     # Create database config from environment variables
     db_config = DatabaseConfig(
         host=os.getenv("POSTGRES_HOST"),
-        port=int(os.getenv("POSTGRES_PORT", "5432")),
+        port=int(p) if (p := os.getenv("POSTGRES_PORT")) else None,
         database=os.getenv("POSTGRES_DB"),
         user=os.getenv("POSTGRES_USER"),
         password=os.getenv("POSTGRES_PASSWORD"),
