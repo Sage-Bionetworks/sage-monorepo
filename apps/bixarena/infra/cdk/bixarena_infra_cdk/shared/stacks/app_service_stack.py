@@ -3,6 +3,7 @@
 import aws_cdk as cdk
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_ecs as ecs
+from aws_cdk import aws_secretsmanager as sm
 from aws_cdk.aws_elasticloadbalancingv2 import IApplicationTargetGroup
 from constructs import Construct
 
@@ -27,6 +28,7 @@ class AppServiceStack(cdk.Stack):
         alb_dns_name: str,
         fqdn: str | None = None,
         use_https: bool = False,
+        openrouter_api_key: str = "",
         **kwargs,
     ) -> None:
         """
@@ -44,6 +46,7 @@ class AppServiceStack(cdk.Stack):
             alb_dns_name: DNS name of the ALB
             fqdn: Fully qualified domain name (optional, uses ALB DNS if not provided)
             use_https: Whether to use HTTPS protocol (default: False for HTTP)
+            openrouter_api_key: OpenRouter API key for LLM access
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -78,6 +81,22 @@ class AppServiceStack(cdk.Stack):
             "APP_CONTACT_URL": "https://sagebionetworks.org/contact",
         }
 
+        # Create AWS Secrets Manager secret for OpenRouter API key
+        # This ensures the API key is encrypted at rest and in transit
+        container_secrets = {}
+        if openrouter_api_key:
+            openrouter_secret = sm.Secret(
+                self,
+                "OpenRouterApiKeySecret",
+                description="OpenRouter API key for BixArena Gradio app",
+                secret_string_value=cdk.SecretValue.unsafe_plain_text(
+                    openrouter_api_key
+                ),
+            )
+            container_secrets["OPENROUTER_API_KEY"] = ecs.Secret.from_secrets_manager(
+                openrouter_secret
+            )
+
         # Create Fargate service for the Gradio app
         service_construct = BixArenaFargateService(
             self,
@@ -90,6 +109,7 @@ class AppServiceStack(cdk.Stack):
             cpu=512,  # 0.5 vCPU - Gradio needs more than nginx
             memory_limit_mib=1024,  # 1 GB - Gradio/Python apps need memory
             environment=container_env,
+            secrets=container_secrets,  # Secure secret injection
             desired_count=1,
             target_group=target_group,
             # Note: Health check path is configured on the ALB target group

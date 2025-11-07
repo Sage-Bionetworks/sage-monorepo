@@ -124,6 +124,7 @@ def main() -> None:
         alb_dns_name=alb_stack.alb.load_balancer_dns_name,
         fqdn=fqdn if fqdn else None,
         use_https=use_https,
+        openrouter_api_key=os.getenv("OPENROUTER_API_KEY", ""),
         description=f"App service for BixArena {environment} environment",
     )
     app_service_stack.add_dependency(ecs_cluster_stack)
