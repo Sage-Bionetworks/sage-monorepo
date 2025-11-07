@@ -4,6 +4,8 @@ import os
 
 import gradio as gr
 import requests
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.utils import setup_logging
@@ -172,15 +174,26 @@ def parse_args():
     When using the `gradio` CLI for auto-reload, command-line arguments
     are not passed through, so environment variables are used instead.
 
-    Environment variables (used when running with `gradio` CLI):
+    Environment variables:
     - APP_HOST: Server host (default: 127.0.0.1)
-    - APP_PORT: Server port (default: None, Gradio will auto-select)
+    - APP_PORT: Server port (default: None, uvicorn will auto-select)
     - APP_SHARE: Enable sharing (true/1/yes, default: false)
     - APP_CONCURRENCY_COUNT: Concurrency limit (default: 10)
     - APP_GRADIO_ROOT_PATH: Root path for Gradio (default: None)
+    - LOG_LEVEL: Logging level for uvicorn (default: info)
+
+    Priority for port selection:
+    1. --port command line argument (if provided)
+    2. APP_PORT environment variable (if set)
+    3. Default value: None (uvicorn will auto-select)
+
+    Priority for log level selection:
+    1. --log-level command line argument (if provided)
+    2. LOG_LEVEL environment variable (if set)
+    3. Default value: info
     """
 
-    # Helper to parse environment variable for port
+    # Helper to parse environment variable for port with fallback to None
     def get_port_default():
         port_env = os.environ.get("APP_PORT")
         return int(port_env) if port_env else None
@@ -195,6 +208,12 @@ def parse_args():
         "--port",
         type=int,
         default=get_port_default(),
+    )
+    parser.add_argument(
+        "--log-level",
+        type=str,
+        default=os.environ.get("LOG_LEVEL", "info"),
+        help="Logging level (critical, error, warning, info, debug, trace)",
     )
     parser.add_argument(
         "--share",
@@ -213,6 +232,10 @@ def parse_args():
     )
     # Use parse_known_args to ignore unknown args (like demo path from gradio CLI)
     args, _ = parser.parse_known_args()
+
+    # Normalize log level to lowercase
+    args.log_level = args.log_level.lower()
+
     return args
 
 
@@ -419,21 +442,36 @@ def build_app():
     return demo
 
 
-# Initialize app at module level for both `python` and `gradio` CLI
-# Note: When using `gradio` CLI, this code runs twice:
-# 1. During module inspection to find the `demo` variable
-# 2. During actual script execution to launch the server
-# This is normal Gradio behavior and unavoidable without complex workarounds
-args = parse_args()
-demo = build_app()
-demo.queue(default_concurrency_limit=args.concurrency_count)
+def create_app(concurrency_count: int = 10) -> FastAPI:
+    """Create and configure the FastAPI application with Gradio mounted.
 
-# Only launch when running directly with python (not via gradio CLI)
-if __name__ == "__main__":
-    demo.launch(
-        server_name=args.host,
-        server_port=args.port,
-        share=args.share,
-        max_threads=200,
-        root_path=args.gradio_root_path,
-    )
+    Args:
+        concurrency_count: Maximum concurrent requests for Gradio queue
+
+    Returns:
+        Configured FastAPI application
+    """
+    # Create FastAPI app with health endpoint
+    fastapi_app = FastAPI()
+
+    @fastapi_app.get("/health")
+    async def health_check():
+        """Health check endpoint for ECS"""
+        return JSONResponse(
+            content={"status": "healthy", "service": "bixarena-app"},
+            status_code=200,
+        )
+
+    # Build Gradio app and mount it to FastAPI
+    demo = build_app()
+    demo.queue(default_concurrency_limit=concurrency_count)
+
+    # Mount Gradio to the FastAPI app at root path
+    fastapi_app = gr.mount_gradio_app(fastapi_app, demo, path="/")
+
+    return fastapi_app
+
+
+# Create app instance at module level for uvicorn imports
+args = parse_args()
+app = create_app(concurrency_count=args.concurrency_count)
