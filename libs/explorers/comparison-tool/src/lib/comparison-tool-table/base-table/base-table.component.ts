@@ -49,6 +49,6 @@ export class BaseTableComponent {
   };
 
   sortCallback(event: SortEvent) {
-    this.comparisonToolService.setSort(event.field, event.order);
+    this.comparisonToolService.setSort(event);
   }
 }
