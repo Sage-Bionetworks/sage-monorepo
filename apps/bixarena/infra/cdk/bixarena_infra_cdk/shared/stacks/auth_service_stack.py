@@ -81,6 +81,7 @@ class AuthServiceStack(cdk.Stack):
             "APP_UI_BASE_URL": ui_base_url,
             "APP_AUTH_CLIENT_ID": synapse_client_id,
             "APP_AUTH_CLIENT_SECRET": synapse_client_secret,
+            "APP_AUTH_REDIRECT_URI": "http://bixare-alb6f-ug1c5eft2tym-2057665726.us-east-1.elb.amazonaws.com/auth/callback",
         }
 
         # Secrets from AWS Secrets Manager (injected securely at runtime)
