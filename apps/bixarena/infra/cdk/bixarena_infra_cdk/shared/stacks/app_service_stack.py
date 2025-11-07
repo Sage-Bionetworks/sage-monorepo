@@ -63,11 +63,17 @@ class AppServiceStack(cdk.Stack):
             "APP_PORT": "8100",
             "APP_VERSION": app_version,
             "LOG_LEVEL": "INFO",
-            # Auth service URLs (both SSR and CSR point to gateway)
-            "AUTH_BASE_URL_SSR": f"{protocol}://{base_url}",  # Server-side
+            # Auth service URLs:
+            # - SSR (server-side): Use internal API Gateway via service discovery
+            # - CSR (client-side): Use public ALB (browser calls)
+            "AUTH_BASE_URL_SSR": (
+                f"http://bixarena-api-gateway.{cluster.cluster_name}.local:8113"
+            ),
             "AUTH_BASE_URL_CSR": f"{protocol}://{base_url}",  # Client-side
-            # API service URL (points to gateway)
-            "API_BASE_URL": f"{protocol}://{base_url}/api/v1",
+            # API service URL: Use internal API Gateway via service discovery
+            "API_BASE_URL": (
+                f"http://bixarena-api-gateway.{cluster.cluster_name}.local:8113/api/v1"
+            ),
             "APP_BRAND_URL": "https://sagebionetworks.org",
             "APP_CONTACT_URL": "https://sagebionetworks.org/contact",
         }

@@ -120,11 +120,20 @@ class AlbStack(cdk.Stack):
             )
 
             # Route /api/* and /auth/* to API Gateway (priority 2)
+            # Also route OAuth/OIDC endpoints
             https_listener.add_action(
                 "ApiGatewayHttps",
                 priority=2,
                 conditions=[
-                    elbv2.ListenerCondition.path_patterns(["/api/*", "/auth/*"])
+                    elbv2.ListenerCondition.path_patterns(
+                        [
+                            "/api/*",
+                            "/auth/*",
+                            "/userinfo",
+                            "/.well-known/jwks.json",
+                            "/oauth2/token",
+                        ]
+                    )
                 ],
                 action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
             )
@@ -179,11 +188,20 @@ class AlbStack(cdk.Stack):
             )
 
             # Route /api/* and /auth/* to API Gateway (priority 2)
+            # Also route OAuth/OIDC endpoints
             http_listener.add_action(
                 "ApiGatewayHttp",
                 priority=2,
                 conditions=[
-                    elbv2.ListenerCondition.path_patterns(["/api/*", "/auth/*"])
+                    elbv2.ListenerCondition.path_patterns(
+                        [
+                            "/api/*",
+                            "/auth/*",
+                            "/userinfo",
+                            "/.well-known/jwks.json",
+                            "/oauth2/token",
+                        ]
+                    )
                 ],
                 action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
             )
