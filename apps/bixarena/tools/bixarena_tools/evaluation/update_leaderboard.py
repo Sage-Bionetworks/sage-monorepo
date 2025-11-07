@@ -10,6 +10,7 @@ This script:
 import argparse
 import os
 import sys
+from datetime import UTC, datetime
 from typing import Any
 
 from rich.console import Console
@@ -22,6 +23,8 @@ from bixarena_tools.evaluation.db_helper import (
     fetch_leaderboard_ids,
     fetch_leaderboards,
     get_db_connection,
+    insert_leaderboard_entries,
+    insert_leaderboard_snapshot,
 )
 from bixarena_tools.evaluation.rank_battle import compute_leaderboard_bt
 
@@ -47,6 +50,9 @@ def display_leaderboard_summary(
         console.print("[yellow]No entries to display[/yellow]")
         return
 
+    # Sort by rank first, then by BT score descending
+    sorted_entries = sorted(entries, key=lambda x: (x["rank"], -x["btScore"]))
+
     table = Table(title=f"{leaderboard_name} Rankings")
     table.add_column("Rank", justify="center", style="bold")
     table.add_column("Model", style="cyan")
@@ -55,7 +61,7 @@ def display_leaderboard_summary(
     table.add_column("Evals", justify="center", style="blue")
     table.add_column("License", style="magenta")
 
-    for entry in entries[:20]:  # Show top 20
+    for entry in sorted_entries[:20]:  # Show top 20
         ci_str = f"[{entry['bootstrapQ025']:.1f}, {entry['bootstrapQ975']:.1f}]"
         table.add_row(
             str(entry["rank"]),
@@ -206,18 +212,38 @@ def main():
                     leaderboard["name"], leaderboard_entries, len(all_evaluations)
                 )
 
+                console.print(
+                    "\n[bold green]✓ Leaderboard computation completed![/bold green]"
+                )
+
                 # Insert into database if not dry run
                 if not args.dry_run:
-                    console.print(
-                        f"\n[cyan]Inserting {len(leaderboard_entries)} entries "
-                        f"into database...[/cyan]"
+                    # Create snapshot identifier with timestamp
+                    timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
+                    snapshot_identifier = f"snapshot_{timestamp}"
+                    description = (
+                        f"Leaderboard snapshot with {len(all_evaluations)} "
+                        f"evaluations and {len(leaderboard_entries)} ranked models"
                     )
-                    # TODO: Implement database insertion
-                    # insert_leaderboard_snapshot(conn, leaderboard_id, snapshot_data)
-                    # insert_leaderboard_entries(conn, entries)
-                    console.print(
-                        "[yellow]⚠ Database insertion not yet implemented[/yellow]"
+
+                    # Insert snapshot
+                    snapshot_id = insert_leaderboard_snapshot(
+                        conn,
+                        leaderboard["id"],
+                        snapshot_identifier,
+                        description,
                     )
+
+                    # Insert entries
+                    entry_count = insert_leaderboard_entries(
+                        conn, leaderboard["id"], snapshot_id, leaderboard_entries
+                    )
+
+                    console.print(
+                        "\n[bold green]✓ Database updated successfully![/bold green]"
+                    )
+                    console.print(f"  • Snapshot ID: {snapshot_id}")
+                    console.print(f"  • Entries inserted: {entry_count}")
 
             if not leaderboard_found:
                 console.print(
@@ -226,14 +252,12 @@ def main():
                 )
                 sys.exit(1)
 
-        console.print("\n[bold green]✓ Leaderboard computation completed![/bold green]")
-        if args.dry_run:
-            console.print(
-                "[yellow]DRY RUN: Results displayed only. "
-                "Database not updated.[/yellow]"
-            )
-        else:
-            console.print("[green]Database updated successfully.[/green]")
+            # Show dry run message if applicable
+            if args.dry_run:
+                console.print(
+                    "\n[yellow]DRY RUN: Results displayed only. "
+                    "Database not updated.[/yellow]"
+                )
 
     except Exception as e:
         console.print(f"[bold red]Error: {e}[/bold red]")

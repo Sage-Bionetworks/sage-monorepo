@@ -292,3 +292,90 @@ def fetch_leaderboard_ids(conn) -> list[str]:
             """
         )
         return [row["slug"] for row in cur.fetchall()]
+
+
+def insert_leaderboard_snapshot(
+    conn, leaderboard_id: str, snapshot_identifier: str, description: str = None
+) -> str:
+    """
+    Insert a new leaderboard snapshot.
+
+    Args:
+        conn: Database connection
+        leaderboard_id: UUID of the leaderboard
+        snapshot_identifier: Unique identifier for this snapshot
+        description: Optional description
+
+    Returns:
+        UUID of the created snapshot as a string
+    """
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            INSERT INTO api.leaderboard_snapshot
+                (leaderboard_id, snapshot_identifier, description)
+            VALUES (%(leaderboard_id)s, %(snapshot_identifier)s, %(description)s)
+            RETURNING id
+            """,
+            {
+                "leaderboard_id": leaderboard_id,
+                "snapshot_identifier": snapshot_identifier,
+                "description": description,
+            },
+        )
+        snapshot_id = cur.fetchone()["id"]
+        conn.commit()
+        return str(snapshot_id)
+
+
+def insert_leaderboard_entries(
+    conn, leaderboard_id: str, snapshot_id: str, entries: list[dict[str, Any]]
+) -> int:
+    """
+    Insert leaderboard entries for a snapshot.
+
+    Args:
+        conn: Database connection
+        leaderboard_id: UUID of the leaderboard
+        snapshot_id: UUID of the snapshot
+        entries: List of entry dicts with keys: modelId, btScore, voteCount,
+                 rank, bootstrapQ025, bootstrapQ975
+
+    Returns:
+        Number of entries inserted
+    """
+    if not entries:
+        return 0
+
+    with conn.cursor() as cur:
+        # Prepare batch insert data
+        insert_data = [
+            {
+                "leaderboard_id": leaderboard_id,
+                "model_id": entry["modelId"],
+                "snapshot_id": snapshot_id,
+                "bt_score": entry["btScore"],
+                "vote_count": entry["voteCount"],
+                "rank": entry["rank"],
+                "bootstrap_q025": entry["bootstrapQ025"],
+                "bootstrap_q975": entry["bootstrapQ975"],
+            }
+            for entry in entries
+        ]
+
+        # Batch insert
+        cur.executemany(
+            """
+            INSERT INTO api.leaderboard_entry
+                (leaderboard_id, model_id, snapshot_id, bt_score,
+                 vote_count, rank, bootstrap_q025, bootstrap_q975)
+            VALUES (%(leaderboard_id)s, %(model_id)s, %(snapshot_id)s,
+                    %(bt_score)s, %(vote_count)s, %(rank)s,
+                    %(bootstrap_q025)s, %(bootstrap_q975)s)
+            """,
+            insert_data,
+        )
+
+        row_count = cur.rowcount
+        conn.commit()
+        return row_count

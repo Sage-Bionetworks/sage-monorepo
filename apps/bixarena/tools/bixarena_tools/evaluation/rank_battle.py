@@ -7,7 +7,6 @@ import math
 import multiprocessing as mp
 import os
 import uuid
-from datetime import UTC, datetime
 from functools import partial
 
 import numpy as np
@@ -314,7 +313,6 @@ def compute_leaderboard_bt(
 
     # Format leaderboard entries
     leaderboard_entries = []
-    current_time = datetime.now(UTC).isoformat()
 
     for model_name, bt_score in scores.items():
         model_info = models.get(str(model_name), {})
@@ -328,7 +326,6 @@ def compute_leaderboard_bt(
             "btScore": float(bt_score),
             "voteCount": evaluation_counts.get(model_name, 0),
             "rank": final_rank[model_name],
-            "createdAt": current_time,
             "bootstrapQ025": ci["lower"],
             "bootstrapQ975": ci["upper"],
         }

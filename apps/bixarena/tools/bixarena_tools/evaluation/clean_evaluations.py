@@ -96,7 +96,6 @@ def main():
                     return
 
             # Perform cleanup
-            console.print("\n[cyan]Cleaning database...[/cyan]")
             deleted_evals, deleted_battles = clean_evaluations(conn)
 
             console.print(f"\n[green]✓ Deleted {deleted_evals} evaluations[/green]")

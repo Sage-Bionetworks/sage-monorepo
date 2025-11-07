@@ -104,6 +104,14 @@
         "cwd": "{projectRoot}"
       },
       "cache": false
+    },
+    "delete-snapshot": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "uv run python -m bixarena_tools.evaluation.delete_snapshot",
+        "cwd": "{projectRoot}"
+      },
+      "cache": false
     }
   },
   "tags": ["language:python", "package-manager:uv"],
