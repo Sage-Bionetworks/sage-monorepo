@@ -62,7 +62,7 @@ class AppServiceStack(cdk.Stack):
             "APP_HOST": "127.0.0.1",
             "APP_PORT": "8100",
             "APP_VERSION": app_version,
-            "LOG_LEVEL": "INFO",
+            "LOG_LEVEL": "DEBUG",
             # Auth service URLs:
             # - SSR (server-side): Use internal API Gateway via service discovery
             # - CSR (client-side): Use public ALB (browser calls)

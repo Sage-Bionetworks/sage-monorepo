@@ -1,5 +1,6 @@
 """Valkey (Redis-compatible) ElastiCache construct for BixArena infrastructure."""
 
+import aws_cdk as cdk
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_elasticache as elasticache
 from constructs import Construct
@@ -95,7 +96,11 @@ class ValkeyCluster(Construct):
 
         # Export cluster attributes
         self.cluster_endpoint = self.replication_group.attr_primary_end_point_address
-        self.cluster_port = self.replication_group.attr_primary_end_point_port
+        # Convert port to string for environment variables
+        # This ensures Spring Boot can parse it correctly from SPRING_DATA_REDIS_PORT
+        self.cluster_port = cdk.Token.as_string(
+            self.replication_group.attr_primary_end_point_port
+        )
         self.cluster_id_output = self.replication_group.replication_group_id
 
     def allow_from(

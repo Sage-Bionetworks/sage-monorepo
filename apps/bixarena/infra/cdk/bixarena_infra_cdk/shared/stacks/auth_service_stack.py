@@ -84,6 +84,10 @@ class AuthServiceStack(cdk.Stack):
             "APP_AUTH_REDIRECT_URI": "https://bixare-alb6f-ug1c5eft2tym-2057665726.us-east-1.elb.amazonaws.com/auth/callback",
             # Use empty/null domain for host-only cookies (works with ALB hostname)
             "APP_SESSION_COOKIE_DOMAIN": "",  # Empty string = null = host-only
+            # Use Lax for OAuth redirects (Strict blocks cross-site navigation)
+            "APP_SESSION_COOKIE_SAME_SITE": "Lax",
+            # Secure must be false for HTTP ALB, true for HTTPS
+            "APP_SESSION_COOKIE_SECURE": "false",
         }
 
         # Secrets from AWS Secrets Manager (injected securely at runtime)

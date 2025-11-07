@@ -58,6 +58,10 @@ class ApiGatewayStack(cdk.Stack):
             # Valkey/Redis connection (override defaults with actual endpoints)
             "SPRING_DATA_REDIS_HOST": valkey_endpoint,
             "SPRING_DATA_REDIS_PORT": valkey_port,
+            # Auth service WebClient URL (for session validation via /userinfo)
+            "APP_AUTH_SERVICE_URL": (
+                f"http://bixarena-auth-service.{cluster.cluster_name}.local:8115"
+            ),
             # Route 0: API Service - must specify complete route definition
             "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_ID": "bixarena-api",
             "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_URI": (
