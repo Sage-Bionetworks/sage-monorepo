@@ -266,6 +266,7 @@ version = "1.0.0"
 source = { editable = "apps/bixarena/app" }
 dependencies = [
     { name = "bixarena-api-client" },
+    { name = "fastapi" },
     { name = "gradio" },
     { name = "numpy" },
     { name = "openai" },
@@ -276,6 +277,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "bixarena-api-client", editable = "libs/bixarena/api-client-python" },
+    { name = "fastapi", specifier = ">=0.119.0" },
     { name = "gradio", specifier = ">=4.10" },
     { name = "numpy" },
     { name = "openai", specifier = ">=1.0" },
