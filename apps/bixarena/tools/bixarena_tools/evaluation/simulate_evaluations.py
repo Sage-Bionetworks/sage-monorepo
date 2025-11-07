@@ -211,7 +211,10 @@ def main():
         help="Probability of tie outcomes (default: 0.05)",
     )
     parser.add_argument(
-        "--seed", type=int, default=42, help="Random seed for reproducibility"
+        "--seed",
+        type=int,
+        default=None,
+        help="Random seed for reproducibility (default: random)",
     )
     parser.add_argument(
         "--dry-run",
@@ -220,6 +223,11 @@ def main():
     )
 
     args = parser.parse_args()
+
+    # Generate random seed if not provided
+    if args.seed is None:
+        args.seed = random.randint(0, 2**31 - 1)
+        console.print(f"[dim]Using random seed: {args.seed}[/dim]")
 
     # Use dummy user ID for simulations
     user_id = "00000000-0000-0000-0000-000000000000"
@@ -309,6 +317,15 @@ def main():
 
                 eval_count = insert_battle_evaluations_batch(conn, evaluations)
                 console.print(f"[green]Inserted {eval_count} evaluations[/green]")
+
+                # Show total evaluations in database after insertion
+                with conn.cursor() as cur:
+                    cur.execute("SELECT COUNT(*) FROM api.battle_evaluation")
+                    result = cur.fetchone()
+                    total_evals = result["count"] if result else 0  # type: ignore
+                console.print(
+                    f"[cyan]Total evaluations in database: {total_evals}[/cyan]"
+                )
 
         console.print("\n[bold green]Simulation completed successfully![/bold green]")
 

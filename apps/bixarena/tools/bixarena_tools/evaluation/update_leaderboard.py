@@ -91,6 +91,15 @@ def main():
         action="store_true",
         help="Compute and display results without writing to database",
     )
+    parser.add_argument(
+        "--min",
+        type=int,
+        default=0,
+        help=(
+            "Minimum evaluations per model to include in leaderboard "
+            "(default: 0/disabled, recommended: 20)"
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -165,6 +174,32 @@ def main():
                     models=models_by_name,
                     num_bootstrap=args.num_bootstrap,
                 )
+
+                # Filter by minimum evaluations if threshold is set
+                if args.min > 0:
+                    skipped_models = []
+
+                    filtered_entries = []
+                    for entry in leaderboard_entries:
+                        if entry["voteCount"] >= args.min:
+                            filtered_entries.append(entry)
+                        else:
+                            skipped_models.append(
+                                (entry["modelName"], entry["voteCount"])
+                            )
+
+                    leaderboard_entries = filtered_entries
+
+                    if skipped_models:
+                        console.print(
+                            f"\n[yellow]⚠ Warning: Skipped "
+                            f"{len(skipped_models)} model(s) "
+                            f"with < {args.min} evaluations:[/yellow]"
+                        )
+                        for model_name, count in skipped_models[:5]:  # Show first 5
+                            console.print(f"  • {model_name}: {count} evaluations")
+                        if len(skipped_models) > 5:
+                            console.print(f"  • ... and {len(skipped_models) - 5} more")
 
                 # Display results
                 display_leaderboard_summary(

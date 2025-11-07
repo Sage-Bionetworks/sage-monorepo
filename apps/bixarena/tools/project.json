@@ -86,21 +86,24 @@
       "options": {
         "command": "uv run python -m bixarena_tools.evaluation.simulate_evaluations",
         "cwd": "{projectRoot}"
-      }
+      },
+      "cache": false
     },
     "update-leaderboard": {
       "executor": "@nxlv/python:run-commands",
       "options": {
         "command": "uv run python -m bixarena_tools.evaluation.update_leaderboard",
         "cwd": "{projectRoot}"
-      }
+      },
+      "cache": false
     },
     "clean-eval": {
       "executor": "@nxlv/python:run-commands",
       "options": {
         "command": "uv run python -m bixarena_tools.evaluation.clean_evaluations",
         "cwd": "{projectRoot}"
-      }
+      },
+      "cache": false
     }
   },
   "tags": ["language:python", "package-manager:uv"],
