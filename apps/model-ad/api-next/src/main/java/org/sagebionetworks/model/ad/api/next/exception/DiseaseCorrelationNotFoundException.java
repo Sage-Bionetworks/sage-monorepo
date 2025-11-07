@@ -1,5 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.exception;
 
+import lombok.experimental.StandardException;
+
+@StandardException
 public class DiseaseCorrelationNotFoundException extends RuntimeException {
 
   public DiseaseCorrelationNotFoundException(String id) {

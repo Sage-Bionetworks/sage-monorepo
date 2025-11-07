@@ -1,10 +1,9 @@
 package org.sagebionetworks.model.ad.api.next.exception;
 
-public class InvalidFilterException extends RuntimeException {
+import lombok.experimental.StandardException;
 
-  public InvalidFilterException(String message) {
-    super(message);
-  }
+@StandardException
+public class InvalidFilterException extends RuntimeException {
 
   public InvalidFilterException(String filterType, String category) {
     super(
