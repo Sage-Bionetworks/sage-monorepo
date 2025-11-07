@@ -139,7 +139,6 @@ def fit_bt(matchups, outcomes, weights, n_models, alpha, tol=1e-6):
 
 def scale_and_offset(
     ratings,
-    models,
     scale=400.0,
     init_rating=1000.0,
 ):
@@ -148,7 +147,6 @@ def scale_and_offset(
 
     Args:
         ratings: array of model ratings on natural scale
-        models: list of model names
         scale: scaling factor (default 400 for Elo scale)
         init_rating: initial rating offset (scores centered around this value)
 
@@ -181,7 +179,7 @@ def compute_bt(
         return {}
 
     ratings = fit_bt(matchups, outcomes, weights, len(models), math.log(base), tol)
-    scaled_ratings = scale_and_offset(ratings, models, scale, init_rating=init_rating)
+    scaled_ratings = scale_and_offset(ratings, scale, init_rating=init_rating)
     # Return as dict sorted by rating (descending)
     return dict(
         sorted(
@@ -236,7 +234,7 @@ def compute_bootstrap_bt(
         results = list(tqdm(pool.imap_unordered(bt_fn, boot_weights), total=num_round))
 
     ratings = np.array(results)
-    scaled_ratings = scale_and_offset(ratings, models, scale, init_rating)
+    scaled_ratings = scale_and_offset(ratings, scale, init_rating)
 
     # Convert to dict with model names as keys and rating arrays as values
     results_dict = {model: scaled_ratings[:, i] for i, model in enumerate(models)}

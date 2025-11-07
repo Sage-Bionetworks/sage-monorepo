@@ -12,74 +12,49 @@ import psycopg
 from psycopg.rows import dict_row
 
 
-class DatabaseConfig:
-    """Database connection configuration."""
-
-    def __init__(
-        self,
-        host: str | None = None,
-        port: int | None = None,
-        database: str | None = None,
-        user: str | None = None,
-        password: str | None = None,
-    ):
-        # Validate required fields
-        missing_fields = []
-        if not host:
-            missing_fields.append("POSTGRES_HOST")
-        if not port:
-            missing_fields.append("POSTGRES_PORT")
-        if not database:
-            missing_fields.append("POSTGRES_DB")
-        if not user:
-            missing_fields.append("POSTGRES_USER")
-        if not password:
-            missing_fields.append("POSTGRES_PASSWORD")
-
-        if missing_fields:
-            raise ValueError(
-                f"Missing required environment variables: {', '.join(missing_fields)}"
-            )
-
-        self.host = host
-        self.port = port
-        self.database = database
-        self.user = user
-        self.password = password
-
-    @classmethod
-    def from_env(cls) -> "DatabaseConfig":
-        """Create config from environment variables."""
-        return cls(
-            host=os.getenv("POSTGRES_HOST"),
-            port=int(p) if (p := os.getenv("POSTGRES_PORT")) else None,
-            database=os.getenv("POSTGRES_DB"),
-            user=os.getenv("POSTGRES_USER"),
-            password=os.getenv("POSTGRES_PASSWORD"),
-        )
-
-
 @contextmanager
-def get_db_connection(config: DatabaseConfig | None = None):
+def get_db_connection():
     """
-    Get a database connection context manager.
-
-    Args:
-        config: Database configuration (uses default if None)
+    Get a database connection context manager using environment variables.
 
     Yields:
         Database connection
+
+    Raises:
+        ValueError: If required environment variables are missing
     """
-    if config is None:
-        config = DatabaseConfig()
+    # Get environment variables
+    host = os.getenv("POSTGRES_HOST")
+    port = os.getenv("POSTGRES_PORT")
+    database = os.getenv("POSTGRES_DB")
+    user = os.getenv("POSTGRES_USER")
+    password = os.getenv("POSTGRES_PASSWORD")
+
+    # Validate required fields
+    missing = [
+        var
+        for var, val in {
+            "POSTGRES_HOST": host,
+            "POSTGRES_PORT": port,
+            "POSTGRES_DB": database,
+            "POSTGRES_USER": user,
+            "POSTGRES_PASSWORD": password,
+        }.items()
+        if not val
+    ]
+
+    if missing:
+        raise ValueError(
+            f"Missing required environment variables: {', '.join(missing)}"
+        )
 
     conn = psycopg.connect(
-        host=config.host,
-        port=config.port,
-        dbname=config.database,
-        user=config.user,
-        password=config.password,
-        row_factory=dict_row,
+        host=host,
+        port=int(port),  # type: ignore[arg-type]
+        dbname=database,
+        user=user,
+        password=password,
+        row_factory=dict_row,  # type: ignore[arg-type]
     )
     try:
         yield conn

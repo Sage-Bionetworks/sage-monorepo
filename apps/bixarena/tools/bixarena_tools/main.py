@@ -2,10 +2,9 @@
 
 import typer
 from dotenv import load_dotenv
-from rich.console import Console
 
-from .evaluation import evaluation_app
-from .leaderboard import leaderboard_app
+from bixarena_tools.leaderboard.evaluation import evaluation_app
+from bixarena_tools.leaderboard.leaderboard import leaderboard_app
 
 # Load environment variables from .env file
 load_dotenv()
@@ -14,7 +13,6 @@ app = typer.Typer(
     help="BixArena CLI - Tools for managing leaderboards and evaluations",
     no_args_is_help=True,
 )
-console = Console()
 
 
 @app.callback()

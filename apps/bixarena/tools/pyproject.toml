@@ -33,7 +33,7 @@ dependencies = [
 ]
 
 [project.scripts]
-bixarena = "bixarena_tools.leaderboard.main:app"
+bixarena = "bixarena_tools.main:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["bixarena_tools"]

@@ -1,6 +1,5 @@
 """Leaderboard management commands."""
 
-import os
 from datetime import UTC, datetime
 
 import typer
@@ -8,7 +7,6 @@ from rich.console import Console
 from rich.table import Table
 
 from bixarena_tools.leaderboard.db_helper import (
-    DatabaseConfig,
     fetch_active_models,
     fetch_battle_evaluations,
     fetch_leaderboard_ids,
@@ -31,21 +29,6 @@ snapshot_app = typer.Typer(
     no_args_is_help=True,
 )
 leaderboard_app.add_typer(snapshot_app, name="snapshot")
-
-
-def get_db_config() -> DatabaseConfig:
-    """Get database configuration from environment variables."""
-    try:
-        return DatabaseConfig(
-            host=os.getenv("POSTGRES_HOST"),
-            port=int(os.getenv("POSTGRES_PORT", "5432")),
-            database=os.getenv("POSTGRES_DB"),
-            user=os.getenv("POSTGRES_USER"),
-            password=os.getenv("POSTGRES_PASSWORD"),
-        )
-    except ValueError as e:
-        console.print(f"[bold red]Configuration Error:[/bold red] {e}")
-        raise typer.Exit(1) from e
 
 
 def display_leaderboard_summary(
@@ -126,10 +109,8 @@ def snapshot_add(
     console.print("[bold blue]BixArena Leaderboard Snapshot Creation[/bold blue]")
     console.print("=" * 60)
 
-    db_config = get_db_config()
-
     try:
-        with get_db_connection(db_config) as conn:
+        with get_db_connection() as conn:
             # Fetch data
             console.print("\n[cyan]Fetching data from database...[/cyan]")
 
@@ -285,10 +266,8 @@ def snapshot_list(
     console.print("[bold blue]BixArena Leaderboard Snapshots[/bold blue]")
     console.print("=" * 60)
 
-    db_config = get_db_config()
-
     try:
-        with get_db_connection(db_config) as conn, conn.cursor() as cur:
+        with get_db_connection() as conn, conn.cursor() as cur:
             if id:
                 # Filter by specific leaderboard
                 cur.execute(
@@ -383,10 +362,8 @@ def snapshot_get(
     console.print("[bold blue]BixArena Snapshot Details[/bold blue]")
     console.print("=" * 60)
 
-    db_config = get_db_config()
-
     try:
-        with get_db_connection(db_config) as conn, conn.cursor() as cur:
+        with get_db_connection() as conn, conn.cursor() as cur:
             # Get snapshot info
             cur.execute(
                 """
@@ -497,10 +474,8 @@ def snapshot_delete(
     console.print("[bold red]⚠ Snapshot Deletion Tool[/bold red]")
     console.print("=" * 60)
 
-    db_config = get_db_config()
-
     try:
-        with get_db_connection(db_config) as conn, conn.cursor() as cur:
+        with get_db_connection() as conn, conn.cursor() as cur:
             # Get snapshot info
             cur.execute(
                 """

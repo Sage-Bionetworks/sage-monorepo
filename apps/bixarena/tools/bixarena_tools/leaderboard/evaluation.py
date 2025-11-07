@@ -11,7 +11,6 @@ from rich.console import Console
 from rich.table import Table
 
 from .db_helper import (
-    DatabaseConfig,
     fetch_active_models,
     get_db_connection,
     insert_battle_evaluations_batch,
@@ -232,9 +231,8 @@ def simulate(
         console.print("=" * 60)
 
         # Create database config from env vars
-        db_config = DatabaseConfig.from_env()
 
-        with get_db_connection(db_config) as conn:
+        with get_db_connection() as conn:
             # Fetch active models
             console.print("[cyan]Fetching active models from database...[/cyan]")
             models = fetch_active_models(conn)
@@ -370,9 +368,8 @@ def clean(
         console.print("=" * 60)
 
         # Create database config from env vars
-        db_config = DatabaseConfig.from_env()
 
-        with get_db_connection(db_config) as conn:
+        with get_db_connection() as conn:
             # Get current counts
             with conn.cursor() as cur:
                 cur.execute("SELECT COUNT(*) FROM api.battle_evaluation")
