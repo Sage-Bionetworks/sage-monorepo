@@ -51,11 +51,11 @@ class DatabaseConfig:
     def from_env(cls) -> "DatabaseConfig":
         """Create config from environment variables."""
         return cls(
-            host=os.getenv("POSTGRES_HOST", "localhost"),
-            port=int(os.getenv("POSTGRES_PORT", "21000")),
-            database=os.getenv("POSTGRES_DB", "bixarena"),
-            user=os.getenv("POSTGRES_USER", "postgres"),
-            password=os.getenv("POSTGRES_PASSWORD", "changeme"),
+            host=os.getenv("POSTGRES_HOST"),
+            port=int(p) if (p := os.getenv("POSTGRES_PORT")) else None,
+            database=os.getenv("POSTGRES_DB"),
+            user=os.getenv("POSTGRES_USER"),
+            password=os.getenv("POSTGRES_PASSWORD"),
         )
 
 
@@ -302,12 +302,12 @@ def insert_leaderboard_snapshot(
 
     Args:
         conn: Database connection
-        leaderboard_id: UUID of the leaderboard
-        snapshot_identifier: Unique identifier for this snapshot
-        description: Optional description
+        leaderboard_id: UUID string
+        snapshot_identifier: unique identifier for this snapshot
+        description: optional description
 
     Returns:
-        UUID of the created snapshot as a string
+        UUID string of the created snapshot
     """
     with conn.cursor() as cur:
         cur.execute(
