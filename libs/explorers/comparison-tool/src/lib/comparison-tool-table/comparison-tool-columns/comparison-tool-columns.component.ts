@@ -21,6 +21,6 @@ export class ComparisonToolColumnsComponent {
   resultsCount = this.comparisonToolService.totalResultsCount;
 
   sortCallback(event: SortEvent) {
-    this.comparisonToolService.setSort(event.field, event.order);
+    this.comparisonToolService.setSort(event);
   }
 }
