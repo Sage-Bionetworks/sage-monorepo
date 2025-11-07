@@ -1,23 +1,16 @@
-"""
-Generate simulated battle evaluations based on model information.
+"""CLI commands for managing battle evaluations."""
 
-This script fetches model information from the database and generates synthetic
-battles with realistic evaluations based on model performance characteristics
-that align with the Bradley-Terry ranking metrics used in rank_battle.py.
-"""
-
-import argparse
-import os
 import random
 import sys
 import uuid
 from datetime import UTC, datetime
 from typing import Any
 
+import typer
 from rich.console import Console
 from rich.table import Table
 
-from bixarena_tools.evaluation.db_helper import (
+from .db_helper import (
     DatabaseConfig,
     fetch_active_models,
     get_db_connection,
@@ -25,6 +18,10 @@ from bixarena_tools.evaluation.db_helper import (
     insert_battles_batch,
 )
 
+evaluation_app = typer.Typer(
+    help="Manage battle evaluations (simulate, clean, etc.)",
+    no_args_is_help=True,
+)
 console = Console()
 
 
@@ -192,58 +189,50 @@ def display_evaluation_summary(evaluations: list[dict[str, str]]) -> None:
     console.print(table)
 
 
-def main():
-    """Main entry point for simulation script."""
-    parser = argparse.ArgumentParser(
-        description="Generate simulated battle evaluations for BixArena"
-    )
-    parser.add_argument(
+@evaluation_app.command("simulate")
+def simulate(
+    num_evaluations: int = typer.Option(
+        100,
         "-n",
         "--num-evaluations",
-        type=int,
-        default=100,
-        help="Number of evaluations to generate (default: 100)",
-    )
-    parser.add_argument(
+        help="Number of evaluations to generate",
+    ),
+    tie_probability: float = typer.Option(
+        0.05,
         "--tie-probability",
-        type=float,
-        default=0.05,
-        help="Probability of tie outcomes (default: 0.05)",
-    )
-    parser.add_argument(
+        help="Probability of tie outcomes",
+    ),
+    seed: int = typer.Option(
+        None,
         "--seed",
-        type=int,
-        default=None,
-        help="Random seed for reproducibility (default: random)",
-    )
-    parser.add_argument(
+        help="Random seed for reproducibility",
+    ),
+    dry_run: bool = typer.Option(
+        False,
         "--dry-run",
-        action="store_true",
         help="Simulate without writing to database",
-    )
+    ),
+):
+    """
+    Generate simulated battle evaluations for testing.
 
-    args = parser.parse_args()
-
+    This command creates synthetic battles with realistic evaluations based on
+    model performance characteristics that align with Bradley-Terry ranking metrics.
+    """
     # Generate random seed if not provided
-    if args.seed is None:
-        args.seed = random.randint(0, 2**31 - 1)
-        console.print(f"[dim]Using random seed: {args.seed}[/dim]")
+    if seed is None:
+        seed = random.randint(0, 2**31 - 1)
+        console.print(f"[dim]Using random seed: {seed}[/dim]")
 
     # Use dummy user ID for simulations
     user_id = "00000000-0000-0000-0000-000000000000"
 
-    # Create database config from env vars
-    db_config = DatabaseConfig(
-        host=os.getenv("POSTGRES_HOST"),
-        port=int(p) if (p := os.getenv("POSTGRES_PORT")) else None,
-        database=os.getenv("POSTGRES_DB"),
-        user=os.getenv("POSTGRES_USER"),
-        password=os.getenv("POSTGRES_PASSWORD"),
-    )
-
     try:
         console.print("[bold blue]BixArena Evaluation Simulator[/bold blue]")
         console.print("=" * 60)
+
+        # Create database config from env vars
+        db_config = DatabaseConfig.from_env()
 
         with get_db_connection(db_config) as conn:
             # Fetch active models
@@ -260,15 +249,15 @@ def main():
 
             # Simulate battles and evaluations
             console.print(
-                f"\n[cyan]Simulating {args.num_evaluations} battles with "
+                f"\n[cyan]Simulating {num_evaluations} battles with "
                 f"evaluations...[/cyan]"
             )
             battles, evaluations = simulate_battles_and_evaluations(
                 models,
-                args.num_evaluations,
+                num_evaluations,
                 user_id=user_id,
-                tie_probability=args.tie_probability,
-                seed=args.seed,
+                tie_probability=tie_probability,
+                seed=seed,
             )
 
             # Display summary
@@ -276,7 +265,7 @@ def main():
             display_evaluation_summary(evaluations)
 
             # Insert into database or display sample
-            if args.dry_run:
+            if dry_run:
                 console.print(
                     "\n[yellow]DRY RUN: Data not written to database[/yellow]"
                 )
@@ -337,5 +326,90 @@ def main():
         sys.exit(1)
 
 
-if __name__ == "__main__":
-    main()
+def clean_evaluations_db(conn) -> tuple[int, int]:
+    """
+    Delete all battle evaluations and battles from the database.
+
+    Args:
+        conn: Database connection
+
+    Returns:
+        Tuple of (evaluation_count, battle_count) deleted
+    """
+    with conn.cursor() as cur:
+        # Delete evaluations first (due to foreign key constraint)
+        cur.execute("DELETE FROM api.battle_evaluation")
+        eval_count = cur.rowcount
+
+        # Delete battles
+        cur.execute("DELETE FROM api.battle")
+        battle_count = cur.rowcount
+
+        conn.commit()
+
+        return eval_count, battle_count
+
+
+@evaluation_app.command("clean")
+def clean(
+    yes: bool = typer.Option(
+        False,
+        "-y",
+        "--yes",
+        help="Skip confirmation prompt",
+    ),
+):
+    """
+    Clean all battles and evaluations from the database.
+
+    WARNING: This is a destructive operation that will delete ALL battles and
+    their associated evaluations. Use with caution!
+    """
+    try:
+        console.print("[bold red]⚠ Database Cleanup Tool[/bold red]")
+        console.print("=" * 60)
+
+        # Create database config from env vars
+        db_config = DatabaseConfig.from_env()
+
+        with get_db_connection(db_config) as conn:
+            # Get current counts
+            with conn.cursor() as cur:
+                cur.execute("SELECT COUNT(*) FROM api.battle_evaluation")
+                eval_count = cur.fetchone()["count"]
+
+                cur.execute("SELECT COUNT(*) FROM api.battle")
+                battle_count = cur.fetchone()["count"]
+
+            console.print("\n[yellow]Current database state:[/yellow]")
+            console.print(f"  • Battles: {battle_count}")
+            console.print(f"  • Evaluations: {eval_count}")
+
+            if battle_count == 0 and eval_count == 0:
+                console.print("\n[green]Database is already clean![/green]")
+                return
+
+            # Confirmation prompt
+            if not yes:
+                console.print(
+                    "\n[bold red]WARNING: This will delete ALL battles and "
+                    "evaluations![/bold red]"
+                )
+                response = console.input("[yellow]Are you sure? (yes/no): [/yellow]")
+                if response.lower() not in ["yes", "y"]:
+                    console.print("[cyan]Operation cancelled.[/cyan]")
+                    return
+
+            # Perform cleanup
+            deleted_evals, deleted_battles = clean_evaluations_db(conn)
+
+            console.print(f"\n[green]✓ Deleted {deleted_evals} evaluations[/green]")
+            console.print(f"[green]✓ Deleted {deleted_battles} battles[/green]")
+            console.print("\n[bold green]Database cleaned successfully![/bold green]")
+
+    except Exception as e:
+        console.print(f"[bold red]Error: {e}[/bold red]")
+        import traceback
+
+        console.print(traceback.format_exc())
+        sys.exit(1)
