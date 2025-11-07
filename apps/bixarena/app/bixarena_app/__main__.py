@@ -42,6 +42,7 @@ def dev() -> None:  # noqa: D401
         log_level=args.log_level,
         reload=True,
         reload_dirs=["bixarena_app"],
+        timeout_graceful_shutdown=3,  # Force shutdown after 3 seconds
     )
 
 
