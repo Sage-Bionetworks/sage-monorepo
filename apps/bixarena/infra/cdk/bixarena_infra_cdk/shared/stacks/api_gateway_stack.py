@@ -9,6 +9,7 @@ from constructs import Construct
 from bixarena_infra_cdk.shared.constructs.fargate_service_construct import (
     BixArenaFargateService,
 )
+from bixarena_infra_cdk.shared.utils import load_container_image
 
 
 class ApiGatewayStack(cdk.Stack):
@@ -46,8 +47,13 @@ class ApiGatewayStack(cdk.Stack):
         """
         super().__init__(scope, construct_id, **kwargs)
 
-        # Container image
-        image = f"ghcr.io/sage-bionetworks/bixarena-api-gateway:{gateway_version}"
+        # Container image - support local or remote images
+        image = load_container_image(
+            self,
+            "ApiGatewayImage",
+            "bixarena-api-gateway",
+            f"ghcr.io/sage-bionetworks/bixarena-api-gateway:{gateway_version}",
+        )
 
         # Environment variables for the API Gateway container
         # Note: Spring Boot list overrides replace the entire list item, not merge

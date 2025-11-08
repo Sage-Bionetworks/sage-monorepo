@@ -10,6 +10,7 @@ from constructs import Construct
 from bixarena_infra_cdk.shared.constructs.fargate_service_construct import (
     BixArenaFargateService,
 )
+from bixarena_infra_cdk.shared.utils import load_container_image
 
 
 class AuthServiceStack(cdk.Stack):
@@ -60,8 +61,13 @@ class AuthServiceStack(cdk.Stack):
             self, "DatabaseSecret", database_secret_arn
         )
 
-        # Container image
-        image = f"ghcr.io/sage-bionetworks/bixarena-auth-service:{auth_version}"
+        # Container image - support local or remote images
+        image = load_container_image(
+            self,
+            "AuthServiceImage",
+            "bixarena-auth-service",
+            f"ghcr.io/sage-bionetworks/bixarena-auth-service:{auth_version}",
+        )
 
         # Environment variables for the Auth service container
         # Only override values that depend on CDK infrastructure

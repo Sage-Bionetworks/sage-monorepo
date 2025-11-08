@@ -10,6 +10,7 @@ from constructs import Construct
 from bixarena_infra_cdk.shared.constructs.fargate_service_construct import (
     BixArenaFargateService,
 )
+from bixarena_infra_cdk.shared.utils import load_container_image
 
 
 class AppServiceStack(cdk.Stack):
@@ -55,8 +56,13 @@ class AppServiceStack(cdk.Stack):
         base_url = fqdn if fqdn else alb_dns_name
         protocol = "https" if use_https else "http"
 
-        # Container image - BixArena Gradio app
-        image = f"ghcr.io/sage-bionetworks/bixarena-app:{app_version}"
+        # Container image - support local or remote images
+        image = load_container_image(
+            self,
+            "AppServiceImage",
+            "bixarena-app",
+            f"ghcr.io/sage-bionetworks/bixarena-app:{app_version}",
+        )
 
         # Environment variables for the Gradio app container
         # The app needs access to auth and API services through the gateway

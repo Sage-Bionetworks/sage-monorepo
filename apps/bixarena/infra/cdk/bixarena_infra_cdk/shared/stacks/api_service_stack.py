@@ -1,10 +1,7 @@
 """API service stack for BixArena backend API."""
 
-import os
-
 import aws_cdk as cdk
 from aws_cdk import aws_ec2 as ec2
-from aws_cdk import aws_ecr_assets as ecr_assets
 from aws_cdk import aws_ecs as ecs
 from aws_cdk import aws_rds as rds
 from aws_cdk import aws_secretsmanager as sm
@@ -13,6 +10,7 @@ from constructs import Construct
 from bixarena_infra_cdk.shared.constructs.fargate_service_construct import (
     BixArenaFargateService,
 )
+from bixarena_infra_cdk.shared.utils import load_container_image
 
 
 class ApiServiceStack(cdk.Stack):
@@ -58,29 +56,12 @@ class ApiServiceStack(cdk.Stack):
         )
 
         # Container image - support local or remote images
-        # Set USE_LOCAL_API_IMAGE=true to use locally-built image from tarball
-        use_local_image = os.getenv("USE_LOCAL_API_IMAGE", "false").lower() == "true"
-
-        if use_local_image:
-            tarball_path = "/tmp/bixarena-api.tar"
-
-            # Check if tarball exists
-            if not os.path.exists(tarball_path):
-                raise FileNotFoundError(
-                    f"Local image tarball not found at {tarball_path}. "
-                    "Build and export first: nx export-image-tarball bixarena-api"
-                )
-
-            print(f"Using local API image from {tarball_path}")
-            image_asset = ecr_assets.TarballImageAsset(
-                self,
-                "ApiServiceLocalImage",
-                tarball_file=tarball_path,
-            )
-            image = image_asset.image_uri
-        else:
-            # Use GHCR image (default behavior)
-            image = f"ghcr.io/sage-bionetworks/bixarena-api:{api_version}"
+        image = load_container_image(
+            self,
+            "ApiServiceImage",
+            "bixarena-api",
+            f"ghcr.io/sage-bionetworks/bixarena-api:{api_version}",
+        )
 
         # Environment variables for the API container
         # Only override values that depend on CDK infrastructure
