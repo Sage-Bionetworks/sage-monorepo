@@ -166,7 +166,7 @@ def build_footer():
 
         <!-- Right section - Version -->
         <div class="footer-right">
-            {f"<span>v{app_version}</span>" if app_version else ""}
+            {f"<span>{app_version}</span>" if app_version else ""}
         </div>
     </div>
 </div>
