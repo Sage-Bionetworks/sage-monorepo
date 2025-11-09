@@ -89,8 +89,10 @@ public class SessionToJwtFilter implements WebFilter {
       return validateSession(sessionId)
         .flatMap(userInfo -> {
           var userAuth = createAuthentication(userInfo);
+          log.debug("Session validated for auth service endpoint, passing through to: {} {}", method, path);
           return chain.filter(exchange)
-            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(userAuth));
+            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(userAuth))
+            .doOnSuccess(v -> log.debug("Auth service response completed for: {} {}", method, path));
         })
         .onErrorResume(e -> handleAuthError(exchange, e, method, path));
     }

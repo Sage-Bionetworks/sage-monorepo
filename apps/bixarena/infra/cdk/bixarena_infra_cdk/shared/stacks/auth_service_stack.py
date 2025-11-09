@@ -87,7 +87,7 @@ class AuthServiceStack(cdk.Stack):
             "APP_UI_BASE_URL": ui_base_url,
             "APP_AUTH_CLIENT_ID": synapse_client_id,
             "APP_AUTH_CLIENT_SECRET": synapse_client_secret,
-            "APP_AUTH_REDIRECT_URI": "https://bixare-alb6f-ug1c5eft2tym-2057665726.us-east-1.elb.amazonaws.com/auth/callback",
+            "APP_AUTH_REDIRECT_URI": f"{ui_base_url}/auth/callback",
             # Use empty/null domain for host-only cookies (works with ALB hostname)
             "APP_SESSION_COOKIE_DOMAIN": "",  # Empty string = null = host-only
             # Use Lax for OAuth redirects (Strict blocks cross-site navigation)
