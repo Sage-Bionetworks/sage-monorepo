@@ -237,10 +237,8 @@ def build_cta_section():
 
     # Two buttons - one for authenticated, one for unauthenticated users
     # Visibility will be controlled based on authentication state
-    with gr.Row():
-        with gr.Column(scale=2):
-            pass
-        with gr.Column(scale=1):
+    with gr.Row(elem_id="cta-button-row"):
+        with gr.Column(scale=1, min_width=200, elem_id="cta-button-container"):
             # Button for authenticated users - navigates to battle page
             start_btn_authenticated = gr.Button(
                 "Start Evaluating Models",
@@ -257,8 +255,6 @@ def build_cta_section():
                 visible=False,
                 elem_id="cta-btn-login",
             )
-        with gr.Column(scale=2):
-            pass
 
     return start_btn_authenticated, start_btn_login
 
