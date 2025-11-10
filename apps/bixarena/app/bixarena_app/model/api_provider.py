@@ -62,7 +62,6 @@ def report_model_error(
 def get_api_provider_stream_iter(
     conv,
     model_api_dict,
-    top_p,
     max_new_tokens,
     battle_session=None,
     cookies: dict[str, str] | None = None,
@@ -72,7 +71,6 @@ def get_api_provider_stream_iter(
         stream_iter = openai_api_stream_iter(
             model_api_dict["model_name"],
             prompt,
-            top_p,
             max_new_tokens,
             api_base=model_api_dict.get("api_base"),
             api_key=model_api_dict.get("api_key"),
@@ -89,7 +87,6 @@ def get_api_provider_stream_iter(
 def openai_api_stream_iter(
     model_name,
     messages,
-    top_p,
     max_new_tokens,
     api_base=None,
     api_key=None,
@@ -114,7 +111,6 @@ def openai_api_stream_iter(
     gen_params = {
         "model": model_name,
         "prompt": messages,
-        "top_p": top_p,
         "max_new_tokens": max_new_tokens,
     }
 

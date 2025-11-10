@@ -12,10 +12,7 @@ from bixarena_api_client import (
 
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.request_auth import get_session_cookie
-from bixarena_app.config.constants import (
-    DEFAULT_TOP_P,
-    MAX_RESPONSE_TOKENS,
-)
+from bixarena_app.config.constants import MAX_RESPONSE_TOKENS
 from bixarena_app.config.conversation import Conversation
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import handle_error_message
@@ -112,12 +109,10 @@ def _update_battle_round_with_responses(
 
 def bot_response(
     state,
-    top_p,
     max_new_tokens,
     battle_session: BattleSession | None = None,
     cookies: dict[str, str] | None = None,
 ):
-    top_p = float(top_p)
     max_new_tokens = int(max_new_tokens)
 
     if state.skip_next:
@@ -140,7 +135,6 @@ def bot_response(
     stream_iter = get_api_provider_stream_iter(
         conv,
         model_api_dict,
-        top_p,
         max_new_tokens,
         battle_session=battle_session,
         cookies=cookies,
@@ -182,7 +176,6 @@ def bot_response_multi(
     state0,
     state1,
     battle_session: BattleSession,
-    top_p=DEFAULT_TOP_P,
     max_new_tokens=MAX_RESPONSE_TOKENS,
     request: gr.Request | None = None,
 ):
@@ -209,7 +202,6 @@ def bot_response_multi(
         gen.append(
             bot_response(
                 states[i],
-                top_p,
                 max_new_tokens,
                 battle_session=battle_session,
                 cookies=cookies,

@@ -9,5 +9,4 @@ PROMPT_LEN_LIMIT = int(os.getenv("PROMPT_LEN_LIMIT", 5000))
 BATTLE_ROUND_LIMIT = int(os.getenv("BATTLE_ROUND_LIMIT", 20))
 
 # Generation parameters
-DEFAULT_TOP_P = 1.0
 MAX_RESPONSE_TOKENS = int(os.getenv("MAX_RESPONSE_TOKENS", 1024))
