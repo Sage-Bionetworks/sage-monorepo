@@ -266,6 +266,10 @@ def build_app():
         .footer-no-padding .html-container {
             padding: 0 !important;
         }
+        /* Override Gradio's default container max-width */
+        .fillable.app {
+            max-width: 1600px !important;
+        }
         .page-content {
             min-height: calc(100vh - 200px);
             padding: 0 40px;

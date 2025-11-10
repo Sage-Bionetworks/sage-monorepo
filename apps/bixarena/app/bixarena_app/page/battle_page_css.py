@@ -4,26 +4,29 @@ CSS styles for the BixArena battle page.
 
 # CSS for example prompt cards and navigation
 EXAMPLE_PROMPTS_CSS = """
-
 /* Example prompt UI section */
 #prompt-card-section > .row {
     display: flex;
-    flex-direction: row;
     align-items: center;
     gap: 12px;
-    flex-wrap: nowrap;
     margin-top: 16px;
 }
 
 #prompt-card-section > .row > .row {
-    flex: 1 1 auto;
-    min-width: 0;
+    display: flex;
+    align-items: stretch;
     gap: 12px;
 }
 
 /* Example prompt card wrapper */
 #prompt-card-section .prompt-card-wrapper {
     flex: 1 1 0;
+    display: flex;
+}
+
+#prompt-card-section .prompt-card-wrapper > div {
+    display: flex;
+    flex: 1;
 }
 
 /* Example prompt card button */
@@ -34,7 +37,8 @@ EXAMPLE_PROMPTS_CSS = """
     padding: 12px 16px;
     transition: all 0.2s ease;
     width: 100%;
-    height: 87px;
+    height: auto;
+    min-height: 87px;
     display: flex;
     align-items: flex-start;
     cursor: pointer;
@@ -52,7 +56,7 @@ EXAMPLE_PROMPTS_CSS = """
     line-height: 1.5;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     overflow: hidden;
 }
 
@@ -68,7 +72,6 @@ EXAMPLE_PROMPTS_CSS = """
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    align-self: center;
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.2s ease;
@@ -91,45 +94,18 @@ EXAMPLE_PROMPTS_CSS = """
     pointer-events: none;
 }
 
+
 /* Responsive layout */
+@media (min-width: 1024px) and (max-width: 1280px) {
+    #prompt-card-section button.prompt-card .prompt-text {
+        -webkit-line-clamp: unset;
+    }
+}
+
 @media (max-width: 1024px) {
-    /* Stack outer container vertically and hide arrows */
-    #prompt-card-section > .row {
-        flex-direction: column;
-    }
-
-    /* Hide navigation arrows on mobile */
-    #prompt-card-section > .row > button.nav-button {
+    /* Hide example prompts entirely on mobile */
+    #prompt-card-section {
         display: none !important;
-    }
-
-    /* Stack cards vertically on mobile */
-    #prompt-card-section > .row > .row {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    /* Override Gradio's hide-container class - force all cards visible */
-    #prompt-card-section .hide-container {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        height: auto !important;
-        overflow: visible !important;
-    }
-
-    /* Full width cards on mobile - force visibility */
-    #prompt-card-section .prompt-card-wrapper {
-        width: 100%;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    /* Force all cards to be visible */
-    #prompt-card-section button.prompt-card {
-        display: flex !important;
-        visibility: visible !important;
     }
 }
 """
