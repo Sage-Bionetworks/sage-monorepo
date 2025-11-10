@@ -89,7 +89,7 @@ def snapshot_add(
     min_evals: int = typer.Option(
         0,
         "--min",
-        help="Minimum evaluations per model to include (0 = disabled)",
+        help="Minimum evaluations per model to include in the leaderboard",
     ),
     dry_run: bool = typer.Option(
         False,

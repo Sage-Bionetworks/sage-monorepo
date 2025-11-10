@@ -313,16 +313,43 @@ def compute_leaderboard_bt(
     leaderboard_entries = []
 
     for model_name, bt_score in scores.items():
-        model_info = models.get(str(model_name), {})
+        model_info = models.get(str(model_name))
+
+        # Validate that model info exists
+        if model_info is None:
+            raise ValueError(
+                f"Model '{model_name}' not found in models dictionary. "
+                "Cannot create leaderboard entry without model metadata."
+            )
+
+        # Validate required fields exist
+        if "id" not in model_info:
+            raise ValueError(
+                f"Model '{model_name}' is missing required 'id' field. "
+                "Cannot create leaderboard entry."
+            )
+
+        if "license" not in model_info:
+            raise ValueError(
+                f"Model '{model_name}' is missing required 'license' field. "
+                "Cannot create leaderboard entry."
+            )
+
+        if model_name not in evaluation_counts:
+            raise ValueError(
+                f"Model '{model_name}' has no evaluation count. "
+                "Cannot create leaderboard entry without evaluation data."
+            )
+
         ci = model_ci[model_name]
 
         entry = {
             "id": str(uuid.uuid4()),
-            "modelId": model_info.get("id", str(uuid.uuid4())),
+            "modelId": model_info["id"],
             "modelName": model_name,
-            "license": model_info.get("license", "Unknown"),
+            "license": model_info["license"],
             "btScore": float(bt_score),
-            "voteCount": evaluation_counts.get(model_name, 0),
+            "voteCount": evaluation_counts[model_name],
             "rank": final_rank[model_name],
             "bootstrapQ025": ci["lower"],
             "bootstrapQ975": ci["upper"],
