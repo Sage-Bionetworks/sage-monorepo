@@ -272,6 +272,16 @@ def build_app():
             max-width: 1400px;
             margin: 0 auto;
         }
+        /* Keep CTA buttons centered at all screen sizes */
+        #cta-button-row {
+            justify-content: center !important;
+        }
+        #cta-btn-authenticated, #cta-btn-login {
+            min-width: fit-content !important;
+            width: fit-content !important;
+            flex-grow: 0 !important;
+            white-space: nowrap !important;
+        }
         """,
     ) as demo:
         _, battle_btn, leaderboard_btn, login_btn = build_header()
