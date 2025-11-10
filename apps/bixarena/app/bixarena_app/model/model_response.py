@@ -13,7 +13,6 @@ from bixarena_api_client import (
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import (
-    DEFAULT_TEMPERATURE,
     DEFAULT_TOP_P,
     MAX_RESPONSE_TOKENS,
 )
@@ -113,13 +112,11 @@ def _update_battle_round_with_responses(
 
 def bot_response(
     state,
-    temperature,
     top_p,
     max_new_tokens,
     battle_session: BattleSession | None = None,
     cookies: dict[str, str] | None = None,
 ):
-    temperature = float(temperature)
     top_p = float(top_p)
     max_new_tokens = int(max_new_tokens)
 
@@ -143,7 +140,6 @@ def bot_response(
     stream_iter = get_api_provider_stream_iter(
         conv,
         model_api_dict,
-        temperature,
         top_p,
         max_new_tokens,
         battle_session=battle_session,
@@ -186,7 +182,6 @@ def bot_response_multi(
     state0,
     state1,
     battle_session: BattleSession,
-    temperature=DEFAULT_TEMPERATURE,
     top_p=DEFAULT_TOP_P,
     max_new_tokens=MAX_RESPONSE_TOKENS,
     request: gr.Request | None = None,
@@ -214,7 +209,6 @@ def bot_response_multi(
         gen.append(
             bot_response(
                 states[i],
-                temperature,
                 top_p,
                 max_new_tokens,
                 battle_session=battle_session,

@@ -62,7 +62,6 @@ def report_model_error(
 def get_api_provider_stream_iter(
     conv,
     model_api_dict,
-    temperature,
     top_p,
     max_new_tokens,
     battle_session=None,
@@ -73,7 +72,6 @@ def get_api_provider_stream_iter(
         stream_iter = openai_api_stream_iter(
             model_api_dict["model_name"],
             prompt,
-            temperature,
             top_p,
             max_new_tokens,
             api_base=model_api_dict.get("api_base"),
@@ -91,7 +89,6 @@ def get_api_provider_stream_iter(
 def openai_api_stream_iter(
     model_name,
     messages,
-    temperature,
     top_p,
     max_new_tokens,
     api_base=None,
@@ -117,7 +114,6 @@ def openai_api_stream_iter(
     gen_params = {
         "model": model_name,
         "prompt": messages,
-        "temperature": temperature,
         "top_p": top_p,
         "max_new_tokens": max_new_tokens,
     }
@@ -134,7 +130,6 @@ def openai_api_stream_iter(
         create_kwargs = {
             "model": model_name,
             "messages": messages,
-            "temperature": temperature,
             "max_tokens": max_new_tokens,
             "stream": True,
         }
@@ -176,7 +171,6 @@ def openai_api_stream_iter(
                 res = client.chat.completions.create(
                     model=model_name,
                     messages=retry_messages,
-                    temperature=temperature,
                     max_tokens=max_new_tokens,
                     stream=True,
                 )
