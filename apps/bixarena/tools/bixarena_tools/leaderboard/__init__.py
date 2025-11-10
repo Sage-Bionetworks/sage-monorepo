@@ -1,0 +1,1 @@
+"""BixArena CLI package."""
