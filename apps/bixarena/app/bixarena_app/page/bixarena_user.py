@@ -19,9 +19,9 @@ def build_user_page():
     return user_container, welcome_display, logout_btn
 
 
-def update_user_page():
+def update_user_page(request: gr.Request | None = None):
     """Update user page based on authentication state"""
-    state = get_user_state()
+    state = get_user_state(request)
 
     if state.is_authenticated():
         username = state.get_display_name()
@@ -36,17 +36,19 @@ def update_user_page():
         return gr.HTML(login_prompt), gr.Button("Logout", visible=False)
 
 
-def handle_logout_click(navigator, update_login_button, update_user_page):
+def handle_logout_click(
+    navigator, update_login_button, update_user_page, request: gr.Request | None = None
+):
     """Handle logout and redirect to home - must return all expected outputs"""
-    state = get_user_state()
+    state = get_user_state(request)
 
     if state.is_authenticated():
         username = state.get_display_name()
         state.clear_session()
         print(f"👋 User logged out: {username}")
 
-    updated_login_btn = update_login_button()
-    user_info = update_user_page()
+    updated_login_btn = update_login_button(request)
+    user_info = update_user_page(request)
     home_pages = navigator.show_page(0)
 
     # Legacy cookie clearing removed

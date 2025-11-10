@@ -50,26 +50,28 @@ def build_header():
     return header, battle_btn, leaderboard_btn, login_btn
 
 
-def update_login_button():
+def update_login_button(request: gr.Request | None = None):
     """Return gr.update for login button based on Python-side auth state."""
-    state = get_user_state()
+    state = get_user_state(request)
     if state.is_authenticated():
         return gr.update(value="Logout", variant="secondary")
     return gr.update(value="Login", variant="primary")
 
 
-def update_battle_button():
+def update_battle_button(request: gr.Request | None = None):
     """Return gr.update for battle button based on Python-side auth state.
 
     The Battle button should only be visible when the user is authenticated.
     """
-    state = get_user_state()
+    state = get_user_state(request)
     if state.is_authenticated():
         return gr.update(visible=True)
     return gr.update(visible=False)
 
 
-def handle_start_evaluation_click(navigator, refresh_prompts_fn):
+def handle_start_evaluation_click(
+    navigator, refresh_prompts_fn, request: gr.Request | None = None
+):
     """Handle start evaluation button click with authentication check.
 
     If authenticated: navigate to battle page
@@ -77,7 +79,7 @@ def handle_start_evaluation_click(navigator, refresh_prompts_fn):
 
     Returns: list of (*pages, *prompt_outputs, auth_marker)
     """
-    state = get_user_state()
+    state = get_user_state(request)
 
     if state.is_authenticated():
         # User is authenticated, navigate to battle page (index 1)
@@ -89,13 +91,18 @@ def handle_start_evaluation_click(navigator, refresh_prompts_fn):
     return navigator.show_page(0) + refresh_prompts_fn() + [gr.HTML("UNAUTHORIZED")]
 
 
-def handle_login_click(navigator, update_login_button, update_user_page):
+def handle_login_click(
+    navigator,
+    update_login_button,
+    update_user_page,
+    request: gr.Request | None = None,
+):
     """Unified login/logout handler (Option A implementation).
 
     Returns a fixed tuple shape matching outputs:
     (*pages, login_button_update, user_html, logout_button, cookie_html_script)
     """
-    state = get_user_state()
+    state = get_user_state(request)
     # backend_base retrieval not needed here (handled in main.py login JS)
 
     # If currently authenticated -> perform logout (server + python) and stay on home
@@ -106,13 +113,13 @@ def handle_login_click(navigator, update_login_button, update_user_page):
         print(f"👋 User logged out: {username}")
         logout_script = ""  # client JS handles real logout & reload
         pages = navigator.show_page(0)
-        updated_login_btn = update_login_button()
-        user_html, logout_btn = update_user_page()  # will hide logout button
+        updated_login_btn = update_login_button(request)
+        user_html, logout_btn = update_user_page(request)  # will hide logout button
         return (*pages, updated_login_btn, user_html, logout_btn, logout_script)
 
     # Not authenticated -> JS (attached in main.py) will perform redirect
     redirect_script = ""  # no marker needed now
     pages = navigator.show_page(0)
     interim_btn = gr.update(value="Redirecting…", interactive=False)
-    user_html, logout_btn = update_user_page()  # still unauthenticated
+    user_html, logout_btn = update_user_page(request)  # still unauthenticated
     return (*pages, interim_btn, user_html, logout_btn, redirect_script)

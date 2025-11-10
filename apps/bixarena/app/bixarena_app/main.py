@@ -87,7 +87,7 @@ def sync_backend_session_on_load(request: gr.Request):
     No local token storage, refresh logic, or OAuth flow lives here—only a
     best-effort identity pull so UI components can render the logged-in name.
     """
-    state = get_user_state()
+    state = get_user_state(request)
 
     # Skip if already populated or request has no headers (e.g. internal load)
     if not state.is_authenticated() and request and hasattr(request, "headers"):
@@ -132,9 +132,9 @@ def sync_backend_session_on_load(request: gr.Request):
                                 f"preferred_username={preferred_username}"
                             )
                             return (
-                                update_battle_button(),
-                                update_login_button(),
-                                *update_user_page(),
+                                update_battle_button(request),
+                                update_login_button(request),
+                                *update_user_page(request),
                                 gr.HTML(""),
                             )
                         else:
@@ -157,9 +157,9 @@ def sync_backend_session_on_load(request: gr.Request):
                 print("[auth-sync] No cookie header; skipping identity fetch")
 
     return (
-        update_battle_button(),
-        update_login_button(),
-        *update_user_page(),
+        update_battle_button(request),
+        update_login_button(request),
+        *update_user_page(request),
         gr.HTML(""),
     )
 
@@ -343,6 +343,17 @@ def build_app():
 
         pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(pages)
+        # Request-aware handler wrappers keep the rest of the logic unchanged.
+
+        def login_click_handler(request: gr.Request):
+            return handle_login_click(
+                navigator, update_login_button, update_user_page, request
+            )
+
+        def logout_click_handler(request: gr.Request):
+            return handle_logout_click(
+                navigator, update_login_button, update_user_page, request
+            )
 
         # Navigation - battle page will refresh prompts via its own load handler
         battle_btn.click(
@@ -373,9 +384,7 @@ def build_app():
 
         # Login
         login_btn.click(
-            lambda: handle_login_click(
-                navigator, update_login_button, update_user_page
-            ),
+            login_click_handler,
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
             js="""
 () => {
@@ -405,9 +414,7 @@ def build_app():
 
         # Logout
         logout_btn.click(
-            lambda: handle_logout_click(
-                navigator, update_login_button, update_user_page
-            ),
+            logout_click_handler,
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
         )
 
