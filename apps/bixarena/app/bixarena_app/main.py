@@ -276,10 +276,13 @@ def build_app():
         #cta-button-row {
             justify-content: center !important;
         }
+        #cta-button-container {
+            max-width: 300px !important;
+        }
         #cta-btn-authenticated, #cta-btn-login {
-            min-width: fit-content !important;
-            width: fit-content !important;
-            flex-grow: 0 !important;
+            width: 100% !important;
+        }
+        #cta-btn-authenticated *, #cta-btn-login * {
             white-space: nowrap !important;
         }
         """,
