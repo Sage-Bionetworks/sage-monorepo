@@ -106,8 +106,8 @@ class DatabaseStack(cdk.Stack):
                 export_name=f"{stack_prefix}-database-secret-arn",
             )
 
-        # Expose database connections for other stacks to reference
-        self.database = self.database_construct.database
-        self.database_connections = self.database_construct.database_connections
-        self.database_secret = database_secret
-        self.security_group = self.database_construct.security_group
+        # Expose database construct for other stacks to reference
+        # Access properties through:
+        #   database_stack.database_construct.database
+        #   database_stack.database_construct.database_connections
+        #   database_stack.database_construct.security_group

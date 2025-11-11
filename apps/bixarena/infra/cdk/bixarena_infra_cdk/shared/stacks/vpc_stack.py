@@ -38,7 +38,7 @@ class VpcStack(cdk.Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # Create VPC
-        vpc_construct = BixArenaVpc(
+        self.vpc_construct = BixArenaVpc(
             self,
             "Vpc",
             cidr=vpc_cidr,
@@ -46,14 +46,11 @@ class VpcStack(cdk.Stack):
             nat_gateways=nat_gateways,
         )
 
-        # Export VPC for use in other stacks
-        self.vpc = vpc_construct.vpc
-
         # CloudFormation outputs
         cdk.CfnOutput(
             self,
             "VpcId",
-            value=self.vpc.vpc_id,
+            value=self.vpc_construct.vpc.vpc_id,
             description="VPC ID",
             export_name=f"{stack_prefix}-vpc-id",
         )
@@ -61,12 +58,14 @@ class VpcStack(cdk.Stack):
         cdk.CfnOutput(
             self,
             "VpcCidr",
-            value=self.vpc.vpc_cidr_block,
+            value=self.vpc_construct.vpc.vpc_cidr_block,
             description="VPC CIDR block",
         )
 
         # Export public subnet IDs
-        public_subnet_ids = [subnet.subnet_id for subnet in self.vpc.public_subnets]
+        public_subnet_ids = [
+            subnet.subnet_id for subnet in self.vpc_construct.vpc.public_subnets
+        ]
         cdk.CfnOutput(
             self,
             "PublicSubnetIds",
@@ -75,7 +74,9 @@ class VpcStack(cdk.Stack):
         )
 
         # Export private subnet IDs
-        private_subnet_ids = [subnet.subnet_id for subnet in self.vpc.private_subnets]
+        private_subnet_ids = [
+            subnet.subnet_id for subnet in self.vpc_construct.vpc.private_subnets
+        ]
         cdk.CfnOutput(
             self,
             "PrivateSubnetIds",

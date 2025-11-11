@@ -37,21 +37,18 @@ class EcsClusterStack(cdk.Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # Create ECS cluster with service discovery
-        cluster_construct = BixArenaEcsCluster(
+        self.cluster_construct = BixArenaEcsCluster(
             self,
             "Cluster",
             vpc=vpc,
             cluster_name=stack_prefix,  # Use stack prefix as cluster name
         )
 
-        # Export cluster for use in service stacks
-        self.cluster = cluster_construct.cluster
-
         # CloudFormation outputs
         cdk.CfnOutput(
             self,
             "ClusterName",
-            value=self.cluster.cluster_name,
+            value=self.cluster_construct.cluster.cluster_name,
             description="ECS cluster name",
             export_name=f"{stack_prefix}-cluster-name",
         )
@@ -59,7 +56,7 @@ class EcsClusterStack(cdk.Stack):
         cdk.CfnOutput(
             self,
             "ClusterArn",
-            value=self.cluster.cluster_arn,
+            value=self.cluster_construct.cluster.cluster_arn,
             description="ECS cluster ARN",
             export_name=f"{stack_prefix}-cluster-arn",
         )

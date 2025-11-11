@@ -62,7 +62,7 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
+        vpc=vpc_stack.vpc_construct.vpc,
         description=f"PostgreSQL database for BixArena {environment} environment",
     )
     database_stack.add_dependency(vpc_stack)
@@ -75,7 +75,7 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
+        vpc=vpc_stack.vpc_construct.vpc,
         description=f"Valkey cache cluster for BixArena {environment} environment",
     )
     valkey_stack.add_dependency(vpc_stack)
@@ -87,7 +87,7 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
+        vpc=vpc_stack.vpc_construct.vpc,
         certificate_arn=certificate_arn if certificate_arn else None,
         description=(
             f"Application Load Balancer for BixArena {environment} environment"
@@ -102,7 +102,7 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
+        vpc=vpc_stack.vpc_construct.vpc,
         description=f"ECS cluster for BixArena {environment} environment",
     )
     ecs_cluster_stack.add_dependency(vpc_stack)
@@ -116,11 +116,11 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
+        vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
         target_group=alb_stack.web_target_group,
         app_version=app_version,
-        alb_dns_name=alb_stack.alb.load_balancer_dns_name,
+        alb_dns_name=alb_stack.alb_construct.alb.load_balancer_dns_name,
         fqdn=fqdn if fqdn else None,
         use_https=use_https,
         description=f"Web client for BixArena {environment} environment",

@@ -55,15 +55,12 @@ class AlbStack(cdk.Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # Create ALB
-        alb_construct = BixArenaAlb(
+        self.alb_construct = BixArenaAlb(
             self,
             "Alb",
             vpc=vpc,
             internet_facing=True,
         )
-
-        self.alb = alb_construct.alb
-        self.security_group = alb_construct.security_group
 
         # Create target group for the web client (Gradio app)
         # This will be used by the Fargate service
@@ -118,7 +115,7 @@ class AlbStack(cdk.Stack):
             https_listener = elbv2.ApplicationListener(
                 self,
                 "HttpsListener",
-                load_balancer=self.alb,
+                load_balancer=self.alb_construct.alb,
                 port=443,
                 protocol=elbv2.ApplicationProtocol.HTTPS,
                 certificates=[certificate],
@@ -160,7 +157,7 @@ class AlbStack(cdk.Stack):
             http_listener = elbv2.ApplicationListener(
                 self,
                 "HttpListener",
-                load_balancer=self.alb,
+                load_balancer=self.alb_construct.alb,
                 port=80,
                 protocol=elbv2.ApplicationProtocol.HTTP,
                 open=True,
@@ -181,7 +178,7 @@ class AlbStack(cdk.Stack):
             http_listener = elbv2.ApplicationListener(
                 self,
                 "HttpListener",
-                load_balancer=self.alb,
+                load_balancer=self.alb_construct.alb,
                 port=80,
                 protocol=elbv2.ApplicationProtocol.HTTP,
                 open=True,
@@ -222,7 +219,7 @@ class AlbStack(cdk.Stack):
         cdk.CfnOutput(
             self,
             "LoadBalancerDnsName",
-            value=self.alb.load_balancer_dns_name,
+            value=self.alb_construct.alb.load_balancer_dns_name,
             description="ALB DNS name",
             export_name=f"{stack_prefix}-alb-dns-name",
         )
@@ -230,13 +227,15 @@ class AlbStack(cdk.Stack):
         cdk.CfnOutput(
             self,
             "LoadBalancerArn",
-            value=self.alb.load_balancer_arn,
+            value=self.alb_construct.alb.load_balancer_arn,
             description="ALB ARN",
         )
 
         # Output health check URL
         protocol = "https" if use_https else "http"
-        health_url = f"{protocol}://{self.alb.load_balancer_dns_name}/health"
+        health_url = (
+            f"{protocol}://{self.alb_construct.alb.load_balancer_dns_name}/health"
+        )
         cdk.CfnOutput(
             self,
             "HealthCheckUrl",

@@ -68,7 +68,7 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
+        vpc=vpc_stack.vpc_construct.vpc,
         description=f"PostgreSQL database for BixArena {environment} environment",
     )
     database_stack.add_dependency(vpc_stack)
@@ -81,7 +81,7 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
+        vpc=vpc_stack.vpc_construct.vpc,
         description=f"Valkey cache cluster for BixArena {environment} environment",
     )
     valkey_stack.add_dependency(vpc_stack)
@@ -94,7 +94,7 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
+        vpc=vpc_stack.vpc_construct.vpc,
         certificate_arn=certificate_arn if certificate_arn else None,
         description=(
             f"Application Load Balancer for BixArena {environment} environment"
@@ -109,7 +109,7 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
+        vpc=vpc_stack.vpc_construct.vpc,
         description=f"ECS cluster for BixArena {environment} environment",
     )
     ecs_cluster_stack.add_dependency(vpc_stack)
@@ -123,11 +123,11 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
+        vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
         target_group=alb_stack.web_target_group,
         app_version=app_version,
-        alb_dns_name=alb_stack.alb.load_balancer_dns_name,
+        alb_dns_name=alb_stack.alb_construct.alb.load_balancer_dns_name,
         fqdn=fqdn if fqdn else None,
         use_https=use_https,
         openrouter_api_key=os.getenv("OPENROUTER_API_KEY", ""),
@@ -138,7 +138,8 @@ def main() -> None:
 
     # Create API service stack (depends on database, valkey, and ECS cluster)
     # Database secret is guaranteed to exist since we use from_generated_secret()
-    if database_stack.database_secret is None:
+    database_secret = database_stack.database_construct.database.secret
+    if database_secret is None:
         raise ValueError(
             "Database secret must be created. "
             "Verify PostgreSQL database initialization completed successfully."
@@ -149,16 +150,16 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
-        database=database_stack.database,
-        database_secret_arn=database_stack.database_secret.secret_arn,
+        vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
+        database=database_stack.database_construct.database,
+        database_secret_arn=database_secret.secret_arn,
         valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
         valkey_port=valkey_stack.valkey_construct.cluster_port,
         api_version=app_version,  # Use same version tag as app
         ui_base_url=(
             f"{'https' if use_https else 'http'}://"
-            f"{fqdn if fqdn else alb_stack.alb.load_balancer_dns_name}"
+            f"{fqdn if fqdn else alb_stack.alb_construct.alb.load_balancer_dns_name}"
         ),
         description=f"API service for BixArena {environment} environment",
     )
@@ -174,16 +175,16 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
-        database=database_stack.database,
-        database_secret_arn=database_stack.database_secret.secret_arn,
+        vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
+        database=database_stack.database_construct.database,
+        database_secret_arn=database_secret.secret_arn,
         valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
         valkey_port=valkey_stack.valkey_construct.cluster_port,
         auth_version=app_version,  # Use same version tag as app
         ui_base_url=(
             f"{'https' if use_https else 'http'}://"
-            f"{fqdn if fqdn else alb_stack.alb.load_balancer_dns_name}"
+            f"{fqdn if fqdn else alb_stack.alb_construct.alb.load_balancer_dns_name}"
         ),
         synapse_client_id=os.getenv("SYNAPSE_CLIENT_ID", "changeme"),
         synapse_client_secret=os.getenv("SYNAPSE_CLIENT_SECRET", "changeme"),
@@ -198,8 +199,8 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
+        vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
         target_group=alb_stack.api_gateway_target_group,
         valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
         valkey_port=valkey_stack.valkey_construct.cluster_port,
@@ -234,8 +235,8 @@ def main() -> None:
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
+        vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
         description=f"Database bastion for BixArena {environment} environment",
     )
 
