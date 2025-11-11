@@ -40,7 +40,7 @@ EXAMPLE_PROMPTS_CSS = """
     transition: all 0.2s ease;
     width: 100%;
     height: auto;
-    min-height: 87px;
+    min-height: 89px;
     display: flex;
     align-items: flex-start;
     cursor: pointer;
