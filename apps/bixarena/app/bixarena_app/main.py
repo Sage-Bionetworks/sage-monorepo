@@ -343,17 +343,6 @@ def build_app():
 
         pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(pages)
-        # Request-aware handler wrappers keep the rest of the logic unchanged.
-
-        def login_click_handler(request: gr.Request):
-            return handle_login_click(
-                navigator, update_login_button, update_user_page, request
-            )
-
-        def logout_click_handler(request: gr.Request):
-            return handle_logout_click(
-                navigator, update_login_button, update_user_page, request
-            )
 
         # Navigation - battle page will refresh prompts via its own load handler
         battle_btn.click(
@@ -384,7 +373,9 @@ def build_app():
 
         # Login
         login_btn.click(
-            login_click_handler,
+            lambda request: handle_login_click(
+                navigator, update_login_button, update_user_page, request
+            ),
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
             js="""
 () => {
@@ -414,7 +405,9 @@ def build_app():
 
         # Logout
         logout_btn.click(
-            logout_click_handler,
+            lambda request: handle_logout_click(
+                navigator, update_login_button, update_user_page, request
+            ),
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
         )
 
