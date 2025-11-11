@@ -244,8 +244,23 @@ def build_app():
     }
     """
 
+    crisp_script = """
+    <script type="text/javascript">
+        window.$crisp=[];
+        window.CRISP_WEBSITE_ID="d58ad402-1217-476c-be6a-c8949671ced4";
+        (function(){
+            d=document;
+            s=d.createElement("script");
+            s.src="https://client.crisp.chat/l.js";
+            s.async=1;
+            d.getElementsByTagName("head")[0].appendChild(s);
+        })();
+    </script>
+    """
+
     with gr.Blocks(
         title="BixArena - Biomedical LLM Evaluation",
+        head=crisp_script,
         css="""
         /* Hide Gradio's default footer */
         footer {
