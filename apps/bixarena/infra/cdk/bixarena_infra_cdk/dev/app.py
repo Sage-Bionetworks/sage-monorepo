@@ -156,7 +156,7 @@ def main() -> None:
         database_secret_arn=database_secret.secret_arn,
         valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
         valkey_port=valkey_stack.valkey_construct.cluster_port,
-        api_version=app_version,  # Use same version tag as app
+        app_version=app_version,  # Use same version tag as app
         ui_base_url=(
             f"{'https' if use_https else 'http'}://"
             f"{fqdn if fqdn else alb_stack.alb_construct.alb.load_balancer_dns_name}"
@@ -181,7 +181,7 @@ def main() -> None:
         database_secret_arn=database_secret.secret_arn,
         valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
         valkey_port=valkey_stack.valkey_construct.cluster_port,
-        auth_version=app_version,  # Use same version tag as app
+        app_version=app_version,  # Use same version tag as app
         ui_base_url=(
             f"{'https' if use_https else 'http'}://"
             f"{fqdn if fqdn else alb_stack.alb_construct.alb.load_balancer_dns_name}"
@@ -204,7 +204,7 @@ def main() -> None:
         target_group=alb_stack.api_gateway_target_group,
         valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
         valkey_port=valkey_stack.valkey_construct.cluster_port,
-        gateway_version=app_version,  # Use same version tag as app
+        app_version=app_version,  # Use same version tag as app
         description=f"API Gateway for BixArena {environment} environment",
     )
     # Explicit dependencies: Gateway must deploy AFTER backend services

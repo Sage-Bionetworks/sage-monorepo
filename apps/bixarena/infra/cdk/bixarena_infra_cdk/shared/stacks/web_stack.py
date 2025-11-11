@@ -47,10 +47,6 @@ class WebStack(cdk.Stack):
             app_version: Application version (Docker image tag)
             alb_dns_name: DNS name of the ALB
             developer_name: Developer name for dev environment (optional)
-            cluster: ECS cluster
-            target_group: ALB target group for the app
-            app_version: Application version (Docker image tag)
-            alb_dns_name: DNS name of the ALB
             fqdn: Fully qualified domain name (optional, uses ALB DNS if not provided)
             use_https: Whether to use HTTPS protocol (default: False for HTTP)
             openrouter_api_key: OpenRouter API key for LLM access

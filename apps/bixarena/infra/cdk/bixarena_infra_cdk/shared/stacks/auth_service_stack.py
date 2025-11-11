@@ -29,7 +29,7 @@ class AuthServiceStack(cdk.Stack):
         valkey_endpoint: str,
         valkey_port: str,
         developer_name: str | None = None,
-        auth_version: str = "edge",
+        app_version: str = "edge",
         ui_base_url: str = "http://localhost:8100",
         synapse_client_id: str = "changeme",
         synapse_client_secret: str = "changeme",
@@ -50,12 +50,7 @@ class AuthServiceStack(cdk.Stack):
             valkey_endpoint: Valkey cluster endpoint
             valkey_port: Valkey cluster port
             developer_name: Developer name for dev environment (optional)
-            cluster: ECS cluster
-            database: RDS PostgreSQL database instance
-            database_secret_arn: ARN of the database credentials secret
-            valkey_endpoint: Valkey cluster endpoint
-            valkey_port: Valkey cluster port
-            auth_version: Auth service version (Docker image tag)
+            app_version: Application version (Docker image tag)
             ui_base_url: Base URL for the UI (for redirects after auth)
             synapse_client_id: Synapse OAuth client ID
             synapse_client_secret: Synapse OAuth client secret
@@ -73,7 +68,7 @@ class AuthServiceStack(cdk.Stack):
             self,
             "AuthServiceImage",
             "bixarena-auth-service",
-            f"ghcr.io/sage-bionetworks/bixarena-auth-service:{auth_version}",
+            f"ghcr.io/sage-bionetworks/bixarena-auth-service:{app_version}",
         )
 
         # Environment variables for the Auth service container
