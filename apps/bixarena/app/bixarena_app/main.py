@@ -262,8 +262,8 @@ def build_app():
         footer {
             display: none !important;
         }
-        /* Remove padding from footer HTML containers */
-        .footer-no-padding .html-container {
+        /* Remove padding from HTML containers */
+        .html-no-padding .html-container {
             padding: 0 !important;
         }
         /* Override Gradio's default container max-width */
@@ -329,7 +329,7 @@ def build_app():
             + "</span><span id='backend-base' style='display:none'>"
             + base_markup
             + "</span>",
-            elem_classes="footer-no-padding",
+            elem_classes="html-no-padding",
         )
 
         pages = [home_page, battle_page, leaderboard_page, user_page]
