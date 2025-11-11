@@ -126,6 +126,10 @@ class BastionStack(cdk.Stack):
             circuit_breaker=ecs.DeploymentCircuitBreaker(rollback=True),
             # Health check grace period
             health_check_grace_period=cdk.Duration.seconds(60),
+            # Deployment configuration for single-task service
+            # AZ rebalancing requires max > 100% to temporarily run 2 tasks
+            min_healthy_percent=0,
+            max_healthy_percent=200,
         )
 
         # Store for reference
