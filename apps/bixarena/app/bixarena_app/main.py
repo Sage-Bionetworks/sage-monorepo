@@ -179,8 +179,6 @@ def parse_args():
     - APP_HOST: Server host (default: 127.0.0.1)
     - APP_PORT: Server port (default: None, uvicorn will auto-select)
     - APP_SHARE: Enable sharing (true/1/yes, default: false)
-    - APP_CONCURRENCY_COUNT: Concurrency limit (default: 10)
-    - APP_GRADIO_ROOT_PATH: Root path for Gradio (default: None)
     - LOG_LEVEL: Logging level for uvicorn (default: info)
 
     Priority for port selection:
@@ -220,16 +218,6 @@ def parse_args():
         "--share",
         action="store_true",
         default=os.environ.get("APP_SHARE", "").lower() in ("true", "1", "yes"),
-    )
-    parser.add_argument(
-        "--concurrency-count",
-        type=int,
-        default=int(os.environ.get("APP_CONCURRENCY_COUNT", "10")),
-    )
-    parser.add_argument(
-        "--gradio-root-path",
-        type=str,
-        default=os.environ.get("APP_GRADIO_ROOT_PATH"),
     )
     # Use parse_known_args to ignore unknown args (like demo path from gradio CLI)
     args, _ = parser.parse_known_args()
@@ -460,11 +448,8 @@ def build_app():
     return demo
 
 
-def create_app(concurrency_count: int = 10) -> FastAPI:
+def create_app() -> FastAPI:
     """Create and configure the FastAPI application with Gradio mounted.
-
-    Args:
-        concurrency_count: Maximum concurrent requests for Gradio queue
 
     Returns:
         Configured FastAPI application
@@ -482,7 +467,8 @@ def create_app(concurrency_count: int = 10) -> FastAPI:
 
     # Build Gradio app and mount it to FastAPI
     demo = build_app()
-    demo.queue(default_concurrency_limit=concurrency_count)
+    # Use unlimited concurrency
+    demo.queue(default_concurrency_limit=None)
 
     # Mount Gradio to the FastAPI app at root path
     fastapi_app = gr.mount_gradio_app(fastapi_app, demo, path="/")
@@ -492,4 +478,4 @@ def create_app(concurrency_count: int = 10) -> FastAPI:
 
 # Create app instance at module level for uvicorn imports
 args = parse_args()
-app = create_app(concurrency_count=args.concurrency_count)
+app = create_app()
