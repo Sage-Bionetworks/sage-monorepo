@@ -1,4 +1,5 @@
 import argparse
+import functools
 import logging
 import os
 
@@ -359,6 +360,14 @@ def build_app():
             outputs=pages,
         )
 
+        # Bind static args so Gradio can still inject request without warnings.
+        login_handler = functools.partial(
+            handle_login_click, navigator, update_login_button, update_user_page
+        )
+        logout_handler = functools.partial(
+            handle_logout_click, navigator, update_login_button, update_user_page
+        )
+
         # Login CTA button - redirects to login page
         cta_btn_login.click(
             None,
@@ -373,9 +382,7 @@ def build_app():
 
         # Login
         login_btn.click(
-            lambda request: handle_login_click(
-                navigator, update_login_button, update_user_page, request
-            ),
+            login_handler,
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
             js="""
 () => {
@@ -405,9 +412,7 @@ def build_app():
 
         # Logout
         logout_btn.click(
-            lambda request: handle_logout_click(
-                navigator, update_login_button, update_user_page, request
-            ),
+            logout_handler,
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
         )
 
