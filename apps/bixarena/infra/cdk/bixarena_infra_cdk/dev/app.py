@@ -1,5 +1,115 @@
 #!/usr/bin/env python3
-"""CDK app for dev environment."""
+"""BixArena CDK Application - Development Environment.
+
+This module defines the complete infrastructure stack for the BixArena platform
+in the development environment.
+
+Architecture Overview:
+    The application consists of several interconnected services organized in layers:
+
+    1. Foundation Layer:
+       - VPC with public/private subnets across availability zones
+       - Application Load Balancer (ALB) for HTTP/HTTPS traffic routing
+       - S3 bucket for application data storage
+
+    2. Data Layer:
+       - PostgreSQL database (RDS) for persistent data storage
+       - Valkey cache cluster for session management and caching
+
+    3. Service Layer:
+       - Auth Service: OAuth2/OIDC authentication with Synapse integration
+       - API Service: Backend business logic and data access
+       - API Gateway: Request routing, session validation, and service aggregation
+       - Web Client: Gradio-based Python frontend application
+
+    4. Management Layer:
+       - Bastion host: ECS task for secure database access via Session Manager
+       - ECS Cluster: Container orchestration for all services
+
+Service Discovery:
+    Services communicate internally using AWS Cloud Map service discovery:
+    - bixarena-auth-service.{cluster_name}.local:8115 (Auth Service)
+    - bixarena-api.{cluster_name}.local:8112 (API Service)
+    - bixarena-api-gateway.{cluster_name}.local:8113 (API Gateway)
+    - bixarena-app.{cluster_name}.local:8100 (Web Client)
+
+    External traffic flows through the ALB:
+    - /health → Fixed ALB response (health check)
+    - /api/*, /auth/*, /userinfo, /.well-known/jwks.json, /oauth2/token → API Gateway
+    - /* (default) → Web Client
+
+Stack Dependencies:
+    Stacks have explicit and implicit dependencies that determine deployment order:
+
+    1. VPC Stack (no dependencies)
+       - Provides networking foundation for all resources
+
+    2. Database Stack, Valkey Stack, ALB Stack (depends on: VPC)
+       - Database and Valkey deployed in private subnets
+       - ALB deployed in public subnets
+
+    3. ECS Cluster Stack (depends on: VPC)
+       - Container orchestration platform
+
+    4. Auth Service Stack, API Service Stack
+       (depends on: VPC, ECS Cluster, Database, Valkey)
+       - Backend services with database and cache access
+       - Use Cloud Map for service discovery
+
+    5. API Gateway Stack
+       (depends on: VPC, ECS Cluster, Valkey, Auth Service, API Service)
+       - Routes traffic to backend services
+       - Validates sessions using Auth Service
+       - Connected to ALB target group
+
+    6. Web Stack (depends on: VPC, ECS Cluster, ALB)
+       - Frontend service connected to ALB
+       - Communicates with backend via API Gateway
+
+    7. Bastion Stack, Bucket Stack (depends on: VPC, ECS Cluster)
+       - Support infrastructure
+
+    Note: Some dependencies are implicit via CloudFormation references (e.g., security
+    group rules, database endpoints) and don't require explicit add_dependency() calls.
+
+Environment Configuration:
+    Development environment uses cost-optimized settings:
+
+    - VPC: Single NAT Gateway (vs. one per AZ in stage/prod)
+    - Database: t4g.small, single-AZ, 20GB storage, 1-day backup retention
+    - Valkey: Single-node deployment (vs. multi-node in stage/prod)
+    - Services: Minimal CPU/memory allocation (1 vCPU, 2GB for most services)
+    - Bastion: Enabled for database access (disabled in stage/prod)
+    - HTTPS: Optional via CERTIFICATE_ARN environment variable
+    - Developer Isolation: Stack prefix includes developer name for multi-tenant dev
+
+    Configuration via environment variables:
+    - ENVIRONMENT: Must be "dev"
+    - STACK_PREFIX: Unique identifier for this deployment
+      (default: dev-bixarena-{developer})
+    - DEVELOPER_NAME: Developer name for stack isolation
+      (auto-detected from AWS profile)
+    - VPC_CIDR: VPC CIDR block (default: 10.0.0.0/16)
+    - APP_VERSION: Docker image tag for all services (default: "edge")
+    - CERTIFICATE_ARN: ACM certificate ARN for HTTPS
+      (optional, uses HTTP if not provided)
+    - FQDN: Custom domain name (optional, uses ALB DNS if not provided)
+    - SYNAPSE_CLIENT_ID: Synapse OAuth client ID (default: "changeme")
+    - SYNAPSE_CLIENT_SECRET: Synapse OAuth client secret (default: "changeme")
+    - OPENROUTER_API_KEY: API key for LLM access (optional)
+
+Docker Images:
+    Images can be loaded from local tarballs or remote registry:
+    - Local: Place .tar file in project root (e.g., bixarena-app.tar)
+    - Remote: Uses ghcr.io/sage-bionetworks/{service}:{APP_VERSION}
+
+Security:
+    - All services run in private subnets (no direct internet access)
+    - Database credentials stored in AWS Secrets Manager
+    - Security groups restrict traffic to VPC CIDR range
+    - ALB provides single entry point for external traffic
+    - Sessions managed via Valkey with secure cookie configuration
+"""
 
 import os
 

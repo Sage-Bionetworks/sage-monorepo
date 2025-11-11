@@ -1,5 +1,94 @@
 #!/usr/bin/env python3
-"""CDK app for prod environment."""
+"""BixArena CDK Application - Production Environment.
+
+This module defines the complete infrastructure stack for the BixArena platform
+in the production environment.
+
+Architecture Overview:
+    The application consists of several interconnected services organized in layers:
+
+    1. Foundation Layer:
+       - VPC with public/private subnets across multiple availability zones
+       - Application Load Balancer (ALB) for HTTPS traffic routing
+       - S3 bucket for application data storage
+
+    2. Data Layer:
+       - PostgreSQL database (RDS) with Multi-AZ deployment for high availability
+       - Valkey cache cluster with multi-node configuration
+
+    3. Service Layer:
+       - Web Client: Gradio-based Python frontend application
+
+    Note: Auth Service, API Service, and API Gateway are not deployed in production.
+    Production currently deploys web client only.
+
+Service Discovery:
+    Services communicate internally using AWS Cloud Map service discovery:
+    - bixarena-app.{cluster_name}.local:8100 (Web Client)
+
+    External traffic flows through the ALB:
+    - /health → Fixed ALB response (health check)
+    - /* (default) → Web Client
+
+Stack Dependencies:
+    Stacks have explicit and implicit dependencies that determine deployment order:
+
+    1. VPC Stack (no dependencies)
+       - Provides networking foundation for all resources
+
+    2. Database Stack, Valkey Stack, ALB Stack (depends on: VPC)
+       - Database and Valkey deployed in private subnets with Multi-AZ
+       - ALB deployed in public subnets
+
+    3. ECS Cluster Stack (depends on: VPC)
+       - Container orchestration platform
+
+    4. Web Stack (depends on: VPC, ECS Cluster, ALB)
+       - Frontend service connected to ALB
+
+    5. Bucket Stack (depends on: VPC)
+       - Support infrastructure
+
+    Note: Some dependencies are implicit via CloudFormation references (e.g., security
+    group rules) and don't require explicit add_dependency() calls.
+
+Environment Configuration:
+    Production environment uses high-availability, production-grade settings:
+
+    - VPC: One NAT Gateway per AZ for high availability
+    - Database: t4g.large, Multi-AZ, 100GB storage, 30-day backup retention
+    - Valkey: Multi-node deployment for high availability
+    - Services: Production-grade CPU/memory allocation
+    - Bastion: Not deployed (no direct database access in production)
+    - HTTPS: Required via CERTIFICATE_ARN environment variable
+    - Multi-AZ: Enabled for all critical services (2 AZs by default)
+    - Deletion Protection: Enabled for database
+
+    Configuration via environment variables:
+    - ENVIRONMENT: Must be "prod"
+    - STACK_PREFIX: Unique identifier for this deployment
+      (default: prod-bixarena)
+    - VPC_CIDR: VPC CIDR block (default: 10.0.0.0/16)
+    - MAX_AZS: Number of Availability Zones (default: 2)
+    - APP_VERSION: Docker image tag for all services (default: "latest")
+    - CERTIFICATE_ARN: ACM certificate ARN for HTTPS (REQUIRED for production)
+    - FQDN: Custom domain name (optional, uses ALB DNS if not provided)
+
+Docker Images:
+    Images are loaded from remote registry:
+    - Remote: Uses ghcr.io/sage-bionetworks/{service}:{APP_VERSION}
+    - Default version: "latest" (stable releases only)
+    - Never use "edge" or development tags in production
+
+Security:
+    - All services run in private subnets (no direct internet access)
+    - Database credentials stored in AWS Secrets Manager
+    - Security groups restrict traffic to VPC CIDR range
+    - ALB provides single entry point for external traffic
+    - Multi-AZ deployment for high availability and fault tolerance
+    - Deletion protection enabled for critical resources
+    - HTTPS enforced for all traffic (HTTP redirects to HTTPS)
+"""
 
 import os
 
