@@ -59,7 +59,6 @@ def get_user_state(request: gr.Request | None = None) -> UserState:
 
     jsessionid = request.cookies.get("JSESSIONID")
     if not jsessionid:
-        # No session cookie - return ephemeral state
         return UserState()
 
     with _SESSION_LOCK:
