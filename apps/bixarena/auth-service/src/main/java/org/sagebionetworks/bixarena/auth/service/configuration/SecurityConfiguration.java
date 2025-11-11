@@ -1,6 +1,6 @@
 package org.sagebionetworks.bixarena.auth.service.configuration;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.bixarena.auth.service.security.SessionAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfiguration {
+
+  private final AppProperties appProperties;
 
   @Bean
   public SecurityFilterChain securityFilterChain(
@@ -58,20 +61,10 @@ public class SecurityConfiguration {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowCredentials(true);
-    config.setAllowedOrigins(
-      List.of(
-        "http://localhost:8100",
-        "http://127.0.0.1:8100",
-        "http://localhost:7860",
-        "http://127.0.0.1:7860",
-        // AWS ALB domain (hardcoded for testing)
-        "https://bixare-alb6f-ug1c5eft2tym-2057665726.us-east-1.elb.amazonaws.com",
-        "http://bixare-alb6f-ug1c5eft2tym-2057665726.us-east-1.elb.amazonaws.com"
-      )
-    );
-    config.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
-    config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cookie"));
+    config.setAllowCredentials(appProperties.cors().allowCredentials());
+    config.setAllowedOrigins(appProperties.cors().allowedOrigins());
+    config.setAllowedMethods(appProperties.cors().allowedMethods());
+    config.setAllowedHeaders(appProperties.cors().allowedHeaders());
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", config);
     return source;

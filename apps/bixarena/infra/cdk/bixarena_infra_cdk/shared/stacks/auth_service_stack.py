@@ -88,6 +88,9 @@ class AuthServiceStack(cdk.Stack):
             "APP_AUTH_CLIENT_ID": synapse_client_id,
             "APP_AUTH_CLIENT_SECRET": synapse_client_secret,
             "APP_AUTH_REDIRECT_URI": f"{ui_base_url}/auth/callback",
+            # CORS configuration: only allow requests from deployment URL
+            # This overrides the default list in application.yml
+            "APP_CORS_ALLOWED_ORIGINS": ui_base_url,
             # Use empty/null domain for host-only cookies (works with ALB hostname)
             "APP_SESSION_COOKIE_DOMAIN": "",  # Empty string = null = host-only
             # Use Lax for OAuth redirects (Strict blocks cross-site navigation)
