@@ -64,11 +64,14 @@ public class SecurityConfiguration {
         "http://localhost:8100",
         "http://127.0.0.1:8100",
         "http://localhost:7860",
-        "http://127.0.0.1:7860"
+        "http://127.0.0.1:7860",
+        // AWS ALB domain (hardcoded for testing)
+        "https://bixare-alb6f-ug1c5eft2tym-2057665726.us-east-1.elb.amazonaws.com",
+        "http://bixare-alb6f-ug1c5eft2tym-2057665726.us-east-1.elb.amazonaws.com"
       )
     );
     config.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
-    config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+    config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cookie"));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", config);
     return source;
