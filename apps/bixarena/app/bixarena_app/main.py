@@ -234,11 +234,9 @@ def build_app():
     cleanup_js = """
     function() {
         setTimeout(function() {
-            if (window.location.search.includes('code=')) {
-                const url = new URL(window.location);
-                url.searchParams.delete('code');
-                url.searchParams.delete('state');
-                window.history.replaceState({}, document.title, url.pathname);
+            // Reset Crisp chat session on page load
+            if (window.$crisp) {
+                window.$crisp.push(["do", "session:reset"]);
             }
         }, 100);
     }
@@ -255,6 +253,15 @@ def build_app():
             s.async=1;
             d.getElementsByTagName("head")[0].appendChild(s);
         })();
+
+        // Trigger scenario when chatbot is opened
+        window.$crisp.push(["on", "chat:opened", function() {
+            window.$crisp.push([
+                "do",
+                "bot:scenario:run",
+                ["scenario_e9e05450-91a3-4dac-9970-004f8071a52b"]
+            ]);
+        }]);
     </script>
     """
 
