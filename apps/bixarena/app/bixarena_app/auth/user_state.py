@@ -46,33 +46,25 @@ class UserState:
 
 _SESSION_STATES: dict[str, UserState] = {}
 _SESSION_LOCK = threading.Lock()
-_DEFAULT_SESSION_KEY = "__global__"
-
-
-def _get_session_key(request: gr.Request | None) -> str:
-    """Derive a stable session key for the incoming Gradio request."""
-    if request and getattr(request, "session_hash", None):
-        return request.session_hash  # type: ignore[return-value]
-    if request and hasattr(request, "client"):
-        client = request.client
-        if isinstance(client, (tuple, list)) and client:
-            return f"client::{client[0]}"
-    return _DEFAULT_SESSION_KEY
 
 
 def get_user_state(request: gr.Request | None = None) -> UserState:
-    """Return the UserState associated with the current Gradio session."""
-    session_key = _get_session_key(request)
+    """Return the UserState associated with the current Gradio session.
+
+    Uses JSESSIONID cookie as the session key for multi-user isolation.
+    If no JSESSIONID is present, returns a fresh user state.
+    """
+    if not request:
+        return UserState()
+
+    jsessionid = request.cookies.get("JSESSIONID")
+    if not jsessionid:
+        # No session cookie - return ephemeral state
+        return UserState()
+
     with _SESSION_LOCK:
-        state = _SESSION_STATES.get(session_key)
+        state = _SESSION_STATES.get(jsessionid)
         if state is None:
             state = UserState()
-            _SESSION_STATES[session_key] = state
+            _SESSION_STATES[jsessionid] = state
         return state
-
-
-def clear_user_state(request: gr.Request | None = None) -> None:
-    """Remove the stored state for a session."""
-    session_key = _get_session_key(request)
-    with _SESSION_LOCK:
-        _SESSION_STATES.pop(session_key, None)
