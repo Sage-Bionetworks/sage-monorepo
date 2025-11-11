@@ -80,7 +80,7 @@ class DatabaseStack(cdk.Stack):
             "DatabaseEndpoint",
             value=self.database_construct.database_endpoint,
             description="PostgreSQL database endpoint",
-            export_name=f"{stack_prefix}-db-endpoint",
+            export_name=f"{stack_prefix}-database-endpoint",
         )
 
         cdk.CfnOutput(
@@ -88,7 +88,7 @@ class DatabaseStack(cdk.Stack):
             "DatabasePort",
             value=self.database_construct.database_port,
             description="PostgreSQL database port",
-            export_name=f"{stack_prefix}-db-port",
+            export_name=f"{stack_prefix}-database-port",
         )
 
         # Database secret is guaranteed to exist since we use from_generated_secret()
@@ -101,7 +101,7 @@ class DatabaseStack(cdk.Stack):
                 description=(
                     "ARN of the Secrets Manager secret containing database credentials"
                 ),
-                export_name=f"{stack_prefix}-db-secret-arn",
+                export_name=f"{stack_prefix}-database-secret-arn",
             )
 
         # Expose database connections for other stacks to reference
