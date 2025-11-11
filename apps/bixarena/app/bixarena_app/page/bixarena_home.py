@@ -59,14 +59,21 @@ def create_intro_section():
                     Welcome to BixArena
                 </h1>
                 <p style="font-size: 1.2rem; line-height: 1.6; max-width: 800px; margin: 0 auto; color: #e5e7eb;">
-                    Anyone with a computer and an internet connection can evaluate and benchmark Large 
-                    Language Models (LLMs) to solve major biomedical problems through a community-driven 
-                    platform known as "BixArena." This web-based evaluation arena helps biomedical researchers 
-                    compare LLMs on domain-specific tasks, fostering collaboration and establishing best 
-                    practices. The top-performing models might just accelerate the next breakthrough in clinical 
+                    Anyone with a computer and an internet connection can evaluate and benchmark Large
+                    Language Models (LLMs) to solve major biomedical problems through a community-driven
+                    platform known as "BixArena." This web-based evaluation arena helps biomedical researchers
+                    compare LLMs on domain-specific tasks, fostering collaboration and establishing best
+                    practices. The top-performing models might just accelerate the next breakthrough in clinical
                     technology or drug discovery.
                 </p>
             </div>
+            <style>
+            /* Limit metric box row width */
+            #public-stats-row, #user-stats-row {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+            </style>
             """)
 
 
@@ -186,7 +193,7 @@ def build_stats_section():
     """Create the statistics section with metrics"""
 
     # First row: Public stats
-    with gr.Row():
+    with gr.Row(elem_id="public-stats-row"):
         with gr.Column(visible=False) as models_evaluated_column, gr.Group():
             models_evaluated_box = gr.HTML("")
 
@@ -197,7 +204,7 @@ def build_stats_section():
             total_users_box = gr.HTML("")
 
     # Second row: User-specific stats (only shown when logged in)
-    with gr.Row():
+    with gr.Row(elem_id="user-stats-row"):
         with gr.Column(visible=False) as user_battles_column, gr.Group():
             user_battles_box = gr.HTML("")
 
@@ -237,10 +244,8 @@ def build_cta_section():
 
     # Two buttons - one for authenticated, one for unauthenticated users
     # Visibility will be controlled based on authentication state
-    with gr.Row():
-        with gr.Column(scale=2):
-            pass
-        with gr.Column(scale=1):
+    with gr.Row(elem_id="cta-button-row"):
+        with gr.Column(scale=1, min_width=200, elem_id="cta-button-container"):
             # Button for authenticated users - navigates to battle page
             start_btn_authenticated = gr.Button(
                 "Start Evaluating Models",
@@ -257,8 +262,6 @@ def build_cta_section():
                 visible=False,
                 elem_id="cta-btn-login",
             )
-        with gr.Column(scale=2):
-            pass
 
     return start_btn_authenticated, start_btn_login
 

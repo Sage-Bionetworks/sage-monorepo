@@ -16,7 +16,7 @@ def build_footer():
         f"""
 <style>
 /* Remove default Gradio HTML container padding */
-.footer-no-padding {{
+.html-no-padding {{
     padding: 0 !important;
 }}
 
@@ -166,12 +166,12 @@ def build_footer():
 
         <!-- Right section - Version -->
         <div class="footer-right">
-            {f"<span>v{app_version}</span>" if app_version else ""}
+            {f"<span>{app_version}</span>" if app_version else ""}
         </div>
     </div>
 </div>
         """,
-        elem_classes="footer-no-padding",
+        elem_classes="html-no-padding",
     )
 
     return footer

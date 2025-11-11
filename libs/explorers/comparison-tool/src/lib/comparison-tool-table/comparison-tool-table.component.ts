@@ -10,10 +10,12 @@ import {
 } from '@angular/core';
 import {
   ComparisonToolFilterService,
+  ComparisonToolHelperService,
   ComparisonToolService,
   HelperService,
   PlatformService,
 } from '@sagebionetworks/explorers/services';
+import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
@@ -21,7 +23,13 @@ import { ComparisonToolColumnsComponent } from './comparison-tool-columns/compar
 
 @Component({
   selector: 'explorers-comparison-tool-table',
-  imports: [TooltipModule, ComparisonToolColumnsComponent, SvgIconComponent, BaseTableComponent],
+  imports: [
+    TooltipModule,
+    ComparisonToolColumnsComponent,
+    SvgIconComponent,
+    BaseTableComponent,
+    DownloadDomImageComponent,
+  ],
   templateUrl: './comparison-tool-table.component.html',
   styleUrls: ['./comparison-tool-table.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -29,6 +37,7 @@ import { ComparisonToolColumnsComponent } from './comparison-tool-columns/compar
 export class ComparisonToolTableComponent implements AfterViewInit {
   comparisonToolService = inject(ComparisonToolService);
   comparisonToolFilterService = inject(ComparisonToolFilterService);
+  comparisonToolHelperService = inject(ComparisonToolHelperService);
   helperService = inject(HelperService);
   platformService = inject(PlatformService);
 
@@ -74,7 +83,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     }, 100);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onWindowResize() {
     if (this.platformService.isBrowser) {
       const tableElementWidth = this.tableElement()?.nativeElement?.offsetWidth || 0;
@@ -85,8 +94,19 @@ export class ComparisonToolTableComponent implements AfterViewInit {
     }
   }
 
-  downloadPinned() {
-    // TODO: MG-451
+  getPinnedDataFilename(): string {
+    const config = this.comparisonToolService.currentConfig();
+    if (!config) return '';
+    return this.comparisonToolHelperService.getComparisonToolDataFilename(config);
+  }
+
+  getPinnedDataForCsv(): string[][] {
+    const config = this.comparisonToolService.currentConfig();
+    if (!config) return [];
+
+    const data = this.pinnedData();
+    const siteUrl = window.location.origin;
+    return this.comparisonToolHelperService.buildComparisonToolCsvRows(data, config, siteUrl);
   }
 
   pinAll() {

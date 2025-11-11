@@ -34,6 +34,10 @@ public class HistoricalLeaderboardEntryDto {
 
   private Integer rank;
 
+  private Double bootstrapQ025;
+
+  private Double bootstrapQ975;
+
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
@@ -44,11 +48,13 @@ public class HistoricalLeaderboardEntryDto {
   /**
    * Constructor with only required parameters
    */
-  public HistoricalLeaderboardEntryDto(String snapshotId, Double btScore, Integer voteCount, Integer rank, OffsetDateTime createdAt) {
+  public HistoricalLeaderboardEntryDto(String snapshotId, Double btScore, Integer voteCount, Integer rank, Double bootstrapQ025, Double bootstrapQ975, OffsetDateTime createdAt) {
     this.snapshotId = snapshotId;
     this.btScore = btScore;
     this.voteCount = voteCount;
     this.rank = rank;
+    this.bootstrapQ025 = bootstrapQ025;
+    this.bootstrapQ975 = bootstrapQ975;
     this.createdAt = createdAt;
   }
 
@@ -78,11 +84,11 @@ public class HistoricalLeaderboardEntryDto {
   }
 
   /**
-   * Primary scoring metric at this point in time
+   * Bradley-Terry score - primary ranking metric at this point in time
    * @return btScore
    */
   @NotNull 
-  @Schema(name = "btScore", example = "0.915", description = "Primary scoring metric at this point in time", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "btScore", example = "0.915", description = "Bradley-Terry score - primary ranking metric at this point in time", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("btScore")
   public Double getBtScore() {
     return btScore;
@@ -132,6 +138,46 @@ public class HistoricalLeaderboardEntryDto {
     this.rank = rank;
   }
 
+  public HistoricalLeaderboardEntryDto bootstrapQ025(Double bootstrapQ025) {
+    this.bootstrapQ025 = bootstrapQ025;
+    return this;
+  }
+
+  /**
+   * Bootstrap confidence interval lower bound (2.5th percentile)
+   * @return bootstrapQ025
+   */
+  @NotNull 
+  @Schema(name = "bootstrapQ025", example = "875", description = "Bootstrap confidence interval lower bound (2.5th percentile)", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("bootstrapQ025")
+  public Double getBootstrapQ025() {
+    return bootstrapQ025;
+  }
+
+  public void setBootstrapQ025(Double bootstrapQ025) {
+    this.bootstrapQ025 = bootstrapQ025;
+  }
+
+  public HistoricalLeaderboardEntryDto bootstrapQ975(Double bootstrapQ975) {
+    this.bootstrapQ975 = bootstrapQ975;
+    return this;
+  }
+
+  /**
+   * Bootstrap confidence interval upper bound (97.5th percentile)
+   * @return bootstrapQ975
+   */
+  @NotNull 
+  @Schema(name = "bootstrapQ975", example = "1055", description = "Bootstrap confidence interval upper bound (97.5th percentile)", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("bootstrapQ975")
+  public Double getBootstrapQ975() {
+    return bootstrapQ975;
+  }
+
+  public void setBootstrapQ975(Double bootstrapQ975) {
+    this.bootstrapQ975 = bootstrapQ975;
+  }
+
   public HistoricalLeaderboardEntryDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -165,12 +211,14 @@ public class HistoricalLeaderboardEntryDto {
         Objects.equals(this.btScore, historicalLeaderboardEntry.btScore) &&
         Objects.equals(this.voteCount, historicalLeaderboardEntry.voteCount) &&
         Objects.equals(this.rank, historicalLeaderboardEntry.rank) &&
+        Objects.equals(this.bootstrapQ025, historicalLeaderboardEntry.bootstrapQ025) &&
+        Objects.equals(this.bootstrapQ975, historicalLeaderboardEntry.bootstrapQ975) &&
         Objects.equals(this.createdAt, historicalLeaderboardEntry.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(snapshotId, btScore, voteCount, rank, createdAt);
+    return Objects.hash(snapshotId, btScore, voteCount, rank, bootstrapQ025, bootstrapQ975, createdAt);
   }
 
   @Override
@@ -181,6 +229,8 @@ public class HistoricalLeaderboardEntryDto {
     sb.append("    btScore: ").append(toIndentedString(btScore)).append("\n");
     sb.append("    voteCount: ").append(toIndentedString(voteCount)).append("\n");
     sb.append("    rank: ").append(toIndentedString(rank)).append("\n");
+    sb.append("    bootstrapQ025: ").append(toIndentedString(bootstrapQ025)).append("\n");
+    sb.append("    bootstrapQ975: ").append(toIndentedString(bootstrapQ975)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -214,6 +264,8 @@ public class HistoricalLeaderboardEntryDto {
       this.instance.setBtScore(value.btScore);
       this.instance.setVoteCount(value.voteCount);
       this.instance.setRank(value.rank);
+      this.instance.setBootstrapQ025(value.bootstrapQ025);
+      this.instance.setBootstrapQ975(value.bootstrapQ975);
       this.instance.setCreatedAt(value.createdAt);
       return this;
     }
@@ -235,6 +287,16 @@ public class HistoricalLeaderboardEntryDto {
     
     public HistoricalLeaderboardEntryDto.Builder rank(Integer rank) {
       this.instance.rank(rank);
+      return this;
+    }
+    
+    public HistoricalLeaderboardEntryDto.Builder bootstrapQ025(Double bootstrapQ025) {
+      this.instance.bootstrapQ025(bootstrapQ025);
+      return this;
+    }
+    
+    public HistoricalLeaderboardEntryDto.Builder bootstrapQ975(Double bootstrapQ975) {
+      this.instance.bootstrapQ975(bootstrapQ975);
       return this;
     }
     

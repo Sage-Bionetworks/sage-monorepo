@@ -24,7 +24,12 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         is_hidden: false,
       },
       {
-        name: 'Model Type',
+        type: 'text',
+        data_key: 'cluster',
+        is_exported: true,
+        is_hidden: true,
+      },
+      {
         type: 'text',
         data_key: 'model_type',
         tooltip: '',
@@ -94,6 +99,12 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         is_exported: false,
         is_hidden: true,
       },
+      {
+        type: 'text',
+        data_key: 'modified_genes',
+        is_exported: true,
+        is_hidden: true,
+      },
     ],
     filters: [
       {
@@ -115,6 +126,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
     _id: '68fff1aaeb12b9674515fd58',
     name: '3xTg-AD',
     model_type: 'Familial AD',
+    cluster: 'Cluster A',
     matched_controls: ['B6129'],
     disease_correlation: null,
     center: {
@@ -131,11 +143,13 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.409231075552908,
     },
     available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
+    modified_genes: ['APP', 'MAPT', 'Psen1'],
   },
   {
     _id: '68fff1aaeb12b9674515fd59',
     name: '5xFAD (UCI)',
     model_type: 'Familial AD',
+    cluster: 'Cluster A',
     matched_controls: ['C57BL/6J'],
     disease_correlation: null,
     center: {
@@ -152,11 +166,13 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.239210931286464,
     },
     available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
+    modified_genes: ['APP', 'Psen1'],
   },
   {
     _id: '68fff1aaeb12b9674515fd5a',
     name: '5xFAD (IU/Jax/Pitt)',
     model_type: 'Familial AD',
+    cluster: 'Cluster A',
     matched_controls: ['C57BL/6J'],
     disease_correlation: {
       link_url: 'comparison/correlation?model=5xFAD (IU/Jax/Pitt)',
@@ -175,11 +191,13 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.586807542376288,
     },
     available_data: ['Gene Expression', 'Disease Correlation'],
+    modified_genes: ['APP', 'Psen1'],
   },
   {
     _id: '68fff1aaeb12b9674515fd5b',
     name: 'Abca7*V1599M',
     model_type: 'Familial AD',
+    cluster: 'Cluster A',
     matched_controls: ['C57BL/6J', '5xFAD'],
     disease_correlation: null,
     center: {
@@ -196,11 +214,13 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.463613681499704,
     },
     available_data: ['Gene Expression', 'Pathology', 'Biomarkers'],
+    modified_genes: ['Abca7'],
   },
   {
     _id: '68fff1aaeb12b9674515fd5c',
     name: 'APOE4',
     model_type: 'Late Onset AD',
+    cluster: 'Cluster A',
     matched_controls: ['C57BL/6J'],
     disease_correlation: {
       link_url: 'comparison/correlation?model=APOE4',
@@ -219,5 +239,6 @@ export const mockComparisonToolData: Record<string, any>[] = [
       adj_p_val: 0.638623415843113,
     },
     available_data: ['Gene Expression', 'Disease Correlation'],
+    modified_genes: ['APOE'],
   },
 ];

@@ -35,12 +35,20 @@ class LeaderboardEntry(BaseModel):
     )
     license: StrictStr = Field(description="License type of the model")
     bt_score: Union[StrictFloat, StrictInt] = Field(
-        description="Primary scoring metric (higher is better)", alias="btScore"
+        description="Bradley-Terry score - primary ranking metric", alias="btScore"
     )
     vote_count: StrictInt = Field(
         description="Number of votes/evaluations", alias="voteCount"
     )
     rank: StrictInt = Field(description="Current rank position (1-based)")
+    bootstrap_q025: Union[StrictFloat, StrictInt] = Field(
+        description="Bootstrap confidence interval lower bound (2.5th percentile)",
+        alias="bootstrapQ025",
+    )
+    bootstrap_q975: Union[StrictFloat, StrictInt] = Field(
+        description="Bootstrap confidence interval upper bound (97.5th percentile)",
+        alias="bootstrapQ975",
+    )
     created_at: datetime = Field(
         description="When this entry was created", alias="createdAt"
     )
@@ -52,6 +60,8 @@ class LeaderboardEntry(BaseModel):
         "btScore",
         "voteCount",
         "rank",
+        "bootstrapQ025",
+        "bootstrapQ975",
         "createdAt",
     ]
 
@@ -112,6 +122,8 @@ class LeaderboardEntry(BaseModel):
                 "btScore": obj.get("btScore"),
                 "voteCount": obj.get("voteCount"),
                 "rank": obj.get("rank"),
+                "bootstrapQ025": obj.get("bootstrapQ025"),
+                "bootstrapQ975": obj.get("bootstrapQ975"),
                 "createdAt": obj.get("createdAt"),
             }
         )

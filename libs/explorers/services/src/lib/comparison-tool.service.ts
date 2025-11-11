@@ -6,6 +6,7 @@ import {
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
+import { SortEvent, SortMeta } from 'primeng/api';
 import { NotificationService } from './notification.service';
 
 /**
@@ -22,7 +23,7 @@ export class ComparisonToolService<T> {
   // If future tools have more dropdowns and different column selection caching requirements,
   // this cutoff may need to be included in the ui_config instead, so the cutoff can be set per tool.
   private readonly DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL = 2;
-  private readonly DEFAULT_SORT_ORDER = -1;
+  private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
     headerTitle: 'Comparison Tool',
@@ -50,8 +51,7 @@ export class ComparisonToolService<T> {
   private readonly isVisualizationOverviewVisibleSignal = signal(false);
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
-  private readonly sortFieldSignal = signal<string | undefined>(undefined);
-  private readonly sortOrderSignal = signal<number>(this.DEFAULT_SORT_ORDER);
+  private readonly multiSortMetaSignal = signal<SortMeta[]>(this.DEFAULT_MULTI_SORT_META);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
@@ -65,8 +65,7 @@ export class ComparisonToolService<T> {
   readonly isVisualizationOverviewVisible = this.isVisualizationOverviewVisibleSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
-  readonly sortField = this.sortFieldSignal.asReadonly();
-  readonly sortOrder = this.sortOrderSignal.asReadonly();
+  readonly multiSortMeta = this.multiSortMetaSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
 
@@ -112,7 +111,7 @@ export class ComparisonToolService<T> {
     return this.columns().filter((col) => col.selected);
   });
 
-  hasHiddenColumns(): boolean {
+  hasUnselectedColumns(): boolean {
     return this.columns().some((col) => !col.selected);
   }
 
@@ -135,7 +134,7 @@ export class ComparisonToolService<T> {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
     this.resetPinnedItems();
-    this.setSort(undefined, this.DEFAULT_SORT_ORDER);
+    this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
     this.setUnpinnedData([]);
     this.setPinnedData([]);
 
@@ -382,8 +381,7 @@ export class ComparisonToolService<T> {
     );
   }
 
-  setSort(sortField: string | undefined, sortOrder: number | undefined) {
-    this.sortFieldSignal.set(sortField);
-    this.sortOrderSignal.set(sortOrder || this.DEFAULT_SORT_ORDER);
+  setSort(event: SortEvent) {
+    this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
   }
 }

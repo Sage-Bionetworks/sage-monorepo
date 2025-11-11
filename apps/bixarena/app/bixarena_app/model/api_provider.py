@@ -3,6 +3,7 @@
 import logging
 import os
 
+import gradio as gr
 from bixarena_api_client import ModelApi, ModelErrorCreateRequest
 from openai import OpenAI
 
@@ -67,6 +68,7 @@ def get_api_provider_stream_iter(
     max_new_tokens,
     battle_session=None,
     cookies: dict[str, str] | None = None,
+    request: gr.Request | None = None,
 ):
     if model_api_dict["api_type"] == "openai":
         prompt = conv.to_openai_api_messages()
@@ -81,6 +83,7 @@ def get_api_provider_stream_iter(
             model_api_dict=model_api_dict,
             battle_session=battle_session,
             cookies=cookies,
+            request=request,
         )
     else:
         raise NotImplementedError()
@@ -99,6 +102,7 @@ def openai_api_stream_iter(
     model_api_dict: dict | None = None,
     battle_session=None,
     cookies: dict[str, str] | None = None,
+    request: gr.Request | None = None,
 ):
     # Get OPENROUTER_API_KEY from environment if not provided
     if not api_key:
@@ -123,7 +127,7 @@ def openai_api_stream_iter(
     }
 
     username = None
-    state = get_user_state()
+    state = get_user_state(request)
     current = state.get_current_user()
     if current:
         username = current.get("userName")

@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 
 const CorrelationResultSchema = new Schema<CorrelationResult>({
   correlation: { type: Number, required: true },
-  adj_p_value: { type: Number, required: true },
+  adj_p_val: { type: Number, required: true },
 });
 
 const DiseaseCorrelationSchema = new Schema<DiseaseCorrelation>(

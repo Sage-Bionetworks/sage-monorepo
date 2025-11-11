@@ -11,7 +11,9 @@ import { DownloadDomImageComponent } from './download-dom-image.component';
         [filename]="filename"
         [heading]="heading"
         [buttonLabel]="buttonLabel"
-      ></explorers-download-dom-image>
+        [hasCsvDownload]="hasCsvDownload"
+        [getData]="getData"
+      />
       <div
         #plot
         style="width:300px;height:200px;background:#e0e0e0;display:flex;align-items:center;justify-content:center;"
@@ -28,6 +30,11 @@ class StorybookDownloadDomImageWrapper {
   filename = 'my-plot';
   heading = 'Download this plot as:';
   buttonLabel = '';
+  hasCsvDownload = false;
+  getData: () => string[][] = () => [
+    ['Column 1', 'Column 2'],
+    ['Data 1', 'Data 2'],
+  ];
 
   getTarget = () => this.plotRef.nativeElement;
 }
@@ -38,6 +45,9 @@ const meta: Meta<StorybookDownloadDomImageWrapper> = {
   args: {
     filename: 'plot',
     heading: 'Download this plot as:',
+  },
+  argTypes: {
+    getData: { control: false },
   },
 };
 export default meta;
@@ -52,5 +62,17 @@ export const IconActionButton: Story = {
 export const TextActionButton: Story = {
   args: {
     buttonLabel: 'Download',
+  },
+};
+
+export const CsvData: Story = {
+  args: {
+    buttonLabel: 'Download',
+    hasCsvDownload: true,
+    getData: () => [
+      ['X', 'Y'],
+      ['1', '2'],
+      ['3', '4'],
+    ],
   },
 };

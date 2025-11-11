@@ -118,6 +118,7 @@ def bot_response(
     max_new_tokens,
     battle_session: BattleSession | None = None,
     cookies: dict[str, str] | None = None,
+    request: gr.Request | None = None,
 ):
     temperature = float(temperature)
     top_p = float(top_p)
@@ -148,6 +149,7 @@ def bot_response(
         max_new_tokens,
         battle_session=battle_session,
         cookies=cookies,
+        request=request,
     )
 
     conv.update_last_message("▌")
@@ -219,6 +221,7 @@ def bot_response_multi(
                 max_new_tokens,
                 battle_session=battle_session,
                 cookies=cookies,
+                request=request,
             )
         )
 

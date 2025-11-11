@@ -2,10 +2,6 @@
 @use 'explorers/styles/src/lib/mixins';
 
 .comparison-tool-table {
-  button {
-    @include mixins.reset-button;
-  }
-
   .table-divider {
     background-color: var(--color-gray-300);
     margin-left: -44px;
@@ -43,6 +39,19 @@
       &:hover {
         color: var(--color-primary);
         transition: vars.$transition-duration;
+      }
+    }
+
+    .pin-all-button,
+    .clear-all-button {
+      @include mixins.reset-button;
+    }
+
+    .base-download-dom-image-action-button {
+      button:hover {
+        @include mixins.link-hover;
+
+        background: none;
       }
     }
 
@@ -101,12 +110,12 @@
 
       &.primary {
         width: var(--comparison-tool-primary-column-width) !important;
-        padding-left: 10px !important;
-        padding-right: 10px !important;
+        padding: 0 !important;
         justify-content: end;
 
         explorers-primary-identifier-controls {
           width: 100%;
+          height: 100%;
         }
       }
 

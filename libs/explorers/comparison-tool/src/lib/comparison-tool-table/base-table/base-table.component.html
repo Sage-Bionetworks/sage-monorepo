@@ -5,6 +5,8 @@
     [value]="data()"
     [customSort]="true"
     (sortFunction)="sortCallback($event)"
+    sortMode="multiple"
+    [defaultSortOrder]="-1"
     breakpoint="0"
     stripedRows
     showGridlines
@@ -15,7 +17,7 @@
     [currentPageReportTemplate]="pagination?.currentPageReportTemplate ?? ''"
     [showPageLinks]="pagination?.showPageLinks ?? null"
   >
-    <ng-template pTemplate="emptymessage" let-rowData>
+    <ng-template pTemplate="emptymessage">
       @if (shouldShowNoDataMessage()) {
         <div class="no-results">No results found...</div>
       }

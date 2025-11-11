@@ -21,7 +21,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run gradio bixarena_app/main.py",
+        "command": "uv run bixarena-app-dev",
         "cwd": "{projectRoot}"
       }
     },
