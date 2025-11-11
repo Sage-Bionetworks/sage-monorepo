@@ -16,7 +16,7 @@ def build_footer():
         f"""
 <style>
 /* Remove default Gradio HTML container padding */
-.footer-no-padding {{
+.html-no-padding {{
     padding: 0 !important;
 }}
 
@@ -171,7 +171,7 @@ def build_footer():
     </div>
 </div>
         """,
-        elem_classes="footer-no-padding",
+        elem_classes="html-no-padding",
     )
 
     return footer
