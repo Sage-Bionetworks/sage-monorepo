@@ -8,6 +8,7 @@ EXAMPLE_PROMPTS_CSS = """
 #prompt-card-section > .row {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     margin-top: 16px;
 }
@@ -97,16 +98,30 @@ EXAMPLE_PROMPTS_CSS = """
 
 
 /* Responsive layout */
-@media (min-width: 1024px) and (max-width: 1280px) {
+@media (max-width: 1280px) {
     #prompt-card-section button.prompt-card .prompt-text {
         -webkit-line-clamp: unset;
     }
 }
 
 @media (max-width: 1024px) {
-    /* Hide example prompts entirely on mobile */
-    #prompt-card-section {
-        display: none !important;
+    #prompt-card-section > .row {
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    #prompt-card-section > .row > .row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    #prompt-card-section .prompt-card-wrapper {
+        width: 100%;
+        flex: 0 0 auto;
+    }
+
+    #prompt-card-section button.prompt-card {
+        align-items: center;
     }
 }
 """
