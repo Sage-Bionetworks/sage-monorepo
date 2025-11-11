@@ -13,7 +13,6 @@ from bixarena_infra_cdk.shared.config import (
 from bixarena_infra_cdk.shared.stacks.alb_stack import AlbStack
 from bixarena_infra_cdk.shared.stacks.api_gateway_stack import ApiGatewayStack
 from bixarena_infra_cdk.shared.stacks.api_service_stack import ApiServiceStack
-from bixarena_infra_cdk.shared.stacks.app_service_stack import AppServiceStack
 from bixarena_infra_cdk.shared.stacks.auth_service_stack import AuthServiceStack
 from bixarena_infra_cdk.shared.stacks.bastion_stack import BastionStack
 from bixarena_infra_cdk.shared.stacks.bucket_stack import BucketStack
@@ -21,6 +20,7 @@ from bixarena_infra_cdk.shared.stacks.database_stack import DatabaseStack
 from bixarena_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
 from bixarena_infra_cdk.shared.stacks.valkey_stack import ValkeyStack
 from bixarena_infra_cdk.shared.stacks.vpc_stack import VpcStack
+from bixarena_infra_cdk.shared.stacks.web_stack import WebStack
 
 
 def main() -> None:
@@ -109,12 +109,12 @@ def main() -> None:
     )
     ecs_cluster_stack.add_dependency(vpc_stack)
 
-    # Create app service stack (depends on ECS cluster and ALB)
+    # Create web stack (depends on ECS cluster and ALB)
     # Uses ALB DNS name by default, or custom FQDN if provided
     use_https = certificate_arn is not None and certificate_arn.strip() != ""
-    app_service_stack = AppServiceStack(
+    web_stack = WebStack(
         app,
-        f"{stack_prefix}-app-service",
+        f"{stack_prefix}-web",
         stack_prefix=stack_prefix,
         environment=environment,
         vpc=vpc_stack.vpc,
@@ -125,10 +125,10 @@ def main() -> None:
         fqdn=fqdn if fqdn else None,
         use_https=use_https,
         openrouter_api_key=os.getenv("OPENROUTER_API_KEY", ""),
-        description=f"App service for BixArena {environment} environment",
+        description=f"Web client for BixArena {environment} environment",
     )
-    app_service_stack.add_dependency(ecs_cluster_stack)
-    app_service_stack.add_dependency(alb_stack)
+    web_stack.add_dependency(ecs_cluster_stack)
+    web_stack.add_dependency(alb_stack)
 
     # Create API service stack (depends on database, valkey, and ECS cluster)
     # Database secret is guaranteed to exist since we use from_generated_secret()

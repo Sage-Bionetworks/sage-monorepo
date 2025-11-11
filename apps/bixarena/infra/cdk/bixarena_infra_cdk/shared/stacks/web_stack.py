@@ -1,4 +1,4 @@
-"""App service stack for BixArena web client."""
+"""Web stack for BixArena web client."""
 
 import aws_cdk as cdk
 from aws_cdk import aws_ec2 as ec2
@@ -13,7 +13,7 @@ from bixarena_infra_cdk.shared.constructs.fargate_service_construct import (
 from bixarena_infra_cdk.shared.utils import load_container_image
 
 
-class AppServiceStack(cdk.Stack):
+class WebStack(cdk.Stack):
     """Stack for the BixArena web client Fargate service."""
 
     def __init__(
@@ -33,7 +33,7 @@ class AppServiceStack(cdk.Stack):
         **kwargs,
     ) -> None:
         """
-        Create app service stack.
+        Create web stack.
 
         Args:
             scope: CDK app scope
@@ -106,7 +106,7 @@ class AppServiceStack(cdk.Stack):
         # Create Fargate service for the Gradio app
         service_construct = BixArenaFargateService(
             self,
-            "AppService",
+            "WebService",
             vpc=vpc,
             cluster=cluster,
             service_name="bixarena-app",
@@ -129,14 +129,14 @@ class AppServiceStack(cdk.Stack):
             self,
             "ServiceName",
             value=self.service.service_name,
-            description="App service name",
+            description="Web client service name",
         )
 
         cdk.CfnOutput(
             self,
             "ServiceArn",
             value=self.service.service_arn,
-            description="App service ARN",
+            description="Web client service ARN",
         )
 
         cdk.CfnOutput(
