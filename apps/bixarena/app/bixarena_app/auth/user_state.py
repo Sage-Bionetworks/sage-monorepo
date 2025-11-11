@@ -1,26 +1,19 @@
+from __future__ import annotations
+
+import threading
 import time
 from typing import Any
 
+import gradio as gr
+
 
 class UserState:
-    """Minimal in-memory user state"""
-
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance._initialized = False
-        return cls._instance
+    """Minimal in-memory user state tied to a Gradio session."""
 
     def __init__(self):
-        if self._initialized:
-            return
-
         self._current_user = None
         self._session_timestamp = None
         self._error_message = None
-        self._initialized = True
 
     def get_current_user(self) -> dict[str, Any] | None:
         return self._current_user
@@ -51,5 +44,26 @@ class UserState:
         return self._error_message
 
 
-def get_user_state() -> UserState:
-    return UserState()
+_SESSION_STATES: dict[str, UserState] = {}
+_SESSION_LOCK = threading.Lock()
+
+
+def get_user_state(request: gr.Request | None = None) -> UserState:
+    """Return the UserState associated with the current Gradio session.
+
+    Uses JSESSIONID cookie as the session key for multi-user isolation.
+    If no JSESSIONID is present, returns a fresh user state.
+    """
+    if not request:
+        return UserState()
+
+    jsessionid = request.cookies.get("JSESSIONID")
+    if not jsessionid:
+        return UserState()
+
+    with _SESSION_LOCK:
+        state = _SESSION_STATES.get(jsessionid)
+        if state is None:
+            state = UserState()
+            _SESSION_STATES[jsessionid] = state
+        return state
