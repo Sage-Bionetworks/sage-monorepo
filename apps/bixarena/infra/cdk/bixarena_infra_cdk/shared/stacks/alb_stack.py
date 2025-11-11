@@ -8,6 +8,22 @@ from constructs import Construct
 
 from bixarena_infra_cdk.shared.constructs.alb_construct import BixArenaAlb
 
+# ALB listener configuration constants
+# Path patterns for health check endpoint
+HEALTH_CHECK_PATH_PATTERNS = ["/health"]
+
+# Path patterns for API Gateway routing (API, Auth, OAuth/OIDC endpoints)
+API_GATEWAY_PATH_PATTERNS = [
+    "/api/*",
+    "/auth/*",
+    "/userinfo",
+    "/.well-known/jwks.json",
+    "/oauth2/token",
+]
+
+# Health check response body
+HEALTH_CHECK_RESPONSE_BODY = '{"status":"healthy","service":"bixarena-alb"}'
+
 
 class AlbStack(cdk.Stack):
     """Stack for Application Load Balancer."""
@@ -47,11 +63,11 @@ class AlbStack(cdk.Stack):
         self.alb = alb_construct.alb
         self.security_group = alb_construct.security_group
 
-        # Create target group for the app service (Gradio app)
+        # Create target group for the web client (Gradio app)
         # This will be used by the Fargate service
-        self.app_target_group = elbv2.ApplicationTargetGroup(
+        self.web_target_group = elbv2.ApplicationTargetGroup(
             self,
-            "AppTargetGroup",
+            "WebTargetGroup",
             vpc=vpc,
             port=8100,  # Gradio app port
             protocol=elbv2.ApplicationProtocol.HTTP,
@@ -111,11 +127,13 @@ class AlbStack(cdk.Stack):
             https_listener.add_action(
                 "HealthCheck",
                 priority=1,
-                conditions=[elbv2.ListenerCondition.path_patterns(["/health"])],
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(HEALTH_CHECK_PATH_PATTERNS)
+                ],
                 action=elbv2.ListenerAction.fixed_response(
                     status_code=200,
                     content_type="application/json",
-                    message_body='{"status":"healthy","service":"bixarena-alb"}',
+                    message_body=HEALTH_CHECK_RESPONSE_BODY,
                 ),
             )
 
@@ -125,23 +143,15 @@ class AlbStack(cdk.Stack):
                 "ApiGatewayHttps",
                 priority=2,
                 conditions=[
-                    elbv2.ListenerCondition.path_patterns(
-                        [
-                            "/api/*",
-                            "/auth/*",
-                            "/userinfo",
-                            "/.well-known/jwks.json",
-                            "/oauth2/token",
-                        ]
-                    )
+                    elbv2.ListenerCondition.path_patterns(API_GATEWAY_PATH_PATTERNS)
                 ],
                 action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
             )
 
-            # Default action for HTTPS: forward to app service
+            # Default action for HTTPS: forward to web client
             https_listener.add_action(
                 "DefaultHttps",
-                action=elbv2.ListenerAction.forward([self.app_target_group]),
+                action=elbv2.ListenerAction.forward([self.web_target_group]),
             )
 
             # Create HTTP listener (port 80) that redirects to HTTPS
@@ -179,11 +189,13 @@ class AlbStack(cdk.Stack):
             http_listener.add_action(
                 "HealthCheck",
                 priority=1,
-                conditions=[elbv2.ListenerCondition.path_patterns(["/health"])],
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(HEALTH_CHECK_PATH_PATTERNS)
+                ],
                 action=elbv2.ListenerAction.fixed_response(
                     status_code=200,
                     content_type="application/json",
-                    message_body='{"status":"healthy","service":"bixarena-alb"}',
+                    message_body=HEALTH_CHECK_RESPONSE_BODY,
                 ),
             )
 
@@ -193,23 +205,15 @@ class AlbStack(cdk.Stack):
                 "ApiGatewayHttp",
                 priority=2,
                 conditions=[
-                    elbv2.ListenerCondition.path_patterns(
-                        [
-                            "/api/*",
-                            "/auth/*",
-                            "/userinfo",
-                            "/.well-known/jwks.json",
-                            "/oauth2/token",
-                        ]
-                    )
+                    elbv2.ListenerCondition.path_patterns(API_GATEWAY_PATH_PATTERNS)
                 ],
                 action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
             )
 
-            # Default action for HTTP: forward to app service
+            # Default action for HTTP: forward to web client
             http_listener.add_action(
                 "DefaultHttp",
-                action=elbv2.ListenerAction.forward([self.app_target_group]),
+                action=elbv2.ListenerAction.forward([self.web_target_group]),
             )
 
         # CloudFormation outputs

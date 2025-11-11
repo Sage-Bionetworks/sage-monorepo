@@ -4,7 +4,7 @@ from aws_cdk import aws_ec2 as ec2
 from constructs import Construct
 
 
-class OpenchallengesVpc(Construct):
+class BixArenaVpc(Construct):
     """Reusable VPC construct with public and private subnets."""
 
     def __init__(

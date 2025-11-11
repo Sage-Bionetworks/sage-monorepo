@@ -10,7 +10,7 @@ from constructs import Construct
 from bixarena_infra_cdk.shared.constructs.fargate_service_construct import (
     BixArenaFargateService,
 )
-from bixarena_infra_cdk.shared.utils import load_container_image
+from bixarena_infra_cdk.shared.image_loader import load_container_image
 
 
 class ApiServiceStack(cdk.Stack):

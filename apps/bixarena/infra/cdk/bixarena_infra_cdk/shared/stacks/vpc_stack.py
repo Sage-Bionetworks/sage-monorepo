@@ -3,9 +3,7 @@
 import aws_cdk as cdk
 from constructs import Construct
 
-from bixarena_infra_cdk.shared.constructs.vpc_construct import (
-    OpenchallengesVpc,
-)
+from bixarena_infra_cdk.shared.constructs.vpc_construct import BixArenaVpc
 
 
 class VpcStack(cdk.Stack):
@@ -38,7 +36,7 @@ class VpcStack(cdk.Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # Create VPC
-        vpc_construct = OpenchallengesVpc(
+        vpc_construct = BixArenaVpc(
             self,
             "Vpc",
             cidr=vpc_cidr,

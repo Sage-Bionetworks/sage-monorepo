@@ -112,7 +112,7 @@ def main() -> None:
         environment=environment,
         vpc=vpc_stack.vpc,
         cluster=ecs_cluster_stack.cluster,
-        target_group=alb_stack.app_target_group,
+        target_group=alb_stack.web_target_group,
         app_version=app_version,
         alb_dns_name=alb_stack.alb.load_balancer_dns_name,
         fqdn=fqdn if fqdn else None,
