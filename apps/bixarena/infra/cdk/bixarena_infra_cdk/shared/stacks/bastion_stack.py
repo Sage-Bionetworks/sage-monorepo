@@ -19,6 +19,7 @@ class BastionStack(cdk.Stack):
         environment: str,
         vpc: ec2.IVpc,
         cluster: ecs.ICluster,
+        developer_name: str | None = None,
         **kwargs,
     ) -> None:
         """
@@ -37,6 +38,7 @@ class BastionStack(cdk.Stack):
             environment: Environment name (dev, stage, prod)
             vpc: VPC where the bastion will run
             cluster: ECS cluster
+            developer_name: Developer name for dev environment (optional)
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)

@@ -27,6 +27,7 @@ class WebStack(cdk.Stack):
         target_group: IApplicationTargetGroup,
         app_version: str,
         alb_dns_name: str,
+        developer_name: str | None = None,
         fqdn: str | None = None,
         use_https: bool = False,
         openrouter_api_key: str = "",
@@ -41,6 +42,11 @@ class WebStack(cdk.Stack):
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
             vpc: VPC where the service will run
+            cluster: ECS cluster
+            target_group: ALB target group for the app
+            app_version: Application version (Docker image tag)
+            alb_dns_name: DNS name of the ALB
+            developer_name: Developer name for dev environment (optional)
             cluster: ECS cluster
             target_group: ALB target group for the app
             app_version: Application version (Docker image tag)

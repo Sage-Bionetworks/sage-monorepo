@@ -26,6 +26,7 @@ class ApiGatewayStack(cdk.Stack):
         target_group: IApplicationTargetGroup,
         valkey_endpoint: str,
         valkey_port: str,
+        developer_name: str | None = None,
         gateway_version: str = "edge",
         **kwargs,
     ) -> None:
@@ -38,6 +39,11 @@ class ApiGatewayStack(cdk.Stack):
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
             vpc: VPC where the service will run
+            cluster: ECS cluster
+            target_group: ALB target group for the gateway
+            valkey_endpoint: Valkey cluster endpoint
+            valkey_port: Valkey cluster port
+            developer_name: Developer name for dev environment (optional)
             cluster: ECS cluster
             target_group: ALB target group for the gateway
             valkey_endpoint: Valkey cluster endpoint

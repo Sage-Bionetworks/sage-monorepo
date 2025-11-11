@@ -19,6 +19,7 @@ class EcsClusterStack(cdk.Stack):
         stack_prefix: str,
         environment: str,
         vpc: ec2.IVpc,
+        developer_name: str | None = None,
         **kwargs,
     ) -> None:
         """
@@ -30,6 +31,7 @@ class EcsClusterStack(cdk.Stack):
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
             vpc: VPC where the cluster will be created
+            developer_name: Developer name for dev environment (optional)
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)

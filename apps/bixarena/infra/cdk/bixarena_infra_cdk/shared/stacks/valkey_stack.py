@@ -17,6 +17,7 @@ class ValkeyStack(cdk.Stack):
         stack_prefix: str,
         environment: str,
         vpc: ec2.IVpc,
+        developer_name: str | None = None,
         **kwargs,
     ) -> None:
         """
@@ -28,6 +29,7 @@ class ValkeyStack(cdk.Stack):
             stack_prefix: Prefix for resource naming
             environment: Environment name (dev, stage, prod)
             vpc: VPC to deploy the cache in
+            developer_name: Developer name for dev environment (optional)
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)

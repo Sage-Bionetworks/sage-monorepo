@@ -15,6 +15,7 @@ class VpcStack(cdk.Stack):
         construct_id: str,
         stack_prefix: str,
         environment: str,
+        developer_name: str | None = None,
         vpc_cidr: str = "10.0.0.0/16",
         max_azs: int = 2,
         nat_gateways: int = 1,
@@ -28,6 +29,7 @@ class VpcStack(cdk.Stack):
             construct_id: Stack identifier
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
+            developer_name: Developer name for dev environment (optional)
             vpc_cidr: CIDR block for the VPC (default: 10.0.0.0/16)
             max_azs: Maximum number of Availability Zones (default: 2)
             nat_gateways: Number of NAT gateways (default: 1)

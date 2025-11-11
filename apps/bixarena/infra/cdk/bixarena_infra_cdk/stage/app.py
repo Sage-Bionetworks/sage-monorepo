@@ -47,6 +47,7 @@ def main() -> None:
         f"{stack_prefix}-vpc",
         stack_prefix=stack_prefix,
         environment=environment,
+        developer_name=developer_name,
         vpc_cidr=vpc_cidr,
         max_azs=max_azs,
         nat_gateways=max_azs,  # One NAT per AZ for high availability
@@ -60,6 +61,7 @@ def main() -> None:
         f"{stack_prefix}-database",
         stack_prefix=stack_prefix,
         environment=environment,
+        developer_name=developer_name,
         vpc=vpc_stack.vpc,
         description=f"PostgreSQL database for BixArena {environment} environment",
     )
@@ -72,6 +74,7 @@ def main() -> None:
         f"{stack_prefix}-valkey",
         stack_prefix=stack_prefix,
         environment=environment,
+        developer_name=developer_name,
         vpc=vpc_stack.vpc,
         description=f"Valkey cache cluster for BixArena {environment} environment",
     )
@@ -83,6 +86,7 @@ def main() -> None:
         f"{stack_prefix}-alb",
         stack_prefix=stack_prefix,
         environment=environment,
+        developer_name=developer_name,
         vpc=vpc_stack.vpc,
         certificate_arn=certificate_arn if certificate_arn else None,
         description=(
@@ -97,6 +101,7 @@ def main() -> None:
         f"{stack_prefix}-ecs-cluster",
         stack_prefix=stack_prefix,
         environment=environment,
+        developer_name=developer_name,
         vpc=vpc_stack.vpc,
         description=f"ECS cluster for BixArena {environment} environment",
     )
@@ -110,6 +115,7 @@ def main() -> None:
         f"{stack_prefix}-web",
         stack_prefix=stack_prefix,
         environment=environment,
+        developer_name=developer_name,
         vpc=vpc_stack.vpc,
         cluster=ecs_cluster_stack.cluster,
         target_group=alb_stack.web_target_group,

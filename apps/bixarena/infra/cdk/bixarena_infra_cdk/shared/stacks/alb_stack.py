@@ -35,6 +35,7 @@ class AlbStack(cdk.Stack):
         stack_prefix: str,
         environment: str,
         vpc: ec2.IVpc,
+        developer_name: str | None = None,
         certificate_arn: str | None = None,
         **kwargs,
     ) -> None:
@@ -47,6 +48,7 @@ class AlbStack(cdk.Stack):
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
             vpc: VPC to deploy the ALB in
+            developer_name: Developer name for dev environment (optional)
             certificate_arn: ARN of ACM certificate for HTTPS (optional for HTTP-only)
             **kwargs: Additional arguments passed to parent Stack
         """

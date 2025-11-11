@@ -28,6 +28,7 @@ class AuthServiceStack(cdk.Stack):
         database_secret_arn: str,
         valkey_endpoint: str,
         valkey_port: str,
+        developer_name: str | None = None,
         auth_version: str = "edge",
         ui_base_url: str = "http://localhost:8100",
         synapse_client_id: str = "changeme",
@@ -43,6 +44,12 @@ class AuthServiceStack(cdk.Stack):
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
             vpc: VPC where the service will run
+            cluster: ECS cluster
+            database: RDS PostgreSQL database instance
+            database_secret_arn: ARN of the database credentials secret
+            valkey_endpoint: Valkey cluster endpoint
+            valkey_port: Valkey cluster port
+            developer_name: Developer name for dev environment (optional)
             cluster: ECS cluster
             database: RDS PostgreSQL database instance
             database_secret_arn: ARN of the database credentials secret
