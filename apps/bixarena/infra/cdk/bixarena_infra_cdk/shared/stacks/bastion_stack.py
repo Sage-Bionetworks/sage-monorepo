@@ -19,7 +19,6 @@ class BastionStack(cdk.Stack):
         environment: str,
         vpc: ec2.IVpc,
         cluster: ecs.ICluster,
-        database_security_group: ec2.ISecurityGroup,
         **kwargs,
     ) -> None:
         """
@@ -28,6 +27,9 @@ class BastionStack(cdk.Stack):
         The bastion service runs a single task that keeps a simple container alive.
         Access is via AWS Systems Manager port forwarding (no SSH, no public IP).
 
+        The bastion can connect to any resource in the VPC, including the database
+        (which allows connections from the VPC CIDR range).
+
         Args:
             scope: CDK app scope
             construct_id: Stack identifier
@@ -35,25 +37,20 @@ class BastionStack(cdk.Stack):
             environment: Environment name (dev, stage, prod)
             vpc: VPC where the bastion will run
             cluster: ECS cluster
-            database_security_group: Security group of the database
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
 
         # Create security group for bastion
+        # Note: The database already allows connections from the entire VPC CIDR range,
+        # so no specific ingress rule is needed. The bastion can connect as long as it's
+        # in the VPC.
         bastion_sg = ec2.SecurityGroup(
             self,
             "BastionSecurityGroup",
             vpc=vpc,
             description="Security group for database bastion",
             allow_all_outbound=True,
-        )
-
-        # Allow bastion to connect to database
-        database_security_group.add_ingress_rule(
-            peer=bastion_sg,
-            connection=ec2.Port.tcp(5432),
-            description="Allow bastion to connect to PostgreSQL",
         )
 
         # Create task execution role with SSM permissions

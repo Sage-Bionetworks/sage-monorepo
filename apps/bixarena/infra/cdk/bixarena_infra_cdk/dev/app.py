@@ -213,9 +213,8 @@ def main() -> None:
 
     # Create bastion stack for database access (dev environment only)
     # This creates an ECS service with 1 task for Session Manager port forwarding
-    # Note: Dependencies are automatic via CloudFormation references
-    # (database security group, etc.). Don't add manual add_dependency() calls
-    # to avoid cyclic dependencies with security group rules.
+    # The bastion can connect to the database since the database allows connections
+    # from the VPC CIDR range. No cross-stack security group references needed.
     BastionStack(
         app,
         f"{stack_prefix}-bastion",
@@ -223,7 +222,6 @@ def main() -> None:
         environment=environment,
         vpc=vpc_stack.vpc,
         cluster=ecs_cluster_stack.cluster,
-        database_security_group=database_stack.security_group,
         description=f"Database bastion for BixArena {environment} environment",
     )
 
