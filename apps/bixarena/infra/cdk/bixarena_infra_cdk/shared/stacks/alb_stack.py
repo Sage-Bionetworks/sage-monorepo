@@ -57,7 +57,7 @@ class AlbStack(cdk.Stack):
             protocol=elbv2.ApplicationProtocol.HTTP,
             target_type=elbv2.TargetType.IP,
             health_check=elbv2.HealthCheck(
-                path="/",  # Root path until /health endpoint is available in image
+                path="/health",  # Gradio app health endpoint
                 interval=cdk.Duration.seconds(30),
                 timeout=cdk.Duration.seconds(5),
                 healthy_threshold_count=2,
