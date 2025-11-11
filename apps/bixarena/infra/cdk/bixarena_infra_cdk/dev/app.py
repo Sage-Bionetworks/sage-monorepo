@@ -145,6 +145,10 @@ def main() -> None:
         valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
         valkey_port=valkey_stack.valkey_construct.cluster_port,
         api_version=app_version,  # Use same version tag as app
+        ui_base_url=(
+            f"{'https' if use_https else 'http'}://"
+            f"{fqdn if fqdn else alb_stack.alb.load_balancer_dns_name}"
+        ),
         description=f"API service for BixArena {environment} environment",
     )
     # Note: Dependencies are automatic via CloudFormation references

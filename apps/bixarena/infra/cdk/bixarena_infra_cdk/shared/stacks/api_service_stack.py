@@ -29,6 +29,7 @@ class ApiServiceStack(cdk.Stack):
         valkey_endpoint: str,
         valkey_port: str,
         api_version: str = "edge",
+        ui_base_url: str = "http://localhost:8100",
         **kwargs,
     ) -> None:
         """
@@ -46,6 +47,7 @@ class ApiServiceStack(cdk.Stack):
             valkey_endpoint: Valkey cluster endpoint
             valkey_port: Valkey cluster port
             api_version: API version (Docker image tag)
+            ui_base_url: Base URL for the UI (for CORS configuration)
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -81,6 +83,9 @@ class ApiServiceStack(cdk.Stack):
             "AUTH_SERVICE_BASE_URL": (
                 f"http://bixarena-auth-service.{cluster.cluster_name}.local:8115"
             ),
+            # CORS configuration: only allow requests from deployment URL
+            # This overrides the default list in application.yml
+            "APP_CORS_ALLOWED_ORIGINS": ui_base_url,
         }
 
         # Secrets from AWS Secrets Manager (injected securely at runtime)
@@ -102,8 +107,8 @@ class ApiServiceStack(cdk.Stack):
             service_name="bixarena-api",
             container_image=image,
             container_port=8112,
-            cpu=512,  # 0.5 vCPU - more than app since this is backend API
-            memory_limit_mib=1024,  # 1 GB - Spring Boot apps need more memory
+            cpu=1024,  # 1 vCPU - aligned with gateway
+            memory_limit_mib=2048,  # 2 GB - Spring Boot apps need more memory
             environment=container_env,
             secrets=container_secrets,  # Secure credential injection
             desired_count=1,

@@ -87,10 +87,6 @@ class ApiGatewayStack(cdk.Stack):
             "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_PREDICATES_0": (
                 "Path=/auth/**,/.well-known/jwks.json,/oauth2/token,/userinfo"
             ),
-            # Preserve Set-Cookie headers for login/logout (important for cookie mgmt)
-            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_FILTERS_0": (
-                "DedupeResponseHeader=Set-Cookie RETAIN_FIRST"
-            ),
         }
 
         # Create Fargate service for the API Gateway

@@ -118,8 +118,8 @@ class AuthServiceStack(cdk.Stack):
             service_name="bixarena-auth-service",
             container_image=image,
             container_port=8115,
-            cpu=512,  # 0.5 vCPU - similar to API service
-            memory_limit_mib=1024,  # 1 GB - Spring Boot apps need more memory
+            cpu=1024,  # 1 vCPU - aligned with gateway
+            memory_limit_mib=2048,  # 2 GB - Spring Boot apps need more memory
             environment=container_env,
             secrets=container_secrets,  # Secure credential injection
             desired_count=1,
