@@ -22,6 +22,7 @@ EXAMPLE_PROMPTS_CSS = """
 #prompt-card-section .prompt-card-wrapper {
     flex: 1 1 0;
     display: flex;
+    padding-top: 2px !important;
 }
 
 #prompt-card-section .prompt-card-wrapper > div {
