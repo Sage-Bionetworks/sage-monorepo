@@ -14,9 +14,9 @@ import { OrgSagebionetworksRepoModelGridQueryResultValidationResults } from './o
  */
 export interface OrgSagebionetworksRepoModelGridQueryResultRow {
   /**
-   * An array of cell values for a single row.  Each cell\'s index will corresponds to the SelectColumn.columnIndex
+   * The JSON object representing a single row.
    */
-  cellValues?: Array<any>;
+  data?: any | null;
   validationResults?: OrgSagebionetworksRepoModelGridQueryResultValidationResults;
   /**
    * Logical timestamp identifying the row in compact form `replicaId.sequenceNumber` (e.g. `123.456`). Used in filters (RowIdFilter) and patch/update operations.
