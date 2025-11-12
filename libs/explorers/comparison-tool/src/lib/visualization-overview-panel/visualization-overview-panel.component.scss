@@ -1,0 +1,65 @@
+.visualization-overview-panel {
+  color: var(--color-text);
+  max-width: 580px;
+  width: 100%;
+  box-sizing: content-box;
+
+  .p-dialog-header {
+    padding: 20px 40px;
+
+    .p-dialog-title {
+      font-size: 28px;
+      font-weight: 600;
+    }
+  }
+
+  .p-dialog-content {
+    padding: 0 40px;
+  }
+
+  .p-dialog-footer {
+    padding: 20px 40px;
+    text-align: right;
+
+    a {
+      color: var(--color-action-primary);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .checkbox {
+      display: flex;
+      column-gap: 0.5rem;
+      align-items: center;
+
+      label {
+        font-size: var(--font-size-sm);
+      }
+    }
+
+    .how-to-panel-previous {
+      margin-right: 12px;
+    }
+  }
+
+  img,
+  svg {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.how-to-panel-panes {
+  .how-to-panel-pane {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+}

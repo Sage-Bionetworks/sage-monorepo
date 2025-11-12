@@ -1,15 +1,30 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
   ComparisonToolLink,
   HeatmapCircleData,
+  VisualizationOverviewPane,
 } from '@sagebionetworks/explorers/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ComparisonToolHelperService {
+  private readonly sanitizer = inject(DomSanitizer);
+
+  /**
+   * Creates a sanitized visualization overview pane.
+   * Use this helper to avoid manually sanitizing HTML in each comparison tool component.
+   */
+  createVisualizationOverviewPane(heading: string, htmlContent: string): VisualizationOverviewPane {
+    return {
+      heading,
+      content: this.sanitizer.bypassSecurityTrustHtml(htmlContent),
+    };
+  }
+
   getComparisonToolDataFilename(config: ComparisonToolConfig): string {
     const pageName = config.page.toLowerCase().replaceAll(' ', '_');
     const primaryCategory = config.dropdowns?.[0];

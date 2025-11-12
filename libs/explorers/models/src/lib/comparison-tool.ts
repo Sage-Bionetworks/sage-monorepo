@@ -1,3 +1,4 @@
+import { SafeHtml } from '@angular/platform-browser';
 import { SynapseWikiParams } from './synapse-wiki';
 
 export interface LegendPanelConfig {
@@ -9,6 +10,10 @@ export interface LegendPanelConfig {
   sizeChartText: string;
 }
 
+export interface VisualizationOverviewPane {
+  heading: string;
+  content: SafeHtml;
+}
 export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
   headerTitle: string;
@@ -16,8 +21,9 @@ export interface ComparisonToolViewConfig {
   showSignificanceControls: boolean;
   viewDetailsTooltip: string;
   viewDetailsClick: (id: string, label: string) => void;
-  legendPanelConfig: LegendPanelConfig;
   legendEnabled: boolean;
+  legendPanelConfig: LegendPanelConfig;
+  visualizationOverviewPanes: VisualizationOverviewPane[];
 }
 
 export interface ComparisonToolFilterOption {

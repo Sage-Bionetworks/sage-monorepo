@@ -1,0 +1,61 @@
+<p-dialog
+  [header]="panes.length > 0 ? panes[activePane].heading : ''"
+  [visible]="comparisonToolService.isVisualizationOverviewVisible()"
+  (visibleChange)="comparisonToolService.setVisualizationOverviewVisibility($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '100%', maxWidth: '580px' }"
+  styleClass="visualization-overview-panel"
+  (onHide)="onHide()"
+>
+  <div class="how-to-panel-panes">
+    @for (pane of panes; track pane; let i = $index) {
+      <div
+        class="how-to-panel-pane active"
+        [ngClass]="{ active: activePane === i }"
+        [innerHtml]="pane.content"
+      ></div>
+    }
+  </div>
+
+  <ng-template #footer>
+    <div class="checkbox">
+      <p-checkbox
+        [ngModel]="willHide()"
+        (ngModelChange)="setWillHide($event)"
+        [binary]="true"
+        size="small"
+        inputId="hideHowTo"
+      />
+      <label for="hideHowTo">Don't show this again</label>
+    </div>
+    <div>
+      @if (activePane > 0) {
+        <p-button
+          styleClass="how-to-panel-previous"
+          label="Back"
+          (click)="previous()"
+          [rounded]="true"
+          size="small"
+          icon="pi pi-angle-left"
+          variant="outlined"
+        ></p-button>
+      }
+      @if (activePane !== panes.length - 1) {
+        <p-button
+          label="Next"
+          (click)="next()"
+          [rounded]="true"
+          size="small"
+          icon="pi pi-angle-right"
+          iconPos="right"
+        ></p-button>
+      }
+      @if (activePane === panes.length - 1) {
+        <p-button label="Close" (click)="close()" [rounded]="true" size="small"></p-button>
+      }
+    </div>
+  </ng-template>
+</p-dialog>
