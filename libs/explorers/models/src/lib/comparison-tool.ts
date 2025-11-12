@@ -14,6 +14,7 @@ export interface VisualizationOverviewPane {
   heading: string;
   content: SafeHtml;
 }
+
 export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
   headerTitle: string;

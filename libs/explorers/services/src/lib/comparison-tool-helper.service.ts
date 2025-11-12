@@ -14,10 +14,6 @@ import {
 export class ComparisonToolHelperService {
   private readonly sanitizer = inject(DomSanitizer);
 
-  /**
-   * Creates a sanitized visualization overview pane.
-   * Use this helper to avoid manually sanitizing HTML in each comparison tool component.
-   */
   createVisualizationOverviewPane(heading: string, htmlContent: string): VisualizationOverviewPane {
     return {
       heading,
