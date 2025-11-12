@@ -5,6 +5,7 @@ on:
     tags:
       - 'agora/v*'
       - 'amp-als/v*'
+      - 'bixarena/v*'
       - 'openchallenges/v*'
       - 'sage/v*'
 
