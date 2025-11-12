@@ -30,7 +30,7 @@ fi
 
 # Get database credentials
 echo "1. Retrieving database credentials..."
-SECRET_PATTERN="bixarena${ENVIRONMENT}${DEVELOPER_NAME}databa"
+SECRET_PATTERN="bixarena-${ENVIRONMENT}-${DEVELOPER_NAME}-database"
 SECRET_ARN=$(AWS_PROFILE=${AWS_PROFILE} aws secretsmanager list-secrets \
   --query "SecretList[?contains(Name, \`${SECRET_PATTERN}\`)].ARN" \
   --output text)
