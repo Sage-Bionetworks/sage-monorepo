@@ -20,6 +20,7 @@ const ModelDataSchema = new Schema<ModelData>({
   tissue: { type: String, required: true },
   age: { type: String, required: true },
   units: { type: String, required: true },
+  y_axis_max: { type: Number, required: true },
   data: { type: [IndividualDataSchema], required: true },
 });
 

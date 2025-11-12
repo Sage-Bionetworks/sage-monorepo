@@ -301,6 +301,9 @@ components:
         units:
           type: string
           description: Units of measurement
+        y_axis_max:
+          type: number
+          description: Maximum value for y-axis in visualizations
         data:
           type: array
           description: Values for each individual
@@ -312,6 +315,7 @@ components:
         - tissue
         - age
         - units
+        - y_axis_max
         - data
     Model:
       type: object

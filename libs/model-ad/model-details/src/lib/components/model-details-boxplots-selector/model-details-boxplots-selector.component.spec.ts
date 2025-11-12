@@ -5,7 +5,7 @@ import {
   SvgIconServiceStub,
   validWikiParams,
 } from '@sagebionetworks/explorers/testing';
-import { Sex } from '@sagebionetworks/model-ad/api-client';
+import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { ModelDetailsBoxplotsSelectorComponent } from './model-details-boxplots-selector.component';
@@ -59,13 +59,14 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
 
   it('should return the expected genotype order', async () => {
     const basePt = { sex: Sex.Male, individual_id: '1', value: 100 };
-    const mockModelDataList = [
+    const mockModelDataList: ModelData[] = [
       {
         name: 'ModelName',
         evidence_type: 'Test',
         tissue: 'Brain',
         age: '4 months',
         units: 'test',
+        y_axis_max: 2000.0,
         data: [
           { ...basePt, genotype: 'ModelName' },
           { ...basePt, genotype: 'NewGenotype1' },
@@ -80,6 +81,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
         tissue: 'Brain',
         age: '4 months',
         units: 'test',
+        y_axis_max: 2000.0,
         data: [
           { ...basePt, genotype: 'NewGenotype3' },
           { ...basePt, genotype: 'ModelName' },
