@@ -56,15 +56,9 @@ class TestGetDeveloperName:
             assert get_developer_name() == "jsmith"
 
     def test_get_developer_name_dev_missing(self):
-        """Test error when DEVELOPER_NAME is missing for dev."""
-        with (
-            patch.dict(os.environ, {"ENV": "dev"}, clear=True),
-            pytest.raises(
-                ValueError,
-                match="DEVELOPER_NAME environment variable is required for dev",
-            ),
-        ):
-            get_developer_name()
+        """Test developer name is None when DEVELOPER_NAME is missing for dev."""
+        with patch.dict(os.environ, {"ENV": "dev"}, clear=True):
+            assert get_developer_name() is None
 
     def test_get_developer_name_stage(self):
         """Test developer name is None for stage."""
@@ -102,6 +96,11 @@ class TestGetStackPrefix:
         """Test stack prefix for dev with developer name."""
         with patch.dict(os.environ, {"ENV": "dev", "DEVELOPER_NAME": "jsmith"}):
             assert get_stack_prefix() == "bixarena-dev-jsmith"
+
+    def test_get_stack_prefix_dev_no_developer(self):
+        """Test stack prefix for dev without developer name (CI/CD)."""
+        with patch.dict(os.environ, {"ENV": "dev"}, clear=True):
+            assert get_stack_prefix() == "bixarena-dev"
 
     def test_get_stack_prefix_stage(self):
         """Test stack prefix for stage."""
