@@ -68,6 +68,7 @@ class DatabaseStack(cdk.Stack):
             self,
             "PostgresDatabase",
             vpc=vpc,
+            stack_prefix=stack_prefix,
             database_name="bixarena",
             instance_type=instance_type,
             multi_az=multi_az,

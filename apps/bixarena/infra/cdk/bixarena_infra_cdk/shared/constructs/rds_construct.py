@@ -14,6 +14,7 @@ class PostgresDatabase(Construct):
         scope: Construct,
         construct_id: str,
         vpc: ec2.IVpc,
+        stack_prefix: str,
         database_name: str = "bixarena",
         instance_type: ec2.InstanceType | None = None,
         multi_az: bool = False,
@@ -29,6 +30,7 @@ class PostgresDatabase(Construct):
             scope: CDK construct scope
             construct_id: Construct identifier
             vpc: VPC to deploy the database in
+            stack_prefix: Prefix for resource naming (used for secret name)
             database_name: Name of the default database (default: bixarena)
             instance_type: EC2 instance type (default: t4g.small)
             multi_az: Enable Multi-AZ deployment for high availability (default: False)
@@ -75,8 +77,13 @@ class PostgresDatabase(Construct):
                 subnet_type=ec2.SubnetType.PRIVATE_ISOLATED
             ),
             security_groups=[self.security_group],
-            # Auto-generate credentials and store in Secrets Manager
-            credentials=rds.Credentials.from_generated_secret("postgres"),
+            # Auto-generate credentials and store in Secrets Manager with custom name
+            # Secret contains: username, password, engine, host, port, dbname,
+            # dbInstanceIdentifier
+            # Follows naming convention: {stack_prefix}-database
+            credentials=rds.Credentials.from_generated_secret(
+                "postgres", secret_name=f"{stack_prefix}-database"
+            ),
             multi_az=multi_az,
             allocated_storage=allocated_storage,
             # Use gp3 for better performance and lower cost
