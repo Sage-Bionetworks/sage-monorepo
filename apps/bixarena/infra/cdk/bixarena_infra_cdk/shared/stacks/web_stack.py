@@ -96,6 +96,7 @@ class WebStack(cdk.Stack):
             openrouter_secret = sm.Secret(
                 self,
                 "OpenRouterApiKeySecret",
+                secret_name=f"{stack_prefix}-openrouter-api-key",
                 description="OpenRouter API key for BixArena Gradio app",
                 secret_string_value=cdk.SecretValue.unsafe_plain_text(
                     openrouter_api_key
