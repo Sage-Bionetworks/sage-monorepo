@@ -25,9 +25,9 @@ export interface OrgSagebionetworksRepoModelGridQueryCellValueFilter {
    */
   operator?: OrgSagebionetworksRepoModelGridQueryCellValueFilter.OperatorEnum;
   /**
-   * A filter used to select rows based on a specific column\'s cell value. Use operators like \'EQUALS\' or \'LIKE\' with the \'value\' array for standard comparisons. For user requests about finding \'empty\', \'blank\', or \'null\' values, use the \'IS_NULL\' operator and omit the \'value\' property. To find rows that are not empty, use the \'IS_NOT_NULL\' operator. When using either \'LIKE\' or \'NOT_LIKE\', the wildcard character: \'%\' is used to represents zero or more characters, and \'_\' is used to represents a single character.
+   * A filter used to select rows based on a specific column\'s cell value. Use operators like \'EQUALS\' or \'LIKE\' with the \'value\' property for standard comparisons. The \'IS_NULL\' operator can be used to find `null` values. The `IS_UNDEFINED` operator can be used to find `undefined` values. When using IN or NOT_IN operators, `value` should be an array of values to compare against. When using either \'LIKE\' or \'NOT_LIKE\', the wildcard character: \'%\' is used to represents zero or more characters, and \'_\' is used to represent a single character.
    */
-  value?: Array<any>;
+  value?: any | null;
 }
 export namespace OrgSagebionetworksRepoModelGridQueryCellValueFilter {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.grid.query.CellValueFilter';
@@ -47,7 +47,9 @@ export namespace OrgSagebionetworksRepoModelGridQueryCellValueFilter {
     | 'LIKE'
     | 'NOT_LIKE'
     | 'IS_NULL'
-    | 'IS_NOT_NULL';
+    | 'IS_NOT_NULL'
+    | 'IS_UNDEFINED'
+    | 'IS_DEFINED';
   export const OperatorEnum = {
     Equals: 'EQUALS' as OperatorEnum,
     NotEquals: 'NOT_EQUALS' as OperatorEnum,
@@ -61,5 +63,7 @@ export namespace OrgSagebionetworksRepoModelGridQueryCellValueFilter {
     NotLike: 'NOT_LIKE' as OperatorEnum,
     IsNull: 'IS_NULL' as OperatorEnum,
     IsNotNull: 'IS_NOT_NULL' as OperatorEnum,
+    IsUndefined: 'IS_UNDEFINED' as OperatorEnum,
+    IsDefined: 'IS_DEFINED' as OperatorEnum,
   };
 }

@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelTableFacetColumnSortConfig } from './org-sagebionetworks-repo-model-table-facet-column-sort-config';
 
 /**
  * Defines a single sub-column of a column of type JSON.  This can be used to enable the faceting of the sub-columns.
@@ -24,6 +25,7 @@ export interface OrgSagebionetworksRepoModelTableJsonSubColumnModel {
    * Set to one of the enumerated values to indicate a column should be treated as a facet
    */
   facetType?: OrgSagebionetworksRepoModelTableJsonSubColumnModel.FacetTypeEnum;
+  facetSortConfig?: OrgSagebionetworksRepoModelTableFacetColumnSortConfig;
   /**
    * Defines the JSON path of the sub column. Use the \'$\' char to represent the root of JSON object. If the JSON key of a sub column is \'a\', then the jsonPath for that column would be: \'$.a\'.
    */

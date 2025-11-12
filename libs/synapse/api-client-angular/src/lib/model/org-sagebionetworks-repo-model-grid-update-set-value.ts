@@ -17,7 +17,7 @@ export interface OrgSagebionetworksRepoModelGridUpdateSetValue {
    */
   columnName?: string;
   /**
-   * Literal JSON value to assign to the column for all selected rows. Supports string, number, boolean, object, array, or null (use null to clear)
+   * Literal JSON value to assign to the field in each target document: string, number, boolean, object, array, or null. Omit the \"value\" property to remove/unset the field (`undefined`); include `\"value\": null` to store JSON null. Must be a literal constant — no SQL or expressions; value is bound and stored as-is.
    */
   value?: any | null;
 }
