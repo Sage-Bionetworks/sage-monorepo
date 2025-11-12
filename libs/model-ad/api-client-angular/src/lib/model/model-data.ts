@@ -34,6 +34,10 @@ export interface ModelData {
    */
   units: string;
   /**
+   * Maximum value for y-axis in visualizations
+   */
+  y_axis_max: number;
+  /**
    * Values for each individual
    */
   data: Array<IndividualData>;
