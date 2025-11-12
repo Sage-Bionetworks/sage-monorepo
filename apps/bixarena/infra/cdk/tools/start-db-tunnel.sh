@@ -85,11 +85,11 @@ echo "3. Getting task details..."
 RUNTIME_ID=$(AWS_PROFILE=${AWS_PROFILE} aws ecs describe-tasks \
   --cluster "${CLUSTER_NAME}" \
   --tasks "${TASK_ARN}" \
-  --query 'tasks[0].containers[0].runtimeId' \
+  --query 'tasks[0].containers[?name==`bastion`].runtimeId' \
   --output text)
 
 if [ -z "$RUNTIME_ID" ] || [ "$RUNTIME_ID" = "None" ]; then
-  echo "ERROR: Could not get container runtime ID"
+  echo "ERROR: Could not get container runtime ID for bastion container"
   exit 1
 fi
 
