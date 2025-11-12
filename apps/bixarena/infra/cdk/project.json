@@ -111,6 +111,13 @@
         "prod": {}
       },
       "defaultConfiguration": "dev"
+    },
+    "start-db-tunnel": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash ./tools/start-db-tunnel.sh",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["language:python", "package-manager:uv"],

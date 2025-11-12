@@ -118,6 +118,54 @@ curl http://<alb-dns-name>/health
 3. Review diff: `nx run bixarena-infra-cdk:diff:dev`
 4. Deploy changes: `nx run bixarena-infra-cdk:deploy:dev`
 
+### Local Docker Image Development
+
+When actively developing and testing service changes, you can use local Docker image tarballs instead of pulling from remote registries. This enables faster iteration without needing to push images to a container registry.
+
+#### Enabling Local Images
+
+Set the environment variable in your configuration file (e.g., `.env.dev`):
+
+```bash
+USE_LOCAL_IMAGES=true
+```
+
+#### Building and Exporting Images
+
+Build Docker images and export them as tarballs:
+
+```bash
+nx run-many -t=export-image-tarball -p=bixarena-*
+```
+
+This command:
+
+- Builds all BixArena service images
+- Exports each image as a tarball (`.tar` file)
+- Places tarballs in the expected location for CDK asset bundling
+
+#### How It Works
+
+When `USE_LOCAL_IMAGES=true` is set, the CDK `load_container_image()` utility function will:
+
+1. Look for local image tarballs instead of remote image references
+2. Bundle the tarball as a CDK asset during synthesis
+3. Upload the asset to the CDK staging bucket during deployment
+4. Use the uploaded image for ECS task definitions
+
+#### Benefits
+
+- **Faster development iteration**: No need to push to container registry between changes
+- **Testing before publish**: Validate image changes before pushing to production registry
+
+#### Caveats
+
+- **Larger CDK assets**: Image tarballs can be hundreds of MB, increasing synth/deploy times
+- **Local only**: Tarballs are not shared across developers or environments
+- **Stale images**: Remember to rebuild tarballs after making image changes
+
+**Recommendation**: Use `USE_LOCAL_IMAGES=true` for active development, switch to `false` (remote images) for staging and production deployments.
+
 ### Cleaning Up
 
 When you're done with your development stack, destroy it to avoid charges:
@@ -277,6 +325,15 @@ nx test bixarena-infra-cdk
 ### Required for Development
 
 - `DEVELOPER_NAME`: Your identifier for resource naming (alphanumeric, hyphens, underscores only)
+
+### Additional Variables
+
+Additional environment variables for infrastructure configuration, service settings, and feature flags are defined in the `.env.example`, `.env.dev.example`, `.env.stage.example`, and `.env.prod.example` files. Refer to these files for:
+
+- Descriptions of each variable
+- Default values
+- Environment-specific configurations
+- Optional vs. required settings
 
 ## Environment Variable Precedence
 

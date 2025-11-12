@@ -5,7 +5,7 @@ from aws_cdk import aws_s3 as s3
 from constructs import Construct
 
 
-class OpenchallengesBucket(Construct):
+class BixArenaBucket(Construct):
     """Reusable S3 bucket construct for BixArena."""
 
     def __init__(

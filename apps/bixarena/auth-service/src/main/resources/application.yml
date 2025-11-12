@@ -108,3 +108,19 @@ app:
     # Default audience (will be overridden by audience parameter in /oauth2/token)
     audience: urn:bixarena:auth
     token-ttl-seconds: 600
+  cors:
+    # CORS configuration for browser requests (localhost defaults)
+    allowed-origins:
+      - http://localhost:8100
+      - http://127.0.0.1:8100
+      - http://localhost:7860
+      - http://127.0.0.1:7860
+    allowed-methods:
+      - GET
+      - POST
+      - OPTIONS
+    allowed-headers:
+      - Authorization
+      - Content-Type
+      - Cookie
+    allow-credentials: true

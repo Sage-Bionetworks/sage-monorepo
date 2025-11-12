@@ -3,9 +3,7 @@
 import aws_cdk as cdk
 from constructs import Construct
 
-from bixarena_infra_cdk.shared.constructs.vpc_construct import (
-    OpenchallengesVpc,
-)
+from bixarena_infra_cdk.shared.constructs.vpc_construct import BixArenaVpc
 
 
 class VpcStack(cdk.Stack):
@@ -17,6 +15,7 @@ class VpcStack(cdk.Stack):
         construct_id: str,
         stack_prefix: str,
         environment: str,
+        developer_name: str | None = None,
         vpc_cidr: str = "10.0.0.0/16",
         max_azs: int = 2,
         nat_gateways: int = 1,
@@ -30,6 +29,7 @@ class VpcStack(cdk.Stack):
             construct_id: Stack identifier
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
+            developer_name: Developer name for dev environment (optional)
             vpc_cidr: CIDR block for the VPC (default: 10.0.0.0/16)
             max_azs: Maximum number of Availability Zones (default: 2)
             nat_gateways: Number of NAT gateways (default: 1)
@@ -38,7 +38,7 @@ class VpcStack(cdk.Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # Create VPC
-        vpc_construct = OpenchallengesVpc(
+        self.vpc_construct = BixArenaVpc(
             self,
             "Vpc",
             cidr=vpc_cidr,
@@ -46,14 +46,11 @@ class VpcStack(cdk.Stack):
             nat_gateways=nat_gateways,
         )
 
-        # Export VPC for use in other stacks
-        self.vpc = vpc_construct.vpc
-
         # CloudFormation outputs
         cdk.CfnOutput(
             self,
             "VpcId",
-            value=self.vpc.vpc_id,
+            value=self.vpc_construct.vpc.vpc_id,
             description="VPC ID",
             export_name=f"{stack_prefix}-vpc-id",
         )
@@ -61,12 +58,14 @@ class VpcStack(cdk.Stack):
         cdk.CfnOutput(
             self,
             "VpcCidr",
-            value=self.vpc.vpc_cidr_block,
+            value=self.vpc_construct.vpc.vpc_cidr_block,
             description="VPC CIDR block",
         )
 
         # Export public subnet IDs
-        public_subnet_ids = [subnet.subnet_id for subnet in self.vpc.public_subnets]
+        public_subnet_ids = [
+            subnet.subnet_id for subnet in self.vpc_construct.vpc.public_subnets
+        ]
         cdk.CfnOutput(
             self,
             "PublicSubnetIds",
@@ -75,7 +74,9 @@ class VpcStack(cdk.Stack):
         )
 
         # Export private subnet IDs
-        private_subnet_ids = [subnet.subnet_id for subnet in self.vpc.private_subnets]
+        private_subnet_ids = [
+            subnet.subnet_id for subnet in self.vpc_construct.vpc.private_subnets
+        ]
         cdk.CfnOutput(
             self,
             "PrivateSubnetIds",

@@ -3,9 +3,7 @@
 import aws_cdk as cdk
 from constructs import Construct
 
-from bixarena_infra_cdk.shared.constructs.bucket_construct import (
-    OpenchallengesBucket,
-)
+from bixarena_infra_cdk.shared.constructs.bucket_construct import BixArenaBucket
 
 
 class BucketStack(cdk.Stack):
@@ -48,7 +46,7 @@ class BucketStack(cdk.Stack):
         # - Dev: bixarena-dev-{developer}-imagebucket{hash}-{random}
         # - Stage: bixarena-stage-imagebucket{hash}-{random}
         # - Prod: bixarena-prod-imagebucket{hash}-{random}
-        self.image_bucket = OpenchallengesBucket(
+        self.image_bucket = BixArenaBucket(
             self,
             "ImageBucket",
             bucket_name=None,  # Let CDK auto-generate with stack prefix

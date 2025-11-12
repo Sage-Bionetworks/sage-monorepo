@@ -90,3 +90,20 @@ app:
     expected-issuer: urn:bixarena:auth
     # Expected audience claim value
     expected-audience: urn:bixarena:api
+  cors:
+    # CORS configuration for browser requests (localhost defaults)
+    # Can be overridden via env vars (e.g., APP_CORS_ALLOWED_ORIGINS=http://example.com,https://example.com)
+    allowed-origins:
+      - http://localhost:8100
+      - http://127.0.0.1:8100
+      - http://localhost:7860
+      - http://127.0.0.1:7860
+    allowed-methods:
+      - GET
+      - POST
+      - PATCH
+      - OPTIONS
+    allowed-headers:
+      - Authorization
+      - Content-Type
+    allow-credentials: true

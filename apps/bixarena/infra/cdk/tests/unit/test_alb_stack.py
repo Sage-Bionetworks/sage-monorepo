@@ -28,13 +28,13 @@ class TestAlbStack:
             "TestAlbStack",
             stack_prefix="test",
             environment="dev",
-            vpc=vpc_stack.vpc,
+            vpc=vpc_stack.vpc_construct.vpc,
             certificate_arn=None,
         )
 
         # Verify ALB was created
-        assert alb_stack.alb is not None
-        assert alb_stack.security_group is not None
+        assert alb_stack.alb_construct.alb is not None
+        assert alb_stack.alb_construct.security_group is not None
 
         # Get template and verify resources
         template = Template.from_stack(alb_stack)
@@ -60,7 +60,7 @@ class TestAlbStack:
             "TestAlbStack",
             stack_prefix="test",
             environment="dev",
-            vpc=vpc_stack.vpc,
+            vpc=vpc_stack.vpc_construct.vpc,
             certificate_arn=cert_arn,
         )
 
@@ -88,7 +88,7 @@ class TestAlbStack:
             "TestAlbStack",
             stack_prefix="test",
             environment="dev",
-            vpc=vpc_stack.vpc,
+            vpc=vpc_stack.vpc_construct.vpc,
         )
 
         # Verify security group allows HTTP and HTTPS
