@@ -94,8 +94,8 @@ Environment Configuration:
     - CERTIFICATE_ARN: ACM certificate ARN for HTTPS
       (optional, uses HTTP if not provided)
     - FQDN: Custom domain name (optional, uses ALB DNS if not provided)
-    - SYNAPSE_CLIENT_ID: Synapse OAuth client ID (default: "changeme")
-    - SYNAPSE_CLIENT_SECRET: Synapse OAuth client secret (default: "changeme")
+    - SYNAPSE_CLIENT_ID: Synapse OAuth client ID (REQUIRED)
+    - SYNAPSE_CLIENT_SECRET: Synapse OAuth client secret (REQUIRED)
     - OPENROUTER_API_KEY: API key for LLM access (optional)
 
 Docker Images:
@@ -105,7 +105,11 @@ Docker Images:
 
 Security:
     - All services run in private subnets (no direct internet access)
-    - Database credentials stored in AWS Secrets Manager
+    - Sensitive credentials stored in AWS Secrets Manager:
+      * Database credentials (username/password)
+      * Synapse OAuth credentials (client ID/secret)
+    - Credentials injected securely at runtime via ECS Secrets
+    - Never exposed in CloudFormation templates or logs
     - Security groups restrict traffic to VPC CIDR range
     - ALB provides single entry point for external traffic
     - Sessions managed via Valkey with secure cookie configuration
@@ -224,6 +228,20 @@ def main() -> None:
     )
     ecs_cluster_stack.add_dependency(vpc_stack)
 
+    # Get Synapse OAuth credentials (REQUIRED for Auth Service)
+    # Credentials are securely stored in AWS Secrets Manager by AuthServiceStack
+    synapse_client_id = os.getenv("SYNAPSE_CLIENT_ID", "")
+    synapse_client_secret = os.getenv("SYNAPSE_CLIENT_SECRET", "")
+
+    # Validate credentials are provided (fail fast at deployment time)
+    if not synapse_client_id or not synapse_client_secret:
+        raise ValueError(
+            "SYNAPSE_CLIENT_ID and SYNAPSE_CLIENT_SECRET environment variables "
+            "are required for deployment. These OAuth credentials are securely "
+            "stored in AWS Secrets Manager and injected into the Auth Service "
+            "container at runtime. Never exposed in CloudFormation or logs."
+        )
+
     # Create web stack (depends on ECS cluster and ALB)
     # Uses ALB DNS name by default, or custom FQDN if provided
     use_https = certificate_arn is not None and certificate_arn.strip() != ""
@@ -296,8 +314,8 @@ def main() -> None:
             f"{'https' if use_https else 'http'}://"
             f"{fqdn if fqdn else alb_stack.alb_construct.alb.load_balancer_dns_name}"
         ),
-        synapse_client_id=os.getenv("SYNAPSE_CLIENT_ID", "changeme"),
-        synapse_client_secret=os.getenv("SYNAPSE_CLIENT_SECRET", "changeme"),
+        synapse_client_id=synapse_client_id,
+        synapse_client_secret=synapse_client_secret,
         description=f"Auth service for BixArena {environment} environment",
     )
     # Note: Dependencies are automatic via CloudFormation references

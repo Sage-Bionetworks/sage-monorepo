@@ -28,11 +28,11 @@ class AuthServiceStack(cdk.Stack):
         database_secret_arn: str,
         valkey_endpoint: str,
         valkey_port: str,
+        synapse_client_id: str,
+        synapse_client_secret: str,
         developer_name: str | None = None,
         app_version: str = "edge",
         ui_base_url: str = "http://localhost:8100",
-        synapse_client_id: str = "changeme",
-        synapse_client_secret: str = "changeme",
         **kwargs,
     ) -> None:
         """
@@ -49,11 +49,11 @@ class AuthServiceStack(cdk.Stack):
             database_secret_arn: ARN of the database credentials secret
             valkey_endpoint: Valkey cluster endpoint
             valkey_port: Valkey cluster port
+            synapse_client_id: Synapse OAuth client ID (REQUIRED)
+            synapse_client_secret: Synapse OAuth client secret (REQUIRED)
             developer_name: Developer name for dev environment (optional)
             app_version: Application version (Docker image tag)
             ui_base_url: Base URL for the UI (for redirects after auth)
-            synapse_client_id: Synapse OAuth client ID
-            synapse_client_secret: Synapse OAuth client secret
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -87,8 +87,6 @@ class AuthServiceStack(cdk.Stack):
             "SPRING_DATA_REDIS_PORT": valkey_port,
             # Application-specific configuration (infrastructure-dependent)
             "APP_UI_BASE_URL": ui_base_url,
-            "APP_AUTH_CLIENT_ID": synapse_client_id,
-            "APP_AUTH_CLIENT_SECRET": synapse_client_secret,
             "APP_AUTH_REDIRECT_URI": f"{ui_base_url}/auth/callback",
             # CORS configuration: only allow requests from deployment URL
             # This overrides the default list in application.yml
@@ -101,13 +99,37 @@ class AuthServiceStack(cdk.Stack):
             "APP_SESSION_COOKIE_SECURE": "false",
         }
 
+        # Create Synapse OAuth credentials secret in Secrets Manager
+        # This stores credentials securely and never exposes them in CloudFormation
+        synapse_secret = sm.Secret(
+            self,
+            "SynapseOAuthSecret",
+            secret_name=f"{stack_prefix}-synapse-oauth",
+            description="Synapse OAuth client credentials for BixArena Auth Service",
+            secret_object_value={
+                "client_id": cdk.SecretValue.unsafe_plain_text(synapse_client_id),
+                "client_secret": cdk.SecretValue.unsafe_plain_text(
+                    synapse_client_secret
+                ),
+            },
+        )
+
         # Secrets from AWS Secrets Manager (injected securely at runtime)
+        # These are never exposed in CloudFormation templates or ECS task definitions
         container_secrets = {
+            # Database credentials
             "SPRING_DATASOURCE_USERNAME": ecs.Secret.from_secrets_manager(
                 db_secret, field="username"
             ),
             "SPRING_DATASOURCE_PASSWORD": ecs.Secret.from_secrets_manager(
                 db_secret, field="password"
+            ),
+            # Synapse OAuth credentials
+            "APP_AUTH_CLIENT_ID": ecs.Secret.from_secrets_manager(
+                synapse_secret, field="client_id"
+            ),
+            "APP_AUTH_CLIENT_SECRET": ecs.Secret.from_secrets_manager(
+                synapse_secret, field="client_secret"
             ),
         }
 
