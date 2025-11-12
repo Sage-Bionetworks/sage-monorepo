@@ -259,7 +259,7 @@ def build_app():
             window.$crisp.push([
                 "do",
                 "bot:scenario:run",
-                ["scenario_e9e05450-91a3-4dac-9970-004f8071a52b"]
+                ["scenario_81f047b4-387a-4b2b-92a3-8a9730a90f5c"]
             ]);
         }]);
     </script>
