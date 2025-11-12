@@ -25,6 +25,6 @@ export class ModelDetailsHeroComponent {
 
   getGeneUrl(gene: string) {
     const species = gene.startsWith('ENSMUSG') ? 'Mus_musculus' : 'Homo_sapiens';
-    return `http://May2025.archive.ensembl.org/${species}/Gene/Summary?db=core;g=${gene}`;
+    return `https://sep2025.archive.ensembl.org/${species}/Gene/Summary?db=core;g=${gene}`;
   }
 }
