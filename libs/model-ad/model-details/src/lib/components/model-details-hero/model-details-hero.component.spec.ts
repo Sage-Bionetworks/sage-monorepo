@@ -61,6 +61,20 @@ describe('ModelDetailsHeroComponent', () => {
       expect(ensemblLink.getAttribute('href')).toContain('Homo_sapiens');
     });
 
+    it('should use https', async () => {
+      await setup();
+      const gene = modelMock.genetic_info[0];
+      const ensemblLink = screen.getByRole('link', { name: gene.ensembl_gene_id });
+      expect(ensemblLink.getAttribute('href')).toMatch(/^https:/);
+    });
+
+    it('should use latest ensembl release version', async () => {
+      await setup();
+      const gene = modelMock.genetic_info[0];
+      const ensemblLink = screen.getByRole('link', { name: gene.ensembl_gene_id });
+      expect(ensemblLink.getAttribute('href')).toContain('sep2025');
+    });
+
     it('should display allele type', async () => {
       await setup();
       const gene = modelMock.genetic_info[2];
