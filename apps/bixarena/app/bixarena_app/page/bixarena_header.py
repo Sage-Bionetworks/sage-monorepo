@@ -14,7 +14,7 @@ def build_header():
                 """
 <div style='display:flex;align-items:center;height:40px;'>
   <h1 style='margin:0;padding:0;font-size:1.5rem;'>
-    <a href='/' style='text-decoration:none;color:inherit;'>🧬 BixArena</a>
+    <a href='/' style='text-decoration:none;color:inherit;'>🧬 BioArena</a>
   </h1>
 </div>
                 """
