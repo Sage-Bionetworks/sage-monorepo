@@ -1,3 +1,16 @@
+-- ============================================================================
+-- DEV ENVIRONMENT ONLY: Mock Data for Development and Testing
+-- ============================================================================
+-- This migration inserts mock data for local development and testing.
+-- It will ONLY run in the dev environment (not in stage or prod).
+--
+-- Migration naming: V999+ ensures this runs AFTER all schema migrations
+-- Location: db/migration/dev/ (dev profile only)
+-- ============================================================================
+
+-- ============================================================================
+-- Insert Model Records
+-- ============================================================================
 -- OPENROUTER FREE MODELS DEPRECATION
 -- INSERT INTO api.model (id, slug, name, license, active, alias, external_link, organization, description, api_model_name, api_base, created_at, updated_at) VALUES
 --   ('f4444444-4444-4444-4444-444444444444', 'deepseek-chat-v3-0324', 'DeepSeek: DeepSeek V3 0324 (free)', 'open-source', false, NULL, 'https://openrouter.ai/models/deepseek/deepseek-chat-v3-0324', 'DeepSeek', 'DeepSeek V3, a 685B-parameter, mixture-of-experts model, is the latest iteration of the flagship chat model family from the DeepSeek team. It succeeds the [DeepSeek V3](/deepseek/deepseek-chat-v3) model and performs really well on a variety of tasks.', 'deepseek/deepseek-chat-v3-0324:free', 'https://openrouter.ai/api/v1', '2025-10-01 14:30:00+00', '2025-10-01 14:30:00+00'),
@@ -35,3 +48,54 @@ INSERT INTO api.model (id, slug, name, license, active, alias, external_link, or
 ('c2d3e4f5-a6b7-4289-c0d1-e2f3a4b5c6d7', 'qwen3-235b-a22b-2507', 'Qwen: Qwen3 235B A22B 2507', 'open-source', true, NULL, 'https://openrouter.ai/models/qwen/qwen3-235b-a22b-2507', 'Qwen', NULL, 'qwen/qwen3-235b-a22b-2507', 'https://openrouter.ai/api/v1', '2025-10-30 00:00:00+00', '2025-10-30 00:00:00+00'),
 ('d3e4f5a6-b7c8-439a-d1e2-f3a4b5c6d7e8', 'qwen3-max', 'Qwen: Qwen3 Max', 'commercial', true, NULL, 'https://openrouter.ai/models/qwen/qwen3-max', 'Qwen', NULL, 'qwen/qwen3-max', 'https://openrouter.ai/api/v1', '2025-10-30 00:00:00+00', '2025-10-30 00:00:00+00'),
 ('e4f5a6b7-c8d9-44ab-e2f3-a4b5c6d7e8f9', 'qwen3-vl-235b-a22b-instruct', 'Qwen: Qwen3 VL 235B A22B Instruct', 'open-source', true, NULL, 'https://openrouter.ai/models/qwen/qwen3-vl-235b-a22b-instruct', 'Qwen', NULL, 'qwen/qwen3-vl-235b-a22b-instruct', 'https://openrouter.ai/api/v1', '2025-10-30 00:00:00+00', '2025-10-30 00:00:00+00');
+
+
+-- ============================================================================
+-- Insert Example Prompts
+-- ============================================================================
+-- Insert example prompt records (sorted alphabetically by question)
+INSERT INTO api.example_prompt (id, question, source, active, created_at) VALUES
+  ('01111111-1111-1111-1111-111111111111', 'Are serum leptin levels a prognostic factor in advanced lung cancer?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('0aaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Can the condition of the cell microenvironment of mediastinal lymph nodes help predict the risk of metastases in non-small cell lung cancer?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('03333333-3333-3333-3333-333333333333', 'Compare and contrast marker-gene versus whole-genome alignment approaches for metagenomic taxonomic profiling.', 'bixarena', TRUE, '2025-10-30 00:00:00+00'),
+  ('04444444-4444-4444-4444-444444444444', 'Do mutations causing low HDL-C promote increased carotid intima-media thickness?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('02222222-2222-2222-2222-222222222222', 'Do preoperative serum C-reactive protein levels predict the definitive pathological stage in patients with clinically localized prostate cancer?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('06666666-6666-6666-6666-666666666666', 'Does HER2 immunoreactivity provide prognostic information in locally advanced urothelial carcinoma patients receiving adjuvant M-VEC chemotherapy?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('05555555-5555-5555-5555-555555555555', 'Does hypoglycaemia increase the risk of cardiovascular events?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('07777777-7777-7777-7777-777777777777', 'Does the lipid-lowering peroxisome proliferator-activated receptors ligand bezafibrate prevent colon cancer in patients with coronary artery disease?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('08888888-8888-8888-8888-888888888888', 'HIF1A as a major vascular endothelial growth factor regulator: do its polymorphisms have an association with age-related macular degeneration?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('09999999-9999-9999-9999-999999999999', 'How would you compute the Bonferroni corrected p-value for a genetics study?', 'bixarena', TRUE, '2025-10-30 00:00:00+00'),
+  ('0fffffff-ffff-ffff-ffff-ffffffffffff', 'I need to convert a set of VCF files into a PLINK-formatted .bed, .bim, and .fam file set. What is the command-line tool and syntax to do this correctly?', 'bixarena', TRUE, '2025-10-30 00:00:00+00'),
+  ('12222222-2222-2222-2222-222222222222', 'Is Alveolar Macrophage Phagocytic Dysfunction in Children With Protracted Bacterial Bronchitis a Forerunner to Bronchiectasis?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('13333333-3333-3333-3333-333333333333', 'Is CA72-4 a useful biomarker in differential diagnosis between ovarian endometrioma and epithelial ovarian cancer?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('10000000-0000-0000-0000-000000000000', 'Is first-line single-agent mitoxantrone in the treatment of high-risk metastatic breast cancer patients as effective as combination chemotherapy?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('14444444-4444-4444-4444-444444444444', 'Is human cytomegalovirus infection associated with hypertension?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('15555555-5555-5555-5555-555555555555', 'Is late-night salivary cortisol a better screening test for possible cortisol excess than standard screening tests in obese patients with Type 2 diabetes?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('16666666-6666-6666-6666-666666666666', 'Is non-HDL-cholesterol a better predictor of long-term outcome in patients after acute myocardial infarction compared to LDL-cholesterol?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('11111111-1111-1111-1111-111111111111', 'Is there a uniform basal endometrial gene expression profile during the implantation window in women who became pregnant in a subsequent ICSI cycle?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00'),
+  ('19999999-9999-9999-9999-999999999999', 'What are the key differences between whole-genome sequencing (WGS) and whole-exome sequencing (WES)?', 'bixarena', TRUE, '2025-10-30 00:00:00+00'),
+  ('1fffffff-ffff-ffff-ffff-ffffffffffff', 'Women with synchronous primary cancers of the endometrium and ovary: do they have Lynch syndrome?', 'pubmedqa', TRUE, '2025-10-30 00:00:00+00');
+
+
+-- ============================================================================
+-- Insert Leaderboard Data
+-- ============================================================================
+-- Insert overall leaderboard
+INSERT INTO api.leaderboard (id, slug, name, description, created_at, updated_at) VALUES
+  ('11111111-1111-1111-1111-111111111111', 'overall', 'Overall', 'Overall performance ranking of all LLMs', '2025-08-01 10:00:00+00', '2025-08-16 14:30:00+00');
+
+-- Insert current snapshots
+INSERT INTO api.leaderboard_snapshot (id, leaderboard_id, snapshot_identifier, description, created_at) VALUES
+  ('f0000000-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', 'snapshot_2025-08-16_14-30', 'Weekly evaluation run', '2025-08-16 14:30:00+00'),
+  ('f0000000-0000-0000-0000-000000000003', '11111111-1111-1111-1111-111111111111', 'snapshot_2025-08-09_14-30', 'Previous week evaluation', '2025-08-09 14:30:00+00');
+
+-- Insert current leaderboard entries for overall leaderboard
+INSERT INTO api.leaderboard_entry (id, leaderboard_id, model_id, snapshot_id, bt_score, vote_count, rank, bootstrap_q025, bootstrap_q975, created_at) VALUES
+  ('e1111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111', '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0', 'f0000000-0000-0000-0000-000000000001', 0.925, 1250, 1, 887.000, 963.000, '2025-08-16 14:30:00+00'),
+  ('e1111111-1111-1111-1111-111111111112', '11111111-1111-1111-1111-111111111111', '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11', 'f0000000-0000-0000-0000-000000000001', 0.918, 1180, 2, 875.000, 961.000, '2025-08-16 14:30:00+00');
+
+
+-- Insert historical entries (previous week)
+INSERT INTO api.leaderboard_entry (id, leaderboard_id, model_id, snapshot_id, bt_score, vote_count, rank, bootstrap_q025, bootstrap_q975, created_at) VALUES
+  ('e1111111-1111-1111-1111-111111111113', '11111111-1111-1111-1111-111111111111', '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0', 'f0000000-0000-0000-0000-000000000003', 0.915, 1180, 1, 875.000, 955.000, '2025-08-09 14:30:00+00'),
+  ('e1111111-1111-1111-1111-111111111114', '11111111-1111-1111-1111-111111111111', '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11', 'f0000000-0000-0000-0000-000000000003', 0.908, 1120, 2, 865.000, 951.000, '2025-08-09 14:30:00+00');
