@@ -89,7 +89,7 @@ Environment Configuration:
       (default: bixarena-stage)
     - VPC_CIDR: VPC CIDR block (default: 10.0.0.0/16)
     - MAX_AZS: Number of Availability Zones (default: 2)
-    - APP_VERSION: Docker image tag for all services (default: "latest")
+    - APP_VERSION: Docker image tag for all services (default: "edge")
     - CERTIFICATE_ARN: ACM certificate ARN for HTTPS
       (optional, uses HTTP if not provided)
     - FQDN: Custom domain name (optional, uses ALB DNS if not provided)
@@ -100,7 +100,7 @@ Environment Configuration:
 Docker Images:
     Images are loaded from remote registry:
     - Remote: Uses ghcr.io/sage-bionetworks/{service}:{APP_VERSION}
-    - Default version: "latest" (vs. "edge" in dev)
+    - Default version: "edge"
 
 Security:
     - All services run in private subnets (no direct internet access)
@@ -150,7 +150,7 @@ def main() -> None:
     vpc_cidr = os.getenv("VPC_CIDR", "10.0.0.0/16")
     certificate_arn = os.getenv("CERTIFICATE_ARN", "")
     max_azs = int(os.getenv("MAX_AZS", "2"))  # Number of Availability Zones
-    app_version = os.getenv("APP_VERSION", "latest")
+    app_version = os.getenv("APP_VERSION", "edge")
     # FQDN is optional - if not provided, will use ALB DNS name
     fqdn = os.getenv("FQDN", "")
 
