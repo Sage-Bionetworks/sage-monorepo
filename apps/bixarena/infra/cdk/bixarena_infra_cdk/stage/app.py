@@ -76,7 +76,7 @@ Environment Configuration:
     Staging environment uses production-like settings for testing:
 
     - VPC: One NAT Gateway per AZ for high availability
-    - Database: t4g.medium, Multi-AZ, 30GB storage, 7-day backup retention
+    - Database: t4g.small, Multi-AZ, 30GB storage, 7-day backup retention
     - Valkey: Multi-node deployment for availability testing
     - Services: Moderate CPU/memory allocation for realistic testing
     - Bastion: Enabled for secure database access via Session Manager

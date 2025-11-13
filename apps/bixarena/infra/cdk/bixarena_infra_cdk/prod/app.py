@@ -76,7 +76,7 @@ Environment Configuration:
     Production environment uses high-availability, production-grade settings:
 
     - VPC: One NAT Gateway per AZ for high availability
-    - Database: t4g.large, Multi-AZ, 50GB storage, 30-day backup retention
+    - Database: t4g.medium, Multi-AZ, 50GB storage, 30-day backup retention
     - Valkey: Multi-node deployment for high availability
     - Services: Production-grade CPU/memory allocation
     - Bastion: Enabled for secure database access via Session Manager

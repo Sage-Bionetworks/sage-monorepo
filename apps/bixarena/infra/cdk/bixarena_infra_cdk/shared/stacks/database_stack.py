@@ -45,18 +45,18 @@ class DatabaseStack(cdk.Stack):
             backup_retention_days = 1
             deletion_protection = False
         elif environment == "stage":
-            # Stage: Multi-AZ for availability testing
+            # Stage: Multi-AZ for availability testing, cost-optimized
             instance_type = ec2.InstanceType.of(
-                ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.MEDIUM
+                ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.SMALL
             )
             multi_az = True
             allocated_storage = 30
             backup_retention_days = 7
             deletion_protection = True
         else:  # prod
-            # Prod: High availability, larger storage, longer backups
+            # Prod: High availability with moderate instance size for <500 users
             instance_type = ec2.InstanceType.of(
-                ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.LARGE
+                ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.MEDIUM
             )
             multi_az = True
             allocated_storage = 50
