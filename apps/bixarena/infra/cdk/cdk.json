@@ -56,7 +56,6 @@
     "@aws-cdk/core:includePrefixInUniqueNameGeneration": true,
     "@aws-cdk/core:target-partitions": ["aws", "aws-cn"],
     "@aws-cdk/core:validateSnapshotRemovalPolicy": true,
-    "@aws-cdk/customresources:installLatestAwsSdkDefault": false,
-    "cli-telemetry": false
+    "@aws-cdk/customresources:installLatestAwsSdkDefault": false
   }
 }
