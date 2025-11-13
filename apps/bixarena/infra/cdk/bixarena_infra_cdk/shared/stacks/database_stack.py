@@ -50,7 +50,7 @@ class DatabaseStack(cdk.Stack):
                 ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.MEDIUM
             )
             multi_az = True
-            allocated_storage = 50
+            allocated_storage = 30
             backup_retention_days = 7
             deletion_protection = True
         else:  # prod
@@ -59,7 +59,7 @@ class DatabaseStack(cdk.Stack):
                 ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.LARGE
             )
             multi_az = True
-            allocated_storage = 100
+            allocated_storage = 50
             backup_retention_days = 30
             deletion_protection = True
 
