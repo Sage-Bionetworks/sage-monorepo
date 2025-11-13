@@ -254,8 +254,8 @@ def build_app():
             d.getElementsByTagName("head")[0].appendChild(s);
         })();
 
-        // Trigger scenario when chatbot is opened
-        window.$crisp.push(["on", "chat:opened", function() {
+        // Trigger scenario when the chatbox is opened for the first time by the user
+        window.$crisp.push(["on", "chat:initiated", function() {
             window.$crisp.push([
                 "do",
                 "bot:scenario:run",
