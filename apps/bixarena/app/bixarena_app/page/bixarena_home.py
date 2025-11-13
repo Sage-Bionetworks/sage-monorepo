@@ -171,21 +171,31 @@ def load_user_battles_on_page_load(
     return gr.update(value=stats_html)
 
 
-def update_cta_buttons_on_page_load(request: gr.Request) -> tuple[dict, dict]:
+def update_cta_buttons_on_page_load(
+    request: gr.Request,
+) -> tuple[dict, dict, dict]:
     """Update CTA button visibility based on authentication state.
 
     Args:
         request: Gradio request object
 
     Returns:
-        Tuple of (authenticated_btn_update, login_btn_update)
+        Tuple of (authenticated_btn_update, login_btn_update, cta_helper_msg_update)
     """
     if is_authenticated(request):
-        # Show authenticated button, hide login button
-        return (gr.update(visible=True), gr.update(visible=False))
+        # Show authenticated button, hide login button and CTA helper message
+        return (
+            gr.update(visible=True),
+            gr.update(visible=False),
+            gr.update(visible=False),
+        )
     else:
-        # Hide authenticated button, show login button
-        return (gr.update(visible=False), gr.update(visible=True))
+        # Hide authenticated button, show login button and CTA helper message
+        return (
+            gr.update(visible=False),
+            gr.update(visible=True),
+            gr.update(visible=True),
+        )
 
 
 def build_stats_section():
@@ -295,52 +305,61 @@ def build_how_it_works_section():
 def build_cta_section():
     """Create the call-to-action section with conditional buttons"""
 
-    # Group button and help message together
-    with gr.Column(elem_id="cta-section-group"):
-        # Two buttons - one for authenticated, one for unauthenticated users
-        # Visibility will be controlled based on authentication state
-        with gr.Row(elem_id="cta-button-row"):
-            with gr.Column(scale=1, min_width=200, elem_id="cta-button-container"):
-                # Button for authenticated users - navigates to battle page
-                start_btn_authenticated = gr.Button(
-                    "Start Evaluating Models",
-                    variant="primary",
-                    size="lg",
-                    visible=False,
-                    elem_id="cta-btn-authenticated",
-                )
-                # Button for unauthenticated users - redirects to login
-                start_btn_login = gr.Button(
-                    "Start Evaluating Models",
-                    variant="primary",
-                    size="lg",
-                    visible=False,
-                    elem_id="cta-btn-login",
-                )
+    # Wrapper with consistent bottom spacing
+    with gr.Column(elem_id="cta-section-wrapper"):
+        # Group button and help message together
+        with gr.Column(elem_id="cta-section-group"):
+            # Two buttons - one for authenticated, one for unauthenticated users
+            # Visibility will be controlled based on authentication state
+            with gr.Row(elem_id="cta-button-row"):
+                with gr.Column(scale=1, min_width=200, elem_id="cta-button-container"):
+                    # Button for authenticated users - navigates to battle page
+                    start_btn_authenticated = gr.Button(
+                        "Start Evaluating Models",
+                        variant="primary",
+                        size="lg",
+                        visible=False,
+                        elem_id="cta-btn-authenticated",
+                    )
+                    # Button for unauthenticated users - redirects to login
+                    start_btn_login = gr.Button(
+                        "Start Evaluating Models",
+                        variant="primary",
+                        size="lg",
+                        visible=False,
+                        elem_id="cta-btn-login",
+                    )
 
-        # Small note below the button
-        with gr.Row():
-            with gr.Column():
-                gr.HTML("""
-                <div style="text-align: center; padding: 10px 1.5rem 2.5rem 1.5rem;">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.875rem; color: rgba(229, 231, 235, 0.6);">
-                        <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #f97316; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;"></div>
-                        <span>Sign in with your Synapse account to Start a Battle</span>
-                    </div>
-                </div>
-                <style>
-                /* Remove gap between CTA button and help message */
-                #cta-section-group {
-                    gap: 0 !important;
-                }
-                @keyframes pulse {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.5; }
-                }
-                </style>
-                """)
+            # Small note below the button - only shown for non-authenticated users
+            with gr.Row():
+                with gr.Column():
+                    cta_helper_msg = gr.HTML(
+                        """
+                        <div style="text-align: center; padding: 10px 1.5rem 0 1.5rem;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.875rem; opacity: 0.6;">
+                                <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #f97316; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; opacity: 1;"></div>
+                                <span>Sign in with your Synapse account to Start a Battle</span>
+                            </div>
+                        </div>
+                        <style>
+                        /* CTA section wrapper with consistent bottom padding */
+                        #cta-section-wrapper {
+                            padding-bottom: 2.5rem;
+                        }
+                        /* Remove gap between CTA button and help message */
+                        #cta-section-group {
+                            gap: 0 !important;
+                        }
+                        @keyframes pulse {
+                            0%, 100% { opacity: 1; }
+                            50% { opacity: 0.5; }
+                        }
+                        </style>
+                        """,
+                        visible=False,
+                    )
 
-    return start_btn_authenticated, start_btn_login
+    return start_btn_authenticated, start_btn_login, cta_helper_msg
 
 
 def build_home_page():
@@ -351,7 +370,7 @@ def build_home_page():
         create_intro_section()
 
         # Call to Action Section
-        start_btn_authenticated, start_btn_login = build_cta_section()
+        start_btn_authenticated, start_btn_login, cta_helper_msg = build_cta_section()
 
         # Stats Section (single horizontal bar)
         stats_container = build_stats_section()
@@ -363,5 +382,6 @@ def build_home_page():
         home_page,
         start_btn_authenticated,
         start_btn_login,
+        cta_helper_msg,
         stats_container,
     )

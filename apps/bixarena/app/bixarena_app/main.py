@@ -287,6 +287,7 @@ def build_app():
                 _,
                 cta_btn_authenticated,
                 cta_btn_login,
+                cta_helper_msg,
                 stats_container,
             ) = build_home_page()
 
@@ -422,7 +423,7 @@ def build_app():
         # Load CTA button visibility based on authentication
         demo.load(
             fn=update_cta_buttons_on_page_load,
-            outputs=[cta_btn_authenticated, cta_btn_login],
+            outputs=[cta_btn_authenticated, cta_btn_login, cta_helper_msg],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
