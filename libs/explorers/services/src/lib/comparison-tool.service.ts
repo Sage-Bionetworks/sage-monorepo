@@ -1,21 +1,25 @@
-import { computed, inject, Injectable, signal, Signal } from '@angular/core';
+import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
+  ComparisonToolUrlParams,
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { SortEvent, SortMeta } from 'primeng/api';
+import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
 
 /**
  * Shared state contract for comparison tools.
  */
-
 @Injectable()
 export class ComparisonToolService<T> {
   private readonly notificationService = inject(NotificationService);
+  private readonly urlService = inject(ComparisonToolUrlService);
+  private readonly destroyRef = inject(DestroyRef);
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
@@ -72,6 +76,15 @@ export class ComparisonToolService<T> {
   readonly multiSortMeta = this.multiSortMetaSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
+
+  private readonly syncToUrlInProgress = signal(false);
+  private readonly isInitialized = signal(false);
+  private lastSerializedState: string | null = null;
+  private hasInitializedConfig = false;
+
+  constructor() {
+    this.setupUrlSync();
+  }
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -137,7 +150,9 @@ export class ComparisonToolService<T> {
   initialize(configs: ComparisonToolConfig[], selection?: string[]) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
-    this.resetPinnedItems();
+    if (this.hasInitializedConfig) {
+      this.resetPinnedItems();
+    }
     this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
     this.setUnpinnedData([]);
     this.setPinnedData([]);
@@ -160,6 +175,7 @@ export class ComparisonToolService<T> {
     }
 
     this.columnsForDropdownsSignal.set(columnsMap);
+    this.hasInitializedConfig = true;
   }
 
   setDropdownSelection(selection: string[]) {
@@ -274,8 +290,8 @@ export class ComparisonToolService<T> {
     });
   }
 
-  setPinnedItems(items: string[]) {
-    this.pinnedItemsSignal.set(new Set(items));
+  setPinnedItems(items: string[] | null) {
+    this.pinnedItemsSignal.set(new Set(items ?? []));
   }
 
   resetPinnedItems() {
@@ -324,7 +340,9 @@ export class ComparisonToolService<T> {
     }
 
     this.dropdownSelectionSignal.set(selection);
-    this.resetPinnedItems();
+    if (this.hasInitializedConfig) {
+      this.resetPinnedItems();
+    }
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {
@@ -395,5 +413,50 @@ export class ComparisonToolService<T> {
 
   setSort(event: SortEvent) {
     this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
+  }
+
+  private setupUrlSync(): void {
+    // URL → State: Subscribe to URL param changes
+    this.urlService.params$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.syncToUrlInProgress.set(true);
+
+      if (params.pinnedItems === undefined) {
+        this.setPinnedItems(null);
+      } else {
+        this.setPinnedItems(params.pinnedItems);
+      }
+
+      this.lastSerializedState = JSON.stringify(this.serializeState());
+
+      this.syncToUrlInProgress.set(false);
+      this.isInitialized.set(true);
+    });
+
+    // State → URL: Sync state changes to URL using effect
+    effect(() => {
+      if (!this.isInitialized() || this.syncToUrlInProgress()) {
+        return;
+      }
+
+      this.syncStateToUrl();
+    });
+  }
+
+  private syncStateToUrl(): void {
+    const state = this.serializeState();
+    const serializedState = JSON.stringify(state);
+    if (this.lastSerializedState === serializedState) {
+      return;
+    }
+
+    this.lastSerializedState = serializedState;
+    this.urlService.syncToUrl(state);
+  }
+
+  private serializeState(): ComparisonToolUrlParams {
+    const pinned = Array.from(this.pinnedItems());
+    return {
+      pinnedItems: pinned.length ? pinned : null,
+    };
   }
 }

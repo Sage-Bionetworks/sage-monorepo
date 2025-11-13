@@ -98,3 +98,7 @@ export type ComparisonToolLink = {
   link_text?: string;
   link_url?: string;
 };
+
+export interface ComparisonToolUrlParams {
+  pinnedItems?: string[] | null;
+}
