@@ -13,15 +13,15 @@ describe('VisualizationOverviewPanelComponent', () => {
   const mockPanes: VisualizationOverviewPane[] = [
     {
       heading: 'Welcome to Visualization',
-      content: '<p>First pane content</p>' as any,
+      content: '<p>First pane content</p>',
     },
     {
       heading: 'How to Use Filters',
-      content: '<p>Second pane content</p>' as any,
+      content: '<p>Second pane content</p>',
     },
     {
       heading: 'Export Your Data',
-      content: '<p>Third pane content</p>' as any,
+      content: '<p>Third pane content</p>',
     },
   ];
 
@@ -38,21 +38,6 @@ describe('VisualizationOverviewPanelComponent', () => {
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
           viewConfig: {
-            selectorsWikiParams: {},
-            headerTitle: 'Test Title',
-            filterResultsButtonTooltip: 'Filter tooltip',
-            showSignificanceControls: false,
-            viewDetailsTooltip: 'View details',
-            viewDetailsClick: jest.fn(),
-            legendEnabled: false,
-            legendPanelConfig: {
-              colorChartLowerLabel: '',
-              colorChartUpperLabel: '',
-              colorChartText: '',
-              sizeChartLowerLabel: '',
-              sizeChartUpperLabel: '',
-              sizeChartText: '',
-            },
             visualizationOverviewPanes: options?.panes ?? mockPanes,
           },
         }),
@@ -284,7 +269,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       const singlePane: VisualizationOverviewPane[] = [
         {
           heading: 'Only Pane',
-          content: '<p>Single pane content</p>' as any,
+          content: '<p>Single pane content</p>',
         },
       ];
 

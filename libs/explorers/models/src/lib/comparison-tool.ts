@@ -1,4 +1,3 @@
-import { SafeHtml } from '@angular/platform-browser';
 import { SynapseWikiParams } from './synapse-wiki';
 
 export interface LegendPanelConfig {
@@ -12,7 +11,7 @@ export interface LegendPanelConfig {
 
 export interface VisualizationOverviewPane {
   heading: string;
-  content: SafeHtml;
+  content: string;
 }
 
 export interface ComparisonToolViewConfig {

@@ -1,5 +1,4 @@
-import { inject, Injectable } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Injectable } from '@angular/core';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
@@ -12,12 +11,10 @@ import {
   providedIn: 'root',
 })
 export class ComparisonToolHelperService {
-  private readonly sanitizer = inject(DomSanitizer);
-
   createVisualizationOverviewPane(heading: string, htmlContent: string): VisualizationOverviewPane {
     return {
       heading,
-      content: this.sanitizer.bypassSecurityTrustHtml(htmlContent),
+      content: htmlContent,
     };
   }
 

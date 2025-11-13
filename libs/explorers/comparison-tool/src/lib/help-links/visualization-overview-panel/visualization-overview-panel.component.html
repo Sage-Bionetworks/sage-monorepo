@@ -10,10 +10,10 @@
   styleClass="visualization-overview-panel"
   (onHide)="onHide()"
 >
-  <div class="how-to-panel-panes">
+  <div class="visualization-overview-panel-panes">
     @for (pane of panes; track pane; let i = $index) {
       <div
-        class="how-to-panel-pane active"
+        class="visualization-overview-panel-pane active"
         [ngClass]="{ active: activePane === i }"
         [innerHtml]="pane.content"
       ></div>
@@ -27,14 +27,14 @@
         (ngModelChange)="setWillHide($event)"
         [binary]="true"
         size="small"
-        inputId="hideHowTo"
+        inputId="hideDialog"
       />
-      <label for="hideHowTo">Don't show this again</label>
+      <label for="hideDialog">Don't show this again</label>
     </div>
     <div>
       @if (activePane > 0) {
         <p-button
-          styleClass="how-to-panel-previous"
+          styleClass="visualization-overview-panel-previous"
           label="Back"
           (click)="previous()"
           [rounded]="true"
