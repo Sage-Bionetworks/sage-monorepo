@@ -85,8 +85,9 @@ describe('VisualizationOverviewPanelComponent', () => {
 
   it('should initialize with correct panes from viewConfig', async () => {
     const { component } = await setup();
-    expect(component.panes).toHaveLength(3);
-    expect(component.panes[0].heading).toBe('Welcome to Visualization');
+    const panes = component.panes();
+    expect(panes).toHaveLength(3);
+    expect(panes[0].heading).toBe('Welcome to Visualization');
   });
 
   it('should display dialog when isVisualizationOverviewVisible is true', async () => {

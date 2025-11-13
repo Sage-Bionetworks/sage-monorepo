@@ -34,6 +34,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
 
   isLoading = signal(true);
 
+  // TODO MG-485 - Update overview panes content and images
   visualizationOverviewPanes = [
     this.comparisonToolHelperService.createVisualizationOverviewPane(
       ComparisonToolPage.ModelOverview,

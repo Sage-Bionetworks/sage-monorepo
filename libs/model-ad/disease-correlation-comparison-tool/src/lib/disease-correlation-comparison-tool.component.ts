@@ -54,6 +54,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
     sizeChartText: `Circle diameter indicates P-value. Larger circles indicate higher statistical significance, while smaller circles indicate lower statistical significance.`,
   };
 
+  // TODO MG-485 - Update overview panes content and images
   viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
     headerTitle: ComparisonToolPage.DiseaseCorrelation,

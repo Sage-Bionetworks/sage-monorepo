@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewEncapsulation, inject } from '@angular/core';
+import { Component, ViewEncapsulation, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { ButtonModule } from 'primeng/button';
@@ -25,7 +25,7 @@ export class VisualizationOverviewPanelComponent {
 
   activePane = 0;
 
-  panes = this.viewConfig().visualizationOverviewPanes;
+  panes = computed(() => this.viewConfig().visualizationOverviewPanes);
 
   previous() {
     if (this.activePane > 0) {
@@ -34,7 +34,7 @@ export class VisualizationOverviewPanelComponent {
   }
 
   next() {
-    if (this.activePane < this.panes.length - 1) {
+    if (this.activePane < this.panes().length - 1) {
       this.activePane++;
     }
   }

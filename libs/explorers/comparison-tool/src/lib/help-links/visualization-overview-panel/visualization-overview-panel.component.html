@@ -1,5 +1,5 @@
 <p-dialog
-  [header]="panes.length > 0 ? panes[activePane].heading : ''"
+  [header]="panes().length > 0 ? panes()[activePane].heading : ''"
   [visible]="comparisonToolService.isVisualizationOverviewVisible()"
   (visibleChange)="comparisonToolService.setVisualizationOverviewVisibility($event)"
   [modal]="true"
@@ -11,7 +11,7 @@
   (onHide)="onHide()"
 >
   <div class="visualization-overview-panel-panes">
-    @for (pane of panes; track pane; let i = $index) {
+    @for (pane of panes(); track pane; let i = $index) {
       <div
         class="visualization-overview-panel-pane active"
         [ngClass]="{ active: activePane === i }"
@@ -43,7 +43,7 @@
           variant="outlined"
         ></p-button>
       }
-      @if (activePane !== panes.length - 1) {
+      @if (activePane !== panes().length - 1) {
         <p-button
           label="Next"
           (click)="next()"
@@ -53,7 +53,7 @@
           iconPos="right"
         ></p-button>
       }
-      @if (activePane === panes.length - 1) {
+      @if (activePane === panes().length - 1) {
         <p-button label="Close" (click)="close()" [rounded]="true" size="small"></p-button>
       }
     </div>

@@ -52,6 +52,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
     sizeChartText: `Circle diameter indicates P-value. Larger circles indicate higher statistical significance, while smaller circles indicate lower statistical significance.`,
   };
 
+  // TODO MG-485 - Update overview panes content and images
   visualizationOverviewPanes = [
     this.comparisonToolHelperService.createVisualizationOverviewPane(
       ComparisonToolPage.GeneExpression,
