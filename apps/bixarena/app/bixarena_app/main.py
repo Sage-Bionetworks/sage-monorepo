@@ -130,20 +130,12 @@ def sync_backend_session_on_load(request: gr.Request):
                                     "source": "backend",
                                 }
                             )
-                            print(
-                                f"[auth-sync] Identity sync success sub={sub} "
-                                f"preferred_username={preferred_username} email={email}"
-                            )
-                            # Pass user data to JS via hidden spans (same pattern as login-start-endpoint)
-                            user_data_html = (
-                                f"<span id='crisp-user-nickname' style='display:none'>{preferred_username}</span>"
-                                f"<span id='crisp-user-email' style='display:none'>{email}</span>"
-                            )
+                            print(f"[auth-sync] Identity sync success sub={sub} ")
                             return (
                                 update_battle_button(request),
                                 update_login_button(request),
                                 *update_user_page(request),
-                                gr.HTML(user_data_html),
+                                gr.HTML(""),
                             )
                         else:
                             print(
@@ -244,13 +236,6 @@ def build_app():
             // Reset Crisp chat session on page load
             if (window.$crisp) {
                 window.$crisp.push(["do", "session:reset"]);
-            }
-
-            // TEST: Set dummy Crisp user data to verify API works
-            if (window.$crisp) {
-                console.log('[BixArena] TEST: Setting dummy Crisp user data');
-                window.$crisp.push(["set", "user:nickname", ["Test User 123"]]);
-                window.$crisp.push(["set", "user:email", ["test@example.com"]]);
             }
         }, 100);
     }
