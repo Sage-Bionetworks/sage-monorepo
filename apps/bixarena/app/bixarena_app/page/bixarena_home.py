@@ -231,8 +231,8 @@ def build_how_it_works_section():
             <h2 style="color: #e5e7eb; margin-bottom: 0.75rem; font-size: 1.875rem; font-weight: 600;">
                 How Battle Mode Works
             </h2>
-            <p style="color: rgba(229, 231, 235, 0.6); font-size: 1rem;">
-                Participate in unbiased AI evaluation and help shape the future of biomedical LLMs
+            <p style="opacity: 0.7; font-size: 1rem; max-width: 42rem; margin: 0 auto;">
+                Drive the next wave of biomedical breakthroughs and shape the future of Ai by validating the next generation of cutting-edge models
             </p>
         </div>
 
@@ -241,23 +241,23 @@ def build_how_it_works_section():
             <!-- Step 01 -->
             <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
-                        <span style="color: #f97316; font-weight: 600;">01</span>
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: #f97316; font-weight: 600; font-size: 0.875rem;">01</span>
                     </div>
                     <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
                         Input Your Prompt
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Type the question you want the AI to answer. Ensure you select the appropriate tool for the job (e.g., use the image icon for visuals). Every prompt you submit supports fair, unbiased AI benchmarking.
+                    Type the question you want the AI to answer. Every prompt you submit supports fair, unbiased AI benchmarking.
                 </p>
             </div>
 
             <!-- Step 02 -->
             <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
-                        <span style="color: #f97316; font-weight: 600;">02</span>
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: #f97316; font-weight: 600; font-size: 0.875rem;">02</span>
                     </div>
                     <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
                         Compare Answers
@@ -271,30 +271,30 @@ def build_how_it_works_section():
             <!-- Step 03 -->
             <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
-                        <span style="color: #f97316; font-weight: 600;">03</span>
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: #f97316; font-weight: 600; font-size: 0.875rem;">03</span>
                     </div>
                     <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
                         Vote for the Best
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Choose the response that offers the highest quality and accuracy. Your evaluation shapes the AI leaderboards and provides actionable insights to help developers improve model performance.
+                    Choose the response that offers the highest quality and accuracy. Your evaluation shapes the leaderboards and provides actionable insights to help developers improve model performance.
                 </p>
             </div>
 
             <!-- Step 04 -->
             <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
-                        <span style="color: #f97316; font-weight: 600;">04</span>
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: #f97316; font-weight: 600; font-size: 0.875rem;">04</span>
                     </div>
                     <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
                         Reveal and Iterate
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Once your vote is cast, the model identities are unveiled. You can continue testing the current models to probe deeper, or initiate a new evaluation with a fresh prompt.
+                    Once your vote is cast, the model identities are unveiled. You can then start a new evaluation with a fresh prompt.
                 </p>
             </div>
         </div>
@@ -305,9 +305,7 @@ def build_how_it_works_section():
 def build_cta_section():
     """Create the call-to-action section with conditional buttons"""
 
-    # Wrapper with consistent bottom spacing
     with gr.Column(elem_id="cta-section-wrapper"):
-        # Group button and help message together
         with gr.Column(elem_id="cta-section-group"):
             # Two buttons - one for authenticated, one for unauthenticated users
             # Visibility will be controlled based on authentication state
