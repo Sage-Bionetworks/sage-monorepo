@@ -15,11 +15,6 @@ def build_footer():
     footer = gr.HTML(
         f"""
 <style>
-/* Remove default Gradio HTML container padding */
-.html-no-padding {{
-    padding: 0 !important;
-}}
-
 .custom-footer {{
     width: 100%;
     border-top: 2px solid rgba(255, 255, 255, 0.2);
@@ -171,7 +166,6 @@ def build_footer():
     </div>
 </div>
         """,
-        elem_classes="html-no-padding",
     )
 
     return footer
