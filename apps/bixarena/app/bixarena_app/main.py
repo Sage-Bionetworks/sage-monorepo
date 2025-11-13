@@ -245,7 +245,7 @@ def build_app():
     """
 
     with gr.Blocks(
-        title="BioArena - Benchmarking LLMs for Biomedical Breakthroughs",
+        title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
         css="""
         /* Hide Gradio's default footer */
         footer {

@@ -150,7 +150,7 @@ def build_leaderboard_page():
     with gr.Column():
         # Title and stats
         gr.Markdown("# 🏆 Leaderboard")
-        gr.Markdown("Community-driven evaluation of biomedical LLMs")
+        gr.Markdown("Community-driven evaluation of biomedical AI models")
 
         # Metrics - will be populated dynamically on page load
         leaderboard_metrics = gr.HTML("")

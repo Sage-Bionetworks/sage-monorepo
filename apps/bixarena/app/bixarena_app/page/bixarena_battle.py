@@ -448,7 +448,7 @@ def build_side_by_side_ui_anony():
     <div style="text-align: center; padding: 0px;">
         <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BioArena</h1>
         <p style="font-size: 1.2rem; color: #666; margin: 0;">
-            Benchmarking LLMs for Biomedical Breakthroughs
+            Benchmarking AI Models for Biomedical Breakthroughs
         </p>
     </div>
     <style>
@@ -729,7 +729,7 @@ def build_battle_page():
     load_demo_side_by_side_anony()
 
     with gr.Blocks(
-        title="BioArena - Benchmarking LLMs for Biomedical Breakthroughs"
+        title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs"
     ) as battle_page:
         (
             _,
