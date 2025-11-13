@@ -120,17 +120,18 @@ def sync_backend_session_on_load(request: gr.Request):
                         data = resp.json()
                         sub = data.get("sub")
                         preferred_username = data.get("preferred_username", sub)
-                        email = data.get("email", "")
                         if sub:
                             state.set_current_user(
                                 {
                                     "firstName": preferred_username,
                                     "userName": sub,
-                                    "email": email,
                                     "source": "backend",
                                 }
                             )
-                            print(f"[auth-sync] Identity sync success sub={sub} ")
+                            print(
+                                f"[auth-sync] Identity sync success sub={sub} "
+                                f"preferred_username={preferred_username}"
+                            )
                             return (
                                 update_battle_button(request),
                                 update_login_button(request),
@@ -335,7 +336,7 @@ def build_app():
         build_footer()
 
         # Hidden HTML component(s) for cookie scripts / future use
-        cookie_html = gr.HTML("", elem_id="cookie-html", elem_classes="html-no-padding")
+        cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
 
         # Expose start endpoint to login button JS for immediate redirect
         auth_base = _get_auth_base_url_csr()
