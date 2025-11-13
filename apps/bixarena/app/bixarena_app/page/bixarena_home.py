@@ -227,39 +227,50 @@ def build_stats_section():
 def build_cta_section():
     """Create the call-to-action section with conditional buttons"""
 
-    with gr.Row():
-        with gr.Column():
-            gr.HTML("""
-            <div style="text-align: center; padding: 40px 20px;">
-                <h2 style="font-size: 2rem; margin-bottom: 20px; color: white;">
-                    Ready to Shape the Future of Biomedical AI?
-                </h2>
-                <p style="font-size: 1.1rem; color: #e5e7eb; margin-bottom: 30px;">
-                    Join our community of researchers and help evaluate the next generation of AI models for healthcare breakthroughs.
-                </p>
-            </div>
-            """)
+    # Group button and help message together
+    with gr.Column(elem_id="cta-section-group"):
+        # Two buttons - one for authenticated, one for unauthenticated users
+        # Visibility will be controlled based on authentication state
+        with gr.Row(elem_id="cta-button-row"):
+            with gr.Column(scale=1, min_width=200, elem_id="cta-button-container"):
+                # Button for authenticated users - navigates to battle page
+                start_btn_authenticated = gr.Button(
+                    "Start Evaluating Models",
+                    variant="primary",
+                    size="lg",
+                    visible=False,
+                    elem_id="cta-btn-authenticated",
+                )
+                # Button for unauthenticated users - redirects to login
+                start_btn_login = gr.Button(
+                    "Start Evaluating Models",
+                    variant="primary",
+                    size="lg",
+                    visible=False,
+                    elem_id="cta-btn-login",
+                )
 
-    # Two buttons - one for authenticated, one for unauthenticated users
-    # Visibility will be controlled based on authentication state
-    with gr.Row(elem_id="cta-button-row"):
-        with gr.Column(scale=1, min_width=200, elem_id="cta-button-container"):
-            # Button for authenticated users - navigates to battle page
-            start_btn_authenticated = gr.Button(
-                "Start Evaluating Models",
-                variant="primary",
-                size="lg",
-                visible=False,
-                elem_id="cta-btn-authenticated",
-            )
-            # Button for unauthenticated users - redirects to login
-            start_btn_login = gr.Button(
-                "Start Evaluating Models",
-                variant="primary",
-                size="lg",
-                visible=False,
-                elem_id="cta-btn-login",
-            )
+        # Small note below the button
+        with gr.Row():
+            with gr.Column():
+                gr.HTML("""
+                <div style="text-align: center; padding-top: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.875rem; color: rgba(229, 231, 235, 0.6);">
+                        <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #f97316; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;"></div>
+                        <span>Sign in with your Synapse account to Start a Battle</span>
+                    </div>
+                </div>
+                <style>
+                /* Remove gap between CTA button and help message */
+                #cta-section-group {
+                    gap: 0 !important;
+                }
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                }
+                </style>
+                """)
 
     return start_btn_authenticated, start_btn_login
 
@@ -270,6 +281,9 @@ def build_home_page():
     with gr.Column() as home_page, gr.Column():
         # Intro Section
         create_intro_section()
+
+        # Call to Action Section
+        start_btn_authenticated, start_btn_login = build_cta_section()
 
         # Stats Section
         (
@@ -284,9 +298,6 @@ def build_home_page():
             user_rank_column,  # New
             user_rank_box,  # New
         ) = build_stats_section()
-
-        # Call to Action Section
-        start_btn_authenticated, start_btn_login = build_cta_section()
 
     return (
         home_page,
