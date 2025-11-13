@@ -56,12 +56,14 @@ def create_intro_section():
             gr.HTML("""
             <div style="text-align: center; padding: 45px 20px;">
                 <h1 style="font-size: 3rem; margin-bottom: 30px; color: white;">
-                    Welcome to BixArena
+                    Welcome to BioArena
                 </h1>
+                <h2>Benchmarking LLMs for Biomedical Breakthroughs</h2>
+                <br/>
                 <p style="font-size: 1.2rem; line-height: 1.6; max-width: 800px; margin: 0 auto; color: #e5e7eb;">
                     Anyone with a computer and an internet connection can evaluate and benchmark Large
                     Language Models (LLMs) to solve major biomedical problems through a community-driven
-                    platform known as "BixArena." This web-based evaluation arena helps biomedical researchers
+                    platform known as BioArena. This web-based evaluation arena helps biomedical researchers
                     compare LLMs on domain-specific tasks, fostering collaboration and establishing best
                     practices. The top-performing models might just accelerate the next breakthrough in clinical
                     technology or drug discovery.
