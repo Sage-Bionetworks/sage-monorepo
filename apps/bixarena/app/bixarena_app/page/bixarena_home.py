@@ -54,12 +54,11 @@ def create_intro_section():
     with gr.Row():
         with gr.Column():
             gr.HTML("""
-            <div style="text-align: center; padding: 45px 20px;">
-                <h1 style="font-size: 3rem; margin-bottom: 30px; color: white;">
+            <div style="text-align: center; padding: 4rem 1.5rem 1.5rem 1.5rem; max-width: 64rem; margin: 0 auto;">
+                <h1 style="font-size: 3rem; margin-bottom: 1.5rem; color: white;">
                     Welcome to BioArena
                 </h1>
-                <br/>
-                <p style="font-size: 1.2rem; line-height: 1.6; max-width: 800px; margin: 0 auto; color: #e5e7eb;">
+                <p style="font-size: 1.125rem; line-height: 1.75; max-width: 42rem; margin: 0 auto; color: rgba(229, 231, 235, 0.7);">
                     BioArena crowdsources the benchmarking of AI models to unlock the
                     next breakthrough in biomedicine, inviting a global community of
                     digital contributors.
@@ -212,6 +211,87 @@ def build_stats_section():
     return stats_container
 
 
+def build_how_it_works_section():
+    """Create the How It Works section explaining the battle mode process"""
+
+    gr.HTML("""
+    <div style="max-width: 1400px; margin: 0 auto; padding: 3rem 1.5rem 4rem 1.5rem;">
+        <!-- Section Header -->
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h2 style="color: #e5e7eb; margin-bottom: 0.75rem; font-size: 1.875rem; font-weight: 600;">
+                How Battle Mode Works
+            </h2>
+            <p style="color: rgba(229, 231, 235, 0.6); font-size: 1rem;">
+                Participate in unbiased AI evaluation and help shape the future of biomedical LLMs
+            </p>
+        </div>
+
+        <!-- Steps Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem;">
+            <!-- Step 01 -->
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: #f97316; font-weight: 600;">01</span>
+                    </div>
+                    <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
+                        Submit Your Prompt
+                    </h3>
+                </div>
+                <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
+                    Ask any biomedical question. Your input fuels fair, unbiased AI benchmarking.
+                </p>
+            </div>
+
+            <!-- Step 02 -->
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: #f97316; font-weight: 600;">02</span>
+                    </div>
+                    <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
+                        Compare Anonymous Models
+                    </h3>
+                </div>
+                <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
+                    Two AI models respond to your prompt. Evaluate their answers side by side without bias.
+                </p>
+            </div>
+
+            <!-- Step 03 -->
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: #f97316; font-weight: 600;">03</span>
+                    </div>
+                    <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
+                        Vote for the Best
+                    </h3>
+                </div>
+                <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
+                    Choose the superior response. Your vote shapes the leaderboard and drives model improvement.
+                </p>
+            </div>
+
+            <!-- Step 04 -->
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: #f97316; font-weight: 600;">04</span>
+                    </div>
+                    <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
+                        Reveal & Continue
+                    </h3>
+                </div>
+                <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
+                    Model identities are unveiled. Test further or start fresh with a new prompt.
+                </p>
+            </div>
+        </div>
+    </div>
+    """)
+
+
 def build_cta_section():
     """Create the call-to-action section with conditional buttons"""
 
@@ -242,7 +322,7 @@ def build_cta_section():
         with gr.Row():
             with gr.Column():
                 gr.HTML("""
-                <div style="text-align: center; padding-top: 10px;">
+                <div style="text-align: center; padding: 10px 1.5rem 2.5rem 1.5rem;">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.875rem; color: rgba(229, 231, 235, 0.6);">
                         <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #f97316; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;"></div>
                         <span>Sign in with your Synapse account to Start a Battle</span>
@@ -275,6 +355,9 @@ def build_home_page():
 
         # Stats Section (single horizontal bar)
         stats_container = build_stats_section()
+
+        # How It Works Section
+        build_how_it_works_section()
 
     return (
         home_page,
