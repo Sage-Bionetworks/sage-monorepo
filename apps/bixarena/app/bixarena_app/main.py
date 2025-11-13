@@ -120,23 +120,30 @@ def sync_backend_session_on_load(request: gr.Request):
                         data = resp.json()
                         sub = data.get("sub")
                         preferred_username = data.get("preferred_username", sub)
+                        email = data.get("email", "")
                         if sub:
                             state.set_current_user(
                                 {
                                     "firstName": preferred_username,
                                     "userName": sub,
+                                    "email": email,
                                     "source": "backend",
                                 }
                             )
                             print(
                                 f"[auth-sync] Identity sync success sub={sub} "
-                                f"preferred_username={preferred_username}"
+                                f"preferred_username={preferred_username} email={email}"
+                            )
+                            # Pass user data to JS via hidden spans (same pattern as login-start-endpoint)
+                            user_data_html = (
+                                f"<span id='crisp-user-nickname' style='display:none'>{preferred_username}</span>"
+                                f"<span id='crisp-user-email' style='display:none'>{email}</span>"
                             )
                             return (
                                 update_battle_button(request),
                                 update_login_button(request),
                                 *update_user_page(request),
-                                gr.HTML(""),
+                                gr.HTML(user_data_html),
                             )
                         else:
                             print(
@@ -238,6 +245,13 @@ def build_app():
             if (window.$crisp) {
                 window.$crisp.push(["do", "session:reset"]);
             }
+
+            // TEST: Set dummy Crisp user data to verify API works
+            if (window.$crisp) {
+                console.log('[BixArena] TEST: Setting dummy Crisp user data');
+                window.$crisp.push(["set", "user:nickname", ["Test User 123"]]);
+                window.$crisp.push(["set", "user:email", ["test@example.com"]]);
+            }
         }, 100);
     }
     """
@@ -259,7 +273,7 @@ def build_app():
             window.$crisp.push([
                 "do",
                 "bot:scenario:run",
-                ["scenario_81f047b4-387a-4b2b-92a3-8a9730a90f5c"]
+                ["scenario_6e1d8905-069c-41f6-b28a-33ef05520766"]
             ]);
         }]);
     </script>
@@ -336,7 +350,7 @@ def build_app():
         build_footer()
 
         # Hidden HTML component(s) for cookie scripts / future use
-        cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
+        cookie_html = gr.HTML("", elem_id="cookie-html", elem_classes="html-no-padding")
 
         # Expose start endpoint to login button JS for immediate redirect
         auth_base = _get_auth_base_url_csr()
