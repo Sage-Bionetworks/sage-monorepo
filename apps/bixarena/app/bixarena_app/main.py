@@ -287,16 +287,7 @@ def build_app():
                 _,
                 cta_btn_authenticated,
                 cta_btn_login,
-                models_evaluated_column,
-                models_evaluated_box,
-                total_battles_column,
-                total_battles_box,
-                total_users_column,
-                total_users_box,
-                user_battles_column,
-                user_battles_box,
-                user_rank_column,  # New
-                user_rank_box,  # New
+                stats_container,
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
@@ -415,30 +406,18 @@ def build_app():
             js=cleanup_js,
         )
 
-        # Load public stats on page load (for the first three stats boxes)
+        # Load public stats on page load
         demo.load(
             fn=load_public_stats_on_page_load,
             inputs=None,
-            outputs=[
-                models_evaluated_column,
-                models_evaluated_box,
-                total_battles_column,
-                total_battles_box,
-                total_users_column,
-                total_users_box,
-            ],
+            outputs=stats_container,
         )
 
-        # Load user stats on page load (for the fourth and fifth stats boxes)
+        # Load user stats on page load (will update stats bar to include user stats if authenticated)
         demo.load(
             fn=load_user_battles_on_page_load,
             inputs=None,
-            outputs=[
-                user_battles_column,
-                user_battles_box,
-                user_rank_column,  # New
-                user_rank_box,  # New
-            ],
+            outputs=stats_container,
         )
 
         # Load CTA button visibility based on authentication

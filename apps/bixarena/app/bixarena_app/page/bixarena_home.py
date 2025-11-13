@@ -75,99 +75,101 @@ def create_intro_section():
             """)
 
 
-def load_public_stats_on_page_load() -> tuple[dict, dict, dict, dict, dict, dict]:
-    """Load public stats and update the HTML boxes.
+def load_public_stats_on_page_load() -> dict:
+    """Load public stats and update the stats bar HTML.
 
     Returns:
-        Tuple of (models_column, models_html, battles_column, battles_html, users_column, users_html) updates
+        HTML update for the stats container
     """
     public_stats = fetch_public_stats()
 
-    models_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            MODELS EVALUATED
-        </p>
-        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["models_evaluated"]:,}</h2>
+    stats_html = f"""
+    <div id="stats-public-only">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                <div style="font-size: 1.5rem; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                <div style="font-size: 1.5rem; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                <div style="font-size: 1.5rem; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
+            </div>
+        </div>
     </div>
     """
 
-    battles_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            TOTAL BATTLES
-        </p>
-        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["completed_battles"]:,}</h2>
-    </div>
-    """
-
-    users_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            TOTAL USERS
-        </p>
-        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["total_users"]:,}</h2>
-    </div>
-    """
-
-    return (
-        gr.update(visible=True),  # models_evaluated_column
-        gr.update(value=models_html),  # models_evaluated_box
-        gr.update(visible=True),  # total_battles_column
-        gr.update(value=battles_html),  # total_battles_box
-        gr.update(visible=True),  # total_users_column
-        gr.update(value=users_html),  # total_users_box
-    )
+    return gr.update(value=stats_html)
 
 
 def load_user_battles_on_page_load(
     request: gr.Request,
-) -> tuple[dict, dict, dict, dict]:
-    """Load user battles and rank data and control column visibility.
+) -> dict:
+    """Load user battles and rank data and update stats bar to include user stats.
 
     Args:
         request: Gradio request object
 
     Returns:
-        Tuple of (battles_column_update, battles_html_update, rank_column_update, rank_html_update)
+        HTML update for the stats container with user stats included
     """
     user_stats = fetch_user_stats(request)
+    public_stats = fetch_public_stats()
 
     if user_stats is None:
-        # Hide both columns when user is not authenticated
-        return (
-            gr.update(visible=False),
-            gr.update(value=""),
-            gr.update(visible=False),
-            gr.update(value=""),
-        )
+        # Return only public stats when user is not authenticated
+        stats_html = f"""
+        <div id="stats-public-only">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 1.5rem; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
+                    <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 1.5rem; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
+                    <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 1.5rem; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
+                    <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
+                </div>
+            </div>
+        </div>
+        """
+        return gr.update(value=stats_html)
 
-    # Battles Completed box
-    battles_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            BATTLES COMPLETED
-        </p>
-        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">{user_stats.completed_battles}</h2>
+    # Return stats with user data included
+    stats_html = f"""
+    <div id="stats-with-user">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                <div style="font-size: 1.5rem; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                <div style="font-size: 1.5rem; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                <div style="font-size: 1.5rem; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                <div style="font-size: 1.5rem; color: #f97316;">{user_stats.completed_battles:,}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Battles Completed</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                <div style="font-size: 1.5rem; color: #f97316;">#{user_stats.rank:,}</div>
+                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Your Rank</div>
+            </div>
+        </div>
     </div>
     """
 
-    # User Rank box - always show for authenticated users
-    rank_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            YOUR RANK
-        </p>
-        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">#{user_stats.rank}</h2>
-    </div>
-    """
-
-    return (
-        gr.update(visible=True),
-        gr.update(value=battles_html),
-        gr.update(visible=True),  # Always show rank for authenticated users
-        gr.update(value=rank_html),
-    )
+    return gr.update(value=stats_html)
 
 
 def update_cta_buttons_on_page_load(request: gr.Request) -> tuple[dict, dict]:
@@ -188,40 +190,26 @@ def update_cta_buttons_on_page_load(request: gr.Request) -> tuple[dict, dict]:
 
 
 def build_stats_section():
-    """Create the statistics section with metrics"""
+    """Create the statistics section as a horizontal bar with metrics"""
 
-    # First row: Public stats
-    with gr.Row(elem_id="public-stats-row"):
-        with gr.Column(visible=False) as models_evaluated_column, gr.Group():
-            models_evaluated_box = gr.HTML("")
-
-        with gr.Column(visible=False) as total_battles_column, gr.Group():
-            total_battles_box = gr.HTML("")
-
-        with gr.Column(visible=False) as total_users_column, gr.Group():
-            total_users_box = gr.HTML("")
-
-    # Second row: User-specific stats (only shown when logged in)
-    with gr.Row(elem_id="user-stats-row"):
-        with gr.Column(visible=False) as user_battles_column, gr.Group():
-            user_battles_box = gr.HTML("")
-
-        # New: User rank box
-        with gr.Column(visible=False) as user_rank_column, gr.Group():
-            user_rank_box = gr.HTML("")
-
-    return (
-        models_evaluated_column,
-        models_evaluated_box,
-        total_battles_column,
-        total_battles_box,
-        total_users_column,
-        total_users_box,
-        user_battles_column,
-        user_battles_box,
-        user_rank_column,  # New
-        user_rank_box,  # New
+    # Single horizontal stats bar
+    stats_container = gr.HTML(
+        "", elem_id="stats-bar-container", elem_classes=["stats-bar"]
     )
+
+    # Add custom CSS for the stats bar
+    gr.HTML("""
+    <style>
+    #stats-bar-container {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.02);
+        padding: 1.5rem 1rem;
+    }
+    </style>
+    """)
+
+    return stats_container
 
 
 def build_cta_section():
@@ -285,32 +273,12 @@ def build_home_page():
         # Call to Action Section
         start_btn_authenticated, start_btn_login = build_cta_section()
 
-        # Stats Section
-        (
-            models_evaluated_column,
-            models_evaluated_box,
-            total_battles_column,
-            total_battles_box,
-            total_users_column,
-            total_users_box,
-            user_battles_column,
-            user_battles_box,
-            user_rank_column,  # New
-            user_rank_box,  # New
-        ) = build_stats_section()
+        # Stats Section (single horizontal bar)
+        stats_container = build_stats_section()
 
     return (
         home_page,
         start_btn_authenticated,
         start_btn_login,
-        models_evaluated_column,
-        models_evaluated_box,
-        total_battles_column,
-        total_battles_box,
-        total_users_column,
-        total_users_box,
-        user_battles_column,
-        user_battles_box,
-        user_rank_column,  # New
-        user_rank_box,  # New
+        stats_container,
     )
