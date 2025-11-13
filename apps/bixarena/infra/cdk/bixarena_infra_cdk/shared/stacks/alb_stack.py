@@ -6,7 +6,23 @@ from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_elasticloadbalancingv2 as elbv2
 from constructs import Construct
 
-from bixarena_infra_cdk.shared.constructs.alb_construct import OpenchallengesAlb
+from bixarena_infra_cdk.shared.constructs.alb_construct import BixArenaAlb
+
+# ALB listener configuration constants
+# Path patterns for health check endpoint
+HEALTH_CHECK_PATH_PATTERNS = ["/health"]
+
+# Path patterns for API Gateway routing (API, Auth, OAuth/OIDC endpoints)
+API_GATEWAY_PATH_PATTERNS = [
+    "/api/*",
+    "/auth/*",
+    "/userinfo",
+    "/.well-known/jwks.json",
+    "/oauth2/token",
+]
+
+# Health check response body
+HEALTH_CHECK_RESPONSE_BODY = '{"status":"healthy","service":"bixarena-alb"}'
 
 
 class AlbStack(cdk.Stack):
@@ -19,6 +35,7 @@ class AlbStack(cdk.Stack):
         stack_prefix: str,
         environment: str,
         vpc: ec2.IVpc,
+        developer_name: str | None = None,
         certificate_arn: str | None = None,
         **kwargs,
     ) -> None:
@@ -31,33 +48,50 @@ class AlbStack(cdk.Stack):
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
             vpc: VPC to deploy the ALB in
+            developer_name: Developer name for dev environment (optional)
             certificate_arn: ARN of ACM certificate for HTTPS (optional for HTTP-only)
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
 
         # Create ALB
-        alb_construct = OpenchallengesAlb(
+        self.alb_construct = BixArenaAlb(
             self,
             "Alb",
             vpc=vpc,
             internet_facing=True,
         )
 
-        self.alb = alb_construct.alb
-        self.security_group = alb_construct.security_group
-
-        # Create target group for the app service
+        # Create target group for the web client (Gradio app)
         # This will be used by the Fargate service
-        self.app_target_group = elbv2.ApplicationTargetGroup(
+        self.web_target_group = elbv2.ApplicationTargetGroup(
             self,
-            "AppTargetGroup",
+            "WebTargetGroup",
             vpc=vpc,
-            port=80,  # nginx port (change to 4200 for bixarena-app)
+            port=8100,  # Gradio app port
             protocol=elbv2.ApplicationProtocol.HTTP,
             target_type=elbv2.TargetType.IP,
             health_check=elbv2.HealthCheck(
-                path="/",
+                path="/health",  # Gradio app health endpoint
+                interval=cdk.Duration.seconds(30),
+                timeout=cdk.Duration.seconds(5),
+                healthy_threshold_count=2,
+                unhealthy_threshold_count=3,
+            ),
+            deregistration_delay=cdk.Duration.seconds(30),
+        )
+
+        # Create target group for the API Gateway service
+        # API Gateway routes traffic to API and Auth services
+        self.api_gateway_target_group = elbv2.ApplicationTargetGroup(
+            self,
+            "ApiGatewayTargetGroup",
+            vpc=vpc,
+            port=8113,  # API Gateway port
+            protocol=elbv2.ApplicationProtocol.HTTP,
+            target_type=elbv2.TargetType.IP,
+            health_check=elbv2.HealthCheck(
+                path="/actuator/health",  # Spring Boot Actuator health endpoint
                 interval=cdk.Duration.seconds(30),
                 timeout=cdk.Duration.seconds(5),
                 healthy_threshold_count=2,
@@ -81,7 +115,7 @@ class AlbStack(cdk.Stack):
             https_listener = elbv2.ApplicationListener(
                 self,
                 "HttpsListener",
-                load_balancer=self.alb,
+                load_balancer=self.alb_construct.alb,
                 port=443,
                 protocol=elbv2.ApplicationProtocol.HTTPS,
                 certificates=[certificate],
@@ -92,25 +126,38 @@ class AlbStack(cdk.Stack):
             https_listener.add_action(
                 "HealthCheck",
                 priority=1,
-                conditions=[elbv2.ListenerCondition.path_patterns(["/health"])],
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(HEALTH_CHECK_PATH_PATTERNS)
+                ],
                 action=elbv2.ListenerAction.fixed_response(
                     status_code=200,
                     content_type="application/json",
-                    message_body='{"status":"healthy","service":"bixarena-alb"}',
+                    message_body=HEALTH_CHECK_RESPONSE_BODY,
                 ),
             )
 
-            # Default action for HTTPS: forward to app service
+            # Route /api/* and /auth/* to API Gateway (priority 2)
+            # Also route OAuth/OIDC endpoints
+            https_listener.add_action(
+                "ApiGatewayHttps",
+                priority=2,
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(API_GATEWAY_PATH_PATTERNS)
+                ],
+                action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
+            )
+
+            # Default action for HTTPS: forward to web client
             https_listener.add_action(
                 "DefaultHttps",
-                action=elbv2.ListenerAction.forward([self.app_target_group]),
+                action=elbv2.ListenerAction.forward([self.web_target_group]),
             )
 
             # Create HTTP listener (port 80) that redirects to HTTPS
             http_listener = elbv2.ApplicationListener(
                 self,
                 "HttpListener",
-                load_balancer=self.alb,
+                load_balancer=self.alb_construct.alb,
                 port=80,
                 protocol=elbv2.ApplicationProtocol.HTTP,
                 open=True,
@@ -131,7 +178,7 @@ class AlbStack(cdk.Stack):
             http_listener = elbv2.ApplicationListener(
                 self,
                 "HttpListener",
-                load_balancer=self.alb,
+                load_balancer=self.alb_construct.alb,
                 port=80,
                 protocol=elbv2.ApplicationProtocol.HTTP,
                 open=True,
@@ -141,39 +188,54 @@ class AlbStack(cdk.Stack):
             http_listener.add_action(
                 "HealthCheck",
                 priority=1,
-                conditions=[elbv2.ListenerCondition.path_patterns(["/health"])],
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(HEALTH_CHECK_PATH_PATTERNS)
+                ],
                 action=elbv2.ListenerAction.fixed_response(
                     status_code=200,
                     content_type="application/json",
-                    message_body='{"status":"healthy","service":"bixarena-alb"}',
+                    message_body=HEALTH_CHECK_RESPONSE_BODY,
                 ),
             )
 
-            # Default action for HTTP: forward to app service
+            # Route /api/* and /auth/* to API Gateway (priority 2)
+            # Also route OAuth/OIDC endpoints
+            http_listener.add_action(
+                "ApiGatewayHttp",
+                priority=2,
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(API_GATEWAY_PATH_PATTERNS)
+                ],
+                action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
+            )
+
+            # Default action for HTTP: forward to web client
             http_listener.add_action(
                 "DefaultHttp",
-                action=elbv2.ListenerAction.forward([self.app_target_group]),
+                action=elbv2.ListenerAction.forward([self.web_target_group]),
             )
 
         # CloudFormation outputs
         cdk.CfnOutput(
             self,
             "LoadBalancerDnsName",
-            value=self.alb.load_balancer_dns_name,
+            value=self.alb_construct.alb.load_balancer_dns_name,
             description="ALB DNS name",
-            export_name=f"{stack_prefix}-alb-dns",
+            export_name=f"{stack_prefix}-alb-dns-name",
         )
 
         cdk.CfnOutput(
             self,
             "LoadBalancerArn",
-            value=self.alb.load_balancer_arn,
+            value=self.alb_construct.alb.load_balancer_arn,
             description="ALB ARN",
         )
 
         # Output health check URL
         protocol = "https" if use_https else "http"
-        health_url = f"{protocol}://{self.alb.load_balancer_dns_name}/health"
+        health_url = (
+            f"{protocol}://{self.alb_construct.alb.load_balancer_dns_name}/health"
+        )
         cdk.CfnOutput(
             self,
             "HealthCheckUrl",

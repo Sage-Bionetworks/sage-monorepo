@@ -8,6 +8,7 @@ const mockModelData: ModelData = {
   tissue: 'Cerebral Cortex',
   age: '6 months',
   units: 'ng/ml',
+  y_axis_max: 10.0,
   data: [
     { genotype: '3xTg-AD', sex: 'Male', individual_id: '1001', value: 5.5 },
     { genotype: '3xTg-AD', sex: 'Male', individual_id: '1002', value: 6.2 },

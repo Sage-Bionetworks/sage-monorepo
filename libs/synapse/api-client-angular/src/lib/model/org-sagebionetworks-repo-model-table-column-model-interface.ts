@@ -9,6 +9,7 @@
  */
 import { OrgSagebionetworksRepoModelTableColumnModel } from './org-sagebionetworks-repo-model-table-column-model';
 import { OrgSagebionetworksRepoModelTableJsonSubColumnModel } from './org-sagebionetworks-repo-model-table-json-sub-column-model';
+import { OrgSagebionetworksRepoModelTableFacetColumnSortConfig } from './org-sagebionetworks-repo-model-table-facet-column-sort-config';
 
 /**
  * Common properties of all ColumnModel implementation

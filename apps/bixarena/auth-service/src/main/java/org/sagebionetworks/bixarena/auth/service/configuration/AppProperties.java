@@ -2,8 +2,10 @@ package org.sagebionetworks.bixarena.auth.service.configuration;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,7 +20,8 @@ public record AppProperties(
   /** Base URL of UI (Gradio) used for post-login redirect */
   @NotBlank(message = "UI base URL must not be blank") String uiBaseUrl,
   @Valid @NotNull Auth auth,
-  @Valid @NotNull SessionCookie sessionCookie
+  @Valid @NotNull SessionCookie sessionCookie,
+  @Valid @NotNull Cors cors
 ) {
   @Validated
   public record Auth(
@@ -42,5 +45,13 @@ public record AppProperties(
     @NotBlank(message = "SameSite attribute must not be blank") String sameSite,
     @NotNull(message = "Secure flag must not be null") Boolean secure,
     @NotNull(message = "HttpOnly flag must not be null") Boolean httpOnly
+  ) {}
+
+  @Validated
+  public record Cors(
+    @NotEmpty(message = "Allowed origins must not be empty") List<String> allowedOrigins,
+    @NotEmpty(message = "Allowed methods must not be empty") List<String> allowedMethods,
+    @NotEmpty(message = "Allowed headers must not be empty") List<String> allowedHeaders,
+    @NotNull(message = "Allow credentials must not be null") Boolean allowCredentials
   ) {}
 }

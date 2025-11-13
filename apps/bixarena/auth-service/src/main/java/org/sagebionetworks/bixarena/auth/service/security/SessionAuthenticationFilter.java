@@ -38,6 +38,11 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
     HttpServletResponse response,
     FilterChain filterChain
   ) throws ServletException, IOException {
+    String method = request.getMethod();
+    String path = request.getRequestURI();
+
+    log.debug("SessionAuthenticationFilter invoked for: {} {}", method, path);
+
     // If already authenticated, skip
     Authentication existing = SecurityContextHolder.getContext().getAuthentication();
     if (existing == null || !existing.isAuthenticated()) {
@@ -47,14 +52,12 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
         @SuppressWarnings("unchecked")
         List<String> roles = (List<String>) session.getAttribute("AUTH_ROLES");
         if (subject != null && roles != null) {
-          if (log.isDebugEnabled()) {
-            log.debug(
-              "SessionAuthenticationFilter: populating context sessionId={} subject={} roles={}",
-              session.getId(),
-              subject,
-              roles
-            );
-          }
+          log.debug(
+            "SessionAuthenticationFilter: populating context sessionId={} subject={} roles={}",
+            session.getId(),
+            subject,
+            roles
+          );
           List<GrantedAuthority> authorities = roles
             .stream()
             .map(r -> r.startsWith("ROLE_") ? r : "ROLE_" + r)
@@ -73,7 +76,7 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
           };
           auth.setAuthenticated(true);
           SecurityContextHolder.getContext().setAuthentication(auth);
-        } else if (log.isDebugEnabled()) {
+        } else {
           log.debug(
             "SessionAuthenticationFilter: sessionId={} present but missing auth attributes (subject={}, roles={})",
             session.getId(),
@@ -81,7 +84,11 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
             roles
           );
         }
+      } else {
+        log.debug("SessionAuthenticationFilter: no session found for {} {}", method, path);
       }
+    } else {
+      log.debug("SessionAuthenticationFilter: already authenticated, skipping for {} {}", method, path);
     }
     filterChain.doFilter(request, response);
   }

@@ -21,7 +21,7 @@ class TestVpcStack:
         )
 
         assert stack is not None
-        assert stack.vpc is not None
+        assert stack.vpc_construct.vpc is not None
 
     def test_vpc_stack_custom_cidr(self):
         """Test VPC stack with custom CIDR block."""
@@ -38,7 +38,7 @@ class TestVpcStack:
 
         # VPC CIDR is resolved as a token during synthesis
         # Just verify the VPC was created
-        assert stack.vpc is not None
+        assert stack.vpc_construct.vpc is not None
 
     def test_vpc_stack_custom_azs(self):
         """Test VPC stack with custom number of AZs."""
@@ -52,4 +52,4 @@ class TestVpcStack:
             max_azs=3,
         )
 
-        assert stack.vpc is not None
+        assert stack.vpc_construct.vpc is not None

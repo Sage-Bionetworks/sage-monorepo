@@ -446,7 +446,7 @@ def build_side_by_side_ui_anony():
     # Page header with title and custom styles
     page_header_html = f"""
     <div style="text-align: center; padding: 0px;">
-        <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BixArena</h1>
+        <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BioArena</h1>
         <p style="font-size: 1.2rem; color: #666; margin: 0;">
             Benchmarking LLMs for Biomedical Breakthroughs
         </p>
@@ -728,7 +728,9 @@ def build_battle_page():
     # Initialize the demo with empty states
     load_demo_side_by_side_anony()
 
-    with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
+    with gr.Blocks(
+        title="BioArena - Benchmarking LLMs for Biomedical Breakthroughs"
+    ) as battle_page:
         (
             _,
             example_prompt_ui,

@@ -149,8 +149,8 @@ def build_leaderboard_page():
 
     with gr.Column():
         # Title and stats
-        gr.Markdown("# 🏆 BixArena Leaderboard")
-        gr.Markdown("Community-driven evaluation of biomedical LLMs by Synapse users")
+        gr.Markdown("# 🏆 Leaderboard")
+        gr.Markdown("Community-driven evaluation of biomedical LLMs")
 
         # Metrics - will be populated dynamically on page load
         leaderboard_metrics = gr.HTML("")
@@ -196,7 +196,7 @@ def build_leaderboard_page():
                     margin-bottom: 0;
                     font-size: 1rem;
                 ">
-                    The leaderboard will be published once we have sufficient evaluations to 
+                    The leaderboard will be published once we have sufficient evaluations to
                     ensure statistically meaningful model rankings.
                 </p>
                 <div style="padding-top: 16px;">
