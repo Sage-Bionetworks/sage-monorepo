@@ -156,10 +156,12 @@ export class ComparisonToolService<T> {
 
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
+    if (this.hasInitializedConfig) {
+      this.resetPinnedItems();
+    }
     this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
     this.setUnpinnedData([]);
     this.setPinnedData([]);
-    this.resetPinnedItems();
 
     const normalizedSelection = this.normalizeSelection(selection ?? [], configs);
     this.dropdownSelectionSignal.set(normalizedSelection);
