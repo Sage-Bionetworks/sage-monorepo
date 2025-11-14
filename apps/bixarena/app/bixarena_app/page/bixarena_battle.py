@@ -35,6 +35,7 @@ from bixarena_app.model.model_response import (
     bot_response_multi,
 )
 from bixarena_app.page.battle_page_css import (
+    CHATBOT_BATTLE_CSS,
     DISCLAIMER_CSS,
     EXAMPLE_PROMPTS_CSS,
     INPUT_PROMPT_CSS,
@@ -223,8 +224,8 @@ def vote_last_response(
     )
 
     names = (
-        "### Model 1: " + states[0].model_name,
-        "### Model 2: " + states[1].model_name,
+        f'<div class="model-name-footer">{states[0].model_name}</div>',
+        f'<div class="model-name-footer">{states[1].model_name}</div>',
     )
     yield (
         names  # model_selector0, model_selector1: reveal model names
@@ -455,6 +456,7 @@ def build_side_by_side_ui_anony():
         </p>
     </div>
     <style>
+    {CHATBOT_BATTLE_CSS}
     {EXAMPLE_PROMPTS_CSS}
     {INPUT_PROMPT_CSS}
     {DISCLAIMER_CSS}
@@ -482,8 +484,8 @@ def build_side_by_side_ui_anony():
         ) = example_prompt_ui.build(textbox=None)
 
         # Battle interface - will appear once a prompt is submitted
-        with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
-            with gr.Row():
+        with gr.Group(elem_id="chatbot-container", visible=False) as battle_interface:
+            with gr.Row(equal_height=True):
                 for i in range(num_sides):
                     label = "Model 1" if i == 0 else "Model 2"
                     with gr.Column():
@@ -503,19 +505,15 @@ def build_side_by_side_ui_anony():
                             )
                         chatbots.append(chatbot)
 
-            with gr.Row():
-                for i in range(num_sides):
-                    with gr.Column():
-                        model_selector = gr.Markdown(
-                            anony_names[i], elem_id="model_selector_md"
-                        )
+                        # Model name footer attached to each chatbot
+                        model_selector = gr.HTML(anony_names[i])
                         model_selectors.append(model_selector)
 
         # Voting buttons
         with gr.Row(visible=False) as voting_row:
-            left_vote_btn = gr.Button(value="A is better 👈 ")
+            left_vote_btn = gr.Button(value="Left is Better 👈")
             tie_btn = gr.Button(value="🤝 Tie")
-            right_vote_btn = gr.Button(value="👉 B is better")
+            right_vote_btn = gr.Button(value="👉 Right is Better")
 
         # Prompt input - always visible, centered with 80% width via CSS
         with gr.Row(visible=True) as textbox_row:

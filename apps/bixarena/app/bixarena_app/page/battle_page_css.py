@@ -2,6 +2,55 @@
 CSS styles for the BixArena battle page.
 """
 
+# CSS for chatbot battle interface
+CHATBOT_BATTLE_CSS = """
+/* Separate the two chat windows */
+#chatbot-container {
+    background: transparent !important;
+    border: none !important;
+}
+
+#chatbot-container .styler {
+    background: transparent !important;
+}
+
+#chatbot-container .row {
+    gap: 24px;
+}
+
+#chatbot-container > .styler > .row:first-child .column {
+    border: 1px solid var(--border-color-primary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Make chatbot labels bigger */
+#chatbot-container .block label {
+    font-size: 1em;
+}
+
+/* Make label icon match text size */
+#chatbot-container .block label span {
+    width: 1em;
+    height: 1em;
+}
+
+/* Chatbot footer to reveal model names */
+#chatbot-container .html-container {
+    padding: 0 !important;
+}
+
+#chatbot-container .column > .block:has(.html-container) {
+    margin-top: -24px;
+}
+
+.model-name-footer {
+    padding: 12px 16px;
+    background: #27272a;
+    text-align: center;
+}
+"""
+
 # CSS for example prompt cards and navigation
 EXAMPLE_PROMPTS_CSS = """
 /* Example prompt UI section */
