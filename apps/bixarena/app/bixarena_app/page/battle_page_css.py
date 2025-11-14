@@ -162,7 +162,7 @@ DISCLAIMER_CSS = """
 }
 
 #disclaimer-content {
-    text-align: left;
+    text-align: center;
 }
 
 #disclaimer-title {
