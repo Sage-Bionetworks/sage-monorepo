@@ -62,7 +62,7 @@ export class ComparisonToolUrlService {
     return result;
   }
 
-  private toArray(value: any): string[] {
+  private toArray(value: string | string[] | null | undefined): string[] {
     if (Array.isArray(value)) {
       return value.map(String);
     }

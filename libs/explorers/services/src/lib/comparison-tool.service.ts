@@ -426,7 +426,7 @@ export class ComparisonToolService<T> {
         this.setPinnedItems(params.pinnedItems);
       }
 
-      this.lastSerializedState = JSON.stringify(this.serializeState());
+      this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
 
       this.syncToUrlInProgress.set(false);
       this.isInitialized.set(true);
@@ -434,16 +434,20 @@ export class ComparisonToolService<T> {
 
     // State → URL: Sync state changes to URL using effect
     effect(() => {
-      if (!this.isInitialized() || this.syncToUrlInProgress()) {
+      const isInitialized = this.isInitialized();
+      const syncingToUrl = this.syncToUrlInProgress();
+      const pinnedItems = this.pinnedItems();
+      const state = this.serializeState(pinnedItems);
+
+      if (!isInitialized || syncingToUrl) {
         return;
       }
 
-      this.syncStateToUrl();
+      this.syncStateToUrl(state);
     });
   }
 
-  private syncStateToUrl(): void {
-    const state = this.serializeState();
+  private syncStateToUrl(state: ComparisonToolUrlParams): void {
     const serializedState = JSON.stringify(state);
     if (this.lastSerializedState === serializedState) {
       return;
@@ -453,8 +457,8 @@ export class ComparisonToolService<T> {
     this.urlService.syncToUrl(state);
   }
 
-  private serializeState(): ComparisonToolUrlParams {
-    const pinned = Array.from(this.pinnedItems());
+  private serializeState(pinnedItems: Set<string>): ComparisonToolUrlParams {
+    const pinned = Array.from(pinnedItems);
     return {
       pinnedItems: pinned.length ? pinned : null,
     };
