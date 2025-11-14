@@ -333,6 +333,7 @@ def clear_history(
         + [gr.Row(visible=False)]  # next_battle_row: hide
         + [gr.HTML(visible=True)]  # page_header: show
         + [gr.Row(visible=True)]  # textbox_row: show
+        + [gr.HTML(visible=True)]  # disclaimer: show
     )
 
     # If example_prompt_ui is provided, also refresh the prompts
@@ -413,6 +414,7 @@ def add_text(
                 + [gr.Column(visible=True)]  # example_prompts_group: show
                 + [gr.HTML(visible=True)]  # page_header: show
                 + [gr.Row(visible=True)]  # textbox_row: show
+                + [gr.HTML(visible=True)]  # disclaimer: show
             )
     battle_id = battle_session.battle_id
 
@@ -440,6 +442,7 @@ def add_text(
         + [gr.Column(visible=False)]  # example_prompts_group: hide
         + [gr.HTML(visible=False)]  # page_header: hide
         + [gr.Row(visible=True)]  # textbox_row: show
+        + [gr.HTML(visible=False)]  # disclaimer: hide
     )
 
 
@@ -531,21 +534,25 @@ def build_side_by_side_ui_anony():
                 gr.HTML("")
 
         # Disclaimer
-        gr.HTML(
+        disclaimer = gr.HTML(
             """
             <div id="disclaimer">
                 <div id="disclaimer-content">
-                    <div id="disclaimer-text">
-                        <div class="pulse-dot"></div>
-                        <span>
-                            AI may make mistakes. Don't include private or
-                            sensitive information in your prompts,
-                            and please verify responses.
-                        </span>
-                    </div>
+                    <h3 id="disclaimer-title">Data Processing & Privacy:</h3>
+                    <p id="disclaimer-text">
+                        We process your prompts to ensure they are relevant to
+                        biomedical research. Your prompts are also sent to
+                        third-party LLM proxies and AI model providers who may
+                        store and use them for training and service improvement.
+                        <strong>Do not include private, sensitive, confidential,
+                        or personally identifiable information in your prompts.</strong>
+                        AI responses may contain errors. Verify all AI responses
+                        independently.
+                    </p>
                 </div>
             </div>
-            """
+            """,
+            visible=True,
         )
 
     # Register listeners
@@ -584,6 +591,7 @@ def build_side_by_side_ui_anony():
         + [left_vote_btn, tie_btn, right_vote_btn]
         + [battle_interface, voting_row, next_battle_row]
         + [page_header, textbox_row]
+        + [disclaimer]
         + [example_prompts_group, prev_btn, next_btn]
         + prompt_cards,
     )
@@ -657,7 +665,7 @@ def build_side_by_side_ui_anony():
         + chatbots
         + [textbox]
         + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [page_header, textbox_row],
+        + [page_header, textbox_row, disclaimer],
     ).then(
         lambda: None,  # Disable enter key
         [],
@@ -689,7 +697,7 @@ def build_side_by_side_ui_anony():
             + chatbots
             + [textbox]
             + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-            + [page_header, textbox_row],
+            + [page_header, textbox_row, disclaimer],
         ).then(
             lambda: None,
             [],
@@ -714,6 +722,7 @@ def build_side_by_side_ui_anony():
         example_prompt_ui,
         [example_prompts_group, prev_btn, next_btn] + prompt_cards,
         prevent_empty_prompt_js,
+        disclaimer,
     )
 
 
@@ -734,6 +743,7 @@ def build_battle_page():
             example_prompt_ui,
             prompt_outputs,
             empty_prompt_js,
+            _,  # disclaimer (not needed)
         ) = build_side_by_side_ui_anony()
 
         # Refresh example prompts when page loads to ensure each user sees different prompts
