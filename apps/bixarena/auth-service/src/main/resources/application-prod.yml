@@ -3,7 +3,11 @@ spring:
   jpa:
     show-sql: false
   flyway:
-    enabled: false
+    enabled: true
+    clean-disabled: true # Never clean prod database
+    validate-on-migrate: true # Extra safety: validate migrations before running
+    locations:
+      - classpath:db/migration/common # Schema migrations only
 
 logging:
   level:
