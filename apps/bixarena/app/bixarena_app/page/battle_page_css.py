@@ -139,6 +139,8 @@ INPUT_PROMPT_CSS = """
 #input_box.prompt_input textarea {
     border-radius: 12px;
     overflow-y: auto !important;
+    padding: 16px 20px;
+    line-height: 1.5;
 }
 
 .form:has(.prompt_input) {
