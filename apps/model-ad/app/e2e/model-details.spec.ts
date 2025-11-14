@@ -1,6 +1,6 @@
 import { expect, Page, test } from '@playwright/test';
 import { baseURL } from '../playwright.config';
-import { searchAndGetSearchListItems } from './helpers';
+import { searchAndGetSearchListItems } from './helpers/search';
 
 async function isPageAtTop(page: Page) {
   return await page.evaluate(() => window.pageYOffset === 0);

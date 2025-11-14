@@ -9,11 +9,10 @@ import {
 } from '@sagebionetworks/explorers/testing/e2e';
 import { ModelOverview } from '@sagebionetworks/model-ad/api-client';
 import { baseURL } from '../playwright.config';
-import { COMPARISON_PATHS } from './constants';
-import { navigateToComparison } from './helpers';
-import { closeVisualizationOverviewDialog } from './helpers/comparison-tool';
+import { COMPARISON_TOOL_PATHS } from './constants';
+import { navigateToComparison } from './helpers/comparison-tool';
 
-const MODEL_OVERVIEW_PATH = COMPARISON_PATHS['Model Overview'];
+const MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS['Model Overview'];
 const MODEL_OVERVIEW_API_PATH = '/comparison-tools/model-overview';
 
 const fetchModelOverviews = async (page: Page): Promise<ModelOverview[]> => {
@@ -35,9 +34,6 @@ test.describe('model overview', () => {
     await expect(shareUrlButton).toBeVisible();
 
     await page.waitForURL(MODEL_OVERVIEW_PATH);
-
-    // close the visualization overview dialog
-    await closeVisualizationOverviewDialog(page);
 
     await shareUrlButton.click();
 
