@@ -149,4 +149,29 @@ describe('PrimaryIdentifierControlsComponent', () => {
       'You have already pinned the maximum number of items (2). You must unpin some items before you can pin more.',
     );
   });
+
+  it('should call viewDetailsClick when activated with the keyboard', async () => {
+    const { user, viewDetailsButton, viewDetailsClickSpy } = await setup();
+
+    await user.tab();
+    expect(viewDetailsButton).toHaveFocus();
+
+    await user.keyboard('[Enter]');
+    expect(viewDetailsClickSpy).toHaveBeenCalledWith('68fff1aaeb12b9674515fd58', '3xTg-AD');
+  });
+
+  it('should toggle pin state when activated with the keyboard', async () => {
+    const { user, pinButton, service } = await setup();
+
+    await user.tab();
+    await user.tab();
+    expect(pinButton).toHaveFocus();
+    expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(false);
+
+    await user.keyboard('[Space]');
+    expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(true);
+
+    await user.keyboard('[Space]');
+    expect(service.isPinned('68fff1aaeb12b9674515fd58')).toBe(false);
+  });
 });
