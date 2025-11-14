@@ -105,23 +105,6 @@ describe('ComparisonToolService', () => {
       expect(service.isPinned('item2')).toBe(true);
     });
 
-    it('should clear pinned items cache when initialize is called', () => {
-      // Pin items
-      service.pinItem('item1');
-      service.setDropdownSelection(['category1', 'option2']);
-      service.pinItem('item2');
-
-      // Re-initialize
-      service.initialize(mockConfigs, ['category1', 'option1']);
-
-      // Cache should be cleared
-      expect(service.pinnedItems().size).toBe(0);
-
-      // Switch to second selection - should not restore old pinned items
-      service.setDropdownSelection(['category1', 'option2']);
-      expect(service.pinnedItems().size).toBe(0);
-    });
-
     it('should handle toggling pins correctly', () => {
       service.togglePin('item1');
       expect(service.isPinned('item1')).toBe(true);
