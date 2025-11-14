@@ -26,13 +26,14 @@ export class ComparisonToolService<T> {
   private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
-    headerTitle: 'Comparison Tool',
+    headerTitle: '',
     filterResultsButtonTooltip: 'Filter results',
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
     viewDetailsClick: (id: string, label: string) => {
       return;
     },
+    legendEnabled: true,
     legendPanelConfig: {
       colorChartLowerLabel: '',
       colorChartUpperLabel: '',
@@ -41,14 +42,15 @@ export class ComparisonToolService<T> {
       sizeChartUpperLabel: '',
       sizeChartText: '',
     },
-    legendEnabled: true,
+    visualizationOverviewPanes: [],
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
-  private readonly isVisualizationOverviewVisibleSignal = signal(false);
+  private readonly isVisualizationOverviewVisibleSignal = signal(true);
+  private readonly isVisualizationOverviewHiddenByUserSignal = signal(false);
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
   private readonly multiSortMetaSignal = signal<SortMeta[]>(this.DEFAULT_MULTI_SORT_META);
@@ -63,6 +65,8 @@ export class ComparisonToolService<T> {
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly isVisualizationOverviewVisible = this.isVisualizationOverviewVisibleSignal.asReadonly();
+  readonly isVisualizationOverviewHiddenByUser =
+    this.isVisualizationOverviewHiddenByUserSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
   readonly multiSortMeta = this.multiSortMetaSignal.asReadonly();
@@ -200,10 +204,18 @@ export class ComparisonToolService<T> {
     this.isVisualizationOverviewVisibleSignal.update((visible) => !visible);
   }
 
+  setVisualizationOverviewHiddenByUser(hidden: boolean) {
+    this.isVisualizationOverviewHiddenByUserSignal.set(hidden);
+  }
+
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {
     this.viewConfigSignal.set({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
     this.setLegendVisibility(false);
-    this.setVisualizationOverviewVisibility(false);
+
+    // If the user checked the option to hide the overview, do not auto-show it
+    if (!this.isVisualizationOverviewHiddenByUserSignal()) {
+      this.setVisualizationOverviewVisibility(true);
+    }
   }
 
   isPinned(id: string): boolean {

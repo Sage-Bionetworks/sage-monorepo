@@ -1,4 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
@@ -21,6 +22,7 @@ async function setup() {
       MessageService,
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
       provideHttpClient(),
+      provideNoopAnimations(),
       provideRouter([]),
       {
         provide: ComparisonToolConfigService,
