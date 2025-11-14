@@ -48,6 +48,7 @@
       "@sagebionetworks/explorers/shared": ["libs/explorers/shared/src/index.ts"],
       "@sagebionetworks/explorers/storybook": ["libs/explorers/storybook/src/index.ts"],
       "@sagebionetworks/explorers/testing": ["libs/explorers/testing/src/index.ts"],
+      "@sagebionetworks/explorers/testing/e2e": ["libs/explorers/testing/src/e2e.ts"],
       "@sagebionetworks/explorers/testing/msw": ["libs/explorers/testing/src/msw.ts"],
       "@sagebionetworks/explorers/themes": ["libs/explorers/themes/src/index.ts"],
       "@sagebionetworks/explorers/ui": ["libs/explorers/ui/src/index.ts"],
