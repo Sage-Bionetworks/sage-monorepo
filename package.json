@@ -92,7 +92,7 @@
     "@angular/language-service": "20.3.1",
     "@anthropic-ai/claude-code": "2.0.27",
     "@chromatic-com/storybook": "4.1.1",
-    "@modelcontextprotocol/inspector": "0.16.8",
+    "@modelcontextprotocol/inspector": "0.17.0",
     "@nx-tools/container-metadata": "6.8.0",
     "@nx-tools/nx-container": "6.8.0",
     "@nx/angular": "21.5.3",
