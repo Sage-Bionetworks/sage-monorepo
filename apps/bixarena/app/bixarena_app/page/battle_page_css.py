@@ -23,6 +23,17 @@ CHATBOT_BATTLE_CSS = """
     border-radius: 8px;
     overflow: hidden;
 }
+
+/* Make chatbot labels bigger */
+#chatbot-container .block label {
+    font-size: var(--chatbot-text-size);
+}
+
+/* Make label icon match text size */
+#chatbot-container .block label span {
+    width: var(--chatbot-text-size);
+    height: var(--chatbot-text-size);
+}
 """
 
 # CSS for example prompt cards and navigation
