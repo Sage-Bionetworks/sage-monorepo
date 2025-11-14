@@ -231,21 +231,47 @@ def parse_args():
 def build_app():
     """Create the main application"""
 
+    enable_crisp = os.environ.get("ENABLE_CRISP", "false").lower() == "true"
+
     cleanup_js = """
     function() {
         setTimeout(function() {
-            if (window.location.search.includes('code=')) {
-                const url = new URL(window.location);
-                url.searchParams.delete('code');
-                url.searchParams.delete('state');
-                window.history.replaceState({}, document.title, url.pathname);
+            // Reset Crisp chat session on page load
+            if (window.$crisp) {
+                window.$crisp.push(["do", "session:reset"]);
             }
         }, 100);
     }
     """
 
+    crisp_script = ""
+    if enable_crisp:
+        crisp_script = """
+    <script type="text/javascript">
+        window.$crisp=[];
+        window.CRISP_WEBSITE_ID="d58ad402-1217-476c-be6a-c8949671ced4";
+        (function(){
+            d=document;
+            s=d.createElement("script");
+            s.src="https://client.crisp.chat/l.js";
+            s.async=1;
+            d.getElementsByTagName("head")[0].appendChild(s);
+        })();
+
+        // Trigger scenario when the chatbox is opened for the first time by the user
+        window.$crisp.push(["on", "chat:initiated", function() {
+            window.$crisp.push([
+                "do",
+                "bot:scenario:run",
+                ["scenario_6e1d8905-069c-41f6-b28a-33ef05520766"]
+            ]);
+        }]);
+    </script>
+    """
+
     with gr.Blocks(
         title="BioArena - Benchmarking LLMs for Biomedical Breakthroughs",
+        head=crisp_script,
         css="""
         /* Hide Gradio's default footer */
         footer {
