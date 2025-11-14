@@ -340,7 +340,7 @@ def build_cta_section():
                         <style>
                         /* CTA section wrapper with consistent bottom padding */
                         #cta-section-wrapper {
-                            padding: 2.5rem 1.5rem;
+                            padding: 0 1.5rem 2.5rem 1.5rem;
                             flex-grow: unset !important;
                         }
                         /* Remove gap between CTA button and help message */
