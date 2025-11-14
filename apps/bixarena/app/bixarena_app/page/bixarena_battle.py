@@ -242,6 +242,7 @@ def vote_last_response(
         + (gr.Row(visible=True),)  # next_battle_row: show
         + (gr.HTML(visible=False),)  # page_header: hide
         + (gr.Row(visible=False),)  # textbox_row: hide
+        + (gr.HTML(visible=False),)  # disclaimer: hide
     )
 
 
@@ -443,7 +444,7 @@ def add_text(
         + [gr.Column(visible=False)]  # example_prompts_group: hide
         + [gr.HTML(visible=False)]  # page_header: hide
         + [gr.Row(visible=True)]  # textbox_row: show
-        + [gr.HTML(visible=False)]  # disclaimer: hide
+        + [gr.HTML(visible=True)]  # disclaimer: show
     )
 
 
@@ -563,7 +564,7 @@ def build_side_by_side_ui_anony():
         model_selectors
         + [textbox]
         + [left_vote_btn, tie_btn, right_vote_btn]
-        + [voting_row, next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer],
     )
     right_vote_btn.click(
         right_vote_last_response,
@@ -571,7 +572,7 @@ def build_side_by_side_ui_anony():
         model_selectors
         + [textbox]
         + [left_vote_btn, tie_btn, right_vote_btn]
-        + [voting_row, next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer],
     )
     tie_btn.click(
         tie_vote_last_response,
@@ -579,7 +580,7 @@ def build_side_by_side_ui_anony():
         model_selectors
         + [textbox]
         + [left_vote_btn, tie_btn, right_vote_btn]
-        + [voting_row, next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer],
     )
     clear_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),

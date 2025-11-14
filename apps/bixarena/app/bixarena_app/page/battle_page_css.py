@@ -29,6 +29,11 @@ CHATBOT_BATTLE_CSS = """
     font-size: 1em;
 }
 
+/* Add bottom padding to chatbot block to prevent message cropping */
+#chatbot-container #chatbot {
+    padding-bottom: 16px;
+}
+
 /* Make label icon match text size */
 #chatbot-container .block label span {
     width: 1em;
