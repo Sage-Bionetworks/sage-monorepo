@@ -235,3 +235,14 @@ DISCLAIMER_CSS = """
     font-weight: 700;
 }
 """
+
+# CSS for Next Battle button
+NEXT_BATTLE_BUTTON_CSS = """
+#next-battle-row {
+    justify-content: center;
+}
+
+#next-battle-btn {
+    max-width: 240px;
+}
+"""
