@@ -57,6 +57,7 @@ export class ComparisonToolService<T> {
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
+  private readonly pinnedItemsForDropdownsSignal = signal<Map<string, Set<string>>>(new Map());
   private readonly unpinnedDataSignal = signal<T[]>([]);
   private readonly pinnedDataSignal = signal<T[]>([]);
 
@@ -137,19 +138,20 @@ export class ComparisonToolService<T> {
   initialize(configs: ComparisonToolConfig[], selection?: string[]) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
-    this.resetPinnedItems();
     this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
     this.setUnpinnedData([]);
     this.setPinnedData([]);
+    this.resetPinnedItems();
 
     if (!configs?.length) {
-      this.updateDropdownSelectionIfChanged([]);
+      this.dropdownSelectionSignal.set([]);
       this.columnsForDropdownsSignal.set(new Map());
+      this.pinnedItemsForDropdownsSignal.set(new Map());
       return;
     }
 
     const normalizedSelection = this.normalizeSelection(selection ?? [], configs);
-    this.updateDropdownSelectionIfChanged(normalizedSelection);
+    this.dropdownSelectionSignal.set(normalizedSelection);
 
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
     for (const config of configs) {
@@ -160,13 +162,13 @@ export class ComparisonToolService<T> {
     }
 
     this.columnsForDropdownsSignal.set(columnsMap);
+    this.pinnedItemsForDropdownsSignal.set(new Map());
   }
 
   setDropdownSelection(selection: string[]) {
     const configs = this.configsSignal();
     if (!configs.length) {
-      const normalizedSelection = selection ?? [];
-      this.updateDropdownSelectionIfChanged(normalizedSelection);
+      this.dropdownSelectionSignal.set(selection ?? []);
       return;
     }
 
@@ -323,8 +325,29 @@ export class ComparisonToolService<T> {
       return;
     }
 
+    // Save current pinned items before switching
+    const previousSelection = this.dropdownSelectionSignal();
+    const previousKey = this.dropdownKey(previousSelection);
+    const currentPinnedItems = this.pinnedItemsSignal();
+
+    this.pinnedItemsForDropdownsSignal.update((cache) => {
+      const next = new Map(cache);
+      next.set(previousKey, new Set(currentPinnedItems));
+      return next;
+    });
+
+    // Switch to new selection
     this.dropdownSelectionSignal.set(selection);
-    this.resetPinnedItems();
+
+    // Restore pinned items for new selection
+    const newKey = this.dropdownKey(selection);
+    const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(newKey);
+
+    if (cachedPinnedItems) {
+      this.pinnedItemsSignal.set(new Set(cachedPinnedItems));
+    } else {
+      this.pinnedItemsSignal.set(new Set());
+    }
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {
