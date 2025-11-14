@@ -54,7 +54,7 @@ def build_footer():
 .footer-center {{
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 12px;
     font-size: 14px;
     flex: 1;
     justify-content: center;
