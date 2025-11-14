@@ -270,7 +270,7 @@ def build_app():
             justify-content: center !important;
         }
         #cta-button-container {
-            max-width: 300px !important;
+            max-width: 240px !important;
         }
         #cta-btn-authenticated, #cta-btn-login {
             width: 100% !important;

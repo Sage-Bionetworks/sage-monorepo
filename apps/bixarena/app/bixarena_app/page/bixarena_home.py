@@ -58,7 +58,7 @@ def create_intro_section():
                 <p style="font-size: 2rem; margin-bottom: 1.5rem; opacity: 0.8;">
                     Welcome to BioArena
                 </p>
-                <h1 style="font-size: 3rem; margin-bottom: 2.2rem; color: white;">
+                <h1 style="font-size: 2.2rem; margin-bottom: 2rem; color: white;">
                     Drive the next wave of biomedical breakthroughs
                 </h1>
 
@@ -90,16 +90,16 @@ def load_public_stats_on_page_load() -> dict:
     <div id="stats-public-only">
         <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
             <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 2rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
+                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
+                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 2rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
+                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
+                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 2rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
+                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
+                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
             </div>
         </div>
     </div>
@@ -128,16 +128,16 @@ def load_user_battles_on_page_load(
         <div id="stats-public-only">
             <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 2rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
-                    <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
+                    <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
+                    <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 2rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
-                    <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
+                    <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
+                    <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 2rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
-                    <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
+                    <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
+                    <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
                 </div>
             </div>
         </div>
@@ -149,24 +149,24 @@ def load_user_battles_on_page_load(
     <div id="stats-with-user">
         <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
             <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 2rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
+                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
+                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 2rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
+                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
+                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 2rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
+                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
+                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 2rem; font-weight: 600; color: #f97316;">{user_stats.completed_battles:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Battles Completed</div>
+                <div style="font-size: 3.5rem; font-weight: 600; color: #f97316;">{user_stats.completed_battles:,}</div>
+                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Battles Completed</div>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 2rem; font-weight: 600; color: #f97316;">#{user_stats.rank:,}</div>
-                <div style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.5);">Your Rank</div>
+                <div style="font-size: 3.5rem; font-weight: 600; color: #f97316;">#{user_stats.rank:,}</div>
+                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Your Rank</div>
             </div>
         </div>
     </div>
@@ -233,10 +233,10 @@ def build_how_it_works_section():
         <!-- Section Header -->
         <div style="text-align: center; margin-bottom: 3rem;">
             <h2 style="color: #e5e7eb; margin-bottom: 0.75rem; font-size: 1.875rem; font-weight: 600;">
-                How it Works
+                Arena Rules
             </h2>
             <p style="opacity: 0.7; font-size: 1rem; max-width: 42rem; margin: 0 auto;">
-                Ready to Shape the Future of Biomedical AI?
+                Simple evaluation, powerful impact
             </p>
         </div>
 
@@ -249,11 +249,11 @@ def build_how_it_works_section():
                         <span style="color: #f97316; font-weight: 600; font-size: 0.875rem;">01</span>
                     </div>
                     <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
-                        Input Your Prompt
+                        Start a Battle
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Type the question you want the AI to answer. Every prompt you submit supports fair, unbiased AI benchmarking.
+                    Choose from curated biomedical questions or submit your own custom prompt. Two AI models are randomly selected for battle.
                 </p>
             </div>
 
@@ -264,11 +264,11 @@ def build_how_it_works_section():
                         <span style="color: #f97316; font-weight: 600; font-size: 0.875rem;">02</span>
                     </div>
                     <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
-                        Compare Answers
+                        Compare Responses
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    In battle mode, two anonymous models will respond to your prompt. Compare the results and select the response that best addresses your query.
+                    Read both AI-generated answers side-by-side. Models stay anonymous so you can evaluate pure content without bias.
                 </p>
             </div>
 
@@ -279,11 +279,11 @@ def build_how_it_works_section():
                         <span style="color: #f97316; font-weight: 600; font-size: 0.875rem;">03</span>
                     </div>
                     <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
-                        Vote for the Best
+                        Vote for Winner
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Choose the response that offers the highest quality and accuracy. Your evaluation shapes the leaderboards and provides actionable insights to help developers improve model performance.
+                    Choose which response is better. Your vote shapes the leaderboard rankings.
                 </p>
             </div>
 
@@ -294,11 +294,11 @@ def build_how_it_works_section():
                         <span style="color: #f97316; font-weight: 600; font-size: 0.875rem;">04</span>
                     </div>
                     <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
-                        Reveal and Iterate
+                        Reveal & Impact
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Once your vote is cast, the model identities are unveiled. You can then start a new evaluation with a fresh prompt.
+                    Once your vote is cast, the model identities are unveiled. See how your contribution moves biomedical AI forward. Ready for another round? Jump into your next battle.
                 </p>
             </div>
         </div>
