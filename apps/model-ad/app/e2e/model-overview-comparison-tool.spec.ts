@@ -28,7 +28,7 @@ test.describe('model overview', () => {
   test('share URL button copies URL to clipboard', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read']);
 
-    await navigateToComparison(page, 'Model Overview');
+    await navigateToComparison(page, 'Model Overview', true);
 
     const shareUrlButton = page.getByRole('button', { name: 'Share URL' });
     await expect(shareUrlButton).toBeVisible();
@@ -47,7 +47,7 @@ test.describe('model overview', () => {
 
     const [firstModel, secondModel] = models;
 
-    await navigateToComparison(page, 'Model Overview');
+    await navigateToComparison(page, 'Model Overview', true);
 
     const pinnedTable = getPinnedTable(page);
     const unpinnedTable = getUnpinnedTable(page);
@@ -73,7 +73,7 @@ test.describe('model overview', () => {
     const [firstModel] = await fetchModelOverviews(page);
     expect(firstModel).toBeDefined();
 
-    await navigateToComparison(page, 'Model Overview', `pinned=${firstModel._id}`);
+    await navigateToComparison(page, 'Model Overview', true, `pinned=${firstModel._id}`);
 
     await expect(page.locator('explorers-base-table')).toHaveCount(2);
     await expect(getRowByName(getPinnedTable(page), page, firstModel.name)).toHaveCount(1);

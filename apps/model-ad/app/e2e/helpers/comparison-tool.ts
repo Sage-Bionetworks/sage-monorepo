@@ -16,8 +16,8 @@ export const closeVisualizationOverviewDialog = async (page: Page) => {
 export const navigateToComparison = async (
   page: Page,
   name: string,
+  shouldCloseVisualizationOverviewDialog = false,
   queryParameters?: string,
-  shouldCloseVisualizationOverviewDialog = true,
 ) => {
   const path = COMPARISON_TOOL_PATHS[name];
   const url = queryParameters ? `${path}?${queryParameters}` : path;
