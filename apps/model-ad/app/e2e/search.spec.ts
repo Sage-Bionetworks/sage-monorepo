@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { headerSearchPlaceholder, searchAndGetSearchListItems } from './helpers';
+import { headerSearchPlaceholder, searchAndGetSearchListItems } from './helpers/search';
 
 test.describe('search', () => {
   test('can search for model and aliases then navigate to model details from search result', async ({

@@ -35,9 +35,11 @@ from bixarena_app.model.model_response import (
     bot_response_multi,
 )
 from bixarena_app.page.battle_page_css import (
+    CHATBOT_BATTLE_CSS,
     DISCLAIMER_CSS,
     EXAMPLE_PROMPTS_CSS,
     INPUT_PROMPT_CSS,
+    NEXT_BATTLE_BUTTON_CSS,
 )
 from bixarena_app.page.example_prompt_ui import (
     PROMPT_CARD_CLICK_JS,
@@ -223,8 +225,8 @@ def vote_last_response(
     )
 
     names = (
-        "### Model 1: " + states[0].model_name,
-        "### Model 2: " + states[1].model_name,
+        f'<div class="model-name-footer">{states[0].model_name}</div>',
+        f'<div class="model-name-footer">{states[1].model_name}</div>',
     )
     yield (
         names  # model_selector0, model_selector1: reveal model names
@@ -240,6 +242,7 @@ def vote_last_response(
         + (gr.Row(visible=True),)  # next_battle_row: show
         + (gr.HTML(visible=False),)  # page_header: hide
         + (gr.Row(visible=False),)  # textbox_row: hide
+        + (gr.HTML(visible=False),)  # disclaimer: hide
     )
 
 
@@ -332,6 +335,7 @@ def clear_history(
         + [gr.Row(visible=False)]  # next_battle_row: hide
         + [gr.HTML(visible=True)]  # page_header: show
         + [gr.Row(visible=True)]  # textbox_row: show
+        + [gr.HTML(visible=True)]  # disclaimer: show
     )
 
     # If example_prompt_ui is provided, also refresh the prompts
@@ -412,6 +416,7 @@ def add_text(
                 + [gr.Column(visible=True)]  # example_prompts_group: show
                 + [gr.HTML(visible=True)]  # page_header: show
                 + [gr.Row(visible=True)]  # textbox_row: show
+                + [gr.HTML(visible=True)]  # disclaimer: show
             )
     battle_id = battle_session.battle_id
 
@@ -439,6 +444,7 @@ def add_text(
         + [gr.Column(visible=False)]  # example_prompts_group: hide
         + [gr.HTML(visible=False)]  # page_header: hide
         + [gr.Row(visible=True)]  # textbox_row: show
+        + [gr.HTML(visible=True)]  # disclaimer: show
     )
 
 
@@ -448,13 +454,15 @@ def build_side_by_side_ui_anony():
     <div style="text-align: center; padding: 0px;">
         <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BioArena</h1>
         <p style="font-size: 1.2rem; color: #666; margin: 0;">
-            Benchmarking LLMs for Biomedical Breakthroughs
+            Benchmarking AI Models for Biomedical Breakthroughs
         </p>
     </div>
     <style>
+    {CHATBOT_BATTLE_CSS}
     {EXAMPLE_PROMPTS_CSS}
     {INPUT_PROMPT_CSS}
     {DISCLAIMER_CSS}
+    {NEXT_BATTLE_BUTTON_CSS}
     </style>
     """
 
@@ -479,8 +487,8 @@ def build_side_by_side_ui_anony():
         ) = example_prompt_ui.build(textbox=None)
 
         # Battle interface - will appear once a prompt is submitted
-        with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
-            with gr.Row():
+        with gr.Group(elem_id="chatbot-container", visible=False) as battle_interface:
+            with gr.Row(equal_height=True):
                 for i in range(num_sides):
                     label = "Model 1" if i == 0 else "Model 2"
                     with gr.Column():
@@ -500,19 +508,15 @@ def build_side_by_side_ui_anony():
                             )
                         chatbots.append(chatbot)
 
-            with gr.Row():
-                for i in range(num_sides):
-                    with gr.Column():
-                        model_selector = gr.Markdown(
-                            anony_names[i], elem_id="model_selector_md"
-                        )
+                        # Model name footer attached to each chatbot
+                        model_selector = gr.HTML(anony_names[i])
                         model_selectors.append(model_selector)
 
         # Voting buttons
         with gr.Row(visible=False) as voting_row:
-            left_vote_btn = gr.Button(value="A is better 👈 ")
+            left_vote_btn = gr.Button(value="Left is Better 👈")
             tie_btn = gr.Button(value="🤝 Tie")
-            right_vote_btn = gr.Button(value="👉 B is better")
+            right_vote_btn = gr.Button(value="👉 Right is Better")
 
         # Prompt input - always visible, centered with 80% width via CSS
         with gr.Row(visible=True) as textbox_row:
@@ -524,30 +528,33 @@ def build_side_by_side_ui_anony():
             )
 
         # Next Round button
-        with gr.Row(visible=False) as next_battle_row:
-            with gr.Column(scale=2):
-                gr.HTML("")
-            with gr.Column(scale=1):
-                clear_btn = gr.Button(value="Next Battle", variant="primary")
-            with gr.Column(scale=2):
-                gr.HTML("")
+        with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
+            clear_btn = gr.Button(
+                value="Next Battle",
+                variant="primary",
+                elem_id="next-battle-btn",
+            )
 
         # Disclaimer
-        gr.HTML(
+        disclaimer = gr.HTML(
             """
             <div id="disclaimer">
                 <div id="disclaimer-content">
-                    <div id="disclaimer-text">
-                        <div class="pulse-dot"></div>
-                        <span>
-                            AI may make mistakes. Don't include private or
-                            sensitive information in your prompts,
-                            and please verify responses.
-                        </span>
-                    </div>
+                    <h3 id="disclaimer-title">Data Processing & Privacy:</h3>
+                    <p id="disclaimer-text">
+                        We process your prompts to ensure they are relevant to
+                        biomedical research. Your prompts are also sent to
+                        third-party LLM proxies and AI model providers who may
+                        store and use them for training and service improvement.
+                        <strong>Do not include private, sensitive, confidential,
+                        or personally identifiable information in your prompts.</strong>
+                        AI responses may contain errors. Verify all AI responses
+                        independently.
+                    </p>
                 </div>
             </div>
-            """
+            """,
+            visible=True,
         )
 
     # Register listeners
@@ -557,7 +564,7 @@ def build_side_by_side_ui_anony():
         model_selectors
         + [textbox]
         + [left_vote_btn, tie_btn, right_vote_btn]
-        + [voting_row, next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer],
     )
     right_vote_btn.click(
         right_vote_last_response,
@@ -565,7 +572,7 @@ def build_side_by_side_ui_anony():
         model_selectors
         + [textbox]
         + [left_vote_btn, tie_btn, right_vote_btn]
-        + [voting_row, next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer],
     )
     tie_btn.click(
         tie_vote_last_response,
@@ -573,7 +580,7 @@ def build_side_by_side_ui_anony():
         model_selectors
         + [textbox]
         + [left_vote_btn, tie_btn, right_vote_btn]
-        + [voting_row, next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer],
     )
     clear_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
@@ -586,6 +593,7 @@ def build_side_by_side_ui_anony():
         + [left_vote_btn, tie_btn, right_vote_btn]
         + [battle_interface, voting_row, next_battle_row]
         + [page_header, textbox_row]
+        + [disclaimer]
         + [example_prompts_group, prev_btn, next_btn]
         + prompt_cards,
     )
@@ -659,7 +667,7 @@ def build_side_by_side_ui_anony():
         + chatbots
         + [textbox]
         + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-        + [page_header, textbox_row],
+        + [page_header, textbox_row, disclaimer],
     ).then(
         lambda: None,  # Disable enter key
         [],
@@ -691,7 +699,7 @@ def build_side_by_side_ui_anony():
             + chatbots
             + [textbox]
             + [battle_interface, voting_row, next_battle_row, example_prompts_group]
-            + [page_header, textbox_row],
+            + [page_header, textbox_row, disclaimer],
         ).then(
             lambda: None,
             [],
@@ -716,6 +724,7 @@ def build_side_by_side_ui_anony():
         example_prompt_ui,
         [example_prompts_group, prev_btn, next_btn] + prompt_cards,
         prevent_empty_prompt_js,
+        disclaimer,
     )
 
 
@@ -729,13 +738,14 @@ def build_battle_page():
     load_demo_side_by_side_anony()
 
     with gr.Blocks(
-        title="BioArena - Benchmarking LLMs for Biomedical Breakthroughs"
+        title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs"
     ) as battle_page:
         (
             _,
             example_prompt_ui,
             prompt_outputs,
             empty_prompt_js,
+            _,  # disclaimer (not needed)
         ) = build_side_by_side_ui_anony()
 
         # Refresh example prompts when page loads to ensure each user sees different prompts

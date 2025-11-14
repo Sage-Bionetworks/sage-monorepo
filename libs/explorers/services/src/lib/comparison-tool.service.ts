@@ -1,21 +1,25 @@
-import { computed, inject, Injectable, signal, Signal } from '@angular/core';
+import { computed, DestroyRef, effect, inject, Injectable, signal, Signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   ComparisonToolColumn,
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
+  ComparisonToolUrlParams,
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { SortEvent, SortMeta } from 'primeng/api';
+import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
 
 /**
  * Shared state contract for comparison tools.
  */
-
 @Injectable()
 export class ComparisonToolService<T> {
   private readonly notificationService = inject(NotificationService);
+  private readonly urlService = inject(ComparisonToolUrlService);
+  private readonly destroyRef = inject(DestroyRef);
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
@@ -26,13 +30,14 @@ export class ComparisonToolService<T> {
   private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
-    headerTitle: 'Comparison Tool',
+    headerTitle: '',
     filterResultsButtonTooltip: 'Filter results',
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
     viewDetailsClick: (id: string, label: string) => {
       return;
     },
+    legendEnabled: true,
     legendPanelConfig: {
       colorChartLowerLabel: '',
       colorChartUpperLabel: '',
@@ -41,14 +46,15 @@ export class ComparisonToolService<T> {
       sizeChartUpperLabel: '',
       sizeChartText: '',
     },
-    legendEnabled: true,
+    visualizationOverviewPanes: [],
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
-  private readonly isVisualizationOverviewVisibleSignal = signal(false);
+  private readonly isVisualizationOverviewVisibleSignal = signal(true);
+  private readonly isVisualizationOverviewHiddenByUserSignal = signal(false);
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
   private readonly multiSortMetaSignal = signal<SortMeta[]>(this.DEFAULT_MULTI_SORT_META);
@@ -63,11 +69,22 @@ export class ComparisonToolService<T> {
   readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly isVisualizationOverviewVisible = this.isVisualizationOverviewVisibleSignal.asReadonly();
+  readonly isVisualizationOverviewHiddenByUser =
+    this.isVisualizationOverviewHiddenByUserSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
   readonly multiSortMeta = this.multiSortMetaSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
+
+  private readonly syncToUrlInProgress = signal(false);
+  private readonly isInitialized = signal(false);
+  private lastSerializedState: string | null = null;
+  private hasInitializedConfig = false;
+
+  constructor() {
+    this.setupUrlSync();
+  }
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
@@ -133,7 +150,9 @@ export class ComparisonToolService<T> {
   initialize(configs: ComparisonToolConfig[], selection?: string[]) {
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
-    this.resetPinnedItems();
+    if (this.hasInitializedConfig) {
+      this.resetPinnedItems();
+    }
     this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
     this.setUnpinnedData([]);
     this.setPinnedData([]);
@@ -156,6 +175,7 @@ export class ComparisonToolService<T> {
     }
 
     this.columnsForDropdownsSignal.set(columnsMap);
+    this.hasInitializedConfig = true;
   }
 
   setDropdownSelection(selection: string[]) {
@@ -200,10 +220,18 @@ export class ComparisonToolService<T> {
     this.isVisualizationOverviewVisibleSignal.update((visible) => !visible);
   }
 
+  setVisualizationOverviewHiddenByUser(hidden: boolean) {
+    this.isVisualizationOverviewHiddenByUserSignal.set(hidden);
+  }
+
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {
     this.viewConfigSignal.set({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
     this.setLegendVisibility(false);
-    this.setVisualizationOverviewVisibility(false);
+
+    // If the user checked the option to hide the overview, do not auto-show it
+    if (!this.isVisualizationOverviewHiddenByUserSignal()) {
+      this.setVisualizationOverviewVisibility(true);
+    }
   }
 
   isPinned(id: string): boolean {
@@ -262,8 +290,8 @@ export class ComparisonToolService<T> {
     });
   }
 
-  setPinnedItems(items: string[]) {
-    this.pinnedItemsSignal.set(new Set(items));
+  setPinnedItems(items: string[] | null) {
+    this.pinnedItemsSignal.set(new Set(items ?? []));
   }
 
   resetPinnedItems() {
@@ -312,7 +340,9 @@ export class ComparisonToolService<T> {
     }
 
     this.dropdownSelectionSignal.set(selection);
-    this.resetPinnedItems();
+    if (this.hasInitializedConfig) {
+      this.resetPinnedItems();
+    }
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {
@@ -383,5 +413,54 @@ export class ComparisonToolService<T> {
 
   setSort(event: SortEvent) {
     this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
+  }
+
+  private setupUrlSync(): void {
+    // URL → State: Subscribe to URL param changes
+    this.urlService.params$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.syncToUrlInProgress.set(true);
+
+      if (params.pinnedItems === undefined) {
+        this.setPinnedItems(null);
+      } else {
+        this.setPinnedItems(params.pinnedItems);
+      }
+
+      this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
+
+      this.syncToUrlInProgress.set(false);
+      this.isInitialized.set(true);
+    });
+
+    // State → URL: Sync state changes to URL using effect
+    effect(() => {
+      const isInitialized = this.isInitialized();
+      const syncingToUrl = this.syncToUrlInProgress();
+      const pinnedItems = this.pinnedItems();
+      const state = this.serializeState(pinnedItems);
+
+      if (!isInitialized || syncingToUrl) {
+        return;
+      }
+
+      this.syncStateToUrl(state);
+    });
+  }
+
+  private syncStateToUrl(state: ComparisonToolUrlParams): void {
+    const serializedState = JSON.stringify(state);
+    if (this.lastSerializedState === serializedState) {
+      return;
+    }
+
+    this.lastSerializedState = serializedState;
+    this.urlService.syncToUrl(state);
+  }
+
+  private serializeState(pinnedItems: Set<string>): ComparisonToolUrlParams {
+    const pinned = Array.from(pinnedItems);
+    return {
+      pinnedItems: pinned.length ? pinned : null,
+    };
   }
 }

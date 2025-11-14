@@ -2,6 +2,60 @@
 CSS styles for the BixArena battle page.
 """
 
+# CSS for chatbot battle interface
+CHATBOT_BATTLE_CSS = """
+/* Separate the two chat windows */
+#chatbot-container {
+    background: transparent !important;
+    border: none !important;
+}
+
+#chatbot-container .styler {
+    background: transparent !important;
+}
+
+#chatbot-container .row {
+    gap: 24px;
+}
+
+#chatbot-container > .styler > .row:first-child .column {
+    border: 1px solid var(--border-color-primary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Make chatbot labels bigger */
+#chatbot-container .block label {
+    font-size: 1em;
+}
+
+/* Add bottom padding to chatbot block to prevent message cropping */
+#chatbot-container #chatbot {
+    padding-bottom: 16px;
+}
+
+/* Make label icon match text size */
+#chatbot-container .block label span {
+    width: 1em;
+    height: 1em;
+}
+
+/* Chatbot footer to reveal model names */
+#chatbot-container .html-container {
+    padding: 0 !important;
+}
+
+#chatbot-container .column > .block:has(.html-container) {
+    margin-top: -24px;
+}
+
+.model-name-footer {
+    padding: 12px 16px;
+    background: #27272a;
+    text-align: center;
+}
+"""
+
 # CSS for example prompt cards and navigation
 EXAMPLE_PROMPTS_CSS = """
 /* Example prompt UI section */
@@ -139,6 +193,8 @@ INPUT_PROMPT_CSS = """
 #input_box.prompt_input textarea {
     border-radius: 12px;
     overflow-y: auto !important;
+    padding: 16px 20px;
+    line-height: 1.5;
 }
 
 .form:has(.prompt_input) {
@@ -157,25 +213,41 @@ INPUT_PROMPT_CSS = """
 DISCLAIMER_CSS = """
 #disclaimer {
     padding: 16px 24px;
+    max-width: 850px;
+    margin: 0 auto;
 }
 
 #disclaimer-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    text-align: center;
+}
+
+#disclaimer-title {
+    color: #2dd4bf;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    margin-top: 0;
 }
 
 #disclaimer-text {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: #d1d5db;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0;
 }
 
-.pulse-dot {
-    width: 6px;
-    height: 6px;
-    background-color: rgba(245, 158, 11, 1);
-    border-radius: 50%;
+#disclaimer-text strong {
+    font-weight: 700;
+}
+"""
+
+# CSS for Next Battle button
+NEXT_BATTLE_BUTTON_CSS = """
+#next-battle-row {
+    justify-content: center;
+}
+
+#next-battle-btn {
+    max-width: 240px;
 }
 """

@@ -15,7 +15,9 @@ export class LegendPanelComponent {
 
   viewConfig = this.comparisonToolService.viewConfig;
 
-  onHowToClick() {
-    //TODO implement
+  openVisualizationOverviewDialog() {
+    // close the legend panel and open the visualization overview
+    this.comparisonToolService.setLegendVisibility(false);
+    this.comparisonToolService.setVisualizationOverviewVisibility(true);
   }
 }

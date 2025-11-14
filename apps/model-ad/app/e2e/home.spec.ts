@@ -11,7 +11,7 @@ test.describe('home', () => {
 
     await modelOverviewCard.click();
 
-    await expect(page).toHaveURL('/comparison/model');
+    await page.waitForURL('/comparison/model');
     await expect(page.getByRole('heading', { level: 1, name: 'Model Overview' })).toBeVisible();
   });
 
@@ -25,7 +25,7 @@ test.describe('home', () => {
 
     await geneExpressionCard.click();
 
-    await expect(page).toHaveURL('/comparison/expression');
+    await page.waitForURL('/comparison/expression');
     await expect(page.getByRole('heading', { level: 1, name: 'Gene Expression' })).toBeVisible();
   });
 
@@ -39,7 +39,7 @@ test.describe('home', () => {
 
     await diseaseCorrelationCard.click();
 
-    await expect(page).toHaveURL('/comparison/correlation');
+    await page.waitForURL('/comparison/correlation');
     await expect(
       page.getByRole('heading', { level: 1, name: 'Disease Correlation' }),
     ).toBeVisible();

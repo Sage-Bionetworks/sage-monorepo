@@ -7,7 +7,7 @@ import {
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
-import { PlatformService } from '@sagebionetworks/explorers/services';
+import { ComparisonToolHelperService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -28,6 +28,7 @@ import { DiseaseCorrelationComparisonToolService } from './services/disease-corr
 export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
+  private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
@@ -43,6 +44,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       wikiId: '632874',
     },
   };
+
   legendPanelConfig: LegendPanelConfig = {
     colorChartLowerLabel: 'Negative Correlation',
     colorChartUpperLabel: 'Positive Correlation',
@@ -51,9 +53,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
     sizeChartUpperLabel: 'Insignificant',
     sizeChartText: `Circle diameter indicates P-value. Larger circles indicate higher statistical significance, while smaller circles indicate lower statistical significance.`,
   };
+
+  // TODO MG-485 - Update overview panes content and images
   viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
-    headerTitle: 'Disease Correlation',
+    headerTitle: ComparisonToolPage.DiseaseCorrelation,
     filterResultsButtonTooltip: 'Filter results by Age, Sex, Modified Gene, and more',
     viewDetailsTooltip: 'Open model details page',
     viewDetailsClick: (id: string, label: string) => {
@@ -61,6 +65,29 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       window.open(url, '_blank');
     },
     legendPanelConfig: this.legendPanelConfig,
+    visualizationOverviewPanes: [
+      this.comparisonToolHelperService.createVisualizationOverviewPane(
+        ComparisonToolPage.DiseaseCorrelation,
+        `<p>Welcome to Agora's Gene Comparison Tool. This overview demonstrates how to use the tool to explore results about genes related to AD. You can revisit this walkthrough by clicking the Visualization Overview link at the bottom of the page.</p>
+        <p>Click on the Legend link at the bottom of the page to view the legend for the current visualization.</p>
+        <img src="/explorer-assets/images/gct-how-to-0.svg" />`,
+      ),
+      this.comparisonToolHelperService.createVisualizationOverviewPane(
+        'View Detailed Expression Info',
+        `<p>Click on a circle to show detailed information about a result for a specific brain region.</p>
+        <img src="/explorer-assets/images/gct-how-to-1.gif" />`,
+      ),
+      this.comparisonToolHelperService.createVisualizationOverviewPane(
+        'Compare Multiple Genes',
+        `<p>You can pin several genes to visually compare them together. Then export the data about your pinned genes as a CSV file for further analysis.</p>
+        <img src="/explorer-assets/images/gct-how-to-2.gif" />`,
+      ),
+      this.comparisonToolHelperService.createVisualizationOverviewPane(
+        'Filter Gene Selection',
+        `<p>Filter genes by Nomination, Association with AD, Study and more. Or simply use the search bar to quickly find the genes you are interested in.</p>
+        <img src="/explorer-assets/images/gct-how-to-3.gif" />`,
+      ),
+    ],
   };
 
   constructor() {
