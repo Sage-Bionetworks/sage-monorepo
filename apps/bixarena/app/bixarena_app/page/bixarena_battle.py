@@ -511,9 +511,9 @@ def build_side_by_side_ui_anony():
 
         # Voting buttons
         with gr.Row(visible=False) as voting_row:
-            left_vote_btn = gr.Button(value="Model 1 is better 👈")
+            left_vote_btn = gr.Button(value="Left is Better 👈")
             tie_btn = gr.Button(value="🤝 Tie")
-            right_vote_btn = gr.Button(value="👉 Model 2 is better")
+            right_vote_btn = gr.Button(value="👉 Right is Better")
 
         # Prompt input - always visible, centered with 80% width via CSS
         with gr.Row(visible=True) as textbox_row:
