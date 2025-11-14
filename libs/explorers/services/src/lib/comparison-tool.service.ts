@@ -136,19 +136,17 @@ export class ComparisonToolService<T> {
   }
 
   initialize(configs: ComparisonToolConfig[], selection?: string[]) {
+    // if it is already initialized, do not re-initialize
+    if (this.configs().length > 0) {
+      return;
+    }
+
     this.configsSignal.set(configs ?? []);
     this.totalResultsCount.set(0);
     this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
     this.setUnpinnedData([]);
     this.setPinnedData([]);
     this.resetPinnedItems();
-
-    if (!configs?.length) {
-      this.dropdownSelectionSignal.set([]);
-      this.columnsForDropdownsSignal.set(new Map());
-      this.pinnedItemsForDropdownsSignal.set(new Map());
-      return;
-    }
 
     const normalizedSelection = this.normalizeSelection(selection ?? [], configs);
     this.dropdownSelectionSignal.set(normalizedSelection);
@@ -168,7 +166,7 @@ export class ComparisonToolService<T> {
   setDropdownSelection(selection: string[]) {
     const configs = this.configsSignal();
     if (!configs.length) {
-      this.dropdownSelectionSignal.set(selection ?? []);
+      this.updateDropdownSelectionIfChanged(selection ?? []);
       return;
     }
 

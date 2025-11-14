@@ -97,11 +97,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   }
 
   getConfigs() {
-    // Skip if already initialized (service persists at route level)
-    if (this.comparisonToolService.configs().length > 0) {
-      return;
-    }
-
     this.comparisonToolConfigService
       .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
       .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
