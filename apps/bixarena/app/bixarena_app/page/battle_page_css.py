@@ -26,13 +26,13 @@ CHATBOT_BATTLE_CSS = """
 
 /* Make chatbot labels bigger */
 #chatbot-container .block label {
-    font-size: var(--chatbot-text-size);
+    font-size: 1em;
 }
 
 /* Make label icon match text size */
 #chatbot-container .block label span {
-    width: var(--chatbot-text-size);
-    height: var(--chatbot-text-size);
+    width: 1em;
+    height: 1em;
 }
 
 /* Chatbot footer to reveal model names */
