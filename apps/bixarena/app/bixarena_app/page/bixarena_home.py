@@ -55,9 +55,13 @@ def create_intro_section():
         with gr.Column():
             gr.HTML("""
             <div style="text-align: center; padding: 4rem 1.5rem 1.5rem 1.5rem; max-width: 64rem; margin: 0 auto;">
-                <h1 style="font-size: 3rem; margin-bottom: 1.5rem; color: white;">
+                <p style="font-size: 2rem; margin-bottom: 1.5rem; opacity: 0.8;">
                     Welcome to BioArena
+                </p>
+                <h1 style="font-size: 3rem; margin-bottom: 2.2rem; color: white;">
+                    Drive the next wave of biomedical breakthroughs
                 </h1>
+
                 <p style="font-size: 1.125rem; line-height: 1.75; max-width: 42rem; margin: 0 auto; color: rgba(229, 231, 235, 0.7);">
                     BioArena crowdsources the benchmarking of AI models to unlock the
                     next breakthrough in biomedicine, inviting a global community of
@@ -225,14 +229,14 @@ def build_how_it_works_section():
     """Create the How It Works section explaining the battle mode process"""
 
     gr.HTML("""
-    <div style="max-width: 1400px; margin: 0 auto; padding: 3rem 1.5rem 4rem 1.5rem;">
+    <div style="padding: 3rem 1.5rem 4rem 1.5rem;">
         <!-- Section Header -->
         <div style="text-align: center; margin-bottom: 3rem;">
             <h2 style="color: #e5e7eb; margin-bottom: 0.75rem; font-size: 1.875rem; font-weight: 600;">
-                How Battle Mode Works
+                How it Works
             </h2>
             <p style="opacity: 0.7; font-size: 1rem; max-width: 42rem; margin: 0 auto;">
-                Drive the next wave of biomedical breakthroughs and shape the future of Ai by validating the next generation of cutting-edge models
+                Ready to Shape the Future of Biomedical AI?
             </p>
         </div>
 
