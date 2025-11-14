@@ -1,8 +1,7 @@
 -- ============================================================================
 -- Reference Data: Add GPT-5.1 Model
 -- ============================================================================
--- This migration inserts reference data needed for the application to function
--- properly in ALL environments (dev, stage, prod).
+-- This migration inserts new model data into the api.model table.
 --
 -- Includes:
 -- - GPT-5.1: OpenAI model via OpenRouter
