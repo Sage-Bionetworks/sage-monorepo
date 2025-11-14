@@ -54,7 +54,7 @@ def create_intro_section():
     with gr.Row():
         with gr.Column():
             gr.HTML("""
-            <div style="text-align: center; padding: 4rem 1.5rem 1.5rem 1.5rem; max-width: 64rem; margin: 0 auto;">
+            <div style="text-align: center; padding: 2.5rem 1.5rem;">
                 <p style="font-size: 2rem; margin-bottom: 1.5rem; opacity: 0.8;">
                     Welcome to BioArena
                 </p>
@@ -87,19 +87,21 @@ def load_public_stats_on_page_load() -> dict:
     public_stats = fetch_public_stats()
 
     stats_html = f"""
-    <div id="stats-public-only">
-        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
-                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
-            </div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
-                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
-            </div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
-                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
+    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.02); padding: 2.5rem 1.5rem;">
+        <div id="stats-public-only">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
+                    <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
+                    <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
+                    <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
+                </div>
             </div>
         </div>
     </div>
@@ -125,7 +127,31 @@ def load_user_battles_on_page_load(
     if user_stats is None:
         # Return only public stats when user is not authenticated
         stats_html = f"""
-        <div id="stats-public-only">
+        <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.02); padding: 2.5rem 1.5rem;">
+            <div id="stats-public-only">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                        <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
+                        <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                        <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
+                        <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                        <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
+                        <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
+        return gr.update(value=stats_html)
+
+    # Return stats with user data included
+    stats_html = f"""
+    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.02); padding: 2.5rem 1.5rem;">
+        <div id="stats-with-user">
             <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                     <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
@@ -139,34 +165,14 @@ def load_user_battles_on_page_load(
                     <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
                     <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
                 </div>
-            </div>
-        </div>
-        """
-        return gr.update(value=stats_html)
-
-    # Return stats with user data included
-    stats_html = f"""
-    <div id="stats-with-user">
-        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["models_evaluated"]:,}</div>
-                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Models Evaluated</div>
-            </div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["completed_battles"]:,}</div>
-                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Battles</div>
-            </div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 3.5rem; font-weight: 600; color: #2dd4bf;">{public_stats["total_users"]:,}</div>
-                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Total Users</div>
-            </div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 3.5rem; font-weight: 600; color: #f97316;">{user_stats.completed_battles:,}</div>
-                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Battles Completed</div>
-            </div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                <div style="font-size: 3.5rem; font-weight: 600; color: #f97316;">#{user_stats.rank:,}</div>
-                <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Your Rank</div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: #f97316;">{user_stats.completed_battles:,}</div>
+                    <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Battles Completed</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: #f97316;">#{user_stats.rank:,}</div>
+                    <div style="font-size: 1rem; color: rgba(229, 231, 235, 0.5);">Your Rank</div>
+                </div>
             </div>
         </div>
     </div>
@@ -210,18 +216,6 @@ def build_stats_section():
         "", elem_id="stats-bar-container", elem_classes=["stats-bar"]
     )
 
-    # Add custom CSS for the stats bar
-    gr.HTML("""
-    <style>
-    #stats-bar-container {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        background-color: rgba(255, 255, 255, 0.02);
-        padding: 1.5rem 1rem;
-    }
-    </style>
-    """)
-
     return stats_container
 
 
@@ -229,7 +223,7 @@ def build_how_it_works_section():
     """Create the How It Works section explaining the battle mode process"""
 
     gr.HTML("""
-    <div style="padding: 3rem 1.5rem 4rem 1.5rem;">
+    <div style="padding: 2.5rem 1.5rem;">
         <!-- Section Header -->
         <div style="text-align: center; margin-bottom: 3rem;">
             <h2 style="color: #e5e7eb; margin-bottom: 0.75rem; font-size: 1.875rem; font-weight: 600;">
@@ -346,7 +340,8 @@ def build_cta_section():
                         <style>
                         /* CTA section wrapper with consistent bottom padding */
                         #cta-section-wrapper {
-                            padding-bottom: 2.5rem;
+                            padding: 2.5rem 1.5rem;
+                            flex-grow: unset !important;
                         }
                         /* Remove gap between CTA button and help message */
                         #cta-section-group {
