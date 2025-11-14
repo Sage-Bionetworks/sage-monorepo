@@ -32,7 +32,11 @@ spring:
       initialization-fail-timeout: -1 # Retry indefinitely during startup
   flyway:
     enabled: true
-    clean-disabled: false
+    baseline-on-migrate: true
+    baseline-version: 0
+    validate-on-migrate: true
+    clean-disabled: true # Safety: prevent accidental data loss
+    locations: classpath:db/migration/common # Default: schema migrations only
     schemas: auth
     default-schema: auth
     connect-retries: 60 # Retry connection 60 times
@@ -53,8 +57,6 @@ spring:
           time_zone: UTC
         default_schema: auth
     open-in-view: false
-  profiles:
-    active: dev
 
 management:
   endpoints:

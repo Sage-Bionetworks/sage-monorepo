@@ -4,12 +4,20 @@ import {
   ComparisonToolConfigColumn,
   ComparisonToolLink,
   HeatmapCircleData,
+  VisualizationOverviewPane,
 } from '@sagebionetworks/explorers/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ComparisonToolHelperService {
+  createVisualizationOverviewPane(heading: string, htmlContent: string): VisualizationOverviewPane {
+    return {
+      heading,
+      content: htmlContent,
+    };
+  }
+
   getComparisonToolDataFilename(config: ComparisonToolConfig): string {
     const pageName = config.page.toLowerCase().replaceAll(' ', '_');
     const primaryCategory = config.dropdowns?.[0];

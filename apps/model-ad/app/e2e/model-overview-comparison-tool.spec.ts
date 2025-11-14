@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { baseURL } from '../playwright.config';
+import { closeVisualizationOverviewDialog } from './helpers/comparison-tool';
 
 test.describe('model overview', () => {
   test('share URL button copies URL to clipboard', async ({ page, context }) => {
@@ -13,6 +14,9 @@ test.describe('model overview', () => {
     await expect(shareUrlButton).toBeVisible();
 
     await page.waitForURL(path);
+
+    // close the visualization overview dialog
+    await closeVisualizationOverviewDialog(page);
 
     await shareUrlButton.click();
 

@@ -7,7 +7,6 @@ import { ComparisonToolFilterPanelComponent } from './comparison-tool-filter-pan
 import { ComparisonToolHeaderComponent } from './comparison-tool-header/comparison-tool-header.component';
 import { ComparisonToolTableComponent } from './comparison-tool-table/comparison-tool-table.component';
 import { HelpLinksComponent } from './help-links/help-links.component';
-import { LegendPanelComponent } from './legend-panel/legend-panel.component';
 
 @Component({
   selector: 'explorers-comparison-tool',
@@ -18,7 +17,6 @@ import { LegendPanelComponent } from './legend-panel/legend-panel.component';
     ComparisonToolControlsComponent,
     ComparisonToolFilterListComponent,
     ComparisonToolTableComponent,
-    LegendPanelComponent,
     HelpLinksComponent,
   ],
   templateUrl: './comparison-tool.component.html',
