@@ -224,8 +224,8 @@ def vote_last_response(
     )
 
     names = (
-        "### " + states[0].model_name,
-        "### " + states[1].model_name,
+        f'<div class="model-name-footer">{states[0].model_name}</div>',
+        f'<div class="model-name-footer">{states[1].model_name}</div>',
     )
     yield (
         names  # model_selector0, model_selector1: reveal model names
@@ -481,8 +481,7 @@ def build_side_by_side_ui_anony():
         ) = example_prompt_ui.build(textbox=None)
 
         # Battle interface - will appear once a prompt is submitted
-        # TODO: Change back to visible=False after testing
-        with gr.Group(elem_id="chatbot-container", visible=True) as battle_interface:
+        with gr.Group(elem_id="chatbot-container", visible=False) as battle_interface:
             with gr.Row(equal_height=True):
                 for i in range(num_sides):
                     label = "Model 1" if i == 0 else "Model 2"
@@ -503,12 +502,8 @@ def build_side_by_side_ui_anony():
                             )
                         chatbots.append(chatbot)
 
-            with gr.Row():
-                for i in range(num_sides):
-                    with gr.Column():
-                        model_selector = gr.Markdown(
-                            anony_names[i], elem_id="model_selector_md"
-                        )
+                        # Model name footer attached to each chatbot
+                        model_selector = gr.HTML(anony_names[i])
                         model_selectors.append(model_selector)
 
         # Voting buttons

@@ -34,6 +34,21 @@ CHATBOT_BATTLE_CSS = """
     width: var(--chatbot-text-size);
     height: var(--chatbot-text-size);
 }
+
+/* Chatbot footer to reveal model names */
+#chatbot-container .html-container {
+    padding: 0 !important;
+}
+
+#chatbot-container .column > .block:has(.html-container) {
+    margin-top: -24px;
+}
+
+.model-name-footer {
+    padding: 12px 16px;
+    background: #27272a;
+    text-align: center;
+}
 """
 
 # CSS for example prompt cards and navigation
