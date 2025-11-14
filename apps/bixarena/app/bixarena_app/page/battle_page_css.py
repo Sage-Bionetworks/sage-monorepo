@@ -2,6 +2,29 @@
 CSS styles for the BixArena battle page.
 """
 
+# CSS for chatbot battle interface
+CHATBOT_BATTLE_CSS = """
+/* Separate the two chat windows */
+#chatbot-container {
+    background: transparent !important;
+    border: none !important;
+}
+
+#chatbot-container .styler {
+    background: transparent !important;
+}
+
+#chatbot-container .row {
+    gap: 24px;
+}
+
+#chatbot-container > .styler > .row:first-child .column {
+    border: 1px solid var(--border-color-primary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+"""
+
 # CSS for example prompt cards and navigation
 EXAMPLE_PROMPTS_CSS = """
 /* Example prompt UI section */

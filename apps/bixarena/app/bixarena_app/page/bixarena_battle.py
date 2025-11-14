@@ -35,6 +35,7 @@ from bixarena_app.model.model_response import (
     bot_response_multi,
 )
 from bixarena_app.page.battle_page_css import (
+    CHATBOT_BATTLE_CSS,
     DISCLAIMER_CSS,
     EXAMPLE_PROMPTS_CSS,
     INPUT_PROMPT_CSS,
@@ -223,8 +224,8 @@ def vote_last_response(
     )
 
     names = (
-        "### Model 1: " + states[0].model_name,
-        "### Model 2: " + states[1].model_name,
+        "### " + states[0].model_name,
+        "### " + states[1].model_name,
     )
     yield (
         names  # model_selector0, model_selector1: reveal model names
@@ -452,6 +453,7 @@ def build_side_by_side_ui_anony():
         </p>
     </div>
     <style>
+    {CHATBOT_BATTLE_CSS}
     {EXAMPLE_PROMPTS_CSS}
     {INPUT_PROMPT_CSS}
     {DISCLAIMER_CSS}
@@ -479,8 +481,9 @@ def build_side_by_side_ui_anony():
         ) = example_prompt_ui.build(textbox=None)
 
         # Battle interface - will appear once a prompt is submitted
-        with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
-            with gr.Row():
+        # TODO: Change back to visible=False after testing
+        with gr.Group(elem_id="chatbot-container", visible=True) as battle_interface:
+            with gr.Row(equal_height=True):
                 for i in range(num_sides):
                     label = "Model 1" if i == 0 else "Model 2"
                     with gr.Column():
