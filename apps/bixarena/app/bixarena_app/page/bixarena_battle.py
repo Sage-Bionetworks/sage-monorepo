@@ -39,6 +39,7 @@ from bixarena_app.page.battle_page_css import (
     DISCLAIMER_CSS,
     EXAMPLE_PROMPTS_CSS,
     INPUT_PROMPT_CSS,
+    NEXT_BATTLE_BUTTON_CSS,
 )
 from bixarena_app.page.example_prompt_ui import (
     PROMPT_CARD_CLICK_JS,
@@ -460,6 +461,7 @@ def build_side_by_side_ui_anony():
     {EXAMPLE_PROMPTS_CSS}
     {INPUT_PROMPT_CSS}
     {DISCLAIMER_CSS}
+    {NEXT_BATTLE_BUTTON_CSS}
     </style>
     """
 
@@ -525,13 +527,12 @@ def build_side_by_side_ui_anony():
             )
 
         # Next Round button
-        with gr.Row(visible=False) as next_battle_row:
-            with gr.Column(scale=2):
-                gr.HTML("")
-            with gr.Column(scale=1):
-                clear_btn = gr.Button(value="Next Battle", variant="primary")
-            with gr.Column(scale=2):
-                gr.HTML("")
+        with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
+            clear_btn = gr.Button(
+                value="Next Battle",
+                variant="primary",
+                elem_id="next-battle-btn",
+            )
 
         # Disclaimer
         disclaimer = gr.HTML(
