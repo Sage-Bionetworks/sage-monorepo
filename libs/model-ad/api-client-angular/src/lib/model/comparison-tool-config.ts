@@ -9,6 +9,7 @@
  */
 import { ComparisonToolPage } from './comparison-tool-page';
 import { ComparisonToolConfigColumn } from './comparison-tool-config-column';
+import { ComparisonToolConfigDropdownMenu } from './comparison-tool-config-dropdown-menu';
 import { ComparisonToolConfigFilter } from './comparison-tool-config-filter';
 
 export interface ComparisonToolConfig {
@@ -29,5 +30,9 @@ export interface ComparisonToolConfig {
    * List of filter configurations
    */
   filters: Array<ComparisonToolConfigFilter>;
+  /**
+   * List of dropdown menu configurations
+   */
+  dropdown_menus: Array<ComparisonToolConfigDropdownMenu>;
 }
 export namespace ComparisonToolConfig {}

@@ -474,6 +474,18 @@ components:
         - name
         - data_key
         - values
+    ComparisonToolConfigDropdownMenu:
+      type: object
+      description: Comparison Tool Config Dropdown Menu
+      properties:
+        options:
+          type: array
+          description: List of dropdown menu options
+          items:
+            type: string
+            example: Option 1
+      required:
+        - options
     ComparisonToolConfig:
       type: object
       properties:
@@ -498,11 +510,17 @@ components:
           description: List of filter configurations
           items:
             $ref: '#/components/schemas/ComparisonToolConfigFilter'
+        dropdown_menus:
+          type: array
+          description: List of dropdown menu configurations
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigDropdownMenu'
       required:
         - page
         - dropdowns
         - row_count
         - columns
+        - dropdown_menus
         - filters
     ItemFilterTypeQuery:
       type: string

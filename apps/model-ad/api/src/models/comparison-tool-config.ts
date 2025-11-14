@@ -1,9 +1,14 @@
 import {
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
+  ComparisonToolConfigDropdownMenu,
   ComparisonToolConfigFilter,
 } from '@sagebionetworks/model-ad/api-client';
 import { Schema, model } from 'mongoose';
+
+const ComparisonToolConfigDropdownMenuSchema = new Schema<ComparisonToolConfigDropdownMenu>({
+  options: { type: [String], required: true },
+});
 
 const ComparisonToolConfigFilterSchema = new Schema<ComparisonToolConfigFilter>({
   name: { type: String, required: true },
@@ -34,6 +39,10 @@ const ComparisonToolConfigSchema = new Schema<ComparisonToolConfig>(
       required: true,
     },
     filters: { type: [ComparisonToolConfigFilterSchema], required: true },
+    dropdown_menus: {
+      type: [ComparisonToolConfigDropdownMenuSchema],
+      required: true,
+    },
   },
   {
     collection: 'ui_config',

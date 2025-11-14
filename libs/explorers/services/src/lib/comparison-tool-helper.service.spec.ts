@@ -123,6 +123,7 @@ describe('Service: ComparisonToolHelper', () => {
         },
       ],
       filters: [],
+      dropdown_menus: [],
     };
 
     const csvData = ctHelperService.buildComparisonToolCsvRows(

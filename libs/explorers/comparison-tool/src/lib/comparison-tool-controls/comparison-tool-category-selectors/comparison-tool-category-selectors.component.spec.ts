@@ -46,7 +46,14 @@ describe('ComparisonToolSelectorsComponent', () => {
 
   it('should display no dropdowns when all configs have empty dropdowns arrays', async () => {
     const emptyConfigs: ComparisonToolConfig[] = [
-      { page: 'Disease Correlation', dropdowns: [], row_count: '0', columns: [], filters: [] },
+      {
+        page: 'Disease Correlation',
+        dropdowns: [],
+        row_count: '0',
+        columns: [],
+        filters: [],
+        dropdown_menus: [],
+      },
     ];
     await setup(emptyConfigs);
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
@@ -90,6 +97,7 @@ describe('ComparisonToolSelectorsComponent', () => {
         row_count: '20',
         columns: [],
         filters: [],
+        dropdown_menus: [{ options: ['Option1', 'Option 2'] }],
       },
       {
         page: 'Disease Correlation',
@@ -97,6 +105,7 @@ describe('ComparisonToolSelectorsComponent', () => {
         row_count: '30',
         columns: [],
         filters: [],
+        dropdown_menus: [{ options: ['Option1', 'Option 2'] }],
       },
     ];
 
@@ -114,6 +123,13 @@ describe('ComparisonToolSelectorsComponent', () => {
         row_count: '10',
         columns: [],
         filters: [],
+        dropdown_menus: [
+          { options: ['Level1'] },
+          { options: ['Level2'] },
+          { options: ['Level3'] },
+          { options: ['Level4'] },
+          { options: ['Level5'] },
+        ],
       },
     ];
 

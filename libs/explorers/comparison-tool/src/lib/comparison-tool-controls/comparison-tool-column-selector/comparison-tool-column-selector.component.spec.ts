@@ -310,6 +310,7 @@ describe('ComparisonToolColumnSelectorComponent', () => {
         row_count: '20',
         columns: [],
         filters: [],
+        dropdown_menus: [{ options: ['Test'] }],
       },
     ];
 

@@ -148,6 +148,7 @@ export const mockComparisonToolConfigs: ComparisonToolConfig[] = [
     row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
+    dropdown_menus: [{ options: ['Red', 'Blue'] }, { options: ['Crimson', 'Maroon'] }],
   },
   {
     page: 'Disease Correlation',
@@ -155,6 +156,7 @@ export const mockComparisonToolConfigs: ComparisonToolConfig[] = [
     row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
+    dropdown_menus: [{ options: ['Red', 'Blue'] }, { options: ['Crimson', 'Maroon'] }],
   },
   {
     page: 'Disease Correlation',
@@ -162,6 +164,11 @@ export const mockComparisonToolConfigs: ComparisonToolConfig[] = [
     row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
+    dropdown_menus: [
+      { options: ['Red', 'Blue'] },
+      { options: ['Light Blue', 'Dark Blue'] },
+      { options: ['Light Blue', 'Powder Blue', 'Sky Blue'] },
+    ],
   },
   {
     page: 'Disease Correlation',
@@ -169,6 +176,11 @@ export const mockComparisonToolConfigs: ComparisonToolConfig[] = [
     row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
+    dropdown_menus: [
+      { options: ['Red', 'Blue'] },
+      { options: ['Light Blue', 'Dark Blue'] },
+      { options: ['Light Blue', 'Powder Blue', 'Sky Blue'] },
+    ],
   },
   {
     page: 'Disease Correlation',
@@ -176,6 +188,11 @@ export const mockComparisonToolConfigs: ComparisonToolConfig[] = [
     row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
+    dropdown_menus: [
+      { options: ['Red', 'Blue'] },
+      { options: ['Light Blue', 'Dark Blue'] },
+      { options: ['Navy Blue', 'Midnight Blue'] },
+    ],
   },
   {
     page: 'Disease Correlation',
@@ -183,5 +200,10 @@ export const mockComparisonToolConfigs: ComparisonToolConfig[] = [
     row_count: 'over 200000',
     columns: mockComparisonToolColumns,
     filters: mockComparisonToolConfigFilters,
+    dropdown_menus: [
+      { options: ['Red', 'Blue'] },
+      { options: ['Light Blue', 'Dark Blue'] },
+      { options: ['Navy Blue', 'Midnight Blue'] },
+    ],
   },
 ];

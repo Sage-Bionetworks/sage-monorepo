@@ -1,0 +1,11 @@
+type: object
+description: Comparison Tool Config Dropdown Menu
+properties:
+  options:
+    type: array
+    description: List of dropdown menu options
+    items:
+      type: string
+      example: 'Option 1'
+required:
+  - options

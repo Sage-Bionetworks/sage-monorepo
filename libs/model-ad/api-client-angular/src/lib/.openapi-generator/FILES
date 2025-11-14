@@ -13,6 +13,7 @@ git_push.sh
 index.ts
 model/basic-error.ts
 model/comparison-tool-config-column.ts
+model/comparison-tool-config-dropdown-menu.ts
 model/comparison-tool-config-filter.ts
 model/comparison-tool-config.ts
 model/comparison-tool-page.ts
