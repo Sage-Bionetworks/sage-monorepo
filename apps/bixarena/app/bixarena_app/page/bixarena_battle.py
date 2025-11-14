@@ -537,14 +537,17 @@ def build_side_by_side_ui_anony():
             """
             <div id="disclaimer">
                 <div id="disclaimer-content">
-                    <div id="disclaimer-text">
-                        <div class="pulse-dot"></div>
-                        <span>
-                            AI may make mistakes. Don't include private or
-                            sensitive information in your prompts,
-                            and please verify responses.
-                        </span>
-                    </div>
+                    <h3 id="disclaimer-title">Data Processing & Privacy:</h3>
+                    <p id="disclaimer-text">
+                        We process your prompts to ensure they are relevant to
+                        biomedical research. Your prompts are also sent to
+                        third-party LLM proxies and AI model providers who may
+                        store and use them for training and service improvement.
+                        <strong>Do not include private, sensitive, confidential,
+                        or personally identifiable information in your prompts.</strong>
+                        AI responses may contain errors. Verify all AI responses
+                        independently.
+                    </p>
                 </div>
             </div>
             """

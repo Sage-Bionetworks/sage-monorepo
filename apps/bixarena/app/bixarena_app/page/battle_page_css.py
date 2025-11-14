@@ -157,25 +157,30 @@ INPUT_PROMPT_CSS = """
 DISCLAIMER_CSS = """
 #disclaimer {
     padding: 16px 24px;
+    max-width: 850px;
+    margin: 0 auto;
 }
 
 #disclaimer-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    text-align: left;
+}
+
+#disclaimer-title {
+    color: #2dd4bf;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    margin-top: 0;
 }
 
 #disclaimer-text {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: #d1d5db;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0;
 }
 
-.pulse-dot {
-    width: 6px;
-    height: 6px;
-    background-color: rgba(245, 158, 11, 1);
-    border-radius: 50%;
+#disclaimer-text strong {
+    font-weight: 700;
 }
 """
