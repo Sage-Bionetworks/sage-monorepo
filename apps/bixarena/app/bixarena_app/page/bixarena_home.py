@@ -247,7 +247,7 @@ def build_how_it_works_section():
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Choose from curated biomedical questions or submit your own custom prompt. Two AI models are randomly selected for battle.
+                    Pick a curated biomedical question or submit your own custom prompt. Two AI models are randomly chosen to face off.
                 </p>
             </div>
 
@@ -262,7 +262,7 @@ def build_how_it_works_section():
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Read both AI-generated answers side-by-side. Models stay anonymous so you can evaluate pure content without bias.
+                    Review the two AI-generated answers side by side. The models remain anonymous so you can focus purely on the quality of the content.
                 </p>
             </div>
 
@@ -273,11 +273,11 @@ def build_how_it_works_section():
                         <span style="color: #f97316; font-weight: 600; font-size: 0.875rem;">03</span>
                     </div>
                     <h3 style="color: #e5e7eb; margin: 0; font-size: 1.125rem; font-weight: 600;">
-                        Vote for Winner
+                        Select the Better
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Choose which response is better. Your vote shapes the leaderboard rankings.
+                    Decide which model demonstrates clearer reasoning or insight. Your input directly shapes model performance metrics.
                 </p>
             </div>
 
@@ -292,7 +292,7 @@ def build_how_it_works_section():
                     </h3>
                 </div>
                 <p style="font-size: 0.875rem; color: rgba(229, 231, 235, 0.6); line-height: 1.5; margin: 0;">
-                    Once your vote is cast, the model identities are unveiled. See how your contribution moves biomedical AI forward. Ready for another round? Jump into your next battle.
+                    Once you’ve made your choice, the models are revealed. Only biomedical battles count toward the daily leaderboard. Ready for another round? Jump into your next battle.
                 </p>
             </div>
         </div>
