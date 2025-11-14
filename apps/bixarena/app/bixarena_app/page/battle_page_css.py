@@ -22,12 +22,16 @@ CHATBOT_BATTLE_CSS = """
     border: 1px solid var(--border-color-primary);
     border-radius: 8px;
     overflow: hidden;
-    padding-bottom: 16px;
 }
 
 /* Make chatbot labels bigger */
 #chatbot-container .block label {
     font-size: 1em;
+}
+
+/* Add bottom padding to chatbot block to prevent message cropping */
+#chatbot-container #chatbot {
+    padding-bottom: 16px;
 }
 
 /* Make label icon match text size */
