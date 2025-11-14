@@ -1,18 +1,63 @@
 #!/bin/bash
 # Script to establish port forwarding to RDS via bastion ECS service
 # Usage: ./start-db-tunnel.sh [dev|stage|prod] [developer-name]
+#
+# Examples:
+#   ./start-db-tunnel.sh dev              # Auto-detects dev profile with current username
+#   ./start-db-tunnel.sh dev john         # Explicit developer name
+#   ./start-db-tunnel.sh stage            # Stage environment (no developer name)
+#   ./start-db-tunnel.sh prod             # Production environment (no developer name)
 
 set -e
 
 # Configuration
 ENVIRONMENT=${1:-dev}
-DEVELOPER_NAME=${2:-$(whoami)}
-AWS_PROFILE="bixarena-${ENVIRONMENT}-Developer"
+DEVELOPER_NAME=${2}  # Optional, will be auto-detected if not provided
 LOCAL_PORT=5432
 
 echo "=== BixArena Database Port Forwarding ==="
 echo "Environment: ${ENVIRONMENT}"
-echo "Developer: ${DEVELOPER_NAME}"
+
+# Function to detect AWS profile
+detect_aws_profile() {
+  local env=$1
+  local profiles=(
+    "bixarena-${env}-Developer"
+    "bixarena-${env}-Administrator"
+    "bixarena-prod-Developer"      # Fallback for stage in prod account
+    "bixarena-prod-Administrator"  # Fallback for stage in prod account
+  )
+
+  for profile in "${profiles[@]}"; do
+    if aws configure list-profiles 2>/dev/null | grep -q "^${profile}$"; then
+      echo "$profile"
+      return 0
+    fi
+  done
+
+  echo ""
+  return 1
+}
+
+# Detect AWS profile
+AWS_PROFILE=$(detect_aws_profile "${ENVIRONMENT}")
+
+if [ -z "$AWS_PROFILE" ]; then
+  echo "ERROR: Could not find AWS profile for environment '${ENVIRONMENT}'"
+  echo ""
+  echo "Expected one of:"
+  echo "  - bixarena-${ENVIRONMENT}-Developer"
+  echo "  - bixarena-${ENVIRONMENT}-Administrator"
+  if [ "${ENVIRONMENT}" = "stage" ]; then
+    echo "  - bixarena-prod-Developer (stage in prod account)"
+    echo "  - bixarena-prod-Administrator (stage in prod account)"
+  fi
+  echo ""
+  echo "Available profiles:"
+  aws configure list-profiles 2>/dev/null | grep bixarena || echo "  (none found)"
+  exit 1
+fi
+
 echo "AWS Profile: ${AWS_PROFILE}"
 echo ""
 
@@ -28,17 +73,67 @@ if ! command -v session-manager-plugin &> /dev/null; then
     exit 1
 fi
 
+# Function to detect database secret
+detect_database_secret() {
+  local env=$1
+  local dev_name=$2
+
+  # Build list of patterns to try
+  local patterns=()
+
+  if [ -n "$dev_name" ]; then
+    # Try with developer name first
+    patterns+=("bixarena-${env}-${dev_name}-database")
+  fi
+
+  # Try without developer name
+  patterns+=("bixarena-${env}-database")
+
+  # Try with current username as fallback for dev
+  if [ "$env" = "dev" ] && [ -z "$dev_name" ]; then
+    patterns+=("bixarena-${env}-$(whoami)-database")
+  fi
+
+  for pattern in "${patterns[@]}"; do
+    echo "  Trying pattern: ${pattern}" >&2
+    local secret_arn=$(AWS_PROFILE=${AWS_PROFILE} aws secretsmanager list-secrets \
+      --query "SecretList[?contains(Name, \`${pattern}\`)].ARN" \
+      --output text 2>/dev/null)
+
+    if [ -n "$secret_arn" ] && [ "$secret_arn" != "None" ]; then
+      echo "$secret_arn"
+      return 0
+    fi
+  done
+
+  echo ""
+  return 1
+}
+
 # Get database credentials
 echo "1. Retrieving database credentials..."
-SECRET_PATTERN="bixarena-${ENVIRONMENT}-${DEVELOPER_NAME}-database"
-SECRET_ARN=$(AWS_PROFILE=${AWS_PROFILE} aws secretsmanager list-secrets \
-  --query "SecretList[?contains(Name, \`${SECRET_PATTERN}\`)].ARN" \
-  --output text)
+SECRET_ARN=$(detect_database_secret "${ENVIRONMENT}" "${DEVELOPER_NAME}")
 
 if [ -z "$SECRET_ARN" ]; then
   echo "ERROR: Could not find database secret"
+  echo ""
+  echo "Tried patterns:"
+  if [ -n "$DEVELOPER_NAME" ]; then
+    echo "  - bixarena-${ENVIRONMENT}-${DEVELOPER_NAME}-database"
+  fi
+  echo "  - bixarena-${ENVIRONMENT}-database"
+  if [ "${ENVIRONMENT}" = "dev" ] && [ -z "$DEVELOPER_NAME" ]; then
+    echo "  - bixarena-${ENVIRONMENT}-$(whoami)-database"
+  fi
+  echo ""
+  echo "Available secrets:"
+  AWS_PROFILE=${AWS_PROFILE} aws secretsmanager list-secrets \
+    --query "SecretList[?contains(Name, 'bixarena')].Name" \
+    --output text | tr '\t' '\n' | sed 's/^/  - /'
   exit 1
 fi
+
+echo "Found secret: ${SECRET_ARN}"
 
 SECRET_JSON=$(AWS_PROFILE=${AWS_PROFILE} aws secretsmanager get-secret-value \
   --secret-id "${SECRET_ARN}" \
@@ -54,10 +149,66 @@ DB_PASSWORD=$(echo "$SECRET_JSON" | python3 -c "import sys, json; print(json.loa
 echo "Database: ${DB_HOST}:${DB_PORT}/${DB_NAME}"
 echo ""
 
+# Function to detect ECS cluster
+detect_ecs_cluster() {
+  local env=$1
+  local dev_name=$2
+
+  # Build list of cluster patterns to try
+  local patterns=()
+
+  if [ -n "$dev_name" ]; then
+    # Try with developer name first
+    patterns+=("bixarena-${env}-${dev_name}")
+  fi
+
+  # Try without developer name
+  patterns+=("bixarena-${env}")
+
+  # Try with current username as fallback for dev
+  if [ "$env" = "dev" ] && [ -z "$dev_name" ]; then
+    patterns+=("bixarena-${env}-$(whoami)")
+  fi
+
+  for pattern in "${patterns[@]}"; do
+    echo "  Trying cluster: ${pattern}" >&2
+    if AWS_PROFILE=${AWS_PROFILE} aws ecs describe-clusters \
+      --clusters "${pattern}" \
+      --query 'clusters[?status==`ACTIVE`].clusterName' \
+      --output text 2>/dev/null | grep -q "${pattern}"; then
+      echo "$pattern"
+      return 0
+    fi
+  done
+
+  echo ""
+  return 1
+}
+
 # Find the cluster
 echo "2. Finding ECS cluster and bastion service..."
-STACK_PREFIX="bixarena-${ENVIRONMENT}-${DEVELOPER_NAME}"
-CLUSTER_NAME="${STACK_PREFIX}"
+CLUSTER_NAME=$(detect_ecs_cluster "${ENVIRONMENT}" "${DEVELOPER_NAME}")
+
+if [ -z "$CLUSTER_NAME" ]; then
+  echo "ERROR: Could not find ECS cluster"
+  echo ""
+  echo "Tried clusters:"
+  if [ -n "$DEVELOPER_NAME" ]; then
+    echo "  - bixarena-${ENVIRONMENT}-${DEVELOPER_NAME}"
+  fi
+  echo "  - bixarena-${ENVIRONMENT}"
+  if [ "${ENVIRONMENT}" = "dev" ] && [ -z "$DEVELOPER_NAME" ]; then
+    echo "  - bixarena-${ENVIRONMENT}-$(whoami)"
+  fi
+  echo ""
+  echo "Available clusters:"
+  AWS_PROFILE=${AWS_PROFILE} aws ecs list-clusters \
+    --query 'clusterArns' \
+    --output text | tr '\t' '\n' | grep bixarena | awk -F/ '{print "  - " $NF}'
+  exit 1
+fi
+
+echo "Found cluster: ${CLUSTER_NAME}"
 
 # Get bastion service tasks
 TASK_ARN=$(AWS_PROFILE=${AWS_PROFILE} aws ecs list-tasks \
@@ -71,7 +222,7 @@ TASK_ARN=$(AWS_PROFILE=${AWS_PROFILE} aws ecs list-tasks \
   --output text)
 
 if [ -z "$TASK_ARN" ] || [ "$TASK_ARN" = "None" ]; then
-  echo "ERROR: No running bastion task found"
+  echo "ERROR: No running bastion task found in cluster ${CLUSTER_NAME}"
   echo "Is the bastion service running?"
   exit 1
 fi
