@@ -96,8 +96,6 @@ spring:
                       maxBackoff: 500ms
                       factor: 2
                       basedOnPreviousValue: false
-  profiles:
-    active: dev
   config:
     import: 'classpath:routes.yml'
 
