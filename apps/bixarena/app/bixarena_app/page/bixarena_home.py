@@ -87,7 +87,7 @@ def load_public_stats_on_page_load() -> dict:
     public_stats = fetch_public_stats()
 
     stats_html = f"""
-    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.02); padding: 2.5rem 1.5rem;">
+    <div style="border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background-color: rgba(255, 255, 255, 0.02); padding: 2.5rem 0; margin: 0 1.5rem;">
         <div id="stats-public-only">
             <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
@@ -127,7 +127,7 @@ def load_user_battles_on_page_load(
     if user_stats is None:
         # Return only public stats when user is not authenticated
         stats_html = f"""
-        <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.02); padding: 2.5rem 1.5rem;">
+        <div style="border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background-color: rgba(255, 255, 255, 0.02); padding: 2.5rem 0; margin: 0 1.5rem;">
             <div id="stats-public-only">
                 <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
@@ -150,7 +150,7 @@ def load_user_battles_on_page_load(
 
     # Return stats with user data included
     stats_html = f"""
-    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.02); padding: 2.5rem 1.5rem;">
+    <div style="border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background-color: rgba(255, 255, 255, 0.02); padding: 2.5rem 0; margin: 0 1.5rem;">
         <div id="stats-with-user">
             <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
