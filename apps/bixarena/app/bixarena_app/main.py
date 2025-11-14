@@ -231,6 +231,8 @@ def parse_args():
 def build_app():
     """Create the main application"""
 
+    enable_crisp = os.environ.get("ENABLE_CRISP", "false").lower() == "true"
+
     cleanup_js = """
     function() {
         setTimeout(function() {
@@ -242,7 +244,9 @@ def build_app():
     }
     """
 
-    crisp_script = """
+    crisp_script = ""
+    if enable_crisp:
+        crisp_script = """
     <script type="text/javascript">
         window.$crisp=[];
         window.CRISP_WEBSITE_ID="d58ad402-1217-476c-be6a-c8949671ced4";
