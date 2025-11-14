@@ -20,9 +20,9 @@ def build_header():
                 """
             )
         with gr.Column(scale=1, min_width=180):
-            battle_btn = gr.Button("⚔️  Battle", variant="primary", visible=False)
+            battle_btn = gr.Button("Battle", variant="primary", visible=False)
         with gr.Column(scale=1, min_width=180):
-            leaderboard_btn = gr.Button("🏆  Leaderboard", variant="secondary")
+            leaderboard_btn = gr.Button("Leaderboard", variant="secondary")
         with gr.Column(scale=1, min_width=180):
             # Start as Login; value updated by load / callback events
             login_btn = gr.Button("Login", variant="primary", elem_id="login-btn")
