@@ -270,15 +270,15 @@ def build_app():
     """
 
     with gr.Blocks(
-        title="BioArena - Benchmarking LLMs for Biomedical Breakthroughs",
+        title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
         head=crisp_script,
         css="""
         /* Hide Gradio's default footer */
         footer {
             display: none !important;
         }
-        /* Remove padding from HTML containers */
-        .html-no-padding .html-container {
+        /* Remove default padding from HTML containers */
+        .padding {
             padding: 0 !important;
         }
         /* Override Gradio's default container max-width */
@@ -296,7 +296,7 @@ def build_app():
             justify-content: center !important;
         }
         #cta-button-container {
-            max-width: 300px !important;
+            max-width: 240px !important;
         }
         #cta-btn-authenticated, #cta-btn-login {
             width: 100% !important;
@@ -313,16 +313,8 @@ def build_app():
                 _,
                 cta_btn_authenticated,
                 cta_btn_login,
-                models_evaluated_column,
-                models_evaluated_box,
-                total_battles_column,
-                total_battles_box,
-                total_users_column,
-                total_users_box,
-                user_battles_column,
-                user_battles_box,
-                user_rank_column,  # New
-                user_rank_box,  # New
+                cta_helper_msg,
+                stats_container,
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
@@ -357,7 +349,6 @@ def build_app():
             + "</span><span id='backend-base' style='display:none'>"
             + base_markup
             + "</span>",
-            elem_classes="html-no-padding",
         )
 
         pages = [home_page, battle_page, leaderboard_page, user_page]
@@ -441,36 +432,24 @@ def build_app():
             js=cleanup_js,
         )
 
-        # Load public stats on page load (for the first three stats boxes)
+        # Load public stats on page load
         demo.load(
             fn=load_public_stats_on_page_load,
             inputs=None,
-            outputs=[
-                models_evaluated_column,
-                models_evaluated_box,
-                total_battles_column,
-                total_battles_box,
-                total_users_column,
-                total_users_box,
-            ],
+            outputs=stats_container,
         )
 
-        # Load user stats on page load (for the fourth and fifth stats boxes)
+        # Load user stats on page load (will update stats bar to include user stats if authenticated)
         demo.load(
             fn=load_user_battles_on_page_load,
             inputs=None,
-            outputs=[
-                user_battles_column,
-                user_battles_box,
-                user_rank_column,  # New
-                user_rank_box,  # New
-            ],
+            outputs=stats_container,
         )
 
         # Load CTA button visibility based on authentication
         demo.load(
             fn=update_cta_buttons_on_page_load,
-            outputs=[cta_btn_authenticated, cta_btn_login],
+            outputs=[cta_btn_authenticated, cta_btn_login, cta_helper_msg],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
