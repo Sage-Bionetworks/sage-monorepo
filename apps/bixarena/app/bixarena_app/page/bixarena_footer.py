@@ -46,6 +46,11 @@ def build_footer():
     width: auto;
 }}
 
+/* Make logo text adaptive to theme */
+.footer-logo path[fill="white"] {{
+    fill: var(--text-primary);
+}}
+
 .footer-separator {{
     margin: 0 8px;
     color: #52525b !important;
