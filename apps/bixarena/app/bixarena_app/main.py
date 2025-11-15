@@ -276,6 +276,12 @@ def build_app():
             body_background_fill="*neutral_950",
             background_fill_primary="*neutral_950",
             background_fill_secondary="*neutral_900",
+            body_text_color="*neutral_50",
+            body_text_color_subdued="*neutral_400",
+            input_background_fill="*neutral_800",
+            input_background_fill_focus="*neutral_700",
+            input_border_color="*neutral_600",
+            input_border_color_focus="*neutral_500",
             button_secondary_background_fill="*neutral_600",
             button_secondary_background_fill_hover="*neutral_700",
             button_secondary_text_color="white",
@@ -289,6 +295,13 @@ def build_app():
         /* Remove default padding from HTML containers */
         .padding {
             padding: 0 !important;
+        }
+        /* Prevent input border from thickening on focus */
+        textarea, input[type="text"] {
+            border-width: 1px !important;
+        }
+        textarea:focus, input[type="text"]:focus {
+            border-width: 1px !important;
         }
         /* Override Gradio's default container max-width */
         .fillable.app {
