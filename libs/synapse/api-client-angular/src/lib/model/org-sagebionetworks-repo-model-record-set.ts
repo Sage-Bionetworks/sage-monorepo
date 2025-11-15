@@ -11,7 +11,7 @@ import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebi
 import { OrgSagebionetworksRepoModelSchemaValidationSummaryStatistics } from './org-sagebionetworks-repo-model-schema-validation-summary-statistics';
 
 /**
- * Captures record-based metadata as a special type of CSV. The record set content can be curated using the grid services.
+ * Captures record-based metadata as a special type of CSV. The record set content can be curated using the grid services. When a grid is created from a record set, its data can be exported back to a new version of the record set. The export will include the validation summary as well as a validation file handle that contains detailed validation results for each row in the record set.
  */
 export interface OrgSagebionetworksRepoModelRecordSet {
   /**
@@ -80,6 +80,10 @@ export interface OrgSagebionetworksRepoModelRecordSet {
   upsertKey?: Array<string>;
   csvDescriptor?: OrgSagebionetworksRepoModelTableCsvTableDescriptor;
   validationSummary?: OrgSagebionetworksRepoModelSchemaValidationSummaryStatistics;
+  /**
+   * Pointer to a CSV file that contains the detailed validation results for each row in the record set. The CSV file will contain for each row the following columns: row_index, is_valid, validation_error_message, all_validation_messages. The file can be donwnloaded using the FileEntity association type using the RecordSet id as the object id. Generated only from a grid session export, cannot be changed by the user.
+   */
+  validationFileHandleId?: string;
   /**
    * An optional replacement for the name of the uploaded file.  This is distinct from the entity name.  If omitted the file will retain its original name.
    */

@@ -10,8 +10,11 @@
 import { OrgSagebionetworksRepoModelGridUpdateUpdate } from './org-sagebionetworks-repo-model-grid-update-update';
 
 /**
- * Request to update the cells of the current grid session.
+ * Request to update one or more cells of the current grid session in a single batch operation.
  */
 export interface OrgSagebionetworksRepoModelGridUpdateGridUpdateRequest {
-  update?: OrgSagebionetworksRepoModelGridUpdateUpdate;
+  /**
+   * A batch containing one or more cell updates to apply to the grid. All updates in the batch are processed together.
+   */
+  updateBatch?: Array<OrgSagebionetworksRepoModelGridUpdateUpdate>;
 }

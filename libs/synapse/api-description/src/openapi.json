@@ -20448,6 +20448,10 @@
           "definingSQL": {
             "type": "string",
             "description": "For materialized views and virtual tables, specifies the SQL defining the content of the table."
+          },
+          "validationResultFileHandleId": {
+            "type": "string",
+            "description": "For a RecordSet, the file handle that contains the detailed validation results."
           }
         },
         "description": "Data record from a node object."
@@ -25066,12 +25070,16 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.schema.ValidationSummaryStatistics",
             "description": "Summary statistics for the JSON schema validation results for the children of an Entity container (Project or Folder)"
           },
+          "validationFileHandleId": {
+            "type": "string",
+            "description": "Pointer to a CSV file that contains the detailed validation results for each row in the record set. The CSV file will contain for each row the following columns: row_index, is_valid, validation_error_message, all_validation_messages. The file can be donwnloaded using the FileEntity association type using the RecordSet id as the object id. Generated only from a grid session export, cannot be changed by the user."
+          },
           "fileNameOverride": {
             "type": "string",
             "description": "An optional replacement for the name of the uploaded file.  This is distinct from the entity name.  If omitted the file will retain its original name."
           }
         },
-        "description": "Captures record-based metadata as a special type of CSV. The record set content can be curated using the grid services.",
+        "description": "Captures record-based metadata as a special type of CSV. The record set content can be curated using the grid services. When a grid is created from a record set, its data can be exported back to a new version of the record set. The export will include the validation summary as well as a validation file handle that contains detailed validation results for each row in the record set.",
         "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.EntityChildrenResponse": {
@@ -28881,12 +28889,16 @@
       "org.sagebionetworks.repo.model.grid.update.GridUpdateRequest": {
         "type": "object",
         "properties": {
-          "update": {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.update.Update",
-            "description": "Request to update one or more cells in a grid (SQL UPDATE style)."
+          "updateBatch": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.update.Update",
+              "description": "Request to update one or more cells in a grid (SQL UPDATE style)."
+            },
+            "description": "A batch containing one or more cell updates to apply to the grid. All updates in the batch are processed together."
           }
         },
-        "description": "Request to update the cells of the current grid session."
+        "description": "Request to update one or more cells of the current grid session in a single batch operation."
       },
       "org.sagebionetworks.repo.model.auth.TotpSecret": {
         "type": "object",
@@ -32092,9 +32104,17 @@
       "org.sagebionetworks.repo.model.grid.update.GridUpdateResponse": {
         "type": "object",
         "properties": {
-          "rowsUpdated": {
+          "updateResults": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Number of rows updated for each update in the batch, in the same order as the request. Each element corresponds to one update operation."
+          },
+          "totalRowsUpdated": {
             "type": "integer",
-            "description": "Number of rows actually updated (after applying any limit).",
+            "description": "Total number of rows updated across all updates in the batch.",
             "format": "int32"
           }
         },
@@ -37750,6 +37770,10 @@
           "definingSQL": {
             "type": "string",
             "description": "For materialized views and virtual tables, specifies the SQL defining the content of the table."
+          },
+          "validationResultFileHandleId": {
+            "type": "string",
+            "description": "For a RecordSet, the file handle that contains the detailed validation results."
           }
         },
         "description": "This is the DTO of a node."
@@ -39549,6 +39573,10 @@
           "validationSummaryStatistics": {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.schema.ValidationSummaryStatistics",
             "description": "Summary statistics for the JSON schema validation results for the children of an Entity container (Project or Folder)"
+          },
+          "validationFileHandleId": {
+            "type": "string",
+            "description": "The id of the file handle that points to a CSV file containing detailed validation results for each row exported from the grid."
           }
         },
         "description": "The response for a grid record set export request.",
