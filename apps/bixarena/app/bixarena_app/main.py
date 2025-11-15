@@ -235,9 +235,6 @@ def build_app():
 
     cleanup_js = """
     function() {
-        // Force dark mode
-        document.body.classList.add('dark');
-
         setTimeout(function() {
             // Reset Crisp chat session on page load
             if (window.$crisp) {

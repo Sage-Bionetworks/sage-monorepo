@@ -768,14 +768,6 @@ def build_battle_page():
             js=empty_prompt_js,
         )
 
-        # Force dark mode on battle page load
-        battle_page.load(
-            lambda: None,
-            None,
-            None,
-            js="() => { document.body.classList.add('dark'); }",
-        )
-
         # Load JavaScript for prompt card click handlers
         battle_page.load(lambda: None, None, None, js=PROMPT_CARD_CLICK_JS)
 
