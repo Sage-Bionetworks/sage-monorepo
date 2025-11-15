@@ -272,52 +272,9 @@ def build_app():
     </script>
     """
 
-    force_dark_mode_script = """
-    <script type="text/javascript">
-        // Force dark mode and keep it enforced
-        (function() {
-            function enforceDarkMode() {
-                if (!document.body.classList.contains('dark')) {
-                    document.body.classList.add('dark');
-                }
-            }
-
-            // Apply immediately
-            enforceDarkMode();
-
-            // Re-apply on DOM ready
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', enforceDarkMode);
-            }
-
-            // Watch for class changes and re-apply dark mode if removed
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (
-                        mutation.type === 'attributes' &&
-                        mutation.attributeName === 'class'
-                    ) {
-                        enforceDarkMode();
-                    }
-                });
-            });
-
-            observer.observe(document.documentElement, {
-                attributes: true,
-                attributeFilter: ['class']
-            });
-
-            observer.observe(document.body, {
-                attributes: true,
-                attributeFilter: ['class']
-            });
-        })();
-    </script>
-    """
-
     with gr.Blocks(
         title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
-        head=crisp_script + force_dark_mode_script,
+        head=crisp_script,
         css="""
         /* Hide Gradio's default footer */
         footer {
