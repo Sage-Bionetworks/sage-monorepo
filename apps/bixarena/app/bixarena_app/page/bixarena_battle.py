@@ -739,6 +739,15 @@ def build_battle_page():
 
     with gr.Blocks(
         title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
+        theme=gr.themes.Default().set(
+            body_background_fill="*neutral_950",
+            background_fill_primary="*neutral_950",
+            background_fill_secondary="*neutral_900",
+            button_secondary_background_fill="*neutral_600",
+            button_secondary_background_fill_hover="*neutral_700",
+            button_secondary_text_color="white",
+            button_secondary_text_color_hover="white",
+        ),
     ) as battle_page:
         (
             _,
