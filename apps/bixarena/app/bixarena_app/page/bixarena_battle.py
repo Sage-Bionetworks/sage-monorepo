@@ -452,8 +452,8 @@ def build_side_by_side_ui_anony():
     # Page header with title and custom styles
     page_header_html = f"""
     <div style="text-align: center; padding: 0px;">
-        <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BioArena</h1>
-        <p style="font-size: 1.2rem; color: #666; margin: 0;">
+        <h1 style="font-size: 3rem; margin-bottom: 0.5rem; color: var(--text-primary);">BioArena</h1>
+        <p style="font-size: 1.2rem; color: var(--text-muted); margin: 0;">
             Benchmarking AI Models for Biomedical Breakthroughs
         </p>
     </div>
@@ -757,14 +757,6 @@ def build_battle_page():
             [],
             [],
             js=empty_prompt_js,
-        )
-
-        # Force dark mode on battle page load
-        battle_page.load(
-            lambda: None,
-            None,
-            None,
-            js="() => { document.body.classList.add('dark'); }",
         )
 
         # Load JavaScript for prompt card click handlers

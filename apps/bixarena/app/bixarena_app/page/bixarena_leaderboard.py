@@ -129,8 +129,8 @@ def build_leaderboard_page():
         # Coming soon message
         gr.HTML("""
         <div style="
-            background: rgba(15, 15, 15, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 64px 48px;
         ">
@@ -156,13 +156,14 @@ def build_leaderboard_page():
                     font-weight: 500;
                     margin-bottom: 16px;
                     line-height: 1.5;
+                    color: var(--text-primary);
                 ">
                     Leaderboard Rankings Coming Soon
                 </h3>
 
                 <!-- Description -->
                 <p style="
-                    color: rgba(229, 231, 235, 0.7);
+                    color: var(--text-secondary);
                     line-height: 1.625;
                     margin-bottom: 0;
                     font-size: 1rem;
@@ -173,7 +174,7 @@ def build_leaderboard_page():
                 <div style="padding-top: 16px;">
                     <p style="
                         font-size: 0.875rem;
-                        color: rgba(229, 231, 235, 0.5);
+                        color: var(--text-muted);
                         line-height: 1.625;
                         margin: 0;
                     ">

@@ -235,9 +235,6 @@ def build_app():
 
     cleanup_js = """
     function() {
-        // Force dark mode
-        document.body.classList.add('dark');
-
         setTimeout(function() {
             // Reset Crisp chat session on page load
             if (window.$crisp) {
@@ -276,6 +273,27 @@ def build_app():
         title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
         head=crisp_script,
         css="""
+        /* CSS variables for adaptive colors */
+        :root {
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-teal: #14b8a6;
+            --accent-orange: #f97316;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --bg-card: rgba(0, 0, 0, 0.02);
+        }
+
+        .dark {
+            --text-primary: #f9fafb;
+            --text-secondary: #e5e7eb;
+            --text-muted: rgba(229, 231, 235, 0.6);
+            --accent-teal: #2dd4bf;
+            --accent-orange: #f97316;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --bg-card: rgba(255, 255, 255, 0.02);
+        }
+
         /* Hide Gradio's default footer */
         footer {
             display: none !important;
