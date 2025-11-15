@@ -738,7 +738,7 @@ def build_battle_page():
     load_demo_side_by_side_anony()
 
     with gr.Blocks(
-        title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs"
+        title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
     ) as battle_page:
         (
             _,
@@ -757,6 +757,14 @@ def build_battle_page():
             [],
             [],
             js=empty_prompt_js,
+        )
+
+        # Force dark mode on battle page load
+        battle_page.load(
+            lambda: None,
+            None,
+            None,
+            js="() => { document.body.classList.add('dark'); }",
         )
 
         # Load JavaScript for prompt card click handlers
