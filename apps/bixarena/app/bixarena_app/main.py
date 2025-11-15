@@ -299,9 +299,13 @@ def build_app():
         /* Prevent input border from thickening on focus */
         textarea, input[type="text"] {
             border-width: 1px !important;
+            outline: none !important;
+            box-shadow: none !important;
         }
         textarea:focus, input[type="text"]:focus {
             border-width: 1px !important;
+            outline: none !important;
+            box-shadow: none !important;
         }
         /* Override Gradio's default container max-width */
         .fillable.app {

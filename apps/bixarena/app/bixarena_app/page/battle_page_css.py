@@ -196,10 +196,14 @@ INPUT_PROMPT_CSS = """
     padding: 16px 20px;
     line-height: 1.5;
     border-width: 1px !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 #input_box.prompt_input textarea:focus {
     border-width: 1px !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .form:has(.prompt_input) {
