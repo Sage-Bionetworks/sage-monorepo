@@ -17,7 +17,7 @@ def build_footer():
 <style>
 .custom-footer {{
     width: 100%;
-    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    border-top: 2px solid var(--border-color);
     padding: 32px 40px;
     margin-top: 60px;
     pointer-events: auto !important;
@@ -44,6 +44,11 @@ def build_footer():
 .footer-logo {{
     height: 24px;
     width: auto;
+}}
+
+/* Make logo text adaptive to theme */
+.footer-logo path[fill="white"] {{
+    fill: var(--text-primary);
 }}
 
 .footer-separator {{
