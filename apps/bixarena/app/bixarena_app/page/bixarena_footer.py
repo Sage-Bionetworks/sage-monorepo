@@ -15,14 +15,9 @@ def build_footer():
     footer = gr.HTML(
         f"""
 <style>
-/* Remove default Gradio HTML container padding */
-.footer-no-padding {{
-    padding: 0 !important;
-}}
-
 .custom-footer {{
     width: 100%;
-    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    border-top: 2px solid var(--border-color);
     padding: 32px 40px;
     margin-top: 60px;
     pointer-events: auto !important;
@@ -51,6 +46,11 @@ def build_footer():
     width: auto;
 }}
 
+/* Make logo text adaptive to theme */
+.footer-logo path[fill="white"] {{
+    fill: var(--text-primary);
+}}
+
 .footer-separator {{
     margin: 0 8px;
     color: #52525b !important;
@@ -59,7 +59,7 @@ def build_footer():
 .footer-center {{
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 12px;
     font-size: 14px;
     flex: 1;
     justify-content: center;
@@ -166,12 +166,11 @@ def build_footer():
 
         <!-- Right section - Version -->
         <div class="footer-right">
-            {f"<span>v{app_version}</span>" if app_version else ""}
+            {f"<span>{app_version}</span>" if app_version else ""}
         </div>
     </div>
 </div>
         """,
-        elem_classes="footer-no-padding",
     )
 
     return footer

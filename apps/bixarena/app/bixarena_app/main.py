@@ -1,9 +1,12 @@
 import argparse
+import functools
 import logging
 import os
 
 import gradio as gr
 import requests
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.utils import setup_logging
@@ -85,7 +88,7 @@ def sync_backend_session_on_load(request: gr.Request):
     No local token storage, refresh logic, or OAuth flow lives here—only a
     best-effort identity pull so UI components can render the logged-in name.
     """
-    state = get_user_state()
+    state = get_user_state(request)
 
     # Skip if already populated or request has no headers (e.g. internal load)
     if not state.is_authenticated() and request and hasattr(request, "headers"):
@@ -130,9 +133,9 @@ def sync_backend_session_on_load(request: gr.Request):
                                 f"preferred_username={preferred_username}"
                             )
                             return (
-                                update_battle_button(),
-                                update_login_button(),
-                                *update_user_page(),
+                                update_battle_button(request),
+                                update_login_button(request),
+                                *update_user_page(request),
                                 gr.HTML(""),
                             )
                         else:
@@ -155,9 +158,9 @@ def sync_backend_session_on_load(request: gr.Request):
                 print("[auth-sync] No cookie header; skipping identity fetch")
 
     return (
-        update_battle_button(),
-        update_login_button(),
-        *update_user_page(),
+        update_battle_button(request),
+        update_login_button(request),
+        *update_user_page(request),
         gr.HTML(""),
     )
 
@@ -172,15 +175,24 @@ def parse_args():
     When using the `gradio` CLI for auto-reload, command-line arguments
     are not passed through, so environment variables are used instead.
 
-    Environment variables (used when running with `gradio` CLI):
+    Environment variables:
     - APP_HOST: Server host (default: 127.0.0.1)
-    - APP_PORT: Server port (default: None, Gradio will auto-select)
+    - APP_PORT: Server port (default: None, uvicorn will auto-select)
     - APP_SHARE: Enable sharing (true/1/yes, default: false)
-    - APP_CONCURRENCY_COUNT: Concurrency limit (default: 10)
-    - APP_GRADIO_ROOT_PATH: Root path for Gradio (default: None)
+    - LOG_LEVEL: Logging level for uvicorn (default: info)
+
+    Priority for port selection:
+    1. --port command line argument (if provided)
+    2. APP_PORT environment variable (if set)
+    3. Default value: None (uvicorn will auto-select)
+
+    Priority for log level selection:
+    1. --log-level command line argument (if provided)
+    2. LOG_LEVEL environment variable (if set)
+    3. Default value: info
     """
 
-    # Helper to parse environment variable for port
+    # Helper to parse environment variable for port with fallback to None
     def get_port_default():
         port_env = os.environ.get("APP_PORT")
         return int(port_env) if port_env else None
@@ -197,57 +209,121 @@ def parse_args():
         default=get_port_default(),
     )
     parser.add_argument(
+        "--log-level",
+        type=str,
+        default=os.environ.get("LOG_LEVEL", "info"),
+        help="Logging level (critical, error, warning, info, debug, trace)",
+    )
+    parser.add_argument(
         "--share",
         action="store_true",
         default=os.environ.get("APP_SHARE", "").lower() in ("true", "1", "yes"),
     )
-    parser.add_argument(
-        "--concurrency-count",
-        type=int,
-        default=int(os.environ.get("APP_CONCURRENCY_COUNT", "10")),
-    )
-    parser.add_argument(
-        "--gradio-root-path",
-        type=str,
-        default=os.environ.get("APP_GRADIO_ROOT_PATH"),
-    )
     # Use parse_known_args to ignore unknown args (like demo path from gradio CLI)
     args, _ = parser.parse_known_args()
+
+    # Normalize log level to lowercase
+    args.log_level = args.log_level.lower()
+
     return args
 
 
 def build_app():
     """Create the main application"""
 
+    enable_crisp = os.environ.get("ENABLE_CRISP", "false").lower() == "true"
+
     cleanup_js = """
     function() {
         setTimeout(function() {
-            if (window.location.search.includes('code=')) {
-                const url = new URL(window.location);
-                url.searchParams.delete('code');
-                url.searchParams.delete('state');
-                window.history.replaceState({}, document.title, url.pathname);
+            // Reset Crisp chat session on page load
+            if (window.$crisp) {
+                window.$crisp.push(["do", "session:reset"]);
             }
         }, 100);
     }
     """
 
+    crisp_script = ""
+    if enable_crisp:
+        crisp_script = """
+    <script type="text/javascript">
+        window.$crisp=[];
+        window.CRISP_WEBSITE_ID="d58ad402-1217-476c-be6a-c8949671ced4";
+        (function(){
+            d=document;
+            s=d.createElement("script");
+            s.src="https://client.crisp.chat/l.js";
+            s.async=1;
+            d.getElementsByTagName("head")[0].appendChild(s);
+        })();
+
+        // Trigger scenario when the chatbox is opened for the first time by the user
+        window.$crisp.push(["on", "chat:initiated", function() {
+            window.$crisp.push([
+                "do",
+                "bot:scenario:run",
+                ["scenario_6e1d8905-069c-41f6-b28a-33ef05520766"]
+            ]);
+        }]);
+    </script>
+    """
+
     with gr.Blocks(
-        title="BixArena - Biomedical LLM Evaluation",
+        title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
+        head=crisp_script,
         css="""
+        /* CSS variables for adaptive colors */
+        :root {
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent-teal: #14b8a6;
+            --accent-orange: #f97316;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --bg-card: rgba(0, 0, 0, 0.02);
+        }
+
+        .dark {
+            --text-primary: #f9fafb;
+            --text-secondary: #e5e7eb;
+            --text-muted: rgba(229, 231, 235, 0.6);
+            --accent-teal: #2dd4bf;
+            --accent-orange: #f97316;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --bg-card: rgba(255, 255, 255, 0.02);
+        }
+
         /* Hide Gradio's default footer */
         footer {
             display: none !important;
         }
-        /* Remove padding from footer HTML containers */
-        .footer-no-padding .html-container {
+        /* Remove default padding from HTML containers */
+        .padding {
             padding: 0 !important;
+        }
+        /* Override Gradio's default container max-width */
+        .fillable.app {
+            max-width: 1600px !important;
         }
         .page-content {
             min-height: calc(100vh - 200px);
             padding: 0 40px;
             max-width: 1400px;
             margin: 0 auto;
+        }
+        /* Keep CTA buttons centered at all screen sizes */
+        #cta-button-row {
+            justify-content: center !important;
+        }
+        #cta-button-container {
+            max-width: 240px !important;
+        }
+        #cta-btn-authenticated, #cta-btn-login {
+            width: 100% !important;
+        }
+        #cta-btn-authenticated *, #cta-btn-login * {
+            white-space: nowrap !important;
         }
         """,
     ) as demo:
@@ -258,16 +334,8 @@ def build_app():
                 _,
                 cta_btn_authenticated,
                 cta_btn_login,
-                models_evaluated_column,
-                models_evaluated_box,
-                total_battles_column,
-                total_battles_box,
-                total_users_column,
-                total_users_box,
-                user_battles_column,
-                user_battles_box,
-                user_rank_column,  # New
-                user_rank_box,  # New
+                cta_helper_msg,
+                stats_container,
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
@@ -302,7 +370,6 @@ def build_app():
             + "</span><span id='backend-base' style='display:none'>"
             + base_markup
             + "</span>",
-            elem_classes="footer-no-padding",
         )
 
         pages = [home_page, battle_page, leaderboard_page, user_page]
@@ -323,6 +390,14 @@ def build_app():
             outputs=pages,
         )
 
+        # Bind static args so Gradio can still inject request without warnings.
+        login_handler = functools.partial(
+            handle_login_click, navigator, update_login_button, update_user_page
+        )
+        logout_handler = functools.partial(
+            handle_logout_click, navigator, update_login_button, update_user_page
+        )
+
         # Login CTA button - redirects to login page
         cta_btn_login.click(
             None,
@@ -337,9 +412,7 @@ def build_app():
 
         # Login
         login_btn.click(
-            lambda: handle_login_click(
-                navigator, update_login_button, update_user_page
-            ),
+            login_handler,
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
             js="""
 () => {
@@ -369,9 +442,7 @@ def build_app():
 
         # Logout
         logout_btn.click(
-            lambda: handle_logout_click(
-                navigator, update_login_button, update_user_page
-            ),
+            logout_handler,
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
         )
 
@@ -382,36 +453,24 @@ def build_app():
             js=cleanup_js,
         )
 
-        # Load public stats on page load (for the first three stats boxes)
+        # Load public stats on page load
         demo.load(
             fn=load_public_stats_on_page_load,
             inputs=None,
-            outputs=[
-                models_evaluated_column,
-                models_evaluated_box,
-                total_battles_column,
-                total_battles_box,
-                total_users_column,
-                total_users_box,
-            ],
+            outputs=stats_container,
         )
 
-        # Load user stats on page load (for the fourth and fifth stats boxes)
+        # Load user stats on page load (will update stats bar to include user stats if authenticated)
         demo.load(
             fn=load_user_battles_on_page_load,
             inputs=None,
-            outputs=[
-                user_battles_column,
-                user_battles_box,
-                user_rank_column,  # New
-                user_rank_box,  # New
-            ],
+            outputs=stats_container,
         )
 
         # Load CTA button visibility based on authentication
         demo.load(
             fn=update_cta_buttons_on_page_load,
-            outputs=[cta_btn_authenticated, cta_btn_login],
+            outputs=[cta_btn_authenticated, cta_btn_login, cta_helper_msg],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
@@ -419,21 +478,34 @@ def build_app():
     return demo
 
 
-# Initialize app at module level for both `python` and `gradio` CLI
-# Note: When using `gradio` CLI, this code runs twice:
-# 1. During module inspection to find the `demo` variable
-# 2. During actual script execution to launch the server
-# This is normal Gradio behavior and unavoidable without complex workarounds
-args = parse_args()
-demo = build_app()
-demo.queue(default_concurrency_limit=args.concurrency_count)
+def create_app() -> FastAPI:
+    """Create and configure the FastAPI application with Gradio mounted.
 
-# Only launch when running directly with python (not via gradio CLI)
-if __name__ == "__main__":
-    demo.launch(
-        server_name=args.host,
-        server_port=args.port,
-        share=args.share,
-        max_threads=200,
-        root_path=args.gradio_root_path,
-    )
+    Returns:
+        Configured FastAPI application
+    """
+    # Create FastAPI app with health endpoint
+    fastapi_app = FastAPI()
+
+    @fastapi_app.get("/health")
+    async def health_check():
+        """Health check endpoint for ECS"""
+        return JSONResponse(
+            content={"status": "healthy", "service": "bixarena-app"},
+            status_code=200,
+        )
+
+    # Build Gradio app and mount it to FastAPI
+    demo = build_app()
+    # Use unlimited concurrency
+    demo.queue(default_concurrency_limit=None)
+
+    # Mount Gradio to the FastAPI app at root path
+    fastapi_app = gr.mount_gradio_app(fastapi_app, demo, path="/")
+
+    return fastapi_app
+
+
+# Create app instance at module level for uvicorn imports
+args = parse_args()
+app = create_app()

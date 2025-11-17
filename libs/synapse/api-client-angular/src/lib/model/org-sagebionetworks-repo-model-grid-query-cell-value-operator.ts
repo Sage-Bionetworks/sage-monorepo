@@ -20,7 +20,9 @@ export type OrgSagebionetworksRepoModelGridQueryCellValueOperator =
   | 'LIKE'
   | 'NOT_LIKE'
   | 'IS_NULL'
-  | 'IS_NOT_NULL';
+  | 'IS_NOT_NULL'
+  | 'IS_UNDEFINED'
+  | 'IS_DEFINED';
 
 export const OrgSagebionetworksRepoModelGridQueryCellValueOperator = {
   Equals: 'EQUALS' as OrgSagebionetworksRepoModelGridQueryCellValueOperator,
@@ -36,4 +38,6 @@ export const OrgSagebionetworksRepoModelGridQueryCellValueOperator = {
   NotLike: 'NOT_LIKE' as OrgSagebionetworksRepoModelGridQueryCellValueOperator,
   IsNull: 'IS_NULL' as OrgSagebionetworksRepoModelGridQueryCellValueOperator,
   IsNotNull: 'IS_NOT_NULL' as OrgSagebionetworksRepoModelGridQueryCellValueOperator,
+  IsUndefined: 'IS_UNDEFINED' as OrgSagebionetworksRepoModelGridQueryCellValueOperator,
+  IsDefined: 'IS_DEFINED' as OrgSagebionetworksRepoModelGridQueryCellValueOperator,
 };

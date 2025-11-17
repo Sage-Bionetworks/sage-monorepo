@@ -5,7 +5,7 @@ from aws_cdk import aws_ec2 as ec2
 from constructs import Construct
 
 from bixarena_infra_cdk.shared.constructs.ecs_cluster_construct import (
-    OpenchallengesEcsCluster,
+    BixArenaEcsCluster,
 )
 
 
@@ -19,6 +19,7 @@ class EcsClusterStack(cdk.Stack):
         stack_prefix: str,
         environment: str,
         vpc: ec2.IVpc,
+        developer_name: str | None = None,
         **kwargs,
     ) -> None:
         """
@@ -30,25 +31,24 @@ class EcsClusterStack(cdk.Stack):
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
             vpc: VPC where the cluster will be created
+            developer_name: Developer name for dev environment (optional)
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
 
-        # Create ECS cluster
-        cluster_construct = OpenchallengesEcsCluster(
+        # Create ECS cluster with service discovery
+        self.cluster_construct = BixArenaEcsCluster(
             self,
             "Cluster",
             vpc=vpc,
+            cluster_name=stack_prefix,  # Use stack prefix as cluster name
         )
-
-        # Export cluster for use in service stacks
-        self.cluster = cluster_construct.cluster
 
         # CloudFormation outputs
         cdk.CfnOutput(
             self,
             "ClusterName",
-            value=self.cluster.cluster_name,
+            value=self.cluster_construct.cluster.cluster_name,
             description="ECS cluster name",
             export_name=f"{stack_prefix}-cluster-name",
         )
@@ -56,7 +56,7 @@ class EcsClusterStack(cdk.Stack):
         cdk.CfnOutput(
             self,
             "ClusterArn",
-            value=self.cluster.cluster_arn,
+            value=self.cluster_construct.cluster.cluster_arn,
             description="ECS cluster ARN",
             export_name=f"{stack_prefix}-cluster-arn",
         )

@@ -1839,31 +1839,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.TermsOfServiceInfo'
-  /auth/v1/secretKey:
-    get:
-      tags:
-        - Authentication Services
-      operationId: get-/auth/v1/secretKey
-      parameters: []
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.SecretKey'
-    delete:
-      tags:
-        - Authentication Services
-      operationId: delete-/auth/v1/secretKey
-      parameters: []
-      security:
-        - bearerAuth: []
-      responses:
-        '204':
-          description: Void
   /auth/v1/oauth2/authurl:
     post:
       tags:
@@ -16525,6 +16500,9 @@ components:
           enum:
             - enumeration
             - range
+        facetSortConfig:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnSortConfig'
+          description: For a column model whose facet type is enumeration, defines the order in which the facet values are returned. If not specified, the default order is frequency, descending with a secondary sort by value ascending.
       description: Common properties of all ColumnModel implementation
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.ColumnModel'
@@ -17376,6 +17354,9 @@ components:
         definingSQL:
           type: string
           description: For materialized views and virtual tables, specifies the SQL defining the content of the table.
+        validationResultFileHandleId:
+          type: string
+          description: For a RecordSet, the file handle that contains the detailed validation results.
       description: Data record from a node object.
     org.sagebionetworks.repo.model.entitybundle.v2.EntityBundleCreate:
       type: object
@@ -18588,10 +18569,8 @@ components:
     org.sagebionetworks.repo.model.grid.query.result.Row:
       type: object
       properties:
-        cellValues:
-          type: array
-          items: {}
-          description: An array of cell values for a single row.  Each cell's index will corresponds to the SelectColumn.columnIndex
+        data:
+          description: The JSON object representing a single row.
         validationResults:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.result.ValidationResults'
           description: Results of a grid row against a JSON schema
@@ -18957,6 +18936,7 @@ components:
       description: A generic select item.
       oneOf:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.SelectAll'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.SelectSelection'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.function.CountStar'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.SelectByName'
       required:
@@ -19212,6 +19192,22 @@ components:
           enum:
             - ASC
             - DESC
+    org.sagebionetworks.repo.model.table.FacetColumnSortConfig:
+      type: object
+      properties:
+        property:
+          type: string
+          description: Which property of a facet to use for sorting, can be by value frequency or the facet value itself.
+          enum:
+            - FREQUENCY
+            - VALUE
+        direction:
+          type: string
+          description: The sorting direction.
+          enum:
+            - DESC
+            - ASC
+      description: For a column model whose facet type is enumeration, defines the order in which the facet values are returned. If not specified, the default order is frequency, descending with a secondary sort by value ascending.
     org.sagebionetworks.repo.model.doi.v2.DataciteMetadata:
       type: object
       properties:
@@ -20160,6 +20156,11 @@ components:
           type: boolean
           description: true if and only if this is the last batch to upload
       description: A batch of status objects, to be updated en masse.
+    org.sagebionetworks.repo.model.table.FacetColumnSortProperty:
+      type: string
+      enum:
+        - FREQUENCY
+        - VALUE
     org.sagebionetworks.repo.model.table.ColumnSingleValueFilterOperator:
       type: string
       enum:
@@ -21118,10 +21119,13 @@ components:
         validationSummary:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.ValidationSummaryStatistics'
           description: Summary statistics for the JSON schema validation results for the children of an Entity container (Project or Folder)
+        validationFileHandleId:
+          type: string
+          description: 'Pointer to a CSV file that contains the detailed validation results for each row in the record set. The CSV file will contain for each row the following columns: row_index, is_valid, validation_error_message, all_validation_messages. The file can be donwnloaded using the FileEntity association type using the RecordSet id as the object id. Generated only from a grid session export, cannot be changed by the user.'
         fileNameOverride:
           type: string
           description: An optional replacement for the name of the uploaded file.  This is distinct from the entity name.  If omitted the file will retain its original name.
-      description: Captures record-based metadata as a special type of CSV. The record set content can be curated using the grid services.
+      description: Captures record-based metadata as a special type of CSV. The record set content can be curated using the grid services. When a grid is created from a record set, its data can be exported back to a new version of the record set. The export will include the validation summary as well as a validation file handle that contains detailed validation results for each row in the record set.
       required:
         - concreteType
     org.sagebionetworks.repo.model.EntityChildrenResponse:
@@ -23574,13 +23578,6 @@ components:
             type: string
           description: If the object is not valid according to the schema, a the flat list of error messages will be provided with one error message per sub-schema.
       description: Results of a grid row against a JSON schema
-    org.sagebionetworks.repo.model.auth.SecretKey:
-      type: object
-      properties:
-        secretKey:
-          type: string
-          description: The user's secret key
-      description: Data transfer object for a secret key
     org.sagebionetworks.repo.model.grid.query.CellValueFilter:
       type: object
       properties:
@@ -23608,10 +23605,10 @@ components:
             - NOT_LIKE
             - IS_NULL
             - IS_NOT_NULL
+            - IS_UNDEFINED
+            - IS_DEFINED
         value:
-          type: array
-          items: {}
-          description: "A filter used to select rows based on a specific column's cell value. Use operators like 'EQUALS' or 'LIKE' with the 'value' array for standard comparisons. For user requests about finding 'empty', 'blank', or 'null' values, use the 'IS_NULL' operator and omit the 'value' property. To find rows that are not empty, use the 'IS_NOT_NULL' operator. When using either 'LIKE' or 'NOT_LIKE', the wildcard character: '%' is used to represents zero or more characters, and '_' is used to represents a single character."
+          description: "A filter used to select rows based on a specific column's cell value. Use operators like 'EQUALS' or 'LIKE' with the 'value' property for standard comparisons. The 'IS_NULL' operator can be used to find `null` values. The `IS_UNDEFINED` operator can be used to find `undefined` values. When using IN or NOT_IN operators, `value` should be an array of values to compare against. When using either 'LIKE' or 'NOT_LIKE', the wildcard character: '%' is used to represents zero or more characters, and '_' is used to represent a single character."
       description: A filter used to select rows based on cell values. For example, to handle a user request like 'find all rows where the Project column is Alpha', you would set 'columnName' to 'Project', 'operator' to 'EQUALS', and 'value' to ['Alpha']
       required:
         - concreteType
@@ -24254,10 +24251,13 @@ components:
     org.sagebionetworks.repo.model.grid.update.GridUpdateRequest:
       type: object
       properties:
-        update:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.update.Update'
-          description: Request to update one or more cells in a grid (SQL UPDATE style).
-      description: Request to update the cells of the current grid session.
+        updateBatch:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.update.Update'
+            description: Request to update one or more cells in a grid (SQL UPDATE style).
+          description: A batch containing one or more cell updates to apply to the grid. All updates in the batch are processed together.
+      description: Request to update one or more cells of the current grid session in a single batch operation.
     org.sagebionetworks.repo.model.auth.TotpSecret:
       type: object
       properties:
@@ -24699,6 +24699,9 @@ components:
           enum:
             - enumeration
             - range
+        facetSortConfig:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnSortConfig'
+          description: For a column model whose facet type is enumeration, defines the order in which the facet values are returned. If not specified, the default order is frequency, descending with a secondary sort by value ascending.
         id:
           type: string
           description: The immutable ID issued to new columns
@@ -26020,6 +26023,11 @@ components:
         fileName:
           type: string
           description: Set the name of the resulting PFB file. An auto-generated name will be used if omitted.
+        pfbEntityIdColumnNames:
+          type: array
+          items:
+            type: string
+          description: The list of column names from the select list that should be used to compose the PFB entity id field for each row. The values will be concatenated using an underscore (_). If not provided, the entity id will be set to the concatentation of the implicit ROW_ID and ROW_VERSION of the underlying table.
         sql:
           type: string
           description: The SQL query string.
@@ -26871,9 +26879,15 @@ components:
     org.sagebionetworks.repo.model.grid.update.GridUpdateResponse:
       type: object
       properties:
-        rowsUpdated:
+        updateResults:
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: Number of rows updated for each update in the batch, in the same order as the request. Each element corresponds to one update operation.
+        totalRowsUpdated:
           type: integer
-          description: Number of rows actually updated (after applying any limit).
+          description: Total number of rows updated across all updates in the batch.
           format: int32
       description: Response summarizing the outcome of a grid update operation.
     org.sagebionetworks.repo.model.table.EntityRefCollectionView:
@@ -28294,6 +28308,9 @@ components:
           enum:
             - enumeration
             - range
+        facetSortConfig:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnSortConfig'
+          description: For a column model whose facet type is enumeration, defines the order in which the facet values are returned. If not specified, the default order is frequency, descending with a secondary sort by value ascending.
         jsonPath:
           type: string
           description: "Defines the JSON path of the sub column. Use the '$' char to represent the root of JSON object. If the JSON key of a sub column is 'a', then the jsonPath for that column would be: '$.a'."
@@ -29769,6 +29786,11 @@ components:
           items:
             type: string
       description: <a href="https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter">OIDC Core 1.0 Claims Request</a> value
+    org.sagebionetworks.repo.model.table.FacetColumnSortDirection:
+      type: string
+      enum:
+        - DESC
+        - ASC
     org.sagebionetworks.repo.model.message.MessageBundle:
       type: object
       properties:
@@ -30063,6 +30085,8 @@ components:
         - NOT_LIKE
         - IS_NULL
         - IS_NOT_NULL
+        - IS_UNDEFINED
+        - IS_DEFINED
     org.sagebionetworks.repo.model.oauth.OAuthRefreshTokenInformation:
       type: object
       properties:
@@ -30141,6 +30165,17 @@ components:
           description: Identifies the replica that will be establishing the websocket connection.
           format: int32
       description: Request to create a new presigned URL that is used to establish a grid websocket connection.
+    org.sagebionetworks.repo.model.grid.query.SelectSelection:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Required. Full name of the exact type used.
+          enum:
+            - org.sagebionetworks.repo.model.grid.query.SelectSelection
+      description: A SelectItem that will result in the selection of the columns the user has actively selected in the interface.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.table.SortItem:
       type: object
       properties:
@@ -30962,7 +30997,7 @@ components:
           type: string
           description: Target column name or ID to update.
         value:
-          description: Literal JSON value to assign to the column for all selected rows. Supports string, number, boolean, object, array, or null (use null to clear)
+          description: 'Literal JSON value to assign to the field in each target document: string, number, boolean, object, array, or null. Omit the "value" property to remove/unset the field (`undefined`); include `"value": null` to store JSON null. Must be a literal constant — no SQL or expressions; value is bound and stored as-is.'
       description: Represents a single column assignment (one entry of the SQL SET clause).
     org.sagebionetworks.repo.model.auth.AccessTokenRecord:
       type: object
@@ -31608,6 +31643,9 @@ components:
         definingSQL:
           type: string
           description: For materialized views and virtual tables, specifies the SQL defining the content of the table.
+        validationResultFileHandleId:
+          type: string
+          description: For a RecordSet, the file handle that contains the detailed validation results.
       description: This is the DTO of a node.
     org.sagebionetworks.repo.model.file.BatchFileRequest:
       type: object
@@ -33157,6 +33195,9 @@ components:
         validationSummaryStatistics:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.ValidationSummaryStatistics'
           description: Summary statistics for the JSON schema validation results for the children of an Entity container (Project or Folder)
+        validationFileHandleId:
+          type: string
+          description: The id of the file handle that points to a CSV file containing detailed validation results for each row exported from the grid.
       description: The response for a grid record set export request.
       required:
         - concreteType

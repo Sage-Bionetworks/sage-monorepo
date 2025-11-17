@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelTableJsonSubColumnModel } from './org-sagebionetworks-repo-model-table-json-sub-column-model';
+import { OrgSagebionetworksRepoModelTableFacetColumnSortConfig } from './org-sagebionetworks-repo-model-table-facet-column-sort-config';
 
 /**
  * A column model contains the metadata of a single column of a table or view.
@@ -25,6 +26,7 @@ export interface OrgSagebionetworksRepoModelTableColumnModel {
    * Set to one of the enumerated values to indicate a column should be treated as a facet
    */
   facetType?: OrgSagebionetworksRepoModelTableColumnModel.FacetTypeEnum;
+  facetSortConfig?: OrgSagebionetworksRepoModelTableFacetColumnSortConfig;
   /**
    * The immutable ID issued to new columns
    */

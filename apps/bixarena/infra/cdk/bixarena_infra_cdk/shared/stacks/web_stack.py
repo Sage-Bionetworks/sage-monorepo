@@ -1,0 +1,162 @@
+"""Web stack for BixArena web client."""
+
+import aws_cdk as cdk
+from aws_cdk import aws_ec2 as ec2
+from aws_cdk import aws_ecs as ecs
+from aws_cdk import aws_secretsmanager as sm
+from aws_cdk.aws_elasticloadbalancingv2 import IApplicationTargetGroup
+from constructs import Construct
+
+from bixarena_infra_cdk.shared.constructs.fargate_service_construct import (
+    BixArenaFargateService,
+)
+from bixarena_infra_cdk.shared.image_loader import load_container_image
+
+
+class WebStack(cdk.Stack):
+    """Stack for the BixArena web client Fargate service."""
+
+    def __init__(
+        self,
+        scope: Construct,
+        construct_id: str,
+        stack_prefix: str,
+        environment: str,
+        vpc: ec2.IVpc,
+        cluster: ecs.ICluster,
+        target_group: IApplicationTargetGroup,
+        app_version: str,
+        alb_dns_name: str,
+        developer_name: str | None = None,
+        fqdn: str | None = None,
+        use_https: bool = False,
+        openrouter_api_key: str = "",
+        **kwargs,
+    ) -> None:
+        """
+        Create web stack.
+
+        Args:
+            scope: CDK app scope
+            construct_id: Stack identifier
+            stack_prefix: Prefix for stack name
+            environment: Environment name (dev, stage, prod)
+            vpc: VPC where the service will run
+            cluster: ECS cluster
+            target_group: ALB target group for the app
+            app_version: Application version (Docker image tag)
+            alb_dns_name: DNS name of the ALB
+            developer_name: Developer name for dev environment (optional)
+            fqdn: Fully qualified domain name (optional, uses ALB DNS if not provided)
+            use_https: Whether to use HTTPS protocol (default: False for HTTP)
+            openrouter_api_key: OpenRouter API key for LLM access
+            **kwargs: Additional arguments passed to parent Stack
+        """
+        super().__init__(scope, construct_id, **kwargs)
+
+        # Use custom domain if provided, otherwise use ALB DNS name
+        base_url = fqdn if fqdn else alb_dns_name
+        protocol = "https" if use_https else "http"
+
+        # Container image - support local or remote images
+        image = load_container_image(
+            self,
+            "AppServiceImage",
+            "bixarena-app",
+            f"ghcr.io/sage-bionetworks/bixarena-app:{app_version}",
+        )
+
+        # Environment variables for the Gradio app container
+        # The app needs access to auth and API services through the gateway
+        container_env = {
+            # Server configuration
+            "APP_HOST": "127.0.0.1",
+            "APP_PORT": "8100",
+            "APP_VERSION": app_version,
+            "LOG_LEVEL": "DEBUG",
+            # Auth service URLs:
+            # - SSR (server-side): Use internal API Gateway via service discovery
+            # - CSR (client-side): Use public ALB (browser calls)
+            "AUTH_BASE_URL_SSR": (
+                f"http://bixarena-api-gateway.{cluster.cluster_name}.local:8113"
+            ),
+            "AUTH_BASE_URL_CSR": f"{protocol}://{base_url}",  # Client-side
+            # API service URL: Use internal API Gateway via service discovery
+            "API_BASE_URL": (
+                f"http://bixarena-api-gateway.{cluster.cluster_name}.local:8113/api/v1"
+            ),
+            "APP_BRAND_URL": "https://sagebionetworks.org",
+            "APP_CONTACT_URL": "https://sagebionetworks.org/contact",
+            "APP_ISSUE_URL": "https://forms.gle/WsvSdEfv5MfFpeedA",
+            "ENABLE_CRISP": "false",
+            "BATTLE_ROUND_LIMIT": "5",
+            "MAX_RESPONSE_TOKENS": "1024",
+            "PROMPT_LEN_LIMIT": "5000",
+        }
+
+        # Create AWS Secrets Manager secret for OpenRouter API key
+        # This ensures the API key is encrypted at rest and in transit
+        container_secrets = {}
+        if openrouter_api_key:
+            openrouter_secret = sm.Secret(
+                self,
+                "OpenRouterApiKeySecret",
+                secret_name=f"{stack_prefix}-openrouter-api-key",
+                description="OpenRouter API key for BixArena Gradio app",
+                secret_string_value=cdk.SecretValue.unsafe_plain_text(
+                    openrouter_api_key
+                ),
+            )
+            container_secrets["OPENROUTER_API_KEY"] = ecs.Secret.from_secrets_manager(
+                openrouter_secret
+            )
+
+        # Create Fargate service for the Gradio app
+        service_construct = BixArenaFargateService(
+            self,
+            "WebService",
+            vpc=vpc,
+            cluster=cluster,
+            service_name="bixarena-app",
+            container_image=image,
+            container_port=8100,  # Gradio app default port
+            cpu=512,  # 0.5 vCPU - Gradio needs more than nginx
+            memory_limit_mib=1024,  # 1 GB - Gradio/Python apps need memory
+            environment=container_env,
+            secrets=container_secrets,  # Secure secret injection
+            desired_count=1,
+            target_group=target_group,
+            # Note: Health check path is configured on the ALB target group
+        )
+
+        # Export service for reference
+        self.service = service_construct.service
+
+        # CloudFormation outputs
+        cdk.CfnOutput(
+            self,
+            "ServiceName",
+            value=self.service.service_name,
+            description="Web client service name",
+        )
+
+        cdk.CfnOutput(
+            self,
+            "ServiceArn",
+            value=self.service.service_arn,
+            description="Web client service ARN",
+        )
+
+        cdk.CfnOutput(
+            self,
+            "AppUrl",
+            value=f"{protocol}://{base_url}",
+            description="Application URL (using ALB DNS or custom domain)",
+        )
+
+        cdk.CfnOutput(
+            self,
+            "ApiUrl",
+            value=f"{protocol}://{base_url}/api/v1",
+            description="API base URL configured in the app",
+        )

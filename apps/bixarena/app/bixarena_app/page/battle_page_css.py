@@ -2,46 +2,109 @@
 CSS styles for the BixArena battle page.
 """
 
+# CSS for chatbot battle interface
+CHATBOT_BATTLE_CSS = """
+/* Separate the two chat windows */
+#chatbot-container {
+    background: transparent !important;
+    border: none !important;
+}
+
+#chatbot-container .styler {
+    background: transparent !important;
+}
+
+#chatbot-container .row {
+    gap: 24px;
+}
+
+#chatbot-container > .styler > .row:first-child .column {
+    border: 1px solid var(--border-color-primary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Make chatbot labels bigger */
+#chatbot-container .block label {
+    font-size: 1em;
+}
+
+/* Add bottom padding to chatbot block to prevent message cropping */
+#chatbot-container #chatbot {
+    padding-bottom: 16px;
+}
+
+/* Make label icon match text size */
+#chatbot-container .block label span {
+    width: 1em;
+    height: 1em;
+}
+
+/* Chatbot footer to reveal model names */
+#chatbot-container .html-container {
+    padding: 0 !important;
+}
+
+#chatbot-container .column > .block:has(.html-container) {
+    margin-top: -24px;
+}
+
+.model-name-footer {
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+"""
+
 # CSS for example prompt cards and navigation
 EXAMPLE_PROMPTS_CSS = """
-
 /* Example prompt UI section */
 #prompt-card-section > .row {
     display: flex;
-    flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 12px;
-    flex-wrap: nowrap;
     margin-top: 16px;
 }
 
 #prompt-card-section > .row > .row {
-    flex: 1 1 auto;
-    min-width: 0;
+    display: flex;
+    align-items: stretch;
     gap: 12px;
 }
 
 /* Example prompt card wrapper */
 #prompt-card-section .prompt-card-wrapper {
     flex: 1 1 0;
+    display: flex;
+    padding-top: 2px !important;
+}
+
+#prompt-card-section .prompt-card-wrapper > div {
+    display: flex;
+    flex: 1;
 }
 
 /* Example prompt card button */
 #prompt-card-section button.prompt-card {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 12px 16px;
     transition: all 0.2s ease;
     width: 100%;
-    height: 87px;
+    height: auto;
+    min-height: 89px;
     display: flex;
     align-items: flex-start;
     cursor: pointer;
 }
 
 #prompt-card-section button.prompt-card:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--bg-card);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -52,7 +115,7 @@ EXAMPLE_PROMPTS_CSS = """
     line-height: 1.5;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     overflow: hidden;
 }
 
@@ -68,9 +131,8 @@ EXAMPLE_PROMPTS_CSS = """
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    align-self: center;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--border-color);
     transition: all 0.2s ease;
 }
 
@@ -79,7 +141,7 @@ EXAMPLE_PROMPTS_CSS = """
 }
 
 #prompt-card-section > .row > .nav-button:not(:disabled):hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--bg-card);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -91,45 +153,32 @@ EXAMPLE_PROMPTS_CSS = """
     pointer-events: none;
 }
 
+
 /* Responsive layout */
+@media (max-width: 1280px) {
+    #prompt-card-section button.prompt-card .prompt-text {
+        -webkit-line-clamp: unset;
+    }
+}
+
 @media (max-width: 1024px) {
-    /* Stack outer container vertically and hide arrows */
     #prompt-card-section > .row {
-        flex-direction: column;
+        align-items: center;
+        flex-wrap: nowrap;
     }
 
-    /* Hide navigation arrows on mobile */
-    #prompt-card-section > .row > button.nav-button {
-        display: none !important;
-    }
-
-    /* Stack cards vertically on mobile */
     #prompt-card-section > .row > .row {
         flex-direction: column;
-        width: 100%;
+        gap: 8px;
     }
 
-    /* Override Gradio's hide-container class - force all cards visible */
-    #prompt-card-section .hide-container {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        height: auto !important;
-        overflow: visible !important;
-    }
-
-    /* Full width cards on mobile - force visibility */
     #prompt-card-section .prompt-card-wrapper {
         width: 100%;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+        flex: 0 0 auto;
     }
 
-    /* Force all cards to be visible */
     #prompt-card-section button.prompt-card {
-        display: flex !important;
-        visibility: visible !important;
+        align-items: center;
     }
 }
 """
@@ -147,6 +196,8 @@ INPUT_PROMPT_CSS = """
 #input_box.prompt_input textarea {
     border-radius: 12px;
     overflow-y: auto !important;
+    padding: 16px 20px;
+    line-height: 1.5;
 }
 
 .form:has(.prompt_input) {
@@ -165,25 +216,41 @@ INPUT_PROMPT_CSS = """
 DISCLAIMER_CSS = """
 #disclaimer {
     padding: 16px 24px;
+    max-width: 850px;
+    margin: 0 auto;
 }
 
 #disclaimer-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    text-align: center;
+}
+
+#disclaimer-title {
+    color: var(--accent-teal);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    margin-top: 0;
 }
 
 #disclaimer-text {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0;
 }
 
-.pulse-dot {
-    width: 6px;
-    height: 6px;
-    background-color: rgba(245, 158, 11, 1);
-    border-radius: 50%;
+#disclaimer-text strong {
+    font-weight: 700;
+}
+"""
+
+# CSS for Next Battle button
+NEXT_BATTLE_BUTTON_CSS = """
+#next-battle-row {
+    justify-content: center;
+}
+
+#next-battle-btn {
+    max-width: 240px;
 }
 """

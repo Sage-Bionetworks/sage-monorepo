@@ -33,18 +33,17 @@ def get_developer_name() -> str | None:
 
     Returns:
         str | None: Developer name (GitHub username) for dev environment,
-            None otherwise
+            None otherwise. Returns None when not provided (for CI/CD deployments).
     """
     env = get_environment()
     developer_name = os.environ.get("DEVELOPER_NAME")
 
-    # Developer name is required for dev environment
-    if env == "dev" and not developer_name:
-        raise ValueError(
-            "DEVELOPER_NAME environment variable is required for dev environment"
-        )
+    # Developer name is optional for dev environment
+    # When provided: Creates isolated stack like 'bixarena-dev-jsmith'
+    # When omitted: Creates shared dev stack 'bixarena-dev' (for CI/CD)
 
-    # Validate developer name format (alphanumeric, hyphens, underscores only)
+    # Validate developer name format if provided
+    # (alphanumeric, hyphens, underscores only)
     if developer_name and not all(c.isalnum() or c in "-_" for c in developer_name):
         raise ValueError(
             f"Invalid DEVELOPER_NAME: {developer_name}. "

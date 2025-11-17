@@ -21,7 +21,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run gradio bixarena_app/main.py",
+        "command": "uv run bixarena-app-dev",
         "cwd": "{projectRoot}"
       }
     },
@@ -48,6 +48,13 @@
         "bundleLocalDependencies": true
       },
       "cache": true
+    },
+    "export-image-tarball": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker save ghcr.io/sage-bionetworks/{projectName}:local -o /tmp/{projectName}.tar"
+      },
+      "dependsOn": ["build-image"]
     }
   },
   "tags": ["type:app", "scope:backend", "language:python", "package-manager:uv"]

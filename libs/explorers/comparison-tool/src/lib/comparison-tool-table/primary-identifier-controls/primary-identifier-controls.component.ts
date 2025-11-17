@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, HostBinding, computed, inject, input } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
@@ -14,6 +14,14 @@ export class PrimaryIdentifierControlsComponent {
 
   id = input.required<string>();
   label = input.required<string>();
+
+  @HostBinding('attr.role')
+  protected readonly hostRole = 'group';
+
+  @HostBinding('attr.aria-label')
+  protected get hostAriaLabel(): string {
+    return this.label();
+  }
 
   maxPinnedItems = this.comparisonToolService.maxPinnedItems;
   hasMaxPinnedItems = this.comparisonToolService.hasMaxPinnedItems;

@@ -2,6 +2,11 @@
 spring:
   jpa:
     show-sql: false
+  flyway:
+    clean-disabled: false # Allow clean in dev environment
+    locations:
+      - classpath:db/migration/common # Schema migrations
+      - classpath:db/migration/dev # Mock data migrations (if any)
 
 logging:
   level:

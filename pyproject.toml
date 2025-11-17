@@ -49,6 +49,9 @@ workspace = true
 [tool.uv.sources.bixarena-infra-cdk]
 workspace = true
 
+[tool.uv.sources.bixarena-tools]
+workspace = true
+
 [tool.uv.sources.openchallenges-api-client]
 workspace = true
 
@@ -96,6 +99,7 @@ requires-python = "==3.13.3"
 # they will be installed transitively.
 dependencies = [
   "bixarena-infra-cdk",
+  "bixarena-tools",
   "openchallenges-client",
   "openchallenges-infra-cdk"
 ]

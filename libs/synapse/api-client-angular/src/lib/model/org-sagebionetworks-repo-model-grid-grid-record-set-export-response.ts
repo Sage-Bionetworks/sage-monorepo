@@ -27,6 +27,10 @@ export interface OrgSagebionetworksRepoModelGridGridRecordSetExportResponse {
    */
   recordSetVersionNumber?: number;
   validationSummaryStatistics?: OrgSagebionetworksRepoModelSchemaValidationSummaryStatistics;
+  /**
+   * The id of the file handle that points to a CSV file containing detailed validation results for each row exported from the grid.
+   */
+  validationFileHandleId?: string;
 }
 export namespace OrgSagebionetworksRepoModelGridGridRecordSetExportResponse {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.grid.GridRecordSetExportResponse';

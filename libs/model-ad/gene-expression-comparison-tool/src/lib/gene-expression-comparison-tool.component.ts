@@ -7,7 +7,7 @@ import {
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
-import { PlatformService } from '@sagebionetworks/explorers/services';
+import { ComparisonToolHelperService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -29,17 +29,20 @@ export type GeneExpression = [];
 export class GeneExpressionComparisonToolComponent implements OnInit {
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
+  private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
 
   isLoading = signal(true);
+
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'RNA - DIFFERENTIAL EXPRESSION': {
       ownerId: 'syn66271427',
       wikiId: '632873',
     },
   };
+
   legendPanelConfig: LegendPanelConfig = {
     colorChartLowerLabel: 'Downregulated',
     colorChartUpperLabel: 'Upregulated',
@@ -48,11 +51,38 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
     sizeChartUpperLabel: 'Insignificant',
     sizeChartText: `Circle diameter indicates P-value. Larger circles indicate higher statistical significance, while smaller circles indicate lower statistical significance.`,
   };
+
+  // TODO MG-485 - Update overview panes content and images
+  visualizationOverviewPanes = [
+    this.comparisonToolHelperService.createVisualizationOverviewPane(
+      ComparisonToolPage.GeneExpression,
+      `<p>Welcome to Agora's Gene Comparison Tool. This overview demonstrates how to use the tool to explore results about genes related to AD. You can revisit this walkthrough by clicking the Visualization Overview link at the bottom of the page.</p>
+      <p>Click on the Legend link at the bottom of the page to view the legend for the current visualization.</p>
+      <img src="/explorer-assets/images/gct-how-to-0.svg" />`,
+    ),
+    this.comparisonToolHelperService.createVisualizationOverviewPane(
+      'View Detailed Expression Info',
+      `<p>Click on a circle to show detailed information about a result for a specific brain region.</p>
+      <img src="/explorer-assets/images/gct-how-to-1.gif" />`,
+    ),
+    this.comparisonToolHelperService.createVisualizationOverviewPane(
+      'Compare Multiple Genes',
+      `<p>You can pin several genes to visually compare them together. Then export the data about your pinned genes as a CSV file for further analysis.</p>
+      <img src="/explorer-assets/images/gct-how-to-2.gif" />`,
+    ),
+    this.comparisonToolHelperService.createVisualizationOverviewPane(
+      'Filter Gene Selection',
+      `<p>Filter genes by Nomination, Association with AD, Study and more. Or simply use the search bar to quickly find the genes you are interested in.</p>
+      <img src="/explorer-assets/images/gct-how-to-3.gif" />`,
+    ),
+  ];
+
   viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
-    headerTitle: 'Gene Expression',
+    headerTitle: ComparisonToolPage.GeneExpression,
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
     legendPanelConfig: this.legendPanelConfig,
+    visualizationOverviewPanes: this.visualizationOverviewPanes,
   };
 
   constructor() {
@@ -67,11 +97,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   }
 
   getConfigs() {
-    // Skip if already initialized (service persists at route level)
-    if (this.comparisonToolService.configs().length > 0) {
-      return;
-    }
-
     this.comparisonToolConfigService
       .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
       .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))

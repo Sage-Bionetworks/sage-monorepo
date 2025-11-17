@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {
   ComparisonToolFilterService,
   ComparisonToolService,
+  ComparisonToolUrlService,
 } from '@sagebionetworks/explorers/services';
 import { GeneExpressionComparisonToolComponent } from './gene-expression-comparison-tool.component';
 import { GeneExpressionComparisonToolService } from './services/gene-expression-comparison-tool.service';
@@ -14,6 +15,7 @@ export const routes: Routes = [
       { provide: ComparisonToolService, useExisting: GeneExpressionComparisonToolService },
       GeneExpressionComparisonToolService,
       ComparisonToolFilterService,
+      ComparisonToolUrlService,
     ],
   },
 ];

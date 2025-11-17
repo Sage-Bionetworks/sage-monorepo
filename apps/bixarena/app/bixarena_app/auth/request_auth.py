@@ -65,7 +65,7 @@ def is_authenticated_with_state(request: gr.Request | None) -> bool:
         return False
 
     # Verify against global user state (synced by main.py on page load)
-    user_state = get_user_state()
+    user_state = get_user_state(request)
     return user_state.is_authenticated()
 
 
@@ -90,7 +90,7 @@ def get_username(request: gr.Request | None) -> str | None:
     if not is_authenticated(request):
         return None
 
-    user_state = get_user_state()
+    user_state = get_user_state(request)
     user = user_state.get_current_user()
     if not user:
         return None
@@ -118,7 +118,7 @@ def get_user_display_name(request: gr.Request | None) -> str:
     if not is_authenticated(request):
         return "Guest"
 
-    user_state = get_user_state()
+    user_state = get_user_state(request)
     return user_state.get_display_name()
 
 

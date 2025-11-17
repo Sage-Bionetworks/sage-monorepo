@@ -1,9 +1,10 @@
 import { provideHttpClient } from '@angular/common/http';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
-  ComparisonToolService,
   provideComparisonToolFilterService,
+  provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { ComparisonToolConfigService } from '@sagebionetworks/model-ad/api-client';
@@ -21,6 +22,7 @@ async function setup() {
       MessageService,
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
       provideHttpClient(),
+      provideNoopAnimations(),
       provideRouter([]),
       {
         provide: ComparisonToolConfigService,
@@ -28,7 +30,7 @@ async function setup() {
           getComparisonToolConfig: jest.fn().mockReturnValue(of([])),
         },
       },
-      ComparisonToolService,
+      ...provideComparisonToolService(),
       ...provideComparisonToolFilterService(),
       GeneExpressionComparisonToolService,
     ],

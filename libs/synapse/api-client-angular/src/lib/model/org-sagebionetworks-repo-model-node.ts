@@ -58,6 +58,10 @@ export interface OrgSagebionetworksRepoModelNode {
    * For materialized views and virtual tables, specifies the SQL defining the content of the table.
    */
   definingSQL?: string;
+  /**
+   * For a RecordSet, the file handle that contains the detailed validation results.
+   */
+  validationResultFileHandleId?: string;
 }
 export namespace OrgSagebionetworksRepoModelNode {
   export type NodeTypeEnum =

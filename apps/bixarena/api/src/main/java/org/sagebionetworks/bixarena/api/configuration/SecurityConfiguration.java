@@ -1,6 +1,5 @@
 package org.sagebionetworks.bixarena.api.configuration;
 
-import java.util.List;
 import org.sagebionetworks.bixarena.api.security.JwtAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -109,17 +108,10 @@ public class SecurityConfiguration {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowCredentials(true);
-    config.setAllowedOrigins(
-      List.of(
-        "http://localhost:8100",
-        "http://127.0.0.1:8100",
-        "http://localhost:7860",
-        "http://127.0.0.1:7860"
-      )
-    );
-    config.setAllowedMethods(List.of("GET", "POST", "PATCH", "OPTIONS"));
-    config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+    config.setAllowCredentials(appProperties.cors().allowCredentials());
+    config.setAllowedOrigins(appProperties.cors().allowedOrigins());
+    config.setAllowedMethods(appProperties.cors().allowedMethods());
+    config.setAllowedHeaders(appProperties.cors().allowedHeaders());
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", config);
     return source;

@@ -157,7 +157,6 @@ model/org-sagebionetworks-repo-model-auth-new-integration-test-user.ts
 model/org-sagebionetworks-repo-model-auth-new-user-signed-token.ts
 model/org-sagebionetworks-repo-model-auth-new-user.ts
 model/org-sagebionetworks-repo-model-auth-password-reset-signed-token.ts
-model/org-sagebionetworks-repo-model-auth-secret-key.ts
 model/org-sagebionetworks-repo-model-auth-session.ts
 model/org-sagebionetworks-repo-model-auth-terms-of-service-agreement.ts
 model/org-sagebionetworks-repo-model-auth-terms-of-service-info.ts
@@ -489,6 +488,7 @@ model/org-sagebionetworks-repo-model-grid-query-row-validation-result-filter.ts
 model/org-sagebionetworks-repo-model-grid-query-select-all.ts
 model/org-sagebionetworks-repo-model-grid-query-select-by-name.ts
 model/org-sagebionetworks-repo-model-grid-query-select-item.ts
+model/org-sagebionetworks-repo-model-grid-query-select-selection.ts
 model/org-sagebionetworks-repo-model-grid-query-validation-operator.ts
 model/org-sagebionetworks-repo-model-grid-replica-selection-model.ts
 model/org-sagebionetworks-repo-model-grid-update-grid-request.ts
@@ -803,6 +803,9 @@ model/org-sagebionetworks-repo-model-table-facet-column-result-range.ts
 model/org-sagebionetworks-repo-model-table-facet-column-result-value-count.ts
 model/org-sagebionetworks-repo-model-table-facet-column-result-values.ts
 model/org-sagebionetworks-repo-model-table-facet-column-result.ts
+model/org-sagebionetworks-repo-model-table-facet-column-sort-config.ts
+model/org-sagebionetworks-repo-model-table-facet-column-sort-direction.ts
+model/org-sagebionetworks-repo-model-table-facet-column-sort-property.ts
 model/org-sagebionetworks-repo-model-table-facet-column-values-request.ts
 model/org-sagebionetworks-repo-model-table-facet-type.ts
 model/org-sagebionetworks-repo-model-table-has-defining-sql.ts

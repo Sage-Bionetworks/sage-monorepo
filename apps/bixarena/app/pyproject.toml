@@ -28,6 +28,7 @@ classifiers = [
 ]
 dependencies = [
     "bixarena-api-client",
+    "fastapi>=0.119.0",
     "gradio>=4.10",
     "numpy",
     "openai>=1.0",
@@ -35,9 +36,10 @@ dependencies = [
     "websockets>=12.0",
 ]
 
-# Transitional console script now points to wrapper package
+# Console scripts for running the application
 [project.scripts]
-bixarena-app = "bixarena_app.__main__:main"
+bixarena-app = "bixarena_app.__main__:main"       # Production mode
+bixarena-app-dev = "bixarena_app.__main__:dev"    # Development mode with auto-reload
 
 [tool.hatch.build.targets.wheel]
 packages = ["bixarena_app"]

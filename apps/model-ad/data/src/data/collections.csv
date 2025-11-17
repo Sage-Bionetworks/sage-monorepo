@@ -2,4 +2,5 @@ dataversion,dataversion.json
 disease_correlation,disease_correlation.json
 model_details,model_details.json
 model_overview,model_overview.json
+rna_de_aggregate,rna_de_aggregate.json
 ui_config,ui_config.json

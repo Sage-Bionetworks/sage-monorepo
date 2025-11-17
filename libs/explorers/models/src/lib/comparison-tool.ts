@@ -9,6 +9,11 @@ export interface LegendPanelConfig {
   sizeChartText: string;
 }
 
+export interface VisualizationOverviewPane {
+  heading: string;
+  content: string;
+}
+
 export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
   headerTitle: string;
@@ -16,8 +21,9 @@ export interface ComparisonToolViewConfig {
   showSignificanceControls: boolean;
   viewDetailsTooltip: string;
   viewDetailsClick: (id: string, label: string) => void;
-  legendPanelConfig: LegendPanelConfig;
   legendEnabled: boolean;
+  legendPanelConfig: LegendPanelConfig;
+  visualizationOverviewPanes: VisualizationOverviewPane[];
 }
 
 export interface ComparisonToolFilterOption {
@@ -92,3 +98,7 @@ export type ComparisonToolLink = {
   link_text?: string;
   link_url?: string;
 };
+
+export interface ComparisonToolUrlParams {
+  pinnedItems?: string[] | null;
+}

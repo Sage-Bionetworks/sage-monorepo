@@ -54,213 +54,309 @@ def create_intro_section():
     with gr.Row():
         with gr.Column():
             gr.HTML("""
-            <div style="text-align: center; padding: 45px 20px;">
-                <h1 style="font-size: 3rem; margin-bottom: 30px; color: white;">
-                    Welcome to BixArena
+            <div style="text-align: center; padding: 2.5rem 1.5rem;">
+                <p style="font-size: 2rem; margin-bottom: 1.5rem; color: var(--text-secondary); opacity: 0.9;">
+                    Welcome to BioArena
+                </p>
+                <h1 style="font-size: 2.2rem; margin-bottom: 2rem; color: var(--text-primary);">
+                    Drive the next wave of biomedical breakthroughs
                 </h1>
-                <p style="font-size: 1.2rem; line-height: 1.6; max-width: 800px; margin: 0 auto; color: #e5e7eb;">
-                    Anyone with a computer and an internet connection can evaluate and benchmark Large 
-                    Language Models (LLMs) to solve major biomedical problems through a community-driven 
-                    platform known as "BixArena." This web-based evaluation arena helps biomedical researchers 
-                    compare LLMs on domain-specific tasks, fostering collaboration and establishing best 
-                    practices. The top-performing models might just accelerate the next breakthrough in clinical 
-                    technology or drug discovery.
+
+                <p style="font-size: 1.125rem; line-height: 1.75; max-width: 42rem; margin: 0 auto; color: var(--text-muted);">
+                    BioArena crowdsources the benchmarking of AI models to unlock the
+                    next breakthrough in biomedicine, inviting a global community of
+                    digital contributors.
                 </p>
             </div>
+            <style>
+            /* Limit metric box row width */
+            #public-stats-row, #user-stats-row {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+            </style>
             """)
 
 
-def load_public_stats_on_page_load() -> tuple[dict, dict, dict, dict, dict, dict]:
-    """Load public stats and update the HTML boxes.
+def load_public_stats_on_page_load() -> dict:
+    """Load public stats and update the stats bar HTML.
 
     Returns:
-        Tuple of (models_column, models_html, battles_column, battles_html, users_column, users_html) updates
+        HTML update for the stats container
     """
     public_stats = fetch_public_stats()
 
-    models_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            MODELS EVALUATED
-        </p>
-        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["models_evaluated"]:,}</h2>
+    stats_html = f"""
+    <div style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); padding: 2.5rem 0; margin: 0 1.5rem;">
+        <div id="stats-public-only">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
+                    <div style="font-size: 1rem; color: var(--text-muted);">Models Evaluated</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
+                    <div style="font-size: 1rem; color: var(--text-muted);">Total Battles</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
+                    <div style="font-size: 1rem; color: var(--text-muted);">Total Users</div>
+                </div>
+            </div>
+        </div>
     </div>
     """
 
-    battles_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            TOTAL BATTLES
-        </p>
-        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["completed_battles"]:,}</h2>
-    </div>
-    """
-
-    users_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            TOTAL USERS
-        </p>
-        <h2 style="color: #2dd4bf; font-size: 3rem; margin: 0;">{public_stats["total_users"]:,}</h2>
-    </div>
-    """
-
-    return (
-        gr.update(visible=True),  # models_evaluated_column
-        gr.update(value=models_html),  # models_evaluated_box
-        gr.update(visible=True),  # total_battles_column
-        gr.update(value=battles_html),  # total_battles_box
-        gr.update(visible=True),  # total_users_column
-        gr.update(value=users_html),  # total_users_box
-    )
+    return gr.update(value=stats_html)
 
 
 def load_user_battles_on_page_load(
     request: gr.Request,
-) -> tuple[dict, dict, dict, dict]:
-    """Load user battles and rank data and control column visibility.
+) -> dict:
+    """Load user battles and rank data and update stats bar to include user stats.
 
     Args:
         request: Gradio request object
 
     Returns:
-        Tuple of (battles_column_update, battles_html_update, rank_column_update, rank_html_update)
+        HTML update for the stats container with user stats included
     """
     user_stats = fetch_user_stats(request)
+    public_stats = fetch_public_stats()
 
     if user_stats is None:
-        # Hide both columns when user is not authenticated
-        return (
-            gr.update(visible=False),
-            gr.update(value=""),
-            gr.update(visible=False),
-            gr.update(value=""),
-        )
+        # Return only public stats when user is not authenticated
+        stats_html = f"""
+        <div style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); padding: 2.5rem 0; margin: 0 1.5rem;">
+            <div id="stats-public-only">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                        <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
+                        <div style="font-size: 1rem; color: var(--text-muted);">Models Evaluated</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                        <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
+                        <div style="font-size: 1rem; color: var(--text-muted);">Total Battles</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                        <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
+                        <div style="font-size: 1rem; color: var(--text-muted);">Total Users</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
+        return gr.update(value=stats_html)
 
-    # Battles Completed box
-    battles_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            BATTLES COMPLETED
-        </p>
-        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">{user_stats.completed_battles}</h2>
+    # Return stats with user data included
+    stats_html = f"""
+    <div style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); padding: 2.5rem 0; margin: 0 1.5rem;">
+        <div id="stats-with-user">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
+                    <div style="font-size: 1rem; color: var(--text-muted);">Models Evaluated</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
+                    <div style="font-size: 1rem; color: var(--text-muted);">Total Battles</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
+                    <div style="font-size: 1rem; color: var(--text-muted);">Total Users</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-orange);">{user_stats.completed_battles:,}</div>
+                    <div style="font-size: 1rem; color: var(--text-muted);">Battles Completed</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-orange);">#{user_stats.rank:,}</div>
+                    <div style="font-size: 1rem; color: var(--text-muted);">Your Rank</div>
+                </div>
+            </div>
+        </div>
     </div>
     """
 
-    # User Rank box - always show for authenticated users
-    rank_html = f"""
-    <div style="text-align: center; padding: 20px;">
-        <p style="color: #9ca3af; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">
-            YOUR RANK
-        </p>
-        <h2 style="color: #f59e0b; font-size: 3rem; margin: 0;">#{user_stats.rank}</h2>
-    </div>
-    """
-
-    return (
-        gr.update(visible=True),
-        gr.update(value=battles_html),
-        gr.update(visible=True),  # Always show rank for authenticated users
-        gr.update(value=rank_html),
-    )
+    return gr.update(value=stats_html)
 
 
-def update_cta_buttons_on_page_load(request: gr.Request) -> tuple[dict, dict]:
+def update_cta_buttons_on_page_load(
+    request: gr.Request,
+) -> tuple[dict, dict, dict]:
     """Update CTA button visibility based on authentication state.
 
     Args:
         request: Gradio request object
 
     Returns:
-        Tuple of (authenticated_btn_update, login_btn_update)
+        Tuple of (authenticated_btn_update, login_btn_update, cta_helper_msg_update)
     """
     if is_authenticated(request):
-        # Show authenticated button, hide login button
-        return (gr.update(visible=True), gr.update(visible=False))
+        # Show authenticated button, hide login button and CTA helper message
+        return (
+            gr.update(visible=True),
+            gr.update(visible=False),
+            gr.update(visible=False),
+        )
     else:
-        # Hide authenticated button, show login button
-        return (gr.update(visible=False), gr.update(visible=True))
+        # Hide authenticated button, show login button and CTA helper message
+        return (
+            gr.update(visible=False),
+            gr.update(visible=True),
+            gr.update(visible=True),
+        )
 
 
 def build_stats_section():
-    """Create the statistics section with metrics"""
+    """Create the statistics section as a horizontal bar with metrics"""
 
-    # First row: Public stats
-    with gr.Row():
-        with gr.Column(visible=False) as models_evaluated_column, gr.Group():
-            models_evaluated_box = gr.HTML("")
-
-        with gr.Column(visible=False) as total_battles_column, gr.Group():
-            total_battles_box = gr.HTML("")
-
-        with gr.Column(visible=False) as total_users_column, gr.Group():
-            total_users_box = gr.HTML("")
-
-    # Second row: User-specific stats (only shown when logged in)
-    with gr.Row():
-        with gr.Column(visible=False) as user_battles_column, gr.Group():
-            user_battles_box = gr.HTML("")
-
-        # New: User rank box
-        with gr.Column(visible=False) as user_rank_column, gr.Group():
-            user_rank_box = gr.HTML("")
-
-    return (
-        models_evaluated_column,
-        models_evaluated_box,
-        total_battles_column,
-        total_battles_box,
-        total_users_column,
-        total_users_box,
-        user_battles_column,
-        user_battles_box,
-        user_rank_column,  # New
-        user_rank_box,  # New
+    # Single horizontal stats bar
+    stats_container = gr.HTML(
+        "", elem_id="stats-bar-container", elem_classes=["stats-bar"]
     )
+
+    return stats_container
+
+
+def build_how_it_works_section():
+    """Create the How It Works section explaining the battle mode process"""
+
+    gr.HTML("""
+    <div style="padding: 2.5rem 1.5rem;">
+        <!-- Section Header -->
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h2 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 1.875rem; font-weight: 600;">
+                Arena Rules
+            </h2>
+            <p style="color: var(--text-muted); font-size: 1rem; max-width: 42rem; margin: 0 auto;">
+                Simple evaluation, powerful impact
+            </p>
+        </div>
+
+        <!-- Steps Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem;">
+            <!-- Step 01 -->
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: var(--accent-orange); font-weight: 600; font-size: 0.875rem;">01</span>
+                    </div>
+                    <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem; font-weight: 600;">
+                        Start a Battle
+                    </h3>
+                </div>
+                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                    Pick a curated biomedical question or submit your own custom prompt. Two AI models are randomly chosen to face off.
+                </p>
+            </div>
+
+            <!-- Step 02 -->
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: var(--accent-orange); font-weight: 600; font-size: 0.875rem;">02</span>
+                    </div>
+                    <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem; font-weight: 600;">
+                        Compare Responses
+                    </h3>
+                </div>
+                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                    Review the two AI-generated answers side by side. The models remain anonymous so you can focus purely on the quality of the content.
+                </p>
+            </div>
+
+            <!-- Step 03 -->
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: var(--accent-orange); font-weight: 600; font-size: 0.875rem;">03</span>
+                    </div>
+                    <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem; font-weight: 600;">
+                        Select the Better
+                    </h3>
+                </div>
+                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                    Decide which model demonstrates clearer reasoning or insight. Your input directly shapes model performance metrics.
+                </p>
+            </div>
+
+            <!-- Step 04 -->
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <span style="color: var(--accent-orange); font-weight: 600; font-size: 0.875rem;">04</span>
+                    </div>
+                    <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem; font-weight: 600;">
+                        Reveal & Impact
+                    </h3>
+                </div>
+                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                    Once you've made your choice, the models are revealed. Only biomedical battles count toward the daily leaderboard. Ready for another round? Jump into your next battle.
+                </p>
+            </div>
+        </div>
+    </div>
+    """)
 
 
 def build_cta_section():
     """Create the call-to-action section with conditional buttons"""
 
-    with gr.Row():
-        with gr.Column():
-            gr.HTML("""
-            <div style="text-align: center; padding: 40px 20px;">
-                <h2 style="font-size: 2rem; margin-bottom: 20px; color: white;">
-                    Ready to Shape the Future of Biomedical AI?
-                </h2>
-                <p style="font-size: 1.1rem; color: #e5e7eb; margin-bottom: 30px;">
-                    Join our community of researchers and help evaluate the next generation of AI models for healthcare breakthroughs.
-                </p>
-            </div>
-            """)
+    with gr.Column(elem_id="cta-section-wrapper"):
+        with gr.Column(elem_id="cta-section-group"):
+            # Two buttons - one for authenticated, one for unauthenticated users
+            # Visibility will be controlled based on authentication state
+            with gr.Row(elem_id="cta-button-row"):
+                with gr.Column(scale=1, min_width=200, elem_id="cta-button-container"):
+                    # Button for authenticated users - navigates to battle page
+                    start_btn_authenticated = gr.Button(
+                        "Start Evaluating Models",
+                        variant="primary",
+                        size="lg",
+                        visible=False,
+                        elem_id="cta-btn-authenticated",
+                    )
+                    # Button for unauthenticated users - redirects to login
+                    start_btn_login = gr.Button(
+                        "Start Evaluating Models",
+                        variant="primary",
+                        size="lg",
+                        visible=False,
+                        elem_id="cta-btn-login",
+                    )
 
-    # Two buttons - one for authenticated, one for unauthenticated users
-    # Visibility will be controlled based on authentication state
-    with gr.Row():
-        with gr.Column(scale=2):
-            pass
-        with gr.Column(scale=1):
-            # Button for authenticated users - navigates to battle page
-            start_btn_authenticated = gr.Button(
-                "Start Evaluating Models",
-                variant="primary",
-                size="lg",
-                visible=False,
-                elem_id="cta-btn-authenticated",
-            )
-            # Button for unauthenticated users - redirects to login
-            start_btn_login = gr.Button(
-                "Start Evaluating Models",
-                variant="primary",
-                size="lg",
-                visible=False,
-                elem_id="cta-btn-login",
-            )
-        with gr.Column(scale=2):
-            pass
+            # Small note below the button - only shown for non-authenticated users
+            with gr.Row():
+                with gr.Column():
+                    cta_helper_msg = gr.HTML(
+                        """
+                        <div style="text-align: center; padding: 10px 1.5rem 0 1.5rem;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.875rem; opacity: 0.6;">
+                                <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #f97316; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; opacity: 1;"></div>
+                                <span>Sign in with your Synapse account to Start a Battle</span>
+                            </div>
+                        </div>
+                        <style>
+                        /* CTA section wrapper with consistent bottom padding */
+                        #cta-section-wrapper {
+                            padding: 0 1.5rem 2.5rem 1.5rem;
+                            flex-grow: unset !important;
+                        }
+                        /* Remove gap between CTA button and help message */
+                        #cta-section-group {
+                            gap: 0 !important;
+                        }
+                        @keyframes pulse {
+                            0%, 100% { opacity: 1; }
+                            50% { opacity: 0.5; }
+                        }
+                        </style>
+                        """,
+                        visible=False,
+                    )
 
-    return start_btn_authenticated, start_btn_login
+    return start_btn_authenticated, start_btn_login, cta_helper_msg
 
 
 def build_home_page():
@@ -270,35 +366,19 @@ def build_home_page():
         # Intro Section
         create_intro_section()
 
-        # Stats Section
-        (
-            models_evaluated_column,
-            models_evaluated_box,
-            total_battles_column,
-            total_battles_box,
-            total_users_column,
-            total_users_box,
-            user_battles_column,
-            user_battles_box,
-            user_rank_column,  # New
-            user_rank_box,  # New
-        ) = build_stats_section()
-
         # Call to Action Section
-        start_btn_authenticated, start_btn_login = build_cta_section()
+        start_btn_authenticated, start_btn_login, cta_helper_msg = build_cta_section()
+
+        # Stats Section (single horizontal bar)
+        stats_container = build_stats_section()
+
+        # How It Works Section
+        build_how_it_works_section()
 
     return (
         home_page,
         start_btn_authenticated,
         start_btn_login,
-        models_evaluated_column,
-        models_evaluated_box,
-        total_battles_column,
-        total_battles_box,
-        total_users_column,
-        total_users_box,
-        user_battles_column,
-        user_battles_box,
-        user_rank_column,  # New
-        user_rank_box,  # New
+        cta_helper_msg,
+        stats_container,
     )

@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 
 import gradio as gr
 import pandas as pd
@@ -8,7 +7,6 @@ from bixarena_api_client.exceptions import ApiException
 
 from bixarena_app.api.api_client_helper import (
     create_authenticated_api_client,
-    fetch_public_stats,
 )
 
 logger = logging.getLogger(__name__)
@@ -108,34 +106,7 @@ def load_leaderboard_stats_on_page_load() -> dict:
     Returns:
         Gradio update dict for the metrics HTML component
     """
-    stats = fetch_public_stats()
-    total_battles = stats["completed_battles"]
-    models_evaluated = stats["models_evaluated"]
-    last_updated = datetime.now().strftime("%b %d, %Y")
-
-    metrics_html = f"""
-        <div style="display: flex;">
-            <div style="flex: 1;">
-                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin: 10px;">
-                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 5px;">{last_updated}</div>
-                    <div style="font-size: 1.1rem; opacity: 0.9;">Last Updated</div>
-                </div>
-            </div>
-            <div style="flex: 1;">
-                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin: 10px;">
-                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 5px;">{total_battles:,}</div>
-                    <div style="font-size: 1.1rem; opacity: 0.9;">Total Battles</div>
-                </div>
-            </div>
-            <div style="flex: 1;">
-                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin: 10px;">
-                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 5px;">{models_evaluated}</div>
-                    <div style="font-size: 1.1rem; opacity: 0.9;">Models Evaluated</div>
-                </div>
-            </div>
-        </div>
-        """
-
+    metrics_html = ""
     return gr.update(value=metrics_html)
 
 
@@ -149,8 +120,8 @@ def build_leaderboard_page():
 
     with gr.Column():
         # Title and stats
-        gr.Markdown("# 🏆 BixArena Leaderboard")
-        gr.Markdown("Community-driven evaluation of biomedical LLMs by Synapse users")
+        gr.Markdown("# 🏆 Leaderboard")
+        gr.Markdown("Community-driven evaluation of biomedical AI models")
 
         # Metrics - will be populated dynamically on page load
         leaderboard_metrics = gr.HTML("")
@@ -158,8 +129,8 @@ def build_leaderboard_page():
         # Coming soon message
         gr.HTML("""
         <div style="
-            background: rgba(15, 15, 15, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 64px 48px;
         ">
@@ -185,24 +156,25 @@ def build_leaderboard_page():
                     font-weight: 500;
                     margin-bottom: 16px;
                     line-height: 1.5;
+                    color: var(--text-primary);
                 ">
                     Leaderboard Rankings Coming Soon
                 </h3>
 
                 <!-- Description -->
                 <p style="
-                    color: rgba(229, 231, 235, 0.7);
+                    color: var(--text-secondary);
                     line-height: 1.625;
                     margin-bottom: 0;
                     font-size: 1rem;
                 ">
-                    The leaderboard will be published once we have sufficient evaluations to 
+                    The leaderboard will be published once we have sufficient evaluations to
                     ensure statistically meaningful model rankings.
                 </p>
                 <div style="padding-top: 16px;">
                     <p style="
                         font-size: 0.875rem;
-                        color: rgba(229, 231, 235, 0.5);
+                        color: var(--text-muted);
                         line-height: 1.625;
                         margin: 0;
                     ">

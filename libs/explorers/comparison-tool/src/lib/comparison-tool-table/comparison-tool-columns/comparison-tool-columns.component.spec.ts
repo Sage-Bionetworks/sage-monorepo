@@ -68,25 +68,43 @@ describe('ComparisonToolColumnsComponent', () => {
 
   it('should update sort state when column sorts are clicked', async () => {
     const { user, service } = await setup();
-    expect(service.sortField()).toBe(undefined);
-    expect(service.sortOrder()).toBe(-1);
+    expect(service.multiSortMeta()).toStrictEqual([]);
 
     const firstColumnToSort = mockComparisonToolColumns[0];
     const firstColumnHeader = screen.getByRole('columnheader', { name: firstColumnToSort.name });
 
     await user.click(firstColumnHeader);
-    expect(service.sortField()).toBe(firstColumnToSort.data_key);
-    expect(service.sortOrder()).toBe(-1);
+    expect(service.multiSortMeta()).toEqual([{ field: firstColumnToSort.data_key, order: -1 }]);
 
     await user.click(firstColumnHeader);
-    expect(service.sortField()).toBe(firstColumnToSort.data_key);
-    expect(service.sortOrder()).toBe(1);
+    expect(service.multiSortMeta()).toEqual([{ field: firstColumnToSort.data_key, order: 1 }]);
 
     const secondColumnToSort = mockComparisonToolColumns[1];
     const secondColumnHeader = screen.getByRole('columnheader', { name: secondColumnToSort.name });
 
     await user.click(secondColumnHeader);
-    expect(service.sortField()).toBe(secondColumnToSort.data_key);
-    expect(service.sortOrder()).toBe(-1);
+    expect(service.multiSortMeta()).toEqual([{ field: secondColumnToSort.data_key, order: -1 }]);
+  });
+
+  it('should allow sorting by multiple columns when metaKey is held', async () => {
+    const { user, service } = await setup();
+    expect(service.multiSortMeta()).toStrictEqual([]);
+
+    const firstColumnToSort = mockComparisonToolColumns[0];
+    const firstColumnHeader = screen.getByRole('columnheader', { name: firstColumnToSort.name });
+
+    await user.click(firstColumnHeader);
+    expect(service.multiSortMeta()).toEqual([{ field: firstColumnToSort.data_key, order: -1 }]);
+
+    const secondColumnToSort = mockComparisonToolColumns[1];
+    const secondColumnHeader = screen.getByRole('columnheader', { name: secondColumnToSort.name });
+
+    await user.keyboard('{Meta>}');
+    await user.click(secondColumnHeader);
+    await user.keyboard('{/Meta}');
+    expect(service.multiSortMeta()).toEqual([
+      { field: firstColumnToSort.data_key, order: -1 },
+      { field: secondColumnToSort.data_key, order: -1 },
+    ]);
   });
 });
