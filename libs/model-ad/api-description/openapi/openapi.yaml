@@ -26,6 +26,8 @@ tags:
     description: Operations about Disease Correlation results.
 paths:
   /data-version:
+    x-audience:
+      - public
     get:
       tags:
         - Data Version

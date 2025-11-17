@@ -1,0 +1,1 @@
+FROM ghcr.io/sage-bionetworks/model-ad-api-next-base:local

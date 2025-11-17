@@ -13,6 +13,9 @@ include(":bixarena-api-gateway")
 include(":bixarena-api")
 include(":bixarena-auth-service")
 
+// Include the Model-AD projects as submodules
+include(":model-ad-api-next")
+
 // Include the OpenChallenges projects as submodules
 include(":openchallenges-api-client-java")
 include(":openchallenges-api-gateway")
@@ -33,6 +36,7 @@ project(":amp-als-user-service").projectDir = file("apps/amp-als/user-service")
 project(":bixarena-api-gateway").projectDir = file("apps/bixarena/api-gateway")
 project(":bixarena-api").projectDir = file("apps/bixarena/api")
 project(":bixarena-auth-service").projectDir = file("apps/bixarena/auth-service")
+project(":model-ad-api-next").projectDir = file("apps/model-ad/api-next")
 project(":openchallenges-api-client-java").projectDir = file("libs/openchallenges/api-client-java")
 project(":openchallenges-api-gateway").projectDir = file("apps/openchallenges/api-gateway")
 project(":openchallenges-auth-service").projectDir = file("apps/openchallenges/auth-service")

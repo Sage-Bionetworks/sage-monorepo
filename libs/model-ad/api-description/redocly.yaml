@@ -33,13 +33,16 @@ apis:
   api-public:
     root: ./src/api.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
   api-service:
     root: ./src/api.openapi.yaml
+
+  # API for modernized and next generation features
+  api-next-public:
+    root: ./src/api-next.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
+  api-next-service:
+    root: ./src/api-next.openapi.yaml
