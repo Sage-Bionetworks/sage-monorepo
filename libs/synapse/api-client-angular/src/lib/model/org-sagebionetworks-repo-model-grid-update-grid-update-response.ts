@@ -13,7 +13,11 @@
  */
 export interface OrgSagebionetworksRepoModelGridUpdateGridUpdateResponse {
   /**
-   * Number of rows actually updated (after applying any limit).
+   * Number of rows updated for each update in the batch, in the same order as the request. Each element corresponds to one update operation.
    */
-  rowsUpdated?: number;
+  updateResults?: Array<number>;
+  /**
+   * Total number of rows updated across all updates in the batch.
+   */
+  totalRowsUpdated?: number;
 }
