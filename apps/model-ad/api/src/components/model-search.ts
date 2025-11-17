@@ -4,6 +4,8 @@ import { NextFunction, Request, Response } from 'express';
 import { buildCacheKey, cache, sendProblemJson, setHeaders } from '../helpers';
 import { ModelCollection } from '../models';
 
+const MIN_QUERY_LENGTH = 1;
+
 export async function searchModels(query: string) {
   // Validate input is a primitive string and not an object
   if (typeof query !== 'string') {
@@ -93,12 +95,12 @@ export async function modelsSearchRoute(req: Request, res: Response, next: NextF
 
   const query = req.query.q;
 
-  if (query.length < 3 || query.length > 100) {
+  if (query.length < MIN_QUERY_LENGTH || query.length > 100) {
     sendProblemJson(
       res,
       400,
       'Bad Request',
-      'Query parameter q must be between 3 and 100 characters',
+      `Query parameter q must be between ${MIN_QUERY_LENGTH} and 100 characters`,
       req.path,
     );
     return;
