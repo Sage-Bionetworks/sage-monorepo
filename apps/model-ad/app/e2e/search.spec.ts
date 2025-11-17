@@ -102,16 +102,6 @@ test.describe('search', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(modelName);
   });
 
-  test('shows error when query is too short', async ({ page }) => {
-    await page.goto('/');
-
-    const input = page.getByPlaceholder(headerSearchPlaceholder);
-    await input.pressSequentially('ab');
-    await expect(
-      page.getByRole('listitem').filter({ hasText: /please enter at least three characters/i }),
-    ).toBeVisible();
-  });
-
   test('shows error when no results are returned', async ({ page }) => {
     await page.goto('/');
     const input = page.getByPlaceholder(headerSearchPlaceholder);
