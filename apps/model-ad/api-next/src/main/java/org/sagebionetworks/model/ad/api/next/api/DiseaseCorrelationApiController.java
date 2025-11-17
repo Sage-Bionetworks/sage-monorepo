@@ -30,7 +30,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.modelAD.base-path:/v1}")
+@RequestMapping("${openapi.modelADAPINext.base-path:/v1}")
 public class DiseaseCorrelationApiController implements DiseaseCorrelationApi {
 
     private final DiseaseCorrelationApiDelegate delegate;

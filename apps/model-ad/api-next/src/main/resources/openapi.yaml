@@ -6,7 +6,7 @@ info:
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
-  title: Model-AD API
+  title: Model-AD API Next
   version: 1.0.0
   x-logo:
     url: https://dev.modeladexplorer.org/opengraph/opengraph.png
@@ -422,7 +422,7 @@ components:
       description: Data for an individual
       example:
         sex: Female
-        value: 1.4658129805029452
+        value: 5.962133916683182
         genotype: genotype
         individual_id: individual_id
       properties:
@@ -449,16 +449,17 @@ components:
         evidence_type: evidence_type
         data:
           - sex: Female
-            value: 1.4658129805029452
+            value: 5.962133916683182
             genotype: genotype
             individual_id: individual_id
           - sex: Female
-            value: 1.4658129805029452
+            value: 5.962133916683182
             genotype: genotype
             individual_id: individual_id
         name: name
         tissue: tissue
         units: units
+        y_axis_max: 1.4658129805029452
         age: age
       properties:
         name:
@@ -476,6 +477,9 @@ components:
         units:
           description: Units of measurement
           type: string
+        y_axis_max:
+          description: Maximum value for y-axis in visualizations
+          type: number
         data:
           description: Values for each individual
           items:
@@ -488,6 +492,7 @@ components:
         - name
         - tissue
         - units
+        - y_axis_max
       type: object
     Model:
       description: Model details
@@ -510,60 +515,64 @@ components:
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 1.4658129805029452
+                value: 5.962133916683182
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 1.4658129805029452
+                value: 5.962133916683182
                 genotype: genotype
                 individual_id: individual_id
             name: name
             tissue: tissue
             units: units
+            y_axis_max: 1.4658129805029452
             age: age
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 1.4658129805029452
+                value: 5.962133916683182
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 1.4658129805029452
+                value: 5.962133916683182
                 genotype: genotype
                 individual_id: individual_id
             name: name
             tissue: tissue
             units: units
+            y_axis_max: 1.4658129805029452
             age: age
         contributing_group: contributing_group
         biomarkers:
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 1.4658129805029452
+                value: 5.962133916683182
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 1.4658129805029452
+                value: 5.962133916683182
                 genotype: genotype
                 individual_id: individual_id
             name: name
             tissue: tissue
             units: units
+            y_axis_max: 1.4658129805029452
             age: age
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 1.4658129805029452
+                value: 5.962133916683182
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 1.4658129805029452
+                value: 5.962133916683182
                 genotype: genotype
                 individual_id: individual_id
             name: name
             tissue: tissue
             units: units
+            y_axis_max: 1.4658129805029452
             age: age
         gene_expression: gene_expression
         disease_correlation: disease_correlation

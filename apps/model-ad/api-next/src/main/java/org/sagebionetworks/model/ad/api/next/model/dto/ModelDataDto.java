@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +39,8 @@ public class ModelDataDto {
 
   private String units;
 
+  private BigDecimal yAxisMax;
+
   @Valid
   private List<@Valid IndividualDataDto> data = new ArrayList<>();
 
@@ -48,12 +51,13 @@ public class ModelDataDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelDataDto(String name, String evidenceType, String tissue, String age, String units, List<@Valid IndividualDataDto> data) {
+  public ModelDataDto(String name, String evidenceType, String tissue, String age, String units, BigDecimal yAxisMax, List<@Valid IndividualDataDto> data) {
     this.name = name;
     this.evidenceType = evidenceType;
     this.tissue = tissue;
     this.age = age;
     this.units = units;
+    this.yAxisMax = yAxisMax;
     this.data = data;
   }
 
@@ -157,6 +161,26 @@ public class ModelDataDto {
     this.units = units;
   }
 
+  public ModelDataDto yAxisMax(BigDecimal yAxisMax) {
+    this.yAxisMax = yAxisMax;
+    return this;
+  }
+
+  /**
+   * Maximum value for y-axis in visualizations
+   * @return yAxisMax
+   */
+  @NotNull @Valid 
+  @Schema(name = "y_axis_max", description = "Maximum value for y-axis in visualizations", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("y_axis_max")
+  public BigDecimal getyAxisMax() {
+    return yAxisMax;
+  }
+
+  public void setyAxisMax(BigDecimal yAxisMax) {
+    this.yAxisMax = yAxisMax;
+  }
+
   public ModelDataDto data(List<@Valid IndividualDataDto> data) {
     this.data = data;
     return this;
@@ -199,12 +223,13 @@ public class ModelDataDto {
         Objects.equals(this.tissue, modelData.tissue) &&
         Objects.equals(this.age, modelData.age) &&
         Objects.equals(this.units, modelData.units) &&
+        Objects.equals(this.yAxisMax, modelData.yAxisMax) &&
         Objects.equals(this.data, modelData.data);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, evidenceType, tissue, age, units, data);
+    return Objects.hash(name, evidenceType, tissue, age, units, yAxisMax, data);
   }
 
   @Override
@@ -216,6 +241,7 @@ public class ModelDataDto {
     sb.append("    tissue: ").append(toIndentedString(tissue)).append("\n");
     sb.append("    age: ").append(toIndentedString(age)).append("\n");
     sb.append("    units: ").append(toIndentedString(units)).append("\n");
+    sb.append("    yAxisMax: ").append(toIndentedString(yAxisMax)).append("\n");
     sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -250,6 +276,7 @@ public class ModelDataDto {
       this.instance.setTissue(value.tissue);
       this.instance.setAge(value.age);
       this.instance.setUnits(value.units);
+      this.instance.setyAxisMax(value.yAxisMax);
       this.instance.setData(value.data);
       return this;
     }
@@ -276,6 +303,11 @@ public class ModelDataDto {
     
     public ModelDataDto.Builder units(String units) {
       this.instance.units(units);
+      return this;
+    }
+    
+    public ModelDataDto.Builder yAxisMax(BigDecimal yAxisMax) {
+      this.instance.yAxisMax(yAxisMax);
       return this;
     }
     
