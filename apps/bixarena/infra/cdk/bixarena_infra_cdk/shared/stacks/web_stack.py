@@ -87,6 +87,11 @@ class WebStack(cdk.Stack):
             ),
             "APP_BRAND_URL": "https://sagebionetworks.org",
             "APP_CONTACT_URL": "https://sagebionetworks.org/contact",
+            "APP_ISSUE_URL": "https://forms.gle/WsvSdEfv5MfFpeedA",
+            "ENABLE_CRISP": "false",
+            "BATTLE_ROUND_LIMIT": "5",
+            "MAX_RESPONSE_TOKENS": "1024",
+            "PROMPT_LEN_LIMIT": "5000",
         }
 
         # Create AWS Secrets Manager secret for OpenRouter API key

@@ -221,7 +221,6 @@ class AlbStack(cdk.Stack):
             "LoadBalancerDnsName",
             value=self.alb_construct.alb.load_balancer_dns_name,
             description="ALB DNS name",
-            export_name=f"{stack_prefix}-alb-dns-name",
         )
 
         cdk.CfnOutput(
