@@ -1,0 +1,12 @@
+type: object
+description: Fold Change result
+properties:
+  log2_fc:
+    type: number
+    description: Log2 fold change
+  adj_p_val:
+    type: number
+    description: Adjusted p-value
+required:
+  - log2_fc
+  - adj_p_val

@@ -24,6 +24,8 @@ tags:
     description: Operations about Comparison Tool UI configuration.
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
+  - name: Gene Expression
+    description: Operations about Gene Expression results.
 paths:
   /data-version:
     x-audience:
@@ -175,6 +177,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/DiseaseCorrelation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/gene-expression:
+    get:
+      tags:
+        - Gene Expression
+      summary: Get gene expression comparison data
+      description: Returns a list of gene expression objects for use in comparison tools.
+      operationId: getGeneExpressions
+      parameters:
+        - $ref: '#/components/parameters/categoryQuery'
+        - $ref: '#/components/parameters/itemQuery'
+        - $ref: '#/components/parameters/itemFilterTypeQuery'
+      responses:
+        '200':
+          description: A list of gene expression objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeneExpression'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -652,6 +680,79 @@ components:
         - modified_genes
         - cluster
         - age
+        - sex
+    SexCohort:
+      type: string
+      description: Sex Cohort
+      enum:
+        - Females
+        - Females & Males
+        - Males
+    FoldChangeResult:
+      type: object
+      description: Fold Change result
+      properties:
+        log2_fc:
+          type: number
+          description: Log2 fold change
+        adj_p_val:
+          type: number
+          description: Adjusted p-value
+      required:
+        - log2_fc
+        - adj_p_val
+    GeneExpression:
+      type: object
+      description: Disease Correlation
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the disease correlation object
+        ensembl_gene_id:
+          type: string
+          description: Ensembl Gene ID
+        gene_symbol:
+          type: string
+          description: Gene Symbol
+        biodomains:
+          type: array
+          description: List of biodomains associated with the gene
+          items:
+            type: string
+        name:
+          type: string
+          description: Model name
+        matched_control:
+          type: string
+          description: Matched control for the model
+        model_group:
+          type: string
+          description: Model group
+          nullable: true
+        model_type:
+          type: string
+          description: Type of model
+        tissue:
+          type: string
+          description: Tissue type
+        sex:
+          $ref: '#/components/schemas/SexCohort'
+        4 months:
+          $ref: '#/components/schemas/FoldChangeResult'
+        12 months:
+          $ref: '#/components/schemas/FoldChangeResult'
+        18 months:
+          $ref: '#/components/schemas/FoldChangeResult'
+      required:
+        - _id
+        - ensembl_gene_id
+        - gene_symbol
+        - biodomains
+        - name
+        - matched_control
+        - model_group
+        - model_type
+        - tissue
         - sex
   responses:
     BadRequest:

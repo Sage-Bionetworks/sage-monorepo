@@ -10,6 +10,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/api/DataVersionApiDelegate.j
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiDelegate.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApiController.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiDelegate.java
@@ -27,6 +30,8 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ComparisonToolPage
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/CorrelationResultDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/DataVersionDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/DiseaseCorrelationDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/FoldChangeResultDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneExpressionDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneticInfoDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/IndividualDataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ItemFilterTypeQueryDto.java
@@ -35,5 +40,6 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewLinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/SearchResultDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/SexCohortDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/SexDto.java
 src/main/resources/openapi.yaml

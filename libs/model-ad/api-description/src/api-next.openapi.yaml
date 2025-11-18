@@ -24,6 +24,8 @@ tags:
     description: Operations about Comparison Tool UI configuration.
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
+  - name: Gene Expression
+    description: Operations about Gene Expression results.
 paths:
   /data-version:
     $ref: paths/data-version.yaml
@@ -37,3 +39,5 @@ paths:
     $ref: paths/comparison-tools/model-overview.yaml
   /comparison-tools/disease-correlation:
     $ref: paths/comparison-tools/disease-correlation.yaml
+  /comparison-tools/gene-expression:
+    $ref: paths/comparison-tools/gene-expression.yaml

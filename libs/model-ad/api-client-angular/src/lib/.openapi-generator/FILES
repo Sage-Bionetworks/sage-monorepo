@@ -5,6 +5,7 @@ api/api.ts
 api/comparison-tool-config.service.ts
 api/data-version.service.ts
 api/disease-correlation.service.ts
+api/gene-expression.service.ts
 api/model-overview.service.ts
 api/model.service.ts
 configuration.ts
@@ -19,6 +20,8 @@ model/comparison-tool-page.ts
 model/correlation-result.ts
 model/data-version.ts
 model/disease-correlation.ts
+model/fold-change-result.ts
+model/gene-expression.ts
 model/genetic-info.ts
 model/individual-data.ts
 model/item-filter-type-query.ts
@@ -28,6 +31,7 @@ model/model-overview.ts
 model/model.ts
 model/models.ts
 model/search-result.ts
+model/sex-cohort.ts
 model/sex.ts
 param.ts
 variables.ts
