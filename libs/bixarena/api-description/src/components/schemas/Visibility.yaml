@@ -1,0 +1,7 @@
+type: string
+enum:
+  - public
+  - private
+description: Visibility status of a resource.
+default: private
+example: public

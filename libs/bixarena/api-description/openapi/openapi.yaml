@@ -359,6 +359,8 @@ paths:
                 $ref: '#/components/schemas/LeaderboardEntryPage'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '429':
@@ -420,6 +422,8 @@ paths:
                 $ref: '#/components/schemas/LeaderboardSnapshotPage'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '429':
@@ -1572,6 +1576,14 @@ components:
         - created_at
       default: created_at
       example: created_at
+    Visibility:
+      type: string
+      enum:
+        - public
+        - private
+      description: Visibility status of a resource.
+      default: private
+      example: public
     LeaderboardSnapshotQuery:
       type: object
       description: A query for retrieving leaderboard snapshots.
@@ -1595,6 +1607,13 @@ components:
           $ref: '#/components/schemas/LeaderboardSnapshotSort'
         direction:
           $ref: '#/components/schemas/SortDirection'
+        visibility:
+          description: An array of visibility values used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/Visibility'
+          default:
+            - public
     LeaderboardSnapshot:
       type: object
       description: A snapshot representing the state of a leaderboard at a specific point in time.
@@ -1603,6 +1622,8 @@ components:
           type: string
           description: Unique identifier for this snapshot
           example: snapshot_2025-08-16_14-30
+        visibility:
+          $ref: '#/components/schemas/Visibility'
         createdAt:
           type: string
           format: date-time
@@ -1619,6 +1640,7 @@ components:
           example: Weekly evaluation run
       required:
         - id
+        - visibility
         - createdAt
         - entryCount
     LeaderboardSnapshotPage:
