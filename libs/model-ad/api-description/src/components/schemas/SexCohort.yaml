@@ -1,0 +1,6 @@
+type: string
+description: Sex Cohort
+enum:
+  - Females
+  - Females & Males
+  - Males

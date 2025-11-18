@@ -1,0 +1,52 @@
+type: object
+description: Disease Correlation
+properties:
+  _id:
+    type: string
+    description: Unique identifier for the disease correlation object
+  ensembl_gene_id:
+    type: string
+    description: Ensembl Gene ID
+  gene_symbol:
+    type: string
+    description: Gene Symbol
+  biodomains:
+    type: array
+    description: List of biodomains associated with the gene
+    items:
+      type: string
+  name:
+    type: string
+    description: Model name
+  matched_control:
+    type: string
+    description: Matched control for the model
+  model_group:
+    type: string
+    description: Model group
+    nullable: true
+  model_type:
+    type: string
+    description: Type of model
+  tissue:
+    type: string
+    description: Tissue type
+  sex:
+    $ref: './SexCohort.yaml'
+  4 months:
+    $ref: './FoldChangeResult.yaml'
+  12 months:
+    $ref: './FoldChangeResult.yaml'
+  18 months:
+    $ref: './FoldChangeResult.yaml'
+required:
+  - _id
+  - ensembl_gene_id
+  - gene_symbol
+  - biodomains
+  - name
+  - matched_control
+  - model_group
+  - model_type
+  - tissue
+  - sex
