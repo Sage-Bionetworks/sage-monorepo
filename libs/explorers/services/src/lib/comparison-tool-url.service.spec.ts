@@ -49,7 +49,7 @@ describe('ComparisonToolUrlService', () => {
       [],
       expect.objectContaining({
         queryParams: expect.objectContaining({
-          pinned: ['id3', 'id1', 'id2'],
+          pinned: 'id3,id1,id2',
         }),
       }),
     );
@@ -69,7 +69,7 @@ describe('ComparisonToolUrlService', () => {
   });
 
   it('should deserialize pinned items', async () => {
-    queryParamsSubject.next({ pinned: ['id1', 'id2', 'id3'] });
+    queryParamsSubject.next({ pinned: 'id1,id2,id3' });
 
     await new Promise((resolve) => setTimeout(resolve, 100));
     const params = await firstValueFrom(service.params$);

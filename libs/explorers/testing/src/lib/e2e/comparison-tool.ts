@@ -1,8 +1,17 @@
 import { expect, Locator, Page } from '@playwright/test';
 
 export const getPinnedQueryParams = (url: string): string[] => {
-  const params = new URL(url).searchParams.getAll('pinned');
-  return params;
+  const searchParams = new URL(url).searchParams;
+  const pinnedValues = searchParams.getAll('pinned');
+
+  if (!pinnedValues.length) {
+    return [];
+  }
+
+  return pinnedValues
+    .flatMap((value) => value.split(','))
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0);
 };
 
 export const getPinnedTable = (page: Page): Locator => page.locator('explorers-base-table').first();

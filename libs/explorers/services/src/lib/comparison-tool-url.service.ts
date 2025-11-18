@@ -44,7 +44,7 @@ export class ComparisonToolUrlService {
     const params: Params = {};
 
     if (state.pinnedItems && state.pinnedItems.length > 0) {
-      params['pinned'] = [...state.pinnedItems];
+      params['pinned'] = state.pinnedItems.join(',');
     } else if (state.pinnedItems !== undefined) {
       params['pinned'] = null;
     }
@@ -56,16 +56,31 @@ export class ComparisonToolUrlService {
     const result: ComparisonToolUrlParams = {};
 
     if (params['pinned']) {
-      result.pinnedItems = this.toArray(params['pinned']);
+      const pinnedItems = this.parsePinnedParam(params['pinned']);
+      if (pinnedItems.length > 0) {
+        result.pinnedItems = pinnedItems;
+      }
     }
 
     return result;
   }
 
-  private toArray(value: string | string[] | null | undefined): string[] {
-    if (Array.isArray(value)) {
-      return value.map(String);
+  private parsePinnedParam(value: string | string[] | null | undefined): string[] {
+    if (value == null) {
+      return [];
     }
-    return [String(value)];
+
+    const values = Array.isArray(value) ? value : [value];
+
+    return values
+      .flatMap((entry) => `${entry}`.split(','))
+      .map((entry) => {
+        try {
+          return decodeURIComponent(entry);
+        } catch {
+          return entry;
+        }
+      })
+      .filter((entry) => entry.length > 0);
   }
 }
