@@ -229,7 +229,7 @@ describe('ComparisonToolService', () => {
           [],
           expect.objectContaining({
             queryParams: expect.objectContaining({
-              pinned: ['id1'],
+              pinned: 'id1',
             }),
           }),
         );
@@ -245,14 +245,14 @@ describe('ComparisonToolService', () => {
         tick();
 
         const lastCall = getLastNavigateCall();
-        expect(lastCall?.[1]?.queryParams?.pinned).toEqual(['id3', 'id1', 'id2']);
+        expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id3,id1,id2');
       }));
 
       it('should restore pinned items from URL', fakeAsync(() => {
         injectService().initialize(mockComparisonToolDataConfig);
         flushInitialUrlSync();
 
-        queryParamsSubject.next({ pinned: ['id1', 'id2'] });
+        queryParamsSubject.next({ pinned: 'id1,id2' });
         tick(COMPARISON_TOOL_URL_SYNC_DEBOUNCE_MS + 1);
         tick();
 
@@ -269,7 +269,7 @@ describe('ComparisonToolService', () => {
         tick();
 
         const lastCall = getLastNavigateCall();
-        expect(lastCall?.[1]?.queryParams?.pinned).toEqual(['id2']);
+        expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id2');
       }));
 
       it('should sync when pinning list of items', fakeAsync(() => {
@@ -280,7 +280,7 @@ describe('ComparisonToolService', () => {
         tick();
 
         const lastCall = getLastNavigateCall();
-        expect(lastCall?.[1]?.queryParams?.pinned).toEqual(['id1', 'id2', 'id3']);
+        expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id1,id2,id3');
       }));
 
       it('should sync when resetting pinned items', fakeAsync(() => {
@@ -289,7 +289,7 @@ describe('ComparisonToolService', () => {
 
         service.pinItem('id1');
         tick();
-        expect(getLastNavigateCall()?.[1]?.queryParams?.pinned).toEqual(['id1']);
+        expect(getLastNavigateCall()?.[1]?.queryParams?.pinned).toEqual('id1');
 
         service.resetPinnedItems();
         tick();
