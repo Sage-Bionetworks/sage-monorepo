@@ -118,7 +118,6 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
         values: ['4 months', '8 months', '12 months'],
       },
     ],
-    dropdown_menus: [],
   },
 ];
 

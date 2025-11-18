@@ -21,15 +21,9 @@ properties:
     description: List of filter configurations
     items:
       $ref: './ComparisonToolConfigFilter.yaml'
-  dropdown_menus:
-    type: array
-    description: List of dropdown menu configurations
-    items:
-      $ref: './ComparisonToolConfigDropdownMenu.yaml'
 required:
   - page
   - dropdowns
   - row_count
   - columns
-  - dropdown_menus
   - filters

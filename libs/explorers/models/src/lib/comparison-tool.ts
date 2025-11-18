@@ -77,17 +77,12 @@ export interface ComparisonToolColumn extends ComparisonToolConfigColumn {
   selected: boolean;
 }
 
-export interface ComparisonToolConfigDropdownMenu {
-  options: string[];
-}
-
 export interface ComparisonToolConfig {
   page: ComparisonToolPage;
   dropdowns: string[];
   row_count: string;
   columns: ComparisonToolConfigColumn[];
   filters: ComparisonToolConfigFilter[];
-  dropdown_menus: ComparisonToolConfigDropdownMenu[];
 }
 
 export type HeatmapCircleData<ColorKey extends string = string> = {
