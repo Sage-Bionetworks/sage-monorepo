@@ -3,6 +3,7 @@ package org.sagebionetworks.bixarena.api.model.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotDto;
+import org.sagebionetworks.bixarena.api.model.dto.VisibilityDto;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardSnapshotEntity;
 import org.sagebionetworks.bixarena.api.model.projection.SnapshotWithEntryCount;
 
@@ -41,6 +42,7 @@ public class LeaderboardSnapshotMapper {
 
     return LeaderboardSnapshotDto.builder()
       .id(projection.getSnapshotIdentifier())
+      .visibility(VisibilityDto.fromValue(projection.getVisibility()))
       .createdAt(projection.getCreatedAt())
       .entryCount(projection.getEntryCount().intValue())
       .description(projection.getDescription())

@@ -40,6 +40,10 @@ public class LeaderboardSnapshotEntity {
   @Column(name = "description")
   private String description;
 
+  @Column(name = "visibility", nullable = false, length = 20)
+  @Builder.Default
+  private String visibility = "private";
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;

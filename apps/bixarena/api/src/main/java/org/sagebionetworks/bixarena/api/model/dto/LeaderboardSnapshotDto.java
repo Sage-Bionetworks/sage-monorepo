@@ -5,7 +5,9 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
+import org.sagebionetworks.bixarena.api.model.dto.VisibilityDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -28,6 +30,8 @@ public class LeaderboardSnapshotDto {
 
   private String id;
 
+  private VisibilityDto visibility = VisibilityDto.PRIVATE;
+
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
@@ -42,8 +46,9 @@ public class LeaderboardSnapshotDto {
   /**
    * Constructor with only required parameters
    */
-  public LeaderboardSnapshotDto(String id, OffsetDateTime createdAt, Integer entryCount) {
+  public LeaderboardSnapshotDto(String id, VisibilityDto visibility, OffsetDateTime createdAt, Integer entryCount) {
     this.id = id;
+    this.visibility = visibility;
     this.createdAt = createdAt;
     this.entryCount = entryCount;
   }
@@ -66,6 +71,26 @@ public class LeaderboardSnapshotDto {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public LeaderboardSnapshotDto visibility(VisibilityDto visibility) {
+    this.visibility = visibility;
+    return this;
+  }
+
+  /**
+   * Get visibility
+   * @return visibility
+   */
+  @NotNull @Valid 
+  @Schema(name = "visibility", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("visibility")
+  public VisibilityDto getVisibility() {
+    return visibility;
+  }
+
+  public void setVisibility(VisibilityDto visibility) {
+    this.visibility = visibility;
   }
 
   public LeaderboardSnapshotDto createdAt(OffsetDateTime createdAt) {
@@ -138,6 +163,7 @@ public class LeaderboardSnapshotDto {
     }
     LeaderboardSnapshotDto leaderboardSnapshot = (LeaderboardSnapshotDto) o;
     return Objects.equals(this.id, leaderboardSnapshot.id) &&
+        Objects.equals(this.visibility, leaderboardSnapshot.visibility) &&
         Objects.equals(this.createdAt, leaderboardSnapshot.createdAt) &&
         Objects.equals(this.entryCount, leaderboardSnapshot.entryCount) &&
         Objects.equals(this.description, leaderboardSnapshot.description);
@@ -145,7 +171,7 @@ public class LeaderboardSnapshotDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, createdAt, entryCount, description);
+    return Objects.hash(id, visibility, createdAt, entryCount, description);
   }
 
   @Override
@@ -153,6 +179,7 @@ public class LeaderboardSnapshotDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class LeaderboardSnapshotDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    visibility: ").append(toIndentedString(visibility)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    entryCount: ").append(toIndentedString(entryCount)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
@@ -185,6 +212,7 @@ public class LeaderboardSnapshotDto {
 
     protected Builder copyOf(LeaderboardSnapshotDto value) { 
       this.instance.setId(value.id);
+      this.instance.setVisibility(value.visibility);
       this.instance.setCreatedAt(value.createdAt);
       this.instance.setEntryCount(value.entryCount);
       this.instance.setDescription(value.description);
@@ -193,6 +221,11 @@ public class LeaderboardSnapshotDto {
 
     public LeaderboardSnapshotDto.Builder id(String id) {
       this.instance.id(id);
+      return this;
+    }
+    
+    public LeaderboardSnapshotDto.Builder visibility(VisibilityDto visibility) {
+      this.instance.visibility(visibility);
       return this;
     }
     
