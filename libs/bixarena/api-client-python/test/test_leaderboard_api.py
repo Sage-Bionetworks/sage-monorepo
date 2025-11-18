@@ -35,7 +35,7 @@ class TestLeaderboardApi(unittest.TestCase):
     def test_get_leaderboard_snapshots(self) -> None:
         """Test case for get_leaderboard_snapshots
 
-        Get leaderboard snapshots
+        Get public leaderboard snapshots
         """
         pass
 

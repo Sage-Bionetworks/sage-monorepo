@@ -4,12 +4,13 @@ A snapshot representing the state of a leaderboard at a specific point in time.
 
 ## Properties
 
-| Name            | Type         | Description                           | Notes      |
-| --------------- | ------------ | ------------------------------------- | ---------- |
-| **id**          | **str**      | Unique identifier for this snapshot   |
-| **created_at**  | **datetime** | When this snapshot was created        |
-| **entry_count** | **int**      | Number of models in this snapshot     |
-| **description** | **str**      | Optional description of this snapshot | [optional] |
+| Name            | Type                            | Description                           | Notes                           |
+| --------------- | ------------------------------- | ------------------------------------- | ------------------------------- |
+| **id**          | **str**                         | Unique identifier for this snapshot   |
+| **visibility**  | [**Visibility**](Visibility.md) |                                       | [default to Visibility.PRIVATE] |
+| **created_at**  | **datetime**                    | When this snapshot was created        |
+| **entry_count** | **int**                         | Number of models in this snapshot     |
+| **description** | **str**                         | Optional description of this snapshot | [optional]                      |
 
 ## Example
 
