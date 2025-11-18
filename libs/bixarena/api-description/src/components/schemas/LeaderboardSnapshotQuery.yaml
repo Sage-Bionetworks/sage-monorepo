@@ -20,10 +20,3 @@ properties:
     $ref: LeaderboardSnapshotSort.yaml
   direction:
     $ref: SortDirection.yaml
-  visibility:
-    description: An array of visibility values used to filter the results.
-    type: array
-    items:
-      $ref: Visibility.yaml
-    default:
-      - public
