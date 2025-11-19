@@ -115,7 +115,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
         next: (response: ModelOverviewsPage) => {
           const data = response.modelOverviews;
           this.comparisonToolService.setUnpinnedData(data);
-          this.comparisonToolService.totalResultsCount.set(data.length);
+          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: (error) => {
           throw new Error('Error fetching model overview data:', { cause: error });

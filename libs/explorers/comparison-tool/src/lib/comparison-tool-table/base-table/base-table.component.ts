@@ -39,6 +39,7 @@ export class BaseTableComponent {
   shouldPaginate = input<boolean>(true);
   shouldShowNoDataMessage = input<boolean>(true);
   columnWidth = input<string>('auto');
+  totalRecords = input<number | undefined>(undefined);
 
   paginationConfig: PaginationOptions = {
     rows: 10,

@@ -138,7 +138,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
         next: (response: DiseaseCorrelationsPage) => {
           const data = response.diseaseCorrelations;
           this.comparisonToolService.setUnpinnedData(data);
-          this.comparisonToolService.totalResultsCount.set(data.length);
+          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: (error) => {
           throw new Error('Error fetching disease correlation data:', { cause: error });

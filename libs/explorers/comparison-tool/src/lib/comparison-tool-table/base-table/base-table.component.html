@@ -3,6 +3,8 @@
   <p-table
     #table
     [value]="data()"
+    [totalRecords]="totalRecords() ?? data().length"
+    [lazy]="true"
     [customSort]="true"
     (sortFunction)="sortCallback($event)"
     sortMode="multiple"
