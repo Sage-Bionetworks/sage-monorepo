@@ -162,7 +162,7 @@ paths:
         - tag: Comparison Tool Config
   /comparison-tools/model-overview:
     get:
-      description: Returns a list of model overview objects for use in comparison
+      description: Returns a paginated list of model overview objects for use in comparison
         tools.
       operationId: getModelOverviews
       parameters:
@@ -185,15 +185,34 @@ paths:
           schema:
             $ref: '#/components/schemas/ItemFilterTypeQuery'
           style: form
+        - description: The page number.
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 0
+            minimum: 0
+            type: integer
+          style: form
+        - description: The number of items in a single page.
+          explode: true
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 10
+            maximum: 1000
+            minimum: 1
+            type: integer
+          style: form
       responses:
         '200':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ModelOverview'
-                type: array
-          description: A list of model overview objects
+                $ref: '#/components/schemas/ModelOverviewsPage'
+          description: A paginated list of model overview objects
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -210,8 +229,8 @@ paths:
         - tag: Model Overview
   /comparison-tools/disease-correlation:
     get:
-      description: Returns a list of disease correlation objects for use in comparison
-        tools.
+      description: Returns a paginated list of disease correlation objects for use
+        in comparison tools.
       operationId: getDiseaseCorrelations
       parameters:
         - description: "An ordered list of categories used to filter the data, where\
@@ -245,15 +264,34 @@ paths:
           schema:
             $ref: '#/components/schemas/ItemFilterTypeQuery'
           style: form
+        - description: The page number.
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 0
+            minimum: 0
+            type: integer
+          style: form
+        - description: The number of items in a single page.
+          explode: true
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 10
+            maximum: 1000
+            minimum: 1
+            type: integer
+          style: form
       responses:
         '200':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/DiseaseCorrelation'
-                type: array
-          description: A list of disease correlation objects
+                $ref: '#/components/schemas/DiseaseCorrelationsPage'
+          description: A paginated response containing disease correlation objects
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -330,6 +368,29 @@ paths:
         - tag: Gene Expression
 components:
   parameters:
+    pageNumberQuery:
+      description: The page number.
+      explode: true
+      in: query
+      name: pageNumber
+      required: false
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+      style: form
+    pageSizeQuery:
+      description: The number of items in a single page.
+      explode: true
+      in: query
+      name: pageSize
+      required: false
+      schema:
+        default: 10
+        maximum: 1000
+        minimum: 1
+        type: integer
+      style: form
     itemQuery:
       description: A list of items to filter the data by.
       explode: true
@@ -1006,6 +1067,138 @@ components:
         - name
         - study_data
       type: object
+    PageMetadata:
+      description: The metadata of a page.
+      example:
+        number: 0
+        size: 100
+        totalPages: 3
+        hasPrevious: false
+        hasNext: true
+        totalElements: 250
+      properties:
+        number:
+          description: The page number.
+          example: 0
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 100
+          type: integer
+        totalElements:
+          description: Total number of elements in the result set.
+          example: 250
+          format: int64
+          type: integer
+        totalPages:
+          description: Total number of pages in the result set.
+          example: 3
+          type: integer
+        hasNext:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        hasPrevious:
+          description: Returns if there is a previous page.
+          example: false
+          type: boolean
+      required:
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
+      type: object
+    ModelOverviewsPage:
+      description: A page of model overview objects.
+      example:
+        modelOverviews:
+          - pathology:
+              link_url: link_url
+              link_text: link_text
+            biomarkers:
+              link_url: link_url
+              link_text: link_text
+            gene_expression:
+              link_url: link_url
+              link_text: link_text
+            disease_correlation:
+              link_url: link_url
+              link_text: link_text
+            center:
+              link_url: link_url
+              link_text: link_text
+            model_type: model_type
+            matched_controls:
+              - matched_controls
+              - matched_controls
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            available_data:
+              - Gene Expression
+              - Gene Expression
+            name: name
+            jax_strain:
+              link_url: link_url
+              link_text: link_text
+            _id: _id
+            study_data:
+              link_url: link_url
+              link_text: link_text
+          - pathology:
+              link_url: link_url
+              link_text: link_text
+            biomarkers:
+              link_url: link_url
+              link_text: link_text
+            gene_expression:
+              link_url: link_url
+              link_text: link_text
+            disease_correlation:
+              link_url: link_url
+              link_text: link_text
+            center:
+              link_url: link_url
+              link_text: link_text
+            model_type: model_type
+            matched_controls:
+              - matched_controls
+              - matched_controls
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            available_data:
+              - Gene Expression
+              - Gene Expression
+            name: name
+            jax_strain:
+              link_url: link_url
+              link_text: link_text
+            _id: _id
+            study_data:
+              link_url: link_url
+              link_text: link_text
+        page:
+          number: 0
+          size: 100
+          totalPages: 3
+          hasPrevious: false
+          hasNext: true
+          totalElements: 250
+      properties:
+        modelOverviews:
+          description: List of model overviews in this page.
+          items:
+            $ref: '#/components/schemas/ModelOverview'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - modelOverviews
+        - page
+      type: object
     CorrelationResult:
       description: Correlation result
       example:
@@ -1105,6 +1298,92 @@ components:
         - modified_genes
         - name
         - sex
+      type: object
+    DiseaseCorrelationsPage:
+      description: A paginated response containing disease correlation objects and
+        pagination metadata.
+      example:
+        diseaseCorrelations:
+          - cluster: cluster
+            DLPFC:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            sex: Female
+            CBE:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            STG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            model_type: model_type
+            TCX:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            FP:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            IFG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            matched_control: matched_control
+            PHG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            name: name
+            _id: _id
+            age: age
+          - cluster: cluster
+            DLPFC:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            sex: Female
+            CBE:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            STG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            model_type: model_type
+            TCX:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            FP:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            IFG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            matched_control: matched_control
+            PHG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            name: name
+            _id: _id
+            age: age
+        page:
+          number: 0
+          size: 100
+          totalPages: 3
+          hasPrevious: false
+          hasNext: true
+          totalElements: 250
+      properties:
+        diseaseCorrelations:
+          description: The list of disease correlation objects for the current page
+          items:
+            $ref: '#/components/schemas/DiseaseCorrelation'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - diseaseCorrelations
+        - page
       type: object
     SexCohort:
       description: Sex Cohort

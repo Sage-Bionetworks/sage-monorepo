@@ -10,6 +10,7 @@ import {
   ComparisonToolPage,
   ItemFilterTypeQuery,
   ModelOverviewService,
+  ModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { shareReplay } from 'rxjs';
@@ -111,7 +112,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Exclude)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => {
+        next: (response: ModelOverviewsPage) => {
+          const data = response.modelOverviews;
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(data.length);
         },
@@ -129,7 +131,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Include)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => {
+        next: (response: ModelOverviewsPage) => {
+          const data = response.modelOverviews;
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },

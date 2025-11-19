@@ -10,11 +10,16 @@ import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -27,10 +32,12 @@ public class ModelOverviewService {
   private final ModelOverviewMapper modelOverviewMapper;
 
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)"
-      + ".buildCacheKey('modelOverview', #filterType, #items)"
+    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
+    ".buildCacheKey('modelOverview', #filterType, #items, #pageNumber, #pageSize)"
   )
-  public List<ModelOverviewDto> loadModelOverviews(
+  public ModelOverviewsPageDto loadModelOverviews(
+    Integer pageNumber,
+    Integer pageSize,
     List<String> items,
     ItemFilterTypeQueryDto filterType
   ) {
@@ -39,26 +46,44 @@ public class ModelOverviewService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<ModelOverviewDocument> documents;
+    int effectivePageNumber = Objects.requireNonNullElse(pageNumber, 0);
+    int effectivePageSize = Objects.requireNonNullElse(pageSize, 100);
+
+    Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize);
+    Page<ModelOverviewDocument> page;
 
     if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
       if (items.isEmpty()) {
-        return List.of();
-      }
-      List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
-      documents = repository.findByIdIn(objectIds);
-    } else {
-      if (items.isEmpty()) {
-        documents = repository.findAll();
+        // Return empty page for include filter with no items
+        page = Page.empty(pageable);
       } else {
         List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
-        documents = repository.findByIdNotIn(objectIds);
+        page = repository.findByIdIn(objectIds, pageable);
+      }
+    } else {
+      if (items.isEmpty()) {
+        page = repository.findAll(pageable);
+      } else {
+        List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
+        page = repository.findByIdNotIn(objectIds, pageable);
       }
     }
 
-    return documents
+    List<ModelOverviewDto> dtos = page
+      .getContent()
       .stream()
       .map(modelOverviewMapper::toDto)
       .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
+
+    PageMetadataDto pageMetadata = new PageMetadataDto(
+      page.getNumber(),
+      page.getSize(),
+      page.getTotalElements(),
+      page.getTotalPages(),
+      page.hasNext(),
+      page.hasPrevious()
+    );
+
+    return new ModelOverviewsPageDto().modelOverviews(dtos).page(pageMetadata);
   }
 }

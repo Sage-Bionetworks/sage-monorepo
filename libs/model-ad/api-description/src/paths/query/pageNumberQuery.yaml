@@ -1,0 +1,8 @@
+name: pageNumber
+in: query
+required: false
+description: The page number.
+schema:
+  type: integer
+  minimum: 0
+  default: 0

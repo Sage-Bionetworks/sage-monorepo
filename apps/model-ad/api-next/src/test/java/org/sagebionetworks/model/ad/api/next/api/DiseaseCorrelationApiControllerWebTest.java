@@ -84,7 +84,7 @@ class DiseaseCorrelationApiControllerWebTest {
   @Test
   @DisplayName("should return bad request problem when delegate raises InvalidObjectIdException")
   void shouldReturnBadRequestProblemWhenDelegateRaisesInvalidObjectIdException() throws Exception {
-    when(delegate.getDiseaseCorrelations(anyList(), any(), any())).thenThrow(
+    when(delegate.getDiseaseCorrelations(anyList(), any(), any(), any(), any())).thenThrow(
       new InvalidObjectIdException("not-an-id")
     );
 

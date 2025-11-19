@@ -13,6 +13,7 @@ import {
   ComparisonToolConfigService,
   ComparisonToolPage,
   DiseaseCorrelationService,
+  DiseaseCorrelationsPage,
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
@@ -134,7 +135,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Exclude)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => {
+        next: (response: DiseaseCorrelationsPage) => {
+          const data = response.diseaseCorrelations;
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(data.length);
         },
@@ -152,7 +154,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Include)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => {
+        next: (response: DiseaseCorrelationsPage) => {
+          const data = response.diseaseCorrelations;
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },

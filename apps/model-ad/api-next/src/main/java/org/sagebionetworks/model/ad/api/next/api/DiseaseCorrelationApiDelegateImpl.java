@@ -2,13 +2,13 @@ package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
-import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.service.DiseaseCorrelationService;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -22,10 +22,12 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   private final DiseaseCorrelationService diseaseCorrelationService;
 
   @Override
-  public ResponseEntity<List<DiseaseCorrelationDto>> getDiseaseCorrelations(
+  public ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(
     List<String> category,
     @Nullable List<String> item,
-    ItemFilterTypeQueryDto itemFilterType
+    ItemFilterTypeQueryDto itemFilterType,
+    Integer pageNumber,
+    Integer pageSize
   ) {
     String cluster = extractCluster(category);
     List<String> items = ApiHelper.sanitizeItems(item);
@@ -34,7 +36,9 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<DiseaseCorrelationDto> results = diseaseCorrelationService.loadDiseaseCorrelations(
+    DiseaseCorrelationsPageDto results = diseaseCorrelationService.loadDiseaseCorrelations(
+      pageNumber,
+      pageSize,
       cluster,
       items,
       effectiveFilter

@@ -9,12 +9,16 @@ import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.DiseaseCorrelationMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.DiseaseCorrelationRepository;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -27,10 +31,13 @@ public class DiseaseCorrelationService {
   private final DiseaseCorrelationMapper diseaseCorrelationMapper;
 
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)"
-      + ".buildCacheKey('diseaseCorrelation', #filterType, #items, #cluster)"
+    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
+    ".buildCacheKey('diseaseCorrelation', #filterType, #items, " +
+    "#cluster, #pageNumber, #pageSize)"
   )
-  public List<DiseaseCorrelationDto> loadDiseaseCorrelations(
+  public DiseaseCorrelationsPageDto loadDiseaseCorrelations(
+    Integer pageNumber,
+    Integer pageSize,
     String cluster,
     List<String> items,
     ItemFilterTypeQueryDto filterType
@@ -40,26 +47,41 @@ public class DiseaseCorrelationService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<DiseaseCorrelationDocument> documents;
+    PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+    Page<DiseaseCorrelationDocument> page;
 
     if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
       if (items.isEmpty()) {
-        return List.of();
-      }
-      List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
-      documents = repository.findByClusterAndIdIn(cluster, objectIds);
-    } else {
-      if (items.isEmpty()) {
-        documents = repository.findByCluster(cluster);
+        page = Page.empty(pageable);
       } else {
         List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
-        documents = repository.findByClusterAndIdNotIn(cluster, objectIds);
+        page = repository.findByClusterAndIdIn(cluster, objectIds, pageable);
+      }
+    } else {
+      if (items.isEmpty()) {
+        page = repository.findByCluster(cluster, pageable);
+      } else {
+        List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
+        page = repository.findByClusterAndIdNotIn(cluster, objectIds, pageable);
       }
     }
 
-    return documents
+    List<DiseaseCorrelationDto> diseaseCorrelations = page
+      .getContent()
       .stream()
       .map(diseaseCorrelationMapper::toDto)
       .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
+
+    PageMetadataDto pageMetadata = new PageMetadataDto()
+      .number(page.getNumber())
+      .size(page.getSize())
+      .totalElements(page.getTotalElements())
+      .totalPages(page.getTotalPages())
+      .hasNext(page.hasNext())
+      .hasPrevious(page.hasPrevious());
+
+    return new DiseaseCorrelationsPageDto()
+      .diseaseCorrelations(diseaseCorrelations)
+      .page(pageMetadata);
   }
 }

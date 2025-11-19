@@ -137,20 +137,20 @@ paths:
       tags:
         - Model Overview
       summary: Get model overview for comparison tools
-      description: Returns a list of model overview objects for use in comparison tools.
+      description: Returns a paginated list of model overview objects for use in comparison tools.
       operationId: getModelOverviews
       parameters:
         - $ref: '#/components/parameters/itemQuery'
         - $ref: '#/components/parameters/itemFilterTypeQuery'
+        - $ref: '#/components/parameters/pageNumberQuery'
+        - $ref: '#/components/parameters/pageSizeQuery'
       responses:
         '200':
-          description: A list of model overview objects
+          description: A paginated list of model overview objects
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ModelOverview'
+                $ref: '#/components/schemas/ModelOverviewsPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -162,21 +162,21 @@ paths:
       tags:
         - Disease Correlation
       summary: Get disease correlation comparison data
-      description: Returns a list of disease correlation objects for use in comparison tools.
+      description: Returns a paginated list of disease correlation objects for use in comparison tools.
       operationId: getDiseaseCorrelations
       parameters:
         - $ref: '#/components/parameters/categoryQuery'
         - $ref: '#/components/parameters/itemQuery'
         - $ref: '#/components/parameters/itemFilterTypeQuery'
+        - $ref: '#/components/parameters/pageNumberQuery'
+        - $ref: '#/components/parameters/pageSizeQuery'
       responses:
         '200':
-          description: A list of disease correlation objects
+          description: A paginated response containing disease correlation objects
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DiseaseCorrelation'
+                $ref: '#/components/schemas/DiseaseCorrelationsPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -616,6 +616,56 @@ components:
         - center
         - modified_genes
         - available_data
+    PageMetadata:
+      type: object
+      description: The metadata of a page.
+      properties:
+        number:
+          type: integer
+          description: The page number.
+          example: 0
+        size:
+          type: integer
+          description: The number of items in a single page.
+          example: 100
+        totalElements:
+          type: integer
+          format: int64
+          description: Total number of elements in the result set.
+          example: 250
+        totalPages:
+          type: integer
+          description: Total number of pages in the result set.
+          example: 3
+        hasNext:
+          type: boolean
+          description: Returns if there is a next page.
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Returns if there is a previous page.
+          example: false
+      required:
+        - number
+        - size
+        - totalElements
+        - totalPages
+        - hasNext
+        - hasPrevious
+    ModelOverviewsPage:
+      type: object
+      description: A page of model overview objects.
+      properties:
+        modelOverviews:
+          type: array
+          description: List of model overviews in this page.
+          items:
+            $ref: '#/components/schemas/ModelOverview'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - modelOverviews
+        - page
     CorrelationResult:
       type: object
       description: Correlation result
@@ -681,6 +731,20 @@ components:
         - cluster
         - age
         - sex
+    DiseaseCorrelationsPage:
+      type: object
+      description: A paginated response containing disease correlation objects and pagination metadata.
+      properties:
+        diseaseCorrelations:
+          type: array
+          description: The list of disease correlation objects for the current page
+          items:
+            $ref: '#/components/schemas/DiseaseCorrelation'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - diseaseCorrelations
+        - page
     SexCohort:
       type: string
       description: Sex Cohort
@@ -792,6 +856,24 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ItemFilterTypeQuery'
+    pageNumberQuery:
+      name: pageNumber
+      in: query
+      required: false
+      description: The page number.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    pageSizeQuery:
+      name: pageSize
+      in: query
+      required: false
+      description: The number of items in a single page.
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
     categoryQuery:
       name: category
       description: An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA.

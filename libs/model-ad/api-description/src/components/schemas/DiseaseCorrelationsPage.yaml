@@ -1,0 +1,13 @@
+type: object
+description: A paginated response containing disease correlation objects and pagination metadata.
+properties:
+  diseaseCorrelations:
+    type: array
+    description: The list of disease correlation objects for the current page
+    items:
+      $ref: './DiseaseCorrelation.yaml'
+  page:
+    $ref: './PageMetadata.yaml'
+required:
+  - diseaseCorrelations
+  - page

@@ -1,0 +1,13 @@
+type: object
+description: A page of model overview objects.
+properties:
+  modelOverviews:
+    type: array
+    description: List of model overviews in this page.
+    items:
+      $ref: './ModelOverview.yaml'
+  page:
+    $ref: './PageMetadata.yaml'
+required:
+  - modelOverviews
+  - page

@@ -5,88 +5,159 @@
  */
 package org.sagebionetworks.model.ad.api.next.api;
 
-import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import org.springframework.lang.Nullable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
+import jakarta.annotation.Generated;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-import jakarta.annotation.Generated;
+import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
+@Generated(
+  value = "org.openapitools.codegen.languages.SpringCodegen",
+  comments = "Generator version: 7.14.0"
+)
 @Validated
 @Tag(name = "Model Overview", description = "Operations about Model Overview.")
 public interface ModelOverviewApi {
+  default ModelOverviewApiDelegate getDelegate() {
+    return new ModelOverviewApiDelegate() {};
+  }
 
-    default ModelOverviewApiDelegate getDelegate() {
-        return new ModelOverviewApiDelegate() {};
-    }
-
-    /**
-     * GET /comparison-tools/model-overview : Get model overview for comparison tools
-     * Returns a list of model overview objects for use in comparison tools.
-     *
-     * @param item A list of items to filter the data by. (optional)
-     * @param itemFilterType The type of filter to apply to the items. Possible values are &#39;include&#39; or &#39;exclude&#39;. (optional, default to include)
-     * @return A list of model overview objects (status code 200)
-     *         or Invalid request (status code 400)
-     *         or The specified resource was not found (status code 404)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "getModelOverviews",
-        summary = "Get model overview for comparison tools",
-        description = "Returns a list of model overview objects for use in comparison tools.",
-        tags = { "Model Overview" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "A list of model overview objects", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ModelOverviewDto.class))),
-                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = ModelOverviewDto.class)))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
+  /**
+   * GET /comparison-tools/model-overview : Get model overview for comparison tools
+   * Returns a paginated list of model overview objects for use in comparison tools.
+   *
+   * @param item A list of items to filter the data by. (optional)
+   * @param itemFilterType The type of filter to apply to the items. Possible values are &#39;include&#39; or &#39;exclude&#39;. (optional, default to include)
+   * @param pageNumber The page number. (optional, default to 0)
+   * @param pageSize The number of items in a single page. (optional, default to 10)
+   * @return A paginated list of model overview objects (status code 200)
+   *         or Invalid request (status code 400)
+   *         or The specified resource was not found (status code 404)
+   *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+   */
+  @Operation(
+    operationId = "getModelOverviews",
+    summary = "Get model overview for comparison tools",
+    description = "Returns a paginated list of model overview objects for use in comparison tools.",
+    tags = { "Model Overview" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "A paginated list of model overview objects",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = ModelOverviewsPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = ModelOverviewsPageDto.class)
+          ),
         }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/comparison-tools/model-overview",
-        produces = { "application/json", "application/problem+json" }
-    )
-    
-    default ResponseEntity<List<ModelOverviewDto>> getModelOverviews(
-        @Parameter(name = "item", description = "A list of items to filter the data by.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "item", required = false) @Nullable List<String> item,
-        @Parameter(name = "itemFilterType", description = "The type of filter to apply to the items. Possible values are 'include' or 'exclude'.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "itemFilterType", required = false, defaultValue = "include") ItemFilterTypeQueryDto itemFilterType
-    ) {
-        return getDelegate().getModelOverviews(item, itemFilterType);
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "The specified resource was not found",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
     }
-
+  )
+  @RequestMapping(
+    method = RequestMethod.GET,
+    value = "/comparison-tools/model-overview",
+    produces = { "application/json", "application/problem+json" }
+  )
+  default ResponseEntity<ModelOverviewsPageDto> getModelOverviews(
+    @Parameter(
+      name = "item",
+      description = "A list of items to filter the data by.",
+      in = ParameterIn.QUERY
+    ) @Valid @RequestParam(value = "item", required = false) @Nullable List<String> item,
+    @Parameter(
+      name = "itemFilterType",
+      description = "The type of filter to apply to the items. Possible values are 'include' or 'exclude'.",
+      in = ParameterIn.QUERY
+    ) @Valid @RequestParam(
+      value = "itemFilterType",
+      required = false,
+      defaultValue = "include"
+    ) ItemFilterTypeQueryDto itemFilterType,
+    @Min(0) @Parameter(
+      name = "pageNumber",
+      description = "The page number.",
+      in = ParameterIn.QUERY
+    ) @Valid @RequestParam(
+      value = "pageNumber",
+      required = false,
+      defaultValue = "0"
+    ) Integer pageNumber,
+    @Min(1) @Max(1000) @Parameter(
+      name = "pageSize",
+      description = "The number of items in a single page.",
+      in = ParameterIn.QUERY
+    ) @Valid @RequestParam(
+      value = "pageSize",
+      required = false,
+      defaultValue = "10"
+    ) Integer pageSize
+  ) {
+    return getDelegate().getModelOverviews(item, itemFilterType, pageNumber, pageSize);
+  }
 }
