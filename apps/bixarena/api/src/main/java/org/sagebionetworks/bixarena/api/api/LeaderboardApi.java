@@ -55,7 +55,6 @@ public interface LeaderboardApi {
      * @param leaderboardSearchQuery The search query used to find and filter leaderboard entries. (optional)
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
-     *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
      *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
@@ -71,10 +70,6 @@ public interface LeaderboardApi {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LeaderboardEntryPageDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),

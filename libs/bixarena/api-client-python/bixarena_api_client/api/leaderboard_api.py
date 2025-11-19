@@ -116,7 +116,6 @@ class LeaderboardApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "LeaderboardEntryPage",
             "400": "BasicError",
-            "403": "BasicError",
             "404": "BasicError",
             "429": "RateLimitError",
             "500": "BasicError",
@@ -196,7 +195,6 @@ class LeaderboardApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "LeaderboardEntryPage",
             "400": "BasicError",
-            "403": "BasicError",
             "404": "BasicError",
             "429": "RateLimitError",
             "500": "BasicError",
@@ -276,7 +274,6 @@ class LeaderboardApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "LeaderboardEntryPage",
             "400": "BasicError",
-            "403": "BasicError",
             "404": "BasicError",
             "429": "RateLimitError",
             "500": "BasicError",

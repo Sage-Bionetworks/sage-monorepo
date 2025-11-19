@@ -42,7 +42,6 @@ public interface LeaderboardApiDelegate {
      * @param leaderboardSearchQuery The search query used to find and filter leaderboard entries. (optional)
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
-     *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
      *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
@@ -55,11 +54,6 @@ public interface LeaderboardApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"number\" : 99, \"entries\" : [ { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"bootstrapQ025\" : 887, \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"bootstrapQ975\" : 1063, \"rank\" : 1, \"id\" : \"entry_123\", \"voteCount\" : 1250 }, { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"bootstrapQ025\" : 887, \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"bootstrapQ975\" : 1063, \"rank\" : 1, \"id\" : \"entry_123\", \"voteCount\" : 1250 } ], \"snapshotId\" : \"snapshot_2025-08-16_14-30\", \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99, \"updatedAt\" : \"2025-08-16T14:30:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
