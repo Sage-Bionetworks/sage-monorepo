@@ -105,8 +105,8 @@ public interface LeaderboardApi {
 
 
     /**
-     * GET /leaderboards/{leaderboardId}/snapshots : Get leaderboard snapshots
-     * Get a paginated list of available snapshots for a leaderboard
+     * GET /leaderboards/{leaderboardId}/snapshots : Get public leaderboard snapshots
+     * Get a paginated list of public snapshots for a leaderboard.
      *
      * @param leaderboardId The unique identifier of a leaderboard (required)
      * @param leaderboardSnapshotQuery The query used to filter and paginate leaderboard snapshots. (optional)
@@ -118,8 +118,8 @@ public interface LeaderboardApi {
      */
     @Operation(
         operationId = "getLeaderboardSnapshots",
-        summary = "Get leaderboard snapshots",
-        description = "Get a paginated list of available snapshots for a leaderboard",
+        summary = "Get public leaderboard snapshots",
+        description = "Get a paginated list of public snapshots for a leaderboard.",
         tags = { "Leaderboard" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {

@@ -3,6 +3,7 @@ package org.sagebionetworks.bixarena.api.model.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotDto;
+import org.sagebionetworks.bixarena.api.model.dto.VisibilityDto;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardSnapshotEntity;
 import org.sagebionetworks.bixarena.api.model.projection.SnapshotWithEntryCount;
 
@@ -15,7 +16,9 @@ public class LeaderboardSnapshotMapper {
 
     return LeaderboardSnapshotDto.builder()
       .id(entity.getSnapshotIdentifier())
+      .visibility(VisibilityDto.fromValue(entity.getVisibility()))
       .createdAt(entity.getCreatedAt())
+      .updatedAt(entity.getUpdatedAt())
       .entryCount(0) // Will be set by service if needed
       .description(entity.getDescription())
       .build();
@@ -28,7 +31,9 @@ public class LeaderboardSnapshotMapper {
 
     return LeaderboardSnapshotDto.builder()
       .id(entity.getSnapshotIdentifier())
+      .visibility(VisibilityDto.fromValue(entity.getVisibility()))
       .createdAt(entity.getCreatedAt())
+      .updatedAt(entity.getUpdatedAt())
       .entryCount((int) entryCount)
       .description(entity.getDescription())
       .build();
@@ -41,7 +46,9 @@ public class LeaderboardSnapshotMapper {
 
     return LeaderboardSnapshotDto.builder()
       .id(projection.getSnapshotIdentifier())
+      .visibility(VisibilityDto.fromValue(projection.getVisibility()))
       .createdAt(projection.getCreatedAt())
+      .updatedAt(projection.getUpdatedAt())
       .entryCount(projection.getEntryCount().intValue())
       .description(projection.getDescription())
       .build();

@@ -2,12 +2,12 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                                                       | HTTP request                                            | Description                     |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------- |
-| [**get_leaderboard**](LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries         |
-| [**get_leaderboard_snapshots**](LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots       |
-| [**get_model_history**](LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history   |
-| [**list_leaderboards**](LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards |
+| Method                                                                       | HTTP request                                            | Description                      |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------- |
+| [**get_leaderboard**](LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries          |
+| [**get_leaderboard_snapshots**](LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get public leaderboard snapshots |
+| [**get_model_history**](LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history    |
+| [**list_leaderboards**](LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards  |
 
 # **get_leaderboard**
 
@@ -96,9 +96,9 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 > LeaderboardSnapshotPage get_leaderboard_snapshots(leaderboard_id, leaderboard_snapshot_query=leaderboard_snapshot_query)
 
-Get leaderboard snapshots
+Get public leaderboard snapshots
 
-Get a paginated list of available snapshots for a leaderboard
+Get a paginated list of public snapshots for a leaderboard.
 
 ### Example
 
@@ -135,7 +135,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     leaderboard_snapshot_query = bixarena_api_client.LeaderboardSnapshotQuery() # LeaderboardSnapshotQuery | The query used to filter and paginate leaderboard snapshots. (optional)
 
     try:
-        # Get leaderboard snapshots
+        # Get public leaderboard snapshots
         api_response = api_instance.get_leaderboard_snapshots(leaderboard_id, leaderboard_snapshot_query=leaderboard_snapshot_query)
         print("The response of LeaderboardApi->get_leaderboard_snapshots:\n")
         pprint(api_response)

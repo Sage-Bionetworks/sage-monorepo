@@ -36,6 +36,7 @@ class TestLeaderboardSnapshot(unittest.TestCase):
         if include_optional:
             return LeaderboardSnapshot(
                 id = 'snapshot_2025-08-16_14-30',
+                visibility = 'private',
                 created_at = '2025-08-16T14:30Z',
                 entry_count = 50,
                 description = 'Weekly evaluation run'
@@ -43,6 +44,7 @@ class TestLeaderboardSnapshot(unittest.TestCase):
         else:
             return LeaderboardSnapshot(
                 id = 'snapshot_2025-08-16_14-30',
+                visibility = 'private',
                 created_at = '2025-08-16T14:30Z',
                 entry_count = 50,
         )
