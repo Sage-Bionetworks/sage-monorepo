@@ -303,6 +303,71 @@ def insert_leaderboard_snapshot(
         return str(snapshot_id)
 
 
+def update_leaderboard_snapshot(
+    conn, snapshot_identifier: str, **updates
+) -> dict | None:
+    """
+    Update properties of a leaderboard snapshot.
+
+    Args:
+        conn: Database connection
+        snapshot_identifier: Snapshot identifier to update
+        **updates: Fields to update (e.g., visibility='public', description='...')
+
+    Returns:
+        Updated snapshot dict if found, None otherwise
+    """
+    if not updates:
+        raise ValueError("No fields provided to update")
+
+    # Build SET clause dynamically
+    set_clauses = [f"{field} = %({field})s" for field in updates]
+    set_clause = ", ".join(set_clauses)
+
+    with conn.cursor() as cur:
+        # Update the snapshot
+        cur.execute(
+            f"""
+            UPDATE api.leaderboard_snapshot
+            SET {set_clause}
+            WHERE snapshot_identifier = %(snapshot_identifier)s
+            RETURNING id
+            """,
+            {"snapshot_identifier": snapshot_identifier, **updates},
+        )
+        result = cur.fetchone()
+
+        if not result:
+            return None
+
+        # Fetch and return the updated snapshot with additional details
+        cur.execute(
+            """
+            SELECT
+                s.id,
+                s.leaderboard_id,
+                s.snapshot_identifier,
+                s.description,
+                s.visibility,
+                s.created_at,
+                l.name as leaderboard_name,
+                l.slug as leaderboard_slug,
+                COUNT(e.id) as entry_count
+            FROM api.leaderboard_snapshot s
+            JOIN api.leaderboard l ON s.leaderboard_id = l.id
+            LEFT JOIN api.leaderboard_entry e ON s.id = e.snapshot_id
+            WHERE s.id = %(id)s
+            GROUP BY s.id, s.leaderboard_id, s.snapshot_identifier,
+                     s.description, s.visibility, s.created_at,
+                     l.name, l.slug
+            """,
+            {"id": result["id"]},
+        )
+        snapshot = cur.fetchone()
+        conn.commit()
+        return snapshot
+
+
 def insert_leaderboard_entries(
     conn, leaderboard_id: str, snapshot_id: str, entries: list[dict[str, Any]]
 ) -> int:

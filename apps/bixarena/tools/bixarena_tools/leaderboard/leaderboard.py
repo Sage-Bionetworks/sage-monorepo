@@ -14,6 +14,7 @@ from bixarena_tools.leaderboard.db_helper import (
     get_db_connection,
     insert_leaderboard_entries,
     insert_leaderboard_snapshot,
+    update_leaderboard_snapshot,
 )
 from bixarena_tools.leaderboard.rank_battle import compute_leaderboard_bt
 
@@ -276,6 +277,7 @@ def snapshot_list(
                             s.id,
                             s.snapshot_identifier,
                             s.description,
+                            s.visibility,
                             s.created_at,
                             l.name as leaderboard_name,
                             l.slug as leaderboard_slug,
@@ -285,7 +287,7 @@ def snapshot_list(
                         LEFT JOIN api.leaderboard_entry e ON s.id = e.snapshot_id
                         WHERE l.slug = %(slug)s
                         GROUP BY s.id, s.snapshot_identifier, s.description,
-                                 s.created_at, l.name, l.slug
+                                 s.visibility, s.created_at, l.name, l.slug
                         ORDER BY s.created_at DESC
                         """,
                     {"slug": id},
@@ -298,6 +300,7 @@ def snapshot_list(
                             s.id,
                             s.snapshot_identifier,
                             s.description,
+                            s.visibility,
                             s.created_at,
                             l.name as leaderboard_name,
                             l.slug as leaderboard_slug,
@@ -306,7 +309,7 @@ def snapshot_list(
                         JOIN api.leaderboard l ON s.leaderboard_id = l.id
                         LEFT JOIN api.leaderboard_entry e ON s.id = e.snapshot_id
                         GROUP BY s.id, s.snapshot_identifier, s.description,
-                                 s.created_at, l.name, l.slug
+                                 s.visibility, s.created_at, l.name, l.slug
                         ORDER BY l.slug, s.created_at DESC
                         """
                 )
@@ -321,6 +324,7 @@ def snapshot_list(
             table = Table(title="Leaderboard Snapshots")
             table.add_column("Identifier", style="cyan")
             table.add_column("Leaderboard", style="magenta")
+            table.add_column("Visibility", style="yellow")
             table.add_column("Entries", justify="right", style="green")
             table.add_column("Created", style="blue")
             table.add_column("Description", style="dim")
@@ -329,6 +333,7 @@ def snapshot_list(
                 table.add_row(
                     snapshot["snapshot_identifier"],
                     snapshot["leaderboard_slug"],
+                    snapshot["visibility"],
                     str(snapshot["entry_count"]),
                     snapshot["created_at"].strftime("%Y-%m-%d %H:%M:%S"),
                     snapshot["description"][:50] + "..."
@@ -371,6 +376,7 @@ def snapshot_get(
                         s.id,
                         s.snapshot_identifier,
                         s.description,
+                        s.visibility,
                         s.created_at,
                         l.name as leaderboard_name,
                         l.slug as leaderboard_slug
@@ -395,6 +401,7 @@ def snapshot_get(
                 f"  Leaderboard: {snapshot['leaderboard_name']} "
                 f"({snapshot['leaderboard_slug']})"
             )
+            console.print(f"  Visibility: {snapshot['visibility']}")
             console.print(f"  Created: {snapshot['created_at']}")
             console.print(f"  Description: {snapshot['description']}")
 
@@ -533,6 +540,91 @@ def snapshot_delete(
             console.print("\n[green]✓ Deleted snapshot[/green]")
             console.print(f"[green]✓ Deleted {snapshot['entry_count']} entries[/green]")
             console.print("\n[bold green]Snapshot deleted successfully![/bold green]")
+
+    except Exception as e:
+        console.print(f"[bold red]Error: {e}[/bold red]")
+        raise typer.Exit(1) from e
+
+
+@snapshot_app.command("update")
+def snapshot_update(
+    identifier: str = typer.Argument(..., help="Snapshot identifier to update"),
+    visibility: str = typer.Option(
+        None,
+        "--visibility",
+        help="New visibility status: 'public' or 'private'",
+    ),
+    description: str = typer.Option(
+        None,
+        "--description",
+        help="New description for the snapshot",
+    ),
+):
+    """Update snapshot properties (visibility, description)."""
+    console.print("[bold blue]BixArena Snapshot Update[/bold blue]")
+    console.print("=" * 60)
+
+    # Build updates dict from provided options
+    updates = {}
+    if visibility is not None:
+        if visibility not in ("public", "private"):
+            console.print(
+                f"[bold red]Error: Invalid visibility '{visibility}'. "
+                "Must be 'public' or 'private'.[/bold red]"
+            )
+            raise typer.Exit(1)
+        updates["visibility"] = visibility
+
+    if description is not None:
+        updates["description"] = description
+
+    # Ensure at least one field is being updated
+    if not updates:
+        console.print(
+            "[bold red]Error: No fields provided to update. Please specify "
+            "at least one option (--visibility or --description).[/bold red]"
+        )
+        raise typer.Exit(1)
+
+    try:
+        with get_db_connection() as conn:
+            # Update the snapshot
+            updated_snapshot = update_leaderboard_snapshot(conn, identifier, **updates)
+
+            if not updated_snapshot:
+                console.print(
+                    f"\n[bold red]Snapshot '{identifier}' not found.[/bold red]"
+                )
+                raise typer.Exit(1)
+
+            # Show what was updated
+            updated_fields = ", ".join(updates.keys())
+            console.print("\n[bold green]✓ Snapshot updated successfully![/bold green]")
+            console.print(f"[dim]Updated fields: {updated_fields}[/dim]\n")
+
+            # Display updated snapshot in same format as list command
+            table = Table(title="Updated Snapshot")
+            table.add_column("Identifier", style="cyan")
+            table.add_column("Leaderboard", style="magenta")
+            table.add_column("Visibility", style="yellow")
+            table.add_column("Entries", justify="right", style="green")
+            table.add_column("Created", style="blue")
+            table.add_column("Description", style="dim")
+
+            description = updated_snapshot["description"] or ""
+            if len(description) > 50:
+                description = description[:50] + "..."
+
+            table.add_row(
+                updated_snapshot["snapshot_identifier"],
+                updated_snapshot["leaderboard_slug"],
+                updated_snapshot["visibility"],
+                str(updated_snapshot["entry_count"]),
+                updated_snapshot["created_at"].strftime("%Y-%m-%d %H:%M:%S"),
+                description,
+            )
+
+            console.print(table)
 
     except Exception as e:
         console.print(f"[bold red]Error: {e}[/bold red]")
