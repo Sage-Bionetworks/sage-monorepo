@@ -65,7 +65,7 @@ class ModelOverviewApiControllerWebTest {
   @Test
   @DisplayName("should return bad request problem when delegate raises InvalidObjectIdException")
   void shouldReturnBadRequestProblemWhenDelegateRaisesInvalidObjectIdException() throws Exception {
-    when(delegate.getModelOverviews(any(), any(), anyList(), any())).thenThrow(
+    when(delegate.getModelOverviews(anyList(), any(), any(), any())).thenThrow(
       new InvalidObjectIdException("not-an-id")
     );
 

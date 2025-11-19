@@ -54,10 +54,10 @@ class ModelOverviewApiDelegateImplTest {
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
     ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(
-      0,
-      100,
       null,
-      ItemFilterTypeQueryDto.INCLUDE
+      ItemFilterTypeQueryDto.INCLUDE,
+      0,
+      100
     );
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -84,10 +84,10 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findByIdIn(anyList(), any())).thenReturn(page);
 
     ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(
-      0,
-      100,
       List.of(objectId.toHexString()),
-      ItemFilterTypeQueryDto.INCLUDE
+      ItemFilterTypeQueryDto.INCLUDE,
+      0,
+      100
     );
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -120,7 +120,7 @@ class ModelOverviewApiDelegateImplTest {
   @DisplayName("should throw bad request when item contains invalid object id")
   void shouldThrowBadRequestWhenItemContainsInvalidObjectId() {
     assertThatThrownBy(() ->
-      delegate.getModelOverviews(0, 100, List.of("not-an-id"), ItemFilterTypeQueryDto.INCLUDE)
+      delegate.getModelOverviews(List.of("not-an-id"), ItemFilterTypeQueryDto.INCLUDE, 0, 100)
     ).isInstanceOf(InvalidObjectIdException.class);
 
     verifyNoInteractions(repository);
@@ -142,10 +142,10 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findAll(any(PageRequest.class))).thenReturn(page);
 
     ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(
-      0,
-      100,
       null,
-      ItemFilterTypeQueryDto.EXCLUDE
+      ItemFilterTypeQueryDto.EXCLUDE,
+      0,
+      100
     );
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -171,10 +171,10 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findByIdNotIn(anyList(), any())).thenReturn(page);
 
     ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(
-      0,
-      100,
       List.of(excludedId.toHexString()),
-      ItemFilterTypeQueryDto.EXCLUDE
+      ItemFilterTypeQueryDto.EXCLUDE,
+      0,
+      100
     );
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
