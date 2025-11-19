@@ -320,8 +320,8 @@ def update_leaderboard_snapshot(
     if not updates:
         raise ValueError("No fields provided to update")
 
-    # Build SET clause dynamically
     set_clauses = [f"{field} = %({field})s" for field in updates]
+    set_clauses.append("updated_at = now()")  # set UpdatedAt
     set_clause = ", ".join(set_clauses)
 
     with conn.cursor() as cur:
@@ -350,6 +350,7 @@ def update_leaderboard_snapshot(
                 s.description,
                 s.visibility,
                 s.created_at,
+                s.updated_at,
                 l.name as leaderboard_name,
                 l.slug as leaderboard_slug,
                 COUNT(e.id) as entry_count
@@ -358,7 +359,7 @@ def update_leaderboard_snapshot(
             LEFT JOIN api.leaderboard_entry e ON s.id = e.snapshot_id
             WHERE s.id = %(id)s
             GROUP BY s.id, s.leaderboard_id, s.snapshot_identifier,
-                     s.description, s.visibility, s.created_at,
+                     s.description, s.visibility, s.created_at, s.updated_at,
                      l.name, l.slug
             """,
             {"id": result["id"]},

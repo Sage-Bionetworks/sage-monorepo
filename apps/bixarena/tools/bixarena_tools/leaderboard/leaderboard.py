@@ -279,6 +279,7 @@ def snapshot_list(
                             s.description,
                             s.visibility,
                             s.created_at,
+                            s.updated_at,
                             l.name as leaderboard_name,
                             l.slug as leaderboard_slug,
                             COUNT(e.id) as entry_count
@@ -287,7 +288,8 @@ def snapshot_list(
                         LEFT JOIN api.leaderboard_entry e ON s.id = e.snapshot_id
                         WHERE l.slug = %(slug)s
                         GROUP BY s.id, s.snapshot_identifier, s.description,
-                                 s.visibility, s.created_at, l.name, l.slug
+                                 s.visibility, s.created_at, s.updated_at,
+                                 l.name, l.slug
                         ORDER BY s.created_at DESC
                         """,
                     {"slug": id},
@@ -302,6 +304,7 @@ def snapshot_list(
                             s.description,
                             s.visibility,
                             s.created_at,
+                            s.updated_at,
                             l.name as leaderboard_name,
                             l.slug as leaderboard_slug,
                             COUNT(e.id) as entry_count
@@ -309,7 +312,8 @@ def snapshot_list(
                         JOIN api.leaderboard l ON s.leaderboard_id = l.id
                         LEFT JOIN api.leaderboard_entry e ON s.id = e.snapshot_id
                         GROUP BY s.id, s.snapshot_identifier, s.description,
-                                 s.visibility, s.created_at, l.name, l.slug
+                                 s.visibility, s.created_at, s.updated_at,
+                                 l.name, l.slug
                         ORDER BY l.slug, s.created_at DESC
                         """
                 )
@@ -327,6 +331,7 @@ def snapshot_list(
             table.add_column("Visibility", style="yellow")
             table.add_column("Entries", justify="right", style="green")
             table.add_column("Created", style="blue")
+            table.add_column("Updated", style="blue")
             table.add_column("Description", style="dim")
 
             for snapshot in snapshots:
@@ -336,6 +341,7 @@ def snapshot_list(
                     snapshot["visibility"],
                     str(snapshot["entry_count"]),
                     snapshot["created_at"].strftime("%Y-%m-%d %H:%M:%S"),
+                    snapshot["updated_at"].strftime("%Y-%m-%d %H:%M:%S"),
                     snapshot["description"][:50] + "..."
                     if len(snapshot["description"]) > 50
                     else snapshot["description"],
@@ -378,6 +384,7 @@ def snapshot_get(
                         s.description,
                         s.visibility,
                         s.created_at,
+                        s.updated_at,
                         l.name as leaderboard_name,
                         l.slug as leaderboard_slug
                     FROM api.leaderboard_snapshot s
@@ -403,6 +410,7 @@ def snapshot_get(
             )
             console.print(f"  Visibility: {snapshot['visibility']}")
             console.print(f"  Created: {snapshot['created_at']}")
+            console.print(f"  Updated: {snapshot['updated_at']}")
             console.print(f"  Description: {snapshot['description']}")
 
             # Get entries
@@ -609,6 +617,7 @@ def snapshot_update(
             table.add_column("Visibility", style="yellow")
             table.add_column("Entries", justify="right", style="green")
             table.add_column("Created", style="blue")
+            table.add_column("Updated", style="blue")
             table.add_column("Description", style="dim")
 
             description = updated_snapshot["description"] or ""
@@ -621,6 +630,7 @@ def snapshot_update(
                 updated_snapshot["visibility"],
                 str(updated_snapshot["entry_count"]),
                 updated_snapshot["created_at"].strftime("%Y-%m-%d %H:%M:%S"),
+                updated_snapshot["updated_at"].strftime("%Y-%m-%d %H:%M:%S"),
                 description,
             )
 
