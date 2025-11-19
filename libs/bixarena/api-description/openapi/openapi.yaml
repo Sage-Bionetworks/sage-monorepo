@@ -1597,6 +1597,7 @@ components:
           $ref: '#/components/schemas/SortDirection'
     Visibility:
       type: string
+      maxLength: 20
       enum:
         - public
         - private
@@ -1618,6 +1619,8 @@ components:
           format: date-time
           description: When this snapshot was created
           example: '2025-08-16T14:30:00Z'
+        updatedAt:
+          $ref: '#/components/schemas/UpdatedAt'
         entryCount:
           type: integer
           description: Number of models in this snapshot
@@ -1631,6 +1634,7 @@ components:
         - id
         - visibility
         - createdAt
+        - updatedAt
         - entryCount
     LeaderboardSnapshotPage:
       type: object

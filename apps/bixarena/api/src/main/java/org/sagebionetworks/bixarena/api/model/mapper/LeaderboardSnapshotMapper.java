@@ -16,7 +16,9 @@ public class LeaderboardSnapshotMapper {
 
     return LeaderboardSnapshotDto.builder()
       .id(entity.getSnapshotIdentifier())
+      .visibility(VisibilityDto.fromValue(entity.getVisibility()))
       .createdAt(entity.getCreatedAt())
+      .updatedAt(entity.getUpdatedAt())
       .entryCount(0) // Will be set by service if needed
       .description(entity.getDescription())
       .build();
@@ -29,7 +31,9 @@ public class LeaderboardSnapshotMapper {
 
     return LeaderboardSnapshotDto.builder()
       .id(entity.getSnapshotIdentifier())
+      .visibility(VisibilityDto.fromValue(entity.getVisibility()))
       .createdAt(entity.getCreatedAt())
+      .updatedAt(entity.getUpdatedAt())
       .entryCount((int) entryCount)
       .description(entity.getDescription())
       .build();
@@ -44,6 +48,7 @@ public class LeaderboardSnapshotMapper {
       .id(projection.getSnapshotIdentifier())
       .visibility(VisibilityDto.fromValue(projection.getVisibility()))
       .createdAt(projection.getCreatedAt())
+      .updatedAt(projection.getUpdatedAt())
       .entryCount(projection.getEntryCount().intValue())
       .description(projection.getDescription())
       .build();

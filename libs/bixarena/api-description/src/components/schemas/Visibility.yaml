@@ -1,4 +1,5 @@
 type: string
+maxLength: 20
 enum:
   - public
   - private

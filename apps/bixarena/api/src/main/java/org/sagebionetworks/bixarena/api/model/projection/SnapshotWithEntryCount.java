@@ -7,6 +7,7 @@ public interface SnapshotWithEntryCount {
   String getSnapshotIdentifier();
   String getDescription();
   OffsetDateTime getCreatedAt();
+  OffsetDateTime getUpdatedAt();
   String getVisibility();
   Long getEntryCount();
 }

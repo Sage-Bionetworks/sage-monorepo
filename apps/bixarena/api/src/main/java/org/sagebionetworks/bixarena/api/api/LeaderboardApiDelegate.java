@@ -100,7 +100,7 @@ public interface LeaderboardApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"snapshots\" : [ { \"createdAt\" : \"2025-08-16T14:30:00Z\", \"entryCount\" : 50, \"visibility\" : \"public\", \"description\" : \"Weekly evaluation run\", \"id\" : \"snapshot_2025-08-16_14-30\" }, { \"createdAt\" : \"2025-08-16T14:30:00Z\", \"entryCount\" : 50, \"visibility\" : \"public\", \"description\" : \"Weekly evaluation run\", \"id\" : \"snapshot_2025-08-16_14-30\" } ], \"number\" : 99, \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
+                    String exampleString = "{ \"snapshots\" : [ { \"createdAt\" : \"2025-08-16T14:30:00Z\", \"entryCount\" : 50, \"visibility\" : \"public\", \"description\" : \"Weekly evaluation run\", \"id\" : \"snapshot_2025-08-16_14-30\", \"updatedAt\" : \"2024-01-15T10:45:00Z\" }, { \"createdAt\" : \"2025-08-16T14:30:00Z\", \"entryCount\" : 50, \"visibility\" : \"public\", \"description\" : \"Weekly evaluation run\", \"id\" : \"snapshot_2025-08-16_14-30\", \"updatedAt\" : \"2024-01-15T10:45:00Z\" } ], \"number\" : 99, \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

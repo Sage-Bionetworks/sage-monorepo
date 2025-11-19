@@ -1,14 +1,13 @@
 -- ============================================================================
--- Schema Change: Add Visibility to Leaderboard Snapshots
+-- Schema Change: Update Columns of Leaderboard Snapshots
 -- ============================================================================
--- This migration adds a visibility column to the leaderboard_snapshot table
+-- This migration adds a visibility and updated_at columns to the leaderboard_snapshot table
 -- to control which snapshots are publicly accessible.
 --
 -- Changes:
 -- - Add visibility column with values: 'public', 'private'
--- - Default value: 'private' (secure by default)
--- - Add index for efficient filtering
--- - Update existing snapshots placeholder to 'private'
+-- - Add updated_at column
+-- - Add index on visibility
 -- ============================================================================
 
 -- ============================================================================
@@ -19,6 +18,12 @@ ALTER TABLE api.leaderboard_snapshot
   CHECK (visibility IN ('public', 'private'));
 
 -- ============================================================================
--- Add Index for Performance
+-- Add UpdatedAt Column
+-- ============================================================================
+ALTER TABLE api.leaderboard_snapshot
+  ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
+
+-- ============================================================================
+-- Create Index on Visibility
 -- ============================================================================
 CREATE INDEX idx_api_leaderboard_snapshot_visibility ON api.leaderboard_snapshot(visibility);

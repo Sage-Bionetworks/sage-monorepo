@@ -35,6 +35,9 @@ public class LeaderboardSnapshotDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime updatedAt;
+
   private Integer entryCount;
 
   private @Nullable String description = null;
@@ -46,10 +49,11 @@ public class LeaderboardSnapshotDto {
   /**
    * Constructor with only required parameters
    */
-  public LeaderboardSnapshotDto(String id, VisibilityDto visibility, OffsetDateTime createdAt, Integer entryCount) {
+  public LeaderboardSnapshotDto(String id, VisibilityDto visibility, OffsetDateTime createdAt, OffsetDateTime updatedAt, Integer entryCount) {
     this.id = id;
     this.visibility = visibility;
     this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
     this.entryCount = entryCount;
   }
 
@@ -113,6 +117,26 @@ public class LeaderboardSnapshotDto {
     this.createdAt = createdAt;
   }
 
+  public LeaderboardSnapshotDto updatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+    return this;
+  }
+
+  /**
+   * Timestamp when the entity was last updated.
+   * @return updatedAt
+   */
+  @NotNull @Valid 
+  @Schema(name = "updatedAt", example = "2024-01-15T10:45Z", description = "Timestamp when the entity was last updated.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("updatedAt")
+  public OffsetDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
   public LeaderboardSnapshotDto entryCount(Integer entryCount) {
     this.entryCount = entryCount;
     return this;
@@ -165,13 +189,14 @@ public class LeaderboardSnapshotDto {
     return Objects.equals(this.id, leaderboardSnapshot.id) &&
         Objects.equals(this.visibility, leaderboardSnapshot.visibility) &&
         Objects.equals(this.createdAt, leaderboardSnapshot.createdAt) &&
+        Objects.equals(this.updatedAt, leaderboardSnapshot.updatedAt) &&
         Objects.equals(this.entryCount, leaderboardSnapshot.entryCount) &&
         Objects.equals(this.description, leaderboardSnapshot.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, visibility, createdAt, entryCount, description);
+    return Objects.hash(id, visibility, createdAt, updatedAt, entryCount, description);
   }
 
   @Override
@@ -181,6 +206,7 @@ public class LeaderboardSnapshotDto {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    visibility: ").append(toIndentedString(visibility)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    entryCount: ").append(toIndentedString(entryCount)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
@@ -214,6 +240,7 @@ public class LeaderboardSnapshotDto {
       this.instance.setId(value.id);
       this.instance.setVisibility(value.visibility);
       this.instance.setCreatedAt(value.createdAt);
+      this.instance.setUpdatedAt(value.updatedAt);
       this.instance.setEntryCount(value.entryCount);
       this.instance.setDescription(value.description);
       return this;
@@ -231,6 +258,11 @@ public class LeaderboardSnapshotDto {
     
     public LeaderboardSnapshotDto.Builder createdAt(OffsetDateTime createdAt) {
       this.instance.createdAt(createdAt);
+      return this;
+    }
+    
+    public LeaderboardSnapshotDto.Builder updatedAt(OffsetDateTime updatedAt) {
+      this.instance.updatedAt(updatedAt);
       return this;
     }
     

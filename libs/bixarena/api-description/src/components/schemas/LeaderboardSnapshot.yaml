@@ -12,6 +12,8 @@ properties:
     format: date-time
     description: When this snapshot was created
     example: '2025-08-16T14:30:00Z'
+  updatedAt:
+    $ref: UpdatedAt.yaml
   entryCount:
     type: integer
     description: Number of models in this snapshot
@@ -25,4 +27,5 @@ required:
   - id
   - visibility
   - createdAt
+  - updatedAt
   - entryCount
