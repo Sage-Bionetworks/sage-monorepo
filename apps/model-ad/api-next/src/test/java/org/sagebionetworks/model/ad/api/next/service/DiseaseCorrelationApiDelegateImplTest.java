@@ -1,5 +1,4 @@
 package org.sagebionetworks.model.ad.api.next.service;
-import org.sagebionetworks.model.ad.api.next.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -18,11 +17,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.model.ad.api.next.api.*;
 import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
-import org.sagebionetworks.model.ad.api.next.model.document.CorrelationResultDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument.CorrelationResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.DiseaseCorrelationMapper;
@@ -104,9 +104,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     ObjectId objectId = new ObjectId();
     DiseaseCorrelationDocument document = buildDocument(objectId);
 
-    when(repository.findByClusterAndIdIn(eq("Cluster A"), anyList())).thenReturn(
-      List.of(document)
-    );
+    when(repository.findByClusterAndIdIn(eq("Cluster A"), anyList())).thenReturn(List.of(document));
 
     ResponseEntity<List<DiseaseCorrelationDto>> response = delegate.getDiseaseCorrelations(
       List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster A"),
@@ -206,7 +204,7 @@ class DiseaseCorrelationApiDelegateImplTest {
   }
 
   private DiseaseCorrelationDocument buildDocument(ObjectId objectId) {
-    CorrelationResultDocument correlation = new CorrelationResultDocument();
+    CorrelationResult correlation = new CorrelationResult();
     correlation.setCorrelation(0.87d);
     correlation.setAdjustedPvalue(0.01d);
 
@@ -224,7 +222,7 @@ class DiseaseCorrelationApiDelegateImplTest {
   }
 
   private DiseaseCorrelationDocument buildDocumentWithPartialCorrelation(ObjectId objectId) {
-    CorrelationResultDocument correlation = new CorrelationResultDocument();
+    CorrelationResult correlation = new CorrelationResult();
     correlation.setCorrelation(0.5d);
 
     DiseaseCorrelationDocument document = new DiseaseCorrelationDocument();

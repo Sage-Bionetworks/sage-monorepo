@@ -1,5 +1,4 @@
 package org.sagebionetworks.model.ad.api.next.service;
-import org.sagebionetworks.model.ad.api.next.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,9 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.model.ad.api.next.api.*;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
-import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewLinkDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument.ModelOverviewLink;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
@@ -150,11 +150,11 @@ class ModelOverviewApiDelegateImplTest {
   }
 
   private ModelOverviewDocument buildDocument(ObjectId objectId) {
-    ModelOverviewLinkDocument requiredLink = new ModelOverviewLinkDocument();
+    ModelOverviewLink requiredLink = new ModelOverviewLink();
     requiredLink.setLinkText("Study");
     requiredLink.setLinkUrl("https://example.org/study");
 
-    ModelOverviewLinkDocument optionalLink = new ModelOverviewLinkDocument();
+    ModelOverviewLink optionalLink = new ModelOverviewLink();
     optionalLink.setLinkText("Gene Expression");
     optionalLink.setLinkUrl("https://example.org/gene");
 
