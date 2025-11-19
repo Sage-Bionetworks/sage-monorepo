@@ -1,3 +1,5 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import {
   provideComparisonToolFilterService,
   provideComparisonToolService,
@@ -16,6 +18,8 @@ async function setup() {
   const { fixture } = await render(ComparisonToolComponent, {
     imports: [LoadingContainerComponent],
     providers: [
+      provideHttpClient(),
+      provideNoopAnimations(),
       provideLoadingIconColors(),
       ...provideComparisonToolService({
         configs: mockComparisonToolConfigs,

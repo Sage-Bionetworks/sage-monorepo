@@ -67,5 +67,6 @@
     [shouldShowNoDataMessage]="true"
     [columnWidth]="columnWidth"
     [totalRecords]="totalResultsCount()"
+    (lazyLoad)="onLazyLoad($event)"
   />
 </div>

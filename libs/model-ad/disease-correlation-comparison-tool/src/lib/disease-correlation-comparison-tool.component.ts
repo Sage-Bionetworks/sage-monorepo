@@ -17,8 +17,10 @@ import {
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { TableLazyLoadEvent } from 'primeng/table';
 import { shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
+import { getPaginationParams } from '@sagebionetworks/explorers/comparison-tool';
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
@@ -37,7 +39,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
 
   pinnedItems = this.comparisonToolService.pinnedItems;
 
-  isLoading = signal(true);
+  isInitialLoad = signal(true);
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'CONSENSUS NETWORK MODULES': {
@@ -102,7 +104,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
         return;
       }
 
-      this.isLoading.set(true);
       const pinnedItems = Array.from(this.pinnedItems());
       this.getUnpinnedData(selection, pinnedItems);
       this.getPinnedData(selection, pinnedItems);
@@ -122,6 +123,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
           this.comparisonToolService.initialize(configs);
+          this.isInitialLoad.set(false);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
@@ -130,9 +132,15 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       });
   }
 
-  getUnpinnedData(selection: string[], pinnedItems: string[]) {
+  getUnpinnedData(selection: string[], pinnedItems: string[], pageNumber = 0, pageSize = 10) {
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Exclude)
+      .getDiseaseCorrelations(
+        selection,
+        pinnedItems,
+        ItemFilterTypeQuery.Exclude,
+        pageNumber,
+        pageSize,
+      )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: DiseaseCorrelationsPage) => {
@@ -141,10 +149,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: (error) => {
+          console.error('Error in getUnpinnedData:', error);
           throw new Error('Error fetching disease correlation data:', { cause: error });
-        },
-        complete: () => {
-          this.isLoading.set(false);
         },
       });
   }
@@ -162,9 +168,17 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
         error: (error) => {
           throw new Error('Error fetching disease correlation data:', { cause: error });
         },
-        complete: () => {
-          this.isLoading.set(false);
-        },
       });
+  }
+
+  onLazyLoad(event: TableLazyLoadEvent) {
+    const selection = this.comparisonToolService.dropdownSelection();
+    if (!selection.length) {
+      return;
+    }
+
+    const pinnedItems = Array.from(this.pinnedItems());
+    const { pageNumber, pageSize } = getPaginationParams(event);
+    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize);
   }
 }

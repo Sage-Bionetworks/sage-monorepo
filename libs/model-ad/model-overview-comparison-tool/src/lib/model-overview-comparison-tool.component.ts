@@ -13,8 +13,10 @@ import {
   ModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { TableLazyLoadEvent } from 'primeng/table';
 import { shareReplay } from 'rxjs';
 import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
+import { getPaginationParams } from '@sagebionetworks/explorers/comparison-tool';
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
@@ -33,7 +35,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
 
   pinnedItems = this.comparisonToolService.pinnedItems;
 
-  isLoading = signal(true);
+  isInitialLoad = signal(true);
 
   // TODO MG-485 - Update overview panes content and images
   visualizationOverviewPanes = [
@@ -79,7 +81,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
 
   readonly onUpdateEffect = effect(() => {
     if (this.platformService.isBrowser) {
-      this.isLoading.set(true);
       const pinnedItems = Array.from(this.pinnedItems());
       this.getPinnedData(pinnedItems);
       this.getUnpinnedData(pinnedItems);
@@ -99,6 +100,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
           this.comparisonToolService.initialize(configs);
+          this.isInitialLoad.set(false);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
@@ -107,9 +109,9 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       });
   }
 
-  getUnpinnedData(pinnedItems: string[]) {
+  getUnpinnedData(pinnedItems: string[], pageNumber = 0, pageSize = 10) {
     this.modelOverviewService
-      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Exclude)
+      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Exclude, pageNumber, pageSize)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: ModelOverviewsPage) => {
@@ -119,9 +121,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
         },
         error: (error) => {
           throw new Error('Error fetching model overview data:', { cause: error });
-        },
-        complete: () => {
-          this.isLoading.set(false);
         },
       });
   }
@@ -139,9 +138,12 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
         error: (error) => {
           throw new Error('Error fetching model overview data:', { cause: error });
         },
-        complete: () => {
-          this.isLoading.set(false);
-        },
       });
+  }
+
+  onLazyLoad(event: TableLazyLoadEvent) {
+    const pinnedItems = Array.from(this.pinnedItems());
+    const { pageNumber, pageSize } = getPaginationParams(event);
+    this.getUnpinnedData(pinnedItems, pageNumber, pageSize);
   }
 }

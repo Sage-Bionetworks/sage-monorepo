@@ -1,10 +1,11 @@
 <div class="base-table-container">
-  @let pagination = shouldPaginate() && data().length !== 0 ? paginationConfig : null;
+  @let pagination = shouldPaginate() ? paginationConfig : null;
   <p-table
     #table
     [value]="data()"
     [totalRecords]="totalRecords() ?? data().length"
     [lazy]="true"
+    (onLazyLoad)="onLazyLoad($event)"
     [customSort]="true"
     (sortFunction)="sortCallback($event)"
     sortMode="multiple"
@@ -14,7 +15,7 @@
     showGridlines
     [paginator]="!!pagination"
     [paginatorStyleClass]="pagination?.paginatorStyleClass ?? ''"
-    [rows]="pagination?.rows ?? undefined"
+    [rows]="pagination?.rows"
     [showCurrentPageReport]="!!pagination?.showCurrentPageReport"
     [currentPageReportTemplate]="pagination?.currentPageReportTemplate ?? ''"
     [showPageLinks]="pagination?.showPageLinks ?? null"

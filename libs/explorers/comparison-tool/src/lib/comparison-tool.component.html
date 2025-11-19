@@ -3,14 +3,16 @@
     <div id="loading">
       <explorers-loading-container [count]="loadingResultsCount()"></explorers-loading-container>
     </div>
-  } @else {
+  }
+
+  <div [style.display]="isLoading() ? 'none' : 'block'">
     <explorers-comparison-tool-header (filterToggle)="toggleFilterPanel()" />
     <explorers-comparison-tool-filter-list />
     <div class="comparison-tool-body">
       <div class="comparison-tool-body-inner">
         <div class="comparison-tool-tables">
           <explorers-comparison-tool-controls />
-          <explorers-comparison-tool-table />
+          <explorers-comparison-tool-table (lazyLoad)="onLazyLoad($event)" />
           <ng-content></ng-content>
           <explorers-help-links />
           <explorers-comparison-tool-filter-panel
@@ -20,5 +22,5 @@
         </div>
       </div>
     </div>
-  }
+  </div>
 </main>
