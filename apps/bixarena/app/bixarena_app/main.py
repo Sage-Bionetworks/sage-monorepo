@@ -276,10 +276,12 @@ def build_app():
         /* Custom accent colors */
         :root {
             --accent-teal: #14b8a6;
+            --border-color-primary: rgba(0, 0, 0, 0.2);
         }
 
         .dark {
             --accent-teal: #2dd4bf;
+            --border-color-primary: rgba(255, 255, 255, 0.2);
         }
 
         /* Hide Gradio's default footer */
