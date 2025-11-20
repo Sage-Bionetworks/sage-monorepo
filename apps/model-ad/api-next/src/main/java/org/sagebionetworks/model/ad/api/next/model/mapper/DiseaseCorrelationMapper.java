@@ -3,8 +3,8 @@ package org.sagebionetworks.model.ad.api.next.model.mapper;
 import java.math.BigDecimal;
 import java.util.List;
 import org.sagebionetworks.model.ad.api.next.exception.DataIntegrityException;
-import org.sagebionetworks.model.ad.api.next.model.document.CorrelationResultDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument.CorrelationResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.CorrelationResultDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
@@ -58,9 +58,7 @@ public class DiseaseCorrelationMapper {
     }
   }
 
-  private @Nullable CorrelationResultDto toCorrelationDto(
-    @Nullable CorrelationResultDocument document
-  ) {
+  private @Nullable CorrelationResultDto toCorrelationDto(@Nullable CorrelationResult document) {
     if (document == null) {
       return null;
     }
