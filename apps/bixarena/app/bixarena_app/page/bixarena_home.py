@@ -239,7 +239,7 @@ def build_how_it_works_section():
             <!-- Step 01 -->
             <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--panel-background-fill); border: 1px solid var(--border-color-primary); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: color-mix(in srgb, var(--color-accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);">
                         <span style="color: var(--color-accent); font-weight: 600; font-size: 0.875rem;">01</span>
                     </div>
                     <h3 style="color: var(--body-text-color); margin: 0; font-size: 1.125rem; font-weight: 600;">
@@ -254,7 +254,7 @@ def build_how_it_works_section():
             <!-- Step 02 -->
             <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--panel-background-fill); border: 1px solid var(--border-color-primary); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: color-mix(in srgb, var(--color-accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);">
                         <span style="color: var(--color-accent); font-weight: 600; font-size: 0.875rem;">02</span>
                     </div>
                     <h3 style="color: var(--body-text-color); margin: 0; font-size: 1.125rem; font-weight: 600;">
@@ -269,7 +269,7 @@ def build_how_it_works_section():
             <!-- Step 03 -->
             <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--panel-background-fill); border: 1px solid var(--border-color-primary); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: color-mix(in srgb, var(--color-accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);">
                         <span style="color: var(--color-accent); font-weight: 600; font-size: 0.875rem;">03</span>
                     </div>
                     <h3 style="color: var(--body-text-color); margin: 0; font-size: 1.125rem; font-weight: 600;">
@@ -284,7 +284,7 @@ def build_how_it_works_section():
             <!-- Step 04 -->
             <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--panel-background-fill); border: 1px solid var(--border-color-primary); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: color-mix(in srgb, var(--color-accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);">
                         <span style="color: var(--color-accent); font-weight: 600; font-size: 0.875rem;">04</span>
                     </div>
                     <h3 style="color: var(--body-text-color); margin: 0; font-size: 1.125rem; font-weight: 600;">
@@ -333,7 +333,7 @@ def build_cta_section():
                         """
                         <div style="text-align: center; padding: 10px 1.5rem 0 1.5rem;">
                             <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.875rem; opacity: 0.6;">
-                                <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #f97316; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; opacity: 1;"></div>
+                                <div style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--color-accent); animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; opacity: 1;"></div>
                                 <span>Sign in with your Synapse account to Start a Battle</span>
                             </div>
                         </div>

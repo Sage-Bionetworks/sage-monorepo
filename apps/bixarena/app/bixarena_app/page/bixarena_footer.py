@@ -53,7 +53,7 @@ def build_footer():
 
 .footer-separator {{
     margin: 0 8px;
-    color: #52525b !important;
+    color: var(--body-text-color-subdued) !important;
 }}
 
 .footer-center {{
@@ -82,7 +82,7 @@ def build_footer():
 }}
 
 .footer-link:hover {{
-    color: #f97316 !important;
+    color: var(--button-primary-background-fill) !important;
 }}
 
 @media (max-width: 768px) {{

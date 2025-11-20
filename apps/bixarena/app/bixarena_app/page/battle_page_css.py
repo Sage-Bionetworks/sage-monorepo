@@ -106,7 +106,6 @@ EXAMPLE_PROMPTS_CSS = """
 #prompt-card-section button.prompt-card:hover {
     background: var(--button-secondary-background-fill-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 #prompt-card-section button.prompt-card .prompt-text {
@@ -143,7 +142,6 @@ EXAMPLE_PROMPTS_CSS = """
 #prompt-card-section > .row > .nav-button:not(:disabled):hover {
     background: var(--button-secondary-background-fill-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Hide the left nav button while disabled */

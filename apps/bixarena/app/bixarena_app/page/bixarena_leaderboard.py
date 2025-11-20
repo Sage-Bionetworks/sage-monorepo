@@ -141,7 +141,7 @@ def build_leaderboard_page():
                         width: 56px;
                         height: 56px;
                         border-radius: 50%;
-                        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+                        background: color-mix(in srgb, var(--color-accent) 10%, transparent);
                         display: flex;
                         align-items: center;
                         justify-content: center;
