@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.model.document;
 
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -57,9 +58,9 @@ public class DiseaseCorrelationDocument {
   @Field("TCX")
   private @Nullable CorrelationResult tcx;
 
+  @Builder
   @Getter
   @Setter
-  @NoArgsConstructor
   public static class CorrelationResult {
 
     private Double correlation;

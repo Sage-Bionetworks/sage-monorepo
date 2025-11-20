@@ -150,13 +150,15 @@ class ModelOverviewApiDelegateImplTest {
   }
 
   private ModelOverviewDocument buildDocument(ObjectId objectId) {
-    ModelOverviewLink requiredLink = new ModelOverviewLink();
-    requiredLink.setLinkText("Study");
-    requiredLink.setLinkUrl("https://example.org/study");
+    ModelOverviewLink requiredLink = ModelOverviewLink.builder()
+      .linkText("Study")
+      .linkUrl("https://example.org/study")
+      .build();
 
-    ModelOverviewLink optionalLink = new ModelOverviewLink();
-    optionalLink.setLinkText("Gene Expression");
-    optionalLink.setLinkUrl("https://example.org/gene");
+    ModelOverviewLink optionalLink = ModelOverviewLink.builder()
+      .linkText("Gene Expression")
+      .linkUrl("https://example.org/gene")
+      .build();
 
     ModelOverviewDocument document = new ModelOverviewDocument();
     document.setId(objectId);

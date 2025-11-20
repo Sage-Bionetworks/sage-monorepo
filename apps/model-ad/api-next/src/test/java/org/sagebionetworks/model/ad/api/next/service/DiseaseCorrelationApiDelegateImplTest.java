@@ -204,9 +204,10 @@ class DiseaseCorrelationApiDelegateImplTest {
   }
 
   private DiseaseCorrelationDocument buildDocument(ObjectId objectId) {
-    CorrelationResult correlation = new CorrelationResult();
-    correlation.setCorrelation(0.87d);
-    correlation.setAdjustedPvalue(0.01d);
+    CorrelationResult correlation = CorrelationResult.builder()
+      .correlation(0.87d)
+      .adjustedPvalue(0.01d)
+      .build();
 
     DiseaseCorrelationDocument document = new DiseaseCorrelationDocument();
     document.setId(objectId);
@@ -222,8 +223,7 @@ class DiseaseCorrelationApiDelegateImplTest {
   }
 
   private DiseaseCorrelationDocument buildDocumentWithPartialCorrelation(ObjectId objectId) {
-    CorrelationResult correlation = new CorrelationResult();
-    correlation.setCorrelation(0.5d);
+    CorrelationResult correlation = CorrelationResult.builder().correlation(0.5d).build();
 
     DiseaseCorrelationDocument document = new DiseaseCorrelationDocument();
     document.setId(objectId);

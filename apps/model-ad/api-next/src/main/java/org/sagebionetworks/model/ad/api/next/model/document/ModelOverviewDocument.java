@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.model.document;
 
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -53,9 +54,9 @@ public class ModelOverviewDocument {
   @Field("available_data")
   private List<String> availableData;
 
+  @Builder
   @Getter
   @Setter
-  @NoArgsConstructor
   public static class ModelOverviewLink {
 
     @Field("link_text")
