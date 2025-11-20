@@ -273,7 +273,7 @@ def build_app():
         title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
         head=crisp_script,
         css="""
-        /* Custom accent colors */
+        /* Custom gloabl colors */
         :root {
             --accent-teal: #14b8a6;
             --border-color-primary: rgba(0, 0, 0, 0.2);
