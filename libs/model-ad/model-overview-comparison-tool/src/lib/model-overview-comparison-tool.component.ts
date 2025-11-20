@@ -9,6 +9,7 @@ import {
   ComparisonToolConfigService,
   ComparisonToolPage,
   ItemFilterTypeQuery,
+  ModelOverviewSearchQuery,
   ModelOverviewService,
   ModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
@@ -36,6 +37,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   pinnedItems = this.comparisonToolService.pinnedItems;
 
   isInitialLoad = signal(true);
+  currentPageNumber = signal(0);
+  currentPageSize = signal(10);
 
   // TODO MG-485 - Update overview panes content and images
   visualizationOverviewPanes = [
@@ -83,7 +86,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     if (this.platformService.isBrowser) {
       const pinnedItems = Array.from(this.pinnedItems());
       this.getPinnedData(pinnedItems);
-      this.getUnpinnedData(pinnedItems);
+      this.getUnpinnedData(pinnedItems, this.currentPageNumber(), this.currentPageSize());
     }
   });
 
@@ -110,8 +113,15 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   }
 
   getUnpinnedData(pinnedItems: string[], pageNumber = 0, pageSize = 10) {
+    const query: ModelOverviewSearchQuery = {
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      pageNumber,
+      pageSize,
+    };
+
     this.modelOverviewService
-      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Exclude, pageNumber, pageSize)
+      .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: ModelOverviewsPage) => {
@@ -126,8 +136,13 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   }
 
   getPinnedData(pinnedItems: string[]) {
+    const query: ModelOverviewSearchQuery = {
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Include,
+    };
+
     this.modelOverviewService
-      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Include)
+      .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: ModelOverviewsPage) => {
@@ -144,6 +159,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   onLazyLoad(event: TableLazyLoadEvent) {
     const pinnedItems = Array.from(this.pinnedItems());
     const { pageNumber, pageSize } = getPaginationParams(event);
+    this.currentPageNumber.set(pageNumber);
+    this.currentPageSize.set(pageSize);
     this.getUnpinnedData(pinnedItems, pageNumber, pageSize);
   }
 }

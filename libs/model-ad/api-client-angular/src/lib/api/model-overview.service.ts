@@ -25,7 +25,7 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { ItemFilterTypeQuery } from '../model/item-filter-type-query';
+import { ModelOverviewSearchQuery } from '../model/model-overview-search-query';
 // @ts-ignore
 import { ModelOverviewsPage } from '../model/model-overviews-page';
 
@@ -111,18 +111,12 @@ export class ModelOverviewService {
   /**
    * Get model overview for comparison tools
    * Returns a paginated list of model overview objects for use in comparison tools.
-   * @param item A list of items to filter the data by.
-   * @param itemFilterType The type of filter to apply to the items. Possible values are \&#39;include\&#39; or \&#39;exclude\&#39;.
-   * @param pageNumber The page number.
-   * @param pageSize The number of items in a single page.
+   * @param modelOverviewSearchQuery The search query used to find and filter model overviews.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getModelOverviews(
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
-    pageNumber?: number,
-    pageSize?: number,
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -132,10 +126,7 @@ export class ModelOverviewService {
     },
   ): Observable<ModelOverviewsPage>;
   public getModelOverviews(
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
-    pageNumber?: number,
-    pageSize?: number,
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -145,10 +136,7 @@ export class ModelOverviewService {
     },
   ): Observable<HttpResponse<ModelOverviewsPage>>;
   public getModelOverviews(
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
-    pageNumber?: number,
-    pageSize?: number,
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -158,10 +146,7 @@ export class ModelOverviewService {
     },
   ): Observable<HttpEvent<ModelOverviewsPage>>;
   public getModelOverviews(
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
-    pageNumber?: number,
-    pageSize?: number,
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -171,34 +156,11 @@ export class ModelOverviewService {
     },
   ): Observable<any> {
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (item) {
-      item.forEach((element) => {
-        localVarQueryParameters = this.addToHttpParams(
-          localVarQueryParameters,
-          <any>element,
-          'item',
-        );
-      });
-    }
-    if (itemFilterType !== undefined && itemFilterType !== null) {
+    if (modelOverviewSearchQuery !== undefined && modelOverviewSearchQuery !== null) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>itemFilterType,
-        'itemFilterType',
-      );
-    }
-    if (pageNumber !== undefined && pageNumber !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>pageNumber,
-        'pageNumber',
-      );
-    }
-    if (pageSize !== undefined && pageSize !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>pageSize,
-        'pageSize',
+        <any>modelOverviewSearchQuery,
+        'modelOverviewSearchQuery',
       );
     }
 

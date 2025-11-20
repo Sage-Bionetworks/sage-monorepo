@@ -1,8 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,22 +32,14 @@ public interface DiseaseCorrelationApiDelegate {
      * GET /comparison-tools/disease-correlation : Get disease correlation comparison data
      * Returns a paginated list of disease correlation objects for use in comparison tools.
      *
-     * @param category An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the &#39;category&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA. (required)
-     * @param item A list of items to filter the data by. (optional)
-     * @param itemFilterType The type of filter to apply to the items. Possible values are &#39;include&#39; or &#39;exclude&#39;. (optional, default to include)
-     * @param pageNumber The page number. (optional, default to 0)
-     * @param pageSize The number of items in a single page. (optional, default to 10)
+     * @param diseaseCorrelationSearchQuery The search query used to find and filter disease correlations. (optional)
      * @return A paginated response containing disease correlation objects (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see DiseaseCorrelationApi#getDiseaseCorrelations
      */
-    default ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(List<String> category,
-        List<String> item,
-        ItemFilterTypeQueryDto itemFilterType,
-        Integer pageNumber,
-        Integer pageSize) {
+    default ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(DiseaseCorrelationSearchQueryDto diseaseCorrelationSearchQuery) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

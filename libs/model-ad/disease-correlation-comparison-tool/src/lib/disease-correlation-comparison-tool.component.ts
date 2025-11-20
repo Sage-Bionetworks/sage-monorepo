@@ -1,7 +1,10 @@
 import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
+import {
+  ComparisonToolComponent,
+  getPaginationParams,
+} from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolViewConfig,
   LegendPanelConfig,
@@ -12,6 +15,7 @@ import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
+  DiseaseCorrelationSearchQuery,
   DiseaseCorrelationService,
   DiseaseCorrelationsPage,
   ItemFilterTypeQuery,
@@ -20,7 +24,6 @@ import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
-import { getPaginationParams } from '@sagebionetworks/explorers/comparison-tool';
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
@@ -40,6 +43,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   pinnedItems = this.comparisonToolService.pinnedItems;
 
   isInitialLoad = signal(true);
+  currentPageNumber = signal(0);
+  currentPageSize = signal(10);
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'CONSENSUS NETWORK MODULES': {
@@ -105,7 +110,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       }
 
       const pinnedItems = Array.from(this.pinnedItems());
-      this.getUnpinnedData(selection, pinnedItems);
+      this.getUnpinnedData(
+        selection,
+        pinnedItems,
+        this.currentPageNumber(),
+        this.currentPageSize(),
+      );
       this.getPinnedData(selection, pinnedItems);
     }
   });
@@ -133,14 +143,16 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   }
 
   getUnpinnedData(selection: string[], pinnedItems: string[], pageNumber = 0, pageSize = 10) {
+    const query: DiseaseCorrelationSearchQuery = {
+      category: selection,
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      pageNumber,
+      pageSize,
+    };
+
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(
-        selection,
-        pinnedItems,
-        ItemFilterTypeQuery.Exclude,
-        pageNumber,
-        pageSize,
-      )
+      .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: DiseaseCorrelationsPage) => {
@@ -156,8 +168,14 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   }
 
   getPinnedData(selection: string[], pinnedItems: string[]) {
+    const query: DiseaseCorrelationSearchQuery = {
+      category: selection,
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Include,
+    };
+
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Include)
+      .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: DiseaseCorrelationsPage) => {
@@ -179,6 +197,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
 
     const pinnedItems = Array.from(this.pinnedItems());
     const { pageNumber, pageSize } = getPaginationParams(event);
+    this.currentPageNumber.set(pageNumber);
+    this.currentPageSize.set(pageSize);
     this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize);
   }
 }

@@ -166,46 +166,14 @@ paths:
         tools.
       operationId: getModelOverviews
       parameters:
-        - description: A list of items to filter the data by.
+        - description: The search query used to find and filter model overviews.
           explode: true
           in: query
-          name: item
+          name: modelOverviewSearchQuery
           required: false
           schema:
-            items:
-              type: string
-            type: array
-          style: form
-        - description: The type of filter to apply to the items. Possible values are
-            'include' or 'exclude'.
-          explode: true
-          in: query
-          name: itemFilterType
-          required: false
-          schema:
-            $ref: '#/components/schemas/ItemFilterTypeQuery'
-          style: form
-        - description: The page number.
-          explode: true
-          in: query
-          name: pageNumber
-          required: false
-          schema:
-            default: 0
-            minimum: 0
-            type: integer
-          style: form
-        - description: The number of items in a single page.
-          explode: true
-          in: query
-          name: pageSize
-          required: false
-          schema:
-            default: 10
-            maximum: 1000
-            minimum: 1
-            type: integer
-          style: form
+            $ref: '#/components/schemas/ModelOverviewSearchQuery'
+          style: deepObject
       responses:
         '200':
           content:
@@ -233,58 +201,14 @@ paths:
         in comparison tools.
       operationId: getDiseaseCorrelations
       parameters:
-        - description: "An ordered list of categories used to filter the data, where\
-            \ the first value is the category and the second is the subcategory. Pass\
-            \ each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA."
+        - description: The search query used to find and filter disease correlations.
           explode: true
           in: query
-          name: category
-          required: true
-          schema:
-            items:
-              type: string
-            type: array
-          style: form
-        - description: A list of items to filter the data by.
-          explode: true
-          in: query
-          name: item
+          name: diseaseCorrelationSearchQuery
           required: false
           schema:
-            items:
-              type: string
-            type: array
-          style: form
-        - description: The type of filter to apply to the items. Possible values are
-            'include' or 'exclude'.
-          explode: true
-          in: query
-          name: itemFilterType
-          required: false
-          schema:
-            $ref: '#/components/schemas/ItemFilterTypeQuery'
-          style: form
-        - description: The page number.
-          explode: true
-          in: query
-          name: pageNumber
-          required: false
-          schema:
-            default: 0
-            minimum: 0
-            type: integer
-          style: form
-        - description: The number of items in a single page.
-          explode: true
-          in: query
-          name: pageSize
-          required: false
-          schema:
-            default: 10
-            maximum: 1000
-            minimum: 1
-            type: integer
-          style: form
+            $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
+          style: deepObject
       responses:
         '200':
           content:
@@ -368,28 +292,36 @@ paths:
         - tag: Gene Expression
 components:
   parameters:
-    pageNumberQuery:
-      description: The page number.
+    modelOverviewSearchQuery:
+      description: The search query used to find and filter model overviews.
       explode: true
       in: query
-      name: pageNumber
+      name: modelOverviewSearchQuery
       required: false
       schema:
-        default: 0
-        minimum: 0
-        type: integer
-      style: form
-    pageSizeQuery:
-      description: The number of items in a single page.
+        $ref: '#/components/schemas/ModelOverviewSearchQuery'
+      style: deepObject
+    diseaseCorrelationSearchQuery:
+      description: The search query used to find and filter disease correlations.
       explode: true
       in: query
-      name: pageSize
+      name: diseaseCorrelationSearchQuery
       required: false
       schema:
-        default: 10
-        maximum: 1000
-        minimum: 1
-        type: integer
+        $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
+      style: deepObject
+    categoryQuery:
+      description: "An ordered list of categories used to filter the data, where the\
+        \ first value is the category and the second is the subcategory. Pass each\
+        \ value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA."
+      explode: true
+      in: query
+      name: category
+      required: true
+      schema:
+        items:
+          type: string
+        type: array
       style: form
     itemQuery:
       description: A list of items to filter the data by.
@@ -411,19 +343,6 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ItemFilterTypeQuery'
-      style: form
-    categoryQuery:
-      description: "An ordered list of categories used to filter the data, where the\
-        \ first value is the category and the second is the subcategory. Pass each\
-        \ value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA."
-      explode: true
-      in: query
-      name: category
-      required: true
-      schema:
-        items:
-          type: string
-        type: array
       style: form
   responses:
     BadRequest:
@@ -964,6 +883,36 @@ components:
         - include
         - exclude
       type: string
+    ModelOverviewSearchQuery:
+      description: Model overview search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 100
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        items:
+          description: List of item IDs to filter by.
+          example:
+            - 507f1f77bcf86cd799439011
+            - 507f191e810c19729de860ea
+          items:
+            type: string
+          nullable: true
+          type: array
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+      type: object
     ModelOverviewLink:
       description: Model Overview Link
       example:
@@ -1198,6 +1147,49 @@ components:
       required:
         - modelOverviews
         - page
+      type: object
+    DiseaseCorrelationSearchQuery:
+      description: Disease correlation search query with pagination and filtering
+        options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 100
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        category:
+          description: The category selections
+          example:
+            - CONSENSUS NETWORK MODULES
+            - Consensus Cluster A - ECM Organization
+          items:
+            type: string
+          maxItems: 2
+          minItems: 2
+          type: array
+        items:
+          description: List of item IDs to filter by.
+          example:
+            - 507f1f77bcf86cd799439011
+            - 507f191e810c19729de860ea
+          items:
+            type: string
+          nullable: true
+          type: array
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+      required:
+        - category
       type: object
     CorrelationResult:
       description: Correlation result

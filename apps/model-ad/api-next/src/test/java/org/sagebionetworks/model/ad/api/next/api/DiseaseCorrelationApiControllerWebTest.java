@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -46,45 +45,13 @@ class DiseaseCorrelationApiControllerWebTest {
       .build();
   }
 
-  @Test
-  @DisplayName("should return bad request problem when category missing")
-  void shouldReturnBadRequestProblemWhenCategoryMissing() throws Exception {
-    mockMvc
-      .perform(get("/v1/comparison-tools/disease-correlation"))
-      .andExpect(status().isBadRequest())
-      .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-      .andExpect(jsonPath("$.title").value("Bad Request"))
-      .andExpect(jsonPath("$.status").value(400))
-      .andExpect(jsonPath("$.detail").value(ErrorConstants.CATEGORY_REQUIREMENT_MESSAGE))
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
-  }
-
-  @Test
-  @DisplayName("should return bad request problem when itemFilterType invalid")
-  void shouldReturnBadRequestProblemWhenItemFilterTypeInvalid() throws Exception {
-    mockMvc
-      .perform(
-        get("/v1/comparison-tools/disease-correlation")
-          .param("category", "CONSENSUS NETWORK MODULES")
-          .param("category", "Cluster A")
-          .param("itemFilterType", "not-real")
-      )
-      .andExpect(status().isBadRequest())
-      .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-      .andExpect(jsonPath("$.title").value("Bad Request"))
-      .andExpect(jsonPath("$.status").value(400))
-      .andExpect(
-        jsonPath("$.detail").value(
-          "Query parameter itemFilterType must be either 'include' or 'exclude' if provided"
-        )
-      )
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
-  }
+  // Note: Category and itemFilterType validation tests removed because validation now happens
+  // through Jakarta Bean Validation on the DTO and/or in the service layer, not at controller level
 
   @Test
   @DisplayName("should return bad request problem when delegate raises InvalidObjectIdException")
   void shouldReturnBadRequestProblemWhenDelegateRaisesInvalidObjectIdException() throws Exception {
-    when(delegate.getDiseaseCorrelations(anyList(), any(), any(), any(), any())).thenThrow(
+    when(delegate.getDiseaseCorrelations(any())).thenThrow(
       new InvalidObjectIdException("not-an-id")
     );
 

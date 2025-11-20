@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
@@ -32,22 +33,20 @@ public class DiseaseCorrelationService {
 
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
-    ".buildCacheKey('diseaseCorrelation', #filterType, #items, " +
-    "#cluster, #pageNumber, #pageSize)"
+    ".buildCacheKey('diseaseCorrelation', #query.itemFilterType, #query.items, " +
+    "#cluster, #query.pageNumber, #query.pageSize)"
   )
   public DiseaseCorrelationsPageDto loadDiseaseCorrelations(
-    Integer pageNumber,
-    Integer pageSize,
-    String cluster,
-    List<String> items,
-    ItemFilterTypeQueryDto filterType
+    DiseaseCorrelationSearchQueryDto query,
+    String cluster
   ) {
     ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
-      filterType,
+      query.getItemFilterType(),
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+    List<String> items = ApiHelper.sanitizeItems(query.getItems());
+    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
     Page<DiseaseCorrelationDocument> page;
 
     if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
@@ -72,16 +71,18 @@ public class DiseaseCorrelationService {
       .map(diseaseCorrelationMapper::toDto)
       .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
 
-    PageMetadataDto pageMetadata = new PageMetadataDto()
+    PageMetadataDto pageMetadata = PageMetadataDto.builder()
       .number(page.getNumber())
       .size(page.getSize())
       .totalElements(page.getTotalElements())
       .totalPages(page.getTotalPages())
       .hasNext(page.hasNext())
-      .hasPrevious(page.hasPrevious());
+      .hasPrevious(page.hasPrevious())
+      .build();
 
-    return new DiseaseCorrelationsPageDto()
+    return DiseaseCorrelationsPageDto.builder()
       .diseaseCorrelations(diseaseCorrelations)
-      .page(pageMetadata);
+      .page(pageMetadata)
+      .build();
   }
 }

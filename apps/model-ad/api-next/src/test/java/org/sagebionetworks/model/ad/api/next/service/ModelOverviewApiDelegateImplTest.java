@@ -22,6 +22,7 @@ import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocumen
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewLinkDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
@@ -53,12 +54,14 @@ class ModelOverviewApiDelegateImplTest {
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
-    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(
-      null,
-      ItemFilterTypeQueryDto.INCLUDE,
-      0,
-      100
-    );
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -83,12 +86,14 @@ class ModelOverviewApiDelegateImplTest {
 
     when(repository.findByIdIn(anyList(), any())).thenReturn(page);
 
-    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(
-      List.of(objectId.toHexString()),
-      ItemFilterTypeQueryDto.INCLUDE,
-      0,
-      100
-    );
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .items(List.of(objectId.toHexString()))
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -119,9 +124,16 @@ class ModelOverviewApiDelegateImplTest {
   @Test
   @DisplayName("should throw bad request when item contains invalid object id")
   void shouldThrowBadRequestWhenItemContainsInvalidObjectId() {
-    assertThatThrownBy(() ->
-      delegate.getModelOverviews(List.of("not-an-id"), ItemFilterTypeQueryDto.INCLUDE, 0, 100)
-    ).isInstanceOf(InvalidObjectIdException.class);
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .items(List.of("not-an-id"))
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    assertThatThrownBy(() -> delegate.getModelOverviews(query)).isInstanceOf(
+      InvalidObjectIdException.class
+    );
 
     verifyNoInteractions(repository);
   }
@@ -141,12 +153,14 @@ class ModelOverviewApiDelegateImplTest {
 
     when(repository.findAll(any(PageRequest.class))).thenReturn(page);
 
-    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(
-      null,
-      ItemFilterTypeQueryDto.EXCLUDE,
-      0,
-      100
-    );
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -170,12 +184,14 @@ class ModelOverviewApiDelegateImplTest {
 
     when(repository.findByIdNotIn(anyList(), any())).thenReturn(page);
 
-    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(
-      List.of(excludedId.toHexString()),
-      ItemFilterTypeQueryDto.EXCLUDE,
-      0,
-      100
-    );
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .items(List.of(excludedId.toHexString()))
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();

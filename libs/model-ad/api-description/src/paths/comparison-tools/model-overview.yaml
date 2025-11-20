@@ -5,10 +5,7 @@ get:
   description: Returns a paginated list of model overview objects for use in comparison tools.
   operationId: getModelOverviews
   parameters:
-    - $ref: ../query/itemQuery.yaml
-    - $ref: ../query/itemFilterTypeQuery.yaml
-    - $ref: ../query/pageNumberQuery.yaml
-    - $ref: ../query/pageSizeQuery.yaml
+    - $ref: ../query/modelOverviewSearchQuery.yaml
   responses:
     '200':
       description: A paginated list of model overview objects

@@ -5,11 +5,7 @@ get:
   description: Returns a paginated list of disease correlation objects for use in comparison tools.
   operationId: getDiseaseCorrelations
   parameters:
-    - $ref: ../query/categoryQuery.yaml
-    - $ref: ../query/itemQuery.yaml
-    - $ref: ../query/itemFilterTypeQuery.yaml
-    - $ref: ../query/pageNumberQuery.yaml
-    - $ref: ../query/pageSizeQuery.yaml
+    - $ref: ../query/diseaseCorrelationSearchQuery.yaml
   responses:
     '200':
       description: A paginated response containing disease correlation objects

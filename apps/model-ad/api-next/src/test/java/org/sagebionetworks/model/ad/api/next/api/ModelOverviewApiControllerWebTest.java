@@ -45,29 +45,13 @@ class ModelOverviewApiControllerWebTest {
       .build();
   }
 
-  @Test
-  @DisplayName("should return bad request problem when itemFilterType invalid")
-  void shouldReturnBadRequestProblemWhenItemFilterTypeInvalid() throws Exception {
-    mockMvc
-      .perform(get("/v1/comparison-tools/model-overview").param("itemFilterType", "not-real"))
-      .andExpect(status().isBadRequest())
-      .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-      .andExpect(jsonPath("$.title").value("Bad Request"))
-      .andExpect(jsonPath("$.status").value(400))
-      .andExpect(
-        jsonPath("$.detail").value(
-          "Query parameter itemFilterType must be either 'include' or 'exclude' if provided"
-        )
-      )
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/model-overview"));
-  }
+  // Note: ItemFilterType validation test removed because validation now happens
+  // through Jakarta Bean Validation on the DTO and/or in the service layer, not at controller level
 
   @Test
   @DisplayName("should return bad request problem when delegate raises InvalidObjectIdException")
   void shouldReturnBadRequestProblemWhenDelegateRaisesInvalidObjectIdException() throws Exception {
-    when(delegate.getModelOverviews(anyList(), any(), any(), any())).thenThrow(
-      new InvalidObjectIdException("not-an-id")
-    );
+    when(delegate.getModelOverviews(any())).thenThrow(new InvalidObjectIdException("not-an-id"));
 
     mockMvc
       .perform(get("/v1/comparison-tools/model-overview").param("item", "not-an-id"))

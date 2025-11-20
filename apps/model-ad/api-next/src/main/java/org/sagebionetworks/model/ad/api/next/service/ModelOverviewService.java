@@ -10,6 +10,7 @@ import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
@@ -33,21 +34,18 @@ public class ModelOverviewService {
 
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
-    ".buildCacheKey('modelOverview', #filterType, #items, #pageNumber, #pageSize)"
+    ".buildCacheKey('modelOverview', #query.itemFilterType, " +
+    "#query.items, #query.pageNumber, #query.pageSize)"
   )
-  public ModelOverviewsPageDto loadModelOverviews(
-    Integer pageNumber,
-    Integer pageSize,
-    List<String> items,
-    ItemFilterTypeQueryDto filterType
-  ) {
+  public ModelOverviewsPageDto loadModelOverviews(ModelOverviewSearchQueryDto query) {
+    List<String> items = ApiHelper.sanitizeItems(query.getItems());
     ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
-      filterType,
+      query.getItemFilterType(),
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    int effectivePageNumber = Objects.requireNonNullElse(pageNumber, 0);
-    int effectivePageSize = Objects.requireNonNullElse(pageSize, 100);
+    int effectivePageNumber = Objects.requireNonNullElse(query.getPageNumber(), 0);
+    int effectivePageSize = Objects.requireNonNullElse(query.getPageSize(), 100);
 
     Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize);
     Page<ModelOverviewDocument> page;
@@ -75,15 +73,15 @@ public class ModelOverviewService {
       .map(modelOverviewMapper::toDto)
       .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
 
-    PageMetadataDto pageMetadata = new PageMetadataDto(
-      page.getNumber(),
-      page.getSize(),
-      page.getTotalElements(),
-      page.getTotalPages(),
-      page.hasNext(),
-      page.hasPrevious()
-    );
+    PageMetadataDto pageMetadata = PageMetadataDto.builder()
+      .number(page.getNumber())
+      .size(page.getSize())
+      .totalElements(page.getTotalElements())
+      .totalPages(page.getTotalPages())
+      .hasNext(page.hasNext())
+      .hasPrevious(page.hasPrevious())
+      .build();
 
-    return new ModelOverviewsPageDto().modelOverviews(dtos).page(pageMetadata);
+    return ModelOverviewsPageDto.builder().modelOverviews(dtos).page(pageMetadata).build();
   }
 }

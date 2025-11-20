@@ -6,8 +6,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,11 +45,7 @@ public interface DiseaseCorrelationApi {
      * GET /comparison-tools/disease-correlation : Get disease correlation comparison data
      * Returns a paginated list of disease correlation objects for use in comparison tools.
      *
-     * @param category An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the &#39;category&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA. (required)
-     * @param item A list of items to filter the data by. (optional)
-     * @param itemFilterType The type of filter to apply to the items. Possible values are &#39;include&#39; or &#39;exclude&#39;. (optional, default to include)
-     * @param pageNumber The page number. (optional, default to 0)
-     * @param pageSize The number of items in a single page. (optional, default to 10)
+     * @param diseaseCorrelationSearchQuery The search query used to find and filter disease correlations. (optional)
      * @return A paginated response containing disease correlation objects (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
@@ -86,13 +82,9 @@ public interface DiseaseCorrelationApi {
     )
     
     default ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(
-        @NotNull @Parameter(name = "category", description = "An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA.", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "category", required = true) List<String> category,
-        @Parameter(name = "item", description = "A list of items to filter the data by.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "item", required = false) @Nullable List<String> item,
-        @Parameter(name = "itemFilterType", description = "The type of filter to apply to the items. Possible values are 'include' or 'exclude'.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "itemFilterType", required = false, defaultValue = "include") ItemFilterTypeQueryDto itemFilterType,
-        @Min(0) @Parameter(name = "pageNumber", description = "The page number.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
-        @Min(1) @Max(1000) @Parameter(name = "pageSize", description = "The number of items in a single page.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize
+        @Parameter(name = "diseaseCorrelationSearchQuery", description = "The search query used to find and filter disease correlations.", in = ParameterIn.QUERY) @Valid @Nullable DiseaseCorrelationSearchQueryDto diseaseCorrelationSearchQuery
     ) {
-        return getDelegate().getDiseaseCorrelations(category, item, itemFilterType, pageNumber, pageSize);
+        return getDelegate().getDiseaseCorrelations(diseaseCorrelationSearchQuery);
     }
 
 }
