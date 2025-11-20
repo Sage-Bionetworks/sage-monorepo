@@ -51,10 +51,10 @@ CHATBOT_BATTLE_CSS = """
 
 .model-name-footer {
     padding: 12px 16px;
-    background: var(--bg-card);
-    border-top: 1px solid var(--border-color);
+    background: var(--block-background-fill);
+    border-top: 1px solid var(--border-color-primary);
     text-align: center;
-    color: var(--text-primary);
+    color: var(--body-text-color);
     font-weight: 500;
 }
 """
@@ -91,7 +91,7 @@ EXAMPLE_PROMPTS_CSS = """
 /* Example prompt card button */
 #prompt-card-section button.prompt-card {
     background: transparent;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-color-primary);
     border-radius: 8px;
     padding: 12px 16px;
     transition: all 0.2s ease;
@@ -104,7 +104,7 @@ EXAMPLE_PROMPTS_CSS = """
 }
 
 #prompt-card-section button.prompt-card:hover {
-    background: var(--bg-card);
+    background: var(--button-secondary-background-fill-hover);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -132,7 +132,7 @@ EXAMPLE_PROMPTS_CSS = """
     justify-content: center;
     border-radius: 50%;
     background: transparent;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-color-primary);
     transition: all 0.2s ease;
 }
 
@@ -141,7 +141,7 @@ EXAMPLE_PROMPTS_CSS = """
 }
 
 #prompt-card-section > .row > .nav-button:not(:disabled):hover {
-    background: var(--bg-card);
+    background: var(--button-secondary-background-fill-hover);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -233,7 +233,7 @@ DISCLAIMER_CSS = """
 }
 
 #disclaimer-text {
-    color: var(--text-muted);
+    color: var(--body-text-color-subdued);
     font-size: 0.875rem;
     line-height: 1.6;
     margin: 0;

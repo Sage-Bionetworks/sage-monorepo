@@ -55,14 +55,14 @@ def create_intro_section():
         with gr.Column():
             gr.HTML("""
             <div style="text-align: center; padding: 2.5rem 1.5rem;">
-                <p style="font-size: 2rem; margin-bottom: 1.5rem; color: var(--text-secondary); opacity: 0.9;">
+                <p style="font-size: 2rem; margin-bottom: 1.5rem; color: var(--body-text-color); opacity: 0.9;">
                     Welcome to BioArena
                 </p>
-                <h1 style="font-size: 2.2rem; margin-bottom: 2rem; color: var(--text-primary);">
+                <h1 style="font-size: 2.2rem; margin-bottom: 2rem; color: var(--body-text-color);">
                     Drive the next wave of biomedical breakthroughs
                 </h1>
 
-                <p style="font-size: 1.125rem; line-height: 1.75; max-width: 42rem; margin: 0 auto; color: var(--text-muted);">
+                <p style="font-size: 1.125rem; line-height: 1.75; max-width: 42rem; margin: 0 auto; color: var(--body-text-color-subdued);">
                     BioArena crowdsources the benchmarking of AI models to unlock the
                     next breakthrough in biomedicine, inviting a global community of
                     digital contributors.
@@ -87,20 +87,20 @@ def load_public_stats_on_page_load() -> dict:
     public_stats = fetch_public_stats()
 
     stats_html = f"""
-    <div style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); padding: 2.5rem 0; margin: 0 1.5rem;">
+    <div style="border: 1px solid var(--border-color-primary); border-radius: 8px; background-color: var(--panel-background-fill); padding: 2.5rem 0; margin: 0 1.5rem;">
         <div id="stats-public-only">
             <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                     <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
-                    <div style="font-size: 1rem; color: var(--text-muted);">Models Evaluated</div>
+                    <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Models Evaluated</div>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                     <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
-                    <div style="font-size: 1rem; color: var(--text-muted);">Total Battles</div>
+                    <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Total Battles</div>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                     <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
-                    <div style="font-size: 1rem; color: var(--text-muted);">Total Users</div>
+                    <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Total Users</div>
                 </div>
             </div>
         </div>
@@ -127,20 +127,20 @@ def load_user_battles_on_page_load(
     if user_stats is None:
         # Return only public stats when user is not authenticated
         stats_html = f"""
-        <div style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); padding: 2.5rem 0; margin: 0 1.5rem;">
+        <div style="border: 1px solid var(--border-color-primary); border-radius: 8px; background-color: var(--panel-background-fill); padding: 2.5rem 0; margin: 0 1.5rem;">
             <div id="stats-public-only">
                 <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                         <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
-                        <div style="font-size: 1rem; color: var(--text-muted);">Models Evaluated</div>
+                        <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Models Evaluated</div>
                     </div>
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                         <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
-                        <div style="font-size: 1rem; color: var(--text-muted);">Total Battles</div>
+                        <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Total Battles</div>
                     </div>
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                         <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
-                        <div style="font-size: 1rem; color: var(--text-muted);">Total Users</div>
+                        <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Total Users</div>
                     </div>
                 </div>
             </div>
@@ -150,28 +150,28 @@ def load_user_battles_on_page_load(
 
     # Return stats with user data included
     stats_html = f"""
-    <div style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); padding: 2.5rem 0; margin: 0 1.5rem;">
+    <div style="border: 1px solid var(--border-color-primary); border-radius: 8px; background-color: var(--panel-background-fill); padding: 2.5rem 0; margin: 0 1.5rem;">
         <div id="stats-with-user">
             <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                     <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
-                    <div style="font-size: 1rem; color: var(--text-muted);">Models Evaluated</div>
+                    <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Models Evaluated</div>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                     <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
-                    <div style="font-size: 1rem; color: var(--text-muted);">Total Battles</div>
+                    <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Total Battles</div>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
                     <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
-                    <div style="font-size: 1rem; color: var(--text-muted);">Total Users</div>
+                    <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Total Users</div>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-orange);">{user_stats.completed_battles:,}</div>
-                    <div style="font-size: 1rem; color: var(--text-muted);">Battles Completed</div>
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--color-accent);">{user_stats.completed_battles:,}</div>
+                    <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Battles Completed</div>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-orange);">#{user_stats.rank:,}</div>
-                    <div style="font-size: 1rem; color: var(--text-muted);">Your Rank</div>
+                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--color-accent);">#{user_stats.rank:,}</div>
+                    <div style="font-size: 1rem; color: var(--body-text-color-subdued);">Your Rank</div>
                 </div>
             </div>
         </div>
@@ -226,10 +226,10 @@ def build_how_it_works_section():
     <div style="padding: 2.5rem 1.5rem;">
         <!-- Section Header -->
         <div style="text-align: center; margin-bottom: 3rem;">
-            <h2 style="color: var(--text-primary); margin-bottom: 0.75rem; font-size: 1.875rem; font-weight: 600;">
+            <h2 style="color: var(--body-text-color); margin-bottom: 0.75rem; font-size: 1.875rem; font-weight: 600;">
                 Arena Rules
             </h2>
-            <p style="color: var(--text-muted); font-size: 1rem; max-width: 42rem; margin: 0 auto;">
+            <p style="color: var(--body-text-color-subdued); font-size: 1rem; max-width: 42rem; margin: 0 auto;">
                 Simple evaluation, powerful impact
             </p>
         </div>
@@ -237,61 +237,61 @@ def build_how_it_works_section():
         <!-- Steps Grid -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem;">
             <!-- Step 01 -->
-            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--panel-background-fill); border: 1px solid var(--border-color-primary); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
                     <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
-                        <span style="color: var(--accent-orange); font-weight: 600; font-size: 0.875rem;">01</span>
+                        <span style="color: var(--color-accent); font-weight: 600; font-size: 0.875rem;">01</span>
                     </div>
-                    <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem; font-weight: 600;">
+                    <h3 style="color: var(--body-text-color); margin: 0; font-size: 1.125rem; font-weight: 600;">
                         Start a Battle
                     </h3>
                 </div>
-                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                <p style="font-size: 0.875rem; color: var(--body-text-color-subdued); line-height: 1.5; margin: 0;">
                     Pick a curated biomedical question or submit your own custom prompt. Two AI models are randomly chosen to face off.
                 </p>
             </div>
 
             <!-- Step 02 -->
-            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--panel-background-fill); border: 1px solid var(--border-color-primary); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
                     <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
-                        <span style="color: var(--accent-orange); font-weight: 600; font-size: 0.875rem;">02</span>
+                        <span style="color: var(--color-accent); font-weight: 600; font-size: 0.875rem;">02</span>
                     </div>
-                    <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem; font-weight: 600;">
+                    <h3 style="color: var(--body-text-color); margin: 0; font-size: 1.125rem; font-weight: 600;">
                         Compare Responses
                     </h3>
                 </div>
-                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                <p style="font-size: 0.875rem; color: var(--body-text-color-subdued); line-height: 1.5; margin: 0;">
                     Review the two AI-generated answers side by side. The models remain anonymous so you can focus purely on the quality of the content.
                 </p>
             </div>
 
             <!-- Step 03 -->
-            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--panel-background-fill); border: 1px solid var(--border-color-primary); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
                     <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
-                        <span style="color: var(--accent-orange); font-weight: 600; font-size: 0.875rem;">03</span>
+                        <span style="color: var(--color-accent); font-weight: 600; font-size: 0.875rem;">03</span>
                     </div>
-                    <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem; font-weight: 600;">
+                    <h3 style="color: var(--body-text-color); margin: 0; font-size: 1.125rem; font-weight: 600;">
                         Select the Better
                     </h3>
                 </div>
-                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                <p style="font-size: 0.875rem; color: var(--body-text-color-subdued); line-height: 1.5; margin: 0;">
                     Decide which model demonstrates clearer reasoning or insight. Your input directly shapes model performance metrics.
                 </p>
             </div>
 
             <!-- Step 04 -->
-            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.3s ease;">
+            <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--panel-background-fill); border: 1px solid var(--border-color-primary); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
                     <div style="display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 50%; background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(249, 115, 22, 0.3);">
-                        <span style="color: var(--accent-orange); font-weight: 600; font-size: 0.875rem;">04</span>
+                        <span style="color: var(--color-accent); font-weight: 600; font-size: 0.875rem;">04</span>
                     </div>
-                    <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem; font-weight: 600;">
+                    <h3 style="color: var(--body-text-color); margin: 0; font-size: 1.125rem; font-weight: 600;">
                         Reveal & Impact
                     </h3>
                 </div>
-                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                <p style="font-size: 0.875rem; color: var(--body-text-color-subdued); line-height: 1.5; margin: 0;">
                     Once you've made your choice, the models are revealed. Only biomedical battles count toward the daily leaderboard. Ready for another round? Jump into your next battle.
                 </p>
             </div>
