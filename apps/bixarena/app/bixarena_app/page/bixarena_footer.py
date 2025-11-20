@@ -82,7 +82,7 @@ def build_footer():
 }}
 
 .footer-link:hover {{
-    color: var(--button-primary-background-fill) !important;
+    color: var(--color-accent) !important;
 }}
 
 @media (max-width: 768px) {{
