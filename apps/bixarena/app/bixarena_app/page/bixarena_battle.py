@@ -49,7 +49,11 @@ from bixarena_app.page.example_prompt_ui import (
 logger = logging.getLogger(__name__)
 
 num_sides = 2
-anony_names = ["", ""]
+# Temporarily show placeholder model names for testing
+anony_names = [
+    '<div class="model-name-footer">GPT-4o</div>',
+    '<div class="model-name-footer">Claude 3.5 Sonnet</div>',
+]
 
 
 def create_battle(
@@ -330,8 +334,8 @@ def clear_history(
             gr.Button(variant="secondary", interactive=True),
             gr.Button(variant="secondary", interactive=True),
         ]  # voting buttons: reset to default state
-        + [gr.Group(visible=False)]  # battle_interface: hide
-        + [gr.Row(visible=False)]  # voting_row: hide
+        + [gr.Group(visible=True)]  # battle_interface: show for testing
+        + [gr.Row(visible=True)]  # voting_row: show for testing
         + [gr.Row(visible=False)]  # next_battle_row: hide
         + [gr.HTML(visible=True)]  # page_header: show
         + [gr.Row(visible=True)]  # textbox_row: show
@@ -403,6 +407,7 @@ def add_text(
                 + [
                     x.to_gradio_chatbot() if x else [] for x in [state0, state1]
                 ]  # chatbot0, chatbot1: unchanged
+                + anony_names  # model_selector0, model_selector1: keep empty
                 + [
                     gr.update(
                         value="",
@@ -410,8 +415,8 @@ def add_text(
                         placeholder="Error creating battle. Please try again.",
                     )
                 ]  # textbox: clear with error message
-                + [gr.Group(visible=False)]  # battle_interface: hide
-                + [gr.Row(visible=False)]  # voting_row: hide
+                + [gr.Group(visible=True)]  # battle_interface: show for testing
+                + [gr.Row(visible=True)]  # voting_row: show for testing
                 + [gr.Row(visible=False)]  # next_battle_row: hide
                 + [gr.Column(visible=True)]  # example_prompts_group: show
                 + [gr.HTML(visible=True)]  # page_header: show
@@ -433,10 +438,16 @@ def add_text(
         battle_session.round_id = round_id
 
     # State 1: User submits prompt (battle started)
+    # Temporarily reveal model names immediately
+    model_names = (
+        f'<div class="model-name-footer">{states[0].model_name}</div>',
+        f'<div class="model-name-footer">{states[1].model_name}</div>',
+    )
     return (
         states  # state0, state1: updated with prompt
         + [battle_session]  # battle_session: updated with battle_id, round_id
         + [x.to_gradio_chatbot() for x in states]  # chatbot0, chatbot1: show prompt
+        + model_names  # model_selector0, model_selector1: temporarily reveal names
         + [gr.update(value="", placeholder="Ask follow-ups...")]  # textbox: clear
         + [gr.Group(visible=True)]  # battle_interface: show
         + [gr.Row(visible=False)]  # voting_row: hide
@@ -487,7 +498,7 @@ def build_side_by_side_ui_anony():
         ) = example_prompt_ui.build(textbox=None)
 
         # Battle interface - will appear once a prompt is submitted
-        with gr.Group(elem_id="chatbot-container", visible=False) as battle_interface:
+        with gr.Group(elem_id="chatbot-container", visible=True) as battle_interface:
             with gr.Row(equal_height=True):
                 for i in range(num_sides):
                     label = "Model 1" if i == 0 else "Model 2"
@@ -513,7 +524,7 @@ def build_side_by_side_ui_anony():
                         model_selectors.append(model_selector)
 
         # Voting buttons
-        with gr.Row(visible=False) as voting_row:
+        with gr.Row(visible=True) as voting_row:
             left_vote_btn = gr.Button(value="Left is Better 👈")
             tie_btn = gr.Button(value="🤝 Tie")
             right_vote_btn = gr.Button(value="👉 Right is Better")
@@ -665,6 +676,7 @@ def build_side_by_side_ui_anony():
         states
         + [battle_session]
         + chatbots
+        + model_selectors
         + [textbox]
         + [battle_interface, voting_row, next_battle_row, example_prompts_group]
         + [page_header, textbox_row, disclaimer],
@@ -697,6 +709,7 @@ def build_side_by_side_ui_anony():
             states
             + [battle_session]
             + chatbots
+            + model_selectors
             + [textbox]
             + [battle_interface, voting_row, next_battle_row, example_prompts_group]
             + [page_header, textbox_row, disclaimer],
