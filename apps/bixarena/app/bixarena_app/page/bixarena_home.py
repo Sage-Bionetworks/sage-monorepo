@@ -235,7 +235,7 @@ def build_how_it_works_section():
         </div>
 
         <!-- Steps Grid -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 1.25rem;">
             <!-- Step 01 -->
             <div style="position: relative; height: 100%; padding: 1.5rem; border-radius: 0.5rem; background-color: var(--panel-background-fill); border: 1px solid var(--border-color-primary); transition: all 0.3s ease;">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">

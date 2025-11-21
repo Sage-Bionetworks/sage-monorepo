@@ -318,6 +318,30 @@ def build_app():
         #cta-btn-authenticated *, #cta-btn-login * {
             white-space: nowrap !important;
         }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .page-content {
+                padding: 0 20px;
+            }
+            .page-content h1 {
+                font-size: 32px !important;
+            }
+            /* Adjust stats section for mobile */
+            #stats-public-only > div,
+            #stats-with-user > div {
+                gap: 1.5rem;
+                padding: 0 1rem;
+            }
+            #stats-public-only > div > div,
+            #stats-with-user > div > div {
+                min-width: 120px;
+            }
+            #stats-public-only > div > div > div:first-child,
+            #stats-with-user > div > div > div:first-child {
+                font-size: 2.5rem;
+            }
+        }
         """,
     ) as demo:
         _, battle_btn, leaderboard_btn, login_btn = build_header()
