@@ -56,9 +56,9 @@ def fetch_leaderboard_data():
             for entry in leaderboard_response.entries:
                 data["Rank"].append(entry.rank)
                 data["Model"].append(entry.model_name)
-                data["Score"].append(entry.bt_score)
+                data["Score"].append(round(entry.bt_score))
                 data["95% CI"].append(
-                    f"[{entry.bootstrap_q025}, {entry.bootstrap_q975}]"
+                    f"[{round(entry.bootstrap_q025)}, {round(entry.bootstrap_q975)}]"
                 )
                 data["Total Votes"].append(entry.vote_count)
                 data["License"].append(entry.license)
