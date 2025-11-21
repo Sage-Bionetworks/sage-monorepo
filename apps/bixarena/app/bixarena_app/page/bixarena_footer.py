@@ -38,6 +38,7 @@ def build_footer():
     align-items: center;
     gap: 12px;
     flex: 1;
+    white-space: nowrap;
 }}
 
 .footer-logo {{
@@ -61,6 +62,7 @@ def build_footer():
     gap: 12px;
     flex: 1;
     justify-content: center;
+    white-space: nowrap;
 }}
 
 .footer-right {{
@@ -69,6 +71,7 @@ def build_footer():
     gap: 12px;
     flex: 1;
     justify-content: flex-end;
+    white-space: nowrap;
 }}
 
 .footer-link {{
