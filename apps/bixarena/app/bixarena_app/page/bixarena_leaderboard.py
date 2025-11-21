@@ -121,7 +121,9 @@ def build_leaderboard_page():
     with gr.Column():
         # Title and stats
         gr.Markdown("# 🏆 Leaderboard")
-        gr.Markdown("Community-driven evaluation of biomedical AI models")
+        gr.HTML(
+            '<p style="font-size: var(--text-lg); color: var(--body-text-color-subdued); margin: 0;">Community-driven evaluation of biomedical AI models</p>'
+        )
 
         # Metrics - will be populated dynamically on page load
         leaderboard_metrics = gr.HTML("")
@@ -151,8 +153,7 @@ def build_leaderboard_page():
                 </div>
 
                 <!-- Title -->
-                <h3 style="
-                    font-size: 1.25rem;
+                <h2 style="
                     font-weight: 500;
                     margin-bottom: 16px;
                     line-height: 1.5;
@@ -166,14 +167,12 @@ def build_leaderboard_page():
                     color: var(--body-text-color);
                     line-height: 1.625;
                     margin-bottom: 0;
-                    font-size: 1rem;
                 ">
                     The leaderboard will be published once we have sufficient evaluations to
                     ensure statistically meaningful model rankings.
                 </p>
                 <div style="padding-top: 16px;">
                     <p style="
-                        font-size: 0.875rem;
                         color: var(--body-text-color-subdued);
                         line-height: 1.625;
                         margin: 0;

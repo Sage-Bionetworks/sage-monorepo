@@ -37,7 +37,6 @@ def build_footer():
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
 }}
 
@@ -60,7 +59,6 @@ def build_footer():
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
     justify-content: center;
 }}
@@ -69,7 +67,6 @@ def build_footer():
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
     justify-content: flex-end;
 }}

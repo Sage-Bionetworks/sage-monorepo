@@ -26,7 +26,7 @@ CHATBOT_BATTLE_CSS = """
 
 /* Make chatbot labels bigger */
 #chatbot-container .block label {
-    font-size: 1em;
+    font-size: var(--text-md);
 }
 
 /* Add bottom padding to chatbot block to prevent message cropping */
@@ -109,7 +109,7 @@ EXAMPLE_PROMPTS_CSS = """
 
 #prompt-card-section button.prompt-card .prompt-text {
     text-align: left;
-    font-size: 14px;
+    font-size: var(--text-md);
     line-height: 1.5;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -223,7 +223,6 @@ DISCLAIMER_CSS = """
 
 #disclaimer-title {
     color: var(--accent-teal);
-    font-size: 0.95rem;
     font-weight: 600;
     margin-bottom: 8px;
     margin-top: 0;
@@ -231,7 +230,6 @@ DISCLAIMER_CSS = """
 
 #disclaimer-text {
     color: var(--body-text-color-subdued);
-    font-size: 0.875rem;
     line-height: 1.6;
     margin: 0;
 }
