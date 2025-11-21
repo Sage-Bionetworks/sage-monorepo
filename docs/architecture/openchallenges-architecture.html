@@ -39,16 +39,6 @@
         width: 1200px; /* Fixed width */
         max-width: 100%; /* Allow shrinking on smaller screens */
       }
-
-      /* Color the Thumbor icon */
-      .mermaid .node[id*='thumbor'] svg {
-        color: #7b2cbf !important;
-        fill: #7b2cbf !important;
-      }
-
-      .mermaid .node[id*='thumbor'] path {
-        fill: #7b2cbf !important;
-      }
     </style>
   </head>
   <body>
@@ -95,7 +85,7 @@
             %% Infrastructure Services
             subgraph infra["Infrastructure Layer"]
               direction TB
-              thumbor@{shape: icon, icon: 'mdi:image-edit', label: 'Thumbor<br>(Image Processing)'}
+              thumbor["Thumbor<br/>(Image Processing)"]
               s3@{shape: icon, icon: 'logos:aws-s3', label: 'S3 Bucket<br>(Images)'}
             end
 
@@ -144,6 +134,9 @@
         style services fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
         style infra fill:#fff3e0,stroke:#f57c00,stroke-width:2px
         style data fill:#e0f2f1,stroke:#00897b,stroke-width:2px
+
+        %% Style Thumbor node with orange color
+        style thumbor fill:#ff6f00,stroke:#e65100,stroke-width:2px,color:#fff
 
 
       </div>
@@ -196,24 +189,6 @@
           secondaryColor: '#fff',
           tertiaryColor: '#fff',
         },
-      });
-
-      // Change Thumbor icon color after rendering
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          const thumborNode = document.querySelector('[id*="thumbor"]');
-          if (thumborNode) {
-            const svg = thumborNode.querySelector('svg');
-            if (svg) {
-              svg.style.color = '#e65100';
-              svg.style.fill = '#e65100';
-              const paths = svg.querySelectorAll('path');
-              paths.forEach((path) => {
-                path.style.fill = '#e65100';
-              });
-            }
-          }
-        }, 500);
       });
     </script>
   </body>
