@@ -452,8 +452,8 @@ def build_side_by_side_ui_anony():
     # Page header with title and custom styles
     page_header_html = f"""
     <div style="text-align: center; padding: 0px;">
-        <h1 style="font-size: var(--title-hero-size); margin-bottom: 0.5rem; color: var(--body-text-color);">BioArena</h1>
-        <p style="font-size: var(--text-lg); color: var(--body-text-color-subdued); margin: 0;">
+        <h1 style="font-size: var(--text-hero-title); margin-bottom: 0.5rem; color: var(--body-text-color);">BioArena</h1>
+        <p style="font-size: var(--text-xl); color: var(--body-text-color-subdued); margin: 0;">
             Benchmarking AI Models for Biomedical Breakthroughs
         </p>
     </div>

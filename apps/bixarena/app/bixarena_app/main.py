@@ -278,7 +278,8 @@ def build_app():
             --accent-teal: #14b8a6;
             --border-color-primary: rgba(63, 63, 70, 0.4);
             --body-text-color-subdued:  rgba(63, 63, 70);
-            --title-hero-size: 44px;
+            --text-section-title: 28px;
+            --text-hero-title: 44px;
         }
         .dark {
             --accent-teal: #2dd4bf;

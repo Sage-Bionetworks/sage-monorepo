@@ -120,9 +120,11 @@ def build_leaderboard_page():
 
     with gr.Column():
         # Title and stats
-        gr.Markdown("# 🏆 Leaderboard")
         gr.HTML(
-            '<p style="font-size: var(--text-lg); color: var(--body-text-color-subdued); margin: 0;">Community-driven evaluation of biomedical AI models</p>'
+            '<h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.5rem; font-weight: 600;">🏆 Leaderboard</h1>'
+        )
+        gr.HTML(
+            '<p style="font-size: var(--text-xl); color: var(--body-text-color-subdued); margin: 0;">Community-driven evaluation of biomedical AI models</p>'
         )
 
         # Metrics - will be populated dynamically on page load

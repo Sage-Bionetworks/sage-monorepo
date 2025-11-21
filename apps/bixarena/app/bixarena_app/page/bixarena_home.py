@@ -55,14 +55,14 @@ def create_intro_section():
         with gr.Column():
             gr.HTML("""
             <div style="text-align: center; padding: 2.5rem 1.5rem;">
-                <p style="font-size: var(--text-lg); margin-bottom: 1.5rem; color: var(--body-text-color-subdued);">
+                <p style="font-size: var(--text-xl); margin-bottom: 1.5rem; color: var(--body-text-color-subdued);">
                     Welcome to BioArena
                 </p>
-                <h1 style="font-size: var(--title-hero-size); margin-bottom: 2rem; color: var(--body-text-color);">
+                <h1 style="font-size: var(--text-hero-title); margin-bottom: 2rem; color: var(--body-text-color);">
                     Drive the next wave of biomedical breakthroughs
                 </h1>
 
-                <p style="font-size: var(--text-lg); line-height: 1.75; max-width: 48rem; margin: 0 auto; color: var(--body-text-color-subdued);">
+                <p style="font-size: var(--text-xl); line-height: 1.75; max-width: 48rem; margin: 0 auto; color: var(--body-text-color-subdued);">
                     BioArena crowdsources the benchmarking of AI models to unlock the
                     next breakthrough in biomedicine, inviting a global community of
                     digital contributors.
@@ -226,10 +226,10 @@ def build_how_it_works_section():
     <div style="padding: 2.5rem 1.5rem;">
         <!-- Section Header -->
         <div style="text-align: center; margin-bottom: 3rem;">
-            <h1 style="color: var(--body-text-color); margin-bottom: 0.75rem; font-weight: 600;">
+            <h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.75rem; font-weight: 600;">
                 Arena Rules
             </h1>
-            <p style="color: var(--body-text-color-subdued); font-size: var(--text-lg); max-width: 48rem; margin: 0 auto;">
+            <p style="color: var(--body-text-color-subdued); font-size: var(--text-xl); max-width: 48rem; margin: 0 auto;">
                 Simple evaluation, powerful impact
             </p>
         </div>
