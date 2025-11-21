@@ -117,7 +117,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _BattleApi_        | [**update_battle_round**](docs/BattleApi.md#update_battle_round)                  | **PATCH** /battles/{battleId}/rounds/{roundId}          | Update a battle round                      |
 | _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts                       |
 | _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
-| _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |
+| _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get public leaderboard snapshots           |
 | _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history              |
 | _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
 | _ModelApi_         | [**create_model_error**](docs/ModelApi.md#create_model_error)                     | **POST** /models/{modelId}/errors                       | Report a model error                       |
@@ -178,6 +178,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [Token200Response](docs/Token200Response.md)
 - [UserInfo](docs/UserInfo.md)
 - [UserStats](docs/UserStats.md)
+- [Visibility](docs/Visibility.md)
 
 <a id="documentation-for-authorization"></a>
 

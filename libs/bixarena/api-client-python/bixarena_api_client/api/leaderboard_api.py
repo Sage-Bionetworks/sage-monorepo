@@ -367,9 +367,9 @@ class LeaderboardApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> LeaderboardSnapshotPage:
-        """Get leaderboard snapshots
+        """Get public leaderboard snapshots
 
-        Get a paginated list of available snapshots for a leaderboard
+        Get a paginated list of public snapshots for a leaderboard.
 
         :param leaderboard_id: The unique identifier of a leaderboard (required)
         :type leaderboard_id: str
@@ -446,9 +446,9 @@ class LeaderboardApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[LeaderboardSnapshotPage]:
-        """Get leaderboard snapshots
+        """Get public leaderboard snapshots
 
-        Get a paginated list of available snapshots for a leaderboard
+        Get a paginated list of public snapshots for a leaderboard.
 
         :param leaderboard_id: The unique identifier of a leaderboard (required)
         :type leaderboard_id: str
@@ -525,9 +525,9 @@ class LeaderboardApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Get leaderboard snapshots
+        """Get public leaderboard snapshots
 
-        Get a paginated list of available snapshots for a leaderboard
+        Get a paginated list of public snapshots for a leaderboard.
 
         :param leaderboard_id: The unique identifier of a leaderboard (required)
         :type leaderboard_id: str

@@ -5,11 +5,15 @@ properties:
     type: string
     description: Unique identifier for this snapshot
     example: 'snapshot_2025-08-16_14-30'
+  visibility:
+    $ref: Visibility.yaml
   createdAt:
     type: string
     format: date-time
     description: When this snapshot was created
     example: '2025-08-16T14:30:00Z'
+  updatedAt:
+    $ref: UpdatedAt.yaml
   entryCount:
     type: integer
     description: Number of models in this snapshot
@@ -21,5 +25,7 @@ properties:
     example: 'Weekly evaluation run'
 required:
   - id
+  - visibility
   - createdAt
+  - updatedAt
   - entryCount

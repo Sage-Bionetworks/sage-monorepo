@@ -19,6 +19,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from bixarena_api_client.models.visibility import Visibility
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -29,6 +30,7 @@ class LeaderboardSnapshot(BaseModel):
     """  # noqa: E501
 
     id: StrictStr = Field(description="Unique identifier for this snapshot")
+    visibility: Visibility
     created_at: datetime = Field(
         description="When this snapshot was created", alias="createdAt"
     )
@@ -38,7 +40,13 @@ class LeaderboardSnapshot(BaseModel):
     description: Optional[StrictStr] = Field(
         default=None, description="Optional description of this snapshot"
     )
-    __properties: ClassVar[List[str]] = ["id", "createdAt", "entryCount", "description"]
+    __properties: ClassVar[List[str]] = [
+        "id",
+        "visibility",
+        "createdAt",
+        "entryCount",
+        "description",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -96,6 +104,9 @@ class LeaderboardSnapshot(BaseModel):
         _obj = cls.model_validate(
             {
                 "id": obj.get("id"),
+                "visibility": obj.get("visibility")
+                if obj.get("visibility") is not None
+                else Visibility.PRIVATE,
                 "createdAt": obj.get("createdAt"),
                 "entryCount": obj.get("entryCount"),
                 "description": obj.get("description"),

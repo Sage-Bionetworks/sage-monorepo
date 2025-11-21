@@ -373,8 +373,8 @@ paths:
       x-rate-limit-requests-per-minute: 100
       tags:
         - Leaderboard
-      summary: Get leaderboard snapshots
-      description: Get a paginated list of available snapshots for a leaderboard
+      summary: Get public leaderboard snapshots
+      description: Get a paginated list of public snapshots for a leaderboard.
       operationId: getLeaderboardSnapshots
       parameters:
         - $ref: '#/components/parameters/leaderboardSnapshotQuery'
@@ -1368,6 +1368,15 @@ components:
           $ref: '#/components/schemas/LeaderboardSnapshotSort'
         direction:
           $ref: '#/components/schemas/SortDirection'
+    Visibility:
+      type: string
+      maxLength: 20
+      enum:
+        - public
+        - private
+      description: Visibility status of a resource.
+      default: private
+      example: public
     LeaderboardSnapshot:
       type: object
       description: A snapshot representing the state of a leaderboard at a specific point in time.
@@ -1376,11 +1385,15 @@ components:
           type: string
           description: Unique identifier for this snapshot
           example: snapshot_2025-08-16_14-30
+        visibility:
+          $ref: '#/components/schemas/Visibility'
         createdAt:
           type: string
           format: date-time
           description: When this snapshot was created
           example: '2025-08-16T14:30:00Z'
+        updatedAt:
+          $ref: '#/components/schemas/UpdatedAt'
         entryCount:
           type: integer
           description: Number of models in this snapshot
@@ -1392,7 +1405,9 @@ components:
           example: Weekly evaluation run
       required:
         - id
+        - visibility
         - createdAt
+        - updatedAt
         - entryCount
     LeaderboardSnapshotPage:
       type: object

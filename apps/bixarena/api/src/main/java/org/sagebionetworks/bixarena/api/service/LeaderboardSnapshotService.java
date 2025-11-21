@@ -44,9 +44,9 @@ public class LeaderboardSnapshotService {
     // Create pageable with sorting
     Pageable pageable = createPageable(snapshotQuery);
 
-    // Find snapshots for this leaderboard with entry counts in a single query
+    // Find public snapshots for this leaderboard with entry counts in a single query
     Page<SnapshotWithEntryCount> snapshotsPage =
-      snapshotRepository.findSnapshotsWithEntryCountByLeaderboard(leaderboard, pageable);
+      snapshotRepository.findPublicSnapshotsWithEntryCountByLeaderboard(leaderboard, pageable);
 
     return LeaderboardSnapshotPageDto.builder()
       .snapshots(snapshotMapper.convertFromProjectionList(snapshotsPage.getContent()))

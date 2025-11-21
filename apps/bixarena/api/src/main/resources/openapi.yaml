@@ -525,7 +525,7 @@ paths:
         - tag: Leaderboard
   /leaderboards/{leaderboardId}/snapshots:
     get:
-      description: Get a paginated list of available snapshots for a leaderboard
+      description: Get a paginated list of public snapshots for a leaderboard.
       operationId: getLeaderboardSnapshots
       parameters:
         - description: The unique identifier of a leaderboard
@@ -560,7 +560,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      summary: Get leaderboard snapshots
+      summary: Get public leaderboard snapshots
       tags:
         - Leaderboard
       x-anonymous-access: true
@@ -1994,22 +1994,40 @@ components:
         direction:
           $ref: '#/components/schemas/SortDirection'
       type: object
+    Visibility:
+      default: private
+      description: Visibility status of a resource.
+      enum:
+        - public
+        - private
+      example: public
+      maxLength: 20
+      type: string
     LeaderboardSnapshot:
       description: A snapshot representing the state of a leaderboard at a specific
         point in time.
       example:
         createdAt: 2025-08-16T14:30:00Z
         entryCount: 50
+        visibility: public
         description: Weekly evaluation run
         id: snapshot_2025-08-16_14-30
+        updatedAt: 2024-01-15T10:45:00Z
       properties:
         id:
           description: Unique identifier for this snapshot
           example: snapshot_2025-08-16_14-30
           type: string
+        visibility:
+          $ref: '#/components/schemas/Visibility'
         createdAt:
           description: When this snapshot was created
           example: 2025-08-16T14:30:00Z
+          format: date-time
+          type: string
+        updatedAt:
+          description: Timestamp when the entity was last updated.
+          example: 2024-01-15T10:45:00Z
           format: date-time
           type: string
         entryCount:
@@ -2025,6 +2043,8 @@ components:
         - createdAt
         - entryCount
         - id
+        - updatedAt
+        - visibility
       type: object
     LeaderboardSnapshotPage:
       allOf:
@@ -2043,12 +2063,16 @@ components:
         snapshots:
           - createdAt: 2025-08-16T14:30:00Z
             entryCount: 50
+            visibility: public
             description: Weekly evaluation run
             id: snapshot_2025-08-16_14-30
+            updatedAt: 2024-01-15T10:45:00Z
           - createdAt: 2025-08-16T14:30:00Z
             entryCount: 50
+            visibility: public
             description: Weekly evaluation run
             id: snapshot_2025-08-16_14-30
+            updatedAt: 2024-01-15T10:45:00Z
         number: 99
         size: 99
         totalPages: 99

@@ -97,8 +97,8 @@ public class LeaderboardService {
     String snapshotId
   ) {
     if (snapshotId != null && !snapshotId.trim().isEmpty()) {
-      // Find specific snapshot by identifier
-      return snapshotRepository
+      // Find specific snapshot by identifier - must be public
+      LeaderboardSnapshotEntity snapshot = snapshotRepository
         .findByLeaderboardOrderByCreatedAtDesc(leaderboard, Pageable.unpaged())
         .getContent()
         .stream()
@@ -107,14 +107,21 @@ public class LeaderboardService {
         .orElseThrow(() ->
           new LeaderboardSnapshotNotFoundException("Leaderboard Snapshot not found: " + snapshotId)
         );
+
+      // Check if snapshot is public
+      if (!"public".equals(snapshot.getVisibility())) {
+        throw new LeaderboardSnapshotNotFoundException("Leaderboard Snapshot not found: " + snapshotId);
+      }
+
+      return snapshot;
     } else {
-      // Get latest snapshot
-      List<LeaderboardSnapshotEntity> snapshots = snapshotRepository.findLatestByLeaderboard(
+      // Get latest public snapshot
+      List<LeaderboardSnapshotEntity> snapshots = snapshotRepository.findLatestPublicByLeaderboard(
         leaderboard
       );
       if (snapshots.isEmpty()) {
         throw new LeaderboardSnapshotNotFoundException(
-          "No snapshots found for leaderboard: " + leaderboard.getSlug()
+          "No public snapshots found for leaderboard: " + leaderboard.getSlug()
         );
       }
       return snapshots.get(0);

@@ -82,3 +82,4 @@ from bixarena_api_client.models.sort_direction import SortDirection
 from bixarena_api_client.models.token200_response import Token200Response
 from bixarena_api_client.models.user_info import UserInfo
 from bixarena_api_client.models.user_stats import UserStats
+from bixarena_api_client.models.visibility import Visibility

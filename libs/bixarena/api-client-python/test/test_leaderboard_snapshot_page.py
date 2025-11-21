@@ -44,6 +44,7 @@ class TestLeaderboardSnapshotPage(unittest.TestCase):
                 snapshots = [
                     bixarena_api_client.models.leaderboard_snapshot.LeaderboardSnapshot(
                         id = 'snapshot_2025-08-16_14-30', 
+                        visibility = 'private', 
                         created_at = '2025-08-16T14:30Z', 
                         entry_count = 50, 
                         description = 'Weekly evaluation run', )
@@ -60,6 +61,7 @@ class TestLeaderboardSnapshotPage(unittest.TestCase):
                 snapshots = [
                     bixarena_api_client.models.leaderboard_snapshot.LeaderboardSnapshot(
                         id = 'snapshot_2025-08-16_14-30', 
+                        visibility = 'private', 
                         created_at = '2025-08-16T14:30Z', 
                         entry_count = 50, 
                         description = 'Weekly evaluation run', )

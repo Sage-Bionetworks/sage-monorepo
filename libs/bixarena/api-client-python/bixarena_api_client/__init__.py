@@ -85,6 +85,7 @@ __all__ = [
     "Token200Response",
     "UserInfo",
     "UserStats",
+    "Visibility",
 ]
 
 # import apis into sdk package
@@ -226,3 +227,4 @@ from bixarena_api_client.models.token200_response import (
 )
 from bixarena_api_client.models.user_info import UserInfo as UserInfo
 from bixarena_api_client.models.user_stats import UserStats as UserStats
+from bixarena_api_client.models.visibility import Visibility as Visibility

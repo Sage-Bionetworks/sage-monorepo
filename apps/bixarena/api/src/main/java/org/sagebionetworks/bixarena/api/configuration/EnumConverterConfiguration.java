@@ -11,6 +11,7 @@ import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
 import org.sagebionetworks.bixarena.api.model.dto.MessageRoleDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.SortDirectionDto;
+import org.sagebionetworks.bixarena.api.model.dto.VisibilityDto;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -115,6 +116,15 @@ public class EnumConverterConfiguration {
             @Override
             public SortDirectionDto convert(String source) {
                 return SortDirectionDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.visibilityConverter")
+    Converter<String, VisibilityDto> visibilityConverter() {
+        return new Converter<String, VisibilityDto>() {
+            @Override
+            public VisibilityDto convert(String source) {
+                return VisibilityDto.fromValue(source);
             }
         };
     }
