@@ -139,7 +139,7 @@ EXAMPLE_PROMPTS_CSS = """
 }
 
 #prompt-card-section > .row > .nav-button:not(:disabled):hover {
-    background: var(--button-secondary-background-fill-hover);
+    background: var(--panel-background-fill);
     transform: translateY(-1px);
 }
 
