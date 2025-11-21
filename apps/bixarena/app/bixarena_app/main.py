@@ -273,27 +273,19 @@ def build_app():
         title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
         head=crisp_script,
         css="""
-        /* CSS variables for adaptive colors */
+        /* Custom global colors */
         :root {
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --text-muted: #9ca3af;
             --accent-teal: #14b8a6;
-            --accent-orange: #f97316;
-            --border-color: rgba(0, 0, 0, 0.1);
-            --bg-card: rgba(0, 0, 0, 0.02);
+            --border-color-primary: rgba(63, 63, 70, 0.4);
+            --body-text-color-subdued:  rgba(63, 63, 70);
+            --text-section-title: 28px;
+            --text-hero-title: 44px;
         }
-
         .dark {
-            --text-primary: #f9fafb;
-            --text-secondary: #e5e7eb;
-            --text-muted: rgba(229, 231, 235, 0.6);
             --accent-teal: #2dd4bf;
-            --accent-orange: #f97316;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --bg-card: rgba(255, 255, 255, 0.02);
+            --border-color-primary: rgba(228, 228, 231, 0.2);
+            --body-text-color-subdued: rgba(229, 231, 235, 0.6);
         }
-
         /* Hide Gradio's default footer */
         footer {
             display: none !important;
@@ -324,6 +316,29 @@ def build_app():
         }
         #cta-btn-authenticated *, #cta-btn-login * {
             white-space: nowrap !important;
+        }
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .page-content {
+                padding: 0 20px;
+            }
+            .page-content h1 {
+                font-size: 32px !important;
+            }
+            /* Adjust stats section for mobile */
+            #stats-public-only > div,
+            #stats-with-user > div {
+                gap: 1.5rem;
+                padding: 0 1rem;
+            }
+            #stats-public-only > div > div,
+            #stats-with-user > div > div {
+                min-width: 120px;
+            }
+            #stats-public-only > div > div > div:first-child,
+            #stats-with-user > div > div > div:first-child {
+                font-size: 2.5rem;
+            }
         }
         """,
     ) as demo:

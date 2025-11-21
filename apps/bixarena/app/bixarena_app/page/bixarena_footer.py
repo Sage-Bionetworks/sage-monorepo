@@ -17,7 +17,7 @@ def build_footer():
 <style>
 .custom-footer {{
     width: 100%;
-    border-top: 2px solid var(--border-color);
+    border-top: 2px solid var(--border-color-primary);
     padding: 32px 40px;
     margin-top: 60px;
     pointer-events: auto !important;
@@ -37,8 +37,8 @@ def build_footer():
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
+    white-space: nowrap;
 }}
 
 .footer-logo {{
@@ -48,30 +48,30 @@ def build_footer():
 
 /* Make logo text adaptive to theme */
 .footer-logo path[fill="white"] {{
-    fill: var(--text-primary);
+    fill: var(--body-text-color);
 }}
 
 .footer-separator {{
     margin: 0 8px;
-    color: #52525b !important;
+    color: var(--body-text-color-subdued) !important;
 }}
 
 .footer-center {{
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
     justify-content: center;
+    white-space: nowrap;
 }}
 
 .footer-right {{
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
     justify-content: flex-end;
+    white-space: nowrap;
 }}
 
 .footer-link {{
@@ -82,7 +82,7 @@ def build_footer():
 }}
 
 .footer-link:hover {{
-    color: #f97316 !important;
+    color: var(--color-accent) !important;
 }}
 
 @media (max-width: 768px) {{
