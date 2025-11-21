@@ -92,7 +92,7 @@
             %% Data Layer
             subgraph data["Data Layer"]
               direction LR
-              mariadb@{shape: icon, icon: 'logos:aws-rds', label: 'RDS<br>(MariaDB)'}
+              postgres@{shape: icon, icon: 'logos:aws-rds', label: 'RDS<br>(PostgreSQL)'}
               elastic@{shape: icon, icon: 'logos:elasticsearch', label: 'Elasticsearch'}
             end
           end
@@ -112,10 +112,10 @@
         apigw --> image
 
         %% Services to Infrastructure
-        challenge --> mariadb
+        challenge --> postgres
         challenge --> elastic
 
-        org --> mariadb
+        org --> postgres
         org --> elastic
 
         image --> thumbor
