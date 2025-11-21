@@ -31,6 +31,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   private readonly modelOverviewService = inject(ModelOverviewService);
 
   pinnedItems = this.comparisonToolService.pinnedItems;
+  isInitialized = this.comparisonToolService.isInitialized;
 
   isLoading = signal(true);
 
@@ -77,7 +78,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   }
 
   readonly onUpdateEffect = effect(() => {
-    if (this.platformService.isBrowser) {
+    const isInitialized = this.isInitialized();
+    if (this.platformService.isBrowser && isInitialized) {
       this.isLoading.set(true);
       const pinnedItems = Array.from(this.pinnedItems());
       this.getPinnedData(pinnedItems);

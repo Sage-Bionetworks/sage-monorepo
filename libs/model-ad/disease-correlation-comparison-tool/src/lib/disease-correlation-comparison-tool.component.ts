@@ -35,6 +35,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
 
   pinnedItems = this.comparisonToolService.pinnedItems;
+  isInitialized = this.comparisonToolService.isInitialized;
 
   isLoading = signal(true);
 
@@ -95,7 +96,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   }
 
   readonly onUpdateEffect = effect(() => {
-    if (this.platformService.isBrowser) {
+    const isInitialized = this.isInitialized();
+    if (this.platformService.isBrowser && isInitialized) {
       const selection = this.comparisonToolService.dropdownSelection();
       if (!selection.length) {
         return;

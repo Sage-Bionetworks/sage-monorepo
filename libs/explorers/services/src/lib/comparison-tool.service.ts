@@ -79,7 +79,8 @@ export class ComparisonToolService<T> {
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
 
   private readonly syncToUrlInProgress = signal(false);
-  private readonly isInitialized = signal(false);
+  private readonly isInitializedSignal = signal(false);
+  readonly isInitialized = this.isInitializedSignal.asReadonly();
   private lastSerializedState: string | null = null;
   private hasInitializedConfig = false;
 
@@ -177,6 +178,7 @@ export class ComparisonToolService<T> {
     this.columnsForDropdownsSignal.set(columnsMap);
     this.pinnedItemsForDropdownsSignal.set(new Map());
     this.hasInitializedConfig = true;
+    this.isInitializedSignal.set(true);
   }
 
   setDropdownSelection(selection: string[]) {
@@ -434,21 +436,27 @@ export class ComparisonToolService<T> {
     this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
   }
 
+  private shouldUpdateFromUrl<T>(currentValue: T, newValue: T): boolean {
+    const isFirstSync = !this.isInitialized();
+    const hasChanged = !isEqual(currentValue, newValue);
+    return isFirstSync || hasChanged;
+  }
+
   private setupUrlSync(): void {
     // URL → State: Subscribe to URL param changes
     this.urlService.params$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.syncToUrlInProgress.set(true);
 
-      if (params.pinnedItems === undefined) {
-        this.setPinnedItems(null);
-      } else {
-        this.setPinnedItems(params.pinnedItems);
+      const newPinnedItems = params.pinnedItems ?? null;
+      const currentPinnedItems = Array.from(this.pinnedItems());
+
+      if (this.shouldUpdateFromUrl(currentPinnedItems, newPinnedItems ?? [])) {
+        this.setPinnedItems(newPinnedItems);
       }
 
       this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
 
       this.syncToUrlInProgress.set(false);
-      this.isInitialized.set(true);
     });
 
     // State → URL: Sync state changes to URL using effect
