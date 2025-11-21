@@ -135,6 +135,7 @@
             subgraph infra["Infrastructure Layer"]
               direction TB
               thumbor@{shape: icon, icon: 'mdi:image-edit', label: 'Thumbor<br>(Image Processing)'}
+              s3@{shape: icon, icon: 'logos:aws-s3', label: 'S3 Bucket<br>(Images)'}
             end
 
             %% Data Layer
@@ -145,9 +146,6 @@
             end
           end
         end
-
-        %% S3 Storage
-        s3@{shape: icon, icon: 'mdi:aws', label: 'S3 Bucket<br>(Images)'}
 
         %% Connections - User to ALB
         user -->|HTTPS| alb
@@ -182,8 +180,6 @@
         classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#fff
         classDef spring fill:#6DB33F,stroke:#6DB33F,stroke-width:2px,color:#fff
         classDef database fill:#4479A1,stroke:#4479A1,stroke-width:2px,color:#fff
-
-        class s3 aws
 
         %% Remove background from subgraphs
         style vpc fill:none,stroke:#333,stroke-width:2px
