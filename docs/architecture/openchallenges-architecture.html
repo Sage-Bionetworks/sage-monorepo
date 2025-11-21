@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>OpenChallenges: AWS Infrastructure Architecture</title>
+
+    <!-- Import Roboto font from Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        margin: 2rem;
+        background-color: #fff;
+        color: #222;
+        text-align: center; /* Center the heading and general layout */
+      }
+
+      h2 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        font-size: 1.8rem;
+        color: #1a1a1a;
+        margin-bottom: 1.5rem;
+      }
+
+      /* Center the Mermaid diagram horizontally */
+      .diagram-container {
+        display: flex;
+        justify-content: center; /* Centers horizontally */
+        align-items: flex-start; /* Keep top-aligned */
+        width: 100%;
+      }
+
+      .mermaid {
+        width: 1200px; /* Fixed width */
+        max-width: 100%; /* Allow shrinking on smaller screens */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <h2>BixArena MVP: Full-Stack Application Architecture</h2> -->
+
+    <div class="diagram-container">
+      <!-- prettier-ignore -->
+      <div class="mermaid">
+      flowchart TB
+        %% External User
+        user[User Browser]
+
+        %% AWS Infrastructure Container
+        subgraph vpc["AWS VPC"]
+          direction TB
+
+          %% Public Subnet
+          subgraph public["Public Subnet"]
+            alb@{shape: icon, icon: 'mdi:aws', label: 'Application Load<br>Balancer'}
+          end
+
+          %% Private Subnet - ECS Cluster
+          subgraph private["Private Subnet - ECS Cluster"]
+            direction TB
+
+            %% Frontend/Proxy Layer
+            subgraph frontend["Frontend Layer"]
+              apex@{shape: icon, icon: 'logos:nginx', label: 'Apex<br>(NGINX Proxy)'}
+              app@{shape: icon, icon: 'logos:angular-icon', label: 'OpenChallenges App<br>(Angular)'}
+              apidocs@{shape: icon, icon: 'mdi:file-document', label: 'API Docs'}
+            end
+
+            %% API Gateway Layer
+            subgraph gateway["Gateway Layer"]
+              apigw@{shape: icon, icon: 'logos:spring-icon', label: 'API Gateway<br>(Spring Cloud Gateway)'}
+            end
+
+            %% Spring Boot Microservices
+            subgraph services["Microservices Layer"]
+              direction TB
+              challenge@{shape: icon, icon: 'logos:spring-icon', label: 'Challenge Service<br>(Spring Boot)'}
+              org@{shape: icon, icon: 'logos:spring-icon', label: 'Organization Service<br>(Spring Boot)'}
+              image@{shape: icon, icon: 'logos:spring-icon', label: 'Image Service<br>(Spring Boot)'}
+            end
+
+            %% Infrastructure Services
+            subgraph infra["Infrastructure Layer"]
+              direction TB
+              config@{shape: icon, icon: 'logos:spring-icon', label: 'Config Server<br>(Spring Cloud Config)'}
+              registry@{shape: icon, icon: 'logos:spring-icon', label: 'Service Registry<br>(Eureka)'}
+              thumbor@{shape: icon, icon: 'mdi:image-edit', label: 'Thumbor<br>(Image Processing)'}
+            end
+
+            %% Data Layer
+            subgraph data["Data Layer"]
+              direction LR
+              mariadb@{shape: icon, icon: 'logos:aws-rds', label: 'RDS<br>(MariaDB)'}
+              elastic@{shape: icon, icon: 'logos:elasticsearch', label: 'Elasticsearch'}
+            end
+          end
+        end
+
+        %% S3 Storage
+        s3@{shape: icon, icon: 'mdi:aws', label: 'S3 Bucket<br>(Images)'}
+
+        %% Connections - User to ALB
+        user -->|HTTPS| alb
+
+        %% ALB to Apex
+        alb -->|"/"| apex
+
+        %% Apex routing
+        apex -->|"/api/**"| apigw
+        apex -->|"static content"| app
+        apex -->|"/api-docs"| apidocs
+        apex -->|"/img/**"| thumbor
+
+        %% API Gateway to Services
+        apigw -->|service discovery| registry
+        apigw --> challenge
+        apigw --> org
+        apigw --> image
+
+        %% Services to Infrastructure
+        challenge --> config
+        challenge --> registry
+        challenge --> mariadb
+        challenge --> elastic
+
+        org --> config
+        org --> registry
+        org --> mariadb
+        org --> elastic
+
+        image --> config
+        image --> registry
+        image --> thumbor
+
+        %% Infrastructure dependencies
+        registry --> config
+        thumbor --> s3
+
+        %% Styling
+        classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#fff
+        classDef spring fill:#6DB33F,stroke:#6DB33F,stroke-width:2px,color:#fff
+        classDef database fill:#4479A1,stroke:#4479A1,stroke-width:2px,color:#fff
+
+        class alb,s3 aws
+
+        %% Remove background from subgraphs
+        style vpc fill:none,stroke:#333,stroke-width:2px
+        style public fill:none,stroke:#333,stroke-width:1px
+        style private fill:none,stroke:#333,stroke-width:1px
+        style frontend fill:none,stroke:#333,stroke-width:1px
+        style gateway fill:none,stroke:#333,stroke-width:1px
+        style services fill:none,stroke:#333,stroke-width:1px
+        style infra fill:none,stroke:#333,stroke-width:1px
+        style data fill:none,stroke:#333,stroke-width:1px
+      </div>
+    </div>
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+      // Register icon packs (loaded from the Iconify JSON CDN)
+      mermaid.registerIconPacks([
+        {
+          name: 'logos',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'mdi',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/mdi@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'catppuccin',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/catppuccin@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'system-uicons',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/system-uicons@1.2.4/icons.json').then((r) =>
+              r.json(),
+            ),
+        },
+      ]);
+
+      // Initialize Mermaid
+      mermaid.initialize({
+        startOnLoad: true,
+        securityLevel: 'loose', // allow loading icons via fetch
+        theme: 'default',
+        flowchart: { useMaxWidth: true },
+      });
+    </script>
+  </body>
+</html>
