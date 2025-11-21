@@ -74,15 +74,17 @@ def fetch_leaderboard_data():
 
 
 def filter_dataframe(df, model_filter):
-    """Filter dataframe by model name"""
+    """Filter dataframe by model name or organization"""
     if model_filter:
-        mask = df["Model"].str.contains(model_filter, case=False, na=False)
+        model_mask = df["Model"].str.contains(model_filter, case=False, na=False)
+        org_mask = df["Organization"].str.contains(model_filter, case=False, na=False)
+        mask = model_mask | org_mask
         return df[mask]
     return df
 
 
 def filter_leaderboard_table(filter_text, df):
-    """Filter leaderboard table by model name"""
+    """Filter leaderboard table by model name or organization"""
     if df is None:
         return None
     if not filter_text:
@@ -111,7 +113,7 @@ def build_leaderboard_page():
     initial_df = None
 
     with gr.Column():
-        # Title and stats with CSS styles
+        # Title and stats
         gr.HTML(
             """
             <h1 style="
@@ -217,7 +219,7 @@ def build_leaderboard_page():
             with gr.Row():
                 model_filter = gr.Textbox(
                     show_label=False,
-                    placeholder="Search models...",
+                    placeholder="Search models or organizations...",
                     elem_classes="leaderboard_search",
                     container=False,
                 )
