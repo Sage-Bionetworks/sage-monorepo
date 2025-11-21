@@ -359,7 +359,7 @@ def build_app():
         with gr.Column(
             visible=False, elem_classes=["page-content"]
         ) as leaderboard_page:
-            leaderboard_table, leaderboard_state = build_leaderboard_page()
+            leaderboard_view = build_leaderboard_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as user_page:
             _, welcome_display, logout_btn = build_user_page()
@@ -398,7 +398,7 @@ def build_app():
         # Leaderboard button - show page and refresh data
         leaderboard_btn.click(
             lambda: navigator.show_page(2) + list(refresh_leaderboard()),
-            outputs=pages + [leaderboard_table, leaderboard_state],
+            outputs=pages + leaderboard_view.outputs,
         )
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(

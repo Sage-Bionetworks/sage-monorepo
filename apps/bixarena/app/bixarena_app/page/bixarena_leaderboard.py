@@ -10,6 +10,18 @@ from bixarena_app.api.api_client_helper import get_api_configuration
 logger = logging.getLogger(__name__)
 
 
+class LeaderboardView:
+    def __init__(self, placeholder, content, table, state):
+        self.placeholder = placeholder
+        self.content = content
+        self.table = table
+        self.state = state
+
+    @property
+    def outputs(self):
+        return [self.placeholder, self.content, self.table, self.state]
+
+
 def fetch_leaderboard_data():
     """Fetch leaderboard data from the BixArena API
 
@@ -67,16 +79,6 @@ def filter_dataframe(df, model_filter):
     return df
 
 
-def load_leaderboard_stats_on_page_load() -> dict:
-    """Load leaderboard stats and update the metrics HTML.
-
-    Returns:
-        Gradio update dict for the metrics HTML component
-    """
-    metrics_html = ""
-    return gr.update(value=metrics_html)
-
-
 def filter_leaderboard_table(filter_text, df):
     """Filter leaderboard table by model name"""
     if df is None:
@@ -90,17 +92,21 @@ def refresh_leaderboard():
     """Refresh leaderboard data
 
     Returns:
-        Tuple of (table_data, dataframe_state)
+        Tuple of (placeholder_visibility, content_visibility, table_data, dataframe_state)
     """
     df = fetch_leaderboard_data()
-    return df, df
+    has_rows = df is not None and not df.empty
+
+    placeholder_update = gr.update(visible=not has_rows)
+    content_update = gr.update(visible=has_rows)
+    table_update = gr.update(value=df if has_rows else None, visible=has_rows)
+
+    return placeholder_update, content_update, table_update, df
 
 
 def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
-    # Get initial data
-    initial_df = fetch_leaderboard_data()
-    show_table = initial_df is not None and len(initial_df) > 0
+    initial_df = None
 
     with gr.Column():
         # Title and stats
@@ -112,10 +118,10 @@ def build_leaderboard_page():
         )
 
         # State to store the full dataframe for filtering
-        dataframe_state = gr.State(initial_df)
+        df_state = gr.State(initial_df)
 
         # Placeholder - shown when no data
-        gr.HTML(
+        leaderboard_placeholder = gr.HTML(
             """
             <div style="
                 background: var(--panel-background-fill);
@@ -172,36 +178,40 @@ def build_leaderboard_page():
                 </div>
             </div>
             """,
-            visible=not show_table,
         )
 
-        # Search filter
-        with gr.Row(visible=show_table):
-            model_filter = gr.Textbox(
-                show_label=False, placeholder="Search models...", scale=3
+        # Search filter + table
+        with gr.Column(visible=False) as leaderboard_content:
+            with gr.Row():
+                model_filter = gr.Textbox(
+                    show_label=False, placeholder="Search models...", scale=3
+                )
+
+            # Main leaderboard table
+            leaderboard_table = gr.Dataframe(
+                value=initial_df,
+                interactive=False,
+                wrap=True,
+                headers=[
+                    "Rank",
+                    "Model",
+                    "Score",
+                    "95% CI",
+                    "Total Votes",
+                    "License",
+                ],
             )
-
-        # Main leaderboard table
-        leaderboard_table = gr.Dataframe(
-            value=initial_df,
-            interactive=False,
-            wrap=True,
-            headers=[
-                "Rank",
-                "Model",
-                "Score",
-                "95% CI",
-                "Total Votes",
-                "License",
-            ],
-            visible=show_table,
-        )
 
         # Connect filter to table
         model_filter.change(
             fn=filter_leaderboard_table,
-            inputs=[model_filter, dataframe_state],
+            inputs=[model_filter, df_state],
             outputs=[leaderboard_table],
         )
 
-    return leaderboard_table, dataframe_state
+    return LeaderboardView(
+        leaderboard_placeholder,
+        leaderboard_content,
+        leaderboard_table,
+        df_state,
+    )
