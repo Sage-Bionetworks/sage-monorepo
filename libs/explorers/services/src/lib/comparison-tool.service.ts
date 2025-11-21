@@ -37,7 +37,7 @@ export class ComparisonToolService<T> {
     filterResultsButtonTooltip: 'Filter results',
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
-    viewDetailsClick: () => {
+    viewDetailsClick: (id: string, label: string) => {
       return;
     },
     legendEnabled: true,
@@ -352,7 +352,7 @@ export class ComparisonToolService<T> {
   }
 
   handleLazyLoad(event: TableLazyLoadEvent) {
-    const defaultRowsPerPage = this.viewConfigSignal().rowsPerPage || 10;
+    const defaultRowsPerPage = this.viewConfigSignal().rowsPerPage;
     const { pageNumber, pageSize } = this.helperService.getPaginationParams(
       event,
       defaultRowsPerPage,
