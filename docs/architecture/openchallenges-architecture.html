@@ -95,6 +95,7 @@
               direction LR
               postgres@{shape: icon, icon: 'logos:aws-rds', label: 'RDS<br>(PostgreSQL)'}
               elastic@{shape: icon, icon: 'logos:elasticsearch', label: 'Elasticsearch'}
+              postgres ~~~ elastic
             end
           end
         end
@@ -113,16 +114,9 @@
         apigw --> image
         apigw --> auth
 
-        %% Services to Infrastructure
-        challenge --> postgres
-        challenge --> elastic
-
-        org --> postgres
-        org --> elastic
-
+        %% Services to Data and Infrastructure
+        services --> data
         image --> thumbor
-
-        auth --> postgres
 
         %% Infrastructure dependencies
         thumbor --> s3
