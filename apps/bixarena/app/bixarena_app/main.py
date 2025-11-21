@@ -280,13 +280,11 @@ def build_app():
             --body-text-color-subdued:  rgba(63, 63, 70);
             --title-hero-size: 44px;
         }
-
         .dark {
             --accent-teal: #2dd4bf;
             --border-color-primary: rgba(228, 228, 231, 0.2);
             --body-text-color-subdued: rgba(229, 231, 235, 0.6);
         }
-
         /* Hide Gradio's default footer */
         footer {
             display: none !important;
@@ -318,7 +316,6 @@ def build_app():
         #cta-btn-authenticated *, #cta-btn-login * {
             white-space: nowrap !important;
         }
-
         /* Mobile optimizations */
         @media (max-width: 768px) {
             .page-content {

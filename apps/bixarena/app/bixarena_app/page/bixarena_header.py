@@ -34,7 +34,7 @@ def build_header():
   align-items: center;
   padding: 10px 0;
   border-bottom: 2px solid var(--border-color-primary);
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 }
 #header-row button {
   white-space: nowrap;
