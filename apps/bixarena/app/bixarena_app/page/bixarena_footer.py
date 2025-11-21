@@ -7,10 +7,10 @@ def build_footer():
     """Build footer with branding and links."""
     # Footer configuration
     app_version = os.environ.get("APP_VERSION", "")
-    brand_url = os.environ.get("APP_BRAND_URL", "")
-    tos_url = os.environ.get("APP_TOS_URL", "")
+    sage_url = os.environ.get("APP_SAGEBIONETWORKS_URL", "")
+    tos_url = os.environ.get("APP_TERMS_OF_SERVICE_URL", "")
     contact_url = os.environ.get("APP_CONTACT_URL", "")
-    issues_url = os.environ.get("APP_ISSUE_URL", "")
+    feedback_url = os.environ.get("APP_FEEDBACK_URL", "")
 
     footer = gr.HTML(
         f"""
@@ -102,13 +102,13 @@ def build_footer():
     <div class="footer-container">
         <!-- Left section - Branding -->
         <div class="footer-left">
-            {"<span>Powered by</span>" if brand_url else ""}
+            {"<span>Powered by</span>" if sage_url else ""}
             {
-            f'''<a href='{brand_url}' target='_blank'
+            f'''<a href='{sage_url}' target='_blank'
                 rel='noopener noreferrer'
                 style='display: inline-flex; align-items: center;
                 text-decoration: none;'>'''
-            if brand_url
+            if sage_url
             else ""
         }
                 <svg class="footer-logo" viewBox="0 0 568 94"
@@ -125,7 +125,7 @@ def build_footer():
                         </clipPath>
                     </defs>
                 </svg>
-            {"</a>" if brand_url else ""}
+            {"</a>" if sage_url else ""}
         </div>
 
         <!-- Center section - Links -->
@@ -152,14 +152,14 @@ def build_footer():
             {
             (
                 "<span class='footer-separator'>•</span>"
-                if contact_url and issues_url
+                if contact_url and feedback_url
                 else ""
             )
         }
             {
-            f"<a href='{issues_url}' class='footer-link' "
+            f"<a href='{feedback_url}' class='footer-link' "
             f"target='_blank' rel='noopener noreferrer'>Report Issue</a>"
-            if issues_url
+            if feedback_url
             else ""
         }
         </div>
