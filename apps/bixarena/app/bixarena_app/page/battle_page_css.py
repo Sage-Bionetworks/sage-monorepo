@@ -26,7 +26,7 @@ CHATBOT_BATTLE_CSS = """
 
 /* Make chatbot labels bigger */
 #chatbot-container .block label {
-    font-size: 1em;
+    font-size: var(--text-md);
 }
 
 /* Add bottom padding to chatbot block to prevent message cropping */
@@ -51,10 +51,9 @@ CHATBOT_BATTLE_CSS = """
 
 .model-name-footer {
     padding: 12px 16px;
-    background: var(--bg-card);
-    border-top: 1px solid var(--border-color);
+    background: var(--color-accent-soft);
     text-align: center;
-    color: var(--text-primary);
+    color: var(--body-text-color);
     font-weight: 500;
 }
 """
@@ -91,7 +90,7 @@ EXAMPLE_PROMPTS_CSS = """
 /* Example prompt card button */
 #prompt-card-section button.prompt-card {
     background: transparent;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-color-primary);
     border-radius: 8px;
     padding: 12px 16px;
     transition: all 0.2s ease;
@@ -104,14 +103,13 @@ EXAMPLE_PROMPTS_CSS = """
 }
 
 #prompt-card-section button.prompt-card:hover {
-    background: var(--bg-card);
+    background: var(--panel-background-fill);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 #prompt-card-section button.prompt-card .prompt-text {
     text-align: left;
-    font-size: 14px;
+    font-size: var(--text-md);
     line-height: 1.5;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -132,7 +130,7 @@ EXAMPLE_PROMPTS_CSS = """
     justify-content: center;
     border-radius: 50%;
     background: transparent;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-color-primary);
     transition: all 0.2s ease;
 }
 
@@ -141,9 +139,8 @@ EXAMPLE_PROMPTS_CSS = """
 }
 
 #prompt-card-section > .row > .nav-button:not(:disabled):hover {
-    background: var(--bg-card);
+    background: var(--panel-background-fill);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Hide the left nav button while disabled */
@@ -226,15 +223,13 @@ DISCLAIMER_CSS = """
 
 #disclaimer-title {
     color: var(--accent-teal);
-    font-size: 0.95rem;
     font-weight: 600;
     margin-bottom: 8px;
     margin-top: 0;
 }
 
 #disclaimer-text {
-    color: var(--text-muted);
-    font-size: 0.875rem;
+    color: var(--body-text-color-subdued);
     line-height: 1.6;
     margin: 0;
 }

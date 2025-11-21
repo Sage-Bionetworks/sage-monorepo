@@ -33,8 +33,8 @@ def build_header():
 #header-row {
   align-items: center;
   padding: 10px 0;
-  border-bottom: 2px solid var(--border-color);
-  margin-bottom: 20px;
+  border-bottom: 2px solid var(--border-color-primary);
+  margin-bottom: 28px;
 }
 #header-row button {
   white-space: nowrap;

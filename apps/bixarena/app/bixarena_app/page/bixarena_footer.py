@@ -7,17 +7,17 @@ def build_footer():
     """Build footer with branding and links."""
     # Footer configuration
     app_version = os.environ.get("APP_VERSION", "")
-    brand_url = os.environ.get("APP_BRAND_URL", "")
-    tos_url = os.environ.get("APP_TOS_URL", "")
+    sage_url = os.environ.get("APP_SAGEBIONETWORKS_URL", "")
+    tos_url = os.environ.get("APP_TERMS_OF_SERVICE_URL", "")
     contact_url = os.environ.get("APP_CONTACT_URL", "")
-    issues_url = os.environ.get("APP_ISSUE_URL", "")
+    feedback_url = os.environ.get("APP_FEEDBACK_URL", "")
 
     footer = gr.HTML(
         f"""
 <style>
 .custom-footer {{
     width: 100%;
-    border-top: 2px solid var(--border-color);
+    border-top: 2px solid var(--border-color-primary);
     padding: 32px 40px;
     margin-top: 60px;
     pointer-events: auto !important;
@@ -37,8 +37,8 @@ def build_footer():
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
+    white-space: nowrap;
 }}
 
 .footer-logo {{
@@ -48,30 +48,30 @@ def build_footer():
 
 /* Make logo text adaptive to theme */
 .footer-logo path[fill="white"] {{
-    fill: var(--text-primary);
+    fill: var(--body-text-color);
 }}
 
 .footer-separator {{
     margin: 0 8px;
-    color: #52525b !important;
+    color: var(--body-text-color-subdued) !important;
 }}
 
 .footer-center {{
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
     justify-content: center;
+    white-space: nowrap;
 }}
 
 .footer-right {{
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
     justify-content: flex-end;
+    white-space: nowrap;
 }}
 
 .footer-link {{
@@ -82,7 +82,7 @@ def build_footer():
 }}
 
 .footer-link:hover {{
-    color: #f97316 !important;
+    color: var(--color-accent) !important;
 }}
 
 @media (max-width: 768px) {{
@@ -102,13 +102,13 @@ def build_footer():
     <div class="footer-container">
         <!-- Left section - Branding -->
         <div class="footer-left">
-            {"<span>Powered by</span>" if brand_url else ""}
+            {"<span>Powered by</span>" if sage_url else ""}
             {
-            f'''<a href='{brand_url}' target='_blank'
+            f'''<a href='{sage_url}' target='_blank'
                 rel='noopener noreferrer'
                 style='display: inline-flex; align-items: center;
                 text-decoration: none;'>'''
-            if brand_url
+            if sage_url
             else ""
         }
                 <svg class="footer-logo" viewBox="0 0 568 94"
@@ -125,7 +125,7 @@ def build_footer():
                         </clipPath>
                     </defs>
                 </svg>
-            {"</a>" if brand_url else ""}
+            {"</a>" if sage_url else ""}
         </div>
 
         <!-- Center section - Links -->
@@ -152,14 +152,14 @@ def build_footer():
             {
             (
                 "<span class='footer-separator'>•</span>"
-                if contact_url and issues_url
+                if contact_url and feedback_url
                 else ""
             )
         }
             {
-            f"<a href='{issues_url}' class='footer-link' "
+            f"<a href='{feedback_url}' class='footer-link' "
             f"target='_blank' rel='noopener noreferrer'>Report Issue</a>"
-            if issues_url
+            if feedback_url
             else ""
         }
         </div>

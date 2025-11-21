@@ -84,8 +84,12 @@ def build_leaderboard_page():
 
     with gr.Column():
         # Title and stats
-        gr.Markdown("# 🏆 Leaderboard")
-        gr.Markdown("Community-driven evaluation of biomedical AI models")
+        gr.HTML(
+            '<h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.5rem; font-weight: 600;">🏆 Leaderboard</h1>'
+        )
+        gr.HTML(
+            '<p style="font-size: var(--text-xl); color: var(--body-text-color-subdued); margin: 0;">Community-driven evaluation of biomedical AI models</p>'
+        )
 
         # Metrics - will be populated dynamically on page load
         leaderboard_metrics = gr.HTML("")
@@ -94,8 +98,8 @@ def build_leaderboard_page():
             # Show placeholder when no data is available
             gr.HTML("""
             <div style="
-                background: var(--bg-card);
-                border: 2px solid var(--border-color);
+                background: var(--panel-background-fill);
+                border: 2px solid var(--border-color-primary);
                 border-radius: 12px;
                 padding: 64px 48px;
             ">
@@ -106,7 +110,9 @@ def build_leaderboard_page():
                             width: 56px;
                             height: 56px;
                             border-radius: 50%;
-                            background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+                            background: color-mix(
+                                in srgb, var(--color-accent) 10%, transparent
+                            );
                             display: flex;
                             align-items: center;
                             justify-content: center;
@@ -116,30 +122,27 @@ def build_leaderboard_page():
                     </div>
 
                     <!-- Title -->
-                    <h3 style="
-                        font-size: 1.25rem;
+                    <h2 style="
                         font-weight: 500;
                         margin-bottom: 16px;
                         line-height: 1.5;
-                        color: var(--text-primary);
+                        color: var(--body-text-color);
                     ">
                         Leaderboard Rankings Coming Soon
-                    </h3>
+                    </h2>
 
                     <!-- Description -->
                     <p style="
-                        color: var(--text-secondary);
+                        color: var(--body-text-color);
                         line-height: 1.625;
                         margin-bottom: 0;
-                        font-size: 1rem;
                     ">
                         The leaderboard will be published once we have sufficient evaluations to
                         ensure statistically meaningful model rankings.
                     </p>
                     <div style="padding-top: 16px;">
                         <p style="
-                            font-size: 0.875rem;
-                            color: var(--text-muted);
+                            color: var(--body-text-color-subdued);
                             line-height: 1.625;
                             margin: 0;
                         ">
