@@ -39,6 +39,53 @@
         width: 1200px; /* Fixed width */
         max-width: 100%; /* Allow shrinking on smaller screens */
       }
+
+      /* White background for node labels */
+      .mermaid .nodeLabel {
+        background-color: white !important;
+      }
+
+      .mermaid .label {
+        background-color: white !important;
+      }
+
+      .mermaid .labelText {
+        background-color: white !important;
+      }
+
+      .mermaid foreignObject {
+        background-color: white !important;
+      }
+
+      .mermaid foreignObject > div {
+        background-color: white !important;
+      }
+
+      .mermaid .iconLabel {
+        background-color: white !important;
+      }
+
+      .mermaid rect.label-container {
+        fill: white !important;
+      }
+
+      /* Target all rect elements used for label backgrounds */
+      .mermaid g.nodes rect {
+        fill: white !important;
+      }
+
+      .mermaid .labelBkg {
+        fill: white !important;
+      }
+
+      /* Edge labels with white background */
+      .mermaid .edgeLabel {
+        background-color: white !important;
+      }
+
+      .mermaid .edgeLabel rect {
+        fill: white !important;
+      }
     </style>
   </head>
   <body>
@@ -57,7 +104,7 @@
 
           %% Public Subnet
           subgraph public["Public Subnet"]
-            alb@{shape: icon, icon: 'mdi:aws', label: 'Application Load<br>Balancer'}
+            alb@{shape: icon, icon: 'logos:aws-elb', label: 'Application Load<br>Balancer'}
           end
 
           %% Private Subnet - ECS Cluster
@@ -87,8 +134,6 @@
             %% Infrastructure Services
             subgraph infra["Infrastructure Layer"]
               direction TB
-              config@{shape: icon, icon: 'logos:spring-icon', label: 'Config Server<br>(Spring Cloud Config)'}
-              registry@{shape: icon, icon: 'logos:spring-icon', label: 'Service Registry<br>(Eureka)'}
               thumbor@{shape: icon, icon: 'mdi:image-edit', label: 'Thumbor<br>(Image Processing)'}
             end
 
@@ -117,28 +162,20 @@
         apex -->|"/img/**"| thumbor
 
         %% API Gateway to Services
-        apigw -->|service discovery| registry
         apigw --> challenge
         apigw --> org
         apigw --> image
 
         %% Services to Infrastructure
-        challenge --> config
-        challenge --> registry
         challenge --> mariadb
         challenge --> elastic
 
-        org --> config
-        org --> registry
         org --> mariadb
         org --> elastic
 
-        image --> config
-        image --> registry
         image --> thumbor
 
         %% Infrastructure dependencies
-        registry --> config
         thumbor --> s3
 
         %% Styling
@@ -146,7 +183,7 @@
         classDef spring fill:#6DB33F,stroke:#6DB33F,stroke-width:2px,color:#fff
         classDef database fill:#4479A1,stroke:#4479A1,stroke-width:2px,color:#fff
 
-        class alb,s3 aws
+        class s3 aws
 
         %% Remove background from subgraphs
         style vpc fill:none,stroke:#333,stroke-width:2px
@@ -157,6 +194,7 @@
         style services fill:none,stroke:#333,stroke-width:1px
         style infra fill:none,stroke:#333,stroke-width:1px
         style data fill:none,stroke:#333,stroke-width:1px
+
       </div>
     </div>
 
@@ -194,7 +232,18 @@
         startOnLoad: true,
         securityLevel: 'loose', // allow loading icons via fetch
         theme: 'default',
-        flowchart: { useMaxWidth: true },
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true,
+        },
+        themeVariables: {
+          nodeBkg: 'white',
+          mainBkg: 'white',
+          clusterBkg: 'transparent',
+          labelBackground: 'white',
+          tertiaryColor: 'white',
+          edgeLabelBackground: 'white',
+        },
       });
     </script>
   </body>
