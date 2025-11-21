@@ -14,7 +14,6 @@ import {
   ModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { TableLazyLoadEvent } from 'primeng/table';
 import { shareReplay } from 'rxjs';
 import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
 
@@ -80,7 +79,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
-    this.comparisonToolService.setLazyLoadCallback((event) => this.onLazyLoad(event));
   }
 
   private loadData(pinnedItems: string[], pageNumber: number, pageSize: number) {
@@ -116,7 +114,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       });
   }
 
-  getUnpinnedData(pinnedItems: string[], pageNumber = 0, pageSize = 10) {
+  getUnpinnedData(pinnedItems: string[], pageNumber: number, pageSize: number) {
     const query: ModelOverviewSearchQuery = {
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
@@ -158,17 +156,5 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
           throw new Error('Error fetching model overview data:', { cause: error });
         },
       });
-  }
-
-  onLazyLoad(event: TableLazyLoadEvent) {
-    const pinnedItems = Array.from(this.pinnedItems());
-    const { pageNumber, pageSize } = this.comparisonToolHelperService.getPaginationParams(
-      event,
-      this.viewConfig.rowsPerPage,
-    );
-    this.comparisonToolService.setPageNumber(pageNumber);
-    this.comparisonToolService.setPageSize(pageSize);
-
-    this.loadData(pinnedItems, pageNumber, pageSize);
   }
 }

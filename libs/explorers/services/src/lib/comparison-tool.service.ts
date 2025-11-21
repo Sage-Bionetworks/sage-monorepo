@@ -9,6 +9,8 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { SortEvent, SortMeta } from 'primeng/api';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
 
@@ -20,6 +22,7 @@ export class ComparisonToolService<T> {
   private readonly notificationService = inject(NotificationService);
   private readonly urlService = inject(ComparisonToolUrlService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly helperService = inject(ComparisonToolHelperService);
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
@@ -34,7 +37,7 @@ export class ComparisonToolService<T> {
     filterResultsButtonTooltip: 'Filter results',
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
-    viewDetailsClick: (id: string, label: string) => {
+    viewDetailsClick: () => {
       return;
     },
     legendEnabled: true,
@@ -68,8 +71,6 @@ export class ComparisonToolService<T> {
   private readonly pageNumberSignal = signal<number>(0);
   private readonly pageSizeSignal = signal<number>(10);
   private readonly isInitializedSignal = signal(false);
-
-  private lazyLoadCallback?: (event: any) => void;
 
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
@@ -350,12 +351,14 @@ export class ComparisonToolService<T> {
     this.pageSizeSignal.set(pageSize);
   }
 
-  setLazyLoadCallback(callback: (event: any) => void) {
-    this.lazyLoadCallback = callback;
-  }
-
-  triggerLazyLoad(event: any) {
-    this.lazyLoadCallback?.(event);
+  handleLazyLoad(event: TableLazyLoadEvent) {
+    const defaultRowsPerPage = this.viewConfigSignal().rowsPerPage || 10;
+    const { pageNumber, pageSize } = this.helperService.getPaginationParams(
+      event,
+      defaultRowsPerPage,
+    );
+    this.setPageNumber(pageNumber);
+    this.setPageSize(pageSize);
   }
 
   private updateDropdownSelectionIfChanged(selection: string[]) {

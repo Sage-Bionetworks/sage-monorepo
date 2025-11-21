@@ -18,7 +18,6 @@ import {
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { TableLazyLoadEvent } from 'primeng/table';
 import { shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
@@ -98,7 +97,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
-    this.comparisonToolService.setLazyLoadCallback((event) => this.onLazyLoad(event));
   }
 
   private loadData(
@@ -144,7 +142,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       });
   }
 
-  getUnpinnedData(selection: string[], pinnedItems: string[], pageNumber = 0, pageSize = 10) {
+  getUnpinnedData(
+    selection: string[],
+    pinnedItems: string[],
+    pageNumber: number,
+    pageSize: number,
+  ) {
     const query: DiseaseCorrelationSearchQuery = {
       category: selection,
       items: pinnedItems,
@@ -189,22 +192,5 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
           throw new Error('Error fetching disease correlation data:', { cause: error });
         },
       });
-  }
-
-  onLazyLoad(event: TableLazyLoadEvent) {
-    const selection = this.comparisonToolService.dropdownSelection();
-    if (!selection.length) {
-      return;
-    }
-
-    const pinnedItems = Array.from(this.pinnedItems());
-    const { pageNumber, pageSize } = this.comparisonToolHelperService.getPaginationParams(
-      event,
-      this.viewConfig.rowsPerPage,
-    );
-    this.comparisonToolService.setPageNumber(pageNumber);
-    this.comparisonToolService.setPageSize(pageSize);
-
-    this.loadData(selection, pinnedItems, pageNumber, pageSize);
   }
 }

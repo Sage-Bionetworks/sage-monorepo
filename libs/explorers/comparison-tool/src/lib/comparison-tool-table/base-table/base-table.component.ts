@@ -58,6 +58,6 @@ export class BaseTableComponent {
   }
 
   onLazyLoad(event: TableLazyLoadEvent) {
-    this.comparisonToolService.triggerLazyLoad(event);
+    this.comparisonToolService.handleLazyLoad(event);
   }
 }
