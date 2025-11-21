@@ -56,7 +56,7 @@ def fetch_leaderboard_data():
 
             for entry in leaderboard_response.entries:
                 data["Rank"].append(entry.rank)
-                data["Model"].append(entry.model_id)  # Show model slug
+                data["Model"].append(f"[{entry.model_id}]({entry.model_url})")
                 data["Score"].append(round(entry.bt_score))
                 data["95% CI"].append(
                     f"[{round(entry.bootstrap_q025)}, {round(entry.bootstrap_q975)}]"
@@ -132,6 +132,17 @@ def build_leaderboard_page():
                 overflow-y: auto !important;
                 padding: 16px 20px !important;
                 line-height: 1.5 !important;
+            }
+
+            /* Table links Styling */
+            #leaderboard_table .md a {
+                color: var(--body-text-color) !important;
+                text-decoration: none !important;
+                transition: color 0.2s ease;
+            }
+
+            #leaderboard_table .md a:hover {
+                color: var(--color-accent) !important;
             }
             </style>
             """
@@ -238,6 +249,16 @@ def build_leaderboard_page():
                     "Organization",
                     "License",
                 ],
+                datatype=[
+                    "number",
+                    "markdown",
+                    "number",
+                    "str",
+                    "number",
+                    "str",
+                    "str",
+                ],
+                elem_id="leaderboard_table",
             )
 
         # Connect filter to table
