@@ -34,6 +34,9 @@ class LeaderboardSnapshot(BaseModel):
     created_at: datetime = Field(
         description="When this snapshot was created", alias="createdAt"
     )
+    updated_at: datetime = Field(
+        description="Timestamp when the entity was last updated.", alias="updatedAt"
+    )
     entry_count: StrictInt = Field(
         description="Number of models in this snapshot", alias="entryCount"
     )
@@ -44,6 +47,7 @@ class LeaderboardSnapshot(BaseModel):
         "id",
         "visibility",
         "createdAt",
+        "updatedAt",
         "entryCount",
         "description",
     ]
@@ -108,6 +112,7 @@ class LeaderboardSnapshot(BaseModel):
                 if obj.get("visibility") is not None
                 else Visibility.PRIVATE,
                 "createdAt": obj.get("createdAt"),
+                "updatedAt": obj.get("updatedAt"),
                 "entryCount": obj.get("entryCount"),
                 "description": obj.get("description"),
             }

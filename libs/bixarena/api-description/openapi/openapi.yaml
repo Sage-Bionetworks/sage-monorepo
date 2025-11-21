@@ -1385,6 +1385,17 @@ components:
           type: string
           description: Display name of the model
           example: GPT-4o
+        modelOrganization:
+          type: string
+          maxLength: 200
+          description: Organization that created the model
+          example: OpenAI
+          nullable: true
+        modelUrl:
+          type: string
+          maxLength: 300
+          description: External link to model information
+          example: https://openai.com/gpt-4
         license:
           type: string
           description: License type of the model
@@ -1421,6 +1432,7 @@ components:
         - id
         - modelId
         - modelName
+        - modelUrl
         - license
         - btScore
         - voteCount
