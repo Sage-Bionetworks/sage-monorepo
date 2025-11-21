@@ -50,17 +50,19 @@ def fetch_leaderboard_data():
                 "Score": [],
                 "95% CI": [],
                 "Total Votes": [],
+                "Organization": [],
                 "License": [],
             }
 
             for entry in leaderboard_response.entries:
                 data["Rank"].append(entry.rank)
-                data["Model"].append(entry.model_name)
+                data["Model"].append(entry.model_id)  # Show model slug
                 data["Score"].append(round(entry.bt_score))
                 data["95% CI"].append(
                     f"[{round(entry.bootstrap_q025)}, {round(entry.bootstrap_q975)}]"
                 )
                 data["Total Votes"].append(entry.vote_count)
+                data["Organization"].append(entry.model_organization or "")
                 data["License"].append(entry.license)
 
             logger.info("✅ Fetched leaderboard data")
@@ -198,6 +200,7 @@ def build_leaderboard_page():
                     "Score",
                     "95% CI",
                     "Total Votes",
+                    "Organization",
                     "License",
                 ],
             )
