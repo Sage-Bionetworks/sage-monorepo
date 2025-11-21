@@ -85,9 +85,10 @@ class WebStack(cdk.Stack):
             "API_BASE_URL": (
                 f"http://bixarena-api-gateway.{cluster.cluster_name}.local:8113/api/v1"
             ),
-            "APP_BRAND_URL": "https://sagebionetworks.org",
+            "APP_SAGEBIONETWORKS_URL": "https://sagebionetworks.org",
             "APP_CONTACT_URL": "https://sagebionetworks.org/contact",
-            "APP_ISSUE_URL": "https://forms.gle/WsvSdEfv5MfFpeedA",
+            "APP_FEEDBACK_URL": "https://forms.gle/WsvSdEfv5MfFpeedA",
+            "APP_TERMS_OF_SERVICE_URL": "https://sagebionetworks.org/trust-center",
             "ENABLE_CRISP": "false",
             "BATTLE_ROUND_LIMIT": "5",
             "MAX_RESPONSE_TOKENS": "1024",
