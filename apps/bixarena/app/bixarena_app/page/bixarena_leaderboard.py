@@ -2,94 +2,61 @@ import logging
 
 import gradio as gr
 import pandas as pd
-from bixarena_api_client import LeaderboardApi
+from bixarena_api_client import ApiClient, LeaderboardApi
 from bixarena_api_client.exceptions import ApiException
 
-from bixarena_app.api.api_client_helper import (
-    create_authenticated_api_client,
-)
+from bixarena_app.api.api_client_helper import get_api_configuration
 
 logger = logging.getLogger(__name__)
 
 
-def fetch_leaderboard_data(jwt_token: str | None = None):
+def fetch_leaderboard_data():
     """Fetch leaderboard data from the BixArena API
 
-    Args:
-        jwt_token: Optional JWT token for authenticated API calls
+    Returns:
+        DataFrame with leaderboard data, or None if no data available
     """
     try:
-        logger.info("📊 Fetching leaderboard data for 'open-source'...")
-        if jwt_token:
-            logger.debug("🔑 Using JWT token for authenticated API call")
-
-        # Create API client and leaderboard API instance
-        with create_authenticated_api_client(jwt_token) as api_client:
+        configuration = get_api_configuration()
+        with ApiClient(configuration) as api_client:
             api_instance = LeaderboardApi(api_client)
 
-            # Fetch leaderboard entries for "open-source" leaderboard
-            logger.debug("📊 Fetching leaderboard data for 'open-source'...")
+            # Fetch leaderboard entries for "overall" leaderboard
+            # API returns the latest visible snapshot by default
             leaderboard_response = api_instance.get_leaderboard(
-                leaderboard_id="open-source"
+                leaderboard_id="overall"
             )
 
-            logger.info(
-                f"✅ API call successful! Received {len(leaderboard_response.entries)} entries"
-            )
+            # If no entries, return None to show placeholder
+            if not leaderboard_response.entries:
+                return None
 
             # Convert API response to DataFrame
             data = {
                 "Rank": [],
                 "Model": [],
-                "BT Score": [],
+                "Score": [],
                 "95% CI": [],
                 "Total Votes": [],
-                "Organization": [],
+                "License": [],
             }
 
             for entry in leaderboard_response.entries:
                 data["Rank"].append(entry.rank)
                 data["Model"].append(entry.model_name)
-                data["BT Score"].append(entry.bt_score)
-                # Placeholder CI calculation
-                ci_lower = entry.bt_score - 15
-                ci_upper = entry.bt_score + 15
-                data["95% CI"].append(f"[{ci_lower:.1f}, {ci_upper:.1f}]")
+                data["Score"].append(entry.bt_score)
+                data["95% CI"].append(
+                    f"[{entry.bootstrap_q025}, {entry.bootstrap_q975}]"
+                )
                 data["Total Votes"].append(entry.vote_count)
-                # API doesn't provide organization, using placeholder
-                data["Organization"].append("Unknown")
+                data["License"].append(entry.license)
 
-            logger.info(f"📋 Converted to DataFrame with {len(data['Rank'])} rows")
+            logger.info("✅ Fetched leaderboard data")
             return pd.DataFrame(data)
 
     except ApiException as e:
-        logger.error(
-            f"❌ API Exception when calling LeaderboardApi->get_leaderboard: {e}"
-        )
-        # Return empty DataFrame if API call fails
-        return pd.DataFrame(
-            {
-                "Rank": [],
-                "Model": [],
-                "BT Score": [],
-                "95% CI": [],
-                "Total Votes": [],
-                "Organization": [],
-            }
-        )
-    except Exception as e:
-        logger.error(f"❌ Unexpected error fetching leaderboard data: {e}")
-        # Return empty DataFrame if any other error occurs
-        return pd.DataFrame(
-            {
-                "Rank": [],
-                "Model": [],
-                "BT Score": [],
-                "95% CI": [],
-                "Total Votes": [],
-                "Organization": [],
-            }
-        )
+        logger.error(f"❌ Failed to fetch leaderboard: {e}")
+        return None
 
 
 def filter_dataframe(df, model_filter):
@@ -113,10 +80,7 @@ def load_leaderboard_stats_on_page_load() -> dict:
 def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
     # Get initial data from API
-    # df = fetch_leaderboard_data()
-    # logger.info(
-    #     f"📈 Leaderboard built with {len(df)} models"
-    # )
+    df = fetch_leaderboard_data()
 
     with gr.Column():
         # Title and stats
@@ -126,101 +90,96 @@ def build_leaderboard_page():
         # Metrics - will be populated dynamically on page load
         leaderboard_metrics = gr.HTML("")
 
-        # Coming soon message
-        gr.HTML("""
-        <div style="
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 64px 48px;
-        ">
-            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <!-- Icon -->
-                <div style="display: flex; justify-content: center; margin-bottom: 24px;">
-                    <div style="
-                        width: 56px;
-                        height: 56px;
-                        border-radius: 50%;
-                        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
+        if df is None or len(df) == 0:
+            # Show placeholder when no data is available
+            gr.HTML("""
+            <div style="
+                background: var(--bg-card);
+                border: 2px solid var(--border-color);
+                border-radius: 12px;
+                padding: 64px 48px;
+            ">
+                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <!-- Icon -->
+                    <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+                        <div style="
+                            width: 56px;
+                            height: 56px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <span style="font-size: 28px;">⏰</span>
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <h3 style="
+                        font-size: 1.25rem;
+                        font-weight: 500;
+                        margin-bottom: 16px;
+                        line-height: 1.5;
+                        color: var(--text-primary);
                     ">
-                        <span style="font-size: 28px;">⏰</span>
+                        Leaderboard Rankings Coming Soon
+                    </h3>
+
+                    <!-- Description -->
+                    <p style="
+                        color: var(--text-secondary);
+                        line-height: 1.625;
+                        margin-bottom: 0;
+                        font-size: 1rem;
+                    ">
+                        The leaderboard will be published once we have sufficient evaluations to
+                        ensure statistically meaningful model rankings.
+                    </p>
+                    <div style="padding-top: 16px;">
+                        <p style="
+                            font-size: 0.875rem;
+                            color: var(--text-muted);
+                            line-height: 1.625;
+                            margin: 0;
+                        ">
+                            Keep battling to help us build a comprehensive benchmark
+                        </p>
                     </div>
                 </div>
-
-                <!-- Title -->
-                <h3 style="
-                    font-size: 1.25rem;
-                    font-weight: 500;
-                    margin-bottom: 16px;
-                    line-height: 1.5;
-                    color: var(--text-primary);
-                ">
-                    Leaderboard Rankings Coming Soon
-                </h3>
-
-                <!-- Description -->
-                <p style="
-                    color: var(--text-secondary);
-                    line-height: 1.625;
-                    margin-bottom: 0;
-                    font-size: 1rem;
-                ">
-                    The leaderboard will be published once we have sufficient evaluations to
-                    ensure statistically meaningful model rankings.
-                </p>
-                <div style="padding-top: 16px;">
-                    <p style="
-                        font-size: 0.875rem;
-                        color: var(--text-muted);
-                        line-height: 1.625;
-                        margin: 0;
-                    ">
-                        Keep battling to help us build a comprehensive benchmark
-                    </p>
-                </div>
             </div>
-        </div>
-        """)
+            """)
+        else:
+            # Show leaderboard table when data is available
+            # Filter controls
+            with gr.Row():
+                model_filter = gr.Textbox(
+                    show_label=False, placeholder="Search models...", scale=3
+                )
 
-        # # Disclaimer sections
-        # with gr.Accordion("⚠️ Important Disclaimer", open=True):
-        #     gr.Markdown("""
-        #     **This is demonstration data only.** The scores and rankings shown are for demo purposes
-        #     and do not represent actual performance comparisons of these models.
-        #     """)
+            # Main leaderboard table
+            leaderboard_table = gr.Dataframe(
+                value=df,
+                interactive=False,
+                wrap=True,
+                headers=[
+                    "Rank",
+                    "Model",
+                    "Score",
+                    "95% CI",
+                    "Total Votes",
+                    "License",
+                ],
+            )
 
-        # # Filter controls
-        # with gr.Row():
-        #     model_filter = gr.Textbox(
-        #         show_label=False, placeholder="Search models...", scale=3
-        #     )
+            # Update functions
+            def update_table(filter_text):
+                filtered_df = filter_dataframe(df, filter_text)
+                return filtered_df
 
-        # # Main leaderboard table
-        # leaderboard_table = gr.Dataframe(
-        #     value=df,
-        #     interactive=False,
-        #     wrap=True,
-        #     headers=[
-        #         "Rank",
-        #         "Model",
-        #         "BT Score",
-        #         "95% CI",
-        #         "Total Votes",
-        #         "Organization",
-        #     ],
-        # )
-
-        # # Update functions
-        # def update_table(filter_text):
-        #     filtered_df = filter_dataframe(df, filter_text)
-        #     return filtered_df
-
-        # # Event handlers
-        # model_filter.change(
-        #     fn=update_table, inputs=[model_filter], outputs=[leaderboard_table]
-        # )
+            # Event handlers
+            model_filter.change(
+                fn=update_table, inputs=[model_filter], outputs=[leaderboard_table]
+            )
 
     return leaderboard_metrics
