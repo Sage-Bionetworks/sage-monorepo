@@ -3,7 +3,7 @@ package org.sagebionetworks.model.ad.api.next.model.mapper;
 import java.util.List;
 import org.sagebionetworks.model.ad.api.next.exception.DataIntegrityException;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
-import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewLinkDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument.ModelOverviewLink;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewLinkDto;
 import org.springframework.lang.Nullable;
@@ -50,14 +50,14 @@ public class ModelOverviewMapper {
     return dto;
   }
 
-  private ModelOverviewLinkDto toRequiredLinkDto(@Nullable ModelOverviewLinkDocument linkDocument) {
+  private ModelOverviewLinkDto toRequiredLinkDto(@Nullable ModelOverviewLink linkDocument) {
     if (linkDocument == null) {
       throw new DataIntegrityException("Required link data is missing from the database");
     }
     return toNullableLinkDto(linkDocument);
   }
 
-  private ModelOverviewLinkDto toNullableLinkDto(@Nullable ModelOverviewLinkDocument linkDocument) {
+  private ModelOverviewLinkDto toNullableLinkDto(@Nullable ModelOverviewLink linkDocument) {
     if (linkDocument == null) {
       return null;
     }

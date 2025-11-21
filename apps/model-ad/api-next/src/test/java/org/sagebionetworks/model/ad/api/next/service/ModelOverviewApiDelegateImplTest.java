@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.api.*;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
-import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewLinkDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument.ModelOverviewLink;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
@@ -203,13 +203,15 @@ class ModelOverviewApiDelegateImplTest {
   }
 
   private ModelOverviewDocument buildDocument(ObjectId objectId) {
-    ModelOverviewLinkDocument requiredLink = new ModelOverviewLinkDocument();
-    requiredLink.setLinkText("Study");
-    requiredLink.setLinkUrl("https://example.org/study");
+    ModelOverviewLink requiredLink = ModelOverviewLink.builder()
+      .linkText("Study")
+      .linkUrl("https://example.org/study")
+      .build();
 
-    ModelOverviewLinkDocument optionalLink = new ModelOverviewLinkDocument();
-    optionalLink.setLinkText("Gene Expression");
-    optionalLink.setLinkUrl("https://example.org/gene");
+    ModelOverviewLink optionalLink = ModelOverviewLink.builder()
+      .linkText("Gene Expression")
+      .linkUrl("https://example.org/gene")
+      .build();
 
     ModelOverviewDocument document = new ModelOverviewDocument();
     document.setId(objectId);

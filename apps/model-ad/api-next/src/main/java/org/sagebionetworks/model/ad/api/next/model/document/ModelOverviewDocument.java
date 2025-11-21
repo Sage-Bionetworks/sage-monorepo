@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.model.document;
 
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,28 +29,40 @@ public class ModelOverviewDocument {
   private List<String> matchedControls;
 
   @Field("gene_expression")
-  private @Nullable ModelOverviewLinkDocument geneExpression;
+  private @Nullable ModelOverviewLink geneExpression;
 
   @Field("disease_correlation")
-  private @Nullable ModelOverviewLinkDocument diseaseCorrelation;
+  private @Nullable ModelOverviewLink diseaseCorrelation;
 
   @Field("biomarkers")
-  private @Nullable ModelOverviewLinkDocument biomarkers;
+  private @Nullable ModelOverviewLink biomarkers;
 
   @Field("pathology")
-  private @Nullable ModelOverviewLinkDocument pathology;
+  private @Nullable ModelOverviewLink pathology;
 
   @Field("study_data")
-  private ModelOverviewLinkDocument studyData;
+  private ModelOverviewLink studyData;
 
   @Field("jax_strain")
-  private ModelOverviewLinkDocument jaxStrain;
+  private ModelOverviewLink jaxStrain;
 
-  private ModelOverviewLinkDocument center;
+  private ModelOverviewLink center;
 
   @Field("modified_genes")
   private List<String> modifiedGenes;
 
   @Field("available_data")
   private List<String> availableData;
+
+  @Builder
+  @Getter
+  @Setter
+  public static class ModelOverviewLink {
+
+    @Field("link_text")
+    private String linkText;
+
+    @Field("link_url")
+    private String linkUrl;
+  }
 }

@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.model.document;
 
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,23 +38,34 @@ public class DiseaseCorrelationDocument {
   private String sex;
 
   @Field("CBE")
-  private @Nullable CorrelationResultDocument cbe;
+  private @Nullable CorrelationResult cbe;
 
   @Field("DLPFC")
-  private @Nullable CorrelationResultDocument dlpfc;
+  private @Nullable CorrelationResult dlpfc;
 
   @Field("FP")
-  private @Nullable CorrelationResultDocument fp;
+  private @Nullable CorrelationResult fp;
 
   @Field("IFG")
-  private @Nullable CorrelationResultDocument ifg;
+  private @Nullable CorrelationResult ifg;
 
   @Field("PHG")
-  private @Nullable CorrelationResultDocument phg;
+  private @Nullable CorrelationResult phg;
 
   @Field("STG")
-  private @Nullable CorrelationResultDocument stg;
+  private @Nullable CorrelationResult stg;
 
   @Field("TCX")
-  private @Nullable CorrelationResultDocument tcx;
+  private @Nullable CorrelationResult tcx;
+
+  @Builder
+  @Getter
+  @Setter
+  public static class CorrelationResult {
+
+    private Double correlation;
+
+    @Field("adj_p_val")
+    private Double adjustedPvalue;
+  }
 }

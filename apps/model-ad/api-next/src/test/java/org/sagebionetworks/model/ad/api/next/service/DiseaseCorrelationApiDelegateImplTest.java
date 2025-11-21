@@ -22,8 +22,8 @@ import org.sagebionetworks.model.ad.api.next.api.DiseaseCorrelationApiDelegateIm
 import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
-import org.sagebionetworks.model.ad.api.next.model.document.CorrelationResultDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument.CorrelationResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -268,9 +268,10 @@ class DiseaseCorrelationApiDelegateImplTest {
   }
 
   private DiseaseCorrelationDocument buildDocument(ObjectId objectId) {
-    CorrelationResultDocument correlation = new CorrelationResultDocument();
-    correlation.setCorrelation(0.87d);
-    correlation.setAdjustedPvalue(0.01d);
+    CorrelationResult correlation = CorrelationResult.builder()
+      .correlation(0.87d)
+      .adjustedPvalue(0.01d)
+      .build();
 
     DiseaseCorrelationDocument document = new DiseaseCorrelationDocument();
     document.setId(objectId);
@@ -286,8 +287,7 @@ class DiseaseCorrelationApiDelegateImplTest {
   }
 
   private DiseaseCorrelationDocument buildDocumentWithPartialCorrelation(ObjectId objectId) {
-    CorrelationResultDocument correlation = new CorrelationResultDocument();
-    correlation.setCorrelation(0.5d);
+    CorrelationResult correlation = CorrelationResult.builder().correlation(0.5d).build();
 
     DiseaseCorrelationDocument document = new DiseaseCorrelationDocument();
     document.setId(objectId);
