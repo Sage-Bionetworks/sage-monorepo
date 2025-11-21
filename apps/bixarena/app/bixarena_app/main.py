@@ -273,15 +273,18 @@ def build_app():
         title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
         head=crisp_script,
         css="""
-        /* Custom gloabl colors */
+        /* Custom global colors */
         :root {
             --accent-teal: #14b8a6;
             --border-color-primary: rgba(63, 63, 70, 0.2);
+            --body-text-color-subdued:  rgba(63, 63, 70);
+            --title-hero-size: 44px;
         }
 
         .dark {
             --accent-teal: #2dd4bf;
             --border-color-primary: rgba(228, 228, 231, 0.2);
+            --body-text-color-subdued: rgba(229, 231, 235, 0.6);
         }
 
         /* Hide Gradio's default footer */

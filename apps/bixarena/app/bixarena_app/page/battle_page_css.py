@@ -52,7 +52,6 @@ CHATBOT_BATTLE_CSS = """
 .model-name-footer {
     padding: 12px 16px;
     background: var(--block-background-fill);
-    border-top: 1px solid var(--border-color-primary);
     text-align: center;
     color: var(--body-text-color);
     font-weight: 500;
