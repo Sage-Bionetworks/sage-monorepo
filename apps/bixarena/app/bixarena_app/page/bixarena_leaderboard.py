@@ -77,10 +77,30 @@ def load_leaderboard_stats_on_page_load() -> dict:
     return gr.update(value=metrics_html)
 
 
+def filter_leaderboard_table(filter_text, df):
+    """Filter leaderboard table by model name"""
+    if df is None:
+        return None
+    if not filter_text:
+        return df
+    return filter_dataframe(df, filter_text)
+
+
+def refresh_leaderboard():
+    """Refresh leaderboard data
+
+    Returns:
+        Tuple of (table_data, dataframe_state)
+    """
+    df = fetch_leaderboard_data()
+    return df, df
+
+
 def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
-    # Get initial data from API
-    df = fetch_leaderboard_data()
+    # Get initial data
+    initial_df = fetch_leaderboard_data()
+    show_table = initial_df is not None and len(initial_df) > 0
 
     with gr.Column():
         # Title and stats
@@ -91,12 +111,12 @@ def build_leaderboard_page():
             '<p style="font-size: var(--text-xl); color: var(--body-text-color-subdued); margin: 0;">Community-driven evaluation of biomedical AI models</p>'
         )
 
-        # Metrics - will be populated dynamically on page load
-        leaderboard_metrics = gr.HTML("")
+        # State to store the full dataframe for filtering
+        dataframe_state = gr.State(initial_df)
 
-        if df is None or len(df) == 0:
-            # Show placeholder when no data is available
-            gr.HTML("""
+        # Placeholder - shown when no data
+        gr.HTML(
+            """
             <div style="
                 background: var(--panel-background-fill);
                 border: 2px solid var(--border-color-primary);
@@ -151,38 +171,37 @@ def build_leaderboard_page():
                     </div>
                 </div>
             </div>
-            """)
-        else:
-            # Show leaderboard table when data is available
-            # Filter controls
-            with gr.Row():
-                model_filter = gr.Textbox(
-                    show_label=False, placeholder="Search models...", scale=3
-                )
+            """,
+            visible=not show_table,
+        )
 
-            # Main leaderboard table
-            leaderboard_table = gr.Dataframe(
-                value=df,
-                interactive=False,
-                wrap=True,
-                headers=[
-                    "Rank",
-                    "Model",
-                    "Score",
-                    "95% CI",
-                    "Total Votes",
-                    "License",
-                ],
+        # Search filter
+        with gr.Row(visible=show_table):
+            model_filter = gr.Textbox(
+                show_label=False, placeholder="Search models...", scale=3
             )
 
-            # Update functions
-            def update_table(filter_text):
-                filtered_df = filter_dataframe(df, filter_text)
-                return filtered_df
+        # Main leaderboard table
+        leaderboard_table = gr.Dataframe(
+            value=initial_df,
+            interactive=False,
+            wrap=True,
+            headers=[
+                "Rank",
+                "Model",
+                "Score",
+                "95% CI",
+                "Total Votes",
+                "License",
+            ],
+            visible=show_table,
+        )
 
-            # Event handlers
-            model_filter.change(
-                fn=update_table, inputs=[model_filter], outputs=[leaderboard_table]
-            )
+        # Connect filter to table
+        model_filter.change(
+            fn=filter_leaderboard_table,
+            inputs=[model_filter, dataframe_state],
+            outputs=[leaderboard_table],
+        )
 
-    return leaderboard_metrics
+    return leaderboard_table, dataframe_state
