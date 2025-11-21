@@ -1,10 +1,7 @@
-import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import {
-  ComparisonToolComponent,
-  getPaginationParams,
-} from '@sagebionetworks/explorers/comparison-tool';
+import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolViewConfig,
   LegendPanelConfig,
@@ -42,9 +39,9 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
 
   pinnedItems = this.comparisonToolService.pinnedItems;
 
-  isInitialLoad = signal(true);
-  currentPageNumber = signal(0);
-  currentPageSize = signal(10);
+  isInitialized = this.comparisonToolService.isInitialized;
+  currentPageNumber = this.comparisonToolService.pageNumber;
+  currentPageSize = this.comparisonToolService.pageSize;
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'CONSENSUS NETWORK MODULES': {
@@ -96,27 +93,33 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
         <img src="/explorer-assets/images/gct-how-to-3.gif" />`,
       ),
     ],
+    rowsPerPage: 10,
   };
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
+    this.comparisonToolService.setLazyLoadCallback((event) => this.onLazyLoad(event));
+  }
+
+  private loadData(
+    selection: string[],
+    pinnedItems: string[],
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    this.getPinnedData(selection, pinnedItems);
+    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize);
   }
 
   readonly onUpdateEffect = effect(() => {
-    if (this.platformService.isBrowser) {
+    if (this.platformService.isBrowser && this.isInitialized()) {
       const selection = this.comparisonToolService.dropdownSelection();
       if (!selection.length) {
         return;
       }
 
       const pinnedItems = Array.from(this.pinnedItems());
-      this.getUnpinnedData(
-        selection,
-        pinnedItems,
-        this.currentPageNumber(),
-        this.currentPageSize(),
-      );
-      this.getPinnedData(selection, pinnedItems);
+      this.loadData(selection, pinnedItems, this.currentPageNumber(), this.currentPageSize());
     }
   });
 
@@ -133,7 +136,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
           this.comparisonToolService.initialize(configs);
-          this.isInitialLoad.set(false);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
@@ -196,9 +198,13 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
     }
 
     const pinnedItems = Array.from(this.pinnedItems());
-    const { pageNumber, pageSize } = getPaginationParams(event);
-    this.currentPageNumber.set(pageNumber);
-    this.currentPageSize.set(pageSize);
-    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize);
+    const { pageNumber, pageSize } = this.comparisonToolHelperService.getPaginationParams(
+      event,
+      this.viewConfig.rowsPerPage,
+    );
+    this.comparisonToolService.setPageNumber(pageNumber);
+    this.comparisonToolService.setPageSize(pageSize);
+
+    this.loadData(selection, pinnedItems, pageNumber, pageSize);
   }
 }

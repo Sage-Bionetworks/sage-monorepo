@@ -2,7 +2,7 @@ type: object
 description: Model overview search query with pagination and filtering options.
 properties:
   pageNumber:
-    description: The page number.
+    description: The page number to return (index starts from 0).
     type: integer
     format: int32
     default: 0

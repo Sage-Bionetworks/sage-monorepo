@@ -1,5 +1,8 @@
-import { Component, inject, input, output, ViewEncapsulation } from '@angular/core';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
+import { Component, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  ComparisonToolHelperService,
+  ComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
 import { SortEvent } from 'primeng/api';
 import { TableModule, TableLazyLoadEvent } from 'primeng/table';
@@ -32,6 +35,7 @@ interface PaginationOptions {
 })
 export class BaseTableComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
+  private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
 
   selectedColumns = this.comparisonToolService.selectedColumns;
 
@@ -39,9 +43,7 @@ export class BaseTableComponent {
   shouldPaginate = input<boolean>(true);
   shouldShowNoDataMessage = input<boolean>(true);
   columnWidth = input<string>('auto');
-  totalRecords = input<number | undefined>(undefined);
-
-  lazyLoad = output<TableLazyLoadEvent>();
+  totalRecords = this.comparisonToolService.totalResultsCount;
 
   paginationConfig: PaginationOptions = {
     rows: 10,
@@ -56,6 +58,6 @@ export class BaseTableComponent {
   }
 
   onLazyLoad(event: TableLazyLoadEvent) {
-    this.lazyLoad.emit(event);
+    this.comparisonToolService.triggerLazyLoad(event);
   }
 }

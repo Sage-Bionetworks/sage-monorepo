@@ -5,7 +5,6 @@ import {
   ElementRef,
   HostListener,
   inject,
-  output,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -19,7 +18,6 @@ import {
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
-import { TableLazyLoadEvent } from 'primeng/table';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
 
@@ -58,8 +56,6 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
   pinnedData = this.comparisonToolService.pinnedData;
   unpinnedData = this.comparisonToolService.unpinnedData;
-
-  lazyLoad = output<TableLazyLoadEvent>();
 
   columnWidth = 'auto';
   primaryColumnWidth = 300;
@@ -126,9 +122,5 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   calculateNonprimaryColumnWidth(nCols: number, tableWidth: number) {
     const count = Math.max(nCols, 5);
     return Math.ceil((tableWidth - this.primaryColumnWidth) / count) + 'px';
-  }
-
-  onLazyLoad(event: TableLazyLoadEvent) {
-    this.lazyLoad.emit(event);
   }
 }

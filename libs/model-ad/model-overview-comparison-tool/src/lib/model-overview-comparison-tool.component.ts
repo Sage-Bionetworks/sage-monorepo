@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -17,7 +17,6 @@ import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { shareReplay } from 'rxjs';
 import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
-import { getPaginationParams } from '@sagebionetworks/explorers/comparison-tool';
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
@@ -36,9 +35,9 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
 
   pinnedItems = this.comparisonToolService.pinnedItems;
 
-  isInitialLoad = signal(true);
-  currentPageNumber = signal(0);
-  currentPageSize = signal(10);
+  isInitialized = this.comparisonToolService.isInitialized;
+  currentPageNumber = this.comparisonToolService.pageNumber;
+  currentPageSize = this.comparisonToolService.pageSize;
 
   // TODO MG-485 - Update overview panes content and images
   visualizationOverviewPanes = [
@@ -76,17 +75,23 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     },
     legendEnabled: false,
     visualizationOverviewPanes: this.visualizationOverviewPanes,
+    rowsPerPage: 10,
   };
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
+    this.comparisonToolService.setLazyLoadCallback((event) => this.onLazyLoad(event));
+  }
+
+  private loadData(pinnedItems: string[], pageNumber: number, pageSize: number) {
+    this.getPinnedData(pinnedItems);
+    this.getUnpinnedData(pinnedItems, pageNumber, pageSize);
   }
 
   readonly onUpdateEffect = effect(() => {
-    if (this.platformService.isBrowser) {
+    if (this.platformService.isBrowser && this.isInitialized()) {
       const pinnedItems = Array.from(this.pinnedItems());
-      this.getPinnedData(pinnedItems);
-      this.getUnpinnedData(pinnedItems, this.currentPageNumber(), this.currentPageSize());
+      this.loadData(pinnedItems, this.currentPageNumber(), this.currentPageSize());
     }
   });
 
@@ -103,7 +108,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       .subscribe({
         next: (configs: ComparisonToolConfig[]) => {
           this.comparisonToolService.initialize(configs);
-          this.isInitialLoad.set(false);
         },
         error: (error) => {
           console.error('Error retrieving comparison tool config: ', error);
@@ -158,9 +162,13 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
 
   onLazyLoad(event: TableLazyLoadEvent) {
     const pinnedItems = Array.from(this.pinnedItems());
-    const { pageNumber, pageSize } = getPaginationParams(event);
-    this.currentPageNumber.set(pageNumber);
-    this.currentPageSize.set(pageSize);
-    this.getUnpinnedData(pinnedItems, pageNumber, pageSize);
+    const { pageNumber, pageSize } = this.comparisonToolHelperService.getPaginationParams(
+      event,
+      this.viewConfig.rowsPerPage,
+    );
+    this.comparisonToolService.setPageNumber(pageNumber);
+    this.comparisonToolService.setPageSize(pageSize);
+
+    this.loadData(pinnedItems, pageNumber, pageSize);
   }
 }

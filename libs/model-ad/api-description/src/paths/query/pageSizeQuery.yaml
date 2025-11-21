@@ -1,8 +1,0 @@
-name: pageSize
-in: query
-required: false
-description: The number of items in a single page.
-schema:
-  type: integer
-  minimum: 1
-  default: 10
