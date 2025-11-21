@@ -80,6 +80,7 @@
               challenge@{shape: icon, icon: 'logos:spring-icon', label: 'Challenge Service<br>(Spring Boot)'}
               org@{shape: icon, icon: 'logos:spring-icon', label: 'Organization Service<br>(Spring Boot)'}
               image@{shape: icon, icon: 'logos:spring-icon', label: 'Image Service<br>(Spring Boot)'}
+              auth@{shape: icon, icon: 'logos:spring-icon', label: 'Auth Service<br>(Spring Boot)'}
             end
 
             %% Infrastructure Services
@@ -110,6 +111,7 @@
         apigw --> challenge
         apigw --> org
         apigw --> image
+        apigw --> auth
 
         %% Services to Infrastructure
         challenge --> postgres
@@ -119,6 +121,8 @@
         org --> elastic
 
         image --> thumbor
+
+        auth --> postgres
 
         %% Infrastructure dependencies
         thumbor --> s3
