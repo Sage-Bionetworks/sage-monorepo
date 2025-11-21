@@ -1654,11 +1654,8 @@ components:
       description: The field to sort leaderboard entries by.
       enum:
         - rank
-        - bt_score
-        - vote_count
         - created_at
-        - model_name
-      example: bt_score
+      example: rank
       type: string
     LeaderboardSearchQuery:
       description: A leaderboard search query with pagination and filtering options.
