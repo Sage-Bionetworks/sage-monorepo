@@ -39,53 +39,6 @@
         width: 1200px; /* Fixed width */
         max-width: 100%; /* Allow shrinking on smaller screens */
       }
-
-      /* White background for node labels */
-      .mermaid .nodeLabel {
-        background-color: white !important;
-      }
-
-      .mermaid .label {
-        background-color: white !important;
-      }
-
-      .mermaid .labelText {
-        background-color: white !important;
-      }
-
-      .mermaid foreignObject {
-        background-color: white !important;
-      }
-
-      .mermaid foreignObject > div {
-        background-color: white !important;
-      }
-
-      .mermaid .iconLabel {
-        background-color: white !important;
-      }
-
-      .mermaid rect.label-container {
-        fill: white !important;
-      }
-
-      /* Target all rect elements used for label backgrounds */
-      .mermaid g.nodes rect {
-        fill: white !important;
-      }
-
-      .mermaid .labelBkg {
-        fill: white !important;
-      }
-
-      /* Edge labels with white background */
-      .mermaid .edgeLabel {
-        background-color: white !important;
-      }
-
-      .mermaid .edgeLabel rect {
-        fill: white !important;
-      }
     </style>
   </head>
   <body>
@@ -111,11 +64,9 @@
           subgraph private["Private Subnet - ECS Cluster"]
             direction TB
 
-            %% Frontend/Proxy Layer
+            %% Frontend Layer
             subgraph frontend["Frontend Layer"]
-              apex@{shape: icon, icon: 'logos:nginx', label: 'Apex<br>(NGINX Proxy)'}
-              app@{shape: icon, icon: 'logos:angular-icon', label: 'OpenChallenges App<br>(Angular)'}
-              apidocs@{shape: icon, icon: 'mdi:file-document', label: 'API Docs'}
+              app@{shape: icon, icon: 'logos:angular-icon', label: 'Web App<br>(Angular)'}
             end
 
             %% API Gateway Layer
@@ -150,14 +101,10 @@
         %% Connections - User to ALB
         user -->|HTTPS| alb
 
-        %% ALB to Apex
-        alb -->|"/"| apex
-
-        %% Apex routing
-        apex -->|"/api/**"| apigw
-        apex -->|"static content"| app
-        apex -->|"/api-docs"| apidocs
-        apex -->|"/img/**"| thumbor
+        %% ALB to Frontend and Gateway
+        alb -->|"/"| app
+        alb -->|"/api/**"| apigw
+        alb -->|"/img/**"| thumbor
 
         %% API Gateway to Services
         apigw --> challenge
@@ -176,20 +123,18 @@
         %% Infrastructure dependencies
         thumbor --> s3
 
-        %% Styling
-        classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#fff
-        classDef spring fill:#6DB33F,stroke:#6DB33F,stroke-width:2px,color:#fff
-        classDef database fill:#4479A1,stroke:#4479A1,stroke-width:2px,color:#fff
-
-        %% Remove background from subgraphs
+        %% Styling for subgraphs
         style vpc fill:none,stroke:#333,stroke-width:2px
         style public fill:none,stroke:#333,stroke-width:1px
         style private fill:none,stroke:#333,stroke-width:1px
-        style frontend fill:none,stroke:#333,stroke-width:1px
-        style gateway fill:none,stroke:#333,stroke-width:1px
-        style services fill:none,stroke:#333,stroke-width:1px
-        style infra fill:none,stroke:#333,stroke-width:1px
-        style data fill:none,stroke:#333,stroke-width:1px
+
+        %% Color backgrounds for different layers
+        style frontend fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+        style gateway fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+        style services fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+        style infra fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+        style data fill:#e0f2f1,stroke:#00897b,stroke-width:2px
+
 
       </div>
     </div>
@@ -227,18 +172,19 @@
       mermaid.initialize({
         startOnLoad: true,
         securityLevel: 'loose', // allow loading icons via fetch
-        theme: 'default',
+        theme: 'base',
         flowchart: {
           useMaxWidth: true,
           htmlLabels: true,
         },
         themeVariables: {
-          nodeBkg: 'white',
-          mainBkg: 'white',
           clusterBkg: 'transparent',
-          labelBackground: 'white',
-          tertiaryColor: 'white',
-          edgeLabelBackground: 'white',
+          primaryColor: '#fff',
+          primaryTextColor: '#333',
+          primaryBorderColor: '#ddd',
+          lineColor: '#333',
+          secondaryColor: '#fff',
+          tertiaryColor: '#fff',
         },
       });
     </script>
