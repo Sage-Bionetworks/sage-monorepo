@@ -111,12 +111,37 @@ def build_leaderboard_page():
     initial_df = None
 
     with gr.Column():
-        # Title and stats
+        # Title and stats with CSS styles
         gr.HTML(
-            '<h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.5rem; font-weight: 600;">🏆 Leaderboard</h1>'
+            """
+            <h1 style="
+                font-size: var(--text-section-title);
+                color: var(--body-text-color);
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+            ">🏆 Leaderboard</h1>
+            <style>
+            /* Search box styling */
+            .leaderboard_search {
+                border-radius: 12px !important;
+            }
+
+            .leaderboard_search textarea {
+                overflow-y: auto !important;
+                padding: 16px 20px !important;
+                line-height: 1.5 !important;
+            }
+            </style>
+            """
         )
         gr.HTML(
-            '<p style="font-size: var(--text-xl); color: var(--body-text-color-subdued); margin: 0;">Community-driven evaluation of biomedical AI models</p>'
+            """
+            <p style="
+                font-size: var(--text-xl);
+                color: var(--body-text-color-subdued);
+                margin-bottom: 40px !important;
+            ">Community-driven evaluation of biomedical AI models</p>
+            """
         )
 
         # State to store the full dataframe for filtering
@@ -133,7 +158,11 @@ def build_leaderboard_page():
             ">
                 <div style="max-width: 800px; margin: 0 auto; text-align: center;">
                     <!-- Icon -->
-                    <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+                    <div style="
+                        display: flex;
+                        justify-content: center;
+                        margin-bottom: 24px;
+                    ">
                         <div style="
                             width: 56px;
                             height: 56px;
@@ -165,8 +194,9 @@ def build_leaderboard_page():
                         line-height: 1.625;
                         margin-bottom: 0;
                     ">
-                        The leaderboard will be published once we have sufficient evaluations to
-                        ensure statistically meaningful model rankings.
+                        The leaderboard will be published once we have
+                        sufficient evaluations to ensure statistically
+                        meaningful model rankings.
                     </p>
                     <div style="padding-top: 16px;">
                         <p style="
@@ -186,7 +216,10 @@ def build_leaderboard_page():
         with gr.Column(visible=False) as leaderboard_content:
             with gr.Row():
                 model_filter = gr.Textbox(
-                    show_label=False, placeholder="Search models...", scale=3
+                    show_label=False,
+                    placeholder="Search models...",
+                    elem_classes="leaderboard_search",
+                    container=False,
                 )
 
             # Main leaderboard table
