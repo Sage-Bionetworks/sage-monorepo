@@ -85,7 +85,7 @@
             %% Infrastructure Services
             subgraph infra["Infrastructure Layer"]
               direction TB
-              thumbor["Thumbor<br/>(Image Processing)"]
+              thumbor@{shape: icon, icon: 'system-uicons:picture', label: 'Thumbor<br>(Image Processing)'}
               s3@{shape: icon, icon: 'logos:aws-s3', label: 'S3 Bucket<br>(Images)'}
             end
 
@@ -135,8 +135,8 @@
         style infra fill:#fff3e0,stroke:#f57c00,stroke-width:2px
         style data fill:#e0f2f1,stroke:#00897b,stroke-width:2px
 
-        %% Style Thumbor node with orange color
-        style thumbor fill:#ff6f00,stroke:#e65100,stroke-width:2px,color:#fff
+        %% Style Thumbor node with orange background
+        style thumbor fill:#ff9800,stroke:#f57c00,stroke-width:2px
 
 
       </div>
