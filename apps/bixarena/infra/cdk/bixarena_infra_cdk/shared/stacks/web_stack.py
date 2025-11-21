@@ -88,6 +88,7 @@ class WebStack(cdk.Stack):
             "APP_BRAND_URL": "https://sagebionetworks.org",
             "APP_CONTACT_URL": "https://sagebionetworks.org/contact",
             "APP_ISSUE_URL": "https://forms.gle/WsvSdEfv5MfFpeedA",
+            "APP_TOS_URL": "https://sagebionetworks.org/trust-center",
             "ENABLE_CRISP": "false",
             "BATTLE_ROUND_LIMIT": "5",
             "MAX_RESPONSE_TOKENS": "1024",
