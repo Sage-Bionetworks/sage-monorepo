@@ -31,6 +31,8 @@ snapshot_app = typer.Typer(
 )
 leaderboard_app.add_typer(snapshot_app, name="snapshot")
 
+SNAPSHOT_IDENTIFIER_FORMAT = "snapshot_%Y-%m-%d_%H-%M"
+
 
 def display_leaderboard_summary(
     leaderboard_name: str,
@@ -73,6 +75,12 @@ def display_leaderboard_summary(
         console.print(f"\n[dim]... and {len(sorted_entries) - limit} more[/dim]")
 
     console.print(table)
+
+
+def _generate_snapshot_identifier(now: datetime | None = None) -> str:
+    """Return a snapshot identifier consistent with seeded reference data."""
+    now = now or datetime.now(UTC)
+    return now.strftime(SNAPSHOT_IDENTIFIER_FORMAT)
 
 
 @snapshot_app.command("add")
@@ -206,8 +214,7 @@ def snapshot_add(
 
             # Insert into database if not dry run
             if not dry_run:
-                timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
-                snapshot_identifier = f"snapshot_{timestamp}"
+                snapshot_identifier = _generate_snapshot_identifier()
                 description = (
                     f"Leaderboard snapshot with {len(all_evaluations)} "
                     f"evaluations and {len(leaderboard_entries)} ranked models"
