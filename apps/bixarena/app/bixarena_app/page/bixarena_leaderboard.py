@@ -153,10 +153,8 @@ def build_leaderboard_page():
                 }
             }
         }
-        setTimeout(customizeTooltips, 500);
-        setTimeout(customizeTooltips, 1000);
-        setTimeout(customizeTooltips, 2000);
-        setTimeout(customizeTooltips, 3000);
+
+        setTimeout(customizeTooltips, 1500);
     }
     """
 
