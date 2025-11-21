@@ -39,6 +39,16 @@
         width: 1200px; /* Fixed width */
         max-width: 100%; /* Allow shrinking on smaller screens */
       }
+
+      /* Color the Thumbor icon */
+      .mermaid .node[id*='thumbor'] svg {
+        color: #7b2cbf !important;
+        fill: #7b2cbf !important;
+      }
+
+      .mermaid .node[id*='thumbor'] path {
+        fill: #7b2cbf !important;
+      }
     </style>
   </head>
   <body>
@@ -186,6 +196,24 @@
           secondaryColor: '#fff',
           tertiaryColor: '#fff',
         },
+      });
+
+      // Change Thumbor icon color after rendering
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const thumborNode = document.querySelector('[id*="thumbor"]');
+          if (thumborNode) {
+            const svg = thumborNode.querySelector('svg');
+            if (svg) {
+              svg.style.color = '#e65100';
+              svg.style.fill = '#e65100';
+              const paths = svg.querySelectorAll('path');
+              paths.forEach((path) => {
+                path.style.fill = '#e65100';
+              });
+            }
+          }
+        }, 500);
       });
     </script>
   </body>
