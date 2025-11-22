@@ -159,17 +159,21 @@ def build_leaderboard_page():
     """
 
     with gr.Blocks() as blocks:
-        with gr.Column():
+        with gr.Column(elem_classes="leaderboard-header"):
             # Title and stats
             gr.HTML(
                 """
             <h1 style="
                 font-size: var(--text-section-title);
                 color: var(--body-text-color);
-                margin-bottom: 0.5rem;
                 font-weight: 600;
             ">🏆 Leaderboard</h1>
             <style>
+            /* Prevent header from growing vertically */
+            .leaderboard-header {
+                flex-grow: 0 !important;
+            }
+
             /* Search box styling */
             .leaderboard_search {
                 border-radius: 12px !important;
