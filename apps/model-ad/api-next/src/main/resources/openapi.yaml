@@ -162,38 +162,25 @@ paths:
         - tag: Comparison Tool Config
   /comparison-tools/model-overview:
     get:
-      description: Returns a list of model overview objects for use in comparison
+      description: Returns a paginated list of model overview objects for use in comparison
         tools.
       operationId: getModelOverviews
       parameters:
-        - description: A list of items to filter the data by.
+        - description: The search query used to find and filter model overviews.
           explode: true
           in: query
-          name: item
+          name: modelOverviewSearchQuery
           required: false
           schema:
-            items:
-              type: string
-            type: array
-          style: form
-        - description: The type of filter to apply to the items. Possible values are
-            'include' or 'exclude'.
-          explode: true
-          in: query
-          name: itemFilterType
-          required: false
-          schema:
-            $ref: '#/components/schemas/ItemFilterTypeQuery'
-          style: form
+            $ref: '#/components/schemas/ModelOverviewSearchQuery'
+          style: deepObject
       responses:
         '200':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ModelOverview'
-                type: array
-          description: A list of model overview objects
+                $ref: '#/components/schemas/ModelOverviewsPage'
+          description: A paginated list of model overview objects
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -210,50 +197,25 @@ paths:
         - tag: Model Overview
   /comparison-tools/disease-correlation:
     get:
-      description: Returns a list of disease correlation objects for use in comparison
-        tools.
+      description: Returns a paginated list of disease correlation objects for use
+        in comparison tools.
       operationId: getDiseaseCorrelations
       parameters:
-        - description: "An ordered list of categories used to filter the data, where\
-            \ the first value is the category and the second is the subcategory. Pass\
-            \ each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA."
+        - description: The search query used to find and filter disease correlations.
           explode: true
           in: query
-          name: category
-          required: true
-          schema:
-            items:
-              type: string
-            type: array
-          style: form
-        - description: A list of items to filter the data by.
-          explode: true
-          in: query
-          name: item
+          name: diseaseCorrelationSearchQuery
           required: false
           schema:
-            items:
-              type: string
-            type: array
-          style: form
-        - description: The type of filter to apply to the items. Possible values are
-            'include' or 'exclude'.
-          explode: true
-          in: query
-          name: itemFilterType
-          required: false
-          schema:
-            $ref: '#/components/schemas/ItemFilterTypeQuery'
-          style: form
+            $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
+          style: deepObject
       responses:
         '200':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/DiseaseCorrelation'
-                type: array
-          description: A list of disease correlation objects
+                $ref: '#/components/schemas/DiseaseCorrelationsPage'
+          description: A paginated response containing disease correlation objects
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -330,6 +292,37 @@ paths:
         - tag: Gene Expression
 components:
   parameters:
+    modelOverviewSearchQuery:
+      description: The search query used to find and filter model overviews.
+      explode: true
+      in: query
+      name: modelOverviewSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/ModelOverviewSearchQuery'
+      style: deepObject
+    diseaseCorrelationSearchQuery:
+      description: The search query used to find and filter disease correlations.
+      explode: true
+      in: query
+      name: diseaseCorrelationSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
+      style: deepObject
+    categoryQuery:
+      description: "An ordered list of categories used to filter the data, where the\
+        \ first value is the category and the second is the subcategory. Pass each\
+        \ value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA."
+      explode: true
+      in: query
+      name: category
+      required: true
+      schema:
+        items:
+          type: string
+        type: array
+      style: form
     itemQuery:
       description: A list of items to filter the data by.
       explode: true
@@ -350,19 +343,6 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ItemFilterTypeQuery'
-      style: form
-    categoryQuery:
-      description: "An ordered list of categories used to filter the data, where the\
-        \ first value is the category and the second is the subcategory. Pass each\
-        \ value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA."
-      explode: true
-      in: query
-      name: category
-      required: true
-      schema:
-        items:
-          type: string
-        type: array
       style: form
   responses:
     BadRequest:
@@ -903,6 +883,36 @@ components:
         - include
         - exclude
       type: string
+    ModelOverviewSearchQuery:
+      description: Model overview search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 100
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        items:
+          description: List of item IDs to filter by.
+          example:
+            - 507f1f77bcf86cd799439011
+            - 507f191e810c19729de860ea
+          items:
+            type: string
+          nullable: true
+          type: array
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+      type: object
     ModelOverviewLink:
       description: Model Overview Link
       example:
@@ -1006,6 +1016,181 @@ components:
         - name
         - study_data
       type: object
+    PageMetadata:
+      description: The metadata of a page.
+      example:
+        number: 0
+        size: 100
+        totalPages: 3
+        hasPrevious: false
+        hasNext: true
+        totalElements: 250
+      properties:
+        number:
+          description: The page number.
+          example: 0
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 100
+          type: integer
+        totalElements:
+          description: Total number of elements in the result set.
+          example: 250
+          format: int64
+          type: integer
+        totalPages:
+          description: Total number of pages in the result set.
+          example: 3
+          type: integer
+        hasNext:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        hasPrevious:
+          description: Returns if there is a previous page.
+          example: false
+          type: boolean
+      required:
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
+      type: object
+    ModelOverviewsPage:
+      description: A page of model overview objects.
+      example:
+        modelOverviews:
+          - pathology:
+              link_url: link_url
+              link_text: link_text
+            biomarkers:
+              link_url: link_url
+              link_text: link_text
+            gene_expression:
+              link_url: link_url
+              link_text: link_text
+            disease_correlation:
+              link_url: link_url
+              link_text: link_text
+            center:
+              link_url: link_url
+              link_text: link_text
+            model_type: model_type
+            matched_controls:
+              - matched_controls
+              - matched_controls
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            available_data:
+              - Gene Expression
+              - Gene Expression
+            name: name
+            jax_strain:
+              link_url: link_url
+              link_text: link_text
+            _id: _id
+            study_data:
+              link_url: link_url
+              link_text: link_text
+          - pathology:
+              link_url: link_url
+              link_text: link_text
+            biomarkers:
+              link_url: link_url
+              link_text: link_text
+            gene_expression:
+              link_url: link_url
+              link_text: link_text
+            disease_correlation:
+              link_url: link_url
+              link_text: link_text
+            center:
+              link_url: link_url
+              link_text: link_text
+            model_type: model_type
+            matched_controls:
+              - matched_controls
+              - matched_controls
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            available_data:
+              - Gene Expression
+              - Gene Expression
+            name: name
+            jax_strain:
+              link_url: link_url
+              link_text: link_text
+            _id: _id
+            study_data:
+              link_url: link_url
+              link_text: link_text
+        page:
+          number: 0
+          size: 100
+          totalPages: 3
+          hasPrevious: false
+          hasNext: true
+          totalElements: 250
+      properties:
+        modelOverviews:
+          description: List of model overviews in this page.
+          items:
+            $ref: '#/components/schemas/ModelOverview'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - modelOverviews
+        - page
+      type: object
+    DiseaseCorrelationSearchQuery:
+      description: Disease correlation search query with pagination and filtering
+        options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 100
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        category:
+          description: The category selections
+          example:
+            - CONSENSUS NETWORK MODULES
+            - Consensus Cluster A - ECM Organization
+          items:
+            type: string
+          maxItems: 2
+          minItems: 2
+          type: array
+        items:
+          description: List of item IDs to filter by.
+          example:
+            - 507f1f77bcf86cd799439011
+            - 507f191e810c19729de860ea
+          items:
+            type: string
+          nullable: true
+          type: array
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+      required:
+        - category
+      type: object
     CorrelationResult:
       description: Correlation result
       example:
@@ -1105,6 +1290,92 @@ components:
         - modified_genes
         - name
         - sex
+      type: object
+    DiseaseCorrelationsPage:
+      description: A paginated response containing disease correlation objects and
+        pagination metadata.
+      example:
+        diseaseCorrelations:
+          - cluster: cluster
+            DLPFC:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            sex: Female
+            CBE:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            STG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            model_type: model_type
+            TCX:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            FP:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            IFG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            matched_control: matched_control
+            PHG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            name: name
+            _id: _id
+            age: age
+          - cluster: cluster
+            DLPFC:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            sex: Female
+            CBE:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            STG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            model_type: model_type
+            TCX:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            FP:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            IFG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            matched_control: matched_control
+            PHG:
+              adj_p_val: 6.027456183070403
+              correlation: 0.8008281904610115
+            name: name
+            _id: _id
+            age: age
+        page:
+          number: 0
+          size: 100
+          totalPages: 3
+          hasPrevious: false
+          hasNext: true
+          totalElements: 250
+      properties:
+        diseaseCorrelations:
+          description: The list of disease correlation objects for the current page
+          items:
+            $ref: '#/components/schemas/DiseaseCorrelation'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - diseaseCorrelations
+        - page
       type: object
     SexCohort:
       description: Sex Cohort

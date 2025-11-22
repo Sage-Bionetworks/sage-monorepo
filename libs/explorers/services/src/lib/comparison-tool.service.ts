@@ -9,6 +9,8 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { SortEvent, SortMeta } from 'primeng/api';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
 
@@ -20,6 +22,7 @@ export class ComparisonToolService<T> {
   private readonly notificationService = inject(NotificationService);
   private readonly urlService = inject(ComparisonToolUrlService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly helperService = inject(ComparisonToolHelperService);
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
@@ -47,6 +50,7 @@ export class ComparisonToolService<T> {
       sizeChartText: '',
     },
     visualizationOverviewPanes: [],
+    rowsPerPage: 10,
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
@@ -64,6 +68,9 @@ export class ComparisonToolService<T> {
   private readonly pinnedItemsForDropdownsSignal = signal<Map<string, Set<string>>>(new Map());
   private readonly unpinnedDataSignal = signal<T[]>([]);
   private readonly pinnedDataSignal = signal<T[]>([]);
+  private readonly pageNumberSignal = signal<number>(0);
+  private readonly pageSizeSignal = signal<number>(10);
+  private readonly isInitializedSignal = signal(false);
 
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
@@ -77,9 +84,11 @@ export class ComparisonToolService<T> {
   readonly multiSortMeta = this.multiSortMetaSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
+  readonly pageNumber = this.pageNumberSignal.asReadonly();
+  readonly pageSize = this.pageSizeSignal.asReadonly();
+  readonly isInitialized = this.isInitializedSignal.asReadonly();
 
   private readonly syncToUrlInProgress = signal(false);
-  private readonly isInitialized = signal(false);
   private lastSerializedState: string | null = null;
   private hasInitializedConfig = false;
 
@@ -334,6 +343,24 @@ export class ComparisonToolService<T> {
     this.pinnedDataSignal.set(pinnedData);
   }
 
+  setPageNumber(pageNumber: number) {
+    this.pageNumberSignal.set(pageNumber);
+  }
+
+  setPageSize(pageSize: number) {
+    this.pageSizeSignal.set(pageSize);
+  }
+
+  handleLazyLoad(event: TableLazyLoadEvent) {
+    const defaultRowsPerPage = this.viewConfigSignal().rowsPerPage;
+    const { pageNumber, pageSize } = this.helperService.getPaginationParams(
+      event,
+      defaultRowsPerPage,
+    );
+    this.setPageNumber(pageNumber);
+    this.setPageSize(pageSize);
+  }
+
   private updateDropdownSelectionIfChanged(selection: string[]) {
     if (isEqual(this.dropdownSelectionSignal(), selection)) {
       return;
@@ -448,17 +475,16 @@ export class ComparisonToolService<T> {
       this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
 
       this.syncToUrlInProgress.set(false);
-      this.isInitialized.set(true);
+      this.isInitializedSignal.set(true);
     });
 
     // State → URL: Sync state changes to URL using effect
     effect(() => {
-      const isInitialized = this.isInitialized();
       const syncingToUrl = this.syncToUrlInProgress();
       const pinnedItems = this.pinnedItems();
       const state = this.serializeState(pinnedItems);
 
-      if (!isInitialized || syncingToUrl) {
+      if (!this.isInitialized() || syncingToUrl) {
         return;
       }
 

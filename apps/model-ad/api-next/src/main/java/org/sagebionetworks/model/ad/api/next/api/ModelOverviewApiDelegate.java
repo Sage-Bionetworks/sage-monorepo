@@ -1,8 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,22 +30,20 @@ public interface ModelOverviewApiDelegate {
 
     /**
      * GET /comparison-tools/model-overview : Get model overview for comparison tools
-     * Returns a list of model overview objects for use in comparison tools.
+     * Returns a paginated list of model overview objects for use in comparison tools.
      *
-     * @param item A list of items to filter the data by. (optional)
-     * @param itemFilterType The type of filter to apply to the items. Possible values are &#39;include&#39; or &#39;exclude&#39;. (optional, default to include)
-     * @return A list of model overview objects (status code 200)
+     * @param modelOverviewSearchQuery The search query used to find and filter model overviews. (optional)
+     * @return A paginated list of model overview objects (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ModelOverviewApi#getModelOverviews
      */
-    default ResponseEntity<List<ModelOverviewDto>> getModelOverviews(List<String> item,
-        ItemFilterTypeQueryDto itemFilterType) {
+    default ResponseEntity<ModelOverviewsPageDto> getModelOverviews(ModelOverviewSearchQueryDto modelOverviewSearchQuery) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"pathology\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"biomarkers\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"gene_expression\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"disease_correlation\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"center\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"model_type\" : \"model_type\", \"matched_controls\" : [ \"matched_controls\", \"matched_controls\" ], \"modified_genes\" : [ \"modified_genes\", \"modified_genes\" ], \"available_data\" : [ \"Gene Expression\", \"Gene Expression\" ], \"name\" : \"name\", \"jax_strain\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"_id\" : \"_id\", \"study_data\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" } }, { \"pathology\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"biomarkers\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"gene_expression\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"disease_correlation\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"center\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"model_type\" : \"model_type\", \"matched_controls\" : [ \"matched_controls\", \"matched_controls\" ], \"modified_genes\" : [ \"modified_genes\", \"modified_genes\" ], \"available_data\" : [ \"Gene Expression\", \"Gene Expression\" ], \"name\" : \"name\", \"jax_strain\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"_id\" : \"_id\", \"study_data\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" } } ]";
+                    String exampleString = "{ \"modelOverviews\" : [ { \"pathology\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"biomarkers\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"gene_expression\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"disease_correlation\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"center\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"model_type\" : \"model_type\", \"matched_controls\" : [ \"matched_controls\", \"matched_controls\" ], \"modified_genes\" : [ \"modified_genes\", \"modified_genes\" ], \"available_data\" : [ \"Gene Expression\", \"Gene Expression\" ], \"name\" : \"name\", \"jax_strain\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"_id\" : \"_id\", \"study_data\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" } }, { \"pathology\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"biomarkers\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"gene_expression\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"disease_correlation\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"center\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"model_type\" : \"model_type\", \"matched_controls\" : [ \"matched_controls\", \"matched_controls\" ], \"modified_genes\" : [ \"modified_genes\", \"modified_genes\" ], \"available_data\" : [ \"Gene Expression\", \"Gene Expression\" ], \"name\" : \"name\", \"jax_strain\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" }, \"_id\" : \"_id\", \"study_data\" : { \"link_url\" : \"link_url\", \"link_text\" : \"link_text\" } } ], \"page\" : { \"number\" : 0, \"size\" : 100, \"totalPages\" : 3, \"hasPrevious\" : false, \"hasNext\" : true, \"totalElements\" : 250 } }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

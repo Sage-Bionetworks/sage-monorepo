@@ -2,20 +2,17 @@ get:
   tags:
     - Model Overview
   summary: Get model overview for comparison tools
-  description: Returns a list of model overview objects for use in comparison tools.
+  description: Returns a paginated list of model overview objects for use in comparison tools.
   operationId: getModelOverviews
   parameters:
-    - $ref: ../query/itemQuery.yaml
-    - $ref: ../query/itemFilterTypeQuery.yaml
+    - $ref: ../query/modelOverviewSearchQuery.yaml
   responses:
     '200':
-      description: A list of model overview objects
+      description: A paginated list of model overview objects
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '../../components/schemas/ModelOverview.yaml'
+            $ref: '../../components/schemas/ModelOverviewsPage.yaml'
     '400':
       $ref: ../../components/responses/BadRequest.yaml
     '404':

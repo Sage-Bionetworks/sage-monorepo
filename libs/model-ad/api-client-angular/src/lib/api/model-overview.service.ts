@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { ItemFilterTypeQuery } from '../model/item-filter-type-query';
+import { ModelOverviewSearchQuery } from '../model/model-overview-search-query';
 // @ts-ignore
-import { ModelOverview } from '../model/model-overview';
+import { ModelOverviewsPage } from '../model/model-overviews-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -110,15 +110,13 @@ export class ModelOverviewService {
 
   /**
    * Get model overview for comparison tools
-   * Returns a list of model overview objects for use in comparison tools.
-   * @param item A list of items to filter the data by.
-   * @param itemFilterType The type of filter to apply to the items. Possible values are \&#39;include\&#39; or \&#39;exclude\&#39;.
+   * Returns a paginated list of model overview objects for use in comparison tools.
+   * @param modelOverviewSearchQuery The search query used to find and filter model overviews.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getModelOverviews(
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -126,10 +124,9 @@ export class ModelOverviewService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Array<ModelOverview>>;
+  ): Observable<ModelOverviewsPage>;
   public getModelOverviews(
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -137,10 +134,9 @@ export class ModelOverviewService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Array<ModelOverview>>>;
+  ): Observable<HttpResponse<ModelOverviewsPage>>;
   public getModelOverviews(
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -148,10 +144,9 @@ export class ModelOverviewService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Array<ModelOverview>>>;
+  ): Observable<HttpEvent<ModelOverviewsPage>>;
   public getModelOverviews(
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -161,20 +156,11 @@ export class ModelOverviewService {
     },
   ): Observable<any> {
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (item) {
-      item.forEach((element) => {
-        localVarQueryParameters = this.addToHttpParams(
-          localVarQueryParameters,
-          <any>element,
-          'item',
-        );
-      });
-    }
-    if (itemFilterType !== undefined && itemFilterType !== null) {
+    if (modelOverviewSearchQuery !== undefined && modelOverviewSearchQuery !== null) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>itemFilterType,
-        'itemFilterType',
+        <any>modelOverviewSearchQuery,
+        'modelOverviewSearchQuery',
       );
     }
 
@@ -212,7 +198,7 @@ export class ModelOverviewService {
     }
 
     let localVarPath = `/comparison-tools/model-overview`;
-    return this.httpClient.request<Array<ModelOverview>>(
+    return this.httpClient.request<ModelOverviewsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
