@@ -32,6 +32,10 @@ public class LeaderboardEntryDto {
 
   private String modelName;
 
+  private @Nullable String modelOrganization = null;
+
+  private String modelUrl;
+
   private String license;
 
   private Double btScore;
@@ -54,10 +58,11 @@ public class LeaderboardEntryDto {
   /**
    * Constructor with only required parameters
    */
-  public LeaderboardEntryDto(String id, String modelId, String modelName, String license, Double btScore, Integer voteCount, Integer rank, Double bootstrapQ025, Double bootstrapQ975, OffsetDateTime createdAt) {
+  public LeaderboardEntryDto(String id, String modelId, String modelName, String modelUrl, String license, Double btScore, Integer voteCount, Integer rank, Double bootstrapQ025, Double bootstrapQ975, OffsetDateTime createdAt) {
     this.id = id;
     this.modelId = modelId;
     this.modelName = modelName;
+    this.modelUrl = modelUrl;
     this.license = license;
     this.btScore = btScore;
     this.voteCount = voteCount;
@@ -125,6 +130,46 @@ public class LeaderboardEntryDto {
 
   public void setModelName(String modelName) {
     this.modelName = modelName;
+  }
+
+  public LeaderboardEntryDto modelOrganization(@Nullable String modelOrganization) {
+    this.modelOrganization = modelOrganization;
+    return this;
+  }
+
+  /**
+   * Organization that created the model
+   * @return modelOrganization
+   */
+  @Size(max = 200) 
+  @Schema(name = "modelOrganization", example = "OpenAI", description = "Organization that created the model", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modelOrganization")
+  public @Nullable String getModelOrganization() {
+    return modelOrganization;
+  }
+
+  public void setModelOrganization(@Nullable String modelOrganization) {
+    this.modelOrganization = modelOrganization;
+  }
+
+  public LeaderboardEntryDto modelUrl(String modelUrl) {
+    this.modelUrl = modelUrl;
+    return this;
+  }
+
+  /**
+   * External link to model information
+   * @return modelUrl
+   */
+  @NotNull @Size(max = 300) 
+  @Schema(name = "modelUrl", example = "https://openai.com/gpt-4", description = "External link to model information", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("modelUrl")
+  public String getModelUrl() {
+    return modelUrl;
+  }
+
+  public void setModelUrl(String modelUrl) {
+    this.modelUrl = modelUrl;
   }
 
   public LeaderboardEntryDto license(String license) {
@@ -279,6 +324,8 @@ public class LeaderboardEntryDto {
     return Objects.equals(this.id, leaderboardEntry.id) &&
         Objects.equals(this.modelId, leaderboardEntry.modelId) &&
         Objects.equals(this.modelName, leaderboardEntry.modelName) &&
+        Objects.equals(this.modelOrganization, leaderboardEntry.modelOrganization) &&
+        Objects.equals(this.modelUrl, leaderboardEntry.modelUrl) &&
         Objects.equals(this.license, leaderboardEntry.license) &&
         Objects.equals(this.btScore, leaderboardEntry.btScore) &&
         Objects.equals(this.voteCount, leaderboardEntry.voteCount) &&
@@ -290,7 +337,7 @@ public class LeaderboardEntryDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, modelId, modelName, license, btScore, voteCount, rank, bootstrapQ025, bootstrapQ975, createdAt);
+    return Objects.hash(id, modelId, modelName, modelOrganization, modelUrl, license, btScore, voteCount, rank, bootstrapQ025, bootstrapQ975, createdAt);
   }
 
   @Override
@@ -300,6 +347,8 @@ public class LeaderboardEntryDto {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    modelName: ").append(toIndentedString(modelName)).append("\n");
+    sb.append("    modelOrganization: ").append(toIndentedString(modelOrganization)).append("\n");
+    sb.append("    modelUrl: ").append(toIndentedString(modelUrl)).append("\n");
     sb.append("    license: ").append(toIndentedString(license)).append("\n");
     sb.append("    btScore: ").append(toIndentedString(btScore)).append("\n");
     sb.append("    voteCount: ").append(toIndentedString(voteCount)).append("\n");
@@ -338,6 +387,8 @@ public class LeaderboardEntryDto {
       this.instance.setId(value.id);
       this.instance.setModelId(value.modelId);
       this.instance.setModelName(value.modelName);
+      this.instance.setModelOrganization(value.modelOrganization);
+      this.instance.setModelUrl(value.modelUrl);
       this.instance.setLicense(value.license);
       this.instance.setBtScore(value.btScore);
       this.instance.setVoteCount(value.voteCount);
@@ -360,6 +411,16 @@ public class LeaderboardEntryDto {
     
     public LeaderboardEntryDto.Builder modelName(String modelName) {
       this.instance.modelName(modelName);
+      return this;
+    }
+    
+    public LeaderboardEntryDto.Builder modelOrganization(String modelOrganization) {
+      this.instance.modelOrganization(modelOrganization);
+      return this;
+    }
+    
+    public LeaderboardEntryDto.Builder modelUrl(String modelUrl) {
+      this.instance.modelUrl(modelUrl);
       return this;
     }
     

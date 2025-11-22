@@ -110,7 +110,9 @@ public class LeaderboardService {
 
       // Check if snapshot is public
       if (!"public".equals(snapshot.getVisibility())) {
-        throw new LeaderboardSnapshotNotFoundException("Leaderboard Snapshot not found: " + snapshotId);
+        throw new LeaderboardSnapshotNotFoundException(
+          "Leaderboard Snapshot not found: " + snapshotId
+        );
       }
 
       return snapshot;
@@ -147,12 +149,14 @@ public class LeaderboardService {
     // Map API sort fields to entity fields
     String entityField =
       switch (sortField) {
-        case "bt_score" -> "btScore";
-        case "vote_count" -> "voteCount";
         case "created_at" -> "createdAt";
-        case "model_name" -> "model.name";
         default -> "rank";
       };
+
+    if ("rank".equals(sortField)) {
+      // Create primary rank sort, and add secondary btScore sort
+      return Sort.by(direction, entityField).and(Sort.by(Sort.Direction.DESC, "btScore"));
+    }
 
     return Sort.by(direction, entityField);
   }

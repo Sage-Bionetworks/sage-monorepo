@@ -1654,11 +1654,8 @@ components:
       description: The field to sort leaderboard entries by.
       enum:
         - rank
-        - bt_score
-        - vote_count
         - created_at
-        - model_name
-      example: bt_score
+      example: rank
       type: string
     LeaderboardSearchQuery:
       description: A leaderboard search query with pagination and filtering options.
@@ -1700,12 +1697,14 @@ components:
         license: MIT
         createdAt: 2025-08-16T10:30:00Z
         bootstrapQ025: 887
+        modelOrganization: OpenAI
         modelId: model_456
         btScore: 0.925
         bootstrapQ975: 1063
         rank: 1
         id: entry_123
         voteCount: 1250
+        modelUrl: https://openai.com/gpt-4
       properties:
         id:
           description: Unique identifier for this leaderboard entry
@@ -1718,6 +1717,17 @@ components:
         modelName:
           description: Display name of the model
           example: GPT-4o
+          type: string
+        modelOrganization:
+          description: Organization that created the model
+          example: OpenAI
+          maxLength: 200
+          nullable: true
+          type: string
+        modelUrl:
+          description: External link to model information
+          example: https://openai.com/gpt-4
+          maxLength: 300
           type: string
         license:
           description: License type of the model
@@ -1760,6 +1770,7 @@ components:
         - license
         - modelId
         - modelName
+        - modelUrl
         - rank
         - voteCount
       type: object
@@ -1794,22 +1805,26 @@ components:
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
             bootstrapQ025: 887
+            modelOrganization: OpenAI
             modelId: model_456
             btScore: 0.925
             bootstrapQ975: 1063
             rank: 1
             id: entry_123
             voteCount: 1250
+            modelUrl: https://openai.com/gpt-4
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
             bootstrapQ025: 887
+            modelOrganization: OpenAI
             modelId: model_456
             btScore: 0.925
             bootstrapQ975: 1063
             rank: 1
             id: entry_123
             voteCount: 1250
+            modelUrl: https://openai.com/gpt-4
         snapshotId: snapshot_2025-08-16_14-30
         size: 99
         totalPages: 99

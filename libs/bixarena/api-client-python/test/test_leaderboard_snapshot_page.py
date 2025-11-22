@@ -46,6 +46,7 @@ class TestLeaderboardSnapshotPage(unittest.TestCase):
                         id = 'snapshot_2025-08-16_14-30', 
                         visibility = 'private', 
                         created_at = '2025-08-16T14:30Z', 
+                        updated_at = '2024-01-15T10:45Z', 
                         entry_count = 50, 
                         description = 'Weekly evaluation run', )
                     ]
@@ -63,6 +64,7 @@ class TestLeaderboardSnapshotPage(unittest.TestCase):
                         id = 'snapshot_2025-08-16_14-30', 
                         visibility = 'private', 
                         created_at = '2025-08-16T14:30Z', 
+                        updated_at = '2024-01-15T10:45Z', 
                         entry_count = 50, 
                         description = 'Weekly evaluation run', )
                     ],

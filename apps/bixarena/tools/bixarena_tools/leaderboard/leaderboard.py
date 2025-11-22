@@ -31,6 +31,8 @@ snapshot_app = typer.Typer(
 )
 leaderboard_app.add_typer(snapshot_app, name="snapshot")
 
+SNAPSHOT_IDENTIFIER_FORMAT = "snapshot_%Y-%m-%d_%H-%M"
+
 
 def display_leaderboard_summary(
     leaderboard_name: str,
@@ -47,7 +49,7 @@ def display_leaderboard_summary(
         console.print("[yellow]No entries to display[/yellow]")
         return
 
-    # Sort by rank first, then by BT score descending
+    # Sort by rank, then BT score (original ordering)
     sorted_entries = sorted(entries, key=lambda x: (x["rank"], -x["btScore"]))
 
     table = Table(title=f"{leaderboard_name} Rankings")
@@ -56,23 +58,34 @@ def display_leaderboard_summary(
     table.add_column("BT Score", justify="right", style="green")
     table.add_column("95% CI", justify="center", style="yellow")
     table.add_column("Evals", justify="center", style="blue")
+    table.add_column("Org", style="magenta")
     table.add_column("License", style="magenta")
+    table.add_column("URL", style="blue")
 
     for entry in sorted_entries[:limit]:
+        model_label = entry.get("modelSlug") or entry.get("modelName", "")
         ci_str = f"[{entry['bootstrapQ025']:.1f}, {entry['bootstrapQ975']:.1f}]"
         table.add_row(
             str(entry["rank"]),
-            entry["modelName"],
+            model_label,
             f"{entry['btScore']:.2f}",
             ci_str,
             str(entry["voteCount"]),
-            entry["license"],
+            entry.get("modelOrganization") or "",
+            entry.get("license") or "",
+            entry.get("modelUrl") or "",
         )
 
     if len(sorted_entries) > limit:
         console.print(f"\n[dim]... and {len(sorted_entries) - limit} more[/dim]")
 
     console.print(table)
+
+
+def _generate_snapshot_identifier(now: datetime | None = None) -> str:
+    """Return a snapshot identifier consistent with seeded reference data."""
+    now = now or datetime.now(UTC)
+    return now.strftime(SNAPSHOT_IDENTIFIER_FORMAT)
 
 
 @snapshot_app.command("add")
@@ -179,7 +192,8 @@ def snapshot_add(
                     if entry["voteCount"] >= min_evals:
                         filtered_entries.append(entry)
                     else:
-                        skipped_models.append((entry["modelName"], entry["voteCount"]))
+                        label = entry.get("modelSlug") or entry["modelName"]
+                        skipped_models.append((label, entry["voteCount"]))
 
                 leaderboard_entries = filtered_entries
 
@@ -206,8 +220,7 @@ def snapshot_add(
 
             # Insert into database if not dry run
             if not dry_run:
-                timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
-                snapshot_identifier = f"snapshot_{timestamp}"
+                snapshot_identifier = _generate_snapshot_identifier()
                 description = (
                     f"Leaderboard snapshot with {len(all_evaluations)} "
                     f"evaluations and {len(leaderboard_entries)} ranked models"
