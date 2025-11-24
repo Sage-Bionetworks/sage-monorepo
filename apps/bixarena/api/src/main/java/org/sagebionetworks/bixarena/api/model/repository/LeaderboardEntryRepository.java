@@ -14,14 +14,17 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LeaderboardEntryRepository extends JpaRepository<LeaderboardEntryEntity, UUID> {
+  @Query(
+    "SELECT e FROM LeaderboardEntryEntity e JOIN FETCH e.model WHERE e.leaderboard = :leaderboard AND e.snapshot = :snapshot"
+  )
   Page<LeaderboardEntryEntity> findByLeaderboardAndSnapshot(
-    LeaderboardEntity leaderboard,
-    LeaderboardSnapshotEntity snapshot,
+    @Param("leaderboard") LeaderboardEntity leaderboard,
+    @Param("snapshot") LeaderboardSnapshotEntity snapshot,
     Pageable pageable
   );
 
   @Query(
-    "SELECT e FROM LeaderboardEntryEntity e WHERE e.leaderboard = :leaderboard AND e.snapshot = :snapshot " +
+    "SELECT e FROM LeaderboardEntryEntity e JOIN FETCH e.model WHERE e.leaderboard = :leaderboard AND e.snapshot = :snapshot " +
     "AND LOWER(e.model.name) LIKE LOWER(CONCAT('%', :search, '%'))"
   )
   Page<LeaderboardEntryEntity> findByLeaderboardAndSnapshotAndModelNameContaining(

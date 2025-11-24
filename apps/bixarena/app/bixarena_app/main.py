@@ -30,7 +30,7 @@ from bixarena_app.page.bixarena_home import (
 )
 from bixarena_app.page.bixarena_leaderboard import (
     build_leaderboard_page,
-    load_leaderboard_stats_on_page_load,
+    refresh_leaderboard,
 )
 from bixarena_app.page.bixarena_user import (
     build_user_page,
@@ -359,7 +359,7 @@ def build_app():
         with gr.Column(
             visible=False, elem_classes=["page-content"]
         ) as leaderboard_page:
-            leaderboard_metrics = build_leaderboard_page()
+            leaderboard_view = build_leaderboard_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as user_page:
             _, welcome_display, logout_btn = build_user_page()
@@ -395,9 +395,10 @@ def build_app():
             lambda: navigator.show_page(1),
             outputs=pages,
         )
+        # Leaderboard button - show page and refresh data
         leaderboard_btn.click(
-            lambda: navigator.show_page(2) + [load_leaderboard_stats_on_page_load()],
-            outputs=pages + [leaderboard_metrics],
+            lambda: navigator.show_page(2) + list(refresh_leaderboard()),
+            outputs=pages + leaderboard_view.outputs,
         )
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(

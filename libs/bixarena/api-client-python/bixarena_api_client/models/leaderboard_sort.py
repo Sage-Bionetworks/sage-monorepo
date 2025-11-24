@@ -26,10 +26,7 @@ class LeaderboardSort(str, Enum):
     allowed enum values
     """
     RANK = "rank"
-    BT_SCORE = "bt_score"
-    VOTE_COUNT = "vote_count"
     CREATED_AT = "created_at"
-    MODEL_NAME = "model_name"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

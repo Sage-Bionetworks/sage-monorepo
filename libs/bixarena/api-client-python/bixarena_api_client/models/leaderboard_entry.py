@@ -18,7 +18,8 @@ import json
 
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Union
+from typing import Any, ClassVar, Dict, List, Optional, Union
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -32,6 +33,16 @@ class LeaderboardEntry(BaseModel):
     model_id: StrictStr = Field(description="Identifier for the model", alias="modelId")
     model_name: StrictStr = Field(
         description="Display name of the model", alias="modelName"
+    )
+    model_organization: Optional[Annotated[str, Field(strict=True, max_length=200)]] = (
+        Field(
+            default=None,
+            description="Organization that created the model",
+            alias="modelOrganization",
+        )
+    )
+    model_url: Annotated[str, Field(strict=True, max_length=300)] = Field(
+        description="External link to model information", alias="modelUrl"
     )
     license: StrictStr = Field(description="License type of the model")
     bt_score: Union[StrictFloat, StrictInt] = Field(
@@ -56,6 +67,8 @@ class LeaderboardEntry(BaseModel):
         "id",
         "modelId",
         "modelName",
+        "modelOrganization",
+        "modelUrl",
         "license",
         "btScore",
         "voteCount",
@@ -102,6 +115,14 @@ class LeaderboardEntry(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if model_organization (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.model_organization is None
+            and "model_organization" in self.model_fields_set
+        ):
+            _dict["modelOrganization"] = None
+
         return _dict
 
     @classmethod
@@ -118,6 +139,8 @@ class LeaderboardEntry(BaseModel):
                 "id": obj.get("id"),
                 "modelId": obj.get("modelId"),
                 "modelName": obj.get("modelName"),
+                "modelOrganization": obj.get("modelOrganization"),
+                "modelUrl": obj.get("modelUrl"),
                 "license": obj.get("license"),
                 "btScore": obj.get("btScore"),
                 "voteCount": obj.get("voteCount"),
