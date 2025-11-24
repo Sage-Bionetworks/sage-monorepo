@@ -39,6 +39,20 @@ def get_battle_round_limit_message() -> str:
     return f"{message}\n\n_Round limit: {BATTLE_ROUND_LIMIT}_"
 
 
+def get_empty_response_message() -> str:
+    """
+    Handle empty response errors from API providers.
+
+    Returns:
+        A user-friendly error message for empty responses.
+    """
+    return (
+        "**Empty Response**\n\n"
+        "The model did not generate a response.\n"
+        "Please wait a moment, then re-enter your prompt."
+    )
+
+
 def handle_error_message(error: Exception) -> str:
     """
     Handle error messages based on OpenAI exception types.

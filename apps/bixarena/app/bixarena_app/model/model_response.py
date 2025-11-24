@@ -19,7 +19,10 @@ from bixarena_app.config.constants import (
 )
 from bixarena_app.config.conversation import Conversation
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
-from bixarena_app.model.error_handler import handle_error_message
+from bixarena_app.model.error_handler import (
+    get_empty_response_message,
+    handle_error_message,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -168,6 +171,16 @@ def bot_response(
                 yield (state, state.to_gradio_chatbot())
                 return
         output = data["text"].strip()
+
+        # Defensive check for empty responses
+        if not output and data.get("error_code", 0) == 0:
+            logger.warning(
+                f"Empty response detected at model_response layer for model: {state.model_name}. "
+                f"This should have been caught earlier in api_provider."
+            )
+            output = get_empty_response_message()
+            state.has_error = True
+
         conv.update_last_message(output)
         yield (state, state.to_gradio_chatbot())
     except requests.exceptions.RequestException as e:

@@ -9,7 +9,10 @@ from openai import OpenAI
 
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.user_state import get_user_state
-from bixarena_app.model.error_handler import handle_error_message
+from bixarena_app.model.error_handler import (
+    get_empty_response_message,
+    handle_error_message,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -157,6 +160,19 @@ def openai_api_stream_iter(
                     "error_code": 0,
                 }
                 yield data
+
+        # Validate that the model generated a response
+        if not text.strip():
+            logger.warning(
+                f"Empty response (0 tokens) from model: {model_name}. "
+                f"The model completed streaming but generated no output."
+            )
+            yield {
+                "text": get_empty_response_message(),
+                "error_code": 1,
+            }
+            return
+
     except Exception as e:
         # Retry without system message if provider doesn't support it
         error_str = str(e).lower()
@@ -189,6 +205,17 @@ def openai_api_stream_iter(
                     if chunk.choices and chunk.choices[0].delta.content:
                         text += chunk.choices[0].delta.content
                         yield {"text": text, "error_code": 0}
+
+                # Validate that the retry generated a response
+                if not text.strip():
+                    logger.warning(
+                        f"Empty response (0 tokens) from model: {model_name} (retry). "
+                        f"The model completed streaming but generated no output."
+                    )
+                    yield {
+                        "text": get_empty_response_message(),
+                        "error_code": 1,
+                    }
                 return
             except Exception as retry_e:
                 logger.error(f"Retry also failed: {retry_e}", exc_info=True)
