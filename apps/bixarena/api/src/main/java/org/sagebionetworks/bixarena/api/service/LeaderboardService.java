@@ -155,7 +155,11 @@ public class LeaderboardService {
 
     if ("rank".equals(sortField)) {
       // Create primary rank sort, and add secondary btScore sort
-      return Sort.by(direction, entityField).and(Sort.by(Sort.Direction.DESC, "btScore"));
+      // Since rank is inversely proportional to btScore, use opposite direction
+      Sort.Direction btScoreDirection = direction == Sort.Direction.ASC
+        ? Sort.Direction.DESC
+        : Sort.Direction.ASC;
+      return Sort.by(direction, entityField).and(Sort.by(btScoreDirection, "btScore"));
     }
 
     return Sort.by(direction, entityField);

@@ -205,7 +205,7 @@ def build_leaderboard_page():
                     font-size: var(--text-xl);
                     color: var(--body-text-color-subdued);
                     margin-bottom: 40px !important;
-                ">Community-driven evaluation of biomedical AI models</p>
+                ">Community-driven evaluation of AI models on biomedical topics</p>
                 """
             )
 
