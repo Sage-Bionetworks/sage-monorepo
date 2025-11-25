@@ -53,6 +53,19 @@ def get_empty_response_message() -> str:
     )
 
 
+def get_finish_reason_error_message() -> str:
+    """
+    Handle finish_reason error from API providers.
+
+    Returns:
+        A user-friendly error message for finish_reason errors.
+    """
+    return (
+        "An error occurred while generating the response. "
+        "Please wait a moment, then re-enter your prompt."
+    )
+
+
 def handle_error_message(error: Exception) -> str:
     """
     Handle error messages based on OpenAI exception types.
