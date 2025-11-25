@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 def _process_streaming_response(
     res,
     model_name: str,
-    model_api_dict: dict | None,
+    model_api_dict: dict,
     battle_session,
     cookies: dict[str, str] | None,
 ):
@@ -53,9 +53,8 @@ def _process_streaming_response(
         error_msg = getattr(error_details, "message", "Unknown error")
         logger.error(f"Model {model_name} finish_reason='error': {error_msg}")
         # Report error to backend
-        if model_api_dict:
-            report_error = error_details if error_details else Exception(error_msg)
-            report_model_error(model_api_dict, report_error, battle_session, cookies)
+        report_error = error_details if error_details else Exception(error_msg)
+        report_model_error(model_api_dict, report_error, battle_session, cookies)
         yield {
             "text": get_finish_error_message(),
             "error_code": 1,
@@ -64,9 +63,13 @@ def _process_streaming_response(
 
     # Validate that the model generated a response
     if not text.strip():
-        logger.warning(
+        logger.error(
             f"Empty response from model: {model_name}. "
             f"The model completed streaming but generated no output."
+        )
+        # Report error to backend
+        report_model_error(
+            model_api_dict, Exception("Empty response"), battle_session, cookies
         )
         yield {
             "text": get_empty_response_message(),
@@ -165,6 +168,8 @@ def openai_api_stream_iter(
     cookies: dict[str, str] | None = None,
     request: gr.Request | None = None,
 ):
+    assert model_api_dict is not None, "model_api_dict is required"
+
     # Get OPENROUTER_API_KEY from environment if not provided
     if not api_key:
         api_key = os.getenv("OPENROUTER_API_KEY")
@@ -249,9 +254,8 @@ def openai_api_stream_iter(
         # Handle error
         logger.error(f"OpenAI API error: {e}", exc_info=True)
 
-        # Report error to backend if model_api_dict is available
-        if model_api_dict:
-            report_model_error(model_api_dict, e, battle_session, cookies)
+        # Report error to backend
+        report_model_error(model_api_dict, e, battle_session, cookies)
 
         display_error_msg = handle_api_error_message(e)
         yield {
