@@ -53,7 +53,11 @@ def _process_streaming_response(
         error_msg = getattr(error_details, "message", "Unknown error")
         logger.error(f"Model {model_name} finish_reason='error': {error_msg}")
         # Report error to backend
-        report_error = error_details if error_details else Exception(error_msg)
+        report_error = (
+            error_details
+            if error_details
+            else Exception(f"finish_reason={finish_reason}: {error_msg}")
+        )
         report_model_error(model_api_dict, report_error, battle_session, cookies)
         yield {
             "text": get_finish_error_message(),
@@ -69,7 +73,10 @@ def _process_streaming_response(
         )
         # Report error to backend
         report_model_error(
-            model_api_dict, Exception("Empty response"), battle_session, cookies
+            model_api_dict,
+            Exception(f"finish_reason={finish_reason}: Empty response"),
+            battle_session,
+            cookies,
         )
         yield {
             "text": get_empty_response_message(),

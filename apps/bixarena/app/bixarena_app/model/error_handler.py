@@ -60,7 +60,7 @@ def get_finish_error_message() -> str:
         A user-friendly error message for model errors.
     """
     return (
-        "An error occurred while generating the response. "
+        "An error occurred while generating the response.\n"
         "Please wait a moment, then re-enter your prompt."
     )
 
