@@ -183,6 +183,17 @@ def bot_response(
             output = get_empty_response_message()
             state.has_error = True
 
+        # Add continuation prompt if response was truncated
+        finish_reason = data.get("finish_reason")
+        logger.info(
+            f"Final finish_reason for model {state.model_name}: {finish_reason}"
+        )
+        if finish_reason == "length":
+            logger.warning(
+                f"Response truncated due to max_tokens limit for model {state.model_name}"
+            )
+            output += "\n\n<br>*Would you like me to continue?*"
+
         conv.update_last_message(output)
         yield (state, state.to_gradio_chatbot())
     except Exception as e:
