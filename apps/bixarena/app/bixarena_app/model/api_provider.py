@@ -152,12 +152,17 @@ def openai_api_stream_iter(
         res = client.chat.completions.create(**create_kwargs)
 
         text = ""
+        finish_reason = None
         for chunk in res:
             if len(chunk.choices) > 0:
                 text += chunk.choices[0].delta.content or ""
+                # Capture finish_reason from the final chunk
+                if chunk.choices[0].finish_reason is not None:
+                    finish_reason = chunk.choices[0].finish_reason
                 data = {
                     "text": text,
                     "error_code": 0,
+                    "finish_reason": finish_reason,
                 }
                 yield data
 
@@ -201,10 +206,18 @@ def openai_api_stream_iter(
                     stream=True,
                 )
                 text = ""
+                finish_reason = None
                 for chunk in res:
                     if chunk.choices and chunk.choices[0].delta.content:
                         text += chunk.choices[0].delta.content
-                        yield {"text": text, "error_code": 0}
+                    # Capture finish_reason from the final chunk
+                    if chunk.choices and chunk.choices[0].finish_reason is not None:
+                        finish_reason = chunk.choices[0].finish_reason
+                    yield {
+                        "text": text,
+                        "error_code": 0,
+                        "finish_reason": finish_reason,
+                    }
 
                 # Validate that the retry generated a response
                 if not text.strip():
