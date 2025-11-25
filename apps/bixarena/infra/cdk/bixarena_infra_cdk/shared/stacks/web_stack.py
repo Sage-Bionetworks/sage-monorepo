@@ -91,7 +91,7 @@ class WebStack(cdk.Stack):
             "APP_TERMS_OF_SERVICE_URL": "https://sagebionetworks.org/trust-center",
             "ENABLE_CRISP": "false",
             "BATTLE_ROUND_LIMIT": "5",
-            "MAX_RESPONSE_TOKENS": "2048",
+            "MAX_RESPONSE_TOKENS": "1024",
             "PROMPT_LEN_LIMIT": "5000",
         }
 
