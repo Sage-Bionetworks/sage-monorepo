@@ -162,6 +162,8 @@ def bot_response(
         for data in stream_iter:
             if data["error_code"] == 0:
                 output = data["text"].strip()
+                # Reset error flag when receiving successful chunks
+                state.has_error = False
                 conv.update_last_message(output + "▌")
                 yield (state, state.to_gradio_chatbot())
             else:
@@ -175,7 +177,8 @@ def bot_response(
         # Defensive check for empty responses
         if not output and data.get("error_code", 0) == 0:
             logger.warning(
-                f"Empty response detected at model_response layer for model: {state.model_name}. "
+                f"Empty response detected at model_response layer "
+                f"for model: {state.model_name}. "
                 f"This should have been caught earlier in api_provider."
             )
             output = get_empty_response_message()
