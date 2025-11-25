@@ -47,18 +47,17 @@ def get_empty_response_message() -> str:
         A user-friendly error message for empty responses.
     """
     return (
-        "**Empty Response**\n\n"
         "The model did not generate a response.\n"
         "Please wait a moment, then re-enter your prompt."
     )
 
 
-def get_finish_reason_error_message() -> str:
+def get_finish_error_message() -> str:
     """
-    Handle finish_reason error from API providers.
+    Handle model error from API providers.
 
     Returns:
-        A user-friendly error message for finish_reason errors.
+        A user-friendly error message for model errors.
     """
     return (
         "An error occurred while generating the response. "
@@ -66,7 +65,7 @@ def get_finish_reason_error_message() -> str:
     )
 
 
-def handle_error_message(error: Exception) -> str:
+def handle_api_error_message(error: Exception) -> str:
     """
     Handle error messages based on OpenAI exception types.
 

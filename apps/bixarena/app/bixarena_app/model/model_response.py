@@ -2,7 +2,6 @@ import logging
 from uuid import UUID
 
 import gradio as gr
-import requests
 from bixarena_api_client import (
     BattleApi,
     BattleRoundUpdateRequest,
@@ -21,7 +20,7 @@ from bixarena_app.config.conversation import Conversation
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import (
     get_empty_response_message,
-    handle_error_message,
+    handle_api_error_message,
 )
 
 logger = logging.getLogger(__name__)
@@ -77,8 +76,8 @@ def _update_battle_round_with_responses(
     model2_message = state2.last_assistant_message()
 
     # When a model errors, add a system message so we still persist context
-    # If the model errored and we didn't get any assistant content, persist a SYSTEM message
-    # If there is an assistant message (e.g., a successful follow-up), keep it as ASSISTANT.
+    # If model errored without assistant content, persist a SYSTEM message
+    # If there is an assistant message (e.g., successful follow-up), keep as ASSISTANT.
     if state1.has_error and not model1_message:
         error_content = "Model response unavailable due to an error."
         model1_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
@@ -186,16 +185,10 @@ def bot_response(
 
         conv.update_last_message(output)
         yield (state, state.to_gradio_chatbot())
-    except requests.exceptions.RequestException as e:
-        display_error_msg = handle_error_message(e)
-        conv.update_last_message(display_error_msg)
-        state.has_error = True  # Mark this state as having an error
-        yield (state, state.to_gradio_chatbot())
-        return
     except Exception as e:
-        display_error_msg = handle_error_message(e)
+        display_error_msg = handle_api_error_message(e)
         conv.update_last_message(display_error_msg)
-        state.has_error = True  # Mark this state as having an error
+        state.has_error = True
         yield (state, state.to_gradio_chatbot())
         return
 

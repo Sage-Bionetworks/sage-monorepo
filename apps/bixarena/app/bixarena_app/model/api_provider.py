@@ -11,11 +11,68 @@ from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.model.error_handler import (
     get_empty_response_message,
-    get_finish_reason_error_message,
-    handle_error_message,
+    get_finish_error_message,
+    handle_api_error_message,
 )
 
 logger = logging.getLogger(__name__)
+
+
+def _process_streaming_response(
+    res,
+    model_name: str,
+    model_api_dict: dict | None,
+    battle_session,
+    cookies: dict[str, str] | None,
+):
+    """
+    Process streaming response from API provider.
+
+    Handles chunk processing, finish_reason validation, and empty response detection.
+    """
+    text = ""
+    finish_reason = None
+    error_details = None
+
+    for chunk in res:
+        if len(chunk.choices) > 0:
+            text += chunk.choices[0].delta.content or ""
+            # Capture finish_reason and error details from the final chunk
+            if chunk.choices[0].finish_reason is not None:
+                finish_reason = chunk.choices[0].finish_reason
+                if finish_reason == "error":
+                    error_details = getattr(chunk.choices[0], "error", None)
+            yield {
+                "text": text,
+                "error_code": 0,
+                "finish_reason": finish_reason,
+            }
+
+    # Handle errors for different finish_reason
+    if finish_reason == "error":
+        error_msg = getattr(error_details, "message", "Unknown error")
+        logger.error(f"Model {model_name} finish_reason='error': {error_msg}")
+        # Report error to backend
+        if model_api_dict:
+            report_error = error_details if error_details else Exception(error_msg)
+            report_model_error(model_api_dict, report_error, battle_session, cookies)
+        yield {
+            "text": get_finish_error_message(),
+            "error_code": 1,
+        }
+        return
+
+    # Validate that the model generated a response
+    if not text.strip():
+        logger.warning(
+            f"Empty response from model: {model_name}. "
+            f"The model completed streaming but generated no output."
+        )
+        yield {
+            "text": get_empty_response_message(),
+            "error_code": 1,
+        }
+        return
 
 
 def report_model_error(
@@ -151,56 +208,9 @@ def openai_api_stream_iter(
             create_kwargs["user"] = username
 
         res = client.chat.completions.create(**create_kwargs)
-
-        text = ""
-        finish_reason = None
-        error_details = None
-        for chunk in res:
-            if len(chunk.choices) > 0:
-                text += chunk.choices[0].delta.content or ""
-                # Capture finish_reason from the final chunk
-                if chunk.choices[0].finish_reason is not None:
-                    finish_reason = chunk.choices[0].finish_reason
-                    # Capture error details if finish_reason is error
-                    if finish_reason == "error" and hasattr(chunk.choices[0], "error"):
-                        error_details = getattr(chunk.choices[0], "error", None)
-                data = {
-                    "text": text,
-                    "error_code": 0,
-                    "finish_reason": finish_reason,
-                }
-                yield data
-
-        # Check if streaming completed with error finish_reason
-        if finish_reason == "error":
-            error_msg = "Unknown error"
-            if error_details and hasattr(error_details, "message"):
-                error_msg = error_details.message
-            logger.error(
-                f"Model {model_name} completed with finish_reason='error'. "
-                f"Error: {error_msg}"
-            )
-            # Report error to backend
-            if model_api_dict:
-                error_obj = Exception(f"Model error: {error_msg}")
-                report_model_error(model_api_dict, error_obj, battle_session, cookies)
-            yield {
-                "text": get_finish_reason_error_message(),
-                "error_code": 1,
-            }
-            return
-
-        # Validate that the model generated a response
-        if not text.strip():
-            logger.warning(
-                f"Empty response (0 tokens) from model: {model_name}. "
-                f"The model completed streaming but generated no output."
-            )
-            yield {
-                "text": get_empty_response_message(),
-                "error_code": 1,
-            }
-            return
+        yield from _process_streaming_response(
+            res, model_name, model_api_dict, battle_session, cookies
+        )
     except Exception as e:
         # Retry without system message if provider doesn't support it
         error_str = str(e).lower()
@@ -228,57 +238,9 @@ def openai_api_stream_iter(
                     max_tokens=max_new_tokens,
                     stream=True,
                 )
-                text = ""
-                finish_reason = None
-                error_details = None
-                for chunk in res:
-                    if chunk.choices and chunk.choices[0].delta.content:
-                        text += chunk.choices[0].delta.content
-                    # Capture finish_reason from the final chunk
-                    if chunk.choices and chunk.choices[0].finish_reason is not None:
-                        finish_reason = chunk.choices[0].finish_reason
-                        # Capture error details if finish_reason is error
-                        if finish_reason == "error" and hasattr(
-                            chunk.choices[0], "error"
-                        ):
-                            error_details = getattr(chunk.choices[0], "error", None)
-                    yield {
-                        "text": text,
-                        "error_code": 0,
-                        "finish_reason": finish_reason,
-                    }
-
-                # Check if streaming completed with error finish_reason
-                if finish_reason == "error":
-                    error_msg = "Unknown error"
-                    if error_details and hasattr(error_details, "message"):
-                        error_msg = error_details.message
-                    logger.error(
-                        f"Model {model_name} retry completed with "
-                        f"finish_reason='error'. Error: {error_msg}"
-                    )
-                    # Report error to backend
-                    if model_api_dict:
-                        error_obj = Exception(f"Model error: {error_msg}")
-                        report_model_error(
-                            model_api_dict, error_obj, battle_session, cookies
-                        )
-                    yield {
-                        "text": get_finish_reason_error_message(),
-                        "error_code": 1,
-                    }
-                    return
-
-                # Validate that the retry generated a response
-                if not text.strip():
-                    logger.warning(
-                        f"Empty response (0 tokens) from model: {model_name} (retry). "
-                        f"The model completed streaming but generated no output."
-                    )
-                    yield {
-                        "text": get_empty_response_message(),
-                        "error_code": 1,
-                    }
+                yield from _process_streaming_response(
+                    res, model_name, model_api_dict, battle_session, cookies
+                )
                 return
             except Exception as retry_e:
                 logger.error(f"Retry also failed: {retry_e}", exc_info=True)
@@ -291,7 +253,7 @@ def openai_api_stream_iter(
         if model_api_dict:
             report_model_error(model_api_dict, e, battle_session, cookies)
 
-        display_error_msg = handle_error_message(e)
+        display_error_msg = handle_api_error_message(e)
         yield {
             "text": display_error_msg,
             "error_code": 1,
