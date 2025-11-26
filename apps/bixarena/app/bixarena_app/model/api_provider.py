@@ -24,18 +24,22 @@ def _process_streaming_response(
     model_api_dict: dict,
     battle_session,
     cookies: dict[str, str] | None,
+    max_new_tokens: int,
 ):
     """
     Process streaming response from API provider.
 
     Handles chunk processing, finish_reason validation, and empty response detection.
+    Implements fallback truncation detection for providers that don't correctly set finish_reason.
     """
     text = ""
     finish_reason = None
     error_details = None
+    last_chunk = None
 
     for chunk in res:
         if len(chunk.choices) > 0:
+            last_chunk = chunk
             text += chunk.choices[0].delta.content or ""
             # Capture finish_reason and error details from the final chunk
             if chunk.choices[0].finish_reason is not None:
@@ -47,6 +51,25 @@ def _process_streaming_response(
                 "error_code": 0,
                 "finish_reason": finish_reason,
             }
+
+    # Log the final response
+    logger.info("==== response ====\n%s", last_chunk)
+
+    # Fallback: detect truncation when provider doesn't set finish_reason correctly
+    if finish_reason in (None, "stop") and last_chunk:
+        usage = getattr(last_chunk, "usage", None)
+        if usage and hasattr(usage, "completion_tokens"):
+            completion_tokens = usage.completion_tokens
+            if completion_tokens >= max_new_tokens:
+                logger.warning(
+                    f"{model_name}: max tokens reached ({completion_tokens}/{max_new_tokens})"
+                )
+                # Updatde the finish reason
+                yield {
+                    "text": text,
+                    "error_code": 0,
+                    "finish_reason": "length",
+                }
 
     # Handle errors for different finish_reason
     if finish_reason == "error":
@@ -221,7 +244,7 @@ def openai_api_stream_iter(
 
         res = client.chat.completions.create(**create_kwargs)
         yield from _process_streaming_response(
-            res, model_name, model_api_dict, battle_session, cookies
+            res, model_name, model_api_dict, battle_session, cookies, max_new_tokens
         )
     except Exception as e:
         # Retry without system message if provider doesn't support it
@@ -251,7 +274,12 @@ def openai_api_stream_iter(
                     stream=True,
                 )
                 yield from _process_streaming_response(
-                    res, model_name, model_api_dict, battle_session, cookies
+                    res,
+                    model_name,
+                    model_api_dict,
+                    battle_session,
+                    cookies,
+                    max_new_tokens,
                 )
                 return
             except Exception as retry_e:
