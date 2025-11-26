@@ -46,10 +46,7 @@ def get_empty_response_message() -> str:
     Returns:
         A user-friendly error message for empty responses.
     """
-    return (
-        "The model did not generate a response.\n"
-        "Please wait a moment, then re-enter your prompt."
-    )
+    return "Something went wrong.\nPlease wait a moment, then re-enter your prompt."
 
 
 def get_finish_error_message() -> str:
