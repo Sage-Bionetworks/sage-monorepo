@@ -46,7 +46,7 @@ def get_empty_response_message() -> str:
     Returns:
         A user-friendly error message for empty responses.
     """
-    return "Something went wrong.\nPlease wait a moment, then re-enter your prompt."
+    return "Something went wrong.\nPlease try submitting your prompt again."
 
 
 def get_finish_error_message() -> str:
@@ -58,7 +58,7 @@ def get_finish_error_message() -> str:
     """
     return (
         "An error occurred while generating the response.\n"
-        "Please wait a moment, then re-enter your prompt."
+        "Please try submitting your prompt again."
     )
 
 
@@ -114,7 +114,7 @@ def handle_api_error_message(error: Exception) -> str:
         return (
             "**Rate Limit Exceeded**\n\n"
             "The request rate limit has been exceeded.\n"
-            "Please wait a moment, then re-enter your prompt.\n\n"
+            "Please try submitting your prompt again later.\n\n"
             "_Error Code: 429_"
         )
 
@@ -123,7 +123,7 @@ def handle_api_error_message(error: Exception) -> str:
         return (
             "**Internal Server Error**\n\n"
             "An internal server error occurred.\n"
-            "Please wait a moment, then re-enter your prompt.\n\n"
+            "Please try submitting your prompt again later.\n\n"
             "_Error Code: 500_"
         )
 
@@ -141,7 +141,7 @@ def handle_api_error_message(error: Exception) -> str:
         return (
             "**Network Connection Error**\n\n"
             "Unable to establish a network connection.\n"
-            "Please wait a moment, then re-enter your prompt."
+            "Please try submitting your prompt again later."
         )
 
     # Generic API errors
