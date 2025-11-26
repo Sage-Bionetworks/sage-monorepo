@@ -2,7 +2,6 @@ import logging
 from uuid import UUID
 
 import gradio as gr
-import requests
 from bixarena_api_client import (
     BattleApi,
     BattleRoundUpdateRequest,
@@ -19,7 +18,9 @@ from bixarena_app.config.constants import (
 )
 from bixarena_app.config.conversation import Conversation
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
-from bixarena_app.model.error_handler import handle_error_message
+from bixarena_app.model.error_handler import (
+    handle_api_error_message,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,14 @@ class State:
         return self.conv.to_gradio_chatbot()
 
     def last_assistant_message(self) -> MessageCreate | None:
-        """Return the last completed assistant response as a MessageCreate."""
+        """Return the last completed assistant response as a MessageCreate.
+
+        Returns None if the last response had an error (has_error=True).
+        """
+        # If there was an error, don't return the error message as assistant content
+        if self.has_error:
+            return None
+
         assistant_role = self.conv.roles[1] if len(self.conv.roles) > 1 else "assistant"
         for role, content in reversed(self.conv.messages):
             if role == assistant_role and content:
@@ -74,8 +82,8 @@ def _update_battle_round_with_responses(
     model2_message = state2.last_assistant_message()
 
     # When a model errors, add a system message so we still persist context
-    # If the model errored and we didn't get any assistant content, persist a SYSTEM message
-    # If there is an assistant message (e.g., a successful follow-up), keep it as ASSISTANT.
+    # If model errored without assistant content, persist a SYSTEM message
+    # If there is an assistant message (e.g., successful follow-up), keep as ASSISTANT.
     if state1.has_error and not model1_message:
         error_content = "Model response unavailable due to an error."
         model1_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
@@ -159,6 +167,8 @@ def bot_response(
         for data in stream_iter:
             if data["error_code"] == 0:
                 output = data["text"].strip()
+                # Reset error flag when receiving successful chunks
+                state.has_error = False
                 conv.update_last_message(output + "▌")
                 yield (state, state.to_gradio_chatbot())
             else:
@@ -168,18 +178,21 @@ def bot_response(
                 yield (state, state.to_gradio_chatbot())
                 return
         output = data["text"].strip()
+
+        # Add continuation prompt if response was truncated
+        finish_reason = data.get("finish_reason")
+        if finish_reason == "length" and not state.has_error:
+            logger.warning(
+                f"Response truncated due to max_tokens limit for model {state.model_name}"
+            )
+            output += "\n\n<br>*Would you like me to continue?*"
+
         conv.update_last_message(output)
         yield (state, state.to_gradio_chatbot())
-    except requests.exceptions.RequestException as e:
-        display_error_msg = handle_error_message(e)
-        conv.update_last_message(display_error_msg)
-        state.has_error = True  # Mark this state as having an error
-        yield (state, state.to_gradio_chatbot())
-        return
     except Exception as e:
-        display_error_msg = handle_error_message(e)
+        display_error_msg = handle_api_error_message(e)
         conv.update_last_message(display_error_msg)
-        state.has_error = True  # Mark this state as having an error
+        state.has_error = True
         yield (state, state.to_gradio_chatbot())
         return
 

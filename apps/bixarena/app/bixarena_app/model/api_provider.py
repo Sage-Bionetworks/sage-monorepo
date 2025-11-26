@@ -9,9 +9,103 @@ from openai import OpenAI
 
 from bixarena_app.api.api_client_helper import create_authenticated_api_client
 from bixarena_app.auth.user_state import get_user_state
-from bixarena_app.model.error_handler import handle_error_message
+from bixarena_app.model.error_handler import (
+    get_empty_response_message,
+    get_finish_error_message,
+    handle_api_error_message,
+)
 
 logger = logging.getLogger(__name__)
+
+
+def _process_streaming_response(
+    res,
+    model_name: str,
+    model_api_dict: dict,
+    battle_session,
+    cookies: dict[str, str] | None,
+    max_new_tokens: int,
+):
+    """
+    Process streaming response from API provider.
+
+    Handles chunk processing, finish_reason validation, and empty response detection.
+    Implements fallback truncation detection for providers that don't correctly set finish_reason.
+    """
+    text = ""
+    finish_reason = None
+    error_details = None
+    last_chunk = None
+
+    for chunk in res:
+        if len(chunk.choices) > 0:
+            last_chunk = chunk
+            text += chunk.choices[0].delta.content or ""
+            # Capture finish_reason and error details from the final chunk
+            if chunk.choices[0].finish_reason is not None:
+                finish_reason = chunk.choices[0].finish_reason
+                if finish_reason == "error":
+                    error_details = getattr(chunk.choices[0], "error", None)
+            yield {
+                "text": text,
+                "error_code": 0,
+                "finish_reason": finish_reason,
+            }
+
+    # Log the final response
+    logger.info("==== response ====\n%s", last_chunk)
+
+    # Fallback: detect truncation when provider doesn't set finish_reason correctly
+    if finish_reason in (None, "stop") and last_chunk:
+        usage = getattr(last_chunk, "usage", None)
+        if usage and hasattr(usage, "completion_tokens"):
+            completion_tokens = usage.completion_tokens
+            if completion_tokens >= max_new_tokens:
+                logger.warning(
+                    f"{model_name}: max tokens reached ({completion_tokens}/{max_new_tokens})"
+                )
+                # Updatde the finish reason
+                yield {
+                    "text": text,
+                    "error_code": 0,
+                    "finish_reason": "length",
+                }
+
+    # Handle errors for different finish_reason
+    if finish_reason == "error":
+        error_msg = getattr(error_details, "message", "Unknown error")
+        logger.error(f"Model {model_name} finish_reason='error': {error_msg}")
+        # Report error to backend
+        report_error = (
+            error_details
+            if error_details
+            else Exception(f"finish_reason={finish_reason}: {error_msg}")
+        )
+        report_model_error(model_api_dict, report_error, battle_session, cookies)
+        yield {
+            "text": get_finish_error_message(),
+            "error_code": 1,
+        }
+        return
+
+    # Validate that the model generated a response
+    if not text.strip():
+        logger.error(
+            f"Empty response from model: {model_name}. "
+            f"The model completed streaming but generated no output."
+        )
+        # Report error to backend
+        report_model_error(
+            model_api_dict,
+            Exception(f"finish_reason={finish_reason}: Empty response"),
+            battle_session,
+            cookies,
+        )
+        yield {
+            "text": get_empty_response_message(),
+            "error_code": 1,
+        }
+        return
 
 
 def report_model_error(
@@ -104,6 +198,8 @@ def openai_api_stream_iter(
     cookies: dict[str, str] | None = None,
     request: gr.Request | None = None,
 ):
+    assert model_api_dict is not None, "model_api_dict is required"
+
     # Get OPENROUTER_API_KEY from environment if not provided
     if not api_key:
         api_key = os.getenv("OPENROUTER_API_KEY")
@@ -147,16 +243,9 @@ def openai_api_stream_iter(
             create_kwargs["user"] = username
 
         res = client.chat.completions.create(**create_kwargs)
-
-        text = ""
-        for chunk in res:
-            if len(chunk.choices) > 0:
-                text += chunk.choices[0].delta.content or ""
-                data = {
-                    "text": text,
-                    "error_code": 0,
-                }
-                yield data
+        yield from _process_streaming_response(
+            res, model_name, model_api_dict, battle_session, cookies, max_new_tokens
+        )
     except Exception as e:
         # Retry without system message if provider doesn't support it
         error_str = str(e).lower()
@@ -184,11 +273,14 @@ def openai_api_stream_iter(
                     max_tokens=max_new_tokens,
                     stream=True,
                 )
-                text = ""
-                for chunk in res:
-                    if chunk.choices and chunk.choices[0].delta.content:
-                        text += chunk.choices[0].delta.content
-                        yield {"text": text, "error_code": 0}
+                yield from _process_streaming_response(
+                    res,
+                    model_name,
+                    model_api_dict,
+                    battle_session,
+                    cookies,
+                    max_new_tokens,
+                )
                 return
             except Exception as retry_e:
                 logger.error(f"Retry also failed: {retry_e}", exc_info=True)
@@ -197,11 +289,10 @@ def openai_api_stream_iter(
         # Handle error
         logger.error(f"OpenAI API error: {e}", exc_info=True)
 
-        # Report error to backend if model_api_dict is available
-        if model_api_dict:
-            report_model_error(model_api_dict, e, battle_session, cookies)
+        # Report error to backend
+        report_model_error(model_api_dict, e, battle_session, cookies)
 
-        display_error_msg = handle_error_message(e)
+        display_error_msg = handle_api_error_message(e)
         yield {
             "text": display_error_msg,
             "error_code": 1,
