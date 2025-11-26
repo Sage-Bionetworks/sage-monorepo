@@ -30,7 +30,7 @@ public class MessageEntity {
   @Column(name = "role", nullable = false, length = 20)
   private String role;
 
-  @Column(name = "content", nullable = false, length = 5000)
+  @Column(name = "content", nullable = false, length = 10000)
   private String content;
 
   @CreationTimestamp
