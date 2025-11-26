@@ -1,0 +1,38 @@
+type: object
+description: Disease correlation search query with pagination and filtering options.
+properties:
+  pageNumber:
+    description: The page number.
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    maximum: 100
+    example: 100
+  category:
+    description: The category selections
+    type: array
+    items:
+      type: string
+    minItems: 2
+    maxItems: 2
+    example: ['CONSENSUS NETWORK MODULES', 'Consensus Cluster A - ECM Organization']
+  items:
+    description: List of item IDs to filter by.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['507f1f77bcf86cd799439011', '507f191e810c19729de860ea']
+  itemFilterType:
+    $ref: ItemFilterTypeQuery.yaml
+    nullable: true
+required:
+  - category

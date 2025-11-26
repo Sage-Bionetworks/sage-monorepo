@@ -1,0 +1,7 @@
+name: modelOverviewSearchQuery
+description: The search query used to find and filter model overviews.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/ModelOverviewSearchQuery.yaml

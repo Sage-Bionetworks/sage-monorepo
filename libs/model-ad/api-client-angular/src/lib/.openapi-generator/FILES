@@ -19,7 +19,9 @@ model/comparison-tool-config.ts
 model/comparison-tool-page.ts
 model/correlation-result.ts
 model/data-version.ts
+model/disease-correlation-search-query.ts
 model/disease-correlation.ts
+model/disease-correlations-page.ts
 model/fold-change-result.ts
 model/gene-expression.ts
 model/genetic-info.ts
@@ -27,9 +29,12 @@ model/individual-data.ts
 model/item-filter-type-query.ts
 model/model-data.ts
 model/model-overview-link.ts
+model/model-overview-search-query.ts
 model/model-overview.ts
+model/model-overviews-page.ts
 model/model.ts
 model/models.ts
+model/page-metadata.ts
 model/search-result.ts
 model/sex-cohort.ts
 model/sex.ts

@@ -1,0 +1,35 @@
+type: object
+description: The metadata of a page.
+properties:
+  number:
+    type: integer
+    description: The page number.
+    example: 0
+  size:
+    type: integer
+    description: The number of items in a single page.
+    example: 100
+  totalElements:
+    type: integer
+    format: int64
+    description: Total number of elements in the result set.
+    example: 250
+  totalPages:
+    type: integer
+    description: Total number of pages in the result set.
+    example: 3
+  hasNext:
+    type: boolean
+    description: Returns if there is a next page.
+    example: true
+  hasPrevious:
+    type: boolean
+    description: Returns if there is a previous page.
+    example: false
+required:
+  - number
+  - size
+  - totalElements
+  - totalPages
+  - hasNext
+  - hasPrevious
