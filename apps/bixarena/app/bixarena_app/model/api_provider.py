@@ -2,6 +2,7 @@
 
 import logging
 import os
+import time
 
 import gradio as gr
 from bixarena_api_client import ModelApi, ModelErrorCreateRequest
@@ -94,18 +95,7 @@ def _process_streaming_response(
             f"Empty response from model: {model_name}. "
             f"The model completed streaming but generated no output."
         )
-        # Report error to backend
-        report_model_error(
-            model_api_dict,
-            Exception(f"finish_reason={finish_reason}: Empty response"),
-            battle_session,
-            cookies,
-        )
-        yield {
-            "text": get_empty_response_message(),
-            "error_code": 1,
-        }
-        return
+        raise Exception(f"finish_reason={finish_reason}: Empty response")
 
 
 def report_model_error(
@@ -247,8 +237,8 @@ def openai_api_stream_iter(
             res, model_name, model_api_dict, battle_session, cookies, max_new_tokens
         )
     except Exception as e:
-        # Retry without system message if provider doesn't support it
         error_str = str(e).lower()
+        is_empty_response = "empty response" in error_str
         is_system_error = any(
             pattern in error_str
             for pattern in ["developer instruction", "system role", "system message"]
@@ -256,8 +246,17 @@ def openai_api_stream_iter(
         has_system = messages and messages[0].get("role") == "system"
         is_400 = getattr(e, "status_code", None) == 400
 
+        # Prepare retry messages and error message
+        retry_messages = None
+        display_error_msg = handle_api_error_message(e)
+
+        if is_empty_response:
+            logger.info(f"Retrying {model_name} due to empty response...")
+            time.sleep(10)  # Wait before retrying
+            retry_messages = messages
+            display_error_msg = get_empty_response_message()
         if is_400 and is_system_error and has_system:
-            logger.warning(f"Retrying {model_name} without system message...")
+            logger.info(f"Retrying {model_name} without system message...")
             # Merge system message into first user message
             system_msg = messages[0]["content"]
             retry_messages = messages[1:]
@@ -265,6 +264,8 @@ def openai_api_stream_iter(
                 user_msg = retry_messages[0]["content"]
                 retry_messages[0]["content"] = f"{system_msg}\n\n{user_msg}"
 
+        # Retry if applicable
+        if retry_messages:
             try:
                 res = client.chat.completions.create(
                     model=model_name,
@@ -292,7 +293,6 @@ def openai_api_stream_iter(
         # Report error to backend
         report_model_error(model_api_dict, e, battle_session, cookies)
 
-        display_error_msg = handle_api_error_message(e)
         yield {
             "text": display_error_msg,
             "error_code": 1,
