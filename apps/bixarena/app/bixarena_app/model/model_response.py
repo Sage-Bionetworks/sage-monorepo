@@ -40,7 +40,14 @@ class State:
         return self.conv.to_gradio_chatbot()
 
     def last_assistant_message(self) -> MessageCreate | None:
-        """Return the last completed assistant response as a MessageCreate."""
+        """Return the last completed assistant response as a MessageCreate.
+
+        Returns None if the last response had an error (has_error=True).
+        """
+        # If there was an error, don't return the error message as assistant content
+        if self.has_error:
+            return None
+
         assistant_role = self.conv.roles[1] if len(self.conv.roles) > 1 else "assistant"
         for role, content in reversed(self.conv.messages):
             if role == assistant_role and content:
@@ -185,7 +192,7 @@ def bot_response(
 
         # Add continuation prompt if response was truncated
         finish_reason = data.get("finish_reason")
-        if finish_reason == "length":
+        if finish_reason == "length" and not state.has_error:
             logger.warning(
                 f"Response truncated due to max_tokens limit for model {state.model_name}"
             )
