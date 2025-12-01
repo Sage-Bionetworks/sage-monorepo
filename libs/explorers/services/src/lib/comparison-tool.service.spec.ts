@@ -15,20 +15,47 @@ import { provideComparisonToolService } from './comparison-tool.service.provider
 describe('ComparisonToolService', () => {
   let service: ComparisonToolService<Record<string, unknown>>;
   let mockRouter: Partial<Router>;
+  let mockActivatedRoute: Partial<ActivatedRoute>;
   let queryParamsSubject: BehaviorSubject<any>;
 
   beforeEach(() => {
     queryParamsSubject = new BehaviorSubject<any>({});
 
-    mockRouter = {
-      navigate: jest.fn(),
-    };
-
-    const mockActivatedRoute = {
+    mockActivatedRoute = {
       queryParams: queryParamsSubject.asObservable(),
       snapshot: {
         queryParams: {},
-      },
+      } as any,
+    };
+
+    mockRouter = {
+      navigate: jest.fn((_, extras) => {
+        const snapshot = (mockActivatedRoute.snapshot ??= { queryParams: {} } as any);
+        const extrasQueryParams = extras?.queryParams;
+
+        if (extrasQueryParams === undefined) {
+          snapshot.queryParams = {};
+          return Promise.resolve(true);
+        }
+
+        const normalizedQueryParams = extrasQueryParams ?? {};
+
+        if (extras?.queryParamsHandling === 'merge') {
+          const next = { ...snapshot.queryParams } as Record<string, unknown>;
+          for (const [key, value] of Object.entries(normalizedQueryParams)) {
+            if (value == null) {
+              delete next[key];
+            } else {
+              next[key] = value;
+            }
+          }
+          snapshot.queryParams = next;
+        } else {
+          snapshot.queryParams = { ...normalizedQueryParams };
+        }
+
+        return Promise.resolve(true);
+      }),
     };
 
     TestBed.configureTestingModule({
@@ -374,12 +401,7 @@ describe('ComparisonToolService', () => {
 
       tick();
 
-      expect(mockRouter.navigate).toHaveBeenCalledWith(
-        [],
-        expect.objectContaining({
-          queryParams: expect.objectContaining({ pinned: null }),
-        }),
-      );
+      expect(mockRouter.navigate).not.toHaveBeenCalled();
     }));
 
     it('clears the URL pinned param on route exit but preserves cache', fakeAsync(() => {

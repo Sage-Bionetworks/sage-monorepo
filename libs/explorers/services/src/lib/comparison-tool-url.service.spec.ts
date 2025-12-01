@@ -13,7 +13,33 @@ describe('ComparisonToolUrlService', () => {
     queryParamsSubject = new BehaviorSubject<Params>({});
 
     mockRouter = {
-      navigate: jest.fn(),
+      navigate: jest.fn((_, extras) => {
+        const snapshot = (mockActivatedRoute.snapshot ??= { queryParams: {} } as any);
+        const extrasQueryParams = extras?.queryParams;
+
+        if (extrasQueryParams === undefined) {
+          snapshot.queryParams = {};
+          return Promise.resolve(true);
+        }
+
+        const normalizedQueryParams = extrasQueryParams ?? {};
+
+        if (extras?.queryParamsHandling === 'merge') {
+          const next = { ...snapshot.queryParams } as Record<string, unknown>;
+          for (const [key, value] of Object.entries(normalizedQueryParams)) {
+            if (value == null) {
+              delete next[key];
+            } else {
+              next[key] = value;
+            }
+          }
+          snapshot.queryParams = next;
+        } else {
+          snapshot.queryParams = { ...normalizedQueryParams };
+        }
+
+        return Promise.resolve(true);
+      }),
     };
 
     mockActivatedRoute = {
@@ -56,6 +82,10 @@ describe('ComparisonToolUrlService', () => {
   });
 
   it('should clear pinned query param when empty', () => {
+    mockActivatedRoute.snapshot = {
+      queryParams: { pinned: 'id1' },
+    } as any;
+
     service.syncToUrl({ pinnedItems: [] });
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(
@@ -86,5 +116,34 @@ describe('ComparisonToolUrlService', () => {
         replaceUrl: true,
       }),
     );
+  });
+
+  it('should skip navigation when pinned state already empty', () => {
+    service.syncToUrl({ pinnedItems: [] });
+
+    expect(mockRouter.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should clear only the pinned query parameter', () => {
+    service.clearPinnedParam();
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(
+      [],
+      expect.objectContaining({
+        queryParams: { pinned: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      }),
+    );
+  });
+
+  it('should skip navigation when the pinned state matches the URL', () => {
+    mockActivatedRoute.snapshot = {
+      queryParams: { pinned: 'id1,id2' },
+    } as any;
+
+    service.syncToUrl({ pinnedItems: ['id1', 'id2'] });
+
+    expect(mockRouter.navigate).not.toHaveBeenCalled();
   });
 });
