@@ -10,7 +10,7 @@ import {
 import { isEqual } from 'lodash';
 import { SortEvent, SortMeta } from 'primeng/api';
 import type { Observable } from 'rxjs';
-import { combineLatest, startWith } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
 
@@ -193,9 +193,7 @@ export class ComparisonToolService<T> {
       this.handleRouteExit();
     });
 
-    const queryParams$ = options.queryParams$.pipe(startWith({} as ComparisonToolUrlParams));
-
-    combineLatest([options.config$, queryParams$])
+    combineLatest([options.config$, options.queryParams$])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([configs, params]) => {
         if (!this.hasBootstrappedSignal()) {
