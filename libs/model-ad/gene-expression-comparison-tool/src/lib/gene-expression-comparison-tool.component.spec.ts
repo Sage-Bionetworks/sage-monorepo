@@ -3,6 +3,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
+  PlatformService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
@@ -24,6 +25,10 @@ async function setup() {
       provideHttpClient(),
       provideNoopAnimations(),
       provideRouter([]),
+      {
+        provide: PlatformService,
+        useValue: { isBrowser: true },
+      },
       {
         provide: ComparisonToolConfigService,
         useValue: {

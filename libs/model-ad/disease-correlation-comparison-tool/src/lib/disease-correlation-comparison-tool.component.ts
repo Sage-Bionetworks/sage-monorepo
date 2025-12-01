@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -7,7 +7,11 @@ import {
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
-import { ComparisonToolHelperService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolHelperService,
+  ComparisonToolUrlService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -16,7 +20,7 @@ import {
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { shareReplay } from 'rxjs';
+import { catchError, of, shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 @Component({
@@ -33,11 +37,24 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
+  private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
 
   pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
+  readonly isReady = computed(() => this.platformService.isBrowser && this.isInitialized());
 
   isLoading = signal(true);
+
+  readonly config$ = this.comparisonToolConfigService
+    .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
+    .pipe(
+      catchError((error) => {
+        console.error('Error retrieving comparison tool config: ', error);
+        this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
+        return of<ComparisonToolConfig[]>([]);
+      }),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'CONSENSUS NETWORK MODULES': {
@@ -96,39 +113,31 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   }
 
   readonly onUpdateEffect = effect(() => {
-    const isInitialized = this.isInitialized();
-    if (this.platformService.isBrowser && isInitialized) {
-      const selection = this.comparisonToolService.dropdownSelection();
-      if (!selection.length) {
-        return;
-      }
-
-      this.isLoading.set(true);
-      const pinnedItems = Array.from(this.pinnedItems());
-      this.getUnpinnedData(selection, pinnedItems);
-      this.getPinnedData(selection, pinnedItems);
+    if (!this.isReady()) {
+      return;
     }
+
+    const selection = this.comparisonToolService.dropdownSelection();
+    if (!selection.length) {
+      return;
+    }
+
+    const pinnedItems = Array.from(this.pinnedItems());
+    this.isLoading.set(true);
+    this.getUnpinnedData(selection, pinnedItems);
+    this.getPinnedData(selection, pinnedItems);
   });
 
   ngOnInit() {
-    if (this.platformService.isBrowser) {
-      this.getConfigs();
+    if (!this.platformService.isBrowser) {
+      return;
     }
-  }
 
-  getConfigs() {
-    this.comparisonToolConfigService
-      .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
-      .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs);
-        },
-        error: (error) => {
-          console.error('Error retrieving comparison tool config: ', error);
-          this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
-        },
-      });
+    this.comparisonToolService.connect({
+      config$: this.config$,
+      queryParams$: this.comparisonToolUrlService.params$,
+      cacheKey: ComparisonToolPage.DiseaseCorrelation,
+    });
   }
 
   getUnpinnedData(selection: string[], pinnedItems: string[]) {
