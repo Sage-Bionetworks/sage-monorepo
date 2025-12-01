@@ -10,7 +10,7 @@ import {
 import { isEqual } from 'lodash';
 import { SortEvent, SortMeta } from 'primeng/api';
 import type { Observable } from 'rxjs';
-import { combineLatest, of, startWith } from 'rxjs';
+import { combineLatest, startWith } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
 
@@ -89,7 +89,7 @@ export class ComparisonToolService<T> {
   private lastSerializedState: string | null = null;
   private hasInitializedConfig = false;
   private connectActivated = false;
-  private pendingSelection: string[] | undefined;
+  private initialSelection: string[] | undefined;
   private cacheKey: string | undefined;
   private initialPinsResolved = false;
 
@@ -179,6 +179,7 @@ export class ComparisonToolService<T> {
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
     cacheKey?: string;
+    initialSelection?: string[];
   }): void {
     if (this.connectActivated) {
       return;
@@ -186,6 +187,7 @@ export class ComparisonToolService<T> {
 
     this.connectActivated = true;
     this.cacheKey = options.cacheKey;
+    this.initialSelection = options.initialSelection;
 
     this.destroyRef.onDestroy(() => {
       this.handleRouteExit();
@@ -204,19 +206,6 @@ export class ComparisonToolService<T> {
         this.resolvePinnedState(params, { isInitial: false });
       });
   }
-
-  initialize(configs: ComparisonToolConfig[], selection?: string[]) {
-    if (this.connectActivated) {
-      return;
-    }
-
-    this.pendingSelection = selection;
-    this.connect({
-      config$: of(configs),
-      queryParams$: this.urlService.params$,
-    });
-  }
-
   setDropdownSelection(selection: string[]) {
     const configs = this.configsSignal();
     if (!configs.length) {
@@ -493,7 +482,7 @@ export class ComparisonToolService<T> {
     this.setUnpinnedData([]);
     this.setPinnedData([]);
 
-    const initialSelection = this.pendingSelection ?? [];
+    const initialSelection = this.initialSelection ?? [];
     const normalizedSelection = this.normalizeSelection(initialSelection, configs);
     this.dropdownSelectionSignal.set(normalizedSelection);
 
@@ -508,7 +497,7 @@ export class ComparisonToolService<T> {
     this.columnsForDropdownsSignal.set(columnsMap);
     this.pinnedItemsForDropdownsSignal.set(new Map());
     this.hasInitializedConfig = true;
-    this.pendingSelection = undefined;
+    this.initialSelection = undefined;
 
     this.resolvePinnedState(params, { isInitial: true });
 
@@ -610,7 +599,7 @@ export class ComparisonToolService<T> {
     }
 
     const clearedState = { pinnedItems: null } satisfies ComparisonToolUrlParams;
-    this.urlService.syncToUrl(clearedState);
+    this.urlService.clearPinnedParam();
     this.lastSerializedState = JSON.stringify(clearedState);
   }
 }

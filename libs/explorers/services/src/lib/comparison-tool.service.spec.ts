@@ -7,8 +7,7 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { FilterService, MessageService } from 'primeng/api';
-import { BehaviorSubject } from 'rxjs';
-import { COMPARISON_TOOL_URL_SYNC_DEBOUNCE_MS } from './comparison-tool-url.service';
+import { BehaviorSubject, of } from 'rxjs';
 import { ComparisonToolService } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
 
@@ -17,6 +16,7 @@ describe('ComparisonToolService', () => {
   let mockRouter: Partial<Router>;
   let mockActivatedRoute: Partial<ActivatedRoute>;
   let queryParamsSubject: BehaviorSubject<any>;
+  let paramsSubject: BehaviorSubject<ComparisonToolUrlParams>;
 
   beforeEach(() => {
     queryParamsSubject = new BehaviorSubject<any>({});
@@ -84,13 +84,25 @@ describe('ComparisonToolService', () => {
     return service;
   };
 
+  const connectService = (
+    configs: ComparisonToolConfig[] = mockComparisonToolDataConfig,
+    options: { selection?: string[]; initialParams?: ComparisonToolUrlParams } = {},
+  ) => {
+    paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>(options.initialParams ?? {});
+    injectService().connect({
+      config$: of(configs),
+      queryParams$: paramsSubject.asObservable(),
+      initialSelection: options.selection,
+    });
+  };
+
   it('should create', () => {
     injectService();
     expect(service).toBeDefined();
   });
 
   it('excludes hidden columns from columns and cached dropdown columns', () => {
-    injectService().initialize(mockComparisonToolDataConfig);
+    connectService();
 
     const columns = service.columns();
     expect(columns.every((column) => !column.is_hidden)).toBe(true);
@@ -123,7 +135,7 @@ describe('ComparisonToolService', () => {
     ];
 
     beforeEach(() => {
-      injectService().initialize(mockConfigs, ['category1', 'option1']);
+      connectService(mockConfigs, { selection: ['category1', 'option1'] });
     });
 
     it('should persist pinned items when switching between dropdown selections', () => {
@@ -131,8 +143,6 @@ describe('ComparisonToolService', () => {
       service.pinItem('item1');
       service.pinItem('item2');
       expect(service.pinnedItems().size).toBe(2);
-      expect(service.isPinned('item1')).toBe(true);
-      expect(service.isPinned('item2')).toBe(true);
 
       // Switch to second selection
       service.setDropdownSelection(['category1', 'option2']);
@@ -215,7 +225,7 @@ describe('ComparisonToolService', () => {
 
   describe('pin/unpin functionality', () => {
     it('should track pinned items correctly', () => {
-      injectService().initialize(mockComparisonToolDataConfig);
+      connectService();
       service.pinItem('id1');
 
       expect(service.isPinned('id1')).toBe(true);
@@ -223,7 +233,7 @@ describe('ComparisonToolService', () => {
     });
 
     it('should toggle pin state', () => {
-      injectService().initialize(mockComparisonToolDataConfig);
+      connectService();
       service.togglePin('id1');
 
       expect(service.isPinned('id1')).toBe(true);
@@ -234,7 +244,7 @@ describe('ComparisonToolService', () => {
     });
 
     it('should not exceed max pinned items', () => {
-      injectService().initialize(mockComparisonToolDataConfig);
+      connectService();
       service.setMaxPinnedItems(2);
 
       service.pinList(['id1', 'id2', 'id3']);
@@ -247,7 +257,6 @@ describe('ComparisonToolService', () => {
 
   describe('URL synchronization', () => {
     const flushInitialUrlSync = () => {
-      tick(COMPARISON_TOOL_URL_SYNC_DEBOUNCE_MS + 1); // allow debounce to emit initial params
       tick();
     };
 
@@ -255,7 +264,7 @@ describe('ComparisonToolService', () => {
 
     describe('pinned items sync', () => {
       it('should sync pinned items to URL', fakeAsync(() => {
-        injectService().initialize(mockComparisonToolDataConfig);
+        connectService();
         flushInitialUrlSync();
 
         service.pinItem('id1');
@@ -272,7 +281,7 @@ describe('ComparisonToolService', () => {
       }));
 
       it('should sync multiple pinned items', fakeAsync(() => {
-        injectService().initialize(mockComparisonToolDataConfig);
+        connectService();
         flushInitialUrlSync();
 
         service.pinItem('id3');
@@ -285,18 +294,17 @@ describe('ComparisonToolService', () => {
       }));
 
       it('should restore pinned items from URL', fakeAsync(() => {
-        injectService().initialize(mockComparisonToolDataConfig);
+        connectService();
         flushInitialUrlSync();
 
-        queryParamsSubject.next({ pinned: 'id1,id2' });
-        tick(COMPARISON_TOOL_URL_SYNC_DEBOUNCE_MS + 1);
+        paramsSubject.next({ pinnedItems: ['id1', 'id2'] });
         tick();
 
         expect(Array.from(service.pinnedItems())).toEqual(['id1', 'id2']);
       }));
 
       it('should sync when unpinning items', fakeAsync(() => {
-        injectService().initialize(mockComparisonToolDataConfig);
+        connectService();
         flushInitialUrlSync();
 
         service.pinItem('id1');
@@ -309,7 +317,7 @@ describe('ComparisonToolService', () => {
       }));
 
       it('should sync when pinning list of items', fakeAsync(() => {
-        injectService().initialize(mockComparisonToolDataConfig);
+        connectService();
         flushInitialUrlSync();
 
         service.pinList(['id1', 'id2', 'id3']);
@@ -320,7 +328,7 @@ describe('ComparisonToolService', () => {
       }));
 
       it('should sync when resetting pinned items', fakeAsync(() => {
-        injectService().initialize(mockComparisonToolDataConfig);
+        connectService();
         flushInitialUrlSync();
 
         service.pinItem('id1');
