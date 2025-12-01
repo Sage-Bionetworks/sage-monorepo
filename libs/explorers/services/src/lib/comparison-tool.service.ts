@@ -19,6 +19,8 @@ import { NotificationService } from './notification.service';
  */
 @Injectable()
 export class ComparisonToolService<T> {
+  private static readonly routePinnedCache = new Map<string, string[]>();
+
   private readonly notificationService = inject(NotificationService);
   private readonly urlService = inject(ComparisonToolUrlService);
   private readonly destroyRef = inject(DestroyRef);
@@ -88,6 +90,8 @@ export class ComparisonToolService<T> {
   private hasInitializedConfig = false;
   private connectActivated = false;
   private pendingSelection: string[] | undefined;
+  private cacheKey: string | undefined;
+  private initialPinsResolved = false;
 
   constructor() {
     effect(() => {
@@ -105,6 +109,7 @@ export class ComparisonToolService<T> {
       const pinnedItems = this.pinnedItems();
       const state = this.serializeState(pinnedItems);
 
+      this.cacheRoutePinnedItems(pinnedItems);
       this.syncStateToUrl(state);
     });
   }
@@ -180,6 +185,11 @@ export class ComparisonToolService<T> {
     }
 
     this.connectActivated = true;
+    this.cacheKey = options.cacheKey;
+
+    this.destroyRef.onDestroy(() => {
+      this.handleRouteExit();
+    });
 
     const queryParams$ = options.queryParams$.pipe(startWith({} as ComparisonToolUrlParams));
 
@@ -191,7 +201,7 @@ export class ComparisonToolService<T> {
           return;
         }
 
-        this.handleQueryParams(params);
+        this.resolvePinnedState(params, { isInitial: false });
       });
   }
 
@@ -500,24 +510,55 @@ export class ComparisonToolService<T> {
     this.hasInitializedConfig = true;
     this.pendingSelection = undefined;
 
-    this.handleQueryParams(params);
+    this.resolvePinnedState(params, { isInitial: true });
 
     this.isInitializedSignal.set(true);
     this.hasBootstrappedSignal.set(true);
   }
 
-  private handleQueryParams(params: ComparisonToolUrlParams): void {
+  private resolvePinnedState(
+    params: ComparisonToolUrlParams,
+    options: { isInitial: boolean },
+  ): void {
     this.syncToUrlInProgress.set(true);
 
-    const newPinnedItems = params.pinnedItems ?? null;
-    const currentPinnedItems = Array.from(this.pinnedItems());
+    const urlPinnedItems = params.pinnedItems ?? undefined;
+    const hasUrlPins = Array.isArray(urlPinnedItems) && urlPinnedItems.length > 0;
 
-    if (this.shouldUpdateFromUrl(currentPinnedItems, newPinnedItems ?? [])) {
-      this.setPinnedItems(newPinnedItems);
+    if (hasUrlPins) {
+      this.setPinnedItems(urlPinnedItems);
+      this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
+      this.initialPinsResolved = true;
+      this.syncToUrlInProgress.set(false);
+      return;
+    }
+
+    if (options.isInitial && this.hasRouteCachedPins()) {
+      const cachedPins = this.getRouteCachedPins();
+      this.setPinnedItems(cachedPins);
+      this.syncToUrlInProgress.set(false);
+
+      const pinnedState = this.pinnedItems();
+      this.cacheRoutePinnedItems(pinnedState);
+      this.syncStateToUrl(this.serializeState(pinnedState));
+
+      this.initialPinsResolved = true;
+      return;
+    }
+
+    if (options.isInitial && !this.initialPinsResolved) {
+      this.resetPinnedItems();
+      this.syncToUrlInProgress.set(false);
+
+      const pinnedState = this.pinnedItems();
+      this.cacheRoutePinnedItems(pinnedState);
+      this.syncStateToUrl(this.serializeState(pinnedState));
+
+      this.initialPinsResolved = true;
+      return;
     }
 
     this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
-
     this.syncToUrlInProgress.set(false);
   }
 
@@ -536,5 +577,40 @@ export class ComparisonToolService<T> {
     return {
       pinnedItems: pinned.length ? pinned : null,
     };
+  }
+
+  private hasRouteCachedPins(): boolean {
+    if (!this.cacheKey) {
+      return false;
+    }
+
+    return ComparisonToolService.routePinnedCache.has(this.cacheKey);
+  }
+
+  private getRouteCachedPins(): string[] {
+    if (!this.cacheKey) {
+      return [];
+    }
+
+    const cached = ComparisonToolService.routePinnedCache.get(this.cacheKey) ?? [];
+    return [...cached];
+  }
+
+  private cacheRoutePinnedItems(pinnedItems: Set<string>): void {
+    if (!this.cacheKey) {
+      return;
+    }
+
+    ComparisonToolService.routePinnedCache.set(this.cacheKey, Array.from(pinnedItems));
+  }
+
+  private handleRouteExit(): void {
+    if (!this.cacheKey) {
+      return;
+    }
+
+    const clearedState = { pinnedItems: null } satisfies ComparisonToolUrlParams;
+    this.urlService.syncToUrl(clearedState);
+    this.lastSerializedState = JSON.stringify(clearedState);
   }
 }

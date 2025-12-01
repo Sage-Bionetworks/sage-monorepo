@@ -1,6 +1,10 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComparisonToolColumn, ComparisonToolConfig } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolColumn,
+  ComparisonToolConfig,
+  ComparisonToolUrlParams,
+} from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { FilterService, MessageService } from 'primeng/api';
 import { BehaviorSubject } from 'rxjs';
@@ -40,6 +44,11 @@ describe('ComparisonToolService', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+
+    const cache = (ComparisonToolService as any).routePinnedCache as
+      | Map<string, string[]>
+      | undefined;
+    cache?.clear();
   });
 
   // Inject inside each test so fakeAsync zones include the service's timer setup
@@ -297,5 +306,104 @@ describe('ComparisonToolService', () => {
         expect(getLastNavigateCall()?.[1]?.queryParams?.pinned).toBeNull();
       }));
     });
+  });
+
+  describe('connect precedence resolution', () => {
+    const createConnectSubjects = () => {
+      const config$ = new BehaviorSubject<ComparisonToolConfig[]>(mockComparisonToolDataConfig);
+      const params$ = new BehaviorSubject<ComparisonToolUrlParams>({});
+      return { config$, params$ };
+    };
+
+    it('prefers URL pins over cached pins when both are present', fakeAsync(() => {
+      const { config$, params$ } = createConnectSubjects();
+      params$.next({ pinnedItems: ['url-1', 'url-2'] });
+
+      const cache = (ComparisonToolService as any).routePinnedCache as Map<string, string[]>;
+      cache.set('test-key', ['cached-1']);
+
+      injectService().connect({
+        config$: config$.asObservable(),
+        queryParams$: params$.asObservable(),
+        cacheKey: 'test-key',
+      });
+      tick();
+
+      expect(Array.from(service.pinnedItems())).toEqual(['url-1', 'url-2']);
+      expect(cache.get('test-key')).toEqual(['url-1', 'url-2']);
+    }));
+
+    it('restores cached pins when URL has none', fakeAsync(() => {
+      const { config$, params$ } = createConnectSubjects();
+      params$.next({});
+
+      const cache = (ComparisonToolService as any).routePinnedCache as Map<string, string[]>;
+      cache.set('test-key', ['cached-1', 'cached-2']);
+
+      injectService().connect({
+        config$: config$.asObservable(),
+        queryParams$: params$.asObservable(),
+        cacheKey: 'test-key',
+      });
+      tick();
+
+      expect(Array.from(service.pinnedItems())).toEqual(['cached-1', 'cached-2']);
+
+      tick();
+
+      expect(mockRouter.navigate).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({
+          queryParams: expect.objectContaining({ pinned: 'cached-1,cached-2' }),
+        }),
+      );
+    }));
+
+    it('starts with empty pins when neither URL nor cache provide values', fakeAsync(() => {
+      const { config$, params$ } = createConnectSubjects();
+      params$.next({});
+
+      injectService().connect({
+        config$: config$.asObservable(),
+        queryParams$: params$.asObservable(),
+        cacheKey: 'test-key',
+      });
+      tick();
+
+      expect(Array.from(service.pinnedItems())).toEqual([]);
+
+      tick();
+
+      expect(mockRouter.navigate).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({
+          queryParams: expect.objectContaining({ pinned: null }),
+        }),
+      );
+    }));
+
+    it('clears the URL pinned param on route exit but preserves cache', fakeAsync(() => {
+      const { config$, params$ } = createConnectSubjects();
+      params$.next({});
+
+      injectService().connect({
+        config$: config$.asObservable(),
+        queryParams$: params$.asObservable(),
+        cacheKey: 'test-key',
+      });
+      tick();
+
+      service.pinList(['p1', 'p2']);
+      tick();
+
+      const cache = (ComparisonToolService as any).routePinnedCache as Map<string, string[]>;
+      expect(cache.get('test-key')).toEqual(['p1', 'p2']);
+
+      (service as any).handleRouteExit();
+
+      const lastCall = (mockRouter.navigate as jest.Mock).mock.calls.at(-1);
+      expect(lastCall?.[1]?.queryParams?.pinned).toBeNull();
+      expect(cache.get('test-key')).toEqual(['p1', 'p2']);
+    }));
   });
 });
