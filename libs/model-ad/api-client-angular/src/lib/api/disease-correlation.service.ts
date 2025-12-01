@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { Model } from '../model/model';
+import { DiseaseCorrelationSearchQuery } from '../model/disease-correlation-search-query';
 // @ts-ignore
-import { SearchResult } from '../model/search-result';
+import { DiseaseCorrelationsPage } from '../model/disease-correlations-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -36,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class ApiPublicOpenapiModelService {
+export class DiseaseCorrelationService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -109,14 +109,14 @@ export class ApiPublicOpenapiModelService {
   }
 
   /**
-   * Get details for a specific model
-   * Retrieve detailed information for a specific model by its name
-   * @param name Name of the model to retrieve
+   * Get disease correlation comparison data
+   * Returns a paginated list of disease correlation objects for use in comparison tools.
+   * @param diseaseCorrelationSearchQuery The search query used to find and filter disease correlations.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getModelByName(
-    name: string,
+  public getDiseaseCorrelations(
+    diseaseCorrelationSearchQuery?: DiseaseCorrelationSearchQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -124,9 +124,9 @@ export class ApiPublicOpenapiModelService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Model>;
-  public getModelByName(
-    name: string,
+  ): Observable<DiseaseCorrelationsPage>;
+  public getDiseaseCorrelations(
+    diseaseCorrelationSearchQuery?: DiseaseCorrelationSearchQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -134,9 +134,9 @@ export class ApiPublicOpenapiModelService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Model>>;
-  public getModelByName(
-    name: string,
+  ): Observable<HttpResponse<DiseaseCorrelationsPage>>;
+  public getDiseaseCorrelations(
+    diseaseCorrelationSearchQuery?: DiseaseCorrelationSearchQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -144,9 +144,9 @@ export class ApiPublicOpenapiModelService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Model>>;
-  public getModelByName(
-    name: string,
+  ): Observable<HttpEvent<DiseaseCorrelationsPage>>;
+  public getDiseaseCorrelations(
+    diseaseCorrelationSearchQuery?: DiseaseCorrelationSearchQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -155,109 +155,13 @@ export class ApiPublicOpenapiModelService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (name === null || name === undefined) {
-      throw new Error('Required parameter name was null or undefined when calling getModelByName.');
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/models/${this.configuration.encodeParam({ name: 'name', value: name, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<Model>('get', `${this.configuration.basePath}${localVarPath}`, {
-      context: localVarHttpContext,
-      responseType: <any>responseType_,
-      withCredentials: this.configuration.withCredentials,
-      headers: localVarHeaders,
-      observe: observe,
-      transferCache: localVarTransferCache,
-      reportProgress: reportProgress,
-    });
-  }
-
-  /**
-   * Search Models
-   * Search for a particular model
-   * @param q Search query
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public searchModels(
-    q: string,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<Array<SearchResult>>;
-  public searchModels(
-    q: string,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<Array<SearchResult>>>;
-  public searchModels(
-    q: string,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<Array<SearchResult>>>;
-  public searchModels(
-    q: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (q === null || q === undefined) {
-      throw new Error('Required parameter q was null or undefined when calling searchModels.');
-    }
-
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (q !== undefined && q !== null) {
-      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>q, 'q');
+    if (diseaseCorrelationSearchQuery !== undefined && diseaseCorrelationSearchQuery !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>diseaseCorrelationSearchQuery,
+        'diseaseCorrelationSearchQuery',
+      );
     }
 
     let localVarHeaders = this.defaultHeaders;
@@ -293,8 +197,8 @@ export class ApiPublicOpenapiModelService {
       }
     }
 
-    let localVarPath = `/models/search`;
-    return this.httpClient.request<Array<SearchResult>>(
+    let localVarPath = `/comparison-tools/disease-correlation`;
+    return this.httpClient.request<DiseaseCorrelationsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

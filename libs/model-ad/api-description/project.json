@@ -22,7 +22,7 @@
       "outputs": ["{projectRoot}/openapi"],
       "options": {
         "commands": [
-          "redocly join openapi/*-public.openapi.yaml --prefix-tags-with-filename --output openapi/openapi.yaml",
+          "redocly join openapi/*-public.openapi.yaml --output openapi/openapi.yaml",
           "redocly bundle model-ad-public --output openapi/openapi.yaml"
         ],
         "cwd": "{projectRoot}",

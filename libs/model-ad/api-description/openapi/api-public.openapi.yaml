@@ -18,14 +18,8 @@ tags:
     description: Operations about the data version.
   - name: Model
     description: Operations about models.
-  - name: Model Overview
-    description: Operations about Model Overview.
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
-  - name: Disease Correlation
-    description: Operations about Disease Correlation results.
-  - name: Gene Expression
-    description: Operations about Gene Expression results.
 paths:
   /data-version:
     x-audience:

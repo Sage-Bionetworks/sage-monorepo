@@ -14,38 +14,29 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: api-next-public.openapi_Model Overview
+  - name: Model Overview
     description: Operations about Model Overview.
     x-displayName: Model Overview
-  - name: api-next-public.openapi_Disease Correlation
+  - name: Disease Correlation
     description: Operations about Disease Correlation results.
     x-displayName: Disease Correlation
-  - name: api-next-public.openapi_Gene Expression
+  - name: Gene Expression
     description: Operations about Gene Expression results.
     x-displayName: Gene Expression
-  - name: api-public.openapi_Data Version
+  - name: Data Version
     description: Operations about the data version.
     x-displayName: Data Version
-  - name: api-public.openapi_Model
+  - name: Model
     description: Operations about models.
     x-displayName: Model
-  - name: api-public.openapi_Model Overview
-    description: Operations about Model Overview.
-    x-displayName: Model Overview
-  - name: api-public.openapi_Comparison Tool Config
+  - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
     x-displayName: Comparison Tool Config
-  - name: api-public.openapi_Disease Correlation
-    description: Operations about Disease Correlation results.
-    x-displayName: Disease Correlation
-  - name: api-public.openapi_Gene Expression
-    description: Operations about Gene Expression results.
-    x-displayName: Gene Expression
 paths:
   /comparison-tools/model-overview:
     get:
       tags:
-        - api-next-public.openapi_Model Overview
+        - Model Overview
       summary: Get model overview for comparison tools
       description: Returns a paginated list of model overview objects for use in comparison tools.
       operationId: getModelOverviews
@@ -67,7 +58,7 @@ paths:
   /comparison-tools/disease-correlation:
     get:
       tags:
-        - api-next-public.openapi_Disease Correlation
+        - Disease Correlation
       summary: Get disease correlation comparison data
       description: Returns a paginated list of disease correlation objects for use in comparison tools.
       operationId: getDiseaseCorrelations
@@ -89,7 +80,7 @@ paths:
   /comparison-tools/gene-expression:
     get:
       tags:
-        - api-next-public.openapi_Gene Expression
+        - Gene Expression
       summary: Get gene expression comparison data
       description: Returns a list of gene expression objects for use in comparison tools.
       operationId: getGeneExpressions
@@ -115,7 +106,7 @@ paths:
   /data-version:
     get:
       tags:
-        - api-public.openapi_Data Version
+        - Data Version
       summary: Get data version
       description: Get data version
       operationId: getDataVersion
@@ -135,7 +126,7 @@ paths:
   /models/search:
     get:
       tags:
-        - api-public.openapi_Model
+        - Model
       summary: Search Models
       description: Search for a particular model
       operationId: searchModels
@@ -162,7 +153,7 @@ paths:
   /models/{name}:
     get:
       tags:
-        - api-public.openapi_Model
+        - Model
       summary: Get details for a specific model
       description: Retrieve detailed information for a specific model by its name
       operationId: getModelByName
@@ -189,7 +180,7 @@ paths:
   /comparison-tool-config:
     get:
       tags:
-        - api-public.openapi_Comparison Tool Config
+        - Comparison Tool Config
       summary: Get Comparison Tool configuration
       description: Retrieve the Comparison Tool configuration schema for the Model-AD application
       operationId: getComparisonToolConfig
@@ -967,14 +958,11 @@ components:
 x-tagGroups:
   - name: Model-AD API Next
     tags:
-      - api-next-public.openapi_Model Overview
-      - api-next-public.openapi_Disease Correlation
-      - api-next-public.openapi_Gene Expression
+      - Model Overview
+      - Disease Correlation
+      - Gene Expression
   - name: Model-AD API
     tags:
-      - api-public.openapi_Data Version
-      - api-public.openapi_Model
-      - api-public.openapi_Model Overview
-      - api-public.openapi_Comparison Tool Config
-      - api-public.openapi_Disease Correlation
-      - api-public.openapi_Gene Expression
+      - Data Version
+      - Model
+      - Comparison Tool Config

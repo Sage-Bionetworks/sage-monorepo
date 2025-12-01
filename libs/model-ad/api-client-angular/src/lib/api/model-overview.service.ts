@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { GeneExpression } from '../model/gene-expression';
+import { ModelOverviewSearchQuery } from '../model/model-overview-search-query';
 // @ts-ignore
-import { ItemFilterTypeQuery } from '../model/item-filter-type-query';
+import { ModelOverviewsPage } from '../model/model-overviews-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -36,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class ApiNextPublicOpenapiGeneExpressionService {
+export class ModelOverviewService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -109,18 +109,14 @@ export class ApiNextPublicOpenapiGeneExpressionService {
   }
 
   /**
-   * Get gene expression comparison data
-   * Returns a list of gene expression objects for use in comparison tools.
-   * @param category An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the \&#39;category\&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA.
-   * @param item A list of items to filter the data by.
-   * @param itemFilterType The type of filter to apply to the items. Possible values are \&#39;include\&#39; or \&#39;exclude\&#39;.
+   * Get model overview for comparison tools
+   * Returns a paginated list of model overview objects for use in comparison tools.
+   * @param modelOverviewSearchQuery The search query used to find and filter model overviews.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getGeneExpressions(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+  public getModelOverviews(
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -128,11 +124,9 @@ export class ApiNextPublicOpenapiGeneExpressionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Array<GeneExpression>>;
-  public getGeneExpressions(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+  ): Observable<ModelOverviewsPage>;
+  public getModelOverviews(
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -140,11 +134,9 @@ export class ApiNextPublicOpenapiGeneExpressionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Array<GeneExpression>>>;
-  public getGeneExpressions(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+  ): Observable<HttpResponse<ModelOverviewsPage>>;
+  public getModelOverviews(
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -152,11 +144,9 @@ export class ApiNextPublicOpenapiGeneExpressionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Array<GeneExpression>>>;
-  public getGeneExpressions(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+  ): Observable<HttpEvent<ModelOverviewsPage>>;
+  public getModelOverviews(
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -165,36 +155,12 @@ export class ApiNextPublicOpenapiGeneExpressionService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (category === null || category === undefined) {
-      throw new Error(
-        'Required parameter category was null or undefined when calling getGeneExpressions.',
-      );
-    }
-
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (category) {
-      category.forEach((element) => {
-        localVarQueryParameters = this.addToHttpParams(
-          localVarQueryParameters,
-          <any>element,
-          'category',
-        );
-      });
-    }
-    if (item) {
-      item.forEach((element) => {
-        localVarQueryParameters = this.addToHttpParams(
-          localVarQueryParameters,
-          <any>element,
-          'item',
-        );
-      });
-    }
-    if (itemFilterType !== undefined && itemFilterType !== null) {
+    if (modelOverviewSearchQuery !== undefined && modelOverviewSearchQuery !== null) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>itemFilterType,
-        'itemFilterType',
+        <any>modelOverviewSearchQuery,
+        'modelOverviewSearchQuery',
       );
     }
 
@@ -231,8 +197,8 @@ export class ApiNextPublicOpenapiGeneExpressionService {
       }
     }
 
-    let localVarPath = `/comparison-tools/gene-expression`;
-    return this.httpClient.request<Array<GeneExpression>>(
+    let localVarPath = `/comparison-tools/model-overview`;
+    return this.httpClient.request<ModelOverviewsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
