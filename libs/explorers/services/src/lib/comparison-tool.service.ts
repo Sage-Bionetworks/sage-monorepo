@@ -9,6 +9,8 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { SortEvent, SortMeta } from 'primeng/api';
+import type { Observable } from 'rxjs';
+import { combineLatest, of, startWith } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
 
@@ -81,11 +83,30 @@ export class ComparisonToolService<T> {
   private readonly syncToUrlInProgress = signal(false);
   private readonly isInitializedSignal = signal(false);
   readonly isInitialized = this.isInitializedSignal.asReadonly();
+  private readonly hasBootstrappedSignal = signal(false);
   private lastSerializedState: string | null = null;
   private hasInitializedConfig = false;
+  private connectActivated = false;
+  private pendingSelection: string[] | undefined;
 
   constructor() {
-    this.setupUrlSync();
+    effect(() => {
+      const hasBootstrapped = this.hasBootstrappedSignal();
+      if (!hasBootstrapped) {
+        return;
+      }
+
+      const isInitialized = this.isInitialized();
+      const syncingToUrl = this.syncToUrlInProgress();
+      if (!isInitialized || syncingToUrl) {
+        return;
+      }
+
+      const pinnedItems = this.pinnedItems();
+      const state = this.serializeState(pinnedItems);
+
+      this.syncStateToUrl(state);
+    });
   }
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
@@ -149,36 +170,41 @@ export class ComparisonToolService<T> {
     this.maxPinnedItemsSignal.set(count);
   }
 
-  initialize(configs: ComparisonToolConfig[], selection?: string[]) {
-    // if it is already initialized, do not re-initialize
-    if (this.configs().length > 0) {
+  connect(options: {
+    config$: Observable<ComparisonToolConfig[]>;
+    queryParams$: Observable<ComparisonToolUrlParams>;
+    cacheKey?: string;
+  }): void {
+    if (this.connectActivated) {
       return;
     }
 
-    this.configsSignal.set(configs ?? []);
-    this.totalResultsCount.set(0);
-    if (this.hasInitializedConfig) {
-      this.resetPinnedItems();
+    this.connectActivated = true;
+
+    const queryParams$ = options.queryParams$.pipe(startWith({} as ComparisonToolUrlParams));
+
+    combineLatest([options.config$, queryParams$])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([configs, params]) => {
+        if (!this.hasBootstrappedSignal()) {
+          this.bootstrapFromConfig(configs, params);
+          return;
+        }
+
+        this.handleQueryParams(params);
+      });
+  }
+
+  initialize(configs: ComparisonToolConfig[], selection?: string[]) {
+    if (this.connectActivated) {
+      return;
     }
-    this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
-    this.setUnpinnedData([]);
-    this.setPinnedData([]);
 
-    const normalizedSelection = this.normalizeSelection(selection ?? [], configs);
-    this.dropdownSelectionSignal.set(normalizedSelection);
-
-    const columnsMap = new Map<string, ComparisonToolColumn[]>();
-    for (const config of configs) {
-      columnsMap.set(
-        this.dropdownKey(config.dropdowns),
-        this.applyColumnPreferences(config.columns),
-      );
-    }
-
-    this.columnsForDropdownsSignal.set(columnsMap);
-    this.pinnedItemsForDropdownsSignal.set(new Map());
-    this.hasInitializedConfig = true;
-    this.isInitializedSignal.set(true);
+    this.pendingSelection = selection;
+    this.connect({
+      config$: of(configs),
+      queryParams$: this.urlService.params$,
+    });
   }
 
   setDropdownSelection(selection: string[]) {
@@ -442,36 +468,57 @@ export class ComparisonToolService<T> {
     return isFirstSync || hasChanged;
   }
 
-  private setupUrlSync(): void {
-    // URL → State: Subscribe to URL param changes
-    this.urlService.params$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      this.syncToUrlInProgress.set(true);
+  private bootstrapFromConfig(
+    configs: ComparisonToolConfig[],
+    params: ComparisonToolUrlParams,
+  ): void {
+    this.configsSignal.set(configs ?? []);
+    this.totalResultsCount.set(0);
 
-      const newPinnedItems = params.pinnedItems ?? null;
-      const currentPinnedItems = Array.from(this.pinnedItems());
+    if (this.hasInitializedConfig) {
+      this.resetPinnedItems();
+    }
 
-      if (this.shouldUpdateFromUrl(currentPinnedItems, newPinnedItems ?? [])) {
-        this.setPinnedItems(newPinnedItems);
-      }
+    this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
+    this.setUnpinnedData([]);
+    this.setPinnedData([]);
 
-      this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
+    const initialSelection = this.pendingSelection ?? [];
+    const normalizedSelection = this.normalizeSelection(initialSelection, configs);
+    this.dropdownSelectionSignal.set(normalizedSelection);
 
-      this.syncToUrlInProgress.set(false);
-    });
+    const columnsMap = new Map<string, ComparisonToolColumn[]>();
+    for (const config of configs) {
+      columnsMap.set(
+        this.dropdownKey(config.dropdowns),
+        this.applyColumnPreferences(config.columns),
+      );
+    }
 
-    // State → URL: Sync state changes to URL using effect
-    effect(() => {
-      const isInitialized = this.isInitialized();
-      const syncingToUrl = this.syncToUrlInProgress();
-      const pinnedItems = this.pinnedItems();
-      const state = this.serializeState(pinnedItems);
+    this.columnsForDropdownsSignal.set(columnsMap);
+    this.pinnedItemsForDropdownsSignal.set(new Map());
+    this.hasInitializedConfig = true;
+    this.pendingSelection = undefined;
 
-      if (!isInitialized || syncingToUrl) {
-        return;
-      }
+    this.handleQueryParams(params);
 
-      this.syncStateToUrl(state);
-    });
+    this.isInitializedSignal.set(true);
+    this.hasBootstrappedSignal.set(true);
+  }
+
+  private handleQueryParams(params: ComparisonToolUrlParams): void {
+    this.syncToUrlInProgress.set(true);
+
+    const newPinnedItems = params.pinnedItems ?? null;
+    const currentPinnedItems = Array.from(this.pinnedItems());
+
+    if (this.shouldUpdateFromUrl(currentPinnedItems, newPinnedItems ?? [])) {
+      this.setPinnedItems(newPinnedItems);
+    }
+
+    this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
+
+    this.syncToUrlInProgress.set(false);
   }
 
   private syncStateToUrl(state: ComparisonToolUrlParams): void {
