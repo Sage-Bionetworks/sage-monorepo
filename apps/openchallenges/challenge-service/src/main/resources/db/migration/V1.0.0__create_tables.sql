@@ -34,8 +34,8 @@ CREATE TABLE challenge (
   created_at TIMESTAMP WITH TIME ZONE NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
   total_competitors INT,
-  total_teams BIGINT,
-  total_submissions BIGINT,
+  total_teams INT,
+  total_submissions INT,
   CONSTRAINT fk_platform FOREIGN KEY (platform_id) REFERENCES challenge_platform(id),
   CONSTRAINT fk_operation FOREIGN KEY (operation_id) REFERENCES edam_concept(id),
   CONSTRAINT slug_check CHECK (
