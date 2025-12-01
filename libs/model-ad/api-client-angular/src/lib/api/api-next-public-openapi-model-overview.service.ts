@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { ComparisonToolConfig } from '../model/comparison-tool-config';
+import { ModelOverviewSearchQuery } from '../model/model-overview-search-query';
 // @ts-ignore
-import { ComparisonToolPage } from '../model/comparison-tool-page';
+import { ModelOverviewsPage } from '../model/model-overviews-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -36,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class ComparisonToolConfigService {
+export class ApiNextPublicOpenapiModelOverviewService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -109,14 +109,14 @@ export class ComparisonToolConfigService {
   }
 
   /**
-   * Get Comparison Tool configuration
-   * Retrieve the Comparison Tool configuration schema for the Model-AD application
-   * @param page Name of the page to retrieve the Comparison Tool configuration for
+   * Get model overview for comparison tools
+   * Returns a paginated list of model overview objects for use in comparison tools.
+   * @param modelOverviewSearchQuery The search query used to find and filter model overviews.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getComparisonToolConfig(
-    page: ComparisonToolPage,
+  public getModelOverviews(
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -124,9 +124,9 @@ export class ComparisonToolConfigService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Array<ComparisonToolConfig>>;
-  public getComparisonToolConfig(
-    page: ComparisonToolPage,
+  ): Observable<ModelOverviewsPage>;
+  public getModelOverviews(
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -134,9 +134,9 @@ export class ComparisonToolConfigService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Array<ComparisonToolConfig>>>;
-  public getComparisonToolConfig(
-    page: ComparisonToolPage,
+  ): Observable<HttpResponse<ModelOverviewsPage>>;
+  public getModelOverviews(
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -144,9 +144,9 @@ export class ComparisonToolConfigService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Array<ComparisonToolConfig>>>;
-  public getComparisonToolConfig(
-    page: ComparisonToolPage,
+  ): Observable<HttpEvent<ModelOverviewsPage>>;
+  public getModelOverviews(
+    modelOverviewSearchQuery?: ModelOverviewSearchQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -155,15 +155,13 @@ export class ComparisonToolConfigService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (page === null || page === undefined) {
-      throw new Error(
-        'Required parameter page was null or undefined when calling getComparisonToolConfig.',
-      );
-    }
-
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (page !== undefined && page !== null) {
-      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>page, 'page');
+    if (modelOverviewSearchQuery !== undefined && modelOverviewSearchQuery !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>modelOverviewSearchQuery,
+        'modelOverviewSearchQuery',
+      );
     }
 
     let localVarHeaders = this.defaultHeaders;
@@ -199,8 +197,8 @@ export class ComparisonToolConfigService {
       }
     }
 
-    let localVarPath = `/comparison-tool-config`;
-    return this.httpClient.request<Array<ComparisonToolConfig>>(
+    let localVarPath = `/comparison-tools/model-overview`;
+    return this.httpClient.request<ModelOverviewsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

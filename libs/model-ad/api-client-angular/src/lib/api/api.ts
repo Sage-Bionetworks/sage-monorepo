@@ -1,20 +1,20 @@
-export * from './comparison-tool-config.service';
-import { ComparisonToolConfigService } from './comparison-tool-config.service';
-export * from './data-version.service';
-import { DataVersionService } from './data-version.service';
-export * from './disease-correlation.service';
-import { DiseaseCorrelationService } from './disease-correlation.service';
-export * from './gene-expression.service';
-import { GeneExpressionService } from './gene-expression.service';
-export * from './model.service';
-import { ModelService } from './model.service';
-export * from './model-overview.service';
-import { ModelOverviewService } from './model-overview.service';
+export * from './api-next-public-openapi-disease-correlation.service';
+import { ApiNextPublicOpenapiDiseaseCorrelationService } from './api-next-public-openapi-disease-correlation.service';
+export * from './api-next-public-openapi-gene-expression.service';
+import { ApiNextPublicOpenapiGeneExpressionService } from './api-next-public-openapi-gene-expression.service';
+export * from './api-next-public-openapi-model-overview.service';
+import { ApiNextPublicOpenapiModelOverviewService } from './api-next-public-openapi-model-overview.service';
+export * from './api-public-openapi-comparison-tool-config.service';
+import { ApiPublicOpenapiComparisonToolConfigService } from './api-public-openapi-comparison-tool-config.service';
+export * from './api-public-openapi-data-version.service';
+import { ApiPublicOpenapiDataVersionService } from './api-public-openapi-data-version.service';
+export * from './api-public-openapi-model.service';
+import { ApiPublicOpenapiModelService } from './api-public-openapi-model.service';
 export const APIS = [
-  ComparisonToolConfigService,
-  DataVersionService,
-  DiseaseCorrelationService,
-  GeneExpressionService,
-  ModelService,
-  ModelOverviewService,
+  ApiNextPublicOpenapiDiseaseCorrelationService,
+  ApiNextPublicOpenapiGeneExpressionService,
+  ApiNextPublicOpenapiModelOverviewService,
+  ApiPublicOpenapiComparisonToolConfigService,
+  ApiPublicOpenapiDataVersionService,
+  ApiPublicOpenapiModelService,
 ];

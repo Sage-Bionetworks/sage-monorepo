@@ -25,7 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { DataVersion } from '../model/data-version';
+import { ComparisonToolConfig } from '../model/comparison-tool-config';
+// @ts-ignore
+import { ComparisonToolPage } from '../model/comparison-tool-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -34,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class DataVersionService {
+export class ApiPublicOpenapiComparisonToolConfigService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -107,12 +109,14 @@ export class DataVersionService {
   }
 
   /**
-   * Get data version
-   * Get data version
+   * Get Comparison Tool configuration
+   * Retrieve the Comparison Tool configuration schema for the Model-AD application
+   * @param page Name of the page to retrieve the Comparison Tool configuration for
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getDataVersion(
+  public getComparisonToolConfig(
+    page: ComparisonToolPage,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -120,8 +124,9 @@ export class DataVersionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<DataVersion>;
-  public getDataVersion(
+  ): Observable<Array<ComparisonToolConfig>>;
+  public getComparisonToolConfig(
+    page: ComparisonToolPage,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -129,8 +134,9 @@ export class DataVersionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<DataVersion>>;
-  public getDataVersion(
+  ): Observable<HttpResponse<Array<ComparisonToolConfig>>>;
+  public getComparisonToolConfig(
+    page: ComparisonToolPage,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -138,8 +144,9 @@ export class DataVersionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<DataVersion>>;
-  public getDataVersion(
+  ): Observable<HttpEvent<Array<ComparisonToolConfig>>>;
+  public getComparisonToolConfig(
+    page: ComparisonToolPage,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -148,6 +155,17 @@ export class DataVersionService {
       transferCache?: boolean;
     },
   ): Observable<any> {
+    if (page === null || page === undefined) {
+      throw new Error(
+        'Required parameter page was null or undefined when calling getComparisonToolConfig.',
+      );
+    }
+
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (page !== undefined && page !== null) {
+      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>page, 'page');
+    }
+
     let localVarHeaders = this.defaultHeaders;
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -181,12 +199,13 @@ export class DataVersionService {
       }
     }
 
-    let localVarPath = `/data-version`;
-    return this.httpClient.request<DataVersion>(
+    let localVarPath = `/comparison-tool-config`;
+    return this.httpClient.request<Array<ComparisonToolConfig>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
+        params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

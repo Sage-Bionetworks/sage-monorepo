@@ -36,8 +36,11 @@ paths:
   /comparison-tool-config:
     $ref: paths/comparison-tool-config.yaml
   /comparison-tools/model-overview:
+    x-sage-internal: true
     $ref: paths/comparison-tools/model-overview.yaml
   /comparison-tools/disease-correlation:
+    x-sage-internal: true
     $ref: paths/comparison-tools/disease-correlation.yaml
   /comparison-tools/gene-expression:
+    x-sage-internal: true
     $ref: paths/comparison-tools/gene-expression.yaml

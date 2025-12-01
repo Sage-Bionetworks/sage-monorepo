@@ -133,6 +133,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /comparison-tools/model-overview:
+    x-sage-internal: true
     get:
       tags:
         - Model Overview
@@ -155,6 +156,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /comparison-tools/disease-correlation:
+    x-sage-internal: true
     get:
       tags:
         - Disease Correlation
@@ -177,6 +179,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /comparison-tools/gene-expression:
+    x-sage-internal: true
     get:
       tags:
         - Gene Expression

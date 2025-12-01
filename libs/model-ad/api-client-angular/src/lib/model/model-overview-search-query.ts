@@ -14,7 +14,7 @@ import { ItemFilterTypeQuery } from './item-filter-type-query';
  */
 export interface ModelOverviewSearchQuery {
   /**
-   * The page number.
+   * The page number to return (index starts from 0).
    */
   pageNumber?: number;
   /**

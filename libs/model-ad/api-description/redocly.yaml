@@ -14,7 +14,7 @@
 apis:
   # Model-AD API
   model-ad-public:
-    root: ./openapi/api-public.openapi.yaml
+    root: ./openapi/openapi.yaml
     decorators:
       info-override:
         version: 1.0.0

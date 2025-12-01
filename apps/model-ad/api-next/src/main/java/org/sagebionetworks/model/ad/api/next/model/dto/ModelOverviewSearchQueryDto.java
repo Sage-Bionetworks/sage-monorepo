@@ -44,12 +44,12 @@ public class ModelOverviewSearchQueryDto {
   }
 
   /**
-   * The page number.
+   * The page number to return (index starts from 0).
    * minimum: 0
    * @return pageNumber
    */
   @Min(0) 
-  @Schema(name = "pageNumber", example = "0", description = "The page number.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "pageNumber", example = "0", description = "The page number to return (index starts from 0).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("pageNumber")
   public Integer getPageNumber() {
     return pageNumber;

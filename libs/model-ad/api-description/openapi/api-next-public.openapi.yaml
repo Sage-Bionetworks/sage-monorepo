@@ -14,124 +14,13 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Data Version
-    description: Operations about the data version.
-  - name: Model
-    description: Operations about models.
   - name: Model Overview
     description: Operations about Model Overview.
-  - name: Comparison Tool Config
-    description: Operations about Comparison Tool UI configuration.
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
   - name: Gene Expression
     description: Operations about Gene Expression results.
 paths:
-  /data-version:
-    x-audience:
-      - public
-    get:
-      tags:
-        - Data Version
-      summary: Get data version
-      description: Get data version
-      operationId: getDataVersion
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataVersion'
-          description: Success
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /models/search:
-    get:
-      tags:
-        - Model
-      summary: Search Models
-      description: Search for a particular model
-      operationId: searchModels
-      parameters:
-        - name: q
-          in: query
-          description: Search query
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SearchResult'
-          description: Successfully retrieved search results
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /models/{name}:
-    get:
-      tags:
-        - Model
-      summary: Get details for a specific model
-      description: Retrieve detailed information for a specific model by its name
-      operationId: getModelByName
-      parameters:
-        - name: name
-          in: path
-          description: Name of the model to retrieve
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model'
-          description: Successfully retrieved model details
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /comparison-tool-config:
-    get:
-      tags:
-        - Comparison Tool Config
-      summary: Get Comparison Tool configuration
-      description: Retrieve the Comparison Tool configuration schema for the Model-AD application
-      operationId: getComparisonToolConfig
-      parameters:
-        - name: page
-          in: query
-          description: Name of the page to retrieve the Comparison Tool configuration for
-          required: true
-          schema:
-            $ref: '#/components/schemas/ComparisonToolPage'
-      responses:
-        '200':
-          description: Successfully retrieved Comparison Tool configuration
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ComparisonToolConfig'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /comparison-tools/model-overview:
     get:
       tags:
@@ -204,329 +93,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    DataVersion:
-      type: object
-      description: Synapse data version
-      properties:
-        data_file:
-          type: string
-        data_version:
-          type: string
-      required:
-        - data_file
-        - data_version
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem
-      required:
-        - title
-        - status
-    SearchResult:
-      type: object
-      description: Search result
-      properties:
-        id:
-          type: string
-          description: ID of result
-        match_field:
-          type: string
-          description: Field that matched the query
-        match_value:
-          type: string
-          description: Value that matched the query
-      required:
-        - id
-        - match_field
-        - match_value
-    GeneticInfo:
-      type: object
-      description: Genetic information about a model
-      properties:
-        modified_gene:
-          type: string
-          description: Name of the modified gene
-        ensembl_gene_id:
-          type: string
-          description: Ensembl gene ID
-        allele:
-          type: string
-          description: Allele symbol
-        allele_type:
-          type: string
-          description: Type of allele
-        mgi_allele_id:
-          type: number
-          description: MGI allele ID
-      required:
-        - modified_gene
-        - ensembl_gene_id
-        - allele
-        - allele_type
-        - mgi_allele_id
-    Sex:
-      type: string
-      description: Sex
-      enum:
-        - Female
-        - Male
-    IndividualData:
-      type: object
-      description: Data for an individual
-      properties:
-        genotype:
-          type: string
-          description: Genotype of the individual
-        sex:
-          $ref: '#/components/schemas/Sex'
-        individual_id:
-          type: string
-          description: Unique identifier for the individual
-        value:
-          type: number
-          description: Value for the individual
-      required:
-        - genotype
-        - sex
-        - individual_id
-        - value
-    ModelData:
-      type: object
-      description: Data associated with a model
-      properties:
-        name:
-          type: string
-          description: Name of the model
-        evidence_type:
-          type: string
-          description: Type of evidence
-        tissue:
-          type: string
-          description: Tissue collected
-        age:
-          type: string
-          description: Age at collection
-        units:
-          type: string
-          description: Units of measurement
-        y_axis_max:
-          type: number
-          description: Maximum value for y-axis in visualizations
-        data:
-          type: array
-          description: Values for each individual
-          items:
-            $ref: '#/components/schemas/IndividualData'
-      required:
-        - name
-        - evidence_type
-        - tissue
-        - age
-        - units
-        - y_axis_max
-        - data
-    Model:
-      type: object
-      description: Model details
-      properties:
-        name:
-          type: string
-          description: Name of the model
-        matched_controls:
-          type: array
-          description: List of matched controls
-          items:
-            type: string
-        model_type:
-          type: string
-          description: Type of the model
-        contributing_group:
-          type: string
-          description: Group contributing the model
-        study_synid:
-          type: string
-          description: Synapse ID of the study
-        rrid:
-          type: string
-          description: RRID of the model
-        jax_id:
-          type: number
-          description: JAX ID of the model
-        alzforum_id:
-          type: string
-          description: AlzForum ID of the model
-        genotype:
-          type: string
-          description: Genotype of the model
-        aliases:
-          type: array
-          description: List of aliases for the model
-          items:
-            type: string
-        gene_expression:
-          type: string
-          description: Link to gene expression comparison tool data
-          nullable: true
-        disease_correlation:
-          type: string
-          description: Link to disease correlation comparison tool data
-          nullable: true
-        spatial_transcriptomics:
-          type: string
-          description: Deprecated field for link to spatial transcriptomics data
-          nullable: true
-        genetic_info:
-          type: array
-          description: Genetic information related to the Model
-          items:
-            $ref: '#/components/schemas/GeneticInfo'
-        biomarkers:
-          type: array
-          description: List of biomarker data associated with the model
-          items:
-            $ref: '#/components/schemas/ModelData'
-        pathology:
-          type: array
-          description: List of pathology data associated with the model
-          items:
-            $ref: '#/components/schemas/ModelData'
-      required:
-        - name
-        - matched_controls
-        - model_type
-        - contributing_group
-        - study_synid
-        - rrid
-        - jax_id
-        - alzforum_id
-        - genotype
-        - aliases
-        - gene_expression
-        - disease_correlation
-        - spatial_transcriptomics
-        - genetic_info
-        - biomarkers
-        - pathology
-    ComparisonToolPage:
-      type: string
-      description: The type of comparison tool page
-      enum:
-        - Model Overview
-        - Gene Expression
-        - Disease Correlation
-      example: Gene Expression
-    ComparisonToolConfigColumn:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The display name of the column.
-        type:
-          type: string
-          enum:
-            - text
-            - heat_map
-            - link_internal
-            - link_external
-            - primary
-          description: The data type of the column. Must be 'text', 'heat_map', 'link_internal', 'link_external', or 'primary', where 'primary' is the primary key column that uniquely identifies each record in the table.
-        data_key:
-          type: string
-          description: The key used to retrieve data for this column from the data source.
-        tooltip:
-          type: string
-          description: Tooltip text for the column.
-        sort_tooltip:
-          type: string
-          description: Tooltip text for the column's sort functionality.
-        link_text:
-          type: string
-          description: The default text for a link in this column.
-        link_url:
-          type: string
-          description: The default URL for this column.
-        is_exported:
-          type: boolean
-          description: Indicates whether the column is included in data exports.
-        is_hidden:
-          type: boolean
-          description: Indicates whether the column is shown in the comparison table UI.
-      required:
-        - type
-        - data_key
-        - is_exported
-        - is_hidden
-    ComparisonToolConfigFilter:
-      type: object
-      description: Comparison Tool Config Filter
-      properties:
-        name:
-          type: string
-          description: Name of the filter group
-          example: Biological Domain
-        data_key:
-          type: string
-          description: Field to filter on
-          example: model_type
-        short_name:
-          type: string
-          description: Short name of the filter group
-          example: Biodomain
-        values:
-          type: array
-          description: List of filter values
-          items:
-            type: string
-            example: Apoptosis
-      required:
-        - name
-        - data_key
-        - values
-    ComparisonToolConfig:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/ComparisonToolPage'
-        dropdowns:
-          type: array
-          description: List of dropdown options
-          items:
-            type: string
-            example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
-        row_count:
-          type: string
-          description: Relative description of the total number of rows in the data
-        columns:
-          type: array
-          description: List of column definitions
-          items:
-            $ref: '#/components/schemas/ComparisonToolConfigColumn'
-        filters:
-          type: array
-          description: List of filter configurations
-          items:
-            $ref: '#/components/schemas/ComparisonToolConfigFilter'
-      required:
-        - page
-        - dropdowns
-        - row_count
-        - columns
-        - filters
     ItemFilterTypeQuery:
       type: string
       enum:
@@ -691,6 +257,28 @@ components:
       required:
         - modelOverviews
         - page
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
     DiseaseCorrelationSearchQuery:
       type: object
       description: Disease correlation search query with pagination and filtering options.
@@ -734,6 +322,12 @@ components:
           nullable: true
       required:
         - category
+    Sex:
+      type: string
+      description: Sex
+      enum:
+        - Female
+        - Male
     CorrelationResult:
       type: object
       description: Correlation result
@@ -886,25 +480,6 @@ components:
         - model_type
         - tissue
         - sex
-  responses:
-    BadRequest:
-      description: Invalid request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
   parameters:
     modelOverviewSearchQuery:
       name: modelOverviewSearchQuery
@@ -951,3 +526,22 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ItemFilterTypeQuery'
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
