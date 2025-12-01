@@ -516,7 +516,7 @@ export class ComparisonToolService<T> {
 
     if (hasUrlPins) {
       this.setPinnedItems(urlPinnedItems);
-      this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
+      this.updateSerializedStateCacheFromPins();
       this.initialPinsResolved = true;
       this.syncToUrlInProgress.set(false);
       return;
@@ -527,9 +527,8 @@ export class ComparisonToolService<T> {
       this.setPinnedItems(cachedPins);
       this.syncToUrlInProgress.set(false);
 
-      const pinnedState = this.pinnedItems();
-      this.cacheRoutePinnedItems(pinnedState);
-      this.syncStateToUrl(this.serializeState(pinnedState));
+      this.cacheRoutePinnedItems(this.pinnedItems());
+      this.syncStateToUrlFromCurrentPins();
 
       this.initialPinsResolved = true;
       return;
@@ -539,15 +538,14 @@ export class ComparisonToolService<T> {
       this.resetPinnedItems();
       this.syncToUrlInProgress.set(false);
 
-      const pinnedState = this.pinnedItems();
-      this.cacheRoutePinnedItems(pinnedState);
-      this.syncStateToUrl(this.serializeState(pinnedState));
+      this.cacheRoutePinnedItems(this.pinnedItems());
+      this.syncStateToUrlFromCurrentPins();
 
       this.initialPinsResolved = true;
       return;
     }
 
-    this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
+    this.updateSerializedStateCacheFromPins();
     this.syncToUrlInProgress.set(false);
   }
 
@@ -591,6 +589,14 @@ export class ComparisonToolService<T> {
     }
 
     ComparisonToolService.routePinnedCache.set(this.cacheKey, Array.from(pinnedItems));
+  }
+
+  private syncStateToUrlFromCurrentPins(): void {
+    this.syncStateToUrl(this.serializeState(this.pinnedItems()));
+  }
+
+  private updateSerializedStateCacheFromPins(): void {
+    this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
   }
 
   private handleRouteExit(): void {
