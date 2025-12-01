@@ -19,6 +19,11 @@ export const getPinnedTable = (page: Page): Locator => page.locator('explorers-b
 export const getUnpinnedTable = (page: Page): Locator =>
   page.locator('explorers-base-table').last();
 
+export const expectUnpinnedTableOnly = async (page: Page): Promise<void> => {
+  await expect(page.locator('explorers-base-table').filter({ visible: true })).toHaveCount(1);
+  await expect(getUnpinnedTable(page).locator('tbody tr').first()).toBeVisible();
+};
+
 export const getRowByName = (table: Locator, page: Page, name: string): Locator =>
   table.locator('tbody tr').filter({
     has: page.getByRole('cell', { name, exact: true }),
@@ -48,4 +53,12 @@ export const unPinByName = async (table: Locator, page: Page, name: string) => {
 
 export const expectPinnedParams = async (page: Page, expected: string[]): Promise<void> => {
   await expect.poll(() => getPinnedQueryParams(page.url())).toEqual(expected);
+};
+
+export const expectPinnedRows = async (page: Page, rowNames: string[]): Promise<void> => {
+  await expect(page.locator('explorers-base-table')).toHaveCount(2);
+  const pinnedTable = getPinnedTable(page);
+  for (const rowName of rowNames) {
+    await expect(getRowByName(pinnedTable, page, rowName)).toHaveCount(1);
+  }
 };

@@ -17,11 +17,16 @@ export const navigateToComparison = async (
   page: Page,
   name: string,
   shouldCloseVisualizationOverviewDialog = false,
+  navigateBy: 'url' | 'link' = 'url',
   queryParameters?: string,
 ) => {
-  const path = COMPARISON_TOOL_PATHS[name];
-  const url = queryParameters ? `${path}?${queryParameters}` : path;
-  await page.goto(url);
+  if (navigateBy === 'url') {
+    const path = COMPARISON_TOOL_PATHS[name];
+    const url = queryParameters ? `${path}?${queryParameters}` : path;
+    await page.goto(url);
+  } else {
+    await page.getByRole('link', { name: name }).click();
+  }
 
   if (shouldCloseVisualizationOverviewDialog) {
     await closeVisualizationOverviewDialog(page);

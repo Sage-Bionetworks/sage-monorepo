@@ -92,6 +92,7 @@ export class ComparisonToolService<T> {
   private initialSelection: string[] | undefined;
   private cacheKey: string | undefined;
   private initialPinsResolved = false;
+  private isDestroyed = false;
 
   constructor() {
     effect(() => {
@@ -182,6 +183,13 @@ export class ComparisonToolService<T> {
     initialSelection?: string[];
   }): void {
     if (this.connectActivated) {
+      if (options.cacheKey && !this.cacheKey) {
+        this.cacheKey = options.cacheKey;
+      }
+
+      // Re-sync pins when re-entering with an already-connected instance
+      this.syncToUrlInProgress.set(false);
+      this.scheduleUrlSyncFromCurrentPins();
       return;
     }
 
@@ -190,6 +198,7 @@ export class ComparisonToolService<T> {
     this.initialSelection = options.initialSelection;
 
     this.destroyRef.onDestroy(() => {
+      this.isDestroyed = true;
       this.handleRouteExit();
     });
 
@@ -204,6 +213,7 @@ export class ComparisonToolService<T> {
         this.resolvePinnedState(params, { isInitial: false });
       });
   }
+
   setDropdownSelection(selection: string[]) {
     const configs = this.configsSignal();
     if (!configs.length) {
@@ -459,12 +469,6 @@ export class ComparisonToolService<T> {
     this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
   }
 
-  private shouldUpdateFromUrl<T>(currentValue: T, newValue: T): boolean {
-    const isFirstSync = !this.isInitialized();
-    const hasChanged = !isEqual(currentValue, newValue);
-    return isFirstSync || hasChanged;
-  }
-
   private bootstrapFromConfig(
     configs: ComparisonToolConfig[],
     params: ComparisonToolUrlParams,
@@ -523,10 +527,11 @@ export class ComparisonToolService<T> {
     if (options.isInitial && this.hasRouteCachedPins()) {
       const cachedPins = this.getRouteCachedPins();
       this.setPinnedItems(cachedPins);
-      this.syncToUrlInProgress.set(false);
 
       this.cacheRoutePinnedItems(this.pinnedItems());
-      this.syncStateToUrlFromCurrentPins();
+
+      this.syncToUrlInProgress.set(false);
+      this.scheduleUrlSyncFromCurrentPins();
 
       this.initialPinsResolved = true;
       return;
@@ -534,10 +539,11 @@ export class ComparisonToolService<T> {
 
     if (options.isInitial && !this.initialPinsResolved) {
       this.resetPinnedItems();
-      this.syncToUrlInProgress.set(false);
 
       this.cacheRoutePinnedItems(this.pinnedItems());
-      this.syncStateToUrlFromCurrentPins();
+
+      this.syncToUrlInProgress.set(false);
+      this.scheduleUrlSyncFromCurrentPins();
 
       this.initialPinsResolved = true;
       return;
@@ -595,6 +601,28 @@ export class ComparisonToolService<T> {
 
   private updateSerializedStateCacheFromPins(): void {
     this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
+  }
+
+  // Allow the effect-driven sync to retry if the immediate navigation was cancelled
+  private invalidateSerializedStateCache(): void {
+    this.lastSerializedState = null;
+  }
+
+  private scheduleUrlSyncFromCurrentPins(): void {
+    const schedule =
+      typeof queueMicrotask === 'function'
+        ? queueMicrotask
+        : (callback: () => void) => Promise.resolve().then(callback);
+
+    schedule(() => {
+      if (this.isDestroyed) {
+        return;
+      }
+
+      // Allow the router navigation that triggered this connect call to finish first
+      this.invalidateSerializedStateCache();
+      this.syncStateToUrlFromCurrentPins();
+    });
   }
 
   private handleRouteExit(): void {

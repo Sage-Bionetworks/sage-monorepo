@@ -1,6 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 import {
   expectPinnedParams,
+  expectPinnedRows,
+  expectUnpinnedTableOnly,
   getPinnedTable,
   getRowByName,
   getUnpinnedTable,
@@ -73,10 +75,42 @@ test.describe('model overview', () => {
     const [firstModel] = await fetchModelOverviews(page);
     expect(firstModel).toBeDefined();
 
-    await navigateToComparison(page, 'Model Overview', true, `pinned=${firstModel._id}`);
+    await navigateToComparison(page, 'Model Overview', true, 'url', `pinned=${firstModel._id}`);
 
     await expect(page.locator('explorers-base-table')).toHaveCount(2);
     await expect(getRowByName(getPinnedTable(page), page, firstModel.name)).toHaveCount(1);
+    await expectPinnedParams(page, [firstModel._id]);
+  });
+
+  test('pinned items are removed from URL when navigating to another comparison tool', async ({
+    page,
+  }) => {
+    const [firstModel] = await fetchModelOverviews(page);
+    expect(firstModel).toBeDefined();
+
+    await navigateToComparison(page, 'Model Overview', true, 'url', `pinned=${firstModel._id}`);
+    await expectPinnedParams(page, [firstModel._id]);
+
+    await navigateToComparison(page, 'Disease Correlation', true, 'link');
+    await expectPinnedParams(page, []);
+    await expectUnpinnedTableOnly(page);
+  });
+
+  test('pinned items are loaded from cache and displayed in UI and in URL when returning to the comparison tool', async ({
+    page,
+  }) => {
+    const [firstModel] = await fetchModelOverviews(page);
+    expect(firstModel).toBeDefined();
+
+    await navigateToComparison(page, 'Model Overview', true, 'url', `pinned=${firstModel._id}`);
+    await expectPinnedParams(page, [firstModel._id]);
+
+    await navigateToComparison(page, 'Disease Correlation', true, 'link');
+    await expectPinnedParams(page, []);
+    await expectUnpinnedTableOnly(page);
+
+    await navigateToComparison(page, 'Model Overview', true, 'link');
+    await expectPinnedRows(page, [firstModel.name]);
     await expectPinnedParams(page, [firstModel._id]);
   });
 });
