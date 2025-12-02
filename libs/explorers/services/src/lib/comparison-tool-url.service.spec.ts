@@ -13,33 +13,7 @@ describe('ComparisonToolUrlService', () => {
     queryParamsSubject = new BehaviorSubject<Params>({});
 
     mockRouter = {
-      navigate: jest.fn((_, extras) => {
-        const snapshot = (mockActivatedRoute.snapshot ??= { queryParams: {} } as any);
-        const extrasQueryParams = extras?.queryParams;
-
-        if (extrasQueryParams === undefined) {
-          snapshot.queryParams = {};
-          return Promise.resolve(true);
-        }
-
-        const normalizedQueryParams = extrasQueryParams ?? {};
-
-        if (extras?.queryParamsHandling === 'merge') {
-          const next = { ...snapshot.queryParams } as Record<string, unknown>;
-          for (const [key, value] of Object.entries(normalizedQueryParams)) {
-            if (value == null) {
-              delete next[key];
-            } else {
-              next[key] = value;
-            }
-          }
-          snapshot.queryParams = next;
-        } else {
-          snapshot.queryParams = { ...normalizedQueryParams };
-        }
-
-        return Promise.resolve(true);
-      }),
+      navigate: jest.fn(),
     };
 
     mockActivatedRoute = {
