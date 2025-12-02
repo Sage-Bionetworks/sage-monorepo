@@ -16,7 +16,7 @@ from bixarena_app.config.constants import (
     DEFAULT_TOP_P,
     MAX_RESPONSE_TOKENS,
 )
-from bixarena_app.config.conversation import Conversation
+from bixarena_app.config.conversation import CONTINUATION_PROMPT, Conversation
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import (
     handle_api_error_message,
@@ -178,6 +178,7 @@ def bot_response(
                 yield (state, state.to_gradio_chatbot())
                 return
         output = data["text"].strip()
+        conv.update_last_message(output)
 
         # Add continuation prompt if response was truncated
         finish_reason = data.get("finish_reason")
@@ -185,9 +186,8 @@ def bot_response(
             logger.warning(
                 f"Response truncated due to max_tokens limit for model {state.model_name}"
             )
-            output += "\n\n<br>*Would you like me to continue?*"
+            conv.append_message("assistant", CONTINUATION_PROMPT)
 
-        conv.update_last_message(output)
         yield (state, state.to_gradio_chatbot())
     except Exception as e:
         display_error_msg = handle_api_error_message(e)

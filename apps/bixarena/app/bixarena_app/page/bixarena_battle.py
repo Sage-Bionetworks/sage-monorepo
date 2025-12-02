@@ -6,7 +6,6 @@ simplified to a single function for a single-page LLM comparison arena.
 """
 
 import logging
-import warnings
 from uuid import UUID
 
 import gradio as gr
@@ -492,20 +491,14 @@ def build_side_by_side_ui_anony():
                 for i in range(num_sides):
                     label = "Model 1" if i == 0 else "Model 2"
                     with gr.Column():
-                        # Suppress tuples deprecation warning until we migrate to messages format
-                        with warnings.catch_warnings():
-                            warnings.filterwarnings(
-                                "ignore",
-                                message=".*tuples.*format.*chatbot.*deprecated.*",
-                                category=UserWarning,
-                            )
-                            chatbot = gr.Chatbot(
-                                label=label,
-                                elem_id="chatbot",
-                                height=550,
-                                show_copy_button=True,
-                                type="tuples",
-                            )
+                        chatbot = gr.Chatbot(
+                            label=label,
+                            elem_id="chatbot",
+                            height=550,
+                            show_copy_button=True,
+                            type="messages",
+                            group_consecutive_messages=False,
+                        )
                         chatbots.append(chatbot)
 
                         # Model name footer attached to each chatbot

@@ -11,6 +11,21 @@ BIXARENA_SYSTEM_PROMPT = (
     "Do not reveal your identity, model name, organization or training details."
 )
 
+CONTINUATION_PROMPT = (
+    "The response reached the maximum token limit and was truncated. "
+    "Would you like to continue the response?"
+)
+
+
+def create_continuation_prompt_html(text: str) -> str:
+    return (
+        '<div class="system-message">'
+        '<div class="system-message-content">'
+        '<span class="system-icon">ⓘ</span>'
+        f'<div class="system-text">{text}</div>'
+        "</div></div>"
+    )
+
 
 @dataclasses.dataclass
 class Conversation:
@@ -40,11 +55,13 @@ class Conversation:
     def to_gradio_chatbot(self):
         """Convert the conversation to gradio chatbot format."""
         ret = []
-        for i, (_, msg) in enumerate(self.messages[self.offset :]):
-            if i % 2 == 0:
-                ret.append([msg, None])
-            else:
-                ret[-1][-1] = msg
+        for role, msg in self.messages[self.offset :]:
+            if msg is not None:
+                content = msg
+                # Handle continuation prompt for display
+                if msg == CONTINUATION_PROMPT:
+                    content = create_continuation_prompt_html(msg)
+                ret.append({"role": role, "content": content})
         return ret
 
     def to_openai_api_messages(self):
@@ -52,12 +69,18 @@ class Conversation:
         # BixArena: Override system message for all models to prevent identity leaking
         ret = [{"role": "system", "content": BIXARENA_SYSTEM_PROMPT}]
 
-        for i, (_, msg) in enumerate(self.messages[self.offset :]):
-            if i % 2 == 0:
+        role_index = 0
+        for _, msg in self.messages[self.offset :]:
+            # Handle continuation prompt for OpenAI API
+            if msg == CONTINUATION_PROMPT:
+                ret.append({"role": "system", "content": msg})
+                continue
+            if role_index % 2 == 0:
                 ret.append({"role": "user", "content": msg})
             else:
                 if msg is not None:
                     ret.append({"role": "assistant", "content": msg})
+            role_index += 1
         return ret
 
     def extract_text_from_messages(self):
