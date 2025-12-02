@@ -3,6 +3,8 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,25 +21,36 @@ public interface DiseaseCorrelationRepository
    * Find all disease correlations for a specific cluster.
    *
    * @param cluster the cluster identifier
-   * @return list of disease correlation documents matching the cluster
+   * @param pageable pagination information
+   * @return page of disease correlation documents matching the cluster
    */
-  List<DiseaseCorrelationDocument> findByCluster(String cluster);
+  Page<DiseaseCorrelationDocument> findByCluster(String cluster, Pageable pageable);
 
   /**
    * Find disease correlations for a specific cluster with IDs in the provided list.
    *
    * @param cluster the cluster identifier
    * @param ids the list of ObjectIds to include
-   * @return list of disease correlation documents matching the cluster and IDs
+   * @param pageable pagination information
+   * @return page of disease correlation documents matching the cluster and IDs
    */
-  List<DiseaseCorrelationDocument> findByClusterAndIdIn(String cluster, List<ObjectId> ids);
+  Page<DiseaseCorrelationDocument> findByClusterAndIdIn(
+    String cluster,
+    List<ObjectId> ids,
+    Pageable pageable
+  );
 
   /**
    * Find disease correlations for a specific cluster excluding IDs in the provided list.
    *
    * @param cluster the cluster identifier
    * @param ids the list of ObjectIds to exclude
-   * @return list of disease correlation documents matching the cluster, excluding the specified IDs
+   * @param pageable pagination information
+   * @return page of disease correlation documents matching the cluster, excluding the specified IDs
    */
-  List<DiseaseCorrelationDocument> findByClusterAndIdNotIn(String cluster, List<ObjectId> ids);
+  Page<DiseaseCorrelationDocument> findByClusterAndIdNotIn(
+    String cluster,
+    List<ObjectId> ids,
+    Pageable pageable
+  );
 }

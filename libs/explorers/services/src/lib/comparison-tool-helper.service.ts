@@ -6,11 +6,25 @@ import {
   HeatmapCircleData,
   VisualizationOverviewPane,
 } from '@sagebionetworks/explorers/models';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { PaginationParams } from '@sagebionetworks/explorers/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ComparisonToolHelperService {
+  /**
+   * Calculates pagination parameters from a PrimeNG TableLazyLoadEvent
+   * @param event The lazy load event from PrimeNG table
+   * @param defaultRowsPerPage Default number of rows per page (defaults to 10)
+   * @returns Object containing pageNumber (zero-based) and pageSize
+   */
+  getPaginationParams(event: TableLazyLoadEvent, defaultRowsPerPage = 10): PaginationParams {
+    const pageNumber = Math.floor((event.first ?? 0) / (event.rows ?? defaultRowsPerPage));
+    const pageSize = event.rows ?? defaultRowsPerPage;
+    return { pageNumber, pageSize };
+  }
+
   createVisualizationOverviewPane(heading: string, htmlContent: string): VisualizationOverviewPane {
     return {
       heading,

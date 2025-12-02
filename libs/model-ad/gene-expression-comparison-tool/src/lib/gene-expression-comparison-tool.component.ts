@@ -83,6 +83,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
     legendPanelConfig: this.legendPanelConfig,
     visualizationOverviewPanes: this.visualizationOverviewPanes,
+    rowsPerPage: 10,
   };
 
   constructor() {

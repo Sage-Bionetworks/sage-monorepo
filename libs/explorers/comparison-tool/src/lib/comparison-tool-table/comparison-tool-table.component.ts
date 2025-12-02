@@ -47,6 +47,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   maxPinnedItems = this.comparisonToolService.maxPinnedItems;
   hasMaxPinnedItems = this.comparisonToolService.hasMaxPinnedItems;
   disabledPinTooltip = this.comparisonToolService.disabledPinTooltip;
+  totalResultsCount = this.comparisonToolService.totalResultsCount;
 
   searchTerm = this.comparisonToolFilterService.searchTerm;
   hasSelectedFilters = this.comparisonToolFilterService.hasSelectedFilters;
