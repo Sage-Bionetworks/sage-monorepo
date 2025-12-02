@@ -34,6 +34,7 @@ class State:
         self.skip_next = False
         self.model_name = model_name
         self.has_error = False
+        self.is_truncated = False
 
     def to_gradio_chatbot(self):
         return self.conv.to_gradio_chatbot()
@@ -42,6 +43,7 @@ class State:
         """Return the last completed assistant response as a MessageCreate.
 
         Returns None if the last response had an error (has_error=True).
+        Only returns assistant messages, skipping continuation prompts.
         """
         # If there was an error, don't return the error message as assistant content
         if self.has_error:
@@ -50,14 +52,12 @@ class State:
         # Get the same message and role used for API call
         api_messages = self.conv.to_openai_api_messages()
 
-        # Find the last assistant or system message (skip the initial system prompt)
+        # Find the last assistant message (skip system prompt & continuation prompts)
         for msg in reversed(api_messages[1:]):
             role = msg.get("role")
             content = msg.get("content")
             if role == "assistant" and content:
                 return MessageCreate(role=MessageRole.ASSISTANT, content=content)
-            elif role == "system" and content:
-                return MessageCreate(role=MessageRole.SYSTEM, content=content)
         return None
 
 
@@ -194,6 +194,7 @@ def bot_response(
                 f"Response truncated due to max_tokens limit for model {state.model_name}"
             )
             conv.append_message("assistant", CONTINUATION_PROMPT)
+            state.is_truncated = True
 
         yield (state, state.to_gradio_chatbot())
     except Exception as e:
@@ -214,7 +215,8 @@ def bot_response_multi(
     request: gr.Request | None = None,
 ):
     num_sides = 2
-    if state0 and state0.skip_next:
+    # Check if BOTH models should skip (e.g., round limit reached)
+    if state0 and state0.skip_next and state1 and state1.skip_next:
         # State: Edge case - battle round limit reached
         yield (
             state0,

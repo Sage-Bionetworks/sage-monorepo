@@ -420,14 +420,20 @@ def add_text(
     battle_id = battle_session.battle_id
 
     if not states[0].skip_next:
+        any_truncated = any(s.is_truncated for s in states if s)
+
         round_id = None
         if battle_id:
             round_id = create_battle_round(battle_id, text, cookies)
 
         for i in range(num_sides):
-            states[i].conv.append_message(states[i].conv.roles[0], text)
-            states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
-            states[i].skip_next = False
+            # In continuation mode, skip models that aren't truncated
+            states[i].skip_next = any_truncated and not states[i].is_truncated
+
+            if not states[i].skip_next:
+                states[i].conv.append_message(states[i].conv.roles[0], text)
+                states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
+                states[i].is_truncated = False
 
         battle_session.round_id = round_id
 
