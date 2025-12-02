@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, computed, effect, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -43,7 +43,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
 
   pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
-  readonly isReady = computed(() => this.platformService.isBrowser && this.isInitialized());
 
   currentPageNumber = this.comparisonToolService.pageNumber;
   currentPageSize = this.comparisonToolService.pageSize;
@@ -127,17 +126,15 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   }
 
   readonly onUpdateEffect = effect(() => {
-    if (!this.isReady()) {
-      return;
-    }
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const selection = this.comparisonToolService.dropdownSelection();
+      if (!selection.length) {
+        return;
+      }
 
-    const selection = this.comparisonToolService.dropdownSelection();
-    if (!selection.length) {
-      return;
+      const pinnedItems = Array.from(this.pinnedItems());
+      this.loadData(selection, pinnedItems, this.currentPageNumber(), this.currentPageSize());
     }
-
-    const pinnedItems = Array.from(this.pinnedItems());
-    this.loadData(selection, pinnedItems, this.currentPageNumber(), this.currentPageSize());
   });
 
   ngOnInit() {

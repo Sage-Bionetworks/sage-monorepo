@@ -172,6 +172,33 @@ export class ComparisonToolService<T> {
     this.maxPinnedItemsSignal.set(count);
   }
 
+  private initializeFromConfig(
+    configs: ComparisonToolConfig[],
+    params: ComparisonToolUrlParams,
+  ): void {
+    this.configsSignal.set(configs ?? []);
+
+    const initialSelection = this.initialSelection ?? [];
+    const normalizedSelection = this.normalizeSelection(initialSelection, configs);
+    this.dropdownSelectionSignal.set(normalizedSelection);
+
+    const columnsMap = new Map<string, ComparisonToolColumn[]>();
+    for (const config of configs) {
+      columnsMap.set(
+        this.dropdownKey(config.dropdowns),
+        this.applyColumnPreferences(config.columns),
+      );
+    }
+
+    this.columnsForDropdownsSignal.set(columnsMap);
+    this.pinnedItemsForDropdownsSignal.set(new Map());
+    this.initialSelection = undefined;
+
+    this.resolvePinnedState(params, { isInitial: true });
+
+    this.isInitializedSignal.set(true);
+  }
+
   connect(options: {
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
@@ -470,33 +497,6 @@ export class ComparisonToolService<T> {
 
   setSort(event: SortEvent) {
     this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
-  }
-
-  private initializeFromConfig(
-    configs: ComparisonToolConfig[],
-    params: ComparisonToolUrlParams,
-  ): void {
-    this.configsSignal.set(configs ?? []);
-
-    const initialSelection = this.initialSelection ?? [];
-    const normalizedSelection = this.normalizeSelection(initialSelection, configs);
-    this.dropdownSelectionSignal.set(normalizedSelection);
-
-    const columnsMap = new Map<string, ComparisonToolColumn[]>();
-    for (const config of configs) {
-      columnsMap.set(
-        this.dropdownKey(config.dropdowns),
-        this.applyColumnPreferences(config.columns),
-      );
-    }
-
-    this.columnsForDropdownsSignal.set(columnsMap);
-    this.pinnedItemsForDropdownsSignal.set(new Map());
-    this.initialSelection = undefined;
-
-    this.resolvePinnedState(params, { isInitial: true });
-
-    this.isInitializedSignal.set(true);
   }
 
   private resolvePinnedState(
