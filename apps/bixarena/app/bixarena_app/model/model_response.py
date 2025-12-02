@@ -47,10 +47,17 @@ class State:
         if self.has_error:
             return None
 
-        assistant_role = self.conv.roles[1] if len(self.conv.roles) > 1 else "assistant"
-        for role, content in reversed(self.conv.messages):
-            if role == assistant_role and content:
+        # Get the same message and role used for API call
+        api_messages = self.conv.to_openai_api_messages()
+
+        # Find the last assistant or system message (skip the initial system prompt)
+        for msg in reversed(api_messages[1:]):
+            role = msg.get("role")
+            content = msg.get("content")
+            if role == "assistant" and content:
                 return MessageCreate(role=MessageRole.ASSISTANT, content=content)
+            elif role == "system" and content:
+                return MessageCreate(role=MessageRole.SYSTEM, content=content)
         return None
 
 
