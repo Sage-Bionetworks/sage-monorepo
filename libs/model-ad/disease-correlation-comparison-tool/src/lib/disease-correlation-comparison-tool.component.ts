@@ -148,7 +148,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
-      cacheKey: ComparisonToolPage.DiseaseCorrelation,
     });
   }
 

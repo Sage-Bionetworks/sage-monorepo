@@ -21,8 +21,6 @@ import { NotificationService } from './notification.service';
  */
 @Injectable()
 export class ComparisonToolService<T> {
-  private static readonly routePinnedCache = new Map<string, string[]>();
-
   private readonly notificationService = inject(NotificationService);
   private readonly urlService = inject(ComparisonToolUrlService);
   private readonly destroyRef = inject(DestroyRef);
@@ -97,7 +95,6 @@ export class ComparisonToolService<T> {
   private lastSerializedState: string | null = null;
   private connectActivated = false;
   private initialSelection: string[] | undefined;
-  private cacheKey: string | undefined;
   private initialPinsResolved = false;
 
   constructor() {
@@ -116,7 +113,6 @@ export class ComparisonToolService<T> {
       const pinnedItems = this.pinnedItems();
       const state = this.serializeState(pinnedItems);
 
-      this.cacheRoutePinnedItems(pinnedItems);
       this.syncStateToUrl(state);
     });
   }
@@ -185,14 +181,9 @@ export class ComparisonToolService<T> {
   connect(options: {
     config$: Observable<ComparisonToolConfig[]>;
     queryParams$: Observable<ComparisonToolUrlParams>;
-    cacheKey?: string;
     initialSelection?: string[];
   }): void {
     if (this.connectActivated) {
-      if (options.cacheKey && !this.cacheKey) {
-        this.cacheKey = options.cacheKey;
-      }
-
       // Re-sync pins when re-entering with an already-connected instance
       this.syncToUrlInProgress.set(false);
       this.scheduleUrlSyncFromCurrentPins();
@@ -200,7 +191,6 @@ export class ComparisonToolService<T> {
     }
 
     this.connectActivated = true;
-    this.cacheKey = options.cacheKey;
     this.initialSelection = options.initialSelection;
 
     combineLatest([options.config$, options.queryParams$])
@@ -533,23 +523,8 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    if (options.isInitial && this.hasRouteCachedPins()) {
-      const cachedPins = this.getRouteCachedPins();
-      this.setPinnedItems(cachedPins);
-
-      this.cacheRoutePinnedItems(this.pinnedItems());
-
-      this.syncToUrlInProgress.set(false);
-      this.scheduleUrlSyncFromCurrentPins();
-
-      this.initialPinsResolved = true;
-      return;
-    }
-
     if (options.isInitial && !this.initialPinsResolved) {
       this.resetPinnedItems();
-
-      this.cacheRoutePinnedItems(this.pinnedItems());
 
       this.syncToUrlInProgress.set(false);
       this.scheduleUrlSyncFromCurrentPins();
@@ -577,31 +552,6 @@ export class ComparisonToolService<T> {
     return {
       pinnedItems: pinned.length ? pinned : null,
     };
-  }
-
-  private hasRouteCachedPins(): boolean {
-    if (!this.cacheKey) {
-      return false;
-    }
-
-    return ComparisonToolService.routePinnedCache.has(this.cacheKey);
-  }
-
-  private getRouteCachedPins(): string[] {
-    if (!this.cacheKey) {
-      return [];
-    }
-
-    const cached = ComparisonToolService.routePinnedCache.get(this.cacheKey) ?? [];
-    return [...cached];
-  }
-
-  private cacheRoutePinnedItems(pinnedItems: Set<string>): void {
-    if (!this.cacheKey) {
-      return;
-    }
-
-    ComparisonToolService.routePinnedCache.set(this.cacheKey, Array.from(pinnedItems));
   }
 
   private syncStateToUrlFromCurrentPins(): void {

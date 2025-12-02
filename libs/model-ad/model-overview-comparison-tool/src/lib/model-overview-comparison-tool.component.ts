@@ -120,7 +120,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
-      cacheKey: ComparisonToolPage.ModelOverview,
     });
   }
 

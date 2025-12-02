@@ -114,7 +114,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
     this.comparisonToolService.connect({
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
-      cacheKey: ComparisonToolPage.GeneExpression,
     });
 
     this.config$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
