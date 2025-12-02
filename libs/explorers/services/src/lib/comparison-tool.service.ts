@@ -91,7 +91,6 @@ export class ComparisonToolService<T> {
   readonly isInitialized = this.isInitializedSignal.asReadonly();
 
   private readonly syncToUrlInProgress = signal(false);
-  private readonly hasBootstrappedSignal = signal(false);
   private lastSerializedState: string | null = null;
   private connectActivated = false;
   private initialSelection: string[] | undefined;
@@ -99,11 +98,6 @@ export class ComparisonToolService<T> {
 
   constructor() {
     effect(() => {
-      const hasBootstrapped = this.hasBootstrappedSignal();
-      if (!hasBootstrapped) {
-        return;
-      }
-
       const isInitialized = this.isInitialized();
       const syncingToUrl = this.syncToUrlInProgress();
       if (!isInitialized || syncingToUrl) {
@@ -196,8 +190,8 @@ export class ComparisonToolService<T> {
     combineLatest([options.config$, options.queryParams$])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([configs, params]) => {
-        if (!this.hasBootstrappedSignal()) {
-          this.bootstrapFromConfig(configs, params);
+        if (!this.isInitializedSignal()) {
+          this.initializeFromConfig(configs, params);
           return;
         }
 
@@ -478,7 +472,7 @@ export class ComparisonToolService<T> {
     this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
   }
 
-  private bootstrapFromConfig(
+  private initializeFromConfig(
     configs: ComparisonToolConfig[],
     params: ComparisonToolUrlParams,
   ): void {
@@ -503,7 +497,6 @@ export class ComparisonToolService<T> {
     this.resolvePinnedState(params, { isInitial: true });
 
     this.isInitializedSignal.set(true);
-    this.hasBootstrappedSignal.set(true);
   }
 
   private resolvePinnedState(
