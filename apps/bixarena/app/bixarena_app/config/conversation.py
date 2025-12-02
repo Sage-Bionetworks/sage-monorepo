@@ -12,12 +12,12 @@ BIXARENA_SYSTEM_PROMPT = (
 )
 
 CONTINUATION_PROMPT = (
-    "The response reached the maximum token limit and was truncated. "
-    "Would you like to continue the response?"
+    "The response reached the maximum token limit and was truncated.<br>"
+    "Would you like the model to resume streaming its response?"
 )
 
 
-def create_continuation_prompt_html(text: str) -> str:
+def create_system_message_html(text: str) -> str:
     return (
         '<div class="system-message">'
         '<div class="system-message-content">'
@@ -60,7 +60,7 @@ class Conversation:
                 content = msg
                 # Handle continuation prompt for display
                 if msg == CONTINUATION_PROMPT:
-                    content = create_continuation_prompt_html(msg)
+                    content = create_system_message_html(msg)
                 ret.append({"role": role, "content": content})
         return ret
 
