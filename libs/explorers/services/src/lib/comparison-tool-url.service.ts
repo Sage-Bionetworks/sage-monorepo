@@ -40,15 +40,6 @@ export class ComparisonToolUrlService {
     });
   }
 
-  clearPinnedParam(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { pinned: null },
-      queryParamsHandling: 'merge',
-      replaceUrl: true,
-    });
-  }
-
   clearUrl(): void {
     this.router.navigate([], {
       relativeTo: this.route,

@@ -33,9 +33,6 @@ class ComparisonToolUrlServiceStub {
   syncToUrl(): void {
     return;
   }
-  clearPinnedParam(): void {
-    return;
-  }
   clearUrl(): void {
     return;
   }

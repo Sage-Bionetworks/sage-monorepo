@@ -124,19 +124,6 @@ describe('ComparisonToolUrlService', () => {
     expect(mockRouter.navigate).not.toHaveBeenCalled();
   });
 
-  it('should clear only the pinned query parameter', () => {
-    service.clearPinnedParam();
-
-    expect(mockRouter.navigate).toHaveBeenCalledWith(
-      [],
-      expect.objectContaining({
-        queryParams: { pinned: null },
-        queryParamsHandling: 'merge',
-        replaceUrl: true,
-      }),
-    );
-  });
-
   it('should skip navigation when the pinned state matches the URL', () => {
     mockActivatedRoute.snapshot = {
       queryParams: { pinned: 'id1,id2' },
