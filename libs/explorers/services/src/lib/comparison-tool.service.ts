@@ -87,12 +87,10 @@ export class ComparisonToolService<T> {
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   private readonly hasBootstrappedSignal = signal(false);
   private lastSerializedState: string | null = null;
-  private hasInitializedConfig = false;
   private connectActivated = false;
   private initialSelection: string[] | undefined;
   private cacheKey: string | undefined;
   private initialPinsResolved = false;
-  private isDestroyed = false;
 
   constructor() {
     effect(() => {
@@ -196,11 +194,6 @@ export class ComparisonToolService<T> {
     this.connectActivated = true;
     this.cacheKey = options.cacheKey;
     this.initialSelection = options.initialSelection;
-
-    this.destroyRef.onDestroy(() => {
-      this.isDestroyed = true;
-      this.handleRouteExit();
-    });
 
     combineLatest([options.config$, options.queryParams$])
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -474,15 +467,6 @@ export class ComparisonToolService<T> {
     params: ComparisonToolUrlParams,
   ): void {
     this.configsSignal.set(configs ?? []);
-    this.totalResultsCount.set(0);
-
-    if (this.hasInitializedConfig) {
-      this.resetPinnedItems();
-    }
-
-    this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
-    this.setUnpinnedData([]);
-    this.setPinnedData([]);
 
     const initialSelection = this.initialSelection ?? [];
     const normalizedSelection = this.normalizeSelection(initialSelection, configs);
@@ -498,7 +482,6 @@ export class ComparisonToolService<T> {
 
     this.columnsForDropdownsSignal.set(columnsMap);
     this.pinnedItemsForDropdownsSignal.set(new Map());
-    this.hasInitializedConfig = true;
     this.initialSelection = undefined;
 
     this.resolvePinnedState(params, { isInitial: true });
@@ -603,35 +586,11 @@ export class ComparisonToolService<T> {
     this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
   }
 
-  // Allow the effect-driven sync to retry if the immediate navigation was cancelled
-  private invalidateSerializedStateCache(): void {
-    this.lastSerializedState = null;
-  }
-
   private scheduleUrlSyncFromCurrentPins(): void {
-    const schedule =
-      typeof queueMicrotask === 'function'
-        ? queueMicrotask
-        : (callback: () => void) => Promise.resolve().then(callback);
-
-    schedule(() => {
-      if (this.isDestroyed) {
-        return;
-      }
-
+    queueMicrotask(() => {
       // Allow the router navigation that triggered this connect call to finish first
-      this.invalidateSerializedStateCache();
+      this.lastSerializedState = null;
       this.syncStateToUrlFromCurrentPins();
     });
-  }
-
-  private handleRouteExit(): void {
-    if (!this.cacheKey) {
-      return;
-    }
-
-    const clearedState = { pinnedItems: null } satisfies ComparisonToolUrlParams;
-    this.urlService.clearPinnedParam();
-    this.lastSerializedState = JSON.stringify(clearedState);
   }
 }
