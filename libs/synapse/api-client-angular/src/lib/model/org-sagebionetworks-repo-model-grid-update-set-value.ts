@@ -7,17 +7,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelGridUpdateLiteralSetValue } from './org-sagebionetworks-repo-model-grid-update-literal-set-value';
+import { OrgSagebionetworksRepoModelGridUpdateRegexExtractSetValue } from './org-sagebionetworks-repo-model-grid-update-regex-extract-set-value';
 
 /**
- * Represents a single column assignment (one entry of the SQL SET clause).
+ *
  */
-export interface OrgSagebionetworksRepoModelGridUpdateSetValue {
-  /**
-   * Target column name or ID to update.
-   */
-  columnName?: string;
-  /**
-   * Literal JSON value to assign to the field in each target document: string, number, boolean, object, array, or null. Omit the \"value\" property to remove/unset the field (`undefined`); include `\"value\": null` to store JSON null. Must be a literal constant — no SQL or expressions; value is bound and stored as-is.
-   */
-  value?: any | null;
-}
+/**
+ * @type OrgSagebionetworksRepoModelGridUpdateSetValue
+ *
+ * @export
+ */
+export type OrgSagebionetworksRepoModelGridUpdateSetValue =
+  | OrgSagebionetworksRepoModelGridUpdateLiteralSetValue
+  | OrgSagebionetworksRepoModelGridUpdateRegexExtractSetValue;
