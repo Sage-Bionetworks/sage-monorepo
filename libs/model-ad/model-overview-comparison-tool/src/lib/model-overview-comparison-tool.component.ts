@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -13,7 +13,9 @@ import {
   ComparisonToolConfigService,
   ComparisonToolPage,
   ItemFilterTypeQuery,
+  ModelOverviewSearchQuery,
   ModelOverviewService,
+  ModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { catchError, of, shareReplay } from 'rxjs';
@@ -39,7 +41,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   isInitialized = this.comparisonToolService.isInitialized;
   readonly isReady = computed(() => this.platformService.isBrowser && this.isInitialized());
 
-  isLoading = signal(true);
+  currentPageNumber = this.comparisonToolService.pageNumber;
+  currentPageSize = this.comparisonToolService.pageSize;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
@@ -88,10 +91,16 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     },
     legendEnabled: false,
     visualizationOverviewPanes: this.visualizationOverviewPanes,
+    rowsPerPage: 10,
   };
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
+  }
+
+  private loadData(pinnedItems: string[], pageNumber: number, pageSize: number) {
+    this.getPinnedData(pinnedItems);
+    this.getUnpinnedData(pinnedItems, pageNumber, pageSize);
   }
 
   readonly onUpdateEffect = effect(() => {
@@ -100,9 +109,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     }
 
     const pinnedItems = Array.from(this.pinnedItems());
-    this.isLoading.set(true);
-    this.getPinnedData(pinnedItems);
-    this.getUnpinnedData(pinnedItems);
+    this.loadData(pinnedItems, this.currentPageNumber(), this.currentPageSize());
   });
 
   ngOnInit() {
@@ -117,38 +124,46 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     });
   }
 
-  getUnpinnedData(pinnedItems: string[]) {
+  getUnpinnedData(pinnedItems: string[], pageNumber: number, pageSize: number) {
+    const query: ModelOverviewSearchQuery = {
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      pageNumber,
+      pageSize,
+    };
+
     this.modelOverviewService
-      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Exclude)
+      .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => {
+        next: (response: ModelOverviewsPage) => {
+          const data = response.modelOverviews;
           this.comparisonToolService.setUnpinnedData(data);
-          this.comparisonToolService.totalResultsCount.set(data.length);
+          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: (error) => {
           throw new Error('Error fetching model overview data:', { cause: error });
-        },
-        complete: () => {
-          this.isLoading.set(false);
         },
       });
   }
 
   getPinnedData(pinnedItems: string[]) {
+    const query: ModelOverviewSearchQuery = {
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Include,
+    };
+
     this.modelOverviewService
-      .getModelOverviews(pinnedItems, ItemFilterTypeQuery.Include)
+      .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => {
+        next: (response: ModelOverviewsPage) => {
+          const data = response.modelOverviews;
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: (error) => {
           throw new Error('Error fetching model overview data:', { cause: error });
-        },
-        complete: () => {
-          this.isLoading.set(false);
         },
       });
   }

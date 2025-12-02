@@ -24,6 +24,7 @@ export interface ComparisonToolViewConfig {
   legendEnabled: boolean;
   legendPanelConfig: LegendPanelConfig;
   visualizationOverviewPanes: VisualizationOverviewPane[];
+  rowsPerPage: number;
 }
 
 export interface ComparisonToolFilterOption {
@@ -101,4 +102,9 @@ export type ComparisonToolLink = {
 
 export interface ComparisonToolUrlParams {
   pinnedItems?: string[] | null;
+}
+
+export interface PaginationParams {
+  pageNumber: number;
+  pageSize: number;
 }

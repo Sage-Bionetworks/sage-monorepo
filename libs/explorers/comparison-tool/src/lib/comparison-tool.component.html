@@ -3,7 +3,9 @@
     <div id="loading">
       <explorers-loading-container [count]="loadingResultsCount()"></explorers-loading-container>
     </div>
-  } @else {
+  }
+
+  <div [style.display]="isLoading() ? 'none' : 'block'">
     <explorers-comparison-tool-header (filterToggle)="toggleFilterPanel()" />
     <explorers-comparison-tool-filter-list />
     <div class="comparison-tool-body">
@@ -20,5 +22,5 @@
         </div>
       </div>
     </div>
-  }
+  </div>
 </main>

@@ -21,7 +21,10 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/openapi"],
       "options": {
-        "commands": ["redocly bundle model-ad-public --output openapi/openapi.yaml"],
+        "commands": [
+          "redocly join openapi/*-public.openapi.yaml --output openapi/openapi.yaml",
+          "redocly bundle model-ad-public --output openapi/openapi.yaml"
+        ],
         "cwd": "{projectRoot}",
         "parallel": false
       },

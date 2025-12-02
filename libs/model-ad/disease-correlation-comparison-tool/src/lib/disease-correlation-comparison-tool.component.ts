@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -16,7 +16,9 @@ import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
+  DiseaseCorrelationSearchQuery,
   DiseaseCorrelationService,
+  DiseaseCorrelationsPage,
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
@@ -43,7 +45,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   isInitialized = this.comparisonToolService.isInitialized;
   readonly isReady = computed(() => this.platformService.isBrowser && this.isInitialized());
 
-  isLoading = signal(true);
+  currentPageNumber = this.comparisonToolService.pageNumber;
+  currentPageSize = this.comparisonToolService.pageSize;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
@@ -106,10 +109,21 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
         <img src="/explorer-assets/images/gct-how-to-3.gif" />`,
       ),
     ],
+    rowsPerPage: 10,
   };
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
+  }
+
+  private loadData(
+    selection: string[],
+    pinnedItems: string[],
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    this.getPinnedData(selection, pinnedItems);
+    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize);
   }
 
   readonly onUpdateEffect = effect(() => {
@@ -123,9 +137,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
     }
 
     const pinnedItems = Array.from(this.pinnedItems());
-    this.isLoading.set(true);
-    this.getUnpinnedData(selection, pinnedItems);
-    this.getPinnedData(selection, pinnedItems);
+    this.loadData(selection, pinnedItems, this.currentPageNumber(), this.currentPageSize());
   });
 
   ngOnInit() {
@@ -140,38 +152,54 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
     });
   }
 
-  getUnpinnedData(selection: string[], pinnedItems: string[]) {
+  getUnpinnedData(
+    selection: string[],
+    pinnedItems: string[],
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    const query: DiseaseCorrelationSearchQuery = {
+      category: selection,
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      pageNumber,
+      pageSize,
+    };
+
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Exclude)
+      .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => {
+        next: (response: DiseaseCorrelationsPage) => {
+          const data = response.diseaseCorrelations;
           this.comparisonToolService.setUnpinnedData(data);
-          this.comparisonToolService.totalResultsCount.set(data.length);
+          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: (error) => {
+          console.error('Error in getUnpinnedData:', error);
           throw new Error('Error fetching disease correlation data:', { cause: error });
-        },
-        complete: () => {
-          this.isLoading.set(false);
         },
       });
   }
 
   getPinnedData(selection: string[], pinnedItems: string[]) {
+    const query: DiseaseCorrelationSearchQuery = {
+      category: selection,
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Include,
+    };
+
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(selection, pinnedItems, ItemFilterTypeQuery.Include)
+      .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => {
+        next: (response: DiseaseCorrelationsPage) => {
+          const data = response.diseaseCorrelations;
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: (error) => {
           throw new Error('Error fetching disease correlation data:', { cause: error });
-        },
-        complete: () => {
-          this.isLoading.set(false);
         },
       });
   }

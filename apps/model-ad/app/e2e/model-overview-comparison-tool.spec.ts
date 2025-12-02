@@ -18,12 +18,15 @@ const MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS['Model Overview'];
 const MODEL_OVERVIEW_API_PATH = '/comparison-tools/model-overview';
 
 const fetchModelOverviews = async (page: Page): Promise<ModelOverview[]> => {
+  // Fetch all model overviews by using exclude filter with no items
   const response = await page.request.get(`${baseURL}/api/v1/${MODEL_OVERVIEW_API_PATH}`, {
-    params: { itemFilterType: 'exclude' },
+    params: {
+      itemFilterType: 'exclude',
+    },
   });
   expect(response.ok()).toBeTruthy();
-  const data = (await response.json()) as ModelOverview[];
-  return data;
+  const data = (await response.json()) as { modelOverviews: ModelOverview[] };
+  return data.modelOverviews;
 };
 
 test.describe('model overview', () => {

@@ -9,8 +9,10 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { SortEvent, SortMeta } from 'primeng/api';
+import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs';
+import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
 
@@ -24,6 +26,7 @@ export class ComparisonToolService<T> {
   private readonly notificationService = inject(NotificationService);
   private readonly urlService = inject(ComparisonToolUrlService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly helperService = inject(ComparisonToolHelperService);
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
@@ -51,6 +54,7 @@ export class ComparisonToolService<T> {
       sizeChartText: '',
     },
     visualizationOverviewPanes: [],
+    rowsPerPage: 10,
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
@@ -68,6 +72,9 @@ export class ComparisonToolService<T> {
   private readonly pinnedItemsForDropdownsSignal = signal<Map<string, Set<string>>>(new Map());
   private readonly unpinnedDataSignal = signal<T[]>([]);
   private readonly pinnedDataSignal = signal<T[]>([]);
+  private readonly pageNumberSignal = signal<number>(0);
+  private readonly pageSizeSignal = signal<number>(10);
+  private readonly isInitializedSignal = signal(false);
 
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
@@ -81,10 +88,11 @@ export class ComparisonToolService<T> {
   readonly multiSortMeta = this.multiSortMetaSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
+  readonly pageNumber = this.pageNumberSignal.asReadonly();
+  readonly pageSize = this.pageSizeSignal.asReadonly();
+  readonly isInitialized = this.isInitializedSignal.asReadonly();
 
   private readonly syncToUrlInProgress = signal(false);
-  private readonly isInitializedSignal = signal(false);
-  readonly isInitialized = this.isInitializedSignal.asReadonly();
   private readonly hasBootstrappedSignal = signal(false);
   private lastSerializedState: string | null = null;
   private connectActivated = false;
@@ -360,6 +368,24 @@ export class ComparisonToolService<T> {
 
   setPinnedData(pinnedData: T[]) {
     this.pinnedDataSignal.set(pinnedData);
+  }
+
+  setPageNumber(pageNumber: number) {
+    this.pageNumberSignal.set(pageNumber);
+  }
+
+  setPageSize(pageSize: number) {
+    this.pageSizeSignal.set(pageSize);
+  }
+
+  handleLazyLoad(event: TableLazyLoadEvent) {
+    const defaultRowsPerPage = this.viewConfigSignal().rowsPerPage;
+    const { pageNumber, pageSize } = this.helperService.getPaginationParams(
+      event,
+      defaultRowsPerPage,
+    );
+    this.setPageNumber(pageNumber);
+    this.setPageSize(pageSize);
   }
 
   private updateDropdownSelectionIfChanged(selection: string[]) {
