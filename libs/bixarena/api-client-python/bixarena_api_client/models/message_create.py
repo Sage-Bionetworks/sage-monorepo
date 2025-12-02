@@ -30,7 +30,7 @@ class MessageCreate(BaseModel):
     """  # noqa: E501
 
     role: MessageRole
-    content: Annotated[str, Field(strict=True, max_length=5000)] = Field(
+    content: Annotated[str, Field(strict=True, max_length=10000)] = Field(
         description="The content of a message."
     )
     __properties: ClassVar[List[str]] = ["role", "content"]

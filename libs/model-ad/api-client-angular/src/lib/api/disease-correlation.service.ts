@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { DiseaseCorrelation } from '../model/disease-correlation';
+import { DiseaseCorrelationSearchQuery } from '../model/disease-correlation-search-query';
 // @ts-ignore
-import { ItemFilterTypeQuery } from '../model/item-filter-type-query';
+import { DiseaseCorrelationsPage } from '../model/disease-correlations-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -110,17 +110,13 @@ export class DiseaseCorrelationService {
 
   /**
    * Get disease correlation comparison data
-   * Returns a list of disease correlation objects for use in comparison tools.
-   * @param category An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the \&#39;category\&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA.
-   * @param item A list of items to filter the data by.
-   * @param itemFilterType The type of filter to apply to the items. Possible values are \&#39;include\&#39; or \&#39;exclude\&#39;.
+   * Returns a paginated list of disease correlation objects for use in comparison tools.
+   * @param diseaseCorrelationSearchQuery The search query used to find and filter disease correlations.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getDiseaseCorrelations(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    diseaseCorrelationSearchQuery?: DiseaseCorrelationSearchQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -128,11 +124,9 @@ export class DiseaseCorrelationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Array<DiseaseCorrelation>>;
+  ): Observable<DiseaseCorrelationsPage>;
   public getDiseaseCorrelations(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    diseaseCorrelationSearchQuery?: DiseaseCorrelationSearchQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -140,11 +134,9 @@ export class DiseaseCorrelationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Array<DiseaseCorrelation>>>;
+  ): Observable<HttpResponse<DiseaseCorrelationsPage>>;
   public getDiseaseCorrelations(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    diseaseCorrelationSearchQuery?: DiseaseCorrelationSearchQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -152,11 +144,9 @@ export class DiseaseCorrelationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Array<DiseaseCorrelation>>>;
+  ): Observable<HttpEvent<DiseaseCorrelationsPage>>;
   public getDiseaseCorrelations(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    diseaseCorrelationSearchQuery?: DiseaseCorrelationSearchQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -165,36 +155,12 @@ export class DiseaseCorrelationService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (category === null || category === undefined) {
-      throw new Error(
-        'Required parameter category was null or undefined when calling getDiseaseCorrelations.',
-      );
-    }
-
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (category) {
-      category.forEach((element) => {
-        localVarQueryParameters = this.addToHttpParams(
-          localVarQueryParameters,
-          <any>element,
-          'category',
-        );
-      });
-    }
-    if (item) {
-      item.forEach((element) => {
-        localVarQueryParameters = this.addToHttpParams(
-          localVarQueryParameters,
-          <any>element,
-          'item',
-        );
-      });
-    }
-    if (itemFilterType !== undefined && itemFilterType !== null) {
+    if (diseaseCorrelationSearchQuery !== undefined && diseaseCorrelationSearchQuery !== null) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>itemFilterType,
-        'itemFilterType',
+        <any>diseaseCorrelationSearchQuery,
+        'diseaseCorrelationSearchQuery',
       );
     }
 
@@ -232,7 +198,7 @@ export class DiseaseCorrelationService {
     }
 
     let localVarPath = `/comparison-tools/disease-correlation`;
-    return this.httpClient.request<Array<DiseaseCorrelation>>(
+    return this.httpClient.request<DiseaseCorrelationsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

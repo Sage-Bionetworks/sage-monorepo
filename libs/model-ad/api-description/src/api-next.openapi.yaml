@@ -14,27 +14,13 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Data Version
-    description: Operations about the data version.
-  - name: Model
-    description: Operations about models.
   - name: Model Overview
     description: Operations about Model Overview.
-  - name: Comparison Tool Config
-    description: Operations about Comparison Tool UI configuration.
   - name: Disease Correlation
     description: Operations about Disease Correlation results.
   - name: Gene Expression
     description: Operations about Gene Expression results.
 paths:
-  /data-version:
-    $ref: paths/data-version.yaml
-  /models/search:
-    $ref: paths/model-search.yaml
-  /models/{name}:
-    $ref: paths/model.yaml
-  /comparison-tool-config:
-    $ref: paths/comparison-tool-config.yaml
   /comparison-tools/model-overview:
     $ref: paths/comparison-tools/model-overview.yaml
   /comparison-tools/disease-correlation:
