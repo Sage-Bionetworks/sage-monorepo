@@ -220,9 +220,9 @@ export class ComparisonToolService<T> {
 
     if (this.isInitialized()) {
       // Re-entering an already-initialized service (navigating back to this CT)
-      // Restore this CT's cached pins and sync them to the URL, ignoring URL params from other CTs
+      // Restore this CT's cached state and sync to the URL, ignoring URL params from other CTs
       this.syncToUrlInProgress.set(false);
-      this.scheduleUrlSyncFromCurrentPins();
+      this.scheduleUrlSyncFromCurrentState();
       return;
     }
 
@@ -530,7 +530,7 @@ export class ComparisonToolService<T> {
     // User navigated directly to this CT with ?pinned=<ids> in URL - restore those pins
     if (hasUrlPins) {
       this.setPinnedItems(urlPinnedItems);
-      this.updateSerializedStateCacheFromPins();
+      this.updateSerializedStateCache();
       this.initialPinsResolved = true;
       this.syncToUrlInProgress.set(false);
       return;
@@ -541,7 +541,7 @@ export class ComparisonToolService<T> {
       this.resetPinnedItems();
 
       this.syncToUrlInProgress.set(false);
-      this.scheduleUrlSyncFromCurrentPins();
+      this.scheduleUrlSyncFromCurrentState();
 
       this.initialPinsResolved = true;
       return;
@@ -555,13 +555,13 @@ export class ComparisonToolService<T> {
     if (cachedPinnedItems && cachedPinnedItems.size > 0) {
       this.setPinnedItems(Array.from(cachedPinnedItems));
       this.syncToUrlInProgress.set(false);
-      this.scheduleUrlSyncFromCurrentPins();
+      this.scheduleUrlSyncFromCurrentState();
       return;
     }
 
     // No URL pins and no cached pins - clear everything and sync to URL
     this.syncToUrlInProgress.set(false);
-    this.scheduleUrlSyncFromCurrentPins();
+    this.scheduleUrlSyncFromCurrentState();
   }
 
   private syncStateToUrl(state: ComparisonToolUrlParams): void {
@@ -585,17 +585,17 @@ export class ComparisonToolService<T> {
     };
   }
 
-  private syncStateToUrlFromCurrentPins(): void {
+  private syncCurrentStateToUrl(): void {
     this.syncStateToUrl(this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()));
   }
 
-  private updateSerializedStateCacheFromPins(): void {
+  private updateSerializedStateCache(): void {
     this.lastSerializedState = JSON.stringify(
       this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()),
     );
   }
 
-  private scheduleUrlSyncFromCurrentPins(): void {
+  private scheduleUrlSyncFromCurrentState(): void {
     // Queue task to allow router navigation that triggered this connect call to finish first
     queueMicrotask(() => {
       // Check if active - CT may have become inactive between scheduling and execution
@@ -603,7 +603,7 @@ export class ComparisonToolService<T> {
         return;
       }
       this.lastSerializedState = null;
-      this.syncStateToUrlFromCurrentPins();
+      this.syncCurrentStateToUrl();
     });
   }
 }
