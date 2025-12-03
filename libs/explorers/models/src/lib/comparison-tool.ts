@@ -25,6 +25,7 @@ export interface ComparisonToolViewConfig {
   legendPanelConfig: LegendPanelConfig;
   visualizationOverviewPanes: VisualizationOverviewPane[];
   rowsPerPage: number;
+  rowIdDataKey: string;
 }
 
 export interface ComparisonToolFilterOption {

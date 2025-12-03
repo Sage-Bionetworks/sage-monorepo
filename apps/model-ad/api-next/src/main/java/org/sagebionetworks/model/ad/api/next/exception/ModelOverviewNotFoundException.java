@@ -5,7 +5,7 @@ import lombok.experimental.StandardException;
 @StandardException
 public class ModelOverviewNotFoundException extends RuntimeException {
 
-  public ModelOverviewNotFoundException(String id) {
-    super("Model overview not found with id: " + id);
+  public ModelOverviewNotFoundException(String name) {
+    super("Model overview not found with name: " + name);
   }
 }
