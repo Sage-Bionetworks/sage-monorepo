@@ -40,11 +40,7 @@ class State:
         return self.conv.to_gradio_chatbot()
 
     def last_assistant_message(self) -> MessageCreate | None:
-        """Return the last completed assistant response as a MessageCreate.
-
-        Returns None if the last response had an error (has_error=True).
-        Only returns assistant messages, skipping continuation prompts.
-        """
+        """Return the last completed assistant response as a MessageCreate."""
         # If there was an error, don't return the error message as assistant content
         if self.has_error:
             return None
@@ -52,7 +48,7 @@ class State:
         # Get the same message and role used for API call
         api_messages = self.conv.to_openai_api_messages()
 
-        # Find the last assistant message (skip system prompt & continuation prompts)
+        # Find the last assistant message
         for msg in reversed(api_messages[1:]):
             role = msg.get("role")
             content = msg.get("content")
