@@ -108,7 +108,8 @@ export class ComparisonToolService<T> {
       }
 
       const pinnedItems = this.pinnedItems();
-      const state = this.serializeSyncState(pinnedItems);
+      const dropdownSelection = this.dropdownSelection();
+      const state = this.serializeSyncState(pinnedItems, dropdownSelection);
 
       this.syncStateToUrl(state);
     });
@@ -565,19 +566,25 @@ export class ComparisonToolService<T> {
     this.urlService.syncToUrl(state);
   }
 
-  private serializeSyncState(pinnedItems: Set<string>): ComparisonToolUrlParams {
+  private serializeSyncState(
+    pinnedItems: Set<string>,
+    dropdownSelection: string[],
+  ): ComparisonToolUrlParams {
     const pinned = Array.from(pinnedItems);
     return {
       pinnedItems: pinned.length ? pinned : null,
+      categories: dropdownSelection.length ? dropdownSelection : null,
     };
   }
 
   private syncStateToUrlFromCurrentPins(): void {
-    this.syncStateToUrl(this.serializeSyncState(this.pinnedItems()));
+    this.syncStateToUrl(this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()));
   }
 
   private updateSerializedStateCacheFromPins(): void {
-    this.lastSerializedState = JSON.stringify(this.serializeSyncState(this.pinnedItems()));
+    this.lastSerializedState = JSON.stringify(
+      this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()),
+    );
   }
 
   private scheduleUrlSyncFromCurrentPins(): void {
