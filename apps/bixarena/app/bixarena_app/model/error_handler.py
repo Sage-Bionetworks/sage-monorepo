@@ -30,13 +30,13 @@ def get_battle_round_limit_message() -> str:
     Provide a user-facing message when the battle round cap is reached.
 
     Returns:
-        Markdown formatted message consistent with other error responses.
+        HTML formatted message for system message display.
     """
     message = (
-        "**You've reached the round limit for this battle.**\n\n"
+        "<strong>You've reached the round limit for this battle.</strong><br><br>"
         "Please wrap up this matchup or start a fresh battle!"
     )
-    return f"{message}\n\n_Round limit: {BATTLE_ROUND_LIMIT}_"
+    return f"{message}<br><br><em>Round limit: {BATTLE_ROUND_LIMIT}</em>"
 
 
 def get_empty_response_message() -> str:
@@ -46,7 +46,7 @@ def get_empty_response_message() -> str:
     Returns:
         A user-friendly error message for empty responses.
     """
-    return "Something went wrong.\nPlease try submitting your prompt again."
+    return "Something went wrong.<br>Please try submitting your prompt again."
 
 
 def get_finish_error_message() -> str:
@@ -57,7 +57,7 @@ def get_finish_error_message() -> str:
         A user-friendly error message for model errors.
     """
     return (
-        "An error occurred while generating the response.\n"
+        "An error occurred while generating the response.<br>"
         "Please try submitting your prompt again."
     )
 
@@ -85,62 +85,62 @@ def handle_api_error_message(error: Exception) -> str:
     # 401 - Authentication Error
     if isinstance(error, AuthenticationError):
         return (
-            "**Connection Issue**\n\n"
-            "The service is currently unavailable.\n"
-            "Please start a new battle to try again.\n\n"
-            "_Error Code: 401_"
+            "<strong>Connection Issue</strong><br><br>"
+            "The service is currently unavailable.<br>"
+            "Please start a new battle to try again.<br><br>"
+            "<em>Error Code: 401</em>"
         )
 
     # 403 - Permission Denied
     if isinstance(error, PermissionDeniedError):
         return (
-            "**Connection Issue**\n\n"
-            "The service is currently unavailable.\n"
-            "Please start a new battle to try again.\n\n"
-            "_Error Code: 403_"
+            "<strong>Connection Issue</strong><br><br>"
+            "The service is currently unavailable.<br>"
+            "Please start a new battle to try again.<br><br>"
+            "<em>Error Code: 403</em>"
         )
 
     # 404 - Not Found
     if isinstance(error, NotFoundError):
         return (
-            "**Service Unavailable**\n\n"
-            "The service is currently unavailable.\n"
-            "Please start a new battle and try again.\n\n"
-            "_Error Code: 404_"
+            "<strong>Service Unavailable</strong><br><br>"
+            "The service is currently unavailable.<br>"
+            "Please start a new battle and try again.<br><br>"
+            "<em>Error Code: 404</em>"
         )
 
     # 429 - Rate Limit
     if isinstance(error, RateLimitError):
         return (
-            "**Rate Limit Exceeded**\n\n"
-            "The request rate limit has been exceeded.\n"
-            "Please try submitting your prompt again later.\n\n"
-            "_Error Code: 429_"
+            "<strong>Rate Limit Exceeded</strong><br><br>"
+            "The request rate limit has been exceeded.<br>"
+            "Please try submitting your prompt again later.<br><br>"
+            "<em>Error Code: 429</em>"
         )
 
     # 500 - Internal Server Error
     if isinstance(error, InternalServerError):
         return (
-            "**Internal Server Error**\n\n"
-            "An internal server error occurred.\n"
-            "Please try submitting your prompt again later.\n\n"
-            "_Error Code: 500_"
+            "<strong>Internal Server Error</strong><br><br>"
+            "An internal server error occurred.<br>"
+            "Please try submitting your prompt again later.<br><br>"
+            "<em>Error Code: 500</em>"
         )
 
     # 400 - Bad Request
     if isinstance(error, BadRequestError):
         return (
-            "**Invalid Request**\n\n"
-            "The request could not be processed due to a formatting issue.\n"
-            "Please try rephrasing your prompt or report this issue if it persists.\n\n"
-            "_Error Code: 400_"
+            "<strong>Invalid Request</strong><br><br>"
+            "The request could not be processed due to a formatting issue.<br>"
+            "Please try rephrasing your prompt or report this issue if it persists.<br><br>"
+            "<em>Error Code: 400</em>"
         )
 
     # Connection errors (network issues)
     if isinstance(error, APIConnectionError):
         return (
-            "**Network Connection Error**\n\n"
-            "Unable to establish a network connection.\n"
+            "<strong>Network Connection Error</strong><br><br>"
+            "Unable to establish a network connection.<br>"
             "Please try submitting your prompt again later."
         )
 
@@ -148,21 +148,21 @@ def handle_api_error_message(error: Exception) -> str:
     if isinstance(error, APIError):
         if status_code:
             return (
-                "**Request Failed**\n\n"
-                "An error occurred while processing the request.\n"
-                "Please try again or report this issue if it persists.\n\n"
-                f"_Error Code: {status_code}_"
+                f"<strong>Request Failed</strong><br><br>"
+                f"An error occurred while processing the request.<br>"
+                f"Please try again or report this issue if it persists.<br><br>"
+                f"<em>Error Code: {status_code}</em>"
             )
         return (
-            "**Request Failed**\n\n"
-            "An error occurred while processing the request.\n"
+            "<strong>Request Failed</strong><br><br>"
+            "An error occurred while processing the request.<br>"
             "Please try again or report this issue if it persists."
         )
 
     # Fallback for any other exception type
     return (
-        "**Service Error**\n\n"
-        "An unexpected error occurred.\n"
+        "<strong>Service Error</strong><br><br>"
+        "An unexpected error occurred.<br>"
         "Please refresh the page or start a new battle, "
         "and report this issue if it persists."
     )
