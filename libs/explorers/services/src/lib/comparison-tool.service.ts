@@ -182,9 +182,8 @@ export class ComparisonToolService<T> {
   ): void {
     this.configsSignal.set(configs ?? []);
 
-    const initialSelection = this.initialSelection ?? [];
-    const normalizedSelection = this.normalizeSelection(initialSelection, configs);
-    this.dropdownSelectionSignal.set(normalizedSelection);
+    const selection = this.resolveInitialDropdownSelection(params, configs);
+    this.dropdownSelectionSignal.set(selection);
 
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
     for (const config of configs) {
@@ -201,6 +200,15 @@ export class ComparisonToolService<T> {
     this.resolvePinnedState(params, { isInitial: true });
 
     this.isInitializedSignal.set(true);
+  }
+
+  private resolveInitialDropdownSelection(
+    params: ComparisonToolUrlParams,
+    configs: ComparisonToolConfig[],
+  ): string[] {
+    const urlCategories = params.categories ?? undefined;
+    const selectionSource = urlCategories ?? this.initialSelection ?? [];
+    return this.normalizeSelection(selectionSource, configs);
   }
 
   connect(options: {
