@@ -14,8 +14,13 @@ CHATBOT_BATTLE_CSS = """
 
 .system-message {
     border: 1px solid var(--accent-teal);
-    border-radius: 8px;
-    padding: 16px;
+    border-radius: 18px;
+    padding: 6px 16px;
+}
+
+/* Remove outer border for system message */
+#chatbot-container .message.bot.panel-full-width:has(.system-message) {
+    border: none !important;
 }
 
 .system-message-content {
@@ -58,6 +63,17 @@ CHATBOT_BATTLE_CSS = """
 #chatbot-container #chatbot {
     height: max(50svh, 350px) !important;
     padding-bottom: 16px;
+}
+
+/* Set border radius for all message bubbles */
+#chatbot-container .message.panel-full-width {
+    border-radius: 18px !important;
+    padding: 6px 16px !important;
+}
+
+/* Remove border for all message bubbles except system messages */
+#chatbot-container .message.panel-full-width:not(:has(.system-message)) {
+    border: none !important;
 }
 
 /* Make label icon match text size */
