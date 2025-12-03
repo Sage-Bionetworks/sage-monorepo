@@ -442,7 +442,9 @@ def add_text(
         states  # state0, state1: updated with prompt
         + [battle_session]  # battle_session: updated with battle_id, round_id
         + [x.to_gradio_chatbot() for x in states]  # chatbot0, chatbot1: show prompt
-        + [gr.update(value="", placeholder="Ask follow-ups...")]  # textbox: clear
+        + [
+            gr.update(value="", placeholder="Interact with models or ask follow-ups...")
+        ]  # textbox: clear
         + [gr.Group(visible=True)]  # battle_interface: show
         + [gr.Row(visible=False)]  # voting_row: hide
         + [gr.Row(visible=False)]  # next_battle_row: hide
