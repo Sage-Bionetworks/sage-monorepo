@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.api.DiseaseCorrelationApiDelegateImpl;
 import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
-import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
+import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument.CorrelationResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
@@ -40,6 +40,13 @@ import org.springframework.http.ResponseEntity;
 @ExtendWith(MockitoExtension.class)
 class DiseaseCorrelationApiDelegateImplTest {
 
+  private static final String CLUSTER_A = "Cluster A";
+  private static final String CLUSTER_B = "Cluster B";
+  private static final String CLUSTER_C = "Cluster C";
+  private static final String CLUSTER_D = "Cluster D";
+  private static final int PAGE_NUMBER = 0;
+  private static final int PAGE_SIZE = 100;
+
   @Mock
   private DiseaseCorrelationRepository repository;
 
@@ -57,12 +64,8 @@ class DiseaseCorrelationApiDelegateImplTest {
   @Test
   @DisplayName("should throw bad request when category missing subcategory")
   void shouldThrowBadRequestWhenCategoryMissingSubcategory() {
-    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
       .category(List.of(ErrorConstants.SUPPORTED_CATEGORY))
-      .items(null)
-      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
-      .pageNumber(0)
-      .pageSize(100)
       .build();
 
     assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query)).isInstanceOf(
@@ -75,12 +78,8 @@ class DiseaseCorrelationApiDelegateImplTest {
   @Test
   @DisplayName("should throw bad request when category unsupported")
   void shouldThrowBadRequestWhenCategoryUnsupported() {
-    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .category(List.of("OTHER", "Cluster A"))
-      .items(null)
-      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
-      .pageNumber(0)
-      .pageSize(100)
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
+      .category(List.of("OTHER", CLUSTER_A))
       .build();
 
     assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query)).isInstanceOf(
@@ -93,29 +92,19 @@ class DiseaseCorrelationApiDelegateImplTest {
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
-    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .category(List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster A"))
-      .items(null)
-      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
-      .pageNumber(0)
-      .pageSize(100)
-      .build();
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A).build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getDiseaseCorrelations()).isEmpty();
-    assertThat(response.getBody().getPage().getNumber()).isZero();
-    assertThat(response.getBody().getPage().getSize()).isEqualTo(100);
-    assertThat(response.getBody().getPage().getTotalElements()).isZero();
+    DiseaseCorrelationsPageDto body = response.getBody();
+    assertThat(body).isNotNull();
+    assertThat(body.getDiseaseCorrelations()).isEmpty();
+    assertThat(body.getPage().getNumber()).isZero();
+    assertThat(body.getPage().getSize()).isEqualTo(PAGE_SIZE);
+    assertThat(body.getPage().getTotalElements()).isZero();
 
-    HttpHeaders headers = response.getHeaders();
-    assertThat(headers.getCacheControl()).isEqualTo("no-cache, no-store, must-revalidate");
-    assertThat(headers.getPragma()).contains("no-cache");
-    assertThat(headers.getExpires()).isZero();
-    assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
-
+    assertResponseHeaders(response.getHeaders());
     verifyNoInteractions(repository);
   }
 
@@ -123,30 +112,26 @@ class DiseaseCorrelationApiDelegateImplTest {
   @DisplayName("should return mapped results when items provided")
   void shouldReturnMappedResultsWhenItemsProvided() {
     ObjectId objectId = new ObjectId();
-    DiseaseCorrelationDocument document = buildDocument(objectId);
-    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(document));
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(buildDocument(objectId)));
 
     when(
-      repository.findByClusterAndIdIn(eq("Cluster A"), anyList(), any(Pageable.class))
+      repository.findByClusterAndCompositeIdentifiers(eq(CLUSTER_A), anyList(), any(Pageable.class))
     ).thenReturn(page);
 
-    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .category(List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster A"))
-      .items(List.of(objectId.toHexString()))
-      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
-      .pageNumber(0)
-      .pageSize(100)
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
+      .items(List.of("Model 1~10 weeks~Female"))
       .build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getDiseaseCorrelations()).hasSize(1);
-    assertThat(response.getBody().getPage().getNumber()).isZero();
-    assertThat(response.getBody().getPage().getTotalElements()).isEqualTo(1);
+    DiseaseCorrelationsPageDto body = response.getBody();
+    assertThat(body).isNotNull();
+    assertThat(body.getDiseaseCorrelations()).hasSize(1);
+    assertThat(body.getPage().getNumber()).isZero();
+    assertThat(body.getPage().getTotalElements()).isEqualTo(1);
 
-    var dto = response.getBody().getDiseaseCorrelations().get(0);
+    var dto = body.getDiseaseCorrelations().get(0);
     assertThat(dto.getId()).isEqualTo(objectId.toHexString());
     assertThat(dto.getName()).isEqualTo("Model 1");
     assertThat(dto.getMatchedControl()).isEqualTo("Control A");
@@ -154,9 +139,9 @@ class DiseaseCorrelationApiDelegateImplTest {
     assertThat(dto.getIFG().getCorrelation()).isEqualTo(BigDecimal.valueOf(0.87d));
     assertThat(dto.getSex().getValue()).isEqualTo("Female");
 
-    verify(repository).findByClusterAndIdIn(
-      eq("Cluster A"),
-      eq(List.of(objectId)),
+    verify(repository).findByClusterAndCompositeIdentifiers(
+      eq(CLUSTER_A),
+      anyList(),
       any(Pageable.class)
     );
   }
@@ -164,17 +149,12 @@ class DiseaseCorrelationApiDelegateImplTest {
   @Test
   @DisplayName("should include cluster filter when exclude filter has no items")
   void shouldIncludeClusterFilterWhenExcludeFilterHasNoItems() {
-    ObjectId objectId = new ObjectId();
-    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(buildDocument(objectId)));
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(buildDocument(new ObjectId())));
+    when(repository.findByCluster(eq(CLUSTER_B), any(Pageable.class))).thenReturn(page);
 
-    when(repository.findByCluster(eq("Cluster B"), any(Pageable.class))).thenReturn(page);
-
-    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .category(List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster B"))
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_B)
       .items(List.of())
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
-      .pageNumber(0)
-      .pageSize(100)
       .build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
@@ -183,22 +163,18 @@ class DiseaseCorrelationApiDelegateImplTest {
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getDiseaseCorrelations()).hasSize(1);
 
-    verify(repository).findByCluster(eq("Cluster B"), any(Pageable.class));
+    verify(repository).findByCluster(eq(CLUSTER_B), any(Pageable.class));
   }
 
   @Test
-  @DisplayName("should throw bad request when items contain invalid object id")
-  void shouldThrowBadRequestWhenItemsContainInvalidObjectId() {
-    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .category(List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster A"))
-      .items(List.of("not-an-id"))
-      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
-      .pageNumber(0)
-      .pageSize(100)
+  @DisplayName("should throw bad request when items contain invalid composite identifier format")
+  void shouldThrowBadRequestWhenItemsContainInvalidCompositeIdentifier() {
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
+      .items(List.of("invalid")) // Missing tildes - only 1 part instead of 3
       .build();
 
     assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query)).isInstanceOf(
-      InvalidObjectIdException.class
+      InvalidFilterException.class
     );
 
     verifyNoInteractions(repository);
@@ -208,19 +184,16 @@ class DiseaseCorrelationApiDelegateImplTest {
   @DisplayName("should omit correlation data when values incomplete")
   void shouldOmitCorrelationDataWhenValuesIncomplete() {
     ObjectId objectId = new ObjectId();
-    DiseaseCorrelationDocument document = buildDocumentWithPartialCorrelation(objectId);
-    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(document));
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(
+      List.of(buildDocumentWithPartialCorrelation(objectId))
+    );
 
     when(
-      repository.findByClusterAndIdIn(eq("Cluster C"), anyList(), any(Pageable.class))
+      repository.findByClusterAndCompositeIdentifiers(eq(CLUSTER_C), anyList(), any(Pageable.class))
     ).thenReturn(page);
 
-    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .category(List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster C"))
-      .items(List.of(objectId.toHexString()))
-      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
-      .pageNumber(0)
-      .pageSize(100)
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_C)
+      .items(List.of("Model 2~12 weeks~Male"))
       .build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
@@ -228,43 +201,57 @@ class DiseaseCorrelationApiDelegateImplTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getDiseaseCorrelations()).hasSize(1);
-    var dto = response.getBody().getDiseaseCorrelations().get(0);
-    assertThat(dto.getIFG()).isNull();
+    assertThat(response.getBody().getDiseaseCorrelations().get(0).getIFG()).isNull();
   }
 
   @Test
   @DisplayName("should exclude specified items when exclude filter has items")
   void shouldExcludeSpecifiedItemsWhenExcludeFilterHasItems() {
-    ObjectId excludedId = new ObjectId();
     ObjectId includedId = new ObjectId();
-    DiseaseCorrelationDocument includedDocument = buildDocument(includedId);
-    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(includedDocument));
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(buildDocument(includedId)));
 
     when(
-      repository.findByClusterAndIdNotIn(eq("Cluster D"), anyList(), any(Pageable.class))
+      repository.findByClusterExcludingCompositeIdentifiers(
+        eq(CLUSTER_D),
+        anyList(),
+        any(Pageable.class)
+      )
     ).thenReturn(page);
 
-    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .category(List.of(ErrorConstants.SUPPORTED_CATEGORY, "Cluster D"))
-      .items(List.of(excludedId.toHexString()))
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_D)
+      .items(List.of("ExcludedModel~8 weeks~Male"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
-      .pageNumber(0)
-      .pageSize(100)
       .build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getDiseaseCorrelations()).hasSize(1);
-    var dto = response.getBody().getDiseaseCorrelations().get(0);
-    assertThat(dto.getId()).isEqualTo(includedId.toHexString());
+    DiseaseCorrelationsPageDto body = response.getBody();
+    assertThat(body).isNotNull();
+    assertThat(body.getDiseaseCorrelations()).hasSize(1);
+    assertThat(body.getDiseaseCorrelations().get(0).getId()).isEqualTo(includedId.toHexString());
 
-    verify(repository).findByClusterAndIdNotIn(
-      eq("Cluster D"),
-      eq(List.of(excludedId)),
+    verify(repository).findByClusterExcludingCompositeIdentifiers(
+      eq(CLUSTER_D),
+      anyList(),
       any(Pageable.class)
     );
+  }
+
+  private DiseaseCorrelationSearchQueryDto.Builder buildQuery(String cluster) {
+    return DiseaseCorrelationSearchQueryDto.builder()
+      .category(List.of(ErrorConstants.SUPPORTED_CATEGORY, cluster))
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(PAGE_NUMBER)
+      .pageSize(PAGE_SIZE);
+  }
+
+  private void assertResponseHeaders(HttpHeaders headers) {
+    assertThat(headers.getCacheControl()).isEqualTo("no-cache, no-store, must-revalidate");
+    assertThat(headers.getPragma()).contains("no-cache");
+    assertThat(headers.getExpires()).isZero();
+    assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
   }
 
   private DiseaseCorrelationDocument buildDocument(ObjectId objectId) {

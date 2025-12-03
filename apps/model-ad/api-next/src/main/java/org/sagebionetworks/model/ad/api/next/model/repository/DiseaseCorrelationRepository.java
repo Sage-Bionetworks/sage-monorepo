@@ -1,11 +1,13 @@
 package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.List;
+import java.util.Map;
 import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -27,30 +29,34 @@ public interface DiseaseCorrelationRepository
   Page<DiseaseCorrelationDocument> findByCluster(String cluster, Pageable pageable);
 
   /**
-   * Find disease correlations for a specific cluster with IDs in the provided list.
+   * Find disease correlations matching specific composite identifiers (name-age-sex combinations).
+   * Uses a custom MongoDB query to match exact combinations using $or with $and conditions.
    *
    * @param cluster the cluster identifier
-   * @param ids the list of ObjectIds to include
+   * @param compositeConditions array of composite conditions, each containing name, age, and sex
    * @param pageable pagination information
-   * @return page of disease correlation documents matching the cluster and IDs
+   * @return page of matching disease correlation documents
    */
-  Page<DiseaseCorrelationDocument> findByClusterAndIdIn(
+  @Query("{ 'cluster': ?0, $or: ?1 }")
+  Page<DiseaseCorrelationDocument> findByClusterAndCompositeIdentifiers(
     String cluster,
-    List<ObjectId> ids,
+    List<Map<String, Object>> compositeConditions,
     Pageable pageable
   );
 
   /**
-   * Find disease correlations for a specific cluster excluding IDs in the provided list.
+   * Find disease correlations excluding specific composite identifiers (name-age-sex combinations).
+   * Uses a custom MongoDB query to exclude exact combinations using $nor with $and conditions.
    *
    * @param cluster the cluster identifier
-   * @param ids the list of ObjectIds to exclude
+   * @param compositeConditions array of composite conditions, each containing name, age, and sex
    * @param pageable pagination information
-   * @return page of disease correlation documents matching the cluster, excluding the specified IDs
+   * @return page of disease correlation documents excluding the specified combinations
    */
-  Page<DiseaseCorrelationDocument> findByClusterAndIdNotIn(
+  @Query("{ 'cluster': ?0, $nor: ?1 }")
+  Page<DiseaseCorrelationDocument> findByClusterExcludingCompositeIdentifiers(
     String cluster,
-    List<ObjectId> ids,
+    List<Map<String, Object>> compositeConditions,
     Pageable pageable
   );
 }
