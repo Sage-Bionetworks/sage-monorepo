@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import {
   expectPinnedParams,
   expectPinnedRows,
@@ -9,31 +9,22 @@ import {
   pinByName,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
-import { ModelOverview } from '@sagebionetworks/model-ad/api-client';
 import { baseURL } from '../playwright.config';
 import { COMPARISON_TOOL_PATHS } from './constants';
-import { navigateToComparison } from './helpers/comparison-tool';
+import {
+  fetchDiseaseCorrelations,
+  fetchModelOverviews,
+  navigateToComparison,
+} from './helpers/comparison-tool';
 
-const MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS['Model Overview'];
-const MODEL_OVERVIEW_API_PATH = '/comparison-tools/model-overview';
-
-const fetchModelOverviews = async (page: Page): Promise<ModelOverview[]> => {
-  // Fetch all model overviews by using exclude filter with no items
-  const response = await page.request.get(`${baseURL}/api/v1/${MODEL_OVERVIEW_API_PATH}`, {
-    params: {
-      itemFilterType: 'exclude',
-    },
-  });
-  expect(response.ok()).toBeTruthy();
-  const data = (await response.json()) as { modelOverviews: ModelOverview[] };
-  return data.modelOverviews;
-};
+const CT_PAGE = 'Model Overview';
+const MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS[CT_PAGE];
 
 test.describe('model overview', () => {
   test('share URL button copies URL to clipboard', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read']);
 
-    await navigateToComparison(page, 'Model Overview', true);
+    await navigateToComparison(page, CT_PAGE, true);
 
     const shareUrlButton = page.getByRole('button', { name: 'Share URL' });
     await expect(shareUrlButton).toBeVisible();
@@ -52,7 +43,7 @@ test.describe('model overview', () => {
 
     const [firstModel, secondModel] = models;
 
-    await navigateToComparison(page, 'Model Overview', true);
+    await navigateToComparison(page, CT_PAGE, true);
 
     const pinnedTable = getPinnedTable(page);
     const unpinnedTable = getUnpinnedTable(page);
@@ -78,7 +69,7 @@ test.describe('model overview', () => {
     const [firstModel] = await fetchModelOverviews(page);
     expect(firstModel).toBeDefined();
 
-    await navigateToComparison(page, 'Model Overview', true, 'url', `pinned=${firstModel._id}`);
+    await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=${firstModel._id}`);
 
     await expect(page.locator('explorers-base-table')).toHaveCount(2);
     await expect(getRowByName(getPinnedTable(page), page, firstModel.name)).toHaveCount(1);
@@ -91,12 +82,39 @@ test.describe('model overview', () => {
     const [firstModel] = await fetchModelOverviews(page);
     expect(firstModel).toBeDefined();
 
-    await navigateToComparison(page, 'Model Overview', true, 'url', `pinned=${firstModel._id}`);
+    await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=${firstModel._id}`);
     await expectPinnedParams(page, [firstModel._id]);
 
     await navigateToComparison(page, 'Disease Correlation', true, 'link');
     await expectPinnedParams(page, []);
     await expectUnpinnedTableOnly(page);
+  });
+
+  test('pinned items are updated in URL when navigating to another comparison tool with cached pinned items', async ({
+    page,
+  }) => {
+    const initialCT = 'Disease Correlation';
+
+    const [firstModel] = await fetchModelOverviews(page);
+    expect(firstModel).toBeDefined();
+
+    const [firstCorrelation] = await fetchDiseaseCorrelations(page);
+    expect(firstCorrelation).toBeDefined();
+
+    await navigateToComparison(page, initialCT, true, 'url', `pinned=${firstCorrelation._id}`);
+    await expectPinnedParams(page, [firstCorrelation._id]);
+
+    await navigateToComparison(page, CT_PAGE, true, 'link');
+    await expectPinnedParams(page, []);
+    await expectUnpinnedTableOnly(page);
+
+    await pinByName(getUnpinnedTable(page), page, firstModel.name);
+    await expectPinnedRows(page, [firstModel.name]);
+    await expectPinnedParams(page, [firstModel._id]);
+
+    await navigateToComparison(page, initialCT, true, 'link');
+    await expectPinnedParams(page, [firstCorrelation._id]);
+    await expectPinnedRows(page, [firstCorrelation.name]);
   });
 
   test('pinned items are loaded from cache and displayed in UI and in URL when returning to the comparison tool', async ({
@@ -105,14 +123,14 @@ test.describe('model overview', () => {
     const [firstModel] = await fetchModelOverviews(page);
     expect(firstModel).toBeDefined();
 
-    await navigateToComparison(page, 'Model Overview', true, 'url', `pinned=${firstModel._id}`);
+    await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=${firstModel._id}`);
     await expectPinnedParams(page, [firstModel._id]);
 
     await navigateToComparison(page, 'Disease Correlation', true, 'link');
     await expectPinnedParams(page, []);
     await expectUnpinnedTableOnly(page);
 
-    await navigateToComparison(page, 'Model Overview', true, 'link');
+    await navigateToComparison(page, CT_PAGE, true, 'link');
     await expectPinnedRows(page, [firstModel.name]);
     await expectPinnedParams(page, [firstModel._id]);
   });
