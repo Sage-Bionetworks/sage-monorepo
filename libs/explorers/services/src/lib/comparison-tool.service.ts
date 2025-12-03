@@ -197,7 +197,7 @@ export class ComparisonToolService<T> {
     this.pinnedItemsForDropdownsSignal.set(new Map());
     this.initialSelection = undefined;
 
-    this.resolvePinnedState(params, { isInitial: true });
+    this.resolveUrlState(params, { isInitial: true });
 
     this.isInitializedSignal.set(true);
   }
@@ -236,7 +236,7 @@ export class ComparisonToolService<T> {
           return;
         }
 
-        this.resolvePinnedState(params, { isInitial: false });
+        this.resolveUrlState(params, { isInitial: false });
       });
   }
 
@@ -513,16 +513,22 @@ export class ComparisonToolService<T> {
     this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
   }
 
-  private resolvePinnedState(
-    params: ComparisonToolUrlParams,
-    options: { isInitial: boolean },
-  ): void {
+  private resolveUrlState(params: ComparisonToolUrlParams, options: { isInitial: boolean }): void {
     // If this service is not active, ignore URL changes from other CTs
     if (!this.coordinatorService.isActive(this)) {
       return;
     }
 
     this.syncToUrlInProgress.set(true);
+
+    // Handle categories from URL (for non-initial navigation)
+    if (!options.isInitial && params.categories) {
+      const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
+      // Only update if different to avoid loops
+      if (!isEqual(normalizedSelection, this.dropdownSelectionSignal())) {
+        this.dropdownSelectionSignal.set(normalizedSelection);
+      }
+    }
 
     const urlPinnedItems = params.pinnedItems ?? undefined;
     const hasUrlPins = Array.isArray(urlPinnedItems) && urlPinnedItems.length > 0;
