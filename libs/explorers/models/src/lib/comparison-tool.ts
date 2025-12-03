@@ -103,6 +103,7 @@ export type ComparisonToolLink = {
 
 export interface ComparisonToolUrlParams {
   pinnedItems?: string[] | null;
+  categories?: string[] | null;
 }
 
 export interface PaginationParams {
