@@ -308,6 +308,7 @@ export class ComparisonToolService<T> {
         newSet.add(id);
         return newSet;
       });
+      this.updatePinnedItemsCache();
     }
   }
 
@@ -317,6 +318,7 @@ export class ComparisonToolService<T> {
       newSet.delete(id);
       return newSet;
     });
+    this.updatePinnedItemsCache();
   }
 
   pinList(ids: string[]) {
@@ -339,10 +341,12 @@ export class ComparisonToolService<T> {
       }
       return newSet;
     });
+    this.updatePinnedItemsCache();
   }
 
   setPinnedItems(items: string[] | null) {
     this.pinnedItemsSignal.set(new Set(items ?? []));
+    this.updatePinnedItemsCache();
   }
 
   resetPinnedItems() {
@@ -408,29 +412,13 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    // Save current pinned items before switching
-    const previousSelection = this.dropdownSelectionSignal();
-    const previousKey = this.dropdownKey(previousSelection);
-    const currentPinnedItems = this.pinnedItemsSignal();
-
-    this.pinnedItemsForDropdownsSignal.update((cache) => {
-      const next = new Map(cache);
-      next.set(previousKey, new Set(currentPinnedItems));
-      return next;
-    });
-
     // Switch to new selection
     this.dropdownSelectionSignal.set(selection);
 
-    // Restore pinned items for new selection
+    // Restore pinned items for new selection from cache (or empty if not cached)
     const newKey = this.dropdownKey(selection);
     const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(newKey);
-
-    if (cachedPinnedItems) {
-      this.pinnedItemsSignal.set(new Set(cachedPinnedItems));
-    } else {
-      this.pinnedItemsSignal.set(new Set());
-    }
+    this.pinnedItemsSignal.set(cachedPinnedItems ? new Set(cachedPinnedItems) : new Set());
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {
@@ -497,6 +485,18 @@ export class ComparisonToolService<T> {
     return JSON.stringify(
       normalized.slice(0, this.DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL),
     );
+  }
+
+  private updatePinnedItemsCache(): void {
+    const currentSelection = this.dropdownSelection();
+    const currentPins = this.pinnedItems();
+    const key = this.dropdownKey(currentSelection);
+
+    this.pinnedItemsForDropdownsSignal.update((cache) => {
+      const next = new Map(cache);
+      next.set(key, new Set(currentPins));
+      return next;
+    });
   }
 
   setSort(event: SortEvent) {
