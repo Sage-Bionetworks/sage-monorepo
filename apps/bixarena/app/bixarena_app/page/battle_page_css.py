@@ -56,7 +56,7 @@ CHATBOT_BATTLE_CSS = """
 /* Responsive chatbot height based on viewport */
 /* Add bottom padding to chatbot block to prevent message cropping */
 #chatbot-container #chatbot {
-    height: clamp(550px, 50vh, 1200px) !important;
+    height: max(50svh, 350px) !important;
     padding-bottom: 16px;
 }
 
@@ -86,7 +86,7 @@ CHATBOT_BATTLE_CSS = """
 /* Mobile optimization */
 @media (max-width: 768px) {
     #chatbot-container #chatbot {
-        height: clamp(400px, 50vh, 600px) !important;
+        height: max(50svh, 280px) !important;
     }
 
     #chatbot-container .row {
