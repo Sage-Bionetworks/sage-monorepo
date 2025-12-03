@@ -132,7 +132,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     assertThat(body.getPage().getTotalElements()).isEqualTo(1);
 
     var dto = body.getDiseaseCorrelations().get(0);
-    assertThat(dto.getId()).isEqualTo(objectId.toHexString());
+    assertThat(dto.getCompositeId()).contains("Model 1");
     assertThat(dto.getName()).isEqualTo("Model 1");
     assertThat(dto.getMatchedControl()).isEqualTo("Control A");
     assertThat(dto.getIFG()).isNotNull();
@@ -229,7 +229,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     DiseaseCorrelationsPageDto body = response.getBody();
     assertThat(body).isNotNull();
     assertThat(body.getDiseaseCorrelations()).hasSize(1);
-    assertThat(body.getDiseaseCorrelations().get(0).getId()).isEqualTo(includedId.toHexString());
+    assertThat(body.getDiseaseCorrelations().get(0).getCompositeId()).contains("Model 1");
 
     verify(repository).findByClusterExcludingCompositeIdentifiers(
       eq(CLUSTER_D),
