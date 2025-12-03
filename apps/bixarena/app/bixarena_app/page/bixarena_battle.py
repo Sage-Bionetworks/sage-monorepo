@@ -687,11 +687,13 @@ def build_side_by_side_ui_anony():
         js=enable_enter_js,
     )
 
-    # Re-wire prompt buttons now that the real textbox exists (created above)
-    # Replace the temporary hidden textbox inside example prompt UI with actual textbox
-    # We simply add new handlers that append to existing click chain.
-    for card in prompt_cards:
-        card.click(lambda v: v, inputs=[card], outputs=[textbox]).then(
+    # Re-wire prompt buttons to use plain text prompts and trigger auto-submission
+    for i, card in enumerate(prompt_cards):
+        card.click(
+            lambda idx=i: example_prompt_ui.prompt_messages[idx],
+            inputs=[],
+            outputs=[textbox],
+        ).then(
             add_text,
             states + [battle_session] + model_selectors + [textbox],
             states
