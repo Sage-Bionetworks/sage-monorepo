@@ -83,7 +83,7 @@ CHATBOT_BATTLE_CSS = """
     font-weight: 500;
 }
 
-/* Mobile optimization */
+/* Responsive layout */
 @media (max-width: 768px) {
     #chatbot-container #chatbot {
         height: max(50svh, 280px) !important;
@@ -243,6 +243,18 @@ INPUT_PROMPT_CSS = """
 .row:has(#input_box.prompt_input) {
     max-width: 900px;
     margin: 0 auto;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+    .row:has(#input_box.prompt_input) {
+        padding: 0 8px;
+    }
+
+    #input_box.prompt_input textarea {
+        padding: 12px 16px;
+        font-size: var(--text-md);
+    }
 }
 """
 
