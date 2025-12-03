@@ -6,7 +6,6 @@ simplified to a single function for a single-page LLM comparison arena.
 """
 
 import logging
-import warnings
 from uuid import UUID
 
 import gradio as gr
@@ -421,14 +420,20 @@ def add_text(
     battle_id = battle_session.battle_id
 
     if not states[0].skip_next:
+        any_truncated = any(s.is_truncated for s in states if s)
+
         round_id = None
         if battle_id:
             round_id = create_battle_round(battle_id, text, cookies)
 
         for i in range(num_sides):
-            states[i].conv.append_message(states[i].conv.roles[0], text)
-            states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
-            states[i].skip_next = False
+            # In continuation mode, skip models that aren't truncated
+            states[i].skip_next = any_truncated and not states[i].is_truncated
+
+            if not states[i].skip_next:
+                states[i].conv.append_message(states[i].conv.roles[0], text)
+                states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
+                states[i].is_truncated = False
 
         battle_session.round_id = round_id
 
@@ -437,7 +442,9 @@ def add_text(
         states  # state0, state1: updated with prompt
         + [battle_session]  # battle_session: updated with battle_id, round_id
         + [x.to_gradio_chatbot() for x in states]  # chatbot0, chatbot1: show prompt
-        + [gr.update(value="", placeholder="Ask follow-ups...")]  # textbox: clear
+        + [
+            gr.update(value="", placeholder="Interact with models or ask follow-ups...")
+        ]  # textbox: clear
         + [gr.Group(visible=True)]  # battle_interface: show
         + [gr.Row(visible=False)]  # voting_row: hide
         + [gr.Row(visible=False)]  # next_battle_row: hide
@@ -492,20 +499,14 @@ def build_side_by_side_ui_anony():
                 for i in range(num_sides):
                     label = "Model 1" if i == 0 else "Model 2"
                     with gr.Column():
-                        # Suppress tuples deprecation warning until we migrate to messages format
-                        with warnings.catch_warnings():
-                            warnings.filterwarnings(
-                                "ignore",
-                                message=".*tuples.*format.*chatbot.*deprecated.*",
-                                category=UserWarning,
-                            )
-                            chatbot = gr.Chatbot(
-                                label=label,
-                                elem_id="chatbot",
-                                height=550,
-                                show_copy_button=True,
-                                type="tuples",
-                            )
+                        chatbot = gr.Chatbot(
+                            label=label,
+                            elem_id="chatbot",
+                            height=550,
+                            show_copy_button=True,
+                            type="messages",
+                            group_consecutive_messages=False,
+                        )
                         chatbots.append(chatbot)
 
                         # Model name footer attached to each chatbot

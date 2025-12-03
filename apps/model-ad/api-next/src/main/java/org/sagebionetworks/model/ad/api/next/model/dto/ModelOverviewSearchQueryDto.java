@@ -95,11 +95,11 @@ public class ModelOverviewSearchQueryDto {
   }
 
   /**
-   * List of item IDs to filter by.
+   * List of item names to filter by.
    * @return items
    */
   
-  @Schema(name = "items", example = "[\"507f1f77bcf86cd799439011\",\"507f191e810c19729de860ea\"]", description = "List of item IDs to filter by.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"3xTg-AD\",\"5xFAD (UCI)\"]", description = "List of item names to filter by.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
   public @Nullable List<String> getItems() {
     return items;

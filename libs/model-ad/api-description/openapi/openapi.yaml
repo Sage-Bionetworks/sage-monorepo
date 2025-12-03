@@ -237,14 +237,14 @@ components:
           maximum: 100
           example: 100
         items:
-          description: List of item IDs to filter by.
+          description: List of item names to filter by.
           type: array
           items:
             type: string
           nullable: true
           example:
-            - 507f1f77bcf86cd799439011
-            - 507f191e810c19729de860ea
+            - 3xTg-AD
+            - 5xFAD (UCI)
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true

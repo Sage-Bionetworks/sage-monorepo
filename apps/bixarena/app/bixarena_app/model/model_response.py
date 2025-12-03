@@ -2,7 +2,6 @@ import logging
 from uuid import UUID
 
 import gradio as gr
-import requests
 from bixarena_api_client import (
     BattleApi,
     BattleRoundUpdateRequest,
@@ -17,9 +16,11 @@ from bixarena_app.config.constants import (
     DEFAULT_TOP_P,
     MAX_RESPONSE_TOKENS,
 )
-from bixarena_app.config.conversation import Conversation
+from bixarena_app.config.conversation import CONTINUATION_PROMPT, Conversation
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
-from bixarena_app.model.error_handler import handle_error_message
+from bixarena_app.model.error_handler import (
+    handle_api_error_message,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -33,16 +34,33 @@ class State:
         self.skip_next = False
         self.model_name = model_name
         self.has_error = False
+        self.is_truncated = False
 
     def to_gradio_chatbot(self):
         return self.conv.to_gradio_chatbot()
 
-    def last_assistant_message(self) -> MessageCreate | None:
-        """Return the last completed assistant response as a MessageCreate."""
-        assistant_role = self.conv.roles[1] if len(self.conv.roles) > 1 else "assistant"
-        for role, content in reversed(self.conv.messages):
-            if role == assistant_role and content:
-                return MessageCreate(role=MessageRole.ASSISTANT, content=content)
+    def get_message_for_persistence(self) -> MessageCreate | None:
+        """Get the message to persist to database (handles both success and errors).
+
+        Returns:
+            - MessageCreate with SYSTEM role if error occurred
+            - MessageCreate with ASSISTANT role if successful response
+            - None if no message to persist
+        """
+        # If there was an error, return a system placeholder message
+        if self.has_error:
+            return MessageCreate(
+                role=MessageRole.SYSTEM,
+                content="Model response unavailable due to an error.",
+            )
+
+        # Otherwise, extract the last successful assistant message
+        api_messages = self.conv.to_openai_api_messages()
+        for msg in reversed(api_messages):
+            if msg.get("role") == "assistant" and msg.get("content"):
+                return MessageCreate(role=MessageRole.ASSISTANT, content=msg["content"])
+
+        # No message found (e.g., model never responded)
         return None
 
 
@@ -69,19 +87,13 @@ def _update_battle_round_with_responses(
     round_id = battle_session.round_id
     if not battle_id or not round_id:
         return
-    # Capture successful responses
-    model1_message = state1.last_assistant_message()
-    model2_message = state2.last_assistant_message()
 
-    # When a model errors, add a system message so we still persist context
-    # If the model errored and we didn't get any assistant content, persist a SYSTEM message
-    # If there is an assistant message (e.g., a successful follow-up), keep it as ASSISTANT.
-    if state1.has_error and not model1_message:
-        error_content = "Model response unavailable due to an error."
-        model1_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
-    if state2.has_error and not model2_message:
-        error_content = "Model response unavailable due to an error."
-        model2_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
+    # Get messages for persistence (handles both success and error cases)
+    # Successful responses: ASSISTANT role with actual LLM content
+    # Error responses: SYSTEM role with placeholder message
+    # Detailed error info tracked separately in model_error table
+    model1_message = state1.get_message_for_persistence()
+    model2_message = state2.get_message_for_persistence()
 
     if not model1_message and not model2_message:
         battle_session.round_id = None
@@ -159,6 +171,8 @@ def bot_response(
         for data in stream_iter:
             if data["error_code"] == 0:
                 output = data["text"].strip()
+                # Reset error flag when receiving successful chunks
+                state.has_error = False
                 conv.update_last_message(output + "▌")
                 yield (state, state.to_gradio_chatbot())
             else:
@@ -169,17 +183,21 @@ def bot_response(
                 return
         output = data["text"].strip()
         conv.update_last_message(output)
+
+        # Add continuation prompt if response was truncated
+        finish_reason = data.get("finish_reason")
+        if finish_reason == "length" and not state.has_error:
+            logger.warning(
+                f"Response truncated due to max_tokens limit for model {state.model_name}"
+            )
+            conv.append_message("assistant", CONTINUATION_PROMPT)
+            state.is_truncated = True
+
         yield (state, state.to_gradio_chatbot())
-    except requests.exceptions.RequestException as e:
-        display_error_msg = handle_error_message(e)
-        conv.update_last_message(display_error_msg)
-        state.has_error = True  # Mark this state as having an error
-        yield (state, state.to_gradio_chatbot())
-        return
     except Exception as e:
-        display_error_msg = handle_error_message(e)
+        display_error_msg = handle_api_error_message(e)
         conv.update_last_message(display_error_msg)
-        state.has_error = True  # Mark this state as having an error
+        state.has_error = True
         yield (state, state.to_gradio_chatbot())
         return
 
@@ -194,7 +212,8 @@ def bot_response_multi(
     request: gr.Request | None = None,
 ):
     num_sides = 2
-    if state0 and state0.skip_next:
+    # Check if BOTH models should skip (e.g., round limit reached)
+    if state0 and state0.skip_next and state1 and state1.skip_next:
         # State: Edge case - battle round limit reached
         yield (
             state0,

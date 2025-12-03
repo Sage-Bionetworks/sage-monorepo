@@ -51,6 +51,7 @@ export class ComparisonToolService<T> {
     },
     visualizationOverviewPanes: [],
     rowsPerPage: 10,
+    rowIdDataKey: '_id',
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);

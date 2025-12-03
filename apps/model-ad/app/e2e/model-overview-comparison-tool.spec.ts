@@ -57,15 +57,15 @@ test.describe('model overview', () => {
 
     await pinByName(unpinnedTable, page, firstModel.name);
     await expect(getRowByName(pinnedTable, page, firstModel.name)).toHaveCount(1);
-    await expectPinnedParams(page, [firstModel._id]);
+    await expectPinnedParams(page, [firstModel.name]);
 
     await pinByName(unpinnedTable, page, secondModel.name);
     await expect(getRowByName(pinnedTable, page, secondModel.name)).toHaveCount(1);
-    await expectPinnedParams(page, [firstModel._id, secondModel._id]);
+    await expectPinnedParams(page, [firstModel.name, secondModel.name]);
 
     const firstPinnedRow = await unPinByName(pinnedTable, page, firstModel.name);
     await expect(firstPinnedRow).toHaveCount(0);
-    await expectPinnedParams(page, [secondModel._id]);
+    await expectPinnedParams(page, [secondModel.name]);
 
     const secondPinnedRow = await unPinByName(pinnedTable, page, secondModel.name);
     await expect(secondPinnedRow).toHaveCount(0);
@@ -76,10 +76,10 @@ test.describe('model overview', () => {
     const [firstModel] = await fetchModelOverviews(page);
     expect(firstModel).toBeDefined();
 
-    await navigateToComparison(page, 'Model Overview', true, `pinned=${firstModel._id}`);
+    await navigateToComparison(page, 'Model Overview', true, `pinned=${firstModel.name}`);
 
     await expect(page.locator('explorers-base-table')).toHaveCount(2);
     await expect(getRowByName(getPinnedTable(page), page, firstModel.name)).toHaveCount(1);
-    await expectPinnedParams(page, [firstModel._id]);
+    await expectPinnedParams(page, [firstModel.name]);
   });
 });
