@@ -23,10 +23,13 @@ export class ComparisonToolUrlService {
   );
 
   syncToUrl(state: ComparisonToolUrlParams): void {
-    const currentPinned = this.deserialize(this.route.snapshot.queryParams).pinnedItems ?? [];
+    const currentState = this.deserialize(this.route.snapshot.queryParams);
+    const currentPinned = currentState.pinnedItems ?? [];
     const nextPinned = state.pinnedItems ?? [];
+    const currentCategories = currentState.categories ?? [];
+    const nextCategories = state.categories ?? [];
 
-    if (isEqual(currentPinned, nextPinned)) {
+    if (isEqual(currentPinned, nextPinned) && isEqual(currentCategories, nextCategories)) {
       return;
     }
 
@@ -51,29 +54,45 @@ export class ComparisonToolUrlService {
   private serialize(state: ComparisonToolUrlParams): Params {
     const params: Params = {};
 
-    if (state.pinnedItems && state.pinnedItems.length > 0) {
-      params['pinned'] = state.pinnedItems.join(',');
-    } else if (state.pinnedItems !== undefined) {
-      params['pinned'] = null;
-    }
+    this.serializeArrayParam(params, 'pinned', state.pinnedItems);
+    this.serializeArrayParam(params, 'categories', state.categories);
 
     return params;
+  }
+
+  private serializeArrayParam(
+    params: Params,
+    key: string,
+    value: string[] | null | undefined,
+  ): void {
+    if (value && value.length > 0) {
+      params[key] = value.join(',');
+    } else if (value !== undefined) {
+      params[key] = null;
+    }
   }
 
   private deserialize(params: Params): ComparisonToolUrlParams {
     const result: ComparisonToolUrlParams = {};
 
     if (params['pinned']) {
-      const pinnedItems = this.parsePinnedParam(params['pinned']);
+      const pinnedItems = this.parseCommaSeparatedParam(params['pinned']);
       if (pinnedItems.length > 0) {
         result.pinnedItems = pinnedItems;
+      }
+    }
+
+    if (params['categories']) {
+      const categories = this.parseCommaSeparatedParam(params['categories']);
+      if (categories.length > 0) {
+        result.categories = categories;
       }
     }
 
     return result;
   }
 
-  private parsePinnedParam(value: string | string[] | null | undefined): string[] {
+  private parseCommaSeparatedParam(value: string | string[] | null | undefined): string[] {
     if (value == null) {
       return [];
     }
