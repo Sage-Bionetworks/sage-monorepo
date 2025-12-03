@@ -1,7 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.api.*;
-import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument.ModelOverviewLink;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -80,14 +78,14 @@ class ModelOverviewApiDelegateImplTest {
   @Test
   @DisplayName("should return mapped results when items provided")
   void shouldReturnMappedResultsWhenItemsProvided() {
-    ObjectId objectId = new ObjectId();
-    ModelOverviewDocument document = buildDocument(objectId);
+    String modelName = "Model A";
+    ModelOverviewDocument document = buildDocument(modelName);
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(document), PageRequest.of(0, 100), 1);
 
-    when(repository.findByIdIn(anyList(), any())).thenReturn(page);
+    when(repository.findByNameIn(anyList(), any())).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items(List.of(objectId.toHexString()))
+      .items(List.of(modelName))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -106,8 +104,7 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(response.getBody().getPage().getHasPrevious()).isFalse();
 
     ModelOverviewDto dto = response.getBody().getModelOverviews().get(0);
-    assertThat(dto.getId()).isEqualTo(objectId.toHexString());
-    assertThat(dto.getName()).isEqualTo("Model A");
+    assertThat(dto.getName()).isEqualTo(modelName);
     assertThat(dto.getModelType()).isEqualTo("Late Onset AD");
     assertThat(dto.getMatchedControls()).containsExactly("Control 1");
     assertThat(dto.getAvailableData()).containsExactly(
@@ -122,29 +119,12 @@ class ModelOverviewApiDelegateImplTest {
   }
 
   @Test
-  @DisplayName("should throw bad request when item contains invalid object id")
-  void shouldThrowBadRequestWhenItemContainsInvalidObjectId() {
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items(List.of("not-an-id"))
-      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
-      .pageNumber(0)
-      .pageSize(100)
-      .build();
-
-    assertThatThrownBy(() -> delegate.getModelOverviews(query)).isInstanceOf(
-      InvalidObjectIdException.class
-    );
-
-    verifyNoInteractions(repository);
-  }
-
-  @Test
   @DisplayName("should return all items when exclude filter has no items")
   void shouldReturnAllItemsWhenExcludeFilterHasNoItems() {
-    ObjectId objectId1 = new ObjectId();
-    ObjectId objectId2 = new ObjectId();
-    ModelOverviewDocument document1 = buildDocument(objectId1);
-    ModelOverviewDocument document2 = buildDocument(objectId2);
+    String modelName1 = "Model A";
+    String modelName2 = "Model B";
+    ModelOverviewDocument document1 = buildDocument(modelName1);
+    ModelOverviewDocument document2 = buildDocument(modelName2);
     Page<ModelOverviewDocument> page = new PageImpl<>(
       List.of(document1, document2),
       PageRequest.of(0, 100),
@@ -173,19 +153,19 @@ class ModelOverviewApiDelegateImplTest {
   @Test
   @DisplayName("should exclude specified items when exclude filter has items")
   void shouldExcludeSpecifiedItemsWhenExcludeFilterHasItems() {
-    ObjectId excludedId = new ObjectId();
-    ObjectId includedId = new ObjectId();
-    ModelOverviewDocument includedDocument = buildDocument(includedId);
+    String excludedName = "Excluded Model";
+    String includedName = "Included Model";
+    ModelOverviewDocument includedDocument = buildDocument(includedName);
     Page<ModelOverviewDocument> page = new PageImpl<>(
       List.of(includedDocument),
       PageRequest.of(0, 100),
       1
     );
 
-    when(repository.findByIdNotIn(anyList(), any())).thenReturn(page);
+    when(repository.findByNameNotIn(anyList(), any())).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items(List.of(excludedId.toHexString()))
+      .items(List.of(excludedName))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -197,12 +177,12 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getModelOverviews()).hasSize(1);
     ModelOverviewDto dto = response.getBody().getModelOverviews().get(0);
-    assertThat(dto.getId()).isEqualTo(includedId.toHexString());
+    assertThat(dto.getName()).isEqualTo(includedName);
 
-    verify(repository).findByIdNotIn(anyList(), any());
+    verify(repository).findByNameNotIn(anyList(), any());
   }
 
-  private ModelOverviewDocument buildDocument(ObjectId objectId) {
+  private ModelOverviewDocument buildDocument(String name) {
     ModelOverviewLink requiredLink = ModelOverviewLink.builder()
       .linkText("Study")
       .linkUrl("https://example.org/study")
@@ -214,8 +194,8 @@ class ModelOverviewApiDelegateImplTest {
       .build();
 
     ModelOverviewDocument document = new ModelOverviewDocument();
-    document.setId(objectId);
-    document.setName("Model A");
+    document.setId(new ObjectId());
+    document.setName(name);
     document.setModelType("Late Onset AD");
     document.setMatchedControls(List.of("Control 1"));
     document.setGeneExpression(optionalLink);

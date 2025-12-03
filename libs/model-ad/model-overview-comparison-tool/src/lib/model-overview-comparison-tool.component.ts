@@ -75,6 +75,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
     legendEnabled: false,
     visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
+    rowIdDataKey: 'name',
   };
 
   constructor() {

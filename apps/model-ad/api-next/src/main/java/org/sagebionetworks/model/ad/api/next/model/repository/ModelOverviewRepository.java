@@ -17,20 +17,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ModelOverviewRepository extends MongoRepository<ModelOverviewDocument, ObjectId> {
   /**
-   * Find model overviews with IDs in the provided list.
+   * Find model overviews with names in the provided list.
    *
-   * @param ids the list of ObjectIds to include
+   * @param names the list of names to include
    * @param pageable the pagination information
-   * @return page of model overview documents with matching IDs
+   * @return page of model overview documents with matching names
    */
-  Page<ModelOverviewDocument> findByIdIn(List<ObjectId> ids, Pageable pageable);
+  Page<ModelOverviewDocument> findByNameIn(List<String> names, Pageable pageable);
 
   /**
-   * Find model overviews excluding IDs in the provided list.
+   * Find model overviews excluding names in the provided list.
    *
-   * @param ids the list of ObjectIds to exclude
+   * @param names the list of names to exclude
    * @param pageable the pagination information
-   * @return page of model overview documents excluding the specified IDs
+   * @return page of model overview documents excluding the specified names
    */
-  Page<ModelOverviewDocument> findByIdNotIn(List<ObjectId> ids, Pageable pageable);
+  Page<ModelOverviewDocument> findByNameNotIn(List<String> names, Pageable pageable);
 }

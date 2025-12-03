@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -55,15 +54,13 @@ public class ModelOverviewService {
         // Return empty page for include filter with no items
         page = Page.empty(pageable);
       } else {
-        List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
-        page = repository.findByIdIn(objectIds, pageable);
+        page = repository.findByNameIn(items, pageable);
       }
     } else {
       if (items.isEmpty()) {
         page = repository.findAll(pageable);
       } else {
-        List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
-        page = repository.findByIdNotIn(objectIds, pageable);
+        page = repository.findByNameNotIn(items, pageable);
       }
     }
 

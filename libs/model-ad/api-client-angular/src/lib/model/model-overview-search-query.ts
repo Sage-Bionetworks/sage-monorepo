@@ -22,7 +22,7 @@ export interface ModelOverviewSearchQuery {
    */
   pageSize?: number;
   /**
-   * List of item IDs to filter by.
+   * List of item names to filter by.
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
