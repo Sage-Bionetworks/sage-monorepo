@@ -54,8 +54,8 @@ export class ComparisonToolUrlService {
   private serialize(state: ComparisonToolUrlParams): Params {
     const params: Params = {};
 
-    this.serializeArrayParam(params, 'pinned', state.pinnedItems);
     this.serializeArrayParam(params, 'categories', state.categories);
+    this.serializeArrayParam(params, 'pinned', state.pinnedItems);
 
     return params;
   }
