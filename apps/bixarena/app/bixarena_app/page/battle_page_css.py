@@ -29,8 +29,10 @@ CHATBOT_BATTLE_CSS = """
     font-size: var(--text-md);
 }
 
+/* Responsive chatbot height based on viewport */
 /* Add bottom padding to chatbot block to prevent message cropping */
 #chatbot-container #chatbot {
+    height: clamp(550px, 50vh, 1200px) !important;
     padding-bottom: 16px;
 }
 
@@ -55,6 +57,17 @@ CHATBOT_BATTLE_CSS = """
     text-align: center;
     color: var(--body-text-color);
     font-weight: 500;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    #chatbot-container #chatbot {
+        height: clamp(400px, 50vh, 600px) !important;
+    }
+
+    #chatbot-container .row {
+        gap: 16px;
+    }
 }
 """
 

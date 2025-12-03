@@ -502,7 +502,6 @@ def build_side_by_side_ui_anony():
                             chatbot = gr.Chatbot(
                                 label=label,
                                 elem_id="chatbot",
-                                height=550,
                                 show_copy_button=True,
                                 type="tuples",
                             )
