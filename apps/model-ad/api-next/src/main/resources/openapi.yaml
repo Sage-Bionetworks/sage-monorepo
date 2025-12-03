@@ -625,12 +625,13 @@ components:
         PHG:
           adj_p_val: 6.027456183070403
           correlation: 0.8008281904610115
+        composite_id: APOE4~12 Months~Female
         name: name
-        _id: _id
         age: age
       properties:
-        _id:
+        composite_id:
           description: Unique identifier for the disease correlation object
+          example: APOE4~12 Months~Female
           type: string
         name:
           description: Model name
@@ -669,9 +670,9 @@ components:
         STG:
           $ref: '#/components/schemas/CorrelationResult'
       required:
-        - _id
         - age
         - cluster
+        - composite_id
         - matched_control
         - model_type
         - modified_genes
@@ -711,8 +712,8 @@ components:
             PHG:
               adj_p_val: 6.027456183070403
               correlation: 0.8008281904610115
+            composite_id: APOE4~12 Months~Female
             name: name
-            _id: _id
             age: age
           - cluster: cluster
             DLPFC:
@@ -742,8 +743,8 @@ components:
             PHG:
               adj_p_val: 6.027456183070403
               correlation: 0.8008281904610115
+            composite_id: APOE4~12 Months~Female
             name: name
-            _id: _id
             age: age
         page:
           number: 0

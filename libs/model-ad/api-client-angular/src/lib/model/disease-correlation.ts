@@ -17,7 +17,7 @@ export interface DiseaseCorrelation {
   /**
    * Unique identifier for the disease correlation object
    */
-  _id: string;
+  composite_id: string;
   /**
    * Model name
    */
