@@ -39,21 +39,28 @@ class State:
     def to_gradio_chatbot(self):
         return self.conv.to_gradio_chatbot()
 
-    def last_assistant_message(self) -> MessageCreate | None:
-        """Return the last completed assistant response as a MessageCreate."""
-        # If there was an error, don't return the error message as assistant content
+    def get_message_for_persistence(self) -> MessageCreate | None:
+        """Get the message to persist to database (handles both success and errors).
+
+        Returns:
+            - MessageCreate with SYSTEM role if error occurred
+            - MessageCreate with ASSISTANT role if successful response
+            - None if no message to persist
+        """
+        # If there was an error, return a system placeholder message
         if self.has_error:
-            return None
+            return MessageCreate(
+                role=MessageRole.SYSTEM,
+                content="Model response unavailable due to an error.",
+            )
 
-        # Get the same message and role used for API call
+        # Otherwise, extract the last successful assistant message
         api_messages = self.conv.to_openai_api_messages()
+        for msg in reversed(api_messages):
+            if msg.get("role") == "assistant" and msg.get("content"):
+                return MessageCreate(role=MessageRole.ASSISTANT, content=msg["content"])
 
-        # Find the last assistant message
-        for msg in reversed(api_messages[1:]):
-            role = msg.get("role")
-            content = msg.get("content")
-            if role == "assistant" and content:
-                return MessageCreate(role=MessageRole.ASSISTANT, content=content)
+        # No message found (e.g., model never responded)
         return None
 
 
@@ -80,19 +87,13 @@ def _update_battle_round_with_responses(
     round_id = battle_session.round_id
     if not battle_id or not round_id:
         return
-    # Capture successful responses
-    model1_message = state1.last_assistant_message()
-    model2_message = state2.last_assistant_message()
 
-    # When a model errors, add a system message so we still persist context
-    # If model errored without assistant content, persist a SYSTEM message
-    # If there is an assistant message (e.g., successful follow-up), keep as ASSISTANT.
-    if state1.has_error and not model1_message:
-        error_content = "Model response unavailable due to an error."
-        model1_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
-    if state2.has_error and not model2_message:
-        error_content = "Model response unavailable due to an error."
-        model2_message = MessageCreate(role=MessageRole.SYSTEM, content=error_content)
+    # Get messages for persistence (handles both success and error cases)
+    # Successful responses: ASSISTANT role with actual LLM content
+    # Error responses: SYSTEM role with placeholder message
+    # Detailed error info tracked separately in model_error table
+    model1_message = state1.get_message_for_persistence()
+    model2_message = state2.get_message_for_persistence()
 
     if not model1_message and not model2_message:
         battle_session.round_id = None
