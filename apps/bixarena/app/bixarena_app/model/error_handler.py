@@ -39,7 +39,30 @@ def get_battle_round_limit_message() -> str:
     return f"{message}\n\n_Round limit: {BATTLE_ROUND_LIMIT}_"
 
 
-def handle_error_message(error: Exception) -> str:
+def get_empty_response_message() -> str:
+    """
+    Handle empty response errors from API providers.
+
+    Returns:
+        A user-friendly error message for empty responses.
+    """
+    return "Something went wrong.\nPlease try submitting your prompt again."
+
+
+def get_finish_error_message() -> str:
+    """
+    Handle model error from API providers.
+
+    Returns:
+        A user-friendly error message for model errors.
+    """
+    return (
+        "An error occurred while generating the response.\n"
+        "Please try submitting your prompt again."
+    )
+
+
+def handle_api_error_message(error: Exception) -> str:
     """
     Handle error messages based on OpenAI exception types.
 
@@ -91,7 +114,7 @@ def handle_error_message(error: Exception) -> str:
         return (
             "**Rate Limit Exceeded**\n\n"
             "The request rate limit has been exceeded.\n"
-            "Please wait a moment, then re-enter your prompt.\n\n"
+            "Please try submitting your prompt again later.\n\n"
             "_Error Code: 429_"
         )
 
@@ -100,7 +123,7 @@ def handle_error_message(error: Exception) -> str:
         return (
             "**Internal Server Error**\n\n"
             "An internal server error occurred.\n"
-            "Please wait a moment, then re-enter your prompt.\n\n"
+            "Please try submitting your prompt again later.\n\n"
             "_Error Code: 500_"
         )
 
@@ -118,7 +141,7 @@ def handle_error_message(error: Exception) -> str:
         return (
             "**Network Connection Error**\n\n"
             "Unable to establish a network connection.\n"
-            "Please wait a moment, then re-enter your prompt."
+            "Please try submitting your prompt again later."
         )
 
     # Generic API errors

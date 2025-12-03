@@ -4,6 +4,30 @@ CSS styles for the BixArena battle page.
 
 # CSS for chatbot battle interface
 CHATBOT_BATTLE_CSS = """
+/* System message styling */
+.message.bot.panel-full-width.thought:has(.system-message) {
+    border: none;
+    padding: 0;
+    margin-top: 24px;
+    background: transparent;
+}
+
+.system-message {
+    border: 1px solid var(--accent-teal);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.system-message-content {
+    display: flex;
+    gap: 12px;
+}
+
+.system-message .system-icon {
+    color: var(--accent-teal);
+    font-size: var(--text-xl);
+}
+
 /* Separate the two chat windows */
 #chatbot-container {
     background: transparent !important;

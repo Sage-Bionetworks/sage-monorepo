@@ -1,8 +1,11 @@
 import { Component, inject, input, ViewEncapsulation } from '@angular/core';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolHelperService,
+  ComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
 import { SortEvent } from 'primeng/api';
-import { TableModule } from 'primeng/table';
+import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { ComparisonToolTableLinkComponent } from '../comparison-tool-table-link/comparison-tool-table-link.component';
 import { HeatmapCircleComponent } from '../heatmap-circle/heatmap-circle.component';
@@ -32,6 +35,7 @@ interface PaginationOptions {
 })
 export class BaseTableComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
+  private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
 
   selectedColumns = this.comparisonToolService.selectedColumns;
 
@@ -39,6 +43,7 @@ export class BaseTableComponent {
   shouldPaginate = input<boolean>(true);
   shouldShowNoDataMessage = input<boolean>(true);
   columnWidth = input<string>('auto');
+  totalRecords = this.comparisonToolService.totalResultsCount;
 
   paginationConfig: PaginationOptions = {
     rows: 10,
@@ -50,5 +55,9 @@ export class BaseTableComponent {
 
   sortCallback(event: SortEvent) {
     this.comparisonToolService.setSort(event);
+  }
+
+  onLazyLoad(event: TableLazyLoadEvent) {
+    this.comparisonToolService.handleLazyLoad(event);
   }
 }
