@@ -101,8 +101,14 @@ test.describe('model overview', () => {
     const [firstCorrelation] = await fetchDiseaseCorrelations(page);
     expect(firstCorrelation).toBeDefined();
 
-    await navigateToComparison(page, initialCT, true, 'url', `pinned=${firstCorrelation._id}`);
-    await expectPinnedParams(page, [firstCorrelation._id]);
+    await navigateToComparison(
+      page,
+      initialCT,
+      true,
+      'url',
+      `pinned=${firstCorrelation.composite_id}`,
+    );
+    await expectPinnedParams(page, [firstCorrelation.composite_id]);
 
     await navigateToComparison(page, CT_PAGE, true, 'link');
     await expectPinnedParams(page, []);
@@ -113,7 +119,7 @@ test.describe('model overview', () => {
     await expectPinnedParams(page, [firstModel.name]);
 
     await navigateToComparison(page, initialCT, true, 'link');
-    await expectPinnedParams(page, [firstCorrelation._id]);
+    await expectPinnedParams(page, [firstCorrelation.composite_id]);
     await expectPinnedRows(page, [firstCorrelation.name]);
   });
 

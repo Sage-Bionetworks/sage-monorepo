@@ -15,9 +15,15 @@ test.describe('disease correlation', () => {
     const correlations = await fetchDiseaseCorrelations(page);
     const [firstCorrelation] = correlations;
 
-    await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=${firstCorrelation._id}`);
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      `pinned=${firstCorrelation.composite_id}`,
+    );
 
-    await expectPinnedParams(page, [firstCorrelation._id]);
+    await expectPinnedParams(page, [firstCorrelation.composite_id]);
     await expectPinnedRows(page, [firstCorrelation.name]);
 
     const dropdown = page.getByRole('combobox');
@@ -32,7 +38,7 @@ test.describe('disease correlation', () => {
     await dropdown.click();
     await options.first().click();
 
-    await expectPinnedParams(page, [firstCorrelation._id]);
+    await expectPinnedParams(page, [firstCorrelation.composite_id]);
     await expectPinnedRows(page, [firstCorrelation.name]);
 
     const pinnedTable = getPinnedTable(page);
