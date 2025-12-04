@@ -105,6 +105,14 @@ def snapshot_add(
         "--min",
         help="Minimum evaluations per model to include in the leaderboard",
     ),
+    significant: bool = typer.Option(
+        False,
+        "--significant",
+        help=(
+            "Rank by statistical significance (CI overlap). "
+            "If False, rank by BT score only."
+        ),
+    ),
     dry_run: bool = typer.Option(
         False,
         "--dry-run",
@@ -174,13 +182,16 @@ def snapshot_add(
             console.print(f"  • Using {len(all_evaluations)} total evaluations")
 
             # Compute rankings
+            ranking_method = "statistical significance" if significant else "BT score"
             console.print(
                 f"  • Computing rankings with {num_bootstrap} bootstrap iterations..."
             )
+            console.print(f"  • Ranking method: {ranking_method}")
             leaderboard_entries = compute_leaderboard_bt(
                 evaluations=all_evaluations,
                 models=models_by_name,
                 num_bootstrap=num_bootstrap,
+                significant=significant,
             )
 
             # Filter by minimum evaluations if threshold is set
