@@ -12,44 +12,28 @@ from bixarena_app.api.api_client_helper import get_api_configuration
 logger = logging.getLogger(__name__)
 
 
-def create_time_badge_html(updated_at: str | None) -> str:
-    """Create HTML for the time badge
+def create_subtitle_row_html(updated_at: str | datetime | None) -> str:
+    """Create HTML for subtitle row with optional time badge
 
     Args:
-        updated_at: ISO format date string when the leaderboard was last updated
+        updated_at: ISO format date string or datetime when the leaderboard
+                    was last updated, or None if no timestamp available
 
     Returns:
-        HTML string for the time badge, or just the description if no timestamp
+        HTML string containing subtitle and time badge (if timestamp provided)
     """
-    if updated_at is None:
-        return """
-        <p style="
-            font-size: var(--text-xl);
-            color: var(--body-text-color-subdued);
-            margin: 0;
-            margin-bottom: 40px !important;
-        ">Community-driven evaluation of AI models on biomedical topics</p>
-        """
+    time_badge_html = ""
+    if updated_at is not None:
+        # Convert to datetime if it's a string
+        if isinstance(updated_at, str):
+            dt = datetime.fromisoformat(updated_at.replace("Z", "+00:00"))
+        else:
+            dt = updated_at
 
-    # Parse and format date, e.g. "2025-12-04T12:00:00Z" -> "Dec 4, 2025"
-    dt = datetime.fromisoformat(updated_at.replace("Z", "+00:00"))
-    formatted_date = dt.strftime("%b %-d, %Y")
+        # Format date, e.g. "Dec 4, 2025"
+        formatted_date = dt.strftime("%b %-d, %Y")
 
-    return f"""
-    <div style="
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 40px !important;
-        flex-wrap: wrap;
-        gap: 16px;
-    ">
-        <p style="
-            font-size: var(--text-xl);
-            color: var(--body-text-color-subdued);
-            margin: 0;
-        ">Community-driven evaluation of AI models on biomedical topics</p>
-
+        time_badge_html = f"""
         <div style="
             display: flex;
             align-items: center;
@@ -76,6 +60,23 @@ def create_time_badge_html(updated_at: str | None) -> str:
                 ">{formatted_date}</span>
             </div>
         </div>
+        """
+
+    return f"""
+    <div style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 40px !important;
+        flex-wrap: wrap;
+        gap: 16px;
+    ">
+        <p style="
+            font-size: var(--text-xl);
+            color: var(--body-text-color-subdued);
+            margin: 0;
+        ">Community-driven evaluation of AI models on biomedical topics</p>
+        {time_badge_html}
     </div>
     """
 
@@ -228,16 +229,17 @@ def refresh_leaderboard():
     content_update = gr.update(visible=has_rows)
     table_update = gr.update(value=df if has_rows else None, visible=has_rows)
 
-    # Create badge HTML (will show only description if updated_at is None)
-    badge_html = create_time_badge_html(updated_at)
+    # Create subtitle row with time badge HTML
+    badge_html = create_subtitle_row_html(updated_at)
 
     return placeholder_update, content_update, table_update, df, badge_html
 
 
 def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
-    # Fetch initial data to get the updated_at timestamp
-    initial_df, initial_updated_at = fetch_leaderboard_data()
+    # Don't fetch data initially
+    initial_df = None
+    initial_updated_at = None
 
     # JavaScript to customize column header tooltips
     tooltips_js = """
@@ -299,6 +301,7 @@ def build_leaderboard_page():
             /* Prevent header from growing vertically */
             .leaderboard-header {
                 flex-grow: 0 !important;
+                gap: 0 !important;
             }
 
             /* Search box styling */
@@ -326,7 +329,8 @@ def build_leaderboard_page():
             </style>
             """
             )
-            timestamp_badge = gr.HTML(create_time_badge_html(initial_updated_at))
+
+            timestamp_badge = gr.HTML(create_subtitle_row_html(initial_updated_at))
 
             # State to store the full dataframe for filtering
             df_state = gr.State(initial_df)
