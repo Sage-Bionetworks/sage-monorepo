@@ -30,26 +30,20 @@ class LeaderboardView:
         ]
 
 
-def create_subtitle_row_html(updated_at: str | datetime | None) -> str:
+def create_subtitle_row_html(updated_at: datetime | None) -> str:
     """Create HTML for subtitle row with optional time badge
 
     Args:
-        updated_at: ISO format date string or datetime when the leaderboard
-                    was last updated, or None if no timestamp available
+        updated_at: datetime when the leaderboard was last updated,
+                    or None if no timestamp available
 
     Returns:
         HTML string containing subtitle and time badge (if timestamp provided)
     """
     time_badge_html = ""
     if updated_at is not None:
-        # Convert to datetime if it's a string
-        if isinstance(updated_at, str):
-            dt = datetime.fromisoformat(updated_at.replace("Z", "+00:00"))
-        else:
-            dt = updated_at
-
         # Format date, e.g. "Dec 4, 2025"
-        formatted_date = dt.strftime("%b %-d, %Y")
+        formatted_date = updated_at.strftime("%b %-d, %Y")
 
         time_badge_html = f"""
         <div style="
