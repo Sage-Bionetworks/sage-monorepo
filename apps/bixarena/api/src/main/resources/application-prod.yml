@@ -11,5 +11,5 @@ spring:
 
 logging:
   level:
-    org.sagebionetworks.bixarena: WARN
-    org.springframework.security: WARN
+    org.sagebionetworks.bixarena: INFO
+    org.springframework.security: INFO
