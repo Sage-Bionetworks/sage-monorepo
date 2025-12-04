@@ -24,7 +24,7 @@ public class DiseaseCorrelationMapper {
       : List.copyOf(document.getModifiedGenes());
 
     DiseaseCorrelationDto dto = new DiseaseCorrelationDto(
-      document.getId() != null ? document.getId().toHexString() : null,
+      getCompositeId(document),
       document.getName(),
       document.getMatchedControl(),
       document.getModelType(),
@@ -56,6 +56,14 @@ public class DiseaseCorrelationMapper {
         ex
       );
     }
+  }
+
+  private String getCompositeId(DiseaseCorrelationDocument document) {
+    String name = document.getName();
+    String age = document.getAge();
+    String sex = document.getSex();
+
+    return String.format("%s~%s~%s", name, age, sex);
   }
 
   private @Nullable CorrelationResultDto toCorrelationDto(@Nullable CorrelationResult document) {

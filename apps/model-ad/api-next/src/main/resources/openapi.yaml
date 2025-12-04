@@ -553,10 +553,16 @@ components:
           minItems: 2
           type: array
         items:
-          description: List of item IDs to filter by.
+          description: |
+            List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
+            where each identifier represents one complete combination of model name, age, and sex.
+
+            Example: "APOE4~4 months~Female" filters for documents matching that exact name, age, and sex.
+            Multiple items can be provided to filter for multiple specific combinations.
           example:
-            - 507f1f77bcf86cd799439011
-            - 507f191e810c19729de860ea
+            - APOE4~4 months~Female
+            - APOE4~8 months~Male
+            - 5xFAD (IU/Jax/Pitt)~12 months~Female
           items:
             type: string
           nullable: true
@@ -619,12 +625,13 @@ components:
         PHG:
           adj_p_val: 6.027456183070403
           correlation: 0.8008281904610115
+        composite_id: APOE4~12 Months~Female
         name: name
-        _id: _id
         age: age
       properties:
-        _id:
+        composite_id:
           description: Unique identifier for the disease correlation object
+          example: APOE4~12 Months~Female
           type: string
         name:
           description: Model name
@@ -663,9 +670,9 @@ components:
         STG:
           $ref: '#/components/schemas/CorrelationResult'
       required:
-        - _id
         - age
         - cluster
+        - composite_id
         - matched_control
         - model_type
         - modified_genes
@@ -705,8 +712,8 @@ components:
             PHG:
               adj_p_val: 6.027456183070403
               correlation: 0.8008281904610115
+            composite_id: APOE4~12 Months~Female
             name: name
-            _id: _id
             age: age
           - cluster: cluster
             DLPFC:
@@ -736,8 +743,8 @@ components:
             PHG:
               adj_p_val: 6.027456183070403
               correlation: 0.8008281904610115
+            composite_id: APOE4~12 Months~Female
             name: name
-            _id: _id
             age: age
         page:
           number: 0

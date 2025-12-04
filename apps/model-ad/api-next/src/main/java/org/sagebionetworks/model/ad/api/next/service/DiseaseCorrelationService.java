@@ -1,14 +1,17 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
+import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationIdentifier;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -49,19 +52,41 @@ public class DiseaseCorrelationService {
     PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
     Page<DiseaseCorrelationDocument> page;
 
-    if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-      if (items.isEmpty()) {
+    if (items.isEmpty()) {
+      // No items specified - return all or empty based on filter type
+      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
         page = Page.empty(pageable);
       } else {
-        List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
-        page = repository.findByClusterAndIdIn(cluster, objectIds, pageable);
+        page = repository.findByCluster(cluster, pageable);
       }
     } else {
-      if (items.isEmpty()) {
-        page = repository.findByCluster(cluster, pageable);
+      // Parse composite identifiers and build MongoDB query conditions
+      List<DiseaseCorrelationIdentifier> identifiers;
+      try {
+        identifiers = items.stream().map(DiseaseCorrelationIdentifier::parse).toList();
+      } catch (InvalidFilterException e) {
+        log.error(
+          "Failed to parse composite identifiers for cluster '{}': {}",
+          cluster,
+          e.getMessage()
+        );
+        throw e;
+      }
+
+      List<Map<String, Object>> compositeConditions = buildCompositeConditions(identifiers);
+
+      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
+        page = repository.findByClusterAndCompositeIdentifiers(
+          cluster,
+          compositeConditions,
+          pageable
+        );
       } else {
-        List<ObjectId> objectIds = ApiHelper.parseObjectIds(items);
-        page = repository.findByClusterAndIdNotIn(cluster, objectIds, pageable);
+        page = repository.findByClusterExcludingCompositeIdentifiers(
+          cluster,
+          compositeConditions,
+          pageable
+        );
       }
     }
 
@@ -84,5 +109,30 @@ public class DiseaseCorrelationService {
       .diseaseCorrelations(diseaseCorrelations)
       .page(pageMetadata)
       .build();
+  }
+
+  /**
+   * Builds MongoDB query conditions for composite identifiers.
+   * Each condition represents a single name-age-sex combination wrapped in $and.
+   *
+   * @param identifiers list of parsed composite identifiers
+   * @return list of MongoDB conditions for $or or $nor queries
+   */
+  private List<Map<String, Object>> buildCompositeConditions(
+    List<DiseaseCorrelationIdentifier> identifiers
+  ) {
+    List<Map<String, Object>> conditions = new ArrayList<>();
+
+    for (DiseaseCorrelationIdentifier identifier : identifiers) {
+      // Each condition must match ALL three fields (name AND age AND sex)
+      List<Map<String, Object>> andConditions = new ArrayList<>();
+      andConditions.add(Map.of("name", identifier.getName()));
+      andConditions.add(Map.of("age", identifier.getAge()));
+      andConditions.add(Map.of("sex", identifier.getSex()));
+
+      conditions.add(Map.of("$and", andConditions));
+    }
+
+    return conditions;
   }
 }

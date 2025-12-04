@@ -30,7 +30,7 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class DiseaseCorrelationDto {
 
-  private String id;
+  private String compositeId;
 
   private String name;
 
@@ -68,8 +68,8 @@ public class DiseaseCorrelationDto {
   /**
    * Constructor with only required parameters
    */
-  public DiseaseCorrelationDto(String id, String name, String matchedControl, String modelType, List<String> modifiedGenes, String cluster, String age, SexDto sex) {
-    this.id = id;
+  public DiseaseCorrelationDto(String compositeId, String name, String matchedControl, String modelType, List<String> modifiedGenes, String cluster, String age, SexDto sex) {
+    this.compositeId = compositeId;
     this.name = name;
     this.matchedControl = matchedControl;
     this.modelType = modelType;
@@ -79,24 +79,24 @@ public class DiseaseCorrelationDto {
     this.sex = sex;
   }
 
-  public DiseaseCorrelationDto id(String id) {
-    this.id = id;
+  public DiseaseCorrelationDto compositeId(String compositeId) {
+    this.compositeId = compositeId;
     return this;
   }
 
   /**
    * Unique identifier for the disease correlation object
-   * @return id
+   * @return compositeId
    */
   @NotNull 
-  @Schema(name = "_id", description = "Unique identifier for the disease correlation object", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("_id")
-  public String getId() {
-    return id;
+  @Schema(name = "composite_id", example = "APOE4~12 Months~Female", description = "Unique identifier for the disease correlation object", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("composite_id")
+  public String getCompositeId() {
+    return compositeId;
   }
 
-  public void setId(String id) {
-    this.id = id;
+  public void setCompositeId(String compositeId) {
+    this.compositeId = compositeId;
   }
 
   public DiseaseCorrelationDto name(String name) {
@@ -396,7 +396,7 @@ public class DiseaseCorrelationDto {
       return false;
     }
     DiseaseCorrelationDto diseaseCorrelation = (DiseaseCorrelationDto) o;
-    return Objects.equals(this.id, diseaseCorrelation.id) &&
+    return Objects.equals(this.compositeId, diseaseCorrelation.compositeId) &&
         Objects.equals(this.name, diseaseCorrelation.name) &&
         Objects.equals(this.matchedControl, diseaseCorrelation.matchedControl) &&
         Objects.equals(this.modelType, diseaseCorrelation.modelType) &&
@@ -415,14 +415,14 @@ public class DiseaseCorrelationDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, matchedControl, modelType, modifiedGenes, cluster, age, sex, IFG, PHG, TCX, CBE, DLPFC, FP, STG);
+    return Objects.hash(compositeId, name, matchedControl, modelType, modifiedGenes, cluster, age, sex, IFG, PHG, TCX, CBE, DLPFC, FP, STG);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DiseaseCorrelationDto {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    compositeId: ").append(toIndentedString(compositeId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    matchedControl: ").append(toIndentedString(matchedControl)).append("\n");
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
@@ -465,7 +465,7 @@ public class DiseaseCorrelationDto {
     }
 
     protected Builder copyOf(DiseaseCorrelationDto value) { 
-      this.instance.setId(value.id);
+      this.instance.setCompositeId(value.compositeId);
       this.instance.setName(value.name);
       this.instance.setMatchedControl(value.matchedControl);
       this.instance.setModelType(value.modelType);
@@ -483,8 +483,8 @@ public class DiseaseCorrelationDto {
       return this;
     }
 
-    public DiseaseCorrelationDto.Builder id(String id) {
-      this.instance.id(id);
+    public DiseaseCorrelationDto.Builder compositeId(String compositeId) {
+      this.instance.compositeId(compositeId);
       return this;
     }
     
