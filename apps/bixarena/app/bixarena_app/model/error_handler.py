@@ -106,14 +106,14 @@ def handle_api_error_message(error: Exception) -> str:
     if isinstance(error, RateLimitError):
         return (
             "The model provider rate limit has been exceeded.<br>"
-            "Please try submitting your prompt again later. <em>(code: 429)</em>"
+            "Please try submitting your prompt again. <em>(code: 429)</em>"
         )
 
     # 500 - Internal Server Error
     if isinstance(error, InternalServerError):
         return (
             "An internal server error occurred.<br>"
-            "Please try submitting your prompt again later. <em>(code: 500)</em>"
+            "Please try submitting your prompt again. <em>(code: 500)</em>"
         )
 
     # 400 - Bad Request
@@ -128,7 +128,7 @@ def handle_api_error_message(error: Exception) -> str:
     if isinstance(error, APIConnectionError):
         return (
             "Unable to establish a network connection.<br>"
-            "Please try submitting your prompt again later."
+            "Please try submitting your prompt again."
         )
 
     # Generic API errors
