@@ -1,4 +1,4 @@
-import { Provider } from '@angular/core';
+import { inject, Provider } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ComparisonToolConfig,
@@ -6,7 +6,7 @@ import {
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { ComparisonToolService } from './comparison-tool.service';
 import { NotificationService } from './notification.service';
@@ -66,9 +66,14 @@ export const provideComparisonToolService = (
     provide: ComparisonToolService,
     useFactory: () => {
       const service = new ComparisonToolService();
+      const urlService = inject(ComparisonToolUrlService);
 
       if (options.configs) {
-        service.initialize(options.configs, options.selection);
+        service.connect({
+          config$: of(options.configs),
+          queryParams$: urlService.params$,
+          initialSelection: options.selection,
+        });
       } else if (options.selection) {
         service.setDropdownSelection(options.selection);
       }

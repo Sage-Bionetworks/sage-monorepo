@@ -10,6 +10,9 @@ import {
 import { isEqual } from 'lodash';
 import { SortEvent, SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
+import type { Observable } from 'rxjs';
+import { combineLatest } from 'rxjs';
+import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
@@ -23,6 +26,7 @@ export class ComparisonToolService<T> {
   private readonly urlService = inject(ComparisonToolUrlService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly helperService = inject(ComparisonToolHelperService);
+  private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
@@ -91,10 +95,23 @@ export class ComparisonToolService<T> {
 
   private readonly syncToUrlInProgress = signal(false);
   private lastSerializedState: string | null = null;
-  private hasInitializedConfig = false;
+  private initialSelection: string[] | undefined;
+  private initialPinsResolved = false;
 
   constructor() {
-    this.setupUrlSync();
+    effect(() => {
+      const isInitialized = this.isInitialized();
+      const syncingToUrl = this.syncToUrlInProgress();
+      const isActive = this.coordinatorService.isActive(this);
+      if (!isInitialized || syncingToUrl || !isActive) {
+        return;
+      }
+
+      const pinnedItems = this.pinnedItems();
+      const state = this.serializeState(pinnedItems);
+
+      this.syncStateToUrl(state);
+    });
   }
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
@@ -158,22 +175,14 @@ export class ComparisonToolService<T> {
     this.maxPinnedItemsSignal.set(count);
   }
 
-  initialize(configs: ComparisonToolConfig[], selection?: string[]) {
-    // if it is already initialized, do not re-initialize
-    if (this.configs().length > 0) {
-      return;
-    }
-
+  private initializeFromConfig(
+    configs: ComparisonToolConfig[],
+    params: ComparisonToolUrlParams,
+  ): void {
     this.configsSignal.set(configs ?? []);
-    this.totalResultsCount.set(0);
-    if (this.hasInitializedConfig) {
-      this.resetPinnedItems();
-    }
-    this.multiSortMetaSignal.set(this.DEFAULT_MULTI_SORT_META);
-    this.setUnpinnedData([]);
-    this.setPinnedData([]);
 
-    const normalizedSelection = this.normalizeSelection(selection ?? [], configs);
+    const initialSelection = this.initialSelection ?? [];
+    const normalizedSelection = this.normalizeSelection(initialSelection, configs);
     this.dropdownSelectionSignal.set(normalizedSelection);
 
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
@@ -186,7 +195,40 @@ export class ComparisonToolService<T> {
 
     this.columnsForDropdownsSignal.set(columnsMap);
     this.pinnedItemsForDropdownsSignal.set(new Map());
-    this.hasInitializedConfig = true;
+    this.initialSelection = undefined;
+
+    this.resolvePinnedState(params, { isInitial: true });
+
+    this.isInitializedSignal.set(true);
+  }
+
+  connect(options: {
+    config$: Observable<ComparisonToolConfig[]>;
+    queryParams$: Observable<ComparisonToolUrlParams>;
+    initialSelection?: string[];
+  }): void {
+    this.coordinatorService.setActive(this);
+
+    if (this.isInitialized()) {
+      // Re-entering an already-initialized service (navigating back to this CT)
+      // Restore this CT's cached pins and sync them to the URL, ignoring URL params from other CTs
+      this.syncToUrlInProgress.set(false);
+      this.scheduleUrlSyncFromCurrentPins();
+      return;
+    }
+
+    this.initialSelection = options.initialSelection;
+
+    combineLatest([options.config$, options.queryParams$])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([configs, params]) => {
+        if (!this.isInitializedSignal()) {
+          this.initializeFromConfig(configs, params);
+          return;
+        }
+
+        this.resolvePinnedState(params, { isInitial: false });
+      });
   }
 
   setDropdownSelection(selection: string[]) {
@@ -267,6 +309,7 @@ export class ComparisonToolService<T> {
         newSet.add(id);
         return newSet;
       });
+      this.updatePinnedItemsCache();
     }
   }
 
@@ -276,6 +319,7 @@ export class ComparisonToolService<T> {
       newSet.delete(id);
       return newSet;
     });
+    this.updatePinnedItemsCache();
   }
 
   pinList(ids: string[]) {
@@ -298,10 +342,12 @@ export class ComparisonToolService<T> {
       }
       return newSet;
     });
+    this.updatePinnedItemsCache();
   }
 
   setPinnedItems(items: string[] | null) {
     this.pinnedItemsSignal.set(new Set(items ?? []));
+    this.updatePinnedItemsCache();
   }
 
   resetPinnedItems() {
@@ -367,29 +413,13 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    // Save current pinned items before switching
-    const previousSelection = this.dropdownSelectionSignal();
-    const previousKey = this.dropdownKey(previousSelection);
-    const currentPinnedItems = this.pinnedItemsSignal();
-
-    this.pinnedItemsForDropdownsSignal.update((cache) => {
-      const next = new Map(cache);
-      next.set(previousKey, new Set(currentPinnedItems));
-      return next;
-    });
-
     // Switch to new selection
     this.dropdownSelectionSignal.set(selection);
 
-    // Restore pinned items for new selection
+    // Restore pinned items for new selection from cache (or empty if not cached)
     const newKey = this.dropdownKey(selection);
     const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(newKey);
-
-    if (cachedPinnedItems) {
-      this.pinnedItemsSignal.set(new Set(cachedPinnedItems));
-    } else {
-      this.pinnedItemsSignal.set(new Set());
-    }
+    this.pinnedItemsSignal.set(cachedPinnedItems ? new Set(cachedPinnedItems) : new Set());
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {
@@ -458,39 +488,71 @@ export class ComparisonToolService<T> {
     );
   }
 
+  private updatePinnedItemsCache(): void {
+    const currentSelection = this.dropdownSelection();
+    const currentPins = this.pinnedItems();
+    const key = this.dropdownKey(currentSelection);
+
+    this.pinnedItemsForDropdownsSignal.update((cache) => {
+      const next = new Map(cache);
+      next.set(key, new Set(currentPins));
+      return next;
+    });
+  }
+
   setSort(event: SortEvent) {
     this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
   }
 
-  private setupUrlSync(): void {
-    // URL → State: Subscribe to URL param changes
-    this.urlService.params$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      this.syncToUrlInProgress.set(true);
+  private resolvePinnedState(
+    params: ComparisonToolUrlParams,
+    options: { isInitial: boolean },
+  ): void {
+    // If this service is not active, ignore URL changes from other CTs
+    if (!this.coordinatorService.isActive(this)) {
+      return;
+    }
 
-      if (params.pinnedItems === undefined) {
-        this.setPinnedItems(null);
-      } else {
-        this.setPinnedItems(params.pinnedItems);
-      }
+    this.syncToUrlInProgress.set(true);
 
-      this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
+    const urlPinnedItems = params.pinnedItems ?? undefined;
+    const hasUrlPins = Array.isArray(urlPinnedItems) && urlPinnedItems.length > 0;
+
+    // User navigated directly to this CT with ?pinned=<ids> in URL - restore those pins
+    if (hasUrlPins) {
+      this.setPinnedItems(urlPinnedItems);
+      this.updateSerializedStateCacheFromPins();
+      this.initialPinsResolved = true;
+      this.syncToUrlInProgress.set(false);
+      return;
+    }
+
+    // First visit to this CT without URL pins - start with empty pins and sync to URL
+    if (options.isInitial && !this.initialPinsResolved) {
+      this.resetPinnedItems();
 
       this.syncToUrlInProgress.set(false);
-      this.isInitializedSignal.set(true);
-    });
+      this.scheduleUrlSyncFromCurrentPins();
 
-    // State → URL: Sync state changes to URL using effect
-    effect(() => {
-      const syncingToUrl = this.syncToUrlInProgress();
-      const pinnedItems = this.pinnedItems();
-      const state = this.serializeState(pinnedItems);
+      this.initialPinsResolved = true;
+      return;
+    }
 
-      if (!this.isInitialized() || syncingToUrl) {
-        return;
-      }
+    // When navigating back without URL pins, check if we have cached pins for current dropdown
+    const currentKey = this.dropdownKey(this.dropdownSelectionSignal());
+    const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(currentKey);
 
-      this.syncStateToUrl(state);
-    });
+    // Restore cached pins and sync to URL
+    if (cachedPinnedItems && cachedPinnedItems.size > 0) {
+      this.setPinnedItems(Array.from(cachedPinnedItems));
+      this.syncToUrlInProgress.set(false);
+      this.scheduleUrlSyncFromCurrentPins();
+      return;
+    }
+
+    // No URL pins and no cached pins - clear everything and sync to URL
+    this.syncToUrlInProgress.set(false);
+    this.scheduleUrlSyncFromCurrentPins();
   }
 
   private syncStateToUrl(state: ComparisonToolUrlParams): void {
@@ -508,5 +570,25 @@ export class ComparisonToolService<T> {
     return {
       pinnedItems: pinned.length ? pinned : null,
     };
+  }
+
+  private syncStateToUrlFromCurrentPins(): void {
+    this.syncStateToUrl(this.serializeState(this.pinnedItems()));
+  }
+
+  private updateSerializedStateCacheFromPins(): void {
+    this.lastSerializedState = JSON.stringify(this.serializeState(this.pinnedItems()));
+  }
+
+  private scheduleUrlSyncFromCurrentPins(): void {
+    // Queue task to allow router navigation that triggered this connect call to finish first
+    queueMicrotask(() => {
+      // Check if active - CT may have become inactive between scheduling and execution
+      if (!this.coordinatorService.isActive(this)) {
+        return;
+      }
+      this.lastSerializedState = null;
+      this.syncStateToUrlFromCurrentPins();
+    });
   }
 }

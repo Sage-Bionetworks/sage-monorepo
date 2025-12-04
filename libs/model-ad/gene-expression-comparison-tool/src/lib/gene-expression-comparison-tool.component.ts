@@ -7,14 +7,18 @@ import {
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
-import { ComparisonToolHelperService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolHelperService,
+  ComparisonToolUrlService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { shareReplay } from 'rxjs';
+import { catchError, of, shareReplay } from 'rxjs';
 import { GeneExpressionComparisonToolService } from './services/gene-expression-comparison-tool.service';
 
 // TODO: Replace with actual gene expression data model (MG-238)
@@ -33,8 +37,20 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
+  private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
 
   isLoading = signal(true);
+
+  readonly config$ = this.comparisonToolConfigService
+    .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
+    .pipe(
+      catchError((error) => {
+        console.error('Error retrieving comparison tool config: ', error);
+        this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
+        return of<ComparisonToolConfig[]>([]);
+      }),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'RNA - DIFFERENTIAL EXPRESSION': {
@@ -91,26 +107,20 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.platformService.isBrowser) {
-      this.getConfigs();
-      this.getData();
+    if (this.platformService.isServer) {
+      return;
     }
-  }
 
-  getConfigs() {
-    this.comparisonToolConfigService
-      .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
-      .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs);
-          this.comparisonToolService.totalResultsCount.set(50000);
-        },
-        error: (error) => {
-          console.error('Error retrieving comparison tool config: ', error);
-          this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
-        },
-      });
+    this.comparisonToolService.connect({
+      config$: this.config$,
+      queryParams$: this.comparisonToolUrlService.params$,
+    });
+
+    this.config$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.comparisonToolService.totalResultsCount.set(50000);
+    });
+
+    this.getData();
   }
 
   getData() {

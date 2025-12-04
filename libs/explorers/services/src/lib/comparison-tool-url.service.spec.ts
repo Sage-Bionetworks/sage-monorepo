@@ -56,6 +56,10 @@ describe('ComparisonToolUrlService', () => {
   });
 
   it('should clear pinned query param when empty', () => {
+    mockActivatedRoute.snapshot = {
+      queryParams: { pinned: 'id1' },
+    } as any;
+
     service.syncToUrl({ pinnedItems: [] });
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(
@@ -86,5 +90,21 @@ describe('ComparisonToolUrlService', () => {
         replaceUrl: true,
       }),
     );
+  });
+
+  it('should skip navigation when pinned state already empty', () => {
+    service.syncToUrl({ pinnedItems: [] });
+
+    expect(mockRouter.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should skip navigation when the pinned state matches the URL', () => {
+    mockActivatedRoute.snapshot = {
+      queryParams: { pinned: 'id1,id2' },
+    } as any;
+
+    service.syncToUrl({ pinnedItems: ['id1', 'id2'] });
+
+    expect(mockRouter.navigate).not.toHaveBeenCalled();
   });
 });

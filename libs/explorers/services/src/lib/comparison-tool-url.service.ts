@@ -4,7 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ComparisonToolUrlParams } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
 
 export const COMPARISON_TOOL_URL_SYNC_DEBOUNCE_MS = 50;
 
@@ -18,10 +18,18 @@ export class ComparisonToolUrlService {
     debounceTime(COMPARISON_TOOL_URL_SYNC_DEBOUNCE_MS),
     map((params) => this.deserialize(params)),
     distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
+    shareReplay({ bufferSize: 1, refCount: true }),
     takeUntilDestroyed(this.destroyRef),
   );
 
   syncToUrl(state: ComparisonToolUrlParams): void {
+    const currentPinned = this.deserialize(this.route.snapshot.queryParams).pinnedItems ?? [];
+    const nextPinned = state.pinnedItems ?? [];
+
+    if (isEqual(currentPinned, nextPinned)) {
+      return;
+    }
+
     const queryParams = this.serialize(state);
 
     this.router.navigate([], {

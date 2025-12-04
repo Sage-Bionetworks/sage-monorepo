@@ -7,7 +7,11 @@ import {
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
-import { ComparisonToolHelperService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolHelperService,
+  ComparisonToolUrlService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -18,7 +22,7 @@ import {
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { shareReplay } from 'rxjs';
+import { catchError, of, shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 @Component({
@@ -35,12 +39,24 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
+  private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
 
   pinnedItems = this.comparisonToolService.pinnedItems;
-
   isInitialized = this.comparisonToolService.isInitialized;
+
   currentPageNumber = this.comparisonToolService.pageNumber;
   currentPageSize = this.comparisonToolService.pageSize;
+
+  readonly config$ = this.comparisonToolConfigService
+    .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
+    .pipe(
+      catchError((error) => {
+        console.error('Error retrieving comparison tool config: ', error);
+        this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
+        return of<ComparisonToolConfig[]>([]);
+      }),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
 
   selectorsWikiParams: { [key: string]: SynapseWikiParams } = {
     'CONSENSUS NETWORK MODULES': {
@@ -123,24 +139,14 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
   });
 
   ngOnInit() {
-    if (this.platformService.isBrowser) {
-      this.getConfigs();
+    if (this.platformService.isServer) {
+      return;
     }
-  }
 
-  getConfigs() {
-    this.comparisonToolConfigService
-      .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
-      .pipe(shareReplay(1), takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (configs: ComparisonToolConfig[]) => {
-          this.comparisonToolService.initialize(configs);
-        },
-        error: (error) => {
-          console.error('Error retrieving comparison tool config: ', error);
-          this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
-        },
-      });
+    this.comparisonToolService.connect({
+      config$: this.config$,
+      queryParams$: this.comparisonToolUrlService.params$,
+    });
   }
 
   getUnpinnedData(
