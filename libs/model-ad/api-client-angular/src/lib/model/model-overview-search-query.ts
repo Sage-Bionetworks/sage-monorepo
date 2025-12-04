@@ -26,5 +26,9 @@ export interface ModelOverviewSearchQuery {
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
+  /**
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: \'3xtg-ad,5xfad\' (comma-separated list) or \'fad\' (partial match). Only applied when  itemFilterType is \'exclude\'.
+   */
+  search?: string | null;
 }
 export namespace ModelOverviewSearchQuery {}
