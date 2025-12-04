@@ -32,11 +32,10 @@ def get_battle_round_limit_message() -> str:
     Returns:
         HTML formatted message for system message display.
     """
-    message = (
-        "<strong>You've reached the round limit for this battle.</strong><br><br>"
-        "Please wrap up this matchup or start a fresh battle!"
+    return (
+        f"You've reached the round limit ({BATTLE_ROUND_LIMIT}) for this battle.<br>"
+        "Please submit your evaluation of the model."
     )
-    return f"{message}<br><br><em>Round limit: {BATTLE_ROUND_LIMIT}</em>"
 
 
 def get_empty_response_message() -> str:
@@ -85,61 +84,55 @@ def handle_api_error_message(error: Exception) -> str:
     # 401 - Authentication Error
     if isinstance(error, AuthenticationError):
         return (
-            "<strong>Connection Issue</strong><br><br>"
+            "<em>Connection Issue (code: 401)</em><br>"
             "The service is currently unavailable.<br>"
-            "Please start a new battle to try again.<br><br>"
-            "<em>Error Code: 401</em>"
+            "Please start a new battle to try again."
         )
 
     # 403 - Permission Denied
     if isinstance(error, PermissionDeniedError):
         return (
-            "<strong>Connection Issue</strong><br><br>"
+            "<em>Connection Issue (code: 403)</em><br>"
             "The service is currently unavailable.<br>"
-            "Please start a new battle to try again.<br><br>"
-            "<em>Error Code: 403</em>"
+            "Please start a new battle to try again."
         )
 
     # 404 - Not Found
     if isinstance(error, NotFoundError):
         return (
-            "<strong>Service Unavailable</strong><br><br>"
+            "<em>Service Unavailable (code: 404)</em><br>"
             "The service is currently unavailable.<br>"
-            "Please start a new battle and try again.<br><br>"
-            "<em>Error Code: 404</em>"
+            "Please start a new battle and try again."
         )
 
     # 429 - Rate Limit
     if isinstance(error, RateLimitError):
         return (
-            "<strong>Rate Limit Exceeded</strong><br><br>"
+            "<em>Rate Limit Exceeded (code: 429)</em><br>"
             "The request rate limit has been exceeded.<br>"
-            "Please try submitting your prompt again later.<br><br>"
-            "<em>Error Code: 429</em>"
+            "Please try submitting your prompt again later."
         )
 
     # 500 - Internal Server Error
     if isinstance(error, InternalServerError):
         return (
-            "<strong>Internal Server Error</strong><br><br>"
+            "<em>Internal Server Error (code: 500)</em><br>"
             "An internal server error occurred.<br>"
-            "Please try submitting your prompt again later.<br><br>"
-            "<em>Error Code: 500</em>"
+            "Please try submitting your prompt again later."
         )
 
     # 400 - Bad Request
     if isinstance(error, BadRequestError):
         return (
-            "<strong>Invalid Request</strong><br><br>"
+            "<em>Invalid Request (code: 400)</em><br>"
             "The request could not be processed due to a formatting issue.<br>"
-            "Please try rephrasing your prompt or report this issue if it persists.<br><br>"
-            "<em>Error Code: 400</em>"
+            "Please try rephrasing your prompt or report this issue if it persists."
         )
 
     # Connection errors (network issues)
     if isinstance(error, APIConnectionError):
         return (
-            "<strong>Network Connection Error</strong><br><br>"
+            "<em>Network Connection Error</em><br>"
             "Unable to establish a network connection.<br>"
             "Please try submitting your prompt again later."
         )
@@ -148,21 +141,20 @@ def handle_api_error_message(error: Exception) -> str:
     if isinstance(error, APIError):
         if status_code:
             return (
-                f"<strong>Request Failed</strong><br><br>"
+                f"<em>Request Failed (code: {status_code})</em><br>"
                 f"An error occurred while processing the request.<br>"
-                f"Please try again or report this issue if it persists.<br><br>"
-                f"<em>Error Code: {status_code}</em>"
+                f"Please try again or report this issue if it persists."
             )
         return (
-            "<strong>Request Failed</strong><br><br>"
+            "<em>Request Failed</em><br>"
             "An error occurred while processing the request.<br>"
             "Please try again or report this issue if it persists."
         )
 
     # Fallback for any other exception type
     return (
-        "<strong>Service Error</strong><br><br>"
+        "<em>Service Error</em><br>"
         "An unexpected error occurred.<br>"
-        "Please refresh the page or start a new battle, "
+        "Please start a new battle, "
         "and report this issue if it persists."
     )
