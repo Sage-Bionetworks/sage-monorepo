@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 import gradio as gr
 import pandas as pd
@@ -11,22 +12,105 @@ logger = logging.getLogger(__name__)
 
 
 class LeaderboardView:
-    def __init__(self, placeholder, content, table, state):
+    def __init__(self, placeholder, content, table, state, subtitle_row):
         self.placeholder = placeholder
         self.content = content
         self.table = table
         self.state = state
+        self.subtitle_row = subtitle_row
 
     @property
     def outputs(self):
-        return [self.placeholder, self.content, self.table, self.state]
+        return [
+            self.placeholder,
+            self.content,
+            self.table,
+            self.state,
+            self.subtitle_row,
+        ]
+
+
+def create_subtitle_row_html(updated_at: datetime | None) -> str:
+    """Create HTML for subtitle row with optional time badge
+
+    Args:
+        updated_at: datetime when the leaderboard was last updated,
+                    or None if no timestamp available
+
+    Returns:
+        HTML string containing subtitle and time badge (if timestamp provided)
+    """
+    time_badge_html = ""
+    if updated_at is not None:
+        # Format date, e.g. "Dec 4, 2025"
+        formatted_date = updated_at.strftime("%b %-d, %Y")
+
+        time_badge_html = f"""
+        <div style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            background: var(--panel-background-fill);
+            border: 1px solid var(--border-color-primary);
+            border-radius: 8px;
+        ">
+            <div style="
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: var(--accent-teal);
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            "></div>
+            <div style="
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            ">
+                <span style="
+                    font-size: var(--text-sm);
+                    color: var(--body-text-color-subdued);
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                ">Last Updated</span>
+                <span style="
+                    font-size: var(--text-lg);
+                    font-weight: 500;
+                ">{formatted_date}</span>
+            </div>
+        </div>
+        <style>
+        @keyframes pulse {{
+            0%, 100% {{ opacity: 1; }}
+            50% {{ opacity: 0.5; }}
+        }}
+        </style>
+        """
+
+    return f"""
+    <div style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 40px !important;
+        flex-wrap: wrap;
+        gap: 16px;
+    ">
+        <p style="
+            font-size: var(--text-xl);
+            color: var(--body-text-color-subdued);
+            margin: 0;
+        ">Community-driven evaluation of AI models on biomedical topics</p>
+        {time_badge_html}
+    </div>
+    """
 
 
 def fetch_leaderboard_data():
     """Fetch leaderboard data from the BixArena API
 
     Returns:
-        DataFrame with leaderboard data, or None if no data available
+        Tuple of (DataFrame or None, updated_at or None)
     """
     try:
         configuration = get_api_configuration()
@@ -41,7 +125,9 @@ def fetch_leaderboard_data():
 
             # If no entries, return None to show placeholder
             if not leaderboard_response.entries:
-                return None
+                return None, None
+
+            updated_at = leaderboard_response.updated_at
 
             # Convert API response to DataFrame
             data = {
@@ -66,11 +152,11 @@ def fetch_leaderboard_data():
                 data["License"].append(entry.license)
 
             logger.info("✅ Fetched leaderboard data")
-            return pd.DataFrame(data)
+            return pd.DataFrame(data), updated_at
 
     except ApiException as e:
         logger.error(f"❌ Failed to fetch leaderboard: {e}")
-        return None
+        return None, None
 
 
 def filter_dataframe(df, model_filter):
@@ -96,21 +182,27 @@ def refresh_leaderboard():
     """Refresh leaderboard data
 
     Returns:
-        Tuple of (placeholder_visibility, content_visibility, table_data, dataframe_state)
+        Tuple of (placeholder_visibility, content_visibility, table_data,
+                  dataframe_state, badge_html)
     """
-    df = fetch_leaderboard_data()
+    df, updated_at = fetch_leaderboard_data()
     has_rows = df is not None and not df.empty
 
     placeholder_update = gr.update(visible=not has_rows)
     content_update = gr.update(visible=has_rows)
     table_update = gr.update(value=df if has_rows else None, visible=has_rows)
 
-    return placeholder_update, content_update, table_update, df
+    # Create subtitle row with time badge HTML
+    badge_html = create_subtitle_row_html(updated_at)
+
+    return placeholder_update, content_update, table_update, df, badge_html
 
 
 def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
+    # Don't fetch data initially
     initial_df = None
+    initial_updated_at = None
 
     # JavaScript to customize column header tooltips
     tooltips_js = """
@@ -172,6 +264,7 @@ def build_leaderboard_page():
             /* Prevent header from growing vertically */
             .leaderboard-header {
                 flex-grow: 0 !important;
+                gap: 0 !important;
             }
 
             /* Search box styling */
@@ -199,15 +292,8 @@ def build_leaderboard_page():
             </style>
             """
             )
-            gr.HTML(
-                """
-                <p style="
-                    font-size: var(--text-xl);
-                    color: var(--body-text-color-subdued);
-                    margin-bottom: 40px !important;
-                ">Community-driven evaluation of AI models on biomedical topics</p>
-                """
-            )
+
+            subtitle_row = gr.HTML(create_subtitle_row_html(initial_updated_at))
 
             # State to store the full dataframe for filtering
             df_state = gr.State(initial_df)
@@ -328,4 +414,5 @@ def build_leaderboard_page():
         leaderboard_content,
         leaderboard_table,
         df_state,
+        subtitle_row,
     )

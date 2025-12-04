@@ -137,11 +137,11 @@ public class DiseaseCorrelationSearchQueryDto {
   }
 
   /**
-   * List of item IDs to filter by.
+   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations. 
    * @return items
    */
   
-  @Schema(name = "items", example = "[\"507f1f77bcf86cd799439011\",\"507f191e810c19729de860ea\"]", description = "List of item IDs to filter by.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"APOE4~4 months~Female\",\"APOE4~8 months~Male\",\"5xFAD (IU/Jax/Pitt)~12 months~Female\"]", description = "List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
   public @Nullable List<String> getItems() {
     return items;

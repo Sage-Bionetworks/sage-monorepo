@@ -13,7 +13,7 @@
   },
   {
     "name": "disease_correlation",
-    "indexes": [{ "name": 1 }]
+    "indexes": [{ "name": 1 }, { "cluster": 1, "name": 1, "age": 1, "sex": 1 }]
   },
   {
     "name": "rna_de_aggregate",
