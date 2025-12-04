@@ -81,14 +81,14 @@ test.describe('disease correlation', () => {
 
     const queryParameters = [
       getQueryParamFromValues(categories, 'categories'),
-      getQueryParamFromValues([firstCorrelation._id], 'pinned'),
+      getQueryParamFromValues([firstCorrelation.composite_id], 'pinned'),
     ].join('&');
 
     await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
 
     await expect(page.locator('explorers-base-table')).toHaveCount(2);
     await expect(getRowByName(getPinnedTable(page), page, firstCorrelation.name)).toHaveCount(1);
-    await expectPinnedParams(page, [firstCorrelation._id]);
+    await expectPinnedParams(page, [firstCorrelation.composite_id]);
     await expectCategoriesParams(page, categories);
     await expectCategories(page, categories);
   });
