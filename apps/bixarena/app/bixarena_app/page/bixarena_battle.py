@@ -26,6 +26,7 @@ from bixarena_app.config.constants import (
     BATTLE_ROUND_LIMIT,
     PROMPT_LEN_LIMIT,
 )
+from bixarena_app.config.conversation import create_system_message_html
 from bixarena_app.model import model_response
 from bixarena_app.model.error_handler import get_battle_round_limit_message
 from bixarena_app.model.model_response import (
@@ -372,10 +373,11 @@ def add_text(
                 f"🛑 Battle round limit reached: battle_id={battle_session.battle_id}"
             )
             round_limit_msg = get_battle_round_limit_message()
+            round_limit_content = create_system_message_html(round_limit_msg)
             for i in range(num_sides):
                 if states[i]:
                     states[i].conv.append_message("user", text)
-                    states[i].conv.append_message("assistant", round_limit_msg)
+                    states[i].conv.append_message("assistant", round_limit_content)
                     states[i].skip_next = True
 
     text = text[:PROMPT_LEN_LIMIT]  # Hard cut-off
@@ -502,7 +504,6 @@ def build_side_by_side_ui_anony():
                         chatbot = gr.Chatbot(
                             label=label,
                             elem_id="chatbot",
-                            height=550,
                             show_copy_button=True,
                             type="messages",
                             group_consecutive_messages=False,
@@ -688,11 +689,13 @@ def build_side_by_side_ui_anony():
         js=enable_enter_js,
     )
 
-    # Re-wire prompt buttons now that the real textbox exists (created above)
-    # Replace the temporary hidden textbox inside example prompt UI with actual textbox
-    # We simply add new handlers that append to existing click chain.
-    for card in prompt_cards:
-        card.click(lambda v: v, inputs=[card], outputs=[textbox]).then(
+    # Re-wire prompt buttons to use plain text prompts and trigger auto-submission
+    for i, card in enumerate(prompt_cards):
+        card.click(
+            lambda idx=i: example_prompt_ui.prompt_messages[idx],
+            inputs=[],
+            outputs=[textbox],
+        ).then(
             add_text,
             states + [battle_session] + model_selectors + [textbox],
             states

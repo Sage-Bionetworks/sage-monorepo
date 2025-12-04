@@ -16,7 +16,11 @@ from bixarena_app.config.constants import (
     DEFAULT_TOP_P,
     MAX_RESPONSE_TOKENS,
 )
-from bixarena_app.config.conversation import CONTINUATION_PROMPT, Conversation
+from bixarena_app.config.conversation import (
+    CONTINUATION_PROMPT,
+    Conversation,
+    create_system_message_html,
+)
 from bixarena_app.model.api_provider import get_api_provider_stream_iter
 from bixarena_app.model.error_handler import (
     handle_api_error_message,
@@ -177,7 +181,8 @@ def bot_response(
                 yield (state, state.to_gradio_chatbot())
             else:
                 output = data["text"]
-                conv.update_last_message(output)
+                error_content = create_system_message_html(output)
+                conv.update_last_message(error_content)
                 state.has_error = True
                 yield (state, state.to_gradio_chatbot())
                 return
@@ -196,7 +201,8 @@ def bot_response(
         yield (state, state.to_gradio_chatbot())
     except Exception as e:
         display_error_msg = handle_api_error_message(e)
-        conv.update_last_message(display_error_msg)
+        error_content = create_system_message_html(display_error_msg)
+        conv.update_last_message(error_content)
         state.has_error = True
         yield (state, state.to_gradio_chatbot())
         return
