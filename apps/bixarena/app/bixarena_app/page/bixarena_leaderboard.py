@@ -243,11 +243,46 @@ def build_leaderboard_page():
             )
             gr.HTML(
                 """
-                <p style="
-                    font-size: var(--text-xl);
-                    color: var(--body-text-color-subdued);
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
                     margin-bottom: 40px !important;
-                ">Community-driven evaluation of AI models on biomedical topics</p>
+                    flex-wrap: wrap;
+                    gap: 16px;
+                ">
+                    <p style="
+                        font-size: var(--text-xl);
+                        color: var(--body-text-color-subdued);
+                        margin: 0;
+                    ">Community-driven evaluation of AI models on biomedical topics</p>
+
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        padding: 8px 16px;
+                        background: var(--panel-background-fill);
+                        border: 1px solid var(--border-color-primary);
+                        border-radius: 8px;
+                    ">
+                        <div style="
+                            width: 6px;
+                            height: 6px;
+                            border-radius: 50%;
+                            background-color: var(--accent-teal);
+                            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                            opacity: 1;
+                        "></div>
+                        <span>4 minutes ago</span>
+                    </div>
+                </div>
+                <style>
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                }
+                </style>
                 """
             )
 
