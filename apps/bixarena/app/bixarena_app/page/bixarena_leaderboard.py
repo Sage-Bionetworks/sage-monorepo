@@ -1,4 +1,5 @@
 import logging
+import os
 
 import gradio as gr
 import pandas as pd
@@ -22,12 +23,53 @@ class LeaderboardView:
         return [self.placeholder, self.content, self.table, self.state]
 
 
+def generate_test_leaderboard_data():
+    """Generate test leaderboard data for development
+
+    Returns:
+        DataFrame with test leaderboard data
+    """
+    test_data = {
+        "Rank": [1, 2, 3],
+        "Model": [
+            "[Claude-Opus-4.5](https://openrouter.ai/anthropic/claude-opus-4.5)",
+            "[GPT-5.1](https://openrouter.ai/openai/gpt-5.1)",
+            "[Grok-4.1](https://openrouter.ai/x-ai/grok-4.1)",
+        ],
+        "Score": [1250, 1200, 1180],
+        "95% CI": [
+            "[1240, 1260]",
+            "[1185, 1215]",
+            "[1165, 1195]",
+        ],
+        "Total Votes": [1500, 1450, 1400],
+        "Organization": [
+            "Anthropic",
+            "OpenAI",
+            "xAI",
+        ],
+        "License": [
+            "Commercial",
+            "Commercial",
+            "Commercial",
+        ],
+    }
+
+    logger.info("✅ Generated test leaderboard data")
+    return pd.DataFrame(test_data)
+
+
 def fetch_leaderboard_data():
     """Fetch leaderboard data from the BixArena API
 
     Returns:
         DataFrame with leaderboard data, or None if no data available
     """
+    # Show test data for development
+    env = os.environ.get("ENV", "").lower()
+    if env == "dev":
+        return generate_test_leaderboard_data()
+
     try:
         configuration = get_api_configuration()
         with ApiClient(configuration) as api_client:
