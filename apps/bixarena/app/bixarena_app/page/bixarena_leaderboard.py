@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import UTC, datetime
 
 import gradio as gr
 import pandas as pd
@@ -11,23 +12,122 @@ from bixarena_app.api.api_client_helper import get_api_configuration
 logger = logging.getLogger(__name__)
 
 
+def format_relative_time(dt: datetime) -> str:
+    """Format datetime to relative time string"""
+    # Ensure dt is timezone-aware
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=UTC)
+
+    now = datetime.now(UTC)
+    diff_seconds = int((now - dt).total_seconds())
+
+    if diff_seconds < 60:
+        return "just now"
+
+    diff_minutes = diff_seconds // 60
+    if diff_minutes < 60:
+        return f"{diff_minutes} {'minute' if diff_minutes == 1 else 'minutes'} ago"
+
+    diff_hours = diff_minutes // 60
+    if diff_hours < 24:
+        return f"{diff_hours} {'hour' if diff_hours == 1 else 'hours'} ago"
+
+    diff_days = diff_hours // 24
+    if diff_days < 30:
+        return f"{diff_days} {'day' if diff_days == 1 else 'days'} ago"
+
+    diff_months = diff_days // 30
+    return f"{diff_months} {'month' if diff_months == 1 else 'months'} ago"
+
+
+def create_time_badge_html(updated_at: datetime | None) -> str:
+    """Create HTML for the time badge
+
+    Args:
+        updated_at: Datetime when the leaderboard was last updated
+
+    Returns:
+        HTML string for the time badge, or just the description if no timestamp
+    """
+    if updated_at is None:
+        return """
+        <p style="
+            font-size: var(--text-xl);
+            color: var(--body-text-color-subdued);
+            margin: 0;
+            margin-bottom: 40px !important;
+        ">Community-driven evaluation of AI models on biomedical topics</p>
+        """
+
+    relative_time = format_relative_time(updated_at)
+    return f"""
+    <div style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 40px !important;
+        flex-wrap: wrap;
+        gap: 16px;
+    ">
+        <p style="
+            font-size: var(--text-xl);
+            color: var(--body-text-color-subdued);
+            margin: 0;
+        ">Community-driven evaluation of AI models on biomedical topics</p>
+
+        <div style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--panel-background-fill);
+            border: 1px solid var(--border-color-primary);
+            border-radius: 8px;
+        ">
+            <div style="
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background-color: var(--accent-teal);
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                opacity: 1;
+            "></div>
+            <span>{relative_time}</span>
+        </div>
+    </div>
+    <style>
+    @keyframes pulse {{
+        0%, 100% {{ opacity: 1; }}
+        50% {{ opacity: 0.5; }}
+    }}
+    </style>
+    """
+
+
 class LeaderboardView:
-    def __init__(self, placeholder, content, table, state):
+    def __init__(self, placeholder, content, table, state, timestamp_badge):
         self.placeholder = placeholder
         self.content = content
         self.table = table
         self.state = state
+        self.timestamp_badge = timestamp_badge
 
     @property
     def outputs(self):
-        return [self.placeholder, self.content, self.table, self.state]
+        return [
+            self.placeholder,
+            self.content,
+            self.table,
+            self.state,
+            self.timestamp_badge,
+        ]
 
 
 def generate_test_leaderboard_data():
     """Generate test leaderboard data for development
 
     Returns:
-        DataFrame with test leaderboard data
+        Tuple of (DataFrame, updated_at)
     """
     test_data = {
         "Rank": [1, 2, 3],
@@ -55,15 +155,17 @@ def generate_test_leaderboard_data():
         ],
     }
 
+    # Fixed test timestamp - parse ISO format string with UTC timezone
+    test_updated_at = datetime.fromisoformat("2025-12-04T12:00:00+00:00")
     logger.info("✅ Generated test leaderboard data")
-    return pd.DataFrame(test_data)
+    return pd.DataFrame(test_data), test_updated_at
 
 
 def fetch_leaderboard_data():
     """Fetch leaderboard data from the BixArena API
 
     Returns:
-        DataFrame with leaderboard data, or None if no data available
+        Tuple of (DataFrame or None, updated_at or None)
     """
     # Show test data for development
     env = os.environ.get("ENV", "").lower()
@@ -83,7 +185,9 @@ def fetch_leaderboard_data():
 
             # If no entries, return None to show placeholder
             if not leaderboard_response.entries:
-                return None
+                return None, None
+
+            updated_at = leaderboard_response.updated_at
 
             # Convert API response to DataFrame
             data = {
@@ -108,11 +212,11 @@ def fetch_leaderboard_data():
                 data["License"].append(entry.license)
 
             logger.info("✅ Fetched leaderboard data")
-            return pd.DataFrame(data)
+            return pd.DataFrame(data), updated_at
 
     except ApiException as e:
         logger.error(f"❌ Failed to fetch leaderboard: {e}")
-        return None
+        return None, None
 
 
 def filter_dataframe(df, model_filter):
@@ -138,21 +242,26 @@ def refresh_leaderboard():
     """Refresh leaderboard data
 
     Returns:
-        Tuple of (placeholder_visibility, content_visibility, table_data, dataframe_state)
+        Tuple of (placeholder_visibility, content_visibility, table_data,
+                  dataframe_state, badge_html)
     """
-    df = fetch_leaderboard_data()
+    df, updated_at = fetch_leaderboard_data()
     has_rows = df is not None and not df.empty
 
     placeholder_update = gr.update(visible=not has_rows)
     content_update = gr.update(visible=has_rows)
     table_update = gr.update(value=df if has_rows else None, visible=has_rows)
 
-    return placeholder_update, content_update, table_update, df
+    # Create badge HTML (will show only description if updated_at is None)
+    badge_html = create_time_badge_html(updated_at)
+
+    return placeholder_update, content_update, table_update, df, badge_html
 
 
 def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
-    initial_df = None
+    # Fetch initial data to get the updated_at timestamp
+    initial_df, initial_updated_at = fetch_leaderboard_data()
 
     # JavaScript to customize column header tooltips
     tooltips_js = """
@@ -241,50 +350,7 @@ def build_leaderboard_page():
             </style>
             """
             )
-            gr.HTML(
-                """
-                <div style="
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin-bottom: 40px !important;
-                    flex-wrap: wrap;
-                    gap: 16px;
-                ">
-                    <p style="
-                        font-size: var(--text-xl);
-                        color: var(--body-text-color-subdued);
-                        margin: 0;
-                    ">Community-driven evaluation of AI models on biomedical topics</p>
-
-                    <div style="
-                        display: flex;
-                        align-items: center;
-                        gap: 8px;
-                        padding: 8px 16px;
-                        background: var(--panel-background-fill);
-                        border: 1px solid var(--border-color-primary);
-                        border-radius: 8px;
-                    ">
-                        <div style="
-                            width: 6px;
-                            height: 6px;
-                            border-radius: 50%;
-                            background-color: var(--accent-teal);
-                            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-                            opacity: 1;
-                        "></div>
-                        <span>4 minutes ago</span>
-                    </div>
-                </div>
-                <style>
-                @keyframes pulse {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.5; }
-                }
-                </style>
-                """
-            )
+            timestamp_badge = gr.HTML(create_time_badge_html(initial_updated_at))
 
             # State to store the full dataframe for filtering
             df_state = gr.State(initial_df)
@@ -405,4 +471,5 @@ def build_leaderboard_page():
         leaderboard_content,
         leaderboard_table,
         df_state,
+        timestamp_badge,
     )
