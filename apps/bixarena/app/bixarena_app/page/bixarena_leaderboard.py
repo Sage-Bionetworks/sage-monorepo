@@ -1,5 +1,4 @@
 import logging
-import os
 from datetime import datetime
 
 import gradio as gr
@@ -113,55 +112,12 @@ def create_subtitle_row_html(updated_at: str | datetime | None) -> str:
     """
 
 
-def generate_test_leaderboard_data():
-    """Generate test leaderboard data for development
-
-    Returns:
-        Tuple of (DataFrame, updated_at)
-    """
-    test_data = {
-        "Rank": [1, 2, 3],
-        "Model": [
-            "[Claude-Opus-4.5](https://openrouter.ai/anthropic/claude-opus-4.5)",
-            "[GPT-5.1](https://openrouter.ai/openai/gpt-5.1)",
-            "[Grok-4.1](https://openrouter.ai/x-ai/grok-4.1)",
-        ],
-        "Score": [1250, 1200, 1180],
-        "95% CI": [
-            "[1240, 1260]",
-            "[1185, 1215]",
-            "[1165, 1195]",
-        ],
-        "Total Votes": [1500, 1450, 1400],
-        "Organization": [
-            "Anthropic",
-            "OpenAI",
-            "xAI",
-        ],
-        "License": [
-            "Commercial",
-            "Commercial",
-            "Commercial",
-        ],
-    }
-
-    # Fixed test timestamp
-    test_updated_at = "2025-12-04T12:00:00+00:00"
-    logger.info("✅ Generated test leaderboard data")
-    return pd.DataFrame(test_data), test_updated_at
-
-
 def fetch_leaderboard_data():
     """Fetch leaderboard data from the BixArena API
 
     Returns:
         Tuple of (DataFrame or None, updated_at or None)
     """
-    # Show test data for development
-    env = os.environ.get("ENV", "").lower()
-    if env == "dev":
-        return generate_test_leaderboard_data()
-
     try:
         configuration = get_api_configuration()
         with ApiClient(configuration) as api_client:
