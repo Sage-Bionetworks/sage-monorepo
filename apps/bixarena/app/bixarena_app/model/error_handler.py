@@ -84,44 +84,44 @@ def handle_api_error_message(error: Exception) -> str:
     # 401 - Authentication Error
     if isinstance(error, AuthenticationError):
         return (
-            "The service is currently unavailable.<br>"
-            "Please start a new battle to try again. <em>(code: 401)</em>"
+            "The service is currently unavailable (code: 401).<br>"
+            "Please start a new battle to try again."
         )
 
     # 403 - Permission Denied
     if isinstance(error, PermissionDeniedError):
         return (
-            "The service is currently unavailable.<br>"
-            "Please start a new battle to try again. <em>(code: 403)</em>"
+            "The service is currently unavailable (code: 403).<br>"
+            "Please start a new battle to try again."
         )
 
     # 404 - Not Found
     if isinstance(error, NotFoundError):
         return (
-            "The service is currently unavailable.<br>"
-            "Please start a new battle and try again. <em>(code: 404)</em>"
+            "The service is currently unavailable (code: 404).<br>"
+            "Please start a new battle and try again."
         )
 
     # 429 - Rate Limit
     if isinstance(error, RateLimitError):
         return (
-            "The model provider rate limit has been exceeded.<br>"
-            "Please try submitting your prompt again. <em>(code: 429)</em>"
+            "The model provider rate limit has been exceeded (code: 429).<br>"
+            "Please try submitting your prompt again."
         )
 
     # 500 - Internal Server Error
     if isinstance(error, InternalServerError):
         return (
-            "An internal server error occurred.<br>"
-            "Please try submitting your prompt again. <em>(code: 500)</em>"
+            "An internal server error occurred (code: 500).<br>"
+            "Please try submitting your prompt again."
         )
 
     # 400 - Bad Request
     if isinstance(error, BadRequestError):
         return (
-            "The request could not be processed due to a formatting issue.<br>"
-            "Please try rephrasing your prompt or report this issue if it persists. "
-            "<em>(code: 400)</em>"
+            "The request could not be processed due to a formatting issue "
+            "(code: 400).<br>"
+            "Please try rephrasing your prompt or report this issue if it persists."
         )
 
     # Connection errors (network issues)
@@ -135,9 +135,9 @@ def handle_api_error_message(error: Exception) -> str:
     if isinstance(error, APIError):
         if status_code:
             return (
-                f"An error occurred while processing the request.<br>"
-                f"Please try again or report this issue if it persists. "
-                f"<em>(code: {status_code})</em>"
+                f"An error occurred while processing the request "
+                f"(code: {status_code}).<br>"
+                f"Please try again or report this issue if it persists."
             )
         return (
             "An error occurred while processing the request.<br>"
