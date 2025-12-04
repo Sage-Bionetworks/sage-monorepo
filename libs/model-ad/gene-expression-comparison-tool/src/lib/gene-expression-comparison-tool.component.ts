@@ -107,7 +107,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.platformService.isBrowser) {
+    if (this.platformService.isServer) {
       return;
     }
 

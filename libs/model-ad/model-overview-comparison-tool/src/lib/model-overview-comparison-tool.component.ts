@@ -111,7 +111,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   });
 
   ngOnInit() {
-    if (!this.platformService.isBrowser) {
+    if (this.platformService.isServer) {
       return;
     }
 
