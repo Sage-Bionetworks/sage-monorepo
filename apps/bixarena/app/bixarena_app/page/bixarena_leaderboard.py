@@ -12,6 +12,25 @@ from bixarena_app.api.api_client_helper import get_api_configuration
 logger = logging.getLogger(__name__)
 
 
+class LeaderboardView:
+    def __init__(self, placeholder, content, table, state, subtitle_row):
+        self.placeholder = placeholder
+        self.content = content
+        self.table = table
+        self.state = state
+        self.subtitle_row = subtitle_row
+
+    @property
+    def outputs(self):
+        return [
+            self.placeholder,
+            self.content,
+            self.table,
+            self.state,
+            self.subtitle_row,
+        ]
+
+
 def create_subtitle_row_html(updated_at: str | datetime | None) -> str:
     """Create HTML for subtitle row with optional time badge
 
@@ -79,25 +98,6 @@ def create_subtitle_row_html(updated_at: str | datetime | None) -> str:
         {time_badge_html}
     </div>
     """
-
-
-class LeaderboardView:
-    def __init__(self, placeholder, content, table, state, timestamp_badge):
-        self.placeholder = placeholder
-        self.content = content
-        self.table = table
-        self.state = state
-        self.timestamp_badge = timestamp_badge
-
-    @property
-    def outputs(self):
-        return [
-            self.placeholder,
-            self.content,
-            self.table,
-            self.state,
-            self.timestamp_badge,
-        ]
 
 
 def generate_test_leaderboard_data():
@@ -330,7 +330,7 @@ def build_leaderboard_page():
             """
             )
 
-            timestamp_badge = gr.HTML(create_subtitle_row_html(initial_updated_at))
+            subtitle_row = gr.HTML(create_subtitle_row_html(initial_updated_at))
 
             # State to store the full dataframe for filtering
             df_state = gr.State(initial_df)
@@ -451,5 +451,5 @@ def build_leaderboard_page():
         leaderboard_content,
         leaderboard_table,
         df_state,
-        timestamp_badge,
+        subtitle_row,
     )
