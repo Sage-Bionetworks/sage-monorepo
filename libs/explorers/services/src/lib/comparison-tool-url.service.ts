@@ -66,7 +66,7 @@ export class ComparisonToolUrlService {
     value: string[] | null | undefined,
   ): void {
     if (value && value.length > 0) {
-      params[key] = value.join(',');
+      params[key] = value.map((v) => encodeURIComponent(v)).join(',');
     } else if (value !== undefined) {
       params[key] = null;
     }
