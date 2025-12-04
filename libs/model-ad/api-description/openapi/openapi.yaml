@@ -424,14 +424,20 @@ components:
             - CONSENSUS NETWORK MODULES
             - Consensus Cluster A - ECM Organization
         items:
-          description: List of item IDs to filter by.
+          description: |
+            List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
+            where each identifier represents one complete combination of model name, age, and sex.
+
+            Example: "APOE4~4 months~Female" filters for documents matching that exact name, age, and sex.
+            Multiple items can be provided to filter for multiple specific combinations.
           type: array
           items:
             type: string
           nullable: true
           example:
-            - 507f1f77bcf86cd799439011
-            - 507f191e810c19729de860ea
+            - APOE4~4 months~Female
+            - APOE4~8 months~Male
+            - 5xFAD (IU/Jax/Pitt)~12 months~Female
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
@@ -460,9 +466,10 @@ components:
       type: object
       description: Disease Correlation
       properties:
-        _id:
+        composite_id:
           type: string
           description: Unique identifier for the disease correlation object
+          example: APOE4~12 Months~Female
         name:
           type: string
           description: Model name
@@ -500,7 +507,7 @@ components:
         STG:
           $ref: '#/components/schemas/CorrelationResult'
       required:
-        - _id
+        - composite_id
         - name
         - matched_control
         - model_type

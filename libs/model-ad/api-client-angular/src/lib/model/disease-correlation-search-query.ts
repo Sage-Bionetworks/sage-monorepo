@@ -26,7 +26,7 @@ export interface DiseaseCorrelationSearchQuery {
    */
   category: Array<string>;
   /**
-   * List of item IDs to filter by.
+   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations.
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;

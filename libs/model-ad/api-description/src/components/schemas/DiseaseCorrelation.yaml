@@ -1,9 +1,10 @@
 type: object
 description: Disease Correlation
 properties:
-  _id:
+  composite_id:
     type: string
     description: Unique identifier for the disease correlation object
+    example: APOE4~12 Months~Female
   name:
     type: string
     description: Model name
@@ -41,7 +42,7 @@ properties:
   STG:
     $ref: './CorrelationResult.yaml'
 required:
-  - _id
+  - composite_id
   - name
   - matched_control
   - model_type

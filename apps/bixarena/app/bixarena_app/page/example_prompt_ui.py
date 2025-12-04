@@ -52,6 +52,7 @@ class ExamplePromptUI:
         self.next_btn: gr.Button | None = None
         self.prompt_cards: list[gr.Button] = []
         self.group: gr.Row | None = None
+        self.prompt_messages: list[str] = []  # Store plain text prompts
 
     # ----------------------------- Data Layer ----------------------------- #
     def _fetch_random_prompts(self, num_prompts: int = 3) -> list[str]:
@@ -97,7 +98,8 @@ class ExamplePromptUI:
             interactive=has_history, elem_classes=["nav-button", "left"]
         )
         next_upd = gr.update(interactive=True, elem_classes=["nav-button", "right"])
-        # Update prompt card HTML buttons
+        # Store plain text prompts and update HTML cards for display
+        self.prompt_messages = prompts
         prompt_card_upds = [
             gr.update(value=self._generate_prompt_button_html(i, p))
             for i, p in enumerate(prompts)

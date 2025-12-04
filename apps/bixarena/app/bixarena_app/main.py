@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
 from bixarena_app.auth.user_state import get_user_state
+from bixarena_app.config.constants import GTM_CONTAINER_ID
 from bixarena_app.config.utils import setup_logging
 from bixarena_app.page.bixarena_battle import build_battle_page
 
@@ -269,9 +270,25 @@ def build_app():
     </script>
     """
 
+    # Google Tag Manager script
+    gtm_script = ""
+    if GTM_CONTAINER_ID:
+        gtm_script = f"""
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+    new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    }})(window,document,'script','dataLayer','{GTM_CONTAINER_ID}');</script>
+    <!-- End Google Tag Manager -->
+    """
+
+    # Combine all head scripts
+    head_scripts = crisp_script + gtm_script
+
     with gr.Blocks(
         title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
-        head=crisp_script,
+        head=head_scripts,
         css="""
         /* Custom global colors */
         :root {
@@ -342,6 +359,18 @@ def build_app():
         }
         """,
     ) as demo:
+        # Google Tag Manager (noscript)
+        if GTM_CONTAINER_ID:
+            gr.HTML(
+                f"""
+                <!-- Google Tag Manager (noscript) -->
+                <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={GTM_CONTAINER_ID}"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+                <!-- End Google Tag Manager (noscript) -->
+                """,
+                visible=True,
+            )
+
         _, battle_btn, leaderboard_btn, login_btn = build_header()
 
         with gr.Column(visible=True, elem_classes=["page-content"]) as home_page:

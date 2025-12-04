@@ -31,6 +31,7 @@ class WebStack(cdk.Stack):
         fqdn: str | None = None,
         use_https: bool = False,
         openrouter_api_key: str = "",
+        gtm_container_id: str = "",
         **kwargs,
     ) -> None:
         """
@@ -50,6 +51,7 @@ class WebStack(cdk.Stack):
             fqdn: Fully qualified domain name (optional, uses ALB DNS if not provided)
             use_https: Whether to use HTTPS protocol (default: False for HTTP)
             openrouter_api_key: OpenRouter API key for LLM access
+            gtm_container_id: Google Tag Manager container ID for analytics
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -90,6 +92,7 @@ class WebStack(cdk.Stack):
             "APP_FEEDBACK_URL": "https://forms.gle/WsvSdEfv5MfFpeedA",
             "APP_TERMS_OF_SERVICE_URL": "https://sagebionetworks.org/trust-center",
             "ENABLE_CRISP": "false",
+            "GTM_CONTAINER_ID": gtm_container_id,
             "BATTLE_ROUND_LIMIT": "5",
             "MAX_RESPONSE_TOKENS": "2048",
             "PROMPT_LEN_LIMIT": "5000",

@@ -30,13 +30,12 @@ def get_battle_round_limit_message() -> str:
     Provide a user-facing message when the battle round cap is reached.
 
     Returns:
-        Markdown formatted message consistent with other error responses.
+        HTML formatted message for system message display.
     """
-    message = (
-        "**You've reached the round limit for this battle.**\n\n"
-        "Please wrap up this matchup or start a fresh battle!"
+    return (
+        f"You've reached the round limit ({BATTLE_ROUND_LIMIT}) for this battle.<br>"
+        "Please submit your evaluation of the model."
     )
-    return f"{message}\n\n_Round limit: {BATTLE_ROUND_LIMIT}_"
 
 
 def get_empty_response_message() -> str:
@@ -46,7 +45,7 @@ def get_empty_response_message() -> str:
     Returns:
         A user-friendly error message for empty responses.
     """
-    return "Something went wrong.\nPlease try submitting your prompt again."
+    return "Something went wrong.<br>Please try submitting your prompt again."
 
 
 def get_finish_error_message() -> str:
@@ -57,7 +56,7 @@ def get_finish_error_message() -> str:
         A user-friendly error message for model errors.
     """
     return (
-        "An error occurred while generating the response.\n"
+        "An error occurred while generating the response.<br>"
         "Please try submitting your prompt again."
     )
 
@@ -85,84 +84,69 @@ def handle_api_error_message(error: Exception) -> str:
     # 401 - Authentication Error
     if isinstance(error, AuthenticationError):
         return (
-            "**Connection Issue**\n\n"
-            "The service is currently unavailable.\n"
-            "Please start a new battle to try again.\n\n"
-            "_Error Code: 401_"
+            "The service is currently unavailable (code: 401).<br>"
+            "Please start a new battle to try again."
         )
 
     # 403 - Permission Denied
     if isinstance(error, PermissionDeniedError):
         return (
-            "**Connection Issue**\n\n"
-            "The service is currently unavailable.\n"
-            "Please start a new battle to try again.\n\n"
-            "_Error Code: 403_"
+            "The service is currently unavailable (code: 403).<br>"
+            "Please start a new battle to try again."
         )
 
     # 404 - Not Found
     if isinstance(error, NotFoundError):
         return (
-            "**Service Unavailable**\n\n"
-            "The service is currently unavailable.\n"
-            "Please start a new battle and try again.\n\n"
-            "_Error Code: 404_"
+            "The service is currently unavailable (code: 404).<br>"
+            "Please start a new battle and try again."
         )
 
     # 429 - Rate Limit
     if isinstance(error, RateLimitError):
         return (
-            "**Rate Limit Exceeded**\n\n"
-            "The request rate limit has been exceeded.\n"
-            "Please try submitting your prompt again later.\n\n"
-            "_Error Code: 429_"
+            "The model provider rate limit has been exceeded (code: 429).<br>"
+            "Please try submitting your prompt again."
         )
 
     # 500 - Internal Server Error
     if isinstance(error, InternalServerError):
         return (
-            "**Internal Server Error**\n\n"
-            "An internal server error occurred.\n"
-            "Please try submitting your prompt again later.\n\n"
-            "_Error Code: 500_"
+            "An internal server error occurred (code: 500).<br>"
+            "Please try submitting your prompt again."
         )
 
     # 400 - Bad Request
     if isinstance(error, BadRequestError):
         return (
-            "**Invalid Request**\n\n"
-            "The request could not be processed due to a formatting issue.\n"
-            "Please try rephrasing your prompt or report this issue if it persists.\n\n"
-            "_Error Code: 400_"
+            "The request could not be processed due to a formatting issue "
+            "(code: 400).<br>"
+            "Please try rephrasing your prompt or report this issue if it persists."
         )
 
     # Connection errors (network issues)
     if isinstance(error, APIConnectionError):
         return (
-            "**Network Connection Error**\n\n"
-            "Unable to establish a network connection.\n"
-            "Please try submitting your prompt again later."
+            "Unable to establish a network connection.<br>"
+            "Please try submitting your prompt again."
         )
 
     # Generic API errors
     if isinstance(error, APIError):
         if status_code:
             return (
-                "**Request Failed**\n\n"
-                "An error occurred while processing the request.\n"
-                "Please try again or report this issue if it persists.\n\n"
-                f"_Error Code: {status_code}_"
+                f"An error occurred while processing the request "
+                f"(code: {status_code}).<br>"
+                f"Please try again or report this issue if it persists."
             )
         return (
-            "**Request Failed**\n\n"
-            "An error occurred while processing the request.\n"
+            "An error occurred while processing the request.<br>"
             "Please try again or report this issue if it persists."
         )
 
     # Fallback for any other exception type
     return (
-        "**Service Error**\n\n"
-        "An unexpected error occurred.\n"
-        "Please refresh the page or start a new battle, "
+        "An unexpected error occurred.<br>"
+        "Please start a new battle, "
         "and report this issue if it persists."
     )

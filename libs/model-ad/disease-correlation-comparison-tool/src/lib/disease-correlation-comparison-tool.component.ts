@@ -109,6 +109,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       ),
     ],
     rowsPerPage: 10,
+    rowIdDataKey: 'composite_id',
   };
 
   constructor() {

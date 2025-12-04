@@ -13,9 +13,14 @@ CHATBOT_BATTLE_CSS = """
 }
 
 .system-message {
-    border: 1px solid var(--accent-teal);
-    border-radius: 8px;
-    padding: 16px;
+    border: 1px solid var(--accent-teal) !important;
+    border-radius: 18px;
+    padding: 6px 16px;
+}
+
+/* Remove outer border for system message */
+#chatbot-container .message.bot.panel-full-width:has(.system-message) {
+    border: none !important;
 }
 
 .system-message-content {
@@ -53,9 +58,22 @@ CHATBOT_BATTLE_CSS = """
     font-size: var(--text-md);
 }
 
+/* Responsive chatbot height based on viewport */
 /* Add bottom padding to chatbot block to prevent message cropping */
 #chatbot-container #chatbot {
+    height: max(50svh, 350px) !important;
     padding-bottom: 16px;
+}
+
+/* Set border radius and remove borders for all message bubbles */
+#chatbot-container .message.panel-full-width {
+    border-radius: 18px !important;
+    padding: 6px 16px !important;
+    border: none !important;
+}
+/* Make all bot message bubbles transparent for light/dark theme compatibility */
+#chatbot-container .message.bot.panel-full-width {
+    background: transparent !important;
 }
 
 /* Make label icon match text size */
@@ -79,6 +97,17 @@ CHATBOT_BATTLE_CSS = """
     text-align: center;
     color: var(--body-text-color);
     font-weight: 500;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+    #chatbot-container #chatbot {
+        height: max(50svh, 280px) !important;
+    }
+
+    #chatbot-container .row {
+        gap: 16px;
+    }
 }
 """
 
@@ -230,6 +259,18 @@ INPUT_PROMPT_CSS = """
 .row:has(#input_box.prompt_input) {
     max-width: 900px;
     margin: 0 auto;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+    .row:has(#input_box.prompt_input) {
+        padding: 0 8px;
+    }
+
+    #input_box.prompt_input textarea {
+        padding: 12px 16px;
+        font-size: var(--text-md);
+    }
 }
 """
 

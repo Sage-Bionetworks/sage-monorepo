@@ -96,6 +96,7 @@ Environment Configuration:
     - SYNAPSE_CLIENT_ID: Synapse OAuth client ID (REQUIRED)
     - SYNAPSE_CLIENT_SECRET: Synapse OAuth client secret (REQUIRED)
     - OPENROUTER_API_KEY: API key for LLM access (optional)
+    - GTM_CONTAINER_ID: Google Tag Manager container ID (optional)
 
 Docker Images:
     Images are loaded from remote registry:
@@ -153,6 +154,8 @@ def main() -> None:
     app_version = os.getenv("APP_VERSION", "edge")
     # FQDN is optional - if not provided, will use ALB DNS name
     fqdn = os.getenv("FQDN", "")
+    # Google Tag Manager container ID for analytics
+    gtm_container_id = os.getenv("GTM_CONTAINER_ID", "")
 
     # Add common tags
     cdk.Tags.of(app).add("Environment", environment)
@@ -257,6 +260,7 @@ def main() -> None:
         fqdn=fqdn if fqdn else None,
         use_https=use_https,
         openrouter_api_key=os.getenv("OPENROUTER_API_KEY", ""),
+        gtm_container_id=gtm_container_id,
         description=f"Web client for BixArena {environment} environment",
     )
     web_stack.add_dependency(ecs_cluster_stack)

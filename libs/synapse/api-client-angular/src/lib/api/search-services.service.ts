@@ -108,13 +108,11 @@ export class SearchServicesService {
 
   /**
    * @param orgSagebionetworksRepoModelSearchQuerySearchQuery
-   * @param isOpenSearchEnable
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public postRepoV1Search(
     orgSagebionetworksRepoModelSearchQuerySearchQuery: OrgSagebionetworksRepoModelSearchQuerySearchQuery,
-    isOpenSearchEnable?: boolean,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -125,7 +123,6 @@ export class SearchServicesService {
   ): Observable<OrgSagebionetworksRepoModelSearchSearchResults>;
   public postRepoV1Search(
     orgSagebionetworksRepoModelSearchQuerySearchQuery: OrgSagebionetworksRepoModelSearchQuerySearchQuery,
-    isOpenSearchEnable?: boolean,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -136,7 +133,6 @@ export class SearchServicesService {
   ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchSearchResults>>;
   public postRepoV1Search(
     orgSagebionetworksRepoModelSearchQuerySearchQuery: OrgSagebionetworksRepoModelSearchQuerySearchQuery,
-    isOpenSearchEnable?: boolean,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -147,7 +143,6 @@ export class SearchServicesService {
   ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchSearchResults>>;
   public postRepoV1Search(
     orgSagebionetworksRepoModelSearchQuerySearchQuery: OrgSagebionetworksRepoModelSearchQuerySearchQuery,
-    isOpenSearchEnable?: boolean,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -162,15 +157,6 @@ export class SearchServicesService {
     ) {
       throw new Error(
         'Required parameter orgSagebionetworksRepoModelSearchQuerySearchQuery was null or undefined when calling postRepoV1Search.',
-      );
-    }
-
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (isOpenSearchEnable !== undefined && isOpenSearchEnable !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>isOpenSearchEnable,
-        'isOpenSearchEnable',
       );
     }
 
@@ -229,7 +215,6 @@ export class SearchServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelSearchQuerySearchQuery,
-        params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
