@@ -254,6 +254,7 @@ def compute_leaderboard_bt(
     scale: float = 400.0,
     init_rating: float = 1000.0,
     tol: float = 1e-6,
+    significant: bool = True,
 ) -> list[dict]:
     """
     Compute Bradley-Terry leaderboard directly from evaluations and model data.
@@ -266,6 +267,8 @@ def compute_leaderboard_bt(
         scale: Scaling factor for final ratings
         init_rating: Initial rating offset
         tol: Optimization tolerance
+        significant: If True, rank by statistical significance (CI overlap).
+                    If False, rank simply by BT score.
 
     Returns:
         List of leaderboard entry dictionaries ready for API
@@ -295,19 +298,25 @@ def compute_leaderboard_bt(
             "upper": float(np.quantile(model_bootstrap, 0.975)),
         }
 
-    # Compute statistical ranking based on CI overlap
-    # A model's rank = 1 + number of models statistically significantly better than it
-    # Model B is significantly better than A if: CI_lower(B) > CI_upper(A)
+    # Compute ranking based on selected method
     model_order = list(scores.keys())
     final_rank = {}
-    for model_a in model_order:
-        final_rank[model_a] = 1
-        for model_b in model_order:
-            if model_a == model_b:
-                continue
-            # Check if model_b is statistically significantly better than model_a
-            if model_ci[model_b]["lower"] > model_ci[model_a]["upper"]:
-                final_rank[model_a] += 1
+
+    if significant:
+        # Statistical ranking based on CI overlap; Ties allowed
+        for model_a in model_order:
+            final_rank[model_a] = 1
+            for model_b in model_order:
+                if model_a == model_b:
+                    continue
+                # Check if model_b is statistically significantly better than model_a
+                if model_ci[model_b]["lower"] > model_ci[model_a]["upper"]:
+                    final_rank[model_a] += 1
+    else:
+        # Simple ranking by BT score only
+        sorted_models = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+        for rank, (model_name, _) in enumerate(sorted_models, start=1):
+            final_rank[model_name] = rank
 
     # Format leaderboard entries
     leaderboard_entries = []
