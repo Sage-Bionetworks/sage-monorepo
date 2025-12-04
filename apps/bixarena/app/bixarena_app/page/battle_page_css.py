@@ -13,7 +13,7 @@ CHATBOT_BATTLE_CSS = """
 }
 
 .system-message {
-    border: 1px solid var(--accent-teal);
+    border: 1px solid var(--accent-teal) !important;
     border-radius: 18px;
     padding: 6px 16px;
 }
@@ -65,15 +65,15 @@ CHATBOT_BATTLE_CSS = """
     padding-bottom: 16px;
 }
 
-/* Set border radius for all message bubbles */
+/* Set border radius and remove borders for all message bubbles */
 #chatbot-container .message.panel-full-width {
     border-radius: 18px !important;
     padding: 6px 16px !important;
-}
-
-/* Remove border for all message bubbles except system messages */
-#chatbot-container .message.panel-full-width:not(:has(.system-message)) {
     border: none !important;
+}
+/* Make all bot message bubbles transparent for light/dark theme compatibility */
+#chatbot-container .message.bot.panel-full-width {
+    background: transparent !important;
 }
 
 /* Make label icon match text size */
