@@ -92,4 +92,88 @@ test.describe('disease correlation', () => {
     await expectCategoriesParams(page, categories);
     await expectCategories(page, categories);
   });
+
+  test('changing dropdown updates categories in URL', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const defaultCategories = configs[0]?.dropdowns;
+    expect(defaultCategories.length).toBeGreaterThan(1);
+
+    await expectCategoriesParams(page, defaultCategories);
+
+    const dropdown = page.getByRole('combobox').last();
+    await dropdown.click();
+    const options = page.getByRole('option');
+    const secondOption = options.nth(1);
+    const secondOptionText = await secondOption.textContent();
+    await secondOption.click();
+
+    const newCategories = [...defaultCategories.slice(0, -1), secondOptionText ?? ''];
+    await expectCategoriesParams(page, newCategories);
+    await expectCategories(page, newCategories);
+  });
+
+  test('categories persist across navigation between comparison tools', async ({ page }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const categories = configs[1]?.dropdowns;
+    expect(categories.length).toBeGreaterThan(1);
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(categories, 'categories'),
+    );
+
+    await expectCategoriesParams(page, categories);
+    await expectCategories(page, categories);
+
+    await navigateToComparison(page, 'Model Overview', true, 'link');
+    await expectCategoriesParams(page, []);
+
+    await navigateToComparison(page, CT_PAGE, true, 'link');
+    await expectCategoriesParams(page, categories);
+    await expectCategories(page, categories);
+  });
+
+  test('invalid categories in URL fallback to default', async ({ page }) => {
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(['Invalid Category', 'Another Invalid'], 'categories'),
+    );
+
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const defaultCategories = configs[0]?.dropdowns;
+
+    await expectCategoriesParams(page, defaultCategories);
+    await expectCategories(page, defaultCategories);
+  });
+
+  test('categories with special characters are URL encoded and decoded correctly', async ({
+    page,
+  }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const categoriesWithSpaces = configs[0]?.dropdowns;
+    expect(categoriesWithSpaces.some((cat) => cat.includes(' '))).toBe(true);
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(categoriesWithSpaces, 'categories'),
+    );
+
+    await expectCategoriesParams(page, categoriesWithSpaces);
+    await expectCategories(page, categoriesWithSpaces);
+
+    const url = page.url();
+    expect(url).toContain('%20');
+    expect(url).not.toContain('%2520');
+  });
 });
