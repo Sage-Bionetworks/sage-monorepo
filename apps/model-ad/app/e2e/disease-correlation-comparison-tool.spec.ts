@@ -1,12 +1,22 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import {
+  expectCategories,
+  expectCategoriesParams,
   expectPinnedParams,
   expectPinnedRows,
   expectUnpinnedTableOnly,
   getPinnedTable,
+  getQueryParamFromValues,
+  getRowByName,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
-import { fetchDiseaseCorrelations, navigateToComparison } from './helpers/comparison-tool';
+import { baseURL } from '../playwright.config';
+import { COMPARISON_TOOL_PATHS } from './constants';
+import {
+  fetchComparisonToolConfig,
+  fetchDiseaseCorrelations,
+  navigateToComparison,
+} from './helpers/comparison-tool';
 
 const CT_PAGE = 'Disease Correlation';
 
@@ -44,5 +54,42 @@ test.describe('disease correlation', () => {
     const pinnedTable = getPinnedTable(page);
     await unPinByName(pinnedTable, page, firstCorrelation.name);
     await expectPinnedParams(page, []);
+  });
+
+  test('categories are added to URL on load', async ({ page }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const defaultCategories = configs[0]?.dropdowns;
+    expect(defaultCategories.length).toBeGreaterThan(1); // disease correlation has dropdown selections
+
+    await navigateToComparison(page, 'Disease Correlation', true);
+
+    const shareUrlButton = page.getByRole('button', { name: 'Share URL' });
+    await expect(shareUrlButton).toBeVisible();
+
+    await expect(page).toHaveURL(
+      `${baseURL}${COMPARISON_TOOL_PATHS[CT_PAGE]}?${getQueryParamFromValues(defaultCategories, 'categories')}`,
+    );
+  });
+
+  test('pinned items and categories in the URL are restored in the UI', async ({ page }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const categories = configs[1]?.dropdowns;
+    expect(categories.length).toBeGreaterThan(1);
+
+    const [firstCorrelation] = await fetchDiseaseCorrelations(page, categories);
+    expect(firstCorrelation).toBeDefined();
+
+    const queryParameters = [
+      getQueryParamFromValues(categories, 'categories'),
+      getQueryParamFromValues([firstCorrelation._id], 'pinned'),
+    ].join('&');
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+
+    await expect(page.locator('explorers-base-table')).toHaveCount(2);
+    await expect(getRowByName(getPinnedTable(page), page, firstCorrelation.name)).toHaveCount(1);
+    await expectPinnedParams(page, [firstCorrelation._id]);
+    await expectCategoriesParams(page, categories);
+    await expectCategories(page, categories);
   });
 });

@@ -9,3 +9,5 @@ export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
   'Gene Expression': '/comparison-tools/gene-expression',
   'Disease Correlation': '/comparison-tools/disease-correlation',
 };
+
+export const COMPARISON_TOOL_CONFIG_PATH = 'comparison-tool-config';

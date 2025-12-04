@@ -1,18 +1,38 @@
 import { expect, Locator, Page } from '@playwright/test';
 
-export const getPinnedQueryParams = (url: string): string[] => {
-  const searchParams = new URL(url).searchParams;
-  const pinnedValues = searchParams.getAll('pinned');
+export const getQueryParamFromValues = (values: string[], key: string): string => {
+  return `${key}=${values.map((value) => encodeURIComponent(value)).join(',')}`;
+};
 
-  if (!pinnedValues.length) {
+const getQueryParamValues = (url: string, key: string): string[] => {
+  const searchParams = new URL(url).searchParams;
+  const paramValues = searchParams.getAll(key);
+
+  if (!paramValues.length) {
     return [];
   }
 
-  return pinnedValues
+  return paramValues
     .flatMap((value) => value.split(','))
     .map((value) => value.trim())
+    .map((value) => {
+      if (!value) {
+        return '';
+      }
+
+      try {
+        return decodeURIComponent(value);
+      } catch {
+        return value;
+      }
+    })
     .filter((value) => value.length > 0);
 };
+
+export const getPinnedQueryParams = (url: string): string[] => getQueryParamValues(url, 'pinned');
+
+export const getCategoriesQueryParams = (url: string): string[] =>
+  getQueryParamValues(url, 'categories');
 
 export const getPinnedTable = (page: Page): Locator => page.locator('explorers-base-table').first();
 
@@ -55,10 +75,20 @@ export const expectPinnedParams = async (page: Page, expected: string[]): Promis
   await expect.poll(() => getPinnedQueryParams(page.url())).toEqual(expected);
 };
 
+export const expectCategoriesParams = async (page: Page, expected: string[]): Promise<void> => {
+  await expect.poll(() => getCategoriesQueryParams(page.url())).toEqual(expected);
+};
+
 export const expectPinnedRows = async (page: Page, rowNames: string[]): Promise<void> => {
   await expect(page.locator('explorers-base-table')).toHaveCount(2);
   const pinnedTable = getPinnedTable(page);
   for (const rowName of rowNames) {
     await expect(getRowByName(pinnedTable, page, rowName)).toHaveCount(1);
+  }
+};
+
+export const expectCategories = async (page: Page, categories: string[]): Promise<void> => {
+  for (const category of categories) {
+    await expect(page.getByText(category)).toBeVisible();
   }
 };
