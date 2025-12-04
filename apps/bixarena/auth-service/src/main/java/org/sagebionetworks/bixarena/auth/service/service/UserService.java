@@ -120,6 +120,46 @@ public class UserService {
           provider,
           externalId
         );
+
+        // Update last login timestamp
+        user.setLastLoginAt(OffsetDateTime.now());
+        user = userRepository.save(user);
+
+        // Check if this user already has an external account for this provider
+        Optional<ExternalAccountEntity> existingProviderAccount =
+          externalAccountRepository.findByUserIdAndProvider(user.getId(), provider);
+
+        if (existingProviderAccount.isPresent()) {
+          // Update existing external account with new externalId
+          ExternalAccountEntity extAccount = existingProviderAccount.get();
+          log.info(
+            "Updating existing external account: provider={} oldExternalId={} newExternalId={} userId={}",
+            provider,
+            extAccount.getExternalId(),
+            externalId,
+            user.getId()
+          );
+          extAccount.setExternalId(externalId);
+          extAccount.setExternalUsername(username);
+          extAccount.setExternalEmail(email);
+          externalAccountRepository.save(extAccount);
+        } else {
+          // Create new external account link
+          ExternalAccountEntity extAccount = ExternalAccountEntity.builder()
+            .user(user)
+            .provider(provider)
+            .externalId(externalId)
+            .externalUsername(username)
+            .externalEmail(email)
+            .build();
+          externalAccountRepository.save(extAccount);
+          log.info(
+            "Created external account link: provider={} externalId={} userId={}",
+            provider,
+            externalId,
+            user.getId()
+          );
+        }
       } else {
         // Create new user
         user = UserEntity.builder()
@@ -140,23 +180,23 @@ public class UserService {
 
         // Publish event after new user is persisted (affects total user count)
         eventPublisher.publishUserRegistered(user.getId());
-      }
 
-      // Create external account link
-      ExternalAccountEntity extAccount = ExternalAccountEntity.builder()
-        .user(user)
-        .provider(provider)
-        .externalId(externalId)
-        .externalUsername(username)
-        .externalEmail(email)
-        .build();
-      externalAccountRepository.save(extAccount);
-      log.info(
-        "Created external account link: provider={} externalId={} userId={}",
-        provider,
-        externalId,
-        user.getId()
-      );
+        // Create external account link
+        ExternalAccountEntity extAccount = ExternalAccountEntity.builder()
+          .user(user)
+          .provider(provider)
+          .externalId(externalId)
+          .externalUsername(username)
+          .externalEmail(email)
+          .build();
+        externalAccountRepository.save(extAccount);
+        log.info(
+          "Created external account link: provider={} externalId={} userId={}",
+          provider,
+          externalId,
+          user.getId()
+        );
+      }
     }
 
     return user;

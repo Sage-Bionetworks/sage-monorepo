@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExternalAccountRepository extends JpaRepository<ExternalAccountEntity, UUID> {
   Optional<ExternalAccountEntity> findByProviderAndExternalId(Provider provider, String externalId);
+  Optional<ExternalAccountEntity> findByUserIdAndProvider(UUID userId, Provider provider);
 }
