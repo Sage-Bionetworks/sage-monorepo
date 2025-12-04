@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import UTC, datetime
+from datetime import datetime
 
 import gradio as gr
 import pandas as pd
@@ -12,39 +12,11 @@ from bixarena_app.api.api_client_helper import get_api_configuration
 logger = logging.getLogger(__name__)
 
 
-def format_relative_time(dt: datetime) -> str:
-    """Format datetime to relative time string"""
-    # Ensure dt is timezone-aware
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=UTC)
-
-    now = datetime.now(UTC)
-    diff_seconds = int((now - dt).total_seconds())
-
-    if diff_seconds < 60:
-        return "just now"
-
-    diff_minutes = diff_seconds // 60
-    if diff_minutes < 60:
-        return f"{diff_minutes} {'minute' if diff_minutes == 1 else 'minutes'} ago"
-
-    diff_hours = diff_minutes // 60
-    if diff_hours < 24:
-        return f"{diff_hours} {'hour' if diff_hours == 1 else 'hours'} ago"
-
-    diff_days = diff_hours // 24
-    if diff_days < 30:
-        return f"{diff_days} {'day' if diff_days == 1 else 'days'} ago"
-
-    diff_months = diff_days // 30
-    return f"{diff_months} {'month' if diff_months == 1 else 'months'} ago"
-
-
-def create_time_badge_html(updated_at: datetime | None) -> str:
+def create_time_badge_html(updated_at: str | None) -> str:
     """Create HTML for the time badge
 
     Args:
-        updated_at: Datetime when the leaderboard was last updated
+        updated_at: ISO format date string when the leaderboard was last updated
 
     Returns:
         HTML string for the time badge, or just the description if no timestamp
@@ -59,7 +31,10 @@ def create_time_badge_html(updated_at: datetime | None) -> str:
         ">Community-driven evaluation of AI models on biomedical topics</p>
         """
 
-    relative_time = format_relative_time(updated_at)
+    # Parse and format date, e.g. "2025-12-04T12:00:00Z" -> "Dec 4, 2025"
+    dt = datetime.fromisoformat(updated_at.replace("Z", "+00:00"))
+    formatted_date = dt.strftime("%b %-d, %Y")
+
     return f"""
     <div style="
         display: flex;
@@ -78,29 +53,30 @@ def create_time_badge_html(updated_at: datetime | None) -> str:
         <div style="
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
+            gap: 12px;
+            padding: 12px 20px;
             background: var(--panel-background-fill);
             border: 1px solid var(--border-color-primary);
             border-radius: 8px;
         ">
             <div style="
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-                background-color: var(--accent-teal);
-                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-                opacity: 1;
-            "></div>
-            <span>{relative_time}</span>
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            ">
+                <span style="
+                    font-size: var(--text-sm);
+                    color: var(--body-text-color-subdued);
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                ">Last Updated</span>
+                <span style="
+                    font-size: var(--text-lg);
+                    font-weight: 500;
+                ">{formatted_date}</span>
+            </div>
         </div>
     </div>
-    <style>
-    @keyframes pulse {{
-        0%, 100% {{ opacity: 1; }}
-        50% {{ opacity: 0.5; }}
-    }}
-    </style>
     """
 
 
@@ -155,8 +131,8 @@ def generate_test_leaderboard_data():
         ],
     }
 
-    # Fixed test timestamp - parse ISO format string with UTC timezone
-    test_updated_at = datetime.fromisoformat("2025-12-04T12:00:00+00:00")
+    # Fixed test timestamp
+    test_updated_at = "2025-12-04T12:00:00+00:00"
     logger.info("✅ Generated test leaderboard data")
     return pd.DataFrame(test_data), test_updated_at
 
