@@ -399,6 +399,32 @@ def build_leaderboard_page():
                 elem_id="leaderboard_table",
             )
 
+            # Ranking methodology note
+            gr.HTML(
+                """
+            <div style="
+                margin-top: 24px;
+                padding: 16px 20px;
+                background: var(--panel-background-fill);
+                border: 1px solid var(--border-color-primary);
+                border-radius: 8px;
+            ">
+                <p style="
+                    margin: 0;
+                    font-size: var(--text-md);
+                    color: var(--body-text-color-subdued);
+                    line-height: 1.6;
+                ">
+                    <strong style="color: var(--body-text-color);">ⓘ</strong>
+                    Models are currently ranked by Score only. As we gather more evaluations,
+                    we will transition to significance-aware ranking based on bootstrapped
+                    confidence intervals, which accounts for statistical uncertainty and may
+                    result in tied ranks when models perform similarly.
+                </p>
+            </div>
+            """
+            )
+
             # Connect filter to table
             model_filter.change(
                 fn=filter_leaderboard_table,
