@@ -415,10 +415,10 @@ def build_leaderboard_page():
                     color: var(--body-text-color-subdued);
                     line-height: 1.6;
                 ">
-                    <strong style="color: var(--body-text-color);">ⓘ</strong>
-                    Models are currently ranked by Score only. As we gather more evaluations,
-                    we will transition to significance-aware ranking based on bootstrapped
-                    confidence intervals, which accounts for statistical uncertainty and may
+                    <strong style="color: var(--body-text-color);">Note: </strong>
+                    Models are currently ranked by Score only. As more evaluations are collected,
+                    ranking will transition to significance-aware methods based on bootstrapped
+                    confidence intervals, which account for statistical uncertainty and may
                     result in tied ranks when models perform similarly.
                 </p>
             </div>
