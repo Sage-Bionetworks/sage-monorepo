@@ -208,6 +208,11 @@ def snapshot_add(
 
                 leaderboard_entries = filtered_entries
 
+                # Reassign ranks sequentially after filtering
+                if not significant:
+                    for new_rank, entry in enumerate(leaderboard_entries, start=1):
+                        entry["rank"] = new_rank
+
                 if skipped_models:
                     console.print(
                         f"\n[yellow]⚠ Warning: Skipped {len(skipped_models)} "
