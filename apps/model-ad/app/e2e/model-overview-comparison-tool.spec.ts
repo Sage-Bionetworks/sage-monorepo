@@ -1,12 +1,15 @@
 import { expect, test } from '@playwright/test';
 import {
+  expectNoResultsFound,
   expectPinnedParams,
   expectPinnedRows,
   expectUnpinnedTableOnly,
   getPinnedTable,
   getRowByName,
   getUnpinnedTable,
+  pinAll,
   pinByName,
+  searchViaFilterbox,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
@@ -139,5 +142,47 @@ test.describe('model overview', () => {
     await navigateToComparison(page, CT_PAGE, true, 'link');
     await expectPinnedRows(page, [firstModel.name]);
     await expectPinnedParams(page, [firstModel.name]);
+  });
+
+  test('filterbox search without comma returns partial case-insensitive matches', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+
+    await searchViaFilterbox(page, 'tg-');
+
+    const unpinnedTable = getUnpinnedTable(page);
+    const row = getRowByName(unpinnedTable, page, '3xTg-AD');
+    await expect(row).toBeVisible();
+    await expect(page.getByText('1-1 of 1')).toBeVisible();
+  });
+
+  test('filterbox search excludes pinned items from results', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=3xTg-AD,LOAD1`);
+
+    await expectPinnedParams(page, ['3xTg-AD', 'LOAD1']);
+    await expectPinnedRows(page, ['3xTg-AD', 'LOAD1']);
+
+    await searchViaFilterbox(page, 'tg-');
+    await expectNoResultsFound(page);
+
+    await searchViaFilterbox(page, '3xtg-ad,load1');
+    await expectNoResultsFound(page);
+  });
+
+  test('filterbox search with commas returns full, case-insensitive matches', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+
+    await searchViaFilterbox(page, '3xtg-ad,apoe4,fad');
+
+    const unpinnedTable = getUnpinnedTable(page);
+    await expect(getRowByName(unpinnedTable, page, '3xTg-AD')).toBeVisible();
+    await expect(getRowByName(unpinnedTable, page, 'APOE4')).toBeVisible();
+    await expect(getRowByName(unpinnedTable, page, '5xFAD (UCI)')).toBeHidden();
+
+    await pinAll(page);
+
+    await expectPinnedRows(page, ['3xTg-AD', 'APOE4']);
+    await expectPinnedParams(page, ['3xTg-AD', 'APOE4']);
   });
 });

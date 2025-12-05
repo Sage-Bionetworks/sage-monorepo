@@ -72,6 +72,10 @@ export const unPinByName = async (table: Locator, page: Page, name: string) => {
   return await togglePinByName(table, page, name, 'unpin');
 };
 
+export const pinAll = async (page: Page) => {
+  await page.getByRole('button', { name: 'Pin All' }).click();
+};
+
 export const expectPinnedParams = async (page: Page, expected: string[]): Promise<void> => {
   await expect.poll(() => getPinnedQueryParams(page.url())).toEqual(expected);
 };
@@ -92,4 +96,16 @@ export const expectCategories = async (page: Page, categories: string[]): Promis
   for (const category of categories) {
     await expect(page.getByText(category)).toBeVisible();
   }
+};
+
+export const searchViaFilterbox = async (page: Page, searchTerm: string): Promise<void> => {
+  const searchInput = page.getByPlaceholder('Search', { exact: true });
+  await searchInput.clear();
+  await searchInput.fill(searchTerm);
+  await expect(page.getByText('Matching Results')).toBeVisible();
+};
+
+export const expectNoResultsFound = async (page: Page): Promise<void> => {
+  await expect(page.getByText('0-0 of 0')).toBeVisible();
+  await expect(page.getByText('No results found')).toBeVisible();
 };
