@@ -261,11 +261,11 @@ def build_how_it_works_section():
                         <span style="color: var(--color-accent); font-weight: 600;">01</span>
                     </div>
                     <h3 style="color: var(--body-text-color); margin: 0; font-size: var(--text-lg); font-weight: 600;">
-                        Start a Battle
+                        Log in with Synapse
                     </h3>
                 </div>
                 <p style="color: var(--body-text-color-subdued); line-height: 1.5; margin: 0;">
-                    Pick a curated biomedical question or submit your own custom prompt. Two AI models are randomly chosen to face off.
+                    BioArena uses Synapse for sign-in. Synapse is Sage Bionetworks’ secure platform for biomedical researchers and includes account verification and multi-factor authentication for protection.
                 </p>
             </div>
 
@@ -276,11 +276,11 @@ def build_how_it_works_section():
                         <span style="color: var(--color-accent); font-weight: 600;">02</span>
                     </div>
                     <h3 style="color: var(--body-text-color); margin: 0; font-size: var(--text-lg); font-weight: 600;">
-                        Compare Responses
+                        Start a Battle
                     </h3>
                 </div>
                 <p style="color: var(--body-text-color-subdued); line-height: 1.5; margin: 0;">
-                    Review the two AI-generated answers side by side. The models remain anonymous so you can focus purely on the quality of the content.
+                    Pick a curated biomedical question or submit your own prompt. Two AI models are randomly chosen to face off, and their identities stay anonymous so you can focus purely on the response quality.
                 </p>
             </div>
 
@@ -295,7 +295,7 @@ def build_how_it_works_section():
                     </h3>
                 </div>
                 <p style="color: var(--body-text-color-subdued); line-height: 1.5; margin: 0;">
-                    Decide which model demonstrates clearer reasoning or insight. Your input directly shapes model performance metrics.
+                    Review the two AI-generated answers side by side and decide which model demonstrates clearer reasoning or insight. Your choice directly shapes model performance metrics.
                 </p>
             </div>
 
