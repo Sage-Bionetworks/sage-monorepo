@@ -50,30 +50,49 @@ def fetch_user_stats(request: gr.Request):
 
 def create_intro_section():
     """Create the intro section of the homepage"""
+    from pathlib import Path
+
+    # Get absolute path to logo for Gradio's static file serving
+    logo_path = Path(__file__).parent.parent / "assets" / "bioarena-logo.svg"
+    logo_path_str = str(logo_path.resolve())
 
     with gr.Row():
         with gr.Column():
-            gr.HTML("""
-            <div style="text-align: center; padding: 2.5rem 1.5rem;">
-                <p style="font-size: var(--text-xl); margin-bottom: 1.5rem; color: var(--body-text-color-subdued);">
-                    Welcome to BioArena
-                </p>
-                <h1 style="font-size: var(--text-hero-title); margin-bottom: 2rem; color: var(--body-text-color);">
-                    Drive the next wave of biomedical breakthroughs
-                </h1>
+            gr.HTML(f"""
+            <div style="display: flex; align-items: center; justify-content: center; gap: 3rem; padding: 2.5rem 1.5rem; flex-wrap: wrap;">
+                <!-- Text Content -->
+                <div style="flex: 1; min-width: 300px; max-width: 600px;">
+                    <p style="font-size: var(--text-xl); margin-bottom: 1.5rem; color: var(--body-text-color-subdued);">
+                        Welcome to BioArena
+                    </p>
+                    <h1 style="font-size: var(--text-hero-title); margin-bottom: 2rem; color: var(--body-text-color); line-height: 1.2;">
+                        Drive the next wave of biomedical breakthroughs
+                    </h1>
 
-                <p style="font-size: var(--text-xl); line-height: 1.75; max-width: 48rem; margin: 0 auto; color: var(--body-text-color-subdued);">
-                    BioArena crowdsources the benchmarking of AI models to unlock the
-                    next breakthrough in biomedicine, inviting a global community of
-                    digital contributors.
-                </p>
+                    <p style="font-size: var(--text-xl); line-height: 1.75; color: var(--body-text-color-subdued);">
+                        BioArena crowdsources the benchmarking of AI models to unlock the
+                        next breakthrough in biomedicine, inviting a global community of
+                        digital contributors.
+                    </p>
+                </div>
+
+                <!-- Fox Logo -->
+                <div style="flex: 0 0 auto; display: flex; align-items: center; justify-content: center;">
+                    <img src='/gradio_api/file={logo_path_str}' alt='BioArena Fox' style='width: 280px; height: auto; max-width: 100%;'>
+                </div>
             </div>
             <style>
             /* Limit metric box row width */
-            #public-stats-row, #user-stats-row {
+            #public-stats-row, #user-stats-row {{
                 max-width: 1000px;
                 margin: 0 auto;
-            }
+            }}
+            /* Responsive layout for smaller screens */
+            @media (max-width: 768px) {{
+                .intro-section {{
+                    flex-direction: column-reverse !important;
+                }}
+            }}
             </style>
             """)
 

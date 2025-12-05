@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import gradio as gr
 
 from bixarena_app.auth.user_state import get_user_state
@@ -10,12 +12,16 @@ def build_header():
     """
     with gr.Row(elem_id="header-row") as header:
         with gr.Column(scale=4):
+            # Get absolute path to logo for Gradio's static file serving
+            logo_path = Path(__file__).parent.parent / "assets" / "bioarena-logo.svg"
+            logo_path_str = str(logo_path.resolve())
             gr.HTML(
-                """
-<div style='display:flex;align-items:center;height:40px;'>
-  <h1 style='margin:0;padding:0;font-size:1.5rem;'>
-    <a href='/' style='text-decoration:none;color:inherit;'>🧬 BioArena</a>
-  </h1>
+                f"""
+<div style='display:flex;align-items:center;height:60px;gap:12px;'>
+  <a href='/' style='text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px;'>
+    <img src='/gradio_api/file={logo_path_str}' alt='BioArena Logo' style='height:60px;width:auto;flex-shrink:0;'>
+    <h1 style='margin:0;padding:0;font-size:1.5rem;'>BioArena</h1>
+  </a>
 </div>
                 """
             )
@@ -32,7 +38,7 @@ def build_header():
 <style>
 #header-row {
   align-items: center;
-  padding: 10px 0;
+  padding: 0 0 10px 0;
   border-bottom: 2px solid var(--border-color-primary);
   margin-bottom: 28px;
 }

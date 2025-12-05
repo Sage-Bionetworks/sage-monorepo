@@ -232,6 +232,15 @@ def parse_args():
 def build_app():
     """Create the main application"""
 
+    # Set static paths for assets like the logo
+    from pathlib import Path
+
+    assets_dir = Path(__file__).parent / "assets"
+    assets_dir_resolved = assets_dir.resolve()
+    print(f"[static] Setting static path to: {assets_dir_resolved}")
+    print(f"[static] Logo file exists: {(assets_dir / 'bioarena-logo.svg').exists()}")
+    gr.set_static_paths(paths=[str(assets_dir_resolved)])
+
     enable_crisp = os.environ.get("ENABLE_CRISP", "false").lower() == "true"
 
     cleanup_js = """
@@ -283,8 +292,14 @@ def build_app():
     <!-- End Google Tag Manager -->
     """
 
+    # Add favicon to head using the static assets path
+    favicon_url = f"/gradio_api/file={str(assets_dir_resolved / 'bioarena-logo.svg')}"
+    favicon_html = f"""
+    <link rel="icon" type="image/svg+xml" href="{favicon_url}">
+    """
+
     # Combine all head scripts
-    head_scripts = crisp_script + gtm_script
+    head_scripts = crisp_script + gtm_script + favicon_html
 
     with gr.Blocks(
         title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
