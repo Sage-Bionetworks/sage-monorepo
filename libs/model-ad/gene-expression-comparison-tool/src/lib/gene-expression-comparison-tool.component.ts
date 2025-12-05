@@ -106,10 +106,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
     viewDetailsTooltip: 'Open gene details page',
     viewDetailsClick: (id: string, label: string) => {
-      const url = this.router.serializeUrl(
-        this.router.createUrlTree([ROUTE_PATHS.GENE_EXPRESSION, label]),
-      );
-      window.open(url, '_blank');
+      // TODO add logic to display details pages MG-588
     },
     legendPanelConfig: this.legendPanelConfig,
     visualizationOverviewPanes: this.visualizationOverviewPanes,

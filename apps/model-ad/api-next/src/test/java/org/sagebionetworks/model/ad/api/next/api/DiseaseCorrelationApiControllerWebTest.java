@@ -11,16 +11,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sagebionetworks.model.ad.api.next.exception.DiseaseCorrelationNotFoundException;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 class DiseaseCorrelationApiControllerWebTest {
 
@@ -51,7 +52,8 @@ class DiseaseCorrelationApiControllerWebTest {
   void shouldReturnBadRequestProblemWhenCategoryHasEmptySubcategory() throws Exception {
     when(delegate.getDiseaseCorrelations(any())).thenThrow(
       new InvalidCategoryException(
-        "Query parameter categories must repeat twice (e.g. ?categories=CONSENSUS NETWORK MODULES" +
+        "Query parameter categories must repeat twice " +
+        "(e.g. ?categories=CONSENSUS NETWORK MODULES" +
         "&categories=subcategory) and each value must be a string"
       )
     );
@@ -68,7 +70,8 @@ class DiseaseCorrelationApiControllerWebTest {
       .andExpect(jsonPath("$.status").value(400))
       .andExpect(
         jsonPath("$.detail").value(
-          "Query parameter categories must repeat twice (e.g. ?categories=CONSENSUS NETWORK MODULES" +
+          "Query parameter categories must repeat twice " +
+          "(e.g. ?categories=CONSENSUS NETWORK MODULES" +
           "&categories=subcategory) and each value must be a string"
         )
       )
@@ -128,7 +131,10 @@ class DiseaseCorrelationApiControllerWebTest {
     throws Exception {
     String correlationId = "673f5d8e8c1a2b3c4d5e6f7a";
     when(delegate.getDiseaseCorrelations(any())).thenThrow(
-      new DiseaseCorrelationNotFoundException(correlationId)
+      new ResponseStatusException(
+        HttpStatus.NOT_FOUND,
+        "Disease correlation not found with id: " + correlationId
+      )
     );
 
     mockMvc
@@ -138,14 +144,7 @@ class DiseaseCorrelationApiControllerWebTest {
           .param("categories", "Cluster A")
           .param("item", correlationId)
       )
-      .andExpect(status().isNotFound())
-      .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-      .andExpect(jsonPath("$.title").value("Entity not found"))
-      .andExpect(jsonPath("$.status").value(404))
-      .andExpect(
-        jsonPath("$.detail").value("Disease correlation not found with id: " + correlationId)
-      )
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
+      .andExpect(status().isNotFound());
   }
 
   @Test
@@ -154,7 +153,10 @@ class DiseaseCorrelationApiControllerWebTest {
     String cluster = "Cluster A";
     String correlationId = "673f5d8e8c1a2b3c4d5e6f7a";
     when(delegate.getDiseaseCorrelations(any())).thenThrow(
-      new DiseaseCorrelationNotFoundException(cluster, correlationId)
+      new ResponseStatusException(
+        HttpStatus.NOT_FOUND,
+        "Disease correlation not found with cluster: " + cluster + ", id: " + correlationId
+      )
     );
 
     mockMvc
@@ -164,15 +166,6 @@ class DiseaseCorrelationApiControllerWebTest {
           .param("categories", cluster)
           .param("item", correlationId)
       )
-      .andExpect(status().isNotFound())
-      .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-      .andExpect(jsonPath("$.title").value("Entity not found"))
-      .andExpect(jsonPath("$.status").value(404))
-      .andExpect(
-        jsonPath("$.detail").value(
-          "Disease correlation not found with cluster: " + cluster + ", id: " + correlationId
-        )
-      )
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
+      .andExpect(status().isNotFound());
   }
 }

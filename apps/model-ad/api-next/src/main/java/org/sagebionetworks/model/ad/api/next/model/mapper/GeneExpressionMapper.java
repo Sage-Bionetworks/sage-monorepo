@@ -2,12 +2,12 @@ package org.sagebionetworks.model.ad.api.next.model.mapper;
 
 import java.math.BigDecimal;
 import java.util.List;
-import org.sagebionetworks.model.ad.api.next.exception.DataIntegrityException;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.FoldChangeResultDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexCohortDto;
+import org.sagebionetworks.model.ad.api.next.util.EnumConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +33,7 @@ public class GeneExpressionMapper {
       document.getModelGroup(),
       document.getModelType(),
       document.getTissue(),
-      toSexCohortDto(document.getSex())
+      EnumConverter.toSexCohortDto(document.getSex(), "gene expression record")
     );
 
     dto.set4months(toFoldChangeDto(document.getFourMonths()));
@@ -41,20 +41,6 @@ public class GeneExpressionMapper {
     dto.set18months(toFoldChangeDto(document.getEighteenMonths()));
 
     return dto;
-  }
-
-  private SexCohortDto toSexCohortDto(@Nullable String value) {
-    if (value == null) {
-      throw new DataIntegrityException("Missing sex value in gene expression record");
-    }
-    try {
-      return SexCohortDto.fromValue(value);
-    } catch (IllegalArgumentException ex) {
-      throw new DataIntegrityException(
-        "Unexpected sex value '" + value + "' in gene expression record",
-        ex
-      );
-    }
   }
 
   private String getCompositeId(GeneExpressionDocument document) {

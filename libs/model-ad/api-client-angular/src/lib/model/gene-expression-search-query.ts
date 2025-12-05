@@ -26,7 +26,7 @@ export interface GeneExpressionSearchQuery {
    */
   categories: Array<string>;
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~Gnai3\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations.
+   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations.
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;

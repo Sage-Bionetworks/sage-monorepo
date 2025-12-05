@@ -36,25 +36,21 @@ public class GeneExpressionService {
 
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
-    ".buildCacheKey('geneExpression', #itemFilterType, #items, " +
-    "#tissue, #sex, #pageNumber, #pageSize)"
+    ".buildCacheKey('geneExpression', #query.itemFilterType, #query.items, " +
+    "#tissue, #sex, #query.pageNumber, #query.pageSize)"
   )
   public GeneExpressionsPageDto loadGeneExpressions(
+    GeneExpressionSearchQueryDto query,
     String tissue,
-    String sex,
-    List<String> items,
-    ItemFilterTypeQueryDto itemFilterType,
-    int pageNumber,
-    int pageSize
+    String sex
   ) {
     ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
-      itemFilterType,
+      query.getItemFilterType(),
       ItemFilterTypeQueryDto.INCLUDE
     );
-    List<String> effectiveItems = Objects.requireNonNullElse(items, List.of());
 
-    List<String> sanitizedItems = ApiHelper.sanitizeItems(effectiveItems);
-    PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+    List<String> sanitizedItems = ApiHelper.sanitizeItems(query.getItems());
+    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
     Page<GeneExpressionDocument> page;
 
     if (sanitizedItems.isEmpty()) {

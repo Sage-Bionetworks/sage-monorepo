@@ -451,16 +451,15 @@ components:
             List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
             where each identifier represents one complete combination of ensembl gene ID and gene name.
 
-            Example: "ENSMUSG00000000001~Gnai3" filters for documents matching that exact gene ID and name.
+            Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
             Multiple items can be provided to filter for multiple specific combinations.
           type: array
           items:
             type: string
           nullable: true
           example:
-            - ENSMUSG00000000001~Gnai3
-            - ENSMUSG00000000028~Cdc45
-            - ENSMUSG00000000037~Scml2
+            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            - ENSMUSG00000000028~APOE4
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
@@ -493,7 +492,7 @@ components:
         composite_id:
           type: string
           description: Unique identifier for the gene expression object
-          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
+          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
         ensembl_gene_id:
           type: string
           description: Ensembl Gene ID
