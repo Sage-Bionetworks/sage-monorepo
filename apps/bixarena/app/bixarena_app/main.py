@@ -292,9 +292,10 @@ def build_app():
     <!-- End Google Tag Manager -->
     """
 
-    # Add favicon to head
-    favicon_html = """
-    <link rel="icon" type="image/svg+xml" href="/gradio_api/file=/workspaces/sage-monorepo/apps/bixarena/app/bixarena_app/assets/bioarena-logo.svg">
+    # Add favicon to head using the static assets path
+    favicon_url = f"/gradio_api/file={str(assets_dir_resolved / 'bioarena-logo.svg')}"
+    favicon_html = f"""
+    <link rel="icon" type="image/svg+xml" href="{favicon_url}">
     """
 
     # Combine all head scripts
