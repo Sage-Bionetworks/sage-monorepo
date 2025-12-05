@@ -15,16 +15,16 @@ INSERT INTO challenge_platform (id, slug, name, avatar_key, website_url, created
 (19, 'drivendata', 'DrivenData', 'logo/drivendata.jpg', 'https://www.drivendata.org/', '2023-11-16 21:57:43', '2023-12-12 18:18:39'),
 (20, 'devpost', 'Devpost', 'logo/devpost.jpg', 'https://devpost.com/', '2024-01-09 16:41:39', '2024-01-11 23:14:56'),
 (21, 'zindi', 'Zindi', 'logo/zindi.jpg', 'https://zindi.africa/', '2024-01-09 18:56:59', '2024-01-11 23:15:00'),
-(22, 'dynabench', 'Dynabench', NULL, 'https://dynabench.org', '2024-01-09 18:57:22', '2024-01-09 18:57:48'),													
-(23, 'mlcube', 'MLCube', NULL, 'https://mlcommons.org/working-groups/data/mlcube/', '2024-01-10 18:57:22', '2025-07-31 21:52:17'),
-(24,	'therapeutics-data-commons', 'Therapeutics Data Commons', NULL, 'https://tdcommons.ai/', '2025-07-31 21:52:20', '2025-07-31 21:53:26'),														
-(25, 'challenge-gov',	'Challenge Gov', NULL, '2025-07-31 22:18:23',	'2025-07-31 22:18:58'),														
-(26,	'elucidata',	'Elucidata', NULL, 'https://www.elucidata.io/elhackathon-2025', '2025-07-31 22:30:07',	'2025-07-31 22:31:59'),														
-(27, 'embls-european-bioinformatics-institute',	'EMBLs European Bioinformatics Institute', NULL, 'https://www.ebi.ac.uk/', '2025-07-31 22:33:18', '2025-07-31 22:33:44'),															
-(28,	'biohackathon-europe', 'Biohackathon Europe', NULL, 'https://biohackathon-europe.org/projects/', '2025-08-01 18:40:18', '2025-08-01 18:40:28'),														
-(29, 'trustiiio', 'Trustii.io', NULL, 'https://www.trustii.io/platform', '2025-10-15 23:34:31', '2025-10-15 23:34:55'),
-(30, 'huggingface', 'HuggingFace', NULL, 'https://huggingface.co/spaces?q=competition', '2025-10-15 23:38:50', '2025-10-15 23:39:31'),
-(31, 'aicrowd', 'AIcrowd', NULL, 'https://www.aicrowd.com/', '2025-11-14 23:40:23', '2025-11-14 23:40:23');
+(22, 'dynabench', 'Dynabench',  'https://dynabench.org', '2024-01-09 18:57:22', '2024-01-09 18:57:48'),													
+(23, 'mlcube', 'MLCube',  'https://mlcommons.org/working-groups/data/mlcube/', '2024-01-10 18:57:22', '2025-07-31 21:52:17'),
+(24,	'therapeutics-data-commons', 'Therapeutics Data Commons',  'https://tdcommons.ai/', '2025-07-31 21:52:20', '2025-07-31 21:53:26'),														
+(25, 'challenge-gov',	'Challenge Gov',  '2025-07-31 22:18:23',	'2025-07-31 22:18:58'),														
+(26,	'elucidata',	'Elucidata',  'https://www.elucidata.io/elhackathon-2025', '2025-07-31 22:30:07',	'2025-07-31 22:31:59'),														
+(27, 'embls-european-bioinformatics-institute',	'EMBLs European Bioinformatics Institute',  'https://www.ebi.ac.uk/', '2025-07-31 22:33:18', '2025-07-31 22:33:44'),															
+(28,	'biohackathon-europe', 'Biohackathon Europe',  'https://biohackathon-europe.org/projects/', '2025-08-01 18:40:18', '2025-08-01 18:40:28'),														
+(29, 'trustiiio', 'Trustii.io',  'https://www.trustii.io/platform', '2025-10-15 23:34:31', '2025-10-15 23:34:55'),
+(30, 'huggingface', 'HuggingFace',  'https://huggingface.co/spaces?q=competition', '2025-10-15 23:38:50', '2025-10-15 23:39:31'),
+(31, 'aicrowd', 'AIcrowd',  'https://www.aicrowd.com/', '2025-11-14 23:40:23', '2025-11-14 23:40:23');
 
 -- Update the sequence to continue from the highest ID to avoid conflicts
 SELECT setval('challenge_platform_id_seq', (SELECT MAX(id) FROM challenge_platform));
