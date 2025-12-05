@@ -292,8 +292,13 @@ def build_app():
     <!-- End Google Tag Manager -->
     """
 
+    # Add favicon to head
+    favicon_html = """
+    <link rel="icon" type="image/svg+xml" href="/gradio_api/file=/workspaces/sage-monorepo/apps/bixarena/app/bixarena_app/assets/bioarena-logo.svg">
+    """
+
     # Combine all head scripts
-    head_scripts = crisp_script + gtm_script
+    head_scripts = crisp_script + gtm_script + favicon_html
 
     with gr.Blocks(
         title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
