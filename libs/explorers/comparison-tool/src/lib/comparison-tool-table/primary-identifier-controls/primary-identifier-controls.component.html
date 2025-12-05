@@ -4,20 +4,23 @@
   </div>
 
   <div class="primary-control-icons">
-    <button
-      type="button"
-      (click)="viewDetailsWasClicked()"
-      [pTooltip]="viewConfig().viewDetailsTooltip"
-      tooltipPosition="top"
-      tooltipStyleClass="tooltip"
-      [ariaLabel]="'View Details'"
-    >
-      <explorers-svg-icon
-        imagePath="/explorers-assets/icons/external-link.svg"
-        [enableHoverEffects]="false"
-        altText="link"
-      />
-    </button>
+    <!--- TODO this conditional logic can be removed once view details functionality is implemented in MG-588 -->
+    @if (viewConfig().viewDetailsTooltip) {
+      <button
+        type="button"
+        (click)="viewDetailsWasClicked()"
+        [pTooltip]="viewConfig().viewDetailsTooltip"
+        tooltipPosition="top"
+        tooltipStyleClass="tooltip"
+        [ariaLabel]="'View Details'"
+      >
+        <explorers-svg-icon
+          imagePath="/explorers-assets/icons/external-link.svg"
+          [enableHoverEffects]="false"
+          altText="link"
+        />
+      </button>
+    }
 
     <button
       type="button"
