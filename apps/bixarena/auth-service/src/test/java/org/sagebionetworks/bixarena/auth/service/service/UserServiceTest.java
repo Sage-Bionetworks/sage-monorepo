@@ -257,6 +257,9 @@ class UserServiceTest {
       externalAccountRepository.findByProviderAndExternalId(Provider.synapse, EXTERNAL_ID)
     ).thenReturn(Optional.empty());
     when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(existingUser));
+    when(externalAccountRepository.findByUserIdAndProvider(userId, Provider.synapse))
+      .thenReturn(Optional.empty());
+    when(userRepository.save(any(UserEntity.class))).thenReturn(existingUser);
     when(externalAccountRepository.save(any(ExternalAccountEntity.class))).thenReturn(
       ExternalAccountEntity.builder().build()
     );
@@ -286,8 +289,73 @@ class UserServiceTest {
     assertThat(capturedExtAccount.getProvider()).isEqualTo(Provider.synapse);
     assertThat(capturedExtAccount.getExternalId()).isEqualTo(EXTERNAL_ID);
 
-    // User should not be created again
-    verify(userRepository, never()).save(any(UserEntity.class));
+    // User should be saved to update lastLoginAt
+    verify(userRepository).save(any(UserEntity.class));
+  }
+
+  @Test
+  @DisplayName("Should update external account when user exists with different external ID")
+  void handleUserLogin_ExistingUserExistingProvider_UpdatesExternalId() {
+    // Arrange
+    UUID userId = UUID.randomUUID();
+    String oldExternalId = "old-external-id";
+    String newExternalId = "new-external-id";
+
+    UserEntity existingUser = UserEntity.builder()
+      .id(userId)
+      .username(USERNAME)
+      .email(EMAIL)
+      .firstName(FIRST_NAME)
+      .lastName(LAST_NAME)
+      .build();
+
+    ExternalAccountEntity existingExtAccount = ExternalAccountEntity.builder()
+      .id(UUID.randomUUID())
+      .user(existingUser)
+      .provider(Provider.synapse)
+      .externalId(oldExternalId)
+      .externalUsername(USERNAME)
+      .externalEmail(EMAIL)
+      .build();
+
+    when(
+      externalAccountRepository.findByProviderAndExternalId(Provider.synapse, newExternalId)
+    ).thenReturn(Optional.empty());
+    when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(existingUser));
+    when(externalAccountRepository.findByUserIdAndProvider(userId, Provider.synapse))
+      .thenReturn(Optional.of(existingExtAccount));
+    when(userRepository.save(any(UserEntity.class))).thenReturn(existingUser);
+    when(externalAccountRepository.save(any(ExternalAccountEntity.class))).thenReturn(
+      existingExtAccount
+    );
+
+    // Act
+    UserEntity result = userService.handleUserLogin(
+      Provider.synapse,
+      newExternalId,
+      USERNAME,
+      EMAIL,
+      true,
+      FIRST_NAME,
+      LAST_NAME
+    );
+
+    // Assert
+    assertThat(result).isNotNull();
+    assertThat(result.getId()).isEqualTo(userId);
+
+    // Verify external account was updated (not created)
+    ArgumentCaptor<ExternalAccountEntity> extAccountCaptor = ArgumentCaptor.forClass(
+      ExternalAccountEntity.class
+    );
+    verify(externalAccountRepository).save(extAccountCaptor.capture());
+    ExternalAccountEntity capturedExtAccount = extAccountCaptor.getValue();
+    assertThat(capturedExtAccount.getExternalId()).isEqualTo(newExternalId);
+    assertThat(capturedExtAccount.getExternalUsername()).isEqualTo(USERNAME);
+    assertThat(capturedExtAccount.getExternalEmail()).isEqualTo(EMAIL);
+
+    // User should be saved to update lastLoginAt
+    verify(userRepository).save(any(UserEntity.class));
   }
 
   @Test
