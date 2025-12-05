@@ -23,7 +23,7 @@ async function setup(
     pinnedData?: Record<string, unknown>[];
     maxPinnedItems?: number;
   },
-  ctFilterServiceOptions?: { searchTerm?: string; filters?: ComparisonToolFilter[] },
+  ctFilterServiceOptions?: { searchTerm?: string | null; filters?: ComparisonToolFilter[] },
 ) {
   const user = userEvent.setup();
 

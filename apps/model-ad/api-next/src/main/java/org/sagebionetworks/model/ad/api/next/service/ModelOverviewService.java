@@ -1,7 +1,9 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +36,11 @@ public class ModelOverviewService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('modelOverview', #query.itemFilterType, " +
-    "#query.items, #query.pageNumber, #query.pageSize)"
+    "#query.items, #query.search, #query.pageNumber, #query.pageSize)"
   )
   public ModelOverviewsPageDto loadModelOverviews(ModelOverviewSearchQueryDto query) {
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
+    String search = query.getSearch();
     ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
       query.getItemFilterType(),
       ItemFilterTypeQueryDto.INCLUDE
@@ -49,18 +52,19 @@ public class ModelOverviewService {
     Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize);
     Page<ModelOverviewDocument> page;
 
-    if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-      if (items.isEmpty()) {
-        // Return empty page for include filter with no items
-        page = Page.empty(pageable);
-      } else {
-        page = repository.findByNameIn(items, pageable);
-      }
+    if (
+      effectiveFilter == ItemFilterTypeQueryDto.EXCLUDE &&
+      search != null &&
+      !search.trim().isEmpty()
+    ) {
+      page = fetchPageWithSearch(search.trim(), items, pageable);
     } else {
-      if (items.isEmpty()) {
-        page = repository.findAll(pageable);
+      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
+        page = items.isEmpty() ? Page.empty(pageable) : repository.findByNameIn(items, pageable);
       } else {
-        page = repository.findByNameNotIn(items, pageable);
+        page = items.isEmpty()
+          ? repository.findAll(pageable)
+          : repository.findByNameNotIn(items, pageable);
       }
     }
 
@@ -80,5 +84,30 @@ public class ModelOverviewService {
       .build();
 
     return ModelOverviewsPageDto.builder().modelOverviews(dtos).page(pageMetadata).build();
+  }
+
+  private Page<ModelOverviewDocument> fetchPageWithSearch(
+    String trimmedSearch,
+    List<String> excludeNames,
+    Pageable pageable
+  ) {
+    if (trimmedSearch.contains(",")) {
+      List<Pattern> patterns = createCaseInsensitiveFullMatchPatterns(trimmedSearch);
+      return repository.findByNameInIgnoreCaseAndNameNotIn(patterns, excludeNames, pageable);
+    }
+
+    return repository.findByNameContainingIgnoreCaseAndNameNotIn(
+      Pattern.quote(trimmedSearch),
+      excludeNames,
+      pageable
+    );
+  }
+
+  private List<Pattern> createCaseInsensitiveFullMatchPatterns(String commaSeparatedNames) {
+    return Arrays.stream(commaSeparatedNames.split(","))
+      .map(String::trim)
+      .filter(s -> !s.isEmpty())
+      .map(name -> Pattern.compile("^" + Pattern.quote(name) + "$", Pattern.CASE_INSENSITIVE))
+      .toList();
   }
 }

@@ -10,7 +10,7 @@ export class ComparisonToolFilterService {
   private readonly DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
 
   private readonly filtersSignal = signal<ComparisonToolFilter[]>([]);
-  private readonly searchTermSignal = signal<string>('');
+  private readonly searchTermSignal = signal<string | null>(null);
   private readonly significanceThresholdSignal = signal(this.DEFAULT_SIGNIFICANCE_THRESHOLD);
   private readonly significanceThresholdActiveSignal = signal(false);
 

@@ -4,7 +4,7 @@ import { ComparisonToolFilterService } from './comparison-tool-filter.service';
 
 export type ComparisonToolFilterServiceOptions = {
   filters?: ComparisonToolFilter[];
-  searchTerm?: string;
+  searchTerm?: string | null;
   significanceThreshold?: number;
   significanceThresholdActive?: boolean;
 };
@@ -26,7 +26,7 @@ export const provideComparisonToolFilterService = (
           service.setFilters(options.filters);
         }
 
-        if (options.searchTerm !== undefined) {
+        if (options.searchTerm !== undefined && options.searchTerm !== null) {
           service.updateSearchTerm(options.searchTerm);
         }
 

@@ -38,6 +38,8 @@ public class ModelOverviewSearchQueryDto {
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
 
+  private @Nullable String search = null;
+
   public ModelOverviewSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
     return this;
@@ -129,6 +131,26 @@ public class ModelOverviewSearchQueryDto {
     this.itemFilterType = itemFilterType;
   }
 
+  public ModelOverviewSearchQueryDto search(@Nullable String search) {
+    this.search = search;
+    return this;
+  }
+
+  /**
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'. 
+   * @return search
+   */
+  
+  @Schema(name = "search", example = "3xtg-ad,5xfad", description = "Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("search")
+  public @Nullable String getSearch() {
+    return search;
+  }
+
+  public void setSearch(@Nullable String search) {
+    this.search = search;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -141,12 +163,13 @@ public class ModelOverviewSearchQueryDto {
     return Objects.equals(this.pageNumber, modelOverviewSearchQuery.pageNumber) &&
         Objects.equals(this.pageSize, modelOverviewSearchQuery.pageSize) &&
         Objects.equals(this.items, modelOverviewSearchQuery.items) &&
-        Objects.equals(this.itemFilterType, modelOverviewSearchQuery.itemFilterType);
+        Objects.equals(this.itemFilterType, modelOverviewSearchQuery.itemFilterType) &&
+        Objects.equals(this.search, modelOverviewSearchQuery.search);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, items, itemFilterType);
+    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search);
   }
 
   @Override
@@ -157,6 +180,7 @@ public class ModelOverviewSearchQueryDto {
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
+    sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -189,6 +213,7 @@ public class ModelOverviewSearchQueryDto {
       this.instance.setPageSize(value.pageSize);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
+      this.instance.setSearch(value.search);
       return this;
     }
 
@@ -209,6 +234,11 @@ public class ModelOverviewSearchQueryDto {
     
     public ModelOverviewSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
       this.instance.itemFilterType(itemFilterType);
+      return this;
+    }
+    
+    public ModelOverviewSearchQueryDto.Builder search(String search) {
+      this.instance.search(search);
       return this;
     }
     

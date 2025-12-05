@@ -263,6 +263,14 @@ components:
           type: array
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
+        search:
+          description: "Search by model name (case-insensitive partial match) or by\
+            \ comma separated list of model names (case-insensitive full matches).\n\
+            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match).\
+            \ Only applied when \nitemFilterType is 'exclude'.\n"
+          example: '3xtg-ad,5xfad'
+          nullable: true
+          type: string
       type: object
     ModelOverviewLink:
       description: Model Overview Link

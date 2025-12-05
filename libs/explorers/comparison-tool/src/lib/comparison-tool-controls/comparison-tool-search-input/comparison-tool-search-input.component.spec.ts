@@ -11,11 +11,11 @@ import { ComparisonToolSearchInputComponent } from './comparison-tool-search-inp
 const DEBOUNCE_TIME_FOR_TESTING = DEBOUNCE_TIME_MS + 100;
 
 const mockComparisonToolFilterService = {
-  searchTerm: signal(''),
+  searchTerm: signal<string | null>(null),
   updateSearchTerm: jest.fn(),
 };
 
-async function setup(searchTerm = '') {
+async function setup(searchTerm: string | null = null) {
   mockComparisonToolFilterService.searchTerm.set(searchTerm);
 
   const { fixture } = await render(ComparisonToolSearchInputComponent, {
