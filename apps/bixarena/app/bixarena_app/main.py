@@ -232,6 +232,15 @@ def parse_args():
 def build_app():
     """Create the main application"""
 
+    # Set static paths for assets like the logo
+    from pathlib import Path
+
+    assets_dir = Path(__file__).parent / "assets"
+    assets_dir_resolved = assets_dir.resolve()
+    print(f"[static] Setting static path to: {assets_dir_resolved}")
+    print(f"[static] Logo file exists: {(assets_dir / 'bioarena-logo.svg').exists()}")
+    gr.set_static_paths(paths=[str(assets_dir_resolved)])
+
     enable_crisp = os.environ.get("ENABLE_CRISP", "false").lower() == "true"
 
     cleanup_js = """
