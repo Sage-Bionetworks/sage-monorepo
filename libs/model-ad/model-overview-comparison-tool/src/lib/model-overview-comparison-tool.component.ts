@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -27,7 +27,7 @@ import { ModelOverviewComparisonToolService } from './services/model-overview-co
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })
-export class ModelOverviewComparisonToolComponent implements OnInit {
+export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
   private readonly router = inject(Router);
@@ -119,6 +119,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
     });
+  }
+
+  ngOnDestroy() {
+    this.comparisonToolService.disconnect();
   }
 
   getUnpinnedData(pinnedItems: string[], pageNumber: number, pageSize: number) {

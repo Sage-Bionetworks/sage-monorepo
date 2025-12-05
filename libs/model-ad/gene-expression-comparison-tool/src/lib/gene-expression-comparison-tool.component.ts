@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -30,7 +30,7 @@ export type GeneExpression = [];
   templateUrl: './gene-expression-comparison-tool.component.html',
   styleUrls: ['./gene-expression-comparison-tool.component.scss'],
 })
-export class GeneExpressionComparisonToolComponent implements OnInit {
+export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
@@ -121,6 +121,10 @@ export class GeneExpressionComparisonToolComponent implements OnInit {
     });
 
     this.getData();
+  }
+
+  ngOnDestroy() {
+    this.comparisonToolService.disconnect();
   }
 
   getData() {

@@ -115,6 +115,12 @@ export class ComparisonToolService<T> {
     });
   }
 
+  disconnect(): void {
+    if (this.coordinatorService.isActive(this)) {
+      this.coordinatorService.setActive(null);
+    }
+  }
+
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
     const configs = this.configsSignal();
     if (!configs.length) {

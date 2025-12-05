@@ -175,4 +175,27 @@ test.describe('disease correlation', () => {
     const url = page.url();
     expect(url).toContain('%252C');
   });
+
+  test('query parameters are removed from URL when navigating to a non-comparison tool page', async ({
+    page,
+  }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const categories = configs[1]?.dropdowns;
+    expect(categories.length).toBeGreaterThan(1);
+
+    const [firstCorrelation] = await fetchDiseaseCorrelations(page, categories);
+    expect(firstCorrelation).toBeDefined();
+
+    const queryParameters = [
+      getQueryParamFromValues(categories, 'categories'),
+      getQueryParamFromValues([firstCorrelation.composite_id], 'pinned'),
+    ].join('&');
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await expectPinnedParams(page, [firstCorrelation.composite_id]);
+    await expectCategoriesParams(page, categories);
+
+    await page.getByRole('link', { name: 'Home' }).click();
+    await expect(page).toHaveURL(`${baseURL}/`);
+  });
 });
