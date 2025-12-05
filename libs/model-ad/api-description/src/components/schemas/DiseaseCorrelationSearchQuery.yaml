@@ -16,8 +16,11 @@ properties:
     minimum: 1
     maximum: 100
     example: 100
-  category:
-    description: The category selections
+  categories:
+    description: |
+      Array of category values from the dropdown selections.
+      The API will parse these to extract the cluster information.
+      Expected format: [mainCategory, clusterCategory]
     type: array
     items:
       type: string
@@ -41,4 +44,4 @@ properties:
     $ref: ItemFilterTypeQuery.yaml
     nullable: true
 required:
-  - category
+  - categories

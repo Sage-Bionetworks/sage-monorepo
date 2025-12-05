@@ -28,7 +28,9 @@ public class CacheConfiguration {
     cacheManager.setCaffeine(Caffeine.newBuilder().recordStats()); // Enable cache statistics for monitoring
 
     // Define the cache names used by query services
-    cacheManager.setCacheNames(List.of(CacheNames.DISEASE_CORRELATION, CacheNames.MODEL_OVERVIEW));
+    cacheManager.setCacheNames(
+      List.of(CacheNames.DISEASE_CORRELATION, CacheNames.MODEL_OVERVIEW, CacheNames.GENE_EXPRESSION)
+    );
 
     return cacheManager;
   }

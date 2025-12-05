@@ -93,50 +93,25 @@ paths:
         - tag: Disease Correlation
   /comparison-tools/gene-expression:
     get:
-      description: Returns a list of gene expression objects for use in comparison
-        tools.
+      description: Returns a paginated list of gene expression objects for use in
+        comparison tools.
       operationId: getGeneExpressions
       parameters:
-        - description: "An ordered list of categories used to filter the data, where\
-            \ the first value is the category and the second is the subcategory. Pass\
-            \ each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA."
+        - description: The search query used to find and filter gene expressions.
           explode: true
           in: query
-          name: category
-          required: true
-          schema:
-            items:
-              type: string
-            type: array
-          style: form
-        - description: A list of items to filter the data by.
-          explode: true
-          in: query
-          name: item
+          name: geneExpressionSearchQuery
           required: false
           schema:
-            items:
-              type: string
-            type: array
-          style: form
-        - description: The type of filter to apply to the items. Possible values are
-            'include' or 'exclude'.
-          explode: true
-          in: query
-          name: itemFilterType
-          required: false
-          schema:
-            $ref: '#/components/schemas/ItemFilterTypeQuery'
-          style: form
+            $ref: '#/components/schemas/GeneExpressionSearchQuery'
+          style: deepObject
       responses:
         '200':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/GeneExpression'
-                type: array
-          description: A list of gene expression objects
+                $ref: '#/components/schemas/GeneExpressionsPage'
+          description: A paginated response containing gene expression objects
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -171,40 +146,15 @@ components:
       schema:
         $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
       style: deepObject
-    categoryQuery:
-      description: "An ordered list of categories used to filter the data, where the\
-        \ first value is the category and the second is the subcategory. Pass each\
-        \ value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA."
+    geneExpressionSearchQuery:
+      description: The search query used to find and filter gene expressions.
       explode: true
       in: query
-      name: category
-      required: true
-      schema:
-        items:
-          type: string
-        type: array
-      style: form
-    itemQuery:
-      description: A list of items to filter the data by.
-      explode: true
-      in: query
-      name: item
+      name: geneExpressionSearchQuery
       required: false
       schema:
-        items:
-          type: string
-        type: array
-      style: form
-    itemFilterTypeQuery:
-      description: The type of filter to apply to the items. Possible values are 'include'
-        or 'exclude'.
-      explode: true
-      in: query
-      name: itemFilterType
-      required: false
-      schema:
-        $ref: '#/components/schemas/ItemFilterTypeQuery'
-      style: form
+        $ref: '#/components/schemas/GeneExpressionSearchQuery'
+      style: deepObject
   responses:
     BadRequest:
       content:
@@ -542,8 +492,11 @@ components:
           maximum: 100
           minimum: 1
           type: integer
-        category:
-          description: The category selections
+        categories:
+          description: |
+            Array of category values from the dropdown selections.
+            The API will parse these to extract the cluster information.
+            Expected format: [mainCategory, clusterCategory]
           example:
             - CONSENSUS NETWORK MODULES
             - Consensus Cluster A - ECM Organization
@@ -570,7 +523,7 @@ components:
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
       required:
-        - category
+        - categories
       type: object
     Sex:
       description: Sex
@@ -765,6 +718,58 @@ components:
         - diseaseCorrelations
         - page
       type: object
+    GeneExpressionSearchQuery:
+      description: Gene expression search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 100
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        categories:
+          description: |
+            Array of category values from the dropdown selections.
+            The API will parse these to extract the tissue and sex information.
+            Expected format: [mainCategory, tissueCategory, sexCategory]
+          example:
+            - RNA - DIFFERENTIAL EXPRESSION
+            - Tissue - Hemibrain
+            - Sex - Females & Males
+          items:
+            type: string
+          maxItems: 3
+          minItems: 3
+          type: array
+        items:
+          description: |
+            List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
+            where each identifier represents one complete combination of ensembl gene ID and gene name.
+
+            Example: "ENSMUSG00000000001~Gnai3" filters for documents matching that exact gene ID and name.
+            Multiple items can be provided to filter for multiple specific combinations.
+          example:
+            - ENSMUSG00000000001~Gnai3
+            - ENSMUSG00000000028~Cdc45
+            - ENSMUSG00000000037~Scml2
+          items:
+            type: string
+          nullable: true
+          type: array
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+      required:
+        - categories
+      type: object
     SexCohort:
       description: Sex Cohort
       enum:
@@ -789,23 +794,23 @@ components:
         - log2_fc
       type: object
     GeneExpression:
-      description: Disease Correlation
+      description: Gene Expression
       example:
         model_group: model_group
-        gene_symbol: gene_symbol
+        gene_symbol: Gnai3
         sex: Females
-        model_type: model_type
-        tissue: tissue
+        model_type: Familial AD
+        tissue: Hemibrain
         '4 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
-        matched_control: matched_control
+        matched_control: C57BL/6J
+        composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
         ensembl_gene_id: ensembl_gene_id
         name: name
         '12 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
-        _id: _id
         '18 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
@@ -813,14 +818,16 @@ components:
           - biodomains
           - biodomains
       properties:
-        _id:
-          description: Unique identifier for the disease correlation object
+        composite_id:
+          description: Unique identifier for the gene expression object
+          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
           type: string
         ensembl_gene_id:
           description: Ensembl Gene ID
           type: string
         gene_symbol:
           description: Gene Symbol
+          example: Gnai3
           type: string
         biodomains:
           description: List of biodomains associated with the gene
@@ -832,6 +839,7 @@ components:
           type: string
         matched_control:
           description: Matched control for the model
+          example: C57BL/6J
           type: string
         model_group:
           description: Model group
@@ -839,9 +847,11 @@ components:
           type: string
         model_type:
           description: Type of model
+          example: Familial AD
           type: string
         tissue:
           description: Tissue type
+          example: Hemibrain
           type: string
         sex:
           $ref: '#/components/schemas/SexCohort'
@@ -852,8 +862,8 @@ components:
         '18 months':
           $ref: '#/components/schemas/FoldChangeResult'
       required:
-        - _id
         - biodomains
+        - composite_id
         - ensembl_gene_id
         - gene_symbol
         - matched_control
@@ -862,4 +872,70 @@ components:
         - name
         - sex
         - tissue
+      type: object
+    GeneExpressionsPage:
+      description: A paginated response containing gene expression objects and pagination
+        metadata.
+      example:
+        page:
+          number: 0
+          size: 100
+          totalPages: 3
+          hasPrevious: false
+          hasNext: true
+          totalElements: 250
+        geneExpressions:
+          - model_group: model_group
+            gene_symbol: Gnai3
+            sex: Females
+            model_type: Familial AD
+            tissue: Hemibrain
+            '4 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            matched_control: C57BL/6J
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
+            ensembl_gene_id: ensembl_gene_id
+            name: name
+            '12 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            '18 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            biodomains:
+              - biodomains
+              - biodomains
+          - model_group: model_group
+            gene_symbol: Gnai3
+            sex: Females
+            model_type: Familial AD
+            tissue: Hemibrain
+            '4 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            matched_control: C57BL/6J
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
+            ensembl_gene_id: ensembl_gene_id
+            name: name
+            '12 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            '18 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            biodomains:
+              - biodomains
+              - biodomains
+      properties:
+        geneExpressions:
+          description: The list of gene expression objects for the current page
+          items:
+            $ref: '#/components/schemas/GeneExpression'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - geneExpressions
+        - page
       type: object

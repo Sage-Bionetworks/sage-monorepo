@@ -1,0 +1,145 @@
+package org.sagebionetworks.model.ad.api.next.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
+import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
+import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIdentifier;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
+import org.sagebionetworks.model.ad.api.next.model.mapper.GeneExpressionMapper;
+import org.sagebionetworks.model.ad.api.next.model.repository.GeneExpressionRepository;
+import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+@RequiredArgsConstructor
+@Service
+@Slf4j
+@CacheConfig(cacheNames = CacheNames.GENE_EXPRESSION)
+public class GeneExpressionService {
+
+  private final GeneExpressionRepository repository;
+  private final GeneExpressionMapper geneExpressionMapper;
+
+  @Cacheable(
+    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
+    ".buildCacheKey('geneExpression', #itemFilterType, #items, " +
+    "#tissue, #sex, #pageNumber, #pageSize)"
+  )
+  public GeneExpressionsPageDto loadGeneExpressions(
+    String tissue,
+    String sex,
+    List<String> items,
+    ItemFilterTypeQueryDto itemFilterType,
+    int pageNumber,
+    int pageSize
+  ) {
+    ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
+      itemFilterType,
+      ItemFilterTypeQueryDto.INCLUDE
+    );
+    List<String> effectiveItems = Objects.requireNonNullElse(items, List.of());
+
+    List<String> sanitizedItems = ApiHelper.sanitizeItems(effectiveItems);
+    PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+    Page<GeneExpressionDocument> page;
+
+    if (sanitizedItems.isEmpty()) {
+      // No items specified - return all or empty based on filter type
+      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
+        page = Page.empty(pageable);
+      } else {
+        page = repository.findByTissueAndSex(tissue, sex, pageable);
+      }
+    } else {
+      // Parse composite identifiers and build MongoDB query conditions
+      List<GeneExpressionIdentifier> identifiers;
+      try {
+        identifiers = sanitizedItems.stream().map(GeneExpressionIdentifier::parse).toList();
+      } catch (InvalidFilterException e) {
+        log.error(
+          "Failed to parse composite identifiers for tissue '{}' and sex '{}': {}",
+          tissue,
+          sex,
+          e.getMessage()
+        );
+        throw e;
+      }
+
+      List<Map<String, Object>> compositeConditions = buildCompositeConditions(identifiers);
+
+      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
+        page = repository.findByTissueAndSexAndCompositeIdentifiers(
+          tissue,
+          sex,
+          compositeConditions,
+          pageable
+        );
+      } else {
+        page = repository.findByTissueAndSexExcludingCompositeIdentifiers(
+          tissue,
+          sex,
+          compositeConditions,
+          pageable
+        );
+      }
+    }
+
+    List<GeneExpressionDto> geneExpressions = page
+      .getContent()
+      .stream()
+      .map(geneExpressionMapper::toDto)
+      .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
+
+    PageMetadataDto pageMetadata = PageMetadataDto.builder()
+      .number(page.getNumber())
+      .size(page.getSize())
+      .totalElements(page.getTotalElements())
+      .totalPages(page.getTotalPages())
+      .hasNext(page.hasNext())
+      .hasPrevious(page.hasPrevious())
+      .build();
+
+    return GeneExpressionsPageDto.builder()
+      .geneExpressions(geneExpressions)
+      .page(pageMetadata)
+      .build();
+  }
+
+  /**
+   * Builds MongoDB query conditions for composite identifiers.
+   * Each condition represents a single ensembl_gene_id-name combination wrapped in $and.
+   *
+   * @param identifiers list of parsed composite identifiers
+   * @return list of MongoDB conditions for $or or $nor queries
+   */
+  private List<Map<String, Object>> buildCompositeConditions(
+    List<GeneExpressionIdentifier> identifiers
+  ) {
+    List<Map<String, Object>> conditions = new ArrayList<>();
+
+    for (GeneExpressionIdentifier identifier : identifiers) {
+      // Each condition must match both fields (ensembl_gene_id AND name)
+      List<Map<String, Object>> andConditions = new ArrayList<>();
+      andConditions.add(Map.of("ensembl_gene_id", identifier.getEnsemblGeneId()));
+      andConditions.add(Map.of("name", identifier.getName()));
+
+      conditions.add(Map.of("$and", andConditions));
+    }
+
+    return conditions;
+  }
+}

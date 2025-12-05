@@ -1,15 +1,17 @@
 type: object
-description: Disease Correlation
+description: Gene Expression
 properties:
-  _id:
+  composite_id:
     type: string
-    description: Unique identifier for the disease correlation object
+    description: Unique identifier for the gene expression object
+    example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
   ensembl_gene_id:
     type: string
     description: Ensembl Gene ID
   gene_symbol:
     type: string
     description: Gene Symbol
+    example: Gnai3
   biodomains:
     type: array
     description: List of biodomains associated with the gene
@@ -21,6 +23,7 @@ properties:
   matched_control:
     type: string
     description: Matched control for the model
+    example: C57BL/6J
   model_group:
     type: string
     description: Model group
@@ -28,9 +31,11 @@ properties:
   model_type:
     type: string
     description: Type of model
+    example: Familial AD
   tissue:
     type: string
     description: Tissue type
+    example: Hemibrain
   sex:
     $ref: './SexCohort.yaml'
   4 months:
@@ -40,7 +45,7 @@ properties:
   18 months:
     $ref: './FoldChangeResult.yaml'
 required:
-  - _id
+  - composite_id
   - ensembl_gene_id
   - gene_symbol
   - biodomains

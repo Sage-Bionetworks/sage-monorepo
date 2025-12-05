@@ -6,8 +6,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,12 +43,10 @@ public interface GeneExpressionApi {
 
     /**
      * GET /comparison-tools/gene-expression : Get gene expression comparison data
-     * Returns a list of gene expression objects for use in comparison tools.
+     * Returns a paginated list of gene expression objects for use in comparison tools.
      *
-     * @param category An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the &#39;category&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA. (required)
-     * @param item A list of items to filter the data by. (optional)
-     * @param itemFilterType The type of filter to apply to the items. Possible values are &#39;include&#39; or &#39;exclude&#39;. (optional, default to include)
-     * @return A list of gene expression objects (status code 200)
+     * @param geneExpressionSearchQuery The search query used to find and filter gene expressions. (optional)
+     * @return A paginated response containing gene expression objects (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
@@ -56,12 +54,12 @@ public interface GeneExpressionApi {
     @Operation(
         operationId = "getGeneExpressions",
         summary = "Get gene expression comparison data",
-        description = "Returns a list of gene expression objects for use in comparison tools.",
+        description = "Returns a paginated list of gene expression objects for use in comparison tools.",
         tags = { "Gene Expression" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "A list of gene expression objects", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionDto.class))),
-                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionDto.class)))
+            @ApiResponse(responseCode = "200", description = "A paginated response containing gene expression objects", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = GeneExpressionsPageDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = GeneExpressionsPageDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -83,12 +81,10 @@ public interface GeneExpressionApi {
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<List<GeneExpressionDto>> getGeneExpressions(
-        @NotNull @Parameter(name = "category", description = "An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA.", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "category", required = true) List<String> category,
-        @Parameter(name = "item", description = "A list of items to filter the data by.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "item", required = false) @Nullable List<String> item,
-        @Parameter(name = "itemFilterType", description = "The type of filter to apply to the items. Possible values are 'include' or 'exclude'.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "itemFilterType", required = false, defaultValue = "include") ItemFilterTypeQueryDto itemFilterType
+    default ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
+        @Parameter(name = "geneExpressionSearchQuery", description = "The search query used to find and filter gene expressions.", in = ParameterIn.QUERY) @Valid @Nullable GeneExpressionSearchQueryDto geneExpressionSearchQuery
     ) {
-        return getDelegate().getGeneExpressions(category, item, itemFilterType);
+        return getDelegate().getGeneExpressions(geneExpressionSearchQuery);
     }
 
 }

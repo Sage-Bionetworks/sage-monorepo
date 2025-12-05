@@ -51,16 +51,16 @@ class DiseaseCorrelationApiControllerWebTest {
   void shouldReturnBadRequestProblemWhenCategoryHasEmptySubcategory() throws Exception {
     when(delegate.getDiseaseCorrelations(any())).thenThrow(
       new InvalidCategoryException(
-        "Query parameter category must repeat twice (e.g. ?category=CONSENSUS NETWORK MODULES" +
-        "&category=subcategory) and each value must be a string"
+        "Query parameter categories must repeat twice (e.g. ?categories=CONSENSUS NETWORK MODULES" +
+        "&categories=subcategory) and each value must be a string"
       )
     );
 
     mockMvc
       .perform(
         get("/v1/comparison-tools/disease-correlation")
-          .param("category", "CONSENSUS NETWORK MODULES")
-          .param("category", "")
+          .param("categories", "CONSENSUS NETWORK MODULES")
+          .param("categories", "")
       )
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -68,8 +68,8 @@ class DiseaseCorrelationApiControllerWebTest {
       .andExpect(jsonPath("$.status").value(400))
       .andExpect(
         jsonPath("$.detail").value(
-          "Query parameter category must repeat twice (e.g. ?category=CONSENSUS NETWORK MODULES" +
-          "&category=subcategory) and each value must be a string"
+          "Query parameter categories must repeat twice (e.g. ?categories=CONSENSUS NETWORK MODULES" +
+          "&categories=subcategory) and each value must be a string"
         )
       )
       .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));
@@ -85,8 +85,8 @@ class DiseaseCorrelationApiControllerWebTest {
     mockMvc
       .perform(
         get("/v1/comparison-tools/disease-correlation")
-          .param("category", "OTHER")
-          .param("category", "Cluster A")
+          .param("categories", "OTHER")
+          .param("categories", "Cluster A")
       )
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -110,8 +110,8 @@ class DiseaseCorrelationApiControllerWebTest {
     mockMvc
       .perform(
         get("/v1/comparison-tools/disease-correlation")
-          .param("category", "CONSENSUS NETWORK MODULES")
-          .param("category", "Cluster A")
+          .param("categories", "CONSENSUS NETWORK MODULES")
+          .param("categories", "Cluster A")
           .param("item", "not-an-id")
       )
       .andExpect(status().isBadRequest())
@@ -134,8 +134,8 @@ class DiseaseCorrelationApiControllerWebTest {
     mockMvc
       .perform(
         get("/v1/comparison-tools/disease-correlation")
-          .param("category", "CONSENSUS NETWORK MODULES")
-          .param("category", "Cluster A")
+          .param("categories", "CONSENSUS NETWORK MODULES")
+          .param("categories", "Cluster A")
           .param("item", correlationId)
       )
       .andExpect(status().isNotFound())
@@ -160,8 +160,8 @@ class DiseaseCorrelationApiControllerWebTest {
     mockMvc
       .perform(
         get("/v1/comparison-tools/disease-correlation")
-          .param("category", "CONSENSUS NETWORK MODULES")
-          .param("category", cluster)
+          .param("categories", "CONSENSUS NETWORK MODULES")
+          .param("categories", cluster)
           .param("item", correlationId)
       )
       .andExpect(status().isNotFound())

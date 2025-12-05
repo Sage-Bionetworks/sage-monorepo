@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -16,13 +16,14 @@ import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
+  GeneExpressionSearchQuery,
+  GeneExpressionService,
+  GeneExpressionsPage,
+  ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { catchError, of, shareReplay } from 'rxjs';
 import { GeneExpressionComparisonToolService } from './services/gene-expression-comparison-tool.service';
-
-// TODO: Replace with actual gene expression data model (MG-238)
-export type GeneExpression = [];
 
 @Component({
   selector: 'model-ad-gene-expression-comparison-tool',
@@ -36,10 +37,15 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly geneExpressionService = inject(GeneExpressionService);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
 
-  isLoading = signal(true);
+  pinnedItems = this.comparisonToolService.pinnedItems;
+  isInitialized = this.comparisonToolService.isInitialized;
+
+  currentPageNumber = this.comparisonToolService.pageNumber;
+  currentPageSize = this.comparisonToolService.pageSize;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
@@ -93,18 +99,49 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     ),
   ];
 
+  // TODO MG-485 - Update overview panes content and images
   viewConfig: Partial<ComparisonToolViewConfig> = {
     selectorsWikiParams: this.selectorsWikiParams,
     headerTitle: ComparisonToolPage.GeneExpression,
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
+    viewDetailsTooltip: 'Open gene details page',
+    viewDetailsClick: (id: string, label: string) => {
+      const url = this.router.serializeUrl(
+        this.router.createUrlTree([ROUTE_PATHS.GENE_EXPRESSION, label]),
+      );
+      window.open(url, '_blank');
+    },
     legendPanelConfig: this.legendPanelConfig,
     visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
+    rowIdDataKey: 'composite_id',
   };
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
+
+  private loadData(
+    selection: string[],
+    pinnedItems: string[],
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    this.getPinnedData(selection, pinnedItems);
+    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize);
+  }
+
+  readonly onUpdateEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const selection = this.comparisonToolService.dropdownSelection();
+      if (!selection.length) {
+        return;
+      }
+
+      const pinnedItems = Array.from(this.pinnedItems());
+      this.loadData(selection, pinnedItems, this.currentPageNumber(), this.currentPageSize());
+    }
+  });
 
   ngOnInit() {
     if (this.platformService.isServer) {
@@ -115,19 +152,61 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
     });
-
-    this.config$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.comparisonToolService.totalResultsCount.set(50000);
-    });
-
-    this.getData();
   }
 
   ngOnDestroy() {
     this.comparisonToolService.disconnect();
   }
 
-  getData() {
-    this.isLoading.set(false);
+  getUnpinnedData(
+    selection: string[],
+    pinnedItems: string[],
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    const query: GeneExpressionSearchQuery = {
+      categories: selection,
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      pageNumber,
+      pageSize,
+    };
+
+    this.geneExpressionService
+      .getGeneExpressions(query)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: GeneExpressionsPage) => {
+          const data = response.geneExpressions;
+          this.comparisonToolService.setUnpinnedData(data);
+          this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
+        },
+        error: (error) => {
+          console.error('Error in getUnpinnedData:', error);
+          throw new Error('Error fetching gene expression data:', { cause: error });
+        },
+      });
+  }
+
+  getPinnedData(selection: string[], pinnedItems: string[]) {
+    const query: GeneExpressionSearchQuery = {
+      categories: selection,
+      items: pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Include,
+    };
+
+    this.geneExpressionService
+      .getGeneExpressions(query)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: GeneExpressionsPage) => {
+          const data = response.geneExpressions;
+          this.comparisonToolService.setPinnedData(data);
+          this.comparisonToolService.pinnedResultsCount.set(data.length);
+        },
+        error: (error) => {
+          throw new Error('Error fetching gene expression data:', { cause: error });
+        },
+      });
   }
 }
