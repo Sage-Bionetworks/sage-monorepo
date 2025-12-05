@@ -66,8 +66,9 @@ export class ComparisonToolUrlService {
     value: string[] | null | undefined,
   ): void {
     if (value && value.length > 0) {
-      // Angular Router will handle URL encoding
-      params[key] = value.join(',');
+      // Encode each value to preserve commas within individual values
+      // Then join with commas as the delimiter
+      params[key] = value.map((v) => encodeURIComponent(v)).join(',');
     } else if (value !== undefined) {
       params[key] = null;
     }

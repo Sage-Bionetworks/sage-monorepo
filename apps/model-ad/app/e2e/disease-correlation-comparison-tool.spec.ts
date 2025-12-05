@@ -154,26 +154,24 @@ test.describe('disease correlation', () => {
     await expectCategories(page, defaultCategories);
   });
 
-  test('categories with special characters are URL encoded and decoded correctly', async ({
-    page,
-  }) => {
+  test('categories with commas are URL encoded and decoded correctly', async ({ page }) => {
     const configs = await fetchComparisonToolConfig(page, CT_PAGE);
-    const categoriesWithSpaces = configs[0]?.dropdowns;
-    expect(categoriesWithSpaces.some((cat) => cat.includes(' '))).toBe(true);
+    const categoriesWithCommas =
+      configs.find((config) => config.dropdowns.some((cat) => cat.includes(',')))?.dropdowns || [];
+    expect(categoriesWithCommas.some((cat) => cat.includes(','))).toBe(true);
 
     await navigateToComparison(
       page,
       CT_PAGE,
       true,
       'url',
-      getQueryParamFromValues(categoriesWithSpaces, 'categories'),
+      getQueryParamFromValues(categoriesWithCommas, 'categories'),
     );
 
-    await expectCategoriesParams(page, categoriesWithSpaces);
-    await expectCategories(page, categoriesWithSpaces);
+    await expectCategoriesParams(page, categoriesWithCommas);
+    await expectCategories(page, categoriesWithCommas);
 
     const url = page.url();
-    expect(url).toContain('%20');
-    expect(url).not.toContain('%2520');
+    expect(url).toContain('%252C');
   });
 });

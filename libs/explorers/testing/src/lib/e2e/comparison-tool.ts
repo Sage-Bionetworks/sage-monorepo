@@ -1,7 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test';
 
 export const getQueryParamFromValues = (values: string[], key: string): string => {
-  return `${key}=${values.map((value) => encodeURIComponent(value)).join(',')}`;
+  // Query parameter values are encoded once by CT URL service and again by Angular router
+  return `${key}=${values.map((value) => encodeURIComponent(encodeURIComponent(value))).join(',')}`;
 };
 
 const getQueryParamValues = (url: string, key: string): string[] => {
