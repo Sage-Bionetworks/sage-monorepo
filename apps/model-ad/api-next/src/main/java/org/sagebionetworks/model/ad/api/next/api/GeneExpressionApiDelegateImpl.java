@@ -22,41 +22,13 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
 
   @Override
   public ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
-    GeneExpressionSearchQueryDto geneExpressionSearchQuery
+    GeneExpressionSearchQueryDto query
   ) {
-    // Extract query parameters with defaults
-    List<String> categories = geneExpressionSearchQuery != null
-      ? geneExpressionSearchQuery.getCategories()
-      : null;
-    List<String> items = geneExpressionSearchQuery != null &&
-      geneExpressionSearchQuery.getItems() != null
-      ? geneExpressionSearchQuery.getItems()
-      : List.of();
-    ItemFilterTypeQueryDto filterType = geneExpressionSearchQuery != null &&
-      geneExpressionSearchQuery.getItemFilterType() != null
-      ? geneExpressionSearchQuery.getItemFilterType()
-      : ItemFilterTypeQueryDto.INCLUDE;
-    Integer pageNumber = geneExpressionSearchQuery != null &&
-      geneExpressionSearchQuery.getPageNumber() != null
-      ? geneExpressionSearchQuery.getPageNumber()
-      : 0;
-    Integer pageSize = geneExpressionSearchQuery != null &&
-      geneExpressionSearchQuery.getPageSize() != null
-      ? geneExpressionSearchQuery.getPageSize()
-      : 10;
-
-    String[] tissueAndSex = extractTissueAndSex(categories);
+    String[] tissueAndSex = extractTissueAndSex(query.getCategories());
     String tissue = tissueAndSex[0];
     String sex = tissueAndSex[1];
 
-    GeneExpressionsPageDto results = geneExpressionService.loadGeneExpressions(
-      tissue,
-      sex,
-      items,
-      filterType,
-      pageNumber,
-      pageSize
-    );
+    GeneExpressionsPageDto results = geneExpressionService.loadGeneExpressions(query, tissue, sex);
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))

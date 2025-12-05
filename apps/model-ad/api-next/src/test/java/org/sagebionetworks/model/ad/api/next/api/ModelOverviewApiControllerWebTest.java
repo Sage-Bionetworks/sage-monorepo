@@ -4,21 +4,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
-import org.sagebionetworks.model.ad.api.next.exception.ModelOverviewNotFoundException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 class ModelOverviewApiControllerWebTest {
 
@@ -50,16 +48,14 @@ class ModelOverviewApiControllerWebTest {
     throws Exception {
     String modelName = "3xTg-AD";
     when(delegate.getModelOverviews(any())).thenThrow(
-      new ModelOverviewNotFoundException(modelName)
+      new ResponseStatusException(
+        HttpStatus.NOT_FOUND,
+        "Model overview not found with name: " + modelName
+      )
     );
 
     mockMvc
       .perform(get("/v1/comparison-tools/model-overview").param("item", modelName))
-      .andExpect(status().isNotFound())
-      .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-      .andExpect(jsonPath("$.title").value("Entity not found"))
-      .andExpect(jsonPath("$.status").value(404))
-      .andExpect(jsonPath("$.detail").value("Model overview not found with name: " + modelName))
-      .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/model-overview"));
+      .andExpect(status().isNotFound());
   }
 }

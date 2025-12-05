@@ -25,7 +25,8 @@ public class CacheConfiguration {
     CaffeineCacheManager cacheManager = new CaffeineCacheManager();
 
     // Configure cache
-    cacheManager.setCaffeine(Caffeine.newBuilder().recordStats()); // Enable cache statistics for monitoring
+    // Enable cache statistics for monitoring
+    cacheManager.setCaffeine(Caffeine.newBuilder().recordStats());
 
     // Define the cache names used by query services
     cacheManager.setCacheNames(

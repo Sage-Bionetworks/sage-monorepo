@@ -30,12 +30,12 @@ public interface GeneExpressionRepository
   Page<GeneExpressionDocument> findByTissueAndSex(String tissue, String sex, Pageable pageable);
 
   /**
-   * Find gene expressions matching specific composite identifiers (ensembl_gene_id~name~tissue~sex combinations).
+   * Find gene expressions matching specific composite identifiers (ensembl_gene_id~name combinations).
    * Uses a custom MongoDB query to match exact combinations using $or with $and conditions.
    *
    * @param tissue the tissue type
    * @param sex the sex cohort
-   * @param compositeConditions array of composite conditions, each containing ensembl_gene_id, name, tissue, and sex
+   * @param compositeConditions array of composite conditions, each containing ensembl_gene_id and name
    * @param pageable pagination information
    * @return page of matching gene expression documents
    */
@@ -48,12 +48,12 @@ public interface GeneExpressionRepository
   );
 
   /**
-   * Find gene expressions excluding specific composite identifiers (ensembl_gene_id~name~tissue~sex combinations).
+   * Find gene expressions excluding specific composite identifiers (ensembl_gene_id~name combinations).
    * Uses a custom MongoDB query to exclude exact combinations using $nor with $and conditions.
    *
    * @param tissue the tissue type
    * @param sex the sex cohort
-   * @param compositeConditions array of composite conditions, each containing ensembl_gene_id, name, tissue, and sex
+   * @param compositeConditions array of composite conditions, each containing ensembl_gene_id and name
    * @param pageable pagination information
    * @return page of gene expression documents excluding the specified combinations
    */

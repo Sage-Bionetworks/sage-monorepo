@@ -4,7 +4,7 @@ properties:
   composite_id:
     type: string
     description: Unique identifier for the gene expression object
-    example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
+    example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
   ensembl_gene_id:
     type: string
     description: Ensembl Gene ID

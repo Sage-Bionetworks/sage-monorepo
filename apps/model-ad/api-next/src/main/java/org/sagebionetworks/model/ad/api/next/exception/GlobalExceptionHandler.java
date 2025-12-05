@@ -19,42 +19,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-  @ExceptionHandler(ModelOverviewNotFoundException.class)
-  protected ResponseEntity<BasicErrorDto> handleModelOverviewNotFound(
-    ModelOverviewNotFoundException ex,
-    NativeWebRequest request,
-    Locale locale
-  ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-      .body(
-        BasicErrorDto.builder()
-          .title(ErrorConstants.ENTITY_NOT_FOUND.getTitle())
-          .status(HttpStatus.NOT_FOUND.value())
-          .detail(ex.getMessage())
-          .instance(resolveInstance(request))
-          .build()
-      );
-  }
-
-  @ExceptionHandler(DiseaseCorrelationNotFoundException.class)
-  protected ResponseEntity<BasicErrorDto> handleDiseaseCorrelationNotFound(
-    DiseaseCorrelationNotFoundException ex,
-    NativeWebRequest request,
-    Locale locale
-  ) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-      .body(
-        BasicErrorDto.builder()
-          .title(ErrorConstants.ENTITY_NOT_FOUND.getTitle())
-          .status(HttpStatus.NOT_FOUND.value())
-          .detail(ex.getMessage())
-          .instance(resolveInstance(request))
-          .build()
-      );
-  }
-
   @ExceptionHandler(InvalidObjectIdException.class)
   protected ResponseEntity<BasicErrorDto> handleInvalidObjectId(
     InvalidObjectIdException ex,
