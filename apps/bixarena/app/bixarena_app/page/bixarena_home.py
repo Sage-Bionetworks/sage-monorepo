@@ -61,7 +61,7 @@ def create_intro_section():
             gr.HTML(f"""
             <div style="display: flex; align-items: center; justify-content: center; gap: 3rem; padding: 2.5rem 1.5rem; flex-wrap: wrap;">
                 <!-- Text Content -->
-                <div style="flex: 1; min-width: 300px; max-width: 600px;">
+                <div style="flex: 1; min-width: 300px; max-width: 620px;">
                     <p style="font-size: var(--text-xl); margin-bottom: 1.5rem; color: var(--body-text-color-subdued);">
                         Welcome to BioArena
                     </p>
@@ -71,8 +71,7 @@ def create_intro_section():
 
                     <p style="font-size: var(--text-xl); line-height: 1.75; color: var(--body-text-color-subdued);">
                         BioArena crowdsources the benchmarking of AI models to unlock the
-                        next breakthrough in biomedicine, inviting a global community of
-                        digital contributors.
+                        next breakthrough in biomedicine, inviting a global community of researchers, clinicians, and biomedical enthusiasts.
                     </p>
                 </div>
 
