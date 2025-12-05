@@ -97,7 +97,7 @@ public class ModelOverviewService {
     }
 
     return repository.findByNameContainingIgnoreCaseAndNameNotIn(
-      trimmedSearch,
+      Pattern.quote(trimmedSearch),
       excludeNames,
       pageable
     );

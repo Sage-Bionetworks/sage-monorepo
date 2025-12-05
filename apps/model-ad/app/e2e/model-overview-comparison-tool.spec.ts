@@ -185,4 +185,17 @@ test.describe('model overview', () => {
     await expectPinnedRows(page, ['3xTg-AD', 'APOE4']);
     await expectPinnedParams(page, ['3xTg-AD', 'APOE4']);
   });
+
+  test('filterbox search partial case-insensitive matches with special characters', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+
+    await searchViaFilterbox(page, '(uc');
+
+    const unpinnedTable = getUnpinnedTable(page);
+    const row = getRowByName(unpinnedTable, page, '5xFAD (UCI)');
+    await expect(row).toBeVisible();
+    await expect(page.getByText('1-1 of 1')).toBeVisible();
+  });
 });
