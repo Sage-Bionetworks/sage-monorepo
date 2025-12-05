@@ -403,24 +403,28 @@ def build_leaderboard_page():
             gr.HTML(
                 """
             <div style="
-                margin-top: 24px;
-                padding: 16px 20px;
-                background: var(--panel-background-fill);
-                border: 1px solid var(--border-color-primary);
-                border-radius: 8px;
+                padding: 16px 24px;
+                max-width: 850px;
+                margin: 0 auto;
             ">
-                <p style="
-                    margin: 0;
-                    font-size: var(--text-md);
-                    color: var(--body-text-color-subdued);
-                    line-height: 1.6;
-                ">
-                    <strong style="color: var(--body-text-color);">Note: </strong>
-                    Models are currently ranked by Score only. As more evaluations are collected,
-                    we will transition to significance-aware ranks based on bootstrapped
-                    confidence intervals, which account for statistical uncertainty and may
-                    result in tied ranks.
-                </p>
+                <div style="text-align: center;">
+                    <h3 style="
+                        color: var(--accent-teal);
+                        font-weight: 600;
+                        margin-bottom: 8px;
+                        margin-top: 0;
+                    ">How Rankings Are Determined</h3>
+                    <p style="
+                        color: var(--body-text-color-subdued);
+                        line-height: 1.6;
+                        margin: 0;
+                    ">
+                        Models are currently ranked by Score (Bradley–Terry rating) only. As more evaluations are collected,
+                        we will transition to significance-aware ranks based on bootstrapped
+                        confidence intervals, which account for statistical uncertainty and may
+                        result in tied ranks.
+                    </p>
+                </div>
             </div>
             """
             )
