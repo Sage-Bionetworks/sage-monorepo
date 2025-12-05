@@ -97,6 +97,10 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     selectorsWikiParams: this.selectorsWikiParams,
     headerTitle: ComparisonToolPage.GeneExpression,
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
+    viewDetailsTooltip: '',
+    viewDetailsClick: () => {
+      // TODO add logic to display details pages MG-588
+    },
     legendPanelConfig: this.legendPanelConfig,
     visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
