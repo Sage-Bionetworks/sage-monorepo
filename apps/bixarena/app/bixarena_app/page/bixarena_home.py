@@ -351,7 +351,7 @@ def build_cta_section():
                     cta_helper_msg = gr.HTML(
                         """
                         <div style="text-align: center; padding: 10px 1.5rem 0 1.5rem;">
-                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: var(--text-sm); opacity: 0.6;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: var(--text-md); opacity: 0.6;">
                                 <div style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--color-accent); animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; opacity: 1;"></div>
                                 <span>Sign in with your Synapse account to Start a Battle</span>
                             </div>
