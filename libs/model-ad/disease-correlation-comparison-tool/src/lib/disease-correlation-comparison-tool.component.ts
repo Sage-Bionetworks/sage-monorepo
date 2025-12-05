@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, effect, inject } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
@@ -31,7 +31,7 @@ import { DiseaseCorrelationComparisonToolService } from './services/disease-corr
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
 })
-export class DiseaseCorrelationComparisonToolComponent implements OnInit {
+export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
@@ -147,6 +147,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit {
       config$: this.config$,
       queryParams$: this.comparisonToolUrlService.params$,
     });
+  }
+
+  ngOnDestroy() {
+    this.comparisonToolService.disconnect();
   }
 
   getUnpinnedData(

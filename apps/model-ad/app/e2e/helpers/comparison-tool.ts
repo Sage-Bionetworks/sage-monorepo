@@ -1,8 +1,17 @@
 import { Page, expect, test } from '@playwright/test';
 import { getUnpinnedTable } from '@sagebionetworks/explorers/testing/e2e';
-import { DiseaseCorrelation, ModelOverview } from '@sagebionetworks/model-ad/api-client';
+import {
+  ComparisonToolConfig,
+  DiseaseCorrelation,
+  ModelOverview,
+  ModelOverviewsPage,
+} from '@sagebionetworks/model-ad/api-client';
 import { baseURL } from '../../playwright.config';
-import { COMPARISON_TOOL_API_PATHS, COMPARISON_TOOL_PATHS } from '../constants';
+import {
+  COMPARISON_TOOL_API_PATHS,
+  COMPARISON_TOOL_CONFIG_PATH,
+  COMPARISON_TOOL_PATHS,
+} from '../constants';
 
 export const closeVisualizationOverviewDialog = async (page: Page) => {
   await test.step('close visualization overview dialog', async () => {
@@ -39,30 +48,50 @@ export const navigateToComparison = async (
   await expect(getUnpinnedTable(page).locator('tbody tr').first()).toBeVisible();
 };
 
-export const fetchModelOverviews = async (page: Page): Promise<ModelOverview[]> => {
-  const response = await page.request.get(
-    `${baseURL}/api/v1/${COMPARISON_TOOL_API_PATHS['Model Overview']}`,
-    {
-      params: {
-        itemFilterType: 'exclude',
-      },
-    },
-  );
+export const fetchComparisonToolData = async <T>(
+  page: Page,
+  name: string,
+  categories: string[] = [],
+): Promise<T> => {
+  const params = new URLSearchParams();
+  params.append('itemFilterType', 'exclude');
+  for (const category of categories) {
+    params.append('category', category);
+  }
+
+  const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_API_PATHS[name]}`, {
+    params,
+  });
   expect(response.ok()).toBeTruthy();
-  const data = (await response.json()) as { modelOverviews: ModelOverview[] };
+  const data = (await response.json()) as T;
+  return data;
+};
+
+export const fetchModelOverviews = async (page: Page): Promise<ModelOverview[]> => {
+  const data = await fetchComparisonToolData<ModelOverviewsPage>(page, 'Model Overview');
   return data.modelOverviews;
 };
 
-export const fetchDiseaseCorrelations = async (page: Page): Promise<DiseaseCorrelation[]> => {
-  const params = new URLSearchParams();
-  params.append('itemFilterType', 'exclude');
-  params.append('category', 'CONSENSUS NETWORK MODULES');
-  params.append('category', 'Consensus Cluster A - ECM Organization');
-
-  const response = await page.request.get(
-    `${baseURL}/api/v1/${COMPARISON_TOOL_API_PATHS['Disease Correlation']}?${params.toString()}`,
+export const fetchDiseaseCorrelations = async (
+  page: Page,
+  categories = ['CONSENSUS NETWORK MODULES', 'Consensus Cluster A - ECM Organization'],
+): Promise<DiseaseCorrelation[]> => {
+  const data = await fetchComparisonToolData<{ diseaseCorrelations: DiseaseCorrelation[] }>(
+    page,
+    'Disease Correlation',
+    categories,
   );
-  expect(response.ok()).toBeTruthy();
-  const data = (await response.json()) as { diseaseCorrelations: DiseaseCorrelation[] };
   return data.diseaseCorrelations;
+};
+
+export const fetchComparisonToolConfig = async (
+  page: Page,
+  name: string,
+): Promise<ComparisonToolConfig[]> => {
+  const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_CONFIG_PATH}`, {
+    params: { page: name },
+  });
+  expect(response.ok()).toBeTruthy();
+  const data = (await response.json()) as ComparisonToolConfig[];
+  return data;
 };

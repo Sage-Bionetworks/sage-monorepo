@@ -314,5 +314,160 @@ describe('ComparisonToolService', () => {
         expect(getLastNavigateCall()?.[1]?.queryParams?.pinned).toBeNull();
       }));
     });
+
+    describe('categories sync', () => {
+      const mockConfigsWithDropdowns: ComparisonToolConfig[] = [
+        {
+          ...mockComparisonToolDataConfig[0],
+          dropdowns: ['Category A', 'Option 1'],
+        },
+        {
+          ...mockComparisonToolDataConfig[0],
+          dropdowns: ['Category A', 'Option 2'],
+        },
+        {
+          ...mockComparisonToolDataConfig[0],
+          dropdowns: ['Category B', 'Option 1'],
+        },
+      ];
+
+      it('should sync dropdown selection to URL as categories', fakeAsync(() => {
+        connectService(mockConfigsWithDropdowns, { selection: ['Category A', 'Option 1'] });
+        flushInitialUrlSync();
+
+        const lastCall = getLastNavigateCall();
+        expect(lastCall?.[1]?.queryParams?.categories).toEqual('Category%20A,Option%201');
+      }));
+
+      it('should restore categories from URL on initialization', fakeAsync(() => {
+        connectService(mockConfigsWithDropdowns, {
+          initialParams: { categories: ['Category B', 'Option 1'] },
+        });
+        flushInitialUrlSync();
+
+        expect(service.dropdownSelection()).toEqual(['Category B', 'Option 1']);
+      }));
+
+      it('should sync when changing dropdown selection', fakeAsync(() => {
+        connectService(mockConfigsWithDropdowns, { selection: ['Category A', 'Option 1'] });
+        flushInitialUrlSync();
+
+        service.setDropdownSelection(['Category A', 'Option 2']);
+        tick();
+
+        const lastCall = getLastNavigateCall();
+        expect(lastCall?.[1]?.queryParams?.categories).toEqual('Category%20A,Option%202');
+      }));
+
+      it('should handle categories with special characters', fakeAsync(() => {
+        const configsWithSpecialChars: ComparisonToolConfig[] = [
+          {
+            ...mockComparisonToolDataConfig[0],
+            dropdowns: ['Category A', 'Option 1, with comma'],
+          },
+          {
+            ...mockComparisonToolDataConfig[0],
+            dropdowns: ['Category B', 'Option 2+plus'],
+          },
+        ];
+
+        connectService(configsWithSpecialChars, {
+          selection: ['Category A', 'Option 1, with comma'],
+        });
+        flushInitialUrlSync();
+
+        const lastCall = getLastNavigateCall();
+        expect(lastCall?.[1]?.queryParams?.categories).toContain('Option%201%2C%20with%20comma');
+      }));
+
+      it('should prioritize URL categories over initialSelection', fakeAsync(() => {
+        connectService(mockConfigsWithDropdowns, {
+          selection: ['Category A', 'Option 1'],
+          initialParams: { categories: ['Category B', 'Option 1'] },
+        });
+        flushInitialUrlSync();
+
+        expect(service.dropdownSelection()).toEqual(['Category B', 'Option 1']);
+      }));
+
+      it('should use initialSelection when no URL categories present', fakeAsync(() => {
+        connectService(mockConfigsWithDropdowns, {
+          selection: ['Category A', 'Option 2'],
+        });
+        flushInitialUrlSync();
+
+        expect(service.dropdownSelection()).toEqual(['Category A', 'Option 2']);
+      }));
+
+      it('should fall back to default when categories are invalid', fakeAsync(() => {
+        connectService(mockConfigsWithDropdowns, {
+          initialParams: { categories: ['Invalid', 'Category'] },
+        });
+        flushInitialUrlSync();
+
+        expect(service.dropdownSelection()).toEqual(['Category A', 'Option 1']);
+      }));
+    });
+
+    describe('combined pinned items and categories', () => {
+      const mockConfigsWithDropdowns: ComparisonToolConfig[] = [
+        {
+          ...mockComparisonToolDataConfig[0],
+          dropdowns: ['Category A', 'Option 1'],
+        },
+        {
+          ...mockComparisonToolDataConfig[0],
+          dropdowns: ['Category A', 'Option 2'],
+        },
+      ];
+
+      it('should sync both categories and pinned items', fakeAsync(() => {
+        connectService(mockConfigsWithDropdowns, { selection: ['Category A', 'Option 1'] });
+        flushInitialUrlSync();
+
+        service.pinItem('id1');
+        tick();
+
+        const lastCall = getLastNavigateCall();
+        expect(lastCall?.[1]?.queryParams?.categories).toEqual('Category%20A,Option%201');
+        expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id1');
+      }));
+
+      it('should restore both from URL', fakeAsync(() => {
+        connectService(mockConfigsWithDropdowns, {
+          initialParams: {
+            categories: ['Category A', 'Option 2'],
+            pinnedItems: ['id1', 'id2'],
+          },
+        });
+        flushInitialUrlSync();
+
+        expect(service.dropdownSelection()).toEqual(['Category A', 'Option 2']);
+        expect(Array.from(service.pinnedItems())).toEqual(['id1', 'id2']);
+      }));
+
+      it('should maintain separate pinned items cache per dropdown selection', fakeAsync(() => {
+        connectService(mockConfigsWithDropdowns, { selection: ['Category A', 'Option 1'] });
+        flushInitialUrlSync();
+
+        service.pinItem('id1');
+        tick();
+
+        service.setDropdownSelection(['Category A', 'Option 2']);
+        tick();
+        expect(service.pinnedItems().size).toBe(0);
+
+        service.pinItem('id2');
+        tick();
+
+        service.setDropdownSelection(['Category A', 'Option 1']);
+        tick();
+        expect(Array.from(service.pinnedItems())).toEqual(['id1']);
+
+        const lastCall = getLastNavigateCall();
+        expect(lastCall?.[1]?.queryParams?.categories).toEqual('Category%20A,Option%201');
+        expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id1');
+      }));
+    });
   });
 });
