@@ -108,6 +108,7 @@ test.describe('disease correlation', () => {
     const secondOption = options.nth(1);
     const secondOptionText = await secondOption.textContent();
     await secondOption.click();
+    await expect(secondOption).toBeHidden();
 
     const newCategories = [...defaultCategories.slice(0, -1), secondOptionText ?? ''];
     await expectCategoriesParams(page, newCategories);
