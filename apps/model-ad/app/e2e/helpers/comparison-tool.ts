@@ -56,7 +56,7 @@ export const fetchComparisonToolData = async <T>(
   const params = new URLSearchParams();
   params.append('itemFilterType', 'exclude');
   for (const category of categories) {
-    params.append('category', category);
+    params.append('categories', category);
   }
 
   const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_API_PATHS[name]}`, {

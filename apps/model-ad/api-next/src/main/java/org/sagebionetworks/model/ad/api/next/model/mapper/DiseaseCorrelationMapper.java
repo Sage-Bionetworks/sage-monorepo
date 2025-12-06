@@ -2,12 +2,12 @@ package org.sagebionetworks.model.ad.api.next.model.mapper;
 
 import java.math.BigDecimal;
 import java.util.List;
-import org.sagebionetworks.model.ad.api.next.exception.DataIntegrityException;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument.CorrelationResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.CorrelationResultDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
+import org.sagebionetworks.model.ad.api.next.util.EnumConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +31,7 @@ public class DiseaseCorrelationMapper {
       modifiedGenes,
       document.getCluster(),
       document.getAge(),
-      toSexDto(document.getSex())
+      EnumConverter.toSexDto(document.getSex(), "disease correlation record")
     );
 
     dto.setCBE(toCorrelationDto(document.getCbe()));
@@ -42,20 +42,6 @@ public class DiseaseCorrelationMapper {
     dto.setSTG(toCorrelationDto(document.getStg()));
     dto.setTCX(toCorrelationDto(document.getTcx()));
     return dto;
-  }
-
-  private SexDto toSexDto(@Nullable String value) {
-    if (value == null) {
-      throw new DataIntegrityException("Missing sex value in disease correlation record");
-    }
-    try {
-      return SexDto.fromValue(value);
-    } catch (IllegalArgumentException ex) {
-      throw new DataIntegrityException(
-        "Unexpected sex value '" + value + "' in disease correlation record",
-        ex
-      );
-    }
   }
 
   private String getCompositeId(DiseaseCorrelationDocument document) {

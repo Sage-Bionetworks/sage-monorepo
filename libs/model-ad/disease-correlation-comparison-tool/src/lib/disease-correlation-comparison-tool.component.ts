@@ -160,7 +160,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     pageSize: number,
   ) {
     const query: DiseaseCorrelationSearchQuery = {
-      category: selection,
+      categories: selection,
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
       pageNumber,
@@ -185,7 +185,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
 
   getPinnedData(selection: string[], pinnedItems: string[]) {
     const query: DiseaseCorrelationSearchQuery = {
-      category: selection,
+      categories: selection,
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
     };

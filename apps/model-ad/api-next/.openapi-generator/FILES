@@ -17,6 +17,8 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/DiseaseCorrelation
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/DiseaseCorrelationsPageDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/FoldChangeResultDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneExpressionDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneExpressionSearchQueryDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneExpressionsPageDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ItemFilterTypeQueryDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewLinkDto.java

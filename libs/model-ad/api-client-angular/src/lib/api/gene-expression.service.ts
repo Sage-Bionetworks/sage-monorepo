@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { GeneExpression } from '../model/gene-expression';
+import { GeneExpressionSearchQuery } from '../model/gene-expression-search-query';
 // @ts-ignore
-import { ItemFilterTypeQuery } from '../model/item-filter-type-query';
+import { GeneExpressionsPage } from '../model/gene-expressions-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -110,17 +110,13 @@ export class GeneExpressionService {
 
   /**
    * Get gene expression comparison data
-   * Returns a list of gene expression objects for use in comparison tools.
-   * @param category An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the \&#39;category\&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA.
-   * @param item A list of items to filter the data by.
-   * @param itemFilterType The type of filter to apply to the items. Possible values are \&#39;include\&#39; or \&#39;exclude\&#39;.
+   * Returns a paginated list of gene expression objects for use in comparison tools.
+   * @param geneExpressionSearchQuery The search query used to find and filter gene expressions.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getGeneExpressions(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    geneExpressionSearchQuery?: GeneExpressionSearchQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -128,11 +124,9 @@ export class GeneExpressionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Array<GeneExpression>>;
+  ): Observable<GeneExpressionsPage>;
   public getGeneExpressions(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    geneExpressionSearchQuery?: GeneExpressionSearchQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -140,11 +134,9 @@ export class GeneExpressionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Array<GeneExpression>>>;
+  ): Observable<HttpResponse<GeneExpressionsPage>>;
   public getGeneExpressions(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    geneExpressionSearchQuery?: GeneExpressionSearchQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -152,11 +144,9 @@ export class GeneExpressionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Array<GeneExpression>>>;
+  ): Observable<HttpEvent<GeneExpressionsPage>>;
   public getGeneExpressions(
-    category: Array<string>,
-    item?: Array<string>,
-    itemFilterType?: ItemFilterTypeQuery,
+    geneExpressionSearchQuery?: GeneExpressionSearchQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -165,36 +155,12 @@ export class GeneExpressionService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (category === null || category === undefined) {
-      throw new Error(
-        'Required parameter category was null or undefined when calling getGeneExpressions.',
-      );
-    }
-
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (category) {
-      category.forEach((element) => {
-        localVarQueryParameters = this.addToHttpParams(
-          localVarQueryParameters,
-          <any>element,
-          'category',
-        );
-      });
-    }
-    if (item) {
-      item.forEach((element) => {
-        localVarQueryParameters = this.addToHttpParams(
-          localVarQueryParameters,
-          <any>element,
-          'item',
-        );
-      });
-    }
-    if (itemFilterType !== undefined && itemFilterType !== null) {
+    if (geneExpressionSearchQuery !== undefined && geneExpressionSearchQuery !== null) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>itemFilterType,
-        'itemFilterType',
+        <any>geneExpressionSearchQuery,
+        'geneExpressionSearchQuery',
       );
     }
 
@@ -232,7 +198,7 @@ export class GeneExpressionService {
     }
 
     let localVarPath = `/comparison-tools/gene-expression`;
-    return this.httpClient.request<Array<GeneExpression>>(
+    return this.httpClient.request<GeneExpressionsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

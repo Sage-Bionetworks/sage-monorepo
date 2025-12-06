@@ -1,0 +1,46 @@
+type: object
+description: Gene expression search query with pagination and filtering options.
+properties:
+  pageNumber:
+    description: The page number.
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    maximum: 100
+    example: 100
+  categories:
+    description: |
+      Array of category values from the dropdown selections.
+      The API will parse these to extract the tissue and sex information.
+      Expected format: [mainCategory, tissueCategory, sexCategory]
+    type: array
+    items:
+      type: string
+    minItems: 3
+    maxItems: 3
+    example: ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain', 'Sex - Females & Males']
+  items:
+    description: |
+      List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
+      where each identifier represents one complete combination of ensembl gene ID and gene name.
+
+      Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
+      Multiple items can be provided to filter for multiple specific combinations.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)', 'ENSMUSG00000000028~APOE4']
+  itemFilterType:
+    $ref: ItemFilterTypeQuery.yaml
+    nullable: true
+required:
+  - categories

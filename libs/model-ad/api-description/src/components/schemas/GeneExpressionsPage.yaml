@@ -1,0 +1,13 @@
+type: object
+description: A paginated response containing gene expression objects and pagination metadata.
+properties:
+  geneExpressions:
+    type: array
+    description: The list of gene expression objects for the current page
+    items:
+      $ref: './GeneExpression.yaml'
+  page:
+    $ref: './PageMetadata.yaml'
+required:
+  - geneExpressions
+  - page

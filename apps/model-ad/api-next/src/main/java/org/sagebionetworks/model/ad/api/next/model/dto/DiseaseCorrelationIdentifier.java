@@ -14,6 +14,7 @@ import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
 @Getter
 public class DiseaseCorrelationIdentifier {
 
+  // MG-586 - Consider using existing CompositeIdentifier utility if applicable
   String name;
   String age;
   String sex;

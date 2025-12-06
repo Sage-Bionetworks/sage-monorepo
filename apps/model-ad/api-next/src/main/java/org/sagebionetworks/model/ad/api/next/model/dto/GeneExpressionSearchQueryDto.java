@@ -21,13 +21,13 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * Disease correlation search query with pagination and filtering options.
+ * Gene expression search query with pagination and filtering options.
  */
 
-@Schema(name = "DiseaseCorrelationSearchQuery", description = "Disease correlation search query with pagination and filtering options.")
-@JsonTypeName("DiseaseCorrelationSearchQuery")
+@Schema(name = "GeneExpressionSearchQuery", description = "Gene expression search query with pagination and filtering options.")
+@JsonTypeName("GeneExpressionSearchQuery")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class DiseaseCorrelationSearchQueryDto {
+public class GeneExpressionSearchQueryDto {
 
   private Integer pageNumber = 0;
 
@@ -41,18 +41,18 @@ public class DiseaseCorrelationSearchQueryDto {
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
 
-  public DiseaseCorrelationSearchQueryDto() {
+  public GeneExpressionSearchQueryDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public DiseaseCorrelationSearchQueryDto(List<String> categories) {
+  public GeneExpressionSearchQueryDto(List<String> categories) {
     this.categories = categories;
   }
 
-  public DiseaseCorrelationSearchQueryDto pageNumber(Integer pageNumber) {
+  public GeneExpressionSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
     return this;
   }
@@ -73,7 +73,7 @@ public class DiseaseCorrelationSearchQueryDto {
     this.pageNumber = pageNumber;
   }
 
-  public DiseaseCorrelationSearchQueryDto pageSize(Integer pageSize) {
+  public GeneExpressionSearchQueryDto pageSize(Integer pageSize) {
     this.pageSize = pageSize;
     return this;
   }
@@ -95,12 +95,12 @@ public class DiseaseCorrelationSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public DiseaseCorrelationSearchQueryDto categories(List<String> categories) {
+  public GeneExpressionSearchQueryDto categories(List<String> categories) {
     this.categories = categories;
     return this;
   }
 
-  public DiseaseCorrelationSearchQueryDto addCategoriesItem(String categoriesItem) {
+  public GeneExpressionSearchQueryDto addCategoriesItem(String categoriesItem) {
     if (this.categories == null) {
       this.categories = new ArrayList<>();
     }
@@ -109,11 +109,11 @@ public class DiseaseCorrelationSearchQueryDto {
   }
 
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory] 
+   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex information. Expected format: [mainCategory, tissueCategory, sexCategory] 
    * @return categories
    */
-  @NotNull @Size(min = 2, max = 2) 
-  @Schema(name = "categories", example = "[\"CONSENSUS NETWORK MODULES\",\"Consensus Cluster A - ECM Organization\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Size(min = 3, max = 3) 
+  @Schema(name = "categories", example = "[\"RNA - DIFFERENTIAL EXPRESSION\",\"Tissue - Hemibrain\",\"Sex - Females & Males\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex information. Expected format: [mainCategory, tissueCategory, sexCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
   public List<String> getCategories() {
     return categories;
@@ -123,12 +123,12 @@ public class DiseaseCorrelationSearchQueryDto {
     this.categories = categories;
   }
 
-  public DiseaseCorrelationSearchQueryDto items(@Nullable List<String> items) {
+  public GeneExpressionSearchQueryDto items(@Nullable List<String> items) {
     this.items = items;
     return this;
   }
 
-  public DiseaseCorrelationSearchQueryDto addItemsItem(String itemsItem) {
+  public GeneExpressionSearchQueryDto addItemsItem(String itemsItem) {
     if (this.items == null) {
       this.items = new ArrayList<>();
     }
@@ -137,11 +137,11 @@ public class DiseaseCorrelationSearchQueryDto {
   }
 
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations. 
+   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~Gnai3\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations. 
    * @return items
    */
   
-  @Schema(name = "items", example = "[\"APOE4~4 months~Female\",\"APOE4~8 months~Male\",\"5xFAD (IU/Jax/Pitt)~12 months~Female\"]", description = "List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"ENSMUSG00000000001~Gnai3\",\"ENSMUSG00000000028~Cdc45\",\"ENSMUSG00000000037~Scml2\"]", description = "List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~Gnai3\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
   public @Nullable List<String> getItems() {
     return items;
@@ -151,7 +151,7 @@ public class DiseaseCorrelationSearchQueryDto {
     this.items = items;
   }
 
-  public DiseaseCorrelationSearchQueryDto itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
+  public GeneExpressionSearchQueryDto itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
     this.itemFilterType = itemFilterType;
     return this;
   }
@@ -179,12 +179,12 @@ public class DiseaseCorrelationSearchQueryDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DiseaseCorrelationSearchQueryDto diseaseCorrelationSearchQuery = (DiseaseCorrelationSearchQueryDto) o;
-    return Objects.equals(this.pageNumber, diseaseCorrelationSearchQuery.pageNumber) &&
-        Objects.equals(this.pageSize, diseaseCorrelationSearchQuery.pageSize) &&
-        Objects.equals(this.categories, diseaseCorrelationSearchQuery.categories) &&
-        Objects.equals(this.items, diseaseCorrelationSearchQuery.items) &&
-        Objects.equals(this.itemFilterType, diseaseCorrelationSearchQuery.itemFilterType);
+    GeneExpressionSearchQueryDto geneExpressionSearchQuery = (GeneExpressionSearchQueryDto) o;
+    return Objects.equals(this.pageNumber, geneExpressionSearchQuery.pageNumber) &&
+        Objects.equals(this.pageSize, geneExpressionSearchQuery.pageSize) &&
+        Objects.equals(this.categories, geneExpressionSearchQuery.categories) &&
+        Objects.equals(this.items, geneExpressionSearchQuery.items) &&
+        Objects.equals(this.itemFilterType, geneExpressionSearchQuery.itemFilterType);
   }
 
   @Override
@@ -195,7 +195,7 @@ public class DiseaseCorrelationSearchQueryDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DiseaseCorrelationSearchQueryDto {\n");
+    sb.append("class GeneExpressionSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
@@ -218,17 +218,17 @@ public class DiseaseCorrelationSearchQueryDto {
   
   public static class Builder {
 
-    private DiseaseCorrelationSearchQueryDto instance;
+    private GeneExpressionSearchQueryDto instance;
 
     public Builder() {
-      this(new DiseaseCorrelationSearchQueryDto());
+      this(new GeneExpressionSearchQueryDto());
     }
 
-    protected Builder(DiseaseCorrelationSearchQueryDto instance) {
+    protected Builder(GeneExpressionSearchQueryDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(DiseaseCorrelationSearchQueryDto value) { 
+    protected Builder copyOf(GeneExpressionSearchQueryDto value) { 
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
       this.instance.setCategories(value.categories);
@@ -237,37 +237,37 @@ public class DiseaseCorrelationSearchQueryDto {
       return this;
     }
 
-    public DiseaseCorrelationSearchQueryDto.Builder pageNumber(Integer pageNumber) {
+    public GeneExpressionSearchQueryDto.Builder pageNumber(Integer pageNumber) {
       this.instance.pageNumber(pageNumber);
       return this;
     }
     
-    public DiseaseCorrelationSearchQueryDto.Builder pageSize(Integer pageSize) {
+    public GeneExpressionSearchQueryDto.Builder pageSize(Integer pageSize) {
       this.instance.pageSize(pageSize);
       return this;
     }
     
-    public DiseaseCorrelationSearchQueryDto.Builder categories(List<String> categories) {
+    public GeneExpressionSearchQueryDto.Builder categories(List<String> categories) {
       this.instance.categories(categories);
       return this;
     }
     
-    public DiseaseCorrelationSearchQueryDto.Builder items(List<String> items) {
+    public GeneExpressionSearchQueryDto.Builder items(List<String> items) {
       this.instance.items(items);
       return this;
     }
     
-    public DiseaseCorrelationSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
+    public GeneExpressionSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
       this.instance.itemFilterType(itemFilterType);
       return this;
     }
     
     /**
-    * returns a built DiseaseCorrelationSearchQueryDto instance.
+    * returns a built GeneExpressionSearchQueryDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public DiseaseCorrelationSearchQueryDto build() {
+    public GeneExpressionSearchQueryDto build() {
       try {
         return this.instance;
       } finally {
@@ -285,15 +285,15 @@ public class DiseaseCorrelationSearchQueryDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static DiseaseCorrelationSearchQueryDto.Builder builder() {
-    return new DiseaseCorrelationSearchQueryDto.Builder();
+  public static GeneExpressionSearchQueryDto.Builder builder() {
+    return new GeneExpressionSearchQueryDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public DiseaseCorrelationSearchQueryDto.Builder toBuilder() {
-    DiseaseCorrelationSearchQueryDto.Builder builder = new DiseaseCorrelationSearchQueryDto.Builder();
+  public GeneExpressionSearchQueryDto.Builder toBuilder() {
+    GeneExpressionSearchQueryDto.Builder builder = new GeneExpressionSearchQueryDto.Builder();
     return builder.copyOf(this);
   }
 

@@ -57,4 +57,30 @@ export class BaseTableComponent {
   onLazyLoad(event: TableLazyLoadEvent) {
     this.comparisonToolService.handleLazyLoad(event);
   }
+
+  getLinkText(cellData: any, column: any): string {
+    if (typeof cellData === 'string') {
+      return cellData;
+    }
+    if (typeof cellData === 'object' && cellData !== null) {
+      return cellData.link_text || column.link_text || '';
+    }
+    return column.link_text || '';
+  }
+
+  getLinkUrl(cellData: any, column: any): string | string[] {
+    if (typeof cellData === 'string') {
+      // For simple string values, if no link_url is provided in column config,
+      // construct a link to the model details page (for internal links)
+      if (!column.link_url && column.type === 'link_internal') {
+        // Return as array of path segments - Angular Router will encode properly
+        return ['/models', cellData];
+      }
+      return column.link_url || '';
+    }
+    if (typeof cellData === 'object' && cellData !== null) {
+      return cellData.link_url || column.link_url || '';
+    }
+    return column.link_url || '';
+  }
 }

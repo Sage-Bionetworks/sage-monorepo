@@ -82,21 +82,17 @@ paths:
       tags:
         - Gene Expression
       summary: Get gene expression comparison data
-      description: Returns a list of gene expression objects for use in comparison tools.
+      description: Returns a paginated list of gene expression objects for use in comparison tools.
       operationId: getGeneExpressions
       parameters:
-        - $ref: '#/components/parameters/categoryQuery'
-        - $ref: '#/components/parameters/itemQuery'
-        - $ref: '#/components/parameters/itemFilterTypeQuery'
+        - $ref: '#/components/parameters/geneExpressionSearchQuery'
       responses:
         '200':
-          description: A list of gene expression objects
+          description: A paginated response containing gene expression objects
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GeneExpression'
+                $ref: '#/components/schemas/GeneExpressionsPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -421,8 +417,11 @@ components:
           minimum: 1
           maximum: 100
           example: 100
-        category:
-          description: The category selections
+        categories:
+          description: |
+            Array of category values from the dropdown selections.
+            The API will parse these to extract the cluster information.
+            Expected format: [mainCategory, clusterCategory]
           type: array
           items:
             type: string
@@ -450,7 +449,7 @@ components:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
       required:
-        - category
+        - categories
     Sex:
       type: string
       description: Sex
@@ -537,6 +536,58 @@ components:
       required:
         - diseaseCorrelations
         - page
+    GeneExpressionSearchQuery:
+      type: object
+      description: Gene expression search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+          example: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+          maximum: 100
+          example: 100
+        categories:
+          description: |
+            Array of category values from the dropdown selections.
+            The API will parse these to extract the tissue and sex information.
+            Expected format: [mainCategory, tissueCategory, sexCategory]
+          type: array
+          items:
+            type: string
+          minItems: 3
+          maxItems: 3
+          example:
+            - RNA - DIFFERENTIAL EXPRESSION
+            - Tissue - Hemibrain
+            - Sex - Females & Males
+        items:
+          description: |
+            List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
+            where each identifier represents one complete combination of ensembl gene ID and gene name.
+
+            Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
+            Multiple items can be provided to filter for multiple specific combinations.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            - ENSMUSG00000000028~APOE4
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          nullable: true
+      required:
+        - categories
     SexCohort:
       type: string
       description: Sex Cohort
@@ -559,17 +610,19 @@ components:
         - adj_p_val
     GeneExpression:
       type: object
-      description: Disease Correlation
+      description: Gene Expression
       properties:
-        _id:
+        composite_id:
           type: string
-          description: Unique identifier for the disease correlation object
+          description: Unique identifier for the gene expression object
+          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
         ensembl_gene_id:
           type: string
           description: Ensembl Gene ID
         gene_symbol:
           type: string
           description: Gene Symbol
+          example: Gnai3
         biodomains:
           type: array
           description: List of biodomains associated with the gene
@@ -581,6 +634,7 @@ components:
         matched_control:
           type: string
           description: Matched control for the model
+          example: C57BL/6J
         model_group:
           type: string
           description: Model group
@@ -588,9 +642,11 @@ components:
         model_type:
           type: string
           description: Type of model
+          example: Familial AD
         tissue:
           type: string
           description: Tissue type
+          example: Hemibrain
         sex:
           $ref: '#/components/schemas/SexCohort'
         4 months:
@@ -600,7 +656,7 @@ components:
         18 months:
           $ref: '#/components/schemas/FoldChangeResult'
       required:
-        - _id
+        - composite_id
         - ensembl_gene_id
         - gene_symbol
         - biodomains
@@ -610,6 +666,20 @@ components:
         - model_type
         - tissue
         - sex
+    GeneExpressionsPage:
+      type: object
+      description: A paginated response containing gene expression objects and pagination metadata.
+      properties:
+        geneExpressions:
+          type: array
+          description: The list of gene expression objects for the current page
+          items:
+            $ref: '#/components/schemas/GeneExpression'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - geneExpressions
+        - page
     DataVersion:
       type: object
       description: Synapse data version
@@ -922,35 +992,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
-    categoryQuery:
-      name: category
-      description: An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the 'category' query parameter, e.g. ?category=category1&category=subcategoryA.
+    geneExpressionSearchQuery:
+      name: geneExpressionSearchQuery
+      description: The search query used to find and filter gene expressions.
       in: query
-      style: form
+      style: deepObject
       explode: true
-      required: true
       schema:
-        type: array
-        items:
-          type: string
-    itemQuery:
-      name: item
-      description: A list of items to filter the data by.
-      in: query
-      required: false
-      schema:
-        type: array
-        items:
-          type: string
-      style: form
-      explode: true
-    itemFilterTypeQuery:
-      name: itemFilterType
-      description: The type of filter to apply to the items. Possible values are 'include' or 'exclude'.
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/ItemFilterTypeQuery'
+        $ref: '#/components/schemas/GeneExpressionSearchQuery'
   responses:
     BadRequest:
       description: Invalid request
