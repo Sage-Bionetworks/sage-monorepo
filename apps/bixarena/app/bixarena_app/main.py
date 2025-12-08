@@ -229,6 +229,36 @@ def parse_args():
     return args
 
 
+def build_opengraph_meta_tags(title: str) -> str:
+    """Build OpenGraph meta tags for social media sharing.
+
+    Args:
+        title: Page title to use for og:title
+
+    Returns:
+        HTML string containing all OpenGraph meta tags
+    """
+    og_tags = f"""
+    <!-- Standard Meta Tags -->
+    <meta name="description" content="BioArena crowdsources the benchmarking of AI models to unlock the next breakthrough in biomedicine, inviting a global community of digital contributors.">
+
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:title" content="{title}">
+    <meta property="og:description" content="BioArena crowdsources the benchmarking of AI models to unlock the next breakthrough in biomedicine, inviting a global community of digital contributors.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bioarena.io">
+    <meta property="og:image" content="https://placehold.co/1200x630/952F92/white?text=BioArena">
+    <meta property="og:site_name" content="BioArena">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:alt" content="BioArena logo - Benchmarking AI for Biomedical Breakthroughs">
+    """
+
+    return og_tags
+
+
 def build_app():
     """Create the main application"""
 
@@ -298,11 +328,15 @@ def build_app():
     <link rel="icon" type="image/svg+xml" href="{favicon_url}">
     """
 
+    title = "BioArena - Benchmarking AI Models for Biomedical Breakthroughs"
+    # Add OpenGraph meta tags
+    og_meta_tags = build_opengraph_meta_tags(title)
+
     # Combine all head scripts
-    head_scripts = crisp_script + gtm_script + favicon_html
+    head_scripts = crisp_script + gtm_script + favicon_html + og_meta_tags
 
     with gr.Blocks(
-        title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
+        title=title,
         head=head_scripts,
         css="""
         /* Custom global colors */
