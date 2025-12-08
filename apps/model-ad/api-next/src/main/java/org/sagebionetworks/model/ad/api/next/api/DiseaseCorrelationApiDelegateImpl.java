@@ -23,7 +23,7 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   public ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query
   ) {
-    String cluster = extractCluster(query.getCategory());
+    String cluster = extractCluster(query.getCategories());
 
     DiseaseCorrelationsPageDto results = diseaseCorrelationService.loadDiseaseCorrelations(
       query,
@@ -35,16 +35,28 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
       .body(results);
   }
 
-  private String extractCluster(List<String> category) {
-    if (category == null || category.size() != 2) {
+  /**
+   * Extracts cluster from categories array.
+   * Expected format: [mainCategory, clusterCategory] where:
+   * - categories[0] is the main category (e.g., "CONSENSUS NETWORK MODULES")
+   * - categories[1] is the cluster category (e.g., "Consensus Cluster A - ECM Organization")
+   *
+   * @param categories Array of category values
+   * @return cluster name
+   */
+  private String extractCluster(List<String> categories) {
+    if (categories == null || categories.size() != 2) {
       throw new InvalidCategoryException(ErrorConstants.CATEGORY_REQUIREMENT_MESSAGE);
     }
 
-    String topLevelCategory = category.get(0);
-    String subCategory = category.get(1);
+    String topLevelCategory = categories.get(0);
+    String subCategory = categories.get(1);
 
-    if (!ErrorConstants.SUPPORTED_CATEGORY.equals(topLevelCategory)) {
-      throw new InvalidCategoryException(topLevelCategory, ErrorConstants.SUPPORTED_CATEGORY);
+    if (!ErrorConstants.DISEASE_CORRELATION_CATEGORY.equals(topLevelCategory)) {
+      throw new InvalidCategoryException(
+        topLevelCategory,
+        ErrorConstants.DISEASE_CORRELATION_CATEGORY
+      );
     }
 
     if (!StringUtils.hasText(subCategory)) {

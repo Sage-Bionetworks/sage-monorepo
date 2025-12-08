@@ -1,8 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,24 +30,20 @@ public interface GeneExpressionApiDelegate {
 
     /**
      * GET /comparison-tools/gene-expression : Get gene expression comparison data
-     * Returns a list of gene expression objects for use in comparison tools.
+     * Returns a paginated list of gene expression objects for use in comparison tools.
      *
-     * @param category An ordered list of categories used to filter the data, where the first value is the category and the second is the subcategory. Pass each value by repeating the &#39;category&#39; query parameter, e.g. ?category&#x3D;category1&amp;category&#x3D;subcategoryA. (required)
-     * @param item A list of items to filter the data by. (optional)
-     * @param itemFilterType The type of filter to apply to the items. Possible values are &#39;include&#39; or &#39;exclude&#39;. (optional, default to include)
-     * @return A list of gene expression objects (status code 200)
+     * @param geneExpressionSearchQuery The search query used to find and filter gene expressions. (optional)
+     * @return A paginated response containing gene expression objects (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see GeneExpressionApi#getGeneExpressions
      */
-    default ResponseEntity<List<GeneExpressionDto>> getGeneExpressions(List<String> category,
-        List<String> item,
-        ItemFilterTypeQueryDto itemFilterType) {
+    default ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(GeneExpressionSearchQueryDto geneExpressionSearchQuery) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"model_group\" : \"model_group\", \"gene_symbol\" : \"gene_symbol\", \"sex\" : \"Females\", \"model_type\" : \"model_type\", \"tissue\" : \"tissue\", \"4 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"matched_control\" : \"matched_control\", \"ensembl_gene_id\" : \"ensembl_gene_id\", \"name\" : \"name\", \"12 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"_id\" : \"_id\", \"18 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"biodomains\" : [ \"biodomains\", \"biodomains\" ] }, { \"model_group\" : \"model_group\", \"gene_symbol\" : \"gene_symbol\", \"sex\" : \"Females\", \"model_type\" : \"model_type\", \"tissue\" : \"tissue\", \"4 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"matched_control\" : \"matched_control\", \"ensembl_gene_id\" : \"ensembl_gene_id\", \"name\" : \"name\", \"12 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"_id\" : \"_id\", \"18 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"biodomains\" : [ \"biodomains\", \"biodomains\" ] } ]";
+                    String exampleString = "{ \"page\" : { \"number\" : 0, \"size\" : 100, \"totalPages\" : 3, \"hasPrevious\" : false, \"hasNext\" : true, \"totalElements\" : 250 }, \"geneExpressions\" : [ { \"model_group\" : \"model_group\", \"gene_symbol\" : \"Gnai3\", \"sex\" : \"Females\", \"model_type\" : \"Familial AD\", \"tissue\" : \"Hemibrain\", \"4 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"matched_control\" : \"C57BL/6J\", \"composite_id\" : \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females\", \"ensembl_gene_id\" : \"ensembl_gene_id\", \"name\" : \"name\", \"12 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"18 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"biodomains\" : [ \"biodomains\", \"biodomains\" ] }, { \"model_group\" : \"model_group\", \"gene_symbol\" : \"Gnai3\", \"sex\" : \"Females\", \"model_type\" : \"Familial AD\", \"tissue\" : \"Hemibrain\", \"4 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"matched_control\" : \"C57BL/6J\", \"composite_id\" : \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females\", \"ensembl_gene_id\" : \"ensembl_gene_id\", \"name\" : \"name\", \"12 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"18 months\" : { \"log2_fc\" : 0.8008281904610115, \"adj_p_val\" : 6.027456183070403 }, \"biodomains\" : [ \"biodomains\", \"biodomains\" ] } ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

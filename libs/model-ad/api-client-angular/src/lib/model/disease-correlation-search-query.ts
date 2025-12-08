@@ -22,9 +22,9 @@ export interface DiseaseCorrelationSearchQuery {
    */
   pageSize?: number;
   /**
-   * The category selections
+   * Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory]
    */
-  category: Array<string>;
+  categories: Array<string>;
   /**
    * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations.
    */

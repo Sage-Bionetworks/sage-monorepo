@@ -22,15 +22,15 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * Disease Correlation
+ * Gene Expression
  */
 
-@Schema(name = "GeneExpression", description = "Disease Correlation")
+@Schema(name = "GeneExpression", description = "Gene Expression")
 @JsonTypeName("GeneExpression")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class GeneExpressionDto {
 
-  private String id;
+  private String compositeId;
 
   private String ensemblGeneId;
 
@@ -64,8 +64,8 @@ public class GeneExpressionDto {
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionDto(String id, String ensemblGeneId, String geneSymbol, List<String> biodomains, String name, String matchedControl, String modelGroup, String modelType, String tissue, SexCohortDto sex) {
-    this.id = id;
+  public GeneExpressionDto(String compositeId, String ensemblGeneId, String geneSymbol, List<String> biodomains, String name, String matchedControl, String modelGroup, String modelType, String tissue, SexCohortDto sex) {
+    this.compositeId = compositeId;
     this.ensemblGeneId = ensemblGeneId;
     this.geneSymbol = geneSymbol;
     this.biodomains = biodomains;
@@ -77,24 +77,24 @@ public class GeneExpressionDto {
     this.sex = sex;
   }
 
-  public GeneExpressionDto id(String id) {
-    this.id = id;
+  public GeneExpressionDto compositeId(String compositeId) {
+    this.compositeId = compositeId;
     return this;
   }
 
   /**
-   * Unique identifier for the disease correlation object
-   * @return id
+   * Unique identifier for the gene expression object
+   * @return compositeId
    */
   @NotNull 
-  @Schema(name = "_id", description = "Unique identifier for the disease correlation object", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("_id")
-  public String getId() {
-    return id;
+  @Schema(name = "composite_id", example = "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females", description = "Unique identifier for the gene expression object", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("composite_id")
+  public String getCompositeId() {
+    return compositeId;
   }
 
-  public void setId(String id) {
-    this.id = id;
+  public void setCompositeId(String compositeId) {
+    this.compositeId = compositeId;
   }
 
   public GeneExpressionDto ensemblGeneId(String ensemblGeneId) {
@@ -127,7 +127,7 @@ public class GeneExpressionDto {
    * @return geneSymbol
    */
   @NotNull 
-  @Schema(name = "gene_symbol", description = "Gene Symbol", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "gene_symbol", example = "Gnai3", description = "Gene Symbol", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("gene_symbol")
   public String getGeneSymbol() {
     return geneSymbol;
@@ -195,7 +195,7 @@ public class GeneExpressionDto {
    * @return matchedControl
    */
   @NotNull 
-  @Schema(name = "matched_control", description = "Matched control for the model", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "matched_control", example = "C57BL/6J", description = "Matched control for the model", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("matched_control")
   public String getMatchedControl() {
     return matchedControl;
@@ -235,7 +235,7 @@ public class GeneExpressionDto {
    * @return modelType
    */
   @NotNull 
-  @Schema(name = "model_type", description = "Type of model", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "model_type", example = "Familial AD", description = "Type of model", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("model_type")
   public String getModelType() {
     return modelType;
@@ -255,7 +255,7 @@ public class GeneExpressionDto {
    * @return tissue
    */
   @NotNull 
-  @Schema(name = "tissue", description = "Tissue type", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "tissue", example = "Hemibrain", description = "Tissue type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("tissue")
   public String getTissue() {
     return tissue;
@@ -354,7 +354,7 @@ public class GeneExpressionDto {
       return false;
     }
     GeneExpressionDto geneExpression = (GeneExpressionDto) o;
-    return Objects.equals(this.id, geneExpression.id) &&
+    return Objects.equals(this.compositeId, geneExpression.compositeId) &&
         Objects.equals(this.ensemblGeneId, geneExpression.ensemblGeneId) &&
         Objects.equals(this.geneSymbol, geneExpression.geneSymbol) &&
         Objects.equals(this.biodomains, geneExpression.biodomains) &&
@@ -371,14 +371,14 @@ public class GeneExpressionDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, ensemblGeneId, geneSymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sex, _4months, _12months, _18months);
+    return Objects.hash(compositeId, ensemblGeneId, geneSymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sex, _4months, _12months, _18months);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeneExpressionDto {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    compositeId: ").append(toIndentedString(compositeId)).append("\n");
     sb.append("    ensemblGeneId: ").append(toIndentedString(ensemblGeneId)).append("\n");
     sb.append("    geneSymbol: ").append(toIndentedString(geneSymbol)).append("\n");
     sb.append("    biodomains: ").append(toIndentedString(biodomains)).append("\n");
@@ -419,7 +419,7 @@ public class GeneExpressionDto {
     }
 
     protected Builder copyOf(GeneExpressionDto value) { 
-      this.instance.setId(value.id);
+      this.instance.setCompositeId(value.compositeId);
       this.instance.setEnsemblGeneId(value.ensemblGeneId);
       this.instance.setGeneSymbol(value.geneSymbol);
       this.instance.setBiodomains(value.biodomains);
@@ -435,8 +435,8 @@ public class GeneExpressionDto {
       return this;
     }
 
-    public GeneExpressionDto.Builder id(String id) {
-      this.instance.id(id);
+    public GeneExpressionDto.Builder compositeId(String compositeId) {
+      this.instance.compositeId(compositeId);
       return this;
     }
     
