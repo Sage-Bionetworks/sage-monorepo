@@ -16,7 +16,6 @@ INSERT INTO challenge_platform (id, slug, name, avatar_key, website_url, created
 (20, 'devpost', 'Devpost', 'logo/devpost.jpg', 'https://devpost.com/', '2024-01-09 16:41:39', '2024-01-11 23:14:56'),
 (21, 'zindi', 'Zindi', 'logo/zindi.jpg', 'https://zindi.africa/', '2024-01-09 18:56:59', '2024-01-11 23:15:00'),
 (22, 'dynabench', 'Dynabench', NULL, 'https://dynabench.org', '2024-01-09 18:57:22', '2024-01-09 18:57:48'),													
-(23, 'mlcube', 'MLCube', NULL, 'https://mlcommons.org/working-groups/data/mlcube/', '2024-01-10 18:57:22', '2025-07-31 21:52:17'),
 (24, 'therapeutics-data-commons', 'Therapeutics Data Commons', NULL,  'https://tdcommons.ai/', '2025-07-31 21:52:20', '2025-07-31 21:53:26'),														
 (25, 'challenge-gov',	'Challenge Gov', NULL, 'https://www.challenge.gov/', '2025-07-31 22:18:23',	'2025-07-31 22:18:58'),														
 (26,	'elucidata',	'Elucidata', NULL, 'https://www.elucidata.io/elhackathon-2025', '2025-07-31 22:30:07',	'2025-07-31 22:31:59'),														
