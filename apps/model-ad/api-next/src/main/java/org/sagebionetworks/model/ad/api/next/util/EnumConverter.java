@@ -69,6 +69,6 @@ public final class EnumConverter {
    * @throws DataIntegrityException if value is null or conversion fails
    */
   public static SexCohortDto toSexCohortDto(@Nullable String value, String recordType) {
-    return toEnum(value, SexCohortDto::fromValue, "sex", recordType);
+    return toEnum(value, SexCohortDto::fromValue, "sexCohort", recordType);
   }
 }

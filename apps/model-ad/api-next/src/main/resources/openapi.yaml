@@ -747,8 +747,8 @@ components:
         categories:
           description: |
             Array of category values from the dropdown selections.
-            The API will parse these to extract the tissue and sex information.
-            Expected format: [mainCategory, tissueCategory, sexCategory]
+            The API will parse these to extract the tissue and sex_cohort information.
+            Expected format: [mainCategory, tissueCategory, sexCohortCategory]
           example:
             - RNA - DIFFERENTIAL EXPRESSION
             - Tissue - Hemibrain
@@ -763,12 +763,11 @@ components:
             List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
             where each identifier represents one complete combination of ensembl gene ID and gene name.
 
-            Example: "ENSMUSG00000000001~Gnai3" filters for documents matching that exact gene ID and name.
+            Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
             Multiple items can be provided to filter for multiple specific combinations.
           example:
-            - ENSMUSG00000000001~Gnai3
-            - ENSMUSG00000000028~Cdc45
-            - ENSMUSG00000000037~Scml2
+            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            - ENSMUSG00000000028~APOE4
           items:
             type: string
           nullable: true
@@ -806,16 +805,16 @@ components:
       example:
         model_group: model_group
         gene_symbol: Gnai3
-        sex: Females
         model_type: Familial AD
         tissue: Hemibrain
         '4 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
         matched_control: C57BL/6J
-        composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
+        composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
         ensembl_gene_id: ensembl_gene_id
         name: name
+        sex_cohort: Females
         '12 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
@@ -828,7 +827,7 @@ components:
       properties:
         composite_id:
           description: Unique identifier for the gene expression object
-          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
+          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
           type: string
         ensembl_gene_id:
           description: Ensembl Gene ID
@@ -861,7 +860,7 @@ components:
           description: Tissue type
           example: Hemibrain
           type: string
-        sex:
+        sex_cohort:
           $ref: '#/components/schemas/SexCohort'
         '4 months':
           $ref: '#/components/schemas/FoldChangeResult'
@@ -878,7 +877,7 @@ components:
         - model_group
         - model_type
         - name
-        - sex
+        - sex_cohort
         - tissue
       type: object
     GeneExpressionsPage:
@@ -895,16 +894,16 @@ components:
         geneExpressions:
           - model_group: model_group
             gene_symbol: Gnai3
-            sex: Females
             model_type: Familial AD
             tissue: Hemibrain
             '4 months':
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
             matched_control: C57BL/6J
-            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
             ensembl_gene_id: ensembl_gene_id
             name: name
+            sex_cohort: Females
             '12 months':
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
@@ -916,16 +915,16 @@ components:
               - biodomains
           - model_group: model_group
             gene_symbol: Gnai3
-            sex: Females
             model_type: Familial AD
             tissue: Hemibrain
             '4 months':
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
             matched_control: C57BL/6J
-            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)~Hemibrain~Females
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
             ensembl_gene_id: ensembl_gene_id
             name: name
+            sex_cohort: Females
             '12 months':
               log2_fc: 0.8008281904610115
               adj_p_val: 6.027456183070403
