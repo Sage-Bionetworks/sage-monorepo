@@ -3,7 +3,6 @@ package org.sagebionetworks.model.ad.api.next.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -20,19 +19,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.api.GeneExpressionApiDelegateImpl;
-import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument.FoldChangeResult;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.GeneExpressionMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.GeneExpressionRepository;
-import org.sagebionetworks.model.ad.api.next.service.GeneExpressionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -46,11 +41,9 @@ class GeneExpressionApiDelegateImplTest {
 
   private static final String TISSUE_HEMIBRAIN = "Hemibrain";
   private static final String TISSUE_CORTEX = "Cortex";
-  private static final String SEX_FEMALES = "Females";
-  private static final String SEX_MALES = "Males";
-  private static final String SEX_FEMALES_AND_MALES = "Females & Males";
-  private static final int PAGE_NUMBER = 0;
-  private static final int PAGE_SIZE = 10;
+  private static final String SEX_COHORT_FEMALES = "Females";
+  private static final String SEX_COHORT_MALES = "Males";
+  private static final String SEX_COHORT_FEMALES_AND_MALES = "Females & Males";
 
   @Mock
   private GeneExpressionRepository repository;
@@ -109,7 +102,7 @@ class GeneExpressionApiDelegateImplTest {
   }
 
   @Test
-  @DisplayName("should throw bad request when sex format invalid")
+  @DisplayName("should throw bad request when sex cohort format invalid")
   void shouldThrowBadRequestWhenSexFormatInvalid() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
       .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "InvalidFormat"))
@@ -117,7 +110,7 @@ class GeneExpressionApiDelegateImplTest {
 
     assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(InvalidCategoryException.class)
-      .hasMessageContaining("Invalid sex format");
+      .hasMessageContaining("Invalid sex_cohort format");
 
     verifyNoInteractions(repository);
   }
@@ -154,9 +147,9 @@ class GeneExpressionApiDelegateImplTest {
     Page<GeneExpressionDocument> page = new PageImpl<>(List.of(document));
 
     when(
-      repository.findByTissueAndSexAndCompositeIdentifiers(
+      repository.findByTissueAndSexCohortAndCompositeIdentifiers(
         eq(TISSUE_HEMIBRAIN),
-        eq(SEX_FEMALES),
+        eq(SEX_COHORT_FEMALES),
         anyList(),
         any(Pageable.class)
       )
@@ -186,22 +179,26 @@ class GeneExpressionApiDelegateImplTest {
     assertThat(dto.getTissue()).isEqualTo("Hemibrain");
     assertThat(dto.get4months()).isNotNull();
     assertThat(dto.get4months().getLog2Fc()).isEqualTo(BigDecimal.valueOf(0.01167d));
-    assertThat(dto.getSex().getValue()).isEqualTo("Females");
+    assertThat(dto.getSexCohort().getValue()).isEqualTo("Females");
 
-    verify(repository).findByTissueAndSexAndCompositeIdentifiers(
+    verify(repository).findByTissueAndSexCohortAndCompositeIdentifiers(
       eq(TISSUE_HEMIBRAIN),
-      eq(SEX_FEMALES),
+      eq(SEX_COHORT_FEMALES),
       anyList(),
       any(Pageable.class)
     );
   }
 
   @Test
-  @DisplayName("should include tissue and sex filter when exclude filter has no items")
+  @DisplayName("should include tissue and sex cohort filter when exclude filter has no items")
   void shouldIncludeTissueAndSexFilterWhenExcludeFilterHasNoItems() {
     Page<GeneExpressionDocument> page = new PageImpl<>(List.of(buildDocument(new ObjectId())));
     when(
-      repository.findByTissueAndSex(eq(TISSUE_CORTEX), eq(SEX_MALES), any(Pageable.class))
+      repository.findByTissueAndSexCohort(
+        eq(TISSUE_CORTEX),
+        eq(SEX_COHORT_MALES),
+        any(Pageable.class)
+      )
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
@@ -218,7 +215,11 @@ class GeneExpressionApiDelegateImplTest {
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getGeneExpressions()).hasSize(1);
 
-    verify(repository).findByTissueAndSex(eq(TISSUE_CORTEX), eq(SEX_MALES), any(Pageable.class));
+    verify(repository).findByTissueAndSexCohort(
+      eq(TISSUE_CORTEX),
+      eq(SEX_COHORT_MALES),
+      any(Pageable.class)
+    );
   }
 
   @Test
@@ -246,9 +247,9 @@ class GeneExpressionApiDelegateImplTest {
     );
 
     when(
-      repository.findByTissueAndSexAndCompositeIdentifiers(
+      repository.findByTissueAndSexCohortAndCompositeIdentifiers(
         eq(TISSUE_HEMIBRAIN),
-        eq(SEX_FEMALES),
+        eq(SEX_COHORT_FEMALES),
         anyList(),
         any(Pageable.class)
       )
@@ -277,9 +278,9 @@ class GeneExpressionApiDelegateImplTest {
     Page<GeneExpressionDocument> page = new PageImpl<>(List.of(buildDocument(includedId)));
 
     when(
-      repository.findByTissueAndSexExcludingCompositeIdentifiers(
+      repository.findByTissueAndSexCohortExcludingCompositeIdentifiers(
         eq(TISSUE_HEMIBRAIN),
-        eq(SEX_FEMALES),
+        eq(SEX_COHORT_FEMALES),
         anyList(),
         any(Pageable.class)
       )
@@ -301,9 +302,9 @@ class GeneExpressionApiDelegateImplTest {
     assertThat(body.getGeneExpressions()).hasSize(1);
     assertThat(body.getGeneExpressions().get(0).getCompositeId()).contains("ENSMUSG00000000001");
 
-    verify(repository).findByTissueAndSexExcludingCompositeIdentifiers(
+    verify(repository).findByTissueAndSexCohortExcludingCompositeIdentifiers(
       eq(TISSUE_HEMIBRAIN),
-      eq(SEX_FEMALES),
+      eq(SEX_COHORT_FEMALES),
       anyList(),
       any(Pageable.class)
     );
@@ -316,9 +317,9 @@ class GeneExpressionApiDelegateImplTest {
     Page<GeneExpressionDocument> page = new PageImpl<>(List.of(buildDocument(objectId)));
 
     when(
-      repository.findByTissueAndSexAndCompositeIdentifiers(
+      repository.findByTissueAndSexCohortAndCompositeIdentifiers(
         eq(TISSUE_HEMIBRAIN),
-        eq(SEX_FEMALES),
+        eq(SEX_COHORT_FEMALES),
         anyList(),
         any(Pageable.class)
       )
@@ -343,15 +344,15 @@ class GeneExpressionApiDelegateImplTest {
   }
 
   @Test
-  @DisplayName("should handle compound sex values like Females & Males")
+  @DisplayName("should handle compound sex cohort values like Females & Males")
   void shouldHandleCompoundSexValues() {
     ObjectId objectId = new ObjectId();
     Page<GeneExpressionDocument> page = new PageImpl<>(List.of(buildDocument(objectId)));
 
     when(
-      repository.findByTissueAndSexAndCompositeIdentifiers(
+      repository.findByTissueAndSexCohortAndCompositeIdentifiers(
         eq(TISSUE_HEMIBRAIN),
-        eq(SEX_FEMALES_AND_MALES),
+        eq(SEX_COHORT_FEMALES_AND_MALES),
         anyList(),
         any(Pageable.class)
       )
@@ -372,9 +373,9 @@ class GeneExpressionApiDelegateImplTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
 
-    verify(repository).findByTissueAndSexAndCompositeIdentifiers(
+    verify(repository).findByTissueAndSexCohortAndCompositeIdentifiers(
       eq(TISSUE_HEMIBRAIN),
-      eq(SEX_FEMALES_AND_MALES),
+      eq(SEX_COHORT_FEMALES_AND_MALES),
       anyList(),
       any(Pageable.class)
     );
@@ -403,7 +404,7 @@ class GeneExpressionApiDelegateImplTest {
     document.setModelGroup(null);
     document.setModelType("Familial AD");
     document.setTissue("Hemibrain");
-    document.setSex("Females");
+    document.setSexCohort("Females");
     document.setFourMonths(foldChange);
     return document;
   }
@@ -421,7 +422,7 @@ class GeneExpressionApiDelegateImplTest {
     document.setModelGroup(null);
     document.setModelType("Familial AD");
     document.setTissue("Hemibrain");
-    document.setSex("Females");
+    document.setSexCohort("Females");
     document.setFourMonths(foldChange);
     return document;
   }

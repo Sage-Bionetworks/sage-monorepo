@@ -50,7 +50,7 @@ export interface GeneExpression {
    * Tissue type
    */
   tissue: string;
-  sex: SexCohort;
+  sex_cohort: SexCohort;
   '4 months'?: FoldChangeResult;
   '12 months'?: FoldChangeResult;
   '18 months'?: FoldChangeResult;

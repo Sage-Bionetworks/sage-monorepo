@@ -42,7 +42,8 @@ public class GeneExpressionDocument {
 
   private String tissue;
 
-  private String sex;
+  @Field("sex_cohort")
+  private String sexCohort;
 
   @Field("4 months")
   private @Nullable FoldChangeResult fourMonths;

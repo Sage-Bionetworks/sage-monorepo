@@ -6,7 +6,6 @@ import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocume
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.FoldChangeResultDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.SexCohortDto;
 import org.sagebionetworks.model.ad.api.next.util.EnumConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -33,7 +32,7 @@ public class GeneExpressionMapper {
       document.getModelGroup(),
       document.getModelType(),
       document.getTissue(),
-      EnumConverter.toSexCohortDto(document.getSex(), "gene expression record")
+      EnumConverter.toSexCohortDto(document.getSexCohort(), "gene expression record")
     );
 
     dto.set4months(toFoldChangeDto(document.getFourMonths()));

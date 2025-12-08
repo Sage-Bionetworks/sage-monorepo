@@ -2,17 +2,14 @@ package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.service.GeneExpressionService;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -24,28 +21,31 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   public ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
     GeneExpressionSearchQueryDto query
   ) {
-    String[] tissueAndSex = extractTissueAndSex(query.getCategories());
-    String tissue = tissueAndSex[0];
-    String sex = tissueAndSex[1];
+    String[] tissueAndSexCohort = extractTissueAndSexCohort(query.getCategories());
+    String tissue = tissueAndSexCohort[0];
+    String sexCohort = tissueAndSexCohort[1];
 
-    GeneExpressionsPageDto results = geneExpressionService.loadGeneExpressions(query, tissue, sex);
-
+    GeneExpressionsPageDto results = geneExpressionService.loadGeneExpressions(
+      query,
+      tissue,
+      sexCohort
+    );
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
       .body(results);
   }
 
   /**
-   * Extracts tissue and sex from categories array.
-   * Expected format: [mainCategory, tissueCategory, sexCategory] where:
+   * Extracts tissue and sex_cohort from categories array.
+   * Expected format: [mainCategory, tissueCategory, sexCohortCategory] where:
    * - categories[0] is the main category (e.g., "RNA - DIFFERENTIAL EXPRESSION")
    * - categories[1] is the tissue with prefix (e.g., "Tissue - Hemibrain")
-   * - categories[2] is the sex with prefix (e.g., "Sex - Females & Males")
+   * - categories[2] is the sex_cohort with prefix (e.g., "Sex - Females & Males")
    *
    * @param categories Array of category values
-   * @return Array with [tissue, sex]
+   * @return Array with [tissue, sex_cohort]
    */
-  private String[] extractTissueAndSex(List<String> categories) {
+  private String[] extractTissueAndSexCohort(List<String> categories) {
     if (categories == null || categories.size() < 3) {
       throw new InvalidCategoryException(
         "Expected at least 3 category values, got: " +
@@ -55,7 +55,7 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
 
     String mainCategory = categories.get(0).trim();
     String tissueWithPrefix = categories.get(1).trim();
-    String sexWithPrefix = categories.get(2).trim();
+    String sexCohortWithPrefix = categories.get(2).trim();
 
     // Validate main category (case-insensitive check)
     if (
@@ -70,10 +70,10 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
     // Extract tissue from "Tissue - Hemibrain"
     String tissue = extractValueAfterPrefix(tissueWithPrefix, "Tissue - ", "tissue");
 
-    // Extract sex from "Sex - Females & Males"
-    String sex = extractValueAfterPrefix(sexWithPrefix, "Sex - ", "sex");
+    // Extract sex_cohort from "Sex - Females & Males"
+    String sexCohort = extractValueAfterPrefix(sexCohortWithPrefix, "Sex - ", "sex_cohort");
 
-    return new String[] { tissue, sex };
+    return new String[] { tissue, sexCohort };
   }
 
   private String extractValueAfterPrefix(String value, String prefix, String fieldName) {

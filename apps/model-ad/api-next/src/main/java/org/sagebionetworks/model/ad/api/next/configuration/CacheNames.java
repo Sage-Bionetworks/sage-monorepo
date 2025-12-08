@@ -26,9 +26,9 @@ public final class CacheNames {
 
   /**
    * Cache for gene expression queries.
-   * Stores results from gene expression comparison queries filtered by tissue, sex, items, and
-   * filter type.
-   * Key format: Dynamic based on query parameters (tissue, sex, items, filterType)
+   * Stores results from gene expression comparison queries filtered by tissue, sex_cohort, items,
+   * and filter type.
+   * Key format: Dynamic based on query parameters (tissue, sex_cohort, items, filterType)
    */
   public static final String GENE_EXPRESSION = "geneExpression";
 }

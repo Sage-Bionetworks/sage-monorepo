@@ -22,7 +22,7 @@ export interface GeneExpressionSearchQuery {
    */
   pageSize?: number;
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex information. Expected format: [mainCategory, tissueCategory, sexCategory]
+   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory]
    */
   categories: Array<string>;
   /**
