@@ -44,8 +44,8 @@
             }
             @if (columnType.startsWith('link_')) {
               <explorers-comparison-tool-table-link
-                [linkText]="cellData?.link_text || column.link_text"
-                [linkUrl]="cellData?.link_url || column.link_url"
+                [linkText]="getLinkText(cellData, column)"
+                [linkUrl]="getLinkUrl(cellData, column)"
               />
             }
           </td>

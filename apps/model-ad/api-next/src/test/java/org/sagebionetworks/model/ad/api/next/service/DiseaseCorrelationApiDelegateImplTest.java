@@ -65,7 +65,7 @@ class DiseaseCorrelationApiDelegateImplTest {
   @DisplayName("should throw bad request when category missing subcategory")
   void shouldThrowBadRequestWhenCategoryMissingSubcategory() {
     DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
-      .category(List.of(ErrorConstants.SUPPORTED_CATEGORY))
+      .categories(List.of(ErrorConstants.DISEASE_CORRELATION_CATEGORY))
       .build();
 
     assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query)).isInstanceOf(
@@ -79,7 +79,7 @@ class DiseaseCorrelationApiDelegateImplTest {
   @DisplayName("should throw bad request when category unsupported")
   void shouldThrowBadRequestWhenCategoryUnsupported() {
     DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
-      .category(List.of("OTHER", CLUSTER_A))
+      .categories(List.of("OTHER", CLUSTER_A))
       .build();
 
     assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query)).isInstanceOf(
@@ -240,7 +240,7 @@ class DiseaseCorrelationApiDelegateImplTest {
 
   private DiseaseCorrelationSearchQueryDto.Builder buildQuery(String cluster) {
     return DiseaseCorrelationSearchQueryDto.builder()
-      .category(List.of(ErrorConstants.SUPPORTED_CATEGORY, cluster))
+      .categories(List.of(ErrorConstants.DISEASE_CORRELATION_CATEGORY, cluster))
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(PAGE_NUMBER)

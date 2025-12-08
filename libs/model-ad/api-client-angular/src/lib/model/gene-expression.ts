@@ -11,13 +11,13 @@ import { FoldChangeResult } from './fold-change-result';
 import { SexCohort } from './sex-cohort';
 
 /**
- * Disease Correlation
+ * Gene Expression
  */
 export interface GeneExpression {
   /**
-   * Unique identifier for the disease correlation object
+   * Unique identifier for the gene expression object
    */
-  _id: string;
+  composite_id: string;
   /**
    * Ensembl Gene ID
    */

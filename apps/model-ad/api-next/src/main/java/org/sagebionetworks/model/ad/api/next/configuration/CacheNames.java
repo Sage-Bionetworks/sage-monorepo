@@ -23,4 +23,12 @@ public final class CacheNames {
    * Key format: Dynamic based on query parameters (items, filterType)
    */
   public static final String MODEL_OVERVIEW = "modelOverview";
+
+  /**
+   * Cache for gene expression queries.
+   * Stores results from gene expression comparison queries filtered by tissue, sex, items, and
+   * filter type.
+   * Key format: Dynamic based on query parameters (tissue, sex, items, filterType)
+   */
+  public static final String GENE_EXPRESSION = "geneExpression";
 }
