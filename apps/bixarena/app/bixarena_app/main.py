@@ -254,7 +254,7 @@ def build_opengraph_meta_tags(title: str, og_image_url: str) -> str:
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/png">
-    <meta property="og:image:alt" content="BioArena logo">
+    <meta property="og:image:alt" content="BioArena OpenGraph Image">
     """
 
     return og_tags
@@ -334,6 +334,7 @@ def build_app():
     og_image_url = (
         "https://raw.githubusercontent.com/rrchai/test-assets/main/og-image.png"
     )
+    # og_image_url = "https://bioarena.io/gradio_api/file=/usr/local/lib/python3.13/site-packages/bixarena_app/assets/og-image.png"
     og_meta_tags = build_opengraph_meta_tags(title, og_image_url)
 
     # Combine all head scripts
