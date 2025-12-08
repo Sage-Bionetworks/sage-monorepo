@@ -1,32 +1,36 @@
 package org.sagebionetworks.model.ad.api.next.model.dto;
 
-import java.net.URI;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import java.net.URI;
+import java.time.OffsetDateTime;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.lang.Nullable;
-import java.time.OffsetDateTime;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import java.util.*;
-import jakarta.annotation.Generated;
 
 /**
  * Disease correlation search query with pagination and filtering options.
  */
 
-@Schema(name = "DiseaseCorrelationSearchQuery", description = "Disease correlation search query with pagination and filtering options.")
+@Schema(
+  name = "DiseaseCorrelationSearchQuery",
+  description = "Disease correlation search query with pagination and filtering options."
+)
 @JsonTypeName("DiseaseCorrelationSearchQuery")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
+@Generated(
+  value = "org.openapitools.codegen.languages.SpringCodegen",
+  comments = "Generator version: 7.14.0"
+)
 public class DiseaseCorrelationSearchQueryDto {
 
   private Integer pageNumber = 0;
@@ -40,6 +44,8 @@ public class DiseaseCorrelationSearchQueryDto {
   private @Nullable List<String> items;
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
+
+  private @Nullable String search = null;
 
   public DiseaseCorrelationSearchQueryDto() {
     super();
@@ -62,8 +68,13 @@ public class DiseaseCorrelationSearchQueryDto {
    * minimum: 0
    * @return pageNumber
    */
-  @Min(0) 
-  @Schema(name = "pageNumber", example = "0", description = "The page number.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Min(0)
+  @Schema(
+    name = "pageNumber",
+    example = "0",
+    description = "The page number.",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("pageNumber")
   public Integer getPageNumber() {
     return pageNumber;
@@ -84,8 +95,14 @@ public class DiseaseCorrelationSearchQueryDto {
    * maximum: 100
    * @return pageSize
    */
-  @Min(1) @Max(100) 
-  @Schema(name = "pageSize", example = "100", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Min(1)
+  @Max(100)
+  @Schema(
+    name = "pageSize",
+    example = "100",
+    description = "The number of items in a single page.",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("pageSize")
   public Integer getPageSize() {
     return pageSize;
@@ -109,11 +126,17 @@ public class DiseaseCorrelationSearchQueryDto {
   }
 
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory] 
+   * Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory]
    * @return categories
    */
-  @NotNull @Size(min = 2, max = 2) 
-  @Schema(name = "categories", example = "[\"CONSENSUS NETWORK MODULES\",\"Consensus Cluster A - ECM Organization\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull
+  @Size(min = 2, max = 2)
+  @Schema(
+    name = "categories",
+    example = "[\"CONSENSUS NETWORK MODULES\",\"Consensus Cluster A - ECM Organization\"]",
+    description = "Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory] ",
+    requiredMode = Schema.RequiredMode.REQUIRED
+  )
   @JsonProperty("categories")
   public List<String> getCategories() {
     return categories;
@@ -137,11 +160,16 @@ public class DiseaseCorrelationSearchQueryDto {
   }
 
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations. 
+   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations.
    * @return items
    */
-  
-  @Schema(name = "items", example = "[\"APOE4~4 months~Female\",\"APOE4~8 months~Male\",\"5xFAD (IU/Jax/Pitt)~12 months~Female\"]", description = "List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+
+  @Schema(
+    name = "items",
+    example = "[\"APOE4~4 months~Female\",\"APOE4~8 months~Male\",\"5xFAD (IU/Jax/Pitt)~12 months~Female\"]",
+    description = "List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations. ",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("items")
   public @Nullable List<String> getItems() {
     return items;
@@ -160,7 +188,7 @@ public class DiseaseCorrelationSearchQueryDto {
    * Get itemFilterType
    * @return itemFilterType
    */
-  @Valid 
+  @Valid
   @Schema(name = "itemFilterType", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("itemFilterType")
   public ItemFilterTypeQueryDto getItemFilterType() {
@@ -171,6 +199,31 @@ public class DiseaseCorrelationSearchQueryDto {
     this.itemFilterType = itemFilterType;
   }
 
+  public DiseaseCorrelationSearchQueryDto search(@Nullable String search) {
+    this.search = search;
+    return this;
+  }
+
+  /**
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'.
+   * @return search
+   */
+
+  @Schema(
+    name = "search",
+    example = "3xtg-ad,5xfad (uci)",
+    description = "Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'. ",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
+  @JsonProperty("search")
+  public @Nullable String getSearch() {
+    return search;
+  }
+
+  public void setSearch(@Nullable String search) {
+    this.search = search;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -179,17 +232,21 @@ public class DiseaseCorrelationSearchQueryDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DiseaseCorrelationSearchQueryDto diseaseCorrelationSearchQuery = (DiseaseCorrelationSearchQueryDto) o;
-    return Objects.equals(this.pageNumber, diseaseCorrelationSearchQuery.pageNumber) &&
-        Objects.equals(this.pageSize, diseaseCorrelationSearchQuery.pageSize) &&
-        Objects.equals(this.categories, diseaseCorrelationSearchQuery.categories) &&
-        Objects.equals(this.items, diseaseCorrelationSearchQuery.items) &&
-        Objects.equals(this.itemFilterType, diseaseCorrelationSearchQuery.itemFilterType);
+    DiseaseCorrelationSearchQueryDto diseaseCorrelationSearchQuery =
+      (DiseaseCorrelationSearchQueryDto) o;
+    return (
+      Objects.equals(this.pageNumber, diseaseCorrelationSearchQuery.pageNumber) &&
+      Objects.equals(this.pageSize, diseaseCorrelationSearchQuery.pageSize) &&
+      Objects.equals(this.categories, diseaseCorrelationSearchQuery.categories) &&
+      Objects.equals(this.items, diseaseCorrelationSearchQuery.items) &&
+      Objects.equals(this.itemFilterType, diseaseCorrelationSearchQuery.itemFilterType) &&
+      Objects.equals(this.search, diseaseCorrelationSearchQuery.search)
+    );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType);
+    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search);
   }
 
   @Override
@@ -201,6 +258,7 @@ public class DiseaseCorrelationSearchQueryDto {
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
+    sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -215,7 +273,7 @@ public class DiseaseCorrelationSearchQueryDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
   public static class Builder {
 
     private DiseaseCorrelationSearchQueryDto instance;
@@ -228,12 +286,13 @@ public class DiseaseCorrelationSearchQueryDto {
       this.instance = instance;
     }
 
-    protected Builder copyOf(DiseaseCorrelationSearchQueryDto value) { 
+    protected Builder copyOf(DiseaseCorrelationSearchQueryDto value) {
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
       this.instance.setCategories(value.categories);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
+      this.instance.setSearch(value.search);
       return this;
     }
 
@@ -241,32 +300,39 @@ public class DiseaseCorrelationSearchQueryDto {
       this.instance.pageNumber(pageNumber);
       return this;
     }
-    
+
     public DiseaseCorrelationSearchQueryDto.Builder pageSize(Integer pageSize) {
       this.instance.pageSize(pageSize);
       return this;
     }
-    
+
     public DiseaseCorrelationSearchQueryDto.Builder categories(List<String> categories) {
       this.instance.categories(categories);
       return this;
     }
-    
+
     public DiseaseCorrelationSearchQueryDto.Builder items(List<String> items) {
       this.instance.items(items);
       return this;
     }
-    
-    public DiseaseCorrelationSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
+
+    public DiseaseCorrelationSearchQueryDto.Builder itemFilterType(
+      ItemFilterTypeQueryDto itemFilterType
+    ) {
       this.instance.itemFilterType(itemFilterType);
       return this;
     }
-    
+
+    public DiseaseCorrelationSearchQueryDto.Builder search(String search) {
+      this.instance.search(search);
+      return this;
+    }
+
     /**
-    * returns a built DiseaseCorrelationSearchQueryDto instance.
-    *
-    * The builder is not reusable (NullPointerException)
-    */
+     * returns a built DiseaseCorrelationSearchQueryDto instance.
+     *
+     * The builder is not reusable (NullPointerException)
+     */
     public DiseaseCorrelationSearchQueryDto build() {
       try {
         return this.instance;
@@ -283,19 +349,18 @@ public class DiseaseCorrelationSearchQueryDto {
   }
 
   /**
-  * Create a builder with no initialized field (except for the default values).
-  */
+   * Create a builder with no initialized field (except for the default values).
+   */
   public static DiseaseCorrelationSearchQueryDto.Builder builder() {
     return new DiseaseCorrelationSearchQueryDto.Builder();
   }
 
   /**
-  * Create a builder with a shallow copy of this instance.
-  */
+   * Create a builder with a shallow copy of this instance.
+   */
   public DiseaseCorrelationSearchQueryDto.Builder toBuilder() {
-    DiseaseCorrelationSearchQueryDto.Builder builder = new DiseaseCorrelationSearchQueryDto.Builder();
+    DiseaseCorrelationSearchQueryDto.Builder builder =
+      new DiseaseCorrelationSearchQueryDto.Builder();
     return builder.copyOf(this);
   }
-
 }
-

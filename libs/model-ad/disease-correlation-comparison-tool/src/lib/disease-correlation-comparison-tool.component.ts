@@ -8,6 +8,7 @@ import {
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import {
+  ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolUrlService,
   PlatformService,
@@ -40,12 +41,14 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
   pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
 
   currentPageNumber = this.comparisonToolService.pageNumber;
   currentPageSize = this.comparisonToolService.pageSize;
+  searchTerm = this.comparisonToolFilterService.searchTerm;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
@@ -121,9 +124,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     pinnedItems: string[],
     pageNumber: number,
     pageSize: number,
+    searchTerm: string | null,
   ) {
     this.getPinnedData(selection, pinnedItems);
-    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize);
+    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize, searchTerm);
   }
 
   readonly onUpdateEffect = effect(() => {
@@ -134,7 +138,13 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       }
 
       const pinnedItems = Array.from(this.pinnedItems());
-      this.loadData(selection, pinnedItems, this.currentPageNumber(), this.currentPageSize());
+      this.loadData(
+        selection,
+        pinnedItems,
+        this.currentPageNumber(),
+        this.currentPageSize(),
+        this.searchTerm(),
+      );
     }
   });
 
@@ -158,6 +168,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     pinnedItems: string[],
     pageNumber: number,
     pageSize: number,
+    searchTerm: string | null,
   ) {
     const query: DiseaseCorrelationSearchQuery = {
       categories: selection,
@@ -165,6 +176,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       itemFilterType: ItemFilterTypeQuery.Exclude,
       pageNumber,
       pageSize,
+      search: searchTerm,
     };
 
     this.diseaseCorrelationService
