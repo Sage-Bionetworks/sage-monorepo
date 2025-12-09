@@ -347,10 +347,7 @@ def build_app():
         "the next breakthrough in biomedicine, inviting a global community "
         "of researchers, clinicians, and biomedical enthusiasts."
     )
-    og_image_url = (
-        "https://raw.githubusercontent.com/rrchai/test-assets/main/og-image.png"
-    )
-    # og_image_url = "https://bioarena.io/gradio_api/file=/usr/local/lib/python3.13/site-packages/bixarena_app/assets/og-image.png"
+    og_image_url = "https://raw.githubusercontent.com/rrchai/sage-monorepo/bixarena/add-og/apps/bixarena/app/bixarena_app/assets/bioarena-opengraph.png"
     og_meta_tags = build_opengraph_meta_tags(title, description, og_image_url)
 
     # Combine all head scripts
