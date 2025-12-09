@@ -8,6 +8,9 @@ import {
   getPinnedTable,
   getQueryParamFromValues,
   getRowByName,
+  testFullCaseInsensitiveMatch,
+  testPartialCaseInsensitiveSearch,
+  testSearchExcludesPinnedItems,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
@@ -34,7 +37,7 @@ test.describe('disease correlation', () => {
     );
 
     await expectPinnedParams(page, [firstCorrelation.composite_id]);
-    await expectPinnedRows(page, [firstCorrelation.name]);
+    await expectPinnedRows(page, [firstCorrelation.composite_id]);
 
     const dropdown = page.getByRole('combobox');
     await dropdown.click();
@@ -49,10 +52,10 @@ test.describe('disease correlation', () => {
     await options.first().click();
 
     await expectPinnedParams(page, [firstCorrelation.composite_id]);
-    await expectPinnedRows(page, [firstCorrelation.name]);
+    await expectPinnedRows(page, [firstCorrelation.composite_id]);
 
     const pinnedTable = getPinnedTable(page);
-    await unPinByName(pinnedTable, page, firstCorrelation.name);
+    await unPinByName(pinnedTable, page, firstCorrelation.composite_id);
     await expectPinnedParams(page, []);
   });
 
@@ -87,7 +90,9 @@ test.describe('disease correlation', () => {
     await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
 
     await expect(page.locator('explorers-base-table')).toHaveCount(2);
-    await expect(getRowByName(getPinnedTable(page), page, firstCorrelation.name)).toHaveCount(1);
+    await expect(
+      getRowByName(getPinnedTable(page), page, firstCorrelation.composite_id),
+    ).toHaveCount(1);
     await expectPinnedParams(page, [firstCorrelation.composite_id]);
     await expectCategoriesParams(page, categories);
     await expectCategories(page, categories);
@@ -197,5 +202,103 @@ test.describe('disease correlation', () => {
 
     await page.getByRole('link', { name: 'Home' }).click();
     await expect(page).toHaveURL(`${baseURL}/`);
+  });
+
+  test('filterbox search without comma returns partial case-insensitive matches', async ({
+    page,
+  }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const categories = configs[1]?.dropdowns;
+    expect(categories.length).toBeGreaterThan(1);
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(categories, 'categories'),
+    );
+
+    await testPartialCaseInsensitiveSearch(page, 'apo', [
+      'APOE4~12 months~Female',
+      'APOE4~12 months~Male',
+      'APOE4~4 months~Female',
+      'APOE4~4 months~Male',
+      'APOE4~8 months~Female',
+      'APOE4~8 months~Male',
+    ]);
+  });
+
+  test('filterbox search excludes pinned items from results', async ({ page }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const categories = configs[1]?.dropdowns;
+    expect(categories.length).toBeGreaterThan(1);
+
+    const pinnedCorrelations = [
+      '5xFAD (IU/Jax/Pitt)~12 months~Female',
+      '5xFAD (IU/Jax/Pitt)~12 months~Male',
+      '5xFAD (IU/Jax/Pitt)~4 months~Female',
+      '5xFAD (IU/Jax/Pitt)~4 months~Male',
+    ];
+
+    const queryParameters = [
+      getQueryParamFromValues(categories, 'categories'),
+      getQueryParamFromValues(pinnedCorrelations, 'pinned'),
+    ].join('&');
+
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+
+    await testSearchExcludesPinnedItems(page, pinnedCorrelations, 'fad', '5xfad (iu/jax/pitt),');
+  });
+
+  test('filterbox search with commas returns full, case-insensitive matches', async ({ page }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const categories = configs[1]?.dropdowns;
+    expect(categories.length).toBeGreaterThan(1);
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(categories, 'categories'),
+    );
+
+    await testFullCaseInsensitiveMatch(
+      page,
+      'load1,',
+      [
+        'LOAD1~12 months~Female',
+        'LOAD1~12 months~Male',
+        'LOAD1~4 months~Female',
+        'LOAD1~4 months~Male',
+        'LOAD1~8 months~Female',
+        'LOAD1~8 months~Male',
+      ],
+      'LOAD1.Clasp2L163P~12 months~Female',
+    );
+  });
+
+  test('filterbox search partial case-insensitive matches with special characters', async ({
+    page,
+  }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const categories = configs[1]?.dropdowns;
+    expect(categories.length).toBeGreaterThan(1);
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(categories, 'categories'),
+    );
+
+    await testPartialCaseInsensitiveSearch(page, '(iu', [
+      '5xFAD (IU/Jax/Pitt)~12 months~Female',
+      '5xFAD (IU/Jax/Pitt)~12 months~Male',
+      '5xFAD (IU/Jax/Pitt)~4 months~Female',
+      '5xFAD (IU/Jax/Pitt)~4 months~Male',
+    ]);
   });
 });

@@ -20,7 +20,7 @@ export class PrimaryIdentifierControlsComponent {
 
   @HostBinding('attr.aria-label')
   protected get hostAriaLabel(): string {
-    return this.label();
+    return this.id();
   }
 
   maxPinnedItems = this.comparisonToolService.maxPinnedItems;
