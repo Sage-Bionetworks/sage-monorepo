@@ -99,7 +99,7 @@ export const expectCategories = async (page: Page, categories: string[]): Promis
 };
 
 export const searchViaFilterbox = async (page: Page, searchTerm: string): Promise<void> => {
-  const searchInput = page.getByPlaceholder('Search', { exact: true });
+  const searchInput = page.getByPlaceholder('Value1, Value2', { exact: true });
   await searchInput.clear();
   await searchInput.fill(searchTerm);
   await expect(page.getByText('Matching Results')).toBeVisible();
