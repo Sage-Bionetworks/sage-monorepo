@@ -42,5 +42,13 @@ properties:
   itemFilterType:
     $ref: ItemFilterTypeQuery.yaml
     nullable: true
+  search:
+    description: |
+      Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches).
+      Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when 
+      itemFilterType is 'exclude'.
+    type: string
+    nullable: true
+    example: 'gnai,cdc45'
 required:
   - categories

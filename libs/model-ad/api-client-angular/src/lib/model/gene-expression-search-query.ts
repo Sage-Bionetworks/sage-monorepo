@@ -30,5 +30,9 @@ export interface GeneExpressionSearchQuery {
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
+  /**
+   * Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches). Examples: \'gnai,cdc45\' (comma-separated list) or \'gna\' (partial match). Only applied when  itemFilterType is \'exclude\'.
+   */
+  search?: string | null;
 }
 export namespace GeneExpressionSearchQuery {}
