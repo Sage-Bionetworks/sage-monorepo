@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 import { Component, computed, input, signal, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -82,10 +81,9 @@ export class BaseDownloadDomImageComponent {
   }
 
   onResize() {
-    const self = this;
     clearTimeout(this.resizeTimer);
-    this.resizeTimer = setTimeout(function () {
-      self.hide();
+    this.resizeTimer = setTimeout(() => {
+      this.hide();
     }, 0);
   }
 }
