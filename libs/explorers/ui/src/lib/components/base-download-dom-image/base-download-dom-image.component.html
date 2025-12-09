@@ -32,7 +32,7 @@
     <div>
       <p-button [label]="modalButtonLabel()" rounded="true" size="small" (click)="download()">
         @if (isLoading()) {
-          <fa-icon [icon]="spinnerIcon" animation="spin"></fa-icon>
+          <fa-icon class="base-download-dom-image-spinner" [icon]="spinnerIcon"></fa-icon>
         }
       </p-button>
       @if (error()) {

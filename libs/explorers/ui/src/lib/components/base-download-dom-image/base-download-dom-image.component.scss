@@ -42,3 +42,13 @@
     text-align: center;
   }
 }
+
+.base-download-dom-image-spinner {
+  animation: base-download-dom-image-spin 2s linear infinite;
+}
+
+@keyframes base-download-dom-image-spin {
+  to {
+    rotate: 360deg;
+  }
+}
