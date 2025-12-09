@@ -256,6 +256,13 @@ def build_opengraph_meta_tags(title: str, description: str, og_image_url: str) -
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:alt" content="BioArena OpenGraph Image">
+
+    <!-- X Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{title}">
+    <meta name="twitter:description" content="{description}">
+    <meta name="twitter:image" content="{og_image_url}">
+    <meta name="twitter:image:alt" content="BioArena - AI model benchmarking">
     """
 
     return og_tags
