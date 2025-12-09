@@ -10,7 +10,7 @@
     pInputText
     [ngModel]="searchTerm"
     (ngModelChange)="updateSearchTerm($event)"
-    placeholder="Search"
+    placeholder="Value1, Value2"
   />
   @if (searchTerm) {
     <button (click)="clearSearch()">
