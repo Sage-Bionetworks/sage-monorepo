@@ -49,7 +49,7 @@ public class GeneExpressionDto {
 
   private String tissue;
 
-  private SexCohortDto sex;
+  private SexCohortDto sexCohort;
 
   private @Nullable FoldChangeResultDto _4months;
 
@@ -64,7 +64,7 @@ public class GeneExpressionDto {
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionDto(String compositeId, String ensemblGeneId, String geneSymbol, List<String> biodomains, String name, String matchedControl, String modelGroup, String modelType, String tissue, SexCohortDto sex) {
+  public GeneExpressionDto(String compositeId, String ensemblGeneId, String geneSymbol, List<String> biodomains, String name, String matchedControl, String modelGroup, String modelType, String tissue, SexCohortDto sexCohort) {
     this.compositeId = compositeId;
     this.ensemblGeneId = ensemblGeneId;
     this.geneSymbol = geneSymbol;
@@ -74,7 +74,7 @@ public class GeneExpressionDto {
     this.modelGroup = modelGroup;
     this.modelType = modelType;
     this.tissue = tissue;
-    this.sex = sex;
+    this.sexCohort = sexCohort;
   }
 
   public GeneExpressionDto compositeId(String compositeId) {
@@ -265,24 +265,24 @@ public class GeneExpressionDto {
     this.tissue = tissue;
   }
 
-  public GeneExpressionDto sex(SexCohortDto sex) {
-    this.sex = sex;
+  public GeneExpressionDto sexCohort(SexCohortDto sexCohort) {
+    this.sexCohort = sexCohort;
     return this;
   }
 
   /**
-   * Get sex
-   * @return sex
+   * Get sexCohort
+   * @return sexCohort
    */
   @NotNull @Valid 
-  @Schema(name = "sex", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("sex")
-  public SexCohortDto getSex() {
-    return sex;
+  @Schema(name = "sex_cohort", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("sex_cohort")
+  public SexCohortDto getSexCohort() {
+    return sexCohort;
   }
 
-  public void setSex(SexCohortDto sex) {
-    this.sex = sex;
+  public void setSexCohort(SexCohortDto sexCohort) {
+    this.sexCohort = sexCohort;
   }
 
   public GeneExpressionDto _4months(@Nullable FoldChangeResultDto _4months) {
@@ -363,7 +363,7 @@ public class GeneExpressionDto {
         Objects.equals(this.modelGroup, geneExpression.modelGroup) &&
         Objects.equals(this.modelType, geneExpression.modelType) &&
         Objects.equals(this.tissue, geneExpression.tissue) &&
-        Objects.equals(this.sex, geneExpression.sex) &&
+        Objects.equals(this.sexCohort, geneExpression.sexCohort) &&
         Objects.equals(this._4months, geneExpression._4months) &&
         Objects.equals(this._12months, geneExpression._12months) &&
         Objects.equals(this._18months, geneExpression._18months);
@@ -371,7 +371,7 @@ public class GeneExpressionDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(compositeId, ensemblGeneId, geneSymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sex, _4months, _12months, _18months);
+    return Objects.hash(compositeId, ensemblGeneId, geneSymbol, biodomains, name, matchedControl, modelGroup, modelType, tissue, sexCohort, _4months, _12months, _18months);
   }
 
   @Override
@@ -387,7 +387,7 @@ public class GeneExpressionDto {
     sb.append("    modelGroup: ").append(toIndentedString(modelGroup)).append("\n");
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
     sb.append("    tissue: ").append(toIndentedString(tissue)).append("\n");
-    sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
+    sb.append("    sexCohort: ").append(toIndentedString(sexCohort)).append("\n");
     sb.append("    _4months: ").append(toIndentedString(_4months)).append("\n");
     sb.append("    _12months: ").append(toIndentedString(_12months)).append("\n");
     sb.append("    _18months: ").append(toIndentedString(_18months)).append("\n");
@@ -428,7 +428,7 @@ public class GeneExpressionDto {
       this.instance.setModelGroup(value.modelGroup);
       this.instance.setModelType(value.modelType);
       this.instance.setTissue(value.tissue);
-      this.instance.setSex(value.sex);
+      this.instance.setSexCohort(value.sexCohort);
       this.instance.set4months(value._4months);
       this.instance.set12months(value._12months);
       this.instance.set18months(value._18months);
@@ -480,8 +480,8 @@ public class GeneExpressionDto {
       return this;
     }
     
-    public GeneExpressionDto.Builder sex(SexCohortDto sex) {
-      this.instance.sex(sex);
+    public GeneExpressionDto.Builder sexCohort(SexCohortDto sexCohort) {
+      this.instance.sexCohort(sexCohort);
       return this;
     }
     

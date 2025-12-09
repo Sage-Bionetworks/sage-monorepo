@@ -128,7 +128,7 @@ public class GeneExpressionSearchQueryDto {
   }
 
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex information. Expected format: [mainCategory, tissueCategory, sexCategory]
+   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory]
    * @return categories
    */
   @NotNull
@@ -136,7 +136,7 @@ public class GeneExpressionSearchQueryDto {
   @Schema(
     name = "categories",
     example = "[\"RNA - DIFFERENTIAL EXPRESSION\",\"Tissue - Hemibrain\",\"Sex - Females & Males\"]",
-    description = "Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex information. Expected format: [mainCategory, tissueCategory, sexCategory] ",
+    description = "Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory] ",
     requiredMode = Schema.RequiredMode.REQUIRED
   )
   @JsonProperty("categories")

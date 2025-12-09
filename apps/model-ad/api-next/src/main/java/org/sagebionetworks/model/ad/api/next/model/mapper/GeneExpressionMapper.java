@@ -32,7 +32,7 @@ public class GeneExpressionMapper {
       document.getModelGroup(),
       document.getModelType(),
       document.getTissue(),
-      EnumConverter.toSexCohortDto(document.getSex(), "gene expression record")
+      EnumConverter.toSexCohortDto(document.getSexCohort(), "gene expression record")
     );
 
     dto.set4months(toFoldChangeDto(document.getFourMonths()));

@@ -39,12 +39,12 @@ public class GeneExpressionService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('geneExpression', #query.itemFilterType, #query.items, " +
-    "#tissue, #sex, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
+    "#tissue, #sexCohort, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
   )
   public GeneExpressionsPageDto loadGeneExpressions(
     GeneExpressionSearchQueryDto query,
     String tissue,
-    String sex
+    String sexCohort
   ) {
     ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
       query.getItemFilterType(),
@@ -67,7 +67,7 @@ public class GeneExpressionService {
       if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
         page = Page.empty(pageable);
       } else {
-        page = repository.findByTissueAndSex(tissue, sex, pageable);
+        page = repository.findByTissueAndSexCohort(tissue, sexCohort, pageable);
       }
     } else {
       // Parse composite identifiers and build MongoDB query conditions
@@ -76,9 +76,9 @@ public class GeneExpressionService {
         identifiers = sanitizedItems.stream().map(GeneExpressionIdentifier::parse).toList();
       } catch (InvalidFilterException e) {
         log.error(
-          "Failed to parse composite identifiers for tissue '{}' and sex '{}': {}",
+          "Failed to parse composite identifiers for tissue '{}' and sex cohort '{}': {}",
           tissue,
-          sex,
+          sexCohort,
           e.getMessage()
         );
         throw e;
@@ -87,16 +87,16 @@ public class GeneExpressionService {
       List<Map<String, Object>> compositeConditions = buildCompositeConditions(identifiers);
 
       if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-        page = repository.findByTissueAndSexAndCompositeIdentifiers(
+        page = repository.findByTissueAndSexCohortAndCompositeIdentifiers(
           tissue,
-          sex,
+          sexCohort,
           compositeConditions,
           pageable
         );
       } else {
-        page = repository.findByTissueAndSexExcludingCompositeIdentifiers(
+        page = repository.findByTissueAndSexCohortExcludingCompositeIdentifiers(
           tissue,
-          sex,
+          sexCohort,
           compositeConditions,
           pageable
         );

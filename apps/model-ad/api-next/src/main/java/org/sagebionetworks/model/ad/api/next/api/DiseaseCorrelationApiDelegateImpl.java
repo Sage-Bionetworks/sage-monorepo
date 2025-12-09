@@ -58,39 +58,39 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   }
 
   /**
-   * Validates that sortFields and sortOrders are both present or both absent,
-   * and that they have matching element counts.
+   * Validates that sortFields and sortOrders are both present and have matching element counts.
+   * These parameters are required by the API contract.
    *
-   * @param sortFields Comma-delimited sort field names
-   * @param sortOrders Comma-delimited sort orders
+   * @param sortFields Comma-delimited sort field names (required)
+   * @param sortOrders Comma-delimited sort orders (required)
    * @throws IllegalArgumentException if validation fails
    */
   private void validateSortParameters(String sortFields, String sortOrders) {
     boolean hasSortFields = StringUtils.hasText(sortFields);
     boolean hasSortOrders = StringUtils.hasText(sortOrders);
 
-    // Both must be present or both must be absent
-    if (hasSortFields != hasSortOrders) {
-      throw new IllegalArgumentException(
-        "Both sortFields and sortOrders must be provided together, or both must be omitted"
-      );
+    // Both parameters are required
+    if (!hasSortFields) {
+      throw new IllegalArgumentException("sortFields is required");
     }
 
-    // If both are present, validate they have the same number of elements
-    if (hasSortFields) {
-      int fieldCount = sortFields.split(",", -1).length;
-      int orderCount = sortOrders.split(",", -1).length;
+    if (!hasSortOrders) {
+      throw new IllegalArgumentException("sortOrders is required");
+    }
 
-      if (fieldCount != orderCount) {
-        throw new IllegalArgumentException(
-          String.format(
-            "sortFields and sortOrders must have the same number of elements. " +
-            "Got %d field(s) and %d order(s)",
-            fieldCount,
-            orderCount
-          )
-        );
-      }
+    // Validate they have the same number of elements
+    int fieldCount = sortFields.split(",", -1).length;
+    int orderCount = sortOrders.split(",", -1).length;
+
+    if (fieldCount != orderCount) {
+      throw new IllegalArgumentException(
+        String.format(
+          "sortFields and sortOrders must have the same number of elements. " +
+          "Got %d field(s) and %d order(s)",
+          fieldCount,
+          orderCount
+        )
+      );
     }
   }
 

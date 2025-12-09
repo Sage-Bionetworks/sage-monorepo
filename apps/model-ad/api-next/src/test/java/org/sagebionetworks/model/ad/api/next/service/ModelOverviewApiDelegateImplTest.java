@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
@@ -66,9 +67,131 @@ class ModelOverviewApiDelegateImplTest {
   }
 
   @Test
+  @DisplayName("should validate sortFields and sortOrders have matching element counts")
+  void shouldValidateSortFieldsAndSortOrdersHaveMatchingElementCounts() {
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields("name,modelType")
+      .sortOrders("1")
+      .items(List.of("Model A"))
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    assertThatThrownBy(() -> callDelegate(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("must have the same number of elements")
+      .hasMessageContaining("Got 2 field(s) and 1 order(s)");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should throw exception when sortFields is null")
+  void shouldThrowExceptionWhenSortFieldsIsNull() {
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields(null)
+      .sortOrders("1")
+      .items(List.of("Model A"))
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    assertThatThrownBy(() -> callDelegate(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("sortFields is required");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should throw exception when sortFields is empty")
+  void shouldThrowExceptionWhenSortFieldsIsEmpty() {
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields("")
+      .sortOrders("1")
+      .items(List.of("Model A"))
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    assertThatThrownBy(() -> callDelegate(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("sortFields is required");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should throw exception when sortOrders is null")
+  void shouldThrowExceptionWhenSortOrdersIsNull() {
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields("name")
+      .sortOrders(null)
+      .items(List.of("Model A"))
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    assertThatThrownBy(() -> callDelegate(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("sortOrders is required");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should throw exception when sortOrders is empty")
+  void shouldThrowExceptionWhenSortOrdersIsEmpty() {
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields("name")
+      .sortOrders("")
+      .items(List.of("Model A"))
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    assertThatThrownBy(() -> callDelegate(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("sortOrders is required");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should accept valid matching sort parameters")
+  void shouldAcceptValidMatchingSortParameters() {
+    String modelName = "Model A";
+    ModelOverviewDocument document = buildDocument(modelName);
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(document), PageRequest.of(0, 100), 1);
+
+    when(repository.findByNameIn(anyList(), any())).thenReturn(page);
+
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields("name,modelType")
+      .sortOrders("1,-1")
+      .items(List.of(modelName))
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isNotNull();
+  }
+
+  @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields("name")
+      .sortOrders("1")
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
@@ -101,6 +224,8 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findByNameIn(anyList(), any())).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields("name")
+      .sortOrders("1")
       .items(List.of(modelName))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
@@ -150,6 +275,8 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findAll(any(PageRequest.class))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields("name")
+      .sortOrders("1")
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
@@ -181,6 +308,8 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findByNameNotIn(anyList(), any())).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .sortFields("name")
+      .sortOrders("1")
       .items(List.of(excludedName))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
