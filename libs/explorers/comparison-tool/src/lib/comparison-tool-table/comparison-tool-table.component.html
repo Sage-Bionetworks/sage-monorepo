@@ -13,6 +13,7 @@
               [target]="tableHeaderAndPinned"
               [filename]="getPinnedDataFilename()"
               [hasCsvDownload]="true"
+              [hasImageDownload]="viewConfig().allowPinnedImageDownload"
               [data]="getPinnedDataForCsv()"
               [buttonLabel]="'Download'"
               [heading]="'Download all results as:'"

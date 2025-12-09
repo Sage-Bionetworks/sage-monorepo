@@ -95,6 +95,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
     rowIdDataKey: 'name',
+    allowPinnedImageDownload: false,
   };
 
   constructor() {

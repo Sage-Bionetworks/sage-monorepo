@@ -26,6 +26,7 @@ export interface ComparisonToolViewConfig {
   visualizationOverviewPanes: VisualizationOverviewPane[];
   rowsPerPage: number;
   rowIdDataKey: string;
+  allowPinnedImageDownload: boolean;
 }
 
 export interface ComparisonToolFilterOption {

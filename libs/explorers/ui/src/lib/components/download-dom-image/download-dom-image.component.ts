@@ -15,6 +15,7 @@ export class DownloadDomImageComponent {
   filename = input.required();
   buttonLabel = input('');
   hasCsvDownload = input<boolean>(false);
+  hasImageDownload = input<boolean>(true);
   data = input<string[][]>([]);
 
   performDownload = async (fileType: string): Promise<void> => {
