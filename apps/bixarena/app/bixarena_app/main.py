@@ -10,8 +10,8 @@ from fastapi.responses import JSONResponse
 
 from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.constants import GTM_CONTAINER_ID
-from bixarena_app.opengraph import OpenGraphFixMiddleware, build_opengraph_meta_tags
 from bixarena_app.config.utils import setup_logging
+from bixarena_app.opengraph import OpenGraphFixMiddleware, build_opengraph_meta_tags
 from bixarena_app.page.bixarena_battle import build_battle_page
 
 # Configure logging first
@@ -306,7 +306,7 @@ def build_app():
         "the next breakthrough in biomedicine, inviting a global community "
         "of researchers, clinicians, and biomedical enthusiasts."
     )
-    og_image_url = "http://bixare-alb6f-kqcjhcxmakvy-948236684.us-east-1.elb.amazonaws.com/gradio_api/file=/usr/local/lib/python3.13/site-packages/bixarena_app/assets/bioarena-opengraph.png"
+    og_image_url = "https://bioarena.io/gradio_api/file=/usr/local/lib/python3.13/site-packages/bixarena_app/assets/bioarena-opengraph.png"
     og_meta_tags = build_opengraph_meta_tags(title, description, og_image_url)
 
     # Combine all head scripts
