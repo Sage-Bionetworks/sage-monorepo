@@ -66,6 +66,26 @@ class GeneExpressionApiDelegateImplTest {
     delegate = new GeneExpressionApiDelegateImpl(queryService);
   }
 
+  /**
+   * Helper to call delegate with DTO by converting to individual parameters.
+   */
+  private ResponseEntity<GeneExpressionsPageDto> callDelegate(GeneExpressionSearchQueryDto query) {
+    String categories = query.getCategories() != null
+      ? String.join(",", query.getCategories())
+      : null;
+    String items = query.getItems() != null ? String.join(",", query.getItems()) : null;
+    return delegate.getGeneExpressions(
+      categories,
+      query.getSortFields(),
+      query.getSortOrders(),
+      query.getPageNumber(),
+      query.getPageSize(),
+      null, // search
+      items,
+      query.getItemFilterType()
+    );
+  }
+
   @Test
   @DisplayName("should throw bad request when categories array has less than 3 values")
   void shouldThrowBadRequestWhenCategoriesStringHasLessThan3Values() {
@@ -73,7 +93,7 @@ class GeneExpressionApiDelegateImplTest {
       .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
       .build();
 
-    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
+    assertThatThrownBy(() -> callDelegate(query))
       .isInstanceOf(InvalidCategoryException.class)
       .hasMessageContaining("Expected at least 3 category values");
 
@@ -87,7 +107,7 @@ class GeneExpressionApiDelegateImplTest {
       .categories(List.of("OTHER", "Tissue - Hemibrain", "Sex - Females"))
       .build();
 
-    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
+    assertThatThrownBy(() -> callDelegate(query))
       .isInstanceOf(InvalidCategoryException.class)
       .hasMessageContaining("Invalid main category");
 
@@ -101,7 +121,7 @@ class GeneExpressionApiDelegateImplTest {
       .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "InvalidFormat", "Sex - Females"))
       .build();
 
-    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
+    assertThatThrownBy(() -> callDelegate(query))
       .isInstanceOf(InvalidCategoryException.class)
       .hasMessageContaining("Invalid tissue format");
 
@@ -115,7 +135,7 @@ class GeneExpressionApiDelegateImplTest {
       .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "InvalidFormat"))
       .build();
 
-    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
+    assertThatThrownBy(() -> callDelegate(query))
       .isInstanceOf(InvalidCategoryException.class)
       .hasMessageContaining("Invalid sex format");
 
@@ -134,7 +154,7 @@ class GeneExpressionApiDelegateImplTest {
       .build();
 
     // Empty items list with INCLUDE filter returns empty result without calling repository
-    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
+    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     GeneExpressionsPageDto body = response.getBody();
@@ -170,7 +190,7 @@ class GeneExpressionApiDelegateImplTest {
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
+    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     GeneExpressionsPageDto body = response.getBody();
@@ -212,7 +232,7 @@ class GeneExpressionApiDelegateImplTest {
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
+    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -230,9 +250,7 @@ class GeneExpressionApiDelegateImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
-    assertThatThrownBy(() -> delegate.getGeneExpressions(query)).isInstanceOf(
-      InvalidFilterException.class
-    );
+    assertThatThrownBy(() -> callDelegate(query)).isInstanceOf(InvalidFilterException.class);
 
     verifyNoInteractions(repository);
   }
@@ -262,7 +280,7 @@ class GeneExpressionApiDelegateImplTest {
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
+    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -293,7 +311,7 @@ class GeneExpressionApiDelegateImplTest {
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
+    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     GeneExpressionsPageDto body = response.getBody();
@@ -332,7 +350,7 @@ class GeneExpressionApiDelegateImplTest {
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
+    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -367,7 +385,7 @@ class GeneExpressionApiDelegateImplTest {
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
+    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();

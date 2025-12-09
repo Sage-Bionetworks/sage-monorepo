@@ -6,7 +6,7 @@ import {
   ComparisonToolUrlParams,
 } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
-import { FilterService, MessageService } from 'primeng/api';
+import { FilterService, MessageService, SortMeta } from 'primeng/api';
 import { BehaviorSubject, of } from 'rxjs';
 import { ComparisonToolService } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
@@ -228,13 +228,14 @@ describe('ComparisonToolService', () => {
     });
   });
 
+  // Helper functions for fakeAsync tests
+  const flushInitialUrlSync = () => {
+    tick();
+  };
+
+  const getLastNavigateCall = () => (mockRouter.navigate as jest.Mock).mock.calls.at(-1);
+
   describe('URL synchronization', () => {
-    const flushInitialUrlSync = () => {
-      tick();
-    };
-
-    const getLastNavigateCall = () => (mockRouter.navigate as jest.Mock).mock.calls.at(-1);
-
     describe('pinned items sync', () => {
       it('should sync pinned items to URL', fakeAsync(() => {
         connectService();
@@ -467,6 +468,307 @@ describe('ComparisonToolService', () => {
         const lastCall = getLastNavigateCall();
         expect(lastCall?.[1]?.queryParams?.categories).toEqual('Category%20A,Option%201');
         expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id1');
+      }));
+    });
+  });
+
+  describe('sorting functionality', () => {
+    describe('setSort', () => {
+      it('should update sort metadata', fakeAsync(() => {
+        connectService();
+        flushInitialUrlSync();
+
+        const sortMeta: SortMeta[] = [
+          { field: 'gene', order: 1 },
+          { field: 'fc', order: -1 },
+        ];
+
+        service.setSort(sortMeta);
+        tick();
+
+        expect(service.multiSortMeta()).toEqual([
+          { field: 'gene', order: 1 },
+          { field: 'fc', order: -1 },
+        ]);
+      }));
+
+      it('should deep clone sort metadata for immutability', fakeAsync(() => {
+        connectService();
+        flushInitialUrlSync();
+
+        const sortMeta = [{ field: 'name', order: 1 }];
+        service.setSort(sortMeta);
+        tick();
+
+        // Mutate original
+        sortMeta[0].order = -1;
+
+        // Service should still have original value
+        expect(service.multiSortMeta()).toEqual([{ field: 'name', order: 1 }]);
+      }));
+
+      it('should not update if sort is reference-equal', fakeAsync(() => {
+        connectService();
+        flushInitialUrlSync();
+
+        const sortMeta = service.multiSortMeta();
+        const navigateCallsBefore = (mockRouter.navigate as jest.Mock).mock.calls.length;
+
+        service.setSort(sortMeta);
+        tick();
+
+        const navigateCallsAfter = (mockRouter.navigate as jest.Mock).mock.calls.length;
+        expect(navigateCallsAfter).toBe(navigateCallsBefore);
+      }));
+
+      it('should not update if sort is deeply equal', fakeAsync(() => {
+        connectService();
+        flushInitialUrlSync();
+
+        const sortMeta = [{ field: 'name', order: 1 }];
+        service.setSort(sortMeta);
+        tick();
+
+        const navigateCallsBefore = (mockRouter.navigate as jest.Mock).mock.calls.length;
+
+        // Set identical sort
+        service.setSort([{ field: 'name', order: 1 }]);
+        tick();
+
+        const navigateCallsAfter = (mockRouter.navigate as jest.Mock).mock.calls.length;
+        expect(navigateCallsAfter).toBe(navigateCallsBefore);
+      }));
+
+      it('should restore default sort when clearing sort', fakeAsync(() => {
+        const viewConfig = {
+          ...service.viewConfig(),
+          defaultSort: [
+            { field: 'model_type', order: -1 as const },
+            { field: 'name', order: 1 as const },
+          ],
+        };
+
+        connectService();
+        service.setViewConfig(viewConfig);
+        flushInitialUrlSync();
+
+        // Set custom sort
+        service.setSort([{ field: 'age', order: 1 }]);
+        tick();
+        expect(service.multiSortMeta()).toEqual([{ field: 'age', order: 1 }]);
+
+        // Clear sort (empty array)
+        service.setSort([]);
+        tick();
+
+        // Should restore to default
+        expect(service.multiSortMeta()).toEqual([
+          { field: 'model_type', order: -1 },
+          { field: 'name', order: 1 },
+        ]);
+      }));
+
+      it('should allow empty sort when no default is configured', fakeAsync(() => {
+        connectService();
+        flushInitialUrlSync();
+
+        service.setSort([]);
+        tick();
+
+        expect(service.multiSortMeta()).toEqual([]);
+      }));
+
+      it('should sync sort to URL', fakeAsync(() => {
+        connectService();
+        flushInitialUrlSync();
+
+        service.setSort([
+          { field: 'name', order: 1 },
+          { field: 'age', order: -1 },
+        ]);
+        tick();
+
+        const lastCall = getLastNavigateCall();
+        expect(lastCall?.[1]?.queryParams?.sortFields).toEqual('name,age');
+        expect(lastCall?.[1]?.queryParams?.sortOrders).toEqual('1,-1');
+      }));
+    });
+
+    describe('convertSortMetaToArrays', () => {
+      it('should convert sort metadata to field and order arrays', () => {
+        injectService();
+
+        const sortMeta = [
+          { field: 'name', order: 1 },
+          { field: 'age', order: -1 },
+          { field: 'sex', order: 1 },
+        ];
+
+        const result = service.convertSortMetaToArrays(sortMeta);
+
+        expect(result.sortFields).toEqual(['name', 'age', 'sex']);
+        expect(result.sortOrders).toEqual([1, -1, 1]);
+      });
+
+      it('should handle empty array', () => {
+        injectService();
+
+        const result = service.convertSortMetaToArrays([]);
+
+        expect(result.sortFields).toEqual([]);
+        expect(result.sortOrders).toEqual([]);
+      });
+
+      it('should skip items without field', () => {
+        injectService();
+
+        const sortMeta = [
+          { field: 'name', order: 1 },
+          { field: '', order: -1 },
+          { field: 'age', order: 1 },
+        ];
+
+        const result = service.convertSortMetaToArrays(sortMeta);
+
+        expect(result.sortFields).toEqual(['name', 'age']);
+        expect(result.sortOrders).toEqual([1, 1]);
+      });
+
+      it('should default to order 1 when order is undefined', () => {
+        injectService();
+
+        const sortMeta = [{ field: 'name', order: undefined }] as any;
+
+        const result = service.convertSortMetaToArrays(sortMeta);
+
+        expect(result.sortOrders).toEqual([1]);
+      });
+    });
+
+    describe('convertSortMetaToStrings', () => {
+      it('should convert sort metadata to comma-delimited strings', () => {
+        injectService();
+
+        const sortMeta = [
+          { field: 'name', order: 1 },
+          { field: 'age', order: -1 },
+        ];
+
+        const result = service.convertSortMetaToStrings(sortMeta);
+
+        expect(result.sortFields).toBe('name,age');
+        expect(result.sortOrders).toBe('1,-1');
+      });
+
+      it('should handle empty array', () => {
+        injectService();
+
+        const result = service.convertSortMetaToStrings([]);
+
+        expect(result.sortFields).toBe('');
+        expect(result.sortOrders).toBe('');
+      });
+    });
+
+    describe('convertArraysToSortMeta', () => {
+      it('should convert arrays to sort metadata', () => {
+        injectService();
+
+        const result = service.convertArraysToSortMeta(['name', 'age', 'sex'], [1, -1, 1]);
+
+        expect(result).toEqual([
+          { field: 'name', order: 1 },
+          { field: 'age', order: -1 },
+          { field: 'sex', order: 1 },
+        ]);
+      });
+
+      it('should handle empty arrays', () => {
+        injectService();
+
+        const result = service.convertArraysToSortMeta([], []);
+
+        expect(result).toEqual([]);
+      });
+
+      it('should handle null arrays', () => {
+        injectService();
+
+        const result = service.convertArraysToSortMeta(null, null);
+
+        expect(result).toEqual([]);
+      });
+
+      it('should handle undefined arrays', () => {
+        injectService();
+
+        const result = service.convertArraysToSortMeta(undefined, undefined);
+
+        expect(result).toEqual([]);
+      });
+
+      it('should warn and return empty array on length mismatch', () => {
+        injectService();
+        const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+        const result = service.convertArraysToSortMeta(['name', 'age'], [1]);
+
+        expect(result).toEqual([]);
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          expect.stringContaining('sortFields and sortOrders length mismatch'),
+        );
+
+        consoleWarnSpy.mockRestore();
+      });
+    });
+
+    describe('default sort initialization', () => {
+      it('should apply default sort on initialization when no URL params', fakeAsync(() => {
+        const viewConfig = {
+          defaultSort: [
+            { field: 'model_type', order: -1 as const },
+            { field: 'name', order: 1 as const },
+          ],
+        };
+
+        injectService();
+        service.setViewConfig(viewConfig);
+        connectService();
+
+        expect(service.multiSortMeta()).toEqual([
+          { field: 'model_type', order: -1 },
+          { field: 'name', order: 1 },
+        ]);
+      }));
+
+      it('should not override URL sort params with default sort', fakeAsync(() => {
+        const viewConfig = {
+          ...mockComparisonToolDataConfig[0],
+          defaultSort: [
+            { field: 'model_type', order: -1 as const },
+            { field: 'name', order: 1 as const },
+          ],
+        };
+
+        injectService().connect({
+          config$: of([viewConfig] as any),
+          queryParams$: of({
+            sortFields: ['age'],
+            sortOrders: [-1],
+          }),
+        });
+
+        tick();
+
+        expect(service.multiSortMeta()).toEqual([{ field: 'age', order: -1 }]);
+      }));
+
+      it('should not apply default sort when not configured', fakeAsync(() => {
+        connectService();
+
+        tick();
+
+        expect(service.multiSortMeta()).toEqual([]);
       }));
     });
   });

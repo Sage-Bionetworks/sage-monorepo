@@ -1,6 +1,7 @@
-import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, EffectRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { SortMeta } from 'primeng/api';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolViewConfig,
@@ -8,6 +9,7 @@ import {
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import {
+  ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolUrlService,
   PlatformService,
@@ -39,13 +41,19 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   private readonly destroyRef = inject(DestroyRef);
   private readonly geneExpressionService = inject(GeneExpressionService);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
+  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+
+  private onPinnedDataUpdateEffectRef?: EffectRef;
+  private onUnpinnedDataUpdateEffectRef?: EffectRef;
 
   pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
+  multiSortMeta = this.comparisonToolService.multiSortMeta;
 
   currentPageNumber = this.comparisonToolService.pageNumber;
   currentPageSize = this.comparisonToolService.pageSize;
+  searchTerm = this.comparisonToolFilterService.searchTerm;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
@@ -105,40 +113,56 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     headerTitle: ComparisonToolPage.GeneExpression,
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
     viewDetailsTooltip: 'Open gene details page',
-    viewDetailsClick: (id: string, label: string) => {
+    viewDetailsClick: (_id: string, _label: string) => {
       // TODO add logic to display details pages MG-588
     },
     legendPanelConfig: this.legendPanelConfig,
     visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
     rowIdDataKey: 'composite_id',
+    defaultSort: [
+      { field: 'gene_symbol', order: 1 },
+      { field: 'name', order: 1 },
+    ],
   };
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
-  }
 
-  private loadData(
-    selection: string[],
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-  ) {
-    this.getPinnedData(selection, pinnedItems);
-    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize);
-  }
+    // Effect for pinned data - only depends on selection, pins, and sort
+    this.onPinnedDataUpdateEffectRef = effect(() => {
+      if (this.platformService.isBrowser && this.isInitialized()) {
+        const selection = this.comparisonToolService.dropdownSelection();
+        if (!selection.length) {
+          return;
+        }
 
-  readonly onUpdateEffect = effect(() => {
-    if (this.platformService.isBrowser && this.isInitialized()) {
-      const selection = this.comparisonToolService.dropdownSelection();
-      if (!selection.length) {
-        return;
+        const pinnedItems = Array.from(this.pinnedItems());
+        const sortMeta = this.multiSortMeta();
+        this.getPinnedData(selection, pinnedItems, sortMeta);
       }
+    });
 
-      const pinnedItems = Array.from(this.pinnedItems());
-      this.loadData(selection, pinnedItems, this.currentPageNumber(), this.currentPageSize());
-    }
-  });
+    // Effect for unpinned data - depends on all params including pagination
+    this.onUnpinnedDataUpdateEffectRef = effect(() => {
+      if (this.platformService.isBrowser && this.isInitialized()) {
+        const selection = this.comparisonToolService.dropdownSelection();
+        if (!selection.length) {
+          return;
+        }
+
+        const pinnedItems = Array.from(this.pinnedItems());
+        this.getUnpinnedData(
+          selection,
+          pinnedItems,
+          this.currentPageNumber(),
+          this.currentPageSize(),
+          this.searchTerm(),
+          this.multiSortMeta(),
+        );
+      }
+    });
+  }
 
   ngOnInit() {
     if (this.platformService.isServer) {
@@ -152,6 +176,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   }
 
   ngOnDestroy() {
+    this.onPinnedDataUpdateEffectRef?.destroy();
+    this.onUnpinnedDataUpdateEffectRef?.destroy();
     this.comparisonToolService.disconnect();
   }
 
@@ -160,15 +186,22 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     pinnedItems: string[],
     pageNumber: number,
     pageSize: number,
+    searchTerm: string | null,
+    sortMeta: SortMeta[],
   ) {
+    const { sortFields, sortOrders } =
+      this.comparisonToolService.convertSortMetaToStrings(sortMeta);
+
     const query: GeneExpressionSearchQuery = {
-      categories: selection,
-      items: pinnedItems,
+      categories: selection.join(','),
+      items: pinnedItems.join(','),
       itemFilterType: ItemFilterTypeQuery.Exclude,
       pageNumber,
       pageSize,
+      search: searchTerm ?? undefined,
+      sortFields,
+      sortOrders,
     };
-
     this.geneExpressionService
       .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -185,11 +218,16 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       });
   }
 
-  getPinnedData(selection: string[], pinnedItems: string[]) {
+  getPinnedData(selection: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } =
+      this.comparisonToolService.convertSortMetaToStrings(sortMeta);
+
     const query: GeneExpressionSearchQuery = {
-      categories: selection,
-      items: pinnedItems,
+      categories: selection.join(','),
+      items: pinnedItems.join(','),
       itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields,
+      sortOrders,
     };
 
     this.geneExpressionService

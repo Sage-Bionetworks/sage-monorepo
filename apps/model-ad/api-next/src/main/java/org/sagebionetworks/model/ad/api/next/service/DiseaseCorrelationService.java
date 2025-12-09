@@ -19,10 +19,12 @@ import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.DiseaseCorrelationMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.DiseaseCorrelationRepository;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.model.ad.api.next.util.SortHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class DiseaseCorrelationService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('diseaseCorrelation', #query.itemFilterType, #query.items, " +
-    "#cluster, #query.pageNumber, #query.pageSize)"
+    "#cluster, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
   )
   public DiseaseCorrelationsPageDto loadDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query,
@@ -48,8 +50,13 @@ public class DiseaseCorrelationService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<String> items = ApiHelper.sanitizeItems(query.getItems());
-    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
+    List<String> items = query.getItems() != null ? query.getItems() : List.of();
+
+    // Build Sort from sortFields and sortOrders
+    List<String> sortFields = ApiHelper.parseCommaDelimitedString(query.getSortFields());
+    List<Integer> sortOrderIntegers = ApiHelper.parseCommaDelimitedIntegers(query.getSortOrders());
+    Sort sort = buildSort(sortFields, sortOrderIntegers);
+    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
     Page<DiseaseCorrelationDocument> page;
 
     if (items.isEmpty()) {
@@ -134,5 +141,18 @@ public class DiseaseCorrelationService {
     }
 
     return conditions;
+  }
+
+  /**
+   * Builds a Spring Data Sort object using the centralized SortHelper utility.
+   * Applies Disease Correlation-specific field transformations (brain regions -> .correlation).
+   *
+   * @param sortFields list of field names to sort by
+   * @param sortOrders list of sort directions (1 for ascending, -1 for descending)
+   * @return Sort object for use in PageRequest
+   * @throws IllegalArgumentException if arrays have mismatched lengths or invalid values
+   */
+  private Sort buildSort(List<String> sortFields, List<Integer> sortOrders) {
+    return SortHelper.buildSort(sortFields, sortOrders, SortHelper.DISEASE_CORRELATION_TRANSFORMER);
   }
 }

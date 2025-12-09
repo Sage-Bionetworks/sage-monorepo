@@ -19,10 +19,12 @@ import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.GeneExpressionMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.GeneExpressionRepository;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.model.ad.api.next.util.SortHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class GeneExpressionService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('geneExpression', #query.itemFilterType, #query.items, " +
-    "#tissue, #sex, #query.pageNumber, #query.pageSize)"
+    "#tissue, #sex, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
   )
   public GeneExpressionsPageDto loadGeneExpressions(
     GeneExpressionSearchQueryDto query,
@@ -49,8 +51,15 @@ public class GeneExpressionService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<String> sanitizedItems = ApiHelper.sanitizeItems(query.getItems());
-    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
+    List<String> sanitizedItems = query.getItems() != null ? query.getItems() : List.of();
+
+    // Parse comma-delimited sortFields and sortOrders
+    List<String> sortFieldsList = ApiHelper.parseCommaDelimitedString(query.getSortFields());
+    List<Integer> sortOrdersList = ApiHelper.parseCommaDelimitedIntegers(query.getSortOrders());
+
+    // Build Sort from sortFields and sortOrders
+    Sort sort = buildSort(sortFieldsList, sortOrdersList);
+    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
     Page<GeneExpressionDocument> page;
 
     if (sanitizedItems.isEmpty()) {
@@ -113,6 +122,19 @@ public class GeneExpressionService {
       .geneExpressions(geneExpressions)
       .page(pageMetadata)
       .build();
+  }
+
+  /**
+   * Builds a Spring Data Sort object using the centralized SortHelper utility.
+   * Applies Gene Expression-specific field transformations (time period fields -> .log2_fc).
+   *
+   * @param sortFields list of field names to sort by
+   * @param sortOrders list of sort directions (1 for ascending, -1 for descending)
+   * @return Sort object for use in PageRequest
+   * @throws IllegalArgumentException if arrays have mismatched lengths or invalid values
+   */
+  private Sort buildSort(List<String> sortFields, List<Integer> sortOrders) {
+    return SortHelper.buildSort(sortFields, sortOrders, SortHelper.GENE_EXPRESSION_TRANSFORMER);
   }
 
   /**

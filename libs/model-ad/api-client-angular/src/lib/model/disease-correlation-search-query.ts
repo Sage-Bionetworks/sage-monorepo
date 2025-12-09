@@ -22,13 +22,22 @@ export interface DiseaseCorrelationSearchQuery {
    */
   pageSize?: number;
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory]
+   * Comma-delimited category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: \"mainCategory,clusterCategory\"
    */
-  categories: Array<string>;
+  categories: string;
+  search?: string | null;
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations.
+   * Comma-delimited list of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female,APOE4~8 months~Male,5xFAD (IU/Jax/Pitt)~12 months~Female\" filters for documents matching those exact combinations.
    */
-  items?: Array<string> | null;
+  items?: string | null;
   itemFilterType?: ItemFilterTypeQuery;
+  /**
+   * Comma-delimited field names to sort by (e.g., \"name,age,sex\"). Each field in sortFields must have a corresponding order in sortOrders.
+   */
+  sortFields: string;
+  /**
+   * Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
+   */
+  sortOrders: string;
 }
 export namespace DiseaseCorrelationSearchQuery {}

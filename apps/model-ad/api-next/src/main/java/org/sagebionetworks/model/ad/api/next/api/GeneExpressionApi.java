@@ -6,8 +6,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,7 +45,14 @@ public interface GeneExpressionApi {
      * GET /comparison-tools/gene-expression : Get gene expression comparison data
      * Returns a paginated list of gene expression objects for use in comparison tools.
      *
-     * @param geneExpressionSearchQuery The search query used to find and filter gene expressions. (optional)
+     * @param categories Comma-delimited category values from the dropdown selections. (required)
+     * @param sortFields Comma-delimited field names to sort by (e.g., \&quot;gene_symbol,name\&quot;). (required)
+     * @param sortOrders Comma-delimited sort directions corresponding to sortFields. Values 1 (ascending) or -1 (descending). (required)
+     * @param pageNumber The page number. (optional, default to 0)
+     * @param pageSize The number of items in a single page. (optional, default to 100)
+     * @param search  (optional)
+     * @param items Comma-delimited list of composite identifiers to filter by. (optional)
+     * @param itemFilterType  (optional, default to include)
      * @return A paginated response containing gene expression objects (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
@@ -82,9 +89,16 @@ public interface GeneExpressionApi {
     )
     
     default ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
-        @Parameter(name = "geneExpressionSearchQuery", description = "The search query used to find and filter gene expressions.", in = ParameterIn.QUERY) @Valid @Nullable GeneExpressionSearchQueryDto geneExpressionSearchQuery
+        @NotNull @Parameter(name = "categories", description = "Comma-delimited category values from the dropdown selections.", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "categories", required = true) String categories,
+        @NotNull @Pattern(regexp = "^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$") @Parameter(name = "sortFields", description = "Comma-delimited field names to sort by (e.g., \"gene_symbol,name\").", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "sortFields", required = true) String sortFields,
+        @NotNull @Pattern(regexp = "^-?1(,-?1)*$") @Parameter(name = "sortOrders", description = "Comma-delimited sort directions corresponding to sortFields. Values 1 (ascending) or -1 (descending).", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "sortOrders", required = true) String sortOrders,
+        @Min(0) @Parameter(name = "pageNumber", description = "The page number.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+        @Min(1) @Max(100) @Parameter(name = "pageSize", description = "The number of items in a single page.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "pageSize", required = false, defaultValue = "100") Integer pageSize,
+        @Parameter(name = "search", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "search", required = false) @Nullable String search,
+        @Parameter(name = "items", description = "Comma-delimited list of composite identifiers to filter by.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "items", required = false) @Nullable String items,
+        @Parameter(name = "itemFilterType", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "itemFilterType", required = false, defaultValue = "include") ItemFilterTypeQueryDto itemFilterType
     ) {
-        return getDelegate().getGeneExpressions(geneExpressionSearchQuery);
+        return getDelegate().getGeneExpressions(categories, sortFields, sortOrders, pageNumber, pageSize, search, items, itemFilterType);
     }
 
 }

@@ -47,7 +47,7 @@ class ModelOverviewApiControllerWebTest {
   void shouldReturnNotFoundProblemWhenDelegateRaisesModelOverviewNotFoundException()
     throws Exception {
     String modelName = "3xTg-AD";
-    when(delegate.getModelOverviews(any())).thenThrow(
+    when(delegate.getModelOverviews(any(), any(), any(), any(), any(), any(), any())).thenThrow(
       new ResponseStatusException(
         HttpStatus.NOT_FOUND,
         "Model overview not found with name: " + modelName
@@ -55,7 +55,7 @@ class ModelOverviewApiControllerWebTest {
     );
 
     mockMvc
-      .perform(get("/v1/comparison-tools/model-overview").param("item", modelName))
+      .perform(get("/v1/comparison-tools/model-overview").param("item", modelName).param("sortFields", "name").param("sortOrders", "1"))
       .andExpect(status().isNotFound());
   }
 }

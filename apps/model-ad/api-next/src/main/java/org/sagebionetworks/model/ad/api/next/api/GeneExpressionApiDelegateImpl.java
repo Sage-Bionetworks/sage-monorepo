@@ -2,7 +2,6 @@ package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
@@ -22,9 +21,29 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
 
   @Override
   public ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
-    GeneExpressionSearchQueryDto query
+    String categories,
+    String sortFields,
+    String sortOrders,
+    Integer pageNumber,
+    Integer pageSize,
+    String search,
+    String items,
+    ItemFilterTypeQueryDto itemFilterType
   ) {
-    String[] tissueAndSex = extractTissueAndSex(query.getCategories());
+    validateSortParameters(sortFields, sortOrders);
+
+    // Build DTO from HTTP request parameters for easier handling
+    GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
+      .categories(ApiHelper.parseCommaDelimitedString(categories))
+      .sortFields(sortFields)
+      .sortOrders(sortOrders)
+      .pageNumber(pageNumber)
+      .pageSize(pageSize)
+      .items(items != null ? ApiHelper.parseCommaDelimitedString(items) : null)
+      .itemFilterType(itemFilterType)
+      .build();
+
+    String[] tissueAndSex = extractTissueAndSex(categories);
     String tissue = tissueAndSex[0];
     String sex = tissueAndSex[1];
 
@@ -36,20 +55,58 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   }
 
   /**
-   * Extracts tissue and sex from categories array.
-   * Expected format: [mainCategory, tissueCategory, sexCategory] where:
-   * - categories[0] is the main category (e.g., "RNA - DIFFERENTIAL EXPRESSION")
-   * - categories[1] is the tissue with prefix (e.g., "Tissue - Hemibrain")
-   * - categories[2] is the sex with prefix (e.g., "Sex - Females & Males")
+   * Validates that sortFields and sortOrders are both present or both absent,
+   * and that they have matching element counts.
    *
-   * @param categories Array of category values
+   * @param sortFields Comma-delimited sort field names
+   * @param sortOrders Comma-delimited sort orders
+   * @throws IllegalArgumentException if validation fails
+   */
+  private void validateSortParameters(String sortFields, String sortOrders) {
+    boolean hasSortFields = StringUtils.hasText(sortFields);
+    boolean hasSortOrders = StringUtils.hasText(sortOrders);
+
+    // Both must be present or both must be absent
+    if (hasSortFields != hasSortOrders) {
+      throw new IllegalArgumentException(
+        "Both sortFields and sortOrders must be provided together, or both must be omitted"
+      );
+    }
+
+    // If both are present, validate they have the same number of elements
+    if (hasSortFields) {
+      int fieldCount = sortFields.split(",", -1).length;
+      int orderCount = sortOrders.split(",", -1).length;
+
+      if (fieldCount != orderCount) {
+        throw new IllegalArgumentException(
+          String.format(
+            "sortFields and sortOrders must have the same number of elements. " +
+            "Got %d field(s) and %d order(s)",
+            fieldCount,
+            orderCount
+          )
+        );
+      }
+    }
+  }
+
+  /**
+   * Extracts tissue and sex from comma-delimited categories string.
+   * Expected format: "mainCategory,tissueCategory,sexCategory" where:
+   * - First value is the main category (e.g., "RNA - DIFFERENTIAL EXPRESSION")
+   * - Second value is the tissue with prefix (e.g., "Tissue - Hemibrain")
+   * - Third value is the sex with prefix (e.g., "Sex - Females & Males")
+   *
+   * @param categoriesString Comma-delimited category values
    * @return Array with [tissue, sex]
    */
-  private String[] extractTissueAndSex(List<String> categories) {
-    if (categories == null || categories.size() < 3) {
+  private String[] extractTissueAndSex(String categoriesString) {
+    List<String> categories = ApiHelper.parseCommaDelimitedString(categoriesString);
+
+    if (categories.size() < 3) {
       throw new InvalidCategoryException(
-        "Expected at least 3 category values, got: " +
-        (categories == null ? "null" : categories.size())
+        "Expected at least 3 category values, got: " + categories.size()
       );
     }
 

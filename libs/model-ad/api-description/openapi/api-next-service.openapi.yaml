@@ -118,26 +118,39 @@ components:
           maximum: 100
           example: 100
         items:
-          description: List of item names to filter by.
-          type: array
-          items:
-            type: string
+          description: Comma-delimited list of item names to filter by. Example "3xTg-AD,5xFAD (UCI)".
+          type: string
           nullable: true
-          example:
-            - 3xTg-AD
-            - 5xFAD (UCI)
+          example: 3xTg-AD,5xFAD (UCI)
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
         search:
           description: |
             Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
-            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when 
+            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when
             itemFilterType is 'exclude'.
           type: string
           nullable: true
           example: 3xtg-ad,5xfad
-      required: []
+        sortFields:
+          description: |
+            Comma-delimited field names to sort by (e.g., "model_type,name").
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: string
+          pattern: ^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$
+          example: model_type,name
+        sortOrders:
+          description: |
+            Comma-delimited sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: string
+          pattern: ^-?1(,-?1)*$
+          example: '-1,1'
+      required:
+        - sortFields
+        - sortOrders
     ModelOverviewLink:
       type: object
       description: Model Overview Link
@@ -304,37 +317,45 @@ components:
           example: 100
         categories:
           description: |
-            Array of category values from the dropdown selections.
+            Comma-delimited category values from the dropdown selections.
             The API will parse these to extract the cluster information.
-            Expected format: [mainCategory, clusterCategory]
-          type: array
-          items:
-            type: string
-          minItems: 2
-          maxItems: 2
-          example:
-            - CONSENSUS NETWORK MODULES
-            - Consensus Cluster A - ECM Organization
+            Expected format: "mainCategory,clusterCategory"
+          type: string
+          example: CONSENSUS NETWORK MODULES,Consensus Cluster A - ECM Organization
+        search:
+          type: string
+          nullable: true
         items:
           description: |
-            List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
+            Comma-delimited list of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
             where each identifier represents one complete combination of model name, age, and sex.
 
-            Example: "APOE4~4 months~Female" filters for documents matching that exact name, age, and sex.
-            Multiple items can be provided to filter for multiple specific combinations.
-          type: array
-          items:
-            type: string
+            Example: "APOE4~4 months~Female,APOE4~8 months~Male,5xFAD (IU/Jax/Pitt)~12 months~Female" filters for documents matching those exact combinations.
+          type: string
           nullable: true
-          example:
-            - APOE4~4 months~Female
-            - APOE4~8 months~Male
-            - 5xFAD (IU/Jax/Pitt)~12 months~Female
+          example: APOE4~4 months~Female,APOE4~8 months~Male,5xFAD (IU/Jax/Pitt)~12 months~Female
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
+        sortFields:
+          description: |
+            Comma-delimited field names to sort by (e.g., "name,age,sex").
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: string
+          pattern: ^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$
+          example: name,age,sex
+        sortOrders:
+          description: |
+            Comma-delimited sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: string
+          pattern: ^-?1(,-?1)*$
+          example: 1,-1,1
       required:
         - categories
+        - sortFields
+        - sortOrders
     Sex:
       type: string
       description: Sex
@@ -442,37 +463,45 @@ components:
           example: 100
         categories:
           description: |
-            Array of category values from the dropdown selections.
+            Comma-delimited category values from the dropdown selections.
             The API will parse these to extract the tissue and sex information.
-            Expected format: [mainCategory, tissueCategory, sexCategory]
-          type: array
-          items:
-            type: string
-          minItems: 3
-          maxItems: 3
-          example:
-            - RNA - DIFFERENTIAL EXPRESSION
-            - Tissue - Hemibrain
-            - Sex - Females & Males
+            Expected format: "mainCategory,tissueCategory,sexCategory"
+          type: string
+          example: RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females & Males
+        search:
+          type: string
+          nullable: true
         items:
           description: |
-            List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
+            Comma-delimited list of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
             where each identifier represents one complete combination of ensembl gene ID and gene name.
 
-            Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
-            Multiple items can be provided to filter for multiple specific combinations.
-          type: array
-          items:
-            type: string
+            Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt),ENSMUSG00000000028~APOE4" filters for documents matching those exact combinations.
+          type: string
           nullable: true
-          example:
-            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
-            - ENSMUSG00000000028~APOE4
+          example: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt),ENSMUSG00000000028~APOE4
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
+        sortFields:
+          description: |
+            Comma-delimited field names to sort by (e.g., "gene_symbol,name").
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: string
+          pattern: ^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$
+          example: gene_symbol,name
+        sortOrders:
+          description: |
+            Comma-delimited sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: string
+          pattern: ^-?1(,-?1)*$
+          example: 1,-1
       required:
         - categories
+        - sortFields
+        - sortOrders
     SexCohort:
       type: string
       description: Sex Cohort
@@ -570,7 +599,7 @@ components:
       name: modelOverviewSearchQuery
       description: The search query used to find and filter model overviews.
       in: query
-      style: deepObject
+      style: form
       explode: true
       schema:
         $ref: '#/components/schemas/ModelOverviewSearchQuery'
@@ -578,7 +607,7 @@ components:
       name: diseaseCorrelationSearchQuery
       description: The search query used to find and filter disease correlations.
       in: query
-      style: deepObject
+      style: form
       explode: true
       schema:
         $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
@@ -586,7 +615,7 @@ components:
       name: geneExpressionSearchQuery
       description: The search query used to find and filter gene expressions.
       in: query
-      style: deepObject
+      style: form
       explode: true
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'

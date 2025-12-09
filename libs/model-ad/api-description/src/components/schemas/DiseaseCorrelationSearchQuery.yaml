@@ -18,30 +18,42 @@ properties:
     example: 100
   categories:
     description: |
-      Array of category values from the dropdown selections.
+      Comma-delimited category values from the dropdown selections.
       The API will parse these to extract the cluster information.
-      Expected format: [mainCategory, clusterCategory]
-    type: array
-    items:
-      type: string
-    minItems: 2
-    maxItems: 2
-    example: ['CONSENSUS NETWORK MODULES', 'Consensus Cluster A - ECM Organization']
+      Expected format: "mainCategory,clusterCategory"
+    type: string
+    example: 'CONSENSUS NETWORK MODULES,Consensus Cluster A - ECM Organization'
+  search:
+    type: string
+    nullable: true
   items:
     description: |
-      List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
+      Comma-delimited list of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
       where each identifier represents one complete combination of model name, age, and sex.
 
-      Example: "APOE4~4 months~Female" filters for documents matching that exact name, age, and sex.
-      Multiple items can be provided to filter for multiple specific combinations.
-    type: array
-    items:
-      type: string
+      Example: "APOE4~4 months~Female,APOE4~8 months~Male,5xFAD (IU/Jax/Pitt)~12 months~Female" filters for documents matching those exact combinations.
+    type: string
     nullable: true
-    example:
-      ['APOE4~4 months~Female', 'APOE4~8 months~Male', '5xFAD (IU/Jax/Pitt)~12 months~Female']
+    example: 'APOE4~4 months~Female,APOE4~8 months~Male,5xFAD (IU/Jax/Pitt)~12 months~Female'
   itemFilterType:
     $ref: ItemFilterTypeQuery.yaml
     nullable: true
+  sortFields:
+    description: |
+      Comma-delimited field names to sort by (e.g., "name,age,sex").
+      Each field in sortFields must have a corresponding order in sortOrders.
+    type: string
+    pattern: '^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$'
+    example: 'name,age,sex'
+  sortOrders:
+    description: |
+      Comma-delimited sort directions corresponding to sortFields.
+      Values: 1 (ascending) or -1 (descending).
+      Must have the same length as sortFields.
+    type: string
+    pattern: '^-?1(,-?1)*$'
+    example: '1,-1,1'
 required:
   - categories
+  - sortFields
+  - sortOrders

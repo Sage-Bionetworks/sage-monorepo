@@ -18,29 +18,42 @@ properties:
     example: 100
   categories:
     description: |
-      Array of category values from the dropdown selections.
+      Comma-delimited category values from the dropdown selections.
       The API will parse these to extract the tissue and sex information.
-      Expected format: [mainCategory, tissueCategory, sexCategory]
-    type: array
-    items:
-      type: string
-    minItems: 3
-    maxItems: 3
-    example: ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Hemibrain', 'Sex - Females & Males']
+      Expected format: "mainCategory,tissueCategory,sexCategory"
+    type: string
+    example: 'RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females & Males'
+  search:
+    type: string
+    nullable: true
   items:
     description: |
-      List of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
+      Comma-delimited list of composite identifiers to filter by. Each identifier uses the format "ensembl_gene_id~name"
       where each identifier represents one complete combination of ensembl gene ID and gene name.
 
-      Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
-      Multiple items can be provided to filter for multiple specific combinations.
-    type: array
-    items:
-      type: string
+      Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt),ENSMUSG00000000028~APOE4" filters for documents matching those exact combinations.
+    type: string
     nullable: true
-    example: ['ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)', 'ENSMUSG00000000028~APOE4']
+    example: 'ENSMUSG00000000001~5xFAD (Jax/IU/Pitt),ENSMUSG00000000028~APOE4'
   itemFilterType:
     $ref: ItemFilterTypeQuery.yaml
     nullable: true
+  sortFields:
+    description: |
+      Comma-delimited field names to sort by (e.g., "gene_symbol,name").
+      Each field in sortFields must have a corresponding order in sortOrders.
+    type: string
+    pattern: '^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$'
+    example: 'gene_symbol,name'
+  sortOrders:
+    description: |
+      Comma-delimited sort directions corresponding to sortFields.
+      Values: 1 (ascending) or -1 (descending).
+      Must have the same length as sortFields.
+    type: string
+    pattern: '^-?1(,-?1)*$'
+    example: '1,-1'
 required:
   - categories
+  - sortFields
+  - sortOrders

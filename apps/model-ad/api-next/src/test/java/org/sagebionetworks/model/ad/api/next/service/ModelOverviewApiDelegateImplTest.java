@@ -49,6 +49,22 @@ class ModelOverviewApiDelegateImplTest {
     delegate = new ModelOverviewApiDelegateImpl(queryService);
   }
 
+  /**
+   * Helper to call delegate with DTO by converting to individual parameters.
+   */
+  private ResponseEntity<ModelOverviewsPageDto> callDelegate(ModelOverviewSearchQueryDto query) {
+    String items = query.getItems() != null ? String.join(",", query.getItems()) : null;
+    return delegate.getModelOverviews(
+      query.getSortFields(),
+      query.getSortOrders(),
+      query.getPageNumber(),
+      query.getPageSize(),
+      items,
+      query.getItemFilterType(),
+      query.getSearch()
+    );
+  }
+
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
@@ -59,7 +75,7 @@ class ModelOverviewApiDelegateImplTest {
       .pageSize(100)
       .build();
 
-    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
+    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -91,7 +107,7 @@ class ModelOverviewApiDelegateImplTest {
       .pageSize(100)
       .build();
 
-    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
+    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -140,7 +156,7 @@ class ModelOverviewApiDelegateImplTest {
       .pageSize(100)
       .build();
 
-    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
+    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -171,7 +187,7 @@ class ModelOverviewApiDelegateImplTest {
       .pageSize(100)
       .build();
 
-    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
+    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();

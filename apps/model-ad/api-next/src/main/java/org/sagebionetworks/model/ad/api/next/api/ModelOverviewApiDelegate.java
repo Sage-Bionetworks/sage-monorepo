@@ -1,7 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,14 +32,26 @@ public interface ModelOverviewApiDelegate {
      * GET /comparison-tools/model-overview : Get model overview for comparison tools
      * Returns a paginated list of model overview objects for use in comparison tools.
      *
-     * @param modelOverviewSearchQuery The search query used to find and filter model overviews. (optional)
+     * @param sortFields Comma-delimited field names to sort by (e.g., \&quot;model_type,name\&quot;). (required)
+     * @param sortOrders Comma-delimited sort directions corresponding to sortFields. Values 1 (ascending) or -1 (descending). (required)
+     * @param pageNumber The page number to return (index starts from 0). (optional, default to 0)
+     * @param pageSize The number of items in a single page. (optional, default to 100)
+     * @param items Comma-delimited list of item names to filter by. (optional)
+     * @param itemFilterType  (optional, default to include)
+     * @param search Search by model name (case-insensitive partial match) or by comma separated list of model names. (optional)
      * @return A paginated list of model overview objects (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ModelOverviewApi#getModelOverviews
      */
-    default ResponseEntity<ModelOverviewsPageDto> getModelOverviews(ModelOverviewSearchQueryDto modelOverviewSearchQuery) {
+    default ResponseEntity<ModelOverviewsPageDto> getModelOverviews(String sortFields,
+        String sortOrders,
+        Integer pageNumber,
+        Integer pageSize,
+        String items,
+        ItemFilterTypeQueryDto itemFilterType,
+        String search) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

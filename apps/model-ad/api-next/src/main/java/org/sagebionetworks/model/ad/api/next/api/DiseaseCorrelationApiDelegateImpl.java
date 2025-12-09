@@ -6,6 +6,7 @@ import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.service.DiseaseCorrelationService;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
@@ -21,9 +22,30 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
 
   @Override
   public ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(
-    DiseaseCorrelationSearchQueryDto query
+    String categories,
+    String sortFields,
+    String sortOrders,
+    Integer pageNumber,
+    Integer pageSize,
+    String search,
+    String items,
+    ItemFilterTypeQueryDto itemFilterType
   ) {
-    String cluster = extractCluster(query.getCategories());
+    validateSortParameters(sortFields, sortOrders);
+
+    // Build DTO from HTTP request parameters for easier handling
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .categories(ApiHelper.parseCommaDelimitedString(categories))
+      .sortFields(sortFields)
+      .sortOrders(sortOrders)
+      .pageNumber(pageNumber)
+      .pageSize(pageSize)
+      .items(items != null ? ApiHelper.parseCommaDelimitedString(items) : null)
+      .itemFilterType(itemFilterType)
+      .build();
+
+    // Categories format: "cluster1,cluster2"
+    String cluster = extractCluster(categories);
 
     DiseaseCorrelationsPageDto results = diseaseCorrelationService.loadDiseaseCorrelations(
       query,
@@ -36,16 +58,55 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   }
 
   /**
-   * Extracts cluster from categories array.
-   * Expected format: [mainCategory, clusterCategory] where:
-   * - categories[0] is the main category (e.g., "CONSENSUS NETWORK MODULES")
-   * - categories[1] is the cluster category (e.g., "Consensus Cluster A - ECM Organization")
+   * Validates that sortFields and sortOrders are both present or both absent,
+   * and that they have matching element counts.
    *
-   * @param categories Array of category values
+   * @param sortFields Comma-delimited sort field names
+   * @param sortOrders Comma-delimited sort orders
+   * @throws IllegalArgumentException if validation fails
+   */
+  private void validateSortParameters(String sortFields, String sortOrders) {
+    boolean hasSortFields = StringUtils.hasText(sortFields);
+    boolean hasSortOrders = StringUtils.hasText(sortOrders);
+
+    // Both must be present or both must be absent
+    if (hasSortFields != hasSortOrders) {
+      throw new IllegalArgumentException(
+        "Both sortFields and sortOrders must be provided together, or both must be omitted"
+      );
+    }
+
+    // If both are present, validate they have the same number of elements
+    if (hasSortFields) {
+      int fieldCount = sortFields.split(",", -1).length;
+      int orderCount = sortOrders.split(",", -1).length;
+
+      if (fieldCount != orderCount) {
+        throw new IllegalArgumentException(
+          String.format(
+            "sortFields and sortOrders must have the same number of elements. " +
+            "Got %d field(s) and %d order(s)",
+            fieldCount,
+            orderCount
+          )
+        );
+      }
+    }
+  }
+
+  /**
+   * Extracts cluster from comma-delimited categories string.
+   * Expected format: "mainCategory,clusterCategory" where:
+   * - First value is the main category (e.g., "CONSENSUS NETWORK MODULES")
+   * - Second value is the cluster category (e.g., "Consensus Cluster A - ECM Organization")
+   *
+   * @param categoriesString Comma-delimited category values
    * @return cluster name
    */
-  private String extractCluster(List<String> categories) {
-    if (categories == null || categories.size() != 2) {
+  private String extractCluster(String categoriesString) {
+    List<String> categories = ApiHelper.parseCommaDelimitedString(categoriesString);
+
+    if (categories.size() != 2) {
       throw new InvalidCategoryException(ErrorConstants.CATEGORY_REQUIREMENT_MESSAGE);
     }
 

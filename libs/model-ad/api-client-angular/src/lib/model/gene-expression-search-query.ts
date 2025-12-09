@@ -22,13 +22,22 @@ export interface GeneExpressionSearchQuery {
    */
   pageSize?: number;
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex information. Expected format: [mainCategory, tissueCategory, sexCategory]
+   * Comma-delimited category values from the dropdown selections. The API will parse these to extract the tissue and sex information. Expected format: \"mainCategory,tissueCategory,sexCategory\"
    */
-  categories: Array<string>;
+  categories: string;
+  search?: string | null;
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations.
+   * Comma-delimited list of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt),ENSMUSG00000000028~APOE4\" filters for documents matching those exact combinations.
    */
-  items?: Array<string> | null;
+  items?: string | null;
   itemFilterType?: ItemFilterTypeQuery;
+  /**
+   * Comma-delimited field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders.
+   */
+  sortFields: string;
+  /**
+   * Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
+   */
+  sortOrders: string;
 }
 export namespace GeneExpressionSearchQuery {}

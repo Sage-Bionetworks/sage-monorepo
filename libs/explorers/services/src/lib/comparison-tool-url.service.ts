@@ -28,8 +28,17 @@ export class ComparisonToolUrlService {
     const nextPinned = state.pinnedItems ?? [];
     const currentCategories = currentState.categories ?? [];
     const nextCategories = state.categories ?? [];
+    const currentSortFields = currentState.sortFields ?? [];
+    const nextSortFields = state.sortFields ?? [];
+    const currentSortOrders = currentState.sortOrders ?? [];
+    const nextSortOrders = state.sortOrders ?? [];
 
-    if (isEqual(currentPinned, nextPinned) && isEqual(currentCategories, nextCategories)) {
+    if (
+      isEqual(currentPinned, nextPinned) &&
+      isEqual(currentCategories, nextCategories) &&
+      isEqual(currentSortFields, nextSortFields) &&
+      isEqual(currentSortOrders, nextSortOrders)
+    ) {
       return;
     }
 
@@ -56,6 +65,8 @@ export class ComparisonToolUrlService {
 
     this.serializeArrayParam(params, 'categories', state.categories);
     this.serializeArrayParam(params, 'pinned', state.pinnedItems);
+    this.serializeArrayParam(params, 'sortFields', state.sortFields);
+    this.serializeNumberArrayParam(params, 'sortOrders', state.sortOrders);
 
     return params;
   }
@@ -69,6 +80,18 @@ export class ComparisonToolUrlService {
       // Encode each value to preserve commas within individual values
       // Then join with commas as the delimiter
       params[key] = value.map((v) => encodeURIComponent(v)).join(',');
+    } else if (value !== undefined) {
+      params[key] = null;
+    }
+  }
+
+  private serializeNumberArrayParam(
+    params: Params,
+    key: string,
+    value: number[] | null | undefined,
+  ): void {
+    if (value && value.length > 0) {
+      params[key] = value.join(',');
     } else if (value !== undefined) {
       params[key] = null;
     }
@@ -88,6 +111,20 @@ export class ComparisonToolUrlService {
       const categories = this.parseCommaSeparatedParam(params['categories']);
       if (categories.length > 0) {
         result.categories = categories;
+      }
+    }
+
+    if (params['sortFields']) {
+      const sortFields = this.parseCommaSeparatedParam(params['sortFields']);
+      if (sortFields.length > 0) {
+        result.sortFields = sortFields;
+      }
+    }
+
+    if (params['sortOrders']) {
+      const sortOrders = this.parseSortOrdersParam(params['sortOrders']);
+      if (sortOrders.length > 0) {
+        result.sortOrders = sortOrders;
       }
     }
 
@@ -111,5 +148,28 @@ export class ComparisonToolUrlService {
         }
       })
       .filter((entry) => entry.length > 0);
+  }
+
+  private parseSortOrdersParam(value: string | string[] | null | undefined): number[] {
+    if (value == null) {
+      return [];
+    }
+
+    const values = Array.isArray(value) ? value : [value];
+
+    return values
+      .flatMap((entry) => `${entry}`.split(','))
+      .map((entry) => {
+        const num = parseInt(entry, 10);
+        // Validate that the number is valid and is either 1 or -1 (valid sort orders)
+        if (isNaN(num) || (num !== 1 && num !== -1)) {
+          console.warn(
+            `Invalid sort order value '${entry}' in URL. Expected 1 or -1. Ignoring invalid value.`,
+          );
+          return NaN; // Return NaN to be filtered out
+        }
+        return num;
+      })
+      .filter((entry) => !isNaN(entry));
   }
 }
