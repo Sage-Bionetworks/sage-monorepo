@@ -497,6 +497,263 @@ class DiseaseCorrelationServiceTest {
     assertThat(patterns.get(1).pattern()).isEqualTo("^\\Qmodel3\\E$");
   }
 
+  @Test
+  @DisplayName("should sort by age numerically in ascending order")
+  void shouldSortByAgeNumericallyAscending() {
+    DiseaseCorrelationDocument doc1 = createDiseaseCorrelationDocument(
+      "Model1",
+      "12 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc2 = createDiseaseCorrelationDocument(
+      "Model2",
+      "4 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc3 = createDiseaseCorrelationDocument(
+      "Model3",
+      "8 months",
+      "Male"
+    );
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc1, doc2, doc3));
+
+    when(repository.findByCluster(eq(CLUSTER), any(PageRequest.class))).thenReturn(page);
+
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .sortFields("age")
+      .sortOrders("1")
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    DiseaseCorrelationsPageDto result = service.loadDiseaseCorrelations(query, CLUSTER);
+
+    assertThat(result.getDiseaseCorrelations()).hasSize(3);
+    assertThat(result.getDiseaseCorrelations().get(0).getAge()).isEqualTo("4 months");
+    assertThat(result.getDiseaseCorrelations().get(1).getAge()).isEqualTo("8 months");
+    assertThat(result.getDiseaseCorrelations().get(2).getAge()).isEqualTo("12 months");
+  }
+
+  @Test
+  @DisplayName("should sort by age numerically in descending order")
+  void shouldSortByAgeNumericallyDescending() {
+    DiseaseCorrelationDocument doc1 = createDiseaseCorrelationDocument(
+      "Model1",
+      "4 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc2 = createDiseaseCorrelationDocument(
+      "Model2",
+      "12 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc3 = createDiseaseCorrelationDocument(
+      "Model3",
+      "8 months",
+      "Male"
+    );
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc1, doc2, doc3));
+
+    when(repository.findByCluster(eq(CLUSTER), any(PageRequest.class))).thenReturn(page);
+
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .sortFields("age")
+      .sortOrders("-1")
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    DiseaseCorrelationsPageDto result = service.loadDiseaseCorrelations(query, CLUSTER);
+
+    assertThat(result.getDiseaseCorrelations()).hasSize(3);
+    assertThat(result.getDiseaseCorrelations().get(0).getAge()).isEqualTo("12 months");
+    assertThat(result.getDiseaseCorrelations().get(1).getAge()).isEqualTo("8 months");
+    assertThat(result.getDiseaseCorrelations().get(2).getAge()).isEqualTo("4 months");
+  }
+
+  @Test
+  @DisplayName("should sort by name then age when both fields specified")
+  void shouldSortByNameThenAge() {
+    DiseaseCorrelationDocument doc1 = createDiseaseCorrelationDocument(
+      "ModelA",
+      "12 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc2 = createDiseaseCorrelationDocument(
+      "ModelA",
+      "4 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc3 = createDiseaseCorrelationDocument(
+      "ModelB",
+      "8 months",
+      "Male"
+    );
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc1, doc2, doc3));
+
+    when(repository.findByCluster(eq(CLUSTER), any(PageRequest.class))).thenReturn(page);
+
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .sortFields("name,age")
+      .sortOrders("1,1")
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    DiseaseCorrelationsPageDto result = service.loadDiseaseCorrelations(query, CLUSTER);
+
+    assertThat(result.getDiseaseCorrelations()).hasSize(3);
+    // ModelA entries should come first, sorted by age
+    assertThat(result.getDiseaseCorrelations().get(0).getName()).isEqualTo("ModelA");
+    assertThat(result.getDiseaseCorrelations().get(0).getAge()).isEqualTo("4 months");
+    assertThat(result.getDiseaseCorrelations().get(1).getName()).isEqualTo("ModelA");
+    assertThat(result.getDiseaseCorrelations().get(1).getAge()).isEqualTo("12 months");
+    assertThat(result.getDiseaseCorrelations().get(2).getName()).isEqualTo("ModelB");
+    assertThat(result.getDiseaseCorrelations().get(2).getAge()).isEqualTo("8 months");
+  }
+
+  @Test
+  @DisplayName("should handle age sorting with various month formats")
+  void shouldHandleAgeSortingWithVariousFormats() {
+    DiseaseCorrelationDocument doc1 = createDiseaseCorrelationDocument(
+      "Model1",
+      "18 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc2 = createDiseaseCorrelationDocument(
+      "Model2",
+      "2 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc3 = createDiseaseCorrelationDocument(
+      "Model3",
+      "6 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc4 = createDiseaseCorrelationDocument(
+      "Model4",
+      "24 months",
+      "Male"
+    );
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc1, doc2, doc3, doc4));
+
+    when(repository.findByCluster(eq(CLUSTER), any(PageRequest.class))).thenReturn(page);
+
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .sortFields("age")
+      .sortOrders("1")
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    DiseaseCorrelationsPageDto result = service.loadDiseaseCorrelations(query, CLUSTER);
+
+    assertThat(result.getDiseaseCorrelations()).hasSize(4);
+    assertThat(result.getDiseaseCorrelations().get(0).getAge()).isEqualTo("2 months");
+    assertThat(result.getDiseaseCorrelations().get(1).getAge()).isEqualTo("6 months");
+    assertThat(result.getDiseaseCorrelations().get(2).getAge()).isEqualTo("18 months");
+    assertThat(result.getDiseaseCorrelations().get(3).getAge()).isEqualTo("24 months");
+  }
+
+  @Test
+  @DisplayName("should handle pagination with age sorting across multiple pages")
+  void shouldHandlePaginationWithAgeSorting() {
+    // Create 5 documents with different ages
+    DiseaseCorrelationDocument doc1 = createDiseaseCorrelationDocument(
+      "Model1",
+      "12 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc2 = createDiseaseCorrelationDocument(
+      "Model2",
+      "4 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc3 = createDiseaseCorrelationDocument(
+      "Model3",
+      "8 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc4 = createDiseaseCorrelationDocument(
+      "Model4",
+      "2 months",
+      "Male"
+    );
+    DiseaseCorrelationDocument doc5 = createDiseaseCorrelationDocument(
+      "Model5",
+      "6 months",
+      "Male"
+    );
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc1, doc2, doc3, doc4, doc5));
+
+    when(repository.findByCluster(eq(CLUSTER), any(PageRequest.class))).thenReturn(page);
+
+    // Request first page with page size of 2
+    DiseaseCorrelationSearchQueryDto query1 = DiseaseCorrelationSearchQueryDto.builder()
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .sortFields("age")
+      .sortOrders("1")
+      .pageNumber(0)
+      .pageSize(2)
+      .build();
+
+    DiseaseCorrelationsPageDto result1 = service.loadDiseaseCorrelations(query1, CLUSTER);
+
+    // First page should have the 2 youngest ages
+    assertThat(result1.getDiseaseCorrelations()).hasSize(2);
+    assertThat(result1.getDiseaseCorrelations().get(0).getAge()).isEqualTo("2 months");
+    assertThat(result1.getDiseaseCorrelations().get(1).getAge()).isEqualTo("4 months");
+    assertThat(result1.getPage().getTotalElements()).isEqualTo(5);
+    assertThat(result1.getPage().getTotalPages()).isEqualTo(3);
+    assertThat(result1.getPage().getHasNext()).isTrue();
+
+    // Request second page
+    DiseaseCorrelationSearchQueryDto query2 = DiseaseCorrelationSearchQueryDto.builder()
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .sortFields("age")
+      .sortOrders("1")
+      .pageNumber(1)
+      .pageSize(2)
+      .build();
+
+    DiseaseCorrelationsPageDto result2 = service.loadDiseaseCorrelations(query2, CLUSTER);
+
+    // Second page should have the next 2 ages
+    assertThat(result2.getDiseaseCorrelations()).hasSize(2);
+    assertThat(result2.getDiseaseCorrelations().get(0).getAge()).isEqualTo("6 months");
+    assertThat(result2.getDiseaseCorrelations().get(1).getAge()).isEqualTo("8 months");
+    assertThat(result2.getPage().getHasNext()).isTrue();
+    assertThat(result2.getPage().getHasPrevious()).isTrue();
+
+    // Request third page
+    DiseaseCorrelationSearchQueryDto query3 = DiseaseCorrelationSearchQueryDto.builder()
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .sortFields("age")
+      .sortOrders("1")
+      .pageNumber(2)
+      .pageSize(2)
+      .build();
+
+    DiseaseCorrelationsPageDto result3 = service.loadDiseaseCorrelations(query3, CLUSTER);
+
+    // Third page should have the last age
+    assertThat(result3.getDiseaseCorrelations()).hasSize(1);
+    assertThat(result3.getDiseaseCorrelations().get(0).getAge()).isEqualTo("12 months");
+    assertThat(result3.getPage().getHasNext()).isFalse();
+    assertThat(result3.getPage().getHasPrevious()).isTrue();
+  }
+
   private DiseaseCorrelationDocument createDiseaseCorrelationDocument(
     String name,
     String age,

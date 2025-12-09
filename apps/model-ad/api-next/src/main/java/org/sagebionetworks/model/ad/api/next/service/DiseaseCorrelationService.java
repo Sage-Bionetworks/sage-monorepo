@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,6 +25,7 @@ import org.sagebionetworks.model.ad.api.next.util.SortHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -55,12 +57,17 @@ public class DiseaseCorrelationService {
 
     String search = query.getSearch();
 
-    // Build Sort from sortFields and sortOrders
+    // Parse sort fields and orders early to detect age sorting
     List<String> sortFields = ApiHelper.parseCommaDelimitedString(query.getSortFields());
     List<Integer> sortOrderIntegers = ApiHelper.parseCommaDelimitedIntegers(query.getSortOrders());
-    Sort sort = buildSort(sortFields, sortOrderIntegers);
 
-    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
+    // Check if age is in the sort fields (requires custom sorting)
+    boolean hasAgeSorting = sortFields.contains("age");
+
+    // Build Sort from sortFields and sortOrders (skip age if custom sorting needed)
+    Sort sort = hasAgeSorting
+      ? buildSortWithoutAge(sortFields, sortOrderIntegers)
+      : buildSort(sortFields, sortOrderIntegers);
 
     boolean hasSearch = search != null && !search.trim().isEmpty();
     boolean hasItems = !items.isEmpty();
@@ -68,28 +75,74 @@ public class DiseaseCorrelationService {
 
     Page<DiseaseCorrelationDocument> page;
 
-    if (isExclude && hasSearch) {
-      String trimmedSearch = search.trim();
-      page = hasItems
-        ? fetchPageWithSearchAndExclusions(cluster, trimmedSearch, items, pageable)
-        : fetchPageWithSearchOnly(cluster, trimmedSearch, pageable);
-    } else if (!hasItems) {
-      page = isExclude ? repository.findByCluster(cluster, pageable) : Page.empty(pageable);
-    } else {
-      List<Map<String, Object>> compositeConditions = buildCompositeConditions(
-        parseIdentifiers(items, cluster)
+    if (hasAgeSorting) {
+      // When age sorting is needed, fetch ALL results, sort in-memory, then paginate
+      PageRequest unsortedPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+      Page<DiseaseCorrelationDocument> allResults;
+
+      if (isExclude && hasSearch) {
+        String trimmedSearch = search.trim();
+        allResults = hasItems
+          ? fetchPageWithSearchAndExclusions(cluster, trimmedSearch, items, unsortedPageable)
+          : fetchPageWithSearchOnly(cluster, trimmedSearch, unsortedPageable);
+      } else if (!hasItems) {
+        allResults = isExclude
+          ? repository.findByCluster(cluster, unsortedPageable)
+          : Page.empty(unsortedPageable);
+      } else {
+        List<Map<String, Object>> compositeConditions = buildCompositeConditions(
+          parseIdentifiers(items, cluster)
+        );
+        allResults = isExclude
+          ? repository.findByClusterExcludingCompositeIdentifiers(
+            cluster,
+            compositeConditions,
+            unsortedPageable
+          )
+          : repository.findByClusterAndCompositeIdentifiers(
+            cluster,
+            compositeConditions,
+            unsortedPageable
+          );
+      }
+
+      // Sort all results
+      List<DiseaseCorrelationDocument> sortedContent = applySortToResults(
+        allResults.getContent(),
+        sortFields,
+        sortOrderIntegers
       );
-      page = isExclude
-        ? repository.findByClusterExcludingCompositeIdentifiers(
-          cluster,
-          compositeConditions,
-          pageable
-        )
-        : repository.findByClusterAndCompositeIdentifiers(cluster, compositeConditions, pageable);
+
+      // Create the requested page from sorted results
+      page = createPageFromSortedList(sortedContent, query.getPageNumber(), query.getPageSize());
+    } else {
+      // Normal pagination with MongoDB sorting
+      PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
+
+      if (isExclude && hasSearch) {
+        String trimmedSearch = search.trim();
+        page = hasItems
+          ? fetchPageWithSearchAndExclusions(cluster, trimmedSearch, items, pageable)
+          : fetchPageWithSearchOnly(cluster, trimmedSearch, pageable);
+      } else if (!hasItems) {
+        page = isExclude ? repository.findByCluster(cluster, pageable) : Page.empty(pageable);
+      } else {
+        List<Map<String, Object>> compositeConditions = buildCompositeConditions(
+          parseIdentifiers(items, cluster)
+        );
+        page = isExclude
+          ? repository.findByClusterExcludingCompositeIdentifiers(
+            cluster,
+            compositeConditions,
+            pageable
+          )
+          : repository.findByClusterAndCompositeIdentifiers(cluster, compositeConditions, pageable);
+      }
     }
 
-    List<DiseaseCorrelationDto> diseaseCorrelations = page
-      .getContent()
+    List<DiseaseCorrelationDocument> content = page.getContent();
+
+    List<DiseaseCorrelationDto> diseaseCorrelations = content
       .stream()
       .map(diseaseCorrelationMapper::toDto)
       .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
@@ -211,5 +264,167 @@ public class DiseaseCorrelationService {
    */
   private Sort buildSort(List<String> sortFields, List<Integer> sortOrders) {
     return SortHelper.buildSort(sortFields, sortOrders, SortHelper.DISEASE_CORRELATION_TRANSFORMER);
+  }
+
+  /**
+   * Builds a Spring Data Sort object excluding the age field.
+   * Age will be sorted in-memory using numeric comparison.
+   *
+   * @param sortFields list of field names to sort by
+   * @param sortOrders list of sort directions (1 for ascending, -1 for descending)
+   * @return Sort object for use in PageRequest
+   */
+  private Sort buildSortWithoutAge(List<String> sortFields, List<Integer> sortOrders) {
+    List<String> fieldsWithoutAge = new ArrayList<>();
+    List<Integer> ordersWithoutAge = new ArrayList<>();
+
+    for (int i = 0; i < sortFields.size(); i++) {
+      if (!"age".equals(sortFields.get(i))) {
+        fieldsWithoutAge.add(sortFields.get(i));
+        ordersWithoutAge.add(sortOrders.get(i));
+      }
+    }
+
+    if (fieldsWithoutAge.isEmpty()) {
+      return Sort.unsorted();
+    }
+
+    return SortHelper.buildSort(
+      fieldsWithoutAge,
+      ordersWithoutAge,
+      SortHelper.DISEASE_CORRELATION_TRANSFORMER
+    );
+  }
+
+  /**
+   * Applies in-memory sorting to the result list.
+   * This is necessary for age sorting to work numerically instead of lexicographically.
+   *
+   * @param documents list of documents to sort
+   * @param sortFields list of field names to sort by
+   * @param sortOrders list of sort directions (1 for ascending, -1 for descending)
+   * @return sorted list of documents
+   */
+  private List<DiseaseCorrelationDocument> applySortToResults(
+    List<DiseaseCorrelationDocument> documents,
+    List<String> sortFields,
+    List<Integer> sortOrders
+  ) {
+    if (documents.isEmpty()) {
+      return documents;
+    }
+
+    // Build a composite comparator that handles all sort fields
+    Comparator<DiseaseCorrelationDocument> comparator = null;
+
+    for (int i = 0; i < sortFields.size(); i++) {
+      String field = sortFields.get(i);
+      int order = sortOrders.get(i);
+
+      Comparator<DiseaseCorrelationDocument> fieldComparator = createFieldComparator(field);
+
+      // Reverse if descending
+      if (order == -1) {
+        fieldComparator = fieldComparator.reversed();
+      }
+
+      // Chain comparators
+      comparator = (comparator == null)
+        ? fieldComparator
+        : comparator.thenComparing(fieldComparator);
+    }
+
+    return documents.stream().sorted(comparator).collect(Collectors.toList());
+  }
+
+  /**
+   * Creates a comparator for a specific field.
+   * Handles age field with numeric comparison by extracting the number from strings like "4 months".
+   *
+   * @param field the field name to compare
+   * @return comparator for the field
+   */
+  private Comparator<DiseaseCorrelationDocument> createFieldComparator(String field) {
+    return switch (field) {
+      case "age" -> Comparator.comparingInt(this::extractNumericAge);
+      case "name" -> Comparator.comparing(
+        DiseaseCorrelationDocument::getName,
+        String.CASE_INSENSITIVE_ORDER
+      );
+      case "sex" -> Comparator.comparing(
+        DiseaseCorrelationDocument::getSex,
+        String.CASE_INSENSITIVE_ORDER
+      );
+      case "cluster" -> Comparator.comparing(
+        DiseaseCorrelationDocument::getCluster,
+        String.CASE_INSENSITIVE_ORDER
+      );
+      case "model_type" -> Comparator.comparing(
+        DiseaseCorrelationDocument::getModelType,
+        String.CASE_INSENSITIVE_ORDER
+      );
+      case "matched_control" -> Comparator.comparing(
+        DiseaseCorrelationDocument::getMatchedControl,
+        String.CASE_INSENSITIVE_ORDER
+      );
+      // For brain regions and other fields, fall back to string comparison
+      default -> Comparator.comparing(
+        DiseaseCorrelationDocument::getName,
+        String.CASE_INSENSITIVE_ORDER
+      );
+    };
+  }
+
+  /**
+   * Extracts the numeric value from an age string like "4 months" or "12 months".
+   * Returns the number portion for numeric comparison.
+   *
+   * @param document the document containing the age field
+   * @return the numeric age value, or Integer.MAX_VALUE if parsing fails
+   */
+  private int extractNumericAge(DiseaseCorrelationDocument document) {
+    String age = document.getAge();
+    if (age == null) {
+      return Integer.MAX_VALUE;
+    }
+
+    try {
+      // Extract the first sequence of digits from the age string
+      String numericPart = age.replaceAll("[^0-9].*$", "");
+      if (numericPart.isEmpty()) {
+        return Integer.MAX_VALUE;
+      }
+      return Integer.parseInt(numericPart);
+    } catch (NumberFormatException e) {
+      log.warn("Failed to parse numeric age from: {}", age);
+      return Integer.MAX_VALUE;
+    }
+  }
+
+  /**
+   * Creates a Page object from a sorted list with proper pagination.
+   * Extracts the requested page slice from the complete sorted list.
+   *
+   * @param sortedList the complete sorted list of documents
+   * @param pageNumber the requested page number (0-indexed)
+   * @param pageSize the size of each page
+   * @return Page object containing the requested slice
+   */
+  private Page<DiseaseCorrelationDocument> createPageFromSortedList(
+    List<DiseaseCorrelationDocument> sortedList,
+    int pageNumber,
+    int pageSize
+  ) {
+    int totalElements = sortedList.size();
+    int startIndex = pageNumber * pageSize;
+    int endIndex = Math.min(startIndex + pageSize, totalElements);
+
+    // Handle out of bounds page requests
+    if (startIndex >= totalElements) {
+      return new PageImpl<>(List.of(), PageRequest.of(pageNumber, pageSize), totalElements);
+    }
+
+    List<DiseaseCorrelationDocument> pageContent = sortedList.subList(startIndex, endIndex);
+    return new PageImpl<>(pageContent, PageRequest.of(pageNumber, pageSize), totalElements);
   }
 }
