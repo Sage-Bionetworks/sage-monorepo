@@ -2,11 +2,14 @@ import argparse
 import functools
 import logging
 import os
+import re
 
 import gradio as gr
 import requests
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 
 from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.constants import GTM_CONTAINER_ID
@@ -590,6 +593,91 @@ def build_app():
     return demo
 
 
+class OpenGraphFixMiddleware(BaseHTTPMiddleware):
+    """Middleware to fix Gradio's OpenGraph meta tag issues.
+
+    Extracts custom meta tags from gradio_config JSON and inserts them into HTML head,
+    while removing default Gradio meta tags.
+    """
+
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+
+        # Only process HTML responses
+        if response.headers.get("content-type", "").startswith("text/html"):
+            body = b""
+            async for chunk in response.body_iterator:
+                body += chunk
+
+            try:
+                html = body.decode("utf-8")
+                html = self.fix_opengraph_tags(html)
+                body = html.encode("utf-8")
+            except Exception as e:
+                logger.error(f"Error fixing OpenGraph tags: {e}")
+
+            # Update Content-Length header
+            headers = dict(response.headers)
+            headers.pop("content-length", None)
+            headers.pop("Content-Length", None)
+            headers["Content-Length"] = str(len(body))
+
+            return Response(
+                content=body,
+                status_code=response.status_code,
+                headers=headers,
+                media_type=response.media_type,
+            )
+
+        return response
+
+    def fix_opengraph_tags(self, html: str) -> str:
+        """Fix OpenGraph meta tags in HTML."""
+        # 1. Extract custom meta tags from gradio_config JSON
+        match = re.search(r'"head":"((?:[^"\\]|\\.)*)"', html)
+        if match:
+            head_json = match.group(1)
+            custom_tags = (
+                head_json.replace("\\n", "\n")
+                .replace("\\u003c", "<")
+                .replace("\\u003e", ">")
+                .replace('\\"', '"')
+            )
+
+            # 2. Insert custom tags after </style>
+            marker = "\n\t\t<!-- Custom OpenGraph Meta Tags -->\n"
+            style_end = html.find("</style>")
+            if style_end > 0:
+                insert_pos = html.find("\n", style_end) + 1
+                html = (
+                    html[:insert_pos] + marker + custom_tags + "\n" + html[insert_pos:]
+                )
+
+                # 3. Remove ALL og:* and twitter:* meta tags after custom block
+                marker_pos = html.find(marker)
+                if marker_pos > 0:
+                    # Find where custom tags end
+                    search_start = marker_pos + len(marker) + len(custom_tags)
+                    script_pos = html.find("<script", search_start)
+
+                    if script_pos > search_start:
+                        # Split HTML into sections
+                        section_before = html[:search_start]
+                        section_to_clean = html[search_start:script_pos]
+                        section_after = html[script_pos:]
+
+                        # Remove all og:* and twitter:* meta tags from middle section
+                        section_to_clean = re.sub(
+                            r'<meta\s+(property|name)="(og:|twitter:)[^"]*"\s+content="[^"]*"\s*/?>',
+                            "",
+                            section_to_clean,
+                        )
+
+                        html = section_before + section_to_clean + section_after
+
+        return html
+
+
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application with Gradio mounted.
 
@@ -606,6 +694,9 @@ def create_app() -> FastAPI:
             content={"status": "healthy", "service": "bixarena-app"},
             status_code=200,
         )
+
+    # Add OpenGraph fix middleware
+    fastapi_app.add_middleware(OpenGraphFixMiddleware)
 
     # Build Gradio app and mount it to FastAPI
     demo = build_app()
