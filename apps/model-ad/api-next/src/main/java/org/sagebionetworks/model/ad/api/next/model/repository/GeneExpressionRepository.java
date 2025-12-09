@@ -20,29 +20,33 @@ import org.springframework.stereotype.Repository;
 public interface GeneExpressionRepository
   extends MongoRepository<GeneExpressionDocument, ObjectId> {
   /**
-   * Find all gene expressions for a specific tissue and sex combination.
+   * Find all gene expressions for a specific tissue and sexCohort combination.
    *
    * @param tissue the tissue type
-   * @param sex the sex cohort
+   * @param sexCohort the sex cohort
    * @param pageable pagination information
-   * @return page of gene expression documents matching the tissue and sex
+   * @return page of gene expression documents matching the tissue and sexCohort
    */
-  Page<GeneExpressionDocument> findByTissueAndSex(String tissue, String sex, Pageable pageable);
+  Page<GeneExpressionDocument> findByTissueAndSexCohort(
+    String tissue,
+    String sexCohort,
+    Pageable pageable
+  );
 
   /**
    * Find gene expressions matching specific composite identifiers (ensembl_gene_id~name combinations).
    * Uses a custom MongoDB query to match exact combinations using $or with $and conditions.
    *
    * @param tissue the tissue type
-   * @param sex the sex cohort
+   * @param sexCohort the sex cohort
    * @param compositeConditions array of composite conditions, each containing ensembl_gene_id and name
    * @param pageable pagination information
    * @return page of matching gene expression documents
    */
-  @Query("{ 'tissue': ?0, 'sex': ?1, $or: ?2 }")
-  Page<GeneExpressionDocument> findByTissueAndSexAndCompositeIdentifiers(
+  @Query("{ 'tissue': ?0, 'sex_cohort': ?1, $or: ?2 }")
+  Page<GeneExpressionDocument> findByTissueAndSexCohortAndCompositeIdentifiers(
     String tissue,
-    String sex,
+    String sexCohort,
     List<Map<String, Object>> compositeConditions,
     Pageable pageable
   );
@@ -52,15 +56,15 @@ public interface GeneExpressionRepository
    * Uses a custom MongoDB query to exclude exact combinations using $nor with $and conditions.
    *
    * @param tissue the tissue type
-   * @param sex the sex cohort
+   * @param sexCohort the sex cohort
    * @param compositeConditions array of composite conditions, each containing ensembl_gene_id and name
    * @param pageable pagination information
    * @return page of gene expression documents excluding the specified combinations
    */
-  @Query("{ 'tissue': ?0, 'sex': ?1, $nor: ?2 }")
-  Page<GeneExpressionDocument> findByTissueAndSexExcludingCompositeIdentifiers(
+  @Query("{ 'tissue': ?0, 'sex_cohort': ?1, $nor: ?2 }")
+  Page<GeneExpressionDocument> findByTissueAndSexCohortExcludingCompositeIdentifiers(
     String tissue,
-    String sex,
+    String sexCohort,
     List<Map<String, Object>> compositeConditions,
     Pageable pageable
   );
