@@ -229,11 +229,12 @@ def parse_args():
     return args
 
 
-def build_opengraph_meta_tags(title: str, og_image_url: str) -> str:
+def build_opengraph_meta_tags(title: str, description: str, og_image_url: str) -> str:
     """Build OpenGraph meta tags for social media sharing.
 
     Args:
         title: Page title to use for og:title
+        description: Description for meta description and og:description
         og_image_url: Full URL to the OpenGraph image
 
     Returns:
@@ -241,11 +242,11 @@ def build_opengraph_meta_tags(title: str, og_image_url: str) -> str:
     """
     og_tags = f"""
     <!-- Standard Meta Tags -->
-    <meta name="description" content="BioArena crowdsources the benchmarking of AI models to unlock the next breakthrough in biomedicine, inviting a global community of digital contributors.">
+    <meta name="description" content="{description}">
 
     <!-- OpenGraph Meta Tags -->
     <meta property="og:title" content="{title}">
-    <meta property="og:description" content="BioArena crowdsources the benchmarking of AI models to unlock the next breakthrough in biomedicine, inviting a global community of digital contributors.">
+    <meta property="og:description" content="{description}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bioarena.io">
     <meta property="og:image" content="{og_image_url}">
@@ -330,12 +331,17 @@ def build_app():
     """
 
     # Add OpenGraph meta tags
-    title = "BioArena - Benchmarking AI Models for Biomedical Breakthroughs"
+    title = "BioArena"
+    description = (
+        "BioArena crowdsources the benchmarking of AI models to unlock "
+        "the next breakthrough in biomedicine, inviting a global community "
+        "of researchers, clinicians, and biomedical enthusiasts."
+    )
     og_image_url = (
         "https://raw.githubusercontent.com/rrchai/test-assets/main/og-image.png"
     )
     # og_image_url = "https://bioarena.io/gradio_api/file=/usr/local/lib/python3.13/site-packages/bixarena_app/assets/og-image.png"
-    og_meta_tags = build_opengraph_meta_tags(title, og_image_url)
+    og_meta_tags = build_opengraph_meta_tags(title, description, og_image_url)
 
     # Combine all head scripts
     head_scripts = crisp_script + gtm_script + favicon_html + og_meta_tags
