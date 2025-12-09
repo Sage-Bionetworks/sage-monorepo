@@ -302,6 +302,7 @@ def build_app():
     # Add OpenGraph meta tags
     title = "BioArena"
     description = (
+        "Find the best AI for your biomedical research. "
         "BioArena crowdsources the benchmarking of AI models to unlock "
         "the next breakthrough in biomedicine, inviting a global community "
         "of researchers, clinicians, and biomedical enthusiasts."
