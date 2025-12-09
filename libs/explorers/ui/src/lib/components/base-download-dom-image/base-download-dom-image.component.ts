@@ -61,6 +61,8 @@ export class BaseDownloadDomImageComponent {
     this.isLoading.set(true);
 
     try {
+      // Yield so the loading spinner paints before expensive DOM serialization starts
+      await this.waitForNextPaint();
       await this.performDownload()(this.selectedType);
       this.hide();
     } catch (err) {
@@ -85,5 +87,13 @@ export class BaseDownloadDomImageComponent {
     this.resizeTimer = setTimeout(() => {
       this.hide();
     }, 0);
+  }
+
+  private waitForNextPaint(): Promise<void> {
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => resolve());
+      });
+    });
   }
 }
