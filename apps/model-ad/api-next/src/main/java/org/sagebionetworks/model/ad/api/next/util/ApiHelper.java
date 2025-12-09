@@ -3,6 +3,7 @@ package org.sagebionetworks.model.ad.api.next.util;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -138,5 +139,21 @@ public final class ApiHelper {
     }
 
     return builder.toString();
+  }
+
+  /**
+   * Creates case-insensitive full match regex patterns from comma-separated names.
+   *
+   * @param commaSeparatedNames comma-separated list of names
+   * @return list of compiled regex patterns for case-insensitive exact matching
+   */
+  public static List<Pattern> createCaseInsensitiveFullMatchPatterns(
+    String commaSeparatedNames
+  ) {
+    return Arrays.stream(commaSeparatedNames.split(","))
+      .map(String::trim)
+      .filter(s -> !s.isEmpty())
+      .map(name -> Pattern.compile("^" + Pattern.quote(name) + "$", Pattern.CASE_INSENSITIVE))
+      .toList();
   }
 }

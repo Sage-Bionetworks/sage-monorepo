@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ public class DiseaseCorrelationService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('diseaseCorrelation', #query.itemFilterType, #query.items, " +
-    "#cluster, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
+    "#query.search, #cluster, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
   )
   public DiseaseCorrelationsPageDto loadDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query,
@@ -52,49 +53,39 @@ public class DiseaseCorrelationService {
 
     List<String> items = query.getItems() != null ? query.getItems() : List.of();
 
+    String search = query.getSearch();
+
     // Build Sort from sortFields and sortOrders
     List<String> sortFields = ApiHelper.parseCommaDelimitedString(query.getSortFields());
     List<Integer> sortOrderIntegers = ApiHelper.parseCommaDelimitedIntegers(query.getSortOrders());
     Sort sort = buildSort(sortFields, sortOrderIntegers);
+
     PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
+
+    boolean hasSearch = search != null && !search.trim().isEmpty();
+    boolean hasItems = !items.isEmpty();
+    boolean isExclude = effectiveFilter == ItemFilterTypeQueryDto.EXCLUDE;
+
     Page<DiseaseCorrelationDocument> page;
 
-    if (items.isEmpty()) {
-      // No items specified - return all or empty based on filter type
-      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-        page = Page.empty(pageable);
-      } else {
-        page = repository.findByCluster(cluster, pageable);
-      }
+    if (isExclude && hasSearch) {
+      String trimmedSearch = search.trim();
+      page = hasItems
+        ? fetchPageWithSearchAndExclusions(cluster, trimmedSearch, items, pageable)
+        : fetchPageWithSearchOnly(cluster, trimmedSearch, pageable);
+    } else if (!hasItems) {
+      page = isExclude ? repository.findByCluster(cluster, pageable) : Page.empty(pageable);
     } else {
-      // Parse composite identifiers and build MongoDB query conditions
-      List<DiseaseCorrelationIdentifier> identifiers;
-      try {
-        identifiers = items.stream().map(DiseaseCorrelationIdentifier::parse).toList();
-      } catch (InvalidFilterException e) {
-        log.error(
-          "Failed to parse composite identifiers for cluster '{}': {}",
-          cluster,
-          e.getMessage()
-        );
-        throw e;
-      }
-
-      List<Map<String, Object>> compositeConditions = buildCompositeConditions(identifiers);
-
-      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-        page = repository.findByClusterAndCompositeIdentifiers(
+      List<Map<String, Object>> compositeConditions = buildCompositeConditions(
+        parseIdentifiers(items, cluster)
+      );
+      page = isExclude
+        ? repository.findByClusterExcludingCompositeIdentifiers(
           cluster,
           compositeConditions,
           pageable
-        );
-      } else {
-        page = repository.findByClusterExcludingCompositeIdentifiers(
-          cluster,
-          compositeConditions,
-          pageable
-        );
-      }
+        )
+        : repository.findByClusterAndCompositeIdentifiers(cluster, compositeConditions, pageable);
     }
 
     List<DiseaseCorrelationDto> diseaseCorrelations = page
@@ -116,6 +107,72 @@ public class DiseaseCorrelationService {
       .diseaseCorrelations(diseaseCorrelations)
       .page(pageMetadata)
       .build();
+  }
+
+  private Page<DiseaseCorrelationDocument> fetchPageWithSearchOnly(
+    String cluster,
+    String trimmedSearch,
+    PageRequest pageable
+  ) {
+    if (trimmedSearch.contains(",")) {
+      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
+      return repository.findByClusterAndNameInIgnoreCase(cluster, patterns, pageable);
+    }
+
+    return repository.findByClusterAndNameContaining(
+      cluster,
+      Pattern.quote(trimmedSearch),
+      pageable
+    );
+  }
+
+  private Page<DiseaseCorrelationDocument> fetchPageWithSearchAndExclusions(
+    String cluster,
+    String trimmedSearch,
+    List<String> items,
+    PageRequest pageable
+  ) {
+    List<Map<String, Object>> compositeConditions = buildCompositeConditions(
+      parseIdentifiers(items, cluster)
+    );
+
+    if (trimmedSearch.contains(",")) {
+      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
+      return repository.findByClusterAndNameInIgnoreCaseExcludingCompositeIdentifiers(
+        cluster,
+        patterns,
+        compositeConditions,
+        pageable
+      );
+    }
+
+    return repository.findByClusterAndNameContainingExcludingCompositeIdentifiers(
+      cluster,
+      Pattern.quote(trimmedSearch),
+      compositeConditions,
+      pageable
+    );
+  }
+
+  /**
+   * Parses composite identifiers from string items.
+   *
+   * @param items list of composite identifier strings
+   * @param cluster cluster name for error logging
+   * @return list of parsed identifiers
+   * @throws InvalidFilterException if parsing fails
+   */
+  private List<DiseaseCorrelationIdentifier> parseIdentifiers(List<String> items, String cluster) {
+    try {
+      return items.stream().map(DiseaseCorrelationIdentifier::parse).toList();
+    } catch (InvalidFilterException e) {
+      log.error(
+        "Failed to parse composite identifiers for cluster '{}': {}",
+        cluster,
+        e.getMessage()
+      );
+      throw e;
+    }
   }
 
   /**

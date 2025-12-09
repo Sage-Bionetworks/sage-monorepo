@@ -1,7 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -99,7 +98,7 @@ public class ModelOverviewService {
     Pageable pageable
   ) {
     if (trimmedSearch.contains(",")) {
-      List<Pattern> patterns = createCaseInsensitiveFullMatchPatterns(trimmedSearch);
+      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
       return repository.findByNameInIgnoreCaseAndNameNotIn(patterns, excludeNames, pageable);
     }
 
@@ -108,14 +107,6 @@ public class ModelOverviewService {
       excludeNames,
       pageable
     );
-  }
-
-  private List<Pattern> createCaseInsensitiveFullMatchPatterns(String commaSeparatedNames) {
-    return Arrays.stream(commaSeparatedNames.split(","))
-      .map(String::trim)
-      .filter(s -> !s.isEmpty())
-      .map(name -> Pattern.compile("^" + Pattern.quote(name) + "$", Pattern.CASE_INSENSITIVE))
-      .toList();
   }
 
   /**

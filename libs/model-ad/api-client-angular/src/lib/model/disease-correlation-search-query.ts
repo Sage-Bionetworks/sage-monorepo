@@ -25,12 +25,15 @@ export interface DiseaseCorrelationSearchQuery {
    * Comma-delimited category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: \"mainCategory,clusterCategory\"
    */
   categories: string;
-  search?: string | null;
   /**
    * Comma-delimited list of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female,APOE4~8 months~Male,5xFAD (IU/Jax/Pitt)~12 months~Female\" filters for documents matching those exact combinations.
    */
   items?: string | null;
   itemFilterType?: ItemFilterTypeQuery;
+  /**
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: \'3xtg-ad,5xfad (uci)\' (comma-separated list) or \'fad\' (partial match). Only applied when itemFilterType is \'exclude\'.
+   */
+  search?: string | null;
   /**
    * Comma-delimited field names to sort by (e.g., \"name,age,sex\"). Each field in sortFields must have a corresponding order in sortOrders.
    */

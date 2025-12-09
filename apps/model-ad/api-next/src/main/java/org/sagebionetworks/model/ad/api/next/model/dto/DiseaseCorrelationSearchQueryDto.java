@@ -45,6 +45,8 @@ public class DiseaseCorrelationSearchQueryDto {
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
 
+  private @Nullable String search = null;
+
   private @Nullable String sortFields = null;
 
   private @Nullable String sortOrders = null;
@@ -201,6 +203,31 @@ public class DiseaseCorrelationSearchQueryDto {
     this.itemFilterType = itemFilterType;
   }
 
+  public DiseaseCorrelationSearchQueryDto search(@Nullable String search) {
+    this.search = search;
+    return this;
+  }
+
+  /**
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'.
+   * @return search
+   */
+
+  @Schema(
+    name = "search",
+    example = "3xtg-ad,5xfad (uci)",
+    description = "Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'. ",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
+  @JsonProperty("search")
+  public @Nullable String getSearch() {
+    return search;
+  }
+
+  public void setSearch(@Nullable String search) {
+    this.search = search;
+  }
+
   public DiseaseCorrelationSearchQueryDto sortFields(@Nullable String sortFields) {
     this.sortFields = sortFields;
     return this;
@@ -263,6 +290,7 @@ public class DiseaseCorrelationSearchQueryDto {
       Objects.equals(this.categories, diseaseCorrelationSearchQuery.categories) &&
       Objects.equals(this.items, diseaseCorrelationSearchQuery.items) &&
       Objects.equals(this.itemFilterType, diseaseCorrelationSearchQuery.itemFilterType) &&
+      Objects.equals(this.search, diseaseCorrelationSearchQuery.search) &&
       Objects.equals(this.sortFields, diseaseCorrelationSearchQuery.sortFields) &&
       Objects.equals(this.sortOrders, diseaseCorrelationSearchQuery.sortOrders)
     );
@@ -276,6 +304,7 @@ public class DiseaseCorrelationSearchQueryDto {
       categories,
       items,
       itemFilterType,
+      search,
       sortFields,
       sortOrders
     );
@@ -290,6 +319,7 @@ public class DiseaseCorrelationSearchQueryDto {
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
+    sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
     sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
@@ -325,6 +355,7 @@ public class DiseaseCorrelationSearchQueryDto {
       this.instance.setCategories(value.categories);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
+      this.instance.setSearch(value.search);
       this.instance.setSortFields(value.sortFields);
       this.instance.setSortOrders(value.sortOrders);
       return this;
@@ -354,6 +385,11 @@ public class DiseaseCorrelationSearchQueryDto {
       ItemFilterTypeQueryDto itemFilterType
     ) {
       this.instance.itemFilterType(itemFilterType);
+      return this;
+    }
+
+    public DiseaseCorrelationSearchQueryDto.Builder search(String search) {
+      this.instance.search(search);
       return this;
     }
 
