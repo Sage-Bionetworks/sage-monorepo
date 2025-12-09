@@ -1,7 +1,6 @@
 import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { SortMeta } from 'primeng/api';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
@@ -19,6 +18,7 @@ import {
   ModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { SortMeta } from 'primeng/api';
 import { catchError, of, shareReplay } from 'rxjs';
 import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
 
@@ -90,6 +90,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
     rowIdDataKey: 'name',
+    allowPinnedImageDownload: false,
     defaultSort: [
       { field: 'model_type', order: -1 },
       { field: 'name', order: 1 },
