@@ -15,6 +15,7 @@ export interface VisualizationOverviewPane {
 }
 
 export interface ComparisonToolQuery {
+  categories: string[];
   pinnedItems: string[];
   pageNumber: number;
   pageSize: number;

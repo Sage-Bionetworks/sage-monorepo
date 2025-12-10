@@ -36,7 +36,7 @@ export class ComparisonToolService<T> {
   // this cutoff may need to be included in the ui_config instead, so the cutoff can be set per tool.
   private readonly DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL = 2;
   private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
-  private readonly INITIAL_PAGE_NUMBER = 0;
+  readonly INITIAL_PAGE_NUMBER = 0;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
     headerTitle: '',
@@ -62,7 +62,6 @@ export class ComparisonToolService<T> {
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
-  private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly isVisualizationOverviewVisibleSignal = signal(true);
   private readonly isVisualizationOverviewHiddenByUserSignal = signal(false);
@@ -74,6 +73,7 @@ export class ComparisonToolService<T> {
   private readonly unpinnedDataSignal = signal<T[]>([]);
   private readonly pinnedDataSignal = signal<T[]>([]);
   private readonly querySignal = signal<ComparisonToolQuery>({
+    categories: [],
     pinnedItems: [],
     pageNumber: this.INITIAL_PAGE_NUMBER,
     pageSize: 10,
@@ -85,7 +85,6 @@ export class ComparisonToolService<T> {
 
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
-  readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly isVisualizationOverviewVisible = this.isVisualizationOverviewVisibleSignal.asReadonly();
   readonly isVisualizationOverviewHiddenByUser =
@@ -94,10 +93,10 @@ export class ComparisonToolService<T> {
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
-  readonly query = this.querySignal.asReadonly();
-  readonly initialPageNumber = this.INITIAL_PAGE_NUMBER;
 
-  readonly pinnedItems = computed(() => new Set(this.query().pinnedItems));
+  readonly query = this.querySignal.asReadonly();
+  readonly dropdownSelection = computed(() => this.querySignal().categories);
+  readonly pinnedItems = computed(() => new Set(this.querySignal().pinnedItems));
   readonly pageNumber = computed(() => this.querySignal().pageNumber);
   readonly pageSize = computed(() => this.querySignal().pageSize);
   readonly multiSortMeta = computed(() => this.querySignal().multiSortMeta);
@@ -139,7 +138,7 @@ export class ComparisonToolService<T> {
     }
 
     // if no selection, return first config
-    const dropdownSelection = this.dropdownSelectionSignal();
+    const dropdownSelection = this.dropdownSelection();
     if (!dropdownSelection.length) {
       return configs[0];
     }
@@ -200,7 +199,7 @@ export class ComparisonToolService<T> {
     this.configsSignal.set(configs ?? []);
 
     const selection = this.resolveInitialDropdownSelection(params, configs);
-    this.dropdownSelectionSignal.set(selection);
+    this.updateQuery({ categories: selection, pageNumber: this.INITIAL_PAGE_NUMBER });
 
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
     for (const config of configs) {
@@ -433,17 +432,16 @@ export class ComparisonToolService<T> {
   }
 
   private updateDropdownSelectionIfChanged(selection: string[]) {
-    if (isEqual(this.dropdownSelectionSignal(), selection)) {
+    if (isEqual(this.dropdownSelection(), selection)) {
       return;
     }
-
-    // Switch to new selection
-    this.dropdownSelectionSignal.set(selection);
 
     // Restore pinned items for new selection from cache (or empty if not cached)
     const newKey = this.dropdownKey(selection);
     const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(newKey);
+
     this.updateQuery({
+      categories: selection,
       pinnedItems: cachedPinnedItems ? Array.from(cachedPinnedItems) : [],
       pageNumber: this.INITIAL_PAGE_NUMBER,
     });
@@ -544,8 +542,8 @@ export class ComparisonToolService<T> {
     if (!options.isInitial && params.categories) {
       const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
       // Only update if different to avoid loops
-      if (!isEqual(normalizedSelection, this.dropdownSelectionSignal())) {
-        this.dropdownSelectionSignal.set(normalizedSelection);
+      if (!isEqual(normalizedSelection, this.dropdownSelection())) {
+        this.updateQuery({ categories: normalizedSelection, pageNumber: this.INITIAL_PAGE_NUMBER });
       }
     }
 
@@ -573,7 +571,7 @@ export class ComparisonToolService<T> {
     }
 
     // When navigating back without URL pins, check if we have cached pins for current dropdown
-    const currentKey = this.dropdownKey(this.dropdownSelectionSignal());
+    const currentKey = this.dropdownKey(this.dropdownSelection());
     const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(currentKey);
 
     // Restore cached pins and sync to URL

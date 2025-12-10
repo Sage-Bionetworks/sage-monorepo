@@ -24,14 +24,14 @@ export class ComparisonToolFilterService {
     const clonedFilters = structuredClone(filters);
     this.comparisonToolService.updateQuery({
       filters: clonedFilters,
-      pageNumber: this.comparisonToolService.initialPageNumber,
+      pageNumber: this.comparisonToolService.INITIAL_PAGE_NUMBER,
     });
   }
 
   updateSearchTerm(term: string) {
     this.comparisonToolService.updateQuery({
       searchTerm: term,
-      pageNumber: this.comparisonToolService.initialPageNumber,
+      pageNumber: this.comparisonToolService.INITIAL_PAGE_NUMBER,
     });
   }
 
