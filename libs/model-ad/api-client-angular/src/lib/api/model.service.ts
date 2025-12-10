@@ -26,8 +26,6 @@ import { Observable } from 'rxjs';
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
 import { Model } from '../model/model';
-// @ts-ignore
-import { SearchResult } from '../model/search-result';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -202,111 +200,5 @@ export class ModelService {
       transferCache: localVarTransferCache,
       reportProgress: reportProgress,
     });
-  }
-
-  /**
-   * Search Models
-   * Search for a particular model
-   * @param q Search query
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public searchModels(
-    q: string,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<Array<SearchResult>>;
-  public searchModels(
-    q: string,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<Array<SearchResult>>>;
-  public searchModels(
-    q: string,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<Array<SearchResult>>>;
-  public searchModels(
-    q: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (q === null || q === undefined) {
-      throw new Error('Required parameter q was null or undefined when calling searchModels.');
-    }
-
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (q !== undefined && q !== null) {
-      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>q, 'q');
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/models/search`;
-    return this.httpClient.request<Array<SearchResult>>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        params: localVarQueryParameters,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
   }
 }

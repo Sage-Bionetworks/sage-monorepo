@@ -16,7 +16,7 @@ servers:
 tags:
   - name: Data Version
     description: Operations about the data version.
-  - name: Model
+  - name: Model Legacy
     description: Operations about models.
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
@@ -46,7 +46,7 @@ paths:
   /models/search:
     get:
       tags:
-        - Model
+        - Model Legacy
       summary: Search Models
       description: Search for a particular model
       operationId: searchModels
@@ -71,6 +71,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /models/{name}:
+    x-sage-internal: true
     get:
       tags:
         - Model

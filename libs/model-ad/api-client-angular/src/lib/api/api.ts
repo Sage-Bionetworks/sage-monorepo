@@ -8,6 +8,8 @@ export * from './gene-expression.service';
 import { GeneExpressionService } from './gene-expression.service';
 export * from './model.service';
 import { ModelService } from './model.service';
+export * from './model-legacy.service';
+import { ModelLegacyService } from './model-legacy.service';
 export * from './model-overview.service';
 import { ModelOverviewService } from './model-overview.service';
 export const APIS = [
@@ -16,5 +18,6 @@ export const APIS = [
   DiseaseCorrelationService,
   GeneExpressionService,
   ModelService,
+  ModelLegacyService,
   ModelOverviewService,
 ];

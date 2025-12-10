@@ -5,6 +5,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApi.ja
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApiDelegate.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiController.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelOverviewApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelOverviewApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/configuration/EnumConverterConfiguration.java
@@ -19,7 +22,11 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/FoldChangeResultDt
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneExpressionDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneExpressionSearchQueryDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneExpressionsPageDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneticInfoDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/IndividualDataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ItemFilterTypeQueryDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDataDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewLinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewSearchQueryDto.java

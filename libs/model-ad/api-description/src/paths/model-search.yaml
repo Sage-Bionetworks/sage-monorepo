@@ -1,6 +1,6 @@
 get:
   tags:
-    - Model
+    - Model Legacy
   summary: Search Models
   description: Search for a particular model
   operationId: searchModels

@@ -14,6 +14,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Model
+    description: Operations about models.
   - name: Model Overview
     description: Operations about Model Overview.
   - name: Disease Correlation
@@ -27,3 +29,5 @@ paths:
     $ref: paths/comparison-tools/disease-correlation.yaml
   /comparison-tools/gene-expression:
     $ref: paths/comparison-tools/gene-expression.yaml
+  /models/{name}:
+    $ref: paths/model.yaml
