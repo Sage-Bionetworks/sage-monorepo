@@ -1,7 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.document.DataVersionDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.DataVersionDto;
@@ -15,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
 @Service
-@Slf4j
 @CacheConfig(cacheNames = CacheNames.DATA_VERSION)
 public class DataVersionService {
 
@@ -24,8 +22,6 @@ public class DataVersionService {
 
   @Cacheable(key = "'dataVersion'")
   public DataVersionDto loadDataVersion() {
-    log.debug("Fetching data version from database");
-
     DataVersionDocument document = repository.findFirstBy()
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data version not found"));
 
