@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.constants import GTM_CONTAINER_ID
 from bixarena_app.config.utils import setup_logging
+from bixarena_app.opengraph import OpenGraphFixMiddleware, build_opengraph_meta_tags
 from bixarena_app.page.bixarena_battle import build_battle_page
 
 # Configure logging first
@@ -298,11 +299,22 @@ def build_app():
     <link rel="icon" type="image/svg+xml" href="{favicon_url}">
     """
 
+    # Add OpenGraph meta tags
+    title = "BioArena"
+    description = (
+        "Find the best AI for your biomedical research. "
+        "BioArena crowdsources the benchmarking of AI models to unlock "
+        "the next breakthrough in biomedicine, inviting a global community "
+        "of researchers, clinicians, and biomedical enthusiasts."
+    )
+    og_image_url = "https://bioarena.io/gradio_api/file=/usr/local/lib/python3.13/site-packages/bixarena_app/assets/bioarena-opengraph.png"
+    og_meta_tags = build_opengraph_meta_tags(title, description, og_image_url)
+
     # Combine all head scripts
-    head_scripts = crisp_script + gtm_script + favicon_html
+    head_scripts = crisp_script + gtm_script + favicon_html + og_meta_tags
 
     with gr.Blocks(
-        title="BioArena - Benchmarking AI Models for Biomedical Breakthroughs",
+        title=title,
         head=head_scripts,
         css="""
         /* Custom global colors */
@@ -554,6 +566,9 @@ def create_app() -> FastAPI:
             content={"status": "healthy", "service": "bixarena-app"},
             status_code=200,
         )
+
+    # Add OpenGraph fix middleware
+    fastapi_app.add_middleware(OpenGraphFixMiddleware)
 
     # Build Gradio app and mount it to FastAPI
     demo = build_app()

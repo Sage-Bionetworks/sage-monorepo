@@ -37,10 +37,11 @@ public class ModelOverviewService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('modelOverview', #query.itemFilterType, " +
-    "#query.items, #query.search, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
+    "#query.items, #query.search, #query.pageNumber, #query.pageSize, " +
+    "#query.sortFields, #query.sortOrders)"
   )
   public ModelOverviewsPageDto loadModelOverviews(ModelOverviewSearchQueryDto query) {
-    List<String> items = ApiHelper.parseCommaDelimitedString(query.getItems());
+    List<String> items = ApiHelper.sanitizeItems(query.getItems());
     String search = query.getSearch();
     ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
       query.getItemFilterType(),
@@ -51,9 +52,9 @@ public class ModelOverviewService {
     int effectivePageSize = Objects.requireNonNullElse(query.getPageSize(), 100);
 
     // Build Sort from sortFields and sortOrders
-    List<String> sortFields = ApiHelper.parseCommaDelimitedString(query.getSortFields());
-    List<Integer> sortOrderIntegers = ApiHelper.parseCommaDelimitedIntegers(query.getSortOrders());
-    Sort sort = buildSort(sortFields, sortOrderIntegers);
+    List<String> sortFields = ApiHelper.sanitizeItems(query.getSortFields());
+    List<Integer> sortOrders = query.getSortOrders();
+    Sort sort = buildSort(sortFields, sortOrders);
     Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize, sort);
     Page<ModelOverviewDocument> page;
 

@@ -42,7 +42,8 @@ public class DiseaseCorrelationService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('diseaseCorrelation', #query.itemFilterType, #query.items, " +
-    "#query.search, #cluster, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
+    "#query.search, #cluster, #query.pageNumber, #query.pageSize, " +
+    "#query.sortFields, #query.sortOrders)"
   )
   public DiseaseCorrelationsPageDto loadDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query,
@@ -53,21 +54,21 @@ public class DiseaseCorrelationService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<String> items = ApiHelper.parseCommaDelimitedString(query.getItems());
+    List<String> items = ApiHelper.sanitizeItems(query.getItems());
 
     String search = query.getSearch();
 
     // Parse sort fields and orders early to detect age sorting
-    List<String> sortFields = ApiHelper.parseCommaDelimitedString(query.getSortFields());
-    List<Integer> sortOrderIntegers = ApiHelper.parseCommaDelimitedIntegers(query.getSortOrders());
+    List<String> sortFields = ApiHelper.sanitizeItems(query.getSortFields());
+    List<Integer> sortOrders = query.getSortOrders();
 
     // Check if age is in the sort fields (requires custom sorting)
     boolean hasAgeSorting = sortFields.contains("age");
 
     // Build Sort from sortFields and sortOrders (skip age if custom sorting needed)
     Sort sort = hasAgeSorting
-      ? buildSortWithoutAge(sortFields, sortOrderIntegers)
-      : buildSort(sortFields, sortOrderIntegers);
+      ? buildSortWithoutAge(sortFields, sortOrders)
+      : buildSort(sortFields, sortOrders);
 
     boolean hasSearch = search != null && !search.trim().isEmpty();
     boolean hasItems = !items.isEmpty();
@@ -111,7 +112,7 @@ public class DiseaseCorrelationService {
       List<DiseaseCorrelationDocument> sortedContent = applySortToResults(
         allResults.getContent(),
         sortFields,
-        sortOrderIntegers
+        sortOrders
       );
 
       // Create the requested page from sorted results
@@ -340,7 +341,8 @@ public class DiseaseCorrelationService {
 
   /**
    * Creates a comparator for a specific field.
-   * Handles age field with numeric comparison by extracting the number from strings like "4 months".
+   * Handles age field with numeric comparison by extracting the number
+   * from strings like "4 months".
    *
    * @param field the field name to compare
    * @return comparator for the field

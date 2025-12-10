@@ -30,32 +30,42 @@ public final class ApiHelper {
   private ApiHelper() {}
 
   /**
-   * Validates that sortFields and sortOrders are both present and have matching element counts.
+   * Validates that sortFields and sortOrders are either both null/empty (no sorting)
+   * or both present with matching element counts.
    *
-   * @param sortFields Comma-delimited sort field names (required)
-   * @param sortOrders Comma-delimited sort orders (required)
+   * @param sortFields List of sort field names (optional, but if present requires sortOrders)
+   * @param sortOrders List of sort orders (optional, but if present requires sortFields)
    * @throws IllegalArgumentException if validation fails
    */
-  public static void validateSortParameters(String sortFields, String sortOrders) {
-    boolean hasSortFields = sortFields != null && !sortFields.isBlank();
-    boolean hasSortOrders = sortOrders != null && !sortOrders.isBlank();
+  public static void validateSortParameters(
+    @Nullable List<String> sortFields,
+    @Nullable List<?> sortOrders
+  ) {
+    boolean hasSortFields = sortFields != null && !sortFields.isEmpty();
+    boolean hasSortOrders = sortOrders != null && !sortOrders.isEmpty();
 
-    if (!hasSortFields) {
-      throw new IllegalArgumentException("sortFields is required");
+    // Both null/empty is valid (no sorting)
+    if (!hasSortFields && !hasSortOrders) {
+      return;
     }
 
-    if (!hasSortOrders) {
-      throw new IllegalArgumentException("sortOrders is required");
+    // If one is provided, the other must also be provided
+    if (hasSortFields && !hasSortOrders) {
+      throw new IllegalArgumentException("sortOrders is required when sortFields is provided");
     }
 
-    int fieldCount = sortFields.split(",", -1).length;
-    int orderCount = sortOrders.split(",", -1).length;
+    if (hasSortOrders && !hasSortFields) {
+      throw new IllegalArgumentException("sortFields is required when sortOrders is provided");
+    }
+
+    int fieldCount = sortFields.size();
+    int orderCount = sortOrders.size();
 
     if (fieldCount != orderCount) {
       throw new IllegalArgumentException(
         String.format(
-          "sortFields and sortOrders must have the same number of elements. " +
-          "Got %d field(s) and %d order(s)",
+          "sortFields and sortOrders must have the same number of elements. "
+            + "Got %d field(s) and %d order(s)",
           fieldCount,
           orderCount
         )
@@ -93,6 +103,40 @@ public final class ApiHelper {
       return List.of();
     }
     return Arrays.stream(commaDelimited.split(","))
+      .map(String::trim)
+      .filter(s -> !s.isEmpty())
+      .map(Integer::parseInt)
+      .toList();
+  }
+
+  /**
+   * Sanitizes a list of items by filtering out null values.
+   * Returns an empty list if the input is null.
+   *
+   * @param rawItems list of items to sanitize
+   * @return list of non-null strings
+   */
+  public static List<String> sanitizeItems(@Nullable List<String> rawItems) {
+    if (rawItems == null) {
+      return List.of();
+    }
+    return rawItems.stream().filter(Objects::nonNull).toList();
+  }
+
+  /**
+   * Converts a list of string integers to a list of integers.
+   * Returns an empty list if the input is null or empty.
+   *
+   * @param stringIntegers list of string integers (e.g., ["1", "-1", "1"])
+   * @return list of integers
+   * @throws NumberFormatException if any value cannot be parsed as an integer
+   */
+  public static List<Integer> parseStringListToIntegers(@Nullable List<String> stringIntegers) {
+    if (stringIntegers == null || stringIntegers.isEmpty()) {
+      return List.of();
+    }
+    return stringIntegers
+      .stream()
       .map(String::trim)
       .filter(s -> !s.isEmpty())
       .map(Integer::parseInt)
@@ -181,9 +225,7 @@ public final class ApiHelper {
    * @param commaSeparatedNames comma-separated list of names
    * @return list of compiled regex patterns for case-insensitive exact matching
    */
-  public static List<Pattern> createCaseInsensitiveFullMatchPatterns(
-    String commaSeparatedNames
-  ) {
+  public static List<Pattern> createCaseInsensitiveFullMatchPatterns(String commaSeparatedNames) {
     return Arrays.stream(commaSeparatedNames.split(","))
       .map(String::trim)
       .filter(s -> !s.isEmpty())

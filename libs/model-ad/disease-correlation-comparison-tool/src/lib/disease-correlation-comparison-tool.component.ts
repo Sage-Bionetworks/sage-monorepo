@@ -188,13 +188,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     searchTerm: string | null,
     sortMeta: SortMeta[],
   ) {
-    const { sortFields, sortOrders } =
-      this.comparisonToolService.convertSortMetaToStrings(sortMeta);
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
     const search = searchTerm ?? undefined;
 
     const query: DiseaseCorrelationSearchQuery = {
-      categories: selection.join(','),
-      items: pinnedItems.join(','),
+      categories: selection,
+      items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
       pageNumber,
       pageSize,
@@ -220,12 +219,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   }
 
   getPinnedData(selection: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
-    const { sortFields, sortOrders } =
-      this.comparisonToolService.convertSortMetaToStrings(sortMeta);
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
 
     const query: DiseaseCorrelationSearchQuery = {
-      categories: selection.join(','),
-      items: pinnedItems.join(','),
+      categories: selection,
+      items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
       sortFields,
       sortOrders,

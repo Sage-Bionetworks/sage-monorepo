@@ -63,9 +63,9 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw bad request when categories array has less than 3 values")
   void shouldThrowBadRequestWhenCategoriesStringHasLessThan3Values() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
       .build();
 
     assertThatThrownBy(() -> delegate.getGeneExpressions(query))
@@ -79,9 +79,9 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw bad request when main category unsupported")
   void shouldThrowBadRequestWhenMainCategoryUnsupported() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("OTHER,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
+      .categories(List.of("OTHER", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
       .build();
 
     assertThatThrownBy(() -> delegate.getGeneExpressions(query))
@@ -95,9 +95,9 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw bad request when tissue format invalid")
   void shouldThrowBadRequestWhenTissueFormatInvalid() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,InvalidFormat,Sex - Females")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "InvalidFormat", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
       .build();
 
     assertThatThrownBy(() -> delegate.getGeneExpressions(query))
@@ -111,9 +111,9 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw bad request when sex cohort format invalid")
   void shouldThrowBadRequestWhenSexFormatInvalid() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,InvalidFormat")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "InvalidFormat"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
       .build();
 
     assertThatThrownBy(() -> delegate.getGeneExpressions(query))
@@ -127,10 +127,10 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should validate sortFields and sortOrders have matching element counts")
   void shouldValidateSortFieldsAndSortOrdersHaveMatchingElementCounts() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol,log2Fc")
-      .sortOrders("1")
-      .items("APOE")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol", "log2Fc"))
+      .sortOrders(List.of(1))
+      .items(List.of("APOE"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -148,10 +148,10 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw exception when sortFields is null")
   void shouldThrowExceptionWhenSortFieldsIsNull() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
       .sortFields(null)
-      .sortOrders("1")
-      .items("APOE")
+      .sortOrders(List.of(1))
+      .items(List.of("APOE"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -168,10 +168,10 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw exception when sortFields is empty")
   void shouldThrowExceptionWhenSortFieldsIsEmpty() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("")
-      .sortOrders("1")
-      .items("APOE")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of())
+      .sortOrders(List.of(1))
+      .items(List.of("APOE"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -188,10 +188,10 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw exception when sortOrders is null")
   void shouldThrowExceptionWhenSortOrdersIsNull() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
       .sortOrders(null)
-      .items("APOE")
+      .items(List.of("APOE"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -208,10 +208,10 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw exception when sortOrders is empty")
   void shouldThrowExceptionWhenSortOrdersIsEmpty() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol")
-      .sortOrders("")
-      .items("APOE")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of())
+      .items(List.of("APOE"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -240,10 +240,10 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol,log2Fc")
-      .sortOrders("1,-1")
-      .items("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol", "log2Fc"))
+      .sortOrders(List.of(1, -1))
+      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -259,9 +259,9 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
@@ -298,10 +298,10 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
-      .items("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
+      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -346,9 +346,9 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Cortex,Sex - Males")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Cortex", "Sex - Males"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
@@ -372,10 +372,10 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw bad request when items contain invalid composite identifier format")
   void shouldThrowBadRequestWhenItemsContainInvalidCompositeIdentifier() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
-      .items("invalid") // Missing tilde - only 1 part instead of 2
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
+      .items(List.of("invalid")) // Missing tilde - only 1 part instead of 2
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
@@ -404,10 +404,10 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
-      .items("ENSMUSG00000000002~APOE4")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
+      .items(List.of("ENSMUSG00000000002~APOE4"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -437,10 +437,10 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
-      .items("ENSMUSG00000099999~ExcludedModel")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
+      .items(List.of("ENSMUSG00000099999~ExcludedModel"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -478,10 +478,10 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
-      .items("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
+      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
+      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
@@ -513,10 +513,16 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females & Males")
-      .sortFields("geneSymbol")
-      .sortOrders("1")
-      .items("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
+      .categories(
+        List.of(
+          "RNA - DIFFERENTIAL EXPRESSION",
+          "Tissue - Hemibrain",
+          "Sex - Females & Males"
+        )
+      )
+      .sortFields(List.of("geneSymbol"))
+      .sortOrders(List.of(1))
+      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)

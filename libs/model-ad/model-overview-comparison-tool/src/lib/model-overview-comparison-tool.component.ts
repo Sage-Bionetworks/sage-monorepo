@@ -157,11 +157,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     searchTerm: string | null,
     sortMeta: SortMeta[],
   ) {
-    const { sortFields, sortOrders } =
-      this.comparisonToolService.convertSortMetaToStrings(sortMeta);
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
 
     const query: ModelOverviewSearchQuery = {
-      items: pinnedItems.join(','),
+      items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
       pageNumber,
       pageSize,
@@ -185,11 +184,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   }
 
   getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
-    const { sortFields, sortOrders } =
-      this.comparisonToolService.convertSortMetaToStrings(sortMeta);
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
 
     const query: ModelOverviewSearchQuery = {
-      items: pinnedItems.join(','),
+      items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
       sortFields,
       sortOrders,

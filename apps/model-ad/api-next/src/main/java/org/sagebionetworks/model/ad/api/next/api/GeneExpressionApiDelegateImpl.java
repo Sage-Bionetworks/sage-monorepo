@@ -38,17 +38,16 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   }
 
   /**
-   * Extracts tissue and sex cohort from categories string.
-   * Expected format: "mainCategory,tissueCategory,sexCohortCategory" where:
+   * Extracts tissue and sex cohort from categories list.
+   * Expected format: [mainCategory, tissueCategory, sexCohortCategory] where:
    * - First value is the main category (e.g., "RNA - DIFFERENTIAL EXPRESSION")
    * - Second value is the tissue with prefix (e.g., "Tissue - Hemibrain")
    * - Third value is the sex_cohort with prefix (e.g., "Sex - Females & Males")
    *
-   * @param categoriesString Comma-delimited category values
+   * @param categories List of category values
    * @return Array with [tissue, sex_cohort]
    */
-  private String[] extractTissueAndSexCohort(String categoriesString) {
-    List<String> categories = ApiHelper.parseCommaDelimitedString(categoriesString);
+  private String[] extractTissueAndSexCohort(List<String> categories) {
     if (categories == null || categories.size() < 3) {
       throw new InvalidCategoryException(
         "Expected at least 3 category values, got: " + (categories == null ? 0 : categories.size())

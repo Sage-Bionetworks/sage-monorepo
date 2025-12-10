@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -30,17 +33,21 @@ public class DiseaseCorrelationSearchQueryDto {
 
   private Integer pageSize = 100;
 
-  private String categories;
+  @Valid
+  private List<String> categories = new ArrayList<>();
 
-  private @Nullable String items = null;
+  @Valid
+  private @Nullable List<String> items;
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
 
   private @Nullable String search = null;
 
-  private String sortFields;
+  @Valid
+  private List<String> sortFields;
 
-  private String sortOrders;
+  @Valid
+  private List<Integer> sortOrders;
 
   public DiseaseCorrelationSearchQueryDto() {
     super();
@@ -49,7 +56,7 @@ public class DiseaseCorrelationSearchQueryDto {
   /**
    * Constructor with only required parameters
    */
-  public DiseaseCorrelationSearchQueryDto(String categories, String sortFields, String sortOrders) {
+  public DiseaseCorrelationSearchQueryDto(List<String> categories, List<String> sortFields, List<Integer> sortOrders) {
     this.categories = categories;
     this.sortFields = sortFields;
     this.sortOrders = sortOrders;
@@ -98,43 +105,59 @@ public class DiseaseCorrelationSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public DiseaseCorrelationSearchQueryDto categories(String categories) {
+  public DiseaseCorrelationSearchQueryDto categories(List<String> categories) {
     this.categories = categories;
     return this;
   }
 
+  public DiseaseCorrelationSearchQueryDto addCategoriesItem(String categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
   /**
-   * Comma-delimited category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: \"mainCategory,clusterCategory\" 
+   * Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory] 
    * @return categories
    */
-  @NotNull 
-  @Schema(name = "categories", example = "CONSENSUS NETWORK MODULES,Consensus Cluster A - ECM Organization", description = "Comma-delimited category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: \"mainCategory,clusterCategory\" ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Size(min = 2, max = 2) 
+  @Schema(name = "categories", example = "[\"CONSENSUS NETWORK MODULES\",\"Consensus Cluster A - ECM Organization\"]", description = "Array of category values from the dropdown selections. The API will parse these to extract the cluster information. Expected format: [mainCategory, clusterCategory] ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
-  public String getCategories() {
+  public List<String> getCategories() {
     return categories;
   }
 
-  public void setCategories(String categories) {
+  public void setCategories(List<String> categories) {
     this.categories = categories;
   }
 
-  public DiseaseCorrelationSearchQueryDto items(@Nullable String items) {
+  public DiseaseCorrelationSearchQueryDto items(@Nullable List<String> items) {
     this.items = items;
     return this;
   }
 
+  public DiseaseCorrelationSearchQueryDto addItemsItem(String itemsItem) {
+    if (this.items == null) {
+      this.items = new ArrayList<>();
+    }
+    this.items.add(itemsItem);
+    return this;
+  }
+
   /**
-   * Comma-delimited list of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female,APOE4~8 months~Male,5xFAD (IU/Jax/Pitt)~12 months~Female\" filters for documents matching those exact combinations. 
+   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact combination. Multiple items can be provided to filter for multiple specific combinations. 
    * @return items
    */
   
-  @Schema(name = "items", example = "APOE4~4 months~Female,APOE4~8 months~Male,5xFAD (IU/Jax/Pitt)~12 months~Female", description = "Comma-delimited list of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female,APOE4~8 months~Male,5xFAD (IU/Jax/Pitt)~12 months~Female\" filters for documents matching those exact combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"APOE4~4 months~Female\",\"APOE4~8 months~Male\",\"5xFAD (IU/Jax/Pitt)~12 months~Female\"]", description = "List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact combination. Multiple items can be provided to filter for multiple specific combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
-  public @Nullable String getItems() {
+  public @Nullable List<String> getItems() {
     return items;
   }
 
-  public void setItems(@Nullable String items) {
+  public void setItems(@Nullable List<String> items) {
     this.items = items;
   }
 
@@ -178,43 +201,59 @@ public class DiseaseCorrelationSearchQueryDto {
     this.search = search;
   }
 
-  public DiseaseCorrelationSearchQueryDto sortFields(String sortFields) {
+  public DiseaseCorrelationSearchQueryDto sortFields(List<String> sortFields) {
     this.sortFields = sortFields;
     return this;
   }
 
+  public DiseaseCorrelationSearchQueryDto addSortFieldsItem(String sortFieldsItem) {
+    if (this.sortFields == null) {
+      this.sortFields = new ArrayList<>();
+    }
+    this.sortFields.add(sortFieldsItem);
+    return this;
+  }
+
   /**
-   * Comma-delimited field names to sort by (e.g., \"name,age,sex\"). Each field in sortFields must have a corresponding order in sortOrders. 
+   * List of field names to sort by (e.g., [\"name\", \"age\", \"sex\"]). Each field in sortFields must have a corresponding order in sortOrders. 
    * @return sortFields
    */
-  @NotNull @Pattern(regexp = "^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$") 
-  @Schema(name = "sortFields", example = "name,age,sex", description = "Comma-delimited field names to sort by (e.g., \"name,age,sex\"). Each field in sortFields must have a corresponding order in sortOrders. ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull 
+  @Schema(name = "sortFields", example = "[\"name\",\"age\",\"sex\"]", description = "List of field names to sort by (e.g., [\"name\", \"age\", \"sex\"]). Each field in sortFields must have a corresponding order in sortOrders. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortFields")
-  public String getSortFields() {
+  public List<String> getSortFields() {
     return sortFields;
   }
 
-  public void setSortFields(String sortFields) {
+  public void setSortFields(List<String> sortFields) {
     this.sortFields = sortFields;
   }
 
-  public DiseaseCorrelationSearchQueryDto sortOrders(String sortOrders) {
+  public DiseaseCorrelationSearchQueryDto sortOrders(List<Integer> sortOrders) {
     this.sortOrders = sortOrders;
     return this;
   }
 
+  public DiseaseCorrelationSearchQueryDto addSortOrdersItem(Integer sortOrdersItem) {
+    if (this.sortOrders == null) {
+      this.sortOrders = new ArrayList<>();
+    }
+    this.sortOrders.add(sortOrdersItem);
+    return this;
+  }
+
   /**
-   * Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. 
+   * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. 
    * @return sortOrders
    */
-  @NotNull @Pattern(regexp = "^-?1(,-?1)*$") 
-  @Schema(name = "sortOrders", example = "1,-1,1", description = "Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull 
+  @Schema(name = "sortOrders", example = "[1,-1,1]", description = "List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortOrders")
-  public String getSortOrders() {
+  public List<Integer> getSortOrders() {
     return sortOrders;
   }
 
-  public void setSortOrders(String sortOrders) {
+  public void setSortOrders(List<Integer> sortOrders) {
     this.sortOrders = sortOrders;
   }
 
@@ -303,12 +342,12 @@ public class DiseaseCorrelationSearchQueryDto {
       return this;
     }
     
-    public DiseaseCorrelationSearchQueryDto.Builder categories(String categories) {
+    public DiseaseCorrelationSearchQueryDto.Builder categories(List<String> categories) {
       this.instance.categories(categories);
       return this;
     }
     
-    public DiseaseCorrelationSearchQueryDto.Builder items(String items) {
+    public DiseaseCorrelationSearchQueryDto.Builder items(List<String> items) {
       this.instance.items(items);
       return this;
     }
@@ -323,12 +362,12 @@ public class DiseaseCorrelationSearchQueryDto {
       return this;
     }
     
-    public DiseaseCorrelationSearchQueryDto.Builder sortFields(String sortFields) {
+    public DiseaseCorrelationSearchQueryDto.Builder sortFields(List<String> sortFields) {
       this.instance.sortFields(sortFields);
       return this;
     }
     
-    public DiseaseCorrelationSearchQueryDto.Builder sortOrders(String sortOrders) {
+    public DiseaseCorrelationSearchQueryDto.Builder sortOrders(List<Integer> sortOrders) {
       this.instance.sortOrders(sortOrders);
       return this;
     }

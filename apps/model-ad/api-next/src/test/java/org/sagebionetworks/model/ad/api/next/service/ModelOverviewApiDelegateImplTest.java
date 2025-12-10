@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.model.ad.api.next.api.*;
+import org.sagebionetworks.model.ad.api.next.api.ModelOverviewApiDelegateImpl;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument.ModelOverviewLink;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -54,9 +54,9 @@ class ModelOverviewApiDelegateImplTest {
   @DisplayName("should validate sortFields and sortOrders have matching element counts")
   void shouldValidateSortFieldsAndSortOrdersHaveMatchingElementCounts() {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields("name,modelType")
-      .sortOrders("1")
-      .items("Model A")
+      .sortFields(List.of("name", "modelType"))
+      .sortOrders(List.of(1))
+      .items(List.of("Model A"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -75,8 +75,8 @@ class ModelOverviewApiDelegateImplTest {
   void shouldThrowExceptionWhenSortFieldsIsNull() {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .sortFields(null)
-      .sortOrders("1")
-      .items("Model A")
+      .sortOrders(List.of(1))
+      .items(List.of("Model A"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -93,9 +93,9 @@ class ModelOverviewApiDelegateImplTest {
   @DisplayName("should throw exception when sortFields is empty")
   void shouldThrowExceptionWhenSortFieldsIsEmpty() {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields("")
-      .sortOrders("1")
-      .items("Model A")
+      .sortFields(List.of())
+      .sortOrders(List.of(1))
+      .items(List.of("Model A"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -112,9 +112,9 @@ class ModelOverviewApiDelegateImplTest {
   @DisplayName("should throw exception when sortOrders is null")
   void shouldThrowExceptionWhenSortOrdersIsNull() {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields("name")
+      .sortFields(List.of("name"))
       .sortOrders(null)
-      .items("Model A")
+      .items(List.of("Model A"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -131,9 +131,9 @@ class ModelOverviewApiDelegateImplTest {
   @DisplayName("should throw exception when sortOrders is empty")
   void shouldThrowExceptionWhenSortOrdersIsEmpty() {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields("name")
-      .sortOrders("")
-      .items("Model A")
+      .sortFields(List.of("name"))
+      .sortOrders(List.of())
+      .items(List.of("Model A"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -156,9 +156,9 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findByNameIn(anyList(), any())).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields("name,modelType")
-      .sortOrders("1,-1")
-      .items(modelName)
+      .sortFields(List.of("name", "modelType"))
+      .sortOrders(List.of(1, -1))
+      .items(List.of(modelName))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -174,8 +174,8 @@ class ModelOverviewApiDelegateImplTest {
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields("name")
-      .sortOrders("1")
+      .sortFields(List.of("name"))
+      .sortOrders(List.of(1))
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
@@ -208,9 +208,9 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findByNameIn(anyList(), any())).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields("name")
-      .sortOrders("1")
-      .items(modelName)
+      .sortFields(List.of("name"))
+      .sortOrders(List.of(1))
+      .items(List.of(modelName))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -259,8 +259,8 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findAll(any(PageRequest.class))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields("name")
-      .sortOrders("1")
+      .sortFields(List.of("name"))
+      .sortOrders(List.of(1))
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
@@ -292,9 +292,9 @@ class ModelOverviewApiDelegateImplTest {
     when(repository.findByNameNotIn(anyList(), any())).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields("name")
-      .sortOrders("1")
-      .items(excludedName)
+      .sortFields(List.of("name"))
+      .sortOrders(List.of(1))
+      .items(List.of(excludedName))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(100)

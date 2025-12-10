@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, EffectRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, EffectRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { SortMeta } from 'primeng/api';
@@ -41,8 +41,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   private readonly destroyRef = inject(DestroyRef);
   private readonly geneExpressionService = inject(GeneExpressionService);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
-  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
   private onPinnedDataUpdateEffectRef?: EffectRef;
   private onUnpinnedDataUpdateEffectRef?: EffectRef;
@@ -113,7 +113,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     headerTitle: ComparisonToolPage.GeneExpression,
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
     viewDetailsTooltip: 'Open gene details page',
-    viewDetailsClick: (_id: string, _label: string) => {
+    viewDetailsClick: (id: string, label: string) => {
       // TODO add logic to display details pages MG-588
     },
     legendPanelConfig: this.legendPanelConfig,
@@ -189,19 +189,20 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     searchTerm: string | null,
     sortMeta: SortMeta[],
   ) {
-    const { sortFields, sortOrders } =
-      this.comparisonToolService.convertSortMetaToStrings(sortMeta);
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+    const search = searchTerm ?? undefined;
 
     const query: GeneExpressionSearchQuery = {
-      categories: selection.join(','),
-      items: pinnedItems.join(','),
+      categories: selection,
+      items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
       pageNumber,
       pageSize,
-      search: searchTerm ?? undefined,
+      search,
       sortFields,
       sortOrders,
     };
+
     this.geneExpressionService
       .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -219,12 +220,11 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   }
 
   getPinnedData(selection: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
-    const { sortFields, sortOrders } =
-      this.comparisonToolService.convertSortMetaToStrings(sortMeta);
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
 
     const query: GeneExpressionSearchQuery = {
-      categories: selection.join(','),
-      items: pinnedItems.join(','),
+      categories: selection,
+      items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
       sortFields,
       sortOrders,

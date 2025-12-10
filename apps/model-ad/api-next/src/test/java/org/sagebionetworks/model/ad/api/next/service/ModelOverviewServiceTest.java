@@ -91,7 +91,7 @@ class ModelOverviewServiceTest {
     when(repository.findByNameIn(anyList(), any(Pageable.class))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items("Model1")
+      .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -113,7 +113,7 @@ class ModelOverviewServiceTest {
     when(repository.findByNameNotIn(anyList(), any(Pageable.class))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items("Model1")
+      .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -141,7 +141,7 @@ class ModelOverviewServiceTest {
     ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items("Model1")
+      .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("test")
       .pageNumber(0)
@@ -178,7 +178,7 @@ class ModelOverviewServiceTest {
     ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items("Model3")
+      .items(List.of("Model3"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("model1,model2")
       .pageNumber(0)
@@ -214,7 +214,7 @@ class ModelOverviewServiceTest {
     when(repository.findByNameIn(anyList(), any(Pageable.class))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items("Model1")
+      .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .search("test")
       .pageNumber(0)
@@ -266,7 +266,7 @@ class ModelOverviewServiceTest {
     ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items("Model1")
+      .items(List.of("Model1"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("  test  ")
       .pageNumber(0)
@@ -297,7 +297,7 @@ class ModelOverviewServiceTest {
     ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items("Model2")
+      .items(List.of("Model2"))
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("model1, , ,model3")
       .pageNumber(0)

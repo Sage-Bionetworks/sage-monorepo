@@ -22,22 +22,25 @@ export interface GeneExpressionSearchQuery {
    */
   pageSize?: number;
   /**
-   * Comma-delimited category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: \"mainCategory,tissueCategory,sexCohortCategory\"
+   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory]
    */
-  categories: string;
-  search?: string | null;
+  categories: Array<string>;
   /**
-   * Comma-delimited list of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt),ENSMUSG00000000028~APOE4\" filters for documents matching those exact combinations.
+   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations.
    */
-  items?: string | null;
+  items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
   /**
-   * Comma-delimited field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders.
+   * Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches). Examples: \'gnai,cdc45\' (comma-separated list) or \'gna\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */
-  sortFields: string;
+  search?: string | null;
   /**
-   * Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
+   * List of field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders.
    */
-  sortOrders: string;
+  sortFields: Array<string> | null;
+  /**
+   * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
+   */
+  sortOrders: Array<number> | null;
 }
 export namespace GeneExpressionSearchQuery {}

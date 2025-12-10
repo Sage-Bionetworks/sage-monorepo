@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -30,15 +33,18 @@ public class ModelOverviewSearchQueryDto {
 
   private Integer pageSize = 100;
 
-  private @Nullable String items = null;
+  @Valid
+  private @Nullable List<String> items;
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
 
   private @Nullable String search = null;
 
-  private String sortFields;
+  @Valid
+  private List<String> sortFields;
 
-  private String sortOrders;
+  @Valid
+  private List<Integer> sortOrders;
 
   public ModelOverviewSearchQueryDto() {
     super();
@@ -47,7 +53,7 @@ public class ModelOverviewSearchQueryDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelOverviewSearchQueryDto(String sortFields, String sortOrders) {
+  public ModelOverviewSearchQueryDto(List<String> sortFields, List<Integer> sortOrders) {
     this.sortFields = sortFields;
     this.sortOrders = sortOrders;
   }
@@ -95,23 +101,31 @@ public class ModelOverviewSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public ModelOverviewSearchQueryDto items(@Nullable String items) {
+  public ModelOverviewSearchQueryDto items(@Nullable List<String> items) {
     this.items = items;
     return this;
   }
 
+  public ModelOverviewSearchQueryDto addItemsItem(String itemsItem) {
+    if (this.items == null) {
+      this.items = new ArrayList<>();
+    }
+    this.items.add(itemsItem);
+    return this;
+  }
+
   /**
-   * Comma-delimited list of item names to filter by. Example \"3xTg-AD,5xFAD (UCI)\".
+   * List of item names to filter by. 
    * @return items
    */
   
-  @Schema(name = "items", example = "3xTg-AD,5xFAD (UCI)", description = "Comma-delimited list of item names to filter by. Example \"3xTg-AD,5xFAD (UCI)\".", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"3xTg-AD\",\"5xFAD (UCI)\"]", description = "List of item names to filter by. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
-  public @Nullable String getItems() {
+  public @Nullable List<String> getItems() {
     return items;
   }
 
-  public void setItems(@Nullable String items) {
+  public void setItems(@Nullable List<String> items) {
     this.items = items;
   }
 
@@ -155,43 +169,59 @@ public class ModelOverviewSearchQueryDto {
     this.search = search;
   }
 
-  public ModelOverviewSearchQueryDto sortFields(String sortFields) {
+  public ModelOverviewSearchQueryDto sortFields(List<String> sortFields) {
     this.sortFields = sortFields;
     return this;
   }
 
+  public ModelOverviewSearchQueryDto addSortFieldsItem(String sortFieldsItem) {
+    if (this.sortFields == null) {
+      this.sortFields = new ArrayList<>();
+    }
+    this.sortFields.add(sortFieldsItem);
+    return this;
+  }
+
   /**
-   * Comma-delimited field names to sort by (e.g., \"model_type,name\"). Each field in sortFields must have a corresponding order in sortOrders. 
+   * List of field names to sort by (e.g., [\"model_type\", \"name\"]). Each field in sortFields must have a corresponding order in sortOrders. 
    * @return sortFields
    */
-  @NotNull @Pattern(regexp = "^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$") 
-  @Schema(name = "sortFields", example = "model_type,name", description = "Comma-delimited field names to sort by (e.g., \"model_type,name\"). Each field in sortFields must have a corresponding order in sortOrders. ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull 
+  @Schema(name = "sortFields", example = "[\"model_type\",\"name\"]", description = "List of field names to sort by (e.g., [\"model_type\", \"name\"]). Each field in sortFields must have a corresponding order in sortOrders. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortFields")
-  public String getSortFields() {
+  public List<String> getSortFields() {
     return sortFields;
   }
 
-  public void setSortFields(String sortFields) {
+  public void setSortFields(List<String> sortFields) {
     this.sortFields = sortFields;
   }
 
-  public ModelOverviewSearchQueryDto sortOrders(String sortOrders) {
+  public ModelOverviewSearchQueryDto sortOrders(List<Integer> sortOrders) {
     this.sortOrders = sortOrders;
     return this;
   }
 
+  public ModelOverviewSearchQueryDto addSortOrdersItem(Integer sortOrdersItem) {
+    if (this.sortOrders == null) {
+      this.sortOrders = new ArrayList<>();
+    }
+    this.sortOrders.add(sortOrdersItem);
+    return this;
+  }
+
   /**
-   * Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. 
+   * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. 
    * @return sortOrders
    */
-  @NotNull @Pattern(regexp = "^-?1(,-?1)*$") 
-  @Schema(name = "sortOrders", example = "-1,1", description = "Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull 
+  @Schema(name = "sortOrders", example = "[-1,1]", description = "List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortOrders")
-  public String getSortOrders() {
+  public List<Integer> getSortOrders() {
     return sortOrders;
   }
 
-  public void setSortOrders(String sortOrders) {
+  public void setSortOrders(List<Integer> sortOrders) {
     this.sortOrders = sortOrders;
   }
 
@@ -277,7 +307,7 @@ public class ModelOverviewSearchQueryDto {
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder items(String items) {
+    public ModelOverviewSearchQueryDto.Builder items(List<String> items) {
       this.instance.items(items);
       return this;
     }
@@ -292,12 +322,12 @@ public class ModelOverviewSearchQueryDto {
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder sortFields(String sortFields) {
+    public ModelOverviewSearchQueryDto.Builder sortFields(List<String> sortFields) {
       this.instance.sortFields(sortFields);
       return this;
     }
     
-    public ModelOverviewSearchQueryDto.Builder sortOrders(String sortOrders) {
+    public ModelOverviewSearchQueryDto.Builder sortOrders(List<Integer> sortOrders) {
       this.instance.sortOrders(sortOrders);
       return this;
     }

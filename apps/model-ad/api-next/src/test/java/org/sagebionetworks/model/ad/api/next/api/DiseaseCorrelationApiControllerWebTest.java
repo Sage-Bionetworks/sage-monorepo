@@ -53,9 +53,9 @@ class DiseaseCorrelationApiControllerWebTest {
   void shouldReturnBadRequestProblemWhenCategoryHasEmptySubcategory() throws Exception {
     when(delegate.getDiseaseCorrelations(any(DiseaseCorrelationSearchQueryDto.class))).thenThrow(
       new InvalidCategoryException(
-        "Query parameter categories must repeat twice " +
-        "(e.g. ?categories=CONSENSUS NETWORK MODULES" +
-        "&categories=subcategory) and each value must be a string"
+        "Query parameter categories must repeat twice "
+          + "(e.g. ?categories=CONSENSUS NETWORK MODULES"
+          + "&categories=subcategory) and each value must be a string"
       )
     );
 
@@ -73,9 +73,9 @@ class DiseaseCorrelationApiControllerWebTest {
       .andExpect(jsonPath("$.status").value(400))
       .andExpect(
         jsonPath("$.detail").value(
-          "Query parameter categories must repeat twice " +
-          "(e.g. ?categories=CONSENSUS NETWORK MODULES" +
-          "&categories=subcategory) and each value must be a string"
+          "Query parameter categories must repeat twice "
+            + "(e.g. ?categories=CONSENSUS NETWORK MODULES"
+            + "&categories=subcategory) and each value must be a string"
         )
       )
       .andExpect(jsonPath("$.instance").value("/v1/comparison-tools/disease-correlation"));

@@ -22,21 +22,21 @@ export interface ModelOverviewSearchQuery {
    */
   pageSize?: number;
   /**
-   * Comma-delimited list of item names to filter by. Example \"3xTg-AD,5xFAD (UCI)\".
+   * List of item names to filter by.
    */
-  items?: string | null;
+  items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
   /**
    * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: \'3xtg-ad,5xfad\' (comma-separated list) or \'fad\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */
   search?: string | null;
   /**
-   * Comma-delimited field names to sort by (e.g., \"model_type,name\"). Each field in sortFields must have a corresponding order in sortOrders.
+   * List of field names to sort by (e.g., [\"model_type\", \"name\"]). Each field in sortFields must have a corresponding order in sortOrders.
    */
-  sortFields: string;
+  sortFields: Array<string> | null;
   /**
-   * Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
+   * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
    */
-  sortOrders: string;
+  sortOrders: Array<number> | null;
 }
 export namespace ModelOverviewSearchQuery {}
