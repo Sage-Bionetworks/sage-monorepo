@@ -14,6 +14,9 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Model
+    description: Operations about models.
+    x-displayName: Model
   - name: Model Overview
     description: Operations about Model Overview.
     x-displayName: Model Overview
@@ -26,9 +29,6 @@ tags:
   - name: Data Version
     description: Operations about the data version.
     x-displayName: Data Version
-  - name: Model
-    description: Operations about models.
-    x-displayName: Model
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
     x-displayName: Comparison Tool Config
@@ -99,6 +99,33 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /models/{name}:
+    get:
+      tags:
+        - Model
+      summary: Get details for a specific model
+      description: Retrieve detailed information for a specific model by its name
+      operationId: getModelByName
+      parameters:
+        - name: name
+          in: path
+          description: Name of the model to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+          description: Successfully retrieved model details
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /data-version:
     get:
       tags:
@@ -144,33 +171,6 @@ paths:
           description: Successfully retrieved search results
         '400':
           $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /models/{name}:
-    get:
-      tags:
-        - Model
-      summary: Get details for a specific model
-      description: Retrieve detailed information for a specific model by its name
-      operationId: getModelByName
-      parameters:
-        - name: name
-          in: path
-          description: Name of the model to retrieve
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model'
-          description: Successfully retrieved model details
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /comparison-tool-config:
@@ -696,34 +696,6 @@ components:
       required:
         - geneExpressions
         - page
-    DataVersion:
-      type: object
-      description: Synapse data version
-      properties:
-        data_file:
-          type: string
-        data_version:
-          type: string
-      required:
-        - data_file
-        - data_version
-    SearchResult:
-      type: object
-      description: Search result
-      properties:
-        id:
-          type: string
-          description: ID of result
-        match_field:
-          type: string
-          description: Field that matched the query
-        match_value:
-          type: string
-          description: Value that matched the query
-      required:
-        - id
-        - match_field
-        - match_value
     GeneticInfo:
       type: object
       description: Genetic information about a model
@@ -886,6 +858,34 @@ components:
         - genetic_info
         - biomarkers
         - pathology
+    DataVersion:
+      type: object
+      description: Synapse data version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
+    SearchResult:
+      type: object
+      description: Search result
+      properties:
+        id:
+          type: string
+          description: ID of result
+        match_field:
+          type: string
+          description: Field that matched the query
+        match_value:
+          type: string
+          description: Value that matched the query
+      required:
+        - id
+        - match_field
+        - match_value
     ComparisonToolPage:
       type: string
       description: The type of comparison tool page
@@ -1035,14 +1035,3 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-x-tagGroups:
-  - name: Model-AD API Next
-    tags:
-      - Model Overview
-      - Disease Correlation
-      - Gene Expression
-  - name: Model-AD API
-    tags:
-      - Data Version
-      - Model
-      - Comparison Tool Config
