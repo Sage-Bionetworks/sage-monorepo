@@ -16,7 +16,7 @@ servers:
 tags:
   - name: Data Version
     description: Operations about the data version.
-  - name: Model Legacy
+  - name: Model
     description: Operations about models.
     # x-sage-internal: true # Now defined in the new API service; making this node internal does not
     # prevent merging conflicts because it just centralize the tag description and does not prevent

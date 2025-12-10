@@ -14,7 +14,7 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Model
+  - name: Model Next
     description: Operations about models.
   - name: Model Overview
     description: Operations about Model Overview.
@@ -92,7 +92,7 @@ paths:
   /models/{name}:
     get:
       tags:
-        - Model
+        - Model Next
       summary: Get details for a specific model
       description: Retrieve detailed information for a specific model by its name
       operationId: getModelByName

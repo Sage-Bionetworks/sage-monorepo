@@ -7,8 +7,8 @@ api/data-version.service.ts
 api/disease-correlation.service.ts
 api/gene-expression.service.ts
 api/model-legacy.service.ts
+api/model-next.service.ts
 api/model-overview.service.ts
-api/model.service.ts
 configuration.ts
 encoder.ts
 git_push.sh

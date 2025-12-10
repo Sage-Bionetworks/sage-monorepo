@@ -33,11 +33,11 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Model", description = "Operations about models.")
-public interface ModelApi {
+@Tag(name = "Model Next", description = "Operations about models.")
+public interface ModelNextApi {
 
-    default ModelApiDelegate getDelegate() {
-        return new ModelApiDelegate() {};
+    default ModelNextApiDelegate getDelegate() {
+        return new ModelNextApiDelegate() {};
     }
 
     /**
@@ -54,7 +54,7 @@ public interface ModelApi {
         operationId = "getModelByName",
         summary = "Get details for a specific model",
         description = "Retrieve detailed information for a specific model by its name",
-        tags = { "Model" },
+        tags = { "Model Next" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved model details", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ModelDto.class)),

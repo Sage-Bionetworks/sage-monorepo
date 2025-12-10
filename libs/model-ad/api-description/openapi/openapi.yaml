@@ -14,9 +14,9 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Model
+  - name: Model Next
     description: Operations about models.
-    x-displayName: Model
+    x-displayName: Model Next
   - name: Model Overview
     description: Operations about Model Overview.
     x-displayName: Model Overview
@@ -29,12 +29,14 @@ tags:
   - name: Data Version
     description: Operations about the data version.
     x-displayName: Data Version
-  - name: Model Legacy
+  - name: Model
     description: Operations about models.
-    x-displayName: Model Legacy
+    x-displayName: Model
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
     x-displayName: Comparison Tool Config
+  - name: Model Legacy
+    x-displayName: Model Legacy
 paths:
   /comparison-tools/model-overview:
     get:
@@ -105,7 +107,7 @@ paths:
   /models/{name}:
     get:
       tags:
-        - Model
+        - Model Next
       summary: Get details for a specific model
       description: Retrieve detailed information for a specific model by its name
       operationId: getModelByName
@@ -1033,12 +1035,13 @@ components:
 x-tagGroups:
   - name: Model-AD API Next
     tags:
-      - Model
+      - Model Next
       - Model Overview
       - Disease Correlation
       - Gene Expression
   - name: Model-AD API
     tags:
       - Data Version
-      - Model Legacy
+      - Model
       - Comparison Tool Config
+      - Model Legacy

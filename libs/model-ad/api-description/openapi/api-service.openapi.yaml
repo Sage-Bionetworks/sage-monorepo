@@ -16,7 +16,7 @@ servers:
 tags:
   - name: Data Version
     description: Operations about the data version.
-  - name: Model Legacy
+  - name: Model
     description: Operations about models.
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
@@ -74,7 +74,7 @@ paths:
     x-sage-internal: true
     get:
       tags:
-        - Model
+        - Model Next
       summary: Get details for a specific model
       description: Retrieve detailed information for a specific model by its name
       operationId: getModelByName

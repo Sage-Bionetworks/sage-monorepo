@@ -16,7 +16,7 @@ servers:
 tags:
   - name: Data Version
     description: Operations about the data version.
-  - name: Model Legacy
+  - name: Model
     description: Operations about models.
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.

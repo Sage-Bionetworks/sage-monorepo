@@ -15,7 +15,7 @@ servers:
   - url: http://localhost/v1
 tags:
   - description: Operations about models.
-    name: Model
+    name: Model Next
   - description: Operations about Model Overview.
     name: Model Overview
   - description: Operations about Disease Correlation results.
@@ -156,12 +156,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       summary: Get details for a specific model
       tags:
-        - Model
+        - Model Next
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: Model
+        - tag: Model Next
 components:
   parameters:
     modelOverviewSearchQuery:
