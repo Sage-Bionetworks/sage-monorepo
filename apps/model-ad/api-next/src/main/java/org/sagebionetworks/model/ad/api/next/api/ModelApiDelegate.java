@@ -17,11 +17,11 @@ import java.util.Optional;
 import jakarta.annotation.Generated;
 
 /**
- * A delegate to be called by the {@link ModelNextApiController}}.
+ * A delegate to be called by the {@link ModelApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public interface ModelNextApiDelegate {
+public interface ModelApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
@@ -36,7 +36,7 @@ public interface ModelNextApiDelegate {
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see ModelNextApi#getModelByName
+     * @see ModelApi#getModelByName
      */
     default ResponseEntity<ModelDto> getModelByName(String name) {
         getRequest().ifPresent(request -> {

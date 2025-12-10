@@ -28,8 +28,5 @@ paths:
     $ref: paths/data-version.yaml
   /models/search:
     $ref: paths/model-search.yaml
-  /models/{name}:
-    $ref: paths/model.yaml
-    x-sage-internal: true # Keep the endpoint internal as long as its implemented by the legacy API service
   /comparison-tool-config:
     $ref: paths/comparison-tool-config.yaml

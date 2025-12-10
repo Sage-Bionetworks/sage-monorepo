@@ -1,6 +1,6 @@
 get:
   tags:
-    - Model Next
+    - Model
   summary: Get details for a specific model
   description: Retrieve detailed information for a specific model by its name
   operationId: getModelByName

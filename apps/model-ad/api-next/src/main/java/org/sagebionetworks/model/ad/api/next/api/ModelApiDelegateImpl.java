@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ModelNextApiDelegateImpl implements ModelNextApiDelegate {
+public class ModelApiDelegateImpl implements ModelApiDelegate {
 
   private final ModelService modelService;
 

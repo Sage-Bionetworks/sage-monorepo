@@ -14,9 +14,9 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Model Next
+  - name: Model
     description: Operations about models.
-    x-displayName: Model Next
+    x-displayName: Model
   - name: Model Overview
     description: Operations about Model Overview.
     x-displayName: Model Overview
@@ -29,14 +29,9 @@ tags:
   - name: Data Version
     description: Operations about the data version.
     x-displayName: Data Version
-  - name: Model
-    description: Operations about models.
-    x-displayName: Model
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
     x-displayName: Comparison Tool Config
-  - name: Model Legacy
-    x-displayName: Model Legacy
 paths:
   /comparison-tools/model-overview:
     get:
@@ -107,7 +102,7 @@ paths:
   /models/{name}:
     get:
       tags:
-        - Model Next
+        - Model
       summary: Get details for a specific model
       description: Retrieve detailed information for a specific model by its name
       operationId: getModelByName
@@ -154,7 +149,7 @@ paths:
   /models/search:
     get:
       tags:
-        - Model Legacy
+        - Model
       summary: Search Models
       description: Search for a particular model
       operationId: searchModels
@@ -1032,16 +1027,3 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-x-tagGroups:
-  - name: Model-AD API Next
-    tags:
-      - Model Next
-      - Model Overview
-      - Disease Correlation
-      - Gene Expression
-  - name: Model-AD API
-    tags:
-      - Data Version
-      - Model
-      - Comparison Tool Config
-      - Model Legacy

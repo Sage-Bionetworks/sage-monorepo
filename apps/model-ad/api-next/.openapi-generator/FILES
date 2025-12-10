@@ -5,9 +5,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApi.ja
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApiDelegate.java
-src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelNextApi.java
-src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelNextApiController.java
-src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelNextApiDelegate.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiController.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelOverviewApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelOverviewApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/configuration/EnumConverterConfiguration.java

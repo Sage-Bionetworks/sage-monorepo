@@ -30,16 +30,16 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
 @RequestMapping("${openapi.modelADAPINext.base-path:/v1}")
-public class ModelNextApiController implements ModelNextApi {
+public class ModelApiController implements ModelApi {
 
-    private final ModelNextApiDelegate delegate;
+    private final ModelApiDelegate delegate;
 
-    public ModelNextApiController(@Autowired(required = false) ModelNextApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new ModelNextApiDelegate() {});
+    public ModelApiController(@Autowired(required = false) ModelApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new ModelApiDelegate() {});
     }
 
     @Override
-    public ModelNextApiDelegate getDelegate() {
+    public ModelApiDelegate getDelegate() {
         return delegate;
     }
 
