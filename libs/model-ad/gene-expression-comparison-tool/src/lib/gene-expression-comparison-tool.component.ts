@@ -1,14 +1,14 @@
-import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
+  ComparisonToolQuery,
   ComparisonToolViewConfig,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import {
-  ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolUrlService,
   PlatformService,
@@ -41,14 +41,11 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   private readonly geneExpressionService = inject(GeneExpressionService);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
-
-  currentPageNumber = this.comparisonToolService.pageNumber;
-  currentPageSize = this.comparisonToolService.pageSize;
-  searchTerm = this.comparisonToolFilterService.searchTerm;
+  query = this.comparisonToolService.query;
+  dropdownSelection = this.comparisonToolService.dropdownSelection;
+  private readonly pinnedItems = computed(() => this.query().pinnedItems);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
@@ -121,32 +118,28 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
-  private loadData(
-    selection: string[],
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
-    this.getPinnedData(selection, pinnedItems);
-    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize, searchTerm);
-  }
-
-  readonly onUpdateEffect = effect(() => {
+  // Effect for pinned data - only re-fetch when pinnedItems or categories change
+  readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const selection = this.comparisonToolService.dropdownSelection();
+      const selection = this.dropdownSelection();
       if (!selection.length) {
         return;
       }
 
-      const pinnedItems = Array.from(this.pinnedItems());
-      this.loadData(
-        selection,
-        pinnedItems,
-        this.currentPageNumber(),
-        this.currentPageSize(),
-        this.searchTerm(),
-      );
+      const pinnedItems = this.pinnedItems();
+      this.getPinnedData(selection, pinnedItems);
+    }
+  });
+
+  // Effect for unpinned data - re-fetch when any query param or categories change
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const selection = this.dropdownSelection();
+      if (!selection.length) {
+        return;
+      }
+
+      this.getUnpinnedData(selection, this.query());
     }
   });
 
@@ -165,24 +158,18 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(
-    selection: string[],
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
-    const query: GeneExpressionSearchQuery = {
+  getUnpinnedData(selection: string[], query: ComparisonToolQuery) {
+    const apiQuery: GeneExpressionSearchQuery = {
       categories: selection,
-      items: pinnedItems,
+      items: query.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber,
-      pageSize,
-      search: searchTerm,
+      pageNumber: query.pageNumber,
+      pageSize: query.pageSize,
+      search: query.searchTerm,
     };
 
     this.geneExpressionService
-      .getGeneExpressions(query)
+      .getGeneExpressions(apiQuery)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: GeneExpressionsPage) => {
@@ -198,14 +185,14 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   }
 
   getPinnedData(selection: string[], pinnedItems: string[]) {
-    const query: GeneExpressionSearchQuery = {
+    const apiQuery: GeneExpressionSearchQuery = {
       categories: selection,
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
     };
 
     this.geneExpressionService
-      .getGeneExpressions(query)
+      .getGeneExpressions(apiQuery)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: GeneExpressionsPage) => {
