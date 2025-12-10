@@ -31,4 +31,11 @@ public final class CacheNames {
    * Key format: Dynamic based on query parameters (tissue, sex_cohort, items, filterType)
    */
   public static final String GENE_EXPRESSION = "geneExpression";
+
+  /**
+   * Cache for model queries.
+   * Stores results from model detail queries by name.
+   * Key format: Dynamic based on model name
+   */
+  public static final String MODEL = "model";
 }
