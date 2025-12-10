@@ -31,4 +31,11 @@ public final class CacheNames {
    * Key format: Dynamic based on query parameters (tissue, sex_cohort, items, filterType)
    */
   public static final String GENE_EXPRESSION = "geneExpression";
+
+  /**
+   * Cache for data version queries.
+   * Stores the data version information from Synapse.
+   * Key format: Static key "dataVersion"
+   */
+  public static final String DATA_VERSION = "dataVersion";
 }

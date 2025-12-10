@@ -14,6 +14,9 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Data Version
+    description: Operations about the data version.
+    x-displayName: Data Version
   - name: Model Overview
     description: Operations about Model Overview.
     x-displayName: Model Overview
@@ -23,9 +26,6 @@ tags:
   - name: Gene Expression
     description: Operations about Gene Expression results.
     x-displayName: Gene Expression
-  - name: Data Version
-    description: Operations about the data version.
-    x-displayName: Data Version
   - name: Model
     description: Operations about models.
     x-displayName: Model
@@ -33,6 +33,26 @@ tags:
     description: Operations about Comparison Tool UI configuration.
     x-displayName: Comparison Tool Config
 paths:
+  /data-version:
+    get:
+      tags:
+        - Data Version
+      summary: Get data version
+      description: Get data version
+      operationId: getDataVersion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataVersion'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /comparison-tools/model-overview:
     get:
       tags:
@@ -93,26 +113,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GeneExpressionsPage'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /data-version:
-    get:
-      tags:
-        - Data Version
-      summary: Get data version
-      description: Get data version
-      operationId: getDataVersion
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataVersion'
-          description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -204,6 +204,39 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    DataVersion:
+      type: object
+      description: Synapse data version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
     ItemFilterTypeQuery:
       type: string
       enum:
@@ -376,28 +409,6 @@ components:
       required:
         - modelOverviews
         - page
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem
-      required:
-        - title
-        - status
     DiseaseCorrelationSearchQuery:
       type: object
       description: Disease correlation search query with pagination and filtering options.
@@ -696,17 +707,6 @@ components:
       required:
         - geneExpressions
         - page
-    DataVersion:
-      type: object
-      description: Synapse data version
-      properties:
-        data_file:
-          type: string
-        data_version:
-          type: string
-      required:
-        - data_file
-        - data_version
     SearchResult:
       type: object
       description: Search result
@@ -991,6 +991,25 @@ components:
         - row_count
         - columns
         - filters
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
   parameters:
     modelOverviewSearchQuery:
       name: modelOverviewSearchQuery
@@ -1016,33 +1035,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'
-  responses:
-    BadRequest:
-      description: Invalid request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
 x-tagGroups:
   - name: Model-AD API Next
     tags:
+      - Data Version
       - Model Overview
       - Disease Correlation
       - Gene Expression
   - name: Model-AD API
     tags:
-      - Data Version
       - Model
       - Comparison Tool Config

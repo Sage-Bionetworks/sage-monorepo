@@ -14,15 +14,11 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Data Version
-    description: Operations about the data version.
   - name: Model
     description: Operations about models.
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
 paths:
-  /data-version:
-    $ref: paths/data-version.yaml
   /models/search:
     $ref: paths/model-search.yaml
   /models/{name}:
