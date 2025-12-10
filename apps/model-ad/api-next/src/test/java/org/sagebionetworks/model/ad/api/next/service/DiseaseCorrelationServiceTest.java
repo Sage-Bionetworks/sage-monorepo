@@ -172,7 +172,7 @@ class DiseaseCorrelationServiceTest {
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .items(List.of("Model1~12m~Male"))
+      .items("Model1~12m~Male")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -213,7 +213,7 @@ class DiseaseCorrelationServiceTest {
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .items(List.of("Model1~12m~Male"))
+      .items("Model1~12m~Male")
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -255,7 +255,7 @@ class DiseaseCorrelationServiceTest {
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .items(List.of("Model1~12m~Male"))
+      .items("Model1~12m~Male")
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("test")
       .pageNumber(0)
@@ -299,7 +299,7 @@ class DiseaseCorrelationServiceTest {
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .items(List.of("Model3~12m~Male"))
+      .items("Model3~12m~Male")
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("model1,model2")
       .pageNumber(0)
@@ -342,7 +342,7 @@ class DiseaseCorrelationServiceTest {
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .items(List.of("Model1~12m~Male"))
+      .items("Model1~12m~Male")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .search("test")
       .pageNumber(0)
@@ -376,7 +376,7 @@ class DiseaseCorrelationServiceTest {
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .items(List.of("Model1~12m~Male", "Model2~18m~Female"))
+      .items("Model1~12m~Male,Model2~18m~Female")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -406,7 +406,7 @@ class DiseaseCorrelationServiceTest {
   @DisplayName("should throw exception when composite identifier is invalid")
   void shouldThrowExceptionWhenCompositeIdentifierIsInvalid() {
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .items(List.of("InvalidFormat"))
+      .items("InvalidFormat")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
@@ -435,7 +435,7 @@ class DiseaseCorrelationServiceTest {
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .items(List.of("Model1~12m~Male"))
+      .items("Model1~12m~Male")
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("  test  ")
       .pageNumber(0)
@@ -472,7 +472,7 @@ class DiseaseCorrelationServiceTest {
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .items(List.of("Model2~12m~Male"))
+      .items("Model2~12m~Male")
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .search("model1, , ,model3")
       .pageNumber(0)

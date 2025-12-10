@@ -50,35 +50,19 @@ class ModelOverviewApiDelegateImplTest {
     delegate = new ModelOverviewApiDelegateImpl(queryService);
   }
 
-  /**
-   * Helper to call delegate with DTO by converting to individual parameters.
-   */
-  private ResponseEntity<ModelOverviewsPageDto> callDelegate(ModelOverviewSearchQueryDto query) {
-    String items = query.getItems() != null ? String.join(",", query.getItems()) : null;
-    return delegate.getModelOverviews(
-      query.getSortFields(),
-      query.getSortOrders(),
-      query.getPageNumber(),
-      query.getPageSize(),
-      items,
-      query.getItemFilterType(),
-      query.getSearch()
-    );
-  }
-
   @Test
   @DisplayName("should validate sortFields and sortOrders have matching element counts")
   void shouldValidateSortFieldsAndSortOrdersHaveMatchingElementCounts() {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .sortFields("name,modelType")
       .sortOrders("1")
-      .items(List.of("Model A"))
+      .items("Model A")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getModelOverviews(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("must have the same number of elements")
       .hasMessageContaining("Got 2 field(s) and 1 order(s)");
@@ -92,13 +76,13 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .sortFields(null)
       .sortOrders("1")
-      .items(List.of("Model A"))
+      .items("Model A")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getModelOverviews(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("sortFields is required");
 
@@ -111,13 +95,13 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .sortFields("")
       .sortOrders("1")
-      .items(List.of("Model A"))
+      .items("Model A")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getModelOverviews(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("sortFields is required");
 
@@ -130,13 +114,13 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .sortFields("name")
       .sortOrders(null)
-      .items(List.of("Model A"))
+      .items("Model A")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getModelOverviews(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("sortOrders is required");
 
@@ -149,13 +133,13 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .sortFields("name")
       .sortOrders("")
-      .items(List.of("Model A"))
+      .items("Model A")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getModelOverviews(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("sortOrders is required");
 
@@ -174,13 +158,13 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .sortFields("name,modelType")
       .sortOrders("1,-1")
-      .items(List.of(modelName))
+      .items(modelName)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
+    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -198,7 +182,7 @@ class ModelOverviewApiDelegateImplTest {
       .pageSize(100)
       .build();
 
-    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
+    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -226,13 +210,13 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .sortFields("name")
       .sortOrders("1")
-      .items(List.of(modelName))
+      .items(modelName)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
+    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -283,7 +267,7 @@ class ModelOverviewApiDelegateImplTest {
       .pageSize(100)
       .build();
 
-    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
+    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -310,13 +294,13 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .sortFields("name")
       .sortOrders("1")
-      .items(List.of(excludedName))
+      .items(excludedName)
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(100)
       .build();
 
-    ResponseEntity<ModelOverviewsPageDto> response = callDelegate(query);
+    ResponseEntity<ModelOverviewsPageDto> response = delegate.getModelOverviews(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();

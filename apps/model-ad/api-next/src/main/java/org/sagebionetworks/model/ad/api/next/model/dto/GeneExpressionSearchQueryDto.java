@@ -1,53 +1,46 @@
 package org.sagebionetworks.model.ad.api.next.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.net.URI;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Generated;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import java.net.URI;
-import java.time.OffsetDateTime;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
 
 /**
  * Gene expression search query with pagination and filtering options.
  */
 
-@Schema(
-  name = "GeneExpressionSearchQuery",
-  description = "Gene expression search query with pagination and filtering options."
-)
+@Schema(name = "GeneExpressionSearchQuery", description = "Gene expression search query with pagination and filtering options.")
 @JsonTypeName("GeneExpressionSearchQuery")
-@Generated(
-  value = "org.openapitools.codegen.languages.SpringCodegen",
-  comments = "Generator version: 7.14.0"
-)
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class GeneExpressionSearchQueryDto {
 
   private Integer pageNumber = 0;
 
   private Integer pageSize = 100;
 
-  @Valid
-  private List<String> categories = new ArrayList<>();
+  private String categories;
 
-  @Valid
-  private @Nullable List<String> items;
+  private @Nullable String search = null;
+
+  private @Nullable String items = null;
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
 
-  private @Nullable String sortFields = null;
+  private String sortFields;
 
-  private @Nullable String sortOrders = null;
+  private String sortOrders;
 
   public GeneExpressionSearchQueryDto() {
     super();
@@ -56,8 +49,10 @@ public class GeneExpressionSearchQueryDto {
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionSearchQueryDto(List<String> categories) {
+  public GeneExpressionSearchQueryDto(String categories, String sortFields, String sortOrders) {
     this.categories = categories;
+    this.sortFields = sortFields;
+    this.sortOrders = sortOrders;
   }
 
   public GeneExpressionSearchQueryDto pageNumber(Integer pageNumber) {
@@ -70,13 +65,8 @@ public class GeneExpressionSearchQueryDto {
    * minimum: 0
    * @return pageNumber
    */
-  @Min(0)
-  @Schema(
-    name = "pageNumber",
-    example = "0",
-    description = "The page number.",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  @Min(0) 
+  @Schema(name = "pageNumber", example = "0", description = "The page number.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("pageNumber")
   public Integer getPageNumber() {
     return pageNumber;
@@ -97,14 +87,8 @@ public class GeneExpressionSearchQueryDto {
    * maximum: 100
    * @return pageSize
    */
-  @Min(1)
-  @Max(100)
-  @Schema(
-    name = "pageSize",
-    example = "100",
-    description = "The number of items in a single page.",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  @Min(1) @Max(100) 
+  @Schema(name = "pageSize", example = "100", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("pageSize")
   public Integer getPageSize() {
     return pageSize;
@@ -114,70 +98,63 @@ public class GeneExpressionSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public GeneExpressionSearchQueryDto categories(List<String> categories) {
+  public GeneExpressionSearchQueryDto categories(String categories) {
     this.categories = categories;
-    return this;
-  }
-
-  public GeneExpressionSearchQueryDto addCategoriesItem(String categoriesItem) {
-    if (this.categories == null) {
-      this.categories = new ArrayList<>();
-    }
-    this.categories.add(categoriesItem);
     return this;
   }
 
   /**
-   * Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory]
+   * Comma-delimited category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: \"mainCategory,tissueCategory,sexCohortCategory\" 
    * @return categories
    */
-  @NotNull
-  @Size(min = 3, max = 3)
-  @Schema(
-    name = "categories",
-    example = "[\"RNA - DIFFERENTIAL EXPRESSION\",\"Tissue - Hemibrain\",\"Sex - Females & Males\"]",
-    description = "Array of category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: [mainCategory, tissueCategory, sexCohortCategory] ",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  @NotNull 
+  @Schema(name = "categories", example = "RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females & Males", description = "Comma-delimited category values from the dropdown selections. The API will parse these to extract the tissue and sex_cohort information. Expected format: \"mainCategory,tissueCategory,sexCohortCategory\" ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categories")
-  public List<String> getCategories() {
+  public String getCategories() {
     return categories;
   }
 
-  public void setCategories(List<String> categories) {
+  public void setCategories(String categories) {
     this.categories = categories;
   }
 
-  public GeneExpressionSearchQueryDto items(@Nullable List<String> items) {
+  public GeneExpressionSearchQueryDto search(@Nullable String search) {
+    this.search = search;
+    return this;
+  }
+
+  /**
+   * Get search
+   * @return search
+   */
+  
+  @Schema(name = "search", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("search")
+  public @Nullable String getSearch() {
+    return search;
+  }
+
+  public void setSearch(@Nullable String search) {
+    this.search = search;
+  }
+
+  public GeneExpressionSearchQueryDto items(@Nullable String items) {
     this.items = items;
     return this;
   }
 
-  public GeneExpressionSearchQueryDto addItemsItem(String itemsItem) {
-    if (this.items == null) {
-      this.items = new ArrayList<>();
-    }
-    this.items.add(itemsItem);
-    return this;
-  }
-
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~Gnai3\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations.
+   * Comma-delimited list of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt),ENSMUSG00000000028~APOE4\" filters for documents matching those exact combinations. 
    * @return items
    */
-
-  @Schema(
-    name = "items",
-    example = "[\"ENSMUSG00000000001~Gnai3\",\"ENSMUSG00000000028~Cdc45\",\"ENSMUSG00000000037~Scml2\"]",
-    description = "List of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~Gnai3\" filters for documents matching that exact gene ID and name. Multiple items can be provided to filter for multiple specific combinations. ",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "items", example = "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt),ENSMUSG00000000028~APOE4", description = "Comma-delimited list of composite identifiers to filter by. Each identifier uses the format \"ensembl_gene_id~name\" where each identifier represents one complete combination of ensembl gene ID and gene name.  Example: \"ENSMUSG00000000001~5xFAD (Jax/IU/Pitt),ENSMUSG00000000028~APOE4\" filters for documents matching those exact combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
-  public @Nullable List<String> getItems() {
+  public @Nullable String getItems() {
     return items;
   }
 
-  public void setItems(@Nullable List<String> items) {
+  public void setItems(@Nullable String items) {
     this.items = items;
   }
 
@@ -190,7 +167,7 @@ public class GeneExpressionSearchQueryDto {
    * Get itemFilterType
    * @return itemFilterType
    */
-  @Valid
+  @Valid 
   @Schema(name = "itemFilterType", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("itemFilterType")
   public ItemFilterTypeQueryDto getItemFilterType() {
@@ -201,49 +178,43 @@ public class GeneExpressionSearchQueryDto {
     this.itemFilterType = itemFilterType;
   }
 
-  public GeneExpressionSearchQueryDto sortFields(@Nullable String sortFields) {
+  public GeneExpressionSearchQueryDto sortFields(String sortFields) {
     this.sortFields = sortFields;
     return this;
   }
 
   /**
-   * Comma-delimited field names to sort by.
+   * Comma-delimited field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders. 
    * @return sortFields
    */
-  @Schema(
-    name = "sortFields",
-    description = "Comma-delimited field names to sort by.",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  @NotNull @Pattern(regexp = "^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$") 
+  @Schema(name = "sortFields", example = "gene_symbol,name", description = "Comma-delimited field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortFields")
-  public @Nullable String getSortFields() {
+  public String getSortFields() {
     return sortFields;
   }
 
-  public void setSortFields(@Nullable String sortFields) {
+  public void setSortFields(String sortFields) {
     this.sortFields = sortFields;
   }
 
-  public GeneExpressionSearchQueryDto sortOrders(@Nullable String sortOrders) {
+  public GeneExpressionSearchQueryDto sortOrders(String sortOrders) {
     this.sortOrders = sortOrders;
     return this;
   }
 
   /**
-   * Comma-delimited sort directions (1 for ascending, -1 for descending).
+   * Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. 
    * @return sortOrders
    */
-  @Schema(
-    name = "sortOrders",
-    description = "Comma-delimited sort directions (1 for ascending, -1 for descending).",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  @NotNull @Pattern(regexp = "^-?1(,-?1)*$") 
+  @Schema(name = "sortOrders", example = "1,-1", description = "Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortOrders")
-  public @Nullable String getSortOrders() {
+  public String getSortOrders() {
     return sortOrders;
   }
 
-  public void setSortOrders(@Nullable String sortOrders) {
+  public void setSortOrders(String sortOrders) {
     this.sortOrders = sortOrders;
   }
 
@@ -256,28 +227,19 @@ public class GeneExpressionSearchQueryDto {
       return false;
     }
     GeneExpressionSearchQueryDto geneExpressionSearchQuery = (GeneExpressionSearchQueryDto) o;
-    return (
-      Objects.equals(this.pageNumber, geneExpressionSearchQuery.pageNumber) &&
-      Objects.equals(this.pageSize, geneExpressionSearchQuery.pageSize) &&
-      Objects.equals(this.categories, geneExpressionSearchQuery.categories) &&
-      Objects.equals(this.items, geneExpressionSearchQuery.items) &&
-      Objects.equals(this.itemFilterType, geneExpressionSearchQuery.itemFilterType) &&
-      Objects.equals(this.sortFields, geneExpressionSearchQuery.sortFields) &&
-      Objects.equals(this.sortOrders, geneExpressionSearchQuery.sortOrders)
-    );
+    return Objects.equals(this.pageNumber, geneExpressionSearchQuery.pageNumber) &&
+        Objects.equals(this.pageSize, geneExpressionSearchQuery.pageSize) &&
+        Objects.equals(this.categories, geneExpressionSearchQuery.categories) &&
+        Objects.equals(this.search, geneExpressionSearchQuery.search) &&
+        Objects.equals(this.items, geneExpressionSearchQuery.items) &&
+        Objects.equals(this.itemFilterType, geneExpressionSearchQuery.itemFilterType) &&
+        Objects.equals(this.sortFields, geneExpressionSearchQuery.sortFields) &&
+        Objects.equals(this.sortOrders, geneExpressionSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-      pageNumber,
-      pageSize,
-      categories,
-      items,
-      itemFilterType,
-      sortFields,
-      sortOrders
-    );
+    return Objects.hash(pageNumber, pageSize, categories, search, items, itemFilterType, sortFields, sortOrders);
   }
 
   @Override
@@ -287,6 +249,7 @@ public class GeneExpressionSearchQueryDto {
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
+    sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
@@ -305,7 +268,7 @@ public class GeneExpressionSearchQueryDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
   public static class Builder {
 
     private GeneExpressionSearchQueryDto instance;
@@ -318,10 +281,11 @@ public class GeneExpressionSearchQueryDto {
       this.instance = instance;
     }
 
-    protected Builder copyOf(GeneExpressionSearchQueryDto value) {
+    protected Builder copyOf(GeneExpressionSearchQueryDto value) { 
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
       this.instance.setCategories(value.categories);
+      this.instance.setSearch(value.search);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
       this.instance.setSortFields(value.sortFields);
@@ -333,44 +297,47 @@ public class GeneExpressionSearchQueryDto {
       this.instance.pageNumber(pageNumber);
       return this;
     }
-
+    
     public GeneExpressionSearchQueryDto.Builder pageSize(Integer pageSize) {
       this.instance.pageSize(pageSize);
       return this;
     }
-
-    public GeneExpressionSearchQueryDto.Builder categories(List<String> categories) {
+    
+    public GeneExpressionSearchQueryDto.Builder categories(String categories) {
       this.instance.categories(categories);
       return this;
     }
-
-    public GeneExpressionSearchQueryDto.Builder items(List<String> items) {
+    
+    public GeneExpressionSearchQueryDto.Builder search(String search) {
+      this.instance.search(search);
+      return this;
+    }
+    
+    public GeneExpressionSearchQueryDto.Builder items(String items) {
       this.instance.items(items);
       return this;
     }
-
-    public GeneExpressionSearchQueryDto.Builder itemFilterType(
-      ItemFilterTypeQueryDto itemFilterType
-    ) {
+    
+    public GeneExpressionSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
       this.instance.itemFilterType(itemFilterType);
       return this;
     }
-
+    
     public GeneExpressionSearchQueryDto.Builder sortFields(String sortFields) {
       this.instance.sortFields(sortFields);
       return this;
     }
-
+    
     public GeneExpressionSearchQueryDto.Builder sortOrders(String sortOrders) {
       this.instance.sortOrders(sortOrders);
       return this;
     }
-
+    
     /**
-     * returns a built GeneExpressionSearchQueryDto instance.
-     *
-     * The builder is not reusable (NullPointerException)
-     */
+    * returns a built GeneExpressionSearchQueryDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
     public GeneExpressionSearchQueryDto build() {
       try {
         return this.instance;
@@ -387,17 +354,19 @@ public class GeneExpressionSearchQueryDto {
   }
 
   /**
-   * Create a builder with no initialized field (except for the default values).
-   */
+  * Create a builder with no initialized field (except for the default values).
+  */
   public static GeneExpressionSearchQueryDto.Builder builder() {
     return new GeneExpressionSearchQueryDto.Builder();
   }
 
   /**
-   * Create a builder with a shallow copy of this instance.
-   */
+  * Create a builder with a shallow copy of this instance.
+  */
   public GeneExpressionSearchQueryDto.Builder toBuilder() {
     GeneExpressionSearchQueryDto.Builder builder = new GeneExpressionSearchQueryDto.Builder();
     return builder.copyOf(this);
   }
+
 }
+

@@ -53,7 +53,7 @@ public class DiseaseCorrelationService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<String> items = query.getItems() != null ? query.getItems() : List.of();
+    List<String> items = ApiHelper.parseCommaDelimitedString(query.getItems());
 
     String search = query.getSearch();
 
@@ -76,6 +76,7 @@ public class DiseaseCorrelationService {
     Page<DiseaseCorrelationDocument> page;
 
     if (hasAgeSorting) {
+      // TODO remove this in the future (MG-611)
       // When age sorting is needed, fetch ALL results, sort in-memory, then paginate
       PageRequest unsortedPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
       Page<DiseaseCorrelationDocument> allResults;

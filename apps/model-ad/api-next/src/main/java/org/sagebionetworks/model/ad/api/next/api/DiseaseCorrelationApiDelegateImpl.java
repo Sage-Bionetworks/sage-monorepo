@@ -6,7 +6,6 @@ import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationsPageDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.service.DiseaseCorrelationService;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
@@ -22,30 +21,12 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
 
   @Override
   public ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(
-    String categories,
-    String sortFields,
-    String sortOrders,
-    Integer pageNumber,
-    Integer pageSize,
-    String search,
-    String items,
-    ItemFilterTypeQueryDto itemFilterType
+    DiseaseCorrelationSearchQueryDto query
   ) {
-    validateSortParameters(sortFields, sortOrders);
-
-    // Build DTO from HTTP request parameters for easier handling
-    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
-      .categories(ApiHelper.parseCommaDelimitedString(categories))
-      .sortFields(sortFields)
-      .sortOrders(sortOrders)
-      .pageNumber(pageNumber)
-      .pageSize(pageSize)
-      .items(items != null ? ApiHelper.parseCommaDelimitedString(items) : null)
-      .itemFilterType(itemFilterType)
-      .build();
+    ApiHelper.validateSortParameters(query.getSortFields(), query.getSortOrders());
 
     // Categories format: "cluster1,cluster2"
-    String cluster = extractCluster(categories);
+    String cluster = extractCluster(query.getCategories());
 
     DiseaseCorrelationsPageDto results = diseaseCorrelationService.loadDiseaseCorrelations(
       query,
@@ -58,44 +39,7 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   }
 
   /**
-   * Validates that sortFields and sortOrders are both present and have matching element counts.
-   * These parameters are required by the API contract.
-   *
-   * @param sortFields Comma-delimited sort field names (required)
-   * @param sortOrders Comma-delimited sort orders (required)
-   * @throws IllegalArgumentException if validation fails
-   */
-  private void validateSortParameters(String sortFields, String sortOrders) {
-    boolean hasSortFields = StringUtils.hasText(sortFields);
-    boolean hasSortOrders = StringUtils.hasText(sortOrders);
-
-    // Both parameters are required
-    if (!hasSortFields) {
-      throw new IllegalArgumentException("sortFields is required");
-    }
-
-    if (!hasSortOrders) {
-      throw new IllegalArgumentException("sortOrders is required");
-    }
-
-    // Validate they have the same number of elements
-    int fieldCount = sortFields.split(",", -1).length;
-    int orderCount = sortOrders.split(",", -1).length;
-
-    if (fieldCount != orderCount) {
-      throw new IllegalArgumentException(
-        String.format(
-          "sortFields and sortOrders must have the same number of elements. " +
-          "Got %d field(s) and %d order(s)",
-          fieldCount,
-          orderCount
-        )
-      );
-    }
-  }
-
-  /**
-   * Extracts cluster from comma-delimited categories string.
+   * Extracts cluster from categories string.
    * Expected format: "mainCategory,clusterCategory" where:
    * - First value is the main category (e.g., "CONSENSUS NETWORK MODULES")
    * - Second value is the cluster category (e.g., "Consensus Cluster A - ECM Organization")
@@ -105,8 +49,7 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
    */
   private String extractCluster(String categoriesString) {
     List<String> categories = ApiHelper.parseCommaDelimitedString(categoriesString);
-
-    if (categories.size() != 2) {
+    if (categories == null || categories.size() != 2) {
       throw new InvalidCategoryException(ErrorConstants.CATEGORY_REQUIREMENT_MESSAGE);
     }
 

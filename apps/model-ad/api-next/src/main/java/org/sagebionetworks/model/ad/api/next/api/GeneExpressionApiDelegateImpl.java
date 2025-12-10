@@ -5,13 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.service.GeneExpressionService;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -21,29 +19,11 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
 
   @Override
   public ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
-    String categories,
-    String sortFields,
-    String sortOrders,
-    Integer pageNumber,
-    Integer pageSize,
-    String search,
-    String items,
-    ItemFilterTypeQueryDto itemFilterType
+    GeneExpressionSearchQueryDto query
   ) {
-    validateSortParameters(sortFields, sortOrders);
+    ApiHelper.validateSortParameters(query.getSortFields(), query.getSortOrders());
 
-    // Build DTO from HTTP request parameters for easier handling
-    GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(ApiHelper.parseCommaDelimitedString(categories))
-      .sortFields(sortFields)
-      .sortOrders(sortOrders)
-      .pageNumber(pageNumber)
-      .pageSize(pageSize)
-      .items(items != null ? ApiHelper.parseCommaDelimitedString(items) : null)
-      .itemFilterType(itemFilterType)
-      .build();
-
-    String[] tissueAndSexCohort = extractTissueAndSexCohort(categories);
+    String[] tissueAndSexCohort = extractTissueAndSexCohort(query.getCategories());
     String tissue = tissueAndSexCohort[0];
     String sexCohort = tissueAndSexCohort[1];
 
@@ -58,44 +38,7 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   }
 
   /**
-   * Validates that sortFields and sortOrders are both present and have matching element counts.
-   * These parameters are required by the API contract.
-   *
-   * @param sortFields Comma-delimited sort field names (required)
-   * @param sortOrders Comma-delimited sort orders (required)
-   * @throws IllegalArgumentException if validation fails
-   */
-  private void validateSortParameters(String sortFields, String sortOrders) {
-    boolean hasSortFields = StringUtils.hasText(sortFields);
-    boolean hasSortOrders = StringUtils.hasText(sortOrders);
-
-    // Both parameters are required
-    if (!hasSortFields) {
-      throw new IllegalArgumentException("sortFields is required");
-    }
-
-    if (!hasSortOrders) {
-      throw new IllegalArgumentException("sortOrders is required");
-    }
-
-    // Validate they have the same number of elements
-    int fieldCount = sortFields.split(",", -1).length;
-    int orderCount = sortOrders.split(",", -1).length;
-
-    if (fieldCount != orderCount) {
-      throw new IllegalArgumentException(
-        String.format(
-          "sortFields and sortOrders must have the same number of elements. " +
-          "Got %d field(s) and %d order(s)",
-          fieldCount,
-          orderCount
-        )
-      );
-    }
-  }
-
-  /**
-   * Extracts tissue and sex from comma-delimited categories string.
+   * Extracts tissue and sex cohort from categories string.
    * Expected format: "mainCategory,tissueCategory,sexCohortCategory" where:
    * - First value is the main category (e.g., "RNA - DIFFERENTIAL EXPRESSION")
    * - Second value is the tissue with prefix (e.g., "Tissue - Hemibrain")
@@ -106,10 +49,9 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
    */
   private String[] extractTissueAndSexCohort(String categoriesString) {
     List<String> categories = ApiHelper.parseCommaDelimitedString(categoriesString);
-
-    if (categories.size() < 3) {
+    if (categories == null || categories.size() < 3) {
       throw new InvalidCategoryException(
-        "Expected at least 3 category values, got: " + categories.size()
+        "Expected at least 3 category values, got: " + (categories == null ? 0 : categories.size())
       );
     }
 

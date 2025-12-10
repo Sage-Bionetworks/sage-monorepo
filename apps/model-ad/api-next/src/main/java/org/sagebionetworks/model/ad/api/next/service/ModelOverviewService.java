@@ -1,6 +1,5 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -41,7 +40,7 @@ public class ModelOverviewService {
     "#query.items, #query.search, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
   )
   public ModelOverviewsPageDto loadModelOverviews(ModelOverviewSearchQueryDto query) {
-    List<String> items = query.getItems() != null ? query.getItems() : List.of();
+    List<String> items = ApiHelper.parseCommaDelimitedString(query.getItems());
     String search = query.getSearch();
     ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
       query.getItemFilterType(),

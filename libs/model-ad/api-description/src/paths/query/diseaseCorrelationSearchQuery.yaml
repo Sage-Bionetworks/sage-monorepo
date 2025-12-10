@@ -1,7 +1,7 @@
 name: diseaseCorrelationSearchQuery
 description: The search query used to find and filter disease correlations.
 in: query
-style: form
+style: deepObject
 explode: true
 schema:
   $ref: ../../components/schemas/DiseaseCorrelationSearchQuery.yaml

@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
  */
 public final class SortHelper {
 
+  // TODO remove hard-coded exceptions (MG-614)
+
   // Pre-compiled regex patterns for performance
   private static final Pattern TIME_PERIOD_PATTERN = Pattern.compile("^\\d+\\s+months?$");
   private static final Pattern BRAIN_REGION_PATTERN = Pattern.compile(

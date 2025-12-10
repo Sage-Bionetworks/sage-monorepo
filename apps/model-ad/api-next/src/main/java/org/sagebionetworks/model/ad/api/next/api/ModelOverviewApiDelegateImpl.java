@@ -1,7 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import lombok.RequiredArgsConstructor;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
 import org.sagebionetworks.model.ad.api.next.service.ModelOverviewService;
@@ -9,7 +8,6 @@ import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -19,68 +17,14 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
 
   @Override
   public ResponseEntity<ModelOverviewsPageDto> getModelOverviews(
-    String sortFields,
-    String sortOrders,
-    Integer pageNumber,
-    Integer pageSize,
-    String items,
-    ItemFilterTypeQueryDto itemFilterType,
-    String search
+    ModelOverviewSearchQueryDto query
   ) {
-    validateSortParameters(sortFields, sortOrders);
-
-    // Build DTO from HTTP request parameters for easier handling
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .sortFields(sortFields)
-      .sortOrders(sortOrders)
-      .pageNumber(pageNumber)
-      .pageSize(pageSize)
-      .items(items != null ? ApiHelper.parseCommaDelimitedString(items) : null)
-      .itemFilterType(itemFilterType)
-      .search(search)
-      .build();
+    ApiHelper.validateSortParameters(query.getSortFields(), query.getSortOrders());
 
     ModelOverviewsPageDto page = modelOverviewService.loadModelOverviews(query);
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
       .body(page);
-  }
-
-  /**
-   * Validates that sortFields and sortOrders are both present and have matching element counts.
-   * These parameters are required by the API contract.
-   *
-   * @param sortFields Comma-delimited sort field names (required)
-   * @param sortOrders Comma-delimited sort orders (required)
-   * @throws IllegalArgumentException if validation fails
-   */
-  private void validateSortParameters(String sortFields, String sortOrders) {
-    boolean hasSortFields = StringUtils.hasText(sortFields);
-    boolean hasSortOrders = StringUtils.hasText(sortOrders);
-
-    // Both parameters are required
-    if (!hasSortFields) {
-      throw new IllegalArgumentException("sortFields is required");
-    }
-
-    if (!hasSortOrders) {
-      throw new IllegalArgumentException("sortOrders is required");
-    }
-
-    // Validate they have the same number of elements
-    int fieldCount = sortFields.split(",", -1).length;
-    int orderCount = sortOrders.split(",", -1).length;
-
-    if (fieldCount != orderCount) {
-      throw new IllegalArgumentException(
-        String.format(
-          "sortFields and sortOrders must have the same number of elements. " +
-          "Got %d field(s) and %d order(s)",
-          fieldCount,
-          orderCount
-        )
-      );
-    }
   }
 }

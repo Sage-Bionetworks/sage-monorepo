@@ -30,6 +30,40 @@ public final class ApiHelper {
   private ApiHelper() {}
 
   /**
+   * Validates that sortFields and sortOrders are both present and have matching element counts.
+   *
+   * @param sortFields Comma-delimited sort field names (required)
+   * @param sortOrders Comma-delimited sort orders (required)
+   * @throws IllegalArgumentException if validation fails
+   */
+  public static void validateSortParameters(String sortFields, String sortOrders) {
+    boolean hasSortFields = sortFields != null && !sortFields.isBlank();
+    boolean hasSortOrders = sortOrders != null && !sortOrders.isBlank();
+
+    if (!hasSortFields) {
+      throw new IllegalArgumentException("sortFields is required");
+    }
+
+    if (!hasSortOrders) {
+      throw new IllegalArgumentException("sortOrders is required");
+    }
+
+    int fieldCount = sortFields.split(",", -1).length;
+    int orderCount = sortOrders.split(",", -1).length;
+
+    if (fieldCount != orderCount) {
+      throw new IllegalArgumentException(
+        String.format(
+          "sortFields and sortOrders must have the same number of elements. " +
+          "Got %d field(s) and %d order(s)",
+          fieldCount,
+          orderCount
+        )
+      );
+    }
+  }
+
+  /**
    * Parses a comma-delimited string into a list of strings.
    * Returns an empty list if the input is null or empty.
    *

@@ -51,7 +51,7 @@ public class GeneExpressionService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<String> sanitizedItems = query.getItems() != null ? query.getItems() : List.of();
+    List<String> sanitizedItems = ApiHelper.parseCommaDelimitedString(query.getItems());
 
     // Parse comma-delimited sortFields and sortOrders
     List<String> sortFieldsList = ApiHelper.parseCommaDelimitedString(query.getSortFields());

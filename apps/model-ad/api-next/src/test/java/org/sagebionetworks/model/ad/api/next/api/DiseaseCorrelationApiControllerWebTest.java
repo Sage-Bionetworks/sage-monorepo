@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
@@ -50,9 +51,7 @@ class DiseaseCorrelationApiControllerWebTest {
   @Test
   @DisplayName("should return bad request problem when category has empty subcategory")
   void shouldReturnBadRequestProblemWhenCategoryHasEmptySubcategory() throws Exception {
-    when(
-      delegate.getDiseaseCorrelations(any(), any(), any(), any(), any(), any(), any(), any())
-    ).thenThrow(
+    when(delegate.getDiseaseCorrelations(any(DiseaseCorrelationSearchQueryDto.class))).thenThrow(
       new InvalidCategoryException(
         "Query parameter categories must repeat twice " +
         "(e.g. ?categories=CONSENSUS NETWORK MODULES" +
@@ -85,9 +84,9 @@ class DiseaseCorrelationApiControllerWebTest {
   @Test
   @DisplayName("should return bad request problem when category unsupported")
   void shouldReturnBadRequestProblemWhenCategoryUnsupported() throws Exception {
-    when(
-      delegate.getDiseaseCorrelations(any(), any(), any(), any(), any(), any(), any(), any())
-    ).thenThrow(new InvalidCategoryException("OTHER", "CONSENSUS NETWORK MODULES"));
+    when(delegate.getDiseaseCorrelations(any(DiseaseCorrelationSearchQueryDto.class))).thenThrow(
+      new InvalidCategoryException("OTHER", "CONSENSUS NETWORK MODULES")
+    );
 
     mockMvc
       .perform(
@@ -112,9 +111,9 @@ class DiseaseCorrelationApiControllerWebTest {
   @Test
   @DisplayName("should return bad request problem when delegate raises InvalidObjectIdException")
   void shouldReturnBadRequestProblemWhenDelegateRaisesInvalidObjectIdException() throws Exception {
-    when(
-      delegate.getDiseaseCorrelations(any(), any(), any(), any(), any(), any(), any(), any())
-    ).thenThrow(new InvalidObjectIdException("not-an-id"));
+    when(delegate.getDiseaseCorrelations(any(DiseaseCorrelationSearchQueryDto.class))).thenThrow(
+      new InvalidObjectIdException("not-an-id")
+    );
 
     mockMvc
       .perform(
@@ -138,9 +137,7 @@ class DiseaseCorrelationApiControllerWebTest {
   void shouldReturnNotFoundProblemWhenDelegateRaisesDiseaseCorrelationNotFoundException()
     throws Exception {
     String correlationId = "673f5d8e8c1a2b3c4d5e6f7a";
-    when(
-      delegate.getDiseaseCorrelations(any(), any(), any(), any(), any(), any(), any(), any())
-    ).thenThrow(
+    when(delegate.getDiseaseCorrelations(any(DiseaseCorrelationSearchQueryDto.class))).thenThrow(
       new ResponseStatusException(
         HttpStatus.NOT_FOUND,
         "Disease correlation not found with id: " + correlationId
@@ -164,9 +161,7 @@ class DiseaseCorrelationApiControllerWebTest {
   void shouldReturnNotFoundProblemWhenDiseaseCorrelationNotFoundWithCluster() throws Exception {
     String cluster = "Cluster A";
     String correlationId = "673f5d8e8c1a2b3c4d5e6f7a";
-    when(
-      delegate.getDiseaseCorrelations(any(), any(), any(), any(), any(), any(), any(), any())
-    ).thenThrow(
+    when(delegate.getDiseaseCorrelations(any(DiseaseCorrelationSearchQueryDto.class))).thenThrow(
       new ResponseStatusException(
         HttpStatus.NOT_FOUND,
         "Disease correlation not found with cluster: " + cluster + ", id: " + correlationId

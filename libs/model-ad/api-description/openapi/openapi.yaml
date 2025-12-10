@@ -1014,7 +1014,7 @@ components:
       name: modelOverviewSearchQuery
       description: The search query used to find and filter model overviews.
       in: query
-      style: form
+      style: deepObject
       explode: true
       schema:
         $ref: '#/components/schemas/ModelOverviewSearchQuery'
@@ -1022,7 +1022,7 @@ components:
       name: diseaseCorrelationSearchQuery
       description: The search query used to find and filter disease correlations.
       in: query
-      style: form
+      style: deepObject
       explode: true
       schema:
         $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
@@ -1030,7 +1030,7 @@ components:
       name: geneExpressionSearchQuery
       description: The search query used to find and filter gene expressions.
       in: query
-      style: form
+      style: deepObject
       explode: true
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'

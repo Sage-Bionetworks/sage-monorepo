@@ -1,7 +1,7 @@
 name: geneExpressionSearchQuery
 description: The search query used to find and filter gene expressions.
 in: query
-style: form
+style: deepObject
 explode: true
 schema:
   $ref: ../../components/schemas/GeneExpressionSearchQuery.yaml

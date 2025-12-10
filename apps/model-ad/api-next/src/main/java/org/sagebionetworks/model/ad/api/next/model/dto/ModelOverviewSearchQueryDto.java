@@ -1,52 +1,56 @@
 package org.sagebionetworks.model.ad.api.next.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.net.URI;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Generated;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import java.net.URI;
-import java.time.OffsetDateTime;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
 
 /**
  * Model overview search query with pagination and filtering options.
  */
 
-@Schema(
-  name = "ModelOverviewSearchQuery",
-  description = "Model overview search query with pagination and filtering options."
-)
+@Schema(name = "ModelOverviewSearchQuery", description = "Model overview search query with pagination and filtering options.")
 @JsonTypeName("ModelOverviewSearchQuery")
-@Generated(
-  value = "org.openapitools.codegen.languages.SpringCodegen",
-  comments = "Generator version: 7.14.0"
-)
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ModelOverviewSearchQueryDto {
 
   private Integer pageNumber = 0;
 
   private Integer pageSize = 100;
 
-  @Valid
-  private @Nullable List<String> items;
+  private @Nullable String items = null;
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
 
   private @Nullable String search = null;
 
-  private @Nullable String sortFields = null;
+  private String sortFields;
 
-  private @Nullable String sortOrders = null;
+  private String sortOrders;
+
+  public ModelOverviewSearchQueryDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ModelOverviewSearchQueryDto(String sortFields, String sortOrders) {
+    this.sortFields = sortFields;
+    this.sortOrders = sortOrders;
+  }
 
   public ModelOverviewSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
@@ -58,13 +62,8 @@ public class ModelOverviewSearchQueryDto {
    * minimum: 0
    * @return pageNumber
    */
-  @Min(0)
-  @Schema(
-    name = "pageNumber",
-    example = "0",
-    description = "The page number to return (index starts from 0).",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  @Min(0) 
+  @Schema(name = "pageNumber", example = "0", description = "The page number to return (index starts from 0).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("pageNumber")
   public Integer getPageNumber() {
     return pageNumber;
@@ -85,14 +84,8 @@ public class ModelOverviewSearchQueryDto {
    * maximum: 100
    * @return pageSize
    */
-  @Min(1)
-  @Max(100)
-  @Schema(
-    name = "pageSize",
-    example = "100",
-    description = "The number of items in a single page.",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  @Min(1) @Max(100) 
+  @Schema(name = "pageSize", example = "100", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("pageSize")
   public Integer getPageSize() {
     return pageSize;
@@ -102,36 +95,23 @@ public class ModelOverviewSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public ModelOverviewSearchQueryDto items(@Nullable List<String> items) {
+  public ModelOverviewSearchQueryDto items(@Nullable String items) {
     this.items = items;
     return this;
   }
 
-  public ModelOverviewSearchQueryDto addItemsItem(String itemsItem) {
-    if (this.items == null) {
-      this.items = new ArrayList<>();
-    }
-    this.items.add(itemsItem);
-    return this;
-  }
-
   /**
-   * List of item names to filter by.
+   * Comma-delimited list of item names to filter by. Example \"3xTg-AD,5xFAD (UCI)\".
    * @return items
    */
-
-  @Schema(
-    name = "items",
-    example = "[\"3xTg-AD\",\"5xFAD (UCI)\"]",
-    description = "List of item names to filter by.",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "items", example = "3xTg-AD,5xFAD (UCI)", description = "Comma-delimited list of item names to filter by. Example \"3xTg-AD,5xFAD (UCI)\".", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
-  public @Nullable List<String> getItems() {
+  public @Nullable String getItems() {
     return items;
   }
 
-  public void setItems(@Nullable List<String> items) {
+  public void setItems(@Nullable String items) {
     this.items = items;
   }
 
@@ -144,7 +124,7 @@ public class ModelOverviewSearchQueryDto {
    * Get itemFilterType
    * @return itemFilterType
    */
-  @Valid
+  @Valid 
   @Schema(name = "itemFilterType", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("itemFilterType")
   public ItemFilterTypeQueryDto getItemFilterType() {
@@ -161,16 +141,11 @@ public class ModelOverviewSearchQueryDto {
   }
 
   /**
-   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'.
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when itemFilterType is 'exclude'. 
    * @return search
    */
-
-  @Schema(
-    name = "search",
-    example = "3xtg-ad,5xfad",
-    description = "Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'. ",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "search", example = "3xtg-ad,5xfad", description = "Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("search")
   public @Nullable String getSearch() {
     return search;
@@ -180,49 +155,43 @@ public class ModelOverviewSearchQueryDto {
     this.search = search;
   }
 
-  public ModelOverviewSearchQueryDto sortFields(@Nullable String sortFields) {
+  public ModelOverviewSearchQueryDto sortFields(String sortFields) {
     this.sortFields = sortFields;
     return this;
   }
 
   /**
-   * Comma-delimited field names to sort by.
+   * Comma-delimited field names to sort by (e.g., \"model_type,name\"). Each field in sortFields must have a corresponding order in sortOrders. 
    * @return sortFields
    */
-  @Schema(
-    name = "sortFields",
-    description = "Comma-delimited field names to sort by.",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  @NotNull @Pattern(regexp = "^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$") 
+  @Schema(name = "sortFields", example = "model_type,name", description = "Comma-delimited field names to sort by (e.g., \"model_type,name\"). Each field in sortFields must have a corresponding order in sortOrders. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortFields")
-  public @Nullable String getSortFields() {
+  public String getSortFields() {
     return sortFields;
   }
 
-  public void setSortFields(@Nullable String sortFields) {
+  public void setSortFields(String sortFields) {
     this.sortFields = sortFields;
   }
 
-  public ModelOverviewSearchQueryDto sortOrders(@Nullable String sortOrders) {
+  public ModelOverviewSearchQueryDto sortOrders(String sortOrders) {
     this.sortOrders = sortOrders;
     return this;
   }
 
   /**
-   * Comma-delimited sort directions (1 for ascending, -1 for descending).
+   * Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. 
    * @return sortOrders
    */
-  @Schema(
-    name = "sortOrders",
-    description = "Comma-delimited sort directions (1 for ascending, -1 for descending).",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  @NotNull @Pattern(regexp = "^-?1(,-?1)*$") 
+  @Schema(name = "sortOrders", example = "-1,1", description = "Comma-delimited sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortOrders")
-  public @Nullable String getSortOrders() {
+  public String getSortOrders() {
     return sortOrders;
   }
 
-  public void setSortOrders(@Nullable String sortOrders) {
+  public void setSortOrders(String sortOrders) {
     this.sortOrders = sortOrders;
   }
 
@@ -235,28 +204,18 @@ public class ModelOverviewSearchQueryDto {
       return false;
     }
     ModelOverviewSearchQueryDto modelOverviewSearchQuery = (ModelOverviewSearchQueryDto) o;
-    return (
-      Objects.equals(this.pageNumber, modelOverviewSearchQuery.pageNumber) &&
-      Objects.equals(this.pageSize, modelOverviewSearchQuery.pageSize) &&
-      Objects.equals(this.items, modelOverviewSearchQuery.items) &&
-      Objects.equals(this.itemFilterType, modelOverviewSearchQuery.itemFilterType) &&
-      Objects.equals(this.search, modelOverviewSearchQuery.search) &&
-      Objects.equals(this.sortFields, modelOverviewSearchQuery.sortFields) &&
-      Objects.equals(this.sortOrders, modelOverviewSearchQuery.sortOrders)
-    );
+    return Objects.equals(this.pageNumber, modelOverviewSearchQuery.pageNumber) &&
+        Objects.equals(this.pageSize, modelOverviewSearchQuery.pageSize) &&
+        Objects.equals(this.items, modelOverviewSearchQuery.items) &&
+        Objects.equals(this.itemFilterType, modelOverviewSearchQuery.itemFilterType) &&
+        Objects.equals(this.search, modelOverviewSearchQuery.search) &&
+        Objects.equals(this.sortFields, modelOverviewSearchQuery.sortFields) &&
+        Objects.equals(this.sortOrders, modelOverviewSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-      pageNumber,
-      pageSize,
-      items,
-      itemFilterType,
-      search,
-      sortFields,
-      sortOrders
-    );
+    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, sortFields, sortOrders);
   }
 
   @Override
@@ -284,7 +243,7 @@ public class ModelOverviewSearchQueryDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
   public static class Builder {
 
     private ModelOverviewSearchQueryDto instance;
@@ -297,7 +256,7 @@ public class ModelOverviewSearchQueryDto {
       this.instance = instance;
     }
 
-    protected Builder copyOf(ModelOverviewSearchQueryDto value) {
+    protected Builder copyOf(ModelOverviewSearchQueryDto value) { 
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
       this.instance.setItems(value.items);
@@ -312,44 +271,42 @@ public class ModelOverviewSearchQueryDto {
       this.instance.pageNumber(pageNumber);
       return this;
     }
-
+    
     public ModelOverviewSearchQueryDto.Builder pageSize(Integer pageSize) {
       this.instance.pageSize(pageSize);
       return this;
     }
-
-    public ModelOverviewSearchQueryDto.Builder items(List<String> items) {
+    
+    public ModelOverviewSearchQueryDto.Builder items(String items) {
       this.instance.items(items);
       return this;
     }
-
-    public ModelOverviewSearchQueryDto.Builder itemFilterType(
-      ItemFilterTypeQueryDto itemFilterType
-    ) {
+    
+    public ModelOverviewSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
       this.instance.itemFilterType(itemFilterType);
       return this;
     }
-
+    
     public ModelOverviewSearchQueryDto.Builder search(String search) {
       this.instance.search(search);
       return this;
     }
-
+    
     public ModelOverviewSearchQueryDto.Builder sortFields(String sortFields) {
       this.instance.sortFields(sortFields);
       return this;
     }
-
+    
     public ModelOverviewSearchQueryDto.Builder sortOrders(String sortOrders) {
       this.instance.sortOrders(sortOrders);
       return this;
     }
-
+    
     /**
-     * returns a built ModelOverviewSearchQueryDto instance.
-     *
-     * The builder is not reusable (NullPointerException)
-     */
+    * returns a built ModelOverviewSearchQueryDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
     public ModelOverviewSearchQueryDto build() {
       try {
         return this.instance;
@@ -366,17 +323,19 @@ public class ModelOverviewSearchQueryDto {
   }
 
   /**
-   * Create a builder with no initialized field (except for the default values).
-   */
+  * Create a builder with no initialized field (except for the default values).
+  */
   public static ModelOverviewSearchQueryDto.Builder builder() {
     return new ModelOverviewSearchQueryDto.Builder();
   }
 
   /**
-   * Create a builder with a shallow copy of this instance.
-   */
+  * Create a builder with a shallow copy of this instance.
+  */
   public ModelOverviewSearchQueryDto.Builder toBuilder() {
     ModelOverviewSearchQueryDto.Builder builder = new ModelOverviewSearchQueryDto.Builder();
     return builder.copyOf(this);
   }
+
 }
+

@@ -59,36 +59,16 @@ class GeneExpressionApiDelegateImplTest {
     delegate = new GeneExpressionApiDelegateImpl(queryService);
   }
 
-  /**
-   * Helper to call delegate with DTO by converting to individual parameters.
-   */
-  private ResponseEntity<GeneExpressionsPageDto> callDelegate(GeneExpressionSearchQueryDto query) {
-    String categories = query.getCategories() != null
-      ? String.join(",", query.getCategories())
-      : null;
-    String items = query.getItems() != null ? String.join(",", query.getItems()) : null;
-    return delegate.getGeneExpressions(
-      categories,
-      query.getSortFields(),
-      query.getSortOrders(),
-      query.getPageNumber(),
-      query.getPageSize(),
-      null, // search
-      items,
-      query.getItemFilterType()
-    );
-  }
-
   @Test
   @DisplayName("should throw bad request when categories array has less than 3 values")
   void shouldThrowBadRequestWhenCategoriesStringHasLessThan3Values() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain")
       .sortFields("geneSymbol")
       .sortOrders("1")
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(InvalidCategoryException.class)
       .hasMessageContaining("Expected at least 3 category values");
 
@@ -99,12 +79,12 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw bad request when main category unsupported")
   void shouldThrowBadRequestWhenMainCategoryUnsupported() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("OTHER", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("OTHER,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders("1")
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(InvalidCategoryException.class)
       .hasMessageContaining("Invalid main category");
 
@@ -115,12 +95,12 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw bad request when tissue format invalid")
   void shouldThrowBadRequestWhenTissueFormatInvalid() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "InvalidFormat", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,InvalidFormat,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders("1")
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(InvalidCategoryException.class)
       .hasMessageContaining("Invalid tissue format");
 
@@ -131,12 +111,12 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw bad request when sex cohort format invalid")
   void shouldThrowBadRequestWhenSexFormatInvalid() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "InvalidFormat"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,InvalidFormat")
       .sortFields("geneSymbol")
       .sortOrders("1")
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(InvalidCategoryException.class)
       .hasMessageContaining("Invalid sex_cohort format");
 
@@ -147,16 +127,16 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should validate sortFields and sortOrders have matching element counts")
   void shouldValidateSortFieldsAndSortOrdersHaveMatchingElementCounts() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol,log2Fc")
       .sortOrders("1")
-      .items(List.of("APOE"))
+      .items("APOE")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("must have the same number of elements")
       .hasMessageContaining("Got 2 field(s) and 1 order(s)");
@@ -168,16 +148,16 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw exception when sortFields is null")
   void shouldThrowExceptionWhenSortFieldsIsNull() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields(null)
       .sortOrders("1")
-      .items(List.of("APOE"))
+      .items("APOE")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("sortFields is required");
 
@@ -188,16 +168,16 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw exception when sortFields is empty")
   void shouldThrowExceptionWhenSortFieldsIsEmpty() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("")
       .sortOrders("1")
-      .items(List.of("APOE"))
+      .items("APOE")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("sortFields is required");
 
@@ -208,16 +188,16 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw exception when sortOrders is null")
   void shouldThrowExceptionWhenSortOrdersIsNull() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders(null)
-      .items(List.of("APOE"))
+      .items("APOE")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("sortOrders is required");
 
@@ -228,16 +208,16 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw exception when sortOrders is empty")
   void shouldThrowExceptionWhenSortOrdersIsEmpty() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders("")
-      .items(List.of("APOE"))
+      .items("APOE")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query))
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("sortOrders is required");
 
@@ -260,16 +240,16 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol,log2Fc")
       .sortOrders("1,-1")
-      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
+      .items("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
+    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -279,17 +259,17 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders("1")
-      .items(List.of())
+      .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
     // Empty items list with INCLUDE filter returns empty result without calling repository
-    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
+    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     GeneExpressionsPageDto body = response.getBody();
@@ -318,16 +298,16 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders("1")
-      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
+      .items("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
+    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     GeneExpressionsPageDto body = response.getBody();
@@ -366,16 +346,16 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Cortex", "Sex - Males"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Cortex,Sex - Males")
       .sortFields("geneSymbol")
       .sortOrders("1")
-      .items(List.of())
+      .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
+    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -392,14 +372,16 @@ class GeneExpressionApiDelegateImplTest {
   @DisplayName("should throw bad request when items contain invalid composite identifier format")
   void shouldThrowBadRequestWhenItemsContainInvalidCompositeIdentifier() {
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders("1")
-      .items(List.of("invalid")) // Missing tilde - only 1 part instead of 2
+      .items("invalid") // Missing tilde - only 1 part instead of 2
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
-    assertThatThrownBy(() -> callDelegate(query)).isInstanceOf(InvalidFilterException.class);
+    assertThatThrownBy(() -> delegate.getGeneExpressions(query)).isInstanceOf(
+      InvalidFilterException.class
+    );
 
     verifyNoInteractions(repository);
   }
@@ -422,16 +404,16 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders("1")
-      .items(List.of("ENSMUSG00000000002~APOE4"))
+      .items("ENSMUSG00000000002~APOE4")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
+    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -455,16 +437,16 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders("1")
-      .items(List.of("ENSMUSG00000099999~ExcludedModel"))
+      .items("ENSMUSG00000099999~ExcludedModel")
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
+    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     GeneExpressionsPageDto body = response.getBody();
@@ -496,16 +478,16 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females"))
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females")
       .sortFields("geneSymbol")
       .sortOrders("1")
-      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
+      .items("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
+    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
@@ -531,18 +513,16 @@ class GeneExpressionApiDelegateImplTest {
     ).thenReturn(page);
 
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
-      .categories(
-        List.of("RNA - DIFFERENTIAL EXPRESSION", "Tissue - Hemibrain", "Sex - Females & Males")
-      )
+      .categories("RNA - DIFFERENTIAL EXPRESSION,Tissue - Hemibrain,Sex - Females & Males")
       .sortFields("geneSymbol")
       .sortOrders("1")
-      .items(List.of("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)"))
+      .items("ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(10)
       .build();
 
-    ResponseEntity<GeneExpressionsPageDto> response = callDelegate(query);
+    ResponseEntity<GeneExpressionsPageDto> response = delegate.getGeneExpressions(query);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();

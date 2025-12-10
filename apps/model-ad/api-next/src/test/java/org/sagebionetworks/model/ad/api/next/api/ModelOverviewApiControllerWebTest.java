@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ class ModelOverviewApiControllerWebTest {
   void shouldReturnNotFoundProblemWhenDelegateRaisesModelOverviewNotFoundException()
     throws Exception {
     String modelName = "3xTg-AD";
-    when(delegate.getModelOverviews(any(), any(), any(), any(), any(), any(), any())).thenThrow(
+    when(delegate.getModelOverviews(any(ModelOverviewSearchQueryDto.class))).thenThrow(
       new ResponseStatusException(
         HttpStatus.NOT_FOUND,
         "Model overview not found with name: " + modelName
@@ -55,7 +56,12 @@ class ModelOverviewApiControllerWebTest {
     );
 
     mockMvc
-      .perform(get("/v1/comparison-tools/model-overview").param("item", modelName).param("sortFields", "name").param("sortOrders", "1"))
+      .perform(
+        get("/v1/comparison-tools/model-overview")
+          .param("item", modelName)
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
+      )
       .andExpect(status().isNotFound());
   }
 }

@@ -6,7 +6,7 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,13 +45,7 @@ public interface ModelOverviewApi {
      * GET /comparison-tools/model-overview : Get model overview for comparison tools
      * Returns a paginated list of model overview objects for use in comparison tools.
      *
-     * @param sortFields Comma-delimited field names to sort by (e.g., \&quot;model_type,name\&quot;). (required)
-     * @param sortOrders Comma-delimited sort directions corresponding to sortFields. Values 1 (ascending) or -1 (descending). (required)
-     * @param pageNumber The page number to return (index starts from 0). (optional, default to 0)
-     * @param pageSize The number of items in a single page. (optional, default to 100)
-     * @param items Comma-delimited list of item names to filter by. (optional)
-     * @param itemFilterType  (optional, default to include)
-     * @param search Search by model name (case-insensitive partial match) or by comma separated list of model names. (optional)
+     * @param modelOverviewSearchQuery The search query used to find and filter model overviews. (optional)
      * @return A paginated list of model overview objects (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
@@ -88,15 +82,9 @@ public interface ModelOverviewApi {
     )
     
     default ResponseEntity<ModelOverviewsPageDto> getModelOverviews(
-        @NotNull @Pattern(regexp = "^[a-zA-Z0-9_ ]+(,[a-zA-Z0-9_ ]+)*$") @Parameter(name = "sortFields", description = "Comma-delimited field names to sort by (e.g., \"model_type,name\").", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "sortFields", required = true) String sortFields,
-        @NotNull @Pattern(regexp = "^-?1(,-?1)*$") @Parameter(name = "sortOrders", description = "Comma-delimited sort directions corresponding to sortFields. Values 1 (ascending) or -1 (descending).", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "sortOrders", required = true) String sortOrders,
-        @Min(0) @Parameter(name = "pageNumber", description = "The page number to return (index starts from 0).", in = ParameterIn.QUERY) @Valid @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
-        @Min(1) @Max(100) @Parameter(name = "pageSize", description = "The number of items in a single page.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "pageSize", required = false, defaultValue = "100") Integer pageSize,
-        @Parameter(name = "items", description = "Comma-delimited list of item names to filter by.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "items", required = false) @Nullable String items,
-        @Parameter(name = "itemFilterType", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "itemFilterType", required = false, defaultValue = "include") ItemFilterTypeQueryDto itemFilterType,
-        @Parameter(name = "search", description = "Search by model name (case-insensitive partial match) or by comma separated list of model names.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "search", required = false) @Nullable String search
+        @Parameter(name = "modelOverviewSearchQuery", description = "The search query used to find and filter model overviews.", in = ParameterIn.QUERY) @Valid @Nullable ModelOverviewSearchQueryDto modelOverviewSearchQuery
     ) {
-        return getDelegate().getModelOverviews(sortFields, sortOrders, pageNumber, pageSize, items, itemFilterType, search);
+        return getDelegate().getModelOverviews(modelOverviewSearchQuery);
     }
 
 }
