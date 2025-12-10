@@ -67,7 +67,6 @@ export class ComparisonToolService<T> {
   private readonly isVisualizationOverviewVisibleSignal = signal(true);
   private readonly isVisualizationOverviewHiddenByUserSignal = signal(false);
   private readonly maxPinnedItemsSignal = signal<number>(50);
-  private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
@@ -75,6 +74,7 @@ export class ComparisonToolService<T> {
   private readonly unpinnedDataSignal = signal<T[]>([]);
   private readonly pinnedDataSignal = signal<T[]>([]);
   private readonly querySignal = signal<ComparisonToolQuery>({
+    pinnedItems: [],
     pageNumber: this.INITIAL_PAGE_NUMBER,
     pageSize: 10,
     multiSortMeta: this.DEFAULT_MULTI_SORT_META,
@@ -91,18 +91,18 @@ export class ComparisonToolService<T> {
   readonly isVisualizationOverviewHiddenByUser =
     this.isVisualizationOverviewHiddenByUserSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
-  readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly query = this.querySignal.asReadonly();
   readonly initialPageNumber = this.INITIAL_PAGE_NUMBER;
 
-  pageNumber = computed(() => this.querySignal().pageNumber);
-  pageSize = computed(() => this.querySignal().pageSize);
-  multiSortMeta = computed(() => this.querySignal().multiSortMeta);
-  searchTerm = computed(() => this.querySignal().searchTerm);
-  filters = computed(() => this.querySignal().filters);
+  readonly pinnedItems = computed(() => new Set(this.query().pinnedItems));
+  readonly pageNumber = computed(() => this.querySignal().pageNumber);
+  readonly pageSize = computed(() => this.querySignal().pageSize);
+  readonly multiSortMeta = computed(() => this.querySignal().multiSortMeta);
+  readonly searchTerm = computed(() => this.querySignal().searchTerm);
+  readonly filters = computed(() => this.querySignal().filters);
 
   private readonly syncToUrlInProgress = signal(false);
   private lastSerializedState: string | null = null;
@@ -313,7 +313,7 @@ export class ComparisonToolService<T> {
   }
 
   isPinned(id: string): boolean {
-    return this.pinnedItemsSignal().has(id);
+    return this.pinnedItems().has(id);
   }
 
   togglePin(id: string) {
@@ -330,49 +330,49 @@ export class ComparisonToolService<T> {
         `You have reached the maximum number of pinned items (${this.maxPinnedItems()}). Please unpin an item before pinning a new one.`,
       );
     } else {
-      this.pinnedItemsSignal.update((pinnedItems) => {
-        const newSet = new Set(pinnedItems);
-        newSet.add(id);
-        return newSet;
+      this.updateQuery({
+        pinnedItems: [...this.query().pinnedItems, id],
       });
       this.updatePinnedItemsCache();
     }
   }
 
   unpinItem(id: string) {
-    this.pinnedItemsSignal.update((pinnedItems) => {
-      const newSet = new Set(pinnedItems);
-      newSet.delete(id);
-      return newSet;
+    this.updateQuery({
+      pinnedItems: this.query().pinnedItems.filter((item) => item !== id),
     });
     this.updatePinnedItemsCache();
   }
 
   pinList(ids: string[]) {
-    this.pinnedItemsSignal.update((pinnedItems) => {
-      const newSet = new Set(pinnedItems);
-      let itemsAdded = 0;
-      for (const id of ids) {
-        if (newSet.size >= this.maxPinnedItems()) {
-          const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
-          this.notificationService.showWarning(
-            `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
-          );
-          break;
-        }
-        if (newSet.has(id)) {
-          continue;
-        }
-        newSet.add(id);
-        itemsAdded++;
+    const currentPins = new Set(this.query().pinnedItems);
+    let itemsAdded = 0;
+
+    for (const id of ids) {
+      if (currentPins.size >= this.maxPinnedItems()) {
+        const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
+        this.notificationService.showWarning(
+          `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
+        );
+        break;
       }
-      return newSet;
+      if (currentPins.has(id)) {
+        continue;
+      }
+      currentPins.add(id);
+      itemsAdded++;
+    }
+
+    this.updateQuery({
+      pinnedItems: Array.from(currentPins),
     });
     this.updatePinnedItemsCache();
   }
 
   setPinnedItems(items: string[] | null) {
-    this.pinnedItemsSignal.set(new Set(items ?? []));
+    this.updateQuery({
+      pinnedItems: items ?? [],
+    });
     this.updatePinnedItemsCache();
   }
 
@@ -443,7 +443,10 @@ export class ComparisonToolService<T> {
     // Restore pinned items for new selection from cache (or empty if not cached)
     const newKey = this.dropdownKey(selection);
     const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(newKey);
-    this.pinnedItemsSignal.set(cachedPinnedItems ? new Set(cachedPinnedItems) : new Set());
+    this.updateQuery({
+      pinnedItems: cachedPinnedItems ? Array.from(cachedPinnedItems) : [],
+      pageNumber: this.INITIAL_PAGE_NUMBER,
+    });
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {

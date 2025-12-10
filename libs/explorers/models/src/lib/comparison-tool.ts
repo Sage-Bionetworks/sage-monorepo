@@ -15,6 +15,7 @@ export interface VisualizationOverviewPane {
 }
 
 export interface ComparisonToolQuery {
+  pinnedItems: string[];
   pageNumber: number;
   pageSize: number;
   multiSortMeta: { field: string; order: number }[];
