@@ -782,6 +782,14 @@ components:
           type: array
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
+        search:
+          description: "Search by gene symbol (case-insensitive partial match) or\
+            \ by comma separated list of gene symbols (case-insensitive full matches).\n\
+            Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match).\
+            \ Only applied when \nitemFilterType is 'exclude'.\n"
+          example: 'gnai,cdc45'
+          nullable: true
+          type: string
       required:
         - categories
       type: object
