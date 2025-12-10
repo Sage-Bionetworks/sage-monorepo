@@ -4,6 +4,7 @@ import {
   ComparisonToolColumn,
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
+  ComparisonToolQuery,
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
@@ -35,6 +36,7 @@ export class ComparisonToolService<T> {
   // this cutoff may need to be included in the ui_config instead, so the cutoff can be set per tool.
   private readonly DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL = 2;
   private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
+  private readonly INITIAL_PAGE_NUMBER = 0;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
     headerTitle: '',
@@ -66,15 +68,19 @@ export class ComparisonToolService<T> {
   private readonly isVisualizationOverviewHiddenByUserSignal = signal(false);
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
-  private readonly multiSortMetaSignal = signal<SortMeta[]>(this.DEFAULT_MULTI_SORT_META);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
   private readonly pinnedItemsForDropdownsSignal = signal<Map<string, Set<string>>>(new Map());
   private readonly unpinnedDataSignal = signal<T[]>([]);
   private readonly pinnedDataSignal = signal<T[]>([]);
-  private readonly pageNumberSignal = signal<number>(0);
-  private readonly pageSizeSignal = signal<number>(10);
+  private readonly querySignal = signal<ComparisonToolQuery>({
+    pageNumber: this.INITIAL_PAGE_NUMBER,
+    pageSize: 10,
+    multiSortMeta: this.DEFAULT_MULTI_SORT_META,
+    searchTerm: null,
+    filters: [],
+  });
   private readonly isInitializedSignal = signal(false);
 
   readonly viewConfig = this.viewConfigSignal.asReadonly();
@@ -86,12 +92,17 @@ export class ComparisonToolService<T> {
     this.isVisualizationOverviewHiddenByUserSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
-  readonly multiSortMeta = this.multiSortMetaSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
-  readonly pageNumber = this.pageNumberSignal.asReadonly();
-  readonly pageSize = this.pageSizeSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
+  readonly query = this.querySignal.asReadonly();
+  readonly initialPageNumber = this.INITIAL_PAGE_NUMBER;
+
+  pageNumber = computed(() => this.querySignal().pageNumber);
+  pageSize = computed(() => this.querySignal().pageSize);
+  multiSortMeta = computed(() => this.querySignal().multiSortMeta);
+  searchTerm = computed(() => this.querySignal().searchTerm);
+  filters = computed(() => this.querySignal().filters);
 
   private readonly syncToUrlInProgress = signal(false);
   private lastSerializedState: string | null = null;
@@ -405,12 +416,11 @@ export class ComparisonToolService<T> {
     this.pinnedDataSignal.set(pinnedData);
   }
 
-  setPageNumber(pageNumber: number) {
-    this.pageNumberSignal.set(pageNumber);
-  }
-
-  setPageSize(pageSize: number) {
-    this.pageSizeSignal.set(pageSize);
+  updateQuery(query: Partial<ComparisonToolQuery>) {
+    this.querySignal.update((current) => ({
+      ...current,
+      ...query,
+    }));
   }
 
   handleLazyLoad(event: TableLazyLoadEvent) {
@@ -419,8 +429,7 @@ export class ComparisonToolService<T> {
       event,
       defaultRowsPerPage,
     );
-    this.setPageNumber(pageNumber);
-    this.setPageSize(pageSize);
+    this.updateQuery({ pageNumber, pageSize });
   }
 
   private updateDropdownSelectionIfChanged(selection: string[]) {
@@ -516,7 +525,8 @@ export class ComparisonToolService<T> {
   }
 
   setSort(event: SortEvent) {
-    this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
+    const multiSortMeta = event.multiSortMeta || this.DEFAULT_MULTI_SORT_META;
+    this.updateQuery({ pageNumber: this.INITIAL_PAGE_NUMBER, multiSortMeta });
   }
 
   private resolveUrlState(params: ComparisonToolUrlParams, options: { isInitial: boolean }): void {

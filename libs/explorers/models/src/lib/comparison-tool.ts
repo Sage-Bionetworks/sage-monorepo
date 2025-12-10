@@ -14,6 +14,14 @@ export interface VisualizationOverviewPane {
   content: string;
 }
 
+export interface ComparisonToolQuery {
+  pageNumber: number;
+  pageSize: number;
+  multiSortMeta: { field: string; order: number }[];
+  searchTerm: string | null;
+  filters: ComparisonToolFilter[];
+}
+
 export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
   headerTitle: string;
