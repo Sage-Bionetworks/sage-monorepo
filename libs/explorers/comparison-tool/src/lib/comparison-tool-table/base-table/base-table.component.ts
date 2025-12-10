@@ -31,7 +31,7 @@ interface PaginationOptions {
   encapsulation: ViewEncapsulation.None,
 })
 export class BaseTableComponent {
-  private readonly comparisonToolService = inject(ComparisonToolService);
+  readonly comparisonToolService = inject(ComparisonToolService);
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;
@@ -51,7 +51,11 @@ export class BaseTableComponent {
   };
 
   sortCallback(event: SortEvent) {
-    this.comparisonToolService.setSort(event);
+    this.comparisonToolService.setSort(event.multiSortMeta || []);
+
+    // Return empty array since we're using lazy loading with backend sorting
+    // The onLazyLoad event will fetch the sorted data from the backend
+    return [];
   }
 
   onLazyLoad(event: TableLazyLoadEvent) {

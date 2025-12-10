@@ -23,6 +23,9 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   public ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query
   ) {
+    ApiHelper.validateSortParameters(query.getSortFields(), query.getSortOrders());
+
+    // Categories format: "cluster1,cluster2"
     String cluster = extractCluster(query.getCategories());
 
     DiseaseCorrelationsPageDto results = diseaseCorrelationService.loadDiseaseCorrelations(
@@ -36,15 +39,16 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   }
 
   /**
-   * Extracts cluster from categories array.
-   * Expected format: [mainCategory, clusterCategory] where:
-   * - categories[0] is the main category (e.g., "CONSENSUS NETWORK MODULES")
-   * - categories[1] is the cluster category (e.g., "Consensus Cluster A - ECM Organization")
+   * Extracts cluster from categories string.
+   * Expected format: "mainCategory,clusterCategory" where:
+   * - First value is the main category (e.g., "CONSENSUS NETWORK MODULES")
+   * - Second value is the cluster category (e.g., "Consensus Cluster A - ECM Organization")
    *
-   * @param categories Array of category values
+   * @param categoriesString Comma-delimited category values
    * @return cluster name
    */
-  private String extractCluster(List<String> categories) {
+  private String extractCluster(String categoriesString) {
+    List<String> categories = ApiHelper.parseCommaDelimitedString(categoriesString);
     if (categories == null || categories.size() != 2) {
       throw new InvalidCategoryException(ErrorConstants.CATEGORY_REQUIREMENT_MESSAGE);
     }

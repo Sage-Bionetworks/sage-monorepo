@@ -50,4 +50,22 @@ describe('GeneExpressionComparisonToolComponent', () => {
     const { component } = await setup();
     expect(component).toBeTruthy();
   });
+
+  it('should cleanup effects on destroy', async () => {
+    const { component } = await setup();
+
+    const pinnedEffectDestroySpy = jest.spyOn(
+      (component as any).onPinnedDataUpdateEffectRef,
+      'destroy',
+    );
+    const unpinnedEffectDestroySpy = jest.spyOn(
+      (component as any).onUnpinnedDataUpdateEffectRef,
+      'destroy',
+    );
+
+    component.ngOnDestroy();
+
+    expect(pinnedEffectDestroySpy).toHaveBeenCalled();
+    expect(unpinnedEffectDestroySpy).toHaveBeenCalled();
+  });
 });

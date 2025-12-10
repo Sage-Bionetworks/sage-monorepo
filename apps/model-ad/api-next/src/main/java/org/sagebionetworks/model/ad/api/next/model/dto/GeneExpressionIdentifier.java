@@ -24,7 +24,8 @@ public class GeneExpressionIdentifier {
   /**
    * Parses a composite identifier string into a GeneExpressionIdentifier.
    *
-   * @param compositeId the composite identifier string (e.g., "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
+   * @param compositeId the composite identifier string
+   *        (e.g., "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)")
    * @return the parsed identifier
    * @throws InvalidFilterException if the format is invalid
    */
@@ -38,7 +39,9 @@ public class GeneExpressionIdentifier {
     if (parts.length != EXPECTED_PARTS) {
       throw new InvalidFilterException(
         String.format(
-          "Invalid composite identifier format: '%s'. Expected format: 'ensembl_gene_id~name' (e.g., 'ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)')",
+          "Invalid composite identifier format: '%s'. " +
+          "Expected format: 'ensembl_gene_id~name' " +
+          "(e.g., 'ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)')",
           compositeId
         )
       );

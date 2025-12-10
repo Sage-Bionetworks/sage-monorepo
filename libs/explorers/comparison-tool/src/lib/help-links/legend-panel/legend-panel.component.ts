@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, inject } from '@angular/core';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
+import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import { DialogModule } from 'primeng/dialog';
 import { LegendComponent } from './legend/legend.component';
 
@@ -12,6 +12,7 @@ import { LegendComponent } from './legend/legend.component';
 })
 export class LegendPanelComponent {
   comparisonToolService = inject(ComparisonToolService);
+  platformService = inject(PlatformService);
 
   viewConfig = this.comparisonToolService.viewConfig;
 

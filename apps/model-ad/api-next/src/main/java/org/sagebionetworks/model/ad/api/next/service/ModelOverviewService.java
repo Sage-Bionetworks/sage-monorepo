@@ -16,11 +16,13 @@ import org.sagebionetworks.model.ad.api.next.model.dto.PageMetadataDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
+import org.sagebionetworks.model.ad.api.next.util.SortHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -35,10 +37,10 @@ public class ModelOverviewService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('modelOverview', #query.itemFilterType, " +
-    "#query.items, #query.search, #query.pageNumber, #query.pageSize)"
+    "#query.items, #query.search, #query.pageNumber, #query.pageSize, #query.sortFields, #query.sortOrders)"
   )
   public ModelOverviewsPageDto loadModelOverviews(ModelOverviewSearchQueryDto query) {
-    List<String> items = ApiHelper.sanitizeItems(query.getItems());
+    List<String> items = ApiHelper.parseCommaDelimitedString(query.getItems());
     String search = query.getSearch();
     ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
       query.getItemFilterType(),
@@ -48,7 +50,11 @@ public class ModelOverviewService {
     int effectivePageNumber = Objects.requireNonNullElse(query.getPageNumber(), 0);
     int effectivePageSize = Objects.requireNonNullElse(query.getPageSize(), 100);
 
-    Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize);
+    // Build Sort from sortFields and sortOrders
+    List<String> sortFields = ApiHelper.parseCommaDelimitedString(query.getSortFields());
+    List<Integer> sortOrderIntegers = ApiHelper.parseCommaDelimitedIntegers(query.getSortOrders());
+    Sort sort = buildSort(sortFields, sortOrderIntegers);
+    Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize, sort);
     Page<ModelOverviewDocument> page;
 
     if (
@@ -100,5 +106,18 @@ public class ModelOverviewService {
       excludeNames,
       pageable
     );
+  }
+
+  /**
+   * Builds a Spring Data Sort object using the centralized SortHelper utility.
+   * No field transformations needed for Model Overview (uses fields as-is).
+   *
+   * @param sortFields list of field names to sort by
+   * @param sortOrders list of sort directions (1 for ascending, -1 for descending)
+   * @return Sort object for use in PageRequest
+   * @throws IllegalArgumentException if arrays have mismatched lengths or invalid values
+   */
+  private Sort buildSort(List<String> sortFields, List<Integer> sortOrders) {
+    return SortHelper.buildSort(sortFields, sortOrders, SortHelper.NO_TRANSFORM);
   }
 }

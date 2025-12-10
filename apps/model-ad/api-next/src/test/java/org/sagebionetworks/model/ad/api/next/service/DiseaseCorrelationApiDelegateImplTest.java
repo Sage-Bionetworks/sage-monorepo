@@ -64,8 +64,13 @@ class DiseaseCorrelationApiDelegateImplTest {
   @Test
   @DisplayName("should throw bad request when category missing subcategory")
   void shouldThrowBadRequestWhenCategoryMissingSubcategory() {
-    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
-      .categories(List.of(ErrorConstants.DISEASE_CORRELATION_CATEGORY))
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .categories(ErrorConstants.DISEASE_CORRELATION_CATEGORY)
+      .sortFields("name")
+      .sortOrders("1")
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(PAGE_NUMBER)
+      .pageSize(PAGE_SIZE)
       .build();
 
     assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query)).isInstanceOf(
@@ -78,8 +83,13 @@ class DiseaseCorrelationApiDelegateImplTest {
   @Test
   @DisplayName("should throw bad request when category unsupported")
   void shouldThrowBadRequestWhenCategoryUnsupported() {
-    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
-      .categories(List.of("OTHER", CLUSTER_A))
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .categories("OTHER," + CLUSTER_A)
+      .sortFields("name")
+      .sortOrders("1")
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(PAGE_NUMBER)
+      .pageSize(PAGE_SIZE)
       .build();
 
     assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query)).isInstanceOf(
@@ -90,9 +100,115 @@ class DiseaseCorrelationApiDelegateImplTest {
   }
 
   @Test
+  @DisplayName("should validate sortFields and sortOrders have matching element counts")
+  void shouldValidateSortFieldsAndSortOrdersHaveMatchingElementCounts() {
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
+      .sortFields("name,age")
+      .sortOrders("1")
+      .build();
+
+    assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("must have the same number of elements")
+      .hasMessageContaining("Got 2 field(s) and 1 order(s)");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should throw exception when sortFields is null")
+  void shouldThrowExceptionWhenSortFieldsIsNull() {
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
+      .sortFields(null)
+      .sortOrders("1")
+      .build();
+
+    assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("sortFields is required");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should throw exception when sortFields is empty")
+  void shouldThrowExceptionWhenSortFieldsIsEmpty() {
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
+      .sortFields("")
+      .sortOrders("1")
+      .build();
+
+    assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("sortFields is required");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should throw exception when sortOrders is null")
+  void shouldThrowExceptionWhenSortOrdersIsNull() {
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
+      .sortFields("name")
+      .sortOrders(null)
+      .build();
+
+    assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("sortOrders is required");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should throw exception when sortOrders is empty")
+  void shouldThrowExceptionWhenSortOrdersIsEmpty() {
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
+      .sortFields("name")
+      .sortOrders("")
+      .build();
+
+    assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("sortOrders is required");
+
+    verifyNoInteractions(repository);
+  }
+
+  @Test
+  @DisplayName("should accept valid matching sort parameters")
+  void shouldAcceptValidMatchingSortParameters() {
+    ObjectId objectId = new ObjectId();
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(buildDocument(objectId)));
+
+    when(
+      repository.findByClusterAndCompositeIdentifiers(eq(CLUSTER_A), anyList(), any(Pageable.class))
+    ).thenReturn(page);
+
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
+      .sortFields("name,age")
+      .sortOrders("1,-1")
+      .items("Model 1~10 weeks~Female")
+      .build();
+
+    ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isNotNull();
+  }
+
+  @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
-    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A).build();
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .categories(ErrorConstants.DISEASE_CORRELATION_CATEGORY + "," + CLUSTER_A)
+      .sortFields("name")
+      .sortOrders("1")
+      .items(null)
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(PAGE_NUMBER)
+      .pageSize(PAGE_SIZE)
+      .build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
 
@@ -118,8 +234,14 @@ class DiseaseCorrelationApiDelegateImplTest {
       repository.findByClusterAndCompositeIdentifiers(eq(CLUSTER_A), anyList(), any(Pageable.class))
     ).thenReturn(page);
 
-    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
-      .items(List.of("Model 1~10 weeks~Female"))
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .categories(ErrorConstants.DISEASE_CORRELATION_CATEGORY + "," + CLUSTER_A)
+      .sortFields("name")
+      .sortOrders("1")
+      .items("Model 1~10 weeks~Female")
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(PAGE_NUMBER)
+      .pageSize(PAGE_SIZE)
       .build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
@@ -152,9 +274,14 @@ class DiseaseCorrelationApiDelegateImplTest {
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(buildDocument(new ObjectId())));
     when(repository.findByCluster(eq(CLUSTER_B), any(Pageable.class))).thenReturn(page);
 
-    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_B)
-      .items(List.of())
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .categories(ErrorConstants.DISEASE_CORRELATION_CATEGORY + "," + CLUSTER_B)
+      .sortFields("name")
+      .sortOrders("1")
+      .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .pageNumber(PAGE_NUMBER)
+      .pageSize(PAGE_SIZE)
       .build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
@@ -169,8 +296,14 @@ class DiseaseCorrelationApiDelegateImplTest {
   @Test
   @DisplayName("should throw bad request when items contain invalid composite identifier format")
   void shouldThrowBadRequestWhenItemsContainInvalidCompositeIdentifier() {
-    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
-      .items(List.of("invalid")) // Missing tildes - only 1 part instead of 3
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .categories(ErrorConstants.DISEASE_CORRELATION_CATEGORY + "," + CLUSTER_A)
+      .sortFields("name")
+      .sortOrders("1")
+      .items("invalid") // Missing tildes - only 1 part instead of 3
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(PAGE_NUMBER)
+      .pageSize(PAGE_SIZE)
       .build();
 
     assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query)).isInstanceOf(
@@ -192,8 +325,14 @@ class DiseaseCorrelationApiDelegateImplTest {
       repository.findByClusterAndCompositeIdentifiers(eq(CLUSTER_C), anyList(), any(Pageable.class))
     ).thenReturn(page);
 
-    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_C)
-      .items(List.of("Model 2~12 weeks~Male"))
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .categories(ErrorConstants.DISEASE_CORRELATION_CATEGORY + "," + CLUSTER_C)
+      .sortFields("name")
+      .sortOrders("1")
+      .items("Model 2~12 weeks~Male")
+      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
+      .pageNumber(PAGE_NUMBER)
+      .pageSize(PAGE_SIZE)
       .build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
@@ -218,9 +357,14 @@ class DiseaseCorrelationApiDelegateImplTest {
       )
     ).thenReturn(page);
 
-    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_D)
-      .items(List.of("ExcludedModel~8 weeks~Male"))
+    DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
+      .categories(ErrorConstants.DISEASE_CORRELATION_CATEGORY + "," + CLUSTER_D)
+      .sortFields("name")
+      .sortOrders("1")
+      .items("ExcludedModel~8 weeks~Male")
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
+      .pageNumber(PAGE_NUMBER)
+      .pageSize(PAGE_SIZE)
       .build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
@@ -240,7 +384,9 @@ class DiseaseCorrelationApiDelegateImplTest {
 
   private DiseaseCorrelationSearchQueryDto.Builder buildQuery(String cluster) {
     return DiseaseCorrelationSearchQueryDto.builder()
-      .categories(List.of(ErrorConstants.DISEASE_CORRELATION_CATEGORY, cluster))
+      .categories(ErrorConstants.DISEASE_CORRELATION_CATEGORY + "," + cluster)
+      .sortFields("name")
+      .sortOrders("1")
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(PAGE_NUMBER)
