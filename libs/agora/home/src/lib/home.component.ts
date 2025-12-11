@@ -19,30 +19,41 @@ export class HomeComponent {
   // TODO: Replace with your actual OpenRouter API key from .env
   private readonly OPENROUTER_API_KEY = 'changeme';
 
-  testOpenRouterService(): void {
-    console.log('🧪 Testing OpenRouter API Service...');
+  streamingResponse = '';
+  isStreaming = false;
 
-    // Simple 1x1 red pixel PNG (base64)
-    const testImageBase64 =
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFBQIAX8jx0gAAAABJRU5ErkJggg==';
-    const imageUrl = `data:image/png;base64,${testImageBase64}`;
+  testOpenRouterService(): void {
+    console.log('🧪 Testing OpenRouter API Service with Streaming...');
+
+    // Use a complex chart/visualization image URL for testing
+    // Example: A chart from a public source
+    const imageUrl = 'https://matplotlib.org/stable/_images/sphx_glr_scatter_001.png';
 
     const template =
-      'You are an AI assistant that analyzes visualizations. Describe what you see in the image.';
-    const modelId = 'google/gemini-3-pro-preview';
+      'You are an AI assistant that analyzes scientific visualizations and data charts. Provide a detailed description of the visualization including: the type of chart, axes labels, data patterns, trends, and any notable features.';
+    const modelId = 'openai/gpt-4o';
 
     console.log('📋 Template:', template);
     console.log('📋 Model ID:', modelId);
-    console.log('📋 Image URL:', imageUrl.substring(0, 50) + '...');
+    console.log('📋 Image URL:', imageUrl);
+
+    this.streamingResponse = '';
+    this.isStreaming = true;
 
     this.openRouterService
-      .explainVisualization(imageUrl, template, this.OPENROUTER_API_KEY, modelId)
+      .explainVisualizationStream(imageUrl, template, this.OPENROUTER_API_KEY, modelId)
       .subscribe({
-        next: (response) => {
-          console.log('✅ SUCCESS! OpenRouter API Response received:', response);
+        next: (textDelta) => {
+          this.streamingResponse += textDelta;
+          console.log('📝 Received delta:', textDelta);
         },
         error: (error) => {
           console.error('❌ ERROR! OpenRouter API call failed:', error);
+          this.isStreaming = false;
+        },
+        complete: () => {
+          console.log('✅ SUCCESS! Streaming completed');
+          this.isStreaming = false;
         },
       });
   }

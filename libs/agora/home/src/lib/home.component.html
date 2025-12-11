@@ -51,8 +51,33 @@
             font-size: 14px;
           "
         >
-          🧪 Test OpenRouter Service
+          🧪 Test OpenRouter Streaming
         </button>
+        @if (isStreaming || streamingResponse) {
+          <div
+            style="
+              margin: 20px 0;
+              padding: 15px;
+              border: 1px solid #ddd;
+              border-radius: 4px;
+              background: #f9f9f9;
+              min-height: 100px;
+              max-height: 300px;
+              overflow-y: auto;
+              white-space: pre-wrap;
+              font-family: monospace;
+              font-size: 13px;
+            "
+          >
+            @if (isStreaming && !streamingResponse) {
+              <div style="color: #666">Waiting for response...</div>
+            }
+            {{ streamingResponse }}
+            @if (isStreaming && streamingResponse) {
+              <span style="animation: blink 1s infinite">▋</span>
+            }
+          </div>
+        }
       </div>
       <div class="card-container">
         <explorers-home-card
