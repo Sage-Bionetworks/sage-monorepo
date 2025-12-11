@@ -24,6 +24,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -38,7 +39,8 @@ public class GeneExpressionService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)"
     + ".buildCacheKey('geneExpression', #query.itemFilterType, #query.items, "
-    + "#query.search, #tissue, #sexCohort, #query.pageNumber, #query.pageSize)"
+    + "#query.search, #tissue, #sexCohort, #query.pageNumber, #query.pageSize, "
+    + "#query.sortFields, #query.sortOrders)"
   )
   public GeneExpressionsPageDto loadGeneExpressions(
     GeneExpressionSearchQueryDto query,
@@ -52,7 +54,8 @@ public class GeneExpressionService {
 
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
     String search = query.getSearch();
-    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
+    Sort sort = ApiHelper.createSort(query.getSortFields(), query.getSortOrders());
+    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
 
     boolean hasSearch = search != null && !search.trim().isEmpty();
     boolean hasItems = !items.isEmpty();

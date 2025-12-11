@@ -5,7 +5,7 @@ import {
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
-import { MessageService } from 'primeng/api';
+import { MessageService, SortMeta } from 'primeng/api';
 import { BehaviorSubject, of } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { ComparisonToolService } from './comparison-tool.service';
@@ -23,6 +23,7 @@ export type ComparisonToolServiceOptions = {
   pinnedItems?: string[];
   unpinnedData?: Record<string, unknown>[];
   pinnedData?: Record<string, unknown>[];
+  multiSortMeta?: SortMeta[];
   router?: Router;
   activatedRoute?: ActivatedRoute;
   urlSync?: boolean;
@@ -113,6 +114,10 @@ export const provideComparisonToolService = (
 
       if (options.pinnedData !== undefined) {
         service.setPinnedData(options.pinnedData);
+      }
+
+      if (options.multiSortMeta !== undefined) {
+        service.setSort(options.multiSortMeta);
       }
 
       return service;

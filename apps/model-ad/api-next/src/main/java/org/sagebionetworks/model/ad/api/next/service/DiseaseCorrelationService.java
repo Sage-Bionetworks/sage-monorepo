@@ -24,6 +24,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -38,7 +39,8 @@ public class DiseaseCorrelationService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('diseaseCorrelation', #query.itemFilterType, #query.items, " +
-    "#query.search, #cluster, #query.pageNumber, #query.pageSize)"
+    "#query.search, #cluster, #query.pageNumber, #query.pageSize, " +
+    "#query.sortFields, #query.sortOrders)"
   )
   public DiseaseCorrelationsPageDto loadDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query,
@@ -51,7 +53,8 @@ public class DiseaseCorrelationService {
 
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
     String search = query.getSearch();
-    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
+    Sort sort = ApiHelper.createSort(query.getSortFields(), query.getSortOrders());
+    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
 
     boolean hasSearch = search != null && !search.trim().isEmpty();
     boolean hasItems = !items.isEmpty();

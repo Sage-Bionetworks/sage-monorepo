@@ -1,6 +1,7 @@
 import { RouterModule } from '@angular/router';
 import {
   ComparisonToolService,
+  ComparisonToolServiceOptions,
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import {
@@ -9,13 +10,16 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { SortMeta } from 'primeng/api';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns.component';
 
-async function setup() {
+async function setup(options?: Partial<ComparisonToolServiceOptions>) {
   const user = userEvent.setup();
   const component = await render(ComparisonToolColumnsComponent, {
     imports: [RouterModule],
-    providers: [...provideComparisonToolService({ configs: mockComparisonToolConfigs })],
+    providers: [
+      ...provideComparisonToolService({ configs: mockComparisonToolConfigs, ...options }),
+    ],
     componentInputs: {},
   });
   const fixture = component.fixture;
@@ -106,5 +110,82 @@ describe('ComparisonToolColumnsComponent', () => {
       { field: firstColumnToSort.data_key, order: -1 },
       { field: secondColumnToSort.data_key, order: -1 },
     ]);
+  });
+
+  describe('sort indicators', () => {
+    it('should display sort icon on column with default sort', async () => {
+      const defaultSort: SortMeta[] = [{ field: mockComparisonToolColumns[0].data_key, order: -1 }];
+      await setup({ multiSortMeta: defaultSort });
+
+      const columnHeader = screen.getByRole('columnheader', {
+        name: mockComparisonToolColumns[0].name,
+      });
+      // Column should have the sorted class
+      expect(columnHeader).toHaveClass('p-datatable-column-sorted');
+      // Should have descending sort indicator
+      expect(columnHeader).toHaveAttribute('aria-sort', 'descending');
+    });
+
+    it('should display sort order numbers for multi-column sort', async () => {
+      const defaultSort: SortMeta[] = [
+        { field: mockComparisonToolColumns[0].data_key, order: -1 },
+        { field: mockComparisonToolColumns[1].data_key, order: 1 },
+      ];
+      await setup({ multiSortMeta: defaultSort });
+
+      // PrimeNG includes badge number in accessible name for multi-column sort
+      const firstColumnHeader = screen.getByRole('columnheader', {
+        name: new RegExp(`^${mockComparisonToolColumns[0].name}\\s+1$`),
+      });
+      const secondColumnHeader = screen.getByRole('columnheader', {
+        name: new RegExp(`^${mockComparisonToolColumns[1].name}\\s+2$`),
+      });
+
+      const firstSortBadge = firstColumnHeader.querySelector('.p-sortable-column-badge');
+      const secondSortBadge = secondColumnHeader.querySelector('.p-sortable-column-badge');
+
+      expect(firstSortBadge).toHaveTextContent('1');
+      expect(secondSortBadge).toHaveTextContent('2');
+
+      // First column should be descending, second ascending
+      expect(firstColumnHeader).toHaveAttribute('aria-sort', 'descending');
+      expect(secondColumnHeader).toHaveAttribute('aria-sort', 'ascending');
+    });
+
+    it('should not display sort indicator on unsorted columns', async () => {
+      const defaultSort: SortMeta[] = [{ field: mockComparisonToolColumns[0].data_key, order: -1 }];
+      await setup({ multiSortMeta: defaultSort });
+
+      // Unsorted columns should not have the sorted class
+      const unsortedColumnHeader = screen.getByRole('columnheader', {
+        name: mockComparisonToolColumns[1].name,
+      });
+      expect(unsortedColumnHeader).not.toHaveClass('p-datatable-column-sorted');
+      expect(unsortedColumnHeader).toHaveAttribute('aria-sort', 'none');
+    });
+
+    it('should update sort indicators when sort changes', async () => {
+      const { user, service } = await setup();
+
+      const firstColumn = mockComparisonToolColumns[0];
+      const firstColumnHeader = screen.getByRole('columnheader', { name: firstColumn.name });
+
+      // Initially no sort
+      expect(firstColumnHeader).not.toHaveClass('p-datatable-column-sorted');
+      expect(firstColumnHeader).toHaveAttribute('aria-sort', 'none');
+
+      // Click to sort
+      await user.click(firstColumnHeader);
+
+      // Now should be sorted descending
+      expect(firstColumnHeader).toHaveClass('p-datatable-column-sorted');
+      expect(firstColumnHeader).toHaveAttribute('aria-sort', 'descending');
+      expect(service.multiSortMeta()).toEqual([{ field: firstColumn.data_key, order: -1 }]);
+
+      // Click again to toggle to ascending
+      await user.click(firstColumnHeader);
+      expect(firstColumnHeader).toHaveAttribute('aria-sort', 'ascending');
+      expect(service.multiSortMeta()).toEqual([{ field: firstColumn.data_key, order: 1 }]);
+    });
   });
 });

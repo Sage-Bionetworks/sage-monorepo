@@ -1,14 +1,14 @@
 <div class="base-table-container">
   @let pagination = shouldPaginate() ? paginationConfig : null;
   <p-table
+    ngSkipHydration
     #table
     [value]="data()"
     [totalRecords]="totalRecords()"
     [lazy]="true"
     (onLazyLoad)="onLazyLoad($event)"
-    [customSort]="true"
-    (sortFunction)="sortCallback($event)"
     sortMode="multiple"
+    [multiSortMeta]="comparisonToolService.multiSortMeta()"
     [defaultSortOrder]="-1"
     breakpoint="0"
     stripedRows
