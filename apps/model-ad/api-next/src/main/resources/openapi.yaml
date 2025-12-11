@@ -14,6 +14,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - description: Operations about the data version.
+    name: Data Version
   - description: Operations about Model Overview.
     name: Model Overview
   - description: Operations about Disease Correlation results.
@@ -21,6 +23,33 @@ tags:
   - description: Operations about Gene Expression results.
     name: Gene Expression
 paths:
+  /data-version:
+    get:
+      description: Get data version
+      operationId: getDataVersion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataVersion'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get data version
+      tags:
+        - Data Version
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Data Version
+    x-audience:
+      - public
   /comparison-tools/model-overview:
     get:
       description: Returns a paginated list of model overview objects for use in comparison
@@ -175,6 +204,44 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
+    DataVersion:
+      description: Synapse data version
+      example:
+        data_file: data_file
+        data_version: data_version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
+      type: object
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+        instance:
+          description: An absolute URI that identifies the specific occurrence of
+            the problem
+          type: string
+      required:
+        - status
+        - title
+      type: object
     ItemFilterTypeQuery:
       default: include
       description: |
@@ -482,30 +549,6 @@ components:
       required:
         - modelOverviews
         - page
-      type: object
-    BasicError:
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          description: A human readable documentation for the problem type
-          type: string
-        status:
-          description: The HTTP status code
-          type: integer
-        detail:
-          description: A human readable explanation specific to this occurrence of
-            the problem
-          type: string
-        type:
-          description: An absolute URI that identifies the problem type
-          type: string
-        instance:
-          description: An absolute URI that identifies the specific occurrence of
-            the problem
-          type: string
-      required:
-        - status
-        - title
       type: object
     DiseaseCorrelationSearchQuery:
       description: Disease correlation search query with pagination and filtering

@@ -1,6 +1,9 @@
 README.md
 src/main/java/org/sagebionetworks/model/ad/api/next/RFC3339DateFormat.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ApiUtil.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/DataVersionApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/DataVersionApiController.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/DataVersionApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApi.java
@@ -12,6 +15,7 @@ src/main/java/org/sagebionetworks/model/ad/api/next/configuration/HomeController
 src/main/java/org/sagebionetworks/model/ad/api/next/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/CorrelationResultDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/DataVersionDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/DiseaseCorrelationDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/DiseaseCorrelationSearchQueryDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/DiseaseCorrelationsPageDto.java

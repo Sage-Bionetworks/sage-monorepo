@@ -14,6 +14,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Data Version
+    description: Operations about the data version.
   - name: Model Overview
     description: Operations about Model Overview.
   - name: Disease Correlation
@@ -21,6 +23,28 @@ tags:
   - name: Gene Expression
     description: Operations about Gene Expression results.
 paths:
+  /data-version:
+    x-audience:
+      - public
+    get:
+      tags:
+        - Data Version
+      summary: Get data version
+      description: Get data version
+      operationId: getDataVersion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataVersion'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /comparison-tools/model-overview:
     get:
       tags:
@@ -89,6 +113,39 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    DataVersion:
+      type: object
+      description: Synapse data version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
     ItemFilterTypeQuery:
       type: string
       enum:
@@ -286,28 +343,6 @@ components:
       required:
         - modelOverviews
         - page
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem
-      required:
-        - title
-        - status
     DiseaseCorrelationSearchQuery:
       type: object
       description: Disease correlation search query with pagination and filtering options.
@@ -656,6 +691,25 @@ components:
       required:
         - geneExpressions
         - page
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
   parameters:
     modelOverviewSearchQuery:
       name: modelOverviewSearchQuery
@@ -681,22 +735,3 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'
-  responses:
-    BadRequest:
-      description: Invalid request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'

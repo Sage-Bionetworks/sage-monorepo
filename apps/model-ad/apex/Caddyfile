@@ -3,6 +3,12 @@
     reverse_proxy {env.API_DOCS_HOST}:{env.API_DOCS_PORT}
   }
 
+  # Route /api/v1/data-version to the next api, stripping /api
+  handle /api/v1/data-version {
+   uri strip_prefix /api
+   reverse_proxy {env.API_NEXT_HOST}:{env.API_NEXT_PORT}
+  }
+
   # Route /api/v1/comparison-tools to the next api, stripping /api
   handle /api/v1/comparison-tools/* {
    uri strip_prefix /api
