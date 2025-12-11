@@ -3,13 +3,18 @@ import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 import { FilterService } from 'primeng/api';
 import { ComparisonToolFilterService } from './comparison-tool-filter.service';
 import { provideComparisonToolFilterService } from './comparison-tool-filter.service.providers';
+import { provideComparisonToolService } from './comparison-tool.service.providers';
 
 describe('ComparisonToolFilterService', () => {
   let service: ComparisonToolFilterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [FilterService, ...provideComparisonToolFilterService()],
+      providers: [
+        FilterService,
+        ...provideComparisonToolService(),
+        ...provideComparisonToolFilterService(),
+      ],
     });
     service = TestBed.inject(ComparisonToolFilterService);
   });

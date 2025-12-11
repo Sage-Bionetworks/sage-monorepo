@@ -1,6 +1,9 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { provideComparisonToolFilterService } from '@sagebionetworks/explorers/services';
+import {
+  provideComparisonToolFilterService,
+  provideComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import { mockComparisonToolFiltersWithSelections } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
@@ -14,6 +17,7 @@ const meta: Meta<ComparisonToolFilterListComponent> = {
       providers: [
         provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
+        ...provideComparisonToolService(),
         ...provideComparisonToolFilterService({
           filters: mockComparisonToolFiltersWithSelections,
           significanceThreshold: 0.05,

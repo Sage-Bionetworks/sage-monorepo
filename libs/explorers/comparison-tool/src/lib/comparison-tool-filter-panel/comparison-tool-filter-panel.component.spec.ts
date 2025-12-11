@@ -4,6 +4,7 @@ import {
   ComparisonToolFilterService,
   HelperService,
   provideComparisonToolFilterService,
+  provideComparisonToolService,
   SvgIconService,
 } from '@sagebionetworks/explorers/services';
 import {
@@ -22,6 +23,7 @@ async function setup(isOpen = false) {
       provideRouter([]),
       HelperService,
       provideHttpClient(),
+      ...provideComparisonToolService(),
       ...provideComparisonToolFilterService(),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],

@@ -40,7 +40,7 @@ describe('ComparisonToolService', () => {
       providers: [
         FilterService,
         MessageService,
-        ...provideComparisonToolService(),
+        ...provideComparisonToolService({ urlSync: true }),
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
       ],

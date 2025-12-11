@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import {
   provideComparisonToolFilterService,
+  provideComparisonToolService,
   SvgIconService,
 } from '@sagebionetworks/explorers/services';
 import {
@@ -17,6 +18,7 @@ async function setup() {
     providers: [
       provideHttpClient(),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
+      ...provideComparisonToolService(),
       ...provideComparisonToolFilterService({
         filters: JSON.parse(JSON.stringify(mockComparisonToolFiltersWithSelections)),
         significanceThreshold: 0.05,
