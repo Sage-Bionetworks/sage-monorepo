@@ -24,7 +24,7 @@ import {
   GCTSelectOption,
   GCTSortEvent,
 } from '@sagebionetworks/agora/models';
-import { HelperService } from '@sagebionetworks/agora/services';
+import { HelperService, OpenRouterApiService } from '@sagebionetworks/agora/services';
 import { cloneDeep } from 'lodash';
 import { FilterService, MessageService, SortEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -51,6 +51,8 @@ import { GeneComparisonToolHowToPanelComponent } from './components/gene-compari
 import { GeneComparisonToolLegendPanelComponent } from './components/gene-comparison-tool-legend-panel/gene-comparison-tool-legend-panel.component';
 import { DrawerModule } from 'primeng/drawer';
 import * as htmlToImage from 'html-to-image';
+
+import { ConfigService } from '@sagebionetworks/agora/config';
 
 @Component({
   selector: 'agora-gene-comparison-tool',
@@ -89,11 +91,18 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   helperService = inject(HelperService);
   messageService = inject(MessageService);
   filterService = inject(FilterService);
+  private readonly openRouterService = inject(OpenRouterApiService);
+  private readonly configService = inject(ConfigService);
+
+  // TODO: Replace with your actual OpenRouter API key from .env
+  private readonly OPENROUTER_API_KEY = '';
 
   isLoading = true;
   isCapturingImage = false;
   drawerVisible = false;
   drawerMessage = '';
+  streamingResponse = '';
+  isStreaming = false;
 
   /* Genes ----------------------------------------------------------------- */
   genes: GCTGene[] = [];
@@ -1026,12 +1035,16 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   captureImage() {
+    //TODO REMOVE THIS
+    console.log(this.OPENROUTER_API_KEY);
+
     if (!this.gctBody?.nativeElement) {
       return;
     }
     this.isCapturingImage = true;
     this.drawerVisible = true;
     this.drawerMessage = 'Generating image for analysis...';
+    this.streamingResponse = '';
 
     // Use setTimeout to allow the UI to render the loading state before starting capture
     setTimeout(() => {
@@ -1040,25 +1053,52 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
           backgroundColor: '#ffffff',
         })
         .then((dataUrl) => {
-          this.drawerMessage = 'Image generation complete!';
-          const link = document.createElement('a');
-          link.download = 'gene-comparison-tool.png';
-          link.href = dataUrl;
-          link.click();
+          this.drawerMessage = 'Image captured. Starting AI analysis...';
+          this.isCapturingImage = false;
+          this.analyzeImageWithAI(dataUrl);
         })
         .catch((error) => {
           console.error('Error capturing image:', error);
           this.drawerMessage = 'Failed to capture image.';
+          this.isCapturingImage = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Failed to capture image.',
           });
-        })
-        .finally(() => {
-          this.isCapturingImage = false;
         });
     }, 100);
+  }
+
+  analyzeImageWithAI(imageDataUrl: string) {
+    const template =
+      'You are an AI assistant that analyzes scientific visualizations and data charts. Provide a detailed description of the visualization including: the type of chart, axes labels, data patterns, trends, and any notable features.';
+    const modelId = 'openai/gpt-4o';
+
+    this.isStreaming = true;
+    this.streamingResponse = '';
+
+    this.openRouterService
+      .explainVisualizationStream(imageDataUrl, template, this.OPENROUTER_API_KEY, modelId)
+      .subscribe({
+        next: (textDelta) => {
+          this.streamingResponse += textDelta;
+        },
+        error: (error) => {
+          console.error('OpenRouter API call failed:', error);
+          this.isStreaming = false;
+          this.drawerMessage = 'AI analysis failed.';
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'AI analysis failed.',
+          });
+        },
+        complete: () => {
+          this.isStreaming = false;
+          this.drawerMessage = 'AI analysis complete.';
+        },
+      });
   }
 
   /* ----------------------------------------------------------------------- */

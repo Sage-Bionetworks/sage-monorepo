@@ -1,7 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ConfigService, ROUTE_PATHS } from '@sagebionetworks/agora/config';
-import { OpenRouterApiService } from '@sagebionetworks/agora/services';
+import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { SearchInputComponent } from '@sagebionetworks/agora/ui';
 import { HomeCardComponent, SvgImageComponent } from '@sagebionetworks/explorers/ui';
 
@@ -13,50 +12,4 @@ import { HomeCardComponent, SvgImageComponent } from '@sagebionetworks/explorers
 })
 export class HomeComponent {
   ROUTE_PATHS = ROUTE_PATHS;
-
-  private readonly openRouterService = inject(OpenRouterApiService);
-  private readonly configService = inject(ConfigService);
-
-  // TODO: Replace with your actual OpenRouter API key from .env
-  private readonly OPENROUTER_API_KEY =
-    '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';
-
-  streamingResponse = '';
-  isStreaming = false;
-
-  testOpenRouterService(): void {
-    console.log('🧪 Testing OpenRouter API Service with Streaming...');
-
-    // Use a complex chart/visualization image URL for testing
-    // Example: A chart from a public source
-    const imageUrl = 'https://matplotlib.org/stable/_images/sphx_glr_scatter_001.png';
-
-    const template =
-      'You are an AI assistant that analyzes scientific visualizations and data charts. Provide a detailed description of the visualization including: the type of chart, axes labels, data patterns, trends, and any notable features.';
-    const modelId = 'openai/gpt-4o';
-
-    console.log('📋 Template:', template);
-    console.log('📋 Model ID:', modelId);
-    console.log('📋 Image URL:', imageUrl);
-
-    this.streamingResponse = '';
-    this.isStreaming = true;
-
-    this.openRouterService
-      .explainVisualizationStream(imageUrl, template, this.OPENROUTER_API_KEY, modelId)
-      .subscribe({
-        next: (textDelta) => {
-          this.streamingResponse += textDelta;
-          console.log('📝 Received delta:', textDelta);
-        },
-        error: (error) => {
-          console.error('❌ ERROR! OpenRouter API call failed:', error);
-          this.isStreaming = false;
-        },
-        complete: () => {
-          console.log('✅ SUCCESS! Streaming completed');
-          this.isStreaming = false;
-        },
-      });
-  }
 }
