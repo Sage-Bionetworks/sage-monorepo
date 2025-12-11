@@ -114,6 +114,7 @@
     "@nx/workspace": "21.5.3",
     "@nxlv/python": "21.0.3",
     "@openapitools/openapi-generator-cli": "2.19.1",
+    "@openrouter/sdk": "0.2.9",
     "@playwright/test": "1.55.0",
     "@redocly/cli": "2.0.0",
     "@schematics/angular": "20.2.2",
