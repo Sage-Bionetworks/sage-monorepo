@@ -1,4 +1,4 @@
-import { Component, DestroyRef, EffectRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { SortMeta } from 'primeng/api';
@@ -44,9 +44,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
   private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  private onPinnedDataUpdateEffectRef?: EffectRef;
-  private onUnpinnedDataUpdateEffectRef?: EffectRef;
-
   pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
   multiSortMeta = this.comparisonToolService.multiSortMeta;
@@ -76,7 +73,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   legendPanelConfig: LegendPanelConfig = {
     colorChartLowerLabel: 'Downregulated',
     colorChartUpperLabel: 'Upregulated',
-    colorChartText: `Circle color indicates the log2 fold change value. Red shades indicate reduced expression levels in AD patients compared  to controls, while blue shades indicate increased expression levels in AD patients relative to controls.`,
+    colorChartText: `Circle color indicates the log2 fold change value. Red shades indicate reduced expression levels in AD patients compared to controls, while blue shades indicate increased expression levels in AD patients relative to controls.`,
     sizeChartLowerLabel: 'Significant',
     sizeChartUpperLabel: 'Insignificant',
     sizeChartText: `Circle diameter indicates P-value. Larger circles indicate higher statistical significance, while smaller circles indicate lower statistical significance.`,
@@ -130,7 +127,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     this.comparisonToolService.setViewConfig(this.viewConfig);
 
     // Effect for pinned data - only depends on selection, pins, and sort
-    this.onPinnedDataUpdateEffectRef = effect(() => {
+    effect(() => {
       if (this.platformService.isBrowser && this.isInitialized()) {
         const selection = this.comparisonToolService.dropdownSelection();
         if (!selection.length) {
@@ -144,7 +141,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     });
 
     // Effect for unpinned data - depends on all params including pagination
-    this.onUnpinnedDataUpdateEffectRef = effect(() => {
+    effect(() => {
       if (this.platformService.isBrowser && this.isInitialized()) {
         const selection = this.comparisonToolService.dropdownSelection();
         if (!selection.length) {
@@ -176,8 +173,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   }
 
   ngOnDestroy() {
-    this.onPinnedDataUpdateEffectRef?.destroy();
-    this.onUnpinnedDataUpdateEffectRef?.destroy();
     this.comparisonToolService.disconnect();
   }
 

@@ -50,7 +50,12 @@ public class ModelOverviewService {
     int effectivePageNumber = Objects.requireNonNullElse(query.getPageNumber(), 0);
     int effectivePageSize = Objects.requireNonNullElse(query.getPageSize(), 100);
 
-    Sort sort = ApiHelper.createSort(query.getSortFields(), query.getSortOrders());
+    List<Integer> sortOrders = query
+      .getSortOrders()
+      .stream()
+      .map(ModelOverviewSearchQueryDto.SortOrdersEnum::getValue)
+      .toList();
+    Sort sort = ApiHelper.createSort(query.getSortFields(), sortOrders);
     Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize, sort);
     Page<ModelOverviewDocument> page;
 

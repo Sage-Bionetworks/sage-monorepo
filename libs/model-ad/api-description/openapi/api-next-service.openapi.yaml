@@ -215,6 +215,9 @@ components:
           items:
             type: integer
             format: int32
+            enum:
+              - 1
+              - -1
           minItems: 1
           example:
             - -1
@@ -424,6 +427,9 @@ components:
           items:
             type: integer
             format: int32
+            enum:
+              - 1
+              - -1
           minItems: 1
           example:
             - 1
@@ -597,6 +603,9 @@ components:
           items:
             type: integer
             format: int32
+            enum:
+              - 1
+              - -1
           minItems: 1
           example:
             - 1

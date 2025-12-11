@@ -309,6 +309,9 @@ components:
             - -1
             - 1
           items:
+            enum:
+              - 1
+              - -1
             format: int32
             type: integer
           minItems: 1
@@ -631,6 +634,9 @@ components:
             - -1
             - 1
           items:
+            enum:
+              - 1
+              - -1
             format: int32
             type: integer
           minItems: 1
@@ -909,6 +915,9 @@ components:
             - 1
             - -1
           items:
+            enum:
+              - 1
+              - -1
             format: int32
             type: integer
           minItems: 1

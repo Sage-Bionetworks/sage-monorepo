@@ -1,4 +1,4 @@
-import { Component, DestroyRef, EffectRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { SortMeta } from 'primeng/api';
@@ -43,9 +43,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
   private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-
-  private onPinnedDataUpdateEffectRef?: EffectRef;
-  private onUnpinnedDataUpdateEffectRef?: EffectRef;
 
   pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
@@ -129,7 +126,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.comparisonToolService.setViewConfig(this.viewConfig);
 
     // Effect for pinned data - only depends on selection, pins, and sort
-    this.onPinnedDataUpdateEffectRef = effect(() => {
+    effect(() => {
       if (this.platformService.isBrowser && this.isInitialized()) {
         const selection = this.comparisonToolService.dropdownSelection();
         if (!selection.length) {
@@ -143,7 +140,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     });
 
     // Effect for unpinned data - depends on all params including pagination
-    this.onUnpinnedDataUpdateEffectRef = effect(() => {
+    effect(() => {
       if (this.platformService.isBrowser && this.isInitialized()) {
         const selection = this.comparisonToolService.dropdownSelection();
         if (!selection.length) {
@@ -175,8 +172,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   }
 
   ngOnDestroy() {
-    this.onPinnedDataUpdateEffectRef?.destroy();
-    this.onUnpinnedDataUpdateEffectRef?.destroy();
     this.comparisonToolService.disconnect();
   }
 

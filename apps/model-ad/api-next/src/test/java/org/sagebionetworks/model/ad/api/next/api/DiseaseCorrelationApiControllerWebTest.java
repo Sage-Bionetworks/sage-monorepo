@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
@@ -38,6 +39,16 @@ class DiseaseCorrelationApiControllerWebTest {
         @Override
         public ItemFilterTypeQueryDto convert(String source) {
           return ItemFilterTypeQueryDto.fromValue(source);
+        }
+      }
+    );
+    conversionService.addConverter(
+      new Converter<String, DiseaseCorrelationSearchQueryDto.SortOrdersEnum>() {
+        @Override
+        public DiseaseCorrelationSearchQueryDto.SortOrdersEnum convert(String source) {
+          return DiseaseCorrelationSearchQueryDto.SortOrdersEnum.fromValue(
+            Integer.parseInt(source)
+          );
         }
       }
     );

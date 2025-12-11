@@ -25,7 +25,6 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   ) {
     ApiHelper.validateSortParameters(query.getSortFields(), query.getSortOrders());
 
-    // Categories format: List of 2 items ["mainCategory", "clusterCategory"]
     String cluster = extractCluster(query.getCategories());
 
     DiseaseCorrelationsPageDto results = diseaseCorrelationService.loadDiseaseCorrelations(

@@ -31,34 +31,15 @@ public final class ApiHelper {
   private ApiHelper() {}
 
   /**
-   * Validates that sortFields and sortOrders are either both null/empty (no sorting)
-   * or both present with matching element counts.
+   * Validates that sortFields and sortOrders have matching element counts.
+   * Note: Presence and non-emptiness are enforced by OpenAPI schema validation
+   * (@NotNull @Size(min = 1)), so this method only validates array length matching.
    *
-   * @param sortFields List of sort field names (optional, but if present requires sortOrders)
-   * @param sortOrders List of sort orders (optional, but if present requires sortFields)
-   * @throws IllegalArgumentException if validation fails
+   * @param sortFields List of sort field names (required, non-empty per OpenAPI schema)
+   * @param sortOrders List of sort orders (required, non-empty per OpenAPI schema)
+   * @throws IllegalArgumentException if arrays have different lengths
    */
-  public static void validateSortParameters(
-    @Nullable List<String> sortFields,
-    @Nullable List<?> sortOrders
-  ) {
-    boolean hasSortFields = sortFields != null && !sortFields.isEmpty();
-    boolean hasSortOrders = sortOrders != null && !sortOrders.isEmpty();
-
-    // Both null/empty is valid (no sorting)
-    if (!hasSortFields && !hasSortOrders) {
-      return;
-    }
-
-    // If one is provided, the other must also be provided
-    if (hasSortFields && !hasSortOrders) {
-      throw new IllegalArgumentException("sortOrders is required when sortFields is provided");
-    }
-
-    if (hasSortOrders && !hasSortFields) {
-      throw new IllegalArgumentException("sortFields is required when sortOrders is provided");
-    }
-
+  public static void validateSortParameters(List<String> sortFields, List<?> sortOrders) {
     int fieldCount = sortFields.size();
     int orderCount = sortOrders.size();
 
@@ -103,42 +84,6 @@ public final class ApiHelper {
   }
 
   /**
-   * Parses a comma-delimited string into a list of strings.
-   * Returns an empty list if the input is null or empty.
-   *
-   * @param commaDelimited comma-separated string (e.g., "value1,value2,value3")
-   * @return list of trimmed non-null strings
-   */
-  public static List<String> parseCommaDelimitedString(@Nullable String commaDelimited) {
-    if (commaDelimited == null || commaDelimited.isBlank()) {
-      return List.of();
-    }
-    return Arrays.stream(commaDelimited.split(","))
-      .map(String::trim)
-      .filter(s -> !s.isEmpty())
-      .toList();
-  }
-
-  /**
-   * Parses a comma-delimited string of integers.
-   * Returns an empty list if the input is null or empty.
-   *
-   * @param commaDelimited comma-separated integers (e.g., "1,-1,1")
-   * @return list of integers
-   * @throws NumberFormatException if any value cannot be parsed as an integer
-   */
-  public static List<Integer> parseCommaDelimitedIntegers(@Nullable String commaDelimited) {
-    if (commaDelimited == null || commaDelimited.isBlank()) {
-      return List.of();
-    }
-    return Arrays.stream(commaDelimited.split(","))
-      .map(String::trim)
-      .filter(s -> !s.isEmpty())
-      .map(Integer::parseInt)
-      .toList();
-  }
-
-  /**
    * Sanitizes a list of items by filtering out null values.
    * Returns an empty list if the input is null.
    *
@@ -150,26 +95,6 @@ public final class ApiHelper {
       return List.of();
     }
     return rawItems.stream().filter(Objects::nonNull).toList();
-  }
-
-  /**
-   * Converts a list of string integers to a list of integers.
-   * Returns an empty list if the input is null or empty.
-   *
-   * @param stringIntegers list of string integers (e.g., ["1", "-1", "1"])
-   * @return list of integers
-   * @throws NumberFormatException if any value cannot be parsed as an integer
-   */
-  public static List<Integer> parseStringListToIntegers(@Nullable List<String> stringIntegers) {
-    if (stringIntegers == null || stringIntegers.isEmpty()) {
-      return List.of();
-    }
-    return stringIntegers
-      .stream()
-      .map(String::trim)
-      .filter(s -> !s.isEmpty())
-      .map(Integer::parseInt)
-      .toList();
   }
 
   public static HttpHeaders createNoCacheHeaders(MediaType mediaType) {

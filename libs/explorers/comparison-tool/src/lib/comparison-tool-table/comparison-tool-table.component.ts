@@ -70,13 +70,15 @@ export class ComparisonToolTableComponent implements AfterViewInit {
       );
 
       // Recalculate column widths whenever selected columns change
-      effect(() => {
+      effect((onCleanup) => {
         // Access selectedColumns to track changes
         this.selectedColumns();
         // Recalculate widths on next tick to ensure DOM is updated
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           this.onWindowResize();
         }, 0);
+        // Clean up timeout if effect re-runs before timeout fires
+        onCleanup(() => clearTimeout(timeoutId));
       });
     }
   }

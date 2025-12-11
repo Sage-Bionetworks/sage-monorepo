@@ -46,8 +46,43 @@ public class GeneExpressionSearchQueryDto {
   @Valid
   private List<String> sortFields = new ArrayList<>();
 
+  /**
+   * Gets or Sets sortOrders
+   */
+  public enum SortOrdersEnum {
+    NUMBER_1(1),
+    
+    NUMBER_MINUS_1(-1);
+
+    private final Integer value;
+
+    SortOrdersEnum(Integer value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public Integer getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static SortOrdersEnum fromValue(Integer value) {
+      for (SortOrdersEnum b : SortOrdersEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
   @Valid
-  private List<Integer> sortOrders = new ArrayList<>();
+  private List<SortOrdersEnum> sortOrders = new ArrayList<>();
 
   public GeneExpressionSearchQueryDto() {
     super();
@@ -56,7 +91,7 @@ public class GeneExpressionSearchQueryDto {
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionSearchQueryDto(List<String> categories, List<String> sortFields, List<Integer> sortOrders) {
+  public GeneExpressionSearchQueryDto(List<String> categories, List<String> sortFields, List<SortOrdersEnum> sortOrders) {
     this.categories = categories;
     this.sortFields = sortFields;
     this.sortOrders = sortOrders;
@@ -229,12 +264,12 @@ public class GeneExpressionSearchQueryDto {
     this.sortFields = sortFields;
   }
 
-  public GeneExpressionSearchQueryDto sortOrders(List<Integer> sortOrders) {
+  public GeneExpressionSearchQueryDto sortOrders(List<SortOrdersEnum> sortOrders) {
     this.sortOrders = sortOrders;
     return this;
   }
 
-  public GeneExpressionSearchQueryDto addSortOrdersItem(Integer sortOrdersItem) {
+  public GeneExpressionSearchQueryDto addSortOrdersItem(SortOrdersEnum sortOrdersItem) {
     if (this.sortOrders == null) {
       this.sortOrders = new ArrayList<>();
     }
@@ -249,11 +284,11 @@ public class GeneExpressionSearchQueryDto {
   @NotNull @Size(min = 1) 
   @Schema(name = "sortOrders", example = "[1,-1]", description = "List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortOrders")
-  public List<Integer> getSortOrders() {
+  public List<SortOrdersEnum> getSortOrders() {
     return sortOrders;
   }
 
-  public void setSortOrders(List<Integer> sortOrders) {
+  public void setSortOrders(List<SortOrdersEnum> sortOrders) {
     this.sortOrders = sortOrders;
   }
 
@@ -367,7 +402,7 @@ public class GeneExpressionSearchQueryDto {
       return this;
     }
     
-    public GeneExpressionSearchQueryDto.Builder sortOrders(List<Integer> sortOrders) {
+    public GeneExpressionSearchQueryDto.Builder sortOrders(List<SortOrdersEnum> sortOrders) {
       this.instance.sortOrders(sortOrders);
       return this;
     }

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,14 @@ class ModelOverviewApiControllerWebTest {
         @Override
         public ItemFilterTypeQueryDto convert(String source) {
           return ItemFilterTypeQueryDto.fromValue(source);
+        }
+      }
+    );
+    conversionService.addConverter(
+      new Converter<String, ModelOverviewSearchQueryDto.SortOrdersEnum>() {
+        @Override
+        public ModelOverviewSearchQueryDto.SortOrdersEnum convert(String source) {
+          return ModelOverviewSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
         }
       }
     );

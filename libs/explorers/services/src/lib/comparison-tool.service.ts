@@ -538,7 +538,7 @@ export class ComparisonToolService<T> {
     }
 
     // Only update if the sort has actually changed (deep equality check)
-    if (this.isSortMetaEqual(currentSort, newSort)) {
+    if (isEqual(currentSort, newSort)) {
       return;
     }
 
@@ -554,21 +554,6 @@ export class ComparisonToolService<T> {
     // Deep clone to create new object references for Angular change detection
     // This ensures immutability and prevents external mutations from affecting our state
     this.multiSortMetaSignal.set(newSort.map((s) => ({ field: s.field, order: s.order })));
-  }
-
-  /**
-   * Compares two SortMeta arrays for equality.
-   */
-  private isSortMetaEqual(a: SortMeta[], b: SortMeta[]): boolean {
-    if (a.length !== b.length) return false;
-
-    for (let i = 0; i < a.length; i++) {
-      if (a[i].field !== b[i].field || a[i].order !== b[i].order) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   private resolveUrlState(params: ComparisonToolUrlParams, options: { isInitial: boolean }): void {

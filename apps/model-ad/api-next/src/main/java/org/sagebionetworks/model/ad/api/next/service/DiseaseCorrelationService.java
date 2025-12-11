@@ -53,7 +53,12 @@ public class DiseaseCorrelationService {
 
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
     String search = query.getSearch();
-    Sort sort = ApiHelper.createSort(query.getSortFields(), query.getSortOrders());
+    List<Integer> sortOrders = query
+      .getSortOrders()
+      .stream()
+      .map(DiseaseCorrelationSearchQueryDto.SortOrdersEnum::getValue)
+      .toList();
+    Sort sort = ApiHelper.createSort(query.getSortFields(), sortOrders);
     PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
 
     boolean hasSearch = search != null && !search.trim().isEmpty();

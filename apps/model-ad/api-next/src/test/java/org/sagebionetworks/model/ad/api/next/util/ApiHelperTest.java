@@ -17,67 +17,8 @@ class ApiHelperTest {
   class ValidateSortParameters {
 
     @Test
-    @DisplayName("should not throw when both sortFields and sortOrders are null")
-    void shouldNotThrowWhenBothAreNull() {
-      assertThatCode(() -> ApiHelper.validateSortParameters(null, null)).doesNotThrowAnyException();
-    }
-
-    @Test
-    @DisplayName("should not throw when both sortFields and sortOrders are empty")
-    void shouldNotThrowWhenBothAreEmpty() {
-      assertThatCode(() -> ApiHelper.validateSortParameters(List.of(), List.of())
-      ).doesNotThrowAnyException();
-    }
-
-    @Test
-    @DisplayName("should not throw when sortFields is null and sortOrders is empty")
-    void shouldNotThrowWhenSortFieldsNullAndSortOrdersEmpty() {
-      assertThatCode(() -> ApiHelper.validateSortParameters(null, List.of())
-      ).doesNotThrowAnyException();
-    }
-
-    @Test
-    @DisplayName("should not throw when sortFields is empty and sortOrders is null")
-    void shouldNotThrowWhenSortFieldsEmptyAndSortOrdersNull() {
-      assertThatCode(() -> ApiHelper.validateSortParameters(List.of(), null)
-      ).doesNotThrowAnyException();
-    }
-
-    @Test
-    @DisplayName("should throw when sortFields is provided but sortOrders is null")
-    void shouldThrowWhenSortFieldsProvidedButSortOrdersNull() {
-      assertThatThrownBy(() -> ApiHelper.validateSortParameters(List.of("name"), null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("sortOrders is required when sortFields is provided");
-    }
-
-    @Test
-    @DisplayName("should throw when sortFields is provided but sortOrders is empty")
-    void shouldThrowWhenSortFieldsProvidedButSortOrdersEmpty() {
-      assertThatThrownBy(() -> ApiHelper.validateSortParameters(List.of("name"), List.of()))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("sortOrders is required when sortFields is provided");
-    }
-
-    @Test
-    @DisplayName("should throw when sortOrders is provided but sortFields is null")
-    void shouldThrowWhenSortOrdersProvidedButSortFieldsNull() {
-      assertThatThrownBy(() -> ApiHelper.validateSortParameters(null, List.of(1)))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("sortFields is required when sortOrders is provided");
-    }
-
-    @Test
-    @DisplayName("should throw when sortOrders is provided but sortFields is empty")
-    void shouldThrowWhenSortOrdersProvidedButSortFieldsEmpty() {
-      assertThatThrownBy(() -> ApiHelper.validateSortParameters(List.of(), List.of(1)))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("sortFields is required when sortOrders is provided");
-    }
-
-    @Test
-    @DisplayName("should throw when sortFields and sortOrders have different lengths")
-    void shouldThrowWhenLengthsMismatch() {
+    @DisplayName("should throw when sortFields has more elements than sortOrders")
+    void shouldThrowWhenSortFieldsHasMoreElements() {
       assertThatThrownBy(() -> ApiHelper.validateSortParameters(List.of("name", "age"), List.of(1)))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage(

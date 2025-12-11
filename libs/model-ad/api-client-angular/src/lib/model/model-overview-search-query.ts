@@ -37,6 +37,12 @@ export interface ModelOverviewSearchQuery {
   /**
    * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
    */
-  sortOrders: Array<number>;
+  sortOrders: Array<ModelOverviewSearchQuery.SortOrdersEnum>;
 }
-export namespace ModelOverviewSearchQuery {}
+export namespace ModelOverviewSearchQuery {
+  export type SortOrdersEnum = 1 | -1;
+  export const SortOrdersEnum = {
+    NUMBER_1: 1 as SortOrdersEnum,
+    NUMBER_MINUS_1: -1 as SortOrdersEnum,
+  };
+}

@@ -3,6 +3,9 @@ import { getUnpinnedTable } from '@sagebionetworks/explorers/testing/e2e';
 import {
   ComparisonToolConfig,
   DiseaseCorrelation,
+  DiseaseCorrelationsPage,
+  GeneExpression,
+  GeneExpressionsPage,
   ModelOverview,
   ModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
@@ -76,12 +79,24 @@ export const fetchDiseaseCorrelations = async (
   page: Page,
   categories = ['CONSENSUS NETWORK MODULES', 'Consensus Cluster A - ECM Organization'],
 ): Promise<DiseaseCorrelation[]> => {
-  const data = await fetchComparisonToolData<{ diseaseCorrelations: DiseaseCorrelation[] }>(
+  const data = await fetchComparisonToolData<DiseaseCorrelationsPage>(
     page,
     'Disease Correlation',
     categories,
   );
   return data.diseaseCorrelations;
+};
+
+export const fetchGeneExpressions = async (
+  page: Page,
+  categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Cortex', 'female'],
+): Promise<GeneExpression[]> => {
+  const data = await fetchComparisonToolData<GeneExpressionsPage>(
+    page,
+    'Gene Expression',
+    categories,
+  );
+  return data.geneExpressions;
 };
 
 export const fetchComparisonToolConfig = async (
