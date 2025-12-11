@@ -62,21 +62,23 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   primaryColumnWidth = 300;
 
   constructor() {
-    this.primaryColumnWidth = this.helperService.getNumberFromCSSValue(
-      getComputedStyle(document.documentElement).getPropertyValue(
-        '--comparison-tool-primary-column-width',
-      ),
-    );
+    if (this.platformService.isBrowser) {
+      this.primaryColumnWidth = this.helperService.getNumberFromCSSValue(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          '--comparison-tool-primary-column-width',
+        ),
+      );
 
-    // Recalculate column widths whenever selected columns change
-    effect(() => {
-      // Access selectedColumns to track changes
-      this.selectedColumns();
-      // Recalculate widths on next tick to ensure DOM is updated
-      setTimeout(() => {
-        this.onWindowResize();
-      }, 0);
-    });
+      // Recalculate column widths whenever selected columns change
+      effect(() => {
+        // Access selectedColumns to track changes
+        this.selectedColumns();
+        // Recalculate widths on next tick to ensure DOM is updated
+        setTimeout(() => {
+          this.onWindowResize();
+        }, 0);
+      });
+    }
   }
 
   ngAfterViewInit() {
