@@ -49,6 +49,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { GeneComparisonToolFilterListComponent } from './components/gene-comparison-tool-filter-list/gene-comparison-tool-filter-list.component';
 import { GeneComparisonToolHowToPanelComponent } from './components/gene-comparison-tool-how-to-panel/gene-comparison-tool-how-to-panel.component';
 import { GeneComparisonToolLegendPanelComponent } from './components/gene-comparison-tool-legend-panel/gene-comparison-tool-legend-panel.component';
+import { DrawerModule } from 'primeng/drawer';
 import * as htmlToImage from 'html-to-image';
 
 @Component({
@@ -66,6 +67,7 @@ import * as htmlToImage from 'html-to-image';
     PopoverLinkComponent,
     PopoverModule,
     SvgIconComponent,
+    DrawerModule,
     GeneComparisonToolHowToPanelComponent,
     GeneComparisonToolLegendPanelComponent,
     GeneComparisonToolFilterListComponent,
@@ -90,6 +92,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   isLoading = true;
   isCapturingImage = false;
+  drawerVisible = false;
+  drawerMessage = '';
 
   /* Genes ----------------------------------------------------------------- */
   genes: GCTGene[] = [];
@@ -1026,6 +1030,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       return;
     }
     this.isCapturingImage = true;
+    this.drawerVisible = true;
+    this.drawerMessage = 'Generating image for analysis...';
 
     // Use setTimeout to allow the UI to render the loading state before starting capture
     setTimeout(() => {
@@ -1034,6 +1040,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
           backgroundColor: '#ffffff',
         })
         .then((dataUrl) => {
+          this.drawerMessage = 'Image generation complete!';
           const link = document.createElement('a');
           link.download = 'gene-comparison-tool.png';
           link.href = dataUrl;
@@ -1041,6 +1048,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         })
         .catch((error) => {
           console.error('Error capturing image:', error);
+          this.drawerMessage = 'Failed to capture image.';
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
