@@ -10,6 +10,7 @@ import {
   getRowByName,
   testFullCaseInsensitiveMatch,
   testPartialCaseInsensitiveSearch,
+  testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
@@ -300,5 +301,10 @@ test.describe('disease correlation', () => {
       '5xFAD (IU/Jax/Pitt)~4 months~Female',
       '5xFAD (IU/Jax/Pitt)~4 months~Male',
     ]);
+  });
+
+  test('table loads previous page when last item on last page is pinned', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+    await testPinLastItemLastPageGoesToPreviousPage(page);
   });
 });

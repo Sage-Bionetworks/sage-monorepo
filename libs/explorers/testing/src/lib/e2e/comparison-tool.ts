@@ -109,3 +109,24 @@ export const expectNoResultsFound = async (page: Page): Promise<void> => {
   await expect(page.getByText('0-0 of 0')).toBeVisible();
   await expect(page.getByText('No results found')).toBeVisible();
 };
+
+export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
+  const lastPageBtn = page.getByRole('button', { name: /last page/i });
+  await expect(lastPageBtn).toBeEnabled();
+
+  await lastPageBtn.click();
+  await expect(lastPageBtn).toBeDisabled();
+
+  const unpinnedTable = getUnpinnedTable(page);
+  const pinButtonsCount = await unpinnedTable.getByRole('button', { name: 'Pin' }).count();
+
+  for (let i = 0; i < pinButtonsCount; i++) {
+    await expect(unpinnedTable.getByRole('row')).toHaveCount(pinButtonsCount - i);
+    const pinButton = unpinnedTable.getByRole('button', { name: 'Pin' }).first();
+    await pinButton.focus();
+    await pinButton.press('Enter');
+  }
+
+  await expect(unpinnedTable.getByRole('row')).toHaveCount(10); // previous full page loaded
+  await expect(lastPageBtn).toBeDisabled();
+}

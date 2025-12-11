@@ -9,6 +9,7 @@ import {
   pinByName,
   testFullCaseInsensitiveMatch,
   testPartialCaseInsensitiveSearch,
+  testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
@@ -171,5 +172,10 @@ test.describe('model overview', () => {
   }) => {
     await navigateToComparison(page, CT_PAGE, true);
     await testPartialCaseInsensitiveSearch(page, '(uc', ['5xFAD (UCI)']);
+  });
+
+  test('table loads previous page when last item on last page is pinned', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+    await testPinLastItemLastPageGoesToPreviousPage(page);
   });
 });

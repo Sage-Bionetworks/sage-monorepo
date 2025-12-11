@@ -1,11 +1,12 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import {
   getQueryParamFromValues,
   testFullCaseInsensitiveMatch,
   testPartialCaseInsensitiveSearch,
+  testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
 } from '@sagebionetworks/explorers/testing/e2e';
-import { navigateToComparison } from './helpers/comparison-tool';
+import { fetchComparisonToolConfig, navigateToComparison } from './helpers/comparison-tool';
 
 const CT_PAGE = 'Gene Expression';
 
@@ -74,4 +75,19 @@ test.describe('gene expression', () => {
       ]); // Gt(ROSA)26Sor
     },
   );
+
+  test('table loads previous page when last item on last page is pinned', async ({ page }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const categories = configs[1]?.dropdowns;
+    expect(categories.length).toBeGreaterThan(1);
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamFromValues(categories, 'categories'),
+    );
+    await testPinLastItemLastPageGoesToPreviousPage(page);
+  });
 });
