@@ -63,6 +63,8 @@ class DiseaseCorrelationApiControllerWebTest {
         get("/v1/comparison-tools/disease-correlation")
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", "")
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -90,6 +92,8 @@ class DiseaseCorrelationApiControllerWebTest {
         get("/v1/comparison-tools/disease-correlation")
           .param("categories", "OTHER")
           .param("categories", "Cluster A")
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -116,6 +120,8 @@ class DiseaseCorrelationApiControllerWebTest {
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", "Cluster A")
           .param("item", "not-an-id")
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -143,6 +149,8 @@ class DiseaseCorrelationApiControllerWebTest {
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", "Cluster A")
           .param("item", correlationId)
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isNotFound());
   }
@@ -165,6 +173,8 @@ class DiseaseCorrelationApiControllerWebTest {
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", cluster)
           .param("item", correlationId)
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isNotFound());
   }

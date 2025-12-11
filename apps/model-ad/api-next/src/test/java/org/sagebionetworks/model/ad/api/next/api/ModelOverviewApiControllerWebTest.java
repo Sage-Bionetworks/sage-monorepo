@@ -55,7 +55,12 @@ class ModelOverviewApiControllerWebTest {
     );
 
     mockMvc
-      .perform(get("/v1/comparison-tools/model-overview").param("item", modelName))
+      .perform(
+        get("/v1/comparison-tools/model-overview")
+          .param("item", modelName)
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
+      )
       .andExpect(status().isNotFound());
   }
 }

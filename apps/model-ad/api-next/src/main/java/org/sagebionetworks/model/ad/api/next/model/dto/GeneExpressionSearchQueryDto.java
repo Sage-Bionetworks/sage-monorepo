@@ -218,7 +218,7 @@ public class GeneExpressionSearchQueryDto {
    * List of field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders. 
    * @return sortFields
    */
-  @NotNull 
+  @NotNull @Size(min = 1) 
   @Schema(name = "sortFields", example = "[\"gene_symbol\",\"name\"]", description = "List of field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortFields")
   public List<String> getSortFields() {
@@ -246,7 +246,7 @@ public class GeneExpressionSearchQueryDto {
    * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. 
    * @return sortOrders
    */
-  @NotNull 
+  @NotNull @Size(min = 1) 
   @Schema(name = "sortOrders", example = "[1,-1]", description = "List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("sortOrders")
   public List<Integer> getSortOrders() {

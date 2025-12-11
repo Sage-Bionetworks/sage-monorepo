@@ -293,6 +293,7 @@ components:
           type: array
           items:
             type: string
+          minItems: 1
           example:
             - model_type
             - name
@@ -305,6 +306,7 @@ components:
           items:
             type: integer
             format: int32
+          minItems: 1
           example:
             - -1
             - 1
@@ -499,6 +501,7 @@ components:
           type: array
           items:
             type: string
+          minItems: 1
           example:
             - name
             - age
@@ -512,6 +515,7 @@ components:
           items:
             type: integer
             format: int32
+          minItems: 1
           example:
             - 1
             - -1
@@ -671,6 +675,7 @@ components:
           type: array
           items:
             type: string
+          minItems: 1
           example:
             - gene_symbol
             - name
@@ -683,6 +688,7 @@ components:
           items:
             type: integer
             format: int32
+          minItems: 1
           example:
             - 1
             - -1

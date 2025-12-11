@@ -58,6 +58,7 @@ properties:
     type: array
     items:
       type: string
+    minItems: 1
     example: ['name', 'age', 'sex']
   sortOrders:
     description: |
@@ -68,6 +69,7 @@ properties:
     items:
       type: integer
       format: int32
+    minItems: 1
     example: [1, -1, 1]
 required:
   - categories

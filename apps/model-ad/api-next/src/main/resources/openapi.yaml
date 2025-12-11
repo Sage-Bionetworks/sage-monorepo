@@ -298,6 +298,7 @@ components:
             - name
           items:
             type: string
+          minItems: 1
           type: array
         sortOrders:
           description: |
@@ -310,6 +311,7 @@ components:
           items:
             format: int32
             type: integer
+          minItems: 1
           type: array
       required:
         - sortFields
@@ -617,6 +619,7 @@ components:
             - sex
           items:
             type: string
+          minItems: 1
           type: array
         sortOrders:
           description: |
@@ -630,6 +633,7 @@ components:
           items:
             format: int32
             type: integer
+          minItems: 1
           type: array
       required:
         - categories
@@ -894,6 +898,7 @@ components:
             - name
           items:
             type: string
+          minItems: 1
           type: array
         sortOrders:
           description: |
@@ -906,6 +911,7 @@ components:
           items:
             format: int32
             type: integer
+          minItems: 1
           type: array
       required:
         - categories
