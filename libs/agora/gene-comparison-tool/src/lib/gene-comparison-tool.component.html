@@ -664,36 +664,14 @@
     [maxPinnedGenes]="maxPinnedGenes"
   ></agora-gene-comparison-tool-pinned-genes-modal>
 
-  <p-drawer
+  <agora-ai-insights-panel
     [(visible)]="drawerVisible"
-    position="right"
-    [modal]="false"
+    [message]="drawerMessage"
+    [isCapturing]="isCapturingImage"
+    [isStreaming]="isStreaming"
+    [streamingResponse]="streamingResponse"
     [showCloseIcon]="!isCapturingImage && !isStreaming"
     [dismissible]="!isCapturingImage && !isStreaming"
     [closeOnEscape]="!isCapturingImage && !isStreaming"
-    styleClass="gct-analysis-drawer"
-  >
-    <ng-template pTemplate="header">
-      <span class="text-xl font-semibold">AI Image Analysis</span>
-    </ng-template>
-    <div class="drawer-content">
-      <p class="drawer-status-message">{{ drawerMessage }}</p>
-      @if (isCapturingImage) {
-        <div class="drawer-loading">
-          <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-        </div>
-      }
-      @if (isStreaming || streamingResponse) {
-        <div class="drawer-response">
-          @if (isStreaming && !streamingResponse) {
-            <div class="drawer-waiting">Waiting for response...</div>
-          }
-          <div class="drawer-response-text">{{ streamingResponse }}</div>
-          @if (isStreaming && streamingResponse) {
-            <span class="drawer-cursor">▋</span>
-          }
-        </div>
-      }
-    </div>
-  </p-drawer>
+  ></agora-ai-insights-panel>
 </div>
