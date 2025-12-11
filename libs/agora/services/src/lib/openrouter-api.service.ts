@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { OpenRouter } from '@openrouter/sdk';
 
 // -------------------------------------------------------------------------- //
 // Service
@@ -59,5 +60,55 @@ export class OpenRouterApiService {
           throw error;
         }),
       );
+  }
+
+  explainVisualizationStream(
+    imageUrl: string,
+    template: string,
+    apiKey: string,
+    modelId: string,
+  ): Observable<string> {
+    if (!apiKey) {
+      throw new Error('OpenRouter API key not configured');
+    }
+
+    return new Observable<string>((observer) => {
+      const client = new OpenRouter({ apiKey });
+
+      const responsePromise = client.chat.send({
+        model: modelId,
+        stream: true,
+        messages: [
+          {
+            role: 'system',
+            content: template,
+          },
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image_url',
+                imageUrl: { url: imageUrl },
+              },
+            ],
+          },
+        ],
+      });
+
+      responsePromise
+        .then(async (stream) => {
+          for await (const chunk of stream) {
+            const content = chunk.choices[0]?.delta?.content;
+            if (content) {
+              observer.next(content);
+            }
+          }
+          observer.complete();
+        })
+        .catch((error: any) => {
+          console.error('OpenRouter API streaming error:', error);
+          observer.error(error);
+        });
+    });
   }
 }

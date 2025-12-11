@@ -61,6 +61,9 @@ importers:
       '@octokit/rest':
         specifier: 22.0.0
         version: 22.0.0
+      '@openrouter/sdk':
+        specifier: 0.2.9
+        version: 0.2.9
       '@opentelemetry/context-zone-peer-dep':
         specifier: 2.0.1
         version: 2.0.1(@opentelemetry/api@1.9.0)(zone.js@0.15.0)
@@ -308,9 +311,6 @@ importers:
       '@openapitools/openapi-generator-cli':
         specifier: 2.19.1
         version: 2.19.1(debug@4.3.7)(encoding@0.1.13)
-      '@openrouter/sdk':
-        specifier: 0.2.9
-        version: 0.2.9
       '@playwright/test':
         specifier: 1.55.0
         version: 1.55.0
