@@ -12,8 +12,8 @@ export class ComparisonToolFilterService {
   readonly significanceThreshold = this.significanceThresholdSignal.asReadonly();
   readonly significanceThresholdActive = this.significanceThresholdActiveSignal.asReadonly();
 
-  searchTerm = this.comparisonToolService.searchTerm;
-  filters = this.comparisonToolService.filters;
+  readonly searchTerm = this.comparisonToolService.searchTerm;
+  readonly filters = this.comparisonToolService.filters;
 
   readonly hasSelectedFilters = computed(() => {
     return this.filters().some((filter) => filter.options.some((option) => option.selected));
