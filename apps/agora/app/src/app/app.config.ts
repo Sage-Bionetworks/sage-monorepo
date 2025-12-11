@@ -7,12 +7,7 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {
-  provideRouter,
-  UrlSerializer,
-  withEnabledBlockingInitialNavigation,
-  withInMemoryScrolling,
-} from '@angular/router';
+import { provideRouter, UrlSerializer, withInMemoryScrolling } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client';
 import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
 import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client';
@@ -69,7 +64,6 @@ export const appConfig: ApplicationConfig = {
     provideMarkdown(),
     provideRouter(
       routes,
-      withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
       }),
