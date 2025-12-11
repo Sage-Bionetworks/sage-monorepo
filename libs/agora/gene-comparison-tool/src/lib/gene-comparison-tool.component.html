@@ -24,6 +24,17 @@
         </div>
         <div class="gct-header-right">
           <p-button
+            [label]="isCapturingImage ? 'Generating...' : 'Capture Image'"
+            (click)="captureImage()"
+            [rounded]="true"
+            variant="outlined"
+            size="small"
+            [disabled]="isCapturingImage"
+            pTooltip="Download the current table view as an image"
+            tooltipPosition="left"
+            tooltipStyleClass="tooltip"
+          ></p-button>
+          <p-button
             label="Share URL"
             (click)="copyUrl()"
             [rounded]="true"
@@ -46,7 +57,7 @@
       (onremoveSignificanceThresholdFilter)="setSignificanceThresholdActive($event)"
     ></agora-gene-comparison-tool-filter-list>
 
-    <div class="gct-body">
+    <div #gctBody class="gct-body">
       <div class="gct-body-inner">
         <div class="gct-controls" [hidden]="isLoading">
           <div class="gct-controls-inner">

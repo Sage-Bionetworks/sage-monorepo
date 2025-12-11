@@ -130,6 +130,9 @@ importers:
       glob:
         specifier: 11.0.0
         version: 11.0.0
+      html-to-image:
+        specifier: 1.11.13
+        version: 1.11.13
       js-yaml:
         specifier: 4.1.0
         version: 4.1.0
@@ -8241,6 +8244,9 @@ packages:
     resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
     engines: {node: '>=8'}
 
+  html-to-image@1.11.13:
+    resolution: {integrity: sha512-cuOPoI7WApyhBElTTb9oqsawRvZ0rHhaHwghRLlTuffoD1B2aDemlCruLeZrUIIdvG7gs9xeELEPm6PhuASqrg==}
+
   html-webpack-plugin@5.6.4:
     resolution: {integrity: sha512-V/PZeWsqhfpE27nKeX9EO2sbR+D17A+tLf6qU+ht66jdUsN0QLKJN27Z+1+gHrVMKgndBahes0PU6rRihDgHTw==}
     engines: {node: '>=10.13.0'}
@@ -9112,6 +9118,7 @@ packages:
 
   jsox@1.2.123:
     resolution: {integrity: sha512-LYordXJ/0Q4G8pUE1Pvh4fkfGvZY7lRe4WIJKl0wr0rtFDVw9lcdNW95GH0DceJ6E9xh41zJNW0vreEz7xOxCw==}
+    deprecated: Bad typescript bindings.
     hasBin: true
 
   jszip@3.10.1:
@@ -9131,6 +9138,7 @@ packages:
   keygrip@1.1.0:
     resolution: {integrity: sha512-iYSchDJ+liQ8iwbSI2QqsQOvqv58eJCEanyJPJi+Khyu8smkcKSFUCbPwzFcL7YVtZ6eONjqRX/38caJ7QjRAQ==}
     engines: {node: '>= 0.6'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -22720,6 +22728,8 @@ snapshots:
       terser: 5.43.1
 
   html-tags@3.3.1: {}
+
+  html-to-image@1.11.13: {}
 
   html-webpack-plugin@5.6.4(@rspack/core@1.5.0(@swc/helpers@0.5.17))(webpack@5.101.3(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.9)):
     dependencies:

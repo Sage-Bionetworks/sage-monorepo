@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   inject,
   OnDestroy,
   OnInit,
@@ -48,6 +49,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { GeneComparisonToolFilterListComponent } from './components/gene-comparison-tool-filter-list/gene-comparison-tool-filter-list.component';
 import { GeneComparisonToolHowToPanelComponent } from './components/gene-comparison-tool-how-to-panel/gene-comparison-tool-how-to-panel.component';
 import { GeneComparisonToolLegendPanelComponent } from './components/gene-comparison-tool-legend-panel/gene-comparison-tool-legend-panel.component';
+import * as htmlToImage from 'html-to-image';
 
 @Component({
   selector: 'agora-gene-comparison-tool',
@@ -87,6 +89,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   filterService = inject(FilterService);
 
   isLoading = true;
+  isCapturingImage = false;
 
   /* Genes ----------------------------------------------------------------- */
   genes: GCTGene[] = [];
@@ -165,6 +168,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('detailsPanel') detailsPanel!: GeneComparisonToolDetailsPanelComponent;
   @ViewChild('scorePanel') scorePanel!: GeneComparisonToolScorePanelComponent;
   @ViewChild('pinnedGenesModal') pinnedGenesModal!: GeneComparisonToolPinnedGenesModalComponent;
+  @ViewChild('gctBody') gctBody!: ElementRef<HTMLDivElement>;
 
   constructor() {
     this.category = 'RNA - Differential Expression';
@@ -1015,6 +1019,38 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     setTimeout(() => {
       this.messageService.clear();
     }, 5000);
+  }
+
+  captureImage() {
+    if (!this.gctBody?.nativeElement) {
+      return;
+    }
+    this.isCapturingImage = true;
+
+    // Use setTimeout to allow the UI to render the loading state before starting capture
+    setTimeout(() => {
+      htmlToImage
+        .toPng(this.gctBody.nativeElement, {
+          backgroundColor: '#ffffff',
+        })
+        .then((dataUrl) => {
+          const link = document.createElement('a');
+          link.download = 'gene-comparison-tool.png';
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((error) => {
+          console.error('Error capturing image:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to capture image.',
+          });
+        })
+        .finally(() => {
+          this.isCapturingImage = false;
+        });
+    }, 100);
   }
 
   /* ----------------------------------------------------------------------- */
