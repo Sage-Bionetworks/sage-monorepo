@@ -5,7 +5,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +42,7 @@ public class ModelDto {
 
   private String rrid;
 
-  private BigDecimal jaxId;
+  private String jaxId;
 
   private String alzforumId;
 
@@ -74,7 +73,7 @@ public class ModelDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelDto(String name, List<String> matchedControls, String modelType, String contributingGroup, String studySynid, String rrid, BigDecimal jaxId, String alzforumId, String genotype, List<String> aliases, String geneExpression, String diseaseCorrelation, String spatialTranscriptomics, List<@Valid GeneticInfoDto> geneticInfo, List<@Valid ModelDataDto> biomarkers, List<@Valid ModelDataDto> pathology) {
+  public ModelDto(String name, List<String> matchedControls, String modelType, String contributingGroup, String studySynid, String rrid, String jaxId, String alzforumId, String genotype, List<String> aliases, String geneExpression, String diseaseCorrelation, String spatialTranscriptomics, List<@Valid GeneticInfoDto> geneticInfo, List<@Valid ModelDataDto> biomarkers, List<@Valid ModelDataDto> pathology) {
     this.name = name;
     this.matchedControls = matchedControls;
     this.modelType = modelType;
@@ -221,7 +220,7 @@ public class ModelDto {
     this.rrid = rrid;
   }
 
-  public ModelDto jaxId(BigDecimal jaxId) {
+  public ModelDto jaxId(String jaxId) {
     this.jaxId = jaxId;
     return this;
   }
@@ -230,14 +229,14 @@ public class ModelDto {
    * JAX ID of the model
    * @return jaxId
    */
-  @NotNull @Valid 
+  @NotNull 
   @Schema(name = "jax_id", description = "JAX ID of the model", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("jax_id")
-  public BigDecimal getJaxId() {
+  public String getJaxId() {
     return jaxId;
   }
 
-  public void setJaxId(BigDecimal jaxId) {
+  public void setJaxId(String jaxId) {
     this.jaxId = jaxId;
   }
 
@@ -582,7 +581,7 @@ public class ModelDto {
       return this;
     }
     
-    public ModelDto.Builder jaxId(BigDecimal jaxId) {
+    public ModelDto.Builder jaxId(String jaxId) {
       this.instance.jaxId(jaxId);
       return this;
     }

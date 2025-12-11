@@ -38,7 +38,7 @@ public class ModelDocument {
   private String rrid;
 
   @Field("jax_id")
-  private BigDecimal jaxId;
+  private String jaxId;
 
   @Field("alzforum_id")
   private String alzforumId;

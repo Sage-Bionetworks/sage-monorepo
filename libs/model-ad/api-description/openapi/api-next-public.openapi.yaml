@@ -707,7 +707,7 @@ components:
           type: string
           description: RRID of the model
         jax_id:
-          type: number
+          type: string
           description: JAX ID of the model
         alzforum_id:
           type: string

@@ -996,7 +996,7 @@ components:
         modified_gene: modified_gene
         ensembl_gene_id: ensembl_gene_id
         allele: allele
-        mgi_allele_id: 6.027456183070403
+        mgi_allele_id: 0.8008281904610115
         allele_type: allele_type
       properties:
         modified_gene:
@@ -1025,7 +1025,7 @@ components:
       description: Data for an individual
       example:
         sex: Female
-        value: 5.962133916683182
+        value: 1.4658129805029452
         genotype: genotype
         individual_id: individual_id
       properties:
@@ -1052,17 +1052,17 @@ components:
         evidence_type: evidence_type
         data:
           - sex: Female
-            value: 5.962133916683182
+            value: 1.4658129805029452
             genotype: genotype
             individual_id: individual_id
           - sex: Female
-            value: 5.962133916683182
+            value: 1.4658129805029452
             genotype: genotype
             individual_id: individual_id
         name: name
         tissue: tissue
         units: units
-        y_axis_max: 1.4658129805029452
+        y_axis_max: 6.027456183070403
         age: age
       properties:
         name:
@@ -1104,12 +1104,12 @@ components:
           - modified_gene: modified_gene
             ensembl_gene_id: ensembl_gene_id
             allele: allele
-            mgi_allele_id: 6.027456183070403
+            mgi_allele_id: 0.8008281904610115
             allele_type: allele_type
           - modified_gene: modified_gene
             ensembl_gene_id: ensembl_gene_id
             allele: allele
-            mgi_allele_id: 6.027456183070403
+            mgi_allele_id: 0.8008281904610115
             allele_type: allele_type
         aliases:
           - aliases
@@ -1118,64 +1118,64 @@ components:
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 5.962133916683182
+                value: 1.4658129805029452
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 5.962133916683182
+                value: 1.4658129805029452
                 genotype: genotype
                 individual_id: individual_id
             name: name
             tissue: tissue
             units: units
-            y_axis_max: 1.4658129805029452
+            y_axis_max: 6.027456183070403
             age: age
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 5.962133916683182
+                value: 1.4658129805029452
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 5.962133916683182
+                value: 1.4658129805029452
                 genotype: genotype
                 individual_id: individual_id
             name: name
             tissue: tissue
             units: units
-            y_axis_max: 1.4658129805029452
+            y_axis_max: 6.027456183070403
             age: age
         contributing_group: contributing_group
         biomarkers:
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 5.962133916683182
+                value: 1.4658129805029452
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 5.962133916683182
+                value: 1.4658129805029452
                 genotype: genotype
                 individual_id: individual_id
             name: name
             tissue: tissue
             units: units
-            y_axis_max: 1.4658129805029452
+            y_axis_max: 6.027456183070403
             age: age
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 5.962133916683182
+                value: 1.4658129805029452
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 5.962133916683182
+                value: 1.4658129805029452
                 genotype: genotype
                 individual_id: individual_id
             name: name
             tissue: tissue
             units: units
-            y_axis_max: 1.4658129805029452
+            y_axis_max: 6.027456183070403
             age: age
         gene_expression: gene_expression
         disease_correlation: disease_correlation
@@ -1183,7 +1183,7 @@ components:
           - matched_controls
           - matched_controls
         model_type: model_type
-        jax_id: 0.8008281904610115
+        jax_id: jax_id
         rrid: rrid
         genotype: genotype
         spatial_transcriptomics: spatial_transcriptomics
@@ -1213,7 +1213,7 @@ components:
           type: string
         jax_id:
           description: JAX ID of the model
-          type: number
+          type: string
         alzforum_id:
           description: AlzForum ID of the model
           type: string
