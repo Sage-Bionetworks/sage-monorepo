@@ -102,6 +102,7 @@ export class ComparisonToolService<T> {
   readonly multiSortMeta = computed(() => this.querySignal().multiSortMeta);
   readonly searchTerm = computed(() => this.querySignal().searchTerm);
   readonly filters = computed(() => this.querySignal().filters);
+  readonly first = computed(() => this.pageNumber() * this.pageSize());
 
   private readonly syncToUrlInProgress = signal(false);
   private lastSerializedState: string | null = null;
