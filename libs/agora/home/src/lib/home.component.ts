@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { ConfigService, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { OpenRouterApiService } from '@sagebionetworks/agora/services';
 import { SearchInputComponent } from '@sagebionetworks/agora/ui';
 import { HomeCardComponent, SvgImageComponent } from '@sagebionetworks/explorers/ui';
@@ -15,9 +15,11 @@ export class HomeComponent {
   ROUTE_PATHS = ROUTE_PATHS;
 
   private readonly openRouterService = inject(OpenRouterApiService);
+  private readonly configService = inject(ConfigService);
 
   // TODO: Replace with your actual OpenRouter API key from .env
-  private readonly OPENROUTER_API_KEY = 'changeme';
+  private readonly OPENROUTER_API_KEY =
+    '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';
 
   streamingResponse = '';
   isStreaming = false;

@@ -10,6 +10,7 @@ export interface AppConfig {
   // Example: "agora/v1.2.3" or "local" for development
   tagName: string;
   googleTagManagerId: string;
+  openRouterApiKey: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;
