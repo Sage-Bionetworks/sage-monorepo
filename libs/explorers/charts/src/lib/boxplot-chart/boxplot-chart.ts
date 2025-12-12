@@ -1,6 +1,6 @@
 import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
-import { DEFAULT_POINT_SIZE } from '../constants';
+import { DEFAULT_POINT_SIZE, GRAY_BACKGROUND_COLOR } from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
 import {
   addXAxisValueToBoxplotSummaries,
@@ -290,8 +290,7 @@ export class BoxplotChart {
         chartStyle === 'grayGrid'
           ? {
               itemStyle: {
-                color: '#AEB5BC',
-                opacity: 0.1,
+                color: GRAY_BACKGROUND_COLOR,
               },
               data: xAxisCategories.map((pc, idx) => {
                 const spacing = 0.4;
