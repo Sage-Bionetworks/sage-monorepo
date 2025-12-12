@@ -40,7 +40,7 @@ const ModelSchema = new Schema<Model>(
     contributing_group: { type: String, required: true },
     study_synid: { type: String, required: true },
     rrid: { type: String, required: true },
-    jax_id: { type: Number, required: true },
+    jax_id: { type: String, required: true },
     alzforum_id: { type: String, required: true },
     genotype: { type: String, required: true },
     aliases: { type: [String], required: true },
