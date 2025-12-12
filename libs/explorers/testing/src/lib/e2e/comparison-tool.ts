@@ -110,6 +110,32 @@ export const expectNoResultsFound = async (page: Page): Promise<void> => {
   await expect(page.getByText('No results found')).toBeVisible();
 };
 
+export async function goToLastPage(page: Page) {
+  const lastPageBtn = page.getByRole('button', { name: /last page/i });
+  await expect(lastPageBtn).toBeEnabled();
+  await lastPageBtn.click();
+  await expect(lastPageBtn).toBeDisabled();
+}
+
+export async function clickFilterCheckbox(page: Page, filterMenuName: string, filterName: string) {
+  const filterButton = page.getByRole('button', { name: 'Filter Results' });
+  await filterButton.click();
+
+  const filterMenuButton = page.getByRole('button', {
+    name: `open ${filterMenuName} filter options`,
+  });
+  await filterMenuButton.click();
+
+  const filterCheckbox = page.getByRole('checkbox', { name: filterName });
+  await filterCheckbox.click();
+}
+
+export async function expectFirstPage(page: Page) {
+  const firstPageBtn = page.getByRole('button', { name: /first page/i });
+  await expect(firstPageBtn).toBeDisabled();
+  await expect(page.getByRole('button', { name: /previous page/i })).toBeDisabled();
+}
+
 export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
   const lastPageBtn = page.getByRole('button', { name: /last page/i });
   await expect(lastPageBtn).toBeEnabled();
@@ -129,4 +155,54 @@ export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
 
   await expect(unpinnedTable.getByRole('row')).toHaveCount(10); // previous full page loaded
   await expect(lastPageBtn).toBeDisabled();
+}
+
+export async function testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
+  page: Page,
+  filterName: string,
+  filterValue: string,
+) {
+  await goToLastPage(page);
+
+  await clickFilterCheckbox(page, filterName, filterValue);
+  await expectFirstPage(page);
+
+  await goToLastPage(page);
+
+  await clickFilterCheckbox(page, filterName, filterValue);
+  await expectFirstPage(page);
+}
+
+export async function testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared(page: Page) {
+  await goToLastPage(page);
+
+  await searchViaFilterbox(page, 'a');
+  await expectFirstPage(page);
+
+  await goToLastPage(page);
+
+  await searchViaFilterbox(page, '');
+  await expectFirstPage(page);
+}
+
+export async function testTableReturnsToFirstPageWhenCategoriesChanged(page: Page) {
+  await goToLastPage(page);
+
+  const dropdown = page.getByRole('combobox').last();
+  await dropdown.click();
+  const options = page.getByRole('option');
+  const secondOption = options.nth(1);
+  await secondOption.click();
+  await expect(secondOption).toBeHidden();
+
+  await expectFirstPage(page);
+}
+
+export async function testTableReturnsToFirstPageWhenSortChanged(page: Page) {
+  await goToLastPage(page);
+
+  const columnHeader = page.getByRole('columnheader').nth(2);
+  await columnHeader.click();
+
+  await expectFirstPage(page);
 }

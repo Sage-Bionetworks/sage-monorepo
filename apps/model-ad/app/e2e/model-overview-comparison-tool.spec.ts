@@ -11,11 +11,15 @@ import {
   testPartialCaseInsensitiveSearch,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
+  testTableReturnsToFirstPageWhenFilterSelectedAndRemoved,
+  testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared,
+  testTableReturnsToFirstPageWhenSortChanged,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
 import { COMPARISON_TOOL_PATHS } from './constants';
 import {
+  fetchComparisonToolConfig,
   fetchDiseaseCorrelations,
   fetchModelOverviews,
   navigateToComparison,
@@ -177,5 +181,29 @@ test.describe('model overview', () => {
   test('table loads previous page when last item on last page is pinned', async ({ page }) => {
     await navigateToComparison(page, CT_PAGE, true);
     await testPinLastItemLastPageGoesToPreviousPage(page);
+  });
+
+  test('table returns to first page when filter selected and removed', async ({ page }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const filters = configs[0]?.filters;
+    expect(filters.length).toBeGreaterThan(1);
+    const filter = filters[0];
+
+    await navigateToComparison(page, CT_PAGE, true);
+    await testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
+      page,
+      filter.name,
+      filter.values[0],
+    );
+  });
+
+  test('table returns to first page when search term entered and cleared', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+    await testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared(page);
+  });
+
+  test('table returns to first page when sort changed', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+    await testTableReturnsToFirstPageWhenSortChanged(page);
   });
 });
