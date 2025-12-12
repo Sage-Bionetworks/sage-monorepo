@@ -1,1 +1,2 @@
 export const DEFAULT_POINT_SIZE = 18;
+export const GRAY_BACKGROUND_COLOR = '#AEB5BC1A';

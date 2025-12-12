@@ -1,5 +1,6 @@
 import * as echarts from 'echarts';
 import { ECharts, EChartsOption } from 'echarts';
+import { GRAY_BACKGROUND_COLOR } from '../constants';
 
 // Chart must have initial height to be visible
 export function ensureChartDomHasHeight(
@@ -42,7 +43,7 @@ export function setNoDataOption(chart: ECharts, noDataStyle: 'textOnly' | 'grayB
     grayBackground: {
       text: 'Data unavailable',
       textColor: '#4A5056',
-      backgroundColor: '#DFE2E6',
+      backgroundColor: GRAY_BACKGROUND_COLOR,
     },
   };
 
