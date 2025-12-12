@@ -225,6 +225,60 @@ describe('ComparisonToolService', () => {
       expect(service.isPinned('id2')).toBe(true);
       expect(service.isPinned('id3')).toBe(false);
     });
+
+    it('should not add duplicate items when pinItem is called multiple times with same id', () => {
+      connectService();
+
+      service.pinItem('id1');
+      service.pinItem('id1');
+      service.pinItem('id1');
+
+      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
+      expect(pinnedItemsArray).toEqual(['id1']);
+      expect(service.isPinned('id1')).toBe(true);
+    });
+
+    it('should deduplicate items when setPinnedItems receives array with duplicates', () => {
+      connectService();
+
+      service.setPinnedItems(['id1', 'id2', 'id1', 'id3', 'id2']);
+
+      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
+      expect(pinnedItemsArray).toEqual(['id1', 'id2', 'id3']);
+      expect(service.pinnedItems().size).toBe(3);
+      expect(service.isPinned('id1')).toBe(true);
+      expect(service.isPinned('id2')).toBe(true);
+      expect(service.isPinned('id3')).toBe(true);
+    });
+
+    it('should handle setPinnedItems with null and return empty array', () => {
+      connectService();
+
+      service.pinItem('id1');
+      expect(service.isPinned('id1')).toBe(true);
+
+      service.setPinnedItems(null);
+
+      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
+      expect(pinnedItemsArray).toEqual([]);
+      expect(service.pinnedItems().size).toBe(0);
+    });
+
+    it('should maintain data integrity when pinning, unpinning, and re-pinning same item', () => {
+      connectService();
+
+      service.pinItem('id1');
+      expect(service.isPinned('id1')).toBe(true);
+
+      service.unpinItem('id1');
+      expect(service.isPinned('id1')).toBe(false);
+
+      service.pinItem('id1');
+      expect(service.isPinned('id1')).toBe(true);
+
+      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
+      expect(pinnedItemsArray).toEqual(['id1']);
+    });
   });
 
   describe('URL synchronization', () => {

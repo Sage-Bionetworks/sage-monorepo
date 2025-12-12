@@ -329,7 +329,7 @@ export class ComparisonToolService<T> {
       this.notificationService.showWarning(
         `You have reached the maximum number of pinned items (${this.maxPinnedItems()}). Please unpin an item before pinning a new one.`,
       );
-    } else {
+    } else if (!this.isPinned(id)) {
       this.updateQuery({
         pinnedItems: [...this.query().pinnedItems, id],
       });
@@ -370,8 +370,9 @@ export class ComparisonToolService<T> {
   }
 
   setPinnedItems(items: string[] | null) {
+    const deduplicatedItems = items ? Array.from(new Set(items)) : [];
     this.updateQuery({
-      pinnedItems: items ?? [],
+      pinnedItems: deduplicatedItems,
     });
     this.updatePinnedItemsCache();
   }
