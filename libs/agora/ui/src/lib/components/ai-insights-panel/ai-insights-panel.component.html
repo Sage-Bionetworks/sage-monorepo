@@ -6,15 +6,16 @@
   [showCloseIcon]="showCloseIcon"
   [dismissible]="dismissible"
   [closeOnEscape]="closeOnEscape"
-  styleClass="gct-analysis-drawer"
+  [style]="{ width: width }"
+  styleClass="ai-insights-panel-drawer"
 >
   <ng-template pTemplate="header">
-    <span class="text-xl font-semibold">AI Image Analysis</span>
+    <span class="text-xl font-semibold">AI Insights</span>
   </ng-template>
-  <div class="drawer-content">
-    <p class="drawer-status-message">{{ message }}</p>
+  <div class="drawer-content" #drawerContent>
     @if (isCapturing) {
       <div class="drawer-loading">
+        <div class="image-waiting">Analyzing visualization...</div>
         <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
       </div>
     }
@@ -22,11 +23,18 @@
       <div class="drawer-response">
         @if (isStreaming && !streamingResponse) {
           <div class="drawer-waiting">Waiting for response...</div>
+          <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
         }
-        <div class="drawer-response-text">{{ streamingResponse }}</div>
+        <div class="drawer-response-text" [innerHTML]="renderedResponse"></div>
         @if (isStreaming && streamingResponse) {
           <span class="drawer-cursor">▋</span>
         }
+      </div>
+    }
+    @if (isComplete) {
+      <div class="drawer-completion-message">
+        <i class="pi pi-check-circle"></i>
+        <span>Processing complete</span>
       </div>
     }
   </div>

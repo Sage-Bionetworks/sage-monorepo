@@ -24,7 +24,7 @@ import {
   GCTSelectOption,
   GCTSortEvent,
 } from '@sagebionetworks/agora/models';
-import { HelperService, OpenRouterApiService } from '@sagebionetworks/agora/services';
+import { AiInsightsService, HelperService } from '@sagebionetworks/agora/services';
 import { cloneDeep } from 'lodash';
 import { FilterService, MessageService, SortEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -43,14 +43,17 @@ import { GeneComparisonToolScorePanelComponent } from './components/gene-compari
 import { FormsModule } from '@angular/forms';
 import { PopoverLinkComponent } from '@sagebionetworks/agora/genes';
 import { LoadingIconComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
-import { AiInsightsPanelComponent } from '@sagebionetworks/agora/ui';
+import {
+  AiAssistantButtonComponent,
+  AiInsightsPanelComponent,
+  CaptureImageEvent,
+} from '@sagebionetworks/agora/ui';
 import { PopoverModule } from 'primeng/popover';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { GeneComparisonToolFilterListComponent } from './components/gene-comparison-tool-filter-list/gene-comparison-tool-filter-list.component';
 import { GeneComparisonToolHowToPanelComponent } from './components/gene-comparison-tool-how-to-panel/gene-comparison-tool-how-to-panel.component';
 import { GeneComparisonToolLegendPanelComponent } from './components/gene-comparison-tool-legend-panel/gene-comparison-tool-legend-panel.component';
-import * as htmlToImage from 'html-to-image';
 
 import { ConfigService } from '@sagebionetworks/agora/config';
 
@@ -67,6 +70,7 @@ import { ConfigService } from '@sagebionetworks/agora/config';
     SelectModule,
     ToggleSwitchModule,
     PopoverLinkComponent,
+    AiAssistantButtonComponent,
     PopoverModule,
     SvgIconComponent,
     GeneComparisonToolHowToPanelComponent,
@@ -91,18 +95,12 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   helperService = inject(HelperService);
   messageService = inject(MessageService);
   filterService = inject(FilterService);
-  private readonly openRouterService = inject(OpenRouterApiService);
   private readonly configService = inject(ConfigService);
+  private readonly aiInsightsService = inject(AiInsightsService);
 
-  // TODO: Replace with your actual OpenRouter API key from .env
-  private readonly OPENROUTER_API_KEY = '';
+  aiInsightsState$ = this.aiInsightsService.state$;
 
   isLoading = true;
-  isCapturingImage = false;
-  drawerVisible = false;
-  drawerMessage = '';
-  streamingResponse = '';
-  isStreaming = false;
 
   /* Genes ----------------------------------------------------------------- */
   genes: GCTGene[] = [];
@@ -1034,71 +1032,50 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     }, 5000);
   }
 
-  captureImage() {
-    //TODO REMOVE THIS
-    console.log(this.OPENROUTER_API_KEY);
-
-    if (!this.gctBody?.nativeElement) {
-      return;
+  onDrawerVisibleChange(visible: boolean) {
+    if (!visible) {
+      this.aiInsightsService.closePanel();
     }
-    this.isCapturingImage = true;
-    this.drawerVisible = true;
-    this.drawerMessage = 'Generating image for analysis...';
-    this.streamingResponse = '';
-
-    // Use setTimeout to allow the UI to render the loading state before starting capture
-    setTimeout(() => {
-      htmlToImage
-        .toPng(this.gctBody.nativeElement, {
-          backgroundColor: '#ffffff',
-        })
-        .then((dataUrl) => {
-          this.drawerMessage = 'Image captured. Starting AI analysis...';
-          this.isCapturingImage = false;
-          this.analyzeImageWithAI(dataUrl);
-        })
-        .catch((error) => {
-          console.error('Error capturing image:', error);
-          this.drawerMessage = 'Failed to capture image.';
-          this.isCapturingImage = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to capture image.',
-          });
-        });
-    }, 100);
   }
 
-  analyzeImageWithAI(imageDataUrl: string) {
-    const template =
-      'You are an AI assistant that analyzes scientific visualizations and data charts. Provide a detailed description of the visualization including: the type of chart, axes labels, data patterns, trends, and any notable features.';
-    const modelId = 'openai/gpt-4o';
+  onCaptureStarted(_audienceType: string) {
+    this.aiInsightsService.startCapture();
+  }
 
-    this.isStreaming = true;
-    this.streamingResponse = '';
+  onCaptureComplete(event: CaptureImageEvent) {
+    const prompt = this.getPrompt(event.audienceType);
+    const apiKey = this.configService.config.openRouterApiKey;
+    this.aiInsightsService.analyzeImage(event.imageDataUrl, prompt, apiKey).subscribe({
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'AI analysis failed.',
+        });
+      },
+    });
+  }
 
-    this.openRouterService
-      .explainVisualizationStream(imageDataUrl, template, this.OPENROUTER_API_KEY, modelId)
-      .subscribe({
-        next: (textDelta) => {
-          this.streamingResponse += textDelta;
-        },
-        error: (error) => {
-          console.error('OpenRouter API call failed:', error);
-          this.isStreaming = false;
-          this.drawerMessage = 'AI analysis failed.';
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'AI analysis failed.',
-          });
-        },
-        complete: () => {
-          this.isStreaming = false;
-          this.drawerMessage = 'AI analysis complete.';
-        },
-      });
+  onCaptureError(_error: Error) {
+    this.aiInsightsService.setCapturing(false);
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to capture image.',
+    });
+  }
+
+  private getPrompt(audienceType: 'simple' | 'researcher'): string {
+    const prompts: Record<'simple' | 'researcher', string> = {
+      simple: `You are an AI assistant that analyzes scientific visualizations and data charts on Alzheimer's data. \
+Explain this visualization in simple terms for a non-researcher. Use analogies, avoid jargon, and focus on what it means in plain language. \
+We are on the Genes Comparison tool page in the Agora web application - https://agora.adknowledgeportal.org/genes/comparison`,
+      researcher: `You are an AI assistant that analyzes scientific visualizations and data charts on Alzheimer's data. \
+Provide detailed scientific insights from this visualization including: percentile rankings, comparative analysis, distribution characteristics, evidence strength, and research prioritization recommendations. \
+We are on the Genes Comparison tool page in the Agora web application - https://agora.adknowledgeportal.org/genes/comparison`,
+    };
+
+    return prompts[audienceType];
   }
 
   /* ----------------------------------------------------------------------- */

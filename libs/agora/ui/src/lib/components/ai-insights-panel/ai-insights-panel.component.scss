@@ -1,2 +1,196 @@
 // Styles for the AI insights panel component
-// Additional component-specific styles can be added here if needed
+// Note: ViewEncapsulation.None is set, so these styles apply globally
+
+// Panel drawer styles
+.ai-insights-panel-drawer {
+  .drawer-content {
+    padding: 1rem;
+    height: 100%;
+    overflow-y: auto;
+
+    .drawer-loading {
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .drawer-response {
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #f9f9f9;
+      min-height: 100px;
+
+      .drawer-waiting {
+        color: #666;
+        font-style: italic;
+      }
+
+      .drawer-cursor {
+        animation: blink 1s infinite;
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.drawer-response-text {
+  line-height: 1.6;
+  color: #333;
+
+  // Headings
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  h1 {
+    font-size: 1.75em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  h3 {
+    font-size: 1.25em;
+  }
+
+  h4 {
+    font-size: 1.1em;
+  }
+
+  // Paragraphs
+  p {
+    margin-bottom: 1em;
+  }
+
+  // Lists
+  ul,
+  ol {
+    margin-bottom: 1em;
+    padding-left: 2em;
+  }
+
+  li {
+    margin-bottom: 0.5em;
+  }
+
+  // Links
+  a {
+    color: #667eea;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Inline code
+  code {
+    background-color: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+  }
+
+  // Code blocks
+  pre {
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    padding: 1em;
+    overflow-x: auto;
+    margin-bottom: 1em;
+
+    code {
+      background-color: transparent;
+      padding: 0;
+    }
+  }
+
+  // Blockquotes
+  blockquote {
+    border-left: 4px solid #667eea;
+    padding-left: 1em;
+    margin: 1em 0;
+    color: #666;
+    font-style: italic;
+  }
+
+  // Tables
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1em;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 0.5em;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+  }
+
+  // Horizontal rules
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 1.5em 0;
+  }
+
+  // Strong/Bold
+  strong {
+    font-weight: 600;
+  }
+
+  // Emphasis/Italic
+  em {
+    font-style: italic;
+  }
+}
+
+// Completion message styling
+.drawer-completion-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  color: #166534;
+  font-weight: 500;
+  font-size: 0.95rem;
+
+  i {
+    color: #22c55e;
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+  }
+}

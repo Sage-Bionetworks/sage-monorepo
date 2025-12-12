@@ -49,10 +49,18 @@
 
   <div class="section section-gray-100">
     <div class="section-inner">
-      <div class="container-lg">
+      <div class="container-lg" #chartsContainer>
         @defer {
           <agora-gene-soe-charts [gene]="gene"></agora-gene-soe-charts>
         }
+        <div style="margin-top: 1rem; text-align: center">
+          <agora-ai-assistant-button
+            [targetElement]="chartsContainer"
+            (captureStarted)="onCaptureStarted($event)"
+            (captureComplete)="onCaptureComplete($event)"
+            (captureError)="onCaptureError($event)"
+          ></agora-ai-assistant-button>
+        </div>
       </div>
     </div>
   </div>

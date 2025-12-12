@@ -1,0 +1,12 @@
+<p-splitbutton
+  [label]="isCapturing ? 'Generating...' : label"
+  [model]="aiInsightsMenuItems"
+  (onClick)="captureImage('simple')"
+  [rounded]="rounded"
+  [outlined]="outlined"
+  [size]="size"
+  [disabled]="disabled || isCapturing"
+  pTooltip="Get AI-powered insights about this visualization"
+  tooltipPosition="top"
+  tooltipStyleClass="tooltip"
+></p-splitbutton>

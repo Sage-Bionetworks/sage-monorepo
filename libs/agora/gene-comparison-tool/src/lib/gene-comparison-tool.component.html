@@ -23,17 +23,12 @@
           <h1 class="gct-heading h2">Gene Comparison Tool</h1>
         </div>
         <div class="gct-header-right">
-          <p-button
-            [label]="isCapturingImage ? 'Generating...' : 'AI Insights'"
-            (click)="captureImage()"
-            [rounded]="true"
-            variant="outlined"
-            size="small"
-            [disabled]="isCapturingImage"
-            pTooltip="AI Insights"
-            tooltipPosition="left"
-            tooltipStyleClass="tooltip"
-          ></p-button>
+          <agora-ai-assistant-button
+            [targetElement]="gctBody"
+            (captureStarted)="onCaptureStarted($event)"
+            (captureComplete)="onCaptureComplete($event)"
+            (captureError)="onCaptureError($event)"
+          ></agora-ai-assistant-button>
           <p-button
             label="Share URL"
             (click)="copyUrl()"
@@ -664,14 +659,17 @@
     [maxPinnedGenes]="maxPinnedGenes"
   ></agora-gene-comparison-tool-pinned-genes-modal>
 
-  <agora-ai-insights-panel
-    [(visible)]="drawerVisible"
-    [message]="drawerMessage"
-    [isCapturing]="isCapturingImage"
-    [isStreaming]="isStreaming"
-    [streamingResponse]="streamingResponse"
-    [showCloseIcon]="!isCapturingImage && !isStreaming"
-    [dismissible]="!isCapturingImage && !isStreaming"
-    [closeOnEscape]="!isCapturingImage && !isStreaming"
-  ></agora-ai-insights-panel>
+  @if (aiInsightsState$ | async; as state) {
+    <agora-ai-insights-panel
+      [visible]="state.visible"
+      (visibleChange)="onDrawerVisibleChange($event)"
+      [isCapturing]="state.isCapturing"
+      [isStreaming]="state.isStreaming"
+      [isComplete]="state.isComplete"
+      [streamingResponse]="state.streamingResponse"
+      [showCloseIcon]="!state.isCapturing && !state.isStreaming"
+      [dismissible]="!state.isCapturing && !state.isStreaming"
+      [closeOnEscape]="!state.isCapturing && !state.isStreaming"
+    ></agora-ai-insights-panel>
+  }
 </div>

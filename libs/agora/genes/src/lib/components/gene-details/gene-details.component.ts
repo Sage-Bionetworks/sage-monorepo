@@ -13,7 +13,8 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
-import { HelperService } from '@sagebionetworks/agora/services';
+import { AiInsightsService, HelperService } from '@sagebionetworks/agora/services';
+import { AiInsightsPanelComponent } from '@sagebionetworks/agora/ui';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';
 import { GeneEvidenceRnaComponent } from '../gene-evidence-rna/gene-evidence-rna.component';
@@ -43,6 +44,7 @@ interface Panel {
     GeneNominationsComponent,
     GeneResourcesComponent,
     FontAwesomeModule,
+    AiInsightsPanelComponent,
   ],
   templateUrl: './gene-details.component.html',
   styleUrls: ['./gene-details.component.scss'],
@@ -53,7 +55,10 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   location = inject(Location);
   helperService = inject(HelperService);
   geneService = inject(GeneService);
+  aiInsightsService = inject(AiInsightsService);
   private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
+
+  aiInsightsState$ = this.aiInsightsService.state$;
 
   faAngleRight = faAngleRight;
   faAngleLeft = faAngleLeft;
@@ -154,6 +159,12 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
     this.activePanel = 'summary';
     this.activeParent = '';
     this.navSlideIndex = 0;
+  }
+
+  onDrawerVisibleChange(visible: boolean) {
+    if (!visible) {
+      this.aiInsightsService.closePanel();
+    }
   }
 
   ngOnInit() {

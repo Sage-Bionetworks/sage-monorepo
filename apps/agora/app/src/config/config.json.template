@@ -5,4 +5,5 @@
   "ssrApiUrl": "${SSR_API_URL}",
   "tagName": "${TAG_NAME}",
   "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID}"
+  "openRouterApiKey": "${OPENROUTER_API_KEY}"
 }

@@ -7,7 +7,7 @@
           <button
             class="gene-details-nav-scroll gene-details-nav-scroll-prev"
             (click)="slideNavigation(-1)"
-            >
+          >
             <fa-icon [icon]="faAngleLeft"></fa-icon>
           </button>
         }
@@ -20,7 +20,7 @@
                   [ngClass]="{
                     active: activePanel === item.name || activeParent === item.name,
                   }"
-                  >
+                >
                   <a (click)="onNavigationItemClick(item)">
                     {{ item.label }}
                     <span class="gene-details-nav-icon"></span>
@@ -33,7 +33,7 @@
                             <li
                               class="gene-details-subnav-item"
                               [ngClass]="{ active: activePanel === subItem.name }"
-                              >
+                            >
                               <a (click)="onNavigationItemClick(subItem)">
                                 {{ subItem.label }}
                                 <span class="gene-details-nav-icon"></span>
@@ -53,7 +53,7 @@
           <button
             class="gene-details-nav-scroll gene-details-nav-scroll-next"
             (click)="slideNavigation(1)"
-            >
+          >
             <fa-icon [icon]="faAngleRight"></fa-icon>
           </button>
         }
@@ -68,7 +68,7 @@
             [ngClass]="{
               active: activePanel === panel.name,
             }"
-            >
+          >
             @if (panel.name === 'summary') {
               <agora-gene-soe [gene]="gene"></agora-gene-soe>
             }
@@ -116,4 +116,19 @@
       }
     </div>
   </div>
+
+  <!-- AI Insights Panel -->
+  @if (aiInsightsState$ | async; as state) {
+    <agora-ai-insights-panel
+      [visible]="state.visible"
+      (visibleChange)="onDrawerVisibleChange($event)"
+      [isCapturing]="state.isCapturing"
+      [isStreaming]="state.isStreaming"
+      [isComplete]="state.isComplete"
+      [streamingResponse]="state.streamingResponse"
+      [showCloseIcon]="!state.isCapturing && !state.isStreaming"
+      [dismissible]="!state.isCapturing && !state.isStreaming"
+      [closeOnEscape]="!state.isCapturing && !state.isStreaming"
+    ></agora-ai-insights-panel>
+  }
 }

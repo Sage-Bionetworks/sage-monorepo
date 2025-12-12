@@ -1,3 +1,4 @@
+export * from './lib/ai-insights.service';
 export * from './lib/error.service';
 export * from './lib/helper.service';
 export * from './lib/http-error-interceptor';
