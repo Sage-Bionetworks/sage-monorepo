@@ -7,14 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrgSagebionetworksRepoModelGridUpdateUpdate } from './org-sagebionetworks-repo-model-grid-update-update';
+import { OrgSagebionetworksRepoModelGridUpdateUpdateBatch } from './org-sagebionetworks-repo-model-grid-update-update-batch';
 
 /**
- * Request to update one or more cells of the current grid session in a single batch operation.
+ * Request to update one or more cells of the current grid session.
  */
 export interface OrgSagebionetworksRepoModelGridUpdateGridUpdateRequest {
-  /**
-   * A batch containing one or more cell updates to apply to the grid. All updates in the batch are processed together.
-   */
-  updateBatch?: Array<OrgSagebionetworksRepoModelGridUpdateUpdate>;
+  update?: OrgSagebionetworksRepoModelGridUpdateUpdateBatch;
 }
