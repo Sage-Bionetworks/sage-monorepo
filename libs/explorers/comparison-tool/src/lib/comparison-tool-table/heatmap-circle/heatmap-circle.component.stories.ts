@@ -5,6 +5,7 @@ import { HeatmapCircleData } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolFilterService,
   provideComparisonToolFilterService,
+  provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { HeatmapCircleComponent } from './heatmap-circle.component';
@@ -61,6 +62,7 @@ const meta: Meta<HeatmapCircleStoryArgs> = {
         providers: [
           provideRouter([]),
           provideHttpClient(withInterceptorsFromDi()),
+          ...provideComparisonToolService(),
           ...provideComparisonToolFilterService({
             significanceThreshold,
             significanceThresholdActive,

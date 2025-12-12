@@ -1,14 +1,14 @@
-import { Component, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, OnInit, computed, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
+  ComparisonToolQuery,
   ComparisonToolViewConfig,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import {
-  ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolUrlService,
   PlatformService,
@@ -41,14 +41,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
-
-  currentPageNumber = this.comparisonToolService.pageNumber;
-  currentPageSize = this.comparisonToolService.pageSize;
-  searchTerm = this.comparisonToolFilterService.searchTerm;
+  query = this.comparisonToolService.query;
+  dropdownSelection = this.comparisonToolService.dropdownSelection;
+  private readonly pinnedItems = computed(() => this.query().pinnedItems);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
@@ -119,32 +116,26 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
-  private loadData(
-    selection: string[],
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
-    this.getPinnedData(selection, pinnedItems);
-    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize, searchTerm);
-  }
-
-  readonly onUpdateEffect = effect(() => {
+  readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const selection = this.comparisonToolService.dropdownSelection();
+      const selection = this.dropdownSelection();
       if (!selection.length) {
         return;
       }
 
-      const pinnedItems = Array.from(this.pinnedItems());
-      this.loadData(
-        selection,
-        pinnedItems,
-        this.currentPageNumber(),
-        this.currentPageSize(),
-        this.searchTerm(),
-      );
+      const pinnedItems = this.pinnedItems();
+      this.getPinnedData(selection, pinnedItems);
+    }
+  });
+
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const selection = this.dropdownSelection();
+      if (!selection.length) {
+        return;
+      }
+
+      this.getUnpinnedData(selection, this.query());
     }
   });
 
@@ -163,24 +154,18 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(
-    selection: string[],
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
-    const query: DiseaseCorrelationSearchQuery = {
+  getUnpinnedData(selection: string[], query: ComparisonToolQuery) {
+    const apiQuery: DiseaseCorrelationSearchQuery = {
       categories: selection,
-      items: pinnedItems,
+      items: query.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber,
-      pageSize,
-      search: searchTerm,
+      pageNumber: query.pageNumber,
+      pageSize: query.pageSize,
+      search: query.searchTerm,
     };
 
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(query)
+      .getDiseaseCorrelations(apiQuery)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: DiseaseCorrelationsPage) => {
@@ -196,14 +181,14 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   }
 
   getPinnedData(selection: string[], pinnedItems: string[]) {
-    const query: DiseaseCorrelationSearchQuery = {
+    const apiQuery: DiseaseCorrelationSearchQuery = {
       categories: selection,
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
     };
 
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(query)
+      .getDiseaseCorrelations(apiQuery)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: DiseaseCorrelationsPage) => {

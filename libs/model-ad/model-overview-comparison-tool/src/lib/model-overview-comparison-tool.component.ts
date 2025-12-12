@@ -1,10 +1,9 @@
-import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
-  ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolUrlService,
   PlatformService,
@@ -35,16 +34,12 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
-  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
   private readonly modelOverviewService = inject(ModelOverviewService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
 
-  pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
-
-  currentPageNumber = this.comparisonToolService.pageNumber;
-  currentPageSize = this.comparisonToolService.pageSize;
-  searchTerm = this.comparisonToolFilterService.searchTerm;
+  query = this.comparisonToolService.query;
+  private readonly pinnedItems = computed(() => this.query().pinnedItems);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
@@ -101,25 +96,16 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
-  private loadData(
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
-    this.getPinnedData(pinnedItems);
-    this.getUnpinnedData(pinnedItems, pageNumber, pageSize, searchTerm);
-  }
-
-  readonly onUpdateEffect = effect(() => {
+  readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const pinnedItems = Array.from(this.pinnedItems());
-      this.loadData(
-        pinnedItems,
-        this.currentPageNumber(),
-        this.currentPageSize(),
-        this.searchTerm(),
-      );
+      const pinnedItems = this.pinnedItems();
+      this.getPinnedData(pinnedItems);
+    }
+  });
+
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      this.getUnpinnedData(this.query());
     }
   });
 
@@ -138,22 +124,17 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
-    const query: ModelOverviewSearchQuery = {
-      items: pinnedItems,
+  getUnpinnedData(query: ComparisonToolQuery) {
+    const apiQuery: ModelOverviewSearchQuery = {
+      items: query.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber,
-      pageSize,
-      search: searchTerm,
+      pageNumber: query.pageNumber,
+      pageSize: query.pageSize,
+      search: query.searchTerm,
     };
 
     this.modelOverviewService
-      .getModelOverviews(query)
+      .getModelOverviews(apiQuery)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: ModelOverviewsPage) => {
