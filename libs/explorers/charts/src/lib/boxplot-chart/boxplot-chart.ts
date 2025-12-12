@@ -79,6 +79,7 @@ export class BoxplotChart {
     xAxisCategories: string[],
     xAxisLabelFormatter: BoxplotProps['xAxisLabelFormatter'],
     xAxisLabelTooltipFormatter: BoxplotProps['xAxisLabelTooltipFormatter'],
+    chartStyle: string,
   ) {
     // Use two xAxes:
     //  - value: used to jitter points with multiple pointCategories, where
@@ -113,7 +114,7 @@ export class BoxplotChart {
         data: xAxisCategories,
         axisLabel: {
           color: 'black',
-          fontWeight: 'bold',
+          fontWeight: chartStyle === 'grayGrid' ? 'normal' : 'bold',
           fontSize: '14px',
           interval: 0, // ensure all labels are shown
           formatter: (value) => {
@@ -151,12 +152,18 @@ export class BoxplotChart {
     yAxisMax: BoxplotProps['yAxisMax'],
     chartStyle: BoxplotProps['chartStyle'],
   ) {
+    const grayGridTextStyle = {
+      fontWeight: 400,
+      fontSize: '14px',
+      color: 'black',
+    };
+
     const yAxisOptions: EChartsOption['yAxis'] = {
       type: 'value',
       name: yAxisTitle,
       nameLocation: 'middle',
       nameGap: Y_AXIS_TICK_LABELS_MAX_WIDTH,
-      nameTextStyle: titleTextStyle,
+      nameTextStyle: chartStyle === 'grayGrid' ? grayGridTextStyle : titleTextStyle,
       axisLine: {
         show: true,
       },
@@ -389,7 +396,12 @@ export class BoxplotChart {
         enabled: true,
       },
       dataset: datasetOpts,
-      xAxis: this.getXAxisOptions(xAxisCategories, xAxisLabelFormatter, xAxisLabelTooltipFormatter),
+      xAxis: this.getXAxisOptions(
+        xAxisCategories,
+        xAxisLabelFormatter,
+        xAxisLabelTooltipFormatter,
+        chartStyle,
+      ),
       yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax, chartStyle),
       tooltip: {
         confine: true,
