@@ -8,9 +8,13 @@
  * Do not edit the class manually.
  */
 
-export type OrgSagebionetworksRepoModelGridUpdateOnMatchFailure = 'SET_NULL' | 'SKIP_UPDATE';
+export type OrgSagebionetworksRepoModelGridUpdateOnMatchFailure =
+  | 'SET_NULL'
+  | 'SET_UNDEFINED'
+  | 'SKIP_UPDATE';
 
 export const OrgSagebionetworksRepoModelGridUpdateOnMatchFailure = {
   SetNull: 'SET_NULL' as OrgSagebionetworksRepoModelGridUpdateOnMatchFailure,
+  SetUndefined: 'SET_UNDEFINED' as OrgSagebionetworksRepoModelGridUpdateOnMatchFailure,
   SkipUpdate: 'SKIP_UPDATE' as OrgSagebionetworksRepoModelGridUpdateOnMatchFailure,
 };

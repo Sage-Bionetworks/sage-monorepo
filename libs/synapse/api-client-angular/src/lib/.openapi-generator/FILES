@@ -497,8 +497,10 @@ model/org-sagebionetworks-repo-model-grid-update-grid-update-request.ts
 model/org-sagebionetworks-repo-model-grid-update-grid-update-response.ts
 model/org-sagebionetworks-repo-model-grid-update-literal-set-value.ts
 model/org-sagebionetworks-repo-model-grid-update-on-match-failure.ts
-model/org-sagebionetworks-repo-model-grid-update-regex-extract-set-value.ts
+model/org-sagebionetworks-repo-model-grid-update-on-missing-value.ts
 model/org-sagebionetworks-repo-model-grid-update-set-value.ts
+model/org-sagebionetworks-repo-model-grid-update-template-set-value.ts
+model/org-sagebionetworks-repo-model-grid-update-update-batch.ts
 model/org-sagebionetworks-repo-model-grid-update-update.ts
 model/org-sagebionetworks-repo-model-has-accessor-requirement.ts
 model/org-sagebionetworks-repo-model-has-etag.ts

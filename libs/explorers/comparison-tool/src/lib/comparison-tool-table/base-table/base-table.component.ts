@@ -36,6 +36,7 @@ export class BaseTableComponent {
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;
   totalRecords = this.comparisonToolService.totalResultsCount;
+  first = this.comparisonToolService.first;
 
   data = input.required<Record<string, any>[]>();
   shouldPaginate = input<boolean>(true);

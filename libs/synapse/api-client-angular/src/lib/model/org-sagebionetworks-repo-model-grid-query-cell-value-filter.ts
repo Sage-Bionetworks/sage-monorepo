@@ -13,7 +13,7 @@
  */
 export interface OrgSagebionetworksRepoModelGridQueryCellValueFilter {
   /**
-   * Required. Must be a properly quoted JSON string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIdFilter\"
+   * Required. Must be a string matching one of: \"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter\", \"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter\", \"org.sagebionetworks.repo.model.grid.query.CellValueFilter\", \"org.sagebionetworks.repo.model.grid.query.RowIdFilter\"
    */
   concreteType: OrgSagebionetworksRepoModelGridQueryCellValueFilter.ConcreteTypeEnum;
   /**

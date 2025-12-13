@@ -14,6 +14,20 @@ export interface VisualizationOverviewPane {
   content: string;
 }
 
+export type SortOrdersEnum = 1 | -1;
+
+export interface ComparisonToolQuery {
+  categories: string[];
+  pinnedItems: string[];
+  pageNumber: number;
+  pageSize: number;
+  multiSortMeta: { field: string; order: number }[];
+  searchTerm: string | null;
+  filters: ComparisonToolFilter[];
+  sortFields: string[];
+  sortOrders: SortOrdersEnum[];
+}
+
 export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
   headerTitle: string;
@@ -26,7 +40,7 @@ export interface ComparisonToolViewConfig {
   visualizationOverviewPanes: VisualizationOverviewPane[];
   rowsPerPage: number;
   rowIdDataKey: string;
-  defaultSort?: Array<{ field: string; order: 1 | -1 }>;
+  defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
 }
 
 export interface ComparisonToolFilterOption {

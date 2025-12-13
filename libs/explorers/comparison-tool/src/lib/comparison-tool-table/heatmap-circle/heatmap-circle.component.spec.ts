@@ -3,6 +3,7 @@ import { HeatmapCircleData } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolFilterService,
   provideComparisonToolFilterService,
+  provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import { render } from '@testing-library/angular';
 import { HeatmapCircleComponent } from './heatmap-circle.component';
@@ -10,7 +11,7 @@ import { HeatmapCircleComponent } from './heatmap-circle.component';
 async function setup<T extends HeatmapCircleData>(data: T) {
   const component = await render(HeatmapCircleComponent, {
     imports: [RouterModule],
-    providers: [...provideComparisonToolFilterService()],
+    providers: [...provideComparisonToolService(), ...provideComparisonToolFilterService()],
     componentInputs: {
       data,
     },

@@ -44,10 +44,6 @@ export const provideComparisonToolService = (
 ): Provider[] => {
   const useUrlSync = options?.urlSync ?? false;
 
-  if (!options) {
-    return [ComparisonToolUrlService, ComparisonToolService];
-  }
-
   const providers: Provider[] = [MessageService, NotificationService];
 
   if (useUrlSync) {
@@ -56,10 +52,10 @@ export const provideComparisonToolService = (
     providers.push({ provide: ComparisonToolUrlService, useClass: ComparisonToolUrlServiceStub });
   }
 
-  if (options.router) {
+  if (options?.router) {
     providers.push({ provide: Router, useValue: options.router });
   }
-  if (options.activatedRoute) {
+  if (options?.activatedRoute) {
     providers.push({ provide: ActivatedRoute, useValue: options.activatedRoute });
   }
 
@@ -68,6 +64,8 @@ export const provideComparisonToolService = (
     useFactory: () => {
       const service = new ComparisonToolService();
       const urlService = inject(ComparisonToolUrlService);
+
+      if (!options) return service;
 
       if (options.configs) {
         service.connect({

@@ -1,11 +1,10 @@
-import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { SortMeta } from 'primeng/api';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
-  ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolUrlService,
   PlatformService,
@@ -37,16 +36,12 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly modelOverviewService = inject(ModelOverviewService);
   private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
-  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
 
-  pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
-  multiSortMeta = this.comparisonToolService.multiSortMeta;
-
-  currentPageNumber = this.comparisonToolService.pageNumber;
-  currentPageSize = this.comparisonToolService.pageSize;
-  searchTerm = this.comparisonToolFilterService.searchTerm;
+  query = this.comparisonToolService.query;
+  private readonly pinnedItems = computed(() => this.query().pinnedItems);
+  private readonly multiSortMeta = computed(() => this.query().multiSortMeta);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
@@ -105,30 +100,22 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
-
-    // Effect for pinned data - only depends on pins and sort
-    effect(() => {
-      if (this.platformService.isBrowser && this.isInitialized()) {
-        const pinnedItems = Array.from(this.pinnedItems());
-        const sortMeta = this.multiSortMeta();
-        this.getPinnedData(pinnedItems, sortMeta);
-      }
-    });
-
-    // Effect for unpinned data - depends on all params including pagination and search
-    effect(() => {
-      if (this.platformService.isBrowser && this.isInitialized()) {
-        const pinnedItems = Array.from(this.pinnedItems());
-        this.getUnpinnedData(
-          pinnedItems,
-          this.currentPageNumber(),
-          this.currentPageSize(),
-          this.searchTerm(),
-          this.multiSortMeta(),
-        );
-      }
-    });
   }
+
+  readonly pinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const pinnedItems = this.pinnedItems();
+      const sortMeta = this.multiSortMeta();
+      this.getPinnedData(pinnedItems, sortMeta);
+    }
+  });
+
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const sortMeta = this.multiSortMeta();
+      this.getUnpinnedData(sortMeta);
+    }
+  });
 
   ngOnInit() {
     if (this.platformService.isServer) {
@@ -145,21 +132,15 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-    sortMeta: SortMeta[],
-  ) {
+  getUnpinnedData(sortMeta: SortMeta[]) {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
 
     const query: ModelOverviewSearchQuery = {
-      items: pinnedItems,
+      items: this.pinnedItems(),
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber,
-      pageSize,
-      search: searchTerm ?? undefined,
+      pageNumber: this.query().pageNumber,
+      pageSize: this.query().pageSize,
+      search: this.query().searchTerm,
       sortFields,
       sortOrders,
     };

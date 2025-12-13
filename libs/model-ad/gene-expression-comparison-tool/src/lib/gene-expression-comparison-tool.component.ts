@@ -1,15 +1,15 @@
-import { Component, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
+import { Component, computed, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { SortMeta } from 'primeng/api';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
+  ComparisonToolQuery,
   ComparisonToolViewConfig,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import {
-  ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolUrlService,
   PlatformService,
@@ -42,15 +42,12 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   private readonly geneExpressionService = inject(GeneExpressionService);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
-  multiSortMeta = this.comparisonToolService.multiSortMeta;
-
-  currentPageNumber = this.comparisonToolService.pageNumber;
-  currentPageSize = this.comparisonToolService.pageSize;
-  searchTerm = this.comparisonToolFilterService.searchTerm;
+  query = this.comparisonToolService.query;
+  dropdownSelection = this.comparisonToolService.dropdownSelection;
+  private readonly pinnedItems = computed(() => this.query().pinnedItems);
+  private readonly multiSortMeta = computed(() => this.query().multiSortMeta);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
@@ -125,41 +122,26 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
-
-    // Effect for pinned data - only depends on selection, pins, and sort
-    effect(() => {
-      if (this.platformService.isBrowser && this.isInitialized()) {
-        const selection = this.comparisonToolService.dropdownSelection();
-        if (!selection.length) {
-          return;
-        }
-
-        const pinnedItems = Array.from(this.pinnedItems());
-        const sortMeta = this.multiSortMeta();
-        this.getPinnedData(selection, pinnedItems, sortMeta);
-      }
-    });
-
-    // Effect for unpinned data - depends on all params including pagination
-    effect(() => {
-      if (this.platformService.isBrowser && this.isInitialized()) {
-        const selection = this.comparisonToolService.dropdownSelection();
-        if (!selection.length) {
-          return;
-        }
-
-        const pinnedItems = Array.from(this.pinnedItems());
-        this.getUnpinnedData(
-          selection,
-          pinnedItems,
-          this.currentPageNumber(),
-          this.currentPageSize(),
-          this.searchTerm(),
-          this.multiSortMeta(),
-        );
-      }
-    });
   }
+
+  // Effect for pinned data - only re-fetch when pinnedItems or categories change
+  readonly pinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const selection = this.dropdownSelection();
+      const pinnedItems = this.pinnedItems();
+      const sortMeta = this.multiSortMeta();
+      this.getPinnedData(selection, pinnedItems, sortMeta);
+    }
+  });
+
+  // Effect for unpinned data - re-fetch when any query param or categories change
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const selection = this.comparisonToolService.dropdownSelection();
+      const sortMeta = this.multiSortMeta();
+      this.getUnpinnedData(selection, sortMeta);
+    }
+  });
 
   ngOnInit() {
     if (this.platformService.isServer) {
@@ -176,24 +158,16 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(
-    selection: string[],
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-    sortMeta: SortMeta[],
-  ) {
+  getUnpinnedData(selection: string[], sortMeta: SortMeta[]) {
     const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
-    const search = searchTerm ?? undefined;
 
     const query: GeneExpressionSearchQuery = {
       categories: selection,
-      items: pinnedItems,
+      items: this.pinnedItems(),
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber,
-      pageSize,
-      search,
+      pageNumber: this.query().pageNumber,
+      pageSize: this.query().pageSize,
+      search: this.query().searchTerm,
       sortFields,
       sortOrders,
     };
