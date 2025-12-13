@@ -17,7 +17,8 @@ properties:
     maximum: 100
     example: 100
   items:
-    description: List of item names to filter by.
+    description: |
+      List of item names to filter by.
     type: array
     items:
       type: string
@@ -29,9 +30,32 @@ properties:
   search:
     description: |
       Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
-      Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when 
+      Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when
       itemFilterType is 'exclude'.
     type: string
     nullable: true
     example: '3xtg-ad,5xfad'
-required: []
+  sortFields:
+    description: |
+      List of field names to sort by (e.g., ["model_type", "name"]).
+      Each field in sortFields must have a corresponding order in sortOrders.
+    type: array
+    items:
+      type: string
+    minItems: 1
+    example: ['model_type', 'name']
+  sortOrders:
+    description: |
+      List of sort directions corresponding to sortFields.
+      Values: 1 (ascending) or -1 (descending).
+      Must have the same length as sortFields.
+    type: array
+    items:
+      type: integer
+      format: int32
+      enum: [1, -1]
+    minItems: 1
+    example: [-1, 1]
+required:
+  - sortFields
+  - sortOrders

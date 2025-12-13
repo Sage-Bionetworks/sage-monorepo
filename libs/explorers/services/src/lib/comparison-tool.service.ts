@@ -9,7 +9,7 @@ import {
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
-import { SortEvent, SortMeta } from 'primeng/api';
+import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs';
@@ -36,14 +36,14 @@ export class ComparisonToolService<T> {
   // this cutoff may need to be included in the ui_config instead, so the cutoff can be set per tool.
   private readonly DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL = 2;
   private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
-  readonly INITIAL_PAGE_NUMBER = 0;
+  readonly FIRST_PAGE_NUMBER = 0;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
     headerTitle: '',
     filterResultsButtonTooltip: 'Filter results',
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
-    viewDetailsClick: (id: string, label: string) => {
+    viewDetailsClick: (_id: string, _label: string) => {
       return;
     },
     legendEnabled: true,
@@ -75,11 +75,13 @@ export class ComparisonToolService<T> {
   private readonly querySignal = signal<ComparisonToolQuery>({
     categories: [],
     pinnedItems: [],
-    pageNumber: this.INITIAL_PAGE_NUMBER,
+    pageNumber: this.FIRST_PAGE_NUMBER,
     pageSize: 10,
     multiSortMeta: this.DEFAULT_MULTI_SORT_META,
     searchTerm: null,
     filters: [],
+    sortFields: [],
+    sortOrders: [],
   });
   private readonly isInitializedSignal = signal(false);
 
@@ -114,13 +116,15 @@ export class ComparisonToolService<T> {
       const isInitialized = this.isInitialized();
       const syncingToUrl = this.syncToUrlInProgress();
       const isActive = this.coordinatorService.isActive(this);
+
       if (!isInitialized || syncingToUrl || !isActive) {
         return;
       }
 
       const pinnedItems = this.pinnedItems();
       const dropdownSelection = this.dropdownSelection();
-      const state = this.serializeSyncState(pinnedItems, dropdownSelection);
+      const multiSortMeta = this.multiSortMeta();
+      const state = this.serializeSyncState(pinnedItems, dropdownSelection, multiSortMeta);
 
       this.syncStateToUrl(state);
     });
@@ -200,7 +204,7 @@ export class ComparisonToolService<T> {
     this.configsSignal.set(configs ?? []);
 
     const selection = this.resolveInitialDropdownSelection(params, configs);
-    this.updateQuery({ categories: selection, pageNumber: this.INITIAL_PAGE_NUMBER });
+    this.updateQuery({ categories: selection, pageNumber: this.FIRST_PAGE_NUMBER });
 
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
     for (const config of configs) {
@@ -215,6 +219,15 @@ export class ComparisonToolService<T> {
     this.initialSelection = undefined;
 
     this.resolveUrlState(params, { isInitial: true });
+
+    // Apply default sort if no URL sort params were applied
+    if (this.querySignal().multiSortMeta.length === 0) {
+      const defaultSort = this.viewConfigSignal().defaultSort;
+      if (defaultSort && defaultSort.length > 0) {
+        const { sortFields, sortOrders } = this.convertSortMetaToArrays(defaultSort as SortMeta[]);
+        this.updateQuery({ sortFields, sortOrders, multiSortMeta: defaultSort as SortMeta[] });
+      }
+    }
 
     this.isInitializedSignal.set(true);
   }
@@ -445,7 +458,7 @@ export class ComparisonToolService<T> {
     this.updateQuery({
       categories: selection,
       pinnedItems: cachedPinnedItems ? Array.from(cachedPinnedItems) : [],
-      pageNumber: this.INITIAL_PAGE_NUMBER,
+      pageNumber: this.FIRST_PAGE_NUMBER,
     });
   }
 
@@ -527,9 +540,47 @@ export class ComparisonToolService<T> {
     });
   }
 
-  setSort(event: SortEvent) {
-    const multiSortMeta = event.multiSortMeta || this.DEFAULT_MULTI_SORT_META;
-    this.updateQuery({ pageNumber: this.INITIAL_PAGE_NUMBER, multiSortMeta });
+  setSort(multiSortMeta: SortMeta[]) {
+    const newSort = multiSortMeta || this.DEFAULT_MULTI_SORT_META;
+    const currentSort = this.querySignal().multiSortMeta;
+
+    // Early return if arrays are reference-equal
+    if (currentSort === newSort) {
+      return;
+    }
+
+    // Only update if the sort has actually changed (deep equality check)
+    if (isEqual(currentSort, newSort)) {
+      return;
+    }
+
+    // If clearing sort (empty array), apply default sort if configured
+    if (newSort.length === 0) {
+      const defaultSort = this.viewConfigSignal().defaultSort;
+      if (defaultSort && defaultSort.length > 0) {
+        const { sortFields, sortOrders } = this.convertSortMetaToArrays(defaultSort as SortMeta[]);
+        this.updateQuery({
+          pageNumber: this.FIRST_PAGE_NUMBER,
+          multiSortMeta: defaultSort as SortMeta[],
+          sortFields,
+          sortOrders,
+        });
+        return;
+      }
+    }
+
+    // Deep clone to create new object references for Angular change detection
+    // This ensures immutability and prevents external mutations from affecting our state
+    const clonedSort = newSort.map((s) => ({ field: s.field, order: s.order }));
+
+    // reset page to the first page when sort changes
+    const { sortFields, sortOrders } = this.convertSortMetaToArrays(clonedSort);
+    this.updateQuery({
+      pageNumber: this.FIRST_PAGE_NUMBER,
+      multiSortMeta: clonedSort,
+      sortFields,
+      sortOrders,
+    });
   }
 
   private resolveUrlState(params: ComparisonToolUrlParams, options: { isInitial: boolean }): void {
@@ -545,7 +596,7 @@ export class ComparisonToolService<T> {
       const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
       // Only update if different to avoid loops
       if (!isEqual(normalizedSelection, this.dropdownSelection())) {
-        this.updateQuery({ categories: normalizedSelection, pageNumber: this.INITIAL_PAGE_NUMBER });
+        this.updateQuery({ categories: normalizedSelection, pageNumber: this.FIRST_PAGE_NUMBER });
       }
     }
 
@@ -557,18 +608,17 @@ export class ComparisonToolService<T> {
       this.setPinnedItems(urlPinnedItems);
       this.updateSerializedStateCache();
       this.initialPinsResolved = true;
-      this.syncToUrlInProgress.set(false);
+      if (!options.isInitial) {
+        this.syncToUrlInProgress.set(false);
+      }
       return;
     }
 
     // First visit to this CT without URL pins - start with empty pins and sync to URL
     if (options.isInitial && !this.initialPinsResolved) {
       this.resetPinnedItems();
-
-      this.syncToUrlInProgress.set(false);
-      this.scheduleUrlSyncFromCurrentState();
-
       this.initialPinsResolved = true;
+      // Don't set syncToUrlInProgress to false here - let initializeFromConfig handle it
       return;
     }
 
@@ -584,9 +634,11 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    // No URL pins and no cached pins - clear everything and sync to URL
+    // No URL pins and no cached pins - clear everything and allow effect to run
     this.syncToUrlInProgress.set(false);
-    this.scheduleUrlSyncFromCurrentState();
+    if (!options.isInitial) {
+      this.scheduleUrlSyncFromCurrentState();
+    }
   }
 
   private syncStateToUrl(state: ComparisonToolUrlParams): void {
@@ -602,21 +654,89 @@ export class ComparisonToolService<T> {
   private serializeSyncState(
     pinnedItems: Set<string>,
     dropdownSelection: string[],
+    multiSortMeta: SortMeta[],
   ): ComparisonToolUrlParams {
     const pinned = Array.from(pinnedItems);
+    const { sortFields, sortOrders } = this.convertSortMetaToArrays(multiSortMeta);
+
     return {
       pinnedItems: pinned.length ? pinned : null,
       categories: dropdownSelection.length ? dropdownSelection : null,
+      sortFields: sortFields.length ? sortFields : null,
+      sortOrders: sortOrders.length ? sortOrders : null,
     };
   }
 
   private syncCurrentStateToUrl(): void {
-    this.syncStateToUrl(this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()));
+    this.syncStateToUrl(
+      this.serializeSyncState(this.pinnedItems(), this.dropdownSelection(), this.multiSortMeta()),
+    );
+  }
+
+  /**
+   * Converts PrimeNG SortMeta array to sortFields and sortOrders arrays.
+   */
+  convertSortMetaToArrays(multiSortMeta: SortMeta[]): {
+    sortFields: string[];
+    sortOrders: (1 | -1)[];
+  } {
+    if (!multiSortMeta || multiSortMeta.length === 0) {
+      return { sortFields: [], sortOrders: [] };
+    }
+
+    const sortFields: string[] = [];
+    const sortOrders: (1 | -1)[] = [];
+
+    for (const meta of multiSortMeta) {
+      if (meta.field) {
+        sortFields.push(meta.field);
+        sortOrders.push((meta.order ?? 1) as 1 | -1);
+      }
+    }
+
+    return { sortFields, sortOrders };
+  }
+
+  /**
+   * Converts sort metadata to comma-delimited strings for API requests.
+   * This ensures the API receives sortFields=a,b&sortOrders=1,-1 instead of
+   * repeated parameters sortFields=a&sortFields=b which don't work with @InitBinder.
+   */
+  convertSortMetaToStrings(multiSortMeta: SortMeta[]): {
+    sortFields: string;
+    sortOrders: string;
+  } {
+    const { sortFields, sortOrders } = this.convertSortMetaToArrays(multiSortMeta);
+    return {
+      sortFields: sortFields.join(','),
+      sortOrders: sortOrders.join(','),
+    };
+  }
+
+  /**
+   * Converts sortFields and sortOrders arrays to PrimeNG SortMeta array.
+   */
+  convertArraysToSortMeta(sortFields?: string[] | null, sortOrders?: number[] | null): SortMeta[] {
+    if (!sortFields || !sortOrders || sortFields.length === 0 || sortOrders.length === 0) {
+      return [];
+    }
+
+    if (sortFields.length !== sortOrders.length) {
+      console.warn(
+        `sortFields and sortOrders length mismatch: ${sortFields.length} vs ${sortOrders.length}`,
+      );
+      return [];
+    }
+
+    return sortFields.map((field, index) => ({
+      field,
+      order: sortOrders[index],
+    }));
   }
 
   private updateSerializedStateCache(): void {
     this.lastSerializedState = JSON.stringify(
-      this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()),
+      this.serializeSyncState(this.pinnedItems(), this.dropdownSelection(), this.multiSortMeta()),
     );
   }
 

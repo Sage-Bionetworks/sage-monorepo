@@ -14,6 +14,8 @@ export interface VisualizationOverviewPane {
   content: string;
 }
 
+export type SortOrdersEnum = 1 | -1;
+
 export interface ComparisonToolQuery {
   categories: string[];
   pinnedItems: string[];
@@ -22,6 +24,8 @@ export interface ComparisonToolQuery {
   multiSortMeta: { field: string; order: number }[];
   searchTerm: string | null;
   filters: ComparisonToolFilter[];
+  sortFields: string[];
+  sortOrders: SortOrdersEnum[];
 }
 
 export interface ComparisonToolViewConfig {
@@ -36,6 +40,7 @@ export interface ComparisonToolViewConfig {
   visualizationOverviewPanes: VisualizationOverviewPane[];
   rowsPerPage: number;
   rowIdDataKey: string;
+  defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
 }
 
 export interface ComparisonToolFilterOption {
@@ -114,6 +119,8 @@ export type ComparisonToolLink = {
 export interface ComparisonToolUrlParams {
   pinnedItems?: string[] | null;
   categories?: string[] | null;
+  sortFields?: string[] | null;
+  sortOrders?: number[] | null;
 }
 
 export interface PaginationParams {

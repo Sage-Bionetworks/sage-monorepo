@@ -26,13 +26,27 @@ export interface DiseaseCorrelationSearchQuery {
    */
   categories: Array<string>;
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations.
+   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact combination. Multiple items can be provided to filter for multiple specific combinations.
    */
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
   /**
-   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: \'3xtg-ad,5xfad (uci)\' (comma-separated list) or \'fad\' (partial match). Only applied when  itemFilterType is \'exclude\'.
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: \'3xtg-ad,5xfad (uci)\' (comma-separated list) or \'fad\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */
   search?: string | null;
+  /**
+   * List of field names to sort by (e.g., [\"name\", \"age\", \"sex\"]). Each field in sortFields must have a corresponding order in sortOrders.
+   */
+  sortFields: Array<string>;
+  /**
+   * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
+   */
+  sortOrders: Array<DiseaseCorrelationSearchQuery.SortOrdersEnum>;
 }
-export namespace DiseaseCorrelationSearchQuery {}
+export namespace DiseaseCorrelationSearchQuery {
+  export type SortOrdersEnum = 1 | -1;
+  export const SortOrdersEnum = {
+    NUMBER_1: 1 as SortOrdersEnum,
+    NUMBER_MINUS_1: -1 as SortOrdersEnum,
+  };
+}

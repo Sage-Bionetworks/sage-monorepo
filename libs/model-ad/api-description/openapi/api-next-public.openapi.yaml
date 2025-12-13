@@ -175,7 +175,8 @@ components:
           maximum: 100
           example: 100
         items:
-          description: List of item names to filter by.
+          description: |
+            List of item names to filter by.
           type: array
           items:
             type: string
@@ -189,12 +190,41 @@ components:
         search:
           description: |
             Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
-            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when 
+            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when
             itemFilterType is 'exclude'.
           type: string
           nullable: true
           example: 3xtg-ad,5xfad
-      required: []
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["model_type", "name"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - model_type
+            - name
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - -1
+            - 1
+      required:
+        - sortFields
+        - sortOrders
     ModelOverviewLink:
       type: object
       description: Model Overview Link
@@ -355,7 +385,7 @@ components:
             List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
             where each identifier represents one complete combination of model name, age, and sex.
 
-            Example: "APOE4~4 months~Female" filters for documents matching that exact name, age, and sex.
+            Example: "APOE4~4 months~Female" filters for documents matching that exact combination.
             Multiple items can be provided to filter for multiple specific combinations.
           type: array
           items:
@@ -371,13 +401,44 @@ components:
         search:
           description: |
             Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
-            Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when 
+            Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when
             itemFilterType is 'exclude'.
           type: string
           nullable: true
           example: 3xtg-ad,5xfad (uci)
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["name", "age", "sex"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - name
+            - age
+            - sex
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - 1
+            - -1
+            - 1
       required:
         - categories
+        - sortFields
+        - sortOrders
     Sex:
       type: string
       description: Sex
@@ -517,13 +578,42 @@ components:
         search:
           description: |
             Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches).
-            Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when 
+            Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when
             itemFilterType is 'exclude'.
           type: string
           nullable: true
           example: gnai,cdc45
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., "gene_symbol,name").
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - gene_symbol
+            - name
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - 1
+            - -1
       required:
         - categories
+        - sortFields
+        - sortOrders
     SexCohort:
       type: string
       description: Sex Cohort

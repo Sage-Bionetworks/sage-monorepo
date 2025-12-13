@@ -1,8 +1,9 @@
 import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { SortMeta } from 'primeng/api';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolHelperService,
   ComparisonToolUrlService,
@@ -32,14 +33,15 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly modelOverviewService = inject(ModelOverviewService);
   private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
-  private readonly modelOverviewService = inject(ModelOverviewService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
   private readonly pinnedItems = computed(() => this.query().pinnedItems);
+  private readonly multiSortMeta = computed(() => this.query().multiSortMeta);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
@@ -90,6 +92,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
     rowIdDataKey: 'name',
+    defaultSort: [
+      { field: 'model_type', order: -1 },
+      { field: 'name', order: 1 },
+    ],
   };
 
   constructor() {
@@ -99,13 +105,15 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
       const pinnedItems = this.pinnedItems();
-      this.getPinnedData(pinnedItems);
+      const sortMeta = this.multiSortMeta();
+      this.getPinnedData(pinnedItems, sortMeta);
     }
   });
 
   readonly unpinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      this.getUnpinnedData(this.query());
+      const sortMeta = this.multiSortMeta();
+      this.getUnpinnedData(sortMeta);
     }
   });
 
@@ -124,17 +132,20 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(query: ComparisonToolQuery) {
-    const apiQuery: ModelOverviewSearchQuery = {
-      items: query.pinnedItems,
-      itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: query.pageNumber,
-      pageSize: query.pageSize,
-      search: query.searchTerm,
-    };
+  getUnpinnedData(sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
 
+    const query: ModelOverviewSearchQuery = {
+      items: this.pinnedItems(),
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      pageNumber: this.query().pageNumber,
+      pageSize: this.query().pageSize,
+      search: this.query().searchTerm,
+      sortFields,
+      sortOrders,
+    };
     this.modelOverviewService
-      .getModelOverviews(apiQuery)
+      .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: ModelOverviewsPage) => {
@@ -148,10 +159,14 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       });
   }
 
-  getPinnedData(pinnedItems: string[]) {
+  getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
     const query: ModelOverviewSearchQuery = {
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields,
+      sortOrders,
     };
 
     this.modelOverviewService

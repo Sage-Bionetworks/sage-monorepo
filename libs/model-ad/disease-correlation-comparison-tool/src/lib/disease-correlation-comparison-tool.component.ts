@@ -1,6 +1,7 @@
 import { Component, DestroyRef, OnDestroy, OnInit, computed, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { SortMeta } from 'primeng/api';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolQuery,
@@ -46,6 +47,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   query = this.comparisonToolService.query;
   dropdownSelection = this.comparisonToolService.dropdownSelection;
   private readonly pinnedItems = computed(() => this.query().pinnedItems);
+  private readonly multiSortMeta = computed(() => this.query().multiSortMeta);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
@@ -110,6 +112,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     ],
     rowsPerPage: 10,
     rowIdDataKey: 'composite_id',
+    defaultSort: [
+      { field: 'name', order: 1 },
+      { field: 'age', order: 1 },
+      { field: 'sex', order: 1 },
+    ],
   };
 
   constructor() {
@@ -119,23 +126,17 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
       const selection = this.dropdownSelection();
-      if (!selection.length) {
-        return;
-      }
-
       const pinnedItems = this.pinnedItems();
-      this.getPinnedData(selection, pinnedItems);
+      const sortMeta = this.multiSortMeta();
+      this.getPinnedData(selection, pinnedItems, sortMeta);
     }
   });
 
   readonly unpinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
       const selection = this.dropdownSelection();
-      if (!selection.length) {
-        return;
-      }
-
-      this.getUnpinnedData(selection, this.query());
+      const sortMeta = this.multiSortMeta();
+      this.getUnpinnedData(selection, sortMeta);
     }
   });
 
@@ -154,18 +155,22 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(selection: string[], query: ComparisonToolQuery) {
-    const apiQuery: DiseaseCorrelationSearchQuery = {
+  getUnpinnedData(selection: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
+    const query: DiseaseCorrelationSearchQuery = {
       categories: selection,
-      items: query.pinnedItems,
+      items: this.pinnedItems(),
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: query.pageNumber,
-      pageSize: query.pageSize,
-      search: query.searchTerm,
+      pageNumber: this.query().pageNumber,
+      pageSize: this.query().pageSize,
+      search: this.query().searchTerm,
+      sortFields,
+      sortOrders,
     };
 
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(apiQuery)
+      .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: DiseaseCorrelationsPage) => {
@@ -180,15 +185,19 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       });
   }
 
-  getPinnedData(selection: string[], pinnedItems: string[]) {
-    const apiQuery: DiseaseCorrelationSearchQuery = {
+  getPinnedData(selection: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
+    const query: DiseaseCorrelationSearchQuery = {
       categories: selection,
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields,
+      sortOrders,
     };
 
     this.diseaseCorrelationService
-      .getDiseaseCorrelations(apiQuery)
+      .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: DiseaseCorrelationsPage) => {

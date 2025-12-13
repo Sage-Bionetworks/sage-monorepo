@@ -43,6 +43,47 @@ public class DiseaseCorrelationSearchQueryDto {
 
   private @Nullable String search = null;
 
+  @Valid
+  private List<String> sortFields = new ArrayList<>();
+
+  /**
+   * Gets or Sets sortOrders
+   */
+  public enum SortOrdersEnum {
+    NUMBER_1(1),
+    
+    NUMBER_MINUS_1(-1);
+
+    private final Integer value;
+
+    SortOrdersEnum(Integer value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public Integer getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static SortOrdersEnum fromValue(Integer value) {
+      for (SortOrdersEnum b : SortOrdersEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  @Valid
+  private List<SortOrdersEnum> sortOrders = new ArrayList<>();
+
   public DiseaseCorrelationSearchQueryDto() {
     super();
   }
@@ -50,8 +91,10 @@ public class DiseaseCorrelationSearchQueryDto {
   /**
    * Constructor with only required parameters
    */
-  public DiseaseCorrelationSearchQueryDto(List<String> categories) {
+  public DiseaseCorrelationSearchQueryDto(List<String> categories, List<String> sortFields, List<SortOrdersEnum> sortOrders) {
     this.categories = categories;
+    this.sortFields = sortFields;
+    this.sortOrders = sortOrders;
   }
 
   public DiseaseCorrelationSearchQueryDto pageNumber(Integer pageNumber) {
@@ -139,11 +182,11 @@ public class DiseaseCorrelationSearchQueryDto {
   }
 
   /**
-   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations. 
+   * List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact combination. Multiple items can be provided to filter for multiple specific combinations. 
    * @return items
    */
   
-  @Schema(name = "items", example = "[\"APOE4~4 months~Female\",\"APOE4~8 months~Male\",\"5xFAD (IU/Jax/Pitt)~12 months~Female\"]", description = "List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact name, age, and sex. Multiple items can be provided to filter for multiple specific combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "items", example = "[\"APOE4~4 months~Female\",\"APOE4~8 months~Male\",\"5xFAD (IU/Jax/Pitt)~12 months~Female\"]", description = "List of composite identifiers to filter by. Each identifier uses the format \"name~age~sex\" where each identifier represents one complete combination of model name, age, and sex.  Example: \"APOE4~4 months~Female\" filters for documents matching that exact combination. Multiple items can be provided to filter for multiple specific combinations. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("items")
   public @Nullable List<String> getItems() {
     return items;
@@ -179,11 +222,11 @@ public class DiseaseCorrelationSearchQueryDto {
   }
 
   /**
-   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'. 
+   * Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when itemFilterType is 'exclude'. 
    * @return search
    */
   
-  @Schema(name = "search", example = "3xtg-ad,5xfad (uci)", description = "Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when  itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "search", example = "3xtg-ad,5xfad (uci)", description = "Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches). Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("search")
   public @Nullable String getSearch() {
     return search;
@@ -191,6 +234,62 @@ public class DiseaseCorrelationSearchQueryDto {
 
   public void setSearch(@Nullable String search) {
     this.search = search;
+  }
+
+  public DiseaseCorrelationSearchQueryDto sortFields(List<String> sortFields) {
+    this.sortFields = sortFields;
+    return this;
+  }
+
+  public DiseaseCorrelationSearchQueryDto addSortFieldsItem(String sortFieldsItem) {
+    if (this.sortFields == null) {
+      this.sortFields = new ArrayList<>();
+    }
+    this.sortFields.add(sortFieldsItem);
+    return this;
+  }
+
+  /**
+   * List of field names to sort by (e.g., [\"name\", \"age\", \"sex\"]). Each field in sortFields must have a corresponding order in sortOrders. 
+   * @return sortFields
+   */
+  @NotNull @Size(min = 1) 
+  @Schema(name = "sortFields", example = "[\"name\",\"age\",\"sex\"]", description = "List of field names to sort by (e.g., [\"name\", \"age\", \"sex\"]). Each field in sortFields must have a corresponding order in sortOrders. ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("sortFields")
+  public List<String> getSortFields() {
+    return sortFields;
+  }
+
+  public void setSortFields(List<String> sortFields) {
+    this.sortFields = sortFields;
+  }
+
+  public DiseaseCorrelationSearchQueryDto sortOrders(List<SortOrdersEnum> sortOrders) {
+    this.sortOrders = sortOrders;
+    return this;
+  }
+
+  public DiseaseCorrelationSearchQueryDto addSortOrdersItem(SortOrdersEnum sortOrdersItem) {
+    if (this.sortOrders == null) {
+      this.sortOrders = new ArrayList<>();
+    }
+    this.sortOrders.add(sortOrdersItem);
+    return this;
+  }
+
+  /**
+   * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. 
+   * @return sortOrders
+   */
+  @NotNull @Size(min = 1) 
+  @Schema(name = "sortOrders", example = "[1,-1,1]", description = "List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("sortOrders")
+  public List<SortOrdersEnum> getSortOrders() {
+    return sortOrders;
+  }
+
+  public void setSortOrders(List<SortOrdersEnum> sortOrders) {
+    this.sortOrders = sortOrders;
   }
 
   @Override
@@ -207,12 +306,14 @@ public class DiseaseCorrelationSearchQueryDto {
         Objects.equals(this.categories, diseaseCorrelationSearchQuery.categories) &&
         Objects.equals(this.items, diseaseCorrelationSearchQuery.items) &&
         Objects.equals(this.itemFilterType, diseaseCorrelationSearchQuery.itemFilterType) &&
-        Objects.equals(this.search, diseaseCorrelationSearchQuery.search);
+        Objects.equals(this.search, diseaseCorrelationSearchQuery.search) &&
+        Objects.equals(this.sortFields, diseaseCorrelationSearchQuery.sortFields) &&
+        Objects.equals(this.sortOrders, diseaseCorrelationSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search);
+    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search, sortFields, sortOrders);
   }
 
   @Override
@@ -225,6 +326,8 @@ public class DiseaseCorrelationSearchQueryDto {
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
+    sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
+    sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -259,6 +362,8 @@ public class DiseaseCorrelationSearchQueryDto {
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
       this.instance.setSearch(value.search);
+      this.instance.setSortFields(value.sortFields);
+      this.instance.setSortOrders(value.sortOrders);
       return this;
     }
 
@@ -289,6 +394,16 @@ public class DiseaseCorrelationSearchQueryDto {
     
     public DiseaseCorrelationSearchQueryDto.Builder search(String search) {
       this.instance.search(search);
+      return this;
+    }
+    
+    public DiseaseCorrelationSearchQueryDto.Builder sortFields(List<String> sortFields) {
+      this.instance.sortFields(sortFields);
+      return this;
+    }
+    
+    public DiseaseCorrelationSearchQueryDto.Builder sortOrders(List<SortOrdersEnum> sortOrders) {
+      this.instance.sortOrders(sortOrders);
       return this;
     }
     

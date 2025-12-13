@@ -21,6 +21,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -35,7 +36,8 @@ public class ModelOverviewService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('modelOverview', #query.itemFilterType, " +
-    "#query.items, #query.search, #query.pageNumber, #query.pageSize)"
+    "#query.items, #query.search, #query.pageNumber, #query.pageSize, " +
+    "#query.sortFields, #query.sortOrders)"
   )
   public ModelOverviewsPageDto loadModelOverviews(ModelOverviewSearchQueryDto query) {
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
@@ -48,7 +50,13 @@ public class ModelOverviewService {
     int effectivePageNumber = Objects.requireNonNullElse(query.getPageNumber(), 0);
     int effectivePageSize = Objects.requireNonNullElse(query.getPageSize(), 100);
 
-    Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize);
+    List<Integer> sortOrders = query
+      .getSortOrders()
+      .stream()
+      .map(ModelOverviewSearchQueryDto.SortOrdersEnum::getValue)
+      .toList();
+    Sort sort = ApiHelper.createSort(query.getSortFields(), sortOrders);
+    Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize, sort);
     Page<ModelOverviewDocument> page;
 
     if (

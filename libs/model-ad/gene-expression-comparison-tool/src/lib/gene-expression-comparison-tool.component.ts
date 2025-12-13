@@ -1,6 +1,7 @@
-import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { SortMeta } from 'primeng/api';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolQuery,
@@ -46,6 +47,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   query = this.comparisonToolService.query;
   dropdownSelection = this.comparisonToolService.dropdownSelection;
   private readonly pinnedItems = computed(() => this.query().pinnedItems);
+  private readonly multiSortMeta = computed(() => this.query().multiSortMeta);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
@@ -68,7 +70,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   legendPanelConfig: LegendPanelConfig = {
     colorChartLowerLabel: 'Downregulated',
     colorChartUpperLabel: 'Upregulated',
-    colorChartText: `Circle color indicates the log2 fold change value. Red shades indicate reduced expression levels in AD patients compared  to controls, while blue shades indicate increased expression levels in AD patients relative to controls.`,
+    colorChartText: `Circle color indicates the log2 fold change value. Red shades indicate reduced expression levels in AD patients compared to controls, while blue shades indicate increased expression levels in AD patients relative to controls.`,
     sizeChartLowerLabel: 'Significant',
     sizeChartUpperLabel: 'Insignificant',
     sizeChartText: `Circle diameter indicates P-value. Larger circles indicate higher statistical significance, while smaller circles indicate lower statistical significance.`,
@@ -112,6 +114,10 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
     rowIdDataKey: 'composite_id',
+    defaultSort: [
+      { field: 'gene_symbol', order: 1 },
+      { field: 'name', order: 1 },
+    ],
   };
 
   constructor() {
@@ -122,24 +128,18 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
       const selection = this.dropdownSelection();
-      if (!selection.length) {
-        return;
-      }
-
       const pinnedItems = this.pinnedItems();
-      this.getPinnedData(selection, pinnedItems);
+      const sortMeta = this.multiSortMeta();
+      this.getPinnedData(selection, pinnedItems, sortMeta);
     }
   });
 
   // Effect for unpinned data - re-fetch when any query param or categories change
   readonly unpinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const selection = this.dropdownSelection();
-      if (!selection.length) {
-        return;
-      }
-
-      this.getUnpinnedData(selection, this.query());
+      const selection = this.comparisonToolService.dropdownSelection();
+      const sortMeta = this.multiSortMeta();
+      this.getUnpinnedData(selection, sortMeta);
     }
   });
 
@@ -158,18 +158,22 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(selection: string[], query: ComparisonToolQuery) {
-    const apiQuery: GeneExpressionSearchQuery = {
+  getUnpinnedData(selection: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
+    const query: GeneExpressionSearchQuery = {
       categories: selection,
-      items: query.pinnedItems,
+      items: this.pinnedItems(),
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: query.pageNumber,
-      pageSize: query.pageSize,
-      search: query.searchTerm,
+      pageNumber: this.query().pageNumber,
+      pageSize: this.query().pageSize,
+      search: this.query().searchTerm,
+      sortFields,
+      sortOrders,
     };
 
     this.geneExpressionService
-      .getGeneExpressions(apiQuery)
+      .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: GeneExpressionsPage) => {
@@ -184,15 +188,19 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       });
   }
 
-  getPinnedData(selection: string[], pinnedItems: string[]) {
-    const apiQuery: GeneExpressionSearchQuery = {
+  getPinnedData(selection: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
+    const query: GeneExpressionSearchQuery = {
       categories: selection,
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields,
+      sortOrders,
     };
 
     this.geneExpressionService
-      .getGeneExpressions(apiQuery)
+      .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: GeneExpressionsPage) => {

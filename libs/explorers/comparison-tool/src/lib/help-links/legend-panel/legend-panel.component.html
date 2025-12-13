@@ -1,22 +1,24 @@
-<p-dialog
-  header="Legend"
-  [visible]="comparisonToolService.isLegendVisible()"
-  (visibleChange)="comparisonToolService.setLegendVisibility($event)"
-  [modal]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [dismissableMask]="true"
-  styleClass="legend-panel"
->
-  <explorers-legend
-    [colorChartLowerLabel]="viewConfig().legendPanelConfig.colorChartLowerLabel"
-    [colorChartUpperLabel]="viewConfig().legendPanelConfig.colorChartUpperLabel"
-    [colorChartText]="viewConfig().legendPanelConfig.colorChartText"
-    [sizeChartLowerLabel]="viewConfig().legendPanelConfig.sizeChartLowerLabel"
-    [sizeChartUpperLabel]="viewConfig().legendPanelConfig.sizeChartUpperLabel"
-    [sizeChartText]="viewConfig().legendPanelConfig.sizeChartText"
-  ></explorers-legend>
-  <ng-template #footer>
-    <a (click)="openVisualizationOverviewDialog()">Visualization Overview</a>
-  </ng-template>
-</p-dialog>
+@if (platformService.isBrowser) {
+  <p-dialog
+    header="Legend"
+    [visible]="comparisonToolService.isLegendVisible()"
+    (visibleChange)="comparisonToolService.setLegendVisibility($event)"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    styleClass="legend-panel"
+  >
+    <explorers-legend
+      [colorChartLowerLabel]="viewConfig().legendPanelConfig.colorChartLowerLabel"
+      [colorChartUpperLabel]="viewConfig().legendPanelConfig.colorChartUpperLabel"
+      [colorChartText]="viewConfig().legendPanelConfig.colorChartText"
+      [sizeChartLowerLabel]="viewConfig().legendPanelConfig.sizeChartLowerLabel"
+      [sizeChartUpperLabel]="viewConfig().legendPanelConfig.sizeChartUpperLabel"
+      [sizeChartText]="viewConfig().legendPanelConfig.sizeChartText"
+    ></explorers-legend>
+    <ng-template #footer>
+      <a (click)="openVisualizationOverviewDialog()">Visualization Overview</a>
+    </ng-template>
+  </p-dialog>
+}

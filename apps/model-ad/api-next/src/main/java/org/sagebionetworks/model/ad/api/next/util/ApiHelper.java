@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
@@ -15,7 +16,86 @@ public final class ApiHelper {
 
   private static final String CACHE_CONTROL_VALUE = "no-cache, no-store, must-revalidate";
 
+  /**
+   * Base buffer size for cache key construction to accommodate fixed string components
+   * (prefix, separators, filterType, and list brackets).
+   */
+  private static final int BASE_CAPACITY_BUFFER = 50;
+
+  /**
+   * Estimated average size per extra part in cache key construction.
+   * Used to pre-allocate StringBuilder capacity.
+   */
+  private static final int ESTIMATED_PART_SIZE = 20;
+
   private ApiHelper() {}
+
+  /**
+   * Validates that sortFields and sortOrders have matching element counts.
+   * Note: Presence and non-emptiness are enforced by OpenAPI schema validation
+   * (@NotNull @Size(min = 1)), so this method only validates array length matching.
+   *
+   * @param sortFields List of sort field names (required, non-empty per OpenAPI schema)
+   * @param sortOrders List of sort orders (required, non-empty per OpenAPI schema)
+   * @throws IllegalArgumentException if arrays have different lengths
+   */
+  public static void validateSortParameters(List<String> sortFields, List<?> sortOrders) {
+    int fieldCount = sortFields.size();
+    int orderCount = sortOrders.size();
+
+    if (fieldCount != orderCount) {
+      throw new IllegalArgumentException(
+        String.format(
+          "sortFields and sortOrders must have the same number of elements. " +
+          "Got %d field(s) and %d order(s)",
+          fieldCount,
+          orderCount
+        )
+      );
+    }
+  }
+
+  /**
+   * Creates a Spring Data Sort object from sortFields and sortOrders lists.
+   * Returns Sort.unsorted() if no sort parameters are provided.
+   *
+   * @param sortFields list of field names to sort by
+   * @param sortOrders list of sort orders (1 for ascending, -1 for descending)
+   * @return Sort object for use with Spring Data repositories
+   */
+  public static Sort createSort(
+    @Nullable List<String> sortFields,
+    @Nullable List<Integer> sortOrders
+  ) {
+    if (sortFields == null || sortFields.isEmpty() || sortOrders == null || sortOrders.isEmpty()) {
+      return Sort.unsorted();
+    }
+
+    Sort sort = Sort.unsorted();
+    for (int i = 0; i < sortFields.size(); i++) {
+      String field = sortFields.get(i);
+      Integer order = sortOrders.get(i);
+      Sort.Direction direction = (order != null && order < 0)
+        ? Sort.Direction.DESC
+        : Sort.Direction.ASC;
+      sort = sort.and(Sort.by(direction, field));
+    }
+    return sort;
+  }
+
+  /**
+   * Sanitizes a list of items by filtering out null values.
+   * Returns an empty list if the input is null.
+   *
+   * @param rawItems list of items to sanitize
+   * @return list of non-null strings
+   */
+  public static List<String> sanitizeItems(@Nullable List<String> rawItems) {
+    if (rawItems == null) {
+      return List.of();
+    }
+    return rawItems.stream().filter(Objects::nonNull).toList();
+  }
 
   public static HttpHeaders createNoCacheHeaders(MediaType mediaType) {
     HttpHeaders headers = new HttpHeaders();
@@ -24,13 +104,6 @@ public final class ApiHelper {
     headers.setExpires(0);
     headers.setContentType(mediaType);
     return headers;
-  }
-
-  public static List<String> sanitizeItems(@Nullable List<String> rawItems) {
-    if (rawItems == null) {
-      return List.of();
-    }
-    return rawItems.stream().filter(Objects::nonNull).toList();
   }
 
   public static List<ObjectId> parseObjectIds(List<String> items) {
@@ -44,20 +117,57 @@ public final class ApiHelper {
     }
   }
 
+  /**
+   * Builds a cache key string from the provided components.
+   * Optimized to avoid unnecessary object allocations.
+   *
+   * @param prefix the cache key prefix
+   * @param filterType the filter type (can be null)
+   * @param items the list of items to include in the key
+   * @param extraParts additional parts to append to the key
+   * @return the constructed cache key
+   */
   public static String buildCacheKey(
     String prefix,
     ItemFilterTypeQueryDto filterType,
     List<String> items,
     Object... extraParts
   ) {
-    StringBuilder builder = new StringBuilder(prefix)
+    // Pre-calculate capacity to avoid StringBuilder reallocations during building
+    int capacity =
+      prefix.length() +
+      BASE_CAPACITY_BUFFER +
+      (extraParts != null ? extraParts.length * ESTIMATED_PART_SIZE : 0);
+    StringBuilder builder = new StringBuilder(capacity);
+
+    builder
+      .append(prefix)
       .append('-')
       .append(filterType != null ? filterType.getValue() : "null")
-      .append('-')
-      .append(items);
+      .append('-');
 
-    if (extraParts != null && extraParts.length > 0) {
-      Arrays.stream(extraParts).forEach(part -> builder.append('-').append(Objects.toString(part)));
+    // Manually build list representation to avoid creating intermediate String from List.toString()
+    // This directly appends each item to StringBuilder instead of:
+    //   1. Calling items.toString() which creates "[item1, item2, item3]" string
+    //   2. Then copying that string into StringBuilder
+    if (items != null && !items.isEmpty()) {
+      builder.append('[');
+      for (int i = 0; i < items.size(); i++) {
+        if (i > 0) {
+          builder.append(',');
+        }
+        builder.append(items.get(i));
+      }
+      builder.append(']');
+    } else {
+      builder.append("[]");
+    }
+
+    // Use simple for-each instead of Stream to avoid Stream object allocation
+    if (extraParts != null) {
+      for (Object part : extraParts) {
+        builder.append('-').append(Objects.toString(part));
+      }
     }
 
     return builder.toString();
@@ -69,9 +179,7 @@ public final class ApiHelper {
    * @param commaSeparatedNames comma-separated list of names
    * @return list of compiled regex patterns for case-insensitive exact matching
    */
-  public static List<Pattern> createCaseInsensitiveFullMatchPatterns(
-    String commaSeparatedNames
-  ) {
+  public static List<Pattern> createCaseInsensitiveFullMatchPatterns(String commaSeparatedNames) {
     return Arrays.stream(commaSeparatedNames.split(","))
       .map(String::trim)
       .filter(s -> !s.isEmpty())
