@@ -31,8 +31,22 @@ export interface GeneExpressionSearchQuery {
   items?: Array<string> | null;
   itemFilterType?: ItemFilterTypeQuery;
   /**
-   * Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches). Examples: \'gnai,cdc45\' (comma-separated list) or \'gna\' (partial match). Only applied when  itemFilterType is \'exclude\'.
+   * Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches). Examples: \'gnai,cdc45\' (comma-separated list) or \'gna\' (partial match). Only applied when itemFilterType is \'exclude\'.
    */
   search?: string | null;
+  /**
+   * List of field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders.
+   */
+  sortFields: Array<string>;
+  /**
+   * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields.
+   */
+  sortOrders: Array<GeneExpressionSearchQuery.SortOrdersEnum>;
 }
-export namespace GeneExpressionSearchQuery {}
+export namespace GeneExpressionSearchQuery {
+  export type SortOrdersEnum = 1 | -1;
+  export const SortOrdersEnum = {
+    NUMBER_1: 1 as SortOrdersEnum,
+    NUMBER_MINUS_1: -1 as SortOrdersEnum,
+  };
+}

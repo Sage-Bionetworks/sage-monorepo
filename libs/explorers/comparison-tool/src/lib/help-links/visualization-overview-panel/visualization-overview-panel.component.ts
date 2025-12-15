@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewEncapsulation, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ComparisonToolService } from '@sagebionetworks/explorers/services';
+import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
@@ -15,6 +15,7 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class VisualizationOverviewPanelComponent {
   comparisonToolService = inject(ComparisonToolService);
+  platformService = inject(PlatformService);
   viewConfig = this.comparisonToolService.viewConfig;
 
   willHide = this.comparisonToolService.isVisualizationOverviewHiddenByUser;

@@ -14,6 +14,8 @@ export interface VisualizationOverviewPane {
   content: string;
 }
 
+export type SortOrder = 1 | -1;
+
 export interface ComparisonToolQuery {
   categories: string[];
   pinnedItems: string[];
@@ -36,6 +38,7 @@ export interface ComparisonToolViewConfig {
   visualizationOverviewPanes: VisualizationOverviewPane[];
   rowsPerPage: number;
   rowIdDataKey: string;
+  defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
 }
 
 export interface ComparisonToolFilterOption {
@@ -114,6 +117,8 @@ export type ComparisonToolLink = {
 export interface ComparisonToolUrlParams {
   pinnedItems?: string[] | null;
   categories?: string[] | null;
+  sortFields?: string[] | null;
+  sortOrders?: number[] | null;
 }
 
 export interface PaginationParams {

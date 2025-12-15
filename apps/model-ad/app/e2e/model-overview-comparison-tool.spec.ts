@@ -166,7 +166,7 @@ test.describe('model overview', () => {
     await testFullCaseInsensitiveMatch(
       page,
       '3xtg-ad,apoe4,fad',
-      ['3xTg-AD', 'APOE4'],
+      ['APOE4', '3xTg-AD'],
       '5xFAD (UCI)',
     );
   });

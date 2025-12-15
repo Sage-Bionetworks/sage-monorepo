@@ -7,9 +7,10 @@ import {
   ComparisonToolQuery,
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
+  SortOrder,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
-import { SortEvent, SortMeta } from 'primeng/api';
+import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs';
@@ -36,14 +37,14 @@ export class ComparisonToolService<T> {
   // this cutoff may need to be included in the ui_config instead, so the cutoff can be set per tool.
   private readonly DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL = 2;
   private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
-  readonly INITIAL_PAGE_NUMBER = 0;
+  readonly FIRST_PAGE_NUMBER = 0;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
     headerTitle: '',
     filterResultsButtonTooltip: 'Filter results',
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
-    viewDetailsClick: (id: string, label: string) => {
+    viewDetailsClick: (_id: string, _label: string) => {
       return;
     },
     legendEnabled: true,
@@ -75,7 +76,7 @@ export class ComparisonToolService<T> {
   private readonly querySignal = signal<ComparisonToolQuery>({
     categories: [],
     pinnedItems: [],
-    pageNumber: this.INITIAL_PAGE_NUMBER,
+    pageNumber: this.FIRST_PAGE_NUMBER,
     pageSize: 10,
     multiSortMeta: this.DEFAULT_MULTI_SORT_META,
     searchTerm: null,
@@ -114,6 +115,7 @@ export class ComparisonToolService<T> {
       const isInitialized = this.isInitialized();
       const syncingToUrl = this.syncToUrlInProgress();
       const isActive = this.coordinatorService.isActive(this);
+
       if (!isInitialized || syncingToUrl || !isActive) {
         return;
       }
@@ -200,7 +202,19 @@ export class ComparisonToolService<T> {
     this.configsSignal.set(configs ?? []);
 
     const selection = this.resolveInitialDropdownSelection(params, configs);
-    this.updateQuery({ categories: selection, pageNumber: this.INITIAL_PAGE_NUMBER });
+
+    const queryUpdate: Partial<ComparisonToolQuery> = {
+      categories: selection,
+      pageNumber: this.FIRST_PAGE_NUMBER,
+    };
+
+    // Apply default sort if configured
+    const defaultSort = this.viewConfigSignal().defaultSort;
+    if (defaultSort && defaultSort.length > 0) {
+      queryUpdate.multiSortMeta = defaultSort as SortMeta[];
+    }
+
+    this.updateQuery(queryUpdate);
 
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
     for (const config of configs) {
@@ -445,7 +459,7 @@ export class ComparisonToolService<T> {
     this.updateQuery({
       categories: selection,
       pinnedItems: cachedPinnedItems ? Array.from(cachedPinnedItems) : [],
-      pageNumber: this.INITIAL_PAGE_NUMBER,
+      pageNumber: this.FIRST_PAGE_NUMBER,
     });
   }
 
@@ -527,9 +541,41 @@ export class ComparisonToolService<T> {
     });
   }
 
-  setSort(event: SortEvent) {
-    const multiSortMeta = event.multiSortMeta || this.DEFAULT_MULTI_SORT_META;
-    this.updateQuery({ pageNumber: this.INITIAL_PAGE_NUMBER, multiSortMeta });
+  setSort(multiSortMeta: SortMeta[]) {
+    const newSort = multiSortMeta || this.DEFAULT_MULTI_SORT_META;
+    const currentSort = this.querySignal().multiSortMeta;
+
+    // Early return if arrays are reference-equal
+    if (currentSort === newSort) {
+      return;
+    }
+
+    // Only update if the sort has actually changed (deep equality check)
+    if (isEqual(currentSort, newSort)) {
+      return;
+    }
+
+    // If clearing sort (empty array), apply default sort if configured
+    if (newSort.length === 0) {
+      const defaultSort = this.viewConfigSignal().defaultSort;
+      if (defaultSort && defaultSort.length > 0) {
+        this.updateQuery({
+          pageNumber: this.FIRST_PAGE_NUMBER,
+          multiSortMeta: defaultSort as SortMeta[],
+        });
+        return;
+      }
+    }
+
+    // Deep clone to create new object references for Angular change detection
+    // This ensures immutability and prevents external mutations from affecting our state
+    const clonedSort = newSort.map((s) => ({ field: s.field, order: s.order }));
+
+    // reset page to the first page when sort changes
+    this.updateQuery({
+      pageNumber: this.FIRST_PAGE_NUMBER,
+      multiSortMeta: clonedSort,
+    });
   }
 
   private resolveUrlState(params: ComparisonToolUrlParams, options: { isInitial: boolean }): void {
@@ -545,7 +591,7 @@ export class ComparisonToolService<T> {
       const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
       // Only update if different to avoid loops
       if (!isEqual(normalizedSelection, this.dropdownSelection())) {
-        this.updateQuery({ categories: normalizedSelection, pageNumber: this.INITIAL_PAGE_NUMBER });
+        this.updateQuery({ categories: normalizedSelection, pageNumber: this.FIRST_PAGE_NUMBER });
       }
     }
 
@@ -564,10 +610,8 @@ export class ComparisonToolService<T> {
     // First visit to this CT without URL pins - start with empty pins and sync to URL
     if (options.isInitial && !this.initialPinsResolved) {
       this.resetPinnedItems();
-
       this.syncToUrlInProgress.set(false);
       this.scheduleUrlSyncFromCurrentState();
-
       this.initialPinsResolved = true;
       return;
     }
@@ -604,6 +648,7 @@ export class ComparisonToolService<T> {
     dropdownSelection: string[],
   ): ComparisonToolUrlParams {
     const pinned = Array.from(pinnedItems);
+
     return {
       pinnedItems: pinned.length ? pinned : null,
       categories: dropdownSelection.length ? dropdownSelection : null,
@@ -612,6 +657,30 @@ export class ComparisonToolService<T> {
 
   private syncCurrentStateToUrl(): void {
     this.syncStateToUrl(this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()));
+  }
+
+  /**
+   * Converts PrimeNG SortMeta array to sortFields and sortOrders arrays.
+   */
+  convertSortMetaToArrays(multiSortMeta: SortMeta[]): {
+    sortFields: string[];
+    sortOrders: SortOrder[];
+  } {
+    if (!multiSortMeta || multiSortMeta.length === 0) {
+      return { sortFields: [], sortOrders: [] };
+    }
+
+    const sortFields: string[] = [];
+    const sortOrders: SortOrder[] = [];
+
+    for (const meta of multiSortMeta) {
+      if (meta.field) {
+        sortFields.push(meta.field);
+        sortOrders.push((meta.order ?? 1) as SortOrder);
+      }
+    }
+
+    return { sortFields, sortOrders };
   }
 
   private updateSerializedStateCache(): void {

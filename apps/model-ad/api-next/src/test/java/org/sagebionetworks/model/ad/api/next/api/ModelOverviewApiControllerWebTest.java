@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,14 @@ class ModelOverviewApiControllerWebTest {
         }
       }
     );
+    conversionService.addConverter(
+      new Converter<String, ModelOverviewSearchQueryDto.SortOrdersEnum>() {
+        @Override
+        public ModelOverviewSearchQueryDto.SortOrdersEnum convert(String source) {
+          return ModelOverviewSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
+        }
+      }
+    );
     mockMvc = MockMvcBuilders.standaloneSetup(controller)
       .setControllerAdvice(new GlobalExceptionHandler())
       .setConversionService(conversionService)
@@ -55,7 +64,12 @@ class ModelOverviewApiControllerWebTest {
     );
 
     mockMvc
-      .perform(get("/v1/comparison-tools/model-overview").param("item", modelName))
+      .perform(
+        get("/v1/comparison-tools/model-overview")
+          .param("item", modelName)
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
+      )
       .andExpect(status().isNotFound());
   }
 }

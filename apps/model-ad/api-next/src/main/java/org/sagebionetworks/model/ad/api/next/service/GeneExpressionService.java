@@ -24,6 +24,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -36,9 +37,10 @@ public class GeneExpressionService {
   private final GeneExpressionMapper geneExpressionMapper;
 
   @Cacheable(
-    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)"
-    + ".buildCacheKey('geneExpression', #query.itemFilterType, #query.items, "
-    + "#query.search, #tissue, #sexCohort, #query.pageNumber, #query.pageSize)"
+    key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
+    ".buildCacheKey('geneExpression', #query.itemFilterType, #query.items, " +
+    "#query.search, #tissue, #sexCohort, #query.pageNumber, #query.pageSize, " +
+    "#query.sortFields, #query.sortOrders)"
   )
   public GeneExpressionsPageDto loadGeneExpressions(
     GeneExpressionSearchQueryDto query,
@@ -52,7 +54,13 @@ public class GeneExpressionService {
 
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
     String search = query.getSearch();
-    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
+    List<Integer> sortOrders = query
+      .getSortOrders()
+      .stream()
+      .map(GeneExpressionSearchQueryDto.SortOrdersEnum::getValue)
+      .toList();
+    Sort sort = ApiHelper.createSort(query.getSortFields(), sortOrders);
+    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
 
     boolean hasSearch = search != null && !search.trim().isEmpty();
     boolean hasItems = !items.isEmpty();
@@ -146,24 +154,22 @@ public class GeneExpressionService {
 
     if (trimmedSearch.contains(",")) {
       List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
-      return repository
-        .findByTissueAndSexCohortAndGeneSymbolInIgnoreCaseExcludingCompositeIdentifiers(
-          tissue,
-          sexCohort,
-          patterns,
-          compositeConditions,
-          pageable
-        );
-    }
-
-    return repository
-      .findByTissueAndSexCohortAndGeneSymbolContainingExcludingCompositeIdentifiers(
+      return repository.findByTissueAndSexCohortAndGeneSymbolInIgnoreCaseExcludingCompositeIdentifiers(
         tissue,
         sexCohort,
-        Pattern.quote(trimmedSearch),
+        patterns,
         compositeConditions,
         pageable
       );
+    }
+
+    return repository.findByTissueAndSexCohortAndGeneSymbolContainingExcludingCompositeIdentifiers(
+      tissue,
+      sexCohort,
+      Pattern.quote(trimmedSearch),
+      compositeConditions,
+      pageable
+    );
   }
 
   /**

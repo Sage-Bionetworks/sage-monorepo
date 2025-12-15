@@ -270,7 +270,8 @@ components:
           minimum: 1
           type: integer
         items:
-          description: List of item names to filter by.
+          description: |
+            List of item names to filter by.
           example:
             - 3xTg-AD
             - 5xFAD (UCI)
@@ -281,13 +282,43 @@ components:
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
-          description: "Search by model name (case-insensitive partial match) or by\
-            \ comma separated list of model names (case-insensitive full matches).\n\
-            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match).\
-            \ Only applied when \nitemFilterType is 'exclude'.\n"
+          description: |
+            Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
+            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when
+            itemFilterType is 'exclude'.
           example: '3xtg-ad,5xfad'
           nullable: true
           type: string
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["model_type", "name"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          example:
+            - model_type
+            - name
+          items:
+            type: string
+          minItems: 1
+          type: array
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          example:
+            - -1
+            - 1
+          items:
+            enum:
+              - 1
+              - -1
+            format: int32
+            type: integer
+          minItems: 1
+          type: array
+      required:
+        - sortFields
+        - sortOrders
       type: object
     ModelOverviewLink:
       description: Model Overview Link
@@ -561,7 +592,7 @@ components:
             List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
             where each identifier represents one complete combination of model name, age, and sex.
 
-            Example: "APOE4~4 months~Female" filters for documents matching that exact name, age, and sex.
+            Example: "APOE4~4 months~Female" filters for documents matching that exact combination.
             Multiple items can be provided to filter for multiple specific combinations.
           example:
             - APOE4~4 months~Female
@@ -574,15 +605,46 @@ components:
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
-          description: "Search by model name (case-insensitive partial match) or by\
-            \ comma separated list of model names (case-insensitive full matches).\n\
-            Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial\
-            \ match). Only applied when \nitemFilterType is 'exclude'.\n"
+          description: |
+            Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
+            Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when
+            itemFilterType is 'exclude'.
           example: '3xtg-ad,5xfad (uci)'
           nullable: true
           type: string
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["name", "age", "sex"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          example:
+            - name
+            - age
+            - sex
+          items:
+            type: string
+          minItems: 1
+          type: array
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          example:
+            - 1
+            - -1
+            - 1
+          items:
+            enum:
+              - 1
+              - -1
+            format: int32
+            type: integer
+          minItems: 1
+          type: array
       required:
         - categories
+        - sortFields
+        - sortOrders
       type: object
     Sex:
       description: Sex
@@ -826,15 +888,44 @@ components:
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
-          description: "Search by gene symbol (case-insensitive partial match) or\
-            \ by comma separated list of gene symbols (case-insensitive full matches).\n\
-            Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match).\
-            \ Only applied when \nitemFilterType is 'exclude'.\n"
+          description: |
+            Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches).
+            Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when
+            itemFilterType is 'exclude'.
           example: 'gnai,cdc45'
           nullable: true
           type: string
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., "gene_symbol,name").
+            Each field in sortFields must have a corresponding order in sortOrders.
+          example:
+            - gene_symbol
+            - name
+          items:
+            type: string
+          minItems: 1
+          type: array
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          example:
+            - 1
+            - -1
+          items:
+            enum:
+              - 1
+              - -1
+            format: int32
+            type: integer
+          minItems: 1
+          type: array
       required:
         - categories
+        - sortFields
+        - sortOrders
       type: object
     SexCohort:
       description: Sex Cohort

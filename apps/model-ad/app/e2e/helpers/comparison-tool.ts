@@ -3,6 +3,9 @@ import { getUnpinnedTable } from '@sagebionetworks/explorers/testing/e2e';
 import {
   ComparisonToolConfig,
   DiseaseCorrelation,
+  DiseaseCorrelationsPage,
+  GeneExpression,
+  GeneExpressionsPage,
   ModelOverview,
   ModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
@@ -10,6 +13,7 @@ import { baseURL } from '../../playwright.config';
 import {
   COMPARISON_TOOL_API_PATHS,
   COMPARISON_TOOL_CONFIG_PATH,
+  COMPARISON_TOOL_DEFAULT_SORTS,
   COMPARISON_TOOL_PATHS,
 } from '../constants';
 
@@ -59,6 +63,13 @@ export const fetchComparisonToolData = async <T>(
     params.append('categories', category);
   }
 
+  // sortFields and sortOrders are required by the API
+  const defaultSort = COMPARISON_TOOL_DEFAULT_SORTS[name];
+  for (const sort of defaultSort) {
+    params.append('sortFields', sort.field);
+    params.append('sortOrders', sort.order.toString());
+  }
+
   const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_API_PATHS[name]}`, {
     params,
   });
@@ -76,12 +87,24 @@ export const fetchDiseaseCorrelations = async (
   page: Page,
   categories = ['CONSENSUS NETWORK MODULES', 'Consensus Cluster A - ECM Organization'],
 ): Promise<DiseaseCorrelation[]> => {
-  const data = await fetchComparisonToolData<{ diseaseCorrelations: DiseaseCorrelation[] }>(
+  const data = await fetchComparisonToolData<DiseaseCorrelationsPage>(
     page,
     'Disease Correlation',
     categories,
   );
   return data.diseaseCorrelations;
+};
+
+export const fetchGeneExpressions = async (
+  page: Page,
+  categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Cortex', 'female'],
+): Promise<GeneExpression[]> => {
+  const data = await fetchComparisonToolData<GeneExpressionsPage>(
+    page,
+    'Gene Expression',
+    categories,
+  );
+  return data.geneExpressions;
 };
 
 export const fetchComparisonToolConfig = async (
