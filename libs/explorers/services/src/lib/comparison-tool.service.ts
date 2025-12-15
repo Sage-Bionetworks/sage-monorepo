@@ -123,8 +123,7 @@ export class ComparisonToolService<T> {
 
       const pinnedItems = this.pinnedItems();
       const dropdownSelection = this.dropdownSelection();
-      const multiSortMeta = this.multiSortMeta();
-      const state = this.serializeSyncState(pinnedItems, dropdownSelection, multiSortMeta);
+      const state = this.serializeSyncState(pinnedItems, dropdownSelection);
 
       this.syncStateToUrl(state);
     });
@@ -230,8 +229,6 @@ export class ComparisonToolService<T> {
     }
 
     this.isInitializedSignal.set(true);
-    // Allow the URL sync effect to run now that initialization is complete
-    this.syncToUrlInProgress.set(false);
   }
 
   private resolveInitialDropdownSelection(
@@ -610,17 +607,16 @@ export class ComparisonToolService<T> {
       this.setPinnedItems(urlPinnedItems);
       this.updateSerializedStateCache();
       this.initialPinsResolved = true;
-      if (!options.isInitial) {
-        this.syncToUrlInProgress.set(false);
-      }
+      this.syncToUrlInProgress.set(false);
       return;
     }
 
     // First visit to this CT without URL pins - start with empty pins and sync to URL
     if (options.isInitial && !this.initialPinsResolved) {
       this.resetPinnedItems();
+      this.syncToUrlInProgress.set(false);
+      this.scheduleUrlSyncFromCurrentState();
       this.initialPinsResolved = true;
-      // Don't set syncToUrlInProgress to false here - let initializeFromConfig handle it
       return;
     }
 
@@ -636,11 +632,9 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    // No URL pins and no cached pins - clear everything and allow effect to run
+    // No URL pins and no cached pins - clear everything and sync to URL
     this.syncToUrlInProgress.set(false);
-    if (!options.isInitial) {
-      this.scheduleUrlSyncFromCurrentState();
-    }
+    this.scheduleUrlSyncFromCurrentState();
   }
 
   private syncStateToUrl(state: ComparisonToolUrlParams): void {
@@ -656,23 +650,17 @@ export class ComparisonToolService<T> {
   private serializeSyncState(
     pinnedItems: Set<string>,
     dropdownSelection: string[],
-    multiSortMeta: SortMeta[],
   ): ComparisonToolUrlParams {
     const pinned = Array.from(pinnedItems);
-    const { sortFields, sortOrders } = this.convertSortMetaToArrays(multiSortMeta);
 
     return {
       pinnedItems: pinned.length ? pinned : null,
       categories: dropdownSelection.length ? dropdownSelection : null,
-      sortFields: sortFields.length ? sortFields : null,
-      sortOrders: sortOrders.length ? sortOrders : null,
     };
   }
 
   private syncCurrentStateToUrl(): void {
-    this.syncStateToUrl(
-      this.serializeSyncState(this.pinnedItems(), this.dropdownSelection(), this.multiSortMeta()),
-    );
+    this.syncStateToUrl(this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()));
   }
 
   /**
@@ -738,7 +726,7 @@ export class ComparisonToolService<T> {
 
   private updateSerializedStateCache(): void {
     this.lastSerializedState = JSON.stringify(
-      this.serializeSyncState(this.pinnedItems(), this.dropdownSelection(), this.multiSortMeta()),
+      this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()),
     );
   }
 
