@@ -13,6 +13,7 @@ import { baseURL } from '../../playwright.config';
 import {
   COMPARISON_TOOL_API_PATHS,
   COMPARISON_TOOL_CONFIG_PATH,
+  COMPARISON_TOOL_DEFAULT_SORTS,
   COMPARISON_TOOL_PATHS,
 } from '../constants';
 
@@ -60,6 +61,13 @@ export const fetchComparisonToolData = async <T>(
   params.append('itemFilterType', 'exclude');
   for (const category of categories) {
     params.append('categories', category);
+  }
+
+  // sortFields and sortOrders are required by the API
+  const defaultSort = COMPARISON_TOOL_DEFAULT_SORTS[name];
+  for (const sort of defaultSort) {
+    params.append('sortFields', sort.field);
+    params.append('sortOrders', sort.order.toString());
   }
 
   const response = await page.request.get(`${baseURL}/api/v1/${COMPARISON_TOOL_API_PATHS[name]}`, {
