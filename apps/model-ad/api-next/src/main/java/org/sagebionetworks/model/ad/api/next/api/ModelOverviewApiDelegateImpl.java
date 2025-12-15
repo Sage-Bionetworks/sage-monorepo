@@ -19,8 +19,6 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
   public ResponseEntity<ModelOverviewsPageDto> getModelOverviews(
     ModelOverviewSearchQueryDto query
   ) {
-    ApiHelper.validateSortParameters(query.getSortFields(), query.getSortOrders());
-
     ModelOverviewsPageDto page = modelOverviewService.loadModelOverviews(query);
 
     return ResponseEntity.ok()

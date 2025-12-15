@@ -23,8 +23,6 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   public ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query
   ) {
-    ApiHelper.validateSortParameters(query.getSortFields(), query.getSortOrders());
-
     String cluster = extractCluster(query.getCategories());
 
     DiseaseCorrelationsPageDto results = diseaseCorrelationService.loadDiseaseCorrelations(

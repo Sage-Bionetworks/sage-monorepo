@@ -1,9 +1,9 @@
-import { Component, computed, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { SortMeta } from 'primeng/api';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolHelperService,
   ComparisonToolUrlService,
@@ -40,8 +40,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
-  private readonly pinnedItems = computed(() => this.query().pinnedItems);
-  private readonly multiSortMeta = computed(() => this.query().multiSortMeta);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
@@ -104,16 +102,15 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
 
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const pinnedItems = this.pinnedItems();
-      const sortMeta = this.multiSortMeta();
-      this.getPinnedData(pinnedItems, sortMeta);
+      const query = this.query();
+      this.getPinnedData(query.pinnedItems, query.multiSortMeta);
     }
   });
 
   readonly unpinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const sortMeta = this.multiSortMeta();
-      this.getUnpinnedData(sortMeta);
+      const query = this.query();
+      this.getUnpinnedData(query);
     }
   });
 
@@ -132,15 +129,17 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(sortMeta: SortMeta[]) {
-    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
+      currentQuery.multiSortMeta,
+    );
 
     const query: ModelOverviewSearchQuery = {
-      items: this.pinnedItems(),
+      items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: this.query().pageNumber,
-      pageSize: this.query().pageSize,
-      search: this.query().searchTerm,
+      pageNumber: currentQuery.pageNumber,
+      pageSize: currentQuery.pageSize,
+      search: currentQuery.searchTerm,
       sortFields,
       sortOrders,
     };

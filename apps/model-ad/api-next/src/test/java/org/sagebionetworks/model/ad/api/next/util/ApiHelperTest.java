@@ -200,5 +200,13 @@ class ApiHelperTest {
       assertThat(order).isNotNull();
       assertThat(order.getDirection()).isEqualTo(Sort.Direction.DESC);
     }
+
+    @Test
+    @DisplayName("should throw when sortFields and sortOrders have mismatched lengths")
+    void shouldThrowWhenLengthsMismatch() {
+      assertThatThrownBy(() -> ApiHelper.createSort(List.of("name", "age"), List.of(1)))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("sortFields and sortOrders must have the same number of elements");
+    }
   }
 }

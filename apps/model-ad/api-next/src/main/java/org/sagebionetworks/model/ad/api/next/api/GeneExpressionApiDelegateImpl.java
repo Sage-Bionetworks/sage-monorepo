@@ -21,8 +21,6 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   public ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
     GeneExpressionSearchQueryDto query
   ) {
-    ApiHelper.validateSortParameters(query.getSortFields(), query.getSortOrders());
-
     String[] tissueAndSexCohort = extractTissueAndSexCohort(query.getCategories());
     String tissue = tissueAndSexCohort[0];
     String sexCohort = tissueAndSexCohort[1];

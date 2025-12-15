@@ -14,7 +14,7 @@ export interface VisualizationOverviewPane {
   content: string;
 }
 
-export type SortOrdersEnum = 1 | -1;
+export type SortOrder = 1 | -1;
 
 export interface ComparisonToolQuery {
   categories: string[];
@@ -24,8 +24,6 @@ export interface ComparisonToolQuery {
   multiSortMeta: { field: string; order: number }[];
   searchTerm: string | null;
   filters: ComparisonToolFilter[];
-  sortFields: string[];
-  sortOrders: SortOrdersEnum[];
 }
 
 export interface ComparisonToolViewConfig {

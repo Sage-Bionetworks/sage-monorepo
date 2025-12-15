@@ -16,18 +16,6 @@ public final class ApiHelper {
 
   private static final String CACHE_CONTROL_VALUE = "no-cache, no-store, must-revalidate";
 
-  /**
-   * Base buffer size for cache key construction to accommodate fixed string components
-   * (prefix, separators, filterType, and list brackets).
-   */
-  private static final int BASE_CAPACITY_BUFFER = 50;
-
-  /**
-   * Estimated average size per extra part in cache key construction.
-   * Used to pre-allocate StringBuilder capacity.
-   */
-  private static final int ESTIMATED_PART_SIZE = 20;
-
   private ApiHelper() {}
 
   /**
@@ -58,10 +46,12 @@ public final class ApiHelper {
   /**
    * Creates a Spring Data Sort object from sortFields and sortOrders lists.
    * Returns Sort.unsorted() if no sort parameters are provided.
+   * Validates that sortFields and sortOrders have matching element counts.
    *
    * @param sortFields list of field names to sort by
    * @param sortOrders list of sort orders (1 for ascending, -1 for descending)
    * @return Sort object for use with Spring Data repositories
+   * @throws IllegalArgumentException if sortFields and sortOrders have different lengths
    */
   public static Sort createSort(
     @Nullable List<String> sortFields,
@@ -70,6 +60,8 @@ public final class ApiHelper {
     if (sortFields == null || sortFields.isEmpty() || sortOrders == null || sortOrders.isEmpty()) {
       return Sort.unsorted();
     }
+
+    validateSortParameters(sortFields, sortOrders);
 
     Sort sort = Sort.unsorted();
     for (int i = 0; i < sortFields.size(); i++) {
@@ -119,7 +111,6 @@ public final class ApiHelper {
 
   /**
    * Builds a cache key string from the provided components.
-   * Optimized to avoid unnecessary object allocations.
    *
    * @param prefix the cache key prefix
    * @param filterType the filter type (can be null)
@@ -133,37 +124,15 @@ public final class ApiHelper {
     List<String> items,
     Object... extraParts
   ) {
-    // Pre-calculate capacity to avoid StringBuilder reallocations during building
-    int capacity =
-      prefix.length() +
-      BASE_CAPACITY_BUFFER +
-      (extraParts != null ? extraParts.length * ESTIMATED_PART_SIZE : 0);
-    StringBuilder builder = new StringBuilder(capacity);
+    StringBuilder builder = new StringBuilder();
 
     builder
       .append(prefix)
       .append('-')
       .append(filterType != null ? filterType.getValue() : "null")
-      .append('-');
+      .append('-')
+      .append(items != null ? items : List.of());
 
-    // Manually build list representation to avoid creating intermediate String from List.toString()
-    // This directly appends each item to StringBuilder instead of:
-    //   1. Calling items.toString() which creates "[item1, item2, item3]" string
-    //   2. Then copying that string into StringBuilder
-    if (items != null && !items.isEmpty()) {
-      builder.append('[');
-      for (int i = 0; i < items.size(); i++) {
-        if (i > 0) {
-          builder.append(',');
-        }
-        builder.append(items.get(i));
-      }
-      builder.append(']');
-    } else {
-      builder.append("[]");
-    }
-
-    // Use simple for-each instead of Stream to avoid Stream object allocation
     if (extraParts != null) {
       for (Object part : extraParts) {
         builder.append('-').append(Objects.toString(part));

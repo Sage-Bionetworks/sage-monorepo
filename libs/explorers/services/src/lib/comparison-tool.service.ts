@@ -7,6 +7,7 @@ import {
   ComparisonToolQuery,
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
+  SortOrder,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { SortMeta } from 'primeng/api';
@@ -80,8 +81,6 @@ export class ComparisonToolService<T> {
     multiSortMeta: this.DEFAULT_MULTI_SORT_META,
     searchTerm: null,
     filters: [],
-    sortFields: [],
-    sortOrders: [],
   });
   private readonly isInitializedSignal = signal(false);
 
@@ -203,7 +202,19 @@ export class ComparisonToolService<T> {
     this.configsSignal.set(configs ?? []);
 
     const selection = this.resolveInitialDropdownSelection(params, configs);
-    this.updateQuery({ categories: selection, pageNumber: this.FIRST_PAGE_NUMBER });
+
+    const queryUpdate: Partial<ComparisonToolQuery> = {
+      categories: selection,
+      pageNumber: this.FIRST_PAGE_NUMBER,
+    };
+
+    // Apply default sort if configured
+    const defaultSort = this.viewConfigSignal().defaultSort;
+    if (defaultSort && defaultSort.length > 0) {
+      queryUpdate.multiSortMeta = defaultSort as SortMeta[];
+    }
+
+    this.updateQuery(queryUpdate);
 
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
     for (const config of configs) {
@@ -218,15 +229,6 @@ export class ComparisonToolService<T> {
     this.initialSelection = undefined;
 
     this.resolveUrlState(params, { isInitial: true });
-
-    // Apply default sort if no URL sort params were applied
-    if (this.querySignal().multiSortMeta.length === 0) {
-      const defaultSort = this.viewConfigSignal().defaultSort;
-      if (defaultSort && defaultSort.length > 0) {
-        const { sortFields, sortOrders } = this.convertSortMetaToArrays(defaultSort as SortMeta[]);
-        this.updateQuery({ sortFields, sortOrders, multiSortMeta: defaultSort as SortMeta[] });
-      }
-    }
 
     this.isInitializedSignal.set(true);
   }
@@ -557,12 +559,9 @@ export class ComparisonToolService<T> {
     if (newSort.length === 0) {
       const defaultSort = this.viewConfigSignal().defaultSort;
       if (defaultSort && defaultSort.length > 0) {
-        const { sortFields, sortOrders } = this.convertSortMetaToArrays(defaultSort as SortMeta[]);
         this.updateQuery({
           pageNumber: this.FIRST_PAGE_NUMBER,
           multiSortMeta: defaultSort as SortMeta[],
-          sortFields,
-          sortOrders,
         });
         return;
       }
@@ -573,12 +572,9 @@ export class ComparisonToolService<T> {
     const clonedSort = newSort.map((s) => ({ field: s.field, order: s.order }));
 
     // reset page to the first page when sort changes
-    const { sortFields, sortOrders } = this.convertSortMetaToArrays(clonedSort);
     this.updateQuery({
       pageNumber: this.FIRST_PAGE_NUMBER,
       multiSortMeta: clonedSort,
-      sortFields,
-      sortOrders,
     });
   }
 
@@ -668,60 +664,23 @@ export class ComparisonToolService<T> {
    */
   convertSortMetaToArrays(multiSortMeta: SortMeta[]): {
     sortFields: string[];
-    sortOrders: (1 | -1)[];
+    sortOrders: SortOrder[];
   } {
     if (!multiSortMeta || multiSortMeta.length === 0) {
       return { sortFields: [], sortOrders: [] };
     }
 
     const sortFields: string[] = [];
-    const sortOrders: (1 | -1)[] = [];
+    const sortOrders: SortOrder[] = [];
 
     for (const meta of multiSortMeta) {
       if (meta.field) {
         sortFields.push(meta.field);
-        sortOrders.push((meta.order ?? 1) as 1 | -1);
+        sortOrders.push((meta.order ?? 1) as SortOrder);
       }
     }
 
     return { sortFields, sortOrders };
-  }
-
-  /**
-   * Converts sort metadata to comma-delimited strings for API requests.
-   * This ensures the API receives sortFields=a,b&sortOrders=1,-1 instead of
-   * repeated parameters sortFields=a&sortFields=b which don't work with @InitBinder.
-   */
-  convertSortMetaToStrings(multiSortMeta: SortMeta[]): {
-    sortFields: string;
-    sortOrders: string;
-  } {
-    const { sortFields, sortOrders } = this.convertSortMetaToArrays(multiSortMeta);
-    return {
-      sortFields: sortFields.join(','),
-      sortOrders: sortOrders.join(','),
-    };
-  }
-
-  /**
-   * Converts sortFields and sortOrders arrays to PrimeNG SortMeta array.
-   */
-  convertArraysToSortMeta(sortFields?: string[] | null, sortOrders?: number[] | null): SortMeta[] {
-    if (!sortFields || !sortOrders || sortFields.length === 0 || sortOrders.length === 0) {
-      return [];
-    }
-
-    if (sortFields.length !== sortOrders.length) {
-      console.warn(
-        `sortFields and sortOrders length mismatch: ${sortFields.length} vs ${sortOrders.length}`,
-      );
-      return [];
-    }
-
-    return sortFields.map((field, index) => ({
-      field,
-      order: sortOrders[index],
-    }));
   }
 
   private updateSerializedStateCache(): void {

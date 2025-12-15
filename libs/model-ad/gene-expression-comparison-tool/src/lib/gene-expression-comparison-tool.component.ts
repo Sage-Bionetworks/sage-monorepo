@@ -1,7 +1,6 @@
-import { Component, computed, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, OnInit, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { SortMeta } from 'primeng/api';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   ComparisonToolQuery,
@@ -46,8 +45,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
   dropdownSelection = this.comparisonToolService.dropdownSelection;
-  private readonly pinnedItems = computed(() => this.query().pinnedItems);
-  private readonly multiSortMeta = computed(() => this.query().multiSortMeta);
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
@@ -127,19 +124,16 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   // Effect for pinned data - only re-fetch when pinnedItems or categories change
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const selection = this.dropdownSelection();
-      const pinnedItems = this.pinnedItems();
-      const sortMeta = this.multiSortMeta();
-      this.getPinnedData(selection, pinnedItems, sortMeta);
+      const query = this.query();
+      this.getPinnedData(query);
     }
   });
 
   // Effect for unpinned data - re-fetch when any query param or categories change
   readonly unpinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const selection = this.comparisonToolService.dropdownSelection();
-      const sortMeta = this.multiSortMeta();
-      this.getUnpinnedData(selection, sortMeta);
+      const query = this.query();
+      this.getUnpinnedData(query);
     }
   });
 
@@ -158,16 +152,18 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(selection: string[], sortMeta: SortMeta[]) {
-    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
+      currentQuery.multiSortMeta,
+    );
 
     const query: GeneExpressionSearchQuery = {
-      categories: selection,
-      items: this.pinnedItems(),
+      categories: currentQuery.categories,
+      items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber: this.query().pageNumber,
-      pageSize: this.query().pageSize,
-      search: this.query().searchTerm,
+      pageNumber: currentQuery.pageNumber,
+      pageSize: currentQuery.pageSize,
+      search: currentQuery.searchTerm,
       sortFields,
       sortOrders,
     };
@@ -188,12 +184,14 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       });
   }
 
-  getPinnedData(selection: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
-    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+  getPinnedData(currentQuery: ComparisonToolQuery) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
+      currentQuery.multiSortMeta,
+    );
 
     const query: GeneExpressionSearchQuery = {
-      categories: selection,
-      items: pinnedItems,
+      categories: currentQuery.categories,
+      items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
       sortFields,
       sortOrders,
