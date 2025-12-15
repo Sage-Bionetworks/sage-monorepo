@@ -102,8 +102,9 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
 
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const query = this.query();
-      this.getPinnedData(query.pinnedItems, query.multiSortMeta);
+      const pinnedItems = this.query().pinnedItems;
+      const sortMeta = this.query().multiSortMeta;
+      this.getPinnedData(pinnedItems, sortMeta);
     }
   });
 

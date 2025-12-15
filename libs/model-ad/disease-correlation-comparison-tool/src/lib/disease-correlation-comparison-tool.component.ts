@@ -23,6 +23,7 @@ import {
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { SortMeta } from 'primeng/api';
 import { catchError, of, shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
@@ -122,8 +123,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
 
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const query = this.query();
-      this.getPinnedData(query);
+      const categories = this.query().categories;
+      const pinnedItems = this.query().pinnedItems;
+      const sortMeta = this.query().multiSortMeta;
+      this.getPinnedData(categories, pinnedItems, sortMeta);
     }
   });
 
@@ -181,14 +184,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       });
   }
 
-  getPinnedData(currentQuery: ComparisonToolQuery) {
-    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
-      currentQuery.multiSortMeta,
-    );
+  getPinnedData(categories: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
 
     const query: DiseaseCorrelationSearchQuery = {
-      categories: currentQuery.categories,
-      items: currentQuery.pinnedItems,
+      categories,
+      items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
       sortFields,
       sortOrders,

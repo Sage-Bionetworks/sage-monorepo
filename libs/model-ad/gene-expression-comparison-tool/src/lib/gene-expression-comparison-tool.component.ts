@@ -23,6 +23,7 @@ import {
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { SortMeta } from 'primeng/api';
 import { catchError, of, shareReplay } from 'rxjs';
 import { GeneExpressionComparisonToolService } from './services/gene-expression-comparison-tool.service';
 
@@ -121,11 +122,13 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
-  // Effect for pinned data - only re-fetch when pinnedItems or categories change
+  // Effect for pinned data - only re-fetch when pinnedItems, categories, or sort change
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const query = this.query();
-      this.getPinnedData(query);
+      const categories = this.query().categories;
+      const pinnedItems = this.query().pinnedItems;
+      const sortMeta = this.query().multiSortMeta;
+      this.getPinnedData(pinnedItems, categories, sortMeta);
     }
   });
 
@@ -184,14 +187,12 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       });
   }
 
-  getPinnedData(currentQuery: ComparisonToolQuery) {
-    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
-      currentQuery.multiSortMeta,
-    );
+  getPinnedData(categories: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
 
     const query: GeneExpressionSearchQuery = {
-      categories: currentQuery.categories,
-      items: currentQuery.pinnedItems,
+      categories,
+      items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
       sortFields,
       sortOrders,
