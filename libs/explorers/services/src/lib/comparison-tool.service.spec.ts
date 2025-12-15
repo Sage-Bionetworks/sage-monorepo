@@ -541,7 +541,7 @@ describe('ComparisonToolService', () => {
           ],
         },
       ];
-      service.updateQuery({ filters, pageNumber: service.INITIAL_PAGE_NUMBER });
+      service.updateQuery({ filters, pageNumber: service.FIRST_PAGE_NUMBER });
 
       expect(service.pageNumber()).toBe(0);
     });
@@ -552,9 +552,7 @@ describe('ComparisonToolService', () => {
       service.updateQuery({ pageNumber: 3 });
       expect(service.pageNumber()).toBe(3);
 
-      service.setSort({
-        multiSortMeta: [{ field: 'name', order: 1 }],
-      });
+      service.setSort([{ field: 'name', order: 1 }]);
 
       expect(service.pageNumber()).toBe(0);
     });
@@ -565,7 +563,7 @@ describe('ComparisonToolService', () => {
       service.updateQuery({ pageNumber: 4 });
       expect(service.pageNumber()).toBe(4);
 
-      service.updateQuery({ searchTerm: 'test search', pageNumber: service.INITIAL_PAGE_NUMBER });
+      service.updateQuery({ searchTerm: 'test search', pageNumber: service.FIRST_PAGE_NUMBER });
 
       expect(service.pageNumber()).toBe(0);
     });

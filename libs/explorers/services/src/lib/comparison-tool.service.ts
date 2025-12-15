@@ -230,6 +230,8 @@ export class ComparisonToolService<T> {
     }
 
     this.isInitializedSignal.set(true);
+    // Allow the URL sync effect to run now that initialization is complete
+    this.syncToUrlInProgress.set(false);
   }
 
   private resolveInitialDropdownSelection(
