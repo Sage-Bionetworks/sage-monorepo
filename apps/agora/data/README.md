@@ -8,7 +8,7 @@ This Python project downloads an Agora data release from Synapse, then seeds and
 
 ### Prepare the Python environment
 
-```
+```bash
 nx prepare agora-data
 ```
 
