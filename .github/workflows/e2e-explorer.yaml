@@ -70,7 +70,7 @@ jobs:
     environment: ${{ github.event_name == 'pull_request_target' &&
       github.event.pull_request.head.repo.full_name != github.repository && format('{0}-pr', inputs.explorer) || inputs.explorer }}
     timeout-minutes: 60
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:
       - uses: actions/checkout@v4
         with:
