@@ -59,6 +59,7 @@ export class ComparisonToolService<T> {
     visualizationOverviewPanes: [],
     rowsPerPage: 10,
     rowIdDataKey: '_id',
+    allowPinnedImageDownload: true,
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);

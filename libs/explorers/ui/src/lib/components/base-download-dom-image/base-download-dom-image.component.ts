@@ -1,5 +1,12 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
-import { Component, computed, input, signal, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  input,
+  signal,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -26,28 +33,38 @@ export class BaseDownloadDomImageComponent {
   filename = input.required();
   performDownload = input.required<(fileType: string) => Promise<void>>();
   hasCsvDownload = input<boolean>(false);
+  hasImageDownload = input<boolean>(true);
 
   downloadIcon = faDownload;
   spinnerIcon = faSpinner;
 
-  selectedType = '.png';
   types = computed(() => {
-    const hasCsvType = this.hasCsvDownload();
-    const imageLabelPostfix = hasCsvType ? ' image' : '';
+    const hasCsv = this.hasCsvDownload();
+    const hasImage = this.hasImageDownload();
 
     const imageTypes: Type[] = [
-      {
-        value: '.png',
-        label: `PNG${imageLabelPostfix}`,
-      },
-      {
-        value: '.jpeg',
-        label: `JPEG${imageLabelPostfix}`,
-      },
+      { value: '.png', label: hasCsv ? 'PNG image' : 'PNG' },
+      { value: '.jpeg', label: hasCsv ? 'JPEG image' : 'JPEG' },
     ];
-    const types = hasCsvType ? [...imageTypes, { value: '.csv', label: 'CSV data' }] : imageTypes;
-    return types;
+
+    const csvType: Type = { value: '.csv', label: 'CSV data' };
+
+    if (hasImage && hasCsv) return [...imageTypes, csvType];
+    if (hasImage) return imageTypes;
+    if (hasCsv) return [csvType];
+    return [];
   });
+
+  selectedType = signal('');
+
+  constructor() {
+    effect(() => {
+      const types = this.types();
+      if (types.length > 0) {
+        this.selectedType.set(types[0].value);
+      }
+    });
+  }
 
   error = signal('');
   isLoading = signal(false);
@@ -62,7 +79,9 @@ export class BaseDownloadDomImageComponent {
     this.isLoading.set(true);
 
     try {
-      await this.performDownload()(this.selectedType);
+      // Yield so the loading spinner paints before expensive DOM serialization starts
+      await this.waitForNextPaint();
+      await this.performDownload()(this.selectedType());
       this.hide();
     } catch (err) {
       this.error.set('Oops, something went wrong!');
@@ -82,10 +101,17 @@ export class BaseDownloadDomImageComponent {
   }
 
   onResize() {
-    const self = this;
     clearTimeout(this.resizeTimer);
-    this.resizeTimer = setTimeout(function () {
-      self.hide();
+    this.resizeTimer = setTimeout(() => {
+      this.hide();
     }, 0);
+  }
+
+  private waitForNextPaint(): Promise<void> {
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => resolve());
+      });
+    });
   }
 }

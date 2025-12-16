@@ -38,6 +38,7 @@ export interface ComparisonToolViewConfig {
   visualizationOverviewPanes: VisualizationOverviewPane[];
   rowsPerPage: number;
   rowIdDataKey: string;
+  allowPinnedImageDownload: boolean;
   defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
 }
 
