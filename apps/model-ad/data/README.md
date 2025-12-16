@@ -2,8 +2,7 @@
 
 ## Introduction
 
-This Python project downloads a Model-AD data release from Synapse, then seeds and indexes the data in
-MongoDB.
+This Python project downloads a Model-AD data release from Synapse, then seeds and indexes the data in MongoDB.
 
 ## Usage
 
