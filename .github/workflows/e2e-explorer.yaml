@@ -115,6 +115,27 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && ${cmd}"
 
+      - name: Snapshot disk usage before Prune unused Docker build cache
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
+
+      - name: Prune unused Docker build cache
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && docker builder prune -af || true"
+
+      - name: Snapshot disk usage before Explorer start
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
+
       - name: Write Synapse PAT for Explorer
         run: |
           env_filename="apps/${{ inputs.explorer }}/data/.env"
@@ -132,6 +153,14 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && ${cmd}"
+
+      - name: Snapshot disk usage after Explorer start
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
 
       - name: Write out Explorer data logs
         if: ${{ failure() }}
@@ -155,6 +184,14 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && ${cmd}"
+
+      - name: Snapshot disk usage before e2e tests
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
 
       - name: Stop Explorer
         run: |
