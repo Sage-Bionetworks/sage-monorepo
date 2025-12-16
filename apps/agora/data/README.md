@@ -14,7 +14,7 @@ nx prepare agora-data
 
 ### Configure Data Release and Credentials
 
-```
+```bash
 nx create-config agora-data
 ```
 

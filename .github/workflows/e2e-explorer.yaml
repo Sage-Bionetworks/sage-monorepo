@@ -77,7 +77,7 @@ jobs:
           echo 'Disk usage for root filesystem:' \
               && df -h / \
               && echo 'Disk usage for /var/lib/docker:' \
-              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')
 
       - uses: actions/checkout@v4
         with:
@@ -97,7 +97,7 @@ jobs:
           echo 'Disk usage for root filesystem:' \
               && df -h / \
               && echo 'Disk usage for /var/lib/docker:' \
-              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')
 
       - name:
           Switch from the detached HEAD of the merge commit to a new branch
@@ -113,7 +113,7 @@ jobs:
           echo 'Disk usage for root filesystem:' \
               && df -h / \
               && echo 'Disk usage for /var/lib/docker:' \
-              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')
 
       - name: Set up the dev container
         id: setup-dev-container
