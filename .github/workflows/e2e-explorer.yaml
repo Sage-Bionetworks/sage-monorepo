@@ -72,6 +72,13 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-22.04
     steps:
+      - name: Snapshot disk usage before checkout
+        run: |
+          echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
+
       - uses: actions/checkout@v4
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare
@@ -85,6 +92,13 @@ jobs:
           # merging".
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.pull_request.head.sha || github.ref }}
 
+      - name: Snapshot disk usage before nx SHA derivation
+        run: |
+          echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
+
       - name:
           Switch from the detached HEAD of the merge commit to a new branch
           # Buildx does not work on a detached HEAD
@@ -94,19 +108,50 @@ jobs:
         # Pin to v4.2.1 until https://github.com/nrwl/nx-set-shas/issues/186 is fixed
         uses: nrwl/nx-set-shas@v4.2.1
 
+      - name: Snapshot disk usage before Set up the dev container
+        run: |
+          echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
+
       - name: Set up the dev container
         id: setup-dev-container
         uses: ./.github/actions/setup-dev-container
+
+      - name: Snapshot disk usage before Install Playwright Browsers
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
 
       - name: Install Playwright Browsers
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && npx playwright install --with-deps"
 
+      - name: Snapshot disk usage before Setup Explorer
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
+
       - name: Setup Explorer
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && bash ./tools/setup-projects.sh ${{ inputs.explorer }}"
+
+      - name: Snapshot disk usage before Build Explorer
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && echo 'Disk usage for root filesystem:' \
+              && df -h / \
+              && echo 'Disk usage for /var/lib/docker:' \
+              && (df -h /var/lib/docker || echo '/var/lib/docker not mounted')"
 
       - name: Build Explorer
         env:
