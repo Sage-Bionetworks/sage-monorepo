@@ -10,7 +10,7 @@ on:
 jobs:
   run-explorer-e2e:
     # Run in Sage repo on main branch and on all branches in user-owned forks
-    if: ${{ github.ref_name == 'main' || github.actor == github.repository_owner }}
+    if: ${{ github.ref_name == 'main' || github.ref_name == 'agora/AG-1921' || github.actor == github.repository_owner }}
     strategy:
       matrix:
         explorer:
