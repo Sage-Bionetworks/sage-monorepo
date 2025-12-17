@@ -17,6 +17,9 @@ tags:
   - name: Data Version
     description: Operations about the data version.
     x-displayName: Data Version
+  - name: Model
+    description: Operations about models.
+    x-displayName: Model
   - name: Model Overview
     description: Operations about Model Overview.
     x-displayName: Model Overview
@@ -26,9 +29,6 @@ tags:
   - name: Gene Expression
     description: Operations about Gene Expression results.
     x-displayName: Gene Expression
-  - name: Model
-    description: Operations about models.
-    x-displayName: Model
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
     x-displayName: Comparison Tool Config
@@ -119,33 +119,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /models/search:
-    get:
-      tags:
-        - Model
-      summary: Search Models
-      description: Search for a particular model
-      operationId: searchModels
-      parameters:
-        - name: q
-          in: query
-          description: Search query
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SearchResult'
-          description: Successfully retrieved search results
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /models/{name}:
     get:
       tags:
@@ -171,6 +144,33 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /models/search:
+    get:
+      tags:
+        - Model
+      summary: Search Models
+      description: Search for a particular model
+      operationId: searchModels
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+          description: Successfully retrieved search results
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /comparison-tool-config:
@@ -797,23 +797,6 @@ components:
       required:
         - geneExpressions
         - page
-    SearchResult:
-      type: object
-      description: Search result
-      properties:
-        id:
-          type: string
-          description: ID of result
-        match_field:
-          type: string
-          description: Field that matched the query
-        match_value:
-          type: string
-          description: Value that matched the query
-      required:
-        - id
-        - match_field
-        - match_value
     GeneticInfo:
       type: object
       description: Genetic information about a model
@@ -919,7 +902,7 @@ components:
           type: string
           description: RRID of the model
         jax_id:
-          type: number
+          type: string
           description: JAX ID of the model
         alzforum_id:
           type: string
@@ -976,6 +959,23 @@ components:
         - genetic_info
         - biomarkers
         - pathology
+    SearchResult:
+      type: object
+      description: Search result
+      properties:
+        id:
+          type: string
+          description: ID of result
+        match_field:
+          type: string
+          description: Field that matched the query
+        match_value:
+          type: string
+          description: Value that matched the query
+      required:
+        - id
+        - match_field
+        - match_value
     ComparisonToolPage:
       type: string
       description: The type of comparison tool page
@@ -1125,14 +1125,3 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'
-x-tagGroups:
-  - name: Model-AD API Next
-    tags:
-      - Data Version
-      - Model Overview
-      - Disease Correlation
-      - Gene Expression
-  - name: Model-AD API
-    tags:
-      - Model
-      - Comparison Tool Config

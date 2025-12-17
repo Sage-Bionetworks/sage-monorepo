@@ -33,6 +33,13 @@ public final class CacheNames {
   public static final String GENE_EXPRESSION = "geneExpression";
 
   /**
+   * Cache for model queries.
+   * Stores results from model detail queries by name.
+   * Key format: Dynamic based on model name
+   */
+  public static final String MODEL = "model";
+
+  /**
    * Cache for data version queries.
    * Stores the data version information from Synapse.
    * Key format: Static key "dataVersion"

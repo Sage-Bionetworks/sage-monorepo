@@ -1,11 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import {
-  comparisonToolConfigRoute,
-  dataVersionRoute,
-  modelRoute,
-  modelsSearchRoute,
-} from './components';
+import { comparisonToolConfigRoute, dataVersionRoute, modelsSearchRoute } from './components';
 
 const mongodbUser = process.env.MONGODB_USER;
 const mongodbPass = process.env.MONGODB_PASS;
@@ -51,7 +46,7 @@ const router = express.Router();
 mongoose.connection.once('open', async () => {
   router.get('/data-version', dataVersionRoute);
   router.get('/models/search', modelsSearchRoute);
-  router.get('/models/:name', modelRoute);
+  // Endpoint /models/:name has been migrated to the new Java API (api-next)
   router.get('/comparison-tool-config', comparisonToolConfigRoute);
 });
 

@@ -31,10 +31,11 @@ public class CacheConfiguration {
     // Define the cache names used by query services
     cacheManager.setCacheNames(
       List.of(
-        CacheNames.DATA_VERSION,
         CacheNames.DISEASE_CORRELATION,
         CacheNames.MODEL_OVERVIEW,
-        CacheNames.GENE_EXPRESSION
+        CacheNames.GENE_EXPRESSION,
+        CacheNames.MODEL,
+        CacheNames.DATA_VERSION
       )
     );
 

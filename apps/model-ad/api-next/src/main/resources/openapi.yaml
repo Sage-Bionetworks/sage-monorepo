@@ -16,6 +16,8 @@ servers:
 tags:
   - description: Operations about the data version.
     name: Data Version
+  - description: Operations about models.
+    name: Model
   - description: Operations about Model Overview.
     name: Model Overview
   - description: Operations about Disease Correlation results.
@@ -155,6 +157,40 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Gene Expression
+  /models/{name}:
+    get:
+      description: Retrieve detailed information for a specific model by its name
+      operationId: getModelByName
+      parameters:
+        - description: Name of the model to retrieve
+          explode: false
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+          description: Successfully retrieved model details
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get details for a specific model
+      tags:
+        - Model
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Model
 components:
   parameters:
     modelOverviewSearchQuery:
@@ -1095,4 +1131,284 @@ components:
       required:
         - geneExpressions
         - page
+      type: object
+    GeneticInfo:
+      description: Genetic information about a model
+      example:
+        modified_gene: modified_gene
+        ensembl_gene_id: ensembl_gene_id
+        allele: allele
+        mgi_allele_id: 0.8008281904610115
+        allele_type: allele_type
+      properties:
+        modified_gene:
+          description: Name of the modified gene
+          type: string
+        ensembl_gene_id:
+          description: Ensembl gene ID
+          type: string
+        allele:
+          description: Allele symbol
+          type: string
+        allele_type:
+          description: Type of allele
+          type: string
+        mgi_allele_id:
+          description: MGI allele ID
+          type: number
+      required:
+        - allele
+        - allele_type
+        - ensembl_gene_id
+        - mgi_allele_id
+        - modified_gene
+      type: object
+    IndividualData:
+      description: Data for an individual
+      example:
+        sex: Female
+        value: 1.4658129805029452
+        genotype: genotype
+        individual_id: individual_id
+      properties:
+        genotype:
+          description: Genotype of the individual
+          type: string
+        sex:
+          $ref: '#/components/schemas/Sex'
+        individual_id:
+          description: Unique identifier for the individual
+          type: string
+        value:
+          description: Value for the individual
+          type: number
+      required:
+        - genotype
+        - individual_id
+        - sex
+        - value
+      type: object
+    ModelData:
+      description: Data associated with a model
+      example:
+        evidence_type: evidence_type
+        data:
+          - sex: Female
+            value: 1.4658129805029452
+            genotype: genotype
+            individual_id: individual_id
+          - sex: Female
+            value: 1.4658129805029452
+            genotype: genotype
+            individual_id: individual_id
+        name: name
+        tissue: tissue
+        units: units
+        y_axis_max: 6.027456183070403
+        age: age
+      properties:
+        name:
+          description: Name of the model
+          type: string
+        evidence_type:
+          description: Type of evidence
+          type: string
+        tissue:
+          description: Tissue collected
+          type: string
+        age:
+          description: Age at collection
+          type: string
+        units:
+          description: Units of measurement
+          type: string
+        y_axis_max:
+          description: Maximum value for y-axis in visualizations
+          type: number
+        data:
+          description: Values for each individual
+          items:
+            $ref: '#/components/schemas/IndividualData'
+          type: array
+      required:
+        - age
+        - data
+        - evidence_type
+        - name
+        - tissue
+        - units
+        - y_axis_max
+      type: object
+    Model:
+      description: Model details
+      example:
+        genetic_info:
+          - modified_gene: modified_gene
+            ensembl_gene_id: ensembl_gene_id
+            allele: allele
+            mgi_allele_id: 0.8008281904610115
+            allele_type: allele_type
+          - modified_gene: modified_gene
+            ensembl_gene_id: ensembl_gene_id
+            allele: allele
+            mgi_allele_id: 0.8008281904610115
+            allele_type: allele_type
+        aliases:
+          - aliases
+          - aliases
+        pathology:
+          - evidence_type: evidence_type
+            data:
+              - sex: Female
+                value: 1.4658129805029452
+                genotype: genotype
+                individual_id: individual_id
+              - sex: Female
+                value: 1.4658129805029452
+                genotype: genotype
+                individual_id: individual_id
+            name: name
+            tissue: tissue
+            units: units
+            y_axis_max: 6.027456183070403
+            age: age
+          - evidence_type: evidence_type
+            data:
+              - sex: Female
+                value: 1.4658129805029452
+                genotype: genotype
+                individual_id: individual_id
+              - sex: Female
+                value: 1.4658129805029452
+                genotype: genotype
+                individual_id: individual_id
+            name: name
+            tissue: tissue
+            units: units
+            y_axis_max: 6.027456183070403
+            age: age
+        contributing_group: contributing_group
+        biomarkers:
+          - evidence_type: evidence_type
+            data:
+              - sex: Female
+                value: 1.4658129805029452
+                genotype: genotype
+                individual_id: individual_id
+              - sex: Female
+                value: 1.4658129805029452
+                genotype: genotype
+                individual_id: individual_id
+            name: name
+            tissue: tissue
+            units: units
+            y_axis_max: 6.027456183070403
+            age: age
+          - evidence_type: evidence_type
+            data:
+              - sex: Female
+                value: 1.4658129805029452
+                genotype: genotype
+                individual_id: individual_id
+              - sex: Female
+                value: 1.4658129805029452
+                genotype: genotype
+                individual_id: individual_id
+            name: name
+            tissue: tissue
+            units: units
+            y_axis_max: 6.027456183070403
+            age: age
+        gene_expression: gene_expression
+        disease_correlation: disease_correlation
+        matched_controls:
+          - matched_controls
+          - matched_controls
+        model_type: model_type
+        jax_id: jax_id
+        rrid: rrid
+        genotype: genotype
+        spatial_transcriptomics: spatial_transcriptomics
+        alzforum_id: alzforum_id
+        study_synid: study_synid
+        name: name
+      properties:
+        name:
+          description: Name of the model
+          type: string
+        matched_controls:
+          description: List of matched controls
+          items:
+            type: string
+          type: array
+        model_type:
+          description: Type of the model
+          type: string
+        contributing_group:
+          description: Group contributing the model
+          type: string
+        study_synid:
+          description: Synapse ID of the study
+          type: string
+        rrid:
+          description: RRID of the model
+          type: string
+        jax_id:
+          description: JAX ID of the model
+          type: string
+        alzforum_id:
+          description: AlzForum ID of the model
+          type: string
+        genotype:
+          description: Genotype of the model
+          type: string
+        aliases:
+          description: List of aliases for the model
+          items:
+            type: string
+          type: array
+        gene_expression:
+          description: Link to gene expression comparison tool data
+          nullable: true
+          type: string
+        disease_correlation:
+          description: Link to disease correlation comparison tool data
+          nullable: true
+          type: string
+        spatial_transcriptomics:
+          description: Deprecated field for link to spatial transcriptomics data
+          nullable: true
+          type: string
+        genetic_info:
+          description: Genetic information related to the Model
+          items:
+            $ref: '#/components/schemas/GeneticInfo'
+          type: array
+        biomarkers:
+          description: List of biomarker data associated with the model
+          items:
+            $ref: '#/components/schemas/ModelData'
+          type: array
+        pathology:
+          description: List of pathology data associated with the model
+          items:
+            $ref: '#/components/schemas/ModelData'
+          type: array
+      required:
+        - aliases
+        - alzforum_id
+        - biomarkers
+        - contributing_group
+        - disease_correlation
+        - gene_expression
+        - genetic_info
+        - genotype
+        - jax_id
+        - matched_controls
+        - model_type
+        - name
+        - pathology
+        - rrid
+        - spatial_transcriptomics
+        - study_synid
       type: object

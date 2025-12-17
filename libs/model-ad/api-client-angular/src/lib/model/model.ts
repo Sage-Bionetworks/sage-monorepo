@@ -41,7 +41,7 @@ export interface Model {
   /**
    * JAX ID of the model
    */
-  jax_id: number;
+  jax_id: string;
   /**
    * AlzForum ID of the model
    */
