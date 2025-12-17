@@ -13,77 +13,81 @@ import {
 import { fetchComparisonToolConfig, navigateToComparison } from './helpers/comparison-tool';
 
 const CT_PAGE = 'Gene Expression';
+const categories = [
+  'RNA - DIFFERENTIAL EXPRESSION',
+  'Tissue - Hippocampus',
+  'Sex - Females & Males',
+];
+const categoriesQueryParams = getQueryParamFromValues(categories, 'categories');
+const cacul1Matches = [
+  'ENSMUSG00000033417~3xTg-AD',
+  'ENSMUSG00000033417~5xFAD (UCI)',
+  'ENSMUSG00000033417~Abca7*V1599M',
+  'ENSMUSG00000033417~Abca7*V1599M.5xFAD',
+  'ENSMUSG00000033417~Trem2-R47H_NSS',
+  'ENSMUSG00000033417~Trem2-R47H_NSS.5xFAD',
+];
 
-// TODO: remove test.fail when MG-602 is resolved
-const testFailDescription =
-  'Test will fail until data is updated to remove duplicate objects with the same row id (MG-602)';
 test.describe('gene expression', () => {
-  test.fail(
-    'filterbox search without comma returns partial case-insensitive matches',
-    { annotation: { type: 'fail', description: testFailDescription } },
-    async ({ page }) => {
-      await navigateToComparison(page, CT_PAGE, true);
+  test('filterbox search without comma returns partial case-insensitive matches', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await testPartialCaseInsensitiveSearch(page, 'acul', cacul1Matches);
+  });
 
-      await testPartialCaseInsensitiveSearch(page, 'acul', [
-        'ENSMUSG00000033417~5xFAD (IU/Jax/Pitt)',
-        'ENSMUSG00000033417~LOAD1',
-      ]); // Cacul1
-    },
-  );
+  test('filterbox search excludes pinned items from results', async ({ page }) => {
+    const queryParameters = [
+      categoriesQueryParams,
+      getQueryParamFromValues(cacul1Matches, 'pinned'),
+    ].join('&');
+    await navigateToComparison(page, CT_PAGE, true, 'url', queryParameters);
+    await testSearchExcludesPinnedItems(page, cacul1Matches, 'acul', 'cacul1,');
+  });
 
-  test.fail(
-    'filterbox search excludes pinned items from results',
-    { annotation: { type: 'fail', description: testFailDescription } },
-    async ({ page }) => {
-      const pinnedCorrelations = [
-        'ENSMUSG00000033417~5xFAD (IU/Jax/Pitt)',
-        'ENSMUSG00000033417~LOAD1',
-      ]; // Cacul1
+  test('filterbox search with commas returns full, case-insensitive matches', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await testFullCaseInsensitiveMatch(
+      page,
+      'fer,',
+      [
+        'ENSMUSG00000000127~3xTg-AD',
+        'ENSMUSG00000000127~5xFAD (UCI)',
+        'ENSMUSG00000000127~Abca7*V1599M',
+        'ENSMUSG00000000127~Abca7*V1599M.5xFAD',
+        'ENSMUSG00000000127~Trem2-R47H_NSS',
+        'ENSMUSG00000000127~Trem2-R47H_NSS.5xFAD',
+      ], // Fer
+      'ENSMUSG00000027356~3xTg-AD', // Fermt1
+    );
+  });
 
-      await navigateToComparison(
-        page,
-        CT_PAGE,
-        true,
-        'url',
-        getQueryParamFromValues(pinnedCorrelations, 'pinned'),
-      );
-
-      await testSearchExcludesPinnedItems(page, pinnedCorrelations, 'acul', 'cacul1,');
-    },
-  );
-
-  test.fail(
-    'filterbox search with commas returns full, case-insensitive matches',
-    { annotation: { type: 'fail', description: testFailDescription } },
-    async ({ page }) => {
-      await navigateToComparison(page, CT_PAGE, true);
-
-      await testFullCaseInsensitiveMatch(
-        page,
-        'fer,',
-        ['ENSMUSG00000000127~5xFAD (IU/Jax/Pitt)', 'ENSMUSG00000000127~LOAD1'], // Fer
-        'ENSMUSG00000024965~5xFAD (IU/Jax/Pitt)', // Fermt3
-      );
-    },
-  );
-
-  test.fail(
-    'filterbox search partial case-insensitive matches with special characters',
-    { annotation: { type: 'fail', description: testFailDescription } },
-    async ({ page }) => {
-      await navigateToComparison(page, CT_PAGE, true);
-
-      await testPartialCaseInsensitiveSearch(page, '(r', [
-        'ENSMUSG00000086429~5xFAD (IU/Jax/Pitt)',
-        'ENSMUSG00000086429~LOAD1',
-      ]); // Gt(ROSA)26Sor
-    },
-  );
+  test('filterbox search partial case-insensitive matches with special characters', async ({
+    page,
+  }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await testPartialCaseInsensitiveSearch(page, '(r', [
+      'ENSMUSG00000086429~3xTg-AD',
+      'ENSMUSG00000086429~5xFAD (UCI)',
+      'ENSMUSG00000086429~Abca7*V1599M',
+      'ENSMUSG00000086429~Abca7*V1599M.5xFAD',
+      'ENSMUSG00000086429~Trem2-R47H_NSS',
+      'ENSMUSG00000086429~Trem2-R47H_NSS.5xFAD',
+    ]); // Gt(ROSA)26Sor
+  });
 
   test('table loads previous page when last item on last page is pinned', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams);
+    await testPinLastItemLastPageGoesToPreviousPage(page);
+  });
+
+  test('table returns to first page when filter selected and removed', async ({ page }) => {
     const configs = await fetchComparisonToolConfig(page, CT_PAGE);
-    const categories = configs[1]?.dropdowns;
-    expect(categories.length).toBeGreaterThan(1);
+    const config = configs[0];
+    const categories = config.dropdowns;
+    const filters = config.filters;
+    expect(filters.length).toBeGreaterThan(1);
+    const filter = filters[0];
 
     await navigateToComparison(
       page,
@@ -92,16 +96,6 @@ test.describe('gene expression', () => {
       'url',
       getQueryParamFromValues(categories, 'categories'),
     );
-    await testPinLastItemLastPageGoesToPreviousPage(page);
-  });
-
-  test('table returns to first page when filter selected and removed', async ({ page }) => {
-    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
-    const filters = configs[0]?.filters;
-    expect(filters.length).toBeGreaterThan(1);
-    const filter = filters[0];
-
-    await navigateToComparison(page, CT_PAGE, true);
     await testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
       page,
       filter.name,
