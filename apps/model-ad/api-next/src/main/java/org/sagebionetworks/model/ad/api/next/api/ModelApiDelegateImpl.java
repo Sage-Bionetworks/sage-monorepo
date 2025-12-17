@@ -10,6 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -19,15 +22,19 @@ public class ModelApiDelegateImpl implements ModelApiDelegate {
 
   @Override
   public ResponseEntity<ModelDto> getModelByName(String name) {
-    log.debug("Fetching model by name: {}", name);
-    ModelDto model = modelService.getModelByName(name);
+    // Manually decode the URL-encoded name parameter
+    // This is necessary because we use pass-through for encoded slashes
+    String decodedName = URLDecoder.decode(name, StandardCharsets.UTF_8);
+
+    log.debug("Fetching model by name: {} (decoded from: {})", decodedName, name);
+    ModelDto model = modelService.getModelByName(decodedName);
 
     if (model == null) {
-      log.debug("Model not found: {}", name);
+      log.debug("Model not found: {}", decodedName);
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    log.debug("Successfully retrieved model: {}", name);
+    log.debug("Successfully retrieved model: {}", decodedName);
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
       .body(model);
