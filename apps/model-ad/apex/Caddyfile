@@ -15,9 +15,10 @@
    reverse_proxy {env.API_NEXT_HOST}:{env.API_NEXT_PORT}
   }
 
-  # Route /api/v1/models/search to the legacy API, stripping /api
-  handle_path /api/v1/models/search {
-    reverse_proxy {env.API_HOST}:{env.API_PORT}
+  # Route /api/v1/models/search (with query params) to the legacy API, stripping /api
+  handle /api/v1/models/search* {
+   uri strip_prefix /api
+   reverse_proxy {env.API_HOST}:{env.API_PORT}
   }
 
   # Route /api/v1/models/{name} to the next api, stripping /api
