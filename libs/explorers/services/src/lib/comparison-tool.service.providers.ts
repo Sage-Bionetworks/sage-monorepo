@@ -5,7 +5,7 @@ import {
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
-import { MessageService } from 'primeng/api';
+import { MessageService, SortMeta } from 'primeng/api';
 import { BehaviorSubject, of } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { ComparisonToolService } from './comparison-tool.service';
@@ -23,6 +23,7 @@ export type ComparisonToolServiceOptions = {
   pinnedItems?: string[];
   unpinnedData?: Record<string, unknown>[];
   pinnedData?: Record<string, unknown>[];
+  multiSortMeta?: SortMeta[];
   router?: Router;
   activatedRoute?: ActivatedRoute;
   urlSync?: boolean;
@@ -43,10 +44,6 @@ export const provideComparisonToolService = (
 ): Provider[] => {
   const useUrlSync = options?.urlSync ?? false;
 
-  if (!options) {
-    return [ComparisonToolUrlService, ComparisonToolService];
-  }
-
   const providers: Provider[] = [MessageService, NotificationService];
 
   if (useUrlSync) {
@@ -55,10 +52,10 @@ export const provideComparisonToolService = (
     providers.push({ provide: ComparisonToolUrlService, useClass: ComparisonToolUrlServiceStub });
   }
 
-  if (options.router) {
+  if (options?.router) {
     providers.push({ provide: Router, useValue: options.router });
   }
-  if (options.activatedRoute) {
+  if (options?.activatedRoute) {
     providers.push({ provide: ActivatedRoute, useValue: options.activatedRoute });
   }
 
@@ -67,6 +64,8 @@ export const provideComparisonToolService = (
     useFactory: () => {
       const service = new ComparisonToolService();
       const urlService = inject(ComparisonToolUrlService);
+
+      if (!options) return service;
 
       if (options.configs) {
         service.connect({
@@ -113,6 +112,10 @@ export const provideComparisonToolService = (
 
       if (options.pinnedData !== undefined) {
         service.setPinnedData(options.pinnedData);
+      }
+
+      if (options.multiSortMeta !== undefined) {
+        service.setSort(options.multiSortMeta);
       }
 
       return service;

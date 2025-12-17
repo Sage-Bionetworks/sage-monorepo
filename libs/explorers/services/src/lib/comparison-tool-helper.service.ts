@@ -4,10 +4,10 @@ import {
   ComparisonToolConfigColumn,
   ComparisonToolLink,
   HeatmapCircleData,
+  PaginationParams,
   VisualizationOverviewPane,
 } from '@sagebionetworks/explorers/models';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { PaginationParams } from '@sagebionetworks/explorers/models';
 
 @Injectable({
   providedIn: 'root',

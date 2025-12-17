@@ -10,7 +10,12 @@ import {
   getRowByName,
   testFullCaseInsensitiveMatch,
   testPartialCaseInsensitiveSearch,
+  testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
+  testTableReturnsToFirstPageWhenCategoriesChanged,
+  testTableReturnsToFirstPageWhenFilterSelectedAndRemoved,
+  testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared,
+  testTableReturnsToFirstPageWhenSortChanged,
   unPinByName,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
@@ -300,5 +305,39 @@ test.describe('disease correlation', () => {
       '5xFAD (IU/Jax/Pitt)~4 months~Female',
       '5xFAD (IU/Jax/Pitt)~4 months~Male',
     ]);
+  });
+
+  test('table loads previous page when last item on last page is pinned', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+    await testPinLastItemLastPageGoesToPreviousPage(page);
+  });
+
+  test('table returns to first page when filter selected and removed', async ({ page }) => {
+    const configs = await fetchComparisonToolConfig(page, CT_PAGE);
+    const filters = configs[0]?.filters;
+    expect(filters.length).toBeGreaterThan(1);
+    const filter = filters[0];
+
+    await navigateToComparison(page, CT_PAGE, true);
+    await testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
+      page,
+      filter.name,
+      filter.values[0],
+    );
+  });
+
+  test('table returns to first page when search term entered and cleared', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+    await testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared(page);
+  });
+
+  test('table returns to first page when categories changed', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+    await testTableReturnsToFirstPageWhenCategoriesChanged(page);
+  });
+
+  test('table returns to first page when sort changed', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+    await testTableReturnsToFirstPageWhenSortChanged(page);
   });
 });

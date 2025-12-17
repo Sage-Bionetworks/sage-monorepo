@@ -3,12 +3,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
+  ComparisonToolQuery,
   ComparisonToolViewConfig,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import {
-  ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolUrlService,
   PlatformService,
@@ -23,6 +23,7 @@ import {
   ItemFilterTypeQuery,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { SortMeta } from 'primeng/api';
 import { catchError, of, shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
@@ -41,14 +42,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
-  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
-
-  currentPageNumber = this.comparisonToolService.pageNumber;
-  currentPageSize = this.comparisonToolService.pageSize;
-  searchTerm = this.comparisonToolFilterService.searchTerm;
+  query = this.comparisonToolService.query;
+  dropdownSelection = this.comparisonToolService.dropdownSelection;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
@@ -113,38 +110,30 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     ],
     rowsPerPage: 10,
     rowIdDataKey: 'composite_id',
+    defaultSort: [
+      { field: 'name', order: 1 },
+      { field: 'age', order: 1 },
+      { field: 'sex', order: 1 },
+    ],
   };
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
-  private loadData(
-    selection: string[],
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
-    this.getPinnedData(selection, pinnedItems);
-    this.getUnpinnedData(selection, pinnedItems, pageNumber, pageSize, searchTerm);
-  }
-
-  readonly onUpdateEffect = effect(() => {
+  readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const selection = this.comparisonToolService.dropdownSelection();
-      if (!selection.length) {
-        return;
-      }
+      const categories = this.query().categories;
+      const pinnedItems = this.query().pinnedItems;
+      const sortMeta = this.query().multiSortMeta;
+      this.getPinnedData(categories, pinnedItems, sortMeta);
+    }
+  });
 
-      const pinnedItems = Array.from(this.pinnedItems());
-      this.loadData(
-        selection,
-        pinnedItems,
-        this.currentPageNumber(),
-        this.currentPageSize(),
-        this.searchTerm(),
-      );
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const query = this.query();
+      this.getUnpinnedData(query);
     }
   });
 
@@ -163,20 +152,20 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(
-    selection: string[],
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
+      currentQuery.multiSortMeta,
+    );
+
     const query: DiseaseCorrelationSearchQuery = {
-      categories: selection,
-      items: pinnedItems,
+      categories: currentQuery.categories,
+      items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber,
-      pageSize,
-      search: searchTerm,
+      pageNumber: currentQuery.pageNumber,
+      pageSize: currentQuery.pageSize,
+      search: currentQuery.searchTerm,
+      sortFields,
+      sortOrders,
     };
 
     this.diseaseCorrelationService
@@ -195,11 +184,15 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       });
   }
 
-  getPinnedData(selection: string[], pinnedItems: string[]) {
+  getPinnedData(categories: string[], pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
     const query: DiseaseCorrelationSearchQuery = {
-      categories: selection,
+      categories,
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields,
+      sortOrders,
     };
 
     this.diseaseCorrelationService

@@ -31,11 +31,12 @@ interface PaginationOptions {
   encapsulation: ViewEncapsulation.None,
 })
 export class BaseTableComponent {
-  private readonly comparisonToolService = inject(ComparisonToolService);
+  readonly comparisonToolService = inject(ComparisonToolService);
 
   selectedColumns = this.comparisonToolService.selectedColumns;
   viewConfig = this.comparisonToolService.viewConfig;
   totalRecords = this.comparisonToolService.totalResultsCount;
+  first = this.comparisonToolService.first;
 
   data = input.required<Record<string, any>[]>();
   shouldPaginate = input<boolean>(true);
@@ -49,10 +50,6 @@ export class BaseTableComponent {
     showPageLinks: false,
     paginatorStyleClass: 'comparison-tool-paginator',
   };
-
-  sortCallback(event: SortEvent) {
-    this.comparisonToolService.setSort(event);
-  }
 
   onLazyLoad(event: TableLazyLoadEvent) {
     this.comparisonToolService.handleLazyLoad(event);

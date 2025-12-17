@@ -14,6 +14,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Data Version
+    description: Operations about the data version.
   - name: Model
     description: Operations about models.
   - name: Model Overview
@@ -23,6 +25,28 @@ tags:
   - name: Gene Expression
     description: Operations about Gene Expression results.
 paths:
+  /data-version:
+    x-audience:
+      - public
+    get:
+      tags:
+        - Data Version
+      summary: Get data version
+      description: Get data version
+      operationId: getDataVersion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataVersion'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /comparison-tools/model-overview:
     get:
       tags:
@@ -118,6 +142,39 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    DataVersion:
+      type: object
+      description: Synapse data version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
     ItemFilterTypeQuery:
       type: string
       enum:
@@ -147,7 +204,8 @@ components:
           maximum: 100
           example: 100
         items:
-          description: List of item names to filter by.
+          description: |
+            List of item names to filter by.
           type: array
           items:
             type: string
@@ -161,12 +219,41 @@ components:
         search:
           description: |
             Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
-            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when 
+            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when
             itemFilterType is 'exclude'.
           type: string
           nullable: true
           example: 3xtg-ad,5xfad
-      required: []
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["model_type", "name"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - model_type
+            - name
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - -1
+            - 1
+      required:
+        - sortFields
+        - sortOrders
     ModelOverviewLink:
       type: object
       description: Model Overview Link
@@ -290,28 +377,6 @@ components:
       required:
         - modelOverviews
         - page
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem
-      required:
-        - title
-        - status
     DiseaseCorrelationSearchQuery:
       type: object
       description: Disease correlation search query with pagination and filtering options.
@@ -349,7 +414,7 @@ components:
             List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
             where each identifier represents one complete combination of model name, age, and sex.
 
-            Example: "APOE4~4 months~Female" filters for documents matching that exact name, age, and sex.
+            Example: "APOE4~4 months~Female" filters for documents matching that exact combination.
             Multiple items can be provided to filter for multiple specific combinations.
           type: array
           items:
@@ -365,13 +430,44 @@ components:
         search:
           description: |
             Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
-            Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when 
+            Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when
             itemFilterType is 'exclude'.
           type: string
           nullable: true
           example: 3xtg-ad,5xfad (uci)
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["name", "age", "sex"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - name
+            - age
+            - sex
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - 1
+            - -1
+            - 1
       required:
         - categories
+        - sortFields
+        - sortOrders
     Sex:
       type: string
       description: Sex
@@ -508,8 +604,45 @@ components:
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
           nullable: true
+        search:
+          description: |
+            Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches).
+            Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when
+            itemFilterType is 'exclude'.
+          type: string
+          nullable: true
+          example: gnai,cdc45
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., "gene_symbol,name").
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - gene_symbol
+            - name
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - 1
+            - -1
       required:
         - categories
+        - sortFields
+        - sortOrders
     SexCohort:
       type: string
       description: Sex Cohort
@@ -764,6 +897,25 @@ components:
         - genetic_info
         - biomarkers
         - pathology
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
   parameters:
     modelOverviewSearchQuery:
       name: modelOverviewSearchQuery
@@ -789,22 +941,3 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'
-  responses:
-    BadRequest:
-      description: Invalid request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'

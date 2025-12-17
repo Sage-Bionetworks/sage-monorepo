@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -37,7 +39,8 @@ public class GeneExpressionService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('geneExpression', #query.itemFilterType, #query.items, " +
-    "#tissue, #sexCohort, #query.pageNumber, #query.pageSize)"
+    "#query.search, #tissue, #sexCohort, #query.pageNumber, #query.pageSize, " +
+    "#query.sortFields, #query.sortOrders)"
   )
   public GeneExpressionsPageDto loadGeneExpressions(
     GeneExpressionSearchQueryDto query,
@@ -49,49 +52,48 @@ public class GeneExpressionService {
       ItemFilterTypeQueryDto.INCLUDE
     );
 
-    List<String> sanitizedItems = ApiHelper.sanitizeItems(query.getItems());
-    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
+    List<String> items = ApiHelper.sanitizeItems(query.getItems());
+    String search = query.getSearch();
+    List<Integer> sortOrders = query
+      .getSortOrders()
+      .stream()
+      .map(GeneExpressionSearchQueryDto.SortOrdersEnum::getValue)
+      .toList();
+    Sort sort = ApiHelper.createSort(query.getSortFields(), sortOrders);
+    PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
+
+    boolean hasSearch = search != null && !search.trim().isEmpty();
+    boolean hasItems = !items.isEmpty();
+    boolean isExclude = effectiveFilter == ItemFilterTypeQueryDto.EXCLUDE;
+
     Page<GeneExpressionDocument> page;
 
-    if (sanitizedItems.isEmpty()) {
-      // No items specified - return all or empty based on filter type
-      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-        page = Page.empty(pageable);
-      } else {
-        page = repository.findByTissueAndSexCohort(tissue, sexCohort, pageable);
-      }
+    if (isExclude && hasSearch) {
+      String trimmedSearch = search.trim();
+      page = hasItems
+        ? fetchPageWithSearchAndExclusions(tissue, sexCohort, trimmedSearch, items, pageable)
+        : fetchPageWithSearchOnly(tissue, sexCohort, trimmedSearch, pageable);
+    } else if (!hasItems) {
+      page = isExclude
+        ? repository.findByTissueAndSexCohort(tissue, sexCohort, pageable)
+        : Page.empty(pageable);
     } else {
-      // Parse composite identifiers and build MongoDB query conditions
-      List<GeneExpressionIdentifier> identifiers;
-      try {
-        identifiers = sanitizedItems.stream().map(GeneExpressionIdentifier::parse).toList();
-      } catch (InvalidFilterException e) {
-        log.error(
-          "Failed to parse composite identifiers for tissue '{}' and sex cohort '{}': {}",
+      List<Map<String, Object>> compositeConditions = buildCompositeConditions(
+        parseIdentifiers(items, tissue, sexCohort)
+      );
+      page = isExclude
+        ? repository.findByTissueAndSexCohortExcludingCompositeIdentifiers(
           tissue,
           sexCohort,
-          e.getMessage()
-        );
-        throw e;
-      }
-
-      List<Map<String, Object>> compositeConditions = buildCompositeConditions(identifiers);
-
-      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-        page = repository.findByTissueAndSexCohortAndCompositeIdentifiers(
+          compositeConditions,
+          pageable
+        )
+        : repository.findByTissueAndSexCohortAndCompositeIdentifiers(
           tissue,
           sexCohort,
           compositeConditions,
           pageable
         );
-      } else {
-        page = repository.findByTissueAndSexCohortExcludingCompositeIdentifiers(
-          tissue,
-          sexCohort,
-          compositeConditions,
-          pageable
-        );
-      }
     }
 
     List<GeneExpressionDto> geneExpressions = page
@@ -113,6 +115,88 @@ public class GeneExpressionService {
       .geneExpressions(geneExpressions)
       .page(pageMetadata)
       .build();
+  }
+
+  private Page<GeneExpressionDocument> fetchPageWithSearchOnly(
+    String tissue,
+    String sexCohort,
+    String trimmedSearch,
+    PageRequest pageable
+  ) {
+    if (trimmedSearch.contains(",")) {
+      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
+      return repository.findByTissueAndSexCohortAndGeneSymbolInIgnoreCase(
+        tissue,
+        sexCohort,
+        patterns,
+        pageable
+      );
+    }
+
+    return repository.findByTissueAndSexCohortAndGeneSymbolContaining(
+      tissue,
+      sexCohort,
+      Pattern.quote(trimmedSearch),
+      pageable
+    );
+  }
+
+  private Page<GeneExpressionDocument> fetchPageWithSearchAndExclusions(
+    String tissue,
+    String sexCohort,
+    String trimmedSearch,
+    List<String> items,
+    PageRequest pageable
+  ) {
+    List<Map<String, Object>> compositeConditions = buildCompositeConditions(
+      parseIdentifiers(items, tissue, sexCohort)
+    );
+
+    if (trimmedSearch.contains(",")) {
+      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
+      return repository.findByTissueAndSexCohortAndGeneSymbolInIgnoreCaseExcludingCompositeIdentifiers(
+        tissue,
+        sexCohort,
+        patterns,
+        compositeConditions,
+        pageable
+      );
+    }
+
+    return repository.findByTissueAndSexCohortAndGeneSymbolContainingExcludingCompositeIdentifiers(
+      tissue,
+      sexCohort,
+      Pattern.quote(trimmedSearch),
+      compositeConditions,
+      pageable
+    );
+  }
+
+  /**
+   * Parses composite identifiers from string items.
+   *
+   * @param items list of composite identifier strings
+   * @param tissue tissue name for error logging
+   * @param sexCohort sex cohort for error logging
+   * @return list of parsed identifiers
+   * @throws InvalidFilterException if parsing fails
+   */
+  private List<GeneExpressionIdentifier> parseIdentifiers(
+    List<String> items,
+    String tissue,
+    String sexCohort
+  ) {
+    try {
+      return items.stream().map(GeneExpressionIdentifier::parse).toList();
+    } catch (InvalidFilterException e) {
+      log.error(
+        "Failed to parse composite identifiers for tissue '{}' and sex cohort '{}': {}",
+        tissue,
+        sexCohort,
+        e.getMessage()
+      );
+      throw e;
+    }
   }
 
   /**

@@ -14,6 +14,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - description: Operations about the data version.
+    name: Data Version
   - description: Operations about models.
     name: Model
   - description: Operations about Model Overview.
@@ -23,6 +25,33 @@ tags:
   - description: Operations about Gene Expression results.
     name: Gene Expression
 paths:
+  /data-version:
+    get:
+      description: Get data version
+      operationId: getDataVersion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataVersion'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get data version
+      tags:
+        - Data Version
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Data Version
+    x-audience:
+      - public
   /comparison-tools/model-overview:
     get:
       description: Returns a paginated list of model overview objects for use in comparison
@@ -211,6 +240,44 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
+    DataVersion:
+      description: Synapse data version
+      example:
+        data_file: data_file
+        data_version: data_version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+      required:
+        - data_file
+        - data_version
+      type: object
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+        instance:
+          description: An absolute URI that identifies the specific occurrence of
+            the problem
+          type: string
+      required:
+        - status
+        - title
+      type: object
     ItemFilterTypeQuery:
       default: include
       description: |
@@ -239,7 +306,8 @@ components:
           minimum: 1
           type: integer
         items:
-          description: List of item names to filter by.
+          description: |
+            List of item names to filter by.
           example:
             - 3xTg-AD
             - 5xFAD (UCI)
@@ -250,13 +318,43 @@ components:
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
-          description: "Search by model name (case-insensitive partial match) or by\
-            \ comma separated list of model names (case-insensitive full matches).\n\
-            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match).\
-            \ Only applied when \nitemFilterType is 'exclude'.\n"
+          description: |
+            Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
+            Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when
+            itemFilterType is 'exclude'.
           example: '3xtg-ad,5xfad'
           nullable: true
           type: string
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["model_type", "name"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          example:
+            - model_type
+            - name
+          items:
+            type: string
+          minItems: 1
+          type: array
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          example:
+            - -1
+            - 1
+          items:
+            enum:
+              - 1
+              - -1
+            format: int32
+            type: integer
+          minItems: 1
+          type: array
+      required:
+        - sortFields
+        - sortOrders
       type: object
     ModelOverviewLink:
       description: Model Overview Link
@@ -493,30 +591,6 @@ components:
         - modelOverviews
         - page
       type: object
-    BasicError:
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          description: A human readable documentation for the problem type
-          type: string
-        status:
-          description: The HTTP status code
-          type: integer
-        detail:
-          description: A human readable explanation specific to this occurrence of
-            the problem
-          type: string
-        type:
-          description: An absolute URI that identifies the problem type
-          type: string
-        instance:
-          description: An absolute URI that identifies the specific occurrence of
-            the problem
-          type: string
-      required:
-        - status
-        - title
-      type: object
     DiseaseCorrelationSearchQuery:
       description: Disease correlation search query with pagination and filtering
         options.
@@ -554,7 +628,7 @@ components:
             List of composite identifiers to filter by. Each identifier uses the format "name~age~sex"
             where each identifier represents one complete combination of model name, age, and sex.
 
-            Example: "APOE4~4 months~Female" filters for documents matching that exact name, age, and sex.
+            Example: "APOE4~4 months~Female" filters for documents matching that exact combination.
             Multiple items can be provided to filter for multiple specific combinations.
           example:
             - APOE4~4 months~Female
@@ -567,15 +641,46 @@ components:
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
-          description: "Search by model name (case-insensitive partial match) or by\
-            \ comma separated list of model names (case-insensitive full matches).\n\
-            Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial\
-            \ match). Only applied when \nitemFilterType is 'exclude'.\n"
+          description: |
+            Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
+            Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when
+            itemFilterType is 'exclude'.
           example: '3xtg-ad,5xfad (uci)'
           nullable: true
           type: string
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["name", "age", "sex"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          example:
+            - name
+            - age
+            - sex
+          items:
+            type: string
+          minItems: 1
+          type: array
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          example:
+            - 1
+            - -1
+            - 1
+          items:
+            enum:
+              - 1
+              - -1
+            format: int32
+            type: integer
+          minItems: 1
+          type: array
       required:
         - categories
+        - sortFields
+        - sortOrders
       type: object
     Sex:
       description: Sex
@@ -818,8 +923,45 @@ components:
           type: array
         itemFilterType:
           $ref: '#/components/schemas/ItemFilterTypeQuery'
+        search:
+          description: |
+            Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches).
+            Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when
+            itemFilterType is 'exclude'.
+          example: 'gnai,cdc45'
+          nullable: true
+          type: string
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., "gene_symbol,name").
+            Each field in sortFields must have a corresponding order in sortOrders.
+          example:
+            - gene_symbol
+            - name
+          items:
+            type: string
+          minItems: 1
+          type: array
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          example:
+            - 1
+            - -1
+          items:
+            enum:
+              - 1
+              - -1
+            format: int32
+            type: integer
+          minItems: 1
+          type: array
       required:
         - categories
+        - sortFields
+        - sortOrders
       type: object
     SexCohort:
       description: Sex Cohort

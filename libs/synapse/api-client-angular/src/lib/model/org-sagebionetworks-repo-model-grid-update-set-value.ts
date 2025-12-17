@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 import { OrgSagebionetworksRepoModelGridUpdateLiteralSetValue } from './org-sagebionetworks-repo-model-grid-update-literal-set-value';
-import { OrgSagebionetworksRepoModelGridUpdateRegexExtractSetValue } from './org-sagebionetworks-repo-model-grid-update-regex-extract-set-value';
+import { OrgSagebionetworksRepoModelGridUpdateTemplateSetValue } from './org-sagebionetworks-repo-model-grid-update-template-set-value';
 
 /**
  *
@@ -20,4 +20,4 @@ import { OrgSagebionetworksRepoModelGridUpdateRegexExtractSetValue } from './org
  */
 export type OrgSagebionetworksRepoModelGridUpdateSetValue =
   | OrgSagebionetworksRepoModelGridUpdateLiteralSetValue
-  | OrgSagebionetworksRepoModelGridUpdateRegexExtractSetValue;
+  | OrgSagebionetworksRepoModelGridUpdateTemplateSetValue;

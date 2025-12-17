@@ -441,9 +441,11 @@ export * from './org-sagebionetworks-repo-model-grid-update-grid-update-request'
 export * from './org-sagebionetworks-repo-model-grid-update-grid-update-response';
 export * from './org-sagebionetworks-repo-model-grid-update-literal-set-value';
 export * from './org-sagebionetworks-repo-model-grid-update-on-match-failure';
-export * from './org-sagebionetworks-repo-model-grid-update-regex-extract-set-value';
+export * from './org-sagebionetworks-repo-model-grid-update-on-missing-value';
 export * from './org-sagebionetworks-repo-model-grid-update-set-value';
+export * from './org-sagebionetworks-repo-model-grid-update-template-set-value';
 export * from './org-sagebionetworks-repo-model-grid-update-update';
+export * from './org-sagebionetworks-repo-model-grid-update-update-batch';
 export * from './org-sagebionetworks-repo-model-has-accessor-requirement';
 export * from './org-sagebionetworks-repo-model-has-etag';
 export * from './org-sagebionetworks-repo-model-id-list';

@@ -15,7 +15,9 @@ export class DownloadDomImageComponent {
   filename = input.required();
   buttonLabel = input('');
   hasCsvDownload = input<boolean>(false);
+  hasImageDownload = input<boolean>(true);
   data = input<string[][]>([]);
+  downloadImagePaddingPx = input<number>();
 
   performDownload = async (fileType: string): Promise<void> => {
     if (fileType === '.jpeg' || fileType === '.png') {
@@ -29,10 +31,16 @@ export class DownloadDomImageComponent {
   downloadImage = async (fileType: string): Promise<void> => {
     // width and height need to be specified
     // known issue: https://github.com/1904labs/dom-to-image-more/issues/198
+    const paddingPx = this.downloadImagePaddingPx() ?? 0;
     const blob = await domtoimage.toBlob(this.target(), {
       bgcolor: '#fff',
-      width: this.target().offsetWidth,
-      height: this.target().offsetHeight,
+      width: this.target().offsetWidth + paddingPx * 2,
+      height: this.target().offsetHeight + paddingPx * 2,
+      ...(this.downloadImagePaddingPx() !== undefined && {
+        style: {
+          padding: `${paddingPx}px`,
+        },
+      }),
     });
     saveAs(blob, this.filename() + fileType);
   };

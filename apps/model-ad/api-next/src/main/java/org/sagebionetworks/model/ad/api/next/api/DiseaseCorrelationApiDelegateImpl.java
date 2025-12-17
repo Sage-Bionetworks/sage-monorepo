@@ -36,12 +36,12 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   }
 
   /**
-   * Extracts cluster from categories array.
-   * Expected format: [mainCategory, clusterCategory] where:
-   * - categories[0] is the main category (e.g., "CONSENSUS NETWORK MODULES")
-   * - categories[1] is the cluster category (e.g., "Consensus Cluster A - ECM Organization")
+   * Extracts cluster from categories list.
+   * Expected format: List of 2 items where:
+   * - First value is the main category (e.g., "CONSENSUS NETWORK MODULES")
+   * - Second value is the cluster category (e.g., "Consensus Cluster A - ECM Organization")
    *
-   * @param categories Array of category values
+   * @param categories List of category values
    * @return cluster name
    */
   private String extractCluster(List<String> categories) {

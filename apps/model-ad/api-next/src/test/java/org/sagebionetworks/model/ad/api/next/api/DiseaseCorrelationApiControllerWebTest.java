@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.sagebionetworks.model.ad.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
+import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
@@ -41,6 +42,16 @@ class DiseaseCorrelationApiControllerWebTest {
         }
       }
     );
+    conversionService.addConverter(
+      new Converter<String, DiseaseCorrelationSearchQueryDto.SortOrdersEnum>() {
+        @Override
+        public DiseaseCorrelationSearchQueryDto.SortOrdersEnum convert(String source) {
+          return DiseaseCorrelationSearchQueryDto.SortOrdersEnum.fromValue(
+            Integer.parseInt(source)
+          );
+        }
+      }
+    );
     mockMvc = MockMvcBuilders.standaloneSetup(controller)
       .setControllerAdvice(new GlobalExceptionHandler())
       .setConversionService(conversionService)
@@ -63,6 +74,8 @@ class DiseaseCorrelationApiControllerWebTest {
         get("/v1/comparison-tools/disease-correlation")
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", "")
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -90,6 +103,8 @@ class DiseaseCorrelationApiControllerWebTest {
         get("/v1/comparison-tools/disease-correlation")
           .param("categories", "OTHER")
           .param("categories", "Cluster A")
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -116,6 +131,8 @@ class DiseaseCorrelationApiControllerWebTest {
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", "Cluster A")
           .param("item", "not-an-id")
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isBadRequest())
       .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -143,6 +160,8 @@ class DiseaseCorrelationApiControllerWebTest {
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", "Cluster A")
           .param("item", correlationId)
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isNotFound());
   }
@@ -165,6 +184,8 @@ class DiseaseCorrelationApiControllerWebTest {
           .param("categories", "CONSENSUS NETWORK MODULES")
           .param("categories", cluster)
           .param("item", correlationId)
+          .param("sortFields", "name")
+          .param("sortOrders", "1")
       )
       .andExpect(status().isNotFound());
   }

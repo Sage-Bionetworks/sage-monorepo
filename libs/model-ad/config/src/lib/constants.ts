@@ -28,13 +28,13 @@ export const ROUTE_PATHS = {
 export const MODEL_DETAILS_BOXPLOT_POINT_STYLES: PointStyle[] = [
   {
     label: 'Female',
-    color: '#DB00FF',
+    color: '#D72247',
     shape: 'triangle',
     opacity: 0.5,
   },
   {
     label: 'Male',
-    color: '#1B00B3',
+    color: '#245299',
     shape: 'circle',
     opacity: 0.5,
   },

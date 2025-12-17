@@ -46,8 +46,12 @@ export class PrimaryIdentifierControlsComponent {
     return isPinned ? 'Unpin this row' : 'Pin this row to the top of the list';
   });
 
-  viewDetailsWasClicked() {
+  viewDetailsWasClicked(event: MouseEvent) {
     this.viewConfig().viewDetailsClick(this.id(), this.label());
+
+    // MG-629: Remove focus from button and its container to prevent focus-within state from persisting
+    const button = event.currentTarget as HTMLElement;
+    button.blur();
   }
 
   pinToggle() {

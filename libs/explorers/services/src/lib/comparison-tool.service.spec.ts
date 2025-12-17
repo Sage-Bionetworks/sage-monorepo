@@ -6,7 +6,7 @@ import {
   ComparisonToolUrlParams,
 } from '@sagebionetworks/explorers/models';
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
-import { FilterService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject, of } from 'rxjs';
 import { ComparisonToolService } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
@@ -38,9 +38,8 @@ describe('ComparisonToolService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        FilterService,
         MessageService,
-        ...provideComparisonToolService(),
+        ...provideComparisonToolService({ urlSync: true }),
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
       ],
@@ -225,6 +224,60 @@ describe('ComparisonToolService', () => {
       expect(service.isPinned('id1')).toBe(true);
       expect(service.isPinned('id2')).toBe(true);
       expect(service.isPinned('id3')).toBe(false);
+    });
+
+    it('should not add duplicate items when pinItem is called multiple times with same id', () => {
+      connectService();
+
+      service.pinItem('id1');
+      service.pinItem('id1');
+      service.pinItem('id1');
+
+      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
+      expect(pinnedItemsArray).toEqual(['id1']);
+      expect(service.isPinned('id1')).toBe(true);
+    });
+
+    it('should deduplicate items when setPinnedItems receives array with duplicates', () => {
+      connectService();
+
+      service.setPinnedItems(['id1', 'id2', 'id1', 'id3', 'id2']);
+
+      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
+      expect(pinnedItemsArray).toEqual(['id1', 'id2', 'id3']);
+      expect(service.pinnedItems().size).toBe(3);
+      expect(service.isPinned('id1')).toBe(true);
+      expect(service.isPinned('id2')).toBe(true);
+      expect(service.isPinned('id3')).toBe(true);
+    });
+
+    it('should handle setPinnedItems with null and return empty array', () => {
+      connectService();
+
+      service.pinItem('id1');
+      expect(service.isPinned('id1')).toBe(true);
+
+      service.setPinnedItems(null);
+
+      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
+      expect(pinnedItemsArray).toEqual([]);
+      expect(service.pinnedItems().size).toBe(0);
+    });
+
+    it('should maintain data integrity when pinning, unpinning, and re-pinning same item', () => {
+      connectService();
+
+      service.pinItem('id1');
+      expect(service.isPinned('id1')).toBe(true);
+
+      service.unpinItem('id1');
+      expect(service.isPinned('id1')).toBe(false);
+
+      service.pinItem('id1');
+      expect(service.isPinned('id1')).toBe(true);
+
+      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
+      expect(pinnedItemsArray).toEqual(['id1']);
     });
   });
 
@@ -468,6 +521,111 @@ describe('ComparisonToolService', () => {
         expect(lastCall?.[1]?.queryParams?.categories).toEqual('Category%20A,Option%201');
         expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id1');
       }));
+    });
+  });
+
+  describe('page number reset behavior', () => {
+    it('should reset page to 0 when filter changes', () => {
+      connectService();
+
+      service.updateQuery({ pageNumber: 5 });
+      expect(service.pageNumber()).toBe(5);
+
+      const filters = [
+        {
+          name: 'Test Filter',
+          data_key: 'testField',
+          options: [
+            { label: 'Option 1', selected: true },
+            { label: 'Option 2', selected: false },
+          ],
+        },
+      ];
+      service.updateQuery({ filters, pageNumber: service.FIRST_PAGE_NUMBER });
+
+      expect(service.pageNumber()).toBe(0);
+    });
+
+    it('should reset page to 0 when sort changes', () => {
+      connectService();
+
+      service.updateQuery({ pageNumber: 3 });
+      expect(service.pageNumber()).toBe(3);
+
+      service.setSort([{ field: 'name', order: 1 }]);
+
+      expect(service.pageNumber()).toBe(0);
+    });
+
+    it('should reset page to 0 when search term changes', () => {
+      connectService();
+
+      service.updateQuery({ pageNumber: 4 });
+      expect(service.pageNumber()).toBe(4);
+
+      service.updateQuery({ searchTerm: 'test search', pageNumber: service.FIRST_PAGE_NUMBER });
+
+      expect(service.pageNumber()).toBe(0);
+    });
+
+    it('should reset page to 0 when dropdown selection changes', () => {
+      const mockConfigsWithDropdowns: ComparisonToolConfig[] = [
+        {
+          ...mockComparisonToolDataConfig[0],
+          dropdowns: ['Category A', 'Option 1'],
+        },
+        {
+          ...mockComparisonToolDataConfig[0],
+          dropdowns: ['Category A', 'Option 2'],
+        },
+      ];
+
+      connectService(mockConfigsWithDropdowns, { selection: ['Category A', 'Option 1'] });
+
+      expect(service.dropdownSelection()).toEqual(['Category A', 'Option 1']);
+
+      service.updateQuery({ pageNumber: 2 });
+      expect(service.pageNumber()).toBe(2);
+
+      service.setDropdownSelection(['Category A', 'Option 2']);
+
+      expect(service.pageNumber()).toBe(0);
+      expect(service.dropdownSelection()).toEqual(['Category A', 'Option 2']);
+    });
+
+    it('should not reset page when item is pinned', () => {
+      connectService();
+
+      service.updateQuery({ pageNumber: 6 });
+      expect(service.pageNumber()).toBe(6);
+
+      service.pinItem('id1');
+
+      expect(service.pageNumber()).toBe(6);
+    });
+
+    it('should not reset page when item is unpinned', () => {
+      connectService();
+
+      service.pinItem('id1');
+
+      service.updateQuery({ pageNumber: 7 });
+      expect(service.pageNumber()).toBe(7);
+
+      service.unpinItem('id1');
+
+      expect(service.pageNumber()).toBe(7);
+    });
+
+    it('should not reset page when multiple items are pinned at once', () => {
+      connectService();
+
+      service.updateQuery({ pageNumber: 3 });
+      expect(service.pageNumber()).toBe(3);
+
+      service.pinList(['id1', 'id2', 'id3']);
+
+      expect(service.pageNumber()).toBe(3);
     });
   });
 });

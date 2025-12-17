@@ -50,6 +50,8 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   private readonly location = inject(Location);
   private readonly clipboard = inject(Clipboard);
 
+  readonly BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX = 20;
+
   boxplotsContainer = viewChild('boxplotsContainer', { read: ElementRef });
   boxplotGrids = viewChildren(ModelDetailsBoxplotsGridComponent, { read: ElementRef });
 

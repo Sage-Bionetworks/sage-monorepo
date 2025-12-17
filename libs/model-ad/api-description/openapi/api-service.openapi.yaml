@@ -14,35 +14,11 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Data Version
-    description: Operations about the data version.
   - name: Model
     description: Operations about models.
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
 paths:
-  /data-version:
-    x-audience:
-      - public
-    get:
-      tags:
-        - Data Version
-      summary: Get data version
-      description: Get data version
-      operationId: getDataVersion
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataVersion'
-          description: Success
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /models/search:
     get:
       tags:
@@ -101,17 +77,23 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    DataVersion:
+    SearchResult:
       type: object
-      description: Synapse data version
+      description: Search result
       properties:
-        data_file:
+        id:
           type: string
-        data_version:
+          description: ID of result
+        match_field:
           type: string
+          description: Field that matched the query
+        match_value:
+          type: string
+          description: Value that matched the query
       required:
-        - data_file
-        - data_version
+        - id
+        - match_field
+        - match_value
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -134,23 +116,6 @@ components:
       required:
         - title
         - status
-    SearchResult:
-      type: object
-      description: Search result
-      properties:
-        id:
-          type: string
-          description: ID of result
-        match_field:
-          type: string
-          description: Field that matched the query
-        match_value:
-          type: string
-          description: Value that matched the query
-      required:
-        - id
-        - match_field
-        - match_value
     ComparisonToolPage:
       type: string
       description: The type of comparison tool page
@@ -263,14 +228,14 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
+    NotFound:
+      description: The specified resource was not found
       content:
         application/problem+json:
           schema:

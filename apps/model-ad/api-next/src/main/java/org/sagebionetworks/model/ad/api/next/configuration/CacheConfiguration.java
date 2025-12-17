@@ -34,7 +34,8 @@ public class CacheConfiguration {
         CacheNames.DISEASE_CORRELATION,
         CacheNames.MODEL_OVERVIEW,
         CacheNames.GENE_EXPRESSION,
-        CacheNames.MODEL
+        CacheNames.MODEL,
+        CacheNames.DATA_VERSION
       )
     );
 

@@ -14,8 +14,6 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Data Version
-    description: Operations about the data version.
   - name: Model
     description: Operations about models.
     # x-sage-internal: true # Now defined in the new API service; making this node internal does not
@@ -24,8 +22,6 @@ tags:
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
 paths:
-  /data-version:
-    $ref: paths/data-version.yaml
   /models/search:
     $ref: paths/model-search.yaml
   /comparison-tool-config:

@@ -1,4 +1,5 @@
 <p-table
+  ngSkipHydration
   #headerTable
   id="table-header"
   breakpoint="0"
@@ -6,6 +7,7 @@
   [customSort]="true"
   (sortFunction)="sortCallback($event)"
   sortMode="multiple"
+  [multiSortMeta]="multiSortMeta()"
   [defaultSortOrder]="-1"
 >
   <ng-template pTemplate="header">

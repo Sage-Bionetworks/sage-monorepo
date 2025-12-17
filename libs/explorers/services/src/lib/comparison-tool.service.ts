@@ -4,11 +4,13 @@ import {
   ComparisonToolColumn,
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
+  ComparisonToolQuery,
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
+  SortOrder,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
-import { SortEvent, SortMeta } from 'primeng/api';
+import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs';
@@ -35,13 +37,14 @@ export class ComparisonToolService<T> {
   // this cutoff may need to be included in the ui_config instead, so the cutoff can be set per tool.
   private readonly DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL = 2;
   private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
+  readonly FIRST_PAGE_NUMBER = 0;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
     selectorsWikiParams: {},
     headerTitle: '',
     filterResultsButtonTooltip: 'Filter results',
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
-    viewDetailsClick: (id: string, label: string) => {
+    viewDetailsClick: (_id: string, _label: string) => {
       return;
     },
     legendEnabled: true,
@@ -56,42 +59,52 @@ export class ComparisonToolService<T> {
     visualizationOverviewPanes: [],
     rowsPerPage: 10,
     rowIdDataKey: '_id',
+    allowPinnedImageDownload: true,
   };
 
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
-  private readonly dropdownSelectionSignal = signal<string[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly isVisualizationOverviewVisibleSignal = signal(true);
   private readonly isVisualizationOverviewHiddenByUserSignal = signal(false);
   private readonly maxPinnedItemsSignal = signal<number>(50);
-  private readonly pinnedItemsSignal = signal<Set<string>>(new Set());
-  private readonly multiSortMetaSignal = signal<SortMeta[]>(this.DEFAULT_MULTI_SORT_META);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
   private readonly pinnedItemsForDropdownsSignal = signal<Map<string, Set<string>>>(new Map());
   private readonly unpinnedDataSignal = signal<T[]>([]);
   private readonly pinnedDataSignal = signal<T[]>([]);
-  private readonly pageNumberSignal = signal<number>(0);
-  private readonly pageSizeSignal = signal<number>(10);
+  private readonly querySignal = signal<ComparisonToolQuery>({
+    categories: [],
+    pinnedItems: [],
+    pageNumber: this.FIRST_PAGE_NUMBER,
+    pageSize: 10,
+    multiSortMeta: this.DEFAULT_MULTI_SORT_META,
+    searchTerm: null,
+    filters: [],
+  });
   private readonly isInitializedSignal = signal(false);
 
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
-  readonly dropdownSelection = this.dropdownSelectionSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly isVisualizationOverviewVisible = this.isVisualizationOverviewVisibleSignal.asReadonly();
   readonly isVisualizationOverviewHiddenByUser =
     this.isVisualizationOverviewHiddenByUserSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
-  readonly pinnedItems = this.pinnedItemsSignal.asReadonly();
-  readonly multiSortMeta = this.multiSortMetaSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
-  readonly pageNumber = this.pageNumberSignal.asReadonly();
-  readonly pageSize = this.pageSizeSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
+
+  readonly query = this.querySignal.asReadonly();
+  readonly dropdownSelection = computed(() => this.querySignal().categories);
+  readonly pinnedItems = computed(() => new Set(this.querySignal().pinnedItems));
+  readonly pageNumber = computed(() => this.querySignal().pageNumber);
+  readonly pageSize = computed(() => this.querySignal().pageSize);
+  readonly multiSortMeta = computed(() => this.querySignal().multiSortMeta);
+  readonly searchTerm = computed(() => this.querySignal().searchTerm);
+  readonly filters = computed(() => this.querySignal().filters);
+  readonly first = computed(() => this.pageNumber() * this.pageSize());
 
   private readonly syncToUrlInProgress = signal(false);
   private lastSerializedState: string | null = null;
@@ -103,6 +116,7 @@ export class ComparisonToolService<T> {
       const isInitialized = this.isInitialized();
       const syncingToUrl = this.syncToUrlInProgress();
       const isActive = this.coordinatorService.isActive(this);
+
       if (!isInitialized || syncingToUrl || !isActive) {
         return;
       }
@@ -128,7 +142,7 @@ export class ComparisonToolService<T> {
     }
 
     // if no selection, return first config
-    const dropdownSelection = this.dropdownSelectionSignal();
+    const dropdownSelection = this.dropdownSelection();
     if (!dropdownSelection.length) {
       return configs[0];
     }
@@ -189,7 +203,19 @@ export class ComparisonToolService<T> {
     this.configsSignal.set(configs ?? []);
 
     const selection = this.resolveInitialDropdownSelection(params, configs);
-    this.dropdownSelectionSignal.set(selection);
+
+    const queryUpdate: Partial<ComparisonToolQuery> = {
+      categories: selection,
+      pageNumber: this.FIRST_PAGE_NUMBER,
+    };
+
+    // Apply default sort if configured
+    const defaultSort = this.viewConfigSignal().defaultSort;
+    if (defaultSort && defaultSort.length > 0) {
+      queryUpdate.multiSortMeta = defaultSort as SortMeta[];
+    }
+
+    this.updateQuery(queryUpdate);
 
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
     for (const config of configs) {
@@ -302,7 +328,7 @@ export class ComparisonToolService<T> {
   }
 
   isPinned(id: string): boolean {
-    return this.pinnedItemsSignal().has(id);
+    return this.pinnedItems().has(id);
   }
 
   togglePin(id: string) {
@@ -318,50 +344,51 @@ export class ComparisonToolService<T> {
       this.notificationService.showWarning(
         `You have reached the maximum number of pinned items (${this.maxPinnedItems()}). Please unpin an item before pinning a new one.`,
       );
-    } else {
-      this.pinnedItemsSignal.update((pinnedItems) => {
-        const newSet = new Set(pinnedItems);
-        newSet.add(id);
-        return newSet;
+    } else if (!this.isPinned(id)) {
+      this.updateQuery({
+        pinnedItems: [...this.query().pinnedItems, id],
       });
       this.updatePinnedItemsCache();
     }
   }
 
   unpinItem(id: string) {
-    this.pinnedItemsSignal.update((pinnedItems) => {
-      const newSet = new Set(pinnedItems);
-      newSet.delete(id);
-      return newSet;
+    this.updateQuery({
+      pinnedItems: this.query().pinnedItems.filter((item) => item !== id),
     });
     this.updatePinnedItemsCache();
   }
 
   pinList(ids: string[]) {
-    this.pinnedItemsSignal.update((pinnedItems) => {
-      const newSet = new Set(pinnedItems);
-      let itemsAdded = 0;
-      for (const id of ids) {
-        if (newSet.size >= this.maxPinnedItems()) {
-          const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
-          this.notificationService.showWarning(
-            `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
-          );
-          break;
-        }
-        if (newSet.has(id)) {
-          continue;
-        }
-        newSet.add(id);
-        itemsAdded++;
+    const currentPins = new Set(this.query().pinnedItems);
+    let itemsAdded = 0;
+
+    for (const id of ids) {
+      if (currentPins.size >= this.maxPinnedItems()) {
+        const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
+        this.notificationService.showWarning(
+          `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
+        );
+        break;
       }
-      return newSet;
+      if (currentPins.has(id)) {
+        continue;
+      }
+      currentPins.add(id);
+      itemsAdded++;
+    }
+
+    this.updateQuery({
+      pinnedItems: Array.from(currentPins),
     });
     this.updatePinnedItemsCache();
   }
 
   setPinnedItems(items: string[] | null) {
-    this.pinnedItemsSignal.set(new Set(items ?? []));
+    const deduplicatedItems = items ? Array.from(new Set(items)) : [];
+    this.updateQuery({
+      pinnedItems: deduplicatedItems,
+    });
     this.updatePinnedItemsCache();
   }
 
@@ -405,12 +432,11 @@ export class ComparisonToolService<T> {
     this.pinnedDataSignal.set(pinnedData);
   }
 
-  setPageNumber(pageNumber: number) {
-    this.pageNumberSignal.set(pageNumber);
-  }
-
-  setPageSize(pageSize: number) {
-    this.pageSizeSignal.set(pageSize);
+  updateQuery(query: Partial<ComparisonToolQuery>) {
+    this.querySignal.update((current) => ({
+      ...current,
+      ...query,
+    }));
   }
 
   handleLazyLoad(event: TableLazyLoadEvent) {
@@ -419,22 +445,23 @@ export class ComparisonToolService<T> {
       event,
       defaultRowsPerPage,
     );
-    this.setPageNumber(pageNumber);
-    this.setPageSize(pageSize);
+    this.updateQuery({ pageNumber, pageSize });
   }
 
   private updateDropdownSelectionIfChanged(selection: string[]) {
-    if (isEqual(this.dropdownSelectionSignal(), selection)) {
+    if (isEqual(this.dropdownSelection(), selection)) {
       return;
     }
-
-    // Switch to new selection
-    this.dropdownSelectionSignal.set(selection);
 
     // Restore pinned items for new selection from cache (or empty if not cached)
     const newKey = this.dropdownKey(selection);
     const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(newKey);
-    this.pinnedItemsSignal.set(cachedPinnedItems ? new Set(cachedPinnedItems) : new Set());
+
+    this.updateQuery({
+      categories: selection,
+      pinnedItems: cachedPinnedItems ? Array.from(cachedPinnedItems) : [],
+      pageNumber: this.FIRST_PAGE_NUMBER,
+    });
   }
 
   private normalizeSelection(selection: string[], configs: ComparisonToolConfig[]): string[] {
@@ -515,8 +542,41 @@ export class ComparisonToolService<T> {
     });
   }
 
-  setSort(event: SortEvent) {
-    this.multiSortMetaSignal.set(event.multiSortMeta || this.DEFAULT_MULTI_SORT_META);
+  setSort(multiSortMeta: SortMeta[]) {
+    const newSort = multiSortMeta || this.DEFAULT_MULTI_SORT_META;
+    const currentSort = this.querySignal().multiSortMeta;
+
+    // Early return if arrays are reference-equal
+    if (currentSort === newSort) {
+      return;
+    }
+
+    // Only update if the sort has actually changed (deep equality check)
+    if (isEqual(currentSort, newSort)) {
+      return;
+    }
+
+    // If clearing sort (empty array), apply default sort if configured
+    if (newSort.length === 0) {
+      const defaultSort = this.viewConfigSignal().defaultSort;
+      if (defaultSort && defaultSort.length > 0) {
+        this.updateQuery({
+          pageNumber: this.FIRST_PAGE_NUMBER,
+          multiSortMeta: defaultSort as SortMeta[],
+        });
+        return;
+      }
+    }
+
+    // Deep clone to create new object references for Angular change detection
+    // This ensures immutability and prevents external mutations from affecting our state
+    const clonedSort = newSort.map((s) => ({ field: s.field, order: s.order }));
+
+    // reset page to the first page when sort changes
+    this.updateQuery({
+      pageNumber: this.FIRST_PAGE_NUMBER,
+      multiSortMeta: clonedSort,
+    });
   }
 
   private resolveUrlState(params: ComparisonToolUrlParams, options: { isInitial: boolean }): void {
@@ -531,8 +591,8 @@ export class ComparisonToolService<T> {
     if (!options.isInitial && params.categories) {
       const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
       // Only update if different to avoid loops
-      if (!isEqual(normalizedSelection, this.dropdownSelectionSignal())) {
-        this.dropdownSelectionSignal.set(normalizedSelection);
+      if (!isEqual(normalizedSelection, this.dropdownSelection())) {
+        this.updateQuery({ categories: normalizedSelection, pageNumber: this.FIRST_PAGE_NUMBER });
       }
     }
 
@@ -551,16 +611,14 @@ export class ComparisonToolService<T> {
     // First visit to this CT without URL pins - start with empty pins and sync to URL
     if (options.isInitial && !this.initialPinsResolved) {
       this.resetPinnedItems();
-
       this.syncToUrlInProgress.set(false);
       this.scheduleUrlSyncFromCurrentState();
-
       this.initialPinsResolved = true;
       return;
     }
 
     // When navigating back without URL pins, check if we have cached pins for current dropdown
-    const currentKey = this.dropdownKey(this.dropdownSelectionSignal());
+    const currentKey = this.dropdownKey(this.dropdownSelection());
     const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(currentKey);
 
     // Restore cached pins and sync to URL
@@ -591,6 +649,7 @@ export class ComparisonToolService<T> {
     dropdownSelection: string[],
   ): ComparisonToolUrlParams {
     const pinned = Array.from(pinnedItems);
+
     return {
       pinnedItems: pinned.length ? pinned : null,
       categories: dropdownSelection.length ? dropdownSelection : null,
@@ -599,6 +658,30 @@ export class ComparisonToolService<T> {
 
   private syncCurrentStateToUrl(): void {
     this.syncStateToUrl(this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()));
+  }
+
+  /**
+   * Converts PrimeNG SortMeta array to sortFields and sortOrders arrays.
+   */
+  convertSortMetaToArrays(multiSortMeta: SortMeta[]): {
+    sortFields: string[];
+    sortOrders: SortOrder[];
+  } {
+    if (!multiSortMeta || multiSortMeta.length === 0) {
+      return { sortFields: [], sortOrders: [] };
+    }
+
+    const sortFields: string[] = [];
+    const sortOrders: SortOrder[] = [];
+
+    for (const meta of multiSortMeta) {
+      if (meta.field) {
+        sortFields.push(meta.field);
+        sortOrders.push((meta.order ?? 1) as SortOrder);
+      }
+    }
+
+    return { sortFields, sortOrders };
   }
 
   private updateSerializedStateCache(): void {

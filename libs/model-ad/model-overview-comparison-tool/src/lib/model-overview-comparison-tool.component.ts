@@ -2,9 +2,8 @@ import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angul
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
-  ComparisonToolFilterService,
   ComparisonToolHelperService,
   ComparisonToolUrlService,
   PlatformService,
@@ -19,6 +18,7 @@ import {
   ModelOverviewsPage,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { SortMeta } from 'primeng/api';
 import { catchError, of, shareReplay } from 'rxjs';
 import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
 
@@ -33,18 +33,13 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly modelOverviewService = inject(ModelOverviewService);
   private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
-  private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
-  private readonly modelOverviewService = inject(ModelOverviewService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
 
-  pinnedItems = this.comparisonToolService.pinnedItems;
   isInitialized = this.comparisonToolService.isInitialized;
-
-  currentPageNumber = this.comparisonToolService.pageNumber;
-  currentPageSize = this.comparisonToolService.pageSize;
-  searchTerm = this.comparisonToolFilterService.searchTerm;
+  query = this.comparisonToolService.query;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
@@ -95,31 +90,29 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
     rowIdDataKey: 'name',
+    allowPinnedImageDownload: false,
+    defaultSort: [
+      { field: 'model_type', order: -1 },
+      { field: 'name', order: 1 },
+    ],
   };
 
   constructor() {
     this.comparisonToolService.setViewConfig(this.viewConfig);
   }
 
-  private loadData(
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
-    this.getPinnedData(pinnedItems);
-    this.getUnpinnedData(pinnedItems, pageNumber, pageSize, searchTerm);
-  }
-
-  readonly onUpdateEffect = effect(() => {
+  readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const pinnedItems = Array.from(this.pinnedItems());
-      this.loadData(
-        pinnedItems,
-        this.currentPageNumber(),
-        this.currentPageSize(),
-        this.searchTerm(),
-      );
+      const pinnedItems = this.query().pinnedItems;
+      const sortMeta = this.query().multiSortMeta;
+      this.getPinnedData(pinnedItems, sortMeta);
+    }
+  });
+
+  readonly unpinnedDataEffect = effect(() => {
+    if (this.platformService.isBrowser && this.isInitialized()) {
+      const query = this.query();
+      this.getUnpinnedData(query);
     }
   });
 
@@ -138,20 +131,20 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     this.comparisonToolService.disconnect();
   }
 
-  getUnpinnedData(
-    pinnedItems: string[],
-    pageNumber: number,
-    pageSize: number,
-    searchTerm: string | null,
-  ) {
-    const query: ModelOverviewSearchQuery = {
-      items: pinnedItems,
-      itemFilterType: ItemFilterTypeQuery.Exclude,
-      pageNumber,
-      pageSize,
-      search: searchTerm,
-    };
+  getUnpinnedData(currentQuery: ComparisonToolQuery) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(
+      currentQuery.multiSortMeta,
+    );
 
+    const query: ModelOverviewSearchQuery = {
+      items: currentQuery.pinnedItems,
+      itemFilterType: ItemFilterTypeQuery.Exclude,
+      pageNumber: currentQuery.pageNumber,
+      pageSize: currentQuery.pageSize,
+      search: currentQuery.searchTerm,
+      sortFields,
+      sortOrders,
+    };
     this.modelOverviewService
       .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -167,10 +160,14 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       });
   }
 
-  getPinnedData(pinnedItems: string[]) {
+  getPinnedData(pinnedItems: string[], sortMeta: SortMeta[]) {
+    const { sortFields, sortOrders } = this.comparisonToolService.convertSortMetaToArrays(sortMeta);
+
     const query: ModelOverviewSearchQuery = {
       items: pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Include,
+      sortFields,
+      sortOrders,
     };
 
     this.modelOverviewService

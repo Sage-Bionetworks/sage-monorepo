@@ -41,6 +41,49 @@ public class GeneExpressionSearchQueryDto {
 
   private ItemFilterTypeQueryDto itemFilterType = ItemFilterTypeQueryDto.INCLUDE;
 
+  private @Nullable String search = null;
+
+  @Valid
+  private List<String> sortFields = new ArrayList<>();
+
+  /**
+   * Gets or Sets sortOrders
+   */
+  public enum SortOrdersEnum {
+    NUMBER_1(1),
+    
+    NUMBER_MINUS_1(-1);
+
+    private final Integer value;
+
+    SortOrdersEnum(Integer value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public Integer getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static SortOrdersEnum fromValue(Integer value) {
+      for (SortOrdersEnum b : SortOrdersEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  @Valid
+  private List<SortOrdersEnum> sortOrders = new ArrayList<>();
+
   public GeneExpressionSearchQueryDto() {
     super();
   }
@@ -48,8 +91,10 @@ public class GeneExpressionSearchQueryDto {
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionSearchQueryDto(List<String> categories) {
+  public GeneExpressionSearchQueryDto(List<String> categories, List<String> sortFields, List<SortOrdersEnum> sortOrders) {
     this.categories = categories;
+    this.sortFields = sortFields;
+    this.sortOrders = sortOrders;
   }
 
   public GeneExpressionSearchQueryDto pageNumber(Integer pageNumber) {
@@ -171,6 +216,82 @@ public class GeneExpressionSearchQueryDto {
     this.itemFilterType = itemFilterType;
   }
 
+  public GeneExpressionSearchQueryDto search(@Nullable String search) {
+    this.search = search;
+    return this;
+  }
+
+  /**
+   * Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches). Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when itemFilterType is 'exclude'. 
+   * @return search
+   */
+  
+  @Schema(name = "search", example = "gnai,cdc45", description = "Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches). Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when itemFilterType is 'exclude'. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("search")
+  public @Nullable String getSearch() {
+    return search;
+  }
+
+  public void setSearch(@Nullable String search) {
+    this.search = search;
+  }
+
+  public GeneExpressionSearchQueryDto sortFields(List<String> sortFields) {
+    this.sortFields = sortFields;
+    return this;
+  }
+
+  public GeneExpressionSearchQueryDto addSortFieldsItem(String sortFieldsItem) {
+    if (this.sortFields == null) {
+      this.sortFields = new ArrayList<>();
+    }
+    this.sortFields.add(sortFieldsItem);
+    return this;
+  }
+
+  /**
+   * List of field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders. 
+   * @return sortFields
+   */
+  @NotNull @Size(min = 1) 
+  @Schema(name = "sortFields", example = "[\"gene_symbol\",\"name\"]", description = "List of field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders. ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("sortFields")
+  public List<String> getSortFields() {
+    return sortFields;
+  }
+
+  public void setSortFields(List<String> sortFields) {
+    this.sortFields = sortFields;
+  }
+
+  public GeneExpressionSearchQueryDto sortOrders(List<SortOrdersEnum> sortOrders) {
+    this.sortOrders = sortOrders;
+    return this;
+  }
+
+  public GeneExpressionSearchQueryDto addSortOrdersItem(SortOrdersEnum sortOrdersItem) {
+    if (this.sortOrders == null) {
+      this.sortOrders = new ArrayList<>();
+    }
+    this.sortOrders.add(sortOrdersItem);
+    return this;
+  }
+
+  /**
+   * List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. 
+   * @return sortOrders
+   */
+  @NotNull @Size(min = 1) 
+  @Schema(name = "sortOrders", example = "[1,-1]", description = "List of sort directions corresponding to sortFields. Values: 1 (ascending) or -1 (descending). Must have the same length as sortFields. ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("sortOrders")
+  public List<SortOrdersEnum> getSortOrders() {
+    return sortOrders;
+  }
+
+  public void setSortOrders(List<SortOrdersEnum> sortOrders) {
+    this.sortOrders = sortOrders;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -184,12 +305,15 @@ public class GeneExpressionSearchQueryDto {
         Objects.equals(this.pageSize, geneExpressionSearchQuery.pageSize) &&
         Objects.equals(this.categories, geneExpressionSearchQuery.categories) &&
         Objects.equals(this.items, geneExpressionSearchQuery.items) &&
-        Objects.equals(this.itemFilterType, geneExpressionSearchQuery.itemFilterType);
+        Objects.equals(this.itemFilterType, geneExpressionSearchQuery.itemFilterType) &&
+        Objects.equals(this.search, geneExpressionSearchQuery.search) &&
+        Objects.equals(this.sortFields, geneExpressionSearchQuery.sortFields) &&
+        Objects.equals(this.sortOrders, geneExpressionSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType);
+    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search, sortFields, sortOrders);
   }
 
   @Override
@@ -201,6 +325,9 @@ public class GeneExpressionSearchQueryDto {
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
+    sb.append("    search: ").append(toIndentedString(search)).append("\n");
+    sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
+    sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -234,6 +361,9 @@ public class GeneExpressionSearchQueryDto {
       this.instance.setCategories(value.categories);
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
+      this.instance.setSearch(value.search);
+      this.instance.setSortFields(value.sortFields);
+      this.instance.setSortOrders(value.sortOrders);
       return this;
     }
 
@@ -259,6 +389,21 @@ public class GeneExpressionSearchQueryDto {
     
     public GeneExpressionSearchQueryDto.Builder itemFilterType(ItemFilterTypeQueryDto itemFilterType) {
       this.instance.itemFilterType(itemFilterType);
+      return this;
+    }
+    
+    public GeneExpressionSearchQueryDto.Builder search(String search) {
+      this.instance.search(search);
+      return this;
+    }
+    
+    public GeneExpressionSearchQueryDto.Builder sortFields(List<String> sortFields) {
+      this.instance.sortFields(sortFields);
+      return this;
+    }
+    
+    public GeneExpressionSearchQueryDto.Builder sortOrders(List<SortOrdersEnum> sortOrders) {
+      this.instance.sortOrders(sortOrders);
       return this;
     }
     

@@ -17,9 +17,9 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
 
   @Override
   public ResponseEntity<ModelOverviewsPageDto> getModelOverviews(
-    ModelOverviewSearchQueryDto modelOverviewSearchQuery
+    ModelOverviewSearchQueryDto query
   ) {
-    ModelOverviewsPageDto page = modelOverviewService.loadModelOverviews(modelOverviewSearchQuery);
+    ModelOverviewsPageDto page = modelOverviewService.loadModelOverviews(query);
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))

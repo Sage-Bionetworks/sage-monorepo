@@ -18,6 +18,7 @@ type DomFile = {
 export class DownloadDomImagesZipComponent {
   domFiles = input.required<DomFile[]>();
   filename = input.required();
+  downloadImagePaddingPx = input<number>();
 
   performDownload = async (fileType: string): Promise<void> => {
     const zip = new JSZip();
@@ -25,10 +26,16 @@ export class DownloadDomImagesZipComponent {
     for (const domFile of this.domFiles()) {
       // width and height need to be specified
       // known issue: https://github.com/1904labs/dom-to-image-more/issues/198
+      const paddingPx = this.downloadImagePaddingPx() ?? 0;
       const blob = await domtoimage.toBlob(domFile.target, {
         bgcolor: '#fff',
-        width: domFile.target.offsetWidth,
-        height: domFile.target.offsetHeight,
+        width: domFile.target.offsetWidth + paddingPx * 2,
+        height: domFile.target.offsetHeight + paddingPx * 2,
+        ...(this.downloadImagePaddingPx() !== undefined && {
+          style: {
+            padding: `${paddingPx}px`,
+          },
+        }),
       });
       zip.file(domFile.filename + fileType, blob);
     }
