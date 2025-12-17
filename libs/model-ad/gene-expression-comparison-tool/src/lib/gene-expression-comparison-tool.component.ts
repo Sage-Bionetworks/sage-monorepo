@@ -128,7 +128,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       const categories = this.query().categories;
       const pinnedItems = this.query().pinnedItems;
       const sortMeta = this.query().multiSortMeta;
-      this.getPinnedData(pinnedItems, categories, sortMeta);
+      this.getPinnedData(categories, pinnedItems, sortMeta);
     }
   });
 
