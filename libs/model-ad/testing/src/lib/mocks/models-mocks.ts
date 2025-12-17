@@ -7,7 +7,7 @@ export const modelMock: Model = {
   contributing_group: 'UCI',
   study_synid: 'syn22964685',
   rrid: 'MMRRC_034830-JAX',
-  jax_id: 4807,
+  jax_id: '004807',
   alzforum_id: '3xtg',
   genotype: 'B6;129-Tg(APPSwe,tauP301L)1Lfa <i>Psen1<sup>tm1Mpm</sup></i>/Mmjax',
   gene_expression: 'comparison/expression?model=3xTg-AD',
