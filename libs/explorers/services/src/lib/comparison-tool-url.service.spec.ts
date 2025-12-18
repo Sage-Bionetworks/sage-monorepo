@@ -241,4 +241,63 @@ describe('ComparisonToolUrlService', () => {
       expect(mockRouter.navigate).toHaveBeenCalled();
     });
   });
+
+  describe('sortFields and sortOrders', () => {
+    it('should serialize sortFields and sortOrders', () => {
+      service.syncToUrl({
+        sortFields: ['name', 'score'],
+        sortOrders: [1, -1],
+      });
+
+      expect(mockRouter.navigate).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({
+          queryParams: expect.objectContaining({
+            sortFields: 'name,score',
+            sortOrders: '1,-1',
+          }),
+        }),
+      );
+    });
+
+    it('should clear sortFields and sortOrders when empty', () => {
+      mockActivatedRoute.snapshot = {
+        queryParams: { sortFields: 'name', sortOrders: '1' },
+      } as any;
+
+      service.syncToUrl({ sortFields: [], sortOrders: [] });
+
+      expect(mockRouter.navigate).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({
+          queryParams: expect.objectContaining({
+            sortFields: null,
+            sortOrders: null,
+          }),
+        }),
+      );
+    });
+
+    it('should deserialize sortFields and sortOrders', async () => {
+      queryParamsSubject.next({ sortFields: 'name,score', sortOrders: '1,-1' });
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      const params = await firstValueFrom(service.params$);
+      expect(params.sortFields).toEqual(['name', 'score']);
+      expect(params.sortOrders).toEqual([1, -1]);
+    });
+
+    it('should skip navigation when sort state matches URL', () => {
+      mockActivatedRoute.snapshot = {
+        queryParams: { sortFields: 'name,score', sortOrders: '1,-1' },
+      } as any;
+
+      service.syncToUrl({
+        sortFields: ['name', 'score'],
+        sortOrders: [1, -1],
+      });
+
+      expect(mockRouter.navigate).not.toHaveBeenCalled();
+    });
+  });
 });
