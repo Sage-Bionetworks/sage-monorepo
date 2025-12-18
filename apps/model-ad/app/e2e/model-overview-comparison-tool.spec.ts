@@ -2,9 +2,13 @@ import { expect, test } from '@playwright/test';
 import {
   expectPinnedParams,
   expectPinnedRows,
+  expectSortFieldsParams,
+  expectSortOrdersParams,
   expectUnpinnedTableOnly,
   getPinnedTable,
   getRowByName,
+  getSortFieldsQueryParams,
+  getSortOrdersQueryParams,
   getUnpinnedTable,
   pinByName,
   testFullCaseInsensitiveMatch,
@@ -205,5 +209,190 @@ test.describe('model overview', () => {
   test('table returns to first page when sort changed', async ({ page }) => {
     await navigateToComparison(page, CT_PAGE, true);
     await testTableReturnsToFirstPageWhenSortChanged(page);
+  });
+
+  test.describe('sort URL sync', () => {
+    // Columns: 0=Model (name), 1=Model Type, 2=Matched Controls, 3=Gene Expression, 4=Disease Correlation, ...
+    // Default sort: model_type DESC, name ASC
+
+    test('clicking Gene Expression column updates URL with sortFields and sortOrders', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+
+      // Initial state: no sort params (default sort applied internally)
+      expect(getSortFieldsQueryParams(page.url())).toEqual([]);
+      expect(getSortOrdersQueryParams(page.url())).toEqual([]);
+
+      // Click Gene Expression column header
+      await page.getByRole('columnheader', { name: 'Gene Expression' }).click();
+
+      await expectSortFieldsParams(page, ['gene_expression']);
+      await expectSortOrdersParams(page, [-1]);
+    });
+
+    test('clicking same column toggles between descending and ascending', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+
+      const geneExpressionHeader = page.getByRole('columnheader', { name: 'Gene Expression' });
+
+      // First click - descending
+      await geneExpressionHeader.click();
+      await expectSortFieldsParams(page, ['gene_expression']);
+      await expectSortOrdersParams(page, [-1]);
+
+      // Second click - ascending
+      await geneExpressionHeader.click();
+      await expectSortFieldsParams(page, ['gene_expression']);
+      await expectSortOrdersParams(page, [1]);
+
+      // Third click - back to descending
+      await geneExpressionHeader.click();
+      await expectSortFieldsParams(page, ['gene_expression']);
+      await expectSortOrdersParams(page, [-1]);
+
+      // Fourth click - ascending again
+      await geneExpressionHeader.click();
+      await expectSortFieldsParams(page, ['gene_expression']);
+      await expectSortOrdersParams(page, [1]);
+    });
+
+    test('sort is restored from URL on page load', async ({ page }) => {
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        'sortFields=disease_correlation&sortOrders=1',
+      );
+
+      await expectSortFieldsParams(page, ['disease_correlation']);
+      await expectSortOrdersParams(page, [1]);
+
+      // Click the sorted column to toggle it
+      await page.getByRole('columnheader', { name: 'Disease Correlation' }).click();
+      await expectSortFieldsParams(page, ['disease_correlation']);
+      await expectSortOrdersParams(page, [-1]);
+
+      // Click again to toggle back
+      await page.getByRole('columnheader', { name: 'Disease Correlation' }).click();
+      await expectSortFieldsParams(page, ['disease_correlation']);
+      await expectSortOrdersParams(page, [1]);
+    });
+
+    test('clicking different columns in sequence replaces single-column sort', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+
+      // Click Gene Expression
+      await page.getByRole('columnheader', { name: 'Gene Expression' }).click();
+      await expectSortFieldsParams(page, ['gene_expression']);
+      await expectSortOrdersParams(page, [-1]);
+
+      // Click Disease Correlation - should replace the sort
+      await page.getByRole('columnheader', { name: 'Disease Correlation' }).click();
+      await expectSortFieldsParams(page, ['disease_correlation']);
+      await expectSortOrdersParams(page, [-1]);
+
+      // Click Pathology - should replace again
+      await page.getByRole('columnheader', { name: 'Pathology' }).click();
+      await expectSortFieldsParams(page, ['pathology']);
+      await expectSortOrdersParams(page, [-1]);
+
+      // Click Gene Expression again - back to first column
+      await page.getByRole('columnheader', { name: 'Gene Expression' }).click();
+      await expectSortFieldsParams(page, ['gene_expression']);
+      await expectSortOrdersParams(page, [-1]);
+    });
+
+    test('Meta+click builds multi-column sort with multiple columns', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+
+      // Click Gene Expression first
+      await page.getByRole('columnheader', { name: 'Gene Expression' }).click();
+      await expectSortFieldsParams(page, ['gene_expression']);
+      await expectSortOrdersParams(page, [-1]);
+
+      // Meta+click Disease Correlation to add to sort
+      await page
+        .getByRole('columnheader', { name: 'Disease Correlation' })
+        .click({ modifiers: ['Meta'] });
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation']);
+      await expectSortOrdersParams(page, [-1, -1]);
+
+      // Meta+click Pathology to add third column
+      await page.getByRole('columnheader', { name: 'Pathology' }).click({ modifiers: ['Meta'] });
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation', 'pathology']);
+      await expectSortOrdersParams(page, [-1, -1, -1]);
+
+      // Regular click on Biomarkers - should reset to single column sort
+      await page.getByRole('columnheader', { name: 'Biomarkers' }).click();
+      await expectSortFieldsParams(page, ['biomarkers']);
+      await expectSortOrdersParams(page, [-1]);
+
+      // Build multi-column sort again to verify cycle works
+      await page.getByRole('columnheader', { name: 'Gene Expression' }).click();
+      await page
+        .getByRole('columnheader', { name: 'Disease Correlation' })
+        .click({ modifiers: ['Meta'] });
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation']);
+      await expectSortOrdersParams(page, [-1, -1]);
+    });
+
+    test('multi-column sort is restored from URL', async ({ page }) => {
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        'sortFields=gene_expression,disease_correlation&sortOrders=-1,1',
+      );
+
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation']);
+      await expectSortOrdersParams(page, [-1, 1]);
+
+      // Meta+click to add third column
+      await page.getByRole('columnheader', { name: 'Pathology' }).click({ modifiers: ['Meta'] });
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation', 'pathology']);
+      await expectSortOrdersParams(page, [-1, 1, -1]);
+    });
+
+    test('Meta+click on existing sort columns toggles their order', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+
+      // Set up multi-column sort with 3 columns
+      await page.getByRole('columnheader', { name: 'Gene Expression' }).click();
+      await page
+        .getByRole('columnheader', { name: 'Disease Correlation' })
+        .click({ modifiers: ['Meta'] });
+      await page.getByRole('columnheader', { name: 'Pathology' }).click({ modifiers: ['Meta'] });
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation', 'pathology']);
+      await expectSortOrdersParams(page, [-1, -1, -1]);
+
+      // Meta+click Gene Expression to toggle its order
+      await page
+        .getByRole('columnheader', { name: 'Gene Expression' })
+        .click({ modifiers: ['Meta'] });
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation', 'pathology']);
+      await expectSortOrdersParams(page, [1, -1, -1]);
+
+      // Meta+click Disease Correlation to toggle its order
+      await page
+        .getByRole('columnheader', { name: 'Disease Correlation' })
+        .click({ modifiers: ['Meta'] });
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation', 'pathology']);
+      await expectSortOrdersParams(page, [1, 1, -1]);
+
+      // Meta+click Pathology to toggle its order
+      await page.getByRole('columnheader', { name: 'Pathology' }).click({ modifiers: ['Meta'] });
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation', 'pathology']);
+      await expectSortOrdersParams(page, [1, 1, 1]);
+
+      // Toggle Gene Expression back to descending
+      await page
+        .getByRole('columnheader', { name: 'Gene Expression' })
+        .click({ modifiers: ['Meta'] });
+      await expectSortFieldsParams(page, ['gene_expression', 'disease_correlation', 'pathology']);
+      await expectSortOrdersParams(page, [-1, 1, 1]);
+    });
   });
 });

@@ -35,6 +35,22 @@ export const getPinnedQueryParams = (url: string): string[] => getQueryParamValu
 export const getCategoriesQueryParams = (url: string): string[] =>
   getQueryParamValues(url, 'categories');
 
+export const getSortFieldsQueryParams = (url: string): string[] =>
+  getQueryParamValues(url, 'sortFields');
+
+export const getSortOrdersQueryParams = (url: string): number[] =>
+  getQueryParamValues(url, 'sortOrders').map((v) => parseInt(v, 10));
+
+export const getPageQueryParam = (url: string): number | null => {
+  const values = getQueryParamValues(url, 'page');
+  return values.length > 0 ? parseInt(values[0], 10) : null;
+};
+
+export const getSearchQueryParam = (url: string): string | null => {
+  const values = getQueryParamValues(url, 'search');
+  return values.length > 0 ? values[0] : null;
+};
+
 export const getPinnedTable = (page: Page): Locator => page.locator('explorers-base-table').first();
 
 export const getUnpinnedTable = (page: Page): Locator =>
@@ -82,6 +98,22 @@ export const expectPinnedParams = async (page: Page, expected: string[]): Promis
 
 export const expectCategoriesParams = async (page: Page, expected: string[]): Promise<void> => {
   await expect.poll(() => getCategoriesQueryParams(page.url())).toEqual(expected);
+};
+
+export const expectSortFieldsParams = async (page: Page, expected: string[]): Promise<void> => {
+  await expect.poll(() => getSortFieldsQueryParams(page.url())).toEqual(expected);
+};
+
+export const expectSortOrdersParams = async (page: Page, expected: number[]): Promise<void> => {
+  await expect.poll(() => getSortOrdersQueryParams(page.url())).toEqual(expected);
+};
+
+export const expectPageParam = async (page: Page, expected: number | null): Promise<void> => {
+  await expect.poll(() => getPageQueryParam(page.url())).toEqual(expected);
+};
+
+export const expectSearchParam = async (page: Page, expected: string | null): Promise<void> => {
+  await expect.poll(() => getSearchQueryParam(page.url())).toEqual(expected);
 };
 
 export const expectPinnedRows = async (page: Page, rowNames: string[]): Promise<void> => {
