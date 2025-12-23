@@ -39,16 +39,17 @@
             />
             <ul>
               @for (option of filter.options; track option; let j = $index) {
+                @let filterOptionId = filter.name + '-' + option.label;
                 <li>
                   <div class="checkbox">
                     <p-checkbox
                       [(ngModel)]="option.selected"
                       [binary]="true"
                       (ngModelChange)="handleChange()"
-                      [inputId]="option.label"
+                      [inputId]="filterOptionId"
                       size="small"
                     />
-                    <label [for]="option.label">
+                    <label [for]="filterOptionId">
                       {{ option.label }}
                     </label>
                   </div>

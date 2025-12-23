@@ -1,7 +1,11 @@
+$border-style: 1px solid var(--color-gray-300);
+
 .controls {
   position: relative;
   display: flex;
   flex-direction: row;
+  border: $border-style;
+  border-top: none;
 
   .controls-left {
     display: flex;
@@ -9,11 +13,10 @@
     align-items: center;
     width: var(--comparison-tool-primary-column-width);
     padding: 20px;
+    gap: 16px;
+    border-right: $border-style;
 
     explorers-comparison-tool-search-input {
-      position: absolute;
-      top: 100%;
-      z-index: 10;
       width: 100%;
       max-width: 200px;
     }
@@ -25,7 +28,6 @@
     align-items: start;
     justify-content: flex-end;
     flex-grow: 1;
-    border: 1px solid var(--color-gray-300);
     padding: 20px;
 
     .significance-and-column-selector {
@@ -38,7 +40,7 @@
         padding-left: 10px;
 
         &:last-child {
-          border-left: 1px solid var(--color-gray-300);
+          border-left: $border-style;
           margin-left: 10px;
           margin-right: 10px;
         }
