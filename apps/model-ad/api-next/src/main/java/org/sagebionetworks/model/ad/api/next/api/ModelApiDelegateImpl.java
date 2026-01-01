@@ -29,12 +29,6 @@ public class ModelApiDelegateImpl implements ModelApiDelegate {
     log.debug("Fetching model by name: {} (decoded from: {})", decodedName, name);
     ModelDto model = modelService.getModelByName(decodedName);
 
-    if (model == null) {
-      log.debug("Model not found: {}", decodedName);
-      ApiHelper.logHttpResponse(HttpStatus.NOT_FOUND.value());
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
     log.debug("Successfully retrieved model: {}", decodedName);
     ApiHelper.logHttpResponse(HttpStatus.OK.value());
     return ResponseEntity.ok()
