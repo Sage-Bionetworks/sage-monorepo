@@ -2,6 +2,7 @@ package org.sagebionetworks.model.ad.api.next.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(InvalidObjectIdException.class)
@@ -25,16 +27,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     NativeWebRequest request,
     Locale locale
   ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.INVALID_OBJECT_ID.getTitle())
+      .status(ErrorConstants.INVALID_OBJECT_ID.getStatus().value())
+      .detail(ex.getMessage())
+      .instance(resolveInstance(request))
+      .build();
+    log.warn("{} {}: uri={}, error={}",
+      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.INVALID_OBJECT_ID.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-      .body(
-        BasicErrorDto.builder()
-          .title(ErrorConstants.INVALID_OBJECT_ID.getTitle())
-          .status(ErrorConstants.INVALID_OBJECT_ID.getStatus().value())
-          .detail(ex.getMessage())
-          .instance(resolveInstance(request))
-          .build()
-      );
+      .body(errorDto);
   }
 
   @ExceptionHandler(InvalidCategoryException.class)
@@ -43,16 +46,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     NativeWebRequest request,
     Locale locale
   ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.INVALID_CATEGORY.getTitle())
+      .status(ErrorConstants.INVALID_CATEGORY.getStatus().value())
+      .detail(ex.getMessage())
+      .instance(resolveInstance(request))
+      .build();
+    log.warn("{} {}: uri={}, error={}",
+      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.INVALID_CATEGORY.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-      .body(
-        BasicErrorDto.builder()
-          .title(ErrorConstants.INVALID_CATEGORY.getTitle())
-          .status(ErrorConstants.INVALID_CATEGORY.getStatus().value())
-          .detail(ex.getMessage())
-          .instance(resolveInstance(request))
-          .build()
-      );
+      .body(errorDto);
   }
 
   @ExceptionHandler(InvalidFilterException.class)
@@ -61,16 +65,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     NativeWebRequest request,
     Locale locale
   ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.INVALID_FILTER.getTitle())
+      .status(ErrorConstants.INVALID_FILTER.getStatus().value())
+      .detail(ex.getMessage())
+      .instance(resolveInstance(request))
+      .build();
+    log.warn("{} {}: uri={}, error={}",
+      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.INVALID_FILTER.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-      .body(
-        BasicErrorDto.builder()
-          .title(ErrorConstants.INVALID_FILTER.getTitle())
-          .status(ErrorConstants.INVALID_FILTER.getStatus().value())
-          .detail(ex.getMessage())
-          .instance(resolveInstance(request))
-          .build()
-      );
+      .body(errorDto);
   }
 
   @ExceptionHandler(DataIntegrityException.class)
@@ -79,16 +84,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     NativeWebRequest request,
     Locale locale
   ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.DATA_INTEGRITY_ERROR.getTitle())
+      .status(ErrorConstants.DATA_INTEGRITY_ERROR.getStatus().value())
+      .detail(ex.getMessage())
+      .instance(resolveInstance(request))
+      .build();
+    log.error("{} {}: uri={}, error={}",
+      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.DATA_INTEGRITY_ERROR.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-      .body(
-        BasicErrorDto.builder()
-          .title(ErrorConstants.DATA_INTEGRITY_ERROR.getTitle())
-          .status(ErrorConstants.DATA_INTEGRITY_ERROR.getStatus().value())
-          .detail(ex.getMessage())
-          .instance(resolveInstance(request))
-          .build()
-      );
+      .body(errorDto);
   }
 
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -107,16 +113,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ex.getValue()
       );
     }
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.BAD_REQUEST.getTitle())
+      .status(ErrorConstants.BAD_REQUEST.getStatus().value())
+      .detail(detail)
+      .instance(resolveInstance(request))
+      .build();
+    log.warn("{} {}: uri={}, error={}",
+      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.BAD_REQUEST.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-      .body(
-        BasicErrorDto.builder()
-          .title(ErrorConstants.BAD_REQUEST.getTitle())
-          .status(ErrorConstants.BAD_REQUEST.getStatus().value())
-          .detail(detail)
-          .instance(resolveInstance(request))
-          .build()
-      );
+      .body(errorDto);
   }
 
   /**
@@ -144,22 +151,31 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .instance(resolveInstance((NativeWebRequest) request))
       .build();
 
+    log.warn("{} {}: uri={}, error={}",
+      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
+
     HttpHeaders responseHeaders = new HttpHeaders();
     responseHeaders.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
     return new ResponseEntity<>(errorDto, responseHeaders, ErrorConstants.BAD_REQUEST.getStatus());
   }
 
   @ExceptionHandler({ Exception.class })
-  protected ResponseEntity<BasicErrorDto> handleGenericException(Exception ex, Locale locale) {
+  protected ResponseEntity<BasicErrorDto> handleGenericException(
+    Exception ex,
+    NativeWebRequest request,
+    Locale locale
+  ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.INTERNAL_SERVER_ERROR.getTitle())
+      .status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus().value())
+      .detail("An unexpected error occurred")
+      .instance(resolveInstance(request))
+      .build();
+    log.error("{} {}: uri={}, error={}",
+      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-      .body(
-        BasicErrorDto.builder()
-          .title(ErrorConstants.INTERNAL_SERVER_ERROR.getTitle())
-          .status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus().value())
-          .detail("An unexpected error occurred")
-          .build()
-      );
+      .body(errorDto);
   }
 
   private String resolveInstance(NativeWebRequest request) {
