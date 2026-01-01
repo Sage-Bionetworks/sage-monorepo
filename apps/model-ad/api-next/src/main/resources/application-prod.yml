@@ -1,4 +1,4 @@
 # Production profile configuration
 logging:
   level:
-    org.sagebionetworks.model.ad: WARN
+    org.sagebionetworks.model.ad: INFO
