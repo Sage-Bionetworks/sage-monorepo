@@ -1,9 +1,11 @@
 package org.sagebionetworks.model.ad.api.next.util;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -11,7 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+@Slf4j
 public final class ApiHelper {
 
   private static final String CACHE_CONTROL_VALUE = "no-cache, no-store, must-revalidate";
@@ -154,5 +159,19 @@ public final class ApiHelper {
       .filter(s -> !s.isEmpty())
       .map(name -> Pattern.compile("^" + Pattern.quote(name) + "$", Pattern.CASE_INSENSITIVE))
       .toList();
+  }
+
+  /**
+   * Logs HTTP response with method, URI, and status code.
+   * Retrieves the current request from RequestContextHolder.
+   *
+   * @param statusCode the HTTP status code to log
+   */
+  public static void logHttpResponse(int statusCode) {
+    ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    if (attrs != null) {
+      HttpServletRequest req = attrs.getRequest();
+      log.info("{} {} status={}", req.getMethod(), req.getRequestURI(), statusCode);
+    }
   }
 }
