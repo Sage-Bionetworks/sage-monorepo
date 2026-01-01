@@ -2,6 +2,7 @@ package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate {
 
   private final GeneExpressionService geneExpressionService;
@@ -21,6 +23,8 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   public ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
     GeneExpressionSearchQueryDto query
   ) {
+    log.debug("Fetching gene expressions for categories: {}", query.getCategories());
+
     String[] tissueAndSexCohort = extractTissueAndSexCohort(query.getCategories());
     String tissue = tissueAndSexCohort[0];
     String sexCohort = tissueAndSexCohort[1];
@@ -30,6 +34,10 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
       tissue,
       sexCohort
     );
+
+    log.debug("Successfully retrieved {} gene expressions", results.getGeneExpressions().size());
+    ApiHelper.logHttpResponse(200);
+
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
       .body(results);
