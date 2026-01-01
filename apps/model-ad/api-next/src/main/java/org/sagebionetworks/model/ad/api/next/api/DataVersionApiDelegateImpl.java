@@ -23,6 +23,7 @@ public class DataVersionApiDelegateImpl implements DataVersionApiDelegate {
 
     DataVersionDto dataVersion = dataVersionService.loadDataVersion();
 
+    log.debug("Successfully retrieved data version");
     ApiHelper.logHttpResponse(HttpStatus.OK.value());
 
     return ResponseEntity.ok()
