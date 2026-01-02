@@ -2,6 +2,7 @@ package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiDelegate {
 
   private final DiseaseCorrelationService diseaseCorrelationService;
@@ -23,12 +25,16 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   public ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query
   ) {
+    log.debug("Fetching disease correlations for categories: {}", query.getCategories());
+
     String cluster = extractCluster(query.getCategories());
 
     DiseaseCorrelationsPageDto results = diseaseCorrelationService.loadDiseaseCorrelations(
       query,
       cluster
     );
+
+    log.debug("Successfully retrieved {} disease correlations", results.getDiseaseCorrelations().size());
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
