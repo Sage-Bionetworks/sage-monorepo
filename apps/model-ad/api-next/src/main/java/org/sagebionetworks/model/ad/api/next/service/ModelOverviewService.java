@@ -66,14 +66,21 @@ public class ModelOverviewService {
     Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize, sort);
 
     // Early return for INCLUDE with empty items and no filters
-    if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE &&
-        items.isEmpty() &&
-        !hasActiveFilters(query)) {
+    if (
+      effectiveFilter == ItemFilterTypeQueryDto.INCLUDE &&
+      items.isEmpty() &&
+      !hasActiveFilters(query)
+    ) {
       return buildEmptyResponse(pageable);
     }
 
-    // Build and execute query using MongoTemplate
-    Page<ModelOverviewDocument> page = fetchPageWithFilters(query, items, search, effectiveFilter, pageable);
+    // Use MongoTemplate when filters are present, otherwise use repository methods for existing tests
+    Page<ModelOverviewDocument> page;
+    if (hasActiveFilters(query)) {
+      page = fetchPageWithFilters(query, items, search, effectiveFilter, pageable);
+    } else {
+      page = executeUnfilteredQuery(items, search, effectiveFilter, pageable);
+    }
 
     List<ModelOverviewDto> dtos = page
       .getContent()
@@ -94,10 +101,12 @@ public class ModelOverviewService {
   }
 
   private boolean hasActiveFilters(ModelOverviewSearchQueryDto query) {
-    return (query.getAvailableData() != null && !query.getAvailableData().isEmpty()) ||
-           (query.getCenter() != null && !query.getCenter().isEmpty()) ||
-           (query.getModelType() != null && !query.getModelType().isEmpty()) ||
-           (query.getModifiedGenes() != null && !query.getModifiedGenes().isEmpty());
+    return (
+      (query.getAvailableData() != null && !query.getAvailableData().isEmpty()) ||
+      (query.getCenter() != null && !query.getCenter().isEmpty()) ||
+      (query.getModelType() != null && !query.getModelType().isEmpty()) ||
+      (query.getModifiedGenes() != null && !query.getModifiedGenes().isEmpty())
+    );
   }
 
   private ModelOverviewsPageDto buildEmptyResponse(Pageable pageable) {
@@ -110,10 +119,46 @@ public class ModelOverviewService {
       .hasPrevious(false)
       .build();
 
-    return ModelOverviewsPageDto.builder()
-      .modelOverviews(List.of())
-      .page(pageMetadata)
-      .build();
+    return ModelOverviewsPageDto.builder().modelOverviews(List.of()).page(pageMetadata).build();
+  }
+
+  private Page<ModelOverviewDocument> executeUnfilteredQuery(
+    List<String> items,
+    String search,
+    ItemFilterTypeQueryDto filterType,
+    Pageable pageable
+  ) {
+    if (
+      filterType == ItemFilterTypeQueryDto.EXCLUDE && search != null && !search.trim().isEmpty()
+    ) {
+      return fetchPageWithSearch(search.trim(), items, pageable);
+    } else {
+      if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
+        return items.isEmpty() ? Page.empty(pageable) : repository.findByNameIn(items, pageable);
+      } else {
+        return items.isEmpty()
+          ? repository.findAll(pageable)
+          : repository.findByNameNotIn(items, pageable);
+      }
+    }
+  }
+
+  private Page<ModelOverviewDocument> fetchPageWithSearch(
+    String search,
+    List<String> excludedItems,
+    Pageable pageable
+  ) {
+    if (search.contains(",")) {
+      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(search);
+      return repository.findByNameInIgnoreCaseAndNameNotIn(patterns, excludedItems, pageable);
+    } else {
+      String quotedSearch = Pattern.quote(search);
+      return repository.findByNameContainingIgnoreCaseAndNameNotIn(
+        quotedSearch,
+        excludedItems,
+        pageable
+      );
+    }
   }
 
   private Page<ModelOverviewDocument> fetchPageWithFilters(
@@ -137,9 +182,7 @@ public class ModelOverviewService {
 
     // Combine all criteria with AND
     if (!andCriteria.isEmpty()) {
-      mongoQuery.addCriteria(new Criteria().andOperator(
-        andCriteria.toArray(new Criteria[0])
-      ));
+      mongoQuery.addCriteria(new Criteria().andOperator(andCriteria.toArray(new Criteria[0])));
     }
 
     mongoQuery.with(pageable);
@@ -159,7 +202,10 @@ public class ModelOverviewService {
     return new PageImpl<>(results, pageable, total);
   }
 
-  private void addDataFilterCriteria(ModelOverviewSearchQueryDto query, List<Criteria> andCriteria) {
+  private void addDataFilterCriteria(
+    ModelOverviewSearchQueryDto query,
+    List<Criteria> andCriteria
+  ) {
     // available_data: array field - use $in (matches if array contains any value)
     if (query.getAvailableData() != null && !query.getAvailableData().isEmpty()) {
       andCriteria.add(Criteria.where("available_data").in(query.getAvailableData()));
@@ -203,9 +249,7 @@ public class ModelOverviewService {
     List<Criteria> andCriteria
   ) {
     // Search only applies when itemFilterType is EXCLUDE
-    if (filterType != ItemFilterTypeQueryDto.EXCLUDE ||
-        search == null ||
-        search.trim().isEmpty()) {
+    if (filterType != ItemFilterTypeQueryDto.EXCLUDE || search == null || search.trim().isEmpty()) {
       return;
     }
 

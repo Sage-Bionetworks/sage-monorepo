@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
@@ -9,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @ExtendWith(MockitoExtension.class)
 class ModelOverviewApiDelegateImplTest {
@@ -38,15 +43,29 @@ class ModelOverviewApiDelegateImplTest {
   @Mock
   private ModelOverviewRepository repository;
 
+  @Mock
+  private org.springframework.data.mongodb.core.MongoTemplate mongoTemplate;
+
   private ModelOverviewApiDelegateImpl delegate;
 
   @BeforeEach
   void setUp() {
+    // Mock the request context for validation
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    ServletRequestAttributes attributes = new ServletRequestAttributes(request);
+    RequestContextHolder.setRequestAttributes(attributes);
+
     ModelOverviewService queryService = new ModelOverviewService(
       repository,
-      new ModelOverviewMapper()
+      new ModelOverviewMapper(),
+      mongoTemplate
     );
     delegate = new ModelOverviewApiDelegateImpl(queryService);
+  }
+
+  @AfterEach
+  void tearDown() {
+    RequestContextHolder.resetRequestAttributes();
   }
 
   @Test
@@ -180,6 +199,26 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(dto.getName()).isEqualTo(includedName);
 
     verify(repository).findByNameNotIn(anyList(), any());
+  }
+
+  @Test
+  @DisplayName("should throw IllegalArgumentException when invalid query parameter provided")
+  void shouldThrowExceptionWhenInvalidQueryParameterProvided() {
+    // Setup request with invalid parameter
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.addParameter("invalidField", "someValue");
+    ServletRequestAttributes attributes = new ServletRequestAttributes(request);
+    RequestContextHolder.setRequestAttributes(attributes);
+
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    // Should throw IllegalArgumentException for invalid field
+    assertThatThrownBy(() -> delegate.getModelOverviews(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Unknown query parameter: invalidField");
   }
 
   private ModelOverviewDocument buildDocument(String name) {
