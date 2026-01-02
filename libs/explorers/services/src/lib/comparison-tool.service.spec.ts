@@ -522,6 +522,95 @@ describe('ComparisonToolService', () => {
         expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id1');
       }));
     });
+
+    describe('sort state sync', () => {
+      it('should sync sort state to URL when not using default sort', fakeAsync(() => {
+        connectService();
+        flushInitialUrlSync();
+
+        service.setSort([{ field: 'name', order: 1 }]);
+        tick();
+
+        const lastCall = getLastNavigateCall();
+        expect(lastCall?.[1]?.queryParams?.sortFields).toEqual('name');
+        expect(lastCall?.[1]?.queryParams?.sortOrders).toEqual('1');
+      }));
+
+      it('should sync multiple sort fields to URL', fakeAsync(() => {
+        connectService();
+        flushInitialUrlSync();
+
+        service.setSort([
+          { field: 'name', order: 1 },
+          { field: 'score', order: -1 },
+        ]);
+        tick();
+
+        const lastCall = getLastNavigateCall();
+        expect(lastCall?.[1]?.queryParams?.sortFields).toEqual('name,score');
+        expect(lastCall?.[1]?.queryParams?.sortOrders).toEqual('1,-1');
+      }));
+
+      it('should restore sort state from URL on initialization', fakeAsync(() => {
+        connectService(mockComparisonToolDataConfig, {
+          initialParams: {
+            sortFields: ['gene_symbol', 'name'],
+            sortOrders: [-1, 1],
+          },
+        });
+        flushInitialUrlSync();
+
+        expect(service.multiSortMeta()).toEqual([
+          { field: 'gene_symbol', order: -1 },
+          { field: 'name', order: 1 },
+        ]);
+      }));
+
+      it('should not include default sort in URL', fakeAsync(() => {
+        service = injectService();
+        service.setViewConfig({
+          defaultSort: [
+            { field: 'name', order: 1 },
+            { field: 'age', order: -1 },
+          ],
+        });
+
+        paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>({});
+        service.connect({
+          config$: of(mockComparisonToolDataConfig),
+          queryParams$: paramsSubject.asObservable(),
+        });
+        flushInitialUrlSync();
+
+        // Default sort should not be in URL - check that sortFields is not included or is null
+        const lastCall = getLastNavigateCall();
+        const sortFields = lastCall?.[1]?.queryParams?.sortFields;
+        // sortFields should either be null or undefined (not included in URL)
+        expect(sortFields === null || sortFields === undefined).toBe(true);
+      }));
+
+      it('should include non-default sort in URL', fakeAsync(() => {
+        service = injectService();
+        service.setViewConfig({
+          defaultSort: [{ field: 'name', order: 1 }],
+        });
+
+        paramsSubject = new BehaviorSubject<ComparisonToolUrlParams>({});
+        service.connect({
+          config$: of(mockComparisonToolDataConfig),
+          queryParams$: paramsSubject.asObservable(),
+        });
+        flushInitialUrlSync();
+
+        // Change to a different sort
+        service.setSort([{ field: 'score', order: -1 }]);
+        tick();
+
+        const lastCall = getLastNavigateCall();
+        expect(lastCall?.[1]?.queryParams?.sortFields).toEqual('score');
+        expect(lastCall?.[1]?.queryParams?.sortOrders).toEqual('-1');
+      }));
+    });
   });
 
   describe('page number reset behavior', () => {

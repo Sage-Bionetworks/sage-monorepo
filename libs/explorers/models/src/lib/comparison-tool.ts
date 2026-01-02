@@ -119,7 +119,7 @@ export interface ComparisonToolUrlParams {
   pinnedItems?: string[] | null;
   categories?: string[] | null;
   sortFields?: string[] | null;
-  sortOrders?: number[] | null;
+  sortOrders?: SortOrder[] | null;
 }
 
 export interface PaginationParams {
