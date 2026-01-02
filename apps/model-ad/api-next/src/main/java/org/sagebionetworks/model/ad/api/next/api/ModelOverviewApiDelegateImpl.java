@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
 import org.sagebionetworks.model.ad.api.next.service.ModelOverviewService;
@@ -16,6 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
 
   private static final Set<String> VALID_QUERY_PARAMS = Set.of(
@@ -57,8 +59,11 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
       .getRequest();
     Map<String, String[]> parameterMap = request.getParameterMap();
 
+    log.debug("Validating query parameters: {}", parameterMap.keySet());
+
     for (String paramName : parameterMap.keySet()) {
       if (!VALID_QUERY_PARAMS.contains(paramName)) {
+        log.warn("Invalid query parameter: '{}'", paramName);
         throw new IllegalArgumentException("Unknown query parameter: " + paramName);
       }
     }
