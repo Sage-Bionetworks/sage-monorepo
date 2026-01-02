@@ -35,7 +35,6 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
     );
 
     log.debug("Successfully retrieved {} disease correlations", results.getDiseaseCorrelations().size());
-    ApiHelper.logHttpResponse(200);
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))

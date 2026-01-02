@@ -26,7 +26,6 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
     ModelOverviewsPageDto page = modelOverviewService.loadModelOverviews(query);
 
     log.debug("Successfully retrieved {} model overviews", page.getModelOverviews().size());
-    ApiHelper.logHttpResponse(200);
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))

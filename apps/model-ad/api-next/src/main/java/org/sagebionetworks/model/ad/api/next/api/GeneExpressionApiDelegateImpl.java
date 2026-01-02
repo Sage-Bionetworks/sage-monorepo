@@ -36,7 +36,6 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
     );
 
     log.debug("Successfully retrieved {} gene expressions", results.getGeneExpressions().size());
-    ApiHelper.logHttpResponse(200);
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))

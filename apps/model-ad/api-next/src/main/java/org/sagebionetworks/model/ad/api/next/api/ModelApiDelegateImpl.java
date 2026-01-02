@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
 import org.sagebionetworks.model.ad.api.next.service.ModelService;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,6 @@ public class ModelApiDelegateImpl implements ModelApiDelegate {
     ModelDto model = modelService.getModelByName(decodedName);
 
     log.debug("Successfully retrieved model: {}", decodedName);
-    ApiHelper.logHttpResponse(HttpStatus.OK.value());
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
       .body(model);

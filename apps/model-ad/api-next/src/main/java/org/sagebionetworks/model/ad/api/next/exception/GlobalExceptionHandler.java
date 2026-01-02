@@ -2,7 +2,6 @@ package org.sagebionetworks.model.ad.api.next.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
-import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(ModelNotFoundException.class)
@@ -33,8 +31,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .detail(ex.getMessage())
       .instance(resolveInstance(request))
       .build();
-    log.warn("{} {}: uri={}, error={}",
-      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.ENTITY_NOT_FOUND.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
       .body(errorDto);
@@ -52,8 +48,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .detail(ex.getMessage())
       .instance(resolveInstance(request))
       .build();
-    log.warn("{} {}: uri={}, error={}",
-      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.INVALID_OBJECT_ID.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
       .body(errorDto);
@@ -71,8 +65,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .detail(ex.getMessage())
       .instance(resolveInstance(request))
       .build();
-    log.warn("{} {}: uri={}, error={}",
-      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.INVALID_CATEGORY.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
       .body(errorDto);
@@ -90,8 +82,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .detail(ex.getMessage())
       .instance(resolveInstance(request))
       .build();
-    log.warn("{} {}: uri={}, error={}",
-      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.INVALID_FILTER.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
       .body(errorDto);
@@ -109,8 +99,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .detail(ex.getMessage())
       .instance(resolveInstance(request))
       .build();
-    log.error("{} {}: uri={}, error={}",
-      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.DATA_INTEGRITY_ERROR.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
       .body(errorDto);
@@ -138,8 +126,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .detail(detail)
       .instance(resolveInstance(request))
       .build();
-    log.warn("{} {}: uri={}, error={}",
-      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.BAD_REQUEST.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
       .body(errorDto);
@@ -170,9 +156,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .instance(resolveInstance((NativeWebRequest) request))
       .build();
 
-    log.warn("{} {}: uri={}, error={}",
-      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
-
     HttpHeaders responseHeaders = new HttpHeaders();
     responseHeaders.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
     return new ResponseEntity<>(errorDto, responseHeaders, ErrorConstants.BAD_REQUEST.getStatus());
@@ -190,8 +173,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .detail("An unexpected error occurred")
       .instance(resolveInstance(request))
       .build();
-    log.error("{} {}: uri={}, error={}",
-      errorDto.getStatus(), errorDto.getTitle(), errorDto.getInstance(), errorDto.getDetail());
     return ResponseEntity.status(ErrorConstants.INTERNAL_SERVER_ERROR.getStatus())
       .contentType(MediaType.APPLICATION_PROBLEM_JSON)
       .body(errorDto);
