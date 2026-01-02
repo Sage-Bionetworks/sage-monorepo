@@ -28,13 +28,15 @@ public class ApiLoggingInterceptor implements HandlerInterceptor {
     int status = response.getStatus();
     String method = request.getMethod();
     String uri = request.getRequestURI();
+    String queryString = request.getQueryString();
+    String fullUrl = queryString != null ? uri + "?" + queryString : uri;
 
     if (status >= 500) {
-      log.error("{} {} status={}", method, uri, status);
+      log.error("{} {} status={}", method, fullUrl, status);
     } else if (status >= 400) {
-      log.warn("{} {} status={}", method, uri, status);
+      log.warn("{} {} status={}", method, fullUrl, status);
     } else {
-      log.info("{} {} status={}", method, uri, status);
+      log.info("{} {} status={}", method, fullUrl, status);
     }
   }
 }
