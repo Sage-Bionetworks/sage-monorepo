@@ -28,6 +28,11 @@ export class ComparisonToolService<T> {
   private readonly helperService = inject(ComparisonToolHelperService);
   private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
 
+  // Cache column selections only for dropdown selections up to this length
+  // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
+  // for the first 2 levels. Disease Correlation has 2 dropdowns, so all selections are cached.
+  // If future tools have more dropdowns and different column selection caching requirements,
+  // this depth value may need to be included in the ui_config instead, so the cutoff can be set per tool.
   private readonly COLUMN_CACHE_DEPTH = 2;
   private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
   readonly FIRST_PAGE_NUMBER = 0;
@@ -118,12 +123,12 @@ export class ComparisonToolService<T> {
         return;
       }
 
-      // Read signals explicitly to register them as effect dependencies
-      this.dropdownSelection();
-      this.pinnedItems();
-      this.multiSortMeta();
+      const dropdownSelection = this.dropdownSelection();
+      const pinnedItems = this.pinnedItems();
+      const multiSortMeta = this.multiSortMeta();
 
-      this.syncCurrentStateToUrl();
+      const state = this.serializeSyncState({ dropdownSelection, pinnedItems, multiSortMeta });
+      this.syncStateToUrl(state);
     });
   }
 
@@ -228,25 +233,12 @@ export class ComparisonToolService<T> {
     this.configsSignal.set(configs ?? []);
 
     const selection = this.resolveInitialDropdownSelection(params, configs);
+    const initialSort = this.resolveInitialSortMeta(params);
 
-    const queryUpdate: Partial<ComparisonToolQuery> = {
+    this.updateQuery({
       categories: selection,
-    };
-
-    // Apply sort from URL if present, otherwise use default sort
-    if (params.sortFields && params.sortFields.length > 0) {
-      queryUpdate.multiSortMeta = this.convertArraysToSortMeta(
-        params.sortFields,
-        params.sortOrders ?? [],
-      );
-    } else {
-      const defaultSort = this.viewConfigSignal().defaultSort;
-      if (defaultSort && defaultSort.length > 0) {
-        queryUpdate.multiSortMeta = defaultSort as SortMeta[];
-      }
-    }
-
-    this.updateQuery(queryUpdate);
+      multiSortMeta: initialSort,
+    });
 
     // Initialize column preferences cache for all configs
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
@@ -273,6 +265,19 @@ export class ComparisonToolService<T> {
     const urlCategories = params.categories ?? undefined;
     const selectionSource = urlCategories ?? this.initialSelection ?? [];
     return this.normalizeSelection(selectionSource, configs);
+  }
+
+  private resolveInitialSortMeta(params: ComparisonToolUrlParams): SortMeta[] {
+    if (params.sortFields && params.sortFields.length > 0) {
+      return this.convertArraysToSortMeta(params.sortFields, params.sortOrders ?? []);
+    }
+
+    const defaultSort = this.viewConfigSignal().defaultSort;
+    if (defaultSort && defaultSort.length > 0) {
+      return defaultSort as SortMeta[];
+    }
+
+    return [];
   }
 
   setDropdownSelection(selection: string[]) {

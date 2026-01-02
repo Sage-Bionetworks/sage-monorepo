@@ -238,3 +238,19 @@ export async function testTableReturnsToFirstPageWhenSortChanged(page: Page) {
 
   await expectFirstPage(page);
 }
+
+/**
+ * Clicks a column header to sort by that column.
+ * @param page - Playwright Page object
+ * @param columnName - The accessible name of the column header to click
+ * @param multiSort - If true, uses Meta+click to add to existing sort (multi-column sort).
+ *                    If false (default), performs a regular click to replace the current sort.
+ */
+export async function sortColumn(page: Page, columnName: string, multiSort = false): Promise<void> {
+  const columnHeader = page.getByRole('columnheader', { name: columnName });
+  if (multiSort) {
+    await columnHeader.click({ modifiers: ['Meta'] });
+  } else {
+    await columnHeader.click();
+  }
+}
