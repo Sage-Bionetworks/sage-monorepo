@@ -248,6 +248,7 @@
         "ms-python.python",
         "ms-toolsai.jupyter",
         "njpwerner.autodocstring",
+        "OpenTofu.vscode-opentofu",
         "Orta.vscode-jest",
         "pranaygp.vscode-css-peek",
         "Redocly.openapi-vs-code",

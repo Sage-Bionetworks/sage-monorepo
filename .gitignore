@@ -145,3 +145,6 @@ vite.config.*.timestamp*
 .aws-sam
 vitest.config.*.timestamp*
 .cursor/rules/nx-rules.mdc
+
+# Terraform
+.terragrunt-cache
