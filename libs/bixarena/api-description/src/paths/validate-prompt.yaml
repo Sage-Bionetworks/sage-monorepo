@@ -1,0 +1,28 @@
+get:
+  tags:
+    - Prompt Validation
+  summary: Validate biomedical prompt
+  description: Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
+  operationId: validatePrompt
+  parameters:
+    - name: prompt
+      in: query
+      required: true
+      description: The prompt text to validate
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 10000
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PromptValidation.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

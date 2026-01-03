@@ -13,6 +13,9 @@ servers:
   - url: https://bixarena.ai/api/v1
   - url: https://bixarena.ai/api/v1
 tags:
+  - name: Prompt Validation
+    description: Operations for validating biomedical prompts
+    x-displayName: Prompt Validation
   - name: Admin
     description: Administrative endpoints requiring elevated roles.
     x-displayName: Admin
@@ -38,6 +41,37 @@ tags:
     description: Authentication and token minting operations.
     x-displayName: Auth
 paths:
+  /validate-prompt:
+    get:
+      tags:
+        - Prompt Validation
+      summary: Validate biomedical prompt
+      description: Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
+      operationId: validatePrompt
+      parameters:
+        - name: prompt
+          in: query
+          required: true
+          description: The prompt text to validate
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 10000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptValidation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /admin/stats:
     get:
       x-rate-limit-requests-per-minute: 60
@@ -777,14 +811,26 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  securitySchemes:
-    jwtBearer:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: |
-        Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
   schemas:
+    PromptValidation:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: The original prompt that was validated
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)
+        isBiomedical:
+          type: boolean
+          description: Whether the prompt is considered biomedically related (confidence >= 0.5)
+      required:
+        - prompt
+        - confidence
+        - isBiomedical
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -1920,8 +1966,20 @@ components:
       required:
         - sub
   responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
     Unauthorized:
       description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:
@@ -1959,18 +2017,6 @@ components:
           schema:
             type: integer
             example: 18
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    BadRequest:
-      description: Invalid request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
     NotFound:
       description: The specified resource was not found
       content:
@@ -1983,6 +2029,13 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+  securitySchemes:
+    jwtBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
   parameters:
     battleSearchQuery:
       name: battleSearchQuery
@@ -2063,6 +2116,9 @@ components:
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
 x-tagGroups:
+  - name: BixArena AI Service
+    tags:
+      - Prompt Validation
   - name: BixArena API Service
     tags:
       - Admin

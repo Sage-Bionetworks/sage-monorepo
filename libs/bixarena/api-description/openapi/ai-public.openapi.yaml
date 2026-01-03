@@ -13,6 +13,99 @@ servers:
   - url: http://localhost
 security:
   - jwtBearer: []
-paths: {}
-components: {}
+tags:
+  - name: Prompt Validation
+    description: Operations for validating biomedical prompts
+paths:
+  /validate-prompt:
+    get:
+      tags:
+        - Prompt Validation
+      summary: Validate biomedical prompt
+      description: Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
+      operationId: validatePrompt
+      parameters:
+        - name: prompt
+          in: query
+          required: true
+          description: The prompt text to validate
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 10000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptValidation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    PromptValidation:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: The original prompt that was validated
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)
+        isBiomedical:
+          type: boolean
+          description: Whether the prompt is considered biomedically related (confidence >= 0.5)
+      required:
+        - prompt
+        - confidence
+        - isBiomedical
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
 x-oauth2-audience: urn:bixarena:ai

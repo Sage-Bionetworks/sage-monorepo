@@ -1,0 +1,18 @@
+type: object
+properties:
+  prompt:
+    type: string
+    description: The original prompt that was validated
+  confidence:
+    type: number
+    format: float
+    minimum: 0.0
+    maximum: 1.0
+    description: Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)
+  isBiomedical:
+    type: boolean
+    description: Whether the prompt is considered biomedically related (confidence >= 0.5)
+required:
+  - prompt
+  - confidence
+  - isBiomedical

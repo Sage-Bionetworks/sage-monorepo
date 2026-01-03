@@ -23,6 +23,7 @@ __all__ = [
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
+    "PromptValidationApi",
     "StatsApi",
     "UserApi",
     "ApiResponse",
@@ -79,6 +80,7 @@ __all__ = [
     "ModelSearchQuery",
     "ModelSort",
     "PageMetadata",
+    "PromptValidation",
     "PublicStats",
     "RateLimitError",
     "SortDirection",
@@ -97,6 +99,9 @@ from bixarena_api_client.api.example_prompt_api import (
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
+from bixarena_api_client.api.prompt_validation_api import (
+    PromptValidationApi as PromptValidationApi,
+)
 from bixarena_api_client.api.stats_api import StatsApi as StatsApi
 from bixarena_api_client.api.user_api import UserApi as UserApi
 
@@ -219,6 +224,9 @@ from bixarena_api_client.models.model_search_query import (
 )
 from bixarena_api_client.models.model_sort import ModelSort as ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
+from bixarena_api_client.models.prompt_validation import (
+    PromptValidation as PromptValidation,
+)
 from bixarena_api_client.models.public_stats import PublicStats as PublicStats
 from bixarena_api_client.models.rate_limit_error import RateLimitError as RateLimitError
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection

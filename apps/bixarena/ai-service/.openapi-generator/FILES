@@ -1,12 +1,16 @@
 bixarena_ai_service/apis/__init__.py
 bixarena_ai_service/apis/health_check_api.py
 bixarena_ai_service/apis/health_check_api_base.py
+bixarena_ai_service/apis/prompt_validation_api.py
+bixarena_ai_service/apis/prompt_validation_api_base.py
 bixarena_ai_service/impl/__init__.py
 bixarena_ai_service/main.py
 bixarena_ai_service/models/__init__.py
 bixarena_ai_service/models/basic_error.py
 bixarena_ai_service/models/extra_models.py
 bixarena_ai_service/models/health_check.py
+bixarena_ai_service/models/prompt_validation.py
 bixarena_ai_service/security_api.py
 tests/conftest.py
 tests/test_health_check_api.py
+tests/test_prompt_validation_api.py

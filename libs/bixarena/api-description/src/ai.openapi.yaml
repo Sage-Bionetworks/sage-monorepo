@@ -23,7 +23,11 @@ tags:
   - name: Health Check
     description: Operations about health checks
     x-sage-internal: true
+  - name: Prompt Validation
+    description: Operations for validating biomedical prompts
 
 paths:
   /health-check:
     $ref: paths/health-check.yaml
+  /validate-prompt:
+    $ref: paths/validate-prompt.yaml
