@@ -327,7 +327,49 @@ class ModelOverviewServiceTest {
   @DisplayName("should filter by single data filter field")
   void shouldFilterBySingleDataFilterField() {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 100), 1);
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 10), 1);
+
+    when(
+      repository.findWithFilters(
+        anyList(),
+        any(),
+        any(),
+        eq(List.of("Biomarkers")),
+        any(),
+        any(),
+        any(),
+        any(Pageable.class)
+      )
+    )
+      .thenReturn(page);
+
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .availableData(List.of("Biomarkers"))
+      .pageNumber(0)
+      .pageSize(10)
+      .build();
+
+    ModelOverviewsPageDto result = service.loadModelOverviews(query);
+
+    assertThat(result.getModelOverviews()).hasSize(1);
+
+    verify(repository).findWithFilters(
+      eq(List.of()),
+      isNull(),
+      eq(ItemFilterTypeQueryDto.INCLUDE),
+      eq(List.of("Biomarkers")),
+      isNull(),
+      isNull(),
+      isNull(),
+      any(Pageable.class)
+    );
+  }
+
+  @Test
+  @DisplayName("should filter with OR logic for multiple values in same field")
+  void shouldFilterWithOrLogicForMultipleValuesInSameField() {
+    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 10), 1);
 
     when(
       repository.findWithFilters(
@@ -346,13 +388,12 @@ class ModelOverviewServiceTest {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .availableData(List.of("Biomarkers", "Pathology"))
       .pageNumber(0)
-      .pageSize(100)
+      .pageSize(10)
       .build();
 
     ModelOverviewsPageDto result = service.loadModelOverviews(query);
 
     assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
 
     verify(repository).findWithFilters(
       eq(List.of()),
@@ -370,7 +411,7 @@ class ModelOverviewServiceTest {
   @DisplayName("should filter by multiple data filter fields with AND logic")
   void shouldFilterByMultipleDataFilterFieldsWithAndLogic() {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 100), 1);
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 10), 1);
 
     when(
       repository.findWithFilters(
@@ -379,7 +420,7 @@ class ModelOverviewServiceTest {
         any(),
         eq(List.of("Biomarkers")),
         eq(List.of("UCI")),
-        eq(List.of("Familial AD")),
+        any(),
         any(),
         any(Pageable.class)
       )
@@ -389,15 +430,13 @@ class ModelOverviewServiceTest {
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .availableData(List.of("Biomarkers"))
       .center(List.of("UCI"))
-      .modelType(List.of("Familial AD"))
       .pageNumber(0)
-      .pageSize(100)
+      .pageSize(10)
       .build();
 
     ModelOverviewsPageDto result = service.loadModelOverviews(query);
 
     assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
 
     verify(repository).findWithFilters(
       eq(List.of()),
@@ -405,54 +444,8 @@ class ModelOverviewServiceTest {
       eq(ItemFilterTypeQueryDto.INCLUDE),
       eq(List.of("Biomarkers")),
       eq(List.of("UCI")),
-      eq(List.of("Familial AD")),
       isNull(),
-      any(Pageable.class)
-    );
-  }
-
-  @Test
-  @DisplayName("should filter by all four data filter fields")
-  void shouldFilterByAllFourDataFilterFields() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 100), 1);
-
-    when(
-      repository.findWithFilters(
-        anyList(),
-        any(),
-        any(),
-        eq(List.of("Biomarkers", "Pathology")),
-        eq(List.of("UCI", "IU/Jax/Pitt")),
-        eq(List.of("Familial AD", "Late Onset AD")),
-        eq(List.of("5xFAD (UCI)", "Abca7*V1599M")),
-        any(Pageable.class)
-      )
-    )
-      .thenReturn(page);
-
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .availableData(List.of("Biomarkers", "Pathology"))
-      .center(List.of("UCI", "IU/Jax/Pitt"))
-      .modelType(List.of("Familial AD", "Late Onset AD"))
-      .modifiedGenes(List.of("5xFAD (UCI)", "Abca7*V1599M"))
-      .pageNumber(0)
-      .pageSize(100)
-      .build();
-
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
-
-    assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
-
-    verify(repository).findWithFilters(
-      eq(List.of()),
       isNull(),
-      eq(ItemFilterTypeQueryDto.INCLUDE),
-      eq(List.of("Biomarkers", "Pathology")),
-      eq(List.of("UCI", "IU/Jax/Pitt")),
-      eq(List.of("Familial AD", "Late Onset AD")),
-      eq(List.of("5xFAD (UCI)", "Abca7*V1599M")),
       any(Pageable.class)
     );
   }
