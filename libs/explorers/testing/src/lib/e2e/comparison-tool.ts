@@ -181,10 +181,16 @@ export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
   const lastPageBtn = page.getByRole('button', { name: /last page/i });
   await expect(lastPageBtn).toBeEnabled();
 
+  const unpinnedTable = getUnpinnedTable(page);
+
+  const firstCellName = await unpinnedTable.getByRole('group').first().getAttribute('aria-label');
+  const firstRow = getRowByName(unpinnedTable, page, firstCellName || '');
+  await expect(firstRow).toBeVisible();
+
   await lastPageBtn.click();
   await expect(lastPageBtn).toBeDisabled();
+  await expect(firstRow).not.toBeVisible(); // wait for first row to no longer be visible, so data has loaded
 
-  const unpinnedTable = getUnpinnedTable(page);
   const pinButtonsCount = await unpinnedTable.getByRole('button', { name: 'Pin' }).count();
 
   for (let i = 0; i < pinButtonsCount; i++) {
