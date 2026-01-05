@@ -33,9 +33,10 @@ import {
 const CT_PAGE = 'Disease Correlation';
 
 test.describe('disease correlation', () => {
-  test('pins are cached for dropdown selections and can be unpinned', async ({ page }) => {
+  test('pins are cached across dropdown selections and can be unpinned', async ({ page }) => {
     const correlations = await fetchDiseaseCorrelations(page);
     const [firstCorrelation] = correlations;
+    const pinnedItems = [firstCorrelation.composite_id];
 
     await navigateToComparison(
       page,
@@ -45,8 +46,8 @@ test.describe('disease correlation', () => {
       `pinned=${firstCorrelation.composite_id}`,
     );
 
-    await expectPinnedParams(page, [firstCorrelation.composite_id]);
-    await expectPinnedRows(page, [firstCorrelation.composite_id]);
+    await expectPinnedParams(page, pinnedItems);
+    await expectPinnedRows(page, pinnedItems);
 
     const dropdown = page.getByRole('combobox');
     await dropdown.click();
@@ -54,14 +55,14 @@ test.describe('disease correlation', () => {
     const secondOption = options.nth(1);
     await secondOption.click();
 
-    await expectPinnedParams(page, []);
-    await expectUnpinnedTableOnly(page);
+    await expectPinnedParams(page, pinnedItems);
+    await expectPinnedRows(page, pinnedItems);
 
     await dropdown.click();
     await options.first().click();
 
-    await expectPinnedParams(page, [firstCorrelation.composite_id]);
-    await expectPinnedRows(page, [firstCorrelation.composite_id]);
+    await expectPinnedParams(page, pinnedItems);
+    await expectPinnedRows(page, pinnedItems);
 
     const pinnedTable = getPinnedTable(page);
     await unPinByName(pinnedTable, page, firstCorrelation.composite_id);

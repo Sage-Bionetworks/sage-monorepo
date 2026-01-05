@@ -114,6 +114,12 @@ export const provideComparisonToolService = (
         service.setPinnedData(options.pinnedData);
       }
 
+      if (options.pinnedData === undefined && options.pinnedItems !== undefined) {
+        // If only pinned IDs are provided, initialize pinned data with provided ids
+        const pinnedData = options.pinnedItems.map((item) => ({ _id: item }));
+        service.setPinnedData(pinnedData);
+      }
+
       if (options.multiSortMeta !== undefined) {
         service.setSort(options.multiSortMeta);
       }
