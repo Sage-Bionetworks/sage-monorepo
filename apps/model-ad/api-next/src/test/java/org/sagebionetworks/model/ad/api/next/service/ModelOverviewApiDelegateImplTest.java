@@ -43,9 +43,6 @@ class ModelOverviewApiDelegateImplTest {
   @Mock
   private ModelOverviewRepository repository;
 
-  @Mock
-  private org.springframework.data.mongodb.core.MongoTemplate mongoTemplate;
-
   private ModelOverviewApiDelegateImpl delegate;
 
   @BeforeEach
@@ -57,8 +54,7 @@ class ModelOverviewApiDelegateImplTest {
 
     ModelOverviewService queryService = new ModelOverviewService(
       repository,
-      new ModelOverviewMapper(),
-      mongoTemplate
+      new ModelOverviewMapper()
     );
     delegate = new ModelOverviewApiDelegateImpl(queryService);
   }

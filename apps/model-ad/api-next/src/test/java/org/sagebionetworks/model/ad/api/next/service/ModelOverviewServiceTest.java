@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -26,6 +27,7 @@ import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,16 +36,13 @@ class ModelOverviewServiceTest {
   @Mock
   private ModelOverviewRepository repository;
 
-  @Mock
-  private org.springframework.data.mongodb.core.MongoTemplate mongoTemplate;
-
   private ModelOverviewService service;
   private ModelOverviewMapper mapper;
 
   @BeforeEach
   void setUp() {
     mapper = new ModelOverviewMapper();
-    service = new ModelOverviewService(repository, mapper, mongoTemplate);
+    service = new ModelOverviewService(repository, mapper);
   }
 
   @Test
@@ -328,11 +327,21 @@ class ModelOverviewServiceTest {
   @DisplayName("should filter by single data filter field")
   void shouldFilterBySingleDataFilterField() {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 100), 1);
 
-    when(mongoTemplate.find(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(List.of(doc));
-    when(mongoTemplate.count(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(1L);
+    when(
+      repository.findWithFilters(
+        anyList(),
+        any(),
+        any(),
+        eq(List.of("Biomarkers", "Pathology")),
+        any(),
+        any(),
+        any(),
+        any(Pageable.class)
+      )
+    )
+      .thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .availableData(List.of("Biomarkers", "Pathology"))
@@ -344,17 +353,38 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
+
+    verify(repository).findWithFilters(
+      eq(List.of()),
+      isNull(),
+      eq(ItemFilterTypeQueryDto.INCLUDE),
+      eq(List.of("Biomarkers", "Pathology")),
+      isNull(),
+      isNull(),
+      isNull(),
+      any(Pageable.class)
+    );
   }
 
   @Test
   @DisplayName("should filter by multiple data filter fields with AND logic")
   void shouldFilterByMultipleDataFilterFieldsWithAndLogic() {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 100), 1);
 
-    when(mongoTemplate.find(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(List.of(doc));
-    when(mongoTemplate.count(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(1L);
+    when(
+      repository.findWithFilters(
+        anyList(),
+        any(),
+        any(),
+        eq(List.of("Biomarkers")),
+        eq(List.of("UCI")),
+        eq(List.of("Familial AD")),
+        any(),
+        any(Pageable.class)
+      )
+    )
+      .thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .availableData(List.of("Biomarkers"))
@@ -368,66 +398,38 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
-  }
 
-  @Test
-  @DisplayName("should combine data filters with name filtering")
-  void shouldCombineDataFiltersWithNameFiltering() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-
-    when(mongoTemplate.find(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(List.of(doc));
-    when(mongoTemplate.count(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(1L);
-
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items(List.of("Model1", "Model2"))
-      .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
-      .availableData(List.of("Biomarkers"))
-      .pageNumber(0)
-      .pageSize(100)
-      .build();
-
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
-
-    assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
-  }
-
-  @Test
-  @DisplayName("should combine data filters with search term")
-  void shouldCombineDataFiltersWithSearchTerm() {
-    ModelOverviewDocument doc = createModelOverviewDocument("TestModel");
-
-    when(mongoTemplate.find(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(List.of(doc));
-    when(mongoTemplate.count(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(1L);
-
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .items(List.of("Model1"))
-      .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
-      .search("test")
-      .center(List.of("UCI"))
-      .pageNumber(0)
-      .pageSize(100)
-      .build();
-
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
-
-    assertThat(result.getModelOverviews()).hasSize(1);
-    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("TestModel");
+    verify(repository).findWithFilters(
+      eq(List.of()),
+      isNull(),
+      eq(ItemFilterTypeQueryDto.INCLUDE),
+      eq(List.of("Biomarkers")),
+      eq(List.of("UCI")),
+      eq(List.of("Familial AD")),
+      isNull(),
+      any(Pageable.class)
+    );
   }
 
   @Test
   @DisplayName("should filter by all four data filter fields")
   void shouldFilterByAllFourDataFilterFields() {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 100), 1);
 
-    when(mongoTemplate.find(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(List.of(doc));
-    when(mongoTemplate.count(any(org.springframework.data.mongodb.core.query.Query.class), eq(ModelOverviewDocument.class)))
-      .thenReturn(1L);
+    when(
+      repository.findWithFilters(
+        anyList(),
+        any(),
+        any(),
+        eq(List.of("Biomarkers", "Pathology")),
+        eq(List.of("UCI", "IU/Jax/Pitt")),
+        eq(List.of("Familial AD", "Late Onset AD")),
+        eq(List.of("5xFAD (UCI)", "Abca7*V1599M")),
+        any(Pageable.class)
+      )
+    )
+      .thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .availableData(List.of("Biomarkers", "Pathology"))
@@ -442,6 +444,17 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
+
+    verify(repository).findWithFilters(
+      eq(List.of()),
+      isNull(),
+      eq(ItemFilterTypeQueryDto.INCLUDE),
+      eq(List.of("Biomarkers", "Pathology")),
+      eq(List.of("UCI", "IU/Jax/Pitt")),
+      eq(List.of("Familial AD", "Late Onset AD")),
+      eq(List.of("5xFAD (UCI)", "Abca7*V1599M")),
+      any(Pageable.class)
+    );
   }
 
   private ModelOverviewDocument createModelOverviewDocument(String name) {

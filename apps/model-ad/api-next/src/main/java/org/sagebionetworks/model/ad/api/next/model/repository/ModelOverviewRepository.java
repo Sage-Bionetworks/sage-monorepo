@@ -17,7 +17,8 @@ import org.springframework.stereotype.Repository;
  * collection.
  */
 @Repository
-public interface ModelOverviewRepository extends MongoRepository<ModelOverviewDocument, ObjectId> {
+public interface ModelOverviewRepository
+  extends MongoRepository<ModelOverviewDocument, ObjectId>, ModelOverviewRepositoryCustom {
   /**
    * Find model overviews with names in the provided list.
    *
