@@ -1,10 +1,18 @@
 import { expect, test } from '@playwright/test';
 import {
+  ColumnConfig,
   getQueryParamFromValues,
+  testClickColumnTogglesSortOrder,
+  testClickColumnUpdatesSortUrl,
+  testClickDifferentColumnsReplacesSingleSort,
   testFullCaseInsensitiveMatch,
+  testMetaClickBuildsMultiColumnSort,
+  testMetaClickTogglesExistingSortOrder,
+  testMultiColumnSortRestoredFromUrl,
   testPartialCaseInsensitiveSearch,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
+  testSortRestoredFromUrl,
   testTableReturnsToFirstPageWhenCategoriesChanged,
   testTableReturnsToFirstPageWhenFilterSelectedAndRemoved,
   testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared,
@@ -116,5 +124,63 @@ test.describe('gene expression', () => {
   test('table returns to first page when sort changed', async ({ page }) => {
     await navigateToComparison(page, CT_PAGE, true);
     await testTableReturnsToFirstPageWhenSortChanged(page);
+  });
+
+  test.describe('sort URL sync', () => {
+    // Columns: 0=Gene (gene_symbol), 1=Model (name), 2=Control, 3=4 months, 4=12 months
+    // Default sort: gene_symbol ASC, name ASC
+
+    const sortColumns: ColumnConfig[] = [
+      { name: '4 months', field: '4 months' },
+      { name: '12 months', field: '12 months' },
+      { name: 'Control', field: 'matched_control' },
+    ];
+
+    test('clicking column updates URL with sortFields and sortOrders', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testClickColumnUpdatesSortUrl(page, sortColumns[0].name, sortColumns[0].field);
+    });
+
+    test('clicking same column toggles between descending and ascending', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testClickColumnTogglesSortOrder(page, sortColumns[0].name, sortColumns[0].field);
+    });
+
+    test('sort is restored from URL on page load', async ({ page }) => {
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        `${categoriesQueryParams}&sortFields=4%20months&sortOrders=1`,
+      );
+      await testSortRestoredFromUrl(page, sortColumns[0].name, sortColumns[0].field);
+    });
+
+    test('clicking different columns in sequence replaces single-column sort', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testClickDifferentColumnsReplacesSingleSort(page, sortColumns);
+    });
+
+    test('Meta+click builds multi-column sort and regular click resets', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testMetaClickBuildsMultiColumnSort(page, sortColumns);
+    });
+
+    test('multi-column sort is restored from URL', async ({ page }) => {
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        `${categoriesQueryParams}&sortFields=4%20months,12%20months&sortOrders=-1,1`,
+      );
+      await testMultiColumnSortRestoredFromUrl(page, sortColumns.slice(0, 2), sortColumns[2]);
+    });
+
+    test('Meta+click on existing sort columns toggles their order', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testMetaClickTogglesExistingSortOrder(page, sortColumns.slice(0, 2));
+    });
   });
 });

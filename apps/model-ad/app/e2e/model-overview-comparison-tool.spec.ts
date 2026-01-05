@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import {
+  ColumnConfig,
   expectPinnedParams,
   expectPinnedRows,
   expectUnpinnedTableOnly,
@@ -7,10 +8,17 @@ import {
   getRowByName,
   getUnpinnedTable,
   pinByName,
+  testClickColumnTogglesSortOrder,
+  testClickColumnUpdatesSortUrl,
+  testClickDifferentColumnsReplacesSingleSort,
   testFullCaseInsensitiveMatch,
+  testMetaClickBuildsMultiColumnSort,
+  testMetaClickTogglesExistingSortOrder,
+  testMultiColumnSortRestoredFromUrl,
   testPartialCaseInsensitiveSearch,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
+  testSortRestoredFromUrl,
   testTableReturnsToFirstPageWhenFilterSelectedAndRemoved,
   testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared,
   testTableReturnsToFirstPageWhenSortChanged,
@@ -205,5 +213,64 @@ test.describe('model overview', () => {
   test('table returns to first page when sort changed', async ({ page }) => {
     await navigateToComparison(page, CT_PAGE, true);
     await testTableReturnsToFirstPageWhenSortChanged(page);
+  });
+
+  test.describe('sort URL sync', () => {
+    // Columns: 0=Model (name), 1=Model Type, 2=Matched Controls, 3=Gene Expression, 4=Disease Correlation, ...
+    // Default sort: model_type DESC, name ASC
+
+    const sortColumns: ColumnConfig[] = [
+      { name: 'Gene Expression', field: 'gene_expression' },
+      { name: 'Disease Correlation', field: 'disease_correlation' },
+      { name: 'Pathology', field: 'pathology' },
+      { name: 'Biomarkers', field: 'biomarkers' },
+    ];
+
+    test('clicking column updates URL with sortFields and sortOrders', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testClickColumnUpdatesSortUrl(page, sortColumns[0].name, sortColumns[0].field);
+    });
+
+    test('clicking same column toggles between descending and ascending', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testClickColumnTogglesSortOrder(page, sortColumns[0].name, sortColumns[0].field);
+    });
+
+    test('sort is restored from URL on page load', async ({ page }) => {
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        'sortFields=disease_correlation&sortOrders=1',
+      );
+      await testSortRestoredFromUrl(page, sortColumns[1].name, sortColumns[1].field);
+    });
+
+    test('clicking different columns in sequence replaces single-column sort', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testClickDifferentColumnsReplacesSingleSort(page, sortColumns.slice(0, 3));
+    });
+
+    test('Meta+click builds multi-column sort with multiple columns', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testMetaClickBuildsMultiColumnSort(page, sortColumns.slice(0, 3));
+    });
+
+    test('multi-column sort is restored from URL', async ({ page }) => {
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        'sortFields=gene_expression,disease_correlation&sortOrders=-1,1',
+      );
+      await testMultiColumnSortRestoredFromUrl(page, sortColumns.slice(0, 2), sortColumns[2]);
+    });
+
+    test('Meta+click on existing sort columns toggles their order', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testMetaClickTogglesExistingSortOrder(page, sortColumns.slice(0, 3));
+    });
   });
 });

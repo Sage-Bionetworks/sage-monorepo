@@ -1,7 +1,7 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ComparisonToolUrlParams } from '@sagebionetworks/explorers/models';
+import { ComparisonToolUrlParams, SortOrder } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
@@ -24,12 +24,9 @@ export class ComparisonToolUrlService {
 
   syncToUrl(state: ComparisonToolUrlParams): void {
     const currentState = this.deserialize(this.route.snapshot.queryParams);
-    const currentPinned = currentState.pinnedItems ?? [];
-    const nextPinned = state.pinnedItems ?? [];
-    const currentCategories = currentState.categories ?? [];
-    const nextCategories = state.categories ?? [];
 
-    if (isEqual(currentPinned, nextPinned) && isEqual(currentCategories, nextCategories)) {
+    // Compare all tracked state properties
+    if (this.isStateEqual(currentState, state)) {
       return;
     }
 
@@ -51,11 +48,22 @@ export class ComparisonToolUrlService {
     });
   }
 
+  private isStateEqual(current: ComparisonToolUrlParams, next: ComparisonToolUrlParams): boolean {
+    return (
+      isEqual(current.pinnedItems ?? [], next.pinnedItems ?? []) &&
+      isEqual(current.categories ?? [], next.categories ?? []) &&
+      isEqual(current.sortFields ?? [], next.sortFields ?? []) &&
+      isEqual(current.sortOrders ?? [], next.sortOrders ?? [])
+    );
+  }
+
   private serialize(state: ComparisonToolUrlParams): Params {
     const params: Params = {};
 
     this.serializeArrayParam(params, 'categories', state.categories);
     this.serializeArrayParam(params, 'pinned', state.pinnedItems);
+    this.serializeArrayParam(params, 'sortFields', state.sortFields);
+    this.serializeNumberArrayParam(params, 'sortOrders', state.sortOrders);
 
     return params;
   }
@@ -91,6 +99,20 @@ export class ComparisonToolUrlService {
       }
     }
 
+    if (params['sortFields']) {
+      const sortFields = this.parseCommaSeparatedParam(params['sortFields']);
+      if (sortFields.length > 0) {
+        result.sortFields = sortFields;
+      }
+    }
+
+    if (params['sortOrders']) {
+      const sortOrders = this.parseNumberArrayParam(params['sortOrders']);
+      if (sortOrders.length > 0) {
+        result.sortOrders = sortOrders as SortOrder[];
+      }
+    }
+
     return result;
   }
 
@@ -111,5 +133,29 @@ export class ComparisonToolUrlService {
         }
       })
       .filter((entry) => entry.length > 0);
+  }
+
+  private serializeNumberArrayParam(
+    params: Params,
+    key: string,
+    value: number[] | null | undefined,
+  ): void {
+    if (value && value.length > 0) {
+      params[key] = value.join(',');
+    } else if (value !== undefined) {
+      params[key] = null;
+    }
+  }
+
+  private parseNumberArrayParam(value: string | string[] | null | undefined): number[] {
+    if (value == null) {
+      return [];
+    }
+
+    const stringValue = Array.isArray(value) ? value.join(',') : value;
+    return stringValue
+      .split(',')
+      .map((s) => parseInt(s.trim(), 10))
+      .filter((n) => !isNaN(n));
   }
 }

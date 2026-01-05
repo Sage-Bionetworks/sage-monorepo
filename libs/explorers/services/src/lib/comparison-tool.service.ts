@@ -19,9 +19,7 @@ import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
 
-/**
- * Shared state contract for comparison tools.
- */
+/** Core state management service for comparison tool pages. */
 @Injectable()
 export class ComparisonToolService<T> {
   private readonly notificationService = inject(NotificationService);
@@ -34,8 +32,8 @@ export class ComparisonToolService<T> {
   // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
   // for the first 2 levels. Disease Correlation has 2 dropdowns, so all selections are cached.
   // If future tools have more dropdowns and different column selection caching requirements,
-  // this cutoff may need to be included in the ui_config instead, so the cutoff can be set per tool.
-  private readonly DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL = 2;
+  // this depth value may need to be included in the ui_config instead, so the cutoff can be set per tool.
+  private readonly COLUMN_CACHE_DEPTH = 2;
   private readonly DEFAULT_MULTI_SORT_META: SortMeta[] = [];
   readonly FIRST_PAGE_NUMBER = 0;
   private readonly DEFAULT_VIEW_CONFIG: ComparisonToolViewConfig = {
@@ -44,6 +42,7 @@ export class ComparisonToolService<T> {
     filterResultsButtonTooltip: 'Filter results',
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     viewDetailsClick: (_id: string, _label: string) => {
       return;
     },
@@ -62,6 +61,7 @@ export class ComparisonToolService<T> {
     allowPinnedImageDownload: true,
   };
 
+  // Private State Signals
   private readonly viewConfigSignal = signal<ComparisonToolViewConfig>(this.DEFAULT_VIEW_CONFIG);
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
@@ -85,6 +85,11 @@ export class ComparisonToolService<T> {
   });
   private readonly isInitializedSignal = signal(false);
 
+  // URL Sync State
+  private lastSerializedState: string | null = null;
+  private initialSelection: string[] | undefined;
+
+  // Public Readonly Signals
   readonly viewConfig = this.viewConfigSignal.asReadonly();
   readonly configs = this.configsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
@@ -96,6 +101,7 @@ export class ComparisonToolService<T> {
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
 
+  // Computed Query Accessors
   readonly query = this.querySignal.asReadonly();
   readonly dropdownSelection = computed(() => this.querySignal().categories);
   readonly pinnedItems = computed(() => new Set(this.querySignal().pinnedItems));
@@ -106,27 +112,52 @@ export class ComparisonToolService<T> {
   readonly filters = computed(() => this.querySignal().filters);
   readonly first = computed(() => this.pageNumber() * this.pageSize());
 
-  private readonly syncToUrlInProgress = signal(false);
-  private lastSerializedState: string | null = null;
-  private initialSelection: string[] | undefined;
-  private initialPinsResolved = false;
-
   constructor() {
+    // Automatically sync state changes to URL.
+    // This effect re-runs whenever any of the tracked signals change,
+    // keeping the URL in sync with the component's state.
     effect(() => {
       const isInitialized = this.isInitialized();
-      const syncingToUrl = this.syncToUrlInProgress();
       const isActive = this.coordinatorService.isActive(this);
-
-      if (!isInitialized || syncingToUrl || !isActive) {
+      if (!isInitialized || !isActive) {
         return;
       }
 
-      const pinnedItems = this.pinnedItems();
       const dropdownSelection = this.dropdownSelection();
-      const state = this.serializeSyncState(pinnedItems, dropdownSelection);
+      const pinnedItems = this.pinnedItems();
+      const multiSortMeta = this.multiSortMeta();
 
+      const state = this.serializeSyncState({ dropdownSelection, pinnedItems, multiSortMeta });
       this.syncStateToUrl(state);
     });
+  }
+
+  connect(options: {
+    config$: Observable<ComparisonToolConfig[]>;
+    queryParams$: Observable<ComparisonToolUrlParams>;
+    initialSelection?: string[];
+  }): void {
+    this.coordinatorService.setActive(this);
+
+    if (this.isInitialized()) {
+      // Re-entering an already-initialized service (navigating back to this CT)
+      // Restore this CT's cached state and sync to the URL, ignoring URL params from other CTs
+      this.scheduleUrlSyncFromCurrentState();
+      return;
+    }
+
+    this.initialSelection = options.initialSelection;
+
+    combineLatest([options.config$, options.queryParams$])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([configs, params]) => {
+        if (!this.isInitializedSignal()) {
+          this.initializeFromConfig(configs, params);
+          return;
+        }
+
+        this.resolveUrlState(params, { isFirstLoad: false });
+      });
   }
 
   disconnect(): void {
@@ -164,12 +195,10 @@ export class ComparisonToolService<T> {
     const config = this.currentConfig();
     if (!config) return [];
 
-    // Get columns from current config (the source of truth from database)
     const configColumns = config.columns;
     if (!configColumns || configColumns.length === 0) return [];
 
     const savedColumns = this.columnsForDropdownsSignal().get(this.dropdownKey(config.dropdowns));
-
     return this.applyColumnPreferences(configColumns, savedColumns);
   });
 
@@ -182,12 +211,13 @@ export class ComparisonToolService<T> {
   }
 
   loadingResultsCount = computed(() => this.currentConfig()?.row_count ?? '');
-
   totalResultsCount = signal<number>(0);
   pinnedResultsCount = signal<number>(0);
+
   hasMaxPinnedItems = computed(() => {
     return this.pinnedResultsCount() >= this.maxPinnedItems();
   });
+
   disabledPinTooltip = computed(() => {
     return `You have already pinned the maximum number of items (${this.maxPinnedItems()}). You must unpin some items before you can pin more.`;
   });
@@ -203,20 +233,14 @@ export class ComparisonToolService<T> {
     this.configsSignal.set(configs ?? []);
 
     const selection = this.resolveInitialDropdownSelection(params, configs);
+    const initialSort = this.resolveInitialSortMeta(params);
 
-    const queryUpdate: Partial<ComparisonToolQuery> = {
+    this.updateQuery({
       categories: selection,
-      pageNumber: this.FIRST_PAGE_NUMBER,
-    };
+      multiSortMeta: initialSort,
+    });
 
-    // Apply default sort if configured
-    const defaultSort = this.viewConfigSignal().defaultSort;
-    if (defaultSort && defaultSort.length > 0) {
-      queryUpdate.multiSortMeta = defaultSort as SortMeta[];
-    }
-
-    this.updateQuery(queryUpdate);
-
+    // Initialize column preferences cache for all configs
     const columnsMap = new Map<string, ComparisonToolColumn[]>();
     for (const config of configs) {
       columnsMap.set(
@@ -229,7 +253,7 @@ export class ComparisonToolService<T> {
     this.pinnedItemsForDropdownsSignal.set(new Map());
     this.initialSelection = undefined;
 
-    this.resolveUrlState(params, { isInitial: true });
+    this.resolveUrlState(params, { isFirstLoad: true });
 
     this.isInitializedSignal.set(true);
   }
@@ -243,33 +267,17 @@ export class ComparisonToolService<T> {
     return this.normalizeSelection(selectionSource, configs);
   }
 
-  connect(options: {
-    config$: Observable<ComparisonToolConfig[]>;
-    queryParams$: Observable<ComparisonToolUrlParams>;
-    initialSelection?: string[];
-  }): void {
-    this.coordinatorService.setActive(this);
-
-    if (this.isInitialized()) {
-      // Re-entering an already-initialized service (navigating back to this CT)
-      // Restore this CT's cached state and sync to the URL, ignoring URL params from other CTs
-      this.syncToUrlInProgress.set(false);
-      this.scheduleUrlSyncFromCurrentState();
-      return;
+  private resolveInitialSortMeta(params: ComparisonToolUrlParams): SortMeta[] {
+    if (params.sortFields && params.sortFields.length > 0) {
+      return this.convertArraysToSortMeta(params.sortFields, params.sortOrders ?? []);
     }
 
-    this.initialSelection = options.initialSelection;
+    const defaultSort = this.viewConfigSignal().defaultSort;
+    if (defaultSort && defaultSort.length > 0) {
+      return defaultSort as SortMeta[];
+    }
 
-    combineLatest([options.config$, options.queryParams$])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([configs, params]) => {
-        if (!this.isInitializedSignal()) {
-          this.initializeFromConfig(configs, params);
-          return;
-        }
-
-        this.resolveUrlState(params, { isInitial: false });
-      });
+    return [];
   }
 
   setDropdownSelection(selection: string[]) {
@@ -344,19 +352,15 @@ export class ComparisonToolService<T> {
       this.notificationService.showWarning(
         `You have reached the maximum number of pinned items (${this.maxPinnedItems()}). Please unpin an item before pinning a new one.`,
       );
-    } else if (!this.isPinned(id)) {
-      this.updateQuery({
-        pinnedItems: [...this.query().pinnedItems, id],
-      });
-      this.updatePinnedItemsCache();
+      return;
+    }
+    if (!this.isPinned(id)) {
+      this.setPinnedItems([...this.query().pinnedItems, id]);
     }
   }
 
   unpinItem(id: string) {
-    this.updateQuery({
-      pinnedItems: this.query().pinnedItems.filter((item) => item !== id),
-    });
-    this.updatePinnedItemsCache();
+    this.setPinnedItems(this.query().pinnedItems.filter((item) => item !== id));
   }
 
   pinList(ids: string[]) {
@@ -371,17 +375,13 @@ export class ComparisonToolService<T> {
         );
         break;
       }
-      if (currentPins.has(id)) {
-        continue;
+      if (!currentPins.has(id)) {
+        currentPins.add(id);
+        itemsAdded++;
       }
-      currentPins.add(id);
-      itemsAdded++;
     }
 
-    this.updateQuery({
-      pinnedItems: Array.from(currentPins),
-    });
-    this.updatePinnedItemsCache();
+    this.setPinnedItems(Array.from(currentPins));
   }
 
   setPinnedItems(items: string[] | null) {
@@ -522,12 +522,10 @@ export class ComparisonToolService<T> {
 
   private dropdownKey(dropdowns: string[] | undefined): string {
     const normalized = dropdowns ?? [];
-    if (normalized.length <= this.DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL) {
+    if (normalized.length <= this.COLUMN_CACHE_DEPTH) {
       return JSON.stringify(normalized);
     }
-    return JSON.stringify(
-      normalized.slice(0, this.DEFAULT_DROPDOWNS_COLUMN_SELECTION_CACHE_CUTOFF_LEVEL),
-    );
+    return JSON.stringify(normalized.slice(0, this.COLUMN_CACHE_DEPTH));
   }
 
   private updatePinnedItemsCache(): void {
@@ -547,12 +545,7 @@ export class ComparisonToolService<T> {
     const currentSort = this.querySignal().multiSortMeta;
 
     // Early return if arrays are reference-equal
-    if (currentSort === newSort) {
-      return;
-    }
-
-    // Only update if the sort has actually changed (deep equality check)
-    if (isEqual(currentSort, newSort)) {
+    if (currentSort === newSort || isEqual(currentSort, newSort)) {
       return;
     }
 
@@ -579,59 +572,62 @@ export class ComparisonToolService<T> {
     });
   }
 
-  private resolveUrlState(params: ComparisonToolUrlParams, options: { isInitial: boolean }): void {
+  private resolveUrlState(
+    params: ComparisonToolUrlParams,
+    options: { isFirstLoad: boolean },
+  ): void {
     // If this service is not active, ignore URL changes from other CTs
     if (!this.coordinatorService.isActive(this)) {
       return;
     }
 
-    this.syncToUrlInProgress.set(true);
+    // Batch all query changes to avoid multiple updateQuery() calls
+    const queryUpdates: Partial<ComparisonToolQuery> = {};
 
-    // Handle categories from URL (for non-initial navigation)
-    if (!options.isInitial && params.categories) {
+    // Categories are handled in initializeFromConfig for first load,
+    // so only process category changes from URL on subsequent navigations
+    if (!options.isFirstLoad && params.categories) {
       const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
-      // Only update if different to avoid loops
       if (!isEqual(normalizedSelection, this.dropdownSelection())) {
-        this.updateQuery({ categories: normalizedSelection, pageNumber: this.FIRST_PAGE_NUMBER });
+        queryUpdates.categories = normalizedSelection;
+        queryUpdates.pageNumber = this.FIRST_PAGE_NUMBER;
       }
     }
 
-    const urlPinnedItems = params.pinnedItems ?? undefined;
-    const hasUrlPins = Array.isArray(urlPinnedItems) && urlPinnedItems.length > 0;
+    if (params.sortFields?.length) {
+      const sortMeta = this.convertArraysToSortMeta(params.sortFields, params.sortOrders ?? []);
+      if (!isEqual(sortMeta, this.multiSortMeta())) {
+        queryUpdates.multiSortMeta = sortMeta;
+      }
+    }
 
-    // User navigated directly to this CT with ?pinned=<ids> in URL - restore those pins
-    if (hasUrlPins) {
-      this.setPinnedItems(urlPinnedItems);
+    // Pinned items logic differs based on context:
+    // - URL has pins: use them (URL is source of truth)
+    // - First load, no URL pins: start fresh with empty pins
+    // - Subsequent navigation, no URL pins: restore from cache to preserve user's pinned state
+    const urlPinnedItems = params.pinnedItems ?? [];
+    let newPinnedItems: string[];
+    if (urlPinnedItems.length > 0) {
+      newPinnedItems = Array.from(new Set(urlPinnedItems));
+    } else if (options.isFirstLoad) {
+      newPinnedItems = [];
+    } else {
+      // Use updated categories if present, otherwise use current selection
+      const selectionKey = this.dropdownKey(queryUpdates.categories ?? this.dropdownSelection());
+      const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(selectionKey);
+      newPinnedItems = cachedPinnedItems ? Array.from(cachedPinnedItems) : [];
+    }
+    queryUpdates.pinnedItems = newPinnedItems;
+
+    // Apply all batched changes in a single update
+    if (Object.keys(queryUpdates).length > 0) {
+      this.updateQuery(queryUpdates);
+      this.updatePinnedItemsCache();
+    }
+
+    if (!options.isFirstLoad) {
       this.updateSerializedStateCache();
-      this.initialPinsResolved = true;
-      this.syncToUrlInProgress.set(false);
-      return;
     }
-
-    // First visit to this CT without URL pins - start with empty pins and sync to URL
-    if (options.isInitial && !this.initialPinsResolved) {
-      this.resetPinnedItems();
-      this.syncToUrlInProgress.set(false);
-      this.scheduleUrlSyncFromCurrentState();
-      this.initialPinsResolved = true;
-      return;
-    }
-
-    // When navigating back without URL pins, check if we have cached pins for current dropdown
-    const currentKey = this.dropdownKey(this.dropdownSelection());
-    const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(currentKey);
-
-    // Restore cached pins and sync to URL
-    if (cachedPinnedItems && cachedPinnedItems.size > 0) {
-      this.setPinnedItems(Array.from(cachedPinnedItems));
-      this.syncToUrlInProgress.set(false);
-      this.scheduleUrlSyncFromCurrentState();
-      return;
-    }
-
-    // No URL pins and no cached pins - clear everything and sync to URL
-    this.syncToUrlInProgress.set(false);
-    this.scheduleUrlSyncFromCurrentState();
   }
 
   private syncStateToUrl(state: ComparisonToolUrlParams): void {
@@ -644,25 +640,34 @@ export class ComparisonToolService<T> {
     this.urlService.syncToUrl(state);
   }
 
-  private serializeSyncState(
-    pinnedItems: Set<string>,
-    dropdownSelection: string[],
-  ): ComparisonToolUrlParams {
-    const pinned = Array.from(pinnedItems);
+  private serializeSyncState(options: {
+    dropdownSelection: string[];
+    pinnedItems: Set<string>;
+    multiSortMeta: SortMeta[];
+  }): ComparisonToolUrlParams {
+    const pinned = Array.from(options.pinnedItems);
+    const { sortFields, sortOrders } = this.convertSortMetaToArrays(options.multiSortMeta);
+    const defaultSort = this.viewConfigSignal().defaultSort;
+    const isDefaultSort = defaultSort && isEqual(options.multiSortMeta, defaultSort as SortMeta[]);
 
     return {
       pinnedItems: pinned.length ? pinned : null,
-      categories: dropdownSelection.length ? dropdownSelection : null,
+      categories: options.dropdownSelection.length ? options.dropdownSelection : null,
+      sortFields: !isDefaultSort && sortFields.length ? sortFields : null,
+      sortOrders: !isDefaultSort && sortOrders.length ? sortOrders : null,
     };
   }
 
   private syncCurrentStateToUrl(): void {
-    this.syncStateToUrl(this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()));
+    this.syncStateToUrl(
+      this.serializeSyncState({
+        dropdownSelection: this.dropdownSelection(),
+        pinnedItems: this.pinnedItems(),
+        multiSortMeta: this.multiSortMeta(),
+      }),
+    );
   }
 
-  /**
-   * Converts PrimeNG SortMeta array to sortFields and sortOrders arrays.
-   */
   convertSortMetaToArrays(multiSortMeta: SortMeta[]): {
     sortFields: string[];
     sortOrders: SortOrder[];
@@ -684,16 +689,32 @@ export class ComparisonToolService<T> {
     return { sortFields, sortOrders };
   }
 
+  private convertArraysToSortMeta(sortFields: string[], sortOrders: SortOrder[]): SortMeta[] {
+    return sortFields.map((field, index) => ({
+      field,
+      order: sortOrders[index] ?? 1,
+    }));
+  }
+
   private updateSerializedStateCache(): void {
     this.lastSerializedState = JSON.stringify(
-      this.serializeSyncState(this.pinnedItems(), this.dropdownSelection()),
+      this.serializeSyncState({
+        pinnedItems: this.pinnedItems(),
+        dropdownSelection: this.dropdownSelection(),
+        multiSortMeta: this.multiSortMeta(),
+      }),
     );
   }
 
+  /**
+   * Schedules URL sync to run after the current navigation completes.
+   *
+   * This is needed when re-entering an already-initialized comparison tool.
+   * The router navigation that triggered connect() must complete before we
+   * can update the URL, otherwise our changes would be overwritten.
+   */
   private scheduleUrlSyncFromCurrentState(): void {
-    // Queue task to allow router navigation that triggered this connect call to finish first
     queueMicrotask(() => {
-      // Check if active - CT may have become inactive between scheduling and execution
       if (!this.coordinatorService.isActive(this)) {
         return;
       }
