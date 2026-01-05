@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
  * <p>This interface defines custom query methods that require MongoTemplate for complex filtering
  * logic that cannot be expressed using Spring Data's derived query methods.
  */
-public interface ModelOverviewRepositoryCustom {
+public interface CustomModelOverviewRepository {
 
   /**
    * Find model overviews with complex filtering including data filters, name filtering, and search

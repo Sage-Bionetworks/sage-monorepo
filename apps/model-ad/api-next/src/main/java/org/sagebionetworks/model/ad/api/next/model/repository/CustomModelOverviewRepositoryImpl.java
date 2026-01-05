@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class ModelOverviewRepositoryCustomImpl implements ModelOverviewRepositoryCustom {
+public class CustomModelOverviewRepositoryImpl implements CustomModelOverviewRepository {
 
   private final MongoTemplate mongoTemplate;
 
