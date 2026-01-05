@@ -35,6 +35,22 @@ export const getPinnedQueryParams = (url: string): string[] => getQueryParamValu
 export const getCategoriesQueryParams = (url: string): string[] =>
   getQueryParamValues(url, 'categories');
 
+export const getSortFieldsQueryParams = (url: string): string[] =>
+  getQueryParamValues(url, 'sortFields');
+
+export const getSortOrdersQueryParams = (url: string): number[] =>
+  getQueryParamValues(url, 'sortOrders').map((v) => parseInt(v, 10));
+
+export const getPageQueryParam = (url: string): number | null => {
+  const values = getQueryParamValues(url, 'page');
+  return values.length > 0 ? parseInt(values[0], 10) : null;
+};
+
+export const getSearchQueryParam = (url: string): string | null => {
+  const values = getQueryParamValues(url, 'search');
+  return values.length > 0 ? values[0] : null;
+};
+
 export const getPinnedTable = (page: Page): Locator => page.locator('explorers-base-table').first();
 
 export const getUnpinnedTable = (page: Page): Locator =>
@@ -84,6 +100,22 @@ export const expectCategoriesParams = async (page: Page, expected: string[]): Pr
   await expect.poll(() => getCategoriesQueryParams(page.url())).toEqual(expected);
 };
 
+export const expectSortFieldsParams = async (page: Page, expected: string[]): Promise<void> => {
+  await expect.poll(() => getSortFieldsQueryParams(page.url())).toEqual(expected);
+};
+
+export const expectSortOrdersParams = async (page: Page, expected: number[]): Promise<void> => {
+  await expect.poll(() => getSortOrdersQueryParams(page.url())).toEqual(expected);
+};
+
+export const expectPageParam = async (page: Page, expected: number | null): Promise<void> => {
+  await expect.poll(() => getPageQueryParam(page.url())).toEqual(expected);
+};
+
+export const expectSearchParam = async (page: Page, expected: string | null): Promise<void> => {
+  await expect.poll(() => getSearchQueryParam(page.url())).toEqual(expected);
+};
+
 export const expectPinnedRows = async (page: Page, rowNames: string[]): Promise<void> => {
   await expect(page.locator('explorers-base-table')).toHaveCount(2);
   const pinnedTable = getPinnedTable(page);
@@ -121,12 +153,21 @@ export async function clickFilterCheckbox(page: Page, filterMenuName: string, fi
   const filterButton = page.getByRole('button', { name: 'Filter Results' });
   await filterButton.click();
 
-  const filterMenuButton = page.getByRole('button', {
-    name: `open ${filterMenuName} filter options`,
+  const filterPanelMain = page.locator('.filter-panel-main');
+  await expect(filterPanelMain).toBeVisible();
+
+  const filterMenuButtonNameRegex = new RegExp(filterMenuName, 'i');
+  const filterMenuButton = filterPanelMain.getByRole('button', {
+    name: filterMenuButtonNameRegex,
   });
   await filterMenuButton.click();
 
-  const filterCheckbox = page.getByRole('checkbox', { name: filterName });
+  const filterPanelSecondary = page.locator('.filter-panel-pane').filter({ visible: true });
+  await expect(filterPanelSecondary.getByText(filterMenuName)).toBeVisible();
+  const filterCheckboxNameRegex = new RegExp(filterName, 'i');
+  const filterCheckbox = filterPanelSecondary.getByRole('checkbox', {
+    name: filterCheckboxNameRegex,
+  });
   await filterCheckbox.click();
 }
 
@@ -205,4 +246,20 @@ export async function testTableReturnsToFirstPageWhenSortChanged(page: Page) {
   await columnHeader.click();
 
   await expectFirstPage(page);
+}
+
+/**
+ * Clicks a column header to sort by that column.
+ * @param page - Playwright Page object
+ * @param columnName - The accessible name of the column header to click
+ * @param multiSort - If true, uses Meta+click to add to existing sort (multi-column sort).
+ *                    If false (default), performs a regular click to replace the current sort.
+ */
+export async function sortColumn(page: Page, columnName: string, multiSort = false): Promise<void> {
+  const columnHeader = page.getByRole('columnheader', { name: columnName });
+  if (multiSort) {
+    await columnHeader.click({ modifiers: ['Meta'] });
+  } else {
+    await columnHeader.click();
+  }
 }

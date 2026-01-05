@@ -13,26 +13,27 @@
   <ng-template pTemplate="header">
     <tr>
       @for (column of selectedColumns(); track column) {
-        @if (column.type === 'primary') {
-          <th [class]="column.type"></th>
-        } @else {
-          <th [pSortableColumn]="column.data_key" [style]="{ width: columnWidth() }">
-            <div class="column-header">
-              <div class="column-header-text">
-                <span [pTooltip]="column.tooltip" tooltipPosition="top">
-                  {{ column.name }}
-                </span>
-              </div>
-              <div class="column-header-sort">
-                <p-sortIcon
-                  [field]="column.data_key"
-                  [pTooltip]="column.sort_tooltip"
-                  tooltipPosition="top"
-                />
-              </div>
+        <th
+          [id]="column.name"
+          [class]="column.type"
+          [pSortableColumn]="column.data_key"
+          [style]="{ width: columnWidth() }"
+        >
+          <div class="column-header">
+            <div class="column-header-text">
+              <span [pTooltip]="column.tooltip" tooltipPosition="top">
+                {{ column.name }}
+              </span>
             </div>
-          </th>
-        }
+            <div class="column-header-sort">
+              <p-sortIcon
+                [field]="column.data_key"
+                [pTooltip]="column.sort_tooltip"
+                tooltipPosition="top"
+              />
+            </div>
+          </div>
+        </th>
       }
     </tr>
   </ng-template>
