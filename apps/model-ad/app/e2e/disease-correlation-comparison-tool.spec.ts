@@ -1,21 +1,26 @@
 import { expect, test } from '@playwright/test';
 import {
+  ColumnConfig,
   expectCategories,
   expectCategoriesParams,
   expectPinnedParams,
   expectPinnedRows,
   expectSortFieldsParams,
   expectSortOrdersParams,
-  expectUnpinnedTableOnly,
   getPinnedTable,
   getQueryParamFromValues,
   getRowByName,
-  getSortFieldsQueryParams,
-  getSortOrdersQueryParams,
+  testClickColumnTogglesSortOrder,
+  testClickColumnUpdatesSortUrl,
+  testClickDifferentColumnsReplacesSingleSort,
   testFullCaseInsensitiveMatch,
+  testMetaClickBuildsMultiColumnSort,
+  testMetaClickTogglesExistingSortOrder,
+  testMultiColumnSortRestoredFromUrl,
   testPartialCaseInsensitiveSearch,
   testPinLastItemLastPageGoesToPreviousPage,
   testSearchExcludesPinnedItems,
+  testSortRestoredFromUrl,
   testTableReturnsToFirstPageWhenCategoriesChanged,
   testTableReturnsToFirstPageWhenFilterSelectedAndRemoved,
   testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared,
@@ -350,165 +355,45 @@ test.describe('disease correlation', () => {
     // Columns: 0=Model (name), 1=Age, 2=Sex, 3=IFG, 4=PHG, 5=TCX
     // Default sort: name ASC, age ASC, sex ASC
 
-    test('clicking IFG column updates URL with sortFields and sortOrders', async ({ page }) => {
+    const sortColumns: ColumnConfig[] = [
+      { name: 'IFG', field: 'IFG' },
+      { name: 'PHG', field: 'PHG' },
+      { name: 'TCX', field: 'TCX' },
+    ];
+
+    test('clicking column updates URL with sortFields and sortOrders', async ({ page }) => {
       await navigateToComparison(page, CT_PAGE, true);
-
-      // Initial state: no sort params (default sort applied internally)
-      expect(getSortFieldsQueryParams(page.url())).toEqual([]);
-      expect(getSortOrdersQueryParams(page.url())).toEqual([]);
-
-      // Click IFG column header (brain region - not part of default sort)
-      await page.getByRole('columnheader', { name: 'IFG' }).click();
-
-      await expectSortFieldsParams(page, ['IFG']);
-      await expectSortOrdersParams(page, [-1]);
+      await testClickColumnUpdatesSortUrl(page, sortColumns[0].name, sortColumns[0].field);
     });
 
     test('clicking same column toggles between descending and ascending', async ({ page }) => {
       await navigateToComparison(page, CT_PAGE, true);
-
-      const ifgHeader = page.getByRole('columnheader', { name: 'IFG' });
-
-      // First click - descending
-      await ifgHeader.click();
-      await expectSortFieldsParams(page, ['IFG']);
-      await expectSortOrdersParams(page, [-1]);
-
-      // Second click - ascending
-      await ifgHeader.click();
-      await expectSortFieldsParams(page, ['IFG']);
-      await expectSortOrdersParams(page, [1]);
-
-      // Third click - back to descending
-      await ifgHeader.click();
-      await expectSortFieldsParams(page, ['IFG']);
-      await expectSortOrdersParams(page, [-1]);
-
-      // Fourth click - ascending again
-      await ifgHeader.click();
-      await expectSortFieldsParams(page, ['IFG']);
-      await expectSortOrdersParams(page, [1]);
+      await testClickColumnTogglesSortOrder(page, sortColumns[0].name, sortColumns[0].field);
     });
 
     test('sort is restored from URL on page load', async ({ page }) => {
       await navigateToComparison(page, CT_PAGE, true, 'url', 'sortFields=PHG&sortOrders=1');
-
-      await expectSortFieldsParams(page, ['PHG']);
-      await expectSortOrdersParams(page, [1]);
-
-      // Click the sorted column to toggle it
-      await page.getByRole('columnheader', { name: 'PHG' }).click();
-      await expectSortFieldsParams(page, ['PHG']);
-      await expectSortOrdersParams(page, [-1]);
-
-      // Click again to toggle back
-      await page.getByRole('columnheader', { name: 'PHG' }).click();
-      await expectSortFieldsParams(page, ['PHG']);
-      await expectSortOrdersParams(page, [1]);
+      await testSortRestoredFromUrl(page, sortColumns[1].name, sortColumns[1].field);
     });
 
     test('clicking different columns in sequence replaces single-column sort', async ({ page }) => {
       await navigateToComparison(page, CT_PAGE, true);
-
-      // Click IFG
-      await page.getByRole('columnheader', { name: 'IFG' }).click();
-      await expectSortFieldsParams(page, ['IFG']);
-      await expectSortOrdersParams(page, [-1]);
-
-      // Click PHG - should replace the sort
-      await page.getByRole('columnheader', { name: 'PHG' }).click();
-      await expectSortFieldsParams(page, ['PHG']);
-      await expectSortOrdersParams(page, [-1]);
-
-      // Click TCX - should replace again
-      await page.getByRole('columnheader', { name: 'TCX' }).click();
-      await expectSortFieldsParams(page, ['TCX']);
-      await expectSortOrdersParams(page, [-1]);
-
-      // Click IFG again - back to first column
-      await page.getByRole('columnheader', { name: 'IFG' }).click();
-      await expectSortFieldsParams(page, ['IFG']);
-      await expectSortOrdersParams(page, [-1]);
+      await testClickDifferentColumnsReplacesSingleSort(page, sortColumns);
     });
 
-    test('Meta+click builds multi-column sort with all brain regions', async ({ page }) => {
+    test('Meta+click builds multi-column sort with multiple columns', async ({ page }) => {
       await navigateToComparison(page, CT_PAGE, true);
-
-      // Click IFG first
-      await page.getByRole('columnheader', { name: 'IFG' }).click();
-      await expectSortFieldsParams(page, ['IFG']);
-      await expectSortOrdersParams(page, [-1]);
-
-      // Meta+click PHG to add to sort
-      await page.getByRole('columnheader', { name: 'PHG' }).click({ modifiers: ['Meta'] });
-      await expectSortFieldsParams(page, ['IFG', 'PHG']);
-      await expectSortOrdersParams(page, [-1, -1]);
-
-      // Meta+click TCX to add third column
-      await page.getByRole('columnheader', { name: 'TCX' }).click({ modifiers: ['Meta'] });
-      await expectSortFieldsParams(page, ['IFG', 'PHG', 'TCX']);
-      await expectSortOrdersParams(page, [-1, -1, -1]);
-
-      // Regular click on Age - should reset to single column sort
-      await page.getByRole('columnheader', { name: 'Age' }).click();
-      await expectSortFieldsParams(page, ['age']);
-      await expectSortOrdersParams(page, [-1]);
-
-      // Build multi-column sort again to verify cycle works
-      await page.getByRole('columnheader', { name: 'IFG' }).click();
-      await page.getByRole('columnheader', { name: 'PHG' }).click({ modifiers: ['Meta'] });
-      await page.getByRole('columnheader', { name: 'TCX' }).click({ modifiers: ['Meta'] });
-      await expectSortFieldsParams(page, ['IFG', 'PHG', 'TCX']);
-      await expectSortOrdersParams(page, [-1, -1, -1]);
+      await testMetaClickBuildsMultiColumnSort(page, sortColumns);
     });
 
     test('multi-column sort is restored from URL', async ({ page }) => {
-      await navigateToComparison(
-        page,
-        CT_PAGE,
-        true,
-        'url',
-        'sortFields=IFG,PHG,TCX&sortOrders=-1,1,-1',
-      );
-
-      await expectSortFieldsParams(page, ['IFG', 'PHG', 'TCX']);
-      await expectSortOrdersParams(page, [-1, 1, -1]);
-
-      // Toggle one of the columns
-      await page.getByRole('columnheader', { name: 'IFG' }).click({ modifiers: ['Meta'] });
-      await expectSortFieldsParams(page, ['IFG', 'PHG', 'TCX']);
-      await expectSortOrdersParams(page, [1, 1, -1]);
+      await navigateToComparison(page, CT_PAGE, true, 'url', 'sortFields=IFG,PHG&sortOrders=-1,1');
+      await testMultiColumnSortRestoredFromUrl(page, sortColumns.slice(0, 2), sortColumns[2]);
     });
 
     test('Meta+click on existing sort columns toggles their order', async ({ page }) => {
       await navigateToComparison(page, CT_PAGE, true);
-
-      // Set up multi-column sort with all 3 brain regions
-      await page.getByRole('columnheader', { name: 'IFG' }).click();
-      await page.getByRole('columnheader', { name: 'PHG' }).click({ modifiers: ['Meta'] });
-      await page.getByRole('columnheader', { name: 'TCX' }).click({ modifiers: ['Meta'] });
-      await expectSortFieldsParams(page, ['IFG', 'PHG', 'TCX']);
-      await expectSortOrdersParams(page, [-1, -1, -1]);
-
-      // Meta+click IFG to toggle its order
-      await page.getByRole('columnheader', { name: 'IFG' }).click({ modifiers: ['Meta'] });
-      await expectSortFieldsParams(page, ['IFG', 'PHG', 'TCX']);
-      await expectSortOrdersParams(page, [1, -1, -1]);
-
-      // Meta+click PHG to toggle its order
-      await page.getByRole('columnheader', { name: 'PHG' }).click({ modifiers: ['Meta'] });
-      await expectSortFieldsParams(page, ['IFG', 'PHG', 'TCX']);
-      await expectSortOrdersParams(page, [1, 1, -1]);
-
-      // Meta+click TCX to toggle its order
-      await page.getByRole('columnheader', { name: 'TCX' }).click({ modifiers: ['Meta'] });
-      await expectSortFieldsParams(page, ['IFG', 'PHG', 'TCX']);
-      await expectSortOrdersParams(page, [1, 1, 1]);
-
-      // Toggle IFG back to descending
-      await page.getByRole('columnheader', { name: 'IFG' }).click({ modifiers: ['Meta'] });
-      await expectSortFieldsParams(page, ['IFG', 'PHG', 'TCX']);
-      await expectSortOrdersParams(page, [-1, 1, 1]);
+      await testMetaClickTogglesExistingSortOrder(page, sortColumns);
     });
 
     test('sort params persist with categories in URL', async ({ page }) => {
