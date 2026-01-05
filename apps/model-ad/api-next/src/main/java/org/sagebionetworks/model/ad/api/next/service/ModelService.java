@@ -3,6 +3,7 @@ package org.sagebionetworks.model.ad.api.next.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
+import org.sagebionetworks.model.ad.api.next.exception.ModelNotFoundException;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelMapper;
@@ -22,7 +23,8 @@ public class ModelService {
 
   @Cacheable(key = "#name")
   public ModelDto getModelByName(String name) {
-    ModelDocument document = repository.findByName(name).orElse(null);
+    ModelDocument document = repository.findByName(name)
+      .orElseThrow(() -> new ModelNotFoundException(name));
     return modelMapper.toDto(document);
   }
 }
