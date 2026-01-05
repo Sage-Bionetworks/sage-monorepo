@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.sagebionetworks.model.ad.api.next.interceptor.ApiLoggingInterceptor;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;

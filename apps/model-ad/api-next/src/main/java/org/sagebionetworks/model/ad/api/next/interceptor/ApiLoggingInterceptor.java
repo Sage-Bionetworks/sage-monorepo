@@ -1,4 +1,4 @@
-package org.sagebionetworks.model.ad.api.next.configuration;
+package org.sagebionetworks.model.ad.api.next.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
