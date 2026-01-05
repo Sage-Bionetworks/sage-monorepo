@@ -22,7 +22,7 @@ public class DataVersionApiDelegateImpl implements DataVersionApiDelegate {
 
     DataVersionDto dataVersion = dataVersionService.loadDataVersion();
 
-    log.debug("Successfully retrieved data version");
+    log.debug("Successfully retrieved data version: {}", dataVersion);
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
