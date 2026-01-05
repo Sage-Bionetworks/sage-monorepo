@@ -153,12 +153,21 @@ export async function clickFilterCheckbox(page: Page, filterMenuName: string, fi
   const filterButton = page.getByRole('button', { name: 'Filter Results' });
   await filterButton.click();
 
-  const filterMenuButton = page.getByRole('button', {
-    name: `open ${filterMenuName} filter options`,
+  const filterPanelMain = page.locator('.filter-panel-main');
+  await expect(filterPanelMain).toBeVisible();
+
+  const filterMenuButtonNameRegex = new RegExp(filterMenuName, 'i');
+  const filterMenuButton = filterPanelMain.getByRole('button', {
+    name: filterMenuButtonNameRegex,
   });
   await filterMenuButton.click();
 
-  const filterCheckbox = page.getByRole('checkbox', { name: filterName });
+  const filterPanelSecondary = page.locator('.filter-panel-pane').filter({ visible: true });
+  await expect(filterPanelSecondary.getByText(filterMenuName)).toBeVisible();
+  const filterCheckboxNameRegex = new RegExp(filterName, 'i');
+  const filterCheckbox = filterPanelSecondary.getByRole('checkbox', {
+    name: filterCheckboxNameRegex,
+  });
   await filterCheckbox.click();
 }
 
