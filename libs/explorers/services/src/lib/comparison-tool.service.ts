@@ -581,19 +581,23 @@ export class ComparisonToolService<T> {
       return;
     }
 
+    // Batch all query changes to avoid multiple updateQuery() calls
+    const queryUpdates: Partial<ComparisonToolQuery> = {};
+
     // Categories are handled in initializeFromConfig for first load,
     // so only process category changes from URL on subsequent navigations
     if (!options.isFirstLoad && params.categories) {
       const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
       if (!isEqual(normalizedSelection, this.dropdownSelection())) {
-        this.updateQuery({ categories: normalizedSelection, pageNumber: this.FIRST_PAGE_NUMBER });
+        queryUpdates.categories = normalizedSelection;
+        queryUpdates.pageNumber = this.FIRST_PAGE_NUMBER;
       }
     }
 
     if (params.sortFields?.length) {
       const sortMeta = this.convertArraysToSortMeta(params.sortFields, params.sortOrders ?? []);
       if (!isEqual(sortMeta, this.multiSortMeta())) {
-        this.updateQuery({ multiSortMeta: sortMeta });
+        queryUpdates.multiSortMeta = sortMeta;
       }
     }
 
@@ -602,14 +606,23 @@ export class ComparisonToolService<T> {
     // - First load, no URL pins: start fresh with empty pins
     // - Subsequent navigation, no URL pins: restore from cache to preserve user's pinned state
     const urlPinnedItems = params.pinnedItems ?? [];
+    let newPinnedItems: string[];
     if (urlPinnedItems.length > 0) {
-      this.setPinnedItems(urlPinnedItems);
+      newPinnedItems = Array.from(new Set(urlPinnedItems));
     } else if (options.isFirstLoad) {
-      this.resetPinnedItems();
+      newPinnedItems = [];
     } else {
-      const currentKey = this.dropdownKey(this.dropdownSelection());
-      const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(currentKey);
-      this.setPinnedItems(cachedPinnedItems ? Array.from(cachedPinnedItems) : []);
+      // Use updated categories if present, otherwise use current selection
+      const selectionKey = this.dropdownKey(queryUpdates.categories ?? this.dropdownSelection());
+      const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(selectionKey);
+      newPinnedItems = cachedPinnedItems ? Array.from(cachedPinnedItems) : [];
+    }
+    queryUpdates.pinnedItems = newPinnedItems;
+
+    // Apply all batched changes in a single update
+    if (Object.keys(queryUpdates).length > 0) {
+      this.updateQuery(queryUpdates);
+      this.updatePinnedItemsCache();
     }
 
     if (!options.isFirstLoad) {
