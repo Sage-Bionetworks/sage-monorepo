@@ -71,7 +71,6 @@ export class ComparisonToolService<T> {
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
   );
-  private readonly pinnedItemsForDropdownsSignal = signal<Map<string, Set<string>>>(new Map());
   private readonly unpinnedDataSignal = signal<T[]>([]);
   private readonly pinnedDataSignal = signal<T[]>([]);
   private readonly querySignal = signal<ComparisonToolQuery>({
@@ -87,6 +86,7 @@ export class ComparisonToolService<T> {
 
   // URL Sync State
   private lastSerializedState: string | null = null;
+  private lastSyncedPins: string[] = [];
   private initialSelection: string[] | undefined;
 
   // Public Readonly Signals
@@ -112,6 +112,17 @@ export class ComparisonToolService<T> {
   readonly filters = computed(() => this.querySignal().filters);
   readonly first = computed(() => this.pageNumber() * this.pageSize());
 
+  // pinnedItems cache may include more pins than are currently visible
+  // Used for the URL serialization
+  readonly visiblePinIds = computed(() => {
+    const visiblePinnedData = this.pinnedData();
+    const rowIdKey = this.viewConfig().rowIdDataKey;
+    return visiblePinnedData.map((item: T) => {
+      const id = (item as Record<string, unknown>)[rowIdKey];
+      return String(id);
+    });
+  });
+
   constructor() {
     // Automatically sync state changes to URL.
     // This effect re-runs whenever any of the tracked signals change,
@@ -124,11 +135,14 @@ export class ComparisonToolService<T> {
       }
 
       const dropdownSelection = this.dropdownSelection();
-      const pinnedItems = this.pinnedItems();
+      const visiblePinIds = this.visiblePinIds();
       const multiSortMeta = this.multiSortMeta();
 
-      const state = this.serializeSyncState({ dropdownSelection, pinnedItems, multiSortMeta });
+      const state = this.serializeSyncState({ dropdownSelection, visiblePinIds, multiSortMeta });
       this.syncStateToUrl(state);
+
+      // Track what we synced so resolveUrlState can detect self-triggered URL changes
+      this.lastSyncedPins = visiblePinIds;
     });
   }
 
@@ -250,7 +264,6 @@ export class ComparisonToolService<T> {
     }
 
     this.columnsForDropdownsSignal.set(columnsMap);
-    this.pinnedItemsForDropdownsSignal.set(new Map());
     this.initialSelection = undefined;
 
     this.resolveUrlState(params, { isFirstLoad: true });
@@ -355,33 +368,33 @@ export class ComparisonToolService<T> {
       return;
     }
     if (!this.isPinned(id)) {
-      this.setPinnedItems([...this.query().pinnedItems, id]);
+      this.setPinnedItems([...this.visiblePinIds(), id]);
     }
   }
 
   unpinItem(id: string) {
-    this.setPinnedItems(this.query().pinnedItems.filter((item) => item !== id));
+    this.setPinnedItems(this.visiblePinIds().filter((item) => item !== id));
   }
 
   pinList(ids: string[]) {
-    const currentPins = new Set(this.query().pinnedItems);
+    const visiblePins = new Set(this.visiblePinIds());
     let itemsAdded = 0;
 
     for (const id of ids) {
-      if (currentPins.size >= this.maxPinnedItems()) {
+      if (visiblePins.size >= this.maxPinnedItems()) {
         const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
         this.notificationService.showWarning(
           `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
         );
         break;
       }
-      if (!currentPins.has(id)) {
-        currentPins.add(id);
+      if (!visiblePins.has(id)) {
+        visiblePins.add(id);
         itemsAdded++;
       }
     }
 
-    this.setPinnedItems(Array.from(currentPins));
+    this.setPinnedItems(Array.from(visiblePins));
   }
 
   setPinnedItems(items: string[] | null) {
@@ -389,7 +402,6 @@ export class ComparisonToolService<T> {
     this.updateQuery({
       pinnedItems: deduplicatedItems,
     });
-    this.updatePinnedItemsCache();
   }
 
   resetPinnedItems() {
@@ -453,13 +465,12 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    // Restore pinned items for new selection from cache (or empty if not cached)
-    const newKey = this.dropdownKey(selection);
-    const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(newKey);
+    // Preserve current pins when changing dropdown selection
+    const currentPins = this.query().pinnedItems;
 
     this.updateQuery({
       categories: selection,
-      pinnedItems: cachedPinnedItems ? Array.from(cachedPinnedItems) : [],
+      pinnedItems: currentPins,
       pageNumber: this.FIRST_PAGE_NUMBER,
     });
   }
@@ -528,18 +539,6 @@ export class ComparisonToolService<T> {
     return JSON.stringify(normalized.slice(0, this.COLUMN_CACHE_DEPTH));
   }
 
-  private updatePinnedItemsCache(): void {
-    const currentSelection = this.dropdownSelection();
-    const currentPins = this.pinnedItems();
-    const key = this.dropdownKey(currentSelection);
-
-    this.pinnedItemsForDropdownsSignal.update((cache) => {
-      const next = new Map(cache);
-      next.set(key, new Set(currentPins));
-      return next;
-    });
-  }
-
   setSort(multiSortMeta: SortMeta[]) {
     const newSort = multiSortMeta || this.DEFAULT_MULTI_SORT_META;
     const currentSort = this.querySignal().multiSortMeta;
@@ -601,28 +600,23 @@ export class ComparisonToolService<T> {
       }
     }
 
-    // Pinned items logic differs based on context:
-    // - URL has pins: use them (URL is source of truth)
-    // - First load, no URL pins: start fresh with empty pins
-    // - Subsequent navigation, no URL pins: restore from cache to preserve user's pinned state
+    // Pinned items logic:
+    // - If URL pins match what we just synced, this is a self-triggered change - don't update query.pinnedItems
+    // - If URL pins differ, this is an external change (user edited URL, link navigation) - accept new pins
+    // - First load with no URL pins: start fresh with empty pins
     const urlPinnedItems = params.pinnedItems ?? [];
-    let newPinnedItems: string[];
-    if (urlPinnedItems.length > 0) {
-      newPinnedItems = Array.from(new Set(urlPinnedItems));
-    } else if (options.isFirstLoad) {
-      newPinnedItems = [];
-    } else {
-      // Use updated categories if present, otherwise use current selection
-      const selectionKey = this.dropdownKey(queryUpdates.categories ?? this.dropdownSelection());
-      const cachedPinnedItems = this.pinnedItemsForDropdownsSignal().get(selectionKey);
-      newPinnedItems = cachedPinnedItems ? Array.from(cachedPinnedItems) : [];
+    const urlPinsMatchLastSync = isEqual(urlPinnedItems, this.lastSyncedPins);
+
+    if (!urlPinsMatchLastSync) {
+      // External URL change - update query.pinnedItems
+      queryUpdates.pinnedItems =
+        urlPinnedItems.length > 0 ? Array.from(new Set(urlPinnedItems)) : [];
     }
-    queryUpdates.pinnedItems = newPinnedItems;
+    // If urlPinsMatchLastSync, we skip updating query.pinnedItems to preserve the full cache
 
     // Apply all batched changes in a single update
     if (Object.keys(queryUpdates).length > 0) {
       this.updateQuery(queryUpdates);
-      this.updatePinnedItemsCache();
     }
 
     if (!options.isFirstLoad) {
@@ -642,10 +636,10 @@ export class ComparisonToolService<T> {
 
   private serializeSyncState(options: {
     dropdownSelection: string[];
-    pinnedItems: Set<string>;
+    visiblePinIds: string[];
     multiSortMeta: SortMeta[];
   }): ComparisonToolUrlParams {
-    const pinned = Array.from(options.pinnedItems);
+    const pinned = options.visiblePinIds;
     const { sortFields, sortOrders } = this.convertSortMetaToArrays(options.multiSortMeta);
     const defaultSort = this.viewConfigSignal().defaultSort;
     const isDefaultSort = defaultSort && isEqual(options.multiSortMeta, defaultSort as SortMeta[]);
@@ -662,7 +656,7 @@ export class ComparisonToolService<T> {
     this.syncStateToUrl(
       this.serializeSyncState({
         dropdownSelection: this.dropdownSelection(),
-        pinnedItems: this.pinnedItems(),
+        visiblePinIds: this.visiblePinIds(),
         multiSortMeta: this.multiSortMeta(),
       }),
     );
@@ -699,7 +693,7 @@ export class ComparisonToolService<T> {
   private updateSerializedStateCache(): void {
     this.lastSerializedState = JSON.stringify(
       this.serializeSyncState({
-        pinnedItems: this.pinnedItems(),
+        visiblePinIds: this.visiblePinIds(),
         dropdownSelection: this.dropdownSelection(),
         multiSortMeta: this.multiSortMeta(),
       }),

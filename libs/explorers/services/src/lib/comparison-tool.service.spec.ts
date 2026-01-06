@@ -90,7 +90,7 @@ describe('ComparisonToolService', () => {
     expect(cachedColumns?.every((column) => column.selected)).toBe(true);
   });
 
-  describe('pinned items cache', () => {
+  describe('global pinned items cache', () => {
     const mockConfigs: ComparisonToolConfig[] = [
       {
         ...mockComparisonToolDataConfig[0],
@@ -110,72 +110,99 @@ describe('ComparisonToolService', () => {
       connectService(mockConfigs, { selection: ['category1', 'option1'] });
     });
 
-    it('should persist pinned items when switching between dropdown selections', () => {
-      // Pin items for first selection
+    it('should carry over pinned items when switching dropdown selections', () => {
       service.pinItem('item1');
+      service.setPinnedData([{ _id: 'item1' }] as any[]);
       service.pinItem('item2');
+      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
       expect(service.pinnedItems().size).toBe(2);
 
-      // Switch to second selection
       service.setDropdownSelection(['category1', 'option2']);
-      // Should start with no pinned items for new selection
-      expect(service.pinnedItems().size).toBe(0);
-      expect(service.isPinned('item1')).toBe(false);
+      expect(service.pinnedItems().size).toBe(2);
+      expect(service.isPinned('item1')).toBe(true);
+      expect(service.isPinned('item2')).toBe(true);
+    });
 
-      // Pin different items
+    it('should preserve cache when switching selections without modifying pins', () => {
+      service.pinItem('item1');
+      service.setPinnedData([{ _id: 'item1' }] as any[]);
+
+      service.pinItem('item2');
+      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
+      const initialPins = (service as any).querySignal().pinnedItems;
+
+      service.setDropdownSelection(['category1', 'option2']);
+
+      const pinsAfterSwitch = (service as any).querySignal().pinnedItems;
+      expect(pinsAfterSwitch).toEqual(initialPins);
+      expect(pinsAfterSwitch).toEqual(['item1', 'item2']);
+
+      service.setDropdownSelection(['category1', 'option1']);
+
+      const pinsAfterSwitchBack = (service as any).querySignal().pinnedItems;
+      expect(pinsAfterSwitchBack).toEqual(initialPins);
+    });
+
+    it('should handle pinning/unpinning across different selections', () => {
+      service.pinItem('item1');
+      service.setPinnedData([{ _id: 'item1' }] as any[]);
+      service.pinItem('item2');
+      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
+      expect(service.pinnedItems().size).toBe(2);
+
+      service.setDropdownSelection(['category1', 'option2']);
+      expect(service.pinnedItems().size).toBe(2);
+
       service.pinItem('item3');
-      expect(service.pinnedItems().size).toBe(1);
-      expect(service.isPinned('item3')).toBe(true);
-
-      // Switch back to first selection
-      service.setDropdownSelection(['category1', 'option1']);
-      // Should restore originally pinned items
-      expect(service.pinnedItems().size).toBe(2);
+      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }, { _id: 'item3' }] as any[]);
+      expect(service.pinnedItems().size).toBe(3);
       expect(service.isPinned('item1')).toBe(true);
       expect(service.isPinned('item2')).toBe(true);
-      expect(service.isPinned('item3')).toBe(false);
-
-      // Switch to second selection again
-      service.setDropdownSelection(['category1', 'option2']);
-      // Should restore pinned items from second selection
-      expect(service.pinnedItems().size).toBe(1);
       expect(service.isPinned('item3')).toBe(true);
-      expect(service.isPinned('item1')).toBe(false);
+
+      service.setDropdownSelection(['category1', 'option1']);
+      expect(service.pinnedItems().size).toBe(3);
+      expect(service.isPinned('item1')).toBe(true);
+      expect(service.isPinned('item2')).toBe(true);
+      expect(service.isPinned('item3')).toBe(true);
     });
 
-    it('should handle unpinning items and persist changes', () => {
-      // Pin and unpin items
+    it('should handle unpinning items and carry over changes', () => {
       service.pinItem('item1');
+      service.setPinnedData([{ _id: 'item1' }] as any[]);
       service.pinItem('item2');
+      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
+      service.pinItem('item3');
+      service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }, { _id: 'item3' }] as any[]);
+
       service.unpinItem('item1');
-      expect(service.pinnedItems().size).toBe(1);
-      expect(service.isPinned('item2')).toBe(true);
+      service.setPinnedData([{ _id: 'item2' }, { _id: 'item3' }] as any[]);
+      expect(service.pinnedItems().size).toBe(2);
+      expect(service.isPinned('item1')).toBe(false);
 
-      // Switch and come back
       service.setDropdownSelection(['category1', 'option2']);
-      service.setDropdownSelection(['category1', 'option1']);
-
-      // Should remember that item1 was unpinned
-      expect(service.pinnedItems().size).toBe(1);
+      expect(service.pinnedItems().size).toBe(2);
       expect(service.isPinned('item1')).toBe(false);
       expect(service.isPinned('item2')).toBe(true);
+      expect(service.isPinned('item3')).toBe(true);
     });
 
-    it('should handle toggling pins correctly', () => {
+    it('should handle toggling pins correctly across selections', () => {
       service.togglePin('item1');
       expect(service.isPinned('item1')).toBe(true);
 
       service.togglePin('item1');
       expect(service.isPinned('item1')).toBe(false);
 
-      // Pin again and switch selections
       service.togglePin('item1');
       expect(service.isPinned('item1')).toBe(true);
 
       service.setDropdownSelection(['category1', 'option2']);
+
+      expect(service.isPinned('item1')).toBe(true);
+
       service.setDropdownSelection(['category1', 'option1']);
 
-      // Should still be pinned after switching back
       expect(service.isPinned('item1')).toBe(true);
     });
 
@@ -183,11 +210,15 @@ describe('ComparisonToolService', () => {
       service.pinList(['item1', 'item2', 'item3']);
       expect(service.pinnedItems().size).toBe(3);
 
-      // Switch and return
       service.setDropdownSelection(['category2', 'option1']);
+
+      expect(service.pinnedItems().size).toBe(3);
+      expect(service.isPinned('item1')).toBe(true);
+      expect(service.isPinned('item2')).toBe(true);
+      expect(service.isPinned('item3')).toBe(true);
+
       service.setDropdownSelection(['category1', 'option1']);
 
-      // Should restore all pinned items
       expect(service.pinnedItems().size).toBe(3);
       expect(service.isPinned('item1')).toBe(true);
       expect(service.isPinned('item2')).toBe(true);
@@ -294,6 +325,7 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id1');
+        service.setPinnedData([{ _id: 'id1' }] as any);
         tick();
 
         expect(mockRouter.navigate).toHaveBeenCalledWith(
@@ -311,8 +343,11 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id3');
+        service.setPinnedData([{ _id: 'id3' }] as any);
         service.pinItem('id1');
+        service.setPinnedData([{ _id: 'id3' }, { _id: 'id1' }] as any);
         service.pinItem('id2');
+        service.setPinnedData([{ _id: 'id3' }, { _id: 'id1' }, { _id: 'id2' }] as any);
         tick();
 
         const lastCall = getLastNavigateCall();
@@ -334,8 +369,11 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id1');
+        service.setPinnedData([{ _id: 'id1' }] as any);
         service.pinItem('id2');
+        service.setPinnedData([{ _id: 'id1' }, { _id: 'id2' }] as any);
         service.unpinItem('id1');
+        service.setPinnedData([{ _id: 'id2' }] as any);
         tick();
 
         const lastCall = getLastNavigateCall();
@@ -347,6 +385,7 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinList(['id1', 'id2', 'id3']);
+        service.setPinnedData([{ _id: 'id1' }, { _id: 'id2' }, { _id: 'id3' }] as any);
         tick();
 
         const lastCall = getLastNavigateCall();
@@ -358,10 +397,12 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id1');
+        service.setPinnedData([{ _id: 'id1' }] as any);
         tick();
         expect(getLastNavigateCall()?.[1]?.queryParams?.pinned).toEqual('id1');
 
         service.resetPinnedItems();
+        service.setPinnedData([] as any);
         tick();
 
         expect(getLastNavigateCall()?.[1]?.queryParams?.pinned).toBeNull();
@@ -479,6 +520,7 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         service.pinItem('id1');
+        service.setPinnedData([{ _id: 'id1' }] as any);
         tick();
 
         const lastCall = getLastNavigateCall();
@@ -499,27 +541,30 @@ describe('ComparisonToolService', () => {
         expect(Array.from(service.pinnedItems())).toEqual(['id1', 'id2']);
       }));
 
-      it('should maintain separate pinned items cache per dropdown selection', fakeAsync(() => {
+      it('should carry over pinned items across dropdown selections', fakeAsync(() => {
         connectService(mockConfigsWithDropdowns, { selection: ['Category A', 'Option 1'] });
         flushInitialUrlSync();
 
         service.pinItem('id1');
+        service.setPinnedData([{ _id: 'id1' }] as any);
         tick();
 
         service.setDropdownSelection(['Category A', 'Option 2']);
         tick();
-        expect(service.pinnedItems().size).toBe(0);
+        expect(service.pinnedItems().size).toBe(1);
+        expect(Array.from(service.pinnedItems())).toEqual(['id1']);
 
         service.pinItem('id2');
+        service.setPinnedData([{ _id: 'id1' }, { _id: 'id2' }] as any);
         tick();
 
         service.setDropdownSelection(['Category A', 'Option 1']);
         tick();
-        expect(Array.from(service.pinnedItems())).toEqual(['id1']);
+        expect(Array.from(service.pinnedItems())).toEqual(['id1', 'id2']);
 
         const lastCall = getLastNavigateCall();
         expect(lastCall?.[1]?.queryParams?.categories).toEqual('Category%20A,Option%201');
-        expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id1');
+        expect(lastCall?.[1]?.queryParams?.pinned).toEqual('id1,id2');
       }));
     });
 

@@ -166,7 +166,7 @@ test.describe('model overview', () => {
 
   test('filterbox search excludes pinned items from results', async ({ page }) => {
     await navigateToComparison(page, CT_PAGE, true, 'url', `pinned=3xTg-AD,LOAD1`);
-    await testSearchExcludesPinnedItems(page, ['3xTg-AD', 'LOAD1'], 'tg-', '3xtg-ad,load1');
+    await testSearchExcludesPinnedItems(page, ['LOAD1', '3xTg-AD'], 'tg-', '3xtg-ad,load1');
   });
 
   test('filterbox search with commas returns full, case-insensitive matches', async ({ page }) => {
