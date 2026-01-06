@@ -37,6 +37,16 @@
       margin-right: 22px;
     }
 
+    &.primary {
+      .column-header-text {
+        text-align: right;
+      }
+
+      .column-header-sort {
+        margin-left: 16px;
+      }
+    }
+
     span:hover {
       color: var(--color-action-primary);
     }
