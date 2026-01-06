@@ -22,15 +22,20 @@
     </div>
 
     <ng-template #footer>
-      <div class="checkbox">
+      <div
+        class="checkbox"
+        pTooltip="Checking this box sets a single functional cookie that saves this setting on your device. You can remove this cookie at any time by unchecking this box."
+        tooltipPosition="top"
+        tooltipStyleClass="visualization-overview-panel-tooltip"
+      >
         <p-checkbox
-          [ngModel]="willHide()"
+          [ngModel]="willHide"
           (ngModelChange)="setWillHide($event)"
           [binary]="true"
           size="small"
           inputId="hideDialog"
         />
-        <label for="hideDialog">Don't show this again</label>
+        <label for="hideDialog">Remember not to show this again</label>
       </div>
       <div>
         @if (activePane > 0) {

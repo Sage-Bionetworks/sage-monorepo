@@ -10,6 +10,7 @@ import {
   SortOrder,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
+import { CookieService } from 'ngx-cookie-service';
 import { SortMeta } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
 import type { Observable } from 'rxjs';
@@ -18,6 +19,7 @@ import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { NotificationService } from './notification.service';
+import { PlatformService } from './platform.service';
 
 /** Core state management service for comparison tool pages. */
 @Injectable()
@@ -27,6 +29,10 @@ export class ComparisonToolService<T> {
   private readonly destroyRef = inject(DestroyRef);
   private readonly helperService = inject(ComparisonToolHelperService);
   private readonly coordinatorService = inject(ComparisonToolCoordinatorService);
+  private readonly cookieService = inject(CookieService);
+  private readonly platformService = inject(PlatformService);
+
+  private readonly HIDE_VISUALIZATION_OVERVIEW_COOKIE = 'hide_visualization_overview';
 
   // Cache column selections only for dropdown selections up to this length
   // Currently, Gene Expression has 3 dropdowns, but we only want to cache selections
@@ -66,7 +72,6 @@ export class ComparisonToolService<T> {
   private readonly configsSignal = signal<ComparisonToolConfig[]>([]);
   private readonly isLegendVisibleSignal = signal(false);
   private readonly isVisualizationOverviewVisibleSignal = signal(true);
-  private readonly isVisualizationOverviewHiddenByUserSignal = signal(false);
   private readonly maxPinnedItemsSignal = signal<number>(50);
   private readonly columnsForDropdownsSignal = signal<Map<string, ComparisonToolColumn[]>>(
     new Map(),
@@ -94,8 +99,6 @@ export class ComparisonToolService<T> {
   readonly configs = this.configsSignal.asReadonly();
   readonly isLegendVisible = this.isLegendVisibleSignal.asReadonly();
   readonly isVisualizationOverviewVisible = this.isVisualizationOverviewVisibleSignal.asReadonly();
-  readonly isVisualizationOverviewHiddenByUser =
-    this.isVisualizationOverviewHiddenByUserSignal.asReadonly();
   readonly maxPinnedItems = this.maxPinnedItemsSignal.asReadonly();
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
@@ -334,18 +337,26 @@ export class ComparisonToolService<T> {
     this.isVisualizationOverviewVisibleSignal.update((visible) => !visible);
   }
 
-  setVisualizationOverviewHiddenByUser(hidden: boolean) {
-    this.isVisualizationOverviewHiddenByUserSignal.set(hidden);
-  }
-
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {
     this.viewConfigSignal.set({ ...this.DEFAULT_VIEW_CONFIG, ...viewConfig });
     this.setLegendVisibility(false);
 
     // If the user checked the option to hide the overview, do not auto-show it
-    if (!this.isVisualizationOverviewHiddenByUserSignal()) {
+    const isHiddenByUser = this.isVisualizationOverviewHiddenByUser();
+    if (!isHiddenByUser) {
       this.setVisualizationOverviewVisibility(true);
     }
+  }
+
+  /**
+   * Checks the global cookie to determine if the user has chosen to hide
+   * the visualization overview panel across all comparison tools.
+   */
+  isVisualizationOverviewHiddenByUser(): boolean {
+    if (!this.platformService.isBrowser) {
+      return false;
+    }
+    return this.cookieService.get(this.HIDE_VISUALIZATION_OVERVIEW_COOKIE) === '1';
   }
 
   isPinned(id: string): boolean {
