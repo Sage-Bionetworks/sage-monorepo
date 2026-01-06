@@ -41,17 +41,17 @@ export class GeneResourcesComponent implements OnInit {
         link: `https://www.chemicalprobes.org/?q=${this.gene?.hgnc_symbol}`,
       },
       {
+        title: 'ClinPGx',
+        description: 'Search for information on gene-drug and gene-phenotype relationships.',
+        linkText: 'Visit ClinPGx',
+        link: 'https://www.clinpgx.org',
+      },
+      {
         title: 'Open Targets',
         description:
           'View evidence on the validity of this therapeutic target based on genome-scale experiments and analysis.',
         linkText: 'Visit Open Targets',
         link: `https://platform.opentargets.org/target/${this.gene?.ensembl_gene_id}`,
-      },
-      {
-        title: 'PharmGKB',
-        description: 'Search for information on gene-drug and gene-phenotype relationships.',
-        linkText: 'Visit PharmGKB',
-        link: 'https://www.pharmgkb.org',
       },
       {
         title: 'Pharos',
