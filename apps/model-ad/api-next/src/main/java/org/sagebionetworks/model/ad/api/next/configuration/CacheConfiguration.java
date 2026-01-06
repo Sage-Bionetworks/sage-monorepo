@@ -36,7 +36,8 @@ public class CacheConfiguration {
         CacheNames.GENE_EXPRESSION,
         CacheNames.GENE_EXPRESSION_INDIVIDUAL,
         CacheNames.MODEL,
-        CacheNames.DATA_VERSION
+        CacheNames.DATA_VERSION,
+        CacheNames.COMPARISON_TOOL_CONFIG
       )
     );
 
