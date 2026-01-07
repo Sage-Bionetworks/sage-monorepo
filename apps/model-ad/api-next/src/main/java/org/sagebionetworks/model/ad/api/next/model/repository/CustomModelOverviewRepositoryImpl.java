@@ -3,10 +3,12 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,21 +26,28 @@ public class CustomModelOverviewRepositoryImpl implements CustomModelOverviewRep
   private final MongoTemplate mongoTemplate;
 
   @Override
-  public Page<ModelOverviewDocument> findWithFilters(
-    List<String> items,
-    String search,
-    ItemFilterTypeQueryDto filterType,
-    List<String> availableData,
-    List<String> center,
-    List<String> modelType,
-    List<String> modifiedGenes,
-    Pageable pageable
+  public Page<ModelOverviewDocument> findAll(
+    Pageable pageable,
+    ModelOverviewSearchQueryDto query,
+    List<String> items
   ) {
     Query mongoQuery = new Query();
     List<Criteria> andCriteria = new ArrayList<>();
 
+    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
+      query.getItemFilterType(),
+      ItemFilterTypeQueryDto.INCLUDE
+    );
+    String search = query.getSearch();
+
     // Add data filters (AND between fields, OR within field)
-    addDataFilterCriteria(availableData, center, modelType, modifiedGenes, andCriteria);
+    addDataFilterCriteria(
+      query.getAvailableData(),
+      query.getCenter(),
+      query.getModelType(),
+      query.getModifiedGenes(),
+      andCriteria
+    );
 
     // Add name filtering (items + itemFilterType)
     addNameFilterCriteria(items, filterType, andCriteria);
@@ -104,7 +113,12 @@ public class CustomModelOverviewRepositoryImpl implements CustomModelOverviewRep
     List<Criteria> andCriteria
   ) {
     if (items.isEmpty()) {
-      return; // No name filtering needed
+      // For INCLUDE mode with empty items, add impossible condition to return empty results
+      if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
+        andCriteria.add(Criteria.where("_id").is(null));
+      }
+      // For EXCLUDE mode with empty items, no filtering needed (return all)
+      return;
     }
 
     if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
