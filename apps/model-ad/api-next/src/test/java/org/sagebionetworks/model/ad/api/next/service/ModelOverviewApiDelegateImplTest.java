@@ -3,10 +3,10 @@ package org.sagebionetworks.model.ad.api.next.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -67,6 +67,9 @@ class ModelOverviewApiDelegateImplTest {
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of());
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
+
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
@@ -87,7 +90,7 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(headers.getExpires()).isZero();
     assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
 
-    verifyNoInteractions(repository);
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
   }
 
   @Test
@@ -97,7 +100,7 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewDocument document = buildDocument(modelName);
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(document), PageRequest.of(0, 100), 1);
 
-    when(repository.findByNameIn(anyList(), any())).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of(modelName)))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of(modelName))
@@ -146,7 +149,7 @@ class ModelOverviewApiDelegateImplTest {
       2
     );
 
-    when(repository.findAll(any(PageRequest.class))).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
@@ -162,7 +165,7 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(response.getBody().getModelOverviews()).hasSize(2);
     assertThat(response.getBody().getPage().getTotalElements()).isEqualTo(2);
 
-    verify(repository).findAll(any(PageRequest.class));
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
   }
 
   @Test
@@ -177,7 +180,7 @@ class ModelOverviewApiDelegateImplTest {
       1
     );
 
-    when(repository.findByNameNotIn(anyList(), any())).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of(excludedName)))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of(excludedName))
@@ -194,7 +197,7 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewDto dto = response.getBody().getModelOverviews().get(0);
     assertThat(dto.getName()).isEqualTo(includedName);
 
-    verify(repository).findByNameNotIn(anyList(), any());
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of(excludedName)));
   }
 
   @Test

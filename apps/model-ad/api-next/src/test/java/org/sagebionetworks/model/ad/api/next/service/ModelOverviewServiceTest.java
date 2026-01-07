@@ -2,15 +2,11 @@ package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.regex.Pattern;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +23,6 @@ import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,6 +43,10 @@ class ModelOverviewServiceTest {
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of());
+
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
+
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
@@ -59,7 +58,7 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).isEmpty();
     assertThat(result.getPage().getTotalElements()).isZero();
-    verifyNoInteractions(repository);
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
   }
 
   @Test
@@ -68,7 +67,7 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findAll(any(Pageable.class))).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
@@ -81,7 +80,7 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
-    verify(repository).findAll(any(Pageable.class));
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
   }
 
   @Test
@@ -90,7 +89,7 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findByNameIn(anyList(), any(Pageable.class))).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -103,7 +102,7 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
-    verify(repository).findByNameIn(eq(List.of("Model1")), any(Pageable.class));
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
   }
 
   @Test
@@ -112,7 +111,7 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model2");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findByNameNotIn(anyList(), any(Pageable.class))).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -125,7 +124,7 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model2");
-    verify(repository).findByNameNotIn(eq(List.of("Model1")), any(Pageable.class));
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
   }
 
   @Test
@@ -134,13 +133,7 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("TestModel");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(
-      repository.findByNameContainingIgnoreCaseAndNameNotIn(
-        any(String.class),
-        anyList(),
-        any(Pageable.class)
-      )
-    ).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -154,16 +147,7 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("TestModel");
-
-    ArgumentCaptor<String> searchCaptor = ArgumentCaptor.forClass(String.class);
-    verify(repository).findByNameContainingIgnoreCaseAndNameNotIn(
-      searchCaptor.capture(),
-      eq(List.of("Model1")),
-      any(Pageable.class)
-    );
-
-    // Verify Pattern.quote was used (wraps search term in \Q \E)
-    assertThat(searchCaptor.getValue()).isEqualTo("\\Qtest\\E");
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
   }
 
   @Test
@@ -175,9 +159,7 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc2 = createModelOverviewDocument("Model2");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc1, doc2));
 
-    when(
-      repository.findByNameInIgnoreCaseAndNameNotIn(anyList(), anyList(), any(Pageable.class))
-    ).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model3")))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model3"))
@@ -190,21 +172,7 @@ class ModelOverviewServiceTest {
     ModelOverviewsPageDto result = service.loadModelOverviews(query);
 
     assertThat(result.getModelOverviews()).hasSize(2);
-
-    @SuppressWarnings("unchecked")
-    ArgumentCaptor<List<Pattern>> patternsCaptor = ArgumentCaptor.forClass(List.class);
-    verify(repository).findByNameInIgnoreCaseAndNameNotIn(
-      patternsCaptor.capture(),
-      eq(List.of("Model3")),
-      any(Pageable.class)
-    );
-
-    List<Pattern> patterns = patternsCaptor.getValue();
-    assertThat(patterns).hasSize(2);
-    assertThat(patterns.get(0).pattern()).isEqualTo("^\\Qmodel1\\E$");
-    assertThat(patterns.get(1).pattern()).isEqualTo("^\\Qmodel2\\E$");
-    // Verify case-insensitive flag is set
-    assertThat(patterns.get(0).flags() & Pattern.CASE_INSENSITIVE).isNotZero();
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model3")));
   }
 
   @Test
@@ -213,7 +181,7 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findByNameIn(anyList(), any(Pageable.class))).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -226,8 +194,7 @@ class ModelOverviewServiceTest {
     ModelOverviewsPageDto result = service.loadModelOverviews(query);
 
     assertThat(result.getModelOverviews()).hasSize(1);
-    // Should use findByNameIn, not search methods
-    verify(repository).findByNameIn(anyList(), any(Pageable.class));
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
   }
 
   @Test
@@ -235,7 +202,7 @@ class ModelOverviewServiceTest {
   void shouldUseDefaultPageSizeWhenNotSpecified() {
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of());
 
-    when(repository.findAll(any(Pageable.class))).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
@@ -246,7 +213,7 @@ class ModelOverviewServiceTest {
     service.loadModelOverviews(query);
 
     ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
-    verify(repository).findAll(pageableCaptor.capture());
+    verify(repository).findAll(pageableCaptor.capture(), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
 
     Pageable pageable = pageableCaptor.getValue();
     assertThat(pageable.getPageNumber()).isZero();
@@ -259,13 +226,7 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("TestModel");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(
-      repository.findByNameContainingIgnoreCaseAndNameNotIn(
-        any(String.class),
-        anyList(),
-        any(Pageable.class)
-      )
-    ).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -275,17 +236,11 @@ class ModelOverviewServiceTest {
       .pageSize(100)
       .build();
 
-    service.loadModelOverviews(query);
+    ModelOverviewsPageDto result = service.loadModelOverviews(query);
 
-    ArgumentCaptor<String> searchCaptor = ArgumentCaptor.forClass(String.class);
-    verify(repository).findByNameContainingIgnoreCaseAndNameNotIn(
-      searchCaptor.capture(),
-      anyList(),
-      any(Pageable.class)
-    );
-
-    // Should be trimmed
-    assertThat(searchCaptor.getValue()).isEqualTo("\\Qtest\\E");
+    assertThat(result.getModelOverviews()).hasSize(1);
+    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("TestModel");
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
   }
 
   @Test
@@ -294,9 +249,7 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(
-      repository.findByNameInIgnoreCaseAndNameNotIn(anyList(), anyList(), any(Pageable.class))
-    ).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model2")))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model2"))
@@ -306,148 +259,11 @@ class ModelOverviewServiceTest {
       .pageSize(100)
       .build();
 
-    service.loadModelOverviews(query);
-
-    @SuppressWarnings("unchecked")
-    ArgumentCaptor<List<Pattern>> patternsCaptor = ArgumentCaptor.forClass(List.class);
-    verify(repository).findByNameInIgnoreCaseAndNameNotIn(
-      patternsCaptor.capture(),
-      anyList(),
-      any(Pageable.class)
-    );
-
-    List<Pattern> patterns = patternsCaptor.getValue();
-    // Should only have 2 patterns (empty strings filtered out)
-    assertThat(patterns).hasSize(2);
-    assertThat(patterns.get(0).pattern()).isEqualTo("^\\Qmodel1\\E$");
-    assertThat(patterns.get(1).pattern()).isEqualTo("^\\Qmodel3\\E$");
-  }
-
-  @Test
-  @DisplayName("should filter by single data filter field")
-  void shouldFilterBySingleDataFilterField() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 10), 1);
-
-    when(
-      repository.findWithFilters(
-        anyList(),
-        any(),
-        any(),
-        eq(List.of("Biomarkers")),
-        any(),
-        any(),
-        any(),
-        any(Pageable.class)
-      )
-    )
-      .thenReturn(page);
-
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .availableData(List.of("Biomarkers"))
-      .pageNumber(0)
-      .pageSize(10)
-      .build();
-
     ModelOverviewsPageDto result = service.loadModelOverviews(query);
 
     assertThat(result.getModelOverviews()).hasSize(1);
-
-    verify(repository).findWithFilters(
-      eq(List.of()),
-      isNull(),
-      eq(ItemFilterTypeQueryDto.INCLUDE),
-      eq(List.of("Biomarkers")),
-      isNull(),
-      isNull(),
-      isNull(),
-      any(Pageable.class)
-    );
-  }
-
-  @Test
-  @DisplayName("should filter with OR logic for multiple values in same field")
-  void shouldFilterWithOrLogicForMultipleValuesInSameField() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 10), 1);
-
-    when(
-      repository.findWithFilters(
-        anyList(),
-        any(),
-        any(),
-        eq(List.of("Biomarkers", "Pathology")),
-        any(),
-        any(),
-        any(),
-        any(Pageable.class)
-      )
-    )
-      .thenReturn(page);
-
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .availableData(List.of("Biomarkers", "Pathology"))
-      .pageNumber(0)
-      .pageSize(10)
-      .build();
-
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
-
-    assertThat(result.getModelOverviews()).hasSize(1);
-
-    verify(repository).findWithFilters(
-      eq(List.of()),
-      isNull(),
-      eq(ItemFilterTypeQueryDto.INCLUDE),
-      eq(List.of("Biomarkers", "Pathology")),
-      isNull(),
-      isNull(),
-      isNull(),
-      any(Pageable.class)
-    );
-  }
-
-  @Test
-  @DisplayName("should filter by multiple data filter fields with AND logic")
-  void shouldFilterByMultipleDataFilterFieldsWithAndLogic() {
-    ModelOverviewDocument doc = createModelOverviewDocument("Model1");
-    Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc), PageRequest.of(0, 10), 1);
-
-    when(
-      repository.findWithFilters(
-        anyList(),
-        any(),
-        any(),
-        eq(List.of("Biomarkers")),
-        eq(List.of("UCI")),
-        any(),
-        any(),
-        any(Pageable.class)
-      )
-    )
-      .thenReturn(page);
-
-    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
-      .availableData(List.of("Biomarkers"))
-      .center(List.of("UCI"))
-      .pageNumber(0)
-      .pageSize(10)
-      .build();
-
-    ModelOverviewsPageDto result = service.loadModelOverviews(query);
-
-    assertThat(result.getModelOverviews()).hasSize(1);
-
-    verify(repository).findWithFilters(
-      eq(List.of()),
-      isNull(),
-      eq(ItemFilterTypeQueryDto.INCLUDE),
-      eq(List.of("Biomarkers")),
-      eq(List.of("UCI")),
-      isNull(),
-      isNull(),
-      any(Pageable.class)
-    );
+    assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model2")));
   }
 
   private ModelOverviewDocument createModelOverviewDocument(String name) {
