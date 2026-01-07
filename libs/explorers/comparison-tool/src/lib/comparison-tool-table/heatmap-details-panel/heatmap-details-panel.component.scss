@@ -1,0 +1,85 @@
+/* stylelint-disable no-descending-specificity */
+@use 'explorers/styles/src/lib/mixins';
+
+$heatmap-details-panel-content-padding: 12px;
+
+.heatmap-details-panel {
+  .p-popover {
+    width: 640px;
+    max-width: 100%;
+    background: #fff;
+    box-shadow: 0 8px 20px 0 rgb(44 52 53 / 15%);
+  }
+
+  .p-popover-content {
+    padding: 20px;
+  }
+
+  .heatmap-details-panel-label {
+    font-size: 14px;
+    color: var(--color-gray-600);
+    margin-bottom: $heatmap-details-panel-content-padding;
+
+    .heatmap-details-panel-label-separator {
+      font-size: 12px;
+      color: var(--color-gray-300);
+      font-weight: 500;
+    }
+  }
+
+  .heatmap-details-panel-heading {
+    font-size: 24px;
+    color: var(--color-gray-1000);
+    font-weight: 700;
+    margin-bottom: $heatmap-details-panel-content-padding;
+  }
+
+  .heatmap-details-panel-sub-headings {
+    color: var(--color-gray-800);
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: $heatmap-details-panel-content-padding;
+  }
+
+  .heatmap-details-panel-data {
+    margin-bottom: $heatmap-details-panel-content-padding;
+
+    > div {
+      &:first-child {
+        display: flex;
+        font-size: 14px;
+        color: var(--color-gray-800);
+        font-weight: 600;
+
+        > div {
+          flex-grow: 1;
+
+          &:last-child:not(:first-child) {
+            text-align: right;
+          }
+        }
+      }
+
+      &:last-child {
+        display: flex;
+        font-size: 21px;
+        font-weight: 900;
+
+        > div {
+          flex-grow: 1;
+
+          &:last-child:not(:first-child) {
+            text-align: right;
+            color: var(--color-gray-900);
+          }
+        }
+      }
+    }
+  }
+
+  .heatmap-details-panel-footer {
+    font-size: 14px;
+    color: var(--color-gray-800);
+    font-weight: 400;
+  }
+}

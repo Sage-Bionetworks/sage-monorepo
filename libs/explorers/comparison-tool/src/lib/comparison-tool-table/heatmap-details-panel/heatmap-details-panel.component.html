@@ -1,0 +1,58 @@
+<ng-template #panelTemplate let-data>
+  @if (data) {
+    @if (data.label) {
+      <div class="heatmap-details-panel-label">
+        {{ data.label.left }}
+        @if (data.label.right) {
+          <span class="heatmap-details-panel-label-separator">|</span>
+          {{ data.label.right }}
+        }
+      </div>
+    }
+
+    @if (data.heading) {
+      <div class="heatmap-details-panel-heading">
+        {{ data.heading }}
+      </div>
+    }
+
+    @if (data.subHeadings) {
+      @for (subHeading of data.subHeadings; track subHeading) {
+        <div class="heatmap-details-panel-sub-headings">
+          {{ subHeading }}
+        </div>
+      }
+    }
+
+    <div class="heatmap-details-panel-data">
+      <div>
+        <div>{{ data.valueLabel }}</div>
+        <div>P-value</div>
+      </div>
+      <div>
+        <div>
+          {{ getSignificantFigures(data.value, 3) }}
+        </div>
+        <div>
+          {{ getSignificantFigures(data.pValue, 3) }}
+        </div>
+      </div>
+    </div>
+
+    @if (data.footer) {
+      <div class="heatmap-details-panel-footer">
+        {{ data.footer }}
+      </div>
+    }
+  }
+</ng-template>
+<p-popover class="heatmap-details-panel" appendTo="">
+  <ng-container
+    *ngTemplateOutlet="panelTemplate; context: { $implicit: panelData()[0] }"
+  ></ng-container>
+</p-popover>
+<p-popover class="heatmap-details-panel" appendTo="">
+  <ng-container
+    *ngTemplateOutlet="panelTemplate; context: { $implicit: panelData()[1] }"
+  ></ng-container>
+</p-popover>
