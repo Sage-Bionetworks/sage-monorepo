@@ -139,9 +139,9 @@ apps/bixarena/infra/terraform/terraform-backend/terraform-backend/terraform.tfst
 
 This project demonstrates the reusable module pattern:
 
-- **Terragrunt Module**: [terraform-backend/terragrunt.hcl](terraform-backend/terragrunt.hcl) - Project-specific configuration
+- **Terragrunt Module**: [apps/bixarena/infra/terraform/terraform-backend/terraform-backend/terragrunt.hcl](terraform-backend/terragrunt.hcl) - Project-specific configuration
 - **Reusable Terraform Module**: [libs/platform/infra/terraform/modules/terraform-s3-backend](../../../../libs/platform/infra/terraform/modules/terraform-s3-backend) - Shared module
-- **Resource Label Module**: [libs/platform/infra/terraform/modules/resource-label](../../../../libs/platform/infra/terraform/modules/resource-label) - Naming convention helper
+- **Resource Label Module**: [libs/platform/infra/terraform/modules/resource-label](../../../../libs/platform/infra/terraform/modules/resource-label) - Naming convention helper (another shared module)
 
 ## Outputs
 
