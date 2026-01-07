@@ -27,7 +27,6 @@ from pydantic import Field
 from typing_extensions import Annotated
 from bixarena_ai_service.models.basic_error import BasicError
 from bixarena_ai_service.models.prompt_validation import PromptValidation
-from bixarena_ai_service.security.jwt_validator import validate_jwt
 
 
 router = APIRouter()
@@ -68,7 +67,6 @@ async def validate_prompt(
         min_length=1,
         max_length=10000,
     ),
-    jwt_claims: dict = Depends(validate_jwt),
 ) -> PromptValidation:
     """Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)"""
     if not BasePromptValidationApi.subclasses:
