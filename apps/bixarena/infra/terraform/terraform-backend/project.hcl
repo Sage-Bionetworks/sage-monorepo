@@ -1,15 +1,10 @@
 locals {
   workspace_vars = read_terragrunt_config(find_in_parent_folders("workspace.hcl"))
 
-  # Static context
-  # product     = "bixarena"
-  # application = "bootstrap"
-  # environment = "prod"
-
   # Default configuration.
   _default_config = {
-    product     = "bixarena"
-    application = "bootstrap"
+    product     = ""
+    application = ""
     environment = ""
     terraform_backend = {
       bucket_name    = ""
@@ -21,14 +16,6 @@ locals {
         aws_provider = {
           region = ""
         }
-      }
-      github_oidc_provider = {
-        repository            = ""
-        allowed_subs          = []
-        existing_provider_arn = ""
-        managed_policy_arns   = []
-        deploy_role_name      = ""
-        create_deploy_role    = true
       }
     }
   }
@@ -78,42 +65,6 @@ locals {
             try(local._merged_config.modules.terraform_backend.aws_provider.region, "")
           )
         }
-      }
-      github_oidc_provider = {
-        repository = get_env(
-          "MODULES_GITHUB_OIDC_PROVIDER_REPOSITORY",
-          try(local._merged_config.modules.github_oidc_provider.repository, "")
-        )
-        existing_provider_arn = get_env(
-          "MODULES_GITHUB_OIDC_PROVIDER_EXISTING_PROVIDER_ARN",
-          try(local._merged_config.modules.github_oidc_provider.existing_provider_arn, "")
-        )
-        allowed_subs = (
-          length(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_ALLOWED_SUBS", ""))) > 0 ? [
-            for s in split(
-              ",",
-              get_env("MODULES_GITHUB_OIDC_PROVIDER_ALLOWED_SUBS", "")
-            ) : trimspace(s) if trimspace(s) != ""
-          ] : try(local._merged_config.modules.github_oidc_provider.allowed_subs, [])
-        )
-        managed_policy_arns = (
-          length(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_MANAGED_POLICY_ARNS", ""))) > 0 ? [
-            for s in split(
-              ",",
-              get_env("MODULES_GITHUB_OIDC_PROVIDER_MANAGED_POLICY_ARNS", "")
-            ) : trimspace(s) if trimspace(s) != ""
-          ] : try(local._merged_config.modules.github_oidc_provider.managed_policy_arns, [])
-        )
-        deploy_role_name = get_env(
-          "MODULES_GITHUB_OIDC_PROVIDER_DEPLOY_ROLE_NAME",
-          local._merged_config.modules.github_oidc_provider.deploy_role_name == null ? "" : local._merged_config.modules.github_oidc_provider.deploy_role_name
-        )
-        create_deploy_role = (
-          length(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_CREATE_DEPLOY_ROLE", ""))) > 0 ? try(
-            tobool(lower(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_CREATE_DEPLOY_ROLE", "")))),
-            try(local._merged_config.modules.github_oidc_provider.create_deploy_role, true)
-          ) : try(local._merged_config.modules.github_oidc_provider.create_deploy_role, true)
-        )
       }
     }
   }

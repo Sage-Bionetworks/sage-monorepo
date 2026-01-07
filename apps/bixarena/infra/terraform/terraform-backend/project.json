@@ -1,5 +1,5 @@
 {
-  "name": "bixarena-infra-terraform-bootstrap",
+  "name": "bixarena-infra-terraform-terraform-backend",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "tags": ["language:terraform", "product:bixarena", "type:infra"],
@@ -14,19 +14,7 @@
     "init": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "terragrunt run-all init --queue-exclude-dir terraform-backend",
-        "cwd": "{projectRoot}"
-      },
-      "configurations": {
-        "terraform-backend": {
-          "command": "terragrunt init --working-dir terraform-backend"
-        }
-      }
-    },
-    "validate-backend": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "terragrunt validate --working-dir terraform-backend",
+        "command": "terragrunt init --working-dir terraform-backend",
         "cwd": "{projectRoot}"
       },
       "configurations": {
@@ -39,20 +27,7 @@
     "validate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "terragrunt run-all validate",
-        "cwd": "{projectRoot}"
-      },
-      "configurations": {
-        "dev": {},
-        "stage": {},
-        "prod": {}
-      },
-      "defaultConfiguration": "dev"
-    },
-    "plan-backend": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "terragrunt plan --working-dir terraform-backend",
+        "command": "terragrunt validate --working-dir terraform-backend",
         "cwd": "{projectRoot}"
       },
       "configurations": {
@@ -65,7 +40,7 @@
     "plan": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "terragrunt run-all plan --queue-exclude-dir terraform-backend",
+        "command": "terragrunt plan --working-dir terraform-backend",
         "cwd": "{projectRoot}"
       },
       "configurations": {
@@ -75,7 +50,7 @@
       },
       "defaultConfiguration": "dev"
     },
-    "apply-backend": {
+    "deploy": {
       "executor": "nx:run-commands",
       "options": {
         "command": "terragrunt apply --working-dir terraform-backend",
@@ -88,10 +63,10 @@
       },
       "defaultConfiguration": "dev"
     },
-    "apply": {
+    "destroy": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "terragrunt run-all apply --queue-exclude-dir terraform-backend",
+        "command": "terragrunt destroy --working-dir terraform-backend",
         "cwd": "{projectRoot}"
       },
       "configurations": {

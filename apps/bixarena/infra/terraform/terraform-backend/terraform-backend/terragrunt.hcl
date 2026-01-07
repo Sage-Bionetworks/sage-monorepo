@@ -14,7 +14,7 @@ terraform {
 # The inputs passed to the Terraform module include the inputs defined in the
 # project Terragrunt file.
 inputs = {
-  component = "terraform-backend"
+  component = ""
   region    = local.module_vars.aws_provider.region
 
   enabled                           = true
