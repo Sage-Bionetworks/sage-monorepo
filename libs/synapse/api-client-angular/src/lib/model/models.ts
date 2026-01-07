@@ -695,6 +695,11 @@ export * from './org-sagebionetworks-repo-model-search-query-search-facet-option
 export * from './org-sagebionetworks-repo-model-search-query-search-facet-sort';
 export * from './org-sagebionetworks-repo-model-search-query-search-field-name';
 export * from './org-sagebionetworks-repo-model-search-query-search-query';
+export * from './org-sagebionetworks-repo-model-search-query-suggested-term-sort';
+export * from './org-sagebionetworks-repo-model-search-query-suggestion';
+export * from './org-sagebionetworks-repo-model-search-query-suggestion-list';
+export * from './org-sagebionetworks-repo-model-search-query-suggestion-query';
+export * from './org-sagebionetworks-repo-model-search-query-suggestion-results';
 export * from './org-sagebionetworks-repo-model-search-search-results';
 export * from './org-sagebionetworks-repo-model-self-sign-access-requirement';
 export * from './org-sagebionetworks-repo-model-self-sign-access-requirement-interface';

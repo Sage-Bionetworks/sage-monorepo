@@ -4373,6 +4373,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.SearchResults'
+  /repo/v1/suggestion:
+    post:
+      tags:
+        - Search Services
+      operationId: post-/repo/v1/suggestion
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.query.SuggestionQuery'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: SuggestionResults
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.query.SuggestionResults'
   /repo/v1/userGroup:
     get:
       tags:
@@ -10710,6 +10731,184 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationLimit'
+  /repo/v1/agent/session:
+    post:
+      tags:
+        - Agent Chat Services
+      operationId: post-/repo/v1/agent/session
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.CreateAgentSessionRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
+  /repo/v1/agent/session/{sessionId}:
+    get:
+      tags:
+        - Agent Chat Services
+      operationId: get-/repo/v1/agent/session/{sessionId}
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
+    put:
+      tags:
+        - Agent Chat Services
+      operationId: put-/repo/v1/agent/session/{sessionId}
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.UpdateAgentSessionRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
+  /repo/v1/agent/chat/async/start:
+    post:
+      tags:
+        - Agent Chat Services
+      operationId: post-/repo/v1/agent/chat/async/start
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
+  /repo/v1/agent/chat/async/get/{asyncToken}:
+    get:
+      tags:
+        - Agent Chat Services
+      operationId: get-/repo/v1/agent/chat/async/get/{asyncToken}
+      parameters:
+        - name: asyncToken
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatResponse'
+  /repo/v1/agent/chat/trace/{jobId}:
+    post:
+      tags:
+        - Agent Chat Services
+      operationId: post-/repo/v1/agent/chat/trace/{jobId}
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: |-
+            - The jobID of the asynchronous job started for an
+                            AgentChatRequest.
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsResponse'
+  /repo/v1/agent/registration:
+    put:
+      tags:
+        - Agent Chat Services
+      operationId: put-/repo/v1/agent/registration
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistrationRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration'
+  /repo/v1/agent/registration/{agentRegistrationId}:
+    get:
+      tags:
+        - Agent Chat Services
+      operationId: get-/repo/v1/agent/registration/{agentRegistrationId}
+      parameters:
+        - name: agentRegistrationId
+          in: path
+          required: true
+          description: The Synapse issued agent registration id.
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration'
   /repo/v1/challenge:
     post:
       tags:
@@ -11041,184 +11240,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.PaginatedIds'
-  /repo/v1/agent/session:
-    post:
-      tags:
-        - Agent Chat Services
-      operationId: post-/repo/v1/agent/session
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.CreateAgentSessionRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
-  /repo/v1/agent/session/{sessionId}:
-    get:
-      tags:
-        - Agent Chat Services
-      operationId: get-/repo/v1/agent/session/{sessionId}
-      parameters:
-        - name: sessionId
-          in: path
-          required: true
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
-    put:
-      tags:
-        - Agent Chat Services
-      operationId: put-/repo/v1/agent/session/{sessionId}
-      parameters:
-        - name: sessionId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.UpdateAgentSessionRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
-  /repo/v1/agent/chat/async/start:
-    post:
-      tags:
-        - Agent Chat Services
-      operationId: post-/repo/v1/agent/chat/async/start
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
-  /repo/v1/agent/chat/async/get/{asyncToken}:
-    get:
-      tags:
-        - Agent Chat Services
-      operationId: get-/repo/v1/agent/chat/async/get/{asyncToken}
-      parameters:
-        - name: asyncToken
-          in: path
-          required: true
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatResponse'
-  /repo/v1/agent/chat/trace/{jobId}:
-    post:
-      tags:
-        - Agent Chat Services
-      operationId: post-/repo/v1/agent/chat/trace/{jobId}
-      parameters:
-        - name: jobId
-          in: path
-          required: true
-          description: |-
-            - The jobID of the asynchronous job started for an
-                            AgentChatRequest.
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsResponse'
-  /repo/v1/agent/registration:
-    put:
-      tags:
-        - Agent Chat Services
-      operationId: put-/repo/v1/agent/registration
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistrationRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration'
-  /repo/v1/agent/registration/{agentRegistrationId}:
-    get:
-      tags:
-        - Agent Chat Services
-      operationId: get-/repo/v1/agent/registration/{agentRegistrationId}
-      parameters:
-        - name: agentRegistrationId
-          in: path
-          required: true
-          description: The Synapse issued agent registration id.
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration'
   /repo/v1/message:
     post:
       tags:
@@ -13900,149 +13921,6 @@ paths:
               schema: {}
         '307':
           description: Status 307 will be returned if the 'redirect' boolean param is true or null
-  /repo/v1/projectSettings/{id}:
-    get:
-      tags:
-        - Project Settings Services
-      operationId: get-/repo/v1/projectSettings/{id}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: the ID of the ,<a href="${org.sagebionetworks.repo.model.project.ProjectSetting}">,ProjectSetting,</a>
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: the ,<a href="${org.sagebionetworks.repo.model.project.ProjectSetting}">,ProjectSetting,</a>, with the corresponding ID, if it exists.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
-    delete:
-      tags:
-        - Project Settings Services
-      operationId: delete-/repo/v1/projectSettings/{id}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the ,<a href="${org.sagebionetworks.repo.model.project.ProjectSetting}">,ProjectSetting,</a>,. This is not the ID of the project.
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '204':
-          description: Void
-  /repo/v1/projectSettings/{projectId}/type/{type}:
-    get:
-      tags:
-        - Project Settings Services
-      operationId: get-/repo/v1/projectSettings/{projectId}/type/{type}
-      parameters:
-        - name: projectId
-          in: path
-          required: true
-          description: the ID of the project
-          schema:
-            type: string
-        - name: type
-          in: path
-          required: true
-          description: The ,<a href="${org.sagebionetworks.repo.model.project.ProjectSettingsType}">,ProjectSettingsType,</a>, to get.
-          schema:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSettingsType'
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
-  /repo/v1/projectSettings:
-    post:
-      tags:
-        - Project Settings Services
-      operationId: post-/repo/v1/projectSettings
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: The created ,<a href="${org.sagebionetworks.repo.model.project.ProjectSetting}">,ProjectSetting,</a>,.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
-    put:
-      tags:
-        - Project Settings Services
-      operationId: put-/repo/v1/projectSettings
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Void
-  /repo/v1/storageLocation:
-    post:
-      tags:
-        - Project Settings Services
-      operationId: post-/repo/v1/storageLocation
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.StorageLocationSetting'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.StorageLocationSetting'
-  /repo/v1/storageLocation/{id}:
-    get:
-      tags:
-        - Project Settings Services
-      operationId: get-/repo/v1/storageLocation/{id}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: the ID of the storage location setting.
-          schema:
-            type: number
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.StorageLocationSetting'
   /repo/v1/portal:
     post:
       tags:
@@ -14210,6 +14088,149 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.UserPortalPermissions'
+  /repo/v1/projectSettings/{id}:
+    get:
+      tags:
+        - Project Settings Services
+      operationId: get-/repo/v1/projectSettings/{id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: the ID of the ,<a href="${org.sagebionetworks.repo.model.project.ProjectSetting}">,ProjectSetting,</a>
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: the ,<a href="${org.sagebionetworks.repo.model.project.ProjectSetting}">,ProjectSetting,</a>, with the corresponding ID, if it exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
+    delete:
+      tags:
+        - Project Settings Services
+      operationId: delete-/repo/v1/projectSettings/{id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the ,<a href="${org.sagebionetworks.repo.model.project.ProjectSetting}">,ProjectSetting,</a>,. This is not the ID of the project.
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Void
+  /repo/v1/projectSettings/{projectId}/type/{type}:
+    get:
+      tags:
+        - Project Settings Services
+      operationId: get-/repo/v1/projectSettings/{projectId}/type/{type}
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: the ID of the project
+          schema:
+            type: string
+        - name: type
+          in: path
+          required: true
+          description: The ,<a href="${org.sagebionetworks.repo.model.project.ProjectSettingsType}">,ProjectSettingsType,</a>, to get.
+          schema:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSettingsType'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
+  /repo/v1/projectSettings:
+    post:
+      tags:
+        - Project Settings Services
+      operationId: post-/repo/v1/projectSettings
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: The created ,<a href="${org.sagebionetworks.repo.model.project.ProjectSetting}">,ProjectSetting,</a>,.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
+    put:
+      tags:
+        - Project Settings Services
+      operationId: put-/repo/v1/projectSettings
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.ProjectSetting'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Void
+  /repo/v1/storageLocation:
+    post:
+      tags:
+        - Project Settings Services
+      operationId: post-/repo/v1/storageLocation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.StorageLocationSetting'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.StorageLocationSetting'
+  /repo/v1/storageLocation/{id}:
+    get:
+      tags:
+        - Project Settings Services
+      operationId: get-/repo/v1/storageLocation/{id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: the ID of the storage location setting.
+          schema:
+            type: number
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.project.StorageLocationSetting'
   /repo/v1/verificationSubmission:
     post:
       tags:
@@ -16802,6 +16823,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.quiz.QuizResponse'
+    org.sagebionetworks.repo.model.search.query.SuggestedTermSort:
+      type: string
+      enum:
+        - SCORE
+        - FREQUENCY
     org.sagebionetworks.repo.model.HasEtag:
       type: object
       properties:
@@ -18816,6 +18842,22 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.agent.AgentChatResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.agent.AgentChatResponse
+        sessionId:
+          type: string
+          description: The sessionId that identifies the conversation with the agent.
+        responseText:
+          type: string
+          description: The agent's text response to the user's request
+      description: The response to an agent chat request.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.audit.AccessRecord:
       type: object
       properties:
@@ -18894,22 +18936,6 @@ components:
           type: string
           description: The authentication method
       description: Data recored from a single web-services methods.
-    org.sagebionetworks.repo.model.agent.AgentChatResponse:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          enum:
-            - org.sagebionetworks.repo.model.agent.AgentChatResponse
-        sessionId:
-          type: string
-          description: The sessionId that identifies the conversation with the agent.
-        responseText:
-          type: string
-          description: The agent's text response to the user's request
-      description: The response to an agent chat request.
-      required:
-        - concreteType
     org.sagebionetworks.repo.model.table.FacetColumnRequest:
       type: object
       properties:
@@ -22750,6 +22776,13 @@ components:
           type: string
           description: The date time this DOI is last updated. Provided by Synapse.
       description: 'JSON schema for fields associated with a DOI and its metadata. This object contains fields from both <a href="${org.sagebionetworks.repo.model.doi.v2.DoiAssociation}">DoiAssociation</a> and <a href="${org.sagebionetworks.repo.model.doi.v2.DataciteMetadata}">DataciteMetadata</a>.<br>To mint a DOI, the following fields are required: <ul> <li>Information that uniquely identifies an object in Synapse <ul><li> The object ID <i>(e.g. "syn12345")</i></li><li>The object type <i>(Note: as of this writing, only ENTITY is supported)</i></li><li>The version number of the object <i>(Optional. A "null" version will mint a DOI that will point to the most recent version of the object, even if the object changes)</i></li><li>An eTag <i>(Necessary when updating an existing DOI)</i></li></ul></li> <li>Additional supplementary information to mint a DOI <ul><li>Creator(s)</li><li>Title(s)</li><li>The general resource type</li><li>A publication year (no later than one year after the current year)</li></ul></li> </ul><br>For more information, see the <a href="${org.sagebionetworks.repo.model.doi.v2.DoiAssociation}">DoiAssociation</a> and <a href="${org.sagebionetworks.repo.model.doi.v2.DataciteMetadata}">DataciteMetadata</a> objects.'
+    org.sagebionetworks.repo.model.grid.CreateReplicaRequest:
+      type: object
+      properties:
+        gridSessionId:
+          type: string
+          description: The ID of the grid seesion.
+      description: Request to create a new replica. A replica represents an 'in-memory' grid document identifed by a unique replicaId.
     org.sagebionetworks.repo.model.migration.BackupTypeResponse:
       type: object
       properties:
@@ -22763,13 +22796,6 @@ components:
       description: Results for a backup type job.
       required:
         - concreteType
-    org.sagebionetworks.repo.model.grid.CreateReplicaRequest:
-      type: object
-      properties:
-        gridSessionId:
-          type: string
-          description: The ID of the grid seesion.
-      description: Request to create a new replica. A replica represents an 'in-memory' grid document identifed by a unique replicaId.
     org.sagebionetworks.repo.model.dataaccess.AccessRequirementSearchResult:
       type: object
       properties:
@@ -25451,6 +25477,16 @@ components:
       description: Interface for JSON schema for UsedEntity POJO
       required:
         - concreteType
+    org.sagebionetworks.repo.model.search.query.SuggestionResults:
+      type: object
+      properties:
+        suggestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.query.SuggestionList'
+            description: JSON Schema for a list of suggested replacements for a search term
+          description: The list of suggestion for the queried search term.
+      description: JSON schema for a suggestion result.
     org.sagebionetworks.repo.model.subscription.SubscriptionRequest:
       type: object
       properties:
@@ -26373,16 +26409,6 @@ components:
           type: string
           description: If the added failed, this will contain the error message of the cause.  Will be null when the add is successful.
       description: Response from adding a part to multi-part upload or copy.
-    org.sagebionetworks.repo.model.principal.AccountCreationToken:
-      type: object
-      properties:
-        emailValidationSignedToken:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.principal.EmailValidationSignedToken'
-          description: Signed token containing the the information necessary to create a new account or add an email address to an existing account.
-        encodedMembershipInvtnSignedToken:
-          type: string
-          description: Encoded signed token containing the information needed to retrieve a membership invitation.
-      description: Information needed to start the process of creating a new account.
     org.sagebionetworks.repo.model.agent.TraceEventsRequest:
       type: object
       properties:
@@ -26394,6 +26420,16 @@ components:
           description: When a timestamp value is provided, only trace events that occurred after the provided timestamp will be included in the results.
           format: int32
       description: A request to get a single page of trace events for a specified asynchronous job.
+    org.sagebionetworks.repo.model.principal.AccountCreationToken:
+      type: object
+      properties:
+        emailValidationSignedToken:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.principal.EmailValidationSignedToken'
+          description: Signed token containing the the information necessary to create a new account or add an email address to an existing account.
+        encodedMembershipInvtnSignedToken:
+          type: string
+          description: Encoded signed token containing the information needed to retrieve a membership invitation.
+      description: Information needed to start the process of creating a new account.
     org.sagebionetworks.repo.model.search.query.SearchFieldName:
       type: string
       enum:
@@ -26770,6 +26806,28 @@ components:
           type: string
           description: A token used to get the next page of a particular search query.
       description: Describes the response object for an Access Requirement search
+    org.sagebionetworks.repo.model.grid.ReplicaSelectionModel:
+      type: object
+      properties:
+        columnSelection:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.CrdtId'
+            description: Represents a single CRDT node's identifier.
+          description: Each SelectionId is an arr node's id from the 'columnOrder' array
+        rowSelection:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.CrdtId'
+            description: Represents a single CRDT node's identifier.
+          description: Each SelectionId is an arr node's id from the 'rows' array
+        columnSelectAll:
+          type: boolean
+          description: When true, all columns are selected and 'columnSelection' will be ignored.
+        rowSelectAll:
+          type: boolean
+          description: When true, all rows are selected, and 'rowSelection' will be ignored.
+      description: Defines a user's selection of columns and rows for a replica.
     org.sagebionetworks.repo.model.wiki.WikiPage:
       type: object
       properties:
@@ -26806,28 +26864,6 @@ components:
             type: string
           description: The list of attachment file handle ids of this page.
       description: The WikiPage model object represent a single user managed wiki page.
-    org.sagebionetworks.repo.model.grid.ReplicaSelectionModel:
-      type: object
-      properties:
-        columnSelection:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.CrdtId'
-            description: Represents a single CRDT node's identifier.
-          description: Each SelectionId is an arr node's id from the 'columnOrder' array
-        rowSelection:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.CrdtId'
-            description: Represents a single CRDT node's identifier.
-          description: Each SelectionId is an arr node's id from the 'rows' array
-        columnSelectAll:
-          type: boolean
-          description: When true, all columns are selected and 'columnSelection' will be ignored.
-        rowSelectAll:
-          type: boolean
-          description: When true, all rows are selected, and 'rowSelection' will be ignored.
-      description: Defines a user's selection of columns and rows for a replica.
     org.sagebionetworks.repo.model.oauth.OAuthGrantType:
       type: string
       enum:
@@ -28755,6 +28791,29 @@ components:
             description: JSON schema for StatusHistoryRecord POJO
           description: Status history
       description: JSON schema for CurationTrackingData
+    org.sagebionetworks.repo.model.search.query.SuggestionQuery:
+      type: object
+      properties:
+        searchTerm:
+          type: array
+          items:
+            type: string
+          description: The free text search terms. The suggestion will be provided for these terms.
+        maxEdit:
+          type: integer
+          description: The maximum number of single-character edits (insertions, deletions, or substitutions) allowed between the input query and a suggested term. Must be 1 or 2. Default is 2.
+          format: int32
+        size:
+          type: integer
+          description: The maximum number of suggestions to return for each term in the input text. The default is 5.
+          format: int32
+        sort:
+          type: string
+          description: Specifies how suggestions should be sorted in the response.
+          enum:
+            - SCORE
+            - FREQUENCY
+      description: JSON schema for a suggestion query.
     org.sagebionetworks.repo.model.message.PublishResults:
       type: object
       properties:
@@ -28979,6 +29038,14 @@ components:
           type: string
           description: The token to get the next page result. Use NULL to get the first page.
       description: A request to retrieve a page of accessor groups. Accessors will be group by submitter and access requirement.
+    org.sagebionetworks.repo.model.grid.UpdateGridResponse:
+      type: object
+      properties:
+        updatedRowCount:
+          type: integer
+          description: The number of rows updated with this request.
+          format: int32
+      description: Response to an Update grid SQL request.
     org.sagebionetworks.repo.model.migration.MigrationTypeList:
       type: object
       properties:
@@ -29116,14 +29183,6 @@ components:
               - RECORDSET_VALIDATION_STATS
               - CHANGE
       description: List of Migration types.
-    org.sagebionetworks.repo.model.grid.UpdateGridResponse:
-      type: object
-      properties:
-        updatedRowCount:
-          type: integer
-          description: The number of rows updated with this request.
-          format: int32
-      description: Response to an Update grid SQL request.
     org.sagebionetworks.repo.model.TermsOfUseAccessRequirement:
       type: object
       properties:
@@ -29203,6 +29262,20 @@ components:
         messageMarkdown:
           type: string
           description: The new message markdown
+    org.sagebionetworks.repo.model.search.query.Suggestion:
+      type: object
+      properties:
+        term:
+          type: string
+          description: The suggested term.
+        score:
+          type: number
+          description: The relative score of suggested term.
+        frequency:
+          type: integer
+          description: The count of documents that contain the specified term.
+          format: int32
+      description: JSON schema for a suggested replacement term.
     org.sagebionetworks.repo.model.schema.ValidationResults:
       type: object
       properties:
@@ -30683,6 +30756,20 @@ components:
       description: JSON schema for in-Synapse 'Access Control Team' controlled Access Requirement, a 'tier 3' Access Requirement. This access requirement allows the ACT managing the detail requirements, and submissions within Synapse.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.search.query.SuggestionList:
+      type: object
+      properties:
+        key:
+          type: string
+          description: The free text search term. The suggestion will be provided for this term.
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.search.query.Suggestion'
+            description: JSON schema for a suggested replacement term.
+          description: The suggested values for search term.
+          uniqueItems: true
+      description: JSON Schema for a list of suggested replacements for a search term
     org.sagebionetworks.repo.model.migration.AdminRequest:
       type: object
       properties:
@@ -32323,31 +32410,6 @@ components:
           type: string
           description: The value of this Annotation
       description: An Annotation containing a String value
-    org.sagebionetworks.repo.model.schema.JsonSchemaObjectBinding:
-      type: object
-      properties:
-        jsonSchemaVersionInfo:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.JsonSchemaVersionInfo'
-          description: Information about a single version of a JSON schema.
-        objectId:
-          type: integer
-          description: The numeric identifier of the object bound to a JSON schema
-          format: int32
-        objectType:
-          type: string
-          description: Object types that can be bound to a JSON schema.
-          enum:
-            - entity
-        createdOn:
-          type: string
-          description: The date this binding was created.
-        createdBy:
-          type: string
-          description: The ID of the user that bound this object to the schema.
-        enableDerivedAnnotations:
-          type: boolean
-          description: When 'true', Synapse will automatically, calculate the derived annotations for the Entities bound to this schema
-      description: Describes the binding of a JSON schema to an object
     org.sagebionetworks.repo.model.grid.update.TemplateSetValue:
       type: object
       properties:
@@ -32386,6 +32448,31 @@ components:
       description: Sets a column's value by composing a string from a source template, then optionally applying a regex-replace to that intermediate string.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.schema.JsonSchemaObjectBinding:
+      type: object
+      properties:
+        jsonSchemaVersionInfo:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.JsonSchemaVersionInfo'
+          description: Information about a single version of a JSON schema.
+        objectId:
+          type: integer
+          description: The numeric identifier of the object bound to a JSON schema
+          format: int32
+        objectType:
+          type: string
+          description: Object types that can be bound to a JSON schema.
+          enum:
+            - entity
+        createdOn:
+          type: string
+          description: The date this binding was created.
+        createdBy:
+          type: string
+          description: The ID of the user that bound this object to the schema.
+        enableDerivedAnnotations:
+          type: boolean
+          description: When 'true', Synapse will automatically, calculate the derived annotations for the Entities bound to this schema
+      description: Describes the binding of a JSON schema to an object
     org.sagebionetworks.repo.model.schema.ListOrganizationsResponse:
       type: object
       properties:
