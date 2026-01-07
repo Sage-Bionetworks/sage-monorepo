@@ -148,3 +148,7 @@ vitest.config.*.timestamp*
 
 # Terraform
 .terragrunt-cache
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
