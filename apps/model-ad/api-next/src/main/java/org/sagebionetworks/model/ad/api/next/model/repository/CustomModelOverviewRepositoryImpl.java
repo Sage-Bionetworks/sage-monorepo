@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class CustomModelOverviewRepositoryImpl implements CustomModelOverviewRepository {
 
   private final MongoTemplate mongoTemplate;
@@ -50,6 +52,8 @@ public class CustomModelOverviewRepositoryImpl implements CustomModelOverviewRep
     }
 
     mongoQuery.with(pageable);
+
+    log.debug("Executing MongoDB query: {}", mongoQuery);
 
     // Execute query
     List<ModelOverviewDocument> results = mongoTemplate.find(
