@@ -286,7 +286,7 @@ components:
           type: string
           nullable: true
           example: 3xtg-ad,5xfad
-        available_data:
+        availableData:
           description: Filter by available data types.
           type: array
           items:
@@ -304,7 +304,7 @@ components:
           example:
             - IU/Jax/Pitt
             - UCI
-        model_type:
+        modelType:
           description: Filter by model type.
           type: array
           items:
@@ -313,7 +313,7 @@ components:
           example:
             - Familial AD
             - Late Onset AD
-        modified_genes:
+        modifiedGenes:
           description: Filter by modified genes.
           type: array
           items:
