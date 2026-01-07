@@ -7,7 +7,7 @@ import {
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { CookieService } from 'ngx-cookie-service';
+import { AppCookieService } from '@sagebionetworks/explorers/services';
 import { VisualizationOverviewPanelComponent } from './visualization-overview-panel.component';
 
 describe('VisualizationOverviewPanelComponent', () => {
@@ -26,24 +26,23 @@ describe('VisualizationOverviewPanelComponent', () => {
     },
   ];
 
-  const createMockCookieService = (cookieValue = '') => ({
-    get: jest.fn().mockReturnValue(cookieValue),
-    set: jest.fn(),
-    delete: jest.fn(),
+  const createMockCookieService = (isHidden = false) => ({
+    isVisualizationOverviewHidden: jest.fn().mockReturnValue(isHidden),
+    setVisualizationOverviewHidden: jest.fn(),
   });
 
   async function setup(options?: {
     isVisible?: boolean;
     panes?: VisualizationOverviewPane[];
-    cookieValue?: string;
+    isHidden?: boolean;
   }) {
     const user = userEvent.setup();
-    const mockCookieService = createMockCookieService(options?.cookieValue);
+    const mockCookieService = createMockCookieService(options?.isHidden);
 
     const { fixture } = await render(VisualizationOverviewPanelComponent, {
       providers: [
         provideNoopAnimations(),
-        { provide: CookieService, useValue: mockCookieService },
+        { provide: AppCookieService, useValue: mockCookieService },
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
           viewConfig: {
@@ -203,36 +202,34 @@ describe('VisualizationOverviewPanelComponent', () => {
     });
 
     it('should initialize checkbox as unchecked when cookie is empty', async () => {
-      await setup({ cookieValue: '' });
+      await setup({ isHidden: false });
       const checkbox = screen.getByLabelText(/not to show this again/i) as HTMLInputElement;
       expect(checkbox.checked).toBe(false);
     });
 
     it('should initialize checkbox as checked when cookie is "1"', async () => {
-      const { fixture } = await setup({ cookieValue: '1', isVisible: true });
+      const { fixture } = await setup({ isHidden: true, isVisible: true });
       fixture.detectChanges();
       const checkbox = screen.getByLabelText(/not to show this again/i) as HTMLInputElement;
       expect(checkbox.checked).toBe(true);
     });
 
     it('should save cookie immediately when checkbox is clicked', async () => {
-      const { user, mockCookieService } = await setup({ cookieValue: '' });
+      const { user, mockCookieService } = await setup({ isHidden: false });
       const checkbox = screen.getByLabelText(/not to show this again/i);
 
       await user.click(checkbox);
 
-      expect(mockCookieService.set).toHaveBeenCalledWith('hide_visualization_overview', '1', {
-        path: '/',
-      });
+      expect(mockCookieService.setVisualizationOverviewHidden).toHaveBeenCalledWith(true);
     });
 
     it('should delete cookie when unchecking checkbox', async () => {
-      const { user, mockCookieService } = await setup({ cookieValue: '1', isVisible: true });
+      const { user, mockCookieService } = await setup({ isHidden: true, isVisible: true });
       const checkbox = screen.getByLabelText(/not to show this again/i);
 
       await user.click(checkbox);
 
-      expect(mockCookieService.delete).toHaveBeenCalledWith('hide_visualization_overview', '/');
+      expect(mockCookieService.setVisualizationOverviewHidden).toHaveBeenCalledWith(false);
     });
   });
 
@@ -266,7 +263,7 @@ describe('VisualizationOverviewPanelComponent', () => {
   describe('Cookie Initialization', () => {
     it('should hide dialog when cookie value is "1"', async () => {
       const { component, comparisonToolService } = await setup({
-        cookieValue: '1',
+        isHidden: true,
       });
 
       expect(component.willHide).toBe(true);
@@ -275,17 +272,17 @@ describe('VisualizationOverviewPanelComponent', () => {
 
     it('should show dialog when cookie value is empty', async () => {
       const { component, comparisonToolService, mockCookieService } = await setup({
-        cookieValue: '',
+        isHidden: false,
       });
 
-      expect(mockCookieService.get).toHaveBeenCalledWith('hide_visualization_overview');
+      expect(mockCookieService.isVisualizationOverviewHidden).toHaveBeenCalled();
       expect(component.willHide).toBe(false);
       expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(true);
     });
 
     it('should show dialog when cookie value is "0"', async () => {
       const { component, comparisonToolService } = await setup({
-        cookieValue: '0',
+        isHidden: false,
       });
 
       expect(component.willHide).toBe(false);
