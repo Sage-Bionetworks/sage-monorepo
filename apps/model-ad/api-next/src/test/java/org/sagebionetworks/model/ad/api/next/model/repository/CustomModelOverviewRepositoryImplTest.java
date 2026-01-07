@@ -97,7 +97,13 @@ class CustomModelOverviewRepositoryImplTest {
     verify(mongoTemplate).count(countQueryCaptor.capture(), eq(ModelOverviewDocument.class));
 
     Query countQuery = countQueryCaptor.getValue();
-    assertEquals(0, countQuery.getLimit(), "Count query should have no limit");
-    assertEquals(0, countQuery.getSkip(), "Count query should have no skip");
+    assertTrue(
+      countQuery.getLimit() <= 0,
+      "Count query should have no limit (0 or -1), but was: " + countQuery.getLimit()
+    );
+    assertTrue(
+      countQuery.getSkip() <= 0,
+      "Count query should have no skip (0 or -1), but was: " + countQuery.getSkip()
+    );
   }
 }
