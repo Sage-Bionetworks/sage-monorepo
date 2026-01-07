@@ -20,6 +20,7 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { TooltipModule } from 'primeng/tooltip';
 import { BaseTableComponent } from './base-table/base-table.component';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns/comparison-tool-columns.component';
+import { HeatmapDetailsPanelComponent } from './heatmap-details-panel/heatmap-details-panel.component';
 
 @Component({
   selector: 'explorers-comparison-tool-table',
@@ -29,6 +30,7 @@ import { ComparisonToolColumnsComponent } from './comparison-tool-columns/compar
     SvgIconComponent,
     BaseTableComponent,
     DownloadDomImageComponent,
+    HeatmapDetailsPanelComponent,
   ],
   templateUrl: './comparison-tool-table.component.html',
   styleUrls: ['./comparison-tool-table.component.scss'],
@@ -42,6 +44,7 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   platformService = inject(PlatformService);
 
   tableElement = viewChild<ElementRef>('table');
+  heatmapDetailsPanel = viewChild(HeatmapDetailsPanelComponent);
 
   pinnedResultsCount = this.comparisonToolService.pinnedResultsCount;
   maxPinnedItems = this.comparisonToolService.maxPinnedItems;
@@ -62,6 +65,15 @@ export class ComparisonToolTableComponent implements AfterViewInit {
   primaryColumnWidth = 300;
 
   constructor() {
+    effect(() => {
+      const panelData = this.comparisonToolService.heatmapDetailsPanelData();
+      if (panelData) {
+        this.heatmapDetailsPanel()?.show(panelData.event, panelData.data);
+      } else {
+        this.heatmapDetailsPanel()?.hide();
+      }
+    });
+
     if (this.platformService.isBrowser) {
       this.primaryColumnWidth = this.helperService.getNumberFromCSSValue(
         getComputedStyle(document.documentElement).getPropertyValue(
