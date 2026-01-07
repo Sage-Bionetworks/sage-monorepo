@@ -234,8 +234,8 @@ public class ModelOverviewSearchQueryDto {
    * @return availableData
    */
   
-  @Schema(name = "available_data", example = "[\"Biomarkers\",\"Disease Correlation\"]", description = "Filter by available data types.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("available_data")
+  @Schema(name = "availableData", example = "[\"Biomarkers\",\"Disease Correlation\"]", description = "Filter by available data types.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("availableData")
   public @Nullable List<String> getAvailableData() {
     return availableData;
   }
@@ -290,8 +290,8 @@ public class ModelOverviewSearchQueryDto {
    * @return modelType
    */
   
-  @Schema(name = "model_type", example = "[\"Familial AD\",\"Late Onset AD\"]", description = "Filter by model type.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("model_type")
+  @Schema(name = "modelType", example = "[\"Familial AD\",\"Late Onset AD\"]", description = "Filter by model type.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modelType")
   public @Nullable List<String> getModelType() {
     return modelType;
   }
@@ -318,8 +318,8 @@ public class ModelOverviewSearchQueryDto {
    * @return modifiedGenes
    */
   
-  @Schema(name = "modified_genes", example = "[\"5xFAD (IU/Jax/Pitt)\",\"Abca7*V1599M\"]", description = "Filter by modified genes.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("modified_genes")
+  @Schema(name = "modifiedGenes", example = "[\"5xFAD (IU/Jax/Pitt)\",\"Abca7*V1599M\"]", description = "Filter by modified genes.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modifiedGenes")
   public @Nullable List<String> getModifiedGenes() {
     return modifiedGenes;
   }

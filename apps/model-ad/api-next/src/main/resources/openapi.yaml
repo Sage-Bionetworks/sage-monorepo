@@ -325,7 +325,7 @@ components:
           example: '3xtg-ad,5xfad'
           nullable: true
           type: string
-        available_data:
+        availableData:
           description: Filter by available data types.
           example:
             - Biomarkers
@@ -343,7 +343,7 @@ components:
             type: string
           nullable: true
           type: array
-        model_type:
+        modelType:
           description: Filter by model type.
           example:
             - Familial AD
@@ -352,7 +352,7 @@ components:
             type: string
           nullable: true
           type: array
-        modified_genes:
+        modifiedGenes:
           description: Filter by modified genes.
           example:
             - 5xFAD (IU/Jax/Pitt)
