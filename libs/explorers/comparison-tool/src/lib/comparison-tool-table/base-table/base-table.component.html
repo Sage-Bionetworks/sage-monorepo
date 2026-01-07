@@ -38,7 +38,17 @@
               <explorers-primary-identifier-controls [label]="cellData" [id]="rowId" />
             }
             @if (columnType === 'heat_map') {
-              <explorers-heatmap-circle [data]="cellData" />
+              @if (hasHeatmapDetailsTransform()) {
+                <button
+                  type="button"
+                  class="heatmap-circle-button"
+                  (click)="onHeatmapCircleClick(rowData, cellData, column.data_key, $event)"
+                >
+                  <explorers-heatmap-circle [data]="cellData" />
+                </button>
+              } @else {
+                <explorers-heatmap-circle [data]="cellData" />
+              }
             }
             @if (columnType === 'text') {
               {{ cellData | commaSeparate }}
