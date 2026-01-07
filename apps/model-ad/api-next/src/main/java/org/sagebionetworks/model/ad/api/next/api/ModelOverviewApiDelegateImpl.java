@@ -26,12 +26,9 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
     "items",
     "itemFilterType",
     "search",
-    "available_data",
     "availableData",
     "center",
-    "model_type",
     "modelType",
-    "modified_genes",
     "modifiedGenes",
     "sortFields",
     "sortOrders"
