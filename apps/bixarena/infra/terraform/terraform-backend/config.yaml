@@ -1,0 +1,11 @@
+# Terraform backend configuration (output of the local "terraform-backend" module)
+terraform_backend:
+  bucket_name: 'sage-bixarena-terraform-backend-use1-prod'
+  bucket_region: 'us-east-1'
+  dynamodb_table: 'sage-bixarena-terraform-backend-lock-use1-prod'
+
+# Module-specific configuration
+modules:
+  terraform_backend:
+    aws_provider:
+      region: 'us-east-1'

@@ -1,0 +1,80 @@
+{
+  "name": "bixarena-infra-terraform-terraform-backend",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "tags": ["language:terraform", "product:bixarena", "type:infra"],
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp --update=none .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "init": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt init --working-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt validate --working-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "plan": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt plan --working-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt apply --working-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "destroy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt destroy --working-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    }
+  }
+}

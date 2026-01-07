@@ -145,3 +145,10 @@ vite.config.*.timestamp*
 .aws-sam
 vitest.config.*.timestamp*
 .cursor/rules/nx-rules.mdc
+
+# Terraform
+.terragrunt-cache
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
