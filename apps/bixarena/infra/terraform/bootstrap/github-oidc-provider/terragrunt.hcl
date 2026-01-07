@@ -19,7 +19,7 @@ locals {
 }
 
 terraform {
-  source = "${include.project.inputs.project_paths.infra}//modules/iam-github-oidc"
+  source = "${include.project.inputs.project_paths.terraform}//modules/iam-github-oidc"
 }
 
 inputs = {

@@ -13,7 +13,7 @@ locals {
 }
 
 module "bucket_label" {
-  source = "${var.project_paths.infra}//modules/resource-label"
+  source = "${var.project_paths.terraform}//modules/resource-label"
 
   enabled         = local.bucket_label_enabled
   region          = "us-east-1" # TODO: replace by var.region
@@ -24,7 +24,7 @@ module "bucket_label" {
 }
 
 module "dynamodb_table_label" {
-  source = "${var.project_paths.infra}//modules/resource-label"
+  source = "${var.project_paths.terraform}//modules/resource-label"
 
   enabled       = local.dynamodb_enabled
   attributes    = ["lock"]

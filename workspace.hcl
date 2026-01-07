@@ -8,7 +8,7 @@ locals {
   # Defines paths to projects within the monorepo to maintain consistency across
   # Terragrunt configurations.
   project_paths = {
-    infra = "${local.workspace_root}/libs/infra"
+    terraform = "${local.workspace_root}/libs/platform/infra/terraform"
   }
 }
 

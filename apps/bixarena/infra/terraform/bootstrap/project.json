@@ -1,0 +1,105 @@
+{
+  "name": "bixarena-infra-terraform-bootstrap",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "tags": ["language:terraform", "product:bixarena", "type:infra"],
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp --update=none .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "init": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt run-all init --queue-exclude-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "terraform-backend": {
+          "command": "terragrunt init --working-dir terraform-backend"
+        }
+      }
+    },
+    "validate-backend": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt validate --working-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt run-all validate",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "plan-backend": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt plan --working-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "plan": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt run-all plan --queue-exclude-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "apply-backend": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt apply --working-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    },
+    "apply": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt run-all apply --queue-exclude-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "dev": {},
+        "stage": {},
+        "prod": {}
+      },
+      "defaultConfiguration": "dev"
+    }
+  }
+}

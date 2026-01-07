@@ -1,5 +1,5 @@
 module "this" {
-  source = "${var.project_paths.infra}//modules/resource-label"
+  source = "${var.project_paths.terraform}//modules/resource-label"
 
   enabled             = var.enabled
   organization        = var.organization
