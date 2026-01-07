@@ -7,6 +7,7 @@ import {
   ComparisonToolQuery,
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
+  HeatmapDetailsPanelData,
   SortOrder,
 } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
@@ -86,6 +87,10 @@ export class ComparisonToolService<T> {
     filters: [],
   });
   private readonly isInitializedSignal = signal(false);
+  private readonly heatmapDetailsPanelDataSignal = signal<{
+    data: HeatmapDetailsPanelData;
+    event: Event;
+  } | null>(null);
 
   // URL Sync State
   private lastSerializedState: string | null = null;
@@ -101,6 +106,7 @@ export class ComparisonToolService<T> {
   readonly unpinnedData = this.unpinnedDataSignal.asReadonly();
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
+  readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
 
   // Computed Query Accessors
   readonly query = this.querySignal.asReadonly();
@@ -333,6 +339,29 @@ export class ComparisonToolService<T> {
 
   toggleVisualizationOverview() {
     this.isVisualizationOverviewVisibleSignal.update((visible) => !visible);
+  }
+
+  showHeatmapDetailsPanel(rowData: T, cellData: unknown, columnKey: string, event: Event): void {
+    const transform = this.viewConfig().heatmapDetailsPanelDataTransform;
+    if (!transform) {
+      return;
+    }
+
+    const data = transform({
+      rowData,
+      cellData,
+      columnKey,
+    });
+
+    if (!data) {
+      return;
+    }
+
+    this.heatmapDetailsPanelDataSignal.set({ data, event });
+  }
+
+  hideHeatmapDetailsPanel(): void {
+    this.heatmapDetailsPanelDataSignal.set(null);
   }
 
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {

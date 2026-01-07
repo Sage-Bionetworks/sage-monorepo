@@ -10,6 +10,24 @@ export interface HeatmapDetailsPanelData {
   footer: string;
 }
 
+/**
+ * Context provided to the heatmap details panel transform function.
+ * Contains all the data needed to build the panel content.
+ */
+export interface HeatmapDetailsPanelTransformContext {
+  rowData: unknown; // The row data object for the clicked cell
+  cellData: unknown; // The cell data (typically HeatmapCircleData) for the clicked cell
+  columnKey: string; // The column key (data_key) for the clicked cell
+}
+
+/**
+ * Transform function that maps consumer-specific data to generic panel data.
+ * Return null to prevent the panel from showing.
+ */
+export type HeatmapDetailsPanelDataTransform = (
+  context: HeatmapDetailsPanelTransformContext,
+) => HeatmapDetailsPanelData | null;
+
 export interface LegendPanelConfig {
   colorChartLowerLabel: string;
   colorChartUpperLabel: string;
@@ -50,6 +68,7 @@ export interface ComparisonToolViewConfig {
   rowIdDataKey: string;
   allowPinnedImageDownload: boolean;
   defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
+  heatmapDetailsPanelDataTransform?: HeatmapDetailsPanelDataTransform;
 }
 
 export interface ComparisonToolFilterOption {

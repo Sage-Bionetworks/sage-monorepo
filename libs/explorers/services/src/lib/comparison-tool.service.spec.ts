@@ -762,4 +762,71 @@ describe('ComparisonToolService', () => {
       expect(service.pageNumber()).toBe(3);
     });
   });
+
+  describe('heatmap details panel', () => {
+    const mockRowData = { gene_symbol: 'APOE', tissue: 'cortex' };
+    const mockCellData = { log2_fc: 1.5, adj_p_val: 0.01 };
+    const mockEvent = new MouseEvent('click');
+
+    it('should have null panel data initially', () => {
+      connectService();
+      expect(service.heatmapDetailsPanelData()).toBeNull();
+    });
+
+    it('should not show panel when no transform is configured', () => {
+      connectService();
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
+      expect(service.heatmapDetailsPanelData()).toBeNull();
+    });
+
+    it('should show panel with transformed data when transform is configured', () => {
+      connectService();
+      const mockTransform = jest.fn().mockReturnValue({
+        heading: 'Test Heading',
+        value: 1.5,
+      });
+      service.setViewConfig({
+        heatmapDetailsPanelDataTransform: mockTransform,
+      });
+
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
+
+      expect(mockTransform).toHaveBeenCalledWith({
+        rowData: mockRowData,
+        cellData: mockCellData,
+        columnKey: 'age_4mo',
+      });
+      expect(service.heatmapDetailsPanelData()).toEqual({
+        data: { heading: 'Test Heading', value: 1.5 },
+        event: mockEvent,
+      });
+    });
+
+    it('should not show panel when transform returns null', () => {
+      connectService();
+      const mockTransform = jest.fn().mockReturnValue(null);
+      service.setViewConfig({
+        heatmapDetailsPanelDataTransform: mockTransform,
+      });
+
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
+
+      expect(mockTransform).toHaveBeenCalled();
+      expect(service.heatmapDetailsPanelData()).toBeNull();
+    });
+
+    it('should hide panel and clear data', () => {
+      connectService();
+      const mockTransform = jest.fn().mockReturnValue({ heading: 'Test' });
+      service.setViewConfig({
+        heatmapDetailsPanelDataTransform: mockTransform,
+      });
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
+      expect(service.heatmapDetailsPanelData()).not.toBeNull();
+
+      service.hideHeatmapDetailsPanel();
+
+      expect(service.heatmapDetailsPanelData()).toBeNull();
+    });
+  });
 });
