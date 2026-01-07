@@ -25,6 +25,10 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelSearchQuerySearchQuery } from '../model/org-sagebionetworks-repo-model-search-query-search-query';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelSearchQuerySuggestionQuery } from '../model/org-sagebionetworks-repo-model-search-query-suggestion-query';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelSearchQuerySuggestionResults } from '../model/org-sagebionetworks-repo-model-search-query-suggestion-results';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelSearchSearchResults } from '../model/org-sagebionetworks-repo-model-search-search-results';
 
 // @ts-ignore
@@ -215,6 +219,125 @@ export class SearchServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelSearchQuerySearchQuery,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param orgSagebionetworksRepoModelSearchQuerySuggestionQuery
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1Suggestion(
+    orgSagebionetworksRepoModelSearchQuerySuggestionQuery: OrgSagebionetworksRepoModelSearchQuerySuggestionQuery,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelSearchQuerySuggestionResults>;
+  public postRepoV1Suggestion(
+    orgSagebionetworksRepoModelSearchQuerySuggestionQuery: OrgSagebionetworksRepoModelSearchQuerySuggestionQuery,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelSearchQuerySuggestionResults>>;
+  public postRepoV1Suggestion(
+    orgSagebionetworksRepoModelSearchQuerySuggestionQuery: OrgSagebionetworksRepoModelSearchQuerySuggestionQuery,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelSearchQuerySuggestionResults>>;
+  public postRepoV1Suggestion(
+    orgSagebionetworksRepoModelSearchQuerySuggestionQuery: OrgSagebionetworksRepoModelSearchQuerySuggestionQuery,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (
+      orgSagebionetworksRepoModelSearchQuerySuggestionQuery === null ||
+      orgSagebionetworksRepoModelSearchQuerySuggestionQuery === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelSearchQuerySuggestionQuery was null or undefined when calling postRepoV1Suggestion.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/suggestion`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelSearchQuerySuggestionResults>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelSearchQuerySuggestionQuery,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

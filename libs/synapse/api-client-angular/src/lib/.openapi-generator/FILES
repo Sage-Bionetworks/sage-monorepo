@@ -751,6 +751,11 @@ model/org-sagebionetworks-repo-model-search-query-search-facet-option.ts
 model/org-sagebionetworks-repo-model-search-query-search-facet-sort.ts
 model/org-sagebionetworks-repo-model-search-query-search-field-name.ts
 model/org-sagebionetworks-repo-model-search-query-search-query.ts
+model/org-sagebionetworks-repo-model-search-query-suggested-term-sort.ts
+model/org-sagebionetworks-repo-model-search-query-suggestion-list.ts
+model/org-sagebionetworks-repo-model-search-query-suggestion-query.ts
+model/org-sagebionetworks-repo-model-search-query-suggestion-results.ts
+model/org-sagebionetworks-repo-model-search-query-suggestion.ts
 model/org-sagebionetworks-repo-model-search-search-results.ts
 model/org-sagebionetworks-repo-model-self-sign-access-requirement-interface.ts
 model/org-sagebionetworks-repo-model-self-sign-access-requirement.ts
