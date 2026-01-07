@@ -2,20 +2,22 @@
 
 ## Overview
 
-This Nx project provisions the foundational AWS infrastructure required for Terraform remote state management. It deploys:
+This Nx Terraform project provisions the foundational AWS infrastructure required for Terraform remote state management. It deploys:
 
 - **S3 Bucket**: Stores Terraform state files with versioning, encryption (SSE-KMS), and secure access controls
 - **DynamoDB Table**: Provides state locking to prevent concurrent modifications and ensure consistency
 - **Security Controls**: Enforces TLS, blocks public access, and includes point-in-time recovery
 
-This backend will be used by all other BixArena Terraform/Terragrunt projects to store their state remotely.
+This backend will be used by all other BixArena Terraform projects to store their state remotely.
 
-**Important**: This project uses a **local backend** (`terraform.tfstate` stored locally) because it creates the remote backend infrastructure itself. After deployment, other projects will reference this backend via their `project.hcl` configuration.
+**Important**: This project uses a **local backend** (`terraform.tfstate` stored locally) because it creates the remote backend infrastructure itself. After deployment, other Terraform projects will reference this backend via their `project.hcl` configuration.
+
+> **Note on OpenTofu**: This monorepo uses OpenTofu 1.10.6, an open-source fork of Terraform that is fully compatible with Terraform syntax and modules. Commands run via `terragrunt` which wraps the `tofu` binary.
 
 ## Prerequisites
 
 - AWS CLI configured with SSO profile
-- Terraform/Terragrunt installed (see monorepo root README)
+- OpenTofu 1.10.6+ and Terragrunt 0.87.5+ (installed in dev container)
 - Appropriate AWS permissions to create S3 buckets, DynamoDB tables, and IAM policies
 
 ## Configuration
@@ -103,7 +105,7 @@ Or for a specific environment:
 nx run bixarena-infra-terraform-terraform-backend:deploy:dev
 ```
 
-**Post-deployment**: After successful deployment, Terraform will output the backend configuration values (S3 bucket name, DynamoDB table name, region). Copy these values to the `terraform_backend` section in [config.yaml](config.yaml) so other Terraform projects can reference this backend.
+**Post-deployment**: After successful deployment, OpenTofu will output the backend configuration values (S3 bucket name, DynamoDB table name, region). Copy these values to the `terraform_backend` section in [config.yaml](config.yaml) so other Terraform projects can reference this backend.
 
 ### Destroy Backend Resources
 
@@ -159,10 +161,12 @@ If you see this error, run `init` again to reconfigure the backend.
 
 ### Error: "Error acquiring the state lock"
 
-Another Terraform process is running. Wait for it to complete or manually release the lock from DynamoDB if it's stuck.
+Another process is running. Wait for it to complete or manually release the lock from DynamoDB if it's stuck.
 
 ## Related Documentation
 
-- [Terraform & Terragrunt Monorepo Conventions](.github/instructions/terraform.instructions.md)
+- [Terraform Infrastructure Architecture](../../../../docs/develop/architecture/terraform-infrastructure.md)
+- [Terraform & Terragrunt Monorepo Conventions](../../../../.github/instructions/terraform.instructions.md)
+- [OpenTofu Documentation](https://opentofu.org/docs/)
 - [Terragrunt Documentation](https://terragrunt.gruntwork.io/)
 - [AWS S3 Backend](https://www.terraform.io/docs/language/settings/backends/s3.html)
