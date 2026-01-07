@@ -33,7 +33,7 @@ export interface ModelOverviewSearchQuery {
   /**
    * Filter by available data types.
    */
-  available_data?: Array<string> | null;
+  availableData?: Array<string> | null;
   /**
    * Filter by contributing center.
    */
@@ -41,11 +41,11 @@ export interface ModelOverviewSearchQuery {
   /**
    * Filter by model type.
    */
-  model_type?: Array<string> | null;
+  modelType?: Array<string> | null;
   /**
    * Filter by modified genes.
    */
-  modified_genes?: Array<string> | null;
+  modifiedGenes?: Array<string> | null;
   /**
    * List of field names to sort by (e.g., [\"model_type\", \"name\"]). Each field in sortFields must have a corresponding order in sortOrders.
    */
