@@ -253,6 +253,6 @@ export const heatmapDetailsPanelDataMock: HeatmapDetailsPanelData = {
   subHeadings: ['subHeading'],
   value: 5,
   valueLabel: 'valueLabel',
-  pValue: 5,
+  pValue: 0.05,
   footer: 'footer',
 };

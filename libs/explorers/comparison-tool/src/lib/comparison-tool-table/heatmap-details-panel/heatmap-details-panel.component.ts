@@ -23,6 +23,12 @@ export class HeatmapDetailsPanelComponent {
   helperService = inject(HelperService);
   panels = viewChildren(Popover);
 
+  /**
+   * Use a double buffering approach: Two popover panels alternate to ensure smooth transitions.
+   * When showing new data, we update the inactive panel's data, switch the active index,
+   * hide the old panel, and show the new one. This prevents flickering that would occur
+   * if we updated and repositioned a single panel while it's visible.
+   */
   panelData = signal<[HeatmapDetailsPanelData, HeatmapDetailsPanelData]>([{}, {}]);
   activePanelIndex = signal(0);
 
@@ -58,9 +64,9 @@ export class HeatmapDetailsPanelComponent {
     }
   }
 
-  getSignificantFigures(n: any, b: any) {
+  getSignificantFigures(n: number | null | undefined, significantDigits: number) {
     const emdash = '\u2014'; // Shift+Option+Hyphen
     if (n === null || n === undefined) return emdash;
-    return this.helperService.getSignificantFigures(n, b);
+    return this.helperService.getSignificantFigures(n, significantDigits);
   }
 }
