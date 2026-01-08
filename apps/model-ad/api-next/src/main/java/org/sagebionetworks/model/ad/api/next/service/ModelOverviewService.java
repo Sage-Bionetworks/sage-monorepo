@@ -2,13 +2,11 @@ package org.sagebionetworks.model.ad.api.next.service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
@@ -36,16 +34,12 @@ public class ModelOverviewService {
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
     ".buildCacheKey('modelOverview', #query.itemFilterType, " +
-    "#query.items, #query.search, #query.pageNumber, #query.pageSize, " +
+    "#query.items, #query.search, #query.availableData, #query.center, " +
+    "#query.modelType, #query.modifiedGenes, #query.pageNumber, #query.pageSize, " +
     "#query.sortFields, #query.sortOrders)"
   )
   public ModelOverviewsPageDto loadModelOverviews(ModelOverviewSearchQueryDto query) {
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
-    String search = query.getSearch();
-    ItemFilterTypeQueryDto effectiveFilter = Objects.requireNonNullElse(
-      query.getItemFilterType(),
-      ItemFilterTypeQueryDto.INCLUDE
-    );
 
     int effectivePageNumber = Objects.requireNonNullElse(query.getPageNumber(), 0);
     int effectivePageSize = Objects.requireNonNullElse(query.getPageSize(), 100);
@@ -57,23 +51,9 @@ public class ModelOverviewService {
       .toList();
     Sort sort = ApiHelper.createSort(query.getSortFields(), sortOrders);
     Pageable pageable = PageRequest.of(effectivePageNumber, effectivePageSize, sort);
-    Page<ModelOverviewDocument> page;
 
-    if (
-      effectiveFilter == ItemFilterTypeQueryDto.EXCLUDE &&
-      search != null &&
-      !search.trim().isEmpty()
-    ) {
-      page = fetchPageWithSearch(search.trim(), items, pageable);
-    } else {
-      if (effectiveFilter == ItemFilterTypeQueryDto.INCLUDE) {
-        page = items.isEmpty() ? Page.empty(pageable) : repository.findByNameIn(items, pageable);
-      } else {
-        page = items.isEmpty()
-          ? repository.findAll(pageable)
-          : repository.findByNameNotIn(items, pageable);
-      }
-    }
+    // Use custom repository for all queries
+    Page<ModelOverviewDocument> page = repository.findAll(pageable, query, items);
 
     List<ModelOverviewDto> dtos = page
       .getContent()
@@ -91,22 +71,5 @@ public class ModelOverviewService {
       .build();
 
     return ModelOverviewsPageDto.builder().modelOverviews(dtos).page(pageMetadata).build();
-  }
-
-  private Page<ModelOverviewDocument> fetchPageWithSearch(
-    String trimmedSearch,
-    List<String> excludeNames,
-    Pageable pageable
-  ) {
-    if (trimmedSearch.contains(",")) {
-      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
-      return repository.findByNameInIgnoreCaseAndNameNotIn(patterns, excludeNames, pageable);
-    }
-
-    return repository.findByNameContainingIgnoreCaseAndNameNotIn(
-      Pattern.quote(trimmedSearch),
-      excludeNames,
-      pageable
-    );
   }
 }

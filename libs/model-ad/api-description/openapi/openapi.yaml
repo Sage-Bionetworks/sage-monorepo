@@ -286,6 +286,42 @@ components:
           type: string
           nullable: true
           example: 3xtg-ad,5xfad
+        availableData:
+          description: Filter by available data types.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Biomarkers
+            - Disease Correlation
+        center:
+          description: Filter by contributing center.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - IU/Jax/Pitt
+            - UCI
+        modelType:
+          description: Filter by model type.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Familial AD
+            - Late Onset AD
+        modifiedGenes:
+          description: Filter by modified genes.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - 5xFAD (IU/Jax/Pitt)
+            - Abca7*V1599M
         sortFields:
           description: |
             List of field names to sort by (e.g., ["model_type", "name"]).

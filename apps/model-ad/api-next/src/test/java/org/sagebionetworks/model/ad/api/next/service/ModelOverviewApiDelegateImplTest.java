@@ -1,14 +1,16 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @ExtendWith(MockitoExtension.class)
 class ModelOverviewApiDelegateImplTest {
@@ -42,6 +47,11 @@ class ModelOverviewApiDelegateImplTest {
 
   @BeforeEach
   void setUp() {
+    // Mock the request context for validation
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    ServletRequestAttributes attributes = new ServletRequestAttributes(request);
+    RequestContextHolder.setRequestAttributes(attributes);
+
     ModelOverviewService queryService = new ModelOverviewService(
       repository,
       new ModelOverviewMapper()
@@ -49,9 +59,17 @@ class ModelOverviewApiDelegateImplTest {
     delegate = new ModelOverviewApiDelegateImpl(queryService);
   }
 
+  @AfterEach
+  void tearDown() {
+    RequestContextHolder.resetRequestAttributes();
+  }
+
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
+    Page<ModelOverviewDocument> page = new PageImpl<>(List.of());
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
+
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
@@ -72,7 +90,7 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(headers.getExpires()).isZero();
     assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
 
-    verifyNoInteractions(repository);
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
   }
 
   @Test
@@ -82,7 +100,7 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewDocument document = buildDocument(modelName);
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(document), PageRequest.of(0, 100), 1);
 
-    when(repository.findByNameIn(anyList(), any())).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of(modelName)))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of(modelName))
@@ -131,7 +149,7 @@ class ModelOverviewApiDelegateImplTest {
       2
     );
 
-    when(repository.findAll(any(PageRequest.class))).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
@@ -147,7 +165,7 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(response.getBody().getModelOverviews()).hasSize(2);
     assertThat(response.getBody().getPage().getTotalElements()).isEqualTo(2);
 
-    verify(repository).findAll(any(PageRequest.class));
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
   }
 
   @Test
@@ -162,7 +180,7 @@ class ModelOverviewApiDelegateImplTest {
       1
     );
 
-    when(repository.findByNameNotIn(anyList(), any())).thenReturn(page);
+    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of(excludedName)))).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of(excludedName))
@@ -179,7 +197,27 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewDto dto = response.getBody().getModelOverviews().get(0);
     assertThat(dto.getName()).isEqualTo(includedName);
 
-    verify(repository).findByNameNotIn(anyList(), any());
+    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of(excludedName)));
+  }
+
+  @Test
+  @DisplayName("should throw IllegalArgumentException when invalid query parameter provided")
+  void shouldThrowExceptionWhenInvalidQueryParameterProvided() {
+    // Setup request with invalid parameter
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.addParameter("invalidField", "someValue");
+    ServletRequestAttributes attributes = new ServletRequestAttributes(request);
+    RequestContextHolder.setRequestAttributes(attributes);
+
+    ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
+      .pageNumber(0)
+      .pageSize(100)
+      .build();
+
+    // Should throw IllegalArgumentException for invalid field
+    assertThatThrownBy(() -> delegate.getModelOverviews(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Unknown query parameter: invalidField");
   }
 
   private ModelOverviewDocument buildDocument(String name) {

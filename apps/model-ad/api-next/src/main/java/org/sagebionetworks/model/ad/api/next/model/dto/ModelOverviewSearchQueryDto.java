@@ -41,6 +41,18 @@ public class ModelOverviewSearchQueryDto {
   private @Nullable String search = null;
 
   @Valid
+  private @Nullable List<String> availableData;
+
+  @Valid
+  private @Nullable List<String> center;
+
+  @Valid
+  private @Nullable List<String> modelType;
+
+  @Valid
+  private @Nullable List<String> modifiedGenes;
+
+  @Valid
   private List<String> sortFields = new ArrayList<>();
 
   /**
@@ -204,6 +216,118 @@ public class ModelOverviewSearchQueryDto {
     this.search = search;
   }
 
+  public ModelOverviewSearchQueryDto availableData(@Nullable List<String> availableData) {
+    this.availableData = availableData;
+    return this;
+  }
+
+  public ModelOverviewSearchQueryDto addAvailableDataItem(String availableDataItem) {
+    if (this.availableData == null) {
+      this.availableData = new ArrayList<>();
+    }
+    this.availableData.add(availableDataItem);
+    return this;
+  }
+
+  /**
+   * Filter by available data types.
+   * @return availableData
+   */
+  
+  @Schema(name = "availableData", example = "[\"Biomarkers\",\"Disease Correlation\"]", description = "Filter by available data types.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("availableData")
+  public @Nullable List<String> getAvailableData() {
+    return availableData;
+  }
+
+  public void setAvailableData(@Nullable List<String> availableData) {
+    this.availableData = availableData;
+  }
+
+  public ModelOverviewSearchQueryDto center(@Nullable List<String> center) {
+    this.center = center;
+    return this;
+  }
+
+  public ModelOverviewSearchQueryDto addCenterItem(String centerItem) {
+    if (this.center == null) {
+      this.center = new ArrayList<>();
+    }
+    this.center.add(centerItem);
+    return this;
+  }
+
+  /**
+   * Filter by contributing center.
+   * @return center
+   */
+  
+  @Schema(name = "center", example = "[\"IU/Jax/Pitt\",\"UCI\"]", description = "Filter by contributing center.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("center")
+  public @Nullable List<String> getCenter() {
+    return center;
+  }
+
+  public void setCenter(@Nullable List<String> center) {
+    this.center = center;
+  }
+
+  public ModelOverviewSearchQueryDto modelType(@Nullable List<String> modelType) {
+    this.modelType = modelType;
+    return this;
+  }
+
+  public ModelOverviewSearchQueryDto addModelTypeItem(String modelTypeItem) {
+    if (this.modelType == null) {
+      this.modelType = new ArrayList<>();
+    }
+    this.modelType.add(modelTypeItem);
+    return this;
+  }
+
+  /**
+   * Filter by model type.
+   * @return modelType
+   */
+  
+  @Schema(name = "modelType", example = "[\"Familial AD\",\"Late Onset AD\"]", description = "Filter by model type.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modelType")
+  public @Nullable List<String> getModelType() {
+    return modelType;
+  }
+
+  public void setModelType(@Nullable List<String> modelType) {
+    this.modelType = modelType;
+  }
+
+  public ModelOverviewSearchQueryDto modifiedGenes(@Nullable List<String> modifiedGenes) {
+    this.modifiedGenes = modifiedGenes;
+    return this;
+  }
+
+  public ModelOverviewSearchQueryDto addModifiedGenesItem(String modifiedGenesItem) {
+    if (this.modifiedGenes == null) {
+      this.modifiedGenes = new ArrayList<>();
+    }
+    this.modifiedGenes.add(modifiedGenesItem);
+    return this;
+  }
+
+  /**
+   * Filter by modified genes.
+   * @return modifiedGenes
+   */
+  
+  @Schema(name = "modifiedGenes", example = "[\"5xFAD (IU/Jax/Pitt)\",\"Abca7*V1599M\"]", description = "Filter by modified genes.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modifiedGenes")
+  public @Nullable List<String> getModifiedGenes() {
+    return modifiedGenes;
+  }
+
+  public void setModifiedGenes(@Nullable List<String> modifiedGenes) {
+    this.modifiedGenes = modifiedGenes;
+  }
+
   public ModelOverviewSearchQueryDto sortFields(List<String> sortFields) {
     this.sortFields = sortFields;
     return this;
@@ -274,13 +398,17 @@ public class ModelOverviewSearchQueryDto {
         Objects.equals(this.items, modelOverviewSearchQuery.items) &&
         Objects.equals(this.itemFilterType, modelOverviewSearchQuery.itemFilterType) &&
         Objects.equals(this.search, modelOverviewSearchQuery.search) &&
+        Objects.equals(this.availableData, modelOverviewSearchQuery.availableData) &&
+        Objects.equals(this.center, modelOverviewSearchQuery.center) &&
+        Objects.equals(this.modelType, modelOverviewSearchQuery.modelType) &&
+        Objects.equals(this.modifiedGenes, modelOverviewSearchQuery.modifiedGenes) &&
         Objects.equals(this.sortFields, modelOverviewSearchQuery.sortFields) &&
         Objects.equals(this.sortOrders, modelOverviewSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, availableData, center, modelType, modifiedGenes, sortFields, sortOrders);
   }
 
   @Override
@@ -292,6 +420,10 @@ public class ModelOverviewSearchQueryDto {
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
+    sb.append("    availableData: ").append(toIndentedString(availableData)).append("\n");
+    sb.append("    center: ").append(toIndentedString(center)).append("\n");
+    sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
+    sb.append("    modifiedGenes: ").append(toIndentedString(modifiedGenes)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
     sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
@@ -327,6 +459,10 @@ public class ModelOverviewSearchQueryDto {
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
       this.instance.setSearch(value.search);
+      this.instance.setAvailableData(value.availableData);
+      this.instance.setCenter(value.center);
+      this.instance.setModelType(value.modelType);
+      this.instance.setModifiedGenes(value.modifiedGenes);
       this.instance.setSortFields(value.sortFields);
       this.instance.setSortOrders(value.sortOrders);
       return this;
@@ -354,6 +490,26 @@ public class ModelOverviewSearchQueryDto {
     
     public ModelOverviewSearchQueryDto.Builder search(String search) {
       this.instance.search(search);
+      return this;
+    }
+    
+    public ModelOverviewSearchQueryDto.Builder availableData(List<String> availableData) {
+      this.instance.availableData(availableData);
+      return this;
+    }
+    
+    public ModelOverviewSearchQueryDto.Builder center(List<String> center) {
+      this.instance.center(center);
+      return this;
+    }
+    
+    public ModelOverviewSearchQueryDto.Builder modelType(List<String> modelType) {
+      this.instance.modelType(modelType);
+      return this;
+    }
+    
+    public ModelOverviewSearchQueryDto.Builder modifiedGenes(List<String> modifiedGenes) {
+      this.instance.modifiedGenes(modifiedGenes);
       return this;
     }
     

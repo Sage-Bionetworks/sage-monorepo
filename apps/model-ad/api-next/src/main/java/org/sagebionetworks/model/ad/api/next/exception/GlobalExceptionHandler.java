@@ -104,6 +104,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .body(errorDto);
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  protected ResponseEntity<BasicErrorDto> handleIllegalArgument(
+    IllegalArgumentException ex,
+    NativeWebRequest request,
+    Locale locale
+  ) {
+    return ResponseEntity.status(ErrorConstants.BAD_REQUEST.getStatus())
+      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+      .body(
+        BasicErrorDto.builder()
+          .title(ErrorConstants.BAD_REQUEST.getTitle())
+          .status(ErrorConstants.BAD_REQUEST.getStatus().value())
+          .detail(ex.getMessage())
+          .instance(resolveInstance(request))
+          .build()
+      );
+  }
+
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   protected ResponseEntity<BasicErrorDto> handleMethodArgumentTypeMismatch(
     MethodArgumentTypeMismatchException ex,
