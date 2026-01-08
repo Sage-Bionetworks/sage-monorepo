@@ -62,5 +62,7 @@
 
   .heatmap-circle-button {
     @include mixins.reset-button;
+
+    cursor: pointer;
   }
 }
