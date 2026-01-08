@@ -5,6 +5,7 @@ import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-t
 import {
   ComparisonToolQuery,
   ComparisonToolViewConfig,
+  HeatmapDetailsPanelTransformContext,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
@@ -17,6 +18,8 @@ import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
+  CorrelationResult,
+  DiseaseCorrelation,
   DiseaseCorrelationSearchQuery,
   DiseaseCorrelationService,
   DiseaseCorrelationsPage,
@@ -115,6 +118,25 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       { field: 'age', order: 1 },
       { field: 'sex', order: 1 },
     ],
+    heatmapDetailsPanelDataTransform: ({
+      rowData,
+      cellData,
+      columnKey,
+    }: HeatmapDetailsPanelTransformContext) => {
+      const row = rowData as DiseaseCorrelation;
+      const cell = cellData as CorrelationResult;
+      return {
+        heading: 'Disease Correlation (Consensus Network Modules)',
+        subHeadings: [
+          `${row.name} (${row.age}, ${row.sex})`,
+          `${row.cluster} | ${columnKey} module`,
+        ],
+        value: cell.correlation,
+        valueLabel: 'Correlation',
+        pValue: cell.adj_p_val,
+        footer: 'Significance is considered to be an adjusted p-value < 0.05',
+      };
+    },
   };
 
   constructor() {
