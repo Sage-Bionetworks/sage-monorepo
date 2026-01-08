@@ -136,6 +136,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       currentQuery.multiSortMeta,
     );
 
+    const selectedFilters = this.comparisonToolHelperService.getSelectedFilters(
+      currentQuery.filters,
+    );
+
     const query: ModelOverviewSearchQuery = {
       items: currentQuery.pinnedItems,
       itemFilterType: ItemFilterTypeQuery.Exclude,
@@ -144,6 +148,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       search: currentQuery.searchTerm,
       sortFields,
       sortOrders,
+      availableData: selectedFilters['available_data'],
+      center: selectedFilters['center'],
+      modelType: selectedFilters['model_type'],
+      modifiedGenes: selectedFilters['modified_genes'],
     };
     this.modelOverviewService
       .getModelOverviews(query)

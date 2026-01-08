@@ -258,8 +258,8 @@ components:
             type: string
           nullable: true
           example:
-            - 5xFAD (IU/Jax/Pitt)
-            - Abca7*V1599M
+            - APP
+            - MAPT
         sortFields:
           description: |
             List of field names to sort by (e.g., ["model_type", "name"]).

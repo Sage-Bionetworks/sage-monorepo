@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
+  ComparisonToolFilter,
   ComparisonToolLink,
   HeatmapCircleData,
   PaginationParams,
@@ -184,5 +185,25 @@ export class ComparisonToolHelperService {
       default:
         return String(itemData);
     }
+  }
+
+  /**
+   * Returns selected filter options as a record keyed by data_key
+   * @param filters Array of comparison tool filters
+   * @returns Object where keys are data_keys and values are arrays of selected option labels
+   */
+  getSelectedFilters(filters: ComparisonToolFilter[]): Record<string, string[]> {
+    return filters.reduce(
+      (acc, filter) => {
+        const selectedLabels = filter.options
+          .filter((option) => option.selected)
+          .map((option) => option.label);
+        if (selectedLabels.length > 0) {
+          acc[filter.data_key] = selectedLabels;
+        }
+        return acc;
+      },
+      {} as Record<string, string[]>,
+    );
   }
 }
