@@ -18,8 +18,10 @@
   }
 
   .p-dialog-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 20px 40px;
-    text-align: right;
 
     a {
       color: var(--color-action-primary);
@@ -39,6 +41,8 @@
 
       label {
         font-size: var(--font-size-sm);
+        cursor: pointer;
+        user-select: none;
       }
     }
 
@@ -62,4 +66,8 @@
       display: block;
     }
   }
+}
+
+.visualization-overview-panel-tooltip {
+  opacity: 1 !important;
 }

@@ -17,7 +17,6 @@ export type ComparisonToolServiceOptions = {
   totalResultsCount?: number;
   legendVisible?: boolean;
   visualizationOverviewVisibility?: boolean;
-  visualizationOverviewHiddenByUser?: boolean;
   viewConfig?: Partial<ComparisonToolViewConfig>;
   maxPinnedItems?: number;
   pinnedItems?: string[];
@@ -91,10 +90,6 @@ export const provideComparisonToolService = (
 
       if (options.visualizationOverviewVisibility !== undefined) {
         service.setVisualizationOverviewVisibility(options.visualizationOverviewVisibility);
-      }
-
-      if (options.visualizationOverviewHiddenByUser !== undefined) {
-        service.setVisualizationOverviewHiddenByUser(options.visualizationOverviewHiddenByUser);
       }
 
       if (options.maxPinnedItems !== undefined) {

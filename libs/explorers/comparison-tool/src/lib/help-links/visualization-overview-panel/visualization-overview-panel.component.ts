@@ -5,10 +5,11 @@ import { ComparisonToolService, PlatformService } from '@sagebionetworks/explore
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'explorers-visualization-overview-panel',
-  imports: [CommonModule, ButtonModule, CheckboxModule, DialogModule, FormsModule],
+  imports: [CommonModule, ButtonModule, CheckboxModule, DialogModule, FormsModule, TooltipModule],
   templateUrl: './visualization-overview-panel.component.html',
   styleUrls: ['./visualization-overview-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -18,7 +19,9 @@ export class VisualizationOverviewPanelComponent {
   platformService = inject(PlatformService);
   viewConfig = this.comparisonToolService.viewConfig;
 
-  willHide = this.comparisonToolService.isVisualizationOverviewHiddenByUser;
+  get willHide(): boolean {
+    return this.comparisonToolService.isVisualizationOverviewHiddenByUser();
+  }
 
   setWillHide(value: boolean) {
     this.comparisonToolService.setVisualizationOverviewHiddenByUser(value);
@@ -42,10 +45,6 @@ export class VisualizationOverviewPanelComponent {
 
   onHide() {
     this.activePane = 0;
-  }
-
-  toggle() {
-    this.comparisonToolService.toggleVisualizationOverview();
   }
 
   close() {
