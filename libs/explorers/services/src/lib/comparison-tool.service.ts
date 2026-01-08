@@ -182,6 +182,7 @@ export class ComparisonToolService<T> {
   }
 
   disconnect(): void {
+    this.hideHeatmapDetailsPanel();
     if (this.coordinatorService.isActive(this)) {
       this.coordinatorService.setActive(null);
     }
