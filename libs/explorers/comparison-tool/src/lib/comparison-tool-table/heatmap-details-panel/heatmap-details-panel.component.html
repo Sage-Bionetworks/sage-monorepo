@@ -10,13 +10,11 @@
       </div>
     }
 
-    @if (data.heading) {
-      <div class="heatmap-details-panel-heading">
-        {{ data.heading }}
-      </div>
-    }
+    <div class="heatmap-details-panel-heading">
+      {{ data.heading }}
+    </div>
 
-    @if (data.subHeadings) {
+    @if (data.subHeadings.length > 0) {
       @for (subHeading of data.subHeadings; track subHeading) {
         <div class="heatmap-details-panel-sub-headings">
           {{ subHeading }}
@@ -39,11 +37,9 @@
       </div>
     </div>
 
-    @if (data.footer) {
-      <div class="heatmap-details-panel-footer">
-        {{ data.footer }}
-      </div>
-    }
+    <div class="heatmap-details-panel-footer">
+      {{ data.footer }}
+    </div>
   }
 </ng-template>
 <p-popover class="heatmap-details-panel" appendTo="">

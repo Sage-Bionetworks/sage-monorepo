@@ -12,6 +12,13 @@ import { HeatmapDetailsPanelData } from '@sagebionetworks/explorers/models';
 import { HelperService } from '@sagebionetworks/explorers/services';
 import { Popover, PopoverModule } from 'primeng/popover';
 
+const defaultPanelData: HeatmapDetailsPanelData = {
+  heading: '',
+  subHeadings: [],
+  valueLabel: '',
+  footer: '',
+};
+
 @Component({
   selector: 'explorers-heatmap-details-panel',
   imports: [CommonModule, PopoverModule],
@@ -29,14 +36,17 @@ export class HeatmapDetailsPanelComponent {
    * hide the old panel, and show the new one. This prevents flickering that would occur
    * if we updated and repositioned a single panel while it's visible.
    */
-  panelData = signal<[HeatmapDetailsPanelData, HeatmapDetailsPanelData]>([{}, {}]);
+  panelData = signal<[HeatmapDetailsPanelData, HeatmapDetailsPanelData]>([
+    { ...defaultPanelData },
+    { ...defaultPanelData },
+  ]);
   activePanelIndex = signal(0);
 
   data = computed(() => this.panelData()[this.activePanelIndex()]);
 
   private lastEventTarget: EventTarget | null = null;
 
-  show(event: Event, data: HeatmapDetailsPanelData = {}) {
+  show(event: Event, data: HeatmapDetailsPanelData) {
     const currentIndex = this.activePanelIndex();
     const newIndex = currentIndex === 0 ? 1 : 0;
 
@@ -59,7 +69,7 @@ export class HeatmapDetailsPanelComponent {
     const isVisible = this.panels().some((p) => p?.overlayVisible);
     if (event.target === this.lastEventTarget && isVisible) {
       this.hide();
-    } else {
+    } else if (data) {
       this.show(event, data);
     }
   }

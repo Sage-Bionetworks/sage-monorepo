@@ -2,12 +2,12 @@ import { SynapseWikiParams } from './synapse-wiki';
 
 export interface HeatmapDetailsPanelData {
   label?: { left: string; right?: string };
-  heading?: string;
-  subHeadings?: string[];
+  heading: string;
+  subHeadings: string[];
   value?: number;
-  valueLabel?: string;
+  valueLabel: string;
   pValue?: number;
-  footer?: string;
+  footer: string;
 }
 
 export interface LegendPanelConfig {
