@@ -127,7 +127,9 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       const row = rowData as GeneExpression;
       const cell = cellData as FoldChangeResult;
       return {
-        label: { left: row.gene_symbol, right: row.ensembl_gene_id },
+        label: row.gene_symbol
+          ? { left: row.gene_symbol, right: row.ensembl_gene_id }
+          : { left: row.ensembl_gene_id },
         heading: `Differential RNA Expression (${row.tissue})`,
         subHeadings: [
           `${row.name} (${columnKey}, ${row.sex_cohort})`,
