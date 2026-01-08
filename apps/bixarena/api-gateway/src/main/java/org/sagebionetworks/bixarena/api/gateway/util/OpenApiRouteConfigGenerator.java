@@ -48,7 +48,7 @@ public final class OpenApiRouteConfigGenerator {
 
   /** Map audience to path prefix. */
   private static final Map<String, String> AUDIENCE_PREFIX_MAP = Map.ofEntries(
-    Map.entry("urn:bixarena:ai", ""),
+    Map.entry("urn:bixarena:ai", "/api/v1"),
     Map.entry("urn:bixarena:api", "/api/v1"),
     Map.entry("urn:bixarena:auth", "")
   );

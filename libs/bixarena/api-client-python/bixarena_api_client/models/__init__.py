@@ -76,6 +76,7 @@ from bixarena_api_client.models.model_page import ModelPage
 from bixarena_api_client.models.model_search_query import ModelSearchQuery
 from bixarena_api_client.models.model_sort import ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata
+from bixarena_api_client.models.prompt_validation import PromptValidation
 from bixarena_api_client.models.public_stats import PublicStats
 from bixarena_api_client.models.rate_limit_error import RateLimitError
 from bixarena_api_client.models.sort_direction import SortDirection

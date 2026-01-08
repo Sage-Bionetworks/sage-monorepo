@@ -27,6 +27,10 @@ app:
       anonymousAccess: true
       rateLimitRequestsPerMinute: 100
     - method: 'GET'
+      path: '/api/v1/health-check'
+      audience: 'urn:bixarena:ai'
+      anonymousAccess: true
+    - method: 'GET'
       path: '/api/v1/leaderboards'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
@@ -61,6 +65,9 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 300
     - method: 'GET'
+      path: '/api/v1/validate-prompt'
+      audience: 'urn:bixarena:ai'
+    - method: 'GET'
       path: '/auth/callback'
       audience: 'urn:bixarena:auth'
       anonymousAccess: true
@@ -70,10 +77,6 @@ app:
       audience: 'urn:bixarena:auth'
       anonymousAccess: true
       rateLimitRequestsPerMinute: 20
-    - method: 'GET'
-      path: '/health-check'
-      audience: 'urn:bixarena:ai'
-      anonymousAccess: true
     - method: 'GET'
       path: '/userinfo'
       audience: 'urn:bixarena:auth'

@@ -65,6 +65,24 @@ spring:
                 allowedheaders: '*'
                 maxAge: 3600
           routes:
+            # AI service routes must come BEFORE the generic /api/v1/** route
+            # to ensure specific paths are matched first
+            - id: bixarena-ai-service
+              uri: http://bixarena-ai-service:8114
+              predicates:
+                - Path=/api/v1/health-check,/api/v1/validate-prompt
+              filters:
+                - StripPrefix=2
+                - name: Retry
+                  args:
+                    retries: 3
+                    statuses: BAD_GATEWAY,SERVICE_UNAVAILABLE
+                    methods: GET,POST
+                    backoff:
+                      firstBackoff: 50ms
+                      maxBackoff: 500ms
+                      factor: 2
+                      basedOnPreviousValue: false
             - id: bixarena-api
               uri: http://bixarena-api:8112
               predicates:

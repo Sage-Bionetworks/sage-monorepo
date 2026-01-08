@@ -17,6 +17,8 @@ tags:
   - name: Health Check
     description: Operations about health checks
     x-sage-internal: true
+  - name: Prompt Validation
+    description: Operations for validating biomedical prompts
 paths:
   /health-check:
     get:
@@ -36,6 +38,35 @@ paths:
                 $ref: '#/components/schemas/HealthCheck'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /validate-prompt:
+    get:
+      tags:
+        - Prompt Validation
+      summary: Validate biomedical prompt
+      description: Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
+      operationId: validatePrompt
+      parameters:
+        - name: prompt
+          in: query
+          required: true
+          description: The prompt text to validate
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 10000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptValidation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -75,6 +106,25 @@ components:
       required:
         - title
         - status
+    PromptValidation:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: The original prompt that was validated
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)
+        isBiomedical:
+          type: boolean
+          description: Whether the prompt is considered biomedically related (confidence >= 0.5)
+      required:
+        - prompt
+        - confidence
+        - isBiomedical
   responses:
     NotFound:
       description: The specified resource was not found
@@ -84,6 +134,18 @@ components:
             $ref: '#/components/schemas/BasicError'
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Unauthorized:
+      description: Unauthorized
       content:
         application/problem+json:
           schema:

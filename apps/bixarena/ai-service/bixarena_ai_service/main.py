@@ -14,6 +14,9 @@ Do not edit the class manually.
 from fastapi import FastAPI
 
 from bixarena_ai_service.apis.health_check_api import router as HealthCheckApiRouter
+from bixarena_ai_service.apis.prompt_validation_api import (
+    router as PromptValidationApiRouter,
+)
 
 app = FastAPI(
     title="BixArena AI Service",
@@ -22,3 +25,4 @@ app = FastAPI(
 )
 
 app.include_router(HealthCheckApiRouter)
+app.include_router(PromptValidationApiRouter)
