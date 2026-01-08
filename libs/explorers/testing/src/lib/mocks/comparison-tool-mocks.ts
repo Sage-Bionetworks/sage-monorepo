@@ -1,4 +1,8 @@
-import { ComparisonToolConfig, SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolConfig,
+  HeatmapDetailsPanelData,
+  SynapseWikiParams,
+} from '@sagebionetworks/explorers/models';
 
 export const mockComparisonToolSelectorsWikiParams: { [key: string]: SynapseWikiParams } = {
   Red: {
@@ -242,3 +246,13 @@ export const mockComparisonToolData: Record<string, any>[] = [
     modified_genes: ['APOE'],
   },
 ];
+
+export const heatmapDetailsPanelDataMock: HeatmapDetailsPanelData = {
+  label: { left: 'label' },
+  heading: 'heading',
+  subHeadings: ['subHeading'],
+  value: 5,
+  valueLabel: 'valueLabel',
+  pValue: 0.05,
+  footer: 'footer',
+};

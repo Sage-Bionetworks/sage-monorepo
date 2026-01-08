@@ -1,5 +1,15 @@
 import { SynapseWikiParams } from './synapse-wiki';
 
+export interface HeatmapDetailsPanelData {
+  label?: { left: string; right?: string };
+  heading: string;
+  subHeadings: string[];
+  value?: number;
+  valueLabel: string;
+  pValue?: number;
+  footer: string;
+}
+
 export interface LegendPanelConfig {
   colorChartLowerLabel: string;
   colorChartUpperLabel: string;
