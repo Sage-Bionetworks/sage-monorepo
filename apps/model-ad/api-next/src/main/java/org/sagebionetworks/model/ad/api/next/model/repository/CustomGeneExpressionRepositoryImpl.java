@@ -2,22 +2,24 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
+import org.bson.Document;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIdentifier;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Collation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -25,165 +27,200 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionRepository {
 
+  private static final String COLLECTION_NAME = "rna_de_aggregate";
+  private static final String DISPLAY_GENE_SYMBOL_FIELD = "display_gene_symbol";
+  private static final String GENE_SYMBOL_FIELD = "gene_symbol";
+
   private final MongoTemplate mongoTemplate;
 
   @Override
-  public Page<GeneExpressionDocument> findAll(
-    Pageable pageable,
-    GeneExpressionSearchQueryDto query,
-    List<String> items,
-    String tissue,
-    String sexCohort
-  ) {
-    Query mongoQuery = new Query();
-    List<Criteria> andCriteria = new ArrayList<>();
-
-    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
-      query.getItemFilterType(),
-      ItemFilterTypeQueryDto.INCLUDE
-    );
-    String search = query.getSearch();
-
-    // Add tissue and sex_cohort filters (always required)
-    addTissueAndSexCohortCriteria(tissue, sexCohort, andCriteria);
-
-    // Add data filters (AND between fields, OR within field)
-    addDataFilterCriteria(
-      query.getBiodomains(),
-      query.getModelType(),
-      query.getName(),
-      andCriteria
-    );
-
-    // Add composite identifier filtering (items + itemFilterType)
-    addCompositeIdentifierFilterCriteria(items, filterType, andCriteria);
-
-    // Add search filtering (gene_symbol search, only when itemFilterType is EXCLUDE)
-    addSearchFilterCriteria(search, filterType, andCriteria);
-
-    // Combine all criteria with AND
-    if (!andCriteria.isEmpty()) {
-      mongoQuery.addCriteria(new Criteria().andOperator(andCriteria.toArray(new Criteria[0])));
-    }
-
-    mongoQuery.with(pageable);
-
-    log.debug("Executing MongoDB query: {}", mongoQuery);
-
-    // Execute query
-    List<GeneExpressionDocument> results = mongoTemplate.find(
-      mongoQuery,
-      GeneExpressionDocument.class
-    );
-
-    // Count total for pagination (without limit/skip)
-    long total = mongoTemplate.count(
-      Query.of(mongoQuery).limit(-1).skip(-1),
-      GeneExpressionDocument.class
-    );
-
-    return new PageImpl<>(results, pageable, total);
-  }
-
-  private void addTissueAndSexCohortCriteria(
+  public Page<GeneExpressionDocument> findWithComputedSort(
     String tissue,
     String sexCohort,
-    List<Criteria> andCriteria
+    @Nullable List<Map<String, Object>> compositeConditions,
+    boolean isExclude,
+    @Nullable String geneSymbolSearch,
+    @Nullable List<Pattern> geneSymbolPatterns,
+    Pageable pageable
   ) {
-    andCriteria.add(Criteria.where("tissue").is(tissue));
-    andCriteria.add(Criteria.where("sex_cohort").is(sexCohort));
-  }
+    log.info("findWithComputedSort: tissue={}, sexCohort={}, isExclude={}",
+      tissue, sexCohort, isExclude);
 
-  private void addDataFilterCriteria(
-    List<String> biodomains,
-    List<String> modelType,
-    List<String> name,
-    List<Criteria> andCriteria
-  ) {
-    // biodomains: array field - use $in (matches if array contains any value)
-    if (biodomains != null && !biodomains.isEmpty()) {
-      andCriteria.add(Criteria.where("biodomains").in(biodomains));
-    }
-
-    // model_type: string field - use $in (matches if value equals any)
-    if (modelType != null && !modelType.isEmpty()) {
-      andCriteria.add(Criteria.where("model_type").in(modelType));
-    }
-
-    // name: string field - use $in (matches if value equals any)
-    if (name != null && !name.isEmpty()) {
-      andCriteria.add(Criteria.where("name").in(name));
-    }
-  }
-
-  private void addCompositeIdentifierFilterCriteria(
-    List<String> items,
-    ItemFilterTypeQueryDto filterType,
-    List<Criteria> andCriteria
-  ) {
-    if (items.isEmpty()) {
-      // For INCLUDE mode with empty items, add impossible condition to return empty results
-      if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
-        andCriteria.add(Criteria.where("_id").is(null));
-      }
-      // For EXCLUDE mode with empty items, no filtering needed (return all)
-      return;
-    }
-
-    // Parse composite identifiers (format: ensembl_gene_id~name)
-    List<GeneExpressionIdentifier> identifiers = parseIdentifiers(items);
-
-    // Build criteria for each identifier (each must match both ensembl_gene_id AND name)
-    List<Criteria> compositeConditions = new ArrayList<>();
-    for (GeneExpressionIdentifier identifier : identifiers) {
-      Criteria idCondition = new Criteria()
-        .andOperator(
-          Criteria.where("ensembl_gene_id").is(identifier.getEnsemblGeneId()),
-          Criteria.where("name").is(identifier.getName())
-        );
-      compositeConditions.add(idCondition);
-    }
-
-    // Apply INCLUDE or EXCLUDE logic
-    if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
-      // Match ANY of the composite identifiers ($or)
-      andCriteria.add(new Criteria().orOperator(compositeConditions.toArray(new Criteria[0])));
-    } else {
-      // Match NONE of the composite identifiers ($nor)
-      andCriteria.add(new Criteria().norOperator(compositeConditions.toArray(new Criteria[0])));
-    }
-  }
-
-  private List<GeneExpressionIdentifier> parseIdentifiers(List<String> items) {
     try {
-      return items.stream().map(GeneExpressionIdentifier::parse).toList();
-    } catch (InvalidFilterException e) {
-      log.error("Failed to parse composite identifiers: {}", e.getMessage());
+      List<AggregationOperation> operations = new ArrayList<>();
+
+      // Add computed field for sorting: display_gene_symbol
+      // Uses gene_symbol if not null/blank, otherwise falls back to ensembl_gene_id
+      operations.add(buildAddFieldsOperation());
+
+      // Build match criteria
+      Criteria matchCriteria = buildMatchCriteria(
+        tissue,
+        sexCohort,
+        compositeConditions,
+        isExclude,
+        geneSymbolSearch,
+        geneSymbolPatterns
+      );
+      operations.add(Aggregation.match(matchCriteria));
+
+      // Count total before pagination (for Page metadata)
+      final long total = countDocuments(operations);
+
+      // Add sorting with computed field substitution
+      addSortOperation(operations, pageable.getSort());
+
+      // Add pagination
+      long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
+      operations.add(Aggregation.skip(skipCount));
+      operations.add(Aggregation.limit(pageable.getPageSize()));
+
+      // Use collation for case-insensitive sorting (strength 2 = secondary = case-insensitive)
+      AggregationOptions options = AggregationOptions.builder()
+        .collation(Collation.of("en").strength(Collation.ComparisonLevel.secondary()))
+        .build();
+
+      Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(options);
+
+      AggregationResults<GeneExpressionDocument> results = mongoTemplate.aggregate(
+        aggregation,
+        COLLECTION_NAME,
+        GeneExpressionDocument.class
+      );
+
+      log.info("Aggregation returned {} results, total={}",
+        results.getMappedResults().size(), total);
+      return new PageImpl<>(results.getMappedResults(), pageable, total);
+    } catch (Exception e) {
+      log.error("Error executing gene expression aggregation", e);
       throw e;
     }
   }
 
-  private void addSearchFilterCriteria(
-    String search,
-    ItemFilterTypeQueryDto filterType,
-    List<Criteria> andCriteria
+  private AggregationOperation buildAddFieldsOperation() {
+    // Build the $cond expression using mutable ArrayLists for MongoDB compatibility
+    List<Object> eqNull = new ArrayList<>();
+    eqNull.add("$gene_symbol");
+    eqNull.add(null);
+
+    List<Object> eqEmpty = new ArrayList<>();
+    eqEmpty.add("$gene_symbol");
+    eqEmpty.add("");
+
+    List<Object> eqTrimmed = new ArrayList<>();
+    eqTrimmed.add(new Document("$trim", new Document("input", "$gene_symbol")));
+    eqTrimmed.add("");
+
+    List<Document> orConditions = new ArrayList<>();
+    orConditions.add(new Document("$eq", eqNull));
+    orConditions.add(new Document("$eq", eqEmpty));
+    orConditions.add(new Document("$eq", eqTrimmed));
+
+    List<Object> condArgs = new ArrayList<>();
+    condArgs.add(new Document("$or", orConditions));
+    condArgs.add("$ensembl_gene_id");
+    condArgs.add("$gene_symbol");
+
+    Document addFieldsDoc = new Document("$addFields",
+      new Document(DISPLAY_GENE_SYMBOL_FIELD, new Document("$cond", condArgs)));
+
+    return context -> addFieldsDoc;
+  }
+
+  private Criteria buildMatchCriteria(
+    String tissue,
+    String sexCohort,
+    @Nullable List<Map<String, Object>> compositeConditions,
+    boolean isExclude,
+    @Nullable String geneSymbolSearch,
+    @Nullable List<Pattern> geneSymbolPatterns
   ) {
-    // Search only applies when itemFilterType is EXCLUDE
-    if (
-      filterType != ItemFilterTypeQueryDto.EXCLUDE || search == null || search.trim().isEmpty()
-    ) {
+    List<Criteria> allCriteria = new ArrayList<>();
+
+    // Base criteria for tissue and sex_cohort
+    allCriteria.add(Criteria.where("tissue").is(tissue));
+    allCriteria.add(Criteria.where("sex_cohort").is(sexCohort));
+
+    // Add composite identifier conditions
+    if (compositeConditions != null && !compositeConditions.isEmpty()) {
+      Criteria[] compositeCriteria = compositeConditions.stream()
+        .map(this::compositeConditionToCriteria)
+        .toArray(Criteria[]::new);
+
+      if (isExclude) {
+        allCriteria.add(new Criteria().norOperator(compositeCriteria));
+      } else {
+        allCriteria.add(new Criteria().orOperator(compositeCriteria));
+      }
+    }
+
+    // Add gene symbol search
+    if (geneSymbolSearch != null) {
+      allCriteria.add(Criteria.where(GENE_SYMBOL_FIELD).regex(geneSymbolSearch, "i"));
+    } else if (geneSymbolPatterns != null && !geneSymbolPatterns.isEmpty()) {
+      allCriteria.add(Criteria.where(GENE_SYMBOL_FIELD).in(geneSymbolPatterns));
+    }
+
+    // Combine all criteria with AND
+    return new Criteria().andOperator(allCriteria.toArray(new Criteria[0]));
+  }
+
+  @SuppressWarnings("unchecked")
+  private Criteria compositeConditionToCriteria(Map<String, Object> condition) {
+    List<Map<String, Object>> andConditions = (List<Map<String, Object>>) condition.get("$and");
+    if (andConditions == null || andConditions.size() != 2) {
+      throw new IllegalArgumentException("Invalid composite condition format");
+    }
+
+    String ensemblGeneId = (String) andConditions.get(0).get("ensembl_gene_id");
+    String name = (String) andConditions.get(1).get("name");
+
+    return new Criteria().andOperator(
+      Criteria.where("ensembl_gene_id").is(ensemblGeneId),
+      Criteria.where("name").is(name)
+    );
+  }
+
+  private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
+    if (sort.isUnsorted()) {
       return;
     }
 
-    String trimmedSearch = search.trim();
-    if (trimmedSearch.contains(",")) {
-      // Comma-separated list: case-insensitive full matches
-      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
-      andCriteria.add(Criteria.where("gene_symbol").in(patterns));
-    } else {
-      // Single term: case-insensitive partial match
-      String quotedSearch = Pattern.quote(trimmedSearch);
-      andCriteria.add(Criteria.where("gene_symbol").regex(quotedSearch, "i"));
+    List<Document> sortFields = new ArrayList<>();
+    for (Sort.Order order : sort) {
+      String field = order.getProperty();
+      // Replace gene_symbol with computed display_gene_symbol for sorting
+      if (GENE_SYMBOL_FIELD.equals(field)) {
+        field = DISPLAY_GENE_SYMBOL_FIELD;
+      }
+      int direction = order.isAscending() ? 1 : -1;
+      sortFields.add(new Document(field, direction));
     }
+
+    if (!sortFields.isEmpty()) {
+      Document sortDocument = new Document();
+      for (Document sortField : sortFields) {
+        sortDocument.putAll(sortField);
+      }
+      operations.add(context -> new Document("$sort", sortDocument));
+    }
+  }
+
+  private long countDocuments(List<AggregationOperation> baseOperations) {
+    List<AggregationOperation> countOperations = new ArrayList<>(baseOperations);
+    countOperations.add(Aggregation.count().as("total"));
+
+    Aggregation countAggregation = Aggregation.newAggregation(countOperations);
+    AggregationResults<Document> countResults = mongoTemplate.aggregate(
+      countAggregation,
+      COLLECTION_NAME,
+      Document.class
+    );
+
+    List<Document> countList = countResults.getMappedResults();
+    if (countList.isEmpty()) {
+      return 0;
+    }
+    return countList.get(0).getInteger("total", 0);
   }
 }

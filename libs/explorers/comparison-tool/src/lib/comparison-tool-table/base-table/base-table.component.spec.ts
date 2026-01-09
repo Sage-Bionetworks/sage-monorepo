@@ -1,6 +1,11 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter, RouterModule } from '@angular/router';
 import {
+  ComparisonToolViewConfig,
+  HeatmapDetailsPanelData,
+} from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
   SvgIconService,
@@ -11,9 +16,11 @@ import {
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 import { BaseTableComponent } from './base-table.component';
 
 async function setup() {
+  const user = userEvent.setup();
   const component = await render(BaseTableComponent, {
     imports: [RouterModule],
     providers: [
@@ -31,8 +38,9 @@ async function setup() {
 
   const fixture = component.fixture;
   const nativeElement = fixture.nativeElement as HTMLElement;
+  const service = fixture.debugElement.injector.get(ComparisonToolService);
 
-  return { component, fixture, nativeElement };
+  return { component, fixture, nativeElement, service, user };
 }
 
 describe('BaseTableComponent', () => {
@@ -138,6 +146,72 @@ describe('BaseTableComponent', () => {
       const componentInstance = fixture.componentInstance;
       const result = componentInstance.getLinkUrl({ link_text: 'Link' }, { link_url: '/fallback' });
       expect(result).toBe('/fallback');
+    });
+  });
+
+  describe('heatmap details panel', () => {
+    const heatmapDetailsPanelData: HeatmapDetailsPanelData = {
+      heading: 'Test',
+      subHeadings: [],
+      valueLabel: 'Test Label',
+      footer: 'Anything',
+    };
+
+    it('should render heatmap circles without button when no transform is configured', async () => {
+      const { nativeElement } = await setup();
+      const buttons = screen.queryAllByRole('button');
+      const heatmapButtons = buttons.filter((btn) =>
+        btn.classList.contains('heatmap-circle-button'),
+      );
+      expect(heatmapButtons.length).toBe(0);
+
+      const heatmapCircles = nativeElement.querySelectorAll('explorers-heatmap-circle');
+      expect(heatmapCircles.length).toBeGreaterThan(0);
+    });
+
+    it('should render heatmap circles inside buttons when transform is configured', async () => {
+      const { fixture, service } = await setup();
+
+      service.setViewConfig({
+        heatmapCircleClickTransformFn: () => heatmapDetailsPanelData,
+      } as Partial<ComparisonToolViewConfig>);
+      fixture.detectChanges();
+
+      const buttons = screen.getAllByRole('button');
+      const heatmapButtons = buttons.filter((btn) =>
+        btn.classList.contains('heatmap-circle-button'),
+      );
+      expect(heatmapButtons.length).toBeGreaterThan(0);
+
+      // Verify heatmap circles are inside buttons
+      const circlesInsideButtons = heatmapButtons.filter(
+        (btn) => btn.querySelector('explorers-heatmap-circle') !== null,
+      );
+      expect(circlesInsideButtons.length).toBeGreaterThan(0);
+    });
+
+    it('should call showHeatmapDetailsPanel when button is clicked', async () => {
+      const { fixture, service, user } = await setup();
+
+      service.setViewConfig({
+        heatmapCircleClickTransformFn: () => heatmapDetailsPanelData,
+      } as Partial<ComparisonToolViewConfig>);
+      fixture.detectChanges();
+
+      const showSpy = jest.spyOn(service, 'showHeatmapDetailsPanel');
+
+      const buttons = screen.getAllByRole('button', { name: '' });
+      const heatmapButton = buttons.find((btn) => btn.classList.contains('heatmap-circle-button'));
+      expect(heatmapButton).toBeDefined();
+      await user.click(heatmapButton as HTMLElement);
+
+      expect(showSpy).toHaveBeenCalled();
+      expect(showSpy).toHaveBeenCalledWith(
+        expect.any(Object),
+        expect.any(Object),
+        expect.any(String),
+        expect.any(MouseEvent),
+      );
     });
   });
 });

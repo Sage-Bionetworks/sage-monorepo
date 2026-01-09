@@ -1,4 +1,4 @@
-import { Component, inject, input, model } from '@angular/core';
+import { Component, effect, inject, input, model, untracked, viewChild } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { ComparisonToolControlsComponent } from './comparison-tool-controls/comparison-tool-controls.component';
@@ -6,6 +6,7 @@ import { ComparisonToolFilterListComponent } from './comparison-tool-filter-list
 import { ComparisonToolFilterPanelComponent } from './comparison-tool-filter-panel/comparison-tool-filter-panel.component';
 import { ComparisonToolHeaderComponent } from './comparison-tool-header/comparison-tool-header.component';
 import { ComparisonToolTableComponent } from './comparison-tool-table/comparison-tool-table.component';
+import { HeatmapDetailsPanelComponent } from './comparison-tool-table/heatmap-details-panel/heatmap-details-panel.component';
 import { HelpLinksComponent } from './help-links/help-links.component';
 
 @Component({
@@ -18,6 +19,7 @@ import { HelpLinksComponent } from './help-links/help-links.component';
     ComparisonToolFilterListComponent,
     ComparisonToolTableComponent,
     HelpLinksComponent,
+    HeatmapDetailsPanelComponent,
   ],
   templateUrl: './comparison-tool.component.html',
   styleUrls: ['./comparison-tool.component.scss'],
@@ -34,5 +36,21 @@ export class ComparisonToolComponent {
 
   toggleFilterPanel() {
     this.isFilterPanelOpen.update((isOpen) => !isOpen);
+  }
+
+  heatmapDetailsPanel = viewChild(HeatmapDetailsPanelComponent);
+
+  constructor() {
+    effect(() => {
+      const panelData = this.comparisonToolService.heatmapDetailsPanelData();
+      // Use untracked to avoid infinite loop with HeatmapDetailsPanelComponent
+      untracked(() => {
+        if (panelData) {
+          this.heatmapDetailsPanel()?.show(panelData.event, panelData.data);
+        } else {
+          this.heatmapDetailsPanel()?.hide();
+        }
+      });
+    });
   }
 }
