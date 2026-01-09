@@ -42,6 +42,11 @@ See [template.md](./template.md) for the ADR template.
 3. **Accept**: Merge when consensus reached
 4. **Supersede**: If decision changes, create new ADR referencing the old one
 
+## Related Documentation
+
+- **RFCs**: See [../rfcs/](../rfcs/README.md) for proposals under review
+- **Architecture**: See [../architecture/](../architecture/README.md) for approved designs
+
 ## References
 
 - [ADR GitHub Organization](https://adr.github.io/)

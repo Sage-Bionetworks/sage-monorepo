@@ -4,7 +4,7 @@ This directory contains technical documentation for the Sage monorepo.
 
 ## Documentation Structure
 
-### [RFCs (Request for Comments)](./rfcs/)
+### [RFCs (Request for Comments)](rfcs/README.md)
 
 Proposals for significant system changes that require review and feedback.
 
@@ -12,7 +12,7 @@ Proposals for significant system changes that require review and feedback.
 - **Audience**: All stakeholders (engineering, product, architecture)
 - **Lifecycle**: Proposed → Approved/Rejected → Moved to Architecture/Archived
 
-### [Architecture](./architecture/)
+### [Architecture](architecture/README.md)
 
 Approved architecture plans, design documents, and system diagrams.
 
@@ -21,7 +21,7 @@ Approved architecture plans, design documents, and system diagrams.
 - **Lifecycle**: Living documents updated as implementation evolves
 - **Diagrams**: Stored in `architecture/diagrams/` (supports .gif, .png, .svg, .html)
 
-### [ADRs (Architecture Decision Records)](./adr/)
+### [ADRs (Architecture Decision Records)](adr/README.md)
 
 Lightweight records of specific architectural decisions.
 
@@ -59,9 +59,9 @@ Lightweight records of specific architectural decisions.
 
 ## Quick Links
 
-- [Active RFCs](./rfcs/README.md#active-rfcs)
-- [Architecture Diagrams](./architecture/README.md#architecture-diagrams)
-- [Architecture Decisions](./adr/README.md#active-adrs)
+- [Active RFCs](rfcs/README.md#active-rfcs)
+- [Architecture Diagrams](architecture/README.md#architecture-diagrams)
+- [Architecture Decisions](adr/README.md#active-adrs)
 
 ## Contributing
 

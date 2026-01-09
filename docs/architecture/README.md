@@ -14,7 +14,7 @@ Architecture documents typically originate from approved RFCs in `docs/rfcs/`. O
 
 ## Architecture Diagrams
 
-Diagrams are stored in the [diagrams/](./diagrams/) subdirectory.
+Diagrams are stored in the [diagrams/](diagrams/README.md) subdirectory.
 
 | Diagram                                                             | Description                 | Last Updated |
 | ------------------------------------------------------------------- | --------------------------- | ------------ |
@@ -50,5 +50,5 @@ architecture/
 
 ## Related Documentation
 
-- **RFCs**: See `docs/rfcs/` for proposals under review
-- **ADRs**: See `docs/adr/` for specific architectural decisions
+- **RFCs**: See [../rfcs/](../rfcs/README.md) for proposals under review
+- **ADRs**: See [../adr/](../adr/README.md) for specific architectural decisions
