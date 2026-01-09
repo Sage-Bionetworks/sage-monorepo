@@ -1,0 +1,9 @@
+<div [class]="{ 'gene-details': true, loading: isLoading }">
+  @if (isLoading) {
+    <div id="loading">
+      <explorers-loading-icon />
+    </div>
+  } @else if (geneDetails) {
+    <div>TODO</div>
+  }
+</div>

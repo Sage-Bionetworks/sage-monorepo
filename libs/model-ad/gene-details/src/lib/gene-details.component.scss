@@ -1,0 +1,17 @@
+@use 'styles/src/lib/variables';
+
+.gene-details {
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  overflow-x: clip;
+
+  &.loading {
+    display: flex;
+  }
+
+  #loading {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

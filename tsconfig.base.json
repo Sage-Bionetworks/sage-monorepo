@@ -58,6 +58,7 @@
       "@sagebionetworks/model-ad/disease-correlation-comparison-tool": [
         "libs/model-ad/disease-correlation-comparison-tool/src/index.ts"
       ],
+      "@sagebionetworks/model-ad/gene-details": ["libs/model-ad/gene-details/src/index.ts"],
       "@sagebionetworks/model-ad/gene-expression-comparison-tool": [
         "libs/model-ad/gene-expression-comparison-tool/src/index.ts"
       ],
