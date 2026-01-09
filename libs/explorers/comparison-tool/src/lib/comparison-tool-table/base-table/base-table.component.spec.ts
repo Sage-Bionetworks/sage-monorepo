@@ -1,6 +1,9 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter, RouterModule } from '@angular/router';
-import { ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolViewConfig,
+  HeatmapDetailsPanelData,
+} from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
   provideComparisonToolFilterService,
@@ -147,6 +150,13 @@ describe('BaseTableComponent', () => {
   });
 
   describe('heatmap details panel', () => {
+    const heatmapDetailsPanelData: HeatmapDetailsPanelData = {
+      heading: 'Test',
+      subHeadings: [],
+      valueLabel: 'Test Label',
+      footer: 'Anything',
+    };
+
     it('should render heatmap circles without button when no transform is configured', async () => {
       const { nativeElement } = await setup();
       const buttons = screen.queryAllByRole('button');
@@ -163,7 +173,7 @@ describe('BaseTableComponent', () => {
       const { fixture, service } = await setup();
 
       service.setViewConfig({
-        heatmapDetailsPanelDataTransform: () => ({ heading: 'Test' }),
+        heatmapDetailsPanelDataTransform: () => heatmapDetailsPanelData,
       } as Partial<ComparisonToolViewConfig>);
       fixture.detectChanges();
 
@@ -184,7 +194,7 @@ describe('BaseTableComponent', () => {
       const { fixture, service, user } = await setup();
 
       service.setViewConfig({
-        heatmapDetailsPanelDataTransform: () => ({ heading: 'Test' }),
+        heatmapDetailsPanelDataTransform: () => heatmapDetailsPanelData,
       } as Partial<ComparisonToolViewConfig>);
       fixture.detectChanges();
 
