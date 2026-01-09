@@ -5,6 +5,7 @@ import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-t
 import {
   ComparisonToolQuery,
   ComparisonToolViewConfig,
+  HeatmapCircleClickTransformFnContext,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
@@ -17,6 +18,8 @@ import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
+  FoldChangeResult,
+  GeneExpression,
   GeneExpressionSearchQuery,
   GeneExpressionService,
   GeneExpressionsPage,
@@ -116,6 +119,28 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       { field: 'gene_symbol', order: 1 },
       { field: 'name', order: 1 },
     ],
+    heatmapCircleClickTransformFn: ({
+      rowData,
+      cellData,
+      columnKey,
+    }: HeatmapCircleClickTransformFnContext) => {
+      const row = rowData as GeneExpression;
+      const cell = cellData as FoldChangeResult;
+      return {
+        label: row.gene_symbol
+          ? { left: row.gene_symbol, right: row.ensembl_gene_id }
+          : { left: row.ensembl_gene_id },
+        heading: `Differential RNA Expression (${row.tissue})`,
+        subHeadings: [
+          `${row.name} (${columnKey}, ${row.sex_cohort})`,
+          `Matched Control: ${row.matched_control}`,
+        ],
+        value: cell.log2_fc,
+        valueLabel: 'Log 2 Fold Change',
+        pValue: cell.adj_p_val,
+        footer: 'Significance is considered to be an adjusted p-value < 0.05',
+      };
+    },
   };
 
   constructor() {

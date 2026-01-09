@@ -1,7 +1,6 @@
-import { Component, inject, input, ViewEncapsulation } from '@angular/core';
+import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
-import { SortEvent } from 'primeng/api';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { ComparisonToolTableLinkComponent } from '../comparison-tool-table-link/comparison-tool-table-link.component';
@@ -37,6 +36,9 @@ export class BaseTableComponent {
   viewConfig = this.comparisonToolService.viewConfig;
   totalRecords = this.comparisonToolService.totalResultsCount;
   first = this.comparisonToolService.first;
+  isHeatmapCircleClickable = computed(
+    () => !!this.comparisonToolService.viewConfig().heatmapCircleClickTransformFn,
+  );
 
   data = input.required<Record<string, any>[]>();
   shouldPaginate = input<boolean>(true);
@@ -85,5 +87,9 @@ export class BaseTableComponent {
       return cellData.link_url || column.link_url || '';
     }
     return column.link_url || '';
+  }
+
+  onHeatmapCircleClick(rowData: unknown, cellData: unknown, columnKey: string, event: Event): void {
+    this.comparisonToolService.showHeatmapDetailsPanel(rowData, cellData, columnKey, event);
   }
 }

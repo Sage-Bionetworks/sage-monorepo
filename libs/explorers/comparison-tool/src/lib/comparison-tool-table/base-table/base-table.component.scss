@@ -1,4 +1,5 @@
 @use 'explorers/styles/src/lib/variables' as vars;
+@use 'explorers/styles/src/lib/mixins' as mixins;
 
 .base-table-container {
   .no-results {
@@ -57,5 +58,11 @@
     &::before {
       content: ' ';
     }
+  }
+
+  .heatmap-circle-button {
+    @include mixins.reset-button;
+
+    cursor: pointer;
   }
 }
