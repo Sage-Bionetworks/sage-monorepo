@@ -6,6 +6,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -40,6 +42,53 @@ public interface GeneExpressionApi {
     default GeneExpressionApiDelegate getDelegate() {
         return new GeneExpressionApiDelegate() {};
     }
+
+    /**
+     * GET /gene-expression-individual : Get individual gene expression results
+     * Retrieve data for an individual set of gene expression data based on specified search criteria.
+     *
+     * @param geneExpressionIndividualSearchQuery The search query used to find individual gene expressions. (optional)
+     * @return Successfully retrieved individual gene expression data (status code 200)
+     *         or Invalid request (status code 400)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "getGeneExpressionIndividual",
+        summary = "Get individual gene expression results",
+        description = "Retrieve data for an individual set of gene expression data based on specified search criteria.",
+        tags = { "Gene Expression" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved individual gene expression data", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionIndividualDto.class))),
+                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionIndividualDto.class)))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/gene-expression-individual",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<List<GeneExpressionIndividualDto>> getGeneExpressionIndividual(
+        @Parameter(name = "geneExpressionIndividualSearchQuery", description = "The search query used to find individual gene expressions.", in = ParameterIn.QUERY) @Valid @Nullable GeneExpressionIndividualSearchQueryDto geneExpressionIndividualSearchQuery
+    ) {
+        return getDelegate().getGeneExpressionIndividual(geneExpressionIndividualSearchQuery);
+    }
+
 
     /**
      * GET /comparison-tools/gene-expression : Get gene expression comparison data

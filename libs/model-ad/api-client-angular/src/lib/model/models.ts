@@ -10,6 +10,8 @@ export * from './disease-correlation-search-query';
 export * from './disease-correlations-page';
 export * from './fold-change-result';
 export * from './gene-expression';
+export * from './gene-expression-individual';
+export * from './gene-expression-individual-search-query';
 export * from './gene-expression-search-query';
 export * from './gene-expressions-page';
 export * from './genetic-info';

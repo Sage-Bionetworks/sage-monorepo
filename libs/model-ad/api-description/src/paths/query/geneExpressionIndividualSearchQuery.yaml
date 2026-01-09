@@ -1,0 +1,7 @@
+name: geneExpressionIndividualSearchQuery
+description: The search query used to find individual gene expressions.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/GeneExpressionIndividualSearchQuery.yaml

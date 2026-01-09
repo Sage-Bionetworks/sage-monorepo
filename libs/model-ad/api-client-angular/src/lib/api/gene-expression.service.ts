@@ -25,6 +25,10 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
+import { GeneExpressionIndividual } from '../model/gene-expression-individual';
+// @ts-ignore
+import { GeneExpressionIndividualSearchQuery } from '../model/gene-expression-individual-search-query';
+// @ts-ignore
 import { GeneExpressionSearchQuery } from '../model/gene-expression-search-query';
 // @ts-ignore
 import { GeneExpressionsPage } from '../model/gene-expressions-page';
@@ -106,6 +110,115 @@ export class GeneExpressionService {
       throw Error('key may not be null if value is not object or array');
     }
     return httpParams;
+  }
+
+  /**
+   * Get individual gene expression results
+   * Retrieve data for an individual set of gene expression data based on specified search criteria.
+   * @param geneExpressionIndividualSearchQuery The search query used to find individual gene expressions.
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getGeneExpressionIndividual(
+    geneExpressionIndividualSearchQuery?: GeneExpressionIndividualSearchQuery,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<Array<GeneExpressionIndividual>>;
+  public getGeneExpressionIndividual(
+    geneExpressionIndividualSearchQuery?: GeneExpressionIndividualSearchQuery,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<Array<GeneExpressionIndividual>>>;
+  public getGeneExpressionIndividual(
+    geneExpressionIndividualSearchQuery?: GeneExpressionIndividualSearchQuery,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<Array<GeneExpressionIndividual>>>;
+  public getGeneExpressionIndividual(
+    geneExpressionIndividualSearchQuery?: GeneExpressionIndividualSearchQuery,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (
+      geneExpressionIndividualSearchQuery !== undefined &&
+      geneExpressionIndividualSearchQuery !== null
+    ) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>geneExpressionIndividualSearchQuery,
+        'geneExpressionIndividualSearchQuery',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/gene-expression-individual`;
+    return this.httpClient.request<Array<GeneExpressionIndividual>>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        params: localVarQueryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
   }
 
   /**

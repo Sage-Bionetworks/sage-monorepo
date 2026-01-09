@@ -1,6 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,46 @@ public interface GeneExpressionApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
+    }
+
+    /**
+     * GET /gene-expression-individual : Get individual gene expression results
+     * Retrieve data for an individual set of gene expression data based on specified search criteria.
+     *
+     * @param geneExpressionIndividualSearchQuery The search query used to find individual gene expressions. (optional)
+     * @return Successfully retrieved individual gene expression data (status code 200)
+     *         or Invalid request (status code 400)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see GeneExpressionApi#getGeneExpressionIndividual
+     */
+    default ResponseEntity<List<GeneExpressionIndividualDto>> getGeneExpressionIndividual(GeneExpressionIndividualSearchQueryDto geneExpressionIndividualSearchQuery) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"model_group\" : \"model_group\", \"data\" : [ { \"sex\" : \"Female\", \"value\" : 0.8008281904610115, \"genotype\" : \"genotype\", \"individual_id\" : \"individual_id\" }, { \"sex\" : \"Female\", \"value\" : 0.8008281904610115, \"genotype\" : \"genotype\", \"individual_id\" : \"individual_id\" } ], \"ensembl_gene_id\" : \"ensembl_gene_id\", \"result_order\" : [ \"C57BL6J\", \"Trem2\" ], \"gene_symbol\" : \"Gnai3\", \"name\" : \"name\", \"tissue\" : \"Hemibrain\", \"age_numeric\" : 4, \"units\" : \"Log2 Counts per Million\", \"matched_control\" : \"C57BL/6J\", \"age\" : \"4 months\" }, { \"model_group\" : \"model_group\", \"data\" : [ { \"sex\" : \"Female\", \"value\" : 0.8008281904610115, \"genotype\" : \"genotype\", \"individual_id\" : \"individual_id\" }, { \"sex\" : \"Female\", \"value\" : 0.8008281904610115, \"genotype\" : \"genotype\", \"individual_id\" : \"individual_id\" } ], \"ensembl_gene_id\" : \"ensembl_gene_id\", \"result_order\" : [ \"C57BL6J\", \"Trem2\" ], \"gene_symbol\" : \"Gnai3\", \"name\" : \"name\", \"tissue\" : \"Hemibrain\", \"age_numeric\" : 4, \"units\" : \"Log2 Counts per Million\", \"matched_control\" : \"C57BL/6J\", \"age\" : \"4 months\" } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
     }
 
     /**
