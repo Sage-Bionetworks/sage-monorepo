@@ -24,7 +24,7 @@ export interface HeatmapCircleClickTransformContext {
  * Transform function that maps consumer-specific data to generic panel data.
  * Return null to prevent the panel from showing.
  */
-export type heatmapCircleClickTransform = (
+export type heatmapCircleClickTransformFn = (
   context: HeatmapCircleClickTransformContext,
 ) => HeatmapDetailsPanelData | null;
 
@@ -68,7 +68,7 @@ export interface ComparisonToolViewConfig {
   rowIdDataKey: string;
   allowPinnedImageDownload: boolean;
   defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
-  heatmapCircleClickTransform?: heatmapCircleClickTransform;
+  heatmapCircleClickTransformFn?: heatmapCircleClickTransformFn;
 }
 
 export interface ComparisonToolFilterOption {

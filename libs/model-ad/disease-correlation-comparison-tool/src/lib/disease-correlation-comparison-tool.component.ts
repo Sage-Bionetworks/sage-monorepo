@@ -118,7 +118,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       { field: 'age', order: 1 },
       { field: 'sex', order: 1 },
     ],
-    heatmapCircleClickTransform: ({
+    heatmapCircleClickTransformFn: ({
       rowData,
       cellData,
       columnKey,

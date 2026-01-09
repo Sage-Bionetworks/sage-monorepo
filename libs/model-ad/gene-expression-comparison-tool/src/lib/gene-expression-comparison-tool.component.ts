@@ -119,7 +119,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       { field: 'gene_symbol', order: 1 },
       { field: 'name', order: 1 },
     ],
-    heatmapCircleClickTransform: ({
+    heatmapCircleClickTransformFn: ({
       rowData,
       cellData,
       columnKey,
