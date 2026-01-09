@@ -50,6 +50,27 @@ properties:
     type: string
     nullable: true
     example: 'gnai,cdc45'
+  biodomains:
+    description: Filter by biological domains.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Apoptosis', 'Cell Cycle']
+  model_type:
+    description: Filter by model type.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Familial AD', 'Late Onset AD']
+  name:
+    description: Filter by mouse model name.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['3xTg-AD', '5xFAD (IU/Jax/Pitt)']
   sortFields:
     description: |
       List of field names to sort by (e.g., "gene_symbol,name").
