@@ -5,7 +5,7 @@ import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-t
 import {
   ComparisonToolQuery,
   ComparisonToolViewConfig,
-  HeatmapCircleClickTransformContext,
+  HeatmapCircleClickTransformFnContext,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
@@ -123,7 +123,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       rowData,
       cellData,
       columnKey,
-    }: HeatmapCircleClickTransformContext) => {
+    }: HeatmapCircleClickTransformFnContext) => {
       const row = rowData as GeneExpression;
       const cell = cellData as FoldChangeResult;
       return {

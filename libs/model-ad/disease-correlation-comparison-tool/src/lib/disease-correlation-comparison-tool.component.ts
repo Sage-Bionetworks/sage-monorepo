@@ -5,7 +5,7 @@ import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-t
 import {
   ComparisonToolQuery,
   ComparisonToolViewConfig,
-  HeatmapCircleClickTransformContext,
+  HeatmapCircleClickTransformFnContext,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
@@ -122,7 +122,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       rowData,
       cellData,
       columnKey,
-    }: HeatmapCircleClickTransformContext) => {
+    }: HeatmapCircleClickTransformFnContext) => {
       const row = rowData as DiseaseCorrelation;
       const cell = cellData as CorrelationResult;
       return {
