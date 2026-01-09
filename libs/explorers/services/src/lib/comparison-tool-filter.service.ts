@@ -42,8 +42,4 @@ export class ComparisonToolFilterService {
   setSignificanceThreshold(value: number) {
     this.significanceThresholdSignal.set(value);
   }
-
-  getSelectedFilters() {
-    //TODO implement
-  }
 }

@@ -1,4 +1,4 @@
-import { ComparisonToolConfig } from '@sagebionetworks/explorers/models';
+import { ComparisonToolConfig, ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 import {
   mockComparisonToolData,
   mockComparisonToolDataConfig,
@@ -135,5 +135,77 @@ describe('Service: ComparisonToolHelper', () => {
       ['3xTg-AD', 'Value 1'],
       ['5xFAD (UCI)', 'Value 2'],
     ]);
+  });
+
+  describe('getSelectedFilters', () => {
+    it('should return empty object when no filters have selected options', () => {
+      const filters: ComparisonToolFilter[] = [
+        {
+          name: 'Filter 1',
+          data_key: 'field1',
+          options: [
+            { label: 'Option A', selected: false },
+            { label: 'Option B', selected: false },
+          ],
+        },
+        {
+          name: 'Filter 2',
+          data_key: 'field2',
+          options: [{ label: 'Option C', selected: false }],
+        },
+      ];
+
+      expect(ctHelperService.getSelectedFilters(filters)).toEqual({});
+    });
+
+    it('should return selected option labels keyed by data_key', () => {
+      const filters: ComparisonToolFilter[] = [
+        {
+          name: 'Species',
+          data_key: 'species',
+          options: [
+            { label: 'Mouse', selected: true },
+            { label: 'Human', selected: false },
+            { label: 'Rat', selected: true },
+          ],
+        },
+        {
+          name: 'Status',
+          data_key: 'status',
+          options: [
+            { label: 'Active', selected: true },
+            { label: 'Inactive', selected: false },
+          ],
+        },
+      ];
+
+      expect(ctHelperService.getSelectedFilters(filters)).toEqual({
+        species: ['Mouse', 'Rat'],
+        status: ['Active'],
+      });
+    });
+
+    it('should exclude filters with no selected options', () => {
+      const filters: ComparisonToolFilter[] = [
+        {
+          name: 'Filter With Selection',
+          data_key: 'withSelection',
+          options: [{ label: 'Selected', selected: true }],
+        },
+        {
+          name: 'Filter Without Selection',
+          data_key: 'withoutSelection',
+          options: [{ label: 'Not Selected', selected: false }],
+        },
+      ];
+
+      const result = ctHelperService.getSelectedFilters(filters);
+      expect(result).toEqual({ withSelection: ['Selected'] });
+      expect(result['withoutSelection']).toBeUndefined();
+    });
+
+    it('should return empty object when filters array is empty', () => {
+      expect(ctHelperService.getSelectedFilters([])).toEqual({});
+    });
   });
 });
