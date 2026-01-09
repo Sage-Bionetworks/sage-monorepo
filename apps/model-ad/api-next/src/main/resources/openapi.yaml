@@ -355,8 +355,8 @@ components:
         modifiedGenes:
           description: Filter by modified genes.
           example:
-            - 5xFAD (IU/Jax/Pitt)
-            - Abca7*V1599M
+            - APP
+            - MAPT
           items:
             type: string
           nullable: true

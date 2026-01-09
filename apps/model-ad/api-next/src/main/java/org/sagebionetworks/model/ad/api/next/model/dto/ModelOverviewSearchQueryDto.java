@@ -318,7 +318,7 @@ public class ModelOverviewSearchQueryDto {
    * @return modifiedGenes
    */
   
-  @Schema(name = "modifiedGenes", example = "[\"5xFAD (IU/Jax/Pitt)\",\"Abca7*V1599M\"]", description = "Filter by modified genes.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "modifiedGenes", example = "[\"APP\",\"MAPT\"]", description = "Filter by modified genes.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("modifiedGenes")
   public @Nullable List<String> getModifiedGenes() {
     return modifiedGenes;
