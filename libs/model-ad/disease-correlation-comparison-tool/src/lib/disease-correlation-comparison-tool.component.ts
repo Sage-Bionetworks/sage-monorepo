@@ -5,7 +5,7 @@ import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-t
 import {
   ComparisonToolQuery,
   ComparisonToolViewConfig,
-  HeatmapDetailsPanelTransformContext,
+  HeatmapCircleClickTransformContext,
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
@@ -118,11 +118,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       { field: 'age', order: 1 },
       { field: 'sex', order: 1 },
     ],
-    heatmapDetailsPanelDataTransform: ({
+    heatmapCircleClickTransform: ({
       rowData,
       cellData,
       columnKey,
-    }: HeatmapDetailsPanelTransformContext) => {
+    }: HeatmapCircleClickTransformContext) => {
       const row = rowData as DiseaseCorrelation;
       const cell = cellData as CorrelationResult;
       return {

@@ -173,7 +173,7 @@ describe('BaseTableComponent', () => {
       const { fixture, service } = await setup();
 
       service.setViewConfig({
-        heatmapDetailsPanelDataTransform: () => heatmapDetailsPanelData,
+        heatmapCircleClickTransform: () => heatmapDetailsPanelData,
       } as Partial<ComparisonToolViewConfig>);
       fixture.detectChanges();
 
@@ -194,7 +194,7 @@ describe('BaseTableComponent', () => {
       const { fixture, service, user } = await setup();
 
       service.setViewConfig({
-        heatmapDetailsPanelDataTransform: () => heatmapDetailsPanelData,
+        heatmapCircleClickTransform: () => heatmapDetailsPanelData,
       } as Partial<ComparisonToolViewConfig>);
       fixture.detectChanges();
 

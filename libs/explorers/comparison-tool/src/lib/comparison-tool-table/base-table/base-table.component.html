@@ -38,7 +38,7 @@
               <explorers-primary-identifier-controls [label]="cellData" [id]="rowId" />
             }
             @if (columnType === 'heat_map') {
-              @if (hasHeatmapDetailsTransform()) {
+              @if (isHeatmapCircleClickable()) {
                 <button
                   type="button"
                   class="heatmap-circle-button"

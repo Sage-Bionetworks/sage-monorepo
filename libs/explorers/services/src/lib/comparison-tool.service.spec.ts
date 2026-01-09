@@ -786,7 +786,7 @@ describe('ComparisonToolService', () => {
         value: 1.5,
       });
       service.setViewConfig({
-        heatmapDetailsPanelDataTransform: mockTransform,
+        heatmapCircleClickTransform: mockTransform,
       });
 
       service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
@@ -806,7 +806,7 @@ describe('ComparisonToolService', () => {
       connectService();
       const mockTransform = jest.fn().mockReturnValue(null);
       service.setViewConfig({
-        heatmapDetailsPanelDataTransform: mockTransform,
+        heatmapCircleClickTransform: mockTransform,
       });
 
       service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
@@ -819,7 +819,7 @@ describe('ComparisonToolService', () => {
       connectService();
       const mockTransform = jest.fn().mockReturnValue({ heading: 'Test' });
       service.setViewConfig({
-        heatmapDetailsPanelDataTransform: mockTransform,
+        heatmapCircleClickTransform: mockTransform,
       });
       service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
       expect(service.heatmapDetailsPanelData()).not.toBeNull();

@@ -36,8 +36,8 @@ export class BaseTableComponent {
   viewConfig = this.comparisonToolService.viewConfig;
   totalRecords = this.comparisonToolService.totalResultsCount;
   first = this.comparisonToolService.first;
-  hasHeatmapDetailsTransform = computed(
-    () => !!this.comparisonToolService.viewConfig().heatmapDetailsPanelDataTransform,
+  isHeatmapCircleClickable = computed(
+    () => !!this.comparisonToolService.viewConfig().heatmapCircleClickTransform,
   );
 
   data = input.required<Record<string, any>[]>();

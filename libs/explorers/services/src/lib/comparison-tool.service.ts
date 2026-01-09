@@ -343,7 +343,7 @@ export class ComparisonToolService<T> {
   }
 
   showHeatmapDetailsPanel(rowData: T, cellData: unknown, columnKey: string, event: Event): void {
-    const transform = this.viewConfig().heatmapDetailsPanelDataTransform;
+    const transform = this.viewConfig().heatmapCircleClickTransform;
     if (!transform) {
       return;
     }
