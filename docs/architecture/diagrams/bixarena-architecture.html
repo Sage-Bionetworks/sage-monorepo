@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Bixarena: Full-Stack Application Architecture</title>
+
+    <!-- Import Roboto font from Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        margin: 2rem;
+        background-color: #fff;
+        color: #222;
+        text-align: center; /* Center the heading and general layout */
+      }
+
+      h2 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        font-size: 1.8rem;
+        color: #1a1a1a;
+        margin-bottom: 1.5rem;
+      }
+
+      /* Center the Mermaid diagram horizontally */
+      .diagram-container {
+        display: flex;
+        justify-content: center; /* Centers horizontally */
+        align-items: flex-start; /* Keep top-aligned */
+        width: 100%;
+      }
+
+      .mermaid {
+        width: 800px; /* Fixed width */
+        max-width: 100%; /* Allow shrinking on smaller screens */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <h2>BixArena MVP: Full-Stack Application Architecture</h2> -->
+
+    <div class="diagram-container">
+      <!-- prettier-ignore -->
+      <div class="mermaid">
+      flowchart TD
+        user[User Browser]
+
+        gw@{shape: icon, icon: 'logos:spring-icon', label: 'Spring Cloud Gateway'}
+
+        web@{shape: icon, icon: 'logos:gradio-icon', label: 'Gradio App'}
+        auth@{shape: icon, icon: 'logos:spring-icon', label: 'Auth Service<br>(Spring Boot)'}
+        api@{shape: icon, icon: 'logos:spring-icon', label: 'API Service<br>(Spring Boot)'}
+        ai@{shape: icon, icon: 'logos:fastapi-icon', label: 'AI Service<br>(FastAPI)'}
+
+        user user_web@-->|"HTTP"| web
+        web web_gw@-->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| gw
+
+        gw gw_auth@-.->|"HTTP /auth/\*\*"| auth
+        gw gw_api@-->|"HTTP /api/**"| api
+        gw gw_ai@-.->|"HTTP/WS /ai/**"| ai
+
+        user_web@{ animate: true }
+        web_gw@{ animate: true }
+        gw_auth@{ animate: true }
+        gw_api@{ animate: true }
+      </div>
+    </div>
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+      // Register icon packs (loaded from the Iconify JSON CDN)
+      mermaid.registerIconPacks([
+        {
+          name: 'logos',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'mdi',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/mdi@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'catppuccin',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/catppuccin@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'system-uicons',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/system-uicons@1.2.4/icons.json').then((r) =>
+              r.json(),
+            ),
+        },
+      ]);
+
+      // Initialize Mermaid
+      mermaid.initialize({
+        startOnLoad: true,
+        securityLevel: 'loose', // allow loading icons via fetch
+        theme: 'default',
+        flowchart: { useMaxWidth: true },
+      });
+    </script>
+  </body>
+</html>
