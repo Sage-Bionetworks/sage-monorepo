@@ -291,8 +291,8 @@ public class GeneExpressionSearchQueryDto {
    * @return modelType
    */
   
-  @Schema(name = "model_type", example = "[\"Familial AD\",\"Late Onset AD\"]", description = "Filter by model type.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("model_type")
+  @Schema(name = "modelType", example = "[\"Familial AD\",\"Late Onset AD\"]", description = "Filter by model type.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modelType")
   public @Nullable List<String> getModelType() {
     return modelType;
   }

@@ -57,7 +57,7 @@ properties:
       type: string
     nullable: true
     example: ['Apoptosis', 'Cell Cycle']
-  model_type:
+  modelType:
     description: Filter by model type.
     type: array
     items:

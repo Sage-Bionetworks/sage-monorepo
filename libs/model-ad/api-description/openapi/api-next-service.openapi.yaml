@@ -657,7 +657,7 @@ components:
           example:
             - Apoptosis
             - Cell Cycle
-        model_type:
+        modelType:
           description: Filter by model type.
           type: array
           items:
