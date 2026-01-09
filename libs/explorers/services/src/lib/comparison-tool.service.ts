@@ -46,7 +46,7 @@ export class ComparisonToolService<T> {
     showSignificanceControls: true,
     viewDetailsTooltip: 'View detailed results',
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    viewDetailsClick: (_id: string, _label: string) => {
+    viewDetailsClick: (_rowData: unknown) => {
       return;
     },
     legendEnabled: true,

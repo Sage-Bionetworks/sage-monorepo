@@ -27,6 +27,7 @@ export const Unpinned: Story = {
   args: {
     label: '3xTg-AD',
     id: '68fff1aaeb12b9674515fd58',
+    rowData: { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' },
   },
 };
 
@@ -34,6 +35,7 @@ export const Pinned: Story = {
   args: {
     label: '3xTg-AD',
     id: '68fff1aaeb12b9674515fd58',
+    rowData: { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' },
   },
   decorators: [
     applicationConfig({
@@ -43,8 +45,8 @@ export const Pinned: Story = {
         ...provideComparisonToolService({
           pinnedItems: ['68fff1aaeb12b9674515fd58', '68fff1aaeb12b9674515fd59'],
           viewConfig: {
-            viewDetailsClick: (id: string, label: string) => {
-              console.log(`id: ${id}, label: ${label}`);
+            viewDetailsClick: (rowData: unknown) => {
+              console.log(`rowData: ${JSON.stringify(rowData)}`);
             },
           },
         }),
@@ -57,6 +59,7 @@ export const MaxPinnedReached: Story = {
   args: {
     label: '3xTg-AD',
     id: '68fff1aaeb12b9674515fd58',
+    rowData: { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' },
   },
   decorators: [
     applicationConfig({

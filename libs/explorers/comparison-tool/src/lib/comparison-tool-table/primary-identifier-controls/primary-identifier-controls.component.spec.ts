@@ -29,6 +29,7 @@ async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number
     componentInputs: {
       label: '3xTg-AD',
       id: '68fff1aaeb12b9674515fd58',
+      rowData: { _id: '68fff1aaeb12b9674515fd58', name: '3xTg-AD' },
     },
   });
 
@@ -64,7 +65,10 @@ describe('PrimaryIdentifierControlsComponent', () => {
   it('should call viewDetailsClick when view details button is clicked', async () => {
     const { user, viewDetailsButton, viewDetailsClickSpy } = await setup();
     await user.click(viewDetailsButton);
-    expect(viewDetailsClickSpy).toHaveBeenCalledWith('68fff1aaeb12b9674515fd58', '3xTg-AD');
+    expect(viewDetailsClickSpy).toHaveBeenCalledWith({
+      _id: '68fff1aaeb12b9674515fd58',
+      name: '3xTg-AD',
+    });
   });
 
   it('should toggle pin state when pin button is clicked', async () => {
@@ -157,7 +161,10 @@ describe('PrimaryIdentifierControlsComponent', () => {
     expect(viewDetailsButton).toHaveFocus();
 
     await user.keyboard('[Enter]');
-    expect(viewDetailsClickSpy).toHaveBeenCalledWith('68fff1aaeb12b9674515fd58', '3xTg-AD');
+    expect(viewDetailsClickSpy).toHaveBeenCalledWith({
+      _id: '68fff1aaeb12b9674515fd58',
+      name: '3xTg-AD',
+    });
   });
 
   it('should toggle pin state when activated with the keyboard', async () => {

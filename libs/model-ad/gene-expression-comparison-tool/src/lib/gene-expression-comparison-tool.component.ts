@@ -108,7 +108,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     headerTitle: ComparisonToolPage.GeneExpression,
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
     viewDetailsTooltip: 'Open gene details page',
-    viewDetailsClick: (id: string, label: string) => {
+    viewDetailsClick: (rowData: unknown) => {
       // TODO add logic to display details pages MG-588
     },
     legendPanelConfig: this.legendPanelConfig,
