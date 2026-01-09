@@ -31,30 +31,13 @@ Lightweight records of specific architectural decisions.
 
 ## Documentation Workflow
 
-```
-┌─────────────┐
-│  New Idea   │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐     Approved     ┌──────────────┐
-│  Create RFC ├─────────────────►│ Architecture │
-│ docs/rfcs/  │                  │docs/architecture/│
-└──────┬──────┘                  └──────────────┘
-       │                                │
-       │ Rejected                       │
-       ▼                                ▼
-┌─────────────┐                  ┌──────────────┐
-│   Archive   │                  │ Implement &  │
-│             │                  │    Update    │
-└─────────────┘                  └──────┬───────┘
-                                        │
-                                        ▼
-                                 ┌──────────────┐
-                                 │  Create ADRs │
-                                 │  docs/adr/   │
-                                 │ (as needed)  │
-                                 └──────────────┘
+```mermaid
+graph TD
+    A[New Idea] --> B[Create RFC<br/>docs/rfcs/]
+    B -->|Approved| C[Architecture<br/>docs/architecture/]
+    B -->|Rejected| D[Archive]
+    C --> E[Implement &<br/>Update]
+    E --> F[Create ADRs<br/>docs/adr/<br/>as needed]
 ```
 
 ## Quick Links

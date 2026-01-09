@@ -75,6 +75,7 @@ nav:
       - OpenChallenges Schemas: resources/oc-schemas.md
   - Technical Documentation:
       - Overview: overview.md
+      - RFCs (Proposals): rfcs/
       - Architecture: architecture/
       - Architecture Decision Records: adr/
 theme:
@@ -113,7 +114,11 @@ plugins:
 markdown_extensions:
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tasklist:
       clickable_checkbox: true
       custom_checkbox: true
