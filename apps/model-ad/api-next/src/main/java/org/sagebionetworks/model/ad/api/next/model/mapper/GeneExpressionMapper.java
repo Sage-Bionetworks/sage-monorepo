@@ -25,7 +25,7 @@ public class GeneExpressionMapper {
     GeneExpressionDto dto = new GeneExpressionDto(
       getCompositeId(document),
       document.getEnsemblGeneId(),
-      document.getGeneSymbol(),
+      getGeneSymbolWithFallback(document),
       biodomains,
       document.getName(),
       document.getMatchedControl(),
@@ -47,6 +47,15 @@ public class GeneExpressionMapper {
     String name = document.getName();
 
     return String.format("%s~%s", ensemblGeneId, name);
+  }
+
+  private String getGeneSymbolWithFallback(GeneExpressionDocument document) {
+    String geneSymbol = document.getGeneSymbol();
+    if (geneSymbol == null || geneSymbol.isBlank()) {
+      // Fallback to ensembl_gene_id if gene_symbol is null or blank
+      return document.getEnsemblGeneId();
+    }
+    return geneSymbol;
   }
 
   private @Nullable FoldChangeResultDto toFoldChangeDto(@Nullable FoldChangeResult document) {

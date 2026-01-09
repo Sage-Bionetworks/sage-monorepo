@@ -23,6 +23,7 @@ import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,8 @@ public class GeneExpressionService {
 
   private final GeneExpressionRepository repository;
   private final GeneExpressionMapper geneExpressionMapper;
+
+  private static final String GENE_SYMBOL_FIELD = "gene_symbol";
 
   @Cacheable(
     key = "T(org.sagebionetworks.model.ad.api.next.util.ApiHelper)" +
@@ -54,21 +57,33 @@ public class GeneExpressionService {
 
     List<String> items = ApiHelper.sanitizeItems(query.getItems());
     String search = query.getSearch();
+    List<String> sortFields = query.getSortFields();
     List<Integer> sortOrders = query
       .getSortOrders()
       .stream()
       .map(GeneExpressionSearchQueryDto.SortOrdersEnum::getValue)
       .toList();
-    Sort sort = ApiHelper.createSort(query.getSortFields(), sortOrders);
+    Sort sort = ApiHelper.createSort(sortFields, sortOrders);
     PageRequest pageable = PageRequest.of(query.getPageNumber(), query.getPageSize(), sort);
 
     boolean hasSearch = search != null && !search.trim().isEmpty();
     boolean hasItems = !items.isEmpty();
     boolean isExclude = effectiveFilter == ItemFilterTypeQueryDto.EXCLUDE;
+    boolean sortsByGeneSymbol = sortFields != null && sortFields.contains(GENE_SYMBOL_FIELD);
 
     Page<GeneExpressionDocument> page;
 
-    if (isExclude && hasSearch) {
+    // Use aggregation-based sorting when sorting by gene_symbol to handle fallback logic
+    if (sortsByGeneSymbol) {
+      page = fetchPageWithComputedSort(
+        tissue,
+        sexCohort,
+        items,
+        isExclude,
+        hasSearch ? search.trim() : null,
+        pageable
+      );
+    } else if (isExclude && hasSearch) {
       String trimmedSearch = search.trim();
       page = hasItems
         ? fetchPageWithSearchAndExclusions(tissue, sexCohort, trimmedSearch, items, pageable)
@@ -115,6 +130,47 @@ public class GeneExpressionService {
       .geneExpressions(geneExpressions)
       .page(pageMetadata)
       .build();
+  }
+
+  private Page<GeneExpressionDocument> fetchPageWithComputedSort(
+    String tissue,
+    String sexCohort,
+    List<String> items,
+    boolean isExclude,
+    String search,
+    PageRequest pageable
+  ) {
+    boolean hasItems = !items.isEmpty();
+
+    // For INCLUDE filter with no items, return empty page
+    if (!isExclude && !hasItems) {
+      return Page.empty(pageable);
+    }
+
+    List<Map<String, Object>> compositeConditions = hasItems
+      ? buildCompositeConditions(parseIdentifiers(items, tissue, sexCohort))
+      : null;
+
+    String geneSymbolSearch = null;
+    List<Pattern> geneSymbolPatterns = null;
+
+    if (search != null && !search.isEmpty()) {
+      if (search.contains(",")) {
+        geneSymbolPatterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(search);
+      } else {
+        geneSymbolSearch = Pattern.quote(search);
+      }
+    }
+
+    return repository.findWithComputedSort(
+      tissue,
+      sexCohort,
+      compositeConditions,
+      isExclude,
+      geneSymbolSearch,
+      geneSymbolPatterns,
+      pageable
+    );
   }
 
   private Page<GeneExpressionDocument> fetchPageWithSearchOnly(

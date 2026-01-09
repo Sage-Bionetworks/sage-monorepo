@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface GeneExpressionRepository
-  extends MongoRepository<GeneExpressionDocument, ObjectId> {
+  extends MongoRepository<GeneExpressionDocument, ObjectId>, CustomGeneExpressionRepository {
   /**
    * Find all gene expressions for a specific tissue and sexCohort combination.
    *
