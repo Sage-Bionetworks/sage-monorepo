@@ -195,7 +195,7 @@ test.describe('model overview', () => {
     const configs = await fetchComparisonToolConfig(page, CT_PAGE);
     const filters = configs[0]?.filters;
     expect(filters.length).toBeGreaterThan(1);
-    const filter = filters[0];
+    const filter = filters[1];
 
     await navigateToComparison(page, CT_PAGE, true);
     await testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
