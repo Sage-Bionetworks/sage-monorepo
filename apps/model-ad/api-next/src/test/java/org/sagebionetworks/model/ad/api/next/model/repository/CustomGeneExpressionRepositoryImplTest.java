@@ -40,14 +40,14 @@ class CustomGeneExpressionRepositoryImplTest {
   @DisplayName("should build query with data filters using $in operators")
   void shouldBuildQueryWithDataFilters() {
     GeneExpressionSearchQueryDto query = new GeneExpressionSearchQueryDto();
-    query.setBiodomains(List.of("Apoptosis"));
-    query.setModelType(List.of("Familial AD"));
-    query.setName(List.of("3xTg-AD"));
+    query.setBiodomains(List.of("test-domain"));
+    query.setModelType(List.of("test-type"));
+    query.setName(List.of("test-name"));
     query.setItemFilterType(ItemFilterTypeQueryDto.INCLUDE);
 
     Pageable pageable = PageRequest.of(0, 10);
 
-    repository.findAll(pageable, query, List.of(), "Hemibrain", "Females & Males");
+    repository.findAll(pageable, query, List.of(), "test-tissue", "test-cohort");
 
     ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
     verify(mongoTemplate).find(queryCaptor.capture(), eq(GeneExpressionDocument.class));
@@ -69,12 +69,12 @@ class CustomGeneExpressionRepositoryImplTest {
   @DisplayName("should apply pagination to data query")
   void shouldApplyPaginationToDataQuery() {
     GeneExpressionSearchQueryDto query = new GeneExpressionSearchQueryDto();
-    query.setBiodomains(List.of("Apoptosis"));
+    query.setBiodomains(List.of("test-domain"));
     query.setItemFilterType(ItemFilterTypeQueryDto.INCLUDE);
 
     Pageable pageable = PageRequest.of(2, 25);
 
-    repository.findAll(pageable, query, List.of(), "Hemibrain", "Females & Males");
+    repository.findAll(pageable, query, List.of(), "test-tissue", "test-cohort");
 
     ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
     verify(mongoTemplate).find(queryCaptor.capture(), eq(GeneExpressionDocument.class));
@@ -88,12 +88,12 @@ class CustomGeneExpressionRepositoryImplTest {
   @DisplayName("should execute count query without pagination")
   void shouldExecuteCountQueryWithoutPagination() {
     GeneExpressionSearchQueryDto query = new GeneExpressionSearchQueryDto();
-    query.setBiodomains(List.of("Apoptosis"));
+    query.setBiodomains(List.of("test-domain"));
     query.setItemFilterType(ItemFilterTypeQueryDto.INCLUDE);
 
     Pageable pageable = PageRequest.of(2, 25);
 
-    repository.findAll(pageable, query, List.of(), "Hemibrain", "Females & Males");
+    repository.findAll(pageable, query, List.of(), "test-tissue", "test-cohort");
 
     ArgumentCaptor<Query> countQueryCaptor = ArgumentCaptor.forClass(Query.class);
     verify(mongoTemplate).count(countQueryCaptor.capture(), eq(GeneExpressionDocument.class));
