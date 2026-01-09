@@ -30,7 +30,6 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
     "itemFilterType",
     "search",
     "biodomains",
-    "model_type",
     "modelType",
     "name",
     "sortFields",
