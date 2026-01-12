@@ -112,6 +112,7 @@ plugins:
   - search
 markdown_extensions:
   - admonition
+  - mdx_truly_sane_lists
   - pymdownx.details
   - pymdownx.superfences:
       custom_fences:

@@ -8,9 +8,10 @@ Architecture documents typically originate from approved RFCs in `docs/rfcs/`. O
 
 ## Active Architecture Documents
 
-| Document                                                                 | Status      | Date    | Description                                           |
-| ------------------------------------------------------------------------ | ----------- | ------- | ----------------------------------------------------- |
-| [Python AI Service Integration](./python-ai-service-integration-plan.md) | Implemented | 2025-12 | JWT authentication integration with Python AI service |
+| Document                                                                                       | Status      | Date       | Description                                                              |
+| ---------------------------------------------------------------------------------------------- | ----------- | ---------- | ------------------------------------------------------------------------ |
+| [Python AI Service Integration](./python-ai-service-integration-plan.md)                       | Implemented | 2025-12    | JWT authentication integration with Python AI service                    |
+| [BixArena Leaderboard Snapshot Automation](./bixarena-leaderboard-snapshot-automation-plan.md) | Approved    | 2026-01-09 | Automated daily leaderboard snapshot generation using Lambda/EventBridge |
 
 ## Architecture Diagrams
 
