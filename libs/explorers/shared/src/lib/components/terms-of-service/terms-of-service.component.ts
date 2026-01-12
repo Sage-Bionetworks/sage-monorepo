@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
@@ -21,6 +21,7 @@ export class TermsOfServiceComponent implements OnInit {
 
   content = '';
   isLoading = true;
+  heroBackgroundImagePath = input<string>('explorers-assets/images/background.svg');
 
   ngOnInit() {
     this.loadTOS();
