@@ -13,6 +13,7 @@ from openchallenges_infra_cdk.shared.config import (
 from openchallenges_infra_cdk.shared.stacks.alb_stack import AlbStack
 from openchallenges_infra_cdk.shared.stacks.app_service_stack import AppServiceStack
 from openchallenges_infra_cdk.shared.stacks.bucket_stack import BucketStack
+from openchallenges_infra_cdk.shared.stacks.database_stack import DatabaseStack
 from openchallenges_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
 from openchallenges_infra_cdk.shared.stacks.vpc_stack import VpcStack
 
@@ -52,6 +53,19 @@ def main() -> None:
         nat_gateways=1,  # Single NAT for cost savings in dev
         description=f"VPC for OpenChallenges {environment} environment",
     )
+
+    # Create database stack (depends on VPC)
+    # Dev uses cost-optimized single-AZ deployment
+    database_stack = DatabaseStack(
+        app,
+        f"{stack_prefix}-database",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        description=f"PostgreSQL database for OpenChallenges {environment} environment",
+    )
+    database_stack.add_dependency(vpc_stack)
 
     # Create ALB stack (depends on VPC)
     alb_stack = AlbStack(
