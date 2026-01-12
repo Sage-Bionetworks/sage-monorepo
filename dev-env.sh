@@ -19,10 +19,6 @@ function workspace-cd {
 # Add local npm binaries to PATH
 export PATH="$PATH:$WORKSPACE_DIR/node_modules/.bin"
 
-# Alias nx to use pnpm nx to avoid Nx CLI issues
-# See: https://github.com/nrwl/nx/issues/30470
-alias nx='pnpm nx'
-
 function workspace-install-nodejs-dependencies {
   pnpm install --frozen-lockfile
 }
@@ -198,7 +194,7 @@ function workspace-nx-cloud-help {
 function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 function check-vscode-version {
-  expected="1.91.1"
+  expected="1.108.0"
   actual="$(code --version | head -n 1)"
   if [ $(version $actual) -lt $(version $expected) ]; then
     echo "📦 Please update VS Code (${actual}) to version ${expected} or above."
