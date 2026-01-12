@@ -44,6 +44,21 @@ public class DiseaseCorrelationSearchQueryDto {
   private @Nullable String search = null;
 
   @Valid
+  private @Nullable List<String> age;
+
+  @Valid
+  private @Nullable List<String> modelType;
+
+  @Valid
+  private @Nullable List<String> modifiedGenes;
+
+  @Valid
+  private @Nullable List<String> name;
+
+  @Valid
+  private @Nullable List<String> sex;
+
+  @Valid
   private List<String> sortFields = new ArrayList<>();
 
   /**
@@ -236,6 +251,146 @@ public class DiseaseCorrelationSearchQueryDto {
     this.search = search;
   }
 
+  public DiseaseCorrelationSearchQueryDto age(@Nullable List<String> age) {
+    this.age = age;
+    return this;
+  }
+
+  public DiseaseCorrelationSearchQueryDto addAgeItem(String ageItem) {
+    if (this.age == null) {
+      this.age = new ArrayList<>();
+    }
+    this.age.add(ageItem);
+    return this;
+  }
+
+  /**
+   * Filter by age.
+   * @return age
+   */
+  
+  @Schema(name = "age", example = "[\"4 months\",\"12 months\"]", description = "Filter by age.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("age")
+  public @Nullable List<String> getAge() {
+    return age;
+  }
+
+  public void setAge(@Nullable List<String> age) {
+    this.age = age;
+  }
+
+  public DiseaseCorrelationSearchQueryDto modelType(@Nullable List<String> modelType) {
+    this.modelType = modelType;
+    return this;
+  }
+
+  public DiseaseCorrelationSearchQueryDto addModelTypeItem(String modelTypeItem) {
+    if (this.modelType == null) {
+      this.modelType = new ArrayList<>();
+    }
+    this.modelType.add(modelTypeItem);
+    return this;
+  }
+
+  /**
+   * Filter by model type.
+   * @return modelType
+   */
+  
+  @Schema(name = "modelType", example = "[\"Familial AD\",\"Late Onset AD\"]", description = "Filter by model type.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modelType")
+  public @Nullable List<String> getModelType() {
+    return modelType;
+  }
+
+  public void setModelType(@Nullable List<String> modelType) {
+    this.modelType = modelType;
+  }
+
+  public DiseaseCorrelationSearchQueryDto modifiedGenes(@Nullable List<String> modifiedGenes) {
+    this.modifiedGenes = modifiedGenes;
+    return this;
+  }
+
+  public DiseaseCorrelationSearchQueryDto addModifiedGenesItem(String modifiedGenesItem) {
+    if (this.modifiedGenes == null) {
+      this.modifiedGenes = new ArrayList<>();
+    }
+    this.modifiedGenes.add(modifiedGenesItem);
+    return this;
+  }
+
+  /**
+   * Filter by modified genes.
+   * @return modifiedGenes
+   */
+  
+  @Schema(name = "modifiedGenes", example = "[\"APOE\",\"Trem2\"]", description = "Filter by modified genes.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modifiedGenes")
+  public @Nullable List<String> getModifiedGenes() {
+    return modifiedGenes;
+  }
+
+  public void setModifiedGenes(@Nullable List<String> modifiedGenes) {
+    this.modifiedGenes = modifiedGenes;
+  }
+
+  public DiseaseCorrelationSearchQueryDto name(@Nullable List<String> name) {
+    this.name = name;
+    return this;
+  }
+
+  public DiseaseCorrelationSearchQueryDto addNameItem(String nameItem) {
+    if (this.name == null) {
+      this.name = new ArrayList<>();
+    }
+    this.name.add(nameItem);
+    return this;
+  }
+
+  /**
+   * Filter by mouse model name.
+   * @return name
+   */
+  
+  @Schema(name = "name", example = "[\"3xTg-AD\",\"5xFAD (IU/Jax/Pitt)\"]", description = "Filter by mouse model name.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("name")
+  public @Nullable List<String> getName() {
+    return name;
+  }
+
+  public void setName(@Nullable List<String> name) {
+    this.name = name;
+  }
+
+  public DiseaseCorrelationSearchQueryDto sex(@Nullable List<String> sex) {
+    this.sex = sex;
+    return this;
+  }
+
+  public DiseaseCorrelationSearchQueryDto addSexItem(String sexItem) {
+    if (this.sex == null) {
+      this.sex = new ArrayList<>();
+    }
+    this.sex.add(sexItem);
+    return this;
+  }
+
+  /**
+   * Filter by sex.
+   * @return sex
+   */
+  
+  @Schema(name = "sex", example = "[\"Female\",\"Male\"]", description = "Filter by sex.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("sex")
+  public @Nullable List<String> getSex() {
+    return sex;
+  }
+
+  public void setSex(@Nullable List<String> sex) {
+    this.sex = sex;
+  }
+
   public DiseaseCorrelationSearchQueryDto sortFields(List<String> sortFields) {
     this.sortFields = sortFields;
     return this;
@@ -307,13 +462,18 @@ public class DiseaseCorrelationSearchQueryDto {
         Objects.equals(this.items, diseaseCorrelationSearchQuery.items) &&
         Objects.equals(this.itemFilterType, diseaseCorrelationSearchQuery.itemFilterType) &&
         Objects.equals(this.search, diseaseCorrelationSearchQuery.search) &&
+        Objects.equals(this.age, diseaseCorrelationSearchQuery.age) &&
+        Objects.equals(this.modelType, diseaseCorrelationSearchQuery.modelType) &&
+        Objects.equals(this.modifiedGenes, diseaseCorrelationSearchQuery.modifiedGenes) &&
+        Objects.equals(this.name, diseaseCorrelationSearchQuery.name) &&
+        Objects.equals(this.sex, diseaseCorrelationSearchQuery.sex) &&
         Objects.equals(this.sortFields, diseaseCorrelationSearchQuery.sortFields) &&
         Objects.equals(this.sortOrders, diseaseCorrelationSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search, age, modelType, modifiedGenes, name, sex, sortFields, sortOrders);
   }
 
   @Override
@@ -326,6 +486,11 @@ public class DiseaseCorrelationSearchQueryDto {
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
+    sb.append("    age: ").append(toIndentedString(age)).append("\n");
+    sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
+    sb.append("    modifiedGenes: ").append(toIndentedString(modifiedGenes)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
     sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
@@ -362,6 +527,11 @@ public class DiseaseCorrelationSearchQueryDto {
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
       this.instance.setSearch(value.search);
+      this.instance.setAge(value.age);
+      this.instance.setModelType(value.modelType);
+      this.instance.setModifiedGenes(value.modifiedGenes);
+      this.instance.setName(value.name);
+      this.instance.setSex(value.sex);
       this.instance.setSortFields(value.sortFields);
       this.instance.setSortOrders(value.sortOrders);
       return this;
@@ -394,6 +564,31 @@ public class DiseaseCorrelationSearchQueryDto {
     
     public DiseaseCorrelationSearchQueryDto.Builder search(String search) {
       this.instance.search(search);
+      return this;
+    }
+    
+    public DiseaseCorrelationSearchQueryDto.Builder age(List<String> age) {
+      this.instance.age(age);
+      return this;
+    }
+    
+    public DiseaseCorrelationSearchQueryDto.Builder modelType(List<String> modelType) {
+      this.instance.modelType(modelType);
+      return this;
+    }
+    
+    public DiseaseCorrelationSearchQueryDto.Builder modifiedGenes(List<String> modifiedGenes) {
+      this.instance.modifiedGenes(modifiedGenes);
+      return this;
+    }
+    
+    public DiseaseCorrelationSearchQueryDto.Builder name(List<String> name) {
+      this.instance.name(name);
+      return this;
+    }
+    
+    public DiseaseCorrelationSearchQueryDto.Builder sex(List<String> sex) {
+      this.instance.sex(sex);
       return this;
     }
     
