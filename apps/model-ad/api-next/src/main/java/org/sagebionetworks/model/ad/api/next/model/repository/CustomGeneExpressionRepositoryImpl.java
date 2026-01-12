@@ -19,9 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.query.Collation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
@@ -50,25 +48,21 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     String tissue,
     String sexCohort
   ) {
-    boolean sortsByGeneSymbol = pageable
-      .getSort()
-      .stream()
-      .anyMatch(order -> GENE_SYMBOL_FIELD.equals(order.getProperty()));
-
-    log.debug(
-      "Executing query: tissue={}, sexCohort={}, sortsByGeneSymbol={}",
-      tissue,
-      sexCohort,
-      sortsByGeneSymbol
-    );
-
     try {
       List<AggregationOperation> operations = new ArrayList<>();
 
-      // Add computed field for gene_symbol fallback (only if sorting by gene_symbol)
+      // Add display_gene_symbol field (with fallback) if sorting by gene_symbol
+      boolean sortsByGeneSymbol = pageable
+        .getSort()
+        .stream()
+        .anyMatch(o -> GENE_SYMBOL_FIELD.equals(o.getProperty()));
+
       if (sortsByGeneSymbol) {
-        operations.add(buildAddFieldsOperation());
+        operations.add(buildDisplayGeneSymbolField());
       }
+
+      // Add lowercase versions of all sort fields for case-insensitive sorting
+      operations.add(buildLowercaseSortFields(pageable.getSort()));
 
       // Build match criteria with all filters
       Criteria matchCriteria = buildMatchCriteria(tissue, sexCohort, query, items);
@@ -77,20 +71,15 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       // Count total before pagination
       final long total = countDocuments(operations);
 
-      // Add sorting (with gene_symbol → display_gene_symbol substitution if needed)
-      addSortOperation(operations, pageable.getSort(), sortsByGeneSymbol);
+      // Add sorting (uses lowercase fields for case-insensitive sorting)
+      addSortOperation(operations, pageable.getSort());
 
       // Add pagination
       long skipCount = (long) pageable.getPageNumber() * pageable.getPageSize();
       operations.add(Aggregation.skip(skipCount));
       operations.add(Aggregation.limit(pageable.getPageSize()));
 
-      // Use collation for case-insensitive sorting
-      AggregationOptions options = AggregationOptions.builder()
-        .collation(Collation.of("en").strength(Collation.ComparisonLevel.secondary()))
-        .build();
-
-      Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(options);
+      Aggregation aggregation = Aggregation.newAggregation(operations);
 
       AggregationResults<GeneExpressionDocument> results = mongoTemplate.aggregate(
         aggregation,
@@ -98,7 +87,6 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
         GeneExpressionDocument.class
       );
 
-      log.debug("Query returned {} results, total={}", results.getMappedResults().size(), total);
       return new PageImpl<>(results.getMappedResults(), pageable, total);
     } catch (Exception e) {
       log.error("Error executing gene expression query", e);
@@ -111,7 +99,7 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
    * Formula: display_gene_symbol = gene_symbol ?? ensembl_gene_id
    * (uses ensembl_gene_id when gene_symbol is null, empty, or whitespace)
    */
-  private AggregationOperation buildAddFieldsOperation() {
+  private AggregationOperation buildDisplayGeneSymbolField() {
     // Check if gene_symbol is null
     List<Object> eqNull = new ArrayList<>();
     eqNull.add("$gene_symbol");
@@ -145,6 +133,36 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     );
 
     return context -> addFieldsDoc;
+  }
+
+  /**
+   * Builds $addFields operation to create lowercase versions of sort fields
+   * for case-insensitive sorting (DocumentDB compatible).
+   *
+   * <p>Applies $toLower to all sort fields.
+   *
+   * @param sort the Sort object containing the fields to sort by
+   * @return AggregationOperation that adds lowercase versions of all sort fields
+   */
+  private AggregationOperation buildLowercaseSortFields(Sort sort) {
+    Document fields = new Document();
+
+    for (Sort.Order order : sort) {
+      String field = order.getProperty();
+
+      if (GENE_SYMBOL_FIELD.equals(field)) {
+        // For gene_symbol, use display_gene_symbol (which has fallback logic)
+        fields.append(
+          "gene_symbol_lower",
+          new Document("$toLower", "$" + DISPLAY_GENE_SYMBOL_FIELD)
+        );
+      } else {
+        // For all other fields, apply lowercase transformation
+        fields.append(field + "_lower", new Document("$toLower", "$" + field));
+      }
+    }
+
+    return context -> new Document("$addFields", fields);
   }
 
   /**
@@ -279,13 +297,13 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
   }
 
   /**
-   * Adds $sort operation, replacing gene_symbol with display_gene_symbol if needed.
+   * Adds $sort operation, using lowercase versions of all fields for
+   * case-insensitive sorting (DocumentDB compatible).
+   *
+   * <p>Applies _lower suffix to all sort fields to replicate the original
+   * collation behavior which applied case-insensitive sorting globally.
    */
-  private void addSortOperation(
-    List<AggregationOperation> operations,
-    Sort sort,
-    boolean sortsByGeneSymbol
-  ) {
+  private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
     if (sort.isUnsorted()) {
       return;
     }
@@ -294,10 +312,9 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     for (Sort.Order order : sort) {
       String field = order.getProperty();
 
-      // Replace gene_symbol with computed display_gene_symbol for sorting
-      if (GENE_SYMBOL_FIELD.equals(field)) {
-        field = DISPLAY_GENE_SYMBOL_FIELD;
-      }
+      // Use lowercase version for all fields (case-insensitive sorting)
+      // This replicates original collation behavior
+      field = field + "_lower";
 
       int direction = order.isAscending() ? 1 : -1;
       sortFields.add(new Document(field, direction));
