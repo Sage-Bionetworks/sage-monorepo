@@ -1,4 +1,4 @@
-# RFCs (Request for Comments)
+# Request for Comments (RFCs)
 
 This directory contains proposals for significant changes to the system that require review and feedback before implementation.
 
@@ -12,9 +12,9 @@ This directory contains proposals for significant changes to the system that req
 
 ## Active RFCs
 
-| RFC                                                        | Title                           | Product  | Status       | Author           | Date       |
-| ---------------------------------------------------------- | ------------------------------- | -------- | ------------ | ---------------- | ---------- |
-| [0001](./0001-bixarena-leaderboard-snapshot-automation.md) | Leaderboard Snapshot Automation | BixArena | Under Review | Thomas Schaffter | 2026-01-09 |
+| RFC                                                        | Title                                    | Status       | Author           | Date       |
+| ---------------------------------------------------------- | ---------------------------------------- | ------------ | ---------------- | ---------- |
+| [0001](./0001-bixarena-leaderboard-snapshot-automation.md) | BixArena Leaderboard Snapshot Automation | Under Review | Thomas Schaffter | 2026-01-09 |
 
 ## Template
 

@@ -1,4 +1,4 @@
-# Leaderboard Snapshot Automation Implementation Plan
+# BixArena Leaderboard Snapshot Automation Implementation Plan
 
 ## Overview
 
