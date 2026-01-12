@@ -139,10 +139,10 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
    * Builds $addFields operation to create lowercase versions of sort fields
    * for case-insensitive sorting (DocumentDB compatible).
    *
-   * <p>Applies $toLower to all sort fields.
+   * <p>Applies $toLower to string fields only.
    *
    * @param sort the Sort object containing the fields to sort by
-   * @return AggregationOperation that adds lowercase versions of all sort fields
+   * @return AggregationOperation that adds lowercase versions of string sort fields
    */
   private AggregationOperation buildLowercaseSortFields(Sort sort) {
     Document fields = new Document();
@@ -156,13 +156,32 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
           "gene_symbol_lower",
           new Document("$toLower", "$" + DISPLAY_GENE_SYMBOL_FIELD)
         );
-      } else {
-        // For all other fields, apply lowercase transformation
+      } else if (isStringField(field)) {
+        // For other string fields, apply lowercase transformation
         fields.append(field + "_lower", new Document("$toLower", "$" + field));
       }
     }
 
     return context -> new Document("$addFields", fields);
+  }
+
+  /**
+   * Checks if a field is a string field that requires case-insensitive sorting.
+   * Non-string fields (like age columns with nested objects) are excluded.
+   *
+   * @param field the field name
+   * @return true if the field is a string field
+   */
+  private boolean isStringField(String field) {
+    return (
+      "name".equals(field) ||
+      "model_type".equals(field) ||
+      "tissue".equals(field) ||
+      "sex_cohort".equals(field) ||
+      "ensembl_gene_id".equals(field) ||
+      "matched_control".equals(field) ||
+      "model_group".equals(field)
+    );
   }
 
   /**
@@ -297,11 +316,10 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
   }
 
   /**
-   * Adds $sort operation, using lowercase versions of all fields for
+   * Adds $sort operation, using lowercase versions of string fields for
    * case-insensitive sorting (DocumentDB compatible).
    *
-   * <p>Applies _lower suffix to all sort fields to replicate the original
-   * collation behavior which applied case-insensitive sorting globally.
+   * <p>Applies _lower suffix only to string fields.
    */
   private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
     if (sort.isUnsorted()) {
@@ -312,9 +330,11 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     for (Sort.Order order : sort) {
       String field = order.getProperty();
 
-      // Use lowercase version for all fields (case-insensitive sorting)
-      // This replicates original collation behavior
-      field = field + "_lower";
+      // Use lowercase version for string fields (case-insensitive sorting)
+      if (isStringField(field) || GENE_SYMBOL_FIELD.equals(field)) {
+        field = field + "_lower";
+      }
+      // Non-string fields (like age columns) are sorted directly
 
       int direction = order.isAscending() ? 1 : -1;
       sortFields.add(new Document(field, direction));
