@@ -1,6 +1,9 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
@@ -13,11 +16,29 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiDelegate {
+
+  private static final Set<String> VALID_QUERY_PARAMS = Set.of(
+    "pageNumber",
+    "pageSize",
+    "categories",
+    "items",
+    "itemFilterType",
+    "search",
+    "age",
+    "modelType",
+    "modifiedGenes",
+    "name",
+    "sex",
+    "sortFields",
+    "sortOrders"
+  );
 
   private final DiseaseCorrelationService diseaseCorrelationService;
 
@@ -26,6 +47,9 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
     DiseaseCorrelationSearchQueryDto query
   ) {
     log.debug("Fetching disease correlations for categories: {}", query.getCategories());
+
+    // Validate query parameters
+    validateQueryParameters();
 
     String cluster = extractCluster(query.getCategories());
 
@@ -70,5 +94,21 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
     }
 
     return subCategory;
+  }
+
+  private void validateQueryParameters() {
+    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+      .getRequestAttributes())
+      .getRequest();
+    Map<String, String[]> parameterMap = request.getParameterMap();
+
+    log.debug("Validating query parameters: {}", parameterMap.keySet());
+
+    for (String paramName : parameterMap.keySet()) {
+      if (!VALID_QUERY_PARAMS.contains(paramName)) {
+        log.warn("Invalid query parameter: '{}'", paramName);
+        throw new IllegalArgumentException("Unknown query parameter: " + paramName);
+      }
+    }
   }
 }
