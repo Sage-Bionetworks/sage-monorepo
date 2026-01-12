@@ -284,34 +284,34 @@ graph TD
 
 ## Timeline
 
-### Phase 1: Foundation (Week 1)
+### Phase 1: Foundation
 
 - Extract `bixarena-leaderboard` library from `bixarena-tools`
 - Write unit tests for snapshot generation logic
-- Update CLI tool to use library
+- Update CLI tool to use library (Optional, no longer needed when calling the API server)
 
-### Phase 2: Lambda Function (Week 2)
+### Phase 2: Lambda Function
 
 - Implement Lambda handler with Docker container
 - Create CDK infrastructure (Lambda, EventBridge, SNS)
 - Add Slack notifications
 - Deploy to dev environment
 
-### Phase 3: Admin API (Week 3)
+### Phase 3: Admin API
 
 - Add protected endpoint to AI service
 - Implement JWT authentication with admin role check
 - Grant IAM permissions for Lambda invocation
 - Test end-to-end flow
 
-### Phase 4: Testing & Deployment (Week 4)
+### Phase 4: Testing & Deployment
 
 - Integration testing in dev environment
 - Verify daily scheduled executions
 - Test manual triggering via API
 - Deploy to staging and production
 
-**Total Estimated Timeline**: 4 weeks
+**Total Estimated Timeline**: 2-3 weeks
 
 ## Success Criteria
 
@@ -414,7 +414,5 @@ graph TD
 
 ## References
 
-- [Implementation Plan](../architecture/bixarena-leaderboard-snapshot-automation-plan.md) - Detailed technical design and implementation guide
-- Related GitHub Issue: TBD
-- AWS Lambda Limits: https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
-- EventBridge Scheduling: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html
+- [AWS Lambda Limits](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html)
+- [EventBridge Scheduling](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html)
