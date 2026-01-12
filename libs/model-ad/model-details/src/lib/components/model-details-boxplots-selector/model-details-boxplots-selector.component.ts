@@ -27,15 +27,15 @@ import {
   TooltipButtonComponent,
 } from '@sagebionetworks/explorers/util';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
+import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
 import { SelectModule } from 'primeng/select';
-import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-grid/model-details-boxplots-grid.component';
 
 @Component({
   selector: 'model-ad-model-details-boxplots-selector',
   imports: [
     FormsModule,
     SelectModule,
-    ModelDetailsBoxplotsGridComponent,
+    BoxplotsGridComponent,
     ModalLinkComponent,
     DecodeGreekEntityPipe,
     DownloadDomImageComponent,
@@ -53,7 +53,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   readonly BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX = 20;
 
   boxplotsContainer = viewChild('boxplotsContainer', { read: ElementRef });
-  boxplotGrids = viewChildren(ModelDetailsBoxplotsGridComponent, { read: ElementRef });
+  boxplotGrids = viewChildren(BoxplotsGridComponent, { read: ElementRef });
 
   title = input.required<string>();
   modelName = input.required<string>();

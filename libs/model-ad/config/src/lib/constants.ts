@@ -26,7 +26,7 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
 } as const;
 
-export const MODEL_DETAILS_BOXPLOT_POINT_STYLES: PointStyle[] = [
+export const BOXPLOT_POINT_STYLES: PointStyle[] = [
   {
     label: 'Female',
     color: '#D72247',

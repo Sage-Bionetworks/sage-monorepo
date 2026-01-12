@@ -4,7 +4,7 @@ import { CategoryPoint, getTextWidth } from '@sagebionetworks/explorers/charts';
 import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { DecodeGreekEntityPipe } from '@sagebionetworks/explorers/util';
 import { IndividualData, Sex } from '@sagebionetworks/model-ad/api-client';
-import { MODEL_DETAILS_BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
+import { BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
 /**
@@ -33,11 +33,11 @@ export class BoxplotComponent {
   private readonly X_AXIS_LABEL_FONT = "bold 14px 'DM Sans Variable', sans-serif";
 
   pointCategoryColors = Object.fromEntries(
-    MODEL_DETAILS_BOXPLOT_POINT_STYLES.map((style) => [style.label, style.color]),
+    BOXPLOT_POINT_STYLES.map((style) => [style.label, style.color]),
   );
 
   pointCategoryShapes = Object.fromEntries(
-    MODEL_DETAILS_BOXPLOT_POINT_STYLES.map((style) => [style.label, style.shape]),
+    BOXPLOT_POINT_STYLES.map((style) => [style.label, style.shape]),
   );
 
   boxplotData = input.required<BoxplotData>();
