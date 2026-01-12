@@ -19,6 +19,12 @@ function workspace-cd {
 # Add local npm binaries to PATH
 export PATH="$PATH:$WORKSPACE_DIR/node_modules/.bin"
 
+# Alias nx to use pnpm nx to avoid Nx CLI issues
+# See: https://github.com/nrwl/nx/issues/30470
+# Update: Nx fixed the issue via #33369, which is not released yet.
+# Keeping the alias for now to avoid issues until the fix is released.
+alias nx='pnpm nx'
+
 function workspace-install-nodejs-dependencies {
   pnpm install --frozen-lockfile
 }
