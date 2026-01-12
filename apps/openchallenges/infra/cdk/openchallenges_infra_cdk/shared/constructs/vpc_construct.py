@@ -43,16 +43,16 @@ class OpenchallengesVpc(Construct):
             enable_dns_hostnames=True,
             enable_dns_support=True,
             # Create public and private subnets with NAT gateways
+            # Note: cidr_mask is not specified, so CDK will auto-calculate and evenly
+            # divide the VPC CIDR space among all subnets (1 of each type per AZ)
             subnet_configuration=[
                 ec2.SubnetConfiguration(
                     name="Public",
                     subnet_type=ec2.SubnetType.PUBLIC,
-                    cidr_mask=24,
                 ),
                 ec2.SubnetConfiguration(
                     name="Private",
                     subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS,
-                    cidr_mask=24,
                 ),
             ],
             # NAT gateways for internet access from private subnets

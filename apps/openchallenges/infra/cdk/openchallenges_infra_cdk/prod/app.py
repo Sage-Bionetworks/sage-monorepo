@@ -99,7 +99,7 @@ def main() -> None:
     # Create bucket stack
     BucketStack(
         app,
-        stack_prefix,  # Use stack_prefix directly as stack ID
+        f"{stack_prefix}-bucket",
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
