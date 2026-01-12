@@ -17,7 +17,7 @@ async function setup(modelDataList = mockModelDataList) {
 describe('ModelDetailsBoxplotsGridComponent', () => {
   it('should render the correct number of boxplot components', async () => {
     const { container } = await setup();
-    const boxplotComponents = container.querySelectorAll('model-ad-model-details-boxplot');
+    const boxplotComponents = container.querySelectorAll('model-ad-boxplot');
     expect(boxplotComponents).toHaveLength(mockModelDataList.length);
   });
 });

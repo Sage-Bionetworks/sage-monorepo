@@ -1,10 +1,10 @@
 <div class="boxplots-grid">
   @for (modelData of modelDataList(); track modelData; let i = $index) {
-    <model-ad-model-details-boxplot
-      [modelData]="modelData"
-      [sexes]="sexes()"
+    <model-ad-boxplot
+      [boxplotData]="modelData"
+      [sexFilter]="sexes()"
       [showLegend]="false"
-      [genotypeOrder]="genotypeOrder()"
+      [xAxisOrder]="genotypeOrder()"
     />
   }
 </div>

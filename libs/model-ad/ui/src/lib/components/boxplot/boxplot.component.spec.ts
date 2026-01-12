@@ -1,11 +1,8 @@
-import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
+import { Sex } from '@sagebionetworks/model-ad/api-client';
 import { render, screen } from '@testing-library/angular';
-import { ModelDetailsBoxplotComponent } from './model-details-boxplot.component';
+import { BoxplotComponent, BoxplotData } from './boxplot.component';
 
-const mockModelData: ModelData = {
-  name: '3xTg-AD',
-  evidence_type: 'A&beta;42',
-  tissue: 'Cerebral Cortex',
+const mockBoxplotData: BoxplotData = {
   age: '6 months',
   units: 'ng/ml',
   y_axis_max: 10.0,
@@ -17,33 +14,39 @@ const mockModelData: ModelData = {
   ],
 };
 
-async function setup(modelData = mockModelData, sexes: Sex[] = ['Female', 'Male']) {
-  const { fixture } = await render(ModelDetailsBoxplotComponent, {
+async function setup(boxplotData = mockBoxplotData, sexFilter?: Sex[]) {
+  const { fixture } = await render(BoxplotComponent, {
     imports: [],
     componentInputs: {
-      modelData,
-      sexes,
+      boxplotData,
+      sexFilter,
     },
   });
   const component = fixture.componentInstance;
   return { component, fixture };
 }
 
-describe('ModelDetailsBoxplotComponent', () => {
+describe('BoxplotComponent', () => {
   it('should render chart title with age', async () => {
     await setup();
     expect(screen.getByRole('heading', { level: 3, name: '6 months' })).toBeVisible();
   });
 
-  it('should filter data by selected sexes', async () => {
-    const { component } = await setup(mockModelData, ['Male']);
+  it('should include all data when no sex filter is provided', async () => {
+    const { component } = await setup(mockBoxplotData, undefined);
+    const points = component.points();
+    expect(points).toHaveLength(4);
+  });
+
+  it('should filter data by selected sexes when filter is provided', async () => {
+    const { component } = await setup(mockBoxplotData, ['Male']);
     const points = component.points();
     expect(points).toHaveLength(2);
     expect(points.every((point) => point.pointCategory === 'Male')).toBe(true);
   });
 
-  it('should include both sexes when both are selected', async () => {
-    const { component } = await setup(mockModelData, ['Female', 'Male']);
+  it('should include both sexes when both are in the filter', async () => {
+    const { component } = await setup(mockBoxplotData, ['Female', 'Male']);
 
     const points = component.points();
     expect(points).toHaveLength(4);
@@ -55,9 +58,24 @@ describe('ModelDetailsBoxplotComponent', () => {
   });
 
   it('should handle empty sexes filter', async () => {
-    const { component } = await setup(mockModelData, []);
+    const { component } = await setup(mockBoxplotData, []);
     const points = component.points();
     expect(points).toHaveLength(0);
+  });
+
+  it('should compute yAxisMax from data when present', async () => {
+    const { component } = await setup(mockBoxplotData);
+    expect(component.yAxisMax()).toBe(10.0);
+  });
+
+  it('should return undefined yAxisMax when not present in data', async () => {
+    const dataWithoutMax: BoxplotData = {
+      age: '6 months',
+      units: 'ng/ml',
+      data: mockBoxplotData.data,
+    };
+    const { component } = await setup(dataWithoutMax);
+    expect(component.yAxisMax()).toBeUndefined();
   });
 
   it('should format x-axis labels', async () => {

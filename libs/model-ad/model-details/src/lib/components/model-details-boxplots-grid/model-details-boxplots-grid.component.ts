@@ -2,11 +2,11 @@ import { Component, computed, input } from '@angular/core';
 import { LegendDirective } from '@sagebionetworks/explorers/charts-angular';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { MODEL_DETAILS_BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
-import { ModelDetailsBoxplotComponent } from '../model-details-boxplot/model-details-boxplot.component';
+import { BoxplotComponent } from '@sagebionetworks/model-ad/ui';
 
 @Component({
   selector: 'model-ad-model-details-boxplots-grid',
-  imports: [ModelDetailsBoxplotComponent, LegendDirective],
+  imports: [BoxplotComponent, LegendDirective],
   templateUrl: './model-details-boxplots-grid.component.html',
   styleUrls: ['./model-details-boxplots-grid.component.scss'],
 })
