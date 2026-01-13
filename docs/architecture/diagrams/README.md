@@ -16,8 +16,9 @@ This directory contains visual diagrams for system architecture and design docum
 
 ## Guidelines
 
-- Use descriptive filenames (e.g., `feature-name-architecture.svg`)
-- Include version numbers for major revisions (e.g., `system-v2.svg`)
+- **Naming convention**: Use kebab-case with dashes (e.g., `feature-name-architecture.svg`)
+- Use descriptive filenames that clearly identify the system or component
+- Include version numbers for major revisions (e.g., `bixarena-architecture-v2.svg`)
 - Prefer SVG for diagrams (better for version control and scaling)
 - Update the parent [README.md](../README.md) when adding new diagrams
 - Keep source files (e.g., `.drawio`, `.mmd`) in a separate `source/` subdirectory if needed

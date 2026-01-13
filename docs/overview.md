@@ -40,6 +40,8 @@ graph TD
     E --> F[Create ADRs<br/>docs/adr/<br/>as needed]
 ```
 
+**Note on workflow**: While the diagram shows a linear progression, in practice you may draft architecture plans while developing your RFC to clarify your thinking. However, **only submit the RFC for initial review**. The detailed architecture plan should be formalized and moved to `docs/architecture/` only after the RFC is approved. This keeps the review process focused and avoids investing heavily in implementation details before gaining consensus on the approach.
+
 ## Quick Links
 
 - [Active RFCs](rfcs/README.md#active-rfcs)

@@ -51,3 +51,4 @@ See [template.md](./template.md) for the ADR template.
 
 - [ADR GitHub Organization](https://adr.github.io/)
 - [Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
+- [AWS ADR Examples](https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/appendix.html)
