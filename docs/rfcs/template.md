@@ -1,9 +1,10 @@
 ---
 title: [Brief Title]
 date: YYYY-MM-DD
-status: proposed # proposed → approved → rejected → implemented
+status: proposed # proposed → under review → approved → rejected → implemented
 author: [Your Name]
 reviewers: []
+discussion: # Add GitHub PR URL after opening feedback PR (PR #2)
 ---
 
 # [RFC Title]
