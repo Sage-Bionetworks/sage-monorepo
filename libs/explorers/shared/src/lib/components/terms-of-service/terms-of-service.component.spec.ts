@@ -26,12 +26,12 @@ describe('TermsOfServiceComponent', () => {
       mockService.getTermsOfService.mockReturnValue(of(mockMarkdown));
     }
 
-    await render(TermsOfServiceComponent, {
+    const renderResult = await render(TermsOfServiceComponent, {
       componentProviders: [{ provide: SynapseApiService, useValue: mockService }],
       imports: [MockHeroComponent, MockLoadingIconComponent, MarkdownModule.forRoot()],
     });
 
-    return { mockService };
+    return { mockService, renderResult };
   }
 
   it('should display the terms of service content after loading', async () => {
@@ -40,5 +40,22 @@ describe('TermsOfServiceComponent', () => {
     await waitFor(() => {
       expect(screen.getByText(mockContent)).toBeInTheDocument();
     });
+  });
+
+  it('uses the default hero background when no value is provided', async () => {
+    const { renderResult } = await setup();
+    expect(renderResult.fixture.componentInstance.heroBackgroundImagePath()).toBe(
+      'explorers-assets/images/background.svg',
+    );
+  });
+
+  it('updates the hero background when input is overridden', async () => {
+    const { renderResult } = await setup();
+
+    renderResult.fixture.componentRef.setInput('heroBackgroundImagePath', 'custom-assets/hero.svg');
+
+    expect(renderResult.fixture.componentInstance.heroBackgroundImagePath()).toBe(
+      'custom-assets/hero.svg',
+    );
   });
 });
