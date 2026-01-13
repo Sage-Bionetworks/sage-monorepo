@@ -34,10 +34,19 @@ ENV PYTHONPATH="${APP_DIR}"
 
 RUN groupadd --gid "$USER_GID" "$USERNAME" \
   && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
-  # Install sudo
+  # Install dependencies
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
+    ca-certificates \
     gosu \
+    wget \
+    gnupg \
+  # Add MongoDB GPG key and repository (modern scoped trust approach)
+  && wget -qO - https://www.mongodb.org/static/pgp/server-8.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg \
+  && echo "deb [signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" | tee /etc/apt/sources.list.d/mongodb-org-8.0.list \
+  && apt-get update -qq -y \
+  && apt-get install --no-install-recommends -qq -y \
+    mongodb-database-tools \
   && apt-get -y clean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
