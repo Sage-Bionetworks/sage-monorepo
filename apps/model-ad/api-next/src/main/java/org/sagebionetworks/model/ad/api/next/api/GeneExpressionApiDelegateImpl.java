@@ -122,9 +122,14 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   }
 
   private void validateQueryParameters() {
-    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-      .getRequestAttributes())
-      .getRequest();
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+      .getRequestAttributes();
+    if (attributes == null) {
+      log.debug("Skipping query parameter validation: RequestContextHolder returned null");
+      return;
+    }
+
+    HttpServletRequest request = attributes.getRequest();
     Map<String, String[]> parameterMap = request.getParameterMap();
 
     for (String paramName : parameterMap.keySet()) {
