@@ -97,9 +97,14 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   }
 
   private void validateQueryParameters() {
-    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-      .getRequestAttributes())
-      .getRequest();
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+      .getRequestAttributes();
+    if (attributes == null) {
+      log.debug("Skipping query parameter validation: RequestContextHolder returned null");
+      return;
+    }
+
+    HttpServletRequest request = attributes.getRequest();
     Map<String, String[]> parameterMap = request.getParameterMap();
 
     log.debug("Validating query parameters: {}", parameterMap.keySet());
