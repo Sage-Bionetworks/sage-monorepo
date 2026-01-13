@@ -1,5 +1,6 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { HelperService } from '@sagebionetworks/explorers/services';
 import { isExternalLink } from '@sagebionetworks/shared/util';
 
 @Component({
@@ -9,6 +10,8 @@ import { isExternalLink } from '@sagebionetworks/shared/util';
   styleUrls: ['./comparison-tool-table-link.component.scss'],
 })
 export class ComparisonToolTableLinkComponent {
+  private helperService = inject(HelperService);
+
   linkText = input<string>('');
   linkUrl = input<string>('');
 
@@ -19,6 +22,10 @@ export class ComparisonToolTableLinkComponent {
     let path = urlParts[0];
     // ensure path starts with '/'
     path = path.startsWith('/') ? path : `/${path}`;
+
+    // Encode special characters in the path to handle model names with parentheses and forward slashes
+    // e.g., /models/5xFAD (IU/Jax/Pitt) needs proper encoding
+    path = this.helperService.encodeParenthesesForwardSlashes(path);
 
     const queryParams: { [key: string]: string | boolean } = {};
 
