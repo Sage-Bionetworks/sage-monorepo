@@ -42,8 +42,10 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
     wget \
     gnupg \
   # Add MongoDB GPG key and repository (modern scoped trust approach)
-  && wget -qO - https://www.mongodb.org/static/pgp/server-8.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg \
-  && echo "deb [signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" | tee /etc/apt/sources.list.d/mongodb-org-8.0.list \
+  && wget -qO /tmp/mongodb-key.asc https://www.mongodb.org/static/pgp/server-8.0.asc \
+  && gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg /tmp/mongodb-key.asc \
+  && rm /tmp/mongodb-key.asc \
+  && echo "deb [signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" > /etc/apt/sources.list.d/mongodb-org-8.0.list \
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
     mongodb-database-tools \
