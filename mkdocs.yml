@@ -75,6 +75,7 @@ nav:
       - OpenChallenges Schemas: resources/oc-schemas.md
   - Technical Documentation:
       - Overview: overview.md
+      - Submission Workflow: submission-workflow.md
       - RFCs: rfcs/README.md
       - Architecture: architecture/README.md
       - ADRs: adr/README.md

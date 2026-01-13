@@ -4,7 +4,11 @@ This directory contains approved architecture plans, design documents, and syste
 
 ## Process
 
-Architecture documents typically originate from approved RFCs in `docs/rfcs/`. Once an RFC is approved, it moves here and implementation begins.
+Architecture documents typically originate from approved RFCs in `docs/rfcs/`. Once an RFC is approved, a detailed architecture plan is created here as a NEW document that references the source RFC (the RFC remains in `docs/rfcs/` as historical record).
+
+### Submitting an Architecture Plan
+
+See the [Documentation Submission Workflow](../submission-workflow.md) guide for detailed step-by-step instructions on the two-PR process.
 
 ## Active Architecture Documents
 

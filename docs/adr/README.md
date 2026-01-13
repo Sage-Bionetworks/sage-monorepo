@@ -35,12 +35,17 @@ ADRs use the format:
 
 See [template.md](./template.md) for the ADR template.
 
-## Example Workflow
+## Submitting an ADR
+
+See the [Documentation Submission Workflow](../submission-workflow.md) guide for detailed step-by-step instructions on the two-PR process.
+
+### Quick Overview
 
 1. **Create**: Copy template, fill in context and decision
-2. **Review**: Submit PR for team feedback
-3. **Accept**: Merge when consensus reached
-4. **Supersede**: If decision changes, create new ADR referencing the old one
+2. **Publish**: Submit PR #1 to publish to docs site
+3. **Review**: Submit PR #2 for team feedback
+4. **Accept**: Update status when consensus reached
+5. **Supersede**: If decision changes, create new ADR referencing the old one
 
 ## Related Documentation
 
