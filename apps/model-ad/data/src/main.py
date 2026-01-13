@@ -108,8 +108,14 @@ def import_collections_data(collections_filepath: str, local_data_dir: str) -> N
                 f"--file={collection_filepath}",
                 "--jsonArray",
                 "--drop",
-                "--maintainInsertionOrder",
             ]
+
+            # Only maintain insertion order for ui_config collection
+            if collection_name == "ui_config":
+                cmd.append("--maintainInsertionOrder")
+            else:
+                # Use parallel workers for better performance on other collections
+                cmd.append("--numInsertionWorkers=4")
 
             result = subprocess.run(cmd, capture_output=True, text=True)
             if result.returncode != 0:
