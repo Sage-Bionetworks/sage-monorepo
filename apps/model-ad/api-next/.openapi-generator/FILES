@@ -29,10 +29,10 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneExpressionsPag
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/GeneticInfoDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/IndividualDataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ItemFilterTypeQueryDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/LinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewDto.java
-src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewLinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewSearchQueryDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewsPageDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/PageMetadataDto.java

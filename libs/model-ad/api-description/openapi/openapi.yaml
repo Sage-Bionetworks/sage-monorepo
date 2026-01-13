@@ -352,9 +352,9 @@ components:
       required:
         - sortFields
         - sortOrders
-    ModelOverviewLink:
+    Link:
       type: object
-      description: Model Overview Link
+      description: Link
       properties:
         link_text:
           type: string
@@ -381,25 +381,25 @@ components:
             type: string
           description: List of matched control models
         gene_expression:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         disease_correlation:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         biomarkers:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         pathology:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         study_data:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         jax_strain:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         center:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         modified_genes:
           type: array
@@ -854,8 +854,8 @@ components:
           items:
             type: string
         name:
-          type: string
-          description: Model name
+          $ref: '#/components/schemas/Link'
+          description: Model name and link to model details page
         matched_control:
           type: string
           description: Matched control for the model

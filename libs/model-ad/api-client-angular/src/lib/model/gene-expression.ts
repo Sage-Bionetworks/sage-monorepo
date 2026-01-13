@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { FoldChangeResult } from './fold-change-result';
+import { Link } from './link';
 import { SexCohort } from './sex-cohort';
 
 /**
@@ -30,10 +31,7 @@ export interface GeneExpression {
    * List of biodomains associated with the gene
    */
   biodomains: Array<string>;
-  /**
-   * Model name
-   */
-  name: string;
+  name: Link;
   /**
    * Matched control for the model
    */

@@ -1,5 +1,5 @@
 type: object
-description: Model Overview Link
+description: Link
 properties:
   link_text:
     type: string

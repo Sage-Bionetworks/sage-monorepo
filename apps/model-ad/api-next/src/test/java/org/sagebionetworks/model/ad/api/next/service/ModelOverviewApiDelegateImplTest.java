@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -18,17 +17,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.api.*;
+import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
-import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument.ModelOverviewLink;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,7 +55,7 @@ class ModelOverviewApiDelegateImplTest {
 
     ModelOverviewService queryService = new ModelOverviewService(
       repository,
-      new ModelOverviewMapper()
+      new ModelOverviewMapper(new LinkMapper())
     );
     delegate = new ModelOverviewApiDelegateImpl(queryService);
   }
@@ -68,7 +69,9 @@ class ModelOverviewApiDelegateImplTest {
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of());
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
+    when(
+      repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
@@ -90,7 +93,11 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(headers.getExpires()).isZero();
     assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
 
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of())
+    );
   }
 
   @Test
@@ -100,7 +107,13 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewDocument document = buildDocument(modelName);
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(document), PageRequest.of(0, 100), 1);
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of(modelName)))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(ModelOverviewSearchQueryDto.class),
+        eq(List.of(modelName))
+      )
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of(modelName))
@@ -149,7 +162,9 @@ class ModelOverviewApiDelegateImplTest {
       2
     );
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
+    when(
+      repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
@@ -165,7 +180,11 @@ class ModelOverviewApiDelegateImplTest {
     assertThat(response.getBody().getModelOverviews()).hasSize(2);
     assertThat(response.getBody().getPage().getTotalElements()).isEqualTo(2);
 
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of())
+    );
   }
 
   @Test
@@ -180,7 +199,13 @@ class ModelOverviewApiDelegateImplTest {
       1
     );
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of(excludedName)))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(ModelOverviewSearchQueryDto.class),
+        eq(List.of(excludedName))
+      )
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of(excludedName))
@@ -197,7 +222,11 @@ class ModelOverviewApiDelegateImplTest {
     ModelOverviewDto dto = response.getBody().getModelOverviews().get(0);
     assertThat(dto.getName()).isEqualTo(includedName);
 
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of(excludedName)));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of(excludedName))
+    );
   }
 
   @Test
@@ -221,12 +250,12 @@ class ModelOverviewApiDelegateImplTest {
   }
 
   private ModelOverviewDocument buildDocument(String name) {
-    ModelOverviewLink requiredLink = ModelOverviewLink.builder()
+    Link requiredLink = Link.builder()
       .linkText("Study")
       .linkUrl("https://example.org/study")
       .build();
 
-    ModelOverviewLink optionalLink = ModelOverviewLink.builder()
+    Link optionalLink = Link.builder()
       .linkText("Gene Expression")
       .linkUrl("https://example.org/gene")
       .build();
