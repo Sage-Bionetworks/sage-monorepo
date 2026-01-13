@@ -50,7 +50,7 @@ public class CustomDiseaseCorrelationRepositoryImpl
     try {
       List<AggregationOperation> operations = new ArrayList<>();
 
-      // Add lowercase versions of all sort fields for case-insensitive sorting
+      // Add lowercase versions of string sort fields for case-insensitive sorting
       operations.add(buildLowercaseSortFields(pageable.getSort()));
 
       // Build match criteria with all filters
@@ -87,21 +87,42 @@ public class CustomDiseaseCorrelationRepositoryImpl
    * Builds $addFields operation to create lowercase versions of sort fields
    * for case-insensitive sorting (DocumentDB compatible).
    *
-   * <p>Applies $toLower to all sort fields.
+   * <p>Only applies $toLower to string fields. Non-string fields (like correlation result
+   * objects) are excluded to prevent aggregation errors.
    *
    * @param sort the Sort object containing the fields to sort by
-   * @return AggregationOperation that adds lowercase versions of all sort fields
+   * @return AggregationOperation that adds lowercase versions of string sort fields
    */
   private AggregationOperation buildLowercaseSortFields(Sort sort) {
     Document fields = new Document();
 
     for (Sort.Order order : sort) {
       String field = order.getProperty();
-      // For all fields, apply lowercase transformation
-      fields.append(field + "_lower", new Document("$toLower", "$" + field));
+      if (isStringField(field)) {
+        // For string fields, apply lowercase transformation
+        fields.append(field + "_lower", new Document("$toLower", "$" + field));
+      }
     }
 
     return context -> new Document("$addFields", fields);
+  }
+
+  /**
+   * Checks if a field is a string field that requires case-insensitive sorting.
+   * Non-string fields (like correlation result objects with numeric values) are excluded.
+   *
+   * @param field the field name
+   * @return true if the field is a string field
+   */
+  private boolean isStringField(String field) {
+    return (
+      "name".equals(field) ||
+      "age".equals(field) ||
+      "sex".equals(field) ||
+      "model_type".equals(field) ||
+      "matched_control".equals(field) ||
+      "cluster".equals(field)
+    );
   }
 
   /**
@@ -249,11 +270,10 @@ public class CustomDiseaseCorrelationRepositoryImpl
   }
 
   /**
-   * Adds $sort operation, using lowercase versions of all fields for
+   * Adds $sort operation, using lowercase versions of string fields for
    * case-insensitive sorting (DocumentDB compatible).
    *
-   * <p>Applies _lower suffix to all sort fields to replicate the original
-   * collation behavior which applied case-insensitive sorting globally.
+   * <p>Applies _lower suffix only to string fields.
    */
   private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
     if (sort.isUnsorted()) {
@@ -264,9 +284,11 @@ public class CustomDiseaseCorrelationRepositoryImpl
     for (Sort.Order order : sort) {
       String field = order.getProperty();
 
-      // Use lowercase version for all fields (case-insensitive sorting)
-      // This replicates original collation behavior
-      field = field + "_lower";
+      // Use lowercase version for string fields (case-insensitive sorting)
+      if (isStringField(field)) {
+        field = field + "_lower";
+      }
+      // Non-string fields (like correlation result objects) are sorted directly
 
       int direction = order.isAscending() ? 1 : -1;
       sortFields.add(new Document(field, direction));
