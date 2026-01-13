@@ -35,6 +35,26 @@ export interface DiseaseCorrelationSearchQuery {
    */
   search?: string | null;
   /**
+   * Filter by age.
+   */
+  age?: Array<string> | null;
+  /**
+   * Filter by model type.
+   */
+  modelType?: Array<string> | null;
+  /**
+   * Filter by modified genes.
+   */
+  modifiedGenes?: Array<string> | null;
+  /**
+   * Filter by mouse model name.
+   */
+  name?: Array<string> | null;
+  /**
+   * Filter by sex.
+   */
+  sex?: Array<string> | null;
+  /**
    * List of field names to sort by (e.g., [\"name\", \"age\", \"sex\"]). Each field in sortFields must have a corresponding order in sortOrders.
    */
   sortFields: Array<string>;
