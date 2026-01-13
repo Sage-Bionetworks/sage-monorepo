@@ -14,7 +14,7 @@ import org.hibernate.search.engine.backend.types.Aggregable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 @Entity
-@Table(name = "challenge_platform")
+@Table(name = "challenge_platform", schema = "challenge")
 @Data
 @Builder
 @NoArgsConstructor

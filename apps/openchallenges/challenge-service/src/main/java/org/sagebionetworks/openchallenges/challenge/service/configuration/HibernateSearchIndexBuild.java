@@ -7,11 +7,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ConditionalOnProperty(
+  name = "spring.jpa.properties.hibernate.search.enabled",
+  havingValue = "true",
+  matchIfMissing = false
+)
 @RequiredArgsConstructor
 @Slf4j
 public class HibernateSearchIndexBuild implements ApplicationListener<ApplicationReadyEvent> {

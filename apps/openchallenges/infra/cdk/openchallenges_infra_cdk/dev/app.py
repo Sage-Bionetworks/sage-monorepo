@@ -12,7 +12,11 @@ from openchallenges_infra_cdk.shared.config import (
 )
 from openchallenges_infra_cdk.shared.stacks.alb_stack import AlbStack
 from openchallenges_infra_cdk.shared.stacks.app_service_stack import AppServiceStack
+from openchallenges_infra_cdk.shared.stacks.bastion_stack import BastionStack
 from openchallenges_infra_cdk.shared.stacks.bucket_stack import BucketStack
+from openchallenges_infra_cdk.shared.stacks.challenge_service_stack import (
+    ChallengeServiceStack,
+)
 from openchallenges_infra_cdk.shared.stacks.database_stack import DatabaseStack
 from openchallenges_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
 from openchallenges_infra_cdk.shared.stacks.vpc_stack import VpcStack
@@ -91,6 +95,47 @@ def main() -> None:
         description=f"ECS cluster for OpenChallenges {environment} environment",
     )
     ecs_cluster_stack.add_dependency(vpc_stack)
+
+    # Create bastion stack for database access (depends on VPC and ECS cluster)
+    bastion_stack = BastionStack(
+        app,
+        f"{stack_prefix}-bastion",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        description=(
+            f"Bastion service for database access in {environment} environment"
+        ),
+    )
+    bastion_stack.add_dependency(ecs_cluster_stack)
+    bastion_stack.add_dependency(vpc_stack)
+
+    # Create Challenge service stack (depends on database, ECS cluster)
+    # Database secret is guaranteed to exist since we use from_generated_secret()
+    database_secret = database_stack.database_construct.database_secret
+    if database_secret is None:
+        raise ValueError(
+            "Database secret must be created. "
+            "Verify PostgreSQL database initialization completed successfully."
+        )
+    ChallengeServiceStack(
+        app,
+        f"{stack_prefix}-challenge-service",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        database=database_stack.database_construct.database,
+        database_secret_arn=database_secret.secret_arn,
+        app_version=app_version,
+        description=f"Challenge service for OpenChallenges {environment} environment",
+    )
+    # Note: Dependencies are automatic via CloudFormation references
+    # (database endpoint, etc.). Don't add manual add_dependency() calls
+    # to avoid cyclic dependencies with security group rules
 
     # Create app service stack (depends on ECS cluster and ALB)
     # Uses ALB DNS name by default, or custom FQDN if provided

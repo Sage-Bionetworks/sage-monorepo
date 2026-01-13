@@ -36,7 +36,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDe
 import org.sagebionetworks.openchallenges.challenge.service.model.search.CollectionSizeBridge;
 
 @Entity
-@Table(name = "challenge")
+@Table(name = "challenge", schema = "challenge")
 @Data
 @Builder
 @NoArgsConstructor
@@ -97,6 +97,7 @@ public class ChallengeEntity {
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
     name = "challenge_input_data_type",
+    schema = "challenge",
     joinColumns = @JoinColumn(name = "challenge_id"),
     inverseJoinColumns = @JoinColumn(name = "edam_concept_id")
   )

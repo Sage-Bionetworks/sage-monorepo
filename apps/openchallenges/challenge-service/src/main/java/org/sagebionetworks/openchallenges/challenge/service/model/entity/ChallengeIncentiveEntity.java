@@ -18,7 +18,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Entity
-@Table(name = "challenge_incentive")
+@Table(name = "challenge_incentive", schema = "challenge")
 @Data
 @Builder
 @NoArgsConstructor
