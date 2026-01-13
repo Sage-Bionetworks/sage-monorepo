@@ -44,6 +44,15 @@ public class GeneExpressionSearchQueryDto {
   private @Nullable String search = null;
 
   @Valid
+  private @Nullable List<String> biodomains;
+
+  @Valid
+  private @Nullable List<String> modelType;
+
+  @Valid
+  private @Nullable List<String> name;
+
+  @Valid
   private List<String> sortFields = new ArrayList<>();
 
   /**
@@ -236,6 +245,90 @@ public class GeneExpressionSearchQueryDto {
     this.search = search;
   }
 
+  public GeneExpressionSearchQueryDto biodomains(@Nullable List<String> biodomains) {
+    this.biodomains = biodomains;
+    return this;
+  }
+
+  public GeneExpressionSearchQueryDto addBiodomainsItem(String biodomainsItem) {
+    if (this.biodomains == null) {
+      this.biodomains = new ArrayList<>();
+    }
+    this.biodomains.add(biodomainsItem);
+    return this;
+  }
+
+  /**
+   * Filter by biological domains.
+   * @return biodomains
+   */
+  
+  @Schema(name = "biodomains", example = "[\"Apoptosis\",\"Cell Cycle\"]", description = "Filter by biological domains.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("biodomains")
+  public @Nullable List<String> getBiodomains() {
+    return biodomains;
+  }
+
+  public void setBiodomains(@Nullable List<String> biodomains) {
+    this.biodomains = biodomains;
+  }
+
+  public GeneExpressionSearchQueryDto modelType(@Nullable List<String> modelType) {
+    this.modelType = modelType;
+    return this;
+  }
+
+  public GeneExpressionSearchQueryDto addModelTypeItem(String modelTypeItem) {
+    if (this.modelType == null) {
+      this.modelType = new ArrayList<>();
+    }
+    this.modelType.add(modelTypeItem);
+    return this;
+  }
+
+  /**
+   * Filter by model type.
+   * @return modelType
+   */
+  
+  @Schema(name = "modelType", example = "[\"Familial AD\",\"Late Onset AD\"]", description = "Filter by model type.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("modelType")
+  public @Nullable List<String> getModelType() {
+    return modelType;
+  }
+
+  public void setModelType(@Nullable List<String> modelType) {
+    this.modelType = modelType;
+  }
+
+  public GeneExpressionSearchQueryDto name(@Nullable List<String> name) {
+    this.name = name;
+    return this;
+  }
+
+  public GeneExpressionSearchQueryDto addNameItem(String nameItem) {
+    if (this.name == null) {
+      this.name = new ArrayList<>();
+    }
+    this.name.add(nameItem);
+    return this;
+  }
+
+  /**
+   * Filter by mouse model name.
+   * @return name
+   */
+  
+  @Schema(name = "name", example = "[\"3xTg-AD\",\"5xFAD (IU/Jax/Pitt)\"]", description = "Filter by mouse model name.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("name")
+  public @Nullable List<String> getName() {
+    return name;
+  }
+
+  public void setName(@Nullable List<String> name) {
+    this.name = name;
+  }
+
   public GeneExpressionSearchQueryDto sortFields(List<String> sortFields) {
     this.sortFields = sortFields;
     return this;
@@ -307,13 +400,16 @@ public class GeneExpressionSearchQueryDto {
         Objects.equals(this.items, geneExpressionSearchQuery.items) &&
         Objects.equals(this.itemFilterType, geneExpressionSearchQuery.itemFilterType) &&
         Objects.equals(this.search, geneExpressionSearchQuery.search) &&
+        Objects.equals(this.biodomains, geneExpressionSearchQuery.biodomains) &&
+        Objects.equals(this.modelType, geneExpressionSearchQuery.modelType) &&
+        Objects.equals(this.name, geneExpressionSearchQuery.name) &&
         Objects.equals(this.sortFields, geneExpressionSearchQuery.sortFields) &&
         Objects.equals(this.sortOrders, geneExpressionSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, categories, items, itemFilterType, search, biodomains, modelType, name, sortFields, sortOrders);
   }
 
   @Override
@@ -326,6 +422,9 @@ public class GeneExpressionSearchQueryDto {
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
+    sb.append("    biodomains: ").append(toIndentedString(biodomains)).append("\n");
+    sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
     sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
@@ -362,6 +461,9 @@ public class GeneExpressionSearchQueryDto {
       this.instance.setItems(value.items);
       this.instance.setItemFilterType(value.itemFilterType);
       this.instance.setSearch(value.search);
+      this.instance.setBiodomains(value.biodomains);
+      this.instance.setModelType(value.modelType);
+      this.instance.setName(value.name);
       this.instance.setSortFields(value.sortFields);
       this.instance.setSortOrders(value.sortOrders);
       return this;
@@ -394,6 +496,21 @@ public class GeneExpressionSearchQueryDto {
     
     public GeneExpressionSearchQueryDto.Builder search(String search) {
       this.instance.search(search);
+      return this;
+    }
+    
+    public GeneExpressionSearchQueryDto.Builder biodomains(List<String> biodomains) {
+      this.instance.biodomains(biodomains);
+      return this;
+    }
+    
+    public GeneExpressionSearchQueryDto.Builder modelType(List<String> modelType) {
+      this.instance.modelType(modelType);
+      return this;
+    }
+    
+    public GeneExpressionSearchQueryDto.Builder name(List<String> name) {
+      this.instance.name(name);
       return this;
     }
     

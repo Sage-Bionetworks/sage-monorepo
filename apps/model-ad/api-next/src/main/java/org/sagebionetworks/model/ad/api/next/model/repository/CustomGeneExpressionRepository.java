@@ -1,43 +1,34 @@
 package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.lang.Nullable;
 
 /**
- * Custom repository interface for Gene Expression queries with computed field sorting.
+ * Custom repository interface for Gene Expression queries with filtering and search.
  *
- * <p>This interface defines custom query methods that require MongoTemplate for aggregation
- * pipelines that compute a display_gene_symbol field for proper sorting when gene_symbol
- * is null or blank.
+ * <p>This interface defines custom query methods that require MongoTemplate for complex filtering
+ * logic that cannot be expressed using Spring Data's derived query methods.
  */
 public interface CustomGeneExpressionRepository {
 
   /**
-   * Find gene expressions with sorting that handles gene_symbol fallback to ensembl_gene_id.
-   * When sorting by gene_symbol, uses a computed field that falls back to ensembl_gene_id
-   * when gene_symbol is null or blank.
+   * Find all gene expressions matching the given query criteria.
    *
-   * @param tissue the tissue type
-   * @param sexCohort the sex cohort
-   * @param compositeConditions conditions for $or/$nor queries (can be null)
-   * @param isExclude true for $nor (exclude), false for $or (include)
-   * @param geneSymbolSearch regex pattern for gene symbol search (can be null)
-   * @param geneSymbolPatterns list of patterns for exact gene symbol matches (can be null)
-   * @param pageable pagination and sorting information
-   * @return page of gene expression documents with proper sorting
+   * @param pageable the pagination information
+   * @param query the search query containing all filter criteria
+   * @param items the sanitized list of composite identifiers (from query.items)
+   * @param tissue the tissue filter value extracted from categories
+   * @param sexCohort the sex cohort filter value extracted from categories
+   * @return page of gene expression documents matching all criteria
    */
-  Page<GeneExpressionDocument> findWithComputedSort(
+  Page<GeneExpressionDocument> findAll(
+    Pageable pageable,
+    GeneExpressionSearchQueryDto query,
+    List<String> items,
     String tissue,
-    String sexCohort,
-    @Nullable List<Map<String, Object>> compositeConditions,
-    boolean isExclude,
-    @Nullable String geneSymbolSearch,
-    @Nullable List<Pattern> geneSymbolPatterns,
-    Pageable pageable
+    String sexCohort
   );
 }

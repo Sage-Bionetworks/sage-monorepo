@@ -35,6 +35,18 @@ export interface GeneExpressionSearchQuery {
    */
   search?: string | null;
   /**
+   * Filter by biological domains.
+   */
+  biodomains?: Array<string> | null;
+  /**
+   * Filter by model type.
+   */
+  modelType?: Array<string> | null;
+  /**
+   * Filter by mouse model name.
+   */
+  name?: Array<string> | null;
+  /**
    * List of field names to sort by (e.g., \"gene_symbol,name\"). Each field in sortFields must have a corresponding order in sortOrders.
    */
   sortFields: Array<string>;
