@@ -6,10 +6,6 @@ This directory contains architecture plans, design documents, and system diagram
 
 Architecture documents typically originate from approved RFCs in `docs/rfcs/`. Once an RFC is approved, a detailed architecture plan is created here as a new document that references the source RFC (the RFC remains in `docs/rfcs/` as historical record).
 
-### Submitting an Architecture Plan
-
-See the [Documentation Submission Workflow](../submission-workflow.md) guide for detailed step-by-step instructions on the two-PR process.
-
 ## Architecture Documents
 
 | Document                                                                                       | Status      | Date       | Description                                           |
@@ -35,6 +31,14 @@ architecture/
 │   └── bixarena-architecture-v1.gif
 └── *.md                               # Architecture documents
 ```
+
+## Template
+
+See [template.md](./template.md) for the architecture plan template.
+
+## Submitting an Architecture Plan
+
+See the [Documentation Submission Workflow](../submission-workflow.md) guide for detailed step-by-step instructions on the two-PR process.
 
 ## Guidelines
 

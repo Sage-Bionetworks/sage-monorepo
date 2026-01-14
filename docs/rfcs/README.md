@@ -19,10 +19,6 @@ Once approved, the RFC remains in `docs/rfcs/` as an immutable historical record
 - **Centralized Feedback**: All discussion happens in PR #2 for easy reference
 - **Lightweight Proposals**: RFCs focus on "why" and "what", detailed "how" comes in architecture plan after approval
 
-### Submitting an RFC
-
-See the [Documentation Submission Workflow](../submission-workflow.md) guide for detailed step-by-step instructions on the two-PR process.
-
 ## RFCs
 
 | RFC                                                        | Title                                    | Status          | Author           | Date       |
@@ -33,6 +29,10 @@ See the [Documentation Submission Workflow](../submission-workflow.md) guide for
 
 See [template.md](./template.md) for the RFC template.
 
+## Submitting an RFC
+
+See the [Documentation Submission Workflow](../submission-workflow.md) guide for detailed step-by-step instructions on the two-PR process.
+
 ## Guidelines
 
 - Use clear, descriptive titles
@@ -40,3 +40,8 @@ See [template.md](./template.md) for the RFC template.
 - Focus on "why" and "what", not just "how"
 - Keep implementation details at appropriate level (not too granular)
 - Include timeline and success criteria
+
+## Related Documentation
+
+- See [Architecture Plans](../architecture/README.md) for approved designs
+- See [ADRs](../adr/README.md) for specific architectural decisions
