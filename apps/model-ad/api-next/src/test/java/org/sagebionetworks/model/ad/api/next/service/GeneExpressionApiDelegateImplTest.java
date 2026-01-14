@@ -448,7 +448,9 @@ class GeneExpressionApiDelegateImplTest {
     document.setEnsemblGeneId("ENSMUSG00000000001");
     document.setGeneSymbol("Gnai3");
     document.setBiodomains(List.of("Apoptosis", "Autophagy", "Synapse"));
-    document.setName(Link.builder().linkText("5xFAD (Jax/IU/Pitt)").linkUrl("").build());
+    document.setName(
+      Link.builder().linkText("5xFAD (Jax/IU/Pitt)").linkUrl("models/5xFAD (Jax/IU/Pitt)").build()
+    );
     document.setMatchedControl("C57BL/6J");
     document.setModelGroup(null);
     document.setModelType("Familial AD");
@@ -466,7 +468,7 @@ class GeneExpressionApiDelegateImplTest {
     document.setEnsemblGeneId("ENSMUSG00000000002");
     document.setGeneSymbol("Apoe");
     document.setBiodomains(List.of("Lipid Metabolism"));
-    document.setName(Link.builder().linkText("APOE4").linkUrl("").build());
+    document.setName(Link.builder().linkText("APOE4").linkUrl("models/APOE4").build());
     document.setMatchedControl("C57BL/6J");
     document.setModelGroup(null);
     document.setModelType("Familial AD");

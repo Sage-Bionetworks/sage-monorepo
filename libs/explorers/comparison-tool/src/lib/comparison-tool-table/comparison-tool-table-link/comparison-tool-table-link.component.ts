@@ -10,12 +10,12 @@ import { isExternalLink } from '@sagebionetworks/shared/util';
   styleUrls: ['./comparison-tool-table-link.component.scss'],
 })
 export class ComparisonToolTableLinkComponent {
-  private helperService = inject(HelperService);
+  private readonly helperService = inject(HelperService);
 
   linkText = input<string>('');
   linkUrl = input<string>('');
 
-  private parsedUrl = computed(() => {
+  private readonly parsedUrl = computed(() => {
     const url = this.linkUrl().trim();
     const urlParts = url.split('?');
 
@@ -43,7 +43,5 @@ export class ComparisonToolTableLinkComponent {
   internalLinkPath = computed(() => this.parsedUrl().path);
   internalLinkQueryParams = computed(() => this.parsedUrl().queryParams);
 
-  isExternalUrl(): boolean {
-    return isExternalLink(this.linkUrl());
-  }
+  isExternalUrl = computed<boolean>((): boolean => isExternalLink(this.linkUrl()));
 }
