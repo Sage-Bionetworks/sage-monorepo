@@ -1,8 +1,5 @@
 <div id="terms-of-service-container">
-  <explorers-hero
-    title="Terms of Service"
-    backgroundImagePath="explorers-assets/images/background.svg"
-  />
+  <explorers-hero title="Terms of Service" [backgroundImagePath]="heroBackgroundImagePath()" />
   <div class="terms-of-service">
     @if (isLoading) {
       <div class="loading-icon">

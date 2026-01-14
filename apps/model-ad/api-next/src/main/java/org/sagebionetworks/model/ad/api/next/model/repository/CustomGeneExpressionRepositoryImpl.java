@@ -2,12 +2,16 @@ package org.sagebionetworks.model.ad.api.next.model.repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIdentifier;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +19,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.query.Collation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Custom repository implementation using MongoDB aggregation pipeline.
+ *
+ * <p>Uses aggregation to support computed field (display_gene_symbol) for proper sorting
+ * when gene_symbol is null/blank. All filtering logic is unified in a single implementation.
+ */
 @Repository
 @RequiredArgsConstructor
 @Slf4j
@@ -34,40 +41,37 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
   private final MongoTemplate mongoTemplate;
 
   @Override
-  public Page<GeneExpressionDocument> findWithComputedSort(
+  public Page<GeneExpressionDocument> findAll(
+    Pageable pageable,
+    GeneExpressionSearchQueryDto query,
+    List<String> items,
     String tissue,
-    String sexCohort,
-    @Nullable List<Map<String, Object>> compositeConditions,
-    boolean isExclude,
-    @Nullable String geneSymbolSearch,
-    @Nullable List<Pattern> geneSymbolPatterns,
-    Pageable pageable
+    String sexCohort
   ) {
-    log.info("findWithComputedSort: tissue={}, sexCohort={}, isExclude={}",
-      tissue, sexCohort, isExclude);
-
     try {
       List<AggregationOperation> operations = new ArrayList<>();
 
-      // Add computed field for sorting: display_gene_symbol
-      // Uses gene_symbol if not null/blank, otherwise falls back to ensembl_gene_id
-      operations.add(buildAddFieldsOperation());
+      // Add display_gene_symbol field (with fallback) if sorting by gene_symbol
+      boolean sortsByGeneSymbol = pageable
+        .getSort()
+        .stream()
+        .anyMatch(o -> GENE_SYMBOL_FIELD.equals(o.getProperty()));
 
-      // Build match criteria
-      Criteria matchCriteria = buildMatchCriteria(
-        tissue,
-        sexCohort,
-        compositeConditions,
-        isExclude,
-        geneSymbolSearch,
-        geneSymbolPatterns
-      );
+      if (sortsByGeneSymbol) {
+        operations.add(buildDisplayGeneSymbolField());
+      }
+
+      // Add lowercase versions of string sort fields for case-insensitive sorting
+      operations.add(buildLowercaseSortFields(pageable.getSort()));
+
+      // Build match criteria with all filters
+      Criteria matchCriteria = buildMatchCriteria(tissue, sexCohort, query, items);
       operations.add(Aggregation.match(matchCriteria));
 
-      // Count total before pagination (for Page metadata)
+      // Count total before pagination
       final long total = countDocuments(operations);
 
-      // Add sorting with computed field substitution
+      // Add sorting (uses lowercase fields for case-insensitive sorting)
       addSortOperation(operations, pageable.getSort());
 
       // Add pagination
@@ -75,12 +79,7 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       operations.add(Aggregation.skip(skipCount));
       operations.add(Aggregation.limit(pageable.getPageSize()));
 
-      // Use collation for case-insensitive sorting (strength 2 = secondary = case-insensitive)
-      AggregationOptions options = AggregationOptions.builder()
-        .collation(Collation.of("en").strength(Collation.ComparisonLevel.secondary()))
-        .build();
-
-      Aggregation aggregation = Aggregation.newAggregation(operations).withOptions(options);
+      Aggregation aggregation = Aggregation.newAggregation(operations);
 
       AggregationResults<GeneExpressionDocument> results = mongoTemplate.aggregate(
         aggregation,
@@ -88,99 +87,240 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
         GeneExpressionDocument.class
       );
 
-      log.info("Aggregation returned {} results, total={}",
-        results.getMappedResults().size(), total);
       return new PageImpl<>(results.getMappedResults(), pageable, total);
     } catch (Exception e) {
-      log.error("Error executing gene expression aggregation", e);
+      log.error("Error executing gene expression query", e);
       throw e;
     }
   }
 
-  private AggregationOperation buildAddFieldsOperation() {
-    // Build the $cond expression using mutable ArrayLists for MongoDB compatibility
+  /**
+   * Builds $addFields operation to compute display_gene_symbol.
+   * Formula: display_gene_symbol = gene_symbol ?? ensembl_gene_id
+   * (uses ensembl_gene_id when gene_symbol is null, empty, or whitespace)
+   */
+  private AggregationOperation buildDisplayGeneSymbolField() {
+    // Check if gene_symbol is null
     List<Object> eqNull = new ArrayList<>();
     eqNull.add("$gene_symbol");
     eqNull.add(null);
 
+    // Check if gene_symbol is empty string
     List<Object> eqEmpty = new ArrayList<>();
     eqEmpty.add("$gene_symbol");
     eqEmpty.add("");
 
+    // Check if gene_symbol is only whitespace
     List<Object> eqTrimmed = new ArrayList<>();
     eqTrimmed.add(new Document("$trim", new Document("input", "$gene_symbol")));
     eqTrimmed.add("");
 
+    // Combine all null/empty/whitespace checks with $or
     List<Document> orConditions = new ArrayList<>();
     orConditions.add(new Document("$eq", eqNull));
     orConditions.add(new Document("$eq", eqEmpty));
     orConditions.add(new Document("$eq", eqTrimmed));
 
+    // $cond: if (gene_symbol is null/empty/whitespace) then ensembl_gene_id else gene_symbol
     List<Object> condArgs = new ArrayList<>();
     condArgs.add(new Document("$or", orConditions));
     condArgs.add("$ensembl_gene_id");
     condArgs.add("$gene_symbol");
 
-    Document addFieldsDoc = new Document("$addFields",
-      new Document(DISPLAY_GENE_SYMBOL_FIELD, new Document("$cond", condArgs)));
+    Document addFieldsDoc = new Document(
+      "$addFields",
+      new Document(DISPLAY_GENE_SYMBOL_FIELD, new Document("$cond", condArgs))
+    );
 
     return context -> addFieldsDoc;
   }
 
-  private Criteria buildMatchCriteria(
-    String tissue,
-    String sexCohort,
-    @Nullable List<Map<String, Object>> compositeConditions,
-    boolean isExclude,
-    @Nullable String geneSymbolSearch,
-    @Nullable List<Pattern> geneSymbolPatterns
-  ) {
-    List<Criteria> allCriteria = new ArrayList<>();
+  /**
+   * Builds $addFields operation to create lowercase versions of sort fields
+   * for case-insensitive sorting (DocumentDB compatible).
+   *
+   * <p>Applies $toLower to string fields only.
+   *
+   * @param sort the Sort object containing the fields to sort by
+   * @return AggregationOperation that adds lowercase versions of string sort fields
+   */
+  private AggregationOperation buildLowercaseSortFields(Sort sort) {
+    Document fields = new Document();
 
-    // Base criteria for tissue and sex_cohort
-    allCriteria.add(Criteria.where("tissue").is(tissue));
-    allCriteria.add(Criteria.where("sex_cohort").is(sexCohort));
+    for (Sort.Order order : sort) {
+      String field = order.getProperty();
 
-    // Add composite identifier conditions
-    if (compositeConditions != null && !compositeConditions.isEmpty()) {
-      Criteria[] compositeCriteria = compositeConditions.stream()
-        .map(this::compositeConditionToCriteria)
-        .toArray(Criteria[]::new);
-
-      if (isExclude) {
-        allCriteria.add(new Criteria().norOperator(compositeCriteria));
-      } else {
-        allCriteria.add(new Criteria().orOperator(compositeCriteria));
+      if (GENE_SYMBOL_FIELD.equals(field)) {
+        // For gene_symbol, use display_gene_symbol (which has fallback logic)
+        fields.append(
+          "gene_symbol_lower",
+          new Document("$toLower", "$" + DISPLAY_GENE_SYMBOL_FIELD)
+        );
+      } else if (isStringField(field)) {
+        // For other string fields, apply lowercase transformation
+        fields.append(field + "_lower", new Document("$toLower", "$" + field));
       }
     }
 
-    // Add gene symbol search
-    if (geneSymbolSearch != null) {
-      allCriteria.add(Criteria.where(GENE_SYMBOL_FIELD).regex(geneSymbolSearch, "i"));
-    } else if (geneSymbolPatterns != null && !geneSymbolPatterns.isEmpty()) {
-      allCriteria.add(Criteria.where(GENE_SYMBOL_FIELD).in(geneSymbolPatterns));
-    }
+    return context -> new Document("$addFields", fields);
+  }
+
+  /**
+   * Checks if a field is a string field that requires case-insensitive sorting.
+   * Non-string fields (like age columns with nested objects) are excluded.
+   *
+   * @param field the field name
+   * @return true if the field is a string field
+   */
+  private boolean isStringField(String field) {
+    return (
+      "name".equals(field) ||
+      "model_type".equals(field) ||
+      "tissue".equals(field) ||
+      "sex_cohort".equals(field) ||
+      "ensembl_gene_id".equals(field) ||
+      "matched_control".equals(field) ||
+      "model_group".equals(field)
+    );
+  }
+
+  /**
+   * Builds match criteria combining all filters: tissue, sex_cohort, data filters,
+   * composite identifiers, and gene symbol search.
+   */
+  private Criteria buildMatchCriteria(
+    String tissue,
+    String sexCohort,
+    GeneExpressionSearchQueryDto query,
+    List<String> items
+  ) {
+    List<Criteria> allCriteria = new ArrayList<>();
+
+    ItemFilterTypeQueryDto filterType = Objects.requireNonNullElse(
+      query.getItemFilterType(),
+      ItemFilterTypeQueryDto.INCLUDE
+    );
+    String search = query.getSearch();
+
+    // Base criteria for tissue and sex_cohort (required)
+    allCriteria.add(Criteria.where("tissue").is(tissue));
+    allCriteria.add(Criteria.where("sex_cohort").is(sexCohort));
+
+    // Data filters: biodomains, modelType, name (OR within field, AND between fields)
+    addDataFilterCriteria(
+      query.getBiodomains(),
+      query.getModelType(),
+      query.getName(),
+      allCriteria
+    );
+
+    // Composite identifier filtering (items + itemFilterType)
+    addCompositeIdentifierCriteria(items, filterType, allCriteria);
+
+    // Gene symbol search (only for EXCLUDE mode)
+    addSearchCriteria(search, filterType, allCriteria);
 
     // Combine all criteria with AND
     return new Criteria().andOperator(allCriteria.toArray(new Criteria[0]));
   }
 
-  @SuppressWarnings("unchecked")
-  private Criteria compositeConditionToCriteria(Map<String, Object> condition) {
-    List<Map<String, Object>> andConditions = (List<Map<String, Object>>) condition.get("$and");
-    if (andConditions == null || andConditions.size() != 2) {
-      throw new IllegalArgumentException("Invalid composite condition format");
+  private void addDataFilterCriteria(
+    List<String> biodomains,
+    List<String> modelType,
+    List<String> name,
+    List<Criteria> criteriaList
+  ) {
+    // biodomains: array field - use $in (matches if array contains any value)
+    if (biodomains != null && !biodomains.isEmpty()) {
+      criteriaList.add(Criteria.where("biodomains").in(biodomains));
     }
 
-    String ensemblGeneId = (String) andConditions.get(0).get("ensembl_gene_id");
-    String name = (String) andConditions.get(1).get("name");
+    // model_type: string field - use $in (matches if value equals any)
+    if (modelType != null && !modelType.isEmpty()) {
+      criteriaList.add(Criteria.where("model_type").in(modelType));
+    }
 
-    return new Criteria().andOperator(
-      Criteria.where("ensembl_gene_id").is(ensemblGeneId),
-      Criteria.where("name").is(name)
-    );
+    // name: string field - use $in (matches if value equals any)
+    if (name != null && !name.isEmpty()) {
+      criteriaList.add(Criteria.where("name").in(name));
+    }
   }
 
+  private void addCompositeIdentifierCriteria(
+    List<String> items,
+    ItemFilterTypeQueryDto filterType,
+    List<Criteria> criteriaList
+  ) {
+    if (items.isEmpty()) {
+      // For INCLUDE mode with empty items, add impossible condition (return empty)
+      if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
+        criteriaList.add(Criteria.where("_id").is(null));
+      }
+      // For EXCLUDE mode with empty items, no filtering needed (return all)
+      return;
+    }
+
+    // Parse composite identifiers (format: ensembl_gene_id~name)
+    List<GeneExpressionIdentifier> identifiers = parseIdentifiers(items);
+
+    // Build criteria for each identifier (must match BOTH ensembl_gene_id AND name)
+    List<Criteria> compositeConditions = new ArrayList<>();
+    for (GeneExpressionIdentifier identifier : identifiers) {
+      Criteria idCondition = new Criteria()
+        .andOperator(
+          Criteria.where("ensembl_gene_id").is(identifier.getEnsemblGeneId()),
+          Criteria.where("name").is(identifier.getName())
+        );
+      compositeConditions.add(idCondition);
+    }
+
+    // Apply INCLUDE or EXCLUDE logic
+    if (filterType == ItemFilterTypeQueryDto.INCLUDE) {
+      // Match ANY of the composite identifiers ($or)
+      criteriaList.add(new Criteria().orOperator(compositeConditions.toArray(new Criteria[0])));
+    } else {
+      // Exclude ALL of the composite identifiers ($nor)
+      criteriaList.add(new Criteria().norOperator(compositeConditions.toArray(new Criteria[0])));
+    }
+  }
+
+  private void addSearchCriteria(
+    String search,
+    ItemFilterTypeQueryDto filterType,
+    List<Criteria> criteriaList
+  ) {
+    // Search only applies when itemFilterType is EXCLUDE
+    if (search == null || search.trim().isEmpty() || filterType == ItemFilterTypeQueryDto.INCLUDE) {
+      return;
+    }
+
+    String trimmedSearch = search.trim();
+
+    // Comma-separated list: exact match (case-insensitive)
+    if (trimmedSearch.contains(",")) {
+      List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
+      criteriaList.add(Criteria.where(GENE_SYMBOL_FIELD).in(patterns));
+    } else {
+      // Single term: partial match (case-insensitive)
+      String regex = Pattern.quote(trimmedSearch);
+      criteriaList.add(Criteria.where(GENE_SYMBOL_FIELD).regex(regex, "i"));
+    }
+  }
+
+  private List<GeneExpressionIdentifier> parseIdentifiers(List<String> items) {
+    List<GeneExpressionIdentifier> identifiers = new ArrayList<>();
+    for (String item : items) {
+      identifiers.add(GeneExpressionIdentifier.parse(item));
+    }
+    return identifiers;
+  }
+
+  /**
+   * Adds $sort operation, using lowercase versions of string fields for
+   * case-insensitive sorting (DocumentDB compatible).
+   *
+   * <p>Applies _lower suffix only to string fields.
+   */
   private void addSortOperation(List<AggregationOperation> operations, Sort sort) {
     if (sort.isUnsorted()) {
       return;
@@ -189,10 +329,13 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     List<Document> sortFields = new ArrayList<>();
     for (Sort.Order order : sort) {
       String field = order.getProperty();
-      // Replace gene_symbol with computed display_gene_symbol for sorting
-      if (GENE_SYMBOL_FIELD.equals(field)) {
-        field = DISPLAY_GENE_SYMBOL_FIELD;
+
+      // Use lowercase version for string fields (case-insensitive sorting)
+      if (isStringField(field) || GENE_SYMBOL_FIELD.equals(field)) {
+        field = field + "_lower";
       }
+      // Non-string fields (like age columns) are sorted directly
+
       int direction = order.isAscending() ? 1 : -1;
       sortFields.add(new Document(field, direction));
     }
@@ -206,6 +349,9 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     }
   }
 
+  /**
+   * Counts total documents matching the criteria (before pagination).
+   */
   private long countDocuments(List<AggregationOperation> baseOperations) {
     List<AggregationOperation> countOperations = new ArrayList<>(baseOperations);
     countOperations.add(Aggregation.count().as("total"));

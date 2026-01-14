@@ -1,6 +1,9 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
@@ -11,11 +14,27 @@ import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate {
+
+  private static final Set<String> VALID_QUERY_PARAMS = Set.of(
+    "pageNumber",
+    "pageSize",
+    "categories",
+    "items",
+    "itemFilterType",
+    "search",
+    "biodomains",
+    "modelType",
+    "name",
+    "sortFields",
+    "sortOrders"
+  );
 
   private final GeneExpressionService geneExpressionService;
 
@@ -23,6 +42,9 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   public ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
     GeneExpressionSearchQueryDto query
   ) {
+    // Validate query parameters
+    validateQueryParameters();
+
     log.debug("Fetching gene expressions for categories: {}", query.getCategories());
 
     String[] tissueAndSexCohort = extractTissueAndSexCohort(query.getCategories());
@@ -97,5 +119,23 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
     }
 
     return extracted;
+  }
+
+  private void validateQueryParameters() {
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+      .getRequestAttributes();
+    if (attributes == null) {
+      log.debug("Skipping query parameter validation: RequestContextHolder returned null");
+      return;
+    }
+
+    HttpServletRequest request = attributes.getRequest();
+    Map<String, String[]> parameterMap = request.getParameterMap();
+
+    for (String paramName : parameterMap.keySet()) {
+      if (!VALID_QUERY_PARAMS.contains(paramName)) {
+        throw new IllegalArgumentException("Unknown query parameter: " + paramName);
+      }
+    }
   }
 }

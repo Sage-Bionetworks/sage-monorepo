@@ -1012,6 +1012,33 @@ components:
           example: 'gnai,cdc45'
           nullable: true
           type: string
+        biodomains:
+          description: Filter by biological domains.
+          example:
+            - Apoptosis
+            - Cell Cycle
+          items:
+            type: string
+          nullable: true
+          type: array
+        modelType:
+          description: Filter by model type.
+          example:
+            - Familial AD
+            - Late Onset AD
+          items:
+            type: string
+          nullable: true
+          type: array
+        name:
+          description: Filter by mouse model name.
+          example:
+            - 3xTg-AD
+            - 5xFAD (IU/Jax/Pitt)
+          items:
+            type: string
+          nullable: true
+          type: array
         sortFields:
           description: |
             List of field names to sort by (e.g., "gene_symbol,name").
