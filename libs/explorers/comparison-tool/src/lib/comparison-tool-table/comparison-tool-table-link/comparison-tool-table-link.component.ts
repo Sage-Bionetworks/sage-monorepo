@@ -1,5 +1,6 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { HelperService } from '@sagebionetworks/explorers/services';
 import { isExternalLink } from '@sagebionetworks/shared/util';
 
 @Component({
@@ -9,23 +10,22 @@ import { isExternalLink } from '@sagebionetworks/shared/util';
   styleUrls: ['./comparison-tool-table-link.component.scss'],
 })
 export class ComparisonToolTableLinkComponent {
+  private readonly helperService = inject(HelperService);
+
   linkText = input<string>('');
-  linkUrl = input<string | string[]>('');
+  linkUrl = input<string>('');
 
-  private parsedUrl = computed(() => {
-    const urlInput = this.linkUrl();
-
-    // If it's an array, use it directly as path segments
-    if (Array.isArray(urlInput)) {
-      return { path: urlInput, queryParams: {} };
-    }
-
-    const url = urlInput.trim();
+  private readonly parsedUrl = computed(() => {
+    const url = this.linkUrl().trim();
     const urlParts = url.split('?');
 
     let path = urlParts[0];
     // ensure path starts with '/'
     path = path.startsWith('/') ? path : `/${path}`;
+
+    // Encode special characters in the path to handle model names with parentheses and forward slashes
+    // e.g., /models/5xFAD (IU/Jax/Pitt) needs proper encoding
+    path = this.helperService.encodeParenthesesForwardSlashes(path);
 
     const queryParams: { [key: string]: string | boolean } = {};
 
@@ -43,8 +43,5 @@ export class ComparisonToolTableLinkComponent {
   internalLinkPath = computed(() => this.parsedUrl().path);
   internalLinkQueryParams = computed(() => this.parsedUrl().queryParams);
 
-  isExternalUrl(): boolean {
-    const url = this.linkUrl();
-    return typeof url === 'string' && isExternalLink(url);
-  }
+  isExternalUrl = computed<boolean>((): boolean => isExternalLink(this.linkUrl()));
 }

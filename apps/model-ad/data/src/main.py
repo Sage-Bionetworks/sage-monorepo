@@ -1,11 +1,10 @@
 from csv import reader
-from glob import glob
-from gridfs import GridFS
 from json import load
 import logging
 import logging.config as logging_config
 from os import getenv, getcwd, makedirs, path
 from pymongo import MongoClient, database
+import subprocess
 import synapseclient
 
 # Get config from the environment variables
@@ -68,7 +67,7 @@ def download_synapse_data(local_data_dir: str) -> None:
 
     logger.debug("Processing manifest and downloading referenced files")
     manifest_filepath = path.join(local_data_dir, manifest_entity.name)
-    with open(manifest_filepath, "r") as manifest_file:
+    with open(manifest_filepath) as manifest_file:
         manifest_reader = reader(manifest_file)
         next(manifest_reader)  # skip header row
         for row in manifest_reader:
@@ -85,36 +84,45 @@ def download_synapse_data(local_data_dir: str) -> None:
     logger.debug("All manifest files downloaded successfully")
 
 
-def import_collections_data(
-    db: database.Database, collections_filepath: str, local_data_dir: str
-) -> None:
+def import_collections_data(collections_filepath: str, local_data_dir: str) -> None:
     """Import collections into MongoDB using local definition CSV and local data"""
     logger.debug("Starting collections import process")
-    with open(collections_filepath, "r") as collections_file:
+    with open(collections_filepath) as collections_file:
         collections_reader = reader(collections_file)
         for row in collections_reader:
             collection_name = row[0]
             collection_filename = row[1]
+            collection_filepath = path.join(local_data_dir, collection_filename)
+
             logger.debug(
                 "Importing collection '%s' from '%s'",
                 collection_name,
                 collection_filename,
             )
 
-            # read json
-            collection_filepath = path.join(local_data_dir, collection_filename)
-            with open(collection_filepath, "r") as collection_file:
-                documents = load(collection_file)
+            # Use mongoimport instead of pymongo for performance with large datasets
+            cmd = [
+                "mongoimport",
+                f"--uri=mongodb://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}?authSource=admin",
+                f"--collection={collection_name}",
+                f"--file={collection_filepath}",
+                "--jsonArray",
+                "--drop",
+            ]
 
-            # import into collection
-            collection = db.get_collection(collection_name)
-            collection.drop()
-            collection.insert_many(documents)
-            logger.debug(
-                "Successfully imported %d documents to collection '%s'",
-                len(documents),
-                collection_name,
-            )
+            # Only maintain insertion order for ui_config collection
+            if collection_name == "ui_config":
+                cmd.append("--maintainInsertionOrder")
+            else:
+                # Use parallel workers for better performance on other collections
+                cmd.append("--numInsertionWorkers=4")
+
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            if result.returncode != 0:
+                logger.error("mongoimport failed: %s", result.stderr)
+                raise Exception(f"Failed to import {collection_name}")
+
+            logger.debug("Successfully imported collection '%s'", collection_name)
     logger.debug("All collections imported successfully")
 
 
@@ -123,7 +131,7 @@ def create_collections_indexes(
 ) -> None:
     """Create indexes for MongoDB collections based on JSON file"""
     logger.debug("Starting index creation process")
-    with open(collections_indexes_filepath, "r") as collection_indexes_file:
+    with open(collections_indexes_filepath) as collection_indexes_file:
         collections_indexes_data = load(collection_indexes_file)
         for collection_index_data in collections_indexes_data:
             collection_name = collection_index_data["name"]
@@ -155,18 +163,20 @@ def main() -> None:
     download_synapse_data(local_data_dir)
     logger.debug("Synapse data download completed successfully")
 
-    logger.debug("Starting MongoDB update process")
+    logger.debug("Starting MongoDB import process")
+    import_collections_data(collections_filepath, local_data_dir)
+
+    # Create indexes using pymongo
     db_uri = f"mongodb://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}"
     client = MongoClient(db_uri)
     try:
         db = client.get_database(DB_NAME)
-        import_collections_data(db, collections_filepath, local_data_dir)
         create_collections_indexes(db, collections_indexes_filepath)
         client.close()
     except Exception as e:
         logger.error("Error during MongoDB update: %s", e)
         raise Exception("Error", e)
-    logger.debug("MongoDB update completed successfully")
+    logger.debug("MongoDB import completed successfully")
 
 
 if __name__ == "__main__":

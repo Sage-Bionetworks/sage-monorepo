@@ -1,7 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.model.document;
 
 import java.util.List;
-import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +28,7 @@ public class GeneExpressionDocument {
 
   private List<String> biodomains;
 
-  private String name;
+  private Link name;
 
   @Field("matched_control")
   private String matchedControl;

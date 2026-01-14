@@ -392,8 +392,8 @@ components:
         - sortFields
         - sortOrders
       type: object
-    ModelOverviewLink:
-      description: Model Overview Link
+    Link:
+      description: Link
       example:
         link_url: link_url
         link_text: link_text
@@ -457,19 +457,19 @@ components:
             type: string
           type: array
         gene_expression:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         disease_correlation:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         biomarkers:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         pathology:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         study_data:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         jax_strain:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         center:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         modified_genes:
           description: List of modified genes in the model
           items:
@@ -1107,7 +1107,9 @@ components:
         matched_control: C57BL/6J
         composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
         ensembl_gene_id: ensembl_gene_id
-        name: name
+        name:
+          link_url: link_url
+          link_text: link_text
         sex_cohort: Females
         '12 months':
           log2_fc: 0.8008281904610115
@@ -1136,8 +1138,7 @@ components:
             type: string
           type: array
         name:
-          description: Model name
-          type: string
+          $ref: '#/components/schemas/Link'
         matched_control:
           description: Matched control for the model
           example: C57BL/6J
@@ -1196,7 +1197,9 @@ components:
             matched_control: C57BL/6J
             composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
             ensembl_gene_id: ensembl_gene_id
-            name: name
+            name:
+              link_url: link_url
+              link_text: link_text
             sex_cohort: Females
             '12 months':
               log2_fc: 0.8008281904610115
@@ -1217,7 +1220,9 @@ components:
             matched_control: C57BL/6J
             composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
             ensembl_gene_id: ensembl_gene_id
-            name: name
+            name:
+              link_url: link_url
+              link_text: link_text
             sex_cohort: Females
             '12 months':
               log2_fc: 0.8008281904610115

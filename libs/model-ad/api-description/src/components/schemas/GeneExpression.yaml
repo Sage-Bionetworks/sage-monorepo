@@ -18,8 +18,8 @@ properties:
     items:
       type: string
   name:
-    type: string
-    description: Model name
+    $ref: './Link.yaml'
+    description: Model name and link to model details page
   matched_control:
     type: string
     description: Matched control for the model

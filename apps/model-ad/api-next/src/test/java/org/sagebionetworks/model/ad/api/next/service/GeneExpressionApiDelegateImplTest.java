@@ -23,10 +23,12 @@ import org.sagebionetworks.model.ad.api.next.api.GeneExpressionApiDelegateImpl;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument.FoldChangeResult;
+import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.GeneExpressionMapper;
+import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.GeneExpressionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -62,7 +64,7 @@ class GeneExpressionApiDelegateImplTest {
 
     GeneExpressionService queryService = new GeneExpressionService(
       repository,
-      new GeneExpressionMapper()
+      new GeneExpressionMapper(new LinkMapper())
     );
     delegate = new GeneExpressionApiDelegateImpl(queryService);
   }
@@ -205,7 +207,8 @@ class GeneExpressionApiDelegateImplTest {
     assertThat(dto.getCompositeId()).contains("ENSMUSG00000000001");
     assertThat(dto.getEnsemblGeneId()).isEqualTo("ENSMUSG00000000001");
     assertThat(dto.getGeneSymbol()).isEqualTo("Gnai3");
-    assertThat(dto.getName()).isEqualTo("5xFAD (Jax/IU/Pitt)");
+    assertThat(dto.getName()).isNotNull();
+    assertThat(dto.getName().getLinkText()).isEqualTo("5xFAD (Jax/IU/Pitt)");
     assertThat(dto.getTissue()).isEqualTo("Hemibrain");
     assertThat(dto.get4months()).isNotNull();
     assertThat(dto.get4months().getLog2Fc()).isEqualTo(BigDecimal.valueOf(0.01167d));
@@ -445,7 +448,9 @@ class GeneExpressionApiDelegateImplTest {
     document.setEnsemblGeneId("ENSMUSG00000000001");
     document.setGeneSymbol("Gnai3");
     document.setBiodomains(List.of("Apoptosis", "Autophagy", "Synapse"));
-    document.setName("5xFAD (Jax/IU/Pitt)");
+    document.setName(
+      Link.builder().linkText("5xFAD (Jax/IU/Pitt)").linkUrl("models/5xFAD (Jax/IU/Pitt)").build()
+    );
     document.setMatchedControl("C57BL/6J");
     document.setModelGroup(null);
     document.setModelType("Familial AD");
@@ -463,7 +468,7 @@ class GeneExpressionApiDelegateImplTest {
     document.setEnsemblGeneId("ENSMUSG00000000002");
     document.setGeneSymbol("Apoe");
     document.setBiodomains(List.of("Lipid Metabolism"));
-    document.setName("APOE4");
+    document.setName(Link.builder().linkText("APOE4").linkUrl("models/APOE4").build());
     document.setMatchedControl("C57BL/6J");
     document.setModelGroup(null);
     document.setModelType("Familial AD");

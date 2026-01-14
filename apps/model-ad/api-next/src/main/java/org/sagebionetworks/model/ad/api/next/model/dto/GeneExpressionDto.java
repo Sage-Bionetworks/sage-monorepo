@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.model.ad.api.next.model.dto.FoldChangeResultDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.LinkDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexCohortDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -39,7 +40,7 @@ public class GeneExpressionDto {
   @Valid
   private List<String> biodomains = new ArrayList<>();
 
-  private String name;
+  private LinkDto name;
 
   private String matchedControl;
 
@@ -64,7 +65,7 @@ public class GeneExpressionDto {
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionDto(String compositeId, String ensemblGeneId, String geneSymbol, List<String> biodomains, String name, String matchedControl, String modelGroup, String modelType, String tissue, SexCohortDto sexCohort) {
+  public GeneExpressionDto(String compositeId, String ensemblGeneId, String geneSymbol, List<String> biodomains, LinkDto name, String matchedControl, String modelGroup, String modelType, String tissue, SexCohortDto sexCohort) {
     this.compositeId = compositeId;
     this.ensemblGeneId = ensemblGeneId;
     this.geneSymbol = geneSymbol;
@@ -165,23 +166,23 @@ public class GeneExpressionDto {
     this.biodomains = biodomains;
   }
 
-  public GeneExpressionDto name(String name) {
+  public GeneExpressionDto name(LinkDto name) {
     this.name = name;
     return this;
   }
 
   /**
-   * Model name
+   * Get name
    * @return name
    */
-  @NotNull 
-  @Schema(name = "name", description = "Model name", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "name", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
-  public String getName() {
+  public LinkDto getName() {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(LinkDto name) {
     this.name = name;
   }
 
@@ -455,7 +456,7 @@ public class GeneExpressionDto {
       return this;
     }
     
-    public GeneExpressionDto.Builder name(String name) {
+    public GeneExpressionDto.Builder name(LinkDto name) {
       this.instance.name(name);
       return this;
     }
