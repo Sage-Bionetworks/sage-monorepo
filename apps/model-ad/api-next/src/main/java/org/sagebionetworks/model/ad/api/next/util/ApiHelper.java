@@ -1,9 +1,13 @@
 package org.sagebionetworks.model.ad.api.next.util;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Pattern;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidObjectIdException;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
@@ -11,7 +15,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+@Slf4j
 public final class ApiHelper {
 
   private static final String CACHE_CONTROL_VALUE = "no-cache, no-store, must-revalidate";
@@ -154,5 +161,34 @@ public final class ApiHelper {
       .filter(s -> !s.isEmpty())
       .map(name -> Pattern.compile("^" + Pattern.quote(name) + "$", Pattern.CASE_INSENSITIVE))
       .toList();
+  }
+
+  /**
+   * Validates that all query parameters in the current HTTP request are in the allowed set.
+   * This method retrieves the current request from RequestContextHolder and checks each
+   * query parameter against the provided set of valid parameter names.
+   *
+   * @param validQueryParams set of allowed query parameter names
+   * @throws IllegalArgumentException if an unknown query parameter is encountered
+   */
+  public static void validateQueryParameters(Set<String> validQueryParams) {
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+      .getRequestAttributes();
+    if (attributes == null) {
+      log.debug("Skipping query parameter validation: RequestContextHolder returned null");
+      return;
+    }
+
+    HttpServletRequest request = attributes.getRequest();
+    Map<String, String[]> parameterMap = request.getParameterMap();
+
+    log.debug("Validating query parameters: {}", parameterMap.keySet());
+
+    for (String paramName : parameterMap.keySet()) {
+      if (!validQueryParams.contains(paramName)) {
+        log.warn("Invalid query parameter: '{}'", paramName);
+        throw new IllegalArgumentException("Unknown query parameter: " + paramName);
+      }
+    }
   }
 }

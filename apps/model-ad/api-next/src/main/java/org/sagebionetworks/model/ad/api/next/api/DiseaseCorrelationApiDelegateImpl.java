@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
@@ -19,6 +20,22 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiDelegate {
 
+  private static final Set<String> VALID_QUERY_PARAMS = Set.of(
+    "pageNumber",
+    "pageSize",
+    "categories",
+    "items",
+    "itemFilterType",
+    "search",
+    "age",
+    "modelType",
+    "modifiedGenes",
+    "name",
+    "sex",
+    "sortFields",
+    "sortOrders"
+  );
+
   private final DiseaseCorrelationService diseaseCorrelationService;
 
   @Override
@@ -26,6 +43,9 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
     DiseaseCorrelationSearchQueryDto query
   ) {
     log.debug("Fetching disease correlations for categories: {}", query.getCategories());
+
+    // Validate query parameters
+    ApiHelper.validateQueryParameters(VALID_QUERY_PARAMS);
 
     String cluster = extractCluster(query.getCategories());
 

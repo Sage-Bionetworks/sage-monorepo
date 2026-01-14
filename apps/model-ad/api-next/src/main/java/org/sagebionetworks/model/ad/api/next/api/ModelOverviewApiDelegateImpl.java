@@ -1,7 +1,5 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +10,6 @@ import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +39,7 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
     log.debug("Fetching model overviews with query: {}", query);
 
     // Validate query parameters
-    validateQueryParameters();
+    ApiHelper.validateQueryParameters(VALID_QUERY_PARAMS);
 
     ModelOverviewsPageDto page = modelOverviewService.loadModelOverviews(query);
 
@@ -52,26 +48,5 @@ public class ModelOverviewApiDelegateImpl implements ModelOverviewApiDelegate {
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))
       .body(page);
-  }
-
-  private void validateQueryParameters() {
-    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
-      .getRequestAttributes();
-    if (attributes == null) {
-      log.debug("Skipping query parameter validation: RequestContextHolder returned null");
-      return;
-    }
-
-    HttpServletRequest request = attributes.getRequest();
-    Map<String, String[]> parameterMap = request.getParameterMap();
-
-    log.debug("Validating query parameters: {}", parameterMap.keySet());
-
-    for (String paramName : parameterMap.keySet()) {
-      if (!VALID_QUERY_PARAMS.contains(paramName)) {
-        log.warn("Invalid query parameter: '{}'", paramName);
-        throw new IllegalArgumentException("Unknown query parameter: " + paramName);
-      }
-    }
   }
 }

@@ -684,6 +684,51 @@ components:
           example: '3xtg-ad,5xfad (uci)'
           nullable: true
           type: string
+        age:
+          description: Filter by age.
+          example:
+            - 4 months
+            - 12 months
+          items:
+            type: string
+          nullable: true
+          type: array
+        modelType:
+          description: Filter by model type.
+          example:
+            - Familial AD
+            - Late Onset AD
+          items:
+            type: string
+          nullable: true
+          type: array
+        modifiedGenes:
+          description: Filter by modified genes.
+          example:
+            - APOE
+            - Trem2
+          items:
+            type: string
+          nullable: true
+          type: array
+        name:
+          description: Filter by mouse model name.
+          example:
+            - 3xTg-AD
+            - 5xFAD (IU/Jax/Pitt)
+          items:
+            type: string
+          nullable: true
+          type: array
+        sex:
+          description: Filter by sex.
+          example:
+            - Female
+            - Male
+          items:
+            type: string
+          nullable: true
+          type: array
         sortFields:
           description: |
             List of field names to sort by (e.g., ["name", "age", "sex"]).

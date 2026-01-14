@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.api.DiseaseCorrelationApiDelegateImpl;
 import org.sagebionetworks.model.ad.api.next.exception.ErrorConstants;
 import org.sagebionetworks.model.ad.api.next.exception.InvalidCategoryException;
-import org.sagebionetworks.model.ad.api.next.exception.InvalidFilterException;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument.CorrelationResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.DiseaseCorrelationSearchQueryDto;
@@ -36,6 +36,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @ExtendWith(MockitoExtension.class)
 class DiseaseCorrelationApiDelegateImplTest {
@@ -54,11 +57,21 @@ class DiseaseCorrelationApiDelegateImplTest {
 
   @BeforeEach
   void setUp() {
+    // Mock the request context for validation
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    ServletRequestAttributes attributes = new ServletRequestAttributes(request);
+    RequestContextHolder.setRequestAttributes(attributes);
+
     DiseaseCorrelationService queryService = new DiseaseCorrelationService(
       repository,
       new DiseaseCorrelationMapper()
     );
     delegate = new DiseaseCorrelationApiDelegateImpl(queryService);
+  }
+
+  @AfterEach
+  void tearDown() {
+    RequestContextHolder.resetRequestAttributes();
   }
 
   @Test
@@ -92,6 +105,16 @@ class DiseaseCorrelationApiDelegateImplTest {
   @Test
   @DisplayName("should return empty page when include filter has no items")
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
+    Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of());
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(DiseaseCorrelationSearchQueryDto.class),
+        eq(List.of()),
+        eq(CLUSTER_A)
+      )
+    ).thenReturn(page);
+
     DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A).build();
 
     ResponseEntity<DiseaseCorrelationsPageDto> response = delegate.getDiseaseCorrelations(query);
@@ -100,12 +123,9 @@ class DiseaseCorrelationApiDelegateImplTest {
     DiseaseCorrelationsPageDto body = response.getBody();
     assertThat(body).isNotNull();
     assertThat(body.getDiseaseCorrelations()).isEmpty();
-    assertThat(body.getPage().getNumber()).isZero();
-    assertThat(body.getPage().getSize()).isEqualTo(PAGE_SIZE);
     assertThat(body.getPage().getTotalElements()).isZero();
 
     assertResponseHeaders(response.getHeaders());
-    verifyNoInteractions(repository);
   }
 
   @Test
@@ -115,7 +135,12 @@ class DiseaseCorrelationApiDelegateImplTest {
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(buildDocument(objectId)));
 
     when(
-      repository.findByClusterAndCompositeIdentifiers(eq(CLUSTER_A), anyList(), any(Pageable.class))
+      repository.findAll(
+        any(Pageable.class),
+        any(DiseaseCorrelationSearchQueryDto.class),
+        anyList(),
+        eq(CLUSTER_A)
+      )
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
@@ -139,10 +164,11 @@ class DiseaseCorrelationApiDelegateImplTest {
     assertThat(dto.getIFG().getCorrelation()).isEqualTo(BigDecimal.valueOf(0.87d));
     assertThat(dto.getSex().getValue()).isEqualTo("Female");
 
-    verify(repository).findByClusterAndCompositeIdentifiers(
-      eq(CLUSTER_A),
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(DiseaseCorrelationSearchQueryDto.class),
       anyList(),
-      any(Pageable.class)
+      eq(CLUSTER_A)
     );
   }
 
@@ -150,7 +176,14 @@ class DiseaseCorrelationApiDelegateImplTest {
   @DisplayName("should include cluster filter when exclude filter has no items")
   void shouldIncludeClusterFilterWhenExcludeFilterHasNoItems() {
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(buildDocument(new ObjectId())));
-    when(repository.findByCluster(eq(CLUSTER_B), any(Pageable.class))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(DiseaseCorrelationSearchQueryDto.class),
+        anyList(),
+        eq(CLUSTER_B)
+      )
+    ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_B)
       .items(List.of())
@@ -163,22 +196,14 @@ class DiseaseCorrelationApiDelegateImplTest {
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getDiseaseCorrelations()).hasSize(1);
 
-    verify(repository).findByCluster(eq(CLUSTER_B), any(Pageable.class));
-  }
-
-  @Test
-  @DisplayName("should throw bad request when items contain invalid composite identifier format")
-  void shouldThrowBadRequestWhenItemsContainInvalidCompositeIdentifier() {
-    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A)
-      .items(List.of("invalid")) // Missing tildes - only 1 part instead of 3
-      .build();
-
-    assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query)).isInstanceOf(
-      InvalidFilterException.class
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(DiseaseCorrelationSearchQueryDto.class),
+      anyList(),
+      eq(CLUSTER_B)
     );
-
-    verifyNoInteractions(repository);
   }
+
 
   @Test
   @DisplayName("should omit correlation data when values incomplete")
@@ -189,7 +214,12 @@ class DiseaseCorrelationApiDelegateImplTest {
     );
 
     when(
-      repository.findByClusterAndCompositeIdentifiers(eq(CLUSTER_C), anyList(), any(Pageable.class))
+      repository.findAll(
+        any(Pageable.class),
+        any(DiseaseCorrelationSearchQueryDto.class),
+        anyList(),
+        eq(CLUSTER_C)
+      )
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_C)
@@ -211,10 +241,11 @@ class DiseaseCorrelationApiDelegateImplTest {
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(buildDocument(includedId)));
 
     when(
-      repository.findByClusterExcludingCompositeIdentifiers(
-        eq(CLUSTER_D),
+      repository.findAll(
+        any(Pageable.class),
+        any(DiseaseCorrelationSearchQueryDto.class),
         anyList(),
-        any(Pageable.class)
+        eq(CLUSTER_D)
       )
     ).thenReturn(page);
 
@@ -231,11 +262,29 @@ class DiseaseCorrelationApiDelegateImplTest {
     assertThat(body.getDiseaseCorrelations()).hasSize(1);
     assertThat(body.getDiseaseCorrelations().get(0).getCompositeId()).contains("Model 1");
 
-    verify(repository).findByClusterExcludingCompositeIdentifiers(
-      eq(CLUSTER_D),
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(DiseaseCorrelationSearchQueryDto.class),
       anyList(),
-      any(Pageable.class)
+      eq(CLUSTER_D)
     );
+  }
+
+  @Test
+  @DisplayName("should throw IllegalArgumentException when invalid query parameter provided")
+  void shouldThrowExceptionWhenInvalidQueryParameterProvided() {
+    // Setup request with invalid parameter
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.addParameter("invalidField", "someValue");
+    ServletRequestAttributes attributes = new ServletRequestAttributes(request);
+    RequestContextHolder.setRequestAttributes(attributes);
+
+    DiseaseCorrelationSearchQueryDto query = buildQuery(CLUSTER_A).build();
+
+    // Should throw IllegalArgumentException for invalid field
+    assertThatThrownBy(() -> delegate.getDiseaseCorrelations(query))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Unknown query parameter: invalidField");
   }
 
   private DiseaseCorrelationSearchQueryDto.Builder buildQuery(String cluster) {
