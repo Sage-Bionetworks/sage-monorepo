@@ -41,8 +41,8 @@ See the [Documentation Submission Workflow](../submission-workflow.md) guide for
 
 ## Related Documentation
 
-- **RFCs**: See [RFCs](../rfcs/README.md) for proposals under review
-- **Architecture**: See [Architecture Plans](../architecture/README.md) for approved designs
+- See [RFCs](../rfcs/README.md) for proposals under review
+- See [Architecture Plans](../architecture/README.md) for approved designs
 
 ## References
 
