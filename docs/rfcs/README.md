@@ -6,11 +6,11 @@ This directory contains proposals for significant changes to the system that req
 
 RFCs follow a structured review process to ensure proposals are well-vetted before implementation:
 
-1. **Proposed**: Author creates RFC and publishes to docs site (PR #1)
-2. **Under Review**: Author opens feedback PR for team discussion (PR #2)
-3. **Approved**: RFC accepted, detailed architecture plan created in `docs/architecture/`
-4. **Rejected**: RFC declined with documented rationale
-5. **Implemented**: Architecture plan executed, RFC remains in `docs/rfcs/` as historical record
+1. **Open for Review**: Author creates RFC, publishes to docs site (PR #1), and opens feedback PR (PR #2)
+2. **Approved**: RFC accepted, detailed architecture plan created in `docs/architecture/`
+3. **Rejected**: RFC declined with documented rationale
+
+Once approved, the RFC remains in `docs/rfcs/` as an immutable historical record. Implementation progress is tracked in the corresponding architecture plan in `docs/architecture/`.
 
 ### Key Principles
 
@@ -25,9 +25,9 @@ See the [Documentation Submission Workflow](../submission-workflow.md) guide for
 
 ## Active RFCs
 
-| RFC                                                        | Title                                    | Status       | Author           | Date       |
-| ---------------------------------------------------------- | ---------------------------------------- | ------------ | ---------------- | ---------- |
-| [0001](./0001-bixarena-leaderboard-snapshot-automation.md) | BixArena Leaderboard Snapshot Automation | Under Review | Thomas Schaffter | 2026-01-09 |
+| RFC                                                        | Title                                    | Status          | Author           | Date       |
+| ---------------------------------------------------------- | ---------------------------------------- | --------------- | ---------------- | ---------- |
+| [0001](./0001-bixarena-leaderboard-snapshot-automation.md) | BixArena Leaderboard Snapshot Automation | Open for Review | Thomas Schaffter | 2026-01-09 |
 
 ## Template
 

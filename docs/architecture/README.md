@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-This directory contains approved architecture plans, design documents, and system diagrams that have been reviewed and are either implemented or in active development.
+This directory contains architecture plans, design documents, and system diagrams for implementation or in active development.
 
 ## Process
 
@@ -39,7 +39,7 @@ architecture/
 
 ## Guidelines
 
-- Documents in this directory represent **approved** designs
+- Documents in this directory are for implementation (source RFC was approved)
 - Use past or present tense (not future/proposal tense)
 - Keep documents updated as implementation evolves
 - Reference related ADRs and RFCs for context
@@ -47,9 +47,7 @@ architecture/
 
 ## Document Status Definitions
 
-- **Proposed**: Under review (should be in `docs/rfcs/` instead)
-- **Approved**: Reviewed and ready for implementation
-- **In Progress**: Currently being implemented
+- **Active**: Architecture plan is available and ready for implementation or in progress
 - **Implemented**: Completed and deployed
 - **Superseded**: Replaced by newer design (archive or add note)
 

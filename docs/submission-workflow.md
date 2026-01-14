@@ -59,11 +59,11 @@ Copy the appropriate template and fill it out:
 
 Add a row to the appropriate table in the directory's README.md:
 
-| Document Type | File to Update                | Status Value |
-| ------------- | ----------------------------- | ------------ |
-| RFC           | `docs/rfcs/README.md`         | `Proposed`   |
-| Architecture  | `docs/architecture/README.md` | `Active`     |
-| ADR           | `docs/adr/README.md`          | `Proposed`   |
+| Document Type | File to Update                | Status Value      |
+| ------------- | ----------------------------- | ----------------- |
+| RFC           | `docs/rfcs/README.md`         | `Open for Review` |
+| Architecture  | `docs/architecture/README.md` | `Active`          |
+| ADR           | `docs/adr/README.md`          | `Open for Review` |
 
 ### 1.5 Commit and Push
 
@@ -100,7 +100,7 @@ This PR publishes RFC-NNNN to the documentation site.
 
 **Title**: [Full RFC title]
 **Author**: @[your-github-username]
-**Status**: Proposed
+**Status**: Open for Review
 
 ## Checklist
 
@@ -156,7 +156,7 @@ This PR publishes ADR-NNNN to the documentation site.
 
 **Title**: [Full ADR title]
 **Author**: @[your-github-username]
-**Status**: Proposed
+**Status**: Open for Review
 
 ## Checklist
 
@@ -211,29 +211,30 @@ git switch -c adr-NNNN-feedback
 
 ### 2.3 Add Discussion Link
 
-Update the document's frontmatter to include the discussion link and update status:
+Update the document's frontmatter to include the discussion link:
 
 ```yaml
 ---
-status: Under Review # Update from Proposed
 discussion: https://github.com/Sage-Bionetworks/sage-monorepo/pull/XXXX # Add PR URL
 ---
 ```
 
-**Status values by document type:**
+**Note**: Status remains unchanged (already set to "Open for Review" or "Active" in PR #1).
 
-| Document Type | Status Progression                                        |
-| ------------- | --------------------------------------------------------- |
-| RFC           | Proposed → Under Review → Approved/Rejected → Implemented |
-| Architecture  | Active → Completed/Superseded                             |
-| ADR           | Proposed → Accepted/Rejected/Superseded                   |
+**Status progression by document type:**
+
+| Document Type | Status Progression                             |
+| ------------- | ---------------------------------------------- |
+| RFC           | Open for Review → Approved/Rejected            |
+| Architecture  | Active → Implemented/Superseded                |
+| ADR           | Open for Review → Accepted/Rejected/Superseded |
 
 ### 2.4 Commit and Push
 
 ```bash
 # Add the updated document file
 git add docs/[rfcs|architecture|adr]/[filename].md
-git commit -m "[RFC-NNNN|Architecture|ADR-NNNN]: Add discussion field for feedback tracking"
+git commit -m "[RFC-NNNN|Architecture|ADR-NNNN]: Add discussion link for feedback tracking"
 git push origin [branch-name]
 ```
 
@@ -383,21 +384,21 @@ Once consensus is reached, update the document status and close PR #2:
 
 ### Commit Message Patterns
 
-| Action               | Pattern                                                                          |
-| -------------------- | -------------------------------------------------------------------------------- |
-| Add RFC              | `docs: Add RFC-NNNN for [brief description]`                                     |
-| Add Architecture     | `docs: Add architecture plan for [brief description]`                            |
-| Add ADR              | `docs: Add ADR-NNNN for [brief description]`                                     |
-| Add discussion field | `[RFC-NNNN\|Architecture\|ADR-NNNN]: Add discussion field for feedback tracking` |
-| Address feedback     | `[RFC-NNNN\|Architecture\|ADR-NNNN]: Address feedback - [brief description]`     |
+| Action              | Pattern                                                                         |
+| ------------------- | ------------------------------------------------------------------------------- |
+| Add RFC             | `docs: Add RFC-NNNN for [brief description]`                                    |
+| Add Architecture    | `docs: Add architecture plan for [brief description]`                           |
+| Add ADR             | `docs: Add ADR-NNNN for [brief description]`                                    |
+| Add discussion link | `[RFC-NNNN\|Architecture\|ADR-NNNN]: Add discussion link for feedback tracking` |
+| Address feedback    | `[RFC-NNNN\|Architecture\|ADR-NNNN]: Address feedback - [brief description]`    |
 
 ### Status Values
 
-| Document Type | Status Values                                             |
-| ------------- | --------------------------------------------------------- |
-| RFC           | Proposed → Under Review → Approved/Rejected → Implemented |
-| Architecture  | Active → Completed/Superseded                             |
-| ADR           | Proposed → Accepted/Rejected/Superseded                   |
+| Document Type | Status Values                                  |
+| ------------- | ---------------------------------------------- |
+| RFC           | Open for Review → Approved/Rejected            |
+| Architecture  | Active → Implemented/Superseded                |
+| ADR           | Open for Review → Accepted/Rejected/Superseded |
 
 ---
 

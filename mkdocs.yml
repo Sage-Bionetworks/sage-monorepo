@@ -74,7 +74,7 @@ nav:
       - Contributing: contributions/overview.md
       - OpenChallenges Schemas: resources/oc-schemas.md
   - Technical Documentation:
-      - Overview: overview.md
+      - Overview: technical-documentation-overview.md
       - Submission Workflow: submission-workflow.md
       - RFCs: rfcs/README.md
       - Architecture: architecture/README.md

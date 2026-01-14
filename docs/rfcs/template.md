@@ -1,7 +1,7 @@
 ---
 title: [Brief Title]
 date: YYYY-MM-DD
-status: proposed # proposed → under review → approved → rejected → implemented
+status: open for review # open for review → approved → rejected
 author: [Your Name]
 reviewers: []
 discussion: # Add GitHub PR URL after opening feedback PR (PR #2)
@@ -11,7 +11,7 @@ discussion: # Add GitHub PR URL after opening feedback PR (PR #2)
 
 ## Metadata
 
-- **Status**: Proposed
+- **Status**: Open for Review
 - **Author**: [Your Name]
 - **Created**: YYYY-MM-DD
 - **Last Updated**: YYYY-MM-DD

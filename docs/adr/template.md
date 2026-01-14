@@ -1,6 +1,6 @@
 # [ADR Number]: [Brief Title]
 
-- **Status**: proposed | accepted | rejected | deprecated | superseded by [ADR-NNNN]
+- **Status**: open for review | accepted | rejected | deprecated | superseded by [ADR-NNNN]
 - **Date**: YYYY-MM-DD
 - **Decision Makers**: [List of people involved]
 - **Tags**: [e.g., backend, infrastructure, security]
