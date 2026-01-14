@@ -1,8 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @RequiredArgsConstructor
@@ -49,7 +45,7 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
     log.debug("Fetching disease correlations for categories: {}", query.getCategories());
 
     // Validate query parameters
-    validateQueryParameters();
+    ApiHelper.validateQueryParameters(VALID_QUERY_PARAMS);
 
     String cluster = extractCluster(query.getCategories());
 
@@ -94,26 +90,5 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
     }
 
     return subCategory;
-  }
-
-  private void validateQueryParameters() {
-    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
-      .getRequestAttributes();
-    if (attributes == null) {
-      log.debug("Skipping query parameter validation: RequestContextHolder returned null");
-      return;
-    }
-
-    HttpServletRequest request = attributes.getRequest();
-    Map<String, String[]> parameterMap = request.getParameterMap();
-
-    log.debug("Validating query parameters: {}", parameterMap.keySet());
-
-    for (String paramName : parameterMap.keySet()) {
-      if (!VALID_QUERY_PARAMS.contains(paramName)) {
-        log.warn("Invalid query parameter: '{}'", paramName);
-        throw new IllegalArgumentException("Unknown query parameter: " + paramName);
-      }
-    }
   }
 }
