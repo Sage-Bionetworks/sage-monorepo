@@ -23,7 +23,7 @@ Once approved, the RFC remains in `docs/rfcs/` as an immutable historical record
 
 See the [Documentation Submission Workflow](../submission-workflow.md) guide for detailed step-by-step instructions on the two-PR process.
 
-## Active RFCs
+## RFCs
 
 | RFC                                                        | Title                                    | Status          | Author           | Date       |
 | ---------------------------------------------------------- | ---------------------------------------- | --------------- | ---------------- | ---------- |

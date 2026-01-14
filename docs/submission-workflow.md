@@ -121,7 +121,7 @@ This PR publishes [Full plan title] to the documentation site.
 ## Checklist
 
 - [ ] Plan follows template structure
-- [ ] Added to Active Architecture Documents table in README
+- [ ] Added to Architecture Documents table
 - [ ] All sections completed
 - [ ] Diagrams added to `architecture/diagrams/` if applicable
 - [ ] No sensitive information included
@@ -146,7 +146,7 @@ This PR publishes ADR-NNNN: [Full ADR title] to the documentation site.
 
 - [ ] ADR follows template structure
 - [ ] ADR number is sequential and unique
-- [ ] Added to Active ADRs table in README
+- [ ] Added to ADRs table
 - [ ] All sections completed (Status, Context, Decision, Consequences)
 - [ ] No sensitive information included
 

@@ -4,27 +4,26 @@ This directory contains architecture plans, design documents, and system diagram
 
 ## Process
 
-Architecture documents typically originate from approved RFCs in `docs/rfcs/`. Once an RFC is approved, a detailed architecture plan is created here as a NEW document that references the source RFC (the RFC remains in `docs/rfcs/` as historical record).
+Architecture documents typically originate from approved RFCs in `docs/rfcs/`. Once an RFC is approved, a detailed architecture plan is created here as a new document that references the source RFC (the RFC remains in `docs/rfcs/` as historical record).
 
 ### Submitting an Architecture Plan
 
 See the [Documentation Submission Workflow](../submission-workflow.md) guide for detailed step-by-step instructions on the two-PR process.
 
-## Active Architecture Documents
+## Architecture Documents
 
-| Document                                                                                       | Status               | Date       | Description                                                              |
-| ---------------------------------------------------------------------------------------------- | -------------------- | ---------- | ------------------------------------------------------------------------ |
-| [Python AI Service Integration](./python-ai-service-integration-plan.md)                       | Implemented          | 2025-12    | JWT authentication integration with Python AI service                    |
-| [BixArena Leaderboard Snapshot Automation](./bixarena-leaderboard-snapshot-automation-plan.md) | Pending RFC Approval | 2026-01-09 | Automated daily leaderboard snapshot generation using Lambda/EventBridge |
+| Document                                                                                       | Status      | Date       | Description                                           |
+| ---------------------------------------------------------------------------------------------- | ----------- | ---------- | ----------------------------------------------------- |
+| [Python FastAPI Microservice with JWT Authentication](./python-ai-service-integration-plan.md) | Implemented | 2025-12-01 | JWT authentication integration with Python AI service |
 
 ## Architecture Diagrams
 
-Diagrams are stored in the [diagrams/](diagrams/README.md) subdirectory.
+Diagrams are stored in the [docs/architecture/diagrams/](diagrams/README.md) subdirectory.
 
 | Diagram                                                             | Description                 | Last Updated |
 | ------------------------------------------------------------------- | --------------------------- | ------------ |
-| [BixArena Architecture](./diagrams/bixarena-architecture.gif)       | Current system architecture | -            |
-| [BixArena Architecture v1](./diagrams/bixarena-architecture-v1.gif) | Previous version            | -            |
+| [BixArena Architecture](./diagrams/bixarena-architecture.gif)       | Current system architecture | 2025-10-31   |
+| [BixArena Architecture v1](./diagrams/bixarena-architecture-v1.gif) | Previous version            | 2025-10-31   |
 
 ## Directory Structure
 
@@ -43,7 +42,7 @@ architecture/
 - Use past or present tense (not future/proposal tense)
 - Keep documents updated as implementation evolves
 - Reference related ADRs and RFCs for context
-- Store diagrams in the `diagrams/` subdirectory (supports .gif, .png, .svg, .html with Mermaid)
+- Store diagrams in the `docs/architecture/diagrams/` subdirectory (supports `.gif`, `.png`, `.svg`, `.html` with Mermaid)
 
 ## Document Status Definitions
 
@@ -53,5 +52,5 @@ architecture/
 
 ## Related Documentation
 
-- **RFCs**: See [../rfcs/](../rfcs/README.md) for proposals under review
-- **ADRs**: See [../adr/](../adr/README.md) for specific architectural decisions
+- See [RFCs](../rfcs/README.md) for proposals under review
+- See [ADRs](../adr/README.md) for specific architectural decisions

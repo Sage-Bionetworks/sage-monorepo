@@ -25,7 +25,7 @@ ADRs use the format:
 - Numbered sequentially
 - Brief title in kebab-case
 
-## Active ADRs
+## ADRs
 
 | ADR | Title | Status | Date |
 | --- | ----- | ------ | ---- |
@@ -49,8 +49,8 @@ See the [Documentation Submission Workflow](../submission-workflow.md) guide for
 
 ## Related Documentation
 
-- **RFCs**: See [../rfcs/](../rfcs/README.md) for proposals under review
-- **Architecture**: See [../architecture/](../architecture/README.md) for approved designs
+- **RFCs**: See [RFCs](../rfcs/README.md) for proposals under review
+- **Architecture**: See [Architecture Plans](../architecture/README.md) for approved designs
 
 ## References
 
