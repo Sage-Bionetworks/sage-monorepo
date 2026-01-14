@@ -1,0 +1,7 @@
+name: geneExpressionIndividualFilterQuery
+description: The filter query used to retrieve a specific set of gene expression individual data.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/GeneExpressionIndividualFilterQuery.yaml

@@ -9,9 +9,9 @@
  */
 
 /**
- * Gene expression details filter query options
+ * Gene expression individual filter query options
  */
-export interface GeneExpressionDetailFilterQuery {
+export interface GeneExpressionIndividualFilterQuery {
   /**
    * Tissue type to filter by
    */
@@ -23,13 +23,13 @@ export interface GeneExpressionDetailFilterQuery {
   /**
    * Specifies whether modelIdentifier is a name or modelGroup
    */
-  modelIdentifierType: GeneExpressionDetailFilterQuery.ModelIdentifierTypeEnum;
+  modelIdentifierType: GeneExpressionIndividualFilterQuery.ModelIdentifierTypeEnum;
   /**
    * Ensembl Gene ID to filter by
    */
   ensemblGeneId: string;
 }
-export namespace GeneExpressionDetailFilterQuery {
+export namespace GeneExpressionIndividualFilterQuery {
   export type ModelIdentifierTypeEnum = 'name' | 'modelGroup';
   export const ModelIdentifierTypeEnum = {
     Name: 'name' as ModelIdentifierTypeEnum,

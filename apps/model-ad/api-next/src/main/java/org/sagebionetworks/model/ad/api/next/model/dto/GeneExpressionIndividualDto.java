@@ -20,13 +20,13 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * Gene Expression Detail
+ * Gene Expression Individual
  */
 
-@Schema(name = "GeneExpressionDetail", description = "Gene Expression Detail")
-@JsonTypeName("GeneExpressionDetail")
+@Schema(name = "GeneExpressionIndividual", description = "Gene Expression Individual")
+@JsonTypeName("GeneExpressionIndividual")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class GeneExpressionDetailDto {
+public class GeneExpressionIndividualDto {
 
   private String ensemblGeneId;
 
@@ -52,14 +52,14 @@ public class GeneExpressionDetailDto {
   @Valid
   private List<@Valid IndividualDataDto> data = new ArrayList<>();
 
-  public GeneExpressionDetailDto() {
+  public GeneExpressionIndividualDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionDetailDto(String ensemblGeneId, String geneSymbol, String tissue, String name, String matchedControl, String units, String age, Integer ageNumeric, List<String> resultOrder, List<@Valid IndividualDataDto> data) {
+  public GeneExpressionIndividualDto(String ensemblGeneId, String geneSymbol, String tissue, String name, String matchedControl, String units, String age, Integer ageNumeric, List<String> resultOrder, List<@Valid IndividualDataDto> data) {
     this.ensemblGeneId = ensemblGeneId;
     this.geneSymbol = geneSymbol;
     this.tissue = tissue;
@@ -72,7 +72,7 @@ public class GeneExpressionDetailDto {
     this.data = data;
   }
 
-  public GeneExpressionDetailDto ensemblGeneId(String ensemblGeneId) {
+  public GeneExpressionIndividualDto ensemblGeneId(String ensemblGeneId) {
     this.ensemblGeneId = ensemblGeneId;
     return this;
   }
@@ -92,7 +92,7 @@ public class GeneExpressionDetailDto {
     this.ensemblGeneId = ensemblGeneId;
   }
 
-  public GeneExpressionDetailDto geneSymbol(String geneSymbol) {
+  public GeneExpressionIndividualDto geneSymbol(String geneSymbol) {
     this.geneSymbol = geneSymbol;
     return this;
   }
@@ -112,7 +112,7 @@ public class GeneExpressionDetailDto {
     this.geneSymbol = geneSymbol;
   }
 
-  public GeneExpressionDetailDto tissue(String tissue) {
+  public GeneExpressionIndividualDto tissue(String tissue) {
     this.tissue = tissue;
     return this;
   }
@@ -132,7 +132,7 @@ public class GeneExpressionDetailDto {
     this.tissue = tissue;
   }
 
-  public GeneExpressionDetailDto name(String name) {
+  public GeneExpressionIndividualDto name(String name) {
     this.name = name;
     return this;
   }
@@ -152,7 +152,7 @@ public class GeneExpressionDetailDto {
     this.name = name;
   }
 
-  public GeneExpressionDetailDto modelGroup(@Nullable String modelGroup) {
+  public GeneExpressionIndividualDto modelGroup(@Nullable String modelGroup) {
     this.modelGroup = modelGroup;
     return this;
   }
@@ -172,7 +172,7 @@ public class GeneExpressionDetailDto {
     this.modelGroup = modelGroup;
   }
 
-  public GeneExpressionDetailDto matchedControl(String matchedControl) {
+  public GeneExpressionIndividualDto matchedControl(String matchedControl) {
     this.matchedControl = matchedControl;
     return this;
   }
@@ -192,7 +192,7 @@ public class GeneExpressionDetailDto {
     this.matchedControl = matchedControl;
   }
 
-  public GeneExpressionDetailDto units(String units) {
+  public GeneExpressionIndividualDto units(String units) {
     this.units = units;
     return this;
   }
@@ -212,7 +212,7 @@ public class GeneExpressionDetailDto {
     this.units = units;
   }
 
-  public GeneExpressionDetailDto age(String age) {
+  public GeneExpressionIndividualDto age(String age) {
     this.age = age;
     return this;
   }
@@ -232,7 +232,7 @@ public class GeneExpressionDetailDto {
     this.age = age;
   }
 
-  public GeneExpressionDetailDto ageNumeric(Integer ageNumeric) {
+  public GeneExpressionIndividualDto ageNumeric(Integer ageNumeric) {
     this.ageNumeric = ageNumeric;
     return this;
   }
@@ -252,12 +252,12 @@ public class GeneExpressionDetailDto {
     this.ageNumeric = ageNumeric;
   }
 
-  public GeneExpressionDetailDto resultOrder(List<String> resultOrder) {
+  public GeneExpressionIndividualDto resultOrder(List<String> resultOrder) {
     this.resultOrder = resultOrder;
     return this;
   }
 
-  public GeneExpressionDetailDto addResultOrderItem(String resultOrderItem) {
+  public GeneExpressionIndividualDto addResultOrderItem(String resultOrderItem) {
     if (this.resultOrder == null) {
       this.resultOrder = new ArrayList<>();
     }
@@ -280,12 +280,12 @@ public class GeneExpressionDetailDto {
     this.resultOrder = resultOrder;
   }
 
-  public GeneExpressionDetailDto data(List<@Valid IndividualDataDto> data) {
+  public GeneExpressionIndividualDto data(List<@Valid IndividualDataDto> data) {
     this.data = data;
     return this;
   }
 
-  public GeneExpressionDetailDto addDataItem(IndividualDataDto dataItem) {
+  public GeneExpressionIndividualDto addDataItem(IndividualDataDto dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<>();
     }
@@ -316,18 +316,18 @@ public class GeneExpressionDetailDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GeneExpressionDetailDto geneExpressionDetail = (GeneExpressionDetailDto) o;
-    return Objects.equals(this.ensemblGeneId, geneExpressionDetail.ensemblGeneId) &&
-        Objects.equals(this.geneSymbol, geneExpressionDetail.geneSymbol) &&
-        Objects.equals(this.tissue, geneExpressionDetail.tissue) &&
-        Objects.equals(this.name, geneExpressionDetail.name) &&
-        Objects.equals(this.modelGroup, geneExpressionDetail.modelGroup) &&
-        Objects.equals(this.matchedControl, geneExpressionDetail.matchedControl) &&
-        Objects.equals(this.units, geneExpressionDetail.units) &&
-        Objects.equals(this.age, geneExpressionDetail.age) &&
-        Objects.equals(this.ageNumeric, geneExpressionDetail.ageNumeric) &&
-        Objects.equals(this.resultOrder, geneExpressionDetail.resultOrder) &&
-        Objects.equals(this.data, geneExpressionDetail.data);
+    GeneExpressionIndividualDto geneExpressionIndividual = (GeneExpressionIndividualDto) o;
+    return Objects.equals(this.ensemblGeneId, geneExpressionIndividual.ensemblGeneId) &&
+        Objects.equals(this.geneSymbol, geneExpressionIndividual.geneSymbol) &&
+        Objects.equals(this.tissue, geneExpressionIndividual.tissue) &&
+        Objects.equals(this.name, geneExpressionIndividual.name) &&
+        Objects.equals(this.modelGroup, geneExpressionIndividual.modelGroup) &&
+        Objects.equals(this.matchedControl, geneExpressionIndividual.matchedControl) &&
+        Objects.equals(this.units, geneExpressionIndividual.units) &&
+        Objects.equals(this.age, geneExpressionIndividual.age) &&
+        Objects.equals(this.ageNumeric, geneExpressionIndividual.ageNumeric) &&
+        Objects.equals(this.resultOrder, geneExpressionIndividual.resultOrder) &&
+        Objects.equals(this.data, geneExpressionIndividual.data);
   }
 
   @Override
@@ -338,7 +338,7 @@ public class GeneExpressionDetailDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GeneExpressionDetailDto {\n");
+    sb.append("class GeneExpressionIndividualDto {\n");
     sb.append("    ensemblGeneId: ").append(toIndentedString(ensemblGeneId)).append("\n");
     sb.append("    geneSymbol: ").append(toIndentedString(geneSymbol)).append("\n");
     sb.append("    tissue: ").append(toIndentedString(tissue)).append("\n");
@@ -367,17 +367,17 @@ public class GeneExpressionDetailDto {
   
   public static class Builder {
 
-    private GeneExpressionDetailDto instance;
+    private GeneExpressionIndividualDto instance;
 
     public Builder() {
-      this(new GeneExpressionDetailDto());
+      this(new GeneExpressionIndividualDto());
     }
 
-    protected Builder(GeneExpressionDetailDto instance) {
+    protected Builder(GeneExpressionIndividualDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(GeneExpressionDetailDto value) { 
+    protected Builder copyOf(GeneExpressionIndividualDto value) { 
       this.instance.setEnsemblGeneId(value.ensemblGeneId);
       this.instance.setGeneSymbol(value.geneSymbol);
       this.instance.setTissue(value.tissue);
@@ -392,67 +392,67 @@ public class GeneExpressionDetailDto {
       return this;
     }
 
-    public GeneExpressionDetailDto.Builder ensemblGeneId(String ensemblGeneId) {
+    public GeneExpressionIndividualDto.Builder ensemblGeneId(String ensemblGeneId) {
       this.instance.ensemblGeneId(ensemblGeneId);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder geneSymbol(String geneSymbol) {
+    public GeneExpressionIndividualDto.Builder geneSymbol(String geneSymbol) {
       this.instance.geneSymbol(geneSymbol);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder tissue(String tissue) {
+    public GeneExpressionIndividualDto.Builder tissue(String tissue) {
       this.instance.tissue(tissue);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder name(String name) {
+    public GeneExpressionIndividualDto.Builder name(String name) {
       this.instance.name(name);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder modelGroup(String modelGroup) {
+    public GeneExpressionIndividualDto.Builder modelGroup(String modelGroup) {
       this.instance.modelGroup(modelGroup);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder matchedControl(String matchedControl) {
+    public GeneExpressionIndividualDto.Builder matchedControl(String matchedControl) {
       this.instance.matchedControl(matchedControl);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder units(String units) {
+    public GeneExpressionIndividualDto.Builder units(String units) {
       this.instance.units(units);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder age(String age) {
+    public GeneExpressionIndividualDto.Builder age(String age) {
       this.instance.age(age);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder ageNumeric(Integer ageNumeric) {
+    public GeneExpressionIndividualDto.Builder ageNumeric(Integer ageNumeric) {
       this.instance.ageNumeric(ageNumeric);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder resultOrder(List<String> resultOrder) {
+    public GeneExpressionIndividualDto.Builder resultOrder(List<String> resultOrder) {
       this.instance.resultOrder(resultOrder);
       return this;
     }
     
-    public GeneExpressionDetailDto.Builder data(List<IndividualDataDto> data) {
+    public GeneExpressionIndividualDto.Builder data(List<IndividualDataDto> data) {
       this.instance.data(data);
       return this;
     }
     
     /**
-    * returns a built GeneExpressionDetailDto instance.
+    * returns a built GeneExpressionIndividualDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public GeneExpressionDetailDto build() {
+    public GeneExpressionIndividualDto build() {
       try {
         return this.instance;
       } finally {
@@ -470,15 +470,15 @@ public class GeneExpressionDetailDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static GeneExpressionDetailDto.Builder builder() {
-    return new GeneExpressionDetailDto.Builder();
+  public static GeneExpressionIndividualDto.Builder builder() {
+    return new GeneExpressionIndividualDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public GeneExpressionDetailDto.Builder toBuilder() {
-    GeneExpressionDetailDto.Builder builder = new GeneExpressionDetailDto.Builder();
+  public GeneExpressionIndividualDto.Builder toBuilder() {
+    GeneExpressionIndividualDto.Builder builder = new GeneExpressionIndividualDto.Builder();
     return builder.copyOf(this);
   }
 

@@ -157,20 +157,20 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Gene Expression
-  /gene-expression-detail:
+  /gene-expression-individual:
     get:
-      description: Retrieve gene expression details data based on specified filter
+      description: Retrieve gene expression individual data based on specified filter
         criteria.
-      operationId: getGeneExpressionDetails
+      operationId: getGeneExpressionIndividual
       parameters:
         - description: The filter query used to retrieve a specific set of gene expression
-            detail data.
+            individual data.
           explode: true
           in: query
-          name: geneExpressionDetailFilterQuery
+          name: geneExpressionIndividualFilterQuery
           required: false
           schema:
-            $ref: '#/components/schemas/GeneExpressionDetailFilterQuery'
+            $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'
           style: deepObject
       responses:
         '200':
@@ -178,7 +178,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/GeneExpressionDetail'
+                  $ref: '#/components/schemas/GeneExpressionIndividual'
                 type: array
           description: Successfully retrieved individual gene expression data
         '400':
@@ -187,7 +187,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      summary: Get gene expression details data
+      summary: Get gene expression individual data
       tags:
         - Gene Expression
       x-accepts:
@@ -258,15 +258,15 @@ components:
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'
       style: deepObject
-    geneExpressionDetailsFilterQuery:
+    geneExpressionIndividualFilterQuery:
       description: The filter query used to retrieve a specific set of gene expression
-        detail data.
+        individual data.
       explode: true
       in: query
-      name: geneExpressionDetailFilterQuery
+      name: geneExpressionIndividualFilterQuery
       required: false
       schema:
-        $ref: '#/components/schemas/GeneExpressionDetailFilterQuery'
+        $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'
       style: deepObject
   responses:
     BadRequest:
@@ -1293,8 +1293,8 @@ components:
         - geneExpressions
         - page
       type: object
-    GeneExpressionDetailFilterQuery:
-      description: Gene expression details filter query options
+    GeneExpressionIndividualFilterQuery:
+      description: Gene expression individual filter query options
       properties:
         tissue:
           description: Tissue type to filter by
@@ -1346,8 +1346,8 @@ components:
         - sex
         - value
       type: object
-    GeneExpressionDetail:
-      description: Gene Expression Detail
+    GeneExpressionIndividual:
+      description: Gene Expression Individual
       example:
         model_group: model_group
         data:

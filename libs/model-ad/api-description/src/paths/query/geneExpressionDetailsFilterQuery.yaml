@@ -1,7 +1,0 @@
-name: geneExpressionDetailFilterQuery
-description: The filter query used to retrieve a specific set of gene expression detail data.
-in: query
-style: deepObject
-explode: true
-schema:
-  $ref: ../../components/schemas/GeneExpressionDetailFilterQuery.yaml

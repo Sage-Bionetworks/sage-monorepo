@@ -17,13 +17,13 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * Gene expression details filter query options
+ * Gene expression individual filter query options
  */
 
-@Schema(name = "GeneExpressionDetailFilterQuery", description = "Gene expression details filter query options")
-@JsonTypeName("GeneExpressionDetailFilterQuery")
+@Schema(name = "GeneExpressionIndividualFilterQuery", description = "Gene expression individual filter query options")
+@JsonTypeName("GeneExpressionIndividualFilterQuery")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class GeneExpressionDetailFilterQueryDto {
+public class GeneExpressionIndividualFilterQueryDto {
 
   private String tissue;
 
@@ -68,21 +68,21 @@ public class GeneExpressionDetailFilterQueryDto {
 
   private String ensemblGeneId;
 
-  public GeneExpressionDetailFilterQueryDto() {
+  public GeneExpressionIndividualFilterQueryDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionDetailFilterQueryDto(String tissue, String modelIdentifier, ModelIdentifierTypeEnum modelIdentifierType, String ensemblGeneId) {
+  public GeneExpressionIndividualFilterQueryDto(String tissue, String modelIdentifier, ModelIdentifierTypeEnum modelIdentifierType, String ensemblGeneId) {
     this.tissue = tissue;
     this.modelIdentifier = modelIdentifier;
     this.modelIdentifierType = modelIdentifierType;
     this.ensemblGeneId = ensemblGeneId;
   }
 
-  public GeneExpressionDetailFilterQueryDto tissue(String tissue) {
+  public GeneExpressionIndividualFilterQueryDto tissue(String tissue) {
     this.tissue = tissue;
     return this;
   }
@@ -102,7 +102,7 @@ public class GeneExpressionDetailFilterQueryDto {
     this.tissue = tissue;
   }
 
-  public GeneExpressionDetailFilterQueryDto modelIdentifier(String modelIdentifier) {
+  public GeneExpressionIndividualFilterQueryDto modelIdentifier(String modelIdentifier) {
     this.modelIdentifier = modelIdentifier;
     return this;
   }
@@ -122,7 +122,7 @@ public class GeneExpressionDetailFilterQueryDto {
     this.modelIdentifier = modelIdentifier;
   }
 
-  public GeneExpressionDetailFilterQueryDto modelIdentifierType(ModelIdentifierTypeEnum modelIdentifierType) {
+  public GeneExpressionIndividualFilterQueryDto modelIdentifierType(ModelIdentifierTypeEnum modelIdentifierType) {
     this.modelIdentifierType = modelIdentifierType;
     return this;
   }
@@ -142,7 +142,7 @@ public class GeneExpressionDetailFilterQueryDto {
     this.modelIdentifierType = modelIdentifierType;
   }
 
-  public GeneExpressionDetailFilterQueryDto ensemblGeneId(String ensemblGeneId) {
+  public GeneExpressionIndividualFilterQueryDto ensemblGeneId(String ensemblGeneId) {
     this.ensemblGeneId = ensemblGeneId;
     return this;
   }
@@ -170,11 +170,11 @@ public class GeneExpressionDetailFilterQueryDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GeneExpressionDetailFilterQueryDto geneExpressionDetailFilterQuery = (GeneExpressionDetailFilterQueryDto) o;
-    return Objects.equals(this.tissue, geneExpressionDetailFilterQuery.tissue) &&
-        Objects.equals(this.modelIdentifier, geneExpressionDetailFilterQuery.modelIdentifier) &&
-        Objects.equals(this.modelIdentifierType, geneExpressionDetailFilterQuery.modelIdentifierType) &&
-        Objects.equals(this.ensemblGeneId, geneExpressionDetailFilterQuery.ensemblGeneId);
+    GeneExpressionIndividualFilterQueryDto geneExpressionIndividualFilterQuery = (GeneExpressionIndividualFilterQueryDto) o;
+    return Objects.equals(this.tissue, geneExpressionIndividualFilterQuery.tissue) &&
+        Objects.equals(this.modelIdentifier, geneExpressionIndividualFilterQuery.modelIdentifier) &&
+        Objects.equals(this.modelIdentifierType, geneExpressionIndividualFilterQuery.modelIdentifierType) &&
+        Objects.equals(this.ensemblGeneId, geneExpressionIndividualFilterQuery.ensemblGeneId);
   }
 
   @Override
@@ -185,7 +185,7 @@ public class GeneExpressionDetailFilterQueryDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GeneExpressionDetailFilterQueryDto {\n");
+    sb.append("class GeneExpressionIndividualFilterQueryDto {\n");
     sb.append("    tissue: ").append(toIndentedString(tissue)).append("\n");
     sb.append("    modelIdentifier: ").append(toIndentedString(modelIdentifier)).append("\n");
     sb.append("    modelIdentifierType: ").append(toIndentedString(modelIdentifierType)).append("\n");
@@ -207,17 +207,17 @@ public class GeneExpressionDetailFilterQueryDto {
   
   public static class Builder {
 
-    private GeneExpressionDetailFilterQueryDto instance;
+    private GeneExpressionIndividualFilterQueryDto instance;
 
     public Builder() {
-      this(new GeneExpressionDetailFilterQueryDto());
+      this(new GeneExpressionIndividualFilterQueryDto());
     }
 
-    protected Builder(GeneExpressionDetailFilterQueryDto instance) {
+    protected Builder(GeneExpressionIndividualFilterQueryDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(GeneExpressionDetailFilterQueryDto value) { 
+    protected Builder copyOf(GeneExpressionIndividualFilterQueryDto value) { 
       this.instance.setTissue(value.tissue);
       this.instance.setModelIdentifier(value.modelIdentifier);
       this.instance.setModelIdentifierType(value.modelIdentifierType);
@@ -225,32 +225,32 @@ public class GeneExpressionDetailFilterQueryDto {
       return this;
     }
 
-    public GeneExpressionDetailFilterQueryDto.Builder tissue(String tissue) {
+    public GeneExpressionIndividualFilterQueryDto.Builder tissue(String tissue) {
       this.instance.tissue(tissue);
       return this;
     }
     
-    public GeneExpressionDetailFilterQueryDto.Builder modelIdentifier(String modelIdentifier) {
+    public GeneExpressionIndividualFilterQueryDto.Builder modelIdentifier(String modelIdentifier) {
       this.instance.modelIdentifier(modelIdentifier);
       return this;
     }
     
-    public GeneExpressionDetailFilterQueryDto.Builder modelIdentifierType(ModelIdentifierTypeEnum modelIdentifierType) {
+    public GeneExpressionIndividualFilterQueryDto.Builder modelIdentifierType(ModelIdentifierTypeEnum modelIdentifierType) {
       this.instance.modelIdentifierType(modelIdentifierType);
       return this;
     }
     
-    public GeneExpressionDetailFilterQueryDto.Builder ensemblGeneId(String ensemblGeneId) {
+    public GeneExpressionIndividualFilterQueryDto.Builder ensemblGeneId(String ensemblGeneId) {
       this.instance.ensemblGeneId(ensemblGeneId);
       return this;
     }
     
     /**
-    * returns a built GeneExpressionDetailFilterQueryDto instance.
+    * returns a built GeneExpressionIndividualFilterQueryDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public GeneExpressionDetailFilterQueryDto build() {
+    public GeneExpressionIndividualFilterQueryDto build() {
       try {
         return this.instance;
       } finally {
@@ -268,15 +268,15 @@ public class GeneExpressionDetailFilterQueryDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static GeneExpressionDetailFilterQueryDto.Builder builder() {
-    return new GeneExpressionDetailFilterQueryDto.Builder();
+  public static GeneExpressionIndividualFilterQueryDto.Builder builder() {
+    return new GeneExpressionIndividualFilterQueryDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public GeneExpressionDetailFilterQueryDto.Builder toBuilder() {
-    GeneExpressionDetailFilterQueryDto.Builder builder = new GeneExpressionDetailFilterQueryDto.Builder();
+  public GeneExpressionIndividualFilterQueryDto.Builder toBuilder() {
+    GeneExpressionIndividualFilterQueryDto.Builder builder = new GeneExpressionIndividualFilterQueryDto.Builder();
     return builder.copyOf(this);
   }
 

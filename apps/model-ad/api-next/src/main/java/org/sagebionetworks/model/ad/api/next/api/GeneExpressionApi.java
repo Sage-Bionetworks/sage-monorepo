@@ -6,8 +6,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDetailDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDetailFilterQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualFilterQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -44,24 +44,24 @@ public interface GeneExpressionApi {
     }
 
     /**
-     * GET /gene-expression-detail : Get gene expression details data
-     * Retrieve gene expression details data based on specified filter criteria.
+     * GET /gene-expression-individual : Get gene expression individual data
+     * Retrieve gene expression individual data based on specified filter criteria.
      *
-     * @param geneExpressionDetailFilterQuery The filter query used to retrieve a specific set of gene expression detail data. (optional)
+     * @param geneExpressionIndividualFilterQuery The filter query used to retrieve a specific set of gene expression individual data. (optional)
      * @return Successfully retrieved individual gene expression data (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "getGeneExpressionDetails",
-        summary = "Get gene expression details data",
-        description = "Retrieve gene expression details data based on specified filter criteria.",
+        operationId = "getGeneExpressionIndividual",
+        summary = "Get gene expression individual data",
+        description = "Retrieve gene expression individual data based on specified filter criteria.",
         tags = { "Gene Expression" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved individual gene expression data", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionDetailDto.class))),
-                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionDetailDto.class)))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionIndividualDto.class))),
+                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionIndividualDto.class)))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -79,14 +79,14 @@ public interface GeneExpressionApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/gene-expression-detail",
+        value = "/gene-expression-individual",
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<List<GeneExpressionDetailDto>> getGeneExpressionDetails(
-        @Parameter(name = "geneExpressionDetailFilterQuery", description = "The filter query used to retrieve a specific set of gene expression detail data.", in = ParameterIn.QUERY) @Valid @Nullable GeneExpressionDetailFilterQueryDto geneExpressionDetailFilterQuery
+    default ResponseEntity<List<GeneExpressionIndividualDto>> getGeneExpressionIndividual(
+        @Parameter(name = "geneExpressionIndividualFilterQuery", description = "The filter query used to retrieve a specific set of gene expression individual data.", in = ParameterIn.QUERY) @Valid @Nullable GeneExpressionIndividualFilterQueryDto geneExpressionIndividualFilterQuery
     ) {
-        return getDelegate().getGeneExpressionDetails(geneExpressionDetailFilterQuery);
+        return getDelegate().getGeneExpressionIndividual(geneExpressionIndividualFilterQuery);
     }
 
 

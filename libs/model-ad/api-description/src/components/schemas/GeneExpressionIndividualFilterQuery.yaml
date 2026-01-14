@@ -1,5 +1,5 @@
 type: object
-description: Gene expression details filter query options
+description: Gene expression individual filter query options
 properties:
   tissue:
     description: Tissue type to filter by

@@ -1,8 +1,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDetailDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionDetailFilterQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualFilterQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
 import org.springframework.http.HttpStatus;
@@ -31,17 +31,17 @@ public interface GeneExpressionApiDelegate {
     }
 
     /**
-     * GET /gene-expression-detail : Get gene expression details data
-     * Retrieve gene expression details data based on specified filter criteria.
+     * GET /gene-expression-individual : Get gene expression individual data
+     * Retrieve gene expression individual data based on specified filter criteria.
      *
-     * @param geneExpressionDetailFilterQuery The filter query used to retrieve a specific set of gene expression detail data. (optional)
+     * @param geneExpressionIndividualFilterQuery The filter query used to retrieve a specific set of gene expression individual data. (optional)
      * @return Successfully retrieved individual gene expression data (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see GeneExpressionApi#getGeneExpressionDetails
+     * @see GeneExpressionApi#getGeneExpressionIndividual
      */
-    default ResponseEntity<List<GeneExpressionDetailDto>> getGeneExpressionDetails(GeneExpressionDetailFilterQueryDto geneExpressionDetailFilterQuery) {
+    default ResponseEntity<List<GeneExpressionIndividualDto>> getGeneExpressionIndividual(GeneExpressionIndividualFilterQueryDto geneExpressionIndividualFilterQuery) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

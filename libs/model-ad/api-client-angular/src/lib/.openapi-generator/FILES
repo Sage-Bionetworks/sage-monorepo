@@ -23,8 +23,8 @@ model/disease-correlation-search-query.ts
 model/disease-correlation.ts
 model/disease-correlations-page.ts
 model/fold-change-result.ts
-model/gene-expression-detail-filter-query.ts
-model/gene-expression-detail.ts
+model/gene-expression-individual-filter-query.ts
+model/gene-expression-individual.ts
 model/gene-expression-search-query.ts
 model/gene-expression.ts
 model/gene-expressions-page.ts
