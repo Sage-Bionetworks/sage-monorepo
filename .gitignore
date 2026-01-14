@@ -5,6 +5,7 @@
 playwright-report/
 test-results/
 tmp/
+site/
 
 # Config files
 .act.secrets

@@ -73,6 +73,12 @@ nav:
       - Feature Requests: resources/feature-requests.md
       - Contributing: contributions/overview.md
       - OpenChallenges Schemas: resources/oc-schemas.md
+  - Technical Documentation:
+      - Overview: technical-documentation-overview.md
+      - Submission Workflow: submission-workflow.md
+      - RFCs: rfcs/README.md
+      - Architecture: architecture/README.md
+      - ADRs: adr/README.md
 theme:
   name: material
   palette:
@@ -107,8 +113,13 @@ plugins:
   - search
 markdown_extensions:
   - admonition
+  - mdx_truly_sane_lists
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tasklist:
       clickable_checkbox: true
       custom_checkbox: true
