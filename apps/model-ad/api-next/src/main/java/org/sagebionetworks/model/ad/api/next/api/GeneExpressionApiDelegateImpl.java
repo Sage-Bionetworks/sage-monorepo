@@ -1,8 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +12,6 @@ import org.sagebionetworks.model.ad.api.next.util.ApiHelper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @RequiredArgsConstructor
@@ -42,10 +38,10 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   public ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
     GeneExpressionSearchQueryDto query
   ) {
-    // Validate query parameters
-    validateQueryParameters();
-
     log.debug("Fetching gene expressions for categories: {}", query.getCategories());
+
+    // Validate query parameters
+    ApiHelper.validateQueryParameters(VALID_QUERY_PARAMS);
 
     String[] tissueAndSexCohort = extractTissueAndSexCohort(query.getCategories());
     String tissue = tissueAndSexCohort[0];
@@ -119,23 +115,5 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
     }
 
     return extracted;
-  }
-
-  private void validateQueryParameters() {
-    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
-      .getRequestAttributes();
-    if (attributes == null) {
-      log.debug("Skipping query parameter validation: RequestContextHolder returned null");
-      return;
-    }
-
-    HttpServletRequest request = attributes.getRequest();
-    Map<String, String[]> parameterMap = request.getParameterMap();
-
-    for (String paramName : parameterMap.keySet()) {
-      if (!VALID_QUERY_PARAMS.contains(paramName)) {
-        throw new IllegalArgumentException("Unknown query parameter: " + paramName);
-      }
-    }
   }
 }
