@@ -119,15 +119,15 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /gene-expression-individual:
+  /gene-expression-detail:
     get:
       tags:
         - Gene Expression
-      summary: Get individual gene expression results
-      description: Retrieve data for an individual set of gene expression data based on specified search criteria.
-      operationId: getGeneExpressionIndividual
+      summary: Get gene expression details data
+      description: Retrieve gene expression details data based on specified filter criteria.
+      operationId: getGeneExpressionDetails
       parameters:
-        - $ref: '#/components/parameters/geneExpressionIndividualSearchQuery'
+        - $ref: '#/components/parameters/geneExpressionDetailsFilterQuery'
       responses:
         '200':
           content:
@@ -135,7 +135,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GeneExpressionIndividual'
+                  $ref: '#/components/schemas/GeneExpressionDetail'
           description: Successfully retrieved individual gene expression data
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -929,31 +929,34 @@ components:
       required:
         - geneExpressions
         - page
-    GeneExpressionIndividualSearchQuery:
+    GeneExpressionDetailFilterQuery:
       type: object
-      description: Gene expression individual search query filter options
+      description: Gene expression details filter query options
       properties:
         tissue:
           description: Tissue type to filter by
           type: string
           example: Hippocampus
-        name:
-          description: Model name to filter by. Used when modelGroup is null.
+        modelIdentifier:
+          description: The model name or model group to filter by
           type: string
           example: 5xFAD (Jax/IU/Pitt)
-        modelGroup:
-          description: Model group to filter by. Overrides name if both are provided.
+        modelIdentifierType:
+          description: Specifies whether modelIdentifier is a name or modelGroup
           type: string
-          nullable: true
-          example: 5xFAD (IU/Jax/Pitt)
+          enum:
+            - name
+            - modelGroup
+          example: name
         ensemblGeneId:
           description: Ensembl Gene ID to filter by
           type: string
           example: ENSMUSG00000000001
       required:
         - tissue
-        - name
         - ensemblGeneId
+        - modelIdentifier
+        - modelIdentifierType
     IndividualData:
       type: object
       description: Data for an individual
@@ -974,9 +977,9 @@ components:
         - sex
         - individual_id
         - value
-    GeneExpressionIndividual:
+    GeneExpressionDetail:
       type: object
-      description: Gene Expression Individual
+      description: Gene Expression Detail
       properties:
         ensembl_gene_id:
           type: string
@@ -1344,11 +1347,11 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'
-    geneExpressionIndividualSearchQuery:
-      name: geneExpressionIndividualSearchQuery
-      description: The search query used to find individual gene expressions.
+    geneExpressionDetailsFilterQuery:
+      name: geneExpressionDetailFilterQuery
+      description: The filter query used to retrieve a specific set of gene expression detail data.
       in: query
       style: deepObject
       explode: true
       schema:
-        $ref: '#/components/schemas/GeneExpressionIndividualSearchQuery'
+        $ref: '#/components/schemas/GeneExpressionDetailFilterQuery'

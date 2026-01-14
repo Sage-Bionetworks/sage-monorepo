@@ -1,5 +1,5 @@
 type: object
-description: Gene Expression Individual
+description: Gene Expression Detail
 properties:
   ensembl_gene_id:
     type: string

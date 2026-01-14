@@ -1,0 +1,27 @@
+type: object
+description: Gene expression details filter query options
+properties:
+  tissue:
+    description: Tissue type to filter by
+    type: string
+    example: 'Hippocampus'
+  modelIdentifier:
+    description: The model name or model group to filter by
+    type: string
+    example: '5xFAD (Jax/IU/Pitt)'
+  modelIdentifierType:
+    description: Specifies whether modelIdentifier is a name or modelGroup
+    type: string
+    enum:
+      - name
+      - modelGroup
+    example: 'name'
+  ensemblGeneId:
+    description: Ensembl Gene ID to filter by
+    type: string
+    example: 'ENSMUSG00000000001'
+required:
+  - tissue
+  - ensemblGeneId
+  - modelIdentifier
+  - modelIdentifierType

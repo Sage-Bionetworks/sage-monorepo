@@ -33,7 +33,7 @@ paths:
     $ref: paths/comparison-tools/disease-correlation.yaml
   /comparison-tools/gene-expression:
     $ref: paths/comparison-tools/gene-expression.yaml
-  /gene-expression-individual:
-    $ref: paths/gene-expression-individual.yaml
+  /gene-expression-detail:
+    $ref: paths/gene-expression-detail.yaml
   /models/{name}:
     $ref: paths/model.yaml

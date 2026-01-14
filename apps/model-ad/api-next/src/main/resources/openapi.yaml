@@ -157,19 +157,20 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Gene Expression
-  /gene-expression-individual:
+  /gene-expression-detail:
     get:
-      description: Retrieve data for an individual set of gene expression data based
-        on specified search criteria.
-      operationId: getGeneExpressionIndividual
+      description: Retrieve gene expression details data based on specified filter
+        criteria.
+      operationId: getGeneExpressionDetails
       parameters:
-        - description: The search query used to find individual gene expressions.
+        - description: The filter query used to retrieve a specific set of gene expression
+            detail data.
           explode: true
           in: query
-          name: geneExpressionIndividualSearchQuery
+          name: geneExpressionDetailFilterQuery
           required: false
           schema:
-            $ref: '#/components/schemas/GeneExpressionIndividualSearchQuery'
+            $ref: '#/components/schemas/GeneExpressionDetailFilterQuery'
           style: deepObject
       responses:
         '200':
@@ -177,7 +178,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/GeneExpressionIndividual'
+                  $ref: '#/components/schemas/GeneExpressionDetail'
                 type: array
           description: Successfully retrieved individual gene expression data
         '400':
@@ -186,7 +187,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      summary: Get individual gene expression results
+      summary: Get gene expression details data
       tags:
         - Gene Expression
       x-accepts:
@@ -257,14 +258,15 @@ components:
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'
       style: deepObject
-    geneExpressionIndividualSearchQuery:
-      description: The search query used to find individual gene expressions.
+    geneExpressionDetailsFilterQuery:
+      description: The filter query used to retrieve a specific set of gene expression
+        detail data.
       explode: true
       in: query
-      name: geneExpressionIndividualSearchQuery
+      name: geneExpressionDetailFilterQuery
       required: false
       schema:
-        $ref: '#/components/schemas/GeneExpressionIndividualSearchQuery'
+        $ref: '#/components/schemas/GeneExpressionDetailFilterQuery'
       style: deepObject
   responses:
     BadRequest:
@@ -1291,21 +1293,23 @@ components:
         - geneExpressions
         - page
       type: object
-    GeneExpressionIndividualSearchQuery:
-      description: Gene expression individual search query filter options
+    GeneExpressionDetailFilterQuery:
+      description: Gene expression details filter query options
       properties:
         tissue:
           description: Tissue type to filter by
           example: Hippocampus
           type: string
-        name:
-          description: Model name to filter by. Used when modelGroup is null.
+        modelIdentifier:
+          description: The model name or model group to filter by
           example: 5xFAD (Jax/IU/Pitt)
           type: string
-        modelGroup:
-          description: Model group to filter by. Overrides name if both are provided.
-          example: 5xFAD (IU/Jax/Pitt)
-          nullable: true
+        modelIdentifierType:
+          description: Specifies whether modelIdentifier is a name or modelGroup
+          enum:
+            - name
+            - modelGroup
+          example: name
           type: string
         ensemblGeneId:
           description: Ensembl Gene ID to filter by
@@ -1313,7 +1317,8 @@ components:
           type: string
       required:
         - ensemblGeneId
-        - name
+        - modelIdentifier
+        - modelIdentifierType
         - tissue
       type: object
     IndividualData:
@@ -1341,8 +1346,8 @@ components:
         - sex
         - value
       type: object
-    GeneExpressionIndividual:
-      description: Gene Expression Individual
+    GeneExpressionDetail:
+      description: Gene Expression Detail
       example:
         model_group: model_group
         data:

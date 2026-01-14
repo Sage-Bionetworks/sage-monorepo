@@ -10,9 +10,9 @@
 import { IndividualData } from './individual-data';
 
 /**
- * Gene Expression Individual
+ * Gene Expression Detail
  */
-export interface GeneExpressionIndividual {
+export interface GeneExpressionDetail {
   /**
    * Ensembl Gene ID
    */
