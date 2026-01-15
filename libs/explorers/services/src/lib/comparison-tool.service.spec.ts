@@ -764,7 +764,7 @@ describe('ComparisonToolService', () => {
   });
 
   describe('heatmap details panel', () => {
-    const mockRowData = { gene_symbol: 'APOE', tissue: 'cortex' };
+    const mockRowData = { _id: 'row-123', gene_symbol: 'APOE', tissue: 'cortex' };
     const mockCellData = { log2_fc: 1.5, adj_p_val: 0.01 };
     const mockEvent = new MouseEvent('click');
 
@@ -799,6 +799,7 @@ describe('ComparisonToolService', () => {
       expect(service.heatmapDetailsPanelData()).toEqual({
         data: { heading: 'Test Heading', value: 1.5 },
         event: mockEvent,
+        panelKey: 'row-123:age_4mo',
       });
     });
 
@@ -827,6 +828,88 @@ describe('ComparisonToolService', () => {
       service.hideHeatmapDetailsPanel();
 
       expect(service.heatmapDetailsPanelData()).toBeNull();
+    });
+
+    it('should toggle panel off when clicking the same cell', () => {
+      connectService();
+      const mockTransform = jest.fn().mockReturnValue({ heading: 'Test' });
+      service.setViewConfig({
+        heatmapCircleClickTransformFn: mockTransform,
+      });
+
+      // First click - show panel
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
+      expect(service.heatmapDetailsPanelData()).not.toBeNull();
+
+      // Second click on same cell - should hide panel
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
+      expect(service.heatmapDetailsPanelData()).toBeNull();
+    });
+
+    it('should show new panel when clicking a different cell', () => {
+      connectService();
+      const mockTransform = jest.fn().mockReturnValue({ heading: 'Test' });
+      service.setViewConfig({
+        heatmapCircleClickTransformFn: mockTransform,
+      });
+
+      // First click
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
+      expect(service.heatmapDetailsPanelData()?.panelKey).toBe('row-123:age_4mo');
+
+      // Click on different column
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_8mo', mockEvent);
+      expect(service.heatmapDetailsPanelData()?.panelKey).toBe('row-123:age_8mo');
+    });
+
+    it('should show new panel when clicking a different row', () => {
+      connectService();
+      const mockTransform = jest.fn().mockReturnValue({ heading: 'Test' });
+      service.setViewConfig({
+        heatmapCircleClickTransformFn: mockTransform,
+      });
+
+      // First click
+      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
+      expect(service.heatmapDetailsPanelData()?.panelKey).toBe('row-123:age_4mo');
+
+      // Click on different row
+      const differentRowData = { _id: 'row-456', gene_symbol: 'TREM2', tissue: 'cortex' };
+      service.showHeatmapDetailsPanel(differentRowData, mockCellData, 'age_4mo', mockEvent);
+      expect(service.heatmapDetailsPanelData()?.panelKey).toBe('row-456:age_4mo');
+    });
+  });
+
+  describe('filter panel', () => {
+    it('should have filter panel closed initially', () => {
+      connectService();
+      expect(service.isFilterPanelOpen()).toBe(false);
+    });
+
+    it('should open filter panel', () => {
+      connectService();
+      service.openFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(true);
+    });
+
+    it('should close filter panel', () => {
+      connectService();
+      service.openFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(true);
+
+      service.closeFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(false);
+    });
+
+    it('should toggle filter panel', () => {
+      connectService();
+      expect(service.isFilterPanelOpen()).toBe(false);
+
+      service.toggleFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(true);
+
+      service.toggleFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(false);
     });
   });
 });

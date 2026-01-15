@@ -42,12 +42,12 @@
     </div>
   }
 </ng-template>
-<p-popover class="heatmap-details-panel" appendTo="">
+<p-popover class="heatmap-details-panel" appendTo="" (onHide)="onPanelHide()">
   <ng-container
     *ngTemplateOutlet="panelTemplate; context: { $implicit: panelData()[0] }"
   ></ng-container>
 </p-popover>
-<p-popover class="heatmap-details-panel" appendTo="">
+<p-popover class="heatmap-details-panel" appendTo="" (onHide)="onPanelHide()">
   <ng-container
     *ngTemplateOutlet="panelTemplate; context: { $implicit: panelData()[1] }"
   ></ng-container>

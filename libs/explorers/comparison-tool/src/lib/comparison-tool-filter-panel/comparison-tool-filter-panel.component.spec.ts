@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import {
   ComparisonToolFilterService,
+  ComparisonToolService,
   HelperService,
   provideComparisonToolFilterService,
   provideComparisonToolService,
@@ -34,7 +35,8 @@ async function setup(isOpen = false) {
   });
   const componentInstance = component.fixture.componentInstance;
   const ctFilterService = component.fixture.debugElement.injector.get(ComparisonToolFilterService);
-  return { user, component, componentInstance, ctFilterService };
+  const ctService = component.fixture.debugElement.injector.get(ComparisonToolService);
+  return { user, component, componentInstance, ctFilterService, ctService };
 }
 
 function getCategoryButton(category: string) {
@@ -80,10 +82,10 @@ describe('ComparisonToolFilterPanelComponent', () => {
   });
 
   it('should close panel when close button is clicked', async () => {
-    const { user, componentInstance } = await setup(true);
+    const { user, ctService } = await setup(true);
     const closeButton = screen.getByRole('button', { name: 'close' });
     await user.click(closeButton);
-    expect(componentInstance.isOpen()).toBe(false);
+    expect(ctService.isFilterPanelOpen()).toBe(false);
   });
 
   it('should open filter pane when category button is clicked', async () => {

@@ -1,15 +1,15 @@
-/* eslint-disable @angular-eslint/no-output-on-prefix */
 import { CommonModule } from '@angular/common';
 import {
   Component,
-  computed,
+  effect,
   inject,
   signal,
+  untracked,
   viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
 import { HeatmapDetailsPanelData } from '@sagebionetworks/explorers/models';
-import { HelperService } from '@sagebionetworks/explorers/services';
+import { ComparisonToolService, HelperService } from '@sagebionetworks/explorers/services';
 import { Popover, PopoverModule } from 'primeng/popover';
 
 const defaultPanelData: HeatmapDetailsPanelData = {
@@ -27,56 +27,70 @@ const defaultPanelData: HeatmapDetailsPanelData = {
   encapsulation: ViewEncapsulation.None,
 })
 export class HeatmapDetailsPanelComponent {
-  helperService = inject(HelperService);
+  private readonly EMDASH = '\u2014'; //Shift+Option+Hyphen
+
+  private readonly comparisonToolService = inject(ComparisonToolService);
+  private readonly helperService = inject(HelperService);
   panels = viewChildren(Popover);
 
   /**
-   * Use a double buffering approach: Two popover panels alternate to ensure smooth transitions.
-   * When showing new data, we update the inactive panel's data, switch the active index,
-   * hide the old panel, and show the new one. This prevents flickering that would occur
-   * if we updated and repositioned a single panel while it's visible.
+   * Double buffering: Two popovers are used so we can hide one
+   * while showing the other at a new position.  Otherwise, PrimeNG won't
+   * reposition the new popover.
    */
+  activePanelIndex = signal(0);
   panelData = signal<[HeatmapDetailsPanelData, HeatmapDetailsPanelData]>([
     { ...defaultPanelData },
     { ...defaultPanelData },
   ]);
-  activePanelIndex = signal(0);
 
-  data = computed(() => this.panelData()[this.activePanelIndex()]);
+  constructor() {
+    effect(() => {
+      const panelData = this.comparisonToolService.heatmapDetailsPanelData();
+      untracked(() => {
+        if (panelData) {
+          this.show(panelData.event, panelData.data);
+        } else {
+          this.hide();
+        }
+      });
+    });
+  }
 
-  private lastEventTarget: EventTarget | null = null;
-
-  show(event: Event, data: HeatmapDetailsPanelData) {
+  private show(event: Event, data: HeatmapDetailsPanelData) {
     const currentIndex = this.activePanelIndex();
     const newIndex = currentIndex === 0 ? 1 : 0;
 
-    this.panelData.update(([d0, d1]) => (newIndex === 0 ? [data, d1] : [d0, data]));
+    // Update data for the next panel
+    this.panelData.update((arr) => {
+      const copy: [HeatmapDetailsPanelData, HeatmapDetailsPanelData] = [...arr];
+      copy[newIndex] = data;
+      return copy;
+    });
     this.activePanelIndex.set(newIndex);
 
+    // Hide current, show next at new position
     this.panels()[currentIndex]?.hide();
-
-    this.lastEventTarget = event?.target ?? null;
-    const target = event?.target ?? document.createElement('span');
-    this.panels()[newIndex]?.show(event ?? new Event('click'), target);
+    this.panels()[newIndex]?.show(event, event.target);
   }
 
-  hide() {
+  private hide() {
     this.panels().forEach((panel) => panel?.hide());
-    this.lastEventTarget = null;
   }
 
-  toggle(event: Event, data?: HeatmapDetailsPanelData) {
-    const isVisible = this.panels().some((p) => p?.overlayVisible);
-    if (event.target === this.lastEventTarget && isVisible) {
-      this.hide();
-    } else if (data) {
-      this.show(event, data);
+  /**
+   * Called when a popover is hidden by PrimeNG (e.g., clicking outside).
+   * Only clears service state if no panel is still visible.
+   */
+  onPanelHide() {
+    const anyVisible = this.panels().some((p) => p?.overlayVisible);
+    if (!anyVisible && this.comparisonToolService.heatmapDetailsPanelData()) {
+      this.comparisonToolService.hideHeatmapDetailsPanel();
     }
   }
 
-  getSignificantFigures(n: number | null | undefined, significantDigits: number) {
-    const emdash = '\u2014'; // Shift+Option+Hyphen
-    if (n === null || n === undefined) return emdash;
+  getSignificantFigures(n: number | null | undefined, significantDigits: number): string | number {
+    if (n === null || n === undefined) return this.EMDASH;
     return this.helperService.getSignificantFigures(n, significantDigits);
   }
 }

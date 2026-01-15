@@ -90,7 +90,9 @@ export class ComparisonToolService<T> {
   private readonly heatmapDetailsPanelDataSignal = signal<{
     data: HeatmapDetailsPanelData;
     event: Event;
+    panelKey: string;
   } | null>(null);
+  private readonly isFilterPanelOpenSignal = signal(false);
 
   // URL Sync State
   private lastSerializedState: string | null = null;
@@ -107,6 +109,7 @@ export class ComparisonToolService<T> {
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
+  readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
 
   // Computed Query Accessors
   readonly query = this.querySignal.asReadonly();
@@ -348,6 +351,16 @@ export class ComparisonToolService<T> {
       return;
     }
 
+    const rowIdKey = this.viewConfig().rowIdDataKey;
+    const rowId = (rowData as Record<string, unknown>)[rowIdKey];
+    const panelKey = `${rowId}:${columnKey}`;
+
+    // Toggle behavior: if clicking the same cell again, hide the panel
+    if (this.heatmapDetailsPanelDataSignal()?.panelKey === panelKey) {
+      this.hideHeatmapDetailsPanel();
+      return;
+    }
+
     const data = transform({
       rowData,
       cellData,
@@ -358,11 +371,27 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    this.heatmapDetailsPanelDataSignal.set({ data, event });
+    this.heatmapDetailsPanelDataSignal.set({ data, event, panelKey });
   }
 
   hideHeatmapDetailsPanel(): void {
     this.heatmapDetailsPanelDataSignal.set(null);
+  }
+
+  /* ----------------------- *
+   *    Filter Panel
+   * ----------------------- */
+
+  toggleFilterPanel(): void {
+    this.isFilterPanelOpenSignal.update((isOpen) => !isOpen);
+  }
+
+  openFilterPanel(): void {
+    this.isFilterPanelOpenSignal.set(true);
+  }
+
+  closeFilterPanel(): void {
+    this.isFilterPanelOpenSignal.set(false);
   }
 
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {

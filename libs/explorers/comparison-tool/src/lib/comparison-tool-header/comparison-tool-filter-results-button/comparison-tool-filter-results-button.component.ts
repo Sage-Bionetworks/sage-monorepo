@@ -1,4 +1,5 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -9,12 +10,11 @@ import { TooltipModule } from 'primeng/tooltip';
   styleUrls: ['./comparison-tool-filter-results-button.component.scss'],
 })
 export class ComparisonToolFilterResultsButtonComponent {
+  private readonly comparisonToolService = inject(ComparisonToolService);
+
   tooltip = input('');
-  filterToggle = output<boolean>();
-  private filterState = signal(false);
 
   toggle() {
-    this.filterState.update((state) => !state);
-    this.filterToggle.emit(this.filterState());
+    this.comparisonToolService.toggleFilterPanel();
   }
 }
