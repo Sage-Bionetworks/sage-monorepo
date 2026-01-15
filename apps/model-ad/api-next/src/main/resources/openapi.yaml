@@ -24,6 +24,8 @@ tags:
     name: Disease Correlation
   - description: Operations about Gene Expression results.
     name: Gene Expression
+  - description: Operations about Individual Gene Expression results.
+    name: Gene Expression Individual
 paths:
   /data-version:
     get:
@@ -189,12 +191,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       summary: Get gene expression individual data
       tags:
-        - Gene Expression
+        - Gene Expression Individual
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: Gene Expression
+        - tag: Gene Expression Individual
   /models/{name}:
     get:
       description: Retrieve detailed information for a specific model by its name

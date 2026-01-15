@@ -24,6 +24,8 @@ tags:
     description: Operations about Disease Correlation results.
   - name: Gene Expression
     description: Operations about Gene Expression results.
+  - name: Gene Expression Individual
+    description: Operations about Individual Gene Expression results.
 paths:
   /data-version:
     $ref: paths/data-version.yaml

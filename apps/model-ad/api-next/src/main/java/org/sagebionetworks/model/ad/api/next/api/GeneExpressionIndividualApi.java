@@ -6,8 +6,8 @@
 package org.sagebionetworks.model.ad.api.next.api;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionIndividualFilterQueryDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,32 +34,32 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Gene Expression", description = "Operations about Gene Expression results.")
-public interface GeneExpressionApi {
+@Tag(name = "Gene Expression Individual", description = "Operations about Individual Gene Expression results.")
+public interface GeneExpressionIndividualApi {
 
-    default GeneExpressionApiDelegate getDelegate() {
-        return new GeneExpressionApiDelegate() {};
+    default GeneExpressionIndividualApiDelegate getDelegate() {
+        return new GeneExpressionIndividualApiDelegate() {};
     }
 
     /**
-     * GET /comparison-tools/gene-expression : Get gene expression comparison data
-     * Returns a paginated list of gene expression objects for use in comparison tools.
+     * GET /gene-expression-individual : Get gene expression individual data
+     * Retrieve gene expression individual data based on specified filter criteria.
      *
-     * @param geneExpressionSearchQuery The search query used to find and filter gene expressions. (optional)
-     * @return A paginated response containing gene expression objects (status code 200)
+     * @param geneExpressionIndividualFilterQuery The filter query used to retrieve a specific set of gene expression individual data. (optional)
+     * @return Successfully retrieved individual gene expression data (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "getGeneExpressions",
-        summary = "Get gene expression comparison data",
-        description = "Returns a paginated list of gene expression objects for use in comparison tools.",
-        tags = { "Gene Expression" },
+        operationId = "getGeneExpressionIndividual",
+        summary = "Get gene expression individual data",
+        description = "Retrieve gene expression individual data based on specified filter criteria.",
+        tags = { "Gene Expression Individual" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "A paginated response containing gene expression objects", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = GeneExpressionsPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = GeneExpressionsPageDto.class))
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved individual gene expression data", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionIndividualDto.class))),
+                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = GeneExpressionIndividualDto.class)))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -77,14 +77,14 @@ public interface GeneExpressionApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/comparison-tools/gene-expression",
+        value = "/gene-expression-individual",
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
-        @Parameter(name = "geneExpressionSearchQuery", description = "The search query used to find and filter gene expressions.", in = ParameterIn.QUERY) @Valid @Nullable GeneExpressionSearchQueryDto geneExpressionSearchQuery
+    default ResponseEntity<List<GeneExpressionIndividualDto>> getGeneExpressionIndividual(
+        @Parameter(name = "geneExpressionIndividualFilterQuery", description = "The filter query used to retrieve a specific set of gene expression individual data.", in = ParameterIn.QUERY) @Valid @Nullable GeneExpressionIndividualFilterQueryDto geneExpressionIndividualFilterQuery
     ) {
-        return getDelegate().getGeneExpressions(geneExpressionSearchQuery);
+        return getDelegate().getGeneExpressionIndividual(geneExpressionIndividualFilterQuery);
     }
 
 }

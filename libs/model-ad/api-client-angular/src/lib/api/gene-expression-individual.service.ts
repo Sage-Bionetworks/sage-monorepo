@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { GeneExpressionSearchQuery } from '../model/gene-expression-search-query';
+import { GeneExpressionIndividual } from '../model/gene-expression-individual';
 // @ts-ignore
-import { GeneExpressionsPage } from '../model/gene-expressions-page';
+import { GeneExpressionIndividualFilterQuery } from '../model/gene-expression-individual-filter-query';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -36,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class GeneExpressionService {
+export class GeneExpressionIndividualService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -109,14 +109,14 @@ export class GeneExpressionService {
   }
 
   /**
-   * Get gene expression comparison data
-   * Returns a paginated list of gene expression objects for use in comparison tools.
-   * @param geneExpressionSearchQuery The search query used to find and filter gene expressions.
+   * Get gene expression individual data
+   * Retrieve gene expression individual data based on specified filter criteria.
+   * @param geneExpressionIndividualFilterQuery The filter query used to retrieve a specific set of gene expression individual data.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getGeneExpressions(
-    geneExpressionSearchQuery?: GeneExpressionSearchQuery,
+  public getGeneExpressionIndividual(
+    geneExpressionIndividualFilterQuery?: GeneExpressionIndividualFilterQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -124,9 +124,9 @@ export class GeneExpressionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<GeneExpressionsPage>;
-  public getGeneExpressions(
-    geneExpressionSearchQuery?: GeneExpressionSearchQuery,
+  ): Observable<Array<GeneExpressionIndividual>>;
+  public getGeneExpressionIndividual(
+    geneExpressionIndividualFilterQuery?: GeneExpressionIndividualFilterQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -134,9 +134,9 @@ export class GeneExpressionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<GeneExpressionsPage>>;
-  public getGeneExpressions(
-    geneExpressionSearchQuery?: GeneExpressionSearchQuery,
+  ): Observable<HttpResponse<Array<GeneExpressionIndividual>>>;
+  public getGeneExpressionIndividual(
+    geneExpressionIndividualFilterQuery?: GeneExpressionIndividualFilterQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -144,9 +144,9 @@ export class GeneExpressionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<GeneExpressionsPage>>;
-  public getGeneExpressions(
-    geneExpressionSearchQuery?: GeneExpressionSearchQuery,
+  ): Observable<HttpEvent<Array<GeneExpressionIndividual>>>;
+  public getGeneExpressionIndividual(
+    geneExpressionIndividualFilterQuery?: GeneExpressionIndividualFilterQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -156,11 +156,14 @@ export class GeneExpressionService {
     },
   ): Observable<any> {
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (geneExpressionSearchQuery !== undefined && geneExpressionSearchQuery !== null) {
+    if (
+      geneExpressionIndividualFilterQuery !== undefined &&
+      geneExpressionIndividualFilterQuery !== null
+    ) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>geneExpressionSearchQuery,
-        'geneExpressionSearchQuery',
+        <any>geneExpressionIndividualFilterQuery,
+        'geneExpressionIndividualFilterQuery',
       );
     }
 
@@ -197,8 +200,8 @@ export class GeneExpressionService {
       }
     }
 
-    let localVarPath = `/comparison-tools/gene-expression`;
-    return this.httpClient.request<GeneExpressionsPage>(
+    let localVarPath = `/gene-expression-individual`;
+    return this.httpClient.request<Array<GeneExpressionIndividual>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

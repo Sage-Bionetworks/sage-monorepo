@@ -29,6 +29,9 @@ tags:
   - name: Gene Expression
     description: Operations about Gene Expression results.
     x-displayName: Gene Expression
+  - name: Gene Expression Individual
+    description: Operations about Individual Gene Expression results.
+    x-displayName: Gene Expression Individual
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
     x-displayName: Comparison Tool Config
@@ -122,7 +125,7 @@ paths:
   /gene-expression-individual:
     get:
       tags:
-        - Gene Expression
+        - Gene Expression Individual
       summary: Get gene expression individual data
       description: Retrieve gene expression individual data based on specified filter criteria.
       operationId: getGeneExpressionIndividual

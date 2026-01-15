@@ -8,6 +8,9 @@ src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApi.ja
 src/main/java/org/sagebionetworks/model/ad/api/next/api/DiseaseCorrelationApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionApiDelegate.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionIndividualApi.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionIndividualApiController.java
+src/main/java/org/sagebionetworks/model/ad/api/next/api/GeneExpressionIndividualApiDelegate.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApi.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiController.java
 src/main/java/org/sagebionetworks/model/ad/api/next/api/ModelApiDelegate.java

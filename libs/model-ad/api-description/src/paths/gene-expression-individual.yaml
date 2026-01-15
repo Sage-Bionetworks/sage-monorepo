@@ -1,6 +1,6 @@
 get:
   tags:
-    - Gene Expression
+    - Gene Expression Individual
   summary: Get gene expression individual data
   description: Retrieve gene expression individual data based on specified filter criteria.
   operationId: getGeneExpressionIndividual

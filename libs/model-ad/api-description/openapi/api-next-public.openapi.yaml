@@ -24,6 +24,8 @@ tags:
     description: Operations about Disease Correlation results.
   - name: Gene Expression
     description: Operations about Gene Expression results.
+  - name: Gene Expression Individual
+    description: Operations about Individual Gene Expression results.
 paths:
   /data-version:
     x-audience:
@@ -116,7 +118,7 @@ paths:
   /gene-expression-individual:
     get:
       tags:
-        - Gene Expression
+        - Gene Expression Individual
       summary: Get gene expression individual data
       description: Retrieve gene expression individual data based on specified filter criteria.
       operationId: getGeneExpressionIndividual
