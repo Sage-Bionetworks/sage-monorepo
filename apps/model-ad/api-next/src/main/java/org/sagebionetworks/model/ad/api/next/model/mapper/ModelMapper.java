@@ -1,17 +1,20 @@
 package org.sagebionetworks.model.ad.api.next.model.mapper;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneticInfoDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.IndividualDataDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDataDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelDto;
-import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ModelMapper {
+
+  private final IndividualDataMapper individualDataMapper;
 
   public ModelDto toDto(@Nullable ModelDocument document) {
     if (document == null) {
@@ -71,7 +74,7 @@ public class ModelMapper {
   private ModelDataDto toModelDataDto(ModelDocument.ModelData modelData) {
     List<IndividualDataDto> data = modelData.getData() == null
       ? List.of()
-      : modelData.getData().stream().map(this::toIndividualDataDto).toList();
+      : modelData.getData().stream().map(individualDataMapper::toIndividualDataDto).toList();
 
     return new ModelDataDto(
       modelData.getName(),
@@ -81,17 +84,6 @@ public class ModelMapper {
       modelData.getUnits(),
       modelData.getYAxisMax(),
       data
-    );
-  }
-
-  private IndividualDataDto toIndividualDataDto(ModelDocument.IndividualData individualData) {
-    SexDto sex = SexDto.fromValue(individualData.getSex());
-
-    return new IndividualDataDto(
-      individualData.getGenotype(),
-      sex,
-      individualData.getIndividualId(),
-      individualData.getValue()
     );
   }
 }

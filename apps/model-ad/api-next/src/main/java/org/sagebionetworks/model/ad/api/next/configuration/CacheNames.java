@@ -33,6 +33,15 @@ public final class CacheNames {
   public static final String GENE_EXPRESSION = "geneExpression";
 
   /**
+   * Cache for gene expression individual queries.
+   * Stores results from gene expression individual queries filtered by tissue,
+   * modelIdentifier, modelIdentifierType, and ensemblGeneId.
+   * Key format: Dynamic based on query parameters (tissue, modelIdentifier,
+   * modelIdentifierType, ensemblGeneId)
+   */
+  public static final String GENE_EXPRESSION_INDIVIDUAL = "geneExpressionIndividual";
+
+  /**
    * Cache for model queries.
    * Stores results from model detail queries by name.
    * Key format: Dynamic based on model name
