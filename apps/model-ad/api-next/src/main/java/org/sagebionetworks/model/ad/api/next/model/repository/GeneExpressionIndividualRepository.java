@@ -9,14 +9,14 @@ import org.springframework.stereotype.Repository;
 /**
  * Repository interface for Gene Expression Individual documents in MongoDB.
  *
- * <p>Provides type-safe query methods for retrieving gene expression individual data from the
- * rna_de_individual collection.
+ * <p>Provides type-safe query methods for retrieving lits of gene expression individual data from
+ * the rna_de_individual collection.
  */
 @Repository
 public interface GeneExpressionIndividualRepository
   extends MongoRepository<GeneExpressionIndividualDocument, ObjectId> {
   /**
-   * Find a gene expression individual by ensemblGeneId, model name, and tissue.
+   * Find a list of gene expression individual data by ensemblGeneId, model name, and tissue.
    *
    * @param ensemblGeneId the Ensembl gene ID
    * @param name the name of the model
@@ -30,7 +30,7 @@ public interface GeneExpressionIndividualRepository
   );
 
   /**
-   * Find a gene expression individual by ensemblGeneId, modelGroup, and tissue.
+   * Find a list of gene expression individual data by ensemblGeneId, modelGroup, and tissue.
    *
    * @param ensemblGeneId the Ensembl gene ID
    * @param modelGroup the group of the model
