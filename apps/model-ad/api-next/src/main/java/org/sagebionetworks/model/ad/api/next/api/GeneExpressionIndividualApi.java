@@ -45,7 +45,7 @@ public interface GeneExpressionIndividualApi {
      * GET /gene-expression-individual : Get gene expression individual data
      * Retrieve gene expression individual data based on specified filter criteria.
      *
-     * @param geneExpressionIndividualFilterQuery The filter query used to retrieve a specific set of gene expression individual data. (optional)
+     * @param geneExpressionIndividualFilterQuery The filter query used to retrieve a specific set of gene expression individual data. (required)
      * @return Successfully retrieved individual gene expression data (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
@@ -82,7 +82,7 @@ public interface GeneExpressionIndividualApi {
     )
     
     default ResponseEntity<List<GeneExpressionIndividualDto>> getGeneExpressionIndividual(
-        @Parameter(name = "geneExpressionIndividualFilterQuery", description = "The filter query used to retrieve a specific set of gene expression individual data.", in = ParameterIn.QUERY) @Valid @Nullable GeneExpressionIndividualFilterQueryDto geneExpressionIndividualFilterQuery
+        @NotNull @Parameter(name = "geneExpressionIndividualFilterQuery", description = "The filter query used to retrieve a specific set of gene expression individual data.", required = true, in = ParameterIn.QUERY) @Valid GeneExpressionIndividualFilterQueryDto geneExpressionIndividualFilterQuery
     ) {
         return getDelegate().getGeneExpressionIndividual(geneExpressionIndividualFilterQuery);
     }

@@ -37,6 +37,7 @@ src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ItemFilterTypeQuer
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/LinkDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDataDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelDto.java
+src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelIdentifierTypeDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewSearchQueryDto.java
 src/main/java/org/sagebionetworks/model/ad/api/next/model/dto/ModelOverviewsPageDto.java

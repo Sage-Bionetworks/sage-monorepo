@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelIdentifierTypeDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -29,42 +30,7 @@ public class GeneExpressionIndividualFilterQueryDto {
 
   private String modelIdentifier;
 
-  /**
-   * Specifies whether modelIdentifier is a name or modelGroup
-   */
-  public enum ModelIdentifierTypeEnum {
-    NAME("name"),
-    
-    MODEL_GROUP("modelGroup");
-
-    private final String value;
-
-    ModelIdentifierTypeEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static ModelIdentifierTypeEnum fromValue(String value) {
-      for (ModelIdentifierTypeEnum b : ModelIdentifierTypeEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-  }
-
-  private ModelIdentifierTypeEnum modelIdentifierType;
+  private ModelIdentifierTypeDto modelIdentifierType;
 
   private String ensemblGeneId;
 
@@ -75,7 +41,7 @@ public class GeneExpressionIndividualFilterQueryDto {
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionIndividualFilterQueryDto(String tissue, String modelIdentifier, ModelIdentifierTypeEnum modelIdentifierType, String ensemblGeneId) {
+  public GeneExpressionIndividualFilterQueryDto(String tissue, String modelIdentifier, ModelIdentifierTypeDto modelIdentifierType, String ensemblGeneId) {
     this.tissue = tissue;
     this.modelIdentifier = modelIdentifier;
     this.modelIdentifierType = modelIdentifierType;
@@ -122,23 +88,23 @@ public class GeneExpressionIndividualFilterQueryDto {
     this.modelIdentifier = modelIdentifier;
   }
 
-  public GeneExpressionIndividualFilterQueryDto modelIdentifierType(ModelIdentifierTypeEnum modelIdentifierType) {
+  public GeneExpressionIndividualFilterQueryDto modelIdentifierType(ModelIdentifierTypeDto modelIdentifierType) {
     this.modelIdentifierType = modelIdentifierType;
     return this;
   }
 
   /**
-   * Specifies whether modelIdentifier is a name or modelGroup
+   * Get modelIdentifierType
    * @return modelIdentifierType
    */
-  @NotNull 
-  @Schema(name = "modelIdentifierType", example = "name", description = "Specifies whether modelIdentifier is a name or modelGroup", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "modelIdentifierType", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("modelIdentifierType")
-  public ModelIdentifierTypeEnum getModelIdentifierType() {
+  public ModelIdentifierTypeDto getModelIdentifierType() {
     return modelIdentifierType;
   }
 
-  public void setModelIdentifierType(ModelIdentifierTypeEnum modelIdentifierType) {
+  public void setModelIdentifierType(ModelIdentifierTypeDto modelIdentifierType) {
     this.modelIdentifierType = modelIdentifierType;
   }
 
@@ -235,7 +201,7 @@ public class GeneExpressionIndividualFilterQueryDto {
       return this;
     }
     
-    public GeneExpressionIndividualFilterQueryDto.Builder modelIdentifierType(ModelIdentifierTypeEnum modelIdentifierType) {
+    public GeneExpressionIndividualFilterQueryDto.Builder modelIdentifierType(ModelIdentifierTypeDto modelIdentifierType) {
       this.instance.modelIdentifierType(modelIdentifierType);
       return this;
     }

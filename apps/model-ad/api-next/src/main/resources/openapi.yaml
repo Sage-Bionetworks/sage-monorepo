@@ -170,7 +170,7 @@ paths:
           explode: true
           in: query
           name: geneExpressionIndividualFilterQuery
-          required: false
+          required: true
           schema:
             $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'
           style: deepObject
@@ -266,7 +266,7 @@ components:
       explode: true
       in: query
       name: geneExpressionIndividualFilterQuery
-      required: false
+      required: true
       schema:
         $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'
       style: deepObject
@@ -1295,6 +1295,15 @@ components:
         - geneExpressions
         - page
       type: object
+    ModelIdentifierType:
+      description: |
+        Specifies whether a model identifier refers to a name or modelGroup.
+        - name: The identifier is a model name.
+        - modelGroup: The identifier is a model group.
+      enum:
+        - name
+        - modelGroup
+      type: string
     GeneExpressionIndividualFilterQuery:
       description: Gene expression individual filter query options
       properties:
@@ -1307,12 +1316,7 @@ components:
           example: 5xFAD (Jax/IU/Pitt)
           type: string
         modelIdentifierType:
-          description: Specifies whether modelIdentifier is a name or modelGroup
-          enum:
-            - name
-            - modelGroup
-          example: name
-          type: string
+          $ref: '#/components/schemas/ModelIdentifierType'
         ensemblGeneId:
           description: Ensembl Gene ID to filter by
           example: ENSMUSG00000000001

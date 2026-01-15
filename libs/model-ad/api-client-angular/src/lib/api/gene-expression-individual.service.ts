@@ -116,7 +116,7 @@ export class GeneExpressionIndividualService {
    * @param reportProgress flag to report request and response progress.
    */
   public getGeneExpressionIndividual(
-    geneExpressionIndividualFilterQuery?: GeneExpressionIndividualFilterQuery,
+    geneExpressionIndividualFilterQuery: GeneExpressionIndividualFilterQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -126,7 +126,7 @@ export class GeneExpressionIndividualService {
     },
   ): Observable<Array<GeneExpressionIndividual>>;
   public getGeneExpressionIndividual(
-    geneExpressionIndividualFilterQuery?: GeneExpressionIndividualFilterQuery,
+    geneExpressionIndividualFilterQuery: GeneExpressionIndividualFilterQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -136,7 +136,7 @@ export class GeneExpressionIndividualService {
     },
   ): Observable<HttpResponse<Array<GeneExpressionIndividual>>>;
   public getGeneExpressionIndividual(
-    geneExpressionIndividualFilterQuery?: GeneExpressionIndividualFilterQuery,
+    geneExpressionIndividualFilterQuery: GeneExpressionIndividualFilterQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -146,7 +146,7 @@ export class GeneExpressionIndividualService {
     },
   ): Observable<HttpEvent<Array<GeneExpressionIndividual>>>;
   public getGeneExpressionIndividual(
-    geneExpressionIndividualFilterQuery?: GeneExpressionIndividualFilterQuery,
+    geneExpressionIndividualFilterQuery: GeneExpressionIndividualFilterQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -155,6 +155,15 @@ export class GeneExpressionIndividualService {
       transferCache?: boolean;
     },
   ): Observable<any> {
+    if (
+      geneExpressionIndividualFilterQuery === null ||
+      geneExpressionIndividualFilterQuery === undefined
+    ) {
+      throw new Error(
+        'Required parameter geneExpressionIndividualFilterQuery was null or undefined when calling getGeneExpressionIndividual.',
+      );
+    }
+
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
     if (
       geneExpressionIndividualFilterQuery !== undefined &&

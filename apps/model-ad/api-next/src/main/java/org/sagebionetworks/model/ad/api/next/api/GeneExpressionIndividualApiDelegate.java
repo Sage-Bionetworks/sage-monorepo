@@ -32,7 +32,7 @@ public interface GeneExpressionIndividualApiDelegate {
      * GET /gene-expression-individual : Get gene expression individual data
      * Retrieve gene expression individual data based on specified filter criteria.
      *
-     * @param geneExpressionIndividualFilterQuery The filter query used to retrieve a specific set of gene expression individual data. (optional)
+     * @param geneExpressionIndividualFilterQuery The filter query used to retrieve a specific set of gene expression individual data. (required)
      * @return Successfully retrieved individual gene expression data (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)

@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ModelIdentifierType } from './model-identifier-type';
 
 /**
  * Gene expression individual filter query options
@@ -20,19 +21,10 @@ export interface GeneExpressionIndividualFilterQuery {
    * The model name or model group to filter by
    */
   modelIdentifier: string;
-  /**
-   * Specifies whether modelIdentifier is a name or modelGroup
-   */
-  modelIdentifierType: GeneExpressionIndividualFilterQuery.ModelIdentifierTypeEnum;
+  modelIdentifierType: ModelIdentifierType;
   /**
    * Ensembl Gene ID to filter by
    */
   ensemblGeneId: string;
 }
-export namespace GeneExpressionIndividualFilterQuery {
-  export type ModelIdentifierTypeEnum = 'name' | 'modelGroup';
-  export const ModelIdentifierTypeEnum = {
-    Name: 'name' as ModelIdentifierTypeEnum,
-    ModelGroup: 'modelGroup' as ModelIdentifierTypeEnum,
-  };
-}
+export namespace GeneExpressionIndividualFilterQuery {}

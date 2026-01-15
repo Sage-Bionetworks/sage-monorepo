@@ -1,6 +1,7 @@
 name: geneExpressionIndividualFilterQuery
 description: The filter query used to retrieve a specific set of gene expression individual data.
 in: query
+required: true
 style: deepObject
 explode: true
 schema:

@@ -20,6 +20,7 @@ export * from './item-filter-type-query';
 export * from './link';
 export * from './model';
 export * from './model-data';
+export * from './model-identifier-type';
 export * from './model-overview';
 export * from './model-overview-search-query';
 export * from './model-overviews-page';

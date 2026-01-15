@@ -869,6 +869,15 @@ components:
       required:
         - geneExpressions
         - page
+    ModelIdentifierType:
+      type: string
+      enum:
+        - name
+        - modelGroup
+      description: |
+        Specifies whether a model identifier refers to a name or modelGroup.
+        - name: The identifier is a model name.
+        - modelGroup: The identifier is a model group.
     GeneExpressionIndividualFilterQuery:
       type: object
       description: Gene expression individual filter query options
@@ -883,11 +892,7 @@ components:
           example: 5xFAD (Jax/IU/Pitt)
         modelIdentifierType:
           description: Specifies whether modelIdentifier is a name or modelGroup
-          type: string
-          enum:
-            - name
-            - modelGroup
-          example: name
+          $ref: '#/components/schemas/ModelIdentifierType'
         ensemblGeneId:
           description: Ensembl Gene ID to filter by
           type: string
@@ -1169,6 +1174,7 @@ components:
       name: geneExpressionIndividualFilterQuery
       description: The filter query used to retrieve a specific set of gene expression individual data.
       in: query
+      required: true
       style: deepObject
       explode: true
       schema:
