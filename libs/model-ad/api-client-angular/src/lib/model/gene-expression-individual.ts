@@ -20,7 +20,7 @@ export interface GeneExpressionIndividual {
   /**
    * Gene Symbol
    */
-  gene_symbol?: string | null;
+  gene_symbol: string;
   /**
    * Tissue type
    */

@@ -996,7 +996,6 @@ components:
           type: string
           description: Gene Symbol
           example: Gnai3
-          nullable: true
         tissue:
           type: string
           description: Tissue type
@@ -1039,6 +1038,7 @@ components:
             $ref: '#/components/schemas/IndividualData'
       required:
         - ensembl_gene_id
+        - gene_symbol
         - tissue
         - name
         - matched_control

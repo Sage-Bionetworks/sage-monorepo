@@ -29,6 +29,7 @@ public class GeneExpressionIndividualMapper {
 
     GeneExpressionIndividualDto dto = new GeneExpressionIndividualDto(
       document.getEnsemblGeneId(),
+      document.getGeneSymbol(),
       document.getTissue(),
       document.getName(),
       document.getMatchedControl(),
@@ -39,7 +40,6 @@ public class GeneExpressionIndividualMapper {
       data
     );
 
-    dto.setGeneSymbol(document.getGeneSymbol());
     dto.setModelGroup(document.getModelGroup());
     return dto;
   }
