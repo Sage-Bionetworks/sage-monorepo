@@ -30,7 +30,7 @@ public class GeneExpressionIndividualDto {
 
   private String ensemblGeneId;
 
-  private String geneSymbol;
+  private @Nullable String geneSymbol = null;
 
   private String tissue;
 
@@ -59,9 +59,8 @@ public class GeneExpressionIndividualDto {
   /**
    * Constructor with only required parameters
    */
-  public GeneExpressionIndividualDto(String ensemblGeneId, String geneSymbol, String tissue, String name, String matchedControl, String units, String age, Integer ageNumeric, List<String> resultOrder, List<@Valid IndividualDataDto> data) {
+  public GeneExpressionIndividualDto(String ensemblGeneId, String tissue, String name, String matchedControl, String units, String age, Integer ageNumeric, List<String> resultOrder, List<@Valid IndividualDataDto> data) {
     this.ensemblGeneId = ensemblGeneId;
-    this.geneSymbol = geneSymbol;
     this.tissue = tissue;
     this.name = name;
     this.matchedControl = matchedControl;
@@ -92,7 +91,7 @@ public class GeneExpressionIndividualDto {
     this.ensemblGeneId = ensemblGeneId;
   }
 
-  public GeneExpressionIndividualDto geneSymbol(String geneSymbol) {
+  public GeneExpressionIndividualDto geneSymbol(@Nullable String geneSymbol) {
     this.geneSymbol = geneSymbol;
     return this;
   }
@@ -101,14 +100,14 @@ public class GeneExpressionIndividualDto {
    * Gene Symbol
    * @return geneSymbol
    */
-  @NotNull 
-  @Schema(name = "gene_symbol", example = "Gnai3", description = "Gene Symbol", requiredMode = Schema.RequiredMode.REQUIRED)
+  
+  @Schema(name = "gene_symbol", example = "Gnai3", description = "Gene Symbol", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("gene_symbol")
-  public String getGeneSymbol() {
+  public @Nullable String getGeneSymbol() {
     return geneSymbol;
   }
 
-  public void setGeneSymbol(String geneSymbol) {
+  public void setGeneSymbol(@Nullable String geneSymbol) {
     this.geneSymbol = geneSymbol;
   }
 
