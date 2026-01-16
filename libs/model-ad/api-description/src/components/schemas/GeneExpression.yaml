@@ -18,7 +18,7 @@ properties:
     items:
       type: string
   name:
-    $ref: './Link.yaml'
+    $ref: ./Link.yaml
     description: Model name and link to model details page
   matched_control:
     type: string
@@ -37,13 +37,13 @@ properties:
     description: Tissue type
     example: Hemibrain
   sex_cohort:
-    $ref: './SexCohort.yaml'
+    $ref: ./SexCohort.yaml
   4 months:
-    $ref: './FoldChangeResult.yaml'
+    $ref: ./FoldChangeResult.yaml
   12 months:
-    $ref: './FoldChangeResult.yaml'
+    $ref: ./FoldChangeResult.yaml
   18 months:
-    $ref: './FoldChangeResult.yaml'
+    $ref: ./FoldChangeResult.yaml
 required:
   - composite_id
   - ensembl_gene_id

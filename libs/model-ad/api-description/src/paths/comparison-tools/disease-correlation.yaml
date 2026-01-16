@@ -12,7 +12,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../../components/schemas/DiseaseCorrelationsPage.yaml'
+            $ref: ../../components/schemas/DiseaseCorrelationsPage.yaml
     '400':
       $ref: ../../components/responses/BadRequest.yaml
     '404':
