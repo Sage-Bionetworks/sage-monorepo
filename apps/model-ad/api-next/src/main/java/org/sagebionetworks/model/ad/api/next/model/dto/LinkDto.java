@@ -16,19 +16,19 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * Model Overview Link
+ * Link
  */
 
-@Schema(name = "ModelOverviewLink", description = "Model Overview Link")
-@JsonTypeName("ModelOverviewLink")
+@Schema(name = "Link", description = "Link")
+@JsonTypeName("Link")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class ModelOverviewLinkDto {
+public class LinkDto {
 
   private @Nullable String linkText;
 
   private @Nullable String linkUrl;
 
-  public ModelOverviewLinkDto linkText(@Nullable String linkText) {
+  public LinkDto linkText(@Nullable String linkText) {
     this.linkText = linkText;
     return this;
   }
@@ -48,7 +48,7 @@ public class ModelOverviewLinkDto {
     this.linkText = linkText;
   }
 
-  public ModelOverviewLinkDto linkUrl(@Nullable String linkUrl) {
+  public LinkDto linkUrl(@Nullable String linkUrl) {
     this.linkUrl = linkUrl;
     return this;
   }
@@ -76,9 +76,9 @@ public class ModelOverviewLinkDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ModelOverviewLinkDto modelOverviewLink = (ModelOverviewLinkDto) o;
-    return Objects.equals(this.linkText, modelOverviewLink.linkText) &&
-        Objects.equals(this.linkUrl, modelOverviewLink.linkUrl);
+    LinkDto link = (LinkDto) o;
+    return Objects.equals(this.linkText, link.linkText) &&
+        Objects.equals(this.linkUrl, link.linkUrl);
   }
 
   @Override
@@ -89,7 +89,7 @@ public class ModelOverviewLinkDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ModelOverviewLinkDto {\n");
+    sb.append("class LinkDto {\n");
     sb.append("    linkText: ").append(toIndentedString(linkText)).append("\n");
     sb.append("    linkUrl: ").append(toIndentedString(linkUrl)).append("\n");
     sb.append("}");
@@ -109,38 +109,38 @@ public class ModelOverviewLinkDto {
   
   public static class Builder {
 
-    private ModelOverviewLinkDto instance;
+    private LinkDto instance;
 
     public Builder() {
-      this(new ModelOverviewLinkDto());
+      this(new LinkDto());
     }
 
-    protected Builder(ModelOverviewLinkDto instance) {
+    protected Builder(LinkDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(ModelOverviewLinkDto value) { 
+    protected Builder copyOf(LinkDto value) { 
       this.instance.setLinkText(value.linkText);
       this.instance.setLinkUrl(value.linkUrl);
       return this;
     }
 
-    public ModelOverviewLinkDto.Builder linkText(String linkText) {
+    public LinkDto.Builder linkText(String linkText) {
       this.instance.linkText(linkText);
       return this;
     }
     
-    public ModelOverviewLinkDto.Builder linkUrl(String linkUrl) {
+    public LinkDto.Builder linkUrl(String linkUrl) {
       this.instance.linkUrl(linkUrl);
       return this;
     }
     
     /**
-    * returns a built ModelOverviewLinkDto instance.
+    * returns a built LinkDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public ModelOverviewLinkDto build() {
+    public LinkDto build() {
       try {
         return this.instance;
       } finally {
@@ -158,15 +158,15 @@ public class ModelOverviewLinkDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static ModelOverviewLinkDto.Builder builder() {
-    return new ModelOverviewLinkDto.Builder();
+  public static LinkDto.Builder builder() {
+    return new LinkDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public ModelOverviewLinkDto.Builder toBuilder() {
-    ModelOverviewLinkDto.Builder builder = new ModelOverviewLinkDto.Builder();
+  public LinkDto.Builder toBuilder() {
+    LinkDto.Builder builder = new LinkDto.Builder();
     return builder.copyOf(this);
   }
 

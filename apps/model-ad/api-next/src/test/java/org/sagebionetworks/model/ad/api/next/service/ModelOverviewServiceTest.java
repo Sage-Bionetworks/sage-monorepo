@@ -15,10 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.document.ModelOverviewDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewsPageDto;
+import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.mapper.ModelOverviewMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.ModelOverviewRepository;
 import org.springframework.data.domain.Page;
@@ -36,7 +38,7 @@ class ModelOverviewServiceTest {
 
   @BeforeEach
   void setUp() {
-    mapper = new ModelOverviewMapper();
+    mapper = new ModelOverviewMapper(new LinkMapper());
     service = new ModelOverviewService(repository, mapper);
   }
 
@@ -45,7 +47,9 @@ class ModelOverviewServiceTest {
   void shouldReturnEmptyPageWhenIncludeFilterHasNoItems() {
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of());
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
+    when(
+      repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
@@ -58,7 +62,11 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).isEmpty();
     assertThat(result.getPage().getTotalElements()).isZero();
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of())
+    );
   }
 
   @Test
@@ -67,7 +75,9 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
+    when(
+      repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(null)
@@ -80,7 +90,11 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of())
+    );
   }
 
   @Test
@@ -89,7 +103,13 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(ModelOverviewSearchQueryDto.class),
+        eq(List.of("Model1"))
+      )
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -102,7 +122,11 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of("Model1"))
+    );
   }
 
   @Test
@@ -111,7 +135,13 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model2");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(ModelOverviewSearchQueryDto.class),
+        eq(List.of("Model1"))
+      )
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -124,7 +154,11 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model2");
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of("Model1"))
+    );
   }
 
   @Test
@@ -133,7 +167,13 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("TestModel");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(ModelOverviewSearchQueryDto.class),
+        eq(List.of("Model1"))
+      )
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -147,7 +187,11 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("TestModel");
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of("Model1"))
+    );
   }
 
   @Test
@@ -159,7 +203,13 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc2 = createModelOverviewDocument("Model2");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc1, doc2));
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model3")))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(ModelOverviewSearchQueryDto.class),
+        eq(List.of("Model3"))
+      )
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model3"))
@@ -172,7 +222,11 @@ class ModelOverviewServiceTest {
     ModelOverviewsPageDto result = service.loadModelOverviews(query);
 
     assertThat(result.getModelOverviews()).hasSize(2);
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model3")));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of("Model3"))
+    );
   }
 
   @Test
@@ -181,7 +235,13 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(ModelOverviewSearchQueryDto.class),
+        eq(List.of("Model1"))
+      )
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -194,7 +254,11 @@ class ModelOverviewServiceTest {
     ModelOverviewsPageDto result = service.loadModelOverviews(query);
 
     assertThat(result.getModelOverviews()).hasSize(1);
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of("Model1"))
+    );
   }
 
   @Test
@@ -202,7 +266,9 @@ class ModelOverviewServiceTest {
   void shouldUseDefaultPageSizeWhenNotSpecified() {
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of());
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))).thenReturn(page);
+    when(
+      repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of()))
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
@@ -213,7 +279,11 @@ class ModelOverviewServiceTest {
     service.loadModelOverviews(query);
 
     ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
-    verify(repository).findAll(pageableCaptor.capture(), any(ModelOverviewSearchQueryDto.class), eq(List.of()));
+    verify(repository).findAll(
+      pageableCaptor.capture(),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of())
+    );
 
     Pageable pageable = pageableCaptor.getValue();
     assertThat(pageable.getPageNumber()).isZero();
@@ -226,7 +296,13 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("TestModel");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(ModelOverviewSearchQueryDto.class),
+        eq(List.of("Model1"))
+      )
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model1"))
@@ -240,7 +316,11 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("TestModel");
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model1")));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of("Model1"))
+    );
   }
 
   @Test
@@ -249,7 +329,13 @@ class ModelOverviewServiceTest {
     ModelOverviewDocument doc = createModelOverviewDocument("Model1");
     Page<ModelOverviewDocument> page = new PageImpl<>(List.of(doc));
 
-    when(repository.findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model2")))).thenReturn(page);
+    when(
+      repository.findAll(
+        any(Pageable.class),
+        any(ModelOverviewSearchQueryDto.class),
+        eq(List.of("Model2"))
+      )
+    ).thenReturn(page);
 
     ModelOverviewSearchQueryDto query = ModelOverviewSearchQueryDto.builder()
       .items(List.of("Model2"))
@@ -263,15 +349,15 @@ class ModelOverviewServiceTest {
 
     assertThat(result.getModelOverviews()).hasSize(1);
     assertThat(result.getModelOverviews().get(0).getName()).isEqualTo("Model1");
-    verify(repository).findAll(any(Pageable.class), any(ModelOverviewSearchQueryDto.class), eq(List.of("Model2")));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(ModelOverviewSearchQueryDto.class),
+      eq(List.of("Model2"))
+    );
   }
 
   private ModelOverviewDocument createModelOverviewDocument(String name) {
-    ModelOverviewDocument.ModelOverviewLink requiredLink =
-      ModelOverviewDocument.ModelOverviewLink.builder()
-        .linkText("Link")
-        .linkUrl("https://example.org")
-        .build();
+    Link requiredLink = Link.builder().linkText("Link").linkUrl("https://example.org").build();
 
     ModelOverviewDocument document = new ModelOverviewDocument();
     document.setId(new ObjectId());

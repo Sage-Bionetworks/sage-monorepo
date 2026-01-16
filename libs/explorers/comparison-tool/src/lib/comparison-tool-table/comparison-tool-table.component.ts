@@ -112,7 +112,13 @@ export class ComparisonToolTableComponent implements AfterViewInit {
 
     const data = this.pinnedData();
     const siteUrl = window.location.origin;
-    return this.comparisonToolHelperService.buildComparisonToolCsvRows(data, config, siteUrl);
+    return this.comparisonToolHelperService.buildComparisonToolCsvRows(
+      data,
+      config,
+      siteUrl,
+      'heatmap',
+      this.viewConfig().linkExportField,
+    );
   }
 
   pinAll() {

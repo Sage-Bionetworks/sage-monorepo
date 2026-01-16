@@ -156,7 +156,10 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
           "gene_symbol_lower",
           new Document("$toLower", "$" + DISPLAY_GENE_SYMBOL_FIELD)
         );
-      } else if (isStringField(field)) {
+      } else if ("name".equals(field)) {
+        // For name (Link field), use name.link_text
+        fields.append("name_lower", new Document("$toLower", "$name.link_text"));
+      } else if (needsCaseInsensitiveSort(field)) {
         // For other string fields, apply lowercase transformation
         fields.append(field + "_lower", new Document("$toLower", "$" + field));
       }
@@ -166,13 +169,14 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
   }
 
   /**
-   * Checks if a field is a string field that requires case-insensitive sorting.
+   * Checks if a field requires case-insensitive sorting via lowercase transformation.
+   * Includes both direct string fields and Link fields that are sorted by their text content.
    * Non-string fields (like age columns with nested objects) are excluded.
    *
    * @param field the field name
-   * @return true if the field is a string field
+   * @return true if the field needs case-insensitive sorting
    */
-  private boolean isStringField(String field) {
+  private boolean needsCaseInsensitiveSort(String field) {
     return (
       "name".equals(field) ||
       "model_type".equals(field) ||
@@ -240,9 +244,9 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       criteriaList.add(Criteria.where("model_type").in(modelType));
     }
 
-    // name: string field - use $in (matches if value equals any)
+    // name.link_text: nested field - use $in (matches if value equals any)
     if (name != null && !name.isEmpty()) {
-      criteriaList.add(Criteria.where("name").in(name));
+      criteriaList.add(Criteria.where("name.link_text").in(name));
     }
   }
 
@@ -263,13 +267,13 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     // Parse composite identifiers (format: ensembl_gene_id~name)
     List<GeneExpressionIdentifier> identifiers = parseIdentifiers(items);
 
-    // Build criteria for each identifier (must match BOTH ensembl_gene_id AND name)
+    // Build criteria for each identifier (must match BOTH ensembl_gene_id AND name.link_text)
     List<Criteria> compositeConditions = new ArrayList<>();
     for (GeneExpressionIdentifier identifier : identifiers) {
       Criteria idCondition = new Criteria()
         .andOperator(
           Criteria.where("ensembl_gene_id").is(identifier.getEnsemblGeneId()),
-          Criteria.where("name").is(identifier.getName())
+          Criteria.where("name.link_text").is(identifier.getName())
         );
       compositeConditions.add(idCondition);
     }
@@ -331,7 +335,7 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       String field = order.getProperty();
 
       // Use lowercase version for string fields (case-insensitive sorting)
-      if (isStringField(field) || GENE_SYMBOL_FIELD.equals(field)) {
+      if (needsCaseInsensitiveSort(field) || GENE_SYMBOL_FIELD.equals(field)) {
         field = field + "_lower";
       }
       // Non-string fields (like age columns) are sorted directly

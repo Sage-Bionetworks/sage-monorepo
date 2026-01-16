@@ -69,6 +69,7 @@ export interface ComparisonToolViewConfig {
   allowPinnedImageDownload: boolean;
   defaultSort?: readonly { readonly field: string; readonly order: 1 | -1 }[];
   heatmapCircleClickTransformFn?: heatmapCircleClickTransformFn;
+  linkExportField: 'link_url' | 'link_text';
 }
 
 export interface ComparisonToolFilterOption {

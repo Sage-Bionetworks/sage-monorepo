@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.sagebionetworks.model.ad.api.next.model.dto.ModelOverviewLinkDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.LinkDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -38,19 +38,19 @@ public class ModelOverviewDto {
   @Valid
   private List<String> matchedControls = new ArrayList<>();
 
-  private @Nullable ModelOverviewLinkDto geneExpression;
+  private @Nullable LinkDto geneExpression;
 
-  private @Nullable ModelOverviewLinkDto diseaseCorrelation;
+  private @Nullable LinkDto diseaseCorrelation;
 
-  private @Nullable ModelOverviewLinkDto biomarkers;
+  private @Nullable LinkDto biomarkers;
 
-  private @Nullable ModelOverviewLinkDto pathology;
+  private @Nullable LinkDto pathology;
 
-  private ModelOverviewLinkDto studyData;
+  private LinkDto studyData;
 
-  private ModelOverviewLinkDto jaxStrain;
+  private LinkDto jaxStrain;
 
-  private ModelOverviewLinkDto center;
+  private LinkDto center;
 
   @Valid
   private List<String> modifiedGenes = new ArrayList<>();
@@ -104,7 +104,7 @@ public class ModelOverviewDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelOverviewDto(String id, String name, String modelType, List<String> matchedControls, ModelOverviewLinkDto studyData, ModelOverviewLinkDto jaxStrain, ModelOverviewLinkDto center, List<String> modifiedGenes, List<AvailableDataEnum> availableData) {
+  public ModelOverviewDto(String id, String name, String modelType, List<String> matchedControls, LinkDto studyData, LinkDto jaxStrain, LinkDto center, List<String> modifiedGenes, List<AvailableDataEnum> availableData) {
     this.id = id;
     this.name = name;
     this.modelType = modelType;
@@ -204,7 +204,7 @@ public class ModelOverviewDto {
     this.matchedControls = matchedControls;
   }
 
-  public ModelOverviewDto geneExpression(@Nullable ModelOverviewLinkDto geneExpression) {
+  public ModelOverviewDto geneExpression(@Nullable LinkDto geneExpression) {
     this.geneExpression = geneExpression;
     return this;
   }
@@ -216,15 +216,15 @@ public class ModelOverviewDto {
   @Valid 
   @Schema(name = "gene_expression", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("gene_expression")
-  public @Nullable ModelOverviewLinkDto getGeneExpression() {
+  public @Nullable LinkDto getGeneExpression() {
     return geneExpression;
   }
 
-  public void setGeneExpression(@Nullable ModelOverviewLinkDto geneExpression) {
+  public void setGeneExpression(@Nullable LinkDto geneExpression) {
     this.geneExpression = geneExpression;
   }
 
-  public ModelOverviewDto diseaseCorrelation(@Nullable ModelOverviewLinkDto diseaseCorrelation) {
+  public ModelOverviewDto diseaseCorrelation(@Nullable LinkDto diseaseCorrelation) {
     this.diseaseCorrelation = diseaseCorrelation;
     return this;
   }
@@ -236,15 +236,15 @@ public class ModelOverviewDto {
   @Valid 
   @Schema(name = "disease_correlation", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("disease_correlation")
-  public @Nullable ModelOverviewLinkDto getDiseaseCorrelation() {
+  public @Nullable LinkDto getDiseaseCorrelation() {
     return diseaseCorrelation;
   }
 
-  public void setDiseaseCorrelation(@Nullable ModelOverviewLinkDto diseaseCorrelation) {
+  public void setDiseaseCorrelation(@Nullable LinkDto diseaseCorrelation) {
     this.diseaseCorrelation = diseaseCorrelation;
   }
 
-  public ModelOverviewDto biomarkers(@Nullable ModelOverviewLinkDto biomarkers) {
+  public ModelOverviewDto biomarkers(@Nullable LinkDto biomarkers) {
     this.biomarkers = biomarkers;
     return this;
   }
@@ -256,15 +256,15 @@ public class ModelOverviewDto {
   @Valid 
   @Schema(name = "biomarkers", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("biomarkers")
-  public @Nullable ModelOverviewLinkDto getBiomarkers() {
+  public @Nullable LinkDto getBiomarkers() {
     return biomarkers;
   }
 
-  public void setBiomarkers(@Nullable ModelOverviewLinkDto biomarkers) {
+  public void setBiomarkers(@Nullable LinkDto biomarkers) {
     this.biomarkers = biomarkers;
   }
 
-  public ModelOverviewDto pathology(@Nullable ModelOverviewLinkDto pathology) {
+  public ModelOverviewDto pathology(@Nullable LinkDto pathology) {
     this.pathology = pathology;
     return this;
   }
@@ -276,15 +276,15 @@ public class ModelOverviewDto {
   @Valid 
   @Schema(name = "pathology", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("pathology")
-  public @Nullable ModelOverviewLinkDto getPathology() {
+  public @Nullable LinkDto getPathology() {
     return pathology;
   }
 
-  public void setPathology(@Nullable ModelOverviewLinkDto pathology) {
+  public void setPathology(@Nullable LinkDto pathology) {
     this.pathology = pathology;
   }
 
-  public ModelOverviewDto studyData(ModelOverviewLinkDto studyData) {
+  public ModelOverviewDto studyData(LinkDto studyData) {
     this.studyData = studyData;
     return this;
   }
@@ -296,15 +296,15 @@ public class ModelOverviewDto {
   @NotNull @Valid 
   @Schema(name = "study_data", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("study_data")
-  public ModelOverviewLinkDto getStudyData() {
+  public LinkDto getStudyData() {
     return studyData;
   }
 
-  public void setStudyData(ModelOverviewLinkDto studyData) {
+  public void setStudyData(LinkDto studyData) {
     this.studyData = studyData;
   }
 
-  public ModelOverviewDto jaxStrain(ModelOverviewLinkDto jaxStrain) {
+  public ModelOverviewDto jaxStrain(LinkDto jaxStrain) {
     this.jaxStrain = jaxStrain;
     return this;
   }
@@ -316,15 +316,15 @@ public class ModelOverviewDto {
   @NotNull @Valid 
   @Schema(name = "jax_strain", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("jax_strain")
-  public ModelOverviewLinkDto getJaxStrain() {
+  public LinkDto getJaxStrain() {
     return jaxStrain;
   }
 
-  public void setJaxStrain(ModelOverviewLinkDto jaxStrain) {
+  public void setJaxStrain(LinkDto jaxStrain) {
     this.jaxStrain = jaxStrain;
   }
 
-  public ModelOverviewDto center(ModelOverviewLinkDto center) {
+  public ModelOverviewDto center(LinkDto center) {
     this.center = center;
     return this;
   }
@@ -336,11 +336,11 @@ public class ModelOverviewDto {
   @NotNull @Valid 
   @Schema(name = "center", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("center")
-  public ModelOverviewLinkDto getCenter() {
+  public LinkDto getCenter() {
     return center;
   }
 
-  public void setCenter(ModelOverviewLinkDto center) {
+  public void setCenter(LinkDto center) {
     this.center = center;
   }
 
@@ -510,37 +510,37 @@ public class ModelOverviewDto {
       return this;
     }
     
-    public ModelOverviewDto.Builder geneExpression(ModelOverviewLinkDto geneExpression) {
+    public ModelOverviewDto.Builder geneExpression(LinkDto geneExpression) {
       this.instance.geneExpression(geneExpression);
       return this;
     }
     
-    public ModelOverviewDto.Builder diseaseCorrelation(ModelOverviewLinkDto diseaseCorrelation) {
+    public ModelOverviewDto.Builder diseaseCorrelation(LinkDto diseaseCorrelation) {
       this.instance.diseaseCorrelation(diseaseCorrelation);
       return this;
     }
     
-    public ModelOverviewDto.Builder biomarkers(ModelOverviewLinkDto biomarkers) {
+    public ModelOverviewDto.Builder biomarkers(LinkDto biomarkers) {
       this.instance.biomarkers(biomarkers);
       return this;
     }
     
-    public ModelOverviewDto.Builder pathology(ModelOverviewLinkDto pathology) {
+    public ModelOverviewDto.Builder pathology(LinkDto pathology) {
       this.instance.pathology(pathology);
       return this;
     }
     
-    public ModelOverviewDto.Builder studyData(ModelOverviewLinkDto studyData) {
+    public ModelOverviewDto.Builder studyData(LinkDto studyData) {
       this.instance.studyData(studyData);
       return this;
     }
     
-    public ModelOverviewDto.Builder jaxStrain(ModelOverviewLinkDto jaxStrain) {
+    public ModelOverviewDto.Builder jaxStrain(LinkDto jaxStrain) {
       this.instance.jaxStrain(jaxStrain);
       return this;
     }
     
-    public ModelOverviewDto.Builder center(ModelOverviewLinkDto center) {
+    public ModelOverviewDto.Builder center(LinkDto center) {
       this.instance.center(center);
       return this;
     }

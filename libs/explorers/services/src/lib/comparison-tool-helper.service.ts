@@ -52,6 +52,7 @@ export class ComparisonToolHelperService {
     config: ComparisonToolConfig,
     siteUrl: string,
     heatmapCategoryColumnName = 'heatmap',
+    linkExportField: 'link_url' | 'link_text' = 'link_url',
   ): string[][] {
     const exportedColumns = config.columns.filter((col) => col.is_exported !== false);
     const heatmapColumns = exportedColumns.filter((col) => col.type === 'heat_map');
@@ -68,7 +69,7 @@ export class ComparisonToolHelperService {
     );
 
     const rows = data.flatMap((item) =>
-      this.buildRows(
+      this.buildRows({
         item,
         baseColumns,
         heatmapColumns,
@@ -76,7 +77,8 @@ export class ComparisonToolHelperService {
         headerRow,
         siteUrl,
         heatmapCategoryColumnName,
-      ),
+        linkExportField,
+      }),
     );
 
     return [headerRow, ...rows];
@@ -123,15 +125,26 @@ export class ComparisonToolHelperService {
     return [];
   }
 
-  protected buildRows(
-    item: Record<string, unknown>,
-    baseColumns: ComparisonToolConfigColumn[],
-    heatmapColumns: ComparisonToolConfigColumn[],
-    heatmapMetrics: string[],
-    headerRow: string[],
-    siteUrl: string,
-    heatmapCategoryColumnName: string,
-  ): string[][] {
+  protected buildRows(options: {
+    item: Record<string, unknown>;
+    baseColumns: ComparisonToolConfigColumn[];
+    heatmapColumns: ComparisonToolConfigColumn[];
+    heatmapMetrics: string[];
+    headerRow: string[];
+    siteUrl: string;
+    heatmapCategoryColumnName: string;
+    linkExportField: 'link_url' | 'link_text';
+  }): string[][] {
+    const {
+      item,
+      baseColumns,
+      heatmapColumns,
+      heatmapMetrics,
+      headerRow,
+      siteUrl,
+      heatmapCategoryColumnName,
+      linkExportField,
+    } = options;
     const baseValues: Record<string, string> = {};
 
     for (const column of baseColumns) {
@@ -139,7 +152,7 @@ export class ComparisonToolHelperService {
       baseValues[column.data_key] =
         itemData === null || itemData === undefined
           ? ''
-          : this.getNonHeatmapValue(column.type, itemData, column, siteUrl);
+          : this.getNonHeatmapValue(column.type, itemData, column, siteUrl, linkExportField);
     }
 
     if (heatmapColumns.length === 0) {
@@ -169,6 +182,7 @@ export class ComparisonToolHelperService {
     itemData: unknown,
     col: any,
     siteUrl: string,
+    linkExportField: 'link_url' | 'link_text',
   ): string {
     switch (colType) {
       case 'text':
@@ -178,7 +192,11 @@ export class ComparisonToolHelperService {
         return String(itemData);
       case 'link_external':
       case 'link_internal': {
-        const linkUrlData = (itemData as ComparisonToolLink).link_url || col.link_url;
+        const linkData = itemData as ComparisonToolLink;
+        if (linkExportField === 'link_text') {
+          return linkData.link_text || col.link_text || '';
+        }
+        const linkUrlData = linkData.link_url || col.link_url;
         const linkUrl = colType === 'link_internal' ? `${siteUrl}/${linkUrlData}` : linkUrlData;
         return linkUrl;
       }

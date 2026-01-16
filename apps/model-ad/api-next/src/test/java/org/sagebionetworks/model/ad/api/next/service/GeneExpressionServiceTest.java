@@ -16,10 +16,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument;
+import org.sagebionetworks.model.ad.api.next.model.document.Link;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionSearchQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.GeneExpressionsPageDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
 import org.sagebionetworks.model.ad.api.next.model.mapper.GeneExpressionMapper;
+import org.sagebionetworks.model.ad.api.next.model.mapper.LinkMapper;
 import org.sagebionetworks.model.ad.api.next.model.repository.GeneExpressionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,7 +41,7 @@ class GeneExpressionServiceTest {
 
   @BeforeEach
   void setUp() {
-    mapper = new GeneExpressionMapper();
+    mapper = new GeneExpressionMapper(new LinkMapper());
     service = new GeneExpressionService(repository, mapper);
   }
 
@@ -463,7 +465,7 @@ class GeneExpressionServiceTest {
     document.setTissue(TISSUE);
     document.setSexCohort(SEX_COHORT);
     document.setEnsemblGeneId(ensemblGeneId);
-    document.setName(name);
+    document.setName(Link.builder().linkText(name).linkUrl("").build());
     document.setGeneSymbol(geneSymbol);
     document.setMatchedControl("Control1");
     document.setModelType("Mouse");

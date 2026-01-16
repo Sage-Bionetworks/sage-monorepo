@@ -9,9 +9,9 @@
  */
 
 /**
- * Model Overview Link
+ * Link
  */
-export interface ModelOverviewLink {
+export interface Link {
   /**
    * Link text
    */

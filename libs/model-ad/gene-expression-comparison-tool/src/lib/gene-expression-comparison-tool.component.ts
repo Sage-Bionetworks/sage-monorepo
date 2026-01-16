@@ -141,6 +141,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
         footer: 'Significance is considered to be an adjusted p-value < 0.05',
       };
     },
+    linkExportField: 'link_text',
   };
 
   constructor() {
@@ -185,6 +186,10 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       currentQuery.multiSortMeta,
     );
 
+    const selectedFilters = this.comparisonToolHelperService.getSelectedFilters(
+      currentQuery.filters,
+    );
+
     const query: GeneExpressionSearchQuery = {
       categories: currentQuery.categories,
       items: currentQuery.pinnedItems,
@@ -192,6 +197,9 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       pageNumber: currentQuery.pageNumber,
       pageSize: currentQuery.pageSize,
       search: currentQuery.searchTerm,
+      biodomains: selectedFilters['biodomains'],
+      modelType: selectedFilters['model_type'],
+      name: selectedFilters['name'],
       sortFields,
       sortOrders,
     };

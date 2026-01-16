@@ -24,6 +24,8 @@ tags:
     description: Operations about Disease Correlation results.
   - name: Gene Expression
     description: Operations about Gene Expression results.
+  - name: Gene Expression Individual
+    description: Operations about Individual Gene Expression results.
 paths:
   /data-version:
     x-audience:
@@ -107,6 +109,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GeneExpressionsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /gene-expression-individual:
+    get:
+      tags:
+        - Gene Expression Individual
+      summary: Get gene expression individual data
+      description: Retrieve gene expression individual data based on specified filter criteria.
+      operationId: getGeneExpressionIndividual
+      parameters:
+        - $ref: '#/components/parameters/geneExpressionIndividualFilterQuery'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeneExpressionIndividual'
+          description: Successfully retrieved individual gene expression data
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -290,9 +316,9 @@ components:
       required:
         - sortFields
         - sortOrders
-    ModelOverviewLink:
+    Link:
       type: object
-      description: Model Overview Link
+      description: Link
       properties:
         link_text:
           type: string
@@ -319,25 +345,25 @@ components:
             type: string
           description: List of matched control models
         gene_expression:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         disease_correlation:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         biomarkers:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         pathology:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         study_data:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         jax_strain:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         center:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
           nullable: true
         modified_genes:
           type: array
@@ -792,8 +818,8 @@ components:
           items:
             type: string
         name:
-          type: string
-          description: Model name
+          $ref: '#/components/schemas/Link'
+          description: Model name and link to model details page
         matched_control:
           type: string
           description: Matched control for the model
@@ -843,6 +869,121 @@ components:
       required:
         - geneExpressions
         - page
+    ModelIdentifierType:
+      type: string
+      enum:
+        - name
+        - modelGroup
+      description: |
+        Specifies whether a model identifier refers to a name or modelGroup.
+        - name: The identifier is a model name.
+        - modelGroup: The identifier is a model group.
+    GeneExpressionIndividualFilterQuery:
+      type: object
+      description: Gene expression individual filter query options
+      properties:
+        tissue:
+          description: Tissue type to filter by
+          type: string
+          example: Hippocampus
+        modelIdentifier:
+          description: The model name or model group to filter by
+          type: string
+          example: 5xFAD (Jax/IU/Pitt)
+        modelIdentifierType:
+          description: Specifies whether modelIdentifier is a name or modelGroup
+          $ref: '#/components/schemas/ModelIdentifierType'
+        ensemblGeneId:
+          description: Ensembl Gene ID to filter by
+          type: string
+          example: ENSMUSG00000000001
+      required:
+        - tissue
+        - ensemblGeneId
+        - modelIdentifier
+        - modelIdentifierType
+    IndividualData:
+      type: object
+      description: Data for an individual
+      properties:
+        genotype:
+          type: string
+          description: Genotype of the individual
+        sex:
+          $ref: '#/components/schemas/Sex'
+        individual_id:
+          type: string
+          description: Unique identifier for the individual
+        value:
+          type: number
+          description: Value for the individual
+      required:
+        - genotype
+        - sex
+        - individual_id
+        - value
+    GeneExpressionIndividual:
+      type: object
+      description: Gene Expression Individual
+      properties:
+        ensembl_gene_id:
+          type: string
+          description: Ensembl Gene ID
+        gene_symbol:
+          type: string
+          description: Gene Symbol
+          example: Gnai3
+        tissue:
+          type: string
+          description: Tissue type
+          example: Hemibrain
+        name:
+          type: string
+          description: Model name
+        model_group:
+          type: string
+          description: Model group
+          nullable: true
+        matched_control:
+          type: string
+          description: Matched control for the model
+          example: C57BL/6J
+        units:
+          type: string
+          description: Units of measurement for gene expression
+          example: Log2 Counts per Million
+        age:
+          type: string
+          description: Age of the model
+          example: 4 months
+        age_numeric:
+          type: integer
+          description: Numeric representation of the age
+          example: 4
+        result_order:
+          type: array
+          items:
+            type: string
+          description: List of genotypes in the order to display results
+          example:
+            - C57BL6J
+            - Trem2
+        data:
+          type: array
+          description: List of individual gene expression data points
+          items:
+            $ref: '#/components/schemas/IndividualData'
+      required:
+        - ensembl_gene_id
+        - gene_symbol
+        - tissue
+        - name
+        - matched_control
+        - units
+        - age
+        - age_numeric
+        - result_order
+        - data
     GeneticInfo:
       type: object
       description: Genetic information about a model
@@ -868,26 +1009,6 @@ components:
         - allele
         - allele_type
         - mgi_allele_id
-    IndividualData:
-      type: object
-      description: Data for an individual
-      properties:
-        genotype:
-          type: string
-          description: Genotype of the individual
-        sex:
-          $ref: '#/components/schemas/Sex'
-        individual_id:
-          type: string
-          description: Unique identifier for the individual
-        value:
-          type: number
-          description: Value for the individual
-      required:
-        - genotype
-        - sex
-        - individual_id
-        - value
     ModelData:
       type: object
       description: Data associated with a model
@@ -1049,3 +1170,12 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'
+    geneExpressionIndividualFilterQuery:
+      name: geneExpressionIndividualFilterQuery
+      description: The filter query used to retrieve a specific set of gene expression individual data.
+      in: query
+      required: true
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'

@@ -24,6 +24,8 @@ tags:
     name: Disease Correlation
   - description: Operations about Gene Expression results.
     name: Gene Expression
+  - description: Operations about Individual Gene Expression results.
+    name: Gene Expression Individual
 paths:
   /data-version:
     get:
@@ -157,6 +159,44 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Gene Expression
+  /gene-expression-individual:
+    get:
+      description: Retrieve gene expression individual data based on specified filter
+        criteria.
+      operationId: getGeneExpressionIndividual
+      parameters:
+        - description: The filter query used to retrieve a specific set of gene expression
+            individual data.
+          explode: true
+          in: query
+          name: geneExpressionIndividualFilterQuery
+          required: true
+          schema:
+            $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/GeneExpressionIndividual'
+                type: array
+          description: Successfully retrieved individual gene expression data
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get gene expression individual data
+      tags:
+        - Gene Expression Individual
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Gene Expression Individual
   /models/{name}:
     get:
       description: Retrieve detailed information for a specific model by its name
@@ -219,6 +259,16 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/GeneExpressionSearchQuery'
+      style: deepObject
+    geneExpressionIndividualFilterQuery:
+      description: The filter query used to retrieve a specific set of gene expression
+        individual data.
+      explode: true
+      in: query
+      name: geneExpressionIndividualFilterQuery
+      required: true
+      schema:
+        $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'
       style: deepObject
   responses:
     BadRequest:
@@ -392,8 +442,8 @@ components:
         - sortFields
         - sortOrders
       type: object
-    ModelOverviewLink:
-      description: Model Overview Link
+    Link:
+      description: Link
       example:
         link_url: link_url
         link_text: link_text
@@ -457,19 +507,19 @@ components:
             type: string
           type: array
         gene_expression:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         disease_correlation:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         biomarkers:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         pathology:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         study_data:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         jax_strain:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         center:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          $ref: '#/components/schemas/Link'
         modified_genes:
           description: List of modified genes in the model
           items:
@@ -1107,7 +1157,9 @@ components:
         matched_control: C57BL/6J
         composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
         ensembl_gene_id: ensembl_gene_id
-        name: name
+        name:
+          link_url: link_url
+          link_text: link_text
         sex_cohort: Females
         '12 months':
           log2_fc: 0.8008281904610115
@@ -1136,8 +1188,7 @@ components:
             type: string
           type: array
         name:
-          description: Model name
-          type: string
+          $ref: '#/components/schemas/Link'
         matched_control:
           description: Matched control for the model
           example: C57BL/6J
@@ -1196,7 +1247,9 @@ components:
             matched_control: C57BL/6J
             composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
             ensembl_gene_id: ensembl_gene_id
-            name: name
+            name:
+              link_url: link_url
+              link_text: link_text
             sex_cohort: Females
             '12 months':
               log2_fc: 0.8008281904610115
@@ -1217,7 +1270,9 @@ components:
             matched_control: C57BL/6J
             composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
             ensembl_gene_id: ensembl_gene_id
-            name: name
+            name:
+              link_url: link_url
+              link_text: link_text
             sex_cohort: Females
             '12 months':
               log2_fc: 0.8008281904610115
@@ -1239,6 +1294,147 @@ components:
       required:
         - geneExpressions
         - page
+      type: object
+    ModelIdentifierType:
+      description: |
+        Specifies whether a model identifier refers to a name or modelGroup.
+        - name: The identifier is a model name.
+        - modelGroup: The identifier is a model group.
+      enum:
+        - name
+        - modelGroup
+      type: string
+    GeneExpressionIndividualFilterQuery:
+      description: Gene expression individual filter query options
+      properties:
+        tissue:
+          description: Tissue type to filter by
+          example: Hippocampus
+          type: string
+        modelIdentifier:
+          description: The model name or model group to filter by
+          example: 5xFAD (Jax/IU/Pitt)
+          type: string
+        modelIdentifierType:
+          $ref: '#/components/schemas/ModelIdentifierType'
+        ensemblGeneId:
+          description: Ensembl Gene ID to filter by
+          example: ENSMUSG00000000001
+          type: string
+      required:
+        - ensemblGeneId
+        - modelIdentifier
+        - modelIdentifierType
+        - tissue
+      type: object
+    IndividualData:
+      description: Data for an individual
+      example:
+        sex: Female
+        value: 0.8008281904610115
+        genotype: genotype
+        individual_id: individual_id
+      properties:
+        genotype:
+          description: Genotype of the individual
+          type: string
+        sex:
+          $ref: '#/components/schemas/Sex'
+        individual_id:
+          description: Unique identifier for the individual
+          type: string
+        value:
+          description: Value for the individual
+          type: number
+      required:
+        - genotype
+        - individual_id
+        - sex
+        - value
+      type: object
+    GeneExpressionIndividual:
+      description: Gene Expression Individual
+      example:
+        model_group: model_group
+        data:
+          - sex: Female
+            value: 0.8008281904610115
+            genotype: genotype
+            individual_id: individual_id
+          - sex: Female
+            value: 0.8008281904610115
+            genotype: genotype
+            individual_id: individual_id
+        ensembl_gene_id: ensembl_gene_id
+        result_order:
+          - C57BL6J
+          - Trem2
+        gene_symbol: Gnai3
+        name: name
+        tissue: Hemibrain
+        age_numeric: 4
+        units: Log2 Counts per Million
+        matched_control: C57BL/6J
+        age: 4 months
+      properties:
+        ensembl_gene_id:
+          description: Ensembl Gene ID
+          type: string
+        gene_symbol:
+          description: Gene Symbol
+          example: Gnai3
+          type: string
+        tissue:
+          description: Tissue type
+          example: Hemibrain
+          type: string
+        name:
+          description: Model name
+          type: string
+        model_group:
+          description: Model group
+          nullable: true
+          type: string
+        matched_control:
+          description: Matched control for the model
+          example: C57BL/6J
+          type: string
+        units:
+          description: Units of measurement for gene expression
+          example: Log2 Counts per Million
+          type: string
+        age:
+          description: Age of the model
+          example: 4 months
+          type: string
+        age_numeric:
+          description: Numeric representation of the age
+          example: 4
+          type: integer
+        result_order:
+          description: List of genotypes in the order to display results
+          example:
+            - C57BL6J
+            - Trem2
+          items:
+            type: string
+          type: array
+        data:
+          description: List of individual gene expression data points
+          items:
+            $ref: '#/components/schemas/IndividualData'
+          type: array
+      required:
+        - age
+        - age_numeric
+        - data
+        - ensembl_gene_id
+        - gene_symbol
+        - matched_control
+        - name
+        - result_order
+        - tissue
+        - units
       type: object
     GeneticInfo:
       description: Genetic information about a model
@@ -1271,42 +1467,17 @@ components:
         - mgi_allele_id
         - modified_gene
       type: object
-    IndividualData:
-      description: Data for an individual
-      example:
-        sex: Female
-        value: 1.4658129805029452
-        genotype: genotype
-        individual_id: individual_id
-      properties:
-        genotype:
-          description: Genotype of the individual
-          type: string
-        sex:
-          $ref: '#/components/schemas/Sex'
-        individual_id:
-          description: Unique identifier for the individual
-          type: string
-        value:
-          description: Value for the individual
-          type: number
-      required:
-        - genotype
-        - individual_id
-        - sex
-        - value
-      type: object
     ModelData:
       description: Data associated with a model
       example:
         evidence_type: evidence_type
         data:
           - sex: Female
-            value: 1.4658129805029452
+            value: 0.8008281904610115
             genotype: genotype
             individual_id: individual_id
           - sex: Female
-            value: 1.4658129805029452
+            value: 0.8008281904610115
             genotype: genotype
             individual_id: individual_id
         name: name
@@ -1368,11 +1539,11 @@ components:
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 1.4658129805029452
+                value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 1.4658129805029452
+                value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
             name: name
@@ -1383,11 +1554,11 @@ components:
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 1.4658129805029452
+                value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 1.4658129805029452
+                value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
             name: name
@@ -1400,11 +1571,11 @@ components:
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 1.4658129805029452
+                value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 1.4658129805029452
+                value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
             name: name
@@ -1415,11 +1586,11 @@ components:
           - evidence_type: evidence_type
             data:
               - sex: Female
-                value: 1.4658129805029452
+                value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
               - sex: Female
-                value: 1.4658129805029452
+                value: 0.8008281904610115
                 genotype: genotype
                 individual_id: individual_id
             name: name

@@ -5,9 +5,9 @@ properties:
     type: array
     description: The list of disease correlation objects for the current page
     items:
-      $ref: './DiseaseCorrelation.yaml'
+      $ref: ./DiseaseCorrelation.yaml
   page:
-    $ref: './PageMetadata.yaml'
+    $ref: ./PageMetadata.yaml
 required:
   - diseaseCorrelations
   - page

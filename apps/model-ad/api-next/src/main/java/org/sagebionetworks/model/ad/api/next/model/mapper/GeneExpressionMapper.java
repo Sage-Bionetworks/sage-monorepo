@@ -2,6 +2,7 @@ package org.sagebionetworks.model.ad.api.next.model.mapper;
 
 import java.math.BigDecimal;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument;
 import org.sagebionetworks.model.ad.api.next.model.document.GeneExpressionDocument.FoldChangeResult;
 import org.sagebionetworks.model.ad.api.next.model.dto.FoldChangeResultDto;
@@ -11,7 +12,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class GeneExpressionMapper {
+
+  private final LinkMapper linkMapper;
 
   public GeneExpressionDto toDto(@Nullable GeneExpressionDocument document) {
     if (document == null) {
@@ -27,7 +31,7 @@ public class GeneExpressionMapper {
       document.getEnsemblGeneId(),
       getGeneSymbolWithFallback(document),
       biodomains,
-      document.getName(),
+      linkMapper.toRequiredDto(document.getName()),
       document.getMatchedControl(),
       document.getModelGroup(),
       document.getModelType(),
@@ -44,7 +48,7 @@ public class GeneExpressionMapper {
 
   private String getCompositeId(GeneExpressionDocument document) {
     String ensemblGeneId = document.getEnsemblGeneId();
-    String name = document.getName();
+    String name = document.getName().getLinkText();
 
     return String.format("%s~%s", ensemblGeneId, name);
   }

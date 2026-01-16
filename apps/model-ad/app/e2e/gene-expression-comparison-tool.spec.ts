@@ -333,6 +333,19 @@ test.describe('gene expression', () => {
     await testTableReturnsToFirstPageWhenSortChanged(page);
   });
 
+  test('link for model with special characters opens model details page', async ({ page }) => {
+    const specialModel = '5xFAD (IU/Jax/Pitt)';
+    const specialModelEncoded = '5xFAD%20%28IU%2FJax%2FPitt%29';
+
+    await navigateToComparison(page, CT_PAGE, true);
+
+    const link = page.getByRole('link', { name: '5xFAD (IU/Jax/Pitt)' }).first();
+    await link.click();
+
+    await page.waitForURL(`/models/${specialModelEncoded}`);
+    await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
+  });
+
   test.describe('sort URL sync', () => {
     // Columns: 0=Gene (gene_symbol), 1=Model (name), 2=Control, 3=4 months, 4=12 months
     // Default sort: gene_symbol ASC, name ASC

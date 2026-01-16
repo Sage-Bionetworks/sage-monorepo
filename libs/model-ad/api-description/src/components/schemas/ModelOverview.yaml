@@ -16,25 +16,25 @@ properties:
       type: string
     description: List of matched control models
   gene_expression:
-    $ref: './ModelOverviewLink.yaml'
+    $ref: ./Link.yaml
     nullable: true
   disease_correlation:
-    $ref: './ModelOverviewLink.yaml'
+    $ref: ./Link.yaml
     nullable: true
   biomarkers:
-    $ref: './ModelOverviewLink.yaml'
+    $ref: ./Link.yaml
     nullable: true
   pathology:
-    $ref: './ModelOverviewLink.yaml'
+    $ref: ./Link.yaml
     nullable: true
   study_data:
-    $ref: './ModelOverviewLink.yaml'
+    $ref: ./Link.yaml
     nullable: true
   jax_strain:
-    $ref: './ModelOverviewLink.yaml'
+    $ref: ./Link.yaml
     nullable: true
   center:
-    $ref: './ModelOverviewLink.yaml'
+    $ref: ./Link.yaml
     nullable: true
   modified_genes:
     type: array

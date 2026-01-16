@@ -1,0 +1,8 @@
+type: string
+enum:
+  - name
+  - modelGroup
+description: |
+  Specifies whether a model identifier refers to a name or modelGroup.
+  - name: The identifier is a model name.
+  - modelGroup: The identifier is a model group.

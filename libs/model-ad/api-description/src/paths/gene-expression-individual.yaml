@@ -1,0 +1,23 @@
+get:
+  tags:
+    - Gene Expression Individual
+  summary: Get gene expression individual data
+  description: Retrieve gene expression individual data based on specified filter criteria.
+  operationId: getGeneExpressionIndividual
+  parameters:
+    - $ref: ./query/geneExpressionIndividualFilterQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/GeneExpressionIndividual.yaml
+      description: Successfully retrieved individual gene expression data
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

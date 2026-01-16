@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ModelOverviewLink } from './model-overview-link';
+import { Link } from './link';
 
 /**
  * Model Overview object for comparison tools
@@ -29,13 +29,13 @@ export interface ModelOverview {
    * List of matched control models
    */
   matched_controls: Array<string>;
-  gene_expression?: ModelOverviewLink;
-  disease_correlation?: ModelOverviewLink;
-  biomarkers?: ModelOverviewLink;
-  pathology?: ModelOverviewLink;
-  study_data: ModelOverviewLink;
-  jax_strain: ModelOverviewLink;
-  center: ModelOverviewLink;
+  gene_expression?: Link;
+  disease_correlation?: Link;
+  biomarkers?: Link;
+  pathology?: Link;
+  study_data: Link;
+  jax_strain: Link;
+  center: Link;
   /**
    * List of modified genes in the model
    */

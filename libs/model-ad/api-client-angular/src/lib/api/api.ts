@@ -6,6 +6,8 @@ export * from './disease-correlation.service';
 import { DiseaseCorrelationService } from './disease-correlation.service';
 export * from './gene-expression.service';
 import { GeneExpressionService } from './gene-expression.service';
+export * from './gene-expression-individual.service';
+import { GeneExpressionIndividualService } from './gene-expression-individual.service';
 export * from './model.service';
 import { ModelService } from './model.service';
 export * from './model-overview.service';
@@ -15,6 +17,7 @@ export const APIS = [
   DataVersionService,
   DiseaseCorrelationService,
   GeneExpressionService,
+  GeneExpressionIndividualService,
   ModelService,
   ModelOverviewService,
 ];
