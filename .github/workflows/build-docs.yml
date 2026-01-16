@@ -4,8 +4,13 @@ on:
     branches:
       - main
     paths:
-      - 'docs/**/*.md'
-      - 'docs/images/*'
+      - '.github/workflows/build-docs.yml'
+      - 'docs/*'
+      - 'mkdocs.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/build-docs.yml'
+      - 'docs/*'
       - 'mkdocs.yml'
 
 jobs:
