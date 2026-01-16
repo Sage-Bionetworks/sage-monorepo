@@ -1,9 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/angular';
-import { TermsOfServiceComponent } from './terms-of-service.component';
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
-import { of, throwError } from 'rxjs';
 import { Component } from '@angular/core';
+import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { MarkdownModule } from 'ngx-markdown';
+import { of, throwError } from 'rxjs';
+import { TermsOfServiceComponent } from './terms-of-service.component';
 
 // Mock SynapseApiService
 class MockSynapseApiService {
@@ -42,14 +42,12 @@ describe('TermsOfServiceComponent', () => {
     });
   });
 
-  it('uses the default hero background when no value is provided', async () => {
+  it('returns undefined for heroBackgroundImagePath when no value is provided', async () => {
     const { renderResult } = await setup();
-    expect(renderResult.fixture.componentInstance.heroBackgroundImagePath()).toBe(
-      'explorers-assets/images/background.svg',
-    );
+    expect(renderResult.fixture.componentInstance.heroBackgroundImagePath()).toBeUndefined();
   });
 
-  it('updates the hero background when input is overridden', async () => {
+  it('uses the provided hero background when input is set', async () => {
     const { renderResult } = await setup();
 
     renderResult.fixture.componentRef.setInput('heroBackgroundImagePath', 'custom-assets/hero.svg');
@@ -57,5 +55,24 @@ describe('TermsOfServiceComponent', () => {
     expect(renderResult.fixture.componentInstance.heroBackgroundImagePath()).toBe(
       'custom-assets/hero.svg',
     );
+  });
+
+  it('uses default for effectiveHeroBackgroundImagePath when heroBackgroundImagePath is undefined', async () => {
+    const { renderResult } = await setup();
+    const component = renderResult.fixture.componentInstance;
+
+    expect(component.heroBackgroundImagePath()).toBeUndefined();
+    expect(component.effectiveHeroBackgroundImagePath()).toBe(
+      'explorers-assets/images/background.svg',
+    );
+  });
+
+  it('uses provided value for effectiveHeroBackgroundImagePath when heroBackgroundImagePath is set', async () => {
+    const { renderResult } = await setup();
+    const component = renderResult.fixture.componentInstance;
+
+    renderResult.fixture.componentRef.setInput('heroBackgroundImagePath', 'custom-assets/hero.svg');
+
+    expect(component.effectiveHeroBackgroundImagePath()).toBe('custom-assets/hero.svg');
   });
 });
