@@ -5,12 +5,12 @@ on:
       - main
     paths:
       - '.github/workflows/build-docs.yml'
-      - 'docs/*'
+      - 'docs/**'
       - 'mkdocs.yml'
   pull_request:
     paths:
       - '.github/workflows/build-docs.yml'
-      - 'docs/*'
+      - 'docs/**'
       - 'mkdocs.yml'
 
 jobs:
