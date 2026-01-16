@@ -4,8 +4,13 @@ on:
     branches:
       - main
     paths:
-      - 'docs/**/*.md'
-      - 'docs/images/*'
+      - '.github/workflows/build-docs.yml'
+      - 'docs/**'
+      - 'mkdocs.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/build-docs.yml'
+      - 'docs/**'
       - 'mkdocs.yml'
 
 jobs:
@@ -13,10 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Configure Git Credentials
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
@@ -28,4 +29,14 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install mkdocs-material mkdocstrings mkdocstrings-python termynal mdx-truly-sane-lists
-      - run: mkdocs gh-deploy --force
+      - name: Build docs (PR validation)
+        if: github.event_name == 'pull_request'
+        run: mkdocs build --strict
+      - name: Configure Git Credentials
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+      - name: Deploy docs to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: mkdocs gh-deploy --force
