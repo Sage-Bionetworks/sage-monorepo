@@ -25,6 +25,7 @@ from openchallenges_infra_cdk.shared.stacks.image_service_stack import (
 from openchallenges_infra_cdk.shared.stacks.organization_service_stack import (
     OrganizationServiceStack,
 )
+from openchallenges_infra_cdk.shared.stacks.thumbor_stack import ThumborStack
 from openchallenges_infra_cdk.shared.stacks.vpc_stack import VpcStack
 
 
@@ -170,8 +171,10 @@ def main() -> None:
         vpc=vpc_stack.vpc,
         cluster=ecs_cluster_stack.cluster,
         app_version=app_version,
-        # Thumbor configuration - will need to be updated when Thumbor is deployed
-        thumbor_host="http://localhost:8000/img/",
+        # Thumbor configuration - use service discovery URL
+        thumbor_host=(
+            f"http://openchallenges-thumbor.{ecs_cluster_stack.cluster.cluster_name}.local:8889/"
+        ),
         thumbor_security_key="changeme",
         description=f"Image service for OpenChallenges {environment} environment",
     )
@@ -197,13 +200,31 @@ def main() -> None:
     app_service_stack.add_dependency(alb_stack)
 
     # Create bucket stack
-    BucketStack(
+    bucket_stack = BucketStack(
         app,
         f"{stack_prefix}-bucket",
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
         description=f"S3 buckets for OpenChallenges {environment} environment",
+    )
+
+    # Create Thumbor stack (depends on bucket and ECS cluster)
+    ThumborStack(
+        app,
+        f"{stack_prefix}-thumbor",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        image_bucket=bucket_stack.image_bucket,
+        app_version=app_version,
+        security_key="changeme",  # TODO: Use secrets manager in production
+        description=(
+            f"Thumbor image processing service for OpenChallenges "
+            f"{environment} environment"
+        ),
     )
 
     app.synth()
