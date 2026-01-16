@@ -21,6 +21,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -49,7 +50,17 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     String sexCohort
   ) {
     try {
+      // Build match criteria with all filters (shared by count and data queries)
+      Criteria matchCriteria = buildMatchCriteria(tissue, sexCohort, query, items);
+
+      // OPTIMIZATION: Use mongoTemplate.count() for counting (faster than aggregation)
+      // This uses indexes directly without loading documents or running $addFields
+      final long total = mongoTemplate.count(new Query(matchCriteria), COLLECTION_NAME);
+
       List<AggregationOperation> operations = new ArrayList<>();
+
+      // Add $match FIRST to filter documents before transformation
+      operations.add(Aggregation.match(matchCriteria));
 
       // Add display_gene_symbol field (with fallback) if sorting by gene_symbol
       boolean sortsByGeneSymbol = pageable
@@ -63,13 +74,6 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
 
       // Add lowercase versions of string sort fields for case-insensitive sorting
       operations.add(buildLowercaseSortFields(pageable.getSort()));
-
-      // Build match criteria with all filters
-      Criteria matchCriteria = buildMatchCriteria(tissue, sexCohort, query, items);
-      operations.add(Aggregation.match(matchCriteria));
-
-      // Count total before pagination
-      final long total = countDocuments(operations);
 
       // Add sorting (uses lowercase fields for case-insensitive sorting)
       addSortOperation(operations, pageable.getSort());
@@ -351,26 +355,5 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       }
       operations.add(context -> new Document("$sort", sortDocument));
     }
-  }
-
-  /**
-   * Counts total documents matching the criteria (before pagination).
-   */
-  private long countDocuments(List<AggregationOperation> baseOperations) {
-    List<AggregationOperation> countOperations = new ArrayList<>(baseOperations);
-    countOperations.add(Aggregation.count().as("total"));
-
-    Aggregation countAggregation = Aggregation.newAggregation(countOperations);
-    AggregationResults<Document> countResults = mongoTemplate.aggregate(
-      countAggregation,
-      COLLECTION_NAME,
-      Document.class
-    );
-
-    List<Document> countList = countResults.getMappedResults();
-    if (countList.isEmpty()) {
-      return 0;
-    }
-    return countList.get(0).getInteger("total", 0);
   }
 }
