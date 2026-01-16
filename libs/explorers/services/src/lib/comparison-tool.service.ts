@@ -62,6 +62,7 @@ export class ComparisonToolService<T> {
     rowsPerPage: 10,
     rowIdDataKey: '_id',
     allowPinnedImageDownload: true,
+    linkExportField: 'link_url',
   };
 
   // Private State Signals
