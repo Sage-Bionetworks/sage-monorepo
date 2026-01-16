@@ -1,21 +1,24 @@
 import { Location } from '@angular/common';
-import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, computed, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { HelperService, PlatformService } from '@sagebionetworks/explorers/services';
+import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import {
-  GeneExpressionDetail,
-  GeneExpressionDetailFilterQuery,
-  GeneExpressionService,
+  GeneExpressionIndividual,
+  GeneExpressionIndividualFilterQuery,
+  GeneExpressionIndividualService,
+  IndividualData,
+  ModelIdentifierType,
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { geneExpressionDetailMocks } from '@sagebionetworks/model-ad/testing';
+import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
 import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'model-ad-gene-details',
-  imports: [LoadingIconComponent],
+  imports: [LoadingIconComponent, BoxplotsGridComponent, DownloadDomImageComponent],
   templateUrl: './gene-details.component.html',
   styleUrls: ['./gene-details.component.scss'],
 })
@@ -24,16 +27,83 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
   router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
-  geneExpressionService = inject(GeneExpressionService);
+  geneExpressionIndividualService = inject(GeneExpressionIndividualService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
 
   isLoading = true;
 
-  geneDetails: GeneExpressionDetail[] | undefined;
+  geneExpressionIndividualData: GeneExpressionIndividual[] | undefined;
+  tissue: string | null = null;
+  modelIdentifier: string | null = null;
+  modelIdentifierType: ModelIdentifierType | null = null;
+
+  primaryGene = computed(() => this.geneExpressionIndividualData?.[0]);
+
+  label = computed(() => {
+    const gene = this.primaryGene();
+    if (!gene) return { left: '', right: '' };
+
+    const geneSymbol = gene.gene_symbol;
+    const ensemblGeneId = gene.ensembl_gene_id;
+    return {
+      left: geneSymbol || ensemblGeneId,
+      right: ensemblGeneId && geneSymbol ? ensemblGeneId : '',
+    };
+  });
+
+  subtitle = computed(() => {
+    return this.modelIdentifier ? `${this.modelIdentifier} (Females & Males)` : '';
+  });
+
+  xAxisOrder = computed(() => this.primaryGene()?.result_order);
+
+  csvData = computed(() => {
+    if (!this.geneExpressionIndividualData) return [];
+
+    const columnHeaders = [
+      'ensembl_gene_id',
+      'gene_symbol',
+      'age',
+      'genotype',
+      'sex',
+      'individual_id',
+      'log2_cpm',
+    ];
+    const data: string[][] = [];
+    data.push(columnHeaders);
+
+    this.geneExpressionIndividualData.forEach((g: GeneExpressionIndividual) => {
+      const baseRow = [g.ensembl_gene_id, g.gene_symbol, g.age];
+      g.data.forEach((point: IndividualData) => {
+        data.push([
+          ...baseRow,
+          point.genotype,
+          point.sex,
+          point.individual_id,
+          String(point.value || ''),
+        ]);
+      });
+    });
+
+    return data;
+  });
+
+  filename = computed(() => {
+    const gene = this.primaryGene();
+    if (!gene) return '';
+
+    const geneSymbol = gene.gene_symbol;
+    const ensemblGeneId = gene.ensembl_gene_id;
+    const filename = `gene-expression-individual-${geneSymbol || ensemblGeneId}-${this.modelIdentifier}-${(this.tissue || '').toLowerCase()}`;
+    return this.helperService.cleanFilename(filename);
+  });
 
   reset() {
-    this.geneDetails = undefined;
+    this.geneExpressionIndividualData = undefined;
+    this.tissue = null;
+    this.modelIdentifier = null;
+    this.modelIdentifierType = null;
     this.isLoading = true;
   }
 
@@ -45,58 +115,53 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
 
         // only fetch data during client hydration
         if (this.platformService.isBrowser) {
-          this.loadgeneDetails(params, queryParams);
+          this.loadGeneExpressionIndividualData(params, queryParams);
         }
       });
   }
 
-  private loadgeneDetails(params: ParamMap, queryParams: ParamMap) {
+  private loadGeneExpressionIndividualData(params: ParamMap, queryParams: ParamMap) {
     const ensemblGeneId = params.get('ensemblGeneId');
     const modelName = queryParams.get('model');
     const modelGroup = queryParams.get('modelGroup');
     const tissue = queryParams.get('tissue');
+    this.tissue = tissue;
 
-    const modelIdentifierType = modelGroup
-      ? GeneExpressionDetailFilterQuery.ModelIdentifierTypeEnum.ModelGroup
-      : GeneExpressionDetailFilterQuery.ModelIdentifierTypeEnum.Name;
-    const modelIdentifier = modelGroup || modelName;
+    this.modelIdentifierType = modelGroup
+      ? ModelIdentifierType.ModelGroup
+      : ModelIdentifierType.Name;
+    this.modelIdentifier = modelGroup || modelName;
 
-    console.log('ensemblGeneId', ensemblGeneId);
-    console.log('tissue', tissue);
-    console.log('modelIdentifierType', modelIdentifierType);
-    console.log('modelIdentifier', modelIdentifier);
-
-    this.geneDetails = geneExpressionDetailMocks;
-    this.isLoading = false;
-
-    // TODO: re-enable real data fetching
-    /* if (ensemblGeneId && tissue && modelIdentifierType && modelIdentifier) {
-      const query: GeneExpressionDetailFilterQuery = {
+    if (ensemblGeneId && tissue && this.modelIdentifierType && this.modelIdentifier) {
+      const query: GeneExpressionIndividualFilterQuery = {
         ensemblGeneId,
         tissue,
-        modelIdentifierType,
-        modelIdentifier,
+        modelIdentifierType: this.modelIdentifierType,
+        modelIdentifier: this.modelIdentifier,
       };
 
-      this.geneExpressionService
-        .getGeneExpressionDetails(query)
+      this.geneExpressionIndividualService
+        .getGeneExpressionIndividual(query)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: (geneDetails: GeneExpressionDetail[]) => {
-            this.geneDetails = geneDetails;
+          next: (geneExpressionIndividualData: GeneExpressionIndividual[]) => {
+            this.geneExpressionIndividualData = geneExpressionIndividualData;
             this.isLoading = false;
           },
           error: (error) => {
-            console.error('Error retrieving gene details: ', error);
+            console.error('Error retrieving gene expression individual data: ', error);
             this.isLoading = false;
             this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });
-    } */
+    } else {
+      this.isLoading = false;
+      this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
+    }
   }
 
   ngAfterViewInit() {
-    if (this.geneDetails?.length === 0) {
+    if (this.geneExpressionIndividualData?.length === 0) {
       this.isLoading = true;
     }
   }

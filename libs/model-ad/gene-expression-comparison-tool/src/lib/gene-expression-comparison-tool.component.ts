@@ -109,7 +109,16 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
     viewDetailsTooltip: 'Open gene details page',
     viewDetailsClick: (rowData: unknown) => {
-      // TODO add logic to display details pages MG-588
+      const row = rowData as GeneExpression;
+      if (row.model_group === null) {
+        this.router.navigate([ROUTE_PATHS.GENES, row.ensembl_gene_id], {
+          queryParams: { model: row.name.link_text, tissue: row.tissue },
+        });
+      } else {
+        this.router.navigate([ROUTE_PATHS.GENES, row.ensembl_gene_id], {
+          queryParams: { modelGroup: row.model_group, tissue: row.tissue },
+        });
+      }
     },
     legendPanelConfig: this.legendPanelConfig,
     visualizationOverviewPanes: this.visualizationOverviewPanes,

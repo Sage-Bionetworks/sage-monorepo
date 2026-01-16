@@ -1,9 +1,39 @@
-<div [class]="{ 'gene-details': true, loading: isLoading }">
-  @if (isLoading) {
-    <div id="loading">
-      <explorers-loading-icon />
-    </div>
-  } @else if (geneDetails) {
-    <div>TODO</div>
-  }
-</div>
+<section>
+  <div [class]="{ 'gene-details': true, loading: isLoading }">
+    @if (isLoading) {
+      <div id="loading">
+        <explorers-loading-icon />
+      </div>
+    } @else if (geneExpressionIndividualData) {
+      <div class="gene-details-header">
+        @if (label().left !== '') {
+          <div class="gene-details-label">
+            {{ label().left }}
+            @if (label().right) {
+              <span class="gene-details-label-separator">|</span>
+              {{ label().right }}
+            }
+          </div>
+        }
+        <h2>Individual RNA Expression {{ tissue ? `(${tissue})` : '' }}</h2>
+        <div class="gene-details-subtitle">{{ subtitle() }}</div>
+      </div>
+      <div class="gene-details-boxplots-download">
+        <explorers-download-dom-image
+          [target]="boxplotGrid"
+          [filename]="filename()"
+          [buttonLabel]="'Download'"
+          [heading]="'Download these results as:'"
+          [hasCsvDownload]="true"
+          [data]="csvData()"
+        />
+      </div>
+      <div #boxplotGrid class="boxplots-grid-wrapper">
+        <model-ad-boxplots-grid
+          [boxplotDataList]="geneExpressionIndividualData"
+          [xAxisOrder]="xAxisOrder()"
+        />
+      </div>
+    }
+  </div>
+</section>
