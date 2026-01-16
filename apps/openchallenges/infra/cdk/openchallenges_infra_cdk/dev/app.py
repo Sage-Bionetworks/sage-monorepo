@@ -12,6 +12,7 @@ from openchallenges_infra_cdk.shared.config import (
 )
 from openchallenges_infra_cdk.shared.stacks.alb_stack import AlbStack
 from openchallenges_infra_cdk.shared.stacks.app_service_stack import AppServiceStack
+from openchallenges_infra_cdk.shared.stacks.auth_service_stack import AuthServiceStack
 from openchallenges_infra_cdk.shared.stacks.bastion_stack import BastionStack
 from openchallenges_infra_cdk.shared.stacks.bucket_stack import BucketStack
 from openchallenges_infra_cdk.shared.stacks.challenge_service_stack import (
@@ -43,6 +44,13 @@ def main() -> None:
     app_version = os.getenv("APP_VERSION", "edge")
     # FQDN is optional - if not provided, will use ALB DNS name
     fqdn = os.getenv("FQDN", "")
+
+    # OAuth credentials for auth service (required for deployment)
+    # These are immediately stored in AWS Secrets Manager and never exposed
+    google_client_id = os.getenv("GOOGLE_CLIENT_ID", "")
+    google_client_secret = os.getenv("GOOGLE_CLIENT_SECRET", "")
+    synapse_client_id = os.getenv("SYNAPSE_CLIENT_ID", "")
+    synapse_client_secret = os.getenv("SYNAPSE_CLIENT_SECRET", "")
 
     # Add common tags
     cdk.Tags.of(app).add("Environment", environment)
@@ -177,6 +185,25 @@ def main() -> None:
         ),
         thumbor_security_key="changeme",
         description=f"Image service for OpenChallenges {environment} environment",
+    )
+
+    # Create Auth service stack (depends on database, ECS cluster)
+    AuthServiceStack(
+        app,
+        f"{stack_prefix}-auth-service",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        database=database_stack.database_construct.database,
+        database_secret_arn=database_secret.secret_arn,
+        google_client_id=google_client_id,
+        google_client_secret=google_client_secret,
+        synapse_client_id=synapse_client_id,
+        synapse_client_secret=synapse_client_secret,
+        app_version=app_version,
+        description=f"Auth service for OpenChallenges {environment} environment",
     )
 
     # Create app service stack (depends on ECS cluster and ALB)
