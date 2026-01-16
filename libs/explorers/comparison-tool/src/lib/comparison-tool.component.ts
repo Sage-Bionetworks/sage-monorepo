@@ -31,5 +31,4 @@ export class ComparisonToolComponent {
 
   currentConfig = this.comparisonToolService.currentConfig;
   loadingResultsCount = this.comparisonToolService.loadingResultsCount;
-  isFilterPanelOpen = this.comparisonToolService.isFilterPanelOpen;
 }

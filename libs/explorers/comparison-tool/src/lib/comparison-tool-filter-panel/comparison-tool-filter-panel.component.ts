@@ -32,9 +32,9 @@ export class ComparisonToolFilterPanelComponent {
   private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
   filterConfigs = input<ComparisonToolConfigFilter[]>([]);
-  isOpen = input<boolean>(false);
 
   filters = this.comparisonToolFilterService.filters;
+  isOpen = this.comparisonToolService.isFilterPanelOpen;
 
   activePane = signal(-1);
   hasActivePane = computed(() => this.activePane() !== -1);

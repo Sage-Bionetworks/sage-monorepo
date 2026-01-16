@@ -30,12 +30,15 @@ async function setup(isOpen = false) {
     ],
     componentInputs: {
       filterConfigs: mockComparisonToolConfigFilters,
-      isOpen,
     },
   });
+  const ctService = component.fixture.debugElement.injector.get(ComparisonToolService);
+  if (isOpen) {
+    ctService.openFilterPanel();
+    component.fixture.detectChanges();
+  }
   const componentInstance = component.fixture.componentInstance;
   const ctFilterService = component.fixture.debugElement.injector.get(ComparisonToolFilterService);
-  const ctService = component.fixture.debugElement.injector.get(ComparisonToolService);
   return { user, component, componentInstance, ctFilterService, ctService };
 }
 
