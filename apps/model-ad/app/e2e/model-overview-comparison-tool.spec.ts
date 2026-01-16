@@ -8,6 +8,7 @@ import {
   getRowByName,
   getUnpinnedTable,
   pinByName,
+  runFilterPanelTests,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
@@ -37,49 +38,7 @@ const CT_PAGE = 'Model Overview';
 const MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS[CT_PAGE];
 
 test.describe('model overview', () => {
-  test.describe('filter panel', () => {
-    test('clicking Filter Results button opens the filter panel', async ({ page }) => {
-      await navigateToComparison(page, CT_PAGE, true);
-
-      const filterButton = page.getByRole('button', { name: 'Filter Results' });
-      await expect(filterButton).toBeVisible();
-
-      await filterButton.click();
-
-      const filterPanel = page.locator('.filter-panel');
-      await expect(filterPanel).toHaveClass(/open/);
-    });
-
-    test('clicking close button closes the filter panel', async ({ page }) => {
-      await navigateToComparison(page, CT_PAGE, true);
-
-      const filterButton = page.getByRole('button', { name: 'Filter Results' });
-      await filterButton.click();
-
-      const filterPanel = page.locator('.filter-panel');
-      await expect(filterPanel).toHaveClass(/open/);
-
-      const closeButton = page.getByRole('button', { name: 'close' });
-      await closeButton.click();
-
-      await expect(filterPanel).not.toHaveClass(/open/);
-    });
-
-    test('clicking Filter Results button again closes the filter panel', async ({ page }) => {
-      await navigateToComparison(page, CT_PAGE, true);
-
-      const filterButton = page.getByRole('button', { name: 'Filter Results' });
-      await filterButton.click();
-
-      const filterPanel = page.locator('.filter-panel');
-      await expect(filterPanel).toHaveClass(/open/);
-
-      // Click the filter button again to close
-      await filterButton.click();
-
-      await expect(filterPanel).not.toHaveClass(/open/);
-    });
-  });
+  runFilterPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true));
 
   test('share URL button copies URL to clipboard', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read']);
