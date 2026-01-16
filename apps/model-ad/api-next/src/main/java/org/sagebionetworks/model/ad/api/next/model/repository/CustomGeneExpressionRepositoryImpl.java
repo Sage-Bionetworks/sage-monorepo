@@ -62,15 +62,9 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       // Add $match FIRST to filter documents before transformation
       operations.add(Aggregation.match(matchCriteria));
 
-      // Add display_gene_symbol field (with fallback) if sorting by gene_symbol
-      boolean sortsByGeneSymbol = pageable
-        .getSort()
-        .stream()
-        .anyMatch(o -> GENE_SYMBOL_FIELD.equals(o.getProperty()));
-
-      if (sortsByGeneSymbol) {
-        operations.add(buildDisplayGeneSymbolField());
-      }
+      // Always add display_gene_symbol field (with fallback to ensembl_gene_id)
+      // Used for both sorting and searching
+      operations.add(buildDisplayGeneSymbolField());
 
       operations.add(buildLowercaseSortFields(pageable.getSort()));
 
@@ -305,11 +299,11 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     // Comma-separated list: exact match (case-insensitive)
     if (trimmedSearch.contains(",")) {
       List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
-      criteriaList.add(Criteria.where(GENE_SYMBOL_FIELD).in(patterns));
+      criteriaList.add(Criteria.where(DISPLAY_GENE_SYMBOL_FIELD).in(patterns));
     } else {
       // Single term: partial match (case-insensitive)
       String regex = Pattern.quote(trimmedSearch);
-      criteriaList.add(Criteria.where(GENE_SYMBOL_FIELD).regex(regex, "i"));
+      criteriaList.add(Criteria.where(DISPLAY_GENE_SYMBOL_FIELD).regex(regex, "i"));
     }
   }
 
