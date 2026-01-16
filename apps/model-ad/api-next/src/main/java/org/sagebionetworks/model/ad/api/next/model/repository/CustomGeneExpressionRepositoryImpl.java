@@ -72,7 +72,6 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
         operations.add(buildDisplayGeneSymbolField());
       }
 
-      // Add lowercase versions of string sort fields for case-insensitive sorting
       operations.add(buildLowercaseSortFields(pageable.getSort()));
 
       // Add sorting (uses lowercase fields for case-insensitive sorting)
