@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Entity
-@Table(name = "challenge_participation")
+@Table(name = "challenge_participation", schema = "organization")
 @Data
 @Builder
 @NoArgsConstructor

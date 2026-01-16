@@ -2,6 +2,8 @@ package org.sagebionetworks.openchallenges.organization.service.configuration;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
@@ -9,14 +11,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
 @ConditionalOnProperty(
-  value = "spring.jpa.properties.hibernate.search.enabled",
-  havingValue = "true"
+  name = "spring.jpa.properties.hibernate.search.enabled",
+  havingValue = "true",
+  matchIfMissing = false
 )
 @RequiredArgsConstructor
 public class HibernateSearchIndexBuild implements ApplicationListener<ApplicationReadyEvent> {

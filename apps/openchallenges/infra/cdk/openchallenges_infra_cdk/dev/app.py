@@ -19,6 +19,12 @@ from openchallenges_infra_cdk.shared.stacks.challenge_service_stack import (
 )
 from openchallenges_infra_cdk.shared.stacks.database_stack import DatabaseStack
 from openchallenges_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
+from openchallenges_infra_cdk.shared.stacks.image_service_stack import (
+    ImageServiceStack,
+)
+from openchallenges_infra_cdk.shared.stacks.organization_service_stack import (
+    OrganizationServiceStack,
+)
 from openchallenges_infra_cdk.shared.stacks.vpc_stack import VpcStack
 
 
@@ -136,6 +142,39 @@ def main() -> None:
     # Note: Dependencies are automatic via CloudFormation references
     # (database endpoint, etc.). Don't add manual add_dependency() calls
     # to avoid cyclic dependencies with security group rules
+
+    # Create Organization service stack (depends on database, ECS cluster)
+    OrganizationServiceStack(
+        app,
+        f"{stack_prefix}-organization-service",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        database=database_stack.database_construct.database,
+        database_secret_arn=database_secret.secret_arn,
+        app_version=app_version,
+        description=(
+            f"Organization service for OpenChallenges {environment} environment"
+        ),
+    )
+
+    # Create Image service stack (stateless, no database)
+    ImageServiceStack(
+        app,
+        f"{stack_prefix}-image-service",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        app_version=app_version,
+        # Thumbor configuration - will need to be updated when Thumbor is deployed
+        thumbor_host="http://localhost:8000/img/",
+        thumbor_security_key="changeme",
+        description=f"Image service for OpenChallenges {environment} environment",
+    )
 
     # Create app service stack (depends on ECS cluster and ALB)
     # Uses ALB DNS name by default, or custom FQDN if provided
