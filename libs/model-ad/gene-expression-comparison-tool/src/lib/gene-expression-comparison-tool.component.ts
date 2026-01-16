@@ -141,6 +141,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
         footer: 'Significance is considered to be an adjusted p-value < 0.05',
       };
     },
+    linkExportField: 'link_text',
   };
 
   constructor() {
