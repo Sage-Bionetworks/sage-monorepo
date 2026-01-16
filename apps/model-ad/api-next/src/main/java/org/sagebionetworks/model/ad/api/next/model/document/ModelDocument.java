@@ -104,19 +104,4 @@ public class ModelDocument {
 
     private List<IndividualData> data;
   }
-
-  @Builder
-  @Getter
-  @Setter
-  public static class IndividualData {
-
-    private String genotype;
-
-    private String sex;
-
-    @Field("individual_id")
-    private String individualId;
-
-    private BigDecimal value;
-  }
 }

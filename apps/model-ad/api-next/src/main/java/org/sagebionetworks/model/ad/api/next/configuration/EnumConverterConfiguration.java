@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.configuration;
 
 import org.sagebionetworks.model.ad.api.next.model.dto.ItemFilterTypeQueryDto;
+import org.sagebionetworks.model.ad.api.next.model.dto.ModelIdentifierTypeDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexCohortDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.SexDto;
 
@@ -17,6 +18,15 @@ public class EnumConverterConfiguration {
             @Override
             public ItemFilterTypeQueryDto convert(String source) {
                 return ItemFilterTypeQueryDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.model.ad.api.next.configuration.EnumConverterConfiguration.modelIdentifierTypeConverter")
+    Converter<String, ModelIdentifierTypeDto> modelIdentifierTypeConverter() {
+        return new Converter<String, ModelIdentifierTypeDto>() {
+            @Override
+            public ModelIdentifierTypeDto convert(String source) {
+                return ModelIdentifierTypeDto.fromValue(source);
             }
         };
     }

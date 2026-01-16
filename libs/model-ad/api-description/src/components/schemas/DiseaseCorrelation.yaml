@@ -26,21 +26,21 @@ properties:
     type: string
     description: Age of the model
   sex:
-    $ref: './Sex.yaml'
+    $ref: ./Sex.yaml
   IFG:
-    $ref: './CorrelationResult.yaml'
+    $ref: ./CorrelationResult.yaml
   PHG:
-    $ref: './CorrelationResult.yaml'
+    $ref: ./CorrelationResult.yaml
   TCX:
-    $ref: './CorrelationResult.yaml'
+    $ref: ./CorrelationResult.yaml
   CBE:
-    $ref: './CorrelationResult.yaml'
+    $ref: ./CorrelationResult.yaml
   DLPFC:
-    $ref: './CorrelationResult.yaml'
+    $ref: ./CorrelationResult.yaml
   FP:
-    $ref: './CorrelationResult.yaml'
+    $ref: ./CorrelationResult.yaml
   STG:
-    $ref: './CorrelationResult.yaml'
+    $ref: ./CorrelationResult.yaml
 required:
   - composite_id
   - name

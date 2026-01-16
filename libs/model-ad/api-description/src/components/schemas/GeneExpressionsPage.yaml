@@ -5,9 +5,9 @@ properties:
     type: array
     description: The list of gene expression objects for the current page
     items:
-      $ref: './GeneExpression.yaml'
+      $ref: ./GeneExpression.yaml
   page:
-    $ref: './PageMetadata.yaml'
+    $ref: ./PageMetadata.yaml
 required:
   - geneExpressions
   - page
