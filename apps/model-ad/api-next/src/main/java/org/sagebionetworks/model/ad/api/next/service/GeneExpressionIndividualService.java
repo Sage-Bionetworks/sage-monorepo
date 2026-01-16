@@ -2,7 +2,6 @@ package org.sagebionetworks.model.ad.api.next.service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
@@ -63,6 +62,6 @@ public class GeneExpressionIndividualService {
         )
       )
       .map(geneExpressionIndividualMapper::toDto)
-      .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
+      .toList();
   }
 }

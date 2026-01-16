@@ -38,7 +38,7 @@ public class GeneExpressionIndividualApiDelegateImpl
     List<GeneExpressionIndividualDto> list =
       geneExpressionIndividualService.getGeneExpressionIndividual(query);
 
-    log.debug("Successfully retrieved gene expression individual data", list.size());
+    log.debug("Successfully retrieved {} gene expression individual data", list.size());
 
     return ResponseEntity.ok()
       .headers(ApiHelper.createNoCacheHeaders(MediaType.APPLICATION_JSON))

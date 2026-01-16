@@ -69,7 +69,7 @@ class GeneExpressionIndividualMapperTest {
     GeneExpressionIndividualDocument document = new GeneExpressionIndividualDocument();
     document.setId(new ObjectId());
     document.setEnsemblGeneId("ENSG00000001");
-    document.setGeneSymbol(null);
+    document.setGeneSymbol("GENE1");
     document.setTissue("brain");
     document.setName("5XFAD");
     document.setModelGroup(null);
@@ -86,7 +86,7 @@ class GeneExpressionIndividualMapperTest {
     // then
     assertThat(dto).isNotNull();
     assertThat(dto.getEnsemblGeneId()).isEqualTo("ENSG00000001");
-    assertThat(dto.getGeneSymbol()).isNull();
+    assertThat(dto.getGeneSymbol()).isEqualTo("GENE1");
     assertThat(dto.getModelGroup()).isNull();
     assertThat(dto.getName()).isEqualTo("5XFAD");
   }

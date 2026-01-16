@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 /**
  * Repository interface for Gene Expression Individual documents in MongoDB.
  *
- * <p>Provides type-safe query methods for retrieving lits of gene expression individual data from
+ * <p>Provides type-safe query methods for retrieving lists of gene expression individual data from
  * the rna_de_individual collection.
  */
 @Repository
