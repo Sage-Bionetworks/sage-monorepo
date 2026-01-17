@@ -5,7 +5,6 @@ import os
 
 import aws_cdk as cdk
 from aws_cdk import aws_ec2 as ec2
-from aws_cdk import aws_secretsmanager as sm
 
 from openchallenges_infra_cdk.shared.config import (
     get_developer_name,
@@ -47,6 +46,10 @@ def main() -> None:
     app_version = os.getenv("APP_VERSION", "edge")
     # FQDN is optional - if not provided, will use ALB DNS name
     fqdn = os.getenv("FQDN", "")
+    # OpenSearch admin username - defaults to "opensearch-admin"
+    opensearch_admin_username = os.getenv(
+        "OPENSEARCH_ADMIN_USERNAME", "opensearch-admin"
+    )
 
     # OAuth credentials for auth service (required for deployment)
     # These are immediately stored in AWS Secrets Manager and never exposed
@@ -132,6 +135,7 @@ def main() -> None:
 
     # Create OpenSearch domain stack (depends on VPC)
     # AWS-managed OpenSearch for search functionality
+    # Credentials secret with auto-generated password is created within the stack
     opensearch_stack = OpenSearchStack(
         app,
         f"{stack_prefix}-opensearch",
@@ -139,25 +143,10 @@ def main() -> None:
         environment=environment,
         developer_name=developer_name,
         vpc=vpc_stack.vpc,
+        admin_username=opensearch_admin_username,
         description=f"OpenSearch domain for OpenChallenges {environment} environment",
     )
     opensearch_stack.add_dependency(vpc_stack)
-
-    # Create OpenSearch credentials secret (shared by all services)
-    # This stores the master username/password for OpenSearch domain
-    # Services import this secret by name using sm.Secret.from_secret_name_v2()
-    sm.Secret(
-        opensearch_stack,
-        "OpenSearchCredentials",
-        secret_name=f"{stack_prefix}-opensearch-credentials",
-        description="OpenSearch master user credentials",
-        secret_object_value={
-            "username": cdk.SecretValue.unsafe_plain_text("admin"),
-            "password": cdk.SecretValue.unsafe_plain_text(
-                "Admin123!"  # TODO: Use stronger password in production
-            ),
-        },
-    )
 
     # Create Challenge service stack (depends on database, ECS cluster)
     # Database secret is guaranteed to exist since we use from_generated_secret()

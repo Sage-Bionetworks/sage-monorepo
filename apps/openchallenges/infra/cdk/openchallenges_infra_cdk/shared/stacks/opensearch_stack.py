@@ -3,6 +3,7 @@
 import aws_cdk as cdk
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_opensearchservice as opensearch
+from aws_cdk import aws_secretsmanager as sm
 from constructs import Construct
 
 
@@ -16,6 +17,7 @@ class OpenSearchStack(cdk.Stack):
         stack_prefix: str,
         environment: str,
         vpc: ec2.IVpc,
+        admin_username: str,
         developer_name: str | None = None,
         **kwargs,
     ) -> None:
@@ -28,10 +30,31 @@ class OpenSearchStack(cdk.Stack):
             stack_prefix: Prefix for stack name
             environment: Environment name (dev, stage, prod)
             vpc: VPC where OpenSearch will be deployed
+            admin_username: Administrator username for OpenSearch domain
             developer_name: Developer name for dev environment (optional)
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
+
+        # Create credentials secret with auto-generated secure password
+        # Password: 32 chars, alphanumeric + special chars
+        # (excluding @/" per OpenSearch requirements)
+        # Services import this by name using sm.Secret.from_secret_name_v2()
+        self.credentials_secret = sm.Secret(
+            self,
+            "OpenSearchCredentials",
+            secret_name=f"{stack_prefix}-opensearch-credentials",
+            description=(
+                f"OpenSearch administrator credentials for {environment} environment"
+            ),
+            generate_secret_string=sm.SecretStringGenerator(
+                secret_string_template=f'{{"username":"{admin_username}"}}',
+                generate_string_key="password",
+                password_length=32,
+                exclude_characters='@/"',  # OpenSearch password requirements
+                require_each_included_type=True,
+            ),
+        )
 
         # Determine removal policy and configuration based on environment
         # Dev: DESTROY for easier cleanup, minimal resources for cost savings
@@ -115,13 +138,12 @@ class OpenSearchStack(cdk.Stack):
             node_to_node_encryption=True,
             enforce_https=True,
             # Fine-grained access control
-            # Use master user with username/password (simpler than IAM for dev)
+            # Use admin user with username/password from Secrets Manager
+            # Password is auto-generated and stored securely
             fine_grained_access_control=opensearch.AdvancedSecurityOptions(
-                master_user_name="admin",
-                # Master user password must be at least 8 chars with special chars
-                # In production, use Secrets Manager instead
-                master_user_password=cdk.SecretValue.unsafe_plain_text(
-                    "Admin123!"  # TODO: Use Secrets Manager in production
+                master_user_name=admin_username,
+                master_user_password=self.credentials_secret.secret_value_from_json(
+                    "password"
                 ),
             ),
             # Logging configuration (CloudWatch logs)
