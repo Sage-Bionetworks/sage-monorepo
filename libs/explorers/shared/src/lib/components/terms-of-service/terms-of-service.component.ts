@@ -31,7 +31,7 @@ export class TermsOfServiceComponent implements OnInit {
   isLoading = true;
   heroBackgroundImagePath = input<string | undefined>();
 
-  effectiveHeroBackgroundImagePath = computed(
+  heroBackgroundImagePathOrDefault = computed(
     () => this.heroBackgroundImagePath() ?? 'explorers-assets/images/background.svg',
   );
 

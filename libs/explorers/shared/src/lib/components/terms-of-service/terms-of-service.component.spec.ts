@@ -57,22 +57,22 @@ describe('TermsOfServiceComponent', () => {
     );
   });
 
-  it('uses default for effectiveHeroBackgroundImagePath when heroBackgroundImagePath is undefined', async () => {
+  it('uses default for heroBackgroundImagePathOrDefault when heroBackgroundImagePath is undefined', async () => {
     const { renderResult } = await setup();
     const component = renderResult.fixture.componentInstance;
 
     expect(component.heroBackgroundImagePath()).toBeUndefined();
-    expect(component.effectiveHeroBackgroundImagePath()).toBe(
+    expect(component.heroBackgroundImagePathOrDefault()).toBe(
       'explorers-assets/images/background.svg',
     );
   });
 
-  it('uses provided value for effectiveHeroBackgroundImagePath when heroBackgroundImagePath is set', async () => {
+  it('uses provided value for heroBackgroundImagePathOrDefault when heroBackgroundImagePath is set', async () => {
     const { renderResult } = await setup();
     const component = renderResult.fixture.componentInstance;
 
     renderResult.fixture.componentRef.setInput('heroBackgroundImagePath', 'custom-assets/hero.svg');
 
-    expect(component.effectiveHeroBackgroundImagePath()).toBe('custom-assets/hero.svg');
+    expect(component.heroBackgroundImagePathOrDefault()).toBe('custom-assets/hero.svg');
   });
 });
