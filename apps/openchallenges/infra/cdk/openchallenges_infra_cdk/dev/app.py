@@ -4,6 +4,8 @@
 import os
 
 import aws_cdk as cdk
+from aws_cdk import aws_ec2 as ec2
+from aws_cdk import aws_secretsmanager as sm
 
 from openchallenges_infra_cdk.shared.config import (
     get_developer_name,
@@ -23,6 +25,7 @@ from openchallenges_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterS
 from openchallenges_infra_cdk.shared.stacks.image_service_stack import (
     ImageServiceStack,
 )
+from openchallenges_infra_cdk.shared.stacks.opensearch_stack import OpenSearchStack
 from openchallenges_infra_cdk.shared.stacks.organization_service_stack import (
     OrganizationServiceStack,
 )
@@ -127,6 +130,35 @@ def main() -> None:
     bastion_stack.add_dependency(ecs_cluster_stack)
     bastion_stack.add_dependency(vpc_stack)
 
+    # Create OpenSearch domain stack (depends on VPC)
+    # AWS-managed OpenSearch for search functionality
+    opensearch_stack = OpenSearchStack(
+        app,
+        f"{stack_prefix}-opensearch",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        description=f"OpenSearch domain for OpenChallenges {environment} environment",
+    )
+    opensearch_stack.add_dependency(vpc_stack)
+
+    # Create OpenSearch credentials secret (shared by all services)
+    # This stores the master username/password for OpenSearch domain
+    # Services import this secret by name using sm.Secret.from_secret_name_v2()
+    sm.Secret(
+        opensearch_stack,
+        "OpenSearchCredentials",
+        secret_name=f"{stack_prefix}-opensearch-credentials",
+        description="OpenSearch master user credentials",
+        secret_object_value={
+            "username": cdk.SecretValue.unsafe_plain_text("admin"),
+            "password": cdk.SecretValue.unsafe_plain_text(
+                "Admin123!"  # TODO: Use stronger password in production
+            ),
+        },
+    )
+
     # Create Challenge service stack (depends on database, ECS cluster)
     # Database secret is guaranteed to exist since we use from_generated_secret()
     database_secret = database_stack.database_construct.database_secret
@@ -135,7 +167,7 @@ def main() -> None:
             "Database secret must be created. "
             "Verify PostgreSQL database initialization completed successfully."
         )
-    ChallengeServiceStack(
+    challenge_service_stack = ChallengeServiceStack(
         app,
         f"{stack_prefix}-challenge-service",
         stack_prefix=stack_prefix,
@@ -145,6 +177,7 @@ def main() -> None:
         cluster=ecs_cluster_stack.cluster,
         database=database_stack.database_construct.database,
         database_secret_arn=database_secret.secret_arn,
+        opensearch_endpoint=opensearch_stack.domain_endpoint,
         app_version=app_version,
         description=f"Challenge service for OpenChallenges {environment} environment",
     )
@@ -153,7 +186,7 @@ def main() -> None:
     # to avoid cyclic dependencies with security group rules
 
     # Create Organization service stack (depends on database, ECS cluster)
-    OrganizationServiceStack(
+    organization_service_stack = OrganizationServiceStack(
         app,
         f"{stack_prefix}-organization-service",
         stack_prefix=stack_prefix,
@@ -163,10 +196,34 @@ def main() -> None:
         cluster=ecs_cluster_stack.cluster,
         database=database_stack.database_construct.database,
         database_secret_arn=database_secret.secret_arn,
+        opensearch_endpoint=opensearch_stack.domain_endpoint,
         app_version=app_version,
         description=(
             f"Organization service for OpenChallenges {environment} environment"
         ),
+    )
+
+    # Configure OpenSearch security group to allow access from services
+    # Create ingress rules in service stack scope to avoid cyclic dependencies
+    ec2.CfnSecurityGroupIngress(
+        challenge_service_stack,
+        "OpenSearchIngress",
+        ip_protocol="tcp",
+        from_port=443,
+        to_port=443,
+        source_security_group_id=challenge_service_stack.security_group.security_group_id,
+        group_id=opensearch_stack.opensearch_security_group.security_group_id,
+        description="Allow Challenge service to access OpenSearch",
+    )
+    ec2.CfnSecurityGroupIngress(
+        organization_service_stack,
+        "OpenSearchIngress",
+        ip_protocol="tcp",
+        from_port=443,
+        to_port=443,
+        source_security_group_id=organization_service_stack.security_group.security_group_id,
+        group_id=opensearch_stack.opensearch_security_group.security_group_id,
+        description="Allow Organization service to access OpenSearch",
     )
 
     # Create Image service stack (stateless, no database)

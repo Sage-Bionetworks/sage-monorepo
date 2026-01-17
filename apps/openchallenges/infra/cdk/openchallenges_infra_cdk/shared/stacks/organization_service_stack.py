@@ -26,6 +26,7 @@ class OrganizationServiceStack(cdk.Stack):
         cluster: ecs.ICluster,
         database: rds.IDatabaseInstance,
         database_secret_arn: str,
+        opensearch_endpoint: str | None = None,
         developer_name: str | None = None,
         app_version: str = "edge",
         **kwargs,
@@ -42,6 +43,7 @@ class OrganizationServiceStack(cdk.Stack):
             cluster: ECS cluster
             database: RDS PostgreSQL database instance
             database_secret_arn: ARN of the database credentials secret
+            opensearch_endpoint: OpenSearch domain endpoint (optional)
             developer_name: Developer name for dev environment (optional)
             app_version: Application version (Docker image tag)
             **kwargs: Additional arguments passed to parent Stack
@@ -85,14 +87,29 @@ class OrganizationServiceStack(cdk.Stack):
                 f"http://openchallenges-challenge-service.{cluster.cluster_name}.local:8085"
             ),
             # Auth service URL: use ECS service discovery
-            # Note: Will need to be added when auth service is deployed
-            # "APP_AUTH_SERVICE_BASE_URL": (
-            #     f"http://openchallenges-auth-service.{cluster.cluster_name}.local:8087"
-            # ),
-            # OpenSearch/Elasticsearch configuration
-            # Note: Disabled for now until OpenSearch is deployed
-            "SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_ENABLED": "false",
+            "APP_AUTH_SERVICE_BASE_URL": (
+                f"http://openchallenges-auth-service.{cluster.cluster_name}.local:8087"
+            ),
         }
+
+        # OpenSearch configuration (if provided)
+        if opensearch_endpoint:
+            container_env.update(
+                {
+                    # Enable Hibernate Search with OpenSearch backend
+                    "SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_ENABLED": "true",
+                    # OpenSearch endpoint (HTTPS with port 443)
+                    "SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_BACKEND_HOSTS": (
+                        f"{opensearch_endpoint}:443"
+                    ),
+                    # Enable HTTPS protocol
+                    "SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_BACKEND_PROTOCOL": "https",
+                    # Authentication will be provided via secrets
+                }
+            )
+        else:
+            # Disable Hibernate Search if OpenSearch is not configured
+            container_env["SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_ENABLED"] = "false"
 
         # Secrets from AWS Secrets Manager (injected securely at runtime)
         container_secrets = {
@@ -103,6 +120,29 @@ class OrganizationServiceStack(cdk.Stack):
                 db_secret, field="password"
             ),
         }
+
+        # Add OpenSearch authentication if configured
+        if opensearch_endpoint:
+            # Import OpenSearch credentials secret
+            opensearch_secret = sm.Secret.from_secret_name_v2(
+                self,
+                "OpenSearchSecret",
+                f"{stack_prefix}-opensearch-credentials",
+            )
+            container_secrets.update(
+                {
+                    "SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_BACKEND_USERNAME": (
+                        ecs.Secret.from_secrets_manager(
+                            opensearch_secret, field="username"
+                        )
+                    ),
+                    "SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_BACKEND_PASSWORD": (
+                        ecs.Secret.from_secrets_manager(
+                            opensearch_secret, field="password"
+                        )
+                    ),
+                }
+            )
 
         # Create Fargate service for the Organization Service
         service_construct = OpenchalllengesFargateService(
@@ -120,6 +160,9 @@ class OrganizationServiceStack(cdk.Stack):
             desired_count=1,
             target_group=None,  # Not directly exposed to ALB initially
         )
+
+        # Note: OpenSearch security group rules are configured in app.py
+        # to avoid cyclic dependencies between stacks
 
         # Export service for reference
         self.service = service_construct.service
