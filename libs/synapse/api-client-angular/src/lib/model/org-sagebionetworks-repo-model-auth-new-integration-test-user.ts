@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelAuthIdentityProvider } from './org-sagebionetworks-repo-model-auth-identity-provider';
 
 /**
  * Administrative object.  Used to create users for integration tests.  All fields besides username can be null
@@ -32,4 +33,5 @@ export interface OrgSagebionetworksRepoModelAuthNewIntegrationTestUser {
    * True if a verification approved states should be added for the user
    */
   validatedUser?: boolean;
+  identityProvider?: OrgSagebionetworksRepoModelAuthIdentityProvider;
 }

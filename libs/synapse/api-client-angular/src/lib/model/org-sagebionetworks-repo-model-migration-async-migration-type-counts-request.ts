@@ -23,7 +23,10 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
       'org.sagebionetworks.repo.model.migration.AsyncMigrationTypeCountsRequest' as ConcreteTypeEnum,
   };
   export type TypesEnum =
+    | 'REALM'
+    | 'REALM_IDP'
     | 'PRINCIPAL'
+    | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
@@ -151,7 +154,10 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     | 'RECORDSET_VALIDATION_STATS'
     | 'CHANGE';
   export const TypesEnum = {
+    Realm: 'REALM' as TypesEnum,
+    RealmIdp: 'REALM_IDP' as TypesEnum,
     Principal: 'PRINCIPAL' as TypesEnum,
+    RealmPrincipal: 'REALM_PRINCIPAL' as TypesEnum,
     GroupMembers: 'GROUP_MEMBERS' as TypesEnum,
     Credential: 'CREDENTIAL' as TypesEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as TypesEnum,

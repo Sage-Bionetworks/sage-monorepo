@@ -30,7 +30,10 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
       'org.sagebionetworks.repo.model.migration.MigrationTypeChecksum' as ConcreteTypeEnum,
   };
   export type MigrationTypeEnum =
+    | 'REALM'
+    | 'REALM_IDP'
     | 'PRINCIPAL'
+    | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
@@ -158,7 +161,10 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     | 'RECORDSET_VALIDATION_STATS'
     | 'CHANGE';
   export const MigrationTypeEnum = {
+    Realm: 'REALM' as MigrationTypeEnum,
+    RealmIdp: 'REALM_IDP' as MigrationTypeEnum,
     Principal: 'PRINCIPAL' as MigrationTypeEnum,
+    RealmPrincipal: 'REALM_PRINCIPAL' as MigrationTypeEnum,
     GroupMembers: 'GROUP_MEMBERS' as MigrationTypeEnum,
     Credential: 'CREDENTIAL' as MigrationTypeEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as MigrationTypeEnum,
@@ -288,7 +294,10 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     Change: 'CHANGE' as MigrationTypeEnum,
   };
   export type TypeEnum =
+    | 'REALM'
+    | 'REALM_IDP'
     | 'PRINCIPAL'
+    | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
@@ -416,7 +425,10 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     | 'RECORDSET_VALIDATION_STATS'
     | 'CHANGE';
   export const TypeEnum = {
+    Realm: 'REALM' as TypeEnum,
+    RealmIdp: 'REALM_IDP' as TypeEnum,
     Principal: 'PRINCIPAL' as TypeEnum,
+    RealmPrincipal: 'REALM_PRINCIPAL' as TypeEnum,
     GroupMembers: 'GROUP_MEMBERS' as TypeEnum,
     Credential: 'CREDENTIAL' as TypeEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as TypeEnum,

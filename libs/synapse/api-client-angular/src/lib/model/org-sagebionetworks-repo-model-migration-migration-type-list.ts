@@ -16,7 +16,10 @@ export interface OrgSagebionetworksRepoModelMigrationMigrationTypeList {
 }
 export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
   export type ListEnum =
+    | 'REALM'
+    | 'REALM_IDP'
     | 'PRINCIPAL'
+    | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
@@ -144,7 +147,10 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'RECORDSET_VALIDATION_STATS'
     | 'CHANGE';
   export const ListEnum = {
+    Realm: 'REALM' as ListEnum,
+    RealmIdp: 'REALM_IDP' as ListEnum,
     Principal: 'PRINCIPAL' as ListEnum,
+    RealmPrincipal: 'REALM_PRINCIPAL' as ListEnum,
     GroupMembers: 'GROUP_MEMBERS' as ListEnum,
     Credential: 'CREDENTIAL' as ListEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as ListEnum,
