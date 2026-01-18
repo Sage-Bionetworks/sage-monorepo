@@ -77,9 +77,12 @@ class AuthServiceStack(cdk.Stack):
             "SPRING_PROFILES_ACTIVE": environment,
             # PostgreSQL connection: shared database with dedicated schema
             # Using PostgreSQL schema isolation (like other services)
+            # currentSchema parameter sets PostgreSQL search_path to ensure
+            # Spring OAuth2 JDBC queries find tables in the auth schema
             "SPRING_DATASOURCE_URL": (
                 f"jdbc:postgresql://{database.db_instance_endpoint_address}:"
                 f"{database.db_instance_endpoint_port}/openchallenges"
+                f"?currentSchema=auth"
             ),
             "SPRING_DATASOURCE_DRIVER_CLASS_NAME": "org.postgresql.Driver",
             # Configure Hibernate to use dedicated schema for data isolation

@@ -47,17 +47,36 @@ class AlbStack(cdk.Stack):
         self.alb = alb_construct.alb
         self.security_group = alb_construct.security_group
 
-        # Create target group for the app service
+        # Create target group for the app service (Angular frontend)
         # This will be used by the Fargate service
         self.app_target_group = elbv2.ApplicationTargetGroup(
             self,
             "AppTargetGroup",
             vpc=vpc,
-            port=80,  # nginx port (change to 4200 for openchallenges-app)
+            port=80,  # nginx port
             protocol=elbv2.ApplicationProtocol.HTTP,
             target_type=elbv2.TargetType.IP,
             health_check=elbv2.HealthCheck(
                 path="/",
+                interval=cdk.Duration.seconds(30),
+                timeout=cdk.Duration.seconds(5),
+                healthy_threshold_count=2,
+                unhealthy_threshold_count=3,
+            ),
+            deregistration_delay=cdk.Duration.seconds(30),
+        )
+
+        # Create target group for the API Gateway service
+        # API Gateway routes traffic to backend services (Auth, Challenge, Org, Image)
+        self.api_gateway_target_group = elbv2.ApplicationTargetGroup(
+            self,
+            "ApiGatewayTargetGroup",
+            vpc=vpc,
+            port=8082,  # API Gateway port
+            protocol=elbv2.ApplicationProtocol.HTTP,
+            target_type=elbv2.TargetType.IP,
+            health_check=elbv2.HealthCheck(
+                path="/actuator/health",  # Spring Boot Actuator health endpoint
                 interval=cdk.Duration.seconds(30),
                 timeout=cdk.Duration.seconds(5),
                 healthy_threshold_count=2,
@@ -100,7 +119,20 @@ class AlbStack(cdk.Stack):
                 ),
             )
 
-            # Default action for HTTPS: forward to app service
+            # Route API traffic to API Gateway (priority 2)
+            # Includes: /api/*, /oauth2/*, /.well-known/*
+            https_listener.add_action(
+                "ApiGateway",
+                priority=2,
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(
+                        ["/api/*", "/oauth2/*", "/.well-known/*"]
+                    )
+                ],
+                action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
+            )
+
+            # Default action for HTTPS: forward to app service (frontend)
             https_listener.add_action(
                 "DefaultHttps",
                 action=elbv2.ListenerAction.forward([self.app_target_group]),
@@ -149,7 +181,20 @@ class AlbStack(cdk.Stack):
                 ),
             )
 
-            # Default action for HTTP: forward to app service
+            # Route API traffic to API Gateway (priority 2)
+            # Includes: /api/*, /oauth2/*, /.well-known/*
+            http_listener.add_action(
+                "ApiGateway",
+                priority=2,
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(
+                        ["/api/*", "/oauth2/*", "/.well-known/*"]
+                    )
+                ],
+                action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
+            )
+
+            # Default action for HTTP: forward to app service (frontend)
             http_listener.add_action(
                 "DefaultHttp",
                 action=elbv2.ListenerAction.forward([self.app_target_group]),

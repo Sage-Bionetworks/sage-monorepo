@@ -60,6 +60,13 @@ public final class RouteConfigRegistry {
       }
     }
 
+    // HEAD request fallback: treat HEAD as GET for route configuration lookup
+    // HTTP HEAD requests should have the same behavior as GET (authentication, authorization)
+    // but without a response body
+    if ("HEAD".equals(normalizedMethod)) {
+      return getRouteConfig("GET", path);
+    }
+
     return Optional.empty();
   }
 

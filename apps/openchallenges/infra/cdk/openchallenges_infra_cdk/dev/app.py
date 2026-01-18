@@ -12,6 +12,7 @@ from openchallenges_infra_cdk.shared.config import (
     get_stack_prefix,
 )
 from openchallenges_infra_cdk.shared.stacks.alb_stack import AlbStack
+from openchallenges_infra_cdk.shared.stacks.api_gateway_stack import ApiGatewayStack
 from openchallenges_infra_cdk.shared.stacks.app_service_stack import AppServiceStack
 from openchallenges_infra_cdk.shared.stacks.auth_service_stack import AuthServiceStack
 from openchallenges_infra_cdk.shared.stacks.bastion_stack import BastionStack
@@ -216,7 +217,7 @@ def main() -> None:
     )
 
     # Create Image service stack (stateless, no database)
-    ImageServiceStack(
+    image_service_stack = ImageServiceStack(
         app,
         f"{stack_prefix}-image-service",
         stack_prefix=stack_prefix,
@@ -234,7 +235,7 @@ def main() -> None:
     )
 
     # Create Auth service stack (depends on database, ECS cluster)
-    AuthServiceStack(
+    auth_service_stack = AuthServiceStack(
         app,
         f"{stack_prefix}-auth-service",
         stack_prefix=stack_prefix,
@@ -298,6 +299,79 @@ def main() -> None:
             f"Thumbor image processing service for OpenChallenges "
             f"{environment} environment"
         ),
+    )
+
+    # Create API Gateway stack (depends on ALB and ECS cluster)
+    # API Gateway routes traffic to Auth, Challenge, Organization, and Image services
+    # Note: Dependencies on service stacks are automatic via CloudFormation references
+    api_gateway_stack = ApiGatewayStack(
+        app,
+        f"{stack_prefix}-api-gateway",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        target_group=alb_stack.api_gateway_target_group,
+        app_version=app_version,
+        description=(f"API Gateway for OpenChallenges {environment} environment"),
+    )
+    api_gateway_stack.add_dependency(alb_stack)
+    api_gateway_stack.add_dependency(ecs_cluster_stack)
+
+    # Configure security group rules for API Gateway
+    # Use CfnSecurityGroupIngress to avoid cyclic dependencies
+    # Allow API Gateway to communicate with backend services
+    ec2.CfnSecurityGroupIngress(
+        api_gateway_stack,
+        "AuthServiceIngress",
+        ip_protocol="tcp",
+        from_port=8087,
+        to_port=8087,
+        source_security_group_id=api_gateway_stack.security_group.security_group_id,
+        group_id=auth_service_stack.security_group.security_group_id,
+        description="Allow API Gateway to access Auth service",
+    )
+    ec2.CfnSecurityGroupIngress(
+        api_gateway_stack,
+        "ChallengeServiceIngress",
+        ip_protocol="tcp",
+        from_port=8085,
+        to_port=8085,
+        source_security_group_id=api_gateway_stack.security_group.security_group_id,
+        group_id=challenge_service_stack.security_group.security_group_id,
+        description="Allow API Gateway to access Challenge service",
+    )
+    ec2.CfnSecurityGroupIngress(
+        api_gateway_stack,
+        "OrganizationServiceIngress",
+        ip_protocol="tcp",
+        from_port=8084,
+        to_port=8084,
+        source_security_group_id=api_gateway_stack.security_group.security_group_id,
+        group_id=organization_service_stack.security_group.security_group_id,
+        description="Allow API Gateway to access Organization service",
+    )
+    ec2.CfnSecurityGroupIngress(
+        api_gateway_stack,
+        "ImageServiceIngress",
+        ip_protocol="tcp",
+        from_port=8086,
+        to_port=8086,
+        source_security_group_id=api_gateway_stack.security_group.security_group_id,
+        group_id=image_service_stack.security_group.security_group_id,
+        description="Allow API Gateway to access Image service",
+    )
+    # Allow API Gateway to receive traffic from ALB
+    ec2.CfnSecurityGroupIngress(
+        api_gateway_stack,
+        "AlbIngress",
+        ip_protocol="tcp",
+        from_port=8082,
+        to_port=8082,
+        source_security_group_id=alb_stack.security_group.security_group_id,
+        group_id=api_gateway_stack.security_group.security_group_id,
+        description="Allow ALB to forward traffic to API Gateway",
     )
 
     app.synth()

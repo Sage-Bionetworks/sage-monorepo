@@ -26,13 +26,13 @@ public class OAuth2JwtService {
   private final String authServiceOAuth2BaseUrl;
 
   public OAuth2JwtService(
-      @Value("${openchallenges.auth.service-url:http://openchallenges-auth-service:8087/v1}") String authServiceUrl,
+      @Value("${app.auth.service-url:http://openchallenges-auth-service:8087/v1}") String authServiceUrl,
       WebClient.Builder webClientBuilder) {
     this.authServiceBaseUrl = authServiceUrl;
     // OAuth2 endpoints are at the root level, not under /v1
     this.authServiceOAuth2BaseUrl = authServiceUrl.replace("/v1", "");
     this.webClient = webClientBuilder.build();
-    
+
     log.info("OAuth2JwtService initialized with auth service URL: {}", authServiceUrl);
   }
 
