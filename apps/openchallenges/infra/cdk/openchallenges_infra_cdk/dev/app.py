@@ -13,7 +13,6 @@ from openchallenges_infra_cdk.shared.config import (
 )
 from openchallenges_infra_cdk.shared.stacks.alb_stack import AlbStack
 from openchallenges_infra_cdk.shared.stacks.api_gateway_stack import ApiGatewayStack
-from openchallenges_infra_cdk.shared.stacks.app_service_stack import AppServiceStack
 from openchallenges_infra_cdk.shared.stacks.auth_service_stack import AuthServiceStack
 from openchallenges_infra_cdk.shared.stacks.bastion_stack import BastionStack
 from openchallenges_infra_cdk.shared.stacks.bucket_stack import BucketStack
@@ -31,6 +30,7 @@ from openchallenges_infra_cdk.shared.stacks.organization_service_stack import (
 )
 from openchallenges_infra_cdk.shared.stacks.thumbor_stack import ThumborStack
 from openchallenges_infra_cdk.shared.stacks.vpc_stack import VpcStack
+from openchallenges_infra_cdk.shared.stacks.web_stack import WebStack
 
 
 def main() -> None:
@@ -51,6 +51,8 @@ def main() -> None:
     opensearch_admin_username = os.getenv(
         "OPENSEARCH_ADMIN_USERNAME", "opensearch-admin"
     )
+    # Data updated date - displayed in web app footer (REQUIRED)
+    data_updated_on = os.getenv("DATA_UPDATED_ON", "")
 
     # OAuth credentials for auth service (required for deployment)
     # These are immediately stored in AWS Secrets Manager and never exposed
@@ -58,6 +60,14 @@ def main() -> None:
     google_client_secret = os.getenv("GOOGLE_CLIENT_SECRET", "")
     synapse_client_id = os.getenv("SYNAPSE_CLIENT_ID", "")
     synapse_client_secret = os.getenv("SYNAPSE_CLIENT_SECRET", "")
+
+    # Validate required configuration (fail fast at deployment time)
+    if not data_updated_on:
+        raise ValueError(
+            "DATA_UPDATED_ON environment variable is required. "
+            "Please set it to the date when OpenChallenges data was last updated "
+            "(format: YYYY-MM-DD, e.g., 2025-10-19)."
+        )
 
     # Add common tags
     cdk.Tags.of(app).add("Environment", environment)
@@ -253,14 +263,15 @@ def main() -> None:
         description=f"Auth service for OpenChallenges {environment} environment",
     )
 
-    # Create app service stack (depends on ECS cluster and ALB)
+    # Create web stack (Angular SSR app) - depends on ECS cluster and ALB
     # Uses ALB DNS name by default, or custom FQDN if provided
     use_https = certificate_arn is not None and certificate_arn.strip() != ""
-    app_service_stack = AppServiceStack(
+    web_stack = WebStack(
         app,
-        f"{stack_prefix}-app-service",
+        f"{stack_prefix}-web",
         stack_prefix=stack_prefix,
         environment=environment,
+        developer_name=developer_name,
         vpc=vpc_stack.vpc,
         cluster=ecs_cluster_stack.cluster,
         target_group=alb_stack.app_target_group,
@@ -268,10 +279,11 @@ def main() -> None:
         alb_dns_name=alb_stack.alb.load_balancer_dns_name,
         fqdn=fqdn if fqdn else None,
         use_https=use_https,
-        description=f"App service for OpenChallenges {environment} environment",
+        data_updated_on=data_updated_on,
+        description=f"Web client for OpenChallenges {environment} environment",
     )
-    app_service_stack.add_dependency(ecs_cluster_stack)
-    app_service_stack.add_dependency(alb_stack)
+    web_stack.add_dependency(ecs_cluster_stack)
+    web_stack.add_dependency(alb_stack)
 
     # Create bucket stack
     bucket_stack = BucketStack(
