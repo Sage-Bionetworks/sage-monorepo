@@ -3,6 +3,7 @@
 import aws_cdk as cdk
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_ecs as ecs
+from aws_cdk import aws_elasticloadbalancingv2 as elbv2
 from aws_cdk import aws_s3 as s3
 from constructs import Construct
 
@@ -23,6 +24,7 @@ class ThumborStack(cdk.Stack):
         vpc: ec2.IVpc,
         cluster: ecs.ICluster,
         image_bucket: s3.IBucket,
+        target_group: elbv2.IApplicationTargetGroup,
         developer_name: str | None = None,
         app_version: str = "edge",
         security_key: str = "changeme",
@@ -39,6 +41,7 @@ class ThumborStack(cdk.Stack):
             vpc: VPC where the service will run
             cluster: ECS cluster
             image_bucket: S3 bucket for storing images
+            target_group: ALB target group for the service
             developer_name: Developer name for dev environment (optional)
             app_version: Application version (Docker image tag)
             security_key: Security key for signed Thumbor URLs
@@ -89,13 +92,11 @@ class ThumborStack(cdk.Stack):
             memory_limit_mib=512,  # 512 MB - sufficient for Thumbor
             environment=container_env,
             desired_count=1,
-            target_group=None,  # Can be exposed via ALB later
+            target_group=target_group,  # Exposed via ALB at /img/* path
         )
 
         # Grant S3 read access to the image bucket
-        image_bucket.bucket.grant_read(
-            service_construct.service.task_definition.task_role
-        )
+        image_bucket.grant_read(service_construct.service.task_definition.task_role)
 
         # Export service for reference
         self.service = service_construct.service

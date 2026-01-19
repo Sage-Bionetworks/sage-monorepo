@@ -227,6 +227,11 @@ def main() -> None:
     )
 
     # Create Image service stack (stateless, no database)
+    # Thumbor is exposed via ALB at /img/ path for public access
+    protocol = "https" if (certificate_arn and certificate_arn.strip()) else "http"
+    thumbor_base_url = fqdn if fqdn else alb_stack.alb.load_balancer_dns_name
+    thumbor_public_url = f"{protocol}://{thumbor_base_url}/img/"
+
     image_service_stack = ImageServiceStack(
         app,
         f"{stack_prefix}-image-service",
@@ -236,10 +241,8 @@ def main() -> None:
         vpc=vpc_stack.vpc,
         cluster=ecs_cluster_stack.cluster,
         app_version=app_version,
-        # Thumbor configuration - use service discovery URL
-        thumbor_host=(
-            f"http://openchallenges-thumbor.{ecs_cluster_stack.cluster.cluster_name}.local:8889/"
-        ),
+        # Thumbor configuration - use public ALB URL for image URLs
+        thumbor_host=thumbor_public_url,
         thumbor_security_key="changeme",
         description=f"Image service for OpenChallenges {environment} environment",
     )
@@ -295,8 +298,8 @@ def main() -> None:
         description=f"S3 buckets for OpenChallenges {environment} environment",
     )
 
-    # Create Thumbor stack (depends on bucket and ECS cluster)
-    ThumborStack(
+    # Create Thumbor stack (depends on bucket, ECS cluster, and ALB)
+    thumbor_stack = ThumborStack(
         app,
         f"{stack_prefix}-thumbor",
         stack_prefix=stack_prefix,
@@ -304,7 +307,8 @@ def main() -> None:
         developer_name=developer_name,
         vpc=vpc_stack.vpc,
         cluster=ecs_cluster_stack.cluster,
-        image_bucket=bucket_stack.image_bucket,
+        image_bucket=bucket_stack.image_bucket.bucket,
+        target_group=alb_stack.thumbor_target_group,
         app_version=app_version,
         security_key="changeme",  # TODO: Use secrets manager in production
         description=(
@@ -312,6 +316,9 @@ def main() -> None:
             f"{environment} environment"
         ),
     )
+    thumbor_stack.add_dependency(bucket_stack)
+    thumbor_stack.add_dependency(ecs_cluster_stack)
+    thumbor_stack.add_dependency(alb_stack)
 
     # Create API Gateway stack (depends on ALB and ECS cluster)
     # API Gateway routes traffic to Auth, Challenge, Organization, and Image services

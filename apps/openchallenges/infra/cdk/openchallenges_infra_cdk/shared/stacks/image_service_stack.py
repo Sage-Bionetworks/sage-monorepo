@@ -63,6 +63,8 @@ class ImageServiceStack(cdk.Stack):
             # Thumbor configuration for image processing
             "APP_THUMBOR_HOST": thumbor_host,
             "APP_THUMBOR_SECURITY_KEY": thumbor_security_key,
+            # Disable placeholder images (use actual images from S3)
+            "APP_PLACEHOLDER_ENABLED": "false",
         }
 
         # Create Fargate service for the Image Service
