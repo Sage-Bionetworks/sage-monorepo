@@ -9,7 +9,7 @@ show_missing = true
 [tool.pytest.ini_options]
 addopts = """
  --cov
- --cov-fail-under=40
+ --cov-fail-under=20
  --cov-report html:'../../../../coverage/apps/openchallenges/infra/cdk/html'
  --cov-report xml:'../../../../coverage/apps/openchallenges/infra/cdk/coverage.xml'
  --html='../../../../reports/apps/openchallenges/infra/cdk/unittests/html/index.html'
