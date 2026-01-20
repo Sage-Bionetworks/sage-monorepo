@@ -833,6 +833,8 @@ tags:
        </p>
   - name: Project Storage Services
     description: Services to manage project storage usage and limits.
+  - name: Realm Services
+    description: Auto-generated description
   - name: Recycle Bin Services
     description: |-
       The recycle bin (or trash can) is the special folder that holds the deleted entities for users.
@@ -2933,6 +2935,70 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleRestoreResponse'
+  /repo/v1/realm/list:
+    get:
+      tags:
+        - Realm Services
+      operationId: get-/repo/v1/realm/list
+      parameters: []
+      responses:
+        '200':
+          description: list of the IDs of the existing realms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.RealmIdList'
+  /repo/v1/realm/{id}:
+    get:
+      tags:
+        - Realm Services
+      operationId: get-/repo/v1/realm/{id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.Realm'
+  /repo/v1/realm/{id}/principals:
+    get:
+      tags:
+        - Realm Services
+      operationId: get-/repo/v1/realm/{id}/principals
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.RealmPrincipal'
+  /repo/v1/realm/principals:
+    get:
+      tags:
+        - Realm Services
+      operationId: get-/repo/v1/realm/principals
+      parameters: []
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.RealmPrincipal'
   /repo/v1/project/{projectId}/forum:
     get:
       tags:
@@ -15152,7 +15218,10 @@ components:
             type: string
             description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
             enum:
+              - REALM
+              - REALM_IDP
               - PRINCIPAL
+              - REALM_PRINCIPAL
               - GROUP_MEMBERS
               - CREDENTIAL
               - AUTHENTICATED_ON
@@ -15390,6 +15459,25 @@ components:
           type: boolean
           description: When true, the actual sum of the files sizes is greater than the value provided with 'sumFileSizesBytes'.  When false, the actual sum of the files sizes is equlas the value provided with 'sumFileSizesBytes'
       description: The sum of the file size for all files in the given view query. Use mask = 0x40 to include in the bundle.
+    org.sagebionetworks.repo.model.auth.Realm:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the realm
+        name:
+          type: string
+          description: Unique name of the realm
+        createdOn:
+          type: string
+          description: The date this realm was created.
+        identityProvider:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.IdentityProvider'
+            description: Interface for an identity provider
+          description: Identity providers which may be used in the realm. No two realms may share an identity provider.
+      description: Security realm for partitioning principals and resources
     org.sagebionetworks.repo.model.download.DownloadListPackageRequest:
       type: object
       properties:
@@ -15528,7 +15616,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -15659,7 +15750,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -16798,6 +16892,9 @@ components:
           type: string
         modifiedBy:
           type: string
+        assigneePrincipalId:
+          type: string
+          description: The principal ID of the user or team assigned to this task. Null if unassigned. For metadata tasks, determines the owner of the grid session. Team members can all join grid sessions owned by their team, while user-owned grid sessions are restricted to that user only.
         taskProperties:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.curation.CurationTaskProperties'
           description: The properties of a CurationTask
@@ -16880,7 +16977,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -17742,7 +17842,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -17950,6 +18053,9 @@ components:
         recordSetId:
           type: string
           description: When provided, the grid will be initialized using the CSV file stored for the given record set id. The grid columns will match the header of the CSV. Optional, if present the initialQuery cannot be included.
+        ownerPrincipalId:
+          type: string
+          description: "The owner of the grid determines who is allowed to join and participate in the grid's session. The default owner will be the user that started the grid session, but only that user will have access to the grid. In order to allow other users to access the grid, set this value to the id of a team. When a team ID is provided as the owner, all members of that team will have equal access to the grid. Note: If a team ID is provided, the creator of the grid must be a member of the team."
       description: Start a job to create a new Grid session.
       required:
         - concreteType
@@ -18202,7 +18308,10 @@ components:
     org.sagebionetworks.repo.model.migration.MigrationType:
       type: string
       enum:
+        - REALM
+        - REALM_IDP
         - PRINCIPAL
+        - REALM_PRINCIPAL
         - GROUP_MEMBERS
         - CREDENTIAL
         - AUTHENTICATED_ON
@@ -21076,6 +21185,24 @@ components:
       enum:
         - TABLE_NAME
         - MIGRATION_TYPE_NAME
+    org.sagebionetworks.repo.model.auth.OAuthIdentityProvider:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Indicates which implementation of IdentityProvider the object represents.
+          enum:
+            - org.sagebionetworks.repo.model.auth.OAuthIdentityProvider
+        provider:
+          type: string
+          description: Supported OAuth providers
+          enum:
+            - GOOGLE_OAUTH_2_0
+            - ORCID
+            - ARCUS_BIOSCIENCES
+      description: Identity Provider representing an OAuth Provider
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.schema.GetValidationSchemaRequest:
       type: object
       properties:
@@ -21492,6 +21619,8 @@ components:
         creationDate:
           type: string
           description: The date this user or group was created.
+        realmId:
+          type: string
         uri:
           type: string
       description: JSON schema for UserGroup POJO
@@ -23411,7 +23540,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -25625,6 +25757,25 @@ components:
             type: string
           description: The List of Rest Resources
       description: JSON schema for the REST Resource List POJO
+    org.sagebionetworks.repo.model.auth.RealmPrincipal:
+      type: object
+      properties:
+        realmId:
+          type: string
+          description: ID of the realm with which the principals are associated
+        anonymousUser:
+          type: string
+          description: The principal id representing an anonymous user in the realm
+        publicGroup:
+          type: string
+          description: The principal id representing all users, including unauthenticated ones, in the realm
+        authenticatedUsers:
+          type: string
+          description: The principal id representing all authenticated users in the realm
+        administrativeGroup:
+          type: string
+          description: The principal id representing the administrative Group in the realm
+      description: Principals associated with a security realm
     PaginatedResultsOfReference:
       type: object
       properties:
@@ -25811,7 +25962,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -26224,6 +26378,20 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileEvent'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.TableStatusChangeEvent'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.message.LocalStackChangeMesssage'
+      required:
+        - concreteType
+      discriminator:
+        propertyName: concreteType
+    org.sagebionetworks.repo.model.auth.IdentityProvider:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Indicates which implementation of IdentityProvider the object represents.
+      description: Interface for an identity provider
+      oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.OAuthIdentityProvider'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.SynapseIdentityProvider'
       required:
         - concreteType
       discriminator:
@@ -27227,7 +27395,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -28221,6 +28392,14 @@ components:
         - SET_NULL
         - SET_UNDEFINED
         - SKIP_UPDATE
+    org.sagebionetworks.repo.model.auth.RealmIdList:
+      type: object
+      properties:
+        realms:
+          type: array
+          items:
+            type: string
+      description: List of IDs of realms
     org.sagebionetworks.repo.model.limits.ProjectStorageUsage:
       type: object
       properties:
@@ -29019,6 +29198,17 @@ components:
           type: boolean
           description: True if the alias is valid for the passed type.
       description: Response to an alias check request.
+    org.sagebionetworks.repo.model.auth.SynapseIdentityProvider:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Indicates which implementation of IdentityProvider the object represents.
+          enum:
+            - org.sagebionetworks.repo.model.auth.SynapseIdentityProvider
+      description: Identity Provider representing Synapse itself
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.dataaccess.AccessorGroupRequest:
       type: object
       properties:
@@ -29055,7 +29245,10 @@ components:
             type: string
             description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
             enum:
+              - REALM
+              - REALM_IDP
               - PRINCIPAL
+              - REALM_PRINCIPAL
               - GROUP_MEMBERS
               - CREDENTIAL
               - AUTHENTICATED_ON
@@ -31523,7 +31716,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -32088,7 +32284,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -32234,7 +32433,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -32626,6 +32828,9 @@ components:
         validatedUser:
           type: boolean
           description: True if a verification approved states should be added for the user
+        identityProvider:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.IdentityProvider'
+          description: Interface for an identity provider
       description: Administrative object.  Used to create users for integration tests.  All fields besides username can be null
     org.sagebionetworks.repo.model.table.SnapshotRequest:
       type: object
@@ -32890,7 +33095,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -33823,6 +34031,9 @@ components:
         sourceEntityId:
           type: string
           description: The synId of the table/view/csv that this grid was cloned from.
+        ownerPrincipalId:
+          type: string
+          description: The principal ID (user or team) that owns this grid session. If the owner is a user, only that user can access the grid. If the owner is a team, all members of that team have equal access to the grid.
       description: Basic information about a grid session.
     org.sagebionetworks.repo.model.file.FileEvent:
       type: object
@@ -34154,7 +34365,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -34660,7 +34874,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON
@@ -35693,7 +35910,10 @@ components:
           type: string
           description: 'JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.'
           enum:
+            - REALM
+            - REALM_IDP
             - PRINCIPAL
+            - REALM_PRINCIPAL
             - GROUP_MEMBERS
             - CREDENTIAL
             - AUTHENTICATED_ON

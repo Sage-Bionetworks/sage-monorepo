@@ -48,4 +48,8 @@ export interface OrgSagebionetworksRepoModelGridGridSession {
    * The synId of the table/view/csv that this grid was cloned from.
    */
   sourceEntityId?: string;
+  /**
+   * The principal ID (user or team) that owns this grid session. If the owner is a user, only that user can access the grid. If the owner is a team, all members of that team have equal access to the grid.
+   */
+  ownerPrincipalId?: string;
 }

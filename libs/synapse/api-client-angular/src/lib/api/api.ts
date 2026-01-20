@@ -66,6 +66,8 @@ export * from './project-settings-services.service';
 import { ProjectSettingsServicesService } from './project-settings-services.service';
 export * from './project-storage-services.service';
 import { ProjectStorageServicesService } from './project-storage-services.service';
+export * from './realm-services.service';
+import { RealmServicesService } from './realm-services.service';
 export * from './recycle-bin-services.service';
 import { RecycleBinServicesService } from './recycle-bin-services.service';
 export * from './search-services.service';
@@ -127,6 +129,7 @@ export const APIS = [
   PrincipalServicesService,
   ProjectSettingsServicesService,
   ProjectStorageServicesService,
+  RealmServicesService,
   RecycleBinServicesService,
   SearchServicesService,
   StatisticsServicesService,

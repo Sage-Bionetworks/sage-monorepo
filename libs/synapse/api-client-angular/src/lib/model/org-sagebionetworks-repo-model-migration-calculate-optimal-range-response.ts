@@ -31,7 +31,10 @@ export namespace OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeRespon
       'org.sagebionetworks.repo.model.migration.CalculateOptimalRangeResponse' as ConcreteTypeEnum,
   };
   export type MigrationTypeEnum =
+    | 'REALM'
+    | 'REALM_IDP'
     | 'PRINCIPAL'
+    | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
@@ -159,7 +162,10 @@ export namespace OrgSagebionetworksRepoModelMigrationCalculateOptimalRangeRespon
     | 'RECORDSET_VALIDATION_STATS'
     | 'CHANGE';
   export const MigrationTypeEnum = {
+    Realm: 'REALM' as MigrationTypeEnum,
+    RealmIdp: 'REALM_IDP' as MigrationTypeEnum,
     Principal: 'PRINCIPAL' as MigrationTypeEnum,
+    RealmPrincipal: 'REALM_PRINCIPAL' as MigrationTypeEnum,
     GroupMembers: 'GROUP_MEMBERS' as MigrationTypeEnum,
     Credential: 'CREDENTIAL' as MigrationTypeEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as MigrationTypeEnum,

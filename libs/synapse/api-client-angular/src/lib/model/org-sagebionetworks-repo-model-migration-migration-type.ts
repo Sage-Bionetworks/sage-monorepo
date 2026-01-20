@@ -9,7 +9,10 @@
  */
 
 export type OrgSagebionetworksRepoModelMigrationMigrationType =
+  | 'REALM'
+  | 'REALM_IDP'
   | 'PRINCIPAL'
+  | 'REALM_PRINCIPAL'
   | 'GROUP_MEMBERS'
   | 'CREDENTIAL'
   | 'AUTHENTICATED_ON'
@@ -138,7 +141,10 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'CHANGE';
 
 export const OrgSagebionetworksRepoModelMigrationMigrationType = {
+  Realm: 'REALM' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  RealmIdp: 'REALM_IDP' as OrgSagebionetworksRepoModelMigrationMigrationType,
   Principal: 'PRINCIPAL' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  RealmPrincipal: 'REALM_PRINCIPAL' as OrgSagebionetworksRepoModelMigrationMigrationType,
   GroupMembers: 'GROUP_MEMBERS' as OrgSagebionetworksRepoModelMigrationMigrationType,
   Credential: 'CREDENTIAL' as OrgSagebionetworksRepoModelMigrationMigrationType,
   AuthenticatedOn: 'AUTHENTICATED_ON' as OrgSagebionetworksRepoModelMigrationMigrationType,

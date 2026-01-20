@@ -37,5 +37,9 @@ export interface OrgSagebionetworksRepoModelCurationCurationTask {
   modifiedOn?: string;
   createdBy?: string;
   modifiedBy?: string;
+  /**
+   * The principal ID of the user or team assigned to this task. Null if unassigned. For metadata tasks, determines the owner of the grid session. Team members can all join grid sessions owned by their team, while user-owned grid sessions are restricted to that user only.
+   */
+  assigneePrincipalId?: string;
   taskProperties?: OrgSagebionetworksRepoModelCurationCurationTaskProperties;
 }

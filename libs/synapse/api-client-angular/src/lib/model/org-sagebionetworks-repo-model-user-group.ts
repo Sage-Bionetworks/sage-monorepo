@@ -28,5 +28,6 @@ export interface OrgSagebionetworksRepoModelUserGroup {
    * The date this user or group was created.
    */
   creationDate?: string;
+  realmId?: string;
   uri?: string;
 }
