@@ -72,7 +72,7 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
         operations.add(buildDisplayGeneSymbolField());
       }
 
-      operations.add(buildLowercaseSortFields(pageable.getSort()));
+      buildLowercaseSortFields(operations, pageable.getSort());
 
       // Add sorting (uses lowercase fields for case-insensitive sorting)
       addSortOperation(operations, pageable.getSort());
@@ -143,11 +143,12 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
    * for case-insensitive sorting (DocumentDB compatible).
    *
    * <p>Applies $toLower to string fields only.
+   * Only adds the operation if there are string fields to transform.
    *
+   * @param operations the list of aggregation operations to add to
    * @param sort the Sort object containing the fields to sort by
-   * @return AggregationOperation that adds lowercase versions of string sort fields
    */
-  private AggregationOperation buildLowercaseSortFields(Sort sort) {
+  private void buildLowercaseSortFields(List<AggregationOperation> operations, Sort sort) {
     Document fields = new Document();
 
     for (Sort.Order order : sort) {
@@ -168,7 +169,10 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       }
     }
 
-    return context -> new Document("$addFields", fields);
+    // Only add $addFields if there are fields
+    if (!fields.isEmpty()) {
+      operations.add(context -> new Document("$addFields", fields));
+    }
   }
 
   /**

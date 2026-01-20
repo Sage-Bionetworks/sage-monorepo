@@ -33,8 +33,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class CustomDiseaseCorrelationRepositoryImpl
-  implements CustomDiseaseCorrelationRepository {
+public class CustomDiseaseCorrelationRepositoryImpl implements CustomDiseaseCorrelationRepository {
 
   private static final String COLLECTION_NAME = "disease_correlation";
   private static final String NAME_FIELD = "name";
@@ -62,7 +61,7 @@ public class CustomDiseaseCorrelationRepositoryImpl
       operations.add(Aggregation.match(matchCriteria));
 
       // Add lowercase versions of string sort fields for case-insensitive sorting
-      operations.add(buildLowercaseSortFields(pageable.getSort()));
+      buildLowercaseSortFields(operations, pageable.getSort());
 
       // Add sorting (uses lowercase fields for case-insensitive sorting)
       addSortOperation(operations, pageable.getSort());
@@ -93,11 +92,12 @@ public class CustomDiseaseCorrelationRepositoryImpl
    *
    * <p>Only applies $toLower to string fields. Non-string fields (like correlation result
    * objects) are excluded to prevent aggregation errors.
+   * Only adds the operation if there are string fields to transform.
    *
+   * @param operations the list of aggregation operations to add to
    * @param sort the Sort object containing the fields to sort by
-   * @return AggregationOperation that adds lowercase versions of string sort fields
    */
-  private AggregationOperation buildLowercaseSortFields(Sort sort) {
+  private void buildLowercaseSortFields(List<AggregationOperation> operations, Sort sort) {
     Document fields = new Document();
 
     for (Sort.Order order : sort) {
@@ -108,7 +108,10 @@ public class CustomDiseaseCorrelationRepositoryImpl
       }
     }
 
-    return context -> new Document("$addFields", fields);
+    // Only add $addFields if there are fields
+    if (!fields.isEmpty()) {
+      operations.add(context -> new Document("$addFields", fields));
+    }
   }
 
   /**
@@ -306,5 +309,4 @@ public class CustomDiseaseCorrelationRepositoryImpl
       operations.add(context -> new Document("$sort", sortDocument));
     }
   }
-
 }
