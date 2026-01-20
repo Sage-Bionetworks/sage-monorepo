@@ -40,7 +40,7 @@ class CustomDiseaseCorrelationRepositoryImplTest {
   void setUp() {
     repository = new CustomDiseaseCorrelationRepositoryImpl(mongoTemplate);
     when(aggregationResults.getMappedResults()).thenReturn(List.of());
-    when(countResults.getMappedResults()).thenReturn(List.of(new Document("total", 0)));
+    when(mongoTemplate.count(any(), eq("disease_correlation"))).thenReturn(0L);
   }
 
   @Test
@@ -61,8 +61,6 @@ class CustomDiseaseCorrelationRepositoryImplTest {
         eq(DiseaseCorrelationDocument.class)
       )
     ).thenReturn(aggregationResults);
-    when(mongoTemplate.aggregate(any(Aggregation.class), eq("disease_correlation"), eq(Document.class)))
-      .thenReturn(countResults);
 
     repository.findAll(pageable, query, List.of(), "Cluster A");
 
@@ -81,7 +79,10 @@ class CustomDiseaseCorrelationRepositoryImplTest {
 
     // Verify all 3 data filter fields are included in the aggregation
     assertTrue(aggregationString.contains("age"), "Aggregation should include age field");
-    assertTrue(aggregationString.contains("model_type"), "Aggregation should include model_type field");
+    assertTrue(
+      aggregationString.contains("model_type"),
+      "Aggregation should include model_type field"
+    );
     assertTrue(aggregationString.contains("name"), "Aggregation should include name field");
   }
 
@@ -101,8 +102,6 @@ class CustomDiseaseCorrelationRepositoryImplTest {
         eq(DiseaseCorrelationDocument.class)
       )
     ).thenReturn(aggregationResults);
-    when(mongoTemplate.aggregate(any(Aggregation.class), eq("disease_correlation"), eq(Document.class)))
-      .thenReturn(countResults);
 
     repository.findAll(pageable, query, List.of(), "Cluster A");
 
@@ -118,14 +117,17 @@ class CustomDiseaseCorrelationRepositoryImplTest {
 
     // Verify skip and limit are applied
     assertTrue(aggregationString.contains("$skip"), "Aggregation should include $skip");
-    assertTrue(aggregationString.contains("50"), "Aggregation should skip 50 items (page 2 * size 25)");
+    assertTrue(
+      aggregationString.contains("50"),
+      "Aggregation should skip 50 items (page 2 * size 25)"
+    );
     assertTrue(aggregationString.contains("$limit"), "Aggregation should include $limit");
     assertTrue(aggregationString.contains("25"), "Aggregation should limit to 25 items");
   }
 
   @Test
-  @DisplayName("should execute count aggregation without pagination")
-  void shouldExecuteCountAggregationWithoutPagination() {
+  @DisplayName("should use direct count instead of aggregation for performance")
+  void shouldUseDirectCountInsteadOfAggregation() {
     DiseaseCorrelationSearchQueryDto query = new DiseaseCorrelationSearchQueryDto();
     query.setAge(List.of("4 months"));
     query.setItemFilterType(ItemFilterTypeQueryDto.INCLUDE);
@@ -139,25 +141,15 @@ class CustomDiseaseCorrelationRepositoryImplTest {
         eq(DiseaseCorrelationDocument.class)
       )
     ).thenReturn(aggregationResults);
-    when(mongoTemplate.aggregate(any(Aggregation.class), eq("disease_correlation"), eq(Document.class)))
-      .thenReturn(countResults);
 
     repository.findAll(pageable, query, List.of(), "Cluster A");
 
-    // Verify count aggregation is executed (second call to aggregate with Document.class)
-    ArgumentCaptor<Aggregation> countAggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
-    verify(mongoTemplate).aggregate(
-      countAggregationCaptor.capture(),
+    // Verify mongoTemplate.count() is called for counting
+    verify(mongoTemplate).count(any(), eq("disease_correlation"));
+    verify(mongoTemplate, times(1)).aggregate(
+      any(Aggregation.class),
       eq("disease_correlation"),
-      eq(Document.class)
+      eq(DiseaseCorrelationDocument.class)
     );
-
-    Aggregation countAggregation = countAggregationCaptor.getValue();
-    String countAggregationString = countAggregation.toString();
-
-    // Verify count has $count stage but no $skip or $limit
-    assertTrue(countAggregationString.contains("$count"), "Count aggregation should include $count");
-    assertFalse(countAggregationString.contains("$skip"), "Count aggregation should not include $skip");
-    assertFalse(countAggregationString.contains("$limit"), "Count aggregation should not include $limit");
   }
 }
