@@ -21,6 +21,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -48,17 +49,20 @@ public class CustomDiseaseCorrelationRepositoryImpl
     String cluster
   ) {
     try {
+      // Build match criteria with all filters (shared by count and data queries)
+      Criteria matchCriteria = buildMatchCriteria(cluster, query, items);
+
+      // OPTIMIZATION: Use mongoTemplate.count() for counting (faster than aggregation)
+      // This uses indexes directly without loading documents or running $addFields
+      final long total = mongoTemplate.count(new Query(matchCriteria), COLLECTION_NAME);
+
       List<AggregationOperation> operations = new ArrayList<>();
+
+      // Add $match FIRST to filter documents before transformation
+      operations.add(Aggregation.match(matchCriteria));
 
       // Add lowercase versions of string sort fields for case-insensitive sorting
       operations.add(buildLowercaseSortFields(pageable.getSort()));
-
-      // Build match criteria with all filters
-      Criteria matchCriteria = buildMatchCriteria(cluster, query, items);
-      operations.add(Aggregation.match(matchCriteria));
-
-      // Count total before pagination
-      final long total = countDocuments(operations);
 
       // Add sorting (uses lowercase fields for case-insensitive sorting)
       addSortOperation(operations, pageable.getSort());
@@ -98,7 +102,7 @@ public class CustomDiseaseCorrelationRepositoryImpl
 
     for (Sort.Order order : sort) {
       String field = order.getProperty();
-      if (isStringField(field)) {
+      if (needsCaseInsensitiveSort(field)) {
         // For string fields, apply lowercase transformation
         fields.append(field + "_lower", new Document("$toLower", "$" + field));
       }
@@ -108,13 +112,13 @@ public class CustomDiseaseCorrelationRepositoryImpl
   }
 
   /**
-   * Checks if a field is a string field that requires case-insensitive sorting.
+   * Checks if a field needs case-insensitive sorting.
    * Non-string fields (like correlation result objects with numeric values) are excluded.
    *
    * @param field the field name
-   * @return true if the field is a string field
+   * @return true if the field needs case-insensitive sorting
    */
-  private boolean isStringField(String field) {
+  private boolean needsCaseInsensitiveSort(String field) {
     return (
       "name".equals(field) ||
       "age".equals(field) ||
@@ -285,7 +289,7 @@ public class CustomDiseaseCorrelationRepositoryImpl
       String field = order.getProperty();
 
       // Use lowercase version for string fields (case-insensitive sorting)
-      if (isStringField(field)) {
+      if (needsCaseInsensitiveSort(field)) {
         field = field + "_lower";
       }
       // Non-string fields (like correlation result objects) are sorted directly
@@ -303,24 +307,4 @@ public class CustomDiseaseCorrelationRepositoryImpl
     }
   }
 
-  /**
-   * Counts total documents matching the criteria (before pagination).
-   */
-  private long countDocuments(List<AggregationOperation> baseOperations) {
-    List<AggregationOperation> countOperations = new ArrayList<>(baseOperations);
-    countOperations.add(Aggregation.count().as("total"));
-
-    Aggregation countAggregation = Aggregation.newAggregation(countOperations);
-    AggregationResults<Document> countResults = mongoTemplate.aggregate(
-      countAggregation,
-      COLLECTION_NAME,
-      Document.class
-    );
-
-    List<Document> countList = countResults.getMappedResults();
-    if (countList.isEmpty()) {
-      return 0;
-    }
-    return countList.get(0).getInteger("total", 0);
-  }
 }
