@@ -148,6 +148,41 @@ AWS_PROFILE=openchallenges-prod-Developer
 
 **Note**: Stage and prod deployments share the same AWS account but are isolated by resource naming and by VPC configuration.
 
+### Using Local Docker Images (Development Only)
+
+When developing microservices or containerized components, you can test local Docker images without publishing them to the container registry:
+
+**1. Enable local images in `.env.dev`:**
+
+```bash
+# .env.dev
+USE_LOCAL_IMAGES=true
+```
+
+**2. Export your Docker image as a tarball:**
+
+```bash
+# After making changes to a service, export the image
+nx run openchallenges-api-gateway:export-image-tarball
+nx run openchallenges-challenge-service:export-image-tarball
+nx run openchallenges-organization-service:export-image-tarball
+# ... etc for any service you've modified
+```
+
+**3. Deploy with CDK:**
+
+```bash
+# The CDK app will automatically upload the tarball and deploy it
+nx run openchallenges-infra-cdk:deploy:dev
+```
+
+**Important Notes:**
+
+- **Development only**: Use this for dev environment testing. Stage and prod should use published images from the Sage monorepo CI/CD pipeline.
+- **Large assets**: Image tarballs can be hundreds of MB, increasing deployment time
+- **Stale images**: Remember to re-export tarballs after making code changes
+- **Default behavior**: When `USE_LOCAL_IMAGES=false` (default), images are pulled from `ghcr.io/sage-bionetworks`
+
 ### Synthesize CloudFormation Templates
 
 Generate CloudFormation templates from the CDK code:
