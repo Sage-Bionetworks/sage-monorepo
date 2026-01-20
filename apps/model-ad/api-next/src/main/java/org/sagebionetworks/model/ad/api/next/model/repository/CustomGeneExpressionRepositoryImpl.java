@@ -62,9 +62,15 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       // Add $match FIRST to filter documents before transformation
       operations.add(Aggregation.match(matchCriteria));
 
-      // Always add display_gene_symbol field (with fallback to ensembl_gene_id)
-      // Used for both sorting and searching
-      operations.add(buildDisplayGeneSymbolField());
+      // Add display_gene_symbol field (with fallback) if sorting by gene_symbol
+      boolean sortsByGeneSymbol = pageable
+        .getSort()
+        .stream()
+        .anyMatch(o -> GENE_SYMBOL_FIELD.equals(o.getProperty()));
+
+      if (sortsByGeneSymbol) {
+        operations.add(buildDisplayGeneSymbolField());
+      }
 
       operations.add(buildLowercaseSortFields(pageable.getSort()));
 
@@ -284,6 +290,17 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
     }
   }
 
+  /**
+   * Adds search criteria that matches the display_gene_symbol logic using raw fields.
+   *
+   * <p>Since display_gene_symbol = gene_symbol ?? ensembl_gene_id, the search matches:
+   * (gene_symbol matches) OR (gene_symbol is null/empty AND ensembl_gene_id matches)
+   *
+   * <p>NOTE: We cannot use DISPLAY_GENE_SYMBOL_FIELD here because it's a computed field
+   * created by $addFields in the aggregation pipeline. The count query uses
+   * mongoTemplate.count() for performance, which doesn't run the aggregation pipeline
+   * and therefore has no access to the computed field.
+   */
   private void addSearchCriteria(
     String search,
     ItemFilterTypeQueryDto filterType,
@@ -296,14 +313,30 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
 
     String trimmedSearch = search.trim();
 
-    // Comma-separated list: exact match (case-insensitive)
+    // Match if gene_symbol matches, OR if gene_symbol is null/empty and ensembl_gene_id matches
+    Criteria geneSymbolIsNullOrEmpty = new Criteria()
+      .orOperator(
+        Criteria.where(GENE_SYMBOL_FIELD).is(null),
+        Criteria.where(GENE_SYMBOL_FIELD).is(""),
+        Criteria.where(GENE_SYMBOL_FIELD).regex("^\\s*$") // whitespace only
+      );
+
     if (trimmedSearch.contains(",")) {
+      // Comma-separated list: exact match (case-insensitive)
       List<Pattern> patterns = ApiHelper.createCaseInsensitiveFullMatchPatterns(trimmedSearch);
-      criteriaList.add(Criteria.where(DISPLAY_GENE_SYMBOL_FIELD).in(patterns));
+      Criteria geneSymbolMatches = Criteria.where(GENE_SYMBOL_FIELD).in(patterns);
+      Criteria ensemblFallbackMatches = new Criteria()
+        .andOperator(geneSymbolIsNullOrEmpty, Criteria.where("ensembl_gene_id").in(patterns));
+
+      criteriaList.add(new Criteria().orOperator(geneSymbolMatches, ensemblFallbackMatches));
     } else {
       // Single term: partial match (case-insensitive)
       String regex = Pattern.quote(trimmedSearch);
-      criteriaList.add(Criteria.where(DISPLAY_GENE_SYMBOL_FIELD).regex(regex, "i"));
+      Criteria geneSymbolMatches = Criteria.where(GENE_SYMBOL_FIELD).regex(regex, "i");
+      Criteria ensemblFallbackMatches = new Criteria()
+        .andOperator(geneSymbolIsNullOrEmpty, Criteria.where("ensembl_gene_id").regex(regex, "i"));
+
+      criteriaList.add(new Criteria().orOperator(geneSymbolMatches, ensemblFallbackMatches));
     }
   }
 
