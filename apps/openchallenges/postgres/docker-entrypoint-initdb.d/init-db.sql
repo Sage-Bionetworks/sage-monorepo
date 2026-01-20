@@ -1,8 +1,6 @@
--- Create the openchallenges database
-CREATE DATABASE openchallenges;
-
--- Create EDAM database (separate as it's a reference database)
-CREATE DATABASE edam;
+-- Create the openchallenges database (if not already created by POSTGRES_DB env var)
+SELECT 'CREATE DATABASE openchallenges'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'openchallenges')\gexec
 
 -- Connect to openchallenges database to set up schemas
 \c openchallenges;
@@ -56,17 +54,6 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT ALL ON TABLES TO role_admin;
 ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT ALL ON SEQUENCES TO role_admin;
 ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT ALL ON FUNCTIONS TO role_admin;
 
--- Set up EDAM database
-\c edam;
-GRANT ALL PRIVILEGES ON DATABASE edam TO role_admin;
-GRANT ALL PRIVILEGES ON SCHEMA public TO role_admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO role_admin;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO role_admin;
-GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO role_admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO role_admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO role_admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO role_admin;
-
 -- Switch back to default database
 \c postgres;
 
@@ -76,7 +63,6 @@ GRANT role_admin TO postgres;
 -- Create user for openchallenges-challenge-service
 CREATE ROLE challenge_service LOGIN PASSWORD 'changeme';
 GRANT CONNECT ON DATABASE openchallenges TO challenge_service;
-GRANT CONNECT ON DATABASE edam TO challenge_service;
 
 -- Grant privileges on challenge schema in openchallenges database
 \c openchallenges;
@@ -87,15 +73,6 @@ GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA challenge TO challenge_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA challenge GRANT ALL ON TABLES TO challenge_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA challenge GRANT ALL ON SEQUENCES TO challenge_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA challenge GRANT ALL ON FUNCTIONS TO challenge_service;
-
--- Grant read privileges on edam database
-\c edam;
-GRANT USAGE ON SCHEMA public TO challenge_service;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO challenge_service;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO challenge_service;
-
--- Switch back to openchallenges database
-\c openchallenges;
 
 -- Create user for openchallenges-organization-service
 \c postgres;
