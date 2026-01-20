@@ -151,14 +151,14 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   // Effect for pinned data - only re-fetch when pinnedItems, categories, or sort change
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const categories = this.query().categories;
-      const pinnedItems = this.query().pinnedItems;
-      const sortMeta = this.query().multiSortMeta;
+      const categories = this.dropdownSelection();
+      const pinnedItems = this.comparisonToolService.pinnedItemsArray();
+      const sortMeta = this.comparisonToolService.multiSortMeta();
       this.getPinnedData(categories, pinnedItems, sortMeta);
     }
   });
 
-  // Effect for unpinned data - re-fetch when any query param or categories change
+  // Effect for unpinned data - re-fetch when any query parameter changes
   readonly unpinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
       const query = this.query();

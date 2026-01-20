@@ -4,6 +4,8 @@ import {
   ComparisonToolColumn,
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
+  ComparisonToolConfigFilter,
+  ComparisonToolFilter,
   ComparisonToolQuery,
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
@@ -95,8 +97,7 @@ export class ComparisonToolService<T> {
   private readonly isFilterPanelOpenSignal = signal(false);
 
   // URL Sync State
-  private lastSerializedState: string | null = null;
-  private lastSyncedPins: string[] = [];
+  private lastSyncedState: ComparisonToolUrlParams | null = null;
   private initialSelection: string[] | undefined;
 
   // Public Readonly Signals
@@ -115,6 +116,7 @@ export class ComparisonToolService<T> {
   readonly query = this.querySignal.asReadonly();
   readonly dropdownSelection = computed(() => this.querySignal().categories);
   readonly pinnedItems = computed(() => new Set(this.querySignal().pinnedItems));
+  readonly pinnedItemsArray = computed(() => this.querySignal().pinnedItems);
   readonly pageNumber = computed(() => this.querySignal().pageNumber);
   readonly pageSize = computed(() => this.querySignal().pageSize);
   readonly multiSortMeta = computed(() => this.querySignal().multiSortMeta);
@@ -150,9 +152,6 @@ export class ComparisonToolService<T> {
 
       const state = this.serializeSyncState({ dropdownSelection, visiblePinIds, multiSortMeta });
       this.syncStateToUrl(state);
-
-      // Track what we synced so resolveUrlState can detect self-triggered URL changes
-      this.lastSyncedPins = visiblePinIds;
     });
   }
 
@@ -192,28 +191,7 @@ export class ComparisonToolService<T> {
   }
 
   readonly currentConfig: Signal<ComparisonToolConfig | null> = computed(() => {
-    const configs = this.configsSignal();
-    if (!configs.length) {
-      return null;
-    }
-
-    // if no selection, return first config
-    const dropdownSelection = this.dropdownSelection();
-    if (!dropdownSelection.length) {
-      return configs[0];
-    }
-
-    const exactMatch = configs.find((config) => isEqual(config.dropdowns ?? [], dropdownSelection));
-
-    if (exactMatch) {
-      return exactMatch;
-    }
-
-    const prefixMatch = configs.find((config) =>
-      this.isPrefix(dropdownSelection, config.dropdowns),
-    );
-
-    return prefixMatch ?? configs[0];
+    return this.findConfigForSelection(this.configsSignal(), this.dropdownSelection());
   });
 
   readonly columns: Signal<ComparisonToolColumn[]> = computed(() => {
@@ -259,10 +237,12 @@ export class ComparisonToolService<T> {
 
     const selection = this.resolveInitialDropdownSelection(params, configs);
     const initialSort = this.resolveInitialSortMeta(params);
+    const initialFilters = this.initializeFiltersFromConfig(configs, selection);
 
     this.updateQuery({
       categories: selection,
       multiSortMeta: initialSort,
+      filters: initialFilters,
     });
 
     // Initialize column preferences cache for all configs
@@ -302,6 +282,53 @@ export class ComparisonToolService<T> {
     }
 
     return [];
+  }
+
+  private initializeFiltersFromConfig(
+    configs: ComparisonToolConfig[],
+    selection: string[],
+  ): ComparisonToolFilter[] {
+    const targetConfig = this.findConfigForSelection(configs, selection);
+    return this.convertFiltersFromConfig(targetConfig?.filters);
+  }
+
+  private findConfigForSelection(
+    configs: ComparisonToolConfig[],
+    selection: string[],
+  ): ComparisonToolConfig | null {
+    if (!configs.length) {
+      return null;
+    }
+
+    if (!selection.length) {
+      return configs[0];
+    }
+
+    const exactMatch = configs.find((config) => isEqual(config.dropdowns ?? [], selection));
+    if (exactMatch) {
+      return exactMatch;
+    }
+
+    const prefixMatch = configs.find((config) => this.isPrefix(selection, config.dropdowns));
+    return prefixMatch ?? configs[0];
+  }
+
+  private convertFiltersFromConfig(
+    filterConfigs: ComparisonToolConfigFilter[] | undefined,
+  ): ComparisonToolFilter[] {
+    if (!filterConfigs || filterConfigs.length === 0) {
+      return [];
+    }
+
+    return filterConfigs.map((config) => ({
+      name: config.name,
+      data_key: config.data_key,
+      short_name: config.short_name,
+      options: config.values.map((value) => ({
+        label: value,
+        selected: false,
+      })),
+    }));
   }
 
   setDropdownSelection(selection: string[]) {
@@ -516,6 +543,14 @@ export class ComparisonToolService<T> {
       event,
       defaultRowsPerPage,
     );
+
+    // Skip if pagination hasn't actually changed
+    const currentPageNumber = this.pageNumber();
+    const currentPageSize = this.pageSize();
+    if (pageNumber === currentPageNumber && pageSize === currentPageSize) {
+      return;
+    }
+
     this.updateQuery({ pageNumber, pageSize });
   }
 
@@ -646,7 +681,12 @@ export class ComparisonToolService<T> {
     // so only process category changes from URL on subsequent navigations
     if (!options.isFirstLoad && params.categories) {
       const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
-      if (!isEqual(normalizedSelection, this.dropdownSelection())) {
+      const categoriesMatchLastSync = isEqual(
+        normalizedSelection,
+        this.lastSyncedState?.categories ?? [],
+      );
+
+      if (!categoriesMatchLastSync && !isEqual(normalizedSelection, this.dropdownSelection())) {
         queryUpdates.categories = normalizedSelection;
         queryUpdates.pageNumber = this.FIRST_PAGE_NUMBER;
       }
@@ -654,7 +694,13 @@ export class ComparisonToolService<T> {
 
     if (params.sortFields?.length) {
       const sortMeta = this.convertArraysToSortMeta(params.sortFields, params.sortOrders ?? []);
-      if (!isEqual(sortMeta, this.multiSortMeta())) {
+      const lastSyncedSortMeta = this.convertArraysToSortMeta(
+        this.lastSyncedState?.sortFields ?? [],
+        this.lastSyncedState?.sortOrders ?? [],
+      );
+      const sortMatchesLastSync = isEqual(sortMeta, lastSyncedSortMeta);
+
+      if (!sortMatchesLastSync && !isEqual(sortMeta, this.multiSortMeta())) {
         queryUpdates.multiSortMeta = sortMeta;
       }
     }
@@ -664,7 +710,7 @@ export class ComparisonToolService<T> {
     // - If URL pins differ, this is an external change (user edited URL, link navigation) - accept new pins
     // - First load with no URL pins: start fresh with empty pins
     const urlPinnedItems = params.pinnedItems ?? [];
-    const urlPinsMatchLastSync = isEqual(urlPinnedItems, this.lastSyncedPins);
+    const urlPinsMatchLastSync = isEqual(urlPinnedItems, this.lastSyncedState?.pinnedItems ?? []);
 
     if (!urlPinsMatchLastSync) {
       // External URL change - update query.pinnedItems
@@ -679,17 +725,16 @@ export class ComparisonToolService<T> {
     }
 
     if (!options.isFirstLoad) {
-      this.updateSerializedStateCache();
+      this.updateSyncedStateCache();
     }
   }
 
   private syncStateToUrl(state: ComparisonToolUrlParams): void {
-    const serializedState = JSON.stringify(state);
-    if (this.lastSerializedState === serializedState) {
+    if (isEqual(this.lastSyncedState, state)) {
       return;
     }
 
-    this.lastSerializedState = serializedState;
+    this.lastSyncedState = state;
     this.urlService.syncToUrl(state);
   }
 
@@ -749,14 +794,12 @@ export class ComparisonToolService<T> {
     }));
   }
 
-  private updateSerializedStateCache(): void {
-    this.lastSerializedState = JSON.stringify(
-      this.serializeSyncState({
-        visiblePinIds: this.visiblePinIds(),
-        dropdownSelection: this.dropdownSelection(),
-        multiSortMeta: this.multiSortMeta(),
-      }),
-    );
+  private updateSyncedStateCache(): void {
+    this.lastSyncedState = this.serializeSyncState({
+      visiblePinIds: this.visiblePinIds(),
+      dropdownSelection: this.dropdownSelection(),
+      multiSortMeta: this.multiSortMeta(),
+    });
   }
 
   /**
@@ -771,7 +814,7 @@ export class ComparisonToolService<T> {
       if (!this.coordinatorService.isActive(this)) {
         return;
       }
-      this.lastSerializedState = null;
+      this.lastSyncedState = null;
       this.syncCurrentStateToUrl();
     });
   }
