@@ -193,6 +193,44 @@ nx run openchallenges-infra-cdk:destroy:stage
 nx run openchallenges-infra-cdk:destroy:prod
 ```
 
+## Accessing Private Resources
+
+The PostgreSQL database and OpenSearch are deployed in private subnets. Access them via port forwarding through the bastion ECS service using the provided scripts.
+
+**Note:** AWS Session Manager plugin is required and is already installed in the dev container.
+
+### PostgreSQL Database
+
+```bash
+# Start database tunnel
+cd apps/openchallenges/infra/cdk
+./tools/start-db-tunnel.sh dev {developer-name}
+
+# The script will display the connection string:
+# postgresql://postgres:password@localhost:5432/openchallenges
+```
+
+Use the displayed connection string with:
+
+- **VS Code**: [PostgreSQL extension](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres)
+- **psql**: `psql -h localhost -p 5432 -U postgres -d openchallenges`
+
+### OpenSearch Dashboards
+
+```bash
+# Start OpenSearch tunnel
+cd apps/openchallenges/infra/cdk
+./tools/start-opensearch-tunnel.sh dev {developer-name}
+
+# The script will display:
+# - Dashboard URL: https://localhost:9200/_dashboards
+# - Username and password
+```
+
+Open `https://localhost:9200/_dashboards` in your browser and login with the displayed credentials.
+
+**Note:** Keep the tunnel scripts running while accessing these resources. Press Ctrl+C to stop.
+
 ## Deployed Infrastructure
 
 The OpenChallenges CDK app deploys a complete microservices architecture on AWS.
