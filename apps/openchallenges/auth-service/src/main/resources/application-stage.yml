@@ -3,7 +3,7 @@ spring:
   jpa:
     show-sql: false
   datasource:
-    url: jdbc:postgresql://openchallenges-postgres-stage:8091/auth_service
+    url: jdbc:postgresql://openchallenges-postgres-stage:8091/openchallenges?currentSchema=auth
   flyway:
     enabled: false
 

@@ -66,13 +66,16 @@ GRANT CONNECT ON DATABASE openchallenges TO challenge_service;
 
 -- Grant privileges on challenge schema in openchallenges database
 \c openchallenges;
-GRANT USAGE ON SCHEMA challenge TO challenge_service;
+GRANT USAGE, CREATE ON SCHEMA challenge TO challenge_service;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA challenge TO challenge_service;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA challenge TO challenge_service;
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA challenge TO challenge_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA challenge GRANT ALL ON TABLES TO challenge_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA challenge GRANT ALL ON SEQUENCES TO challenge_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA challenge GRANT ALL ON FUNCTIONS TO challenge_service;
+ALTER DEFAULT PRIVILEGES FOR ROLE challenge_service IN SCHEMA challenge GRANT ALL ON TABLES TO challenge_service;
+ALTER DEFAULT PRIVILEGES FOR ROLE challenge_service IN SCHEMA challenge GRANT ALL ON SEQUENCES TO challenge_service;
+ALTER DEFAULT PRIVILEGES FOR ROLE challenge_service IN SCHEMA challenge GRANT ALL ON FUNCTIONS TO challenge_service;
 
 -- Create user for openchallenges-organization-service
 \c postgres;
@@ -80,13 +83,16 @@ CREATE ROLE organization_service LOGIN PASSWORD 'changeme';
 GRANT CONNECT ON DATABASE openchallenges TO organization_service;
 
 \c openchallenges;
-GRANT USAGE ON SCHEMA organization TO organization_service;
+GRANT USAGE, CREATE ON SCHEMA organization TO organization_service;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA organization TO organization_service;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA organization TO organization_service;
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA organization TO organization_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA organization GRANT ALL ON TABLES TO organization_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA organization GRANT ALL ON SEQUENCES TO organization_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA organization GRANT ALL ON FUNCTIONS TO organization_service;
+ALTER DEFAULT PRIVILEGES FOR ROLE organization_service IN SCHEMA organization GRANT ALL ON TABLES TO organization_service;
+ALTER DEFAULT PRIVILEGES FOR ROLE organization_service IN SCHEMA organization GRANT ALL ON SEQUENCES TO organization_service;
+ALTER DEFAULT PRIVILEGES FOR ROLE organization_service IN SCHEMA organization GRANT ALL ON FUNCTIONS TO organization_service;
 
 -- Create user for openchallenges-auth-service
 \c postgres;
@@ -94,13 +100,16 @@ CREATE ROLE auth_service LOGIN PASSWORD 'changeme';
 GRANT CONNECT ON DATABASE openchallenges TO auth_service;
 
 \c openchallenges;
-GRANT USAGE ON SCHEMA auth TO auth_service;
+GRANT USAGE, CREATE ON SCHEMA auth TO auth_service;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA auth TO auth_service;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA auth TO auth_service;
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA auth TO auth_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT ALL ON TABLES TO auth_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT ALL ON SEQUENCES TO auth_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT ALL ON FUNCTIONS TO auth_service;
+ALTER DEFAULT PRIVILEGES FOR ROLE auth_service IN SCHEMA auth GRANT ALL ON TABLES TO auth_service;
+ALTER DEFAULT PRIVILEGES FOR ROLE auth_service IN SCHEMA auth GRANT ALL ON SEQUENCES TO auth_service;
+ALTER DEFAULT PRIVILEGES FOR ROLE auth_service IN SCHEMA auth GRANT ALL ON FUNCTIONS TO auth_service;
 
 -- Switch back to default database
 \c postgres;

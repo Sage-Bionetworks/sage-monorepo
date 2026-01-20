@@ -19,8 +19,10 @@ spring:
   flyway:
     enabled: true
     clean-disabled: false
+    schemas: auth
+    default-schema: auth
   datasource:
-    url: jdbc:postgresql://openchallenges-postgres:8091/auth_service
+    url: jdbc:postgresql://openchallenges-postgres:8091/openchallenges?currentSchema=auth
     username: auth_service
     password: changeme
     driver-class-name: org.postgresql.Driver
@@ -32,6 +34,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+        default_schema: auth
 
 management:
   endpoints:
