@@ -162,7 +162,7 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       } else if ("name".equals(field)) {
         // For name (Link field), use name.link_text
         fields.append("name_lower", new Document("$toLower", "$name.link_text"));
-      } else if (isStringField(field)) {
+      } else if (needsCaseInsensitiveSort(field)) {
         // For other string fields, apply lowercase transformation
         fields.append(field + "_lower", new Document("$toLower", "$" + field));
       }
@@ -172,13 +172,13 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
   }
 
   /**
-   * Checks if a field is a string field that requires case-insensitive sorting.
+   * Checks if a field needs case-insensitive sorting.
    * Non-string fields (like age columns with nested objects) are excluded.
    *
    * @param field the field name
-   * @return true if the field is a string field
+   * @return true if the field needs case-insensitive sorting
    */
-  private boolean isStringField(String field) {
+  private boolean needsCaseInsensitiveSort(String field) {
     return (
       "name".equals(field) ||
       "model_type".equals(field) ||
@@ -337,7 +337,7 @@ public class CustomGeneExpressionRepositoryImpl implements CustomGeneExpressionR
       String field = order.getProperty();
 
       // Use lowercase version for string fields (case-insensitive sorting)
-      if (isStringField(field) || GENE_SYMBOL_FIELD.equals(field)) {
+      if (needsCaseInsensitiveSort(field) || GENE_SYMBOL_FIELD.equals(field)) {
         field = field + "_lower";
       }
       // Non-string fields (like age columns) are sorted directly

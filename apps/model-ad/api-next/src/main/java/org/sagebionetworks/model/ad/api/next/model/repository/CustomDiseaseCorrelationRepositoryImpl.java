@@ -102,7 +102,7 @@ public class CustomDiseaseCorrelationRepositoryImpl
 
     for (Sort.Order order : sort) {
       String field = order.getProperty();
-      if (isStringField(field)) {
+      if (needsCaseInsensitiveSort(field)) {
         // For string fields, apply lowercase transformation
         fields.append(field + "_lower", new Document("$toLower", "$" + field));
       }
@@ -112,13 +112,13 @@ public class CustomDiseaseCorrelationRepositoryImpl
   }
 
   /**
-   * Checks if a field is a string field that requires case-insensitive sorting.
+   * Checks if a field needs case-insensitive sorting.
    * Non-string fields (like correlation result objects with numeric values) are excluded.
    *
    * @param field the field name
-   * @return true if the field is a string field
+   * @return true if the field needs case-insensitive sorting
    */
-  private boolean isStringField(String field) {
+  private boolean needsCaseInsensitiveSort(String field) {
     return (
       "name".equals(field) ||
       "age".equals(field) ||
@@ -289,7 +289,7 @@ public class CustomDiseaseCorrelationRepositoryImpl
       String field = order.getProperty();
 
       // Use lowercase version for string fields (case-insensitive sorting)
-      if (isStringField(field)) {
+      if (needsCaseInsensitiveSort(field)) {
         field = field + "_lower";
       }
       // Non-string fields (like correlation result objects) are sorted directly
