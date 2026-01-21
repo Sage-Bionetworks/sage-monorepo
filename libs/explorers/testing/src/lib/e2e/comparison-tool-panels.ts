@@ -61,9 +61,7 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
    * so we filter to only those with a visible circle (display: block).
    */
   const getVisibleHeatmapCircleButtons = (page: Page) =>
-    page
-      .locator('button.heatmap-circle-button')
-      .filter({ has: page.locator('.heatmap-circle[style*="display: block"]') });
+    page.locator('button.heatmap-circle-button').filter({ visible: true });
 
   test.describe('heatmap details panel', () => {
     test('clicking a heatmap circle opens the details panel', async ({ page }) => {
@@ -170,6 +168,22 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
       const panelData = page.locator('.heatmap-details-panel-data').first();
       await expect(panelData).toBeVisible();
       await expect(panelData).toContainText('P-value');
+    });
+
+    test('clicking the same heatmap circle again closes the details panel', async ({ page }) => {
+      await navigateFn(page);
+
+      const heatmapButton = getVisibleHeatmapCircleButtons(page).first();
+      await expect(heatmapButton).toBeVisible();
+
+      // First click - open panel
+      await heatmapButton.click();
+      const panelHeading = page.locator('.heatmap-details-panel-heading').first();
+      await expect(panelHeading).toBeVisible();
+
+      // Second click on the same button - close panel (toggle behavior)
+      await heatmapButton.click();
+      await expect(panelHeading).toBeHidden();
     });
   });
 };

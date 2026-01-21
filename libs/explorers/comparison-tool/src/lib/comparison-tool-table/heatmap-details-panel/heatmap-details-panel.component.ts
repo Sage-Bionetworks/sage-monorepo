@@ -42,8 +42,13 @@ export class HeatmapDetailsPanelComponent {
   activeIndex = signal(0);
   panelData = signal<HeatmapDetailsPanelData>({ ...defaultPanelData });
 
-  /** Tracks the last event target for toggle detection. */
-  private lastTarget: EventTarget | null = null;
+  /**
+   * Tracks the last currentTarget for toggle detection.
+   * Uses currentTarget (the element with the listener) instead of target
+   * (the actual clicked element) to ensure consistent comparison regardless
+   * of which child element within the button was clicked.
+   */
+  private lastCurrentTarget: EventTarget | null = null;
 
   constructor() {
     effect(() => {
@@ -64,12 +69,12 @@ export class HeatmapDetailsPanelComponent {
   private toggle(event: Event, data: HeatmapDetailsPanelData) {
     const isVisible = this.panels().some((p) => p?.overlayVisible);
 
-    if (event.target === this.lastTarget && isVisible) {
+    if (event.currentTarget === this.lastCurrentTarget && isVisible) {
       this.hide();
-      this.lastTarget = null;
+      this.lastCurrentTarget = null;
     } else {
       this.show(event, data);
-      this.lastTarget = event.target;
+      this.lastCurrentTarget = event.currentTarget;
     }
   }
 
@@ -81,7 +86,7 @@ export class HeatmapDetailsPanelComponent {
     this.activeIndex.set(nextIndex);
 
     this.panels()[currentIndex]?.hide();
-    this.panels()[nextIndex]?.show(event, event.target);
+    this.panels()[nextIndex]?.show(event, event.currentTarget);
   }
 
   private hide() {
