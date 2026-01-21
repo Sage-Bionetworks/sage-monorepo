@@ -22,10 +22,13 @@ async function setup(showPanel = true) {
   // Directly set the signal to show panel data (bypasses transform function)
   const service = fixture.debugElement.injector.get(ComparisonToolService);
   if (showPanel) {
+    const mockTarget = document.createElement('div');
+    const mockEvent = new MouseEvent('click', { bubbles: true });
+    Object.defineProperty(mockEvent, 'target', { value: mockTarget });
+
     service['heatmapDetailsPanelDataSignal'].set({
       data: structuredClone(heatmapDetailsPanelDataMock),
-      event: new MouseEvent('click'),
-      panelKey: 'test-row:test-col',
+      event: mockEvent,
     });
     fixture.detectChanges();
   }
@@ -102,33 +105,20 @@ describe('Component: Heatmap - Details Panel', () => {
       const initialIndex = component.activeIndex();
       expect(initialIndex).toBe(1); // After first show, index should be 1
 
-      // Show new data
+      // Show new data with a different event target
       const newData = { ...heatmapDetailsPanelDataMock, heading: 'New Heading' };
+      const newTarget = document.createElement('div');
+      const newEvent = new MouseEvent('click', { bubbles: true });
+      Object.defineProperty(newEvent, 'target', { value: newTarget });
+
       service['heatmapDetailsPanelDataSignal'].set({
         data: newData,
-        event: new MouseEvent('click'),
-        panelKey: 'test-row:new-col',
+        event: newEvent,
       });
       fixture.detectChanges();
 
       // Index should have toggled
       expect(component.activeIndex()).toBe(0);
-    });
-  });
-
-  describe('onPanelHide', () => {
-    it('should not call hideHeatmapDetailsPanel when data is already null', async () => {
-      const { component, service, fixture } = await setup(false);
-
-      // Ensure data is null
-      expect(service.heatmapDetailsPanelData()).toBeNull();
-
-      const hideSpy = jest.spyOn(service, 'hideHeatmapDetailsPanel');
-
-      component.onPanelHide();
-      fixture.detectChanges();
-
-      expect(hideSpy).not.toHaveBeenCalled();
     });
   });
 });

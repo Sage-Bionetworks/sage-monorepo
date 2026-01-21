@@ -799,7 +799,6 @@ describe('ComparisonToolService', () => {
       expect(service.heatmapDetailsPanelData()).toEqual({
         data: { heading: 'Test Heading', value: 1.5 },
         event: mockEvent,
-        panelKey: 'row-123:age_4mo',
       });
     });
 
@@ -828,55 +827,6 @@ describe('ComparisonToolService', () => {
       service.hideHeatmapDetailsPanel();
 
       expect(service.heatmapDetailsPanelData()).toBeNull();
-    });
-
-    it('should toggle panel off when clicking the same cell', () => {
-      connectService();
-      const mockTransform = jest.fn().mockReturnValue({ heading: 'Test' });
-      service.setViewConfig({
-        heatmapCircleClickTransformFn: mockTransform,
-      });
-
-      // First click - show panel
-      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
-      expect(service.heatmapDetailsPanelData()).not.toBeNull();
-
-      // Second click on same cell - should hide panel
-      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
-      expect(service.heatmapDetailsPanelData()).toBeNull();
-    });
-
-    it('should show new panel when clicking a different cell', () => {
-      connectService();
-      const mockTransform = jest.fn().mockReturnValue({ heading: 'Test' });
-      service.setViewConfig({
-        heatmapCircleClickTransformFn: mockTransform,
-      });
-
-      // First click
-      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
-      expect(service.heatmapDetailsPanelData()?.panelKey).toBe('row-123:age_4mo');
-
-      // Click on different column
-      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_8mo', mockEvent);
-      expect(service.heatmapDetailsPanelData()?.panelKey).toBe('row-123:age_8mo');
-    });
-
-    it('should show new panel when clicking a different row', () => {
-      connectService();
-      const mockTransform = jest.fn().mockReturnValue({ heading: 'Test' });
-      service.setViewConfig({
-        heatmapCircleClickTransformFn: mockTransform,
-      });
-
-      // First click
-      service.showHeatmapDetailsPanel(mockRowData, mockCellData, 'age_4mo', mockEvent);
-      expect(service.heatmapDetailsPanelData()?.panelKey).toBe('row-123:age_4mo');
-
-      // Click on different row
-      const differentRowData = { _id: 'row-456', gene_symbol: 'TREM2', tissue: 'cortex' };
-      service.showHeatmapDetailsPanel(differentRowData, mockCellData, 'age_4mo', mockEvent);
-      expect(service.heatmapDetailsPanelData()?.panelKey).toBe('row-456:age_4mo');
     });
   });
 

@@ -77,23 +77,6 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
       await expect(page.locator('.heatmap-details-panel-heading').first()).toBeVisible();
     });
 
-    test('clicking the same heatmap circle again closes the details panel', async ({ page }) => {
-      await navigateFn(page);
-
-      const heatmapButton = getVisibleHeatmapCircleButtons(page).first();
-      await expect(heatmapButton).toBeVisible();
-
-      // First click - open panel
-      await heatmapButton.click();
-      const panelHeading = page.locator('.heatmap-details-panel-heading').first();
-      await expect(panelHeading).toBeVisible();
-
-      // Second click on the same button - close panel (toggle behavior)
-      // Use force:true to bypass any potential click interception by the popover
-      await heatmapButton.click({ force: true });
-      await expect(page.locator('.heatmap-details-panel-heading')).toHaveCount(0);
-    });
-
     test('clicking a different heatmap circle updates the panel content', async ({ page }) => {
       await navigateFn(page);
 
@@ -175,6 +158,18 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
       // Click outside the panel (on the page body)
       await page.locator('body').click({ position: { x: 10, y: 10 } });
       await expect(page.locator('.heatmap-details-panel-heading')).toHaveCount(0);
+    });
+
+    test('panel displays data values and p-value', async ({ page }) => {
+      await navigateFn(page);
+
+      const heatmapButton = getVisibleHeatmapCircleButtons(page).first();
+      await heatmapButton.click();
+
+      // Verify the panel contains the expected data sections
+      const panelData = page.locator('.heatmap-details-panel-data').first();
+      await expect(panelData).toBeVisible();
+      await expect(panelData).toContainText('P-value');
     });
   });
 };

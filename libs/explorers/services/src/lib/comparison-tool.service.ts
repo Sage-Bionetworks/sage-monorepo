@@ -91,7 +91,6 @@ export class ComparisonToolService<T> {
   private readonly heatmapDetailsPanelDataSignal = signal<{
     data: HeatmapDetailsPanelData;
     event: Event;
-    panelKey: string;
   } | null>(null);
   private readonly isFilterPanelOpenSignal = signal(false);
 
@@ -352,16 +351,6 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    const rowIdKey = this.viewConfig().rowIdDataKey;
-    const rowId = (rowData as Record<string, unknown>)[rowIdKey];
-    const panelKey = `${rowId}:${columnKey}`;
-
-    // Toggle behavior: if clicking the same cell again, hide the panel
-    if (this.heatmapDetailsPanelDataSignal()?.panelKey === panelKey) {
-      this.hideHeatmapDetailsPanel();
-      return;
-    }
-
     const data = transform({
       rowData,
       cellData,
@@ -372,7 +361,7 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    this.heatmapDetailsPanelDataSignal.set({ data, event, panelKey });
+    this.heatmapDetailsPanelDataSignal.set({ data, event });
   }
 
   hideHeatmapDetailsPanel(): void {
