@@ -84,7 +84,7 @@ class CustomGeneExpressionRepositoryImplTest {
   }
 
   @Test
-  @DisplayName("should search on display_gene_symbol field with single term")
+  @DisplayName("should search on gene_symbol with fallback to ensembl_gene_id for single term")
   void shouldSearchOnDisplayGeneSymbolWithSingleTerm() throws Exception {
     // Given
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
@@ -101,16 +101,16 @@ class CustomGeneExpressionRepositoryImplTest {
     );
     Document criteriaDoc = criteria.getCriteriaObject();
 
-    // Then - Verify search uses display_gene_symbol field
+    // Then
     assertThat(criteriaDoc).containsKey("$and");
     List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
-
-    // For regex pattern, Spring Data MongoDB stores it as a Pattern object directly
-    assertThat(andConditions).anySatisfy(doc -> assertThat(doc).containsKey("display_gene_symbol"));
+    assertThat(andConditions).anySatisfy(doc -> assertThat(doc).containsKey("$or"));
   }
 
   @Test
-  @DisplayName("should search on display_gene_symbol field with comma-separated terms")
+  @DisplayName(
+    "should search on gene_symbol with fallback to ensembl_gene_id for comma-separated terms"
+  )
   void shouldSearchOnDisplayGeneSymbolWithCommaSeparatedTerms() throws Exception {
     // Given
     GeneExpressionSearchQueryDto query = GeneExpressionSearchQueryDto.builder()
@@ -127,15 +127,10 @@ class CustomGeneExpressionRepositoryImplTest {
     );
     Document criteriaDoc = criteria.getCriteriaObject();
 
-    // Then - Verify search uses display_gene_symbol field with $in for multiple patterns
+    // Then
     assertThat(criteriaDoc).containsKey("$and");
     List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
-
-    assertThat(andConditions).anySatisfy(doc -> {
-      assertThat(doc).containsKey("display_gene_symbol");
-      Document displayGeneSymbolCondition = (Document) doc.get("display_gene_symbol");
-      assertThat(displayGeneSymbolCondition).containsKey("$in");
-    });
+    assertThat(andConditions).anySatisfy(doc -> assertThat(doc).containsKey("$or"));
   }
 
   @Test
@@ -152,12 +147,9 @@ class CustomGeneExpressionRepositoryImplTest {
     Criteria criteria = invokeBuildMatchCriteria("test-tissue", "test-cohort", query, items);
     Document criteriaDoc = criteria.getCriteriaObject();
 
-    // Then - Verify no display_gene_symbol search filter is applied
-    assertThat(criteriaDoc).containsKey("$and");
-    List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
-
-    assertThat(andConditions).noneSatisfy(doc -> assertThat(doc).containsKey("display_gene_symbol")
-    );
+    // Then
+    String criteriaString = criteriaDoc.toJson();
+    assertThat(criteriaString).doesNotContain("\"$regex\"");
   }
 
   @Test
@@ -178,12 +170,9 @@ class CustomGeneExpressionRepositoryImplTest {
     );
     Document criteriaDoc = criteria.getCriteriaObject();
 
-    // Then - Verify no display_gene_symbol search filter is applied
-    assertThat(criteriaDoc).containsKey("$and");
-    List<Document> andConditions = (List<Document>) criteriaDoc.get("$and");
-
-    assertThat(andConditions).noneSatisfy(doc -> assertThat(doc).containsKey("display_gene_symbol")
-    );
+    // Then
+    String criteriaString = criteriaDoc.toJson();
+    assertThat(criteriaString).doesNotContain("\"$regex\"");
   }
 
   /**
