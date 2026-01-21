@@ -26,6 +26,7 @@ class ImageServiceStack(cdk.Stack):
         app_version: str = "edge",
         thumbor_host: str = "http://localhost:8000/img/",
         thumbor_security_key: str = "changeme",
+        placeholder_enabled: str = "true",
         **kwargs,
     ) -> None:
         """
@@ -42,6 +43,7 @@ class ImageServiceStack(cdk.Stack):
             app_version: Application version (Docker image tag)
             thumbor_host: Thumbor image processing service host URL
             thumbor_security_key: Thumbor security key for signed URLs
+            placeholder_enabled: Enable placeholder image URLs (true/false)
             **kwargs: Additional arguments passed to parent Stack
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -63,8 +65,9 @@ class ImageServiceStack(cdk.Stack):
             # Thumbor configuration for image processing
             "APP_THUMBOR_HOST": thumbor_host,
             "APP_THUMBOR_SECURITY_KEY": thumbor_security_key,
-            # Disable placeholder images (use actual images from S3)
-            "APP_PLACEHOLDER_ENABLED": "true",
+            # Placeholder mode: when true, returns placeholder image URLs
+            # instead of real images from S3 (useful during initial deployment)
+            "APP_PLACEHOLDER_ENABLED": placeholder_enabled,
         }
 
         # Create Fargate service for the Image Service

@@ -232,6 +232,10 @@ def main() -> None:
     thumbor_base_url = fqdn if fqdn else alb_stack.alb.load_balancer_dns_name
     thumbor_public_url = f"{protocol}://{thumbor_base_url}/img/"
 
+    # Image service placeholder mode - when enabled, returns placeholder image URLs
+    # instead of real images from S3 (useful during initial deployment)
+    placeholder_enabled = os.getenv("IMAGE_SERVICE_PLACEHOLDER_ENABLED", "true")
+
     image_service_stack = ImageServiceStack(
         app,
         f"{stack_prefix}-image-service",
@@ -244,6 +248,7 @@ def main() -> None:
         # Thumbor configuration - use public ALB URL for image URLs
         thumbor_host=thumbor_public_url,
         thumbor_security_key="changeme",
+        placeholder_enabled=placeholder_enabled,
         description=f"Image service for OpenChallenges {environment} environment",
     )
 
