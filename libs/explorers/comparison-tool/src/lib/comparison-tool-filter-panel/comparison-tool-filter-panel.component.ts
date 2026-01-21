@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, input, model, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   ComparisonToolConfigFilter,
   ComparisonToolFilter,
 } from '@sagebionetworks/explorers/models';
-import { ComparisonToolFilterService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolFilterService,
+  ComparisonToolService,
+} from '@sagebionetworks/explorers/services';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
 import { FilterPanelHeaderComponent } from './filter-panel-header/filter-panel-header.component';
@@ -25,12 +28,13 @@ import { FilterPanelMainMenuItemButtonComponent } from './filter-panel-main-menu
   styleUrls: ['./comparison-tool-filter-panel.component.scss'],
 })
 export class ComparisonToolFilterPanelComponent {
+  private readonly comparisonToolService = inject(ComparisonToolService);
   private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
   filterConfigs = input<ComparisonToolConfigFilter[]>([]);
-  isOpen = model<boolean>(false);
 
   filters = this.comparisonToolFilterService.filters;
+  isOpen = this.comparisonToolService.isFilterPanelOpen;
 
   activePane = signal(-1);
   hasActivePane = computed(() => this.activePane() !== -1);
@@ -66,19 +70,15 @@ export class ComparisonToolFilterPanelComponent {
   }
 
   open() {
-    this.isOpen.set(true);
+    this.comparisonToolService.openFilterPanel();
   }
 
   close() {
     this.closePanes();
-    this.isOpen.set(false);
+    this.comparisonToolService.closeFilterPanel();
   }
 
   toggle() {
-    if (this.isOpen()) {
-      this.close();
-    } else {
-      this.open();
-    }
+    this.comparisonToolService.toggleFilterPanel();
   }
 }

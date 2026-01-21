@@ -103,7 +103,7 @@ export class HeatmapCircleComponent<T extends HeatmapCircleData = HeatmapCircleD
         return negate ? -possible : possible;
       }
       return;
-    } catch (e) {
+    } catch {
       return;
     }
   }

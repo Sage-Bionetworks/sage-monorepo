@@ -6,7 +6,7 @@
   }
 
   <div [style.display]="isLoading() ? 'none' : 'block'">
-    <explorers-comparison-tool-header (filterToggle)="toggleFilterPanel()" />
+    <explorers-comparison-tool-header />
     <explorers-comparison-tool-filter-list />
     <div class="comparison-tool-body">
       <div class="comparison-tool-body-inner">
@@ -17,7 +17,6 @@
           <explorers-help-links />
           <explorers-comparison-tool-filter-panel
             [filterConfigs]="currentConfig()?.filters || []"
-            [(isOpen)]="isFilterPanelOpen"
           />
         </div>
       </div>

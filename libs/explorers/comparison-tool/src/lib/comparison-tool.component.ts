@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, model, untracked, viewChild } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { ComparisonToolControlsComponent } from './comparison-tool-controls/comparison-tool-controls.component';
@@ -31,26 +31,4 @@ export class ComparisonToolComponent {
 
   currentConfig = this.comparisonToolService.currentConfig;
   loadingResultsCount = this.comparisonToolService.loadingResultsCount;
-
-  isFilterPanelOpen = model(false);
-
-  toggleFilterPanel() {
-    this.isFilterPanelOpen.update((isOpen) => !isOpen);
-  }
-
-  heatmapDetailsPanel = viewChild(HeatmapDetailsPanelComponent);
-
-  constructor() {
-    effect(() => {
-      const panelData = this.comparisonToolService.heatmapDetailsPanelData();
-      // Use untracked to avoid infinite loop with HeatmapDetailsPanelComponent
-      untracked(() => {
-        if (panelData) {
-          this.heatmapDetailsPanel()?.show(panelData.event, panelData.data);
-        } else {
-          this.heatmapDetailsPanel()?.hide();
-        }
-      });
-    });
-  }
 }

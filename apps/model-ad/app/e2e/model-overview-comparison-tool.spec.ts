@@ -8,6 +8,7 @@ import {
   getRowByName,
   getUnpinnedTable,
   pinByName,
+  runFilterPanelTests,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
@@ -37,6 +38,8 @@ const CT_PAGE = 'Model Overview';
 const MODEL_OVERVIEW_PATH = COMPARISON_TOOL_PATHS[CT_PAGE];
 
 test.describe('model overview', () => {
+  runFilterPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true));
+
   test('share URL button copies URL to clipboard', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read']);
 

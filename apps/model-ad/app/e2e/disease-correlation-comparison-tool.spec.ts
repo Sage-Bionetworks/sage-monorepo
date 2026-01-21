@@ -10,6 +10,8 @@ import {
   getPinnedTable,
   getQueryParamFromValues,
   getRowByName,
+  runFilterPanelTests,
+  runHeatmapDetailsPanelTests,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
@@ -38,6 +40,9 @@ import {
 const CT_PAGE = 'Disease Correlation';
 
 test.describe('disease correlation', () => {
+  runFilterPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true));
+  runHeatmapDetailsPanelTests(async (page) => navigateToComparison(page, CT_PAGE, true));
+
   test('pins are cached across dropdown selections and can be unpinned', async ({ page }) => {
     const correlations = await fetchDiseaseCorrelations(page);
     const [firstCorrelation] = correlations;

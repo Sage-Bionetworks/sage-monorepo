@@ -92,6 +92,7 @@ export class ComparisonToolService<T> {
     data: HeatmapDetailsPanelData;
     event: Event;
   } | null>(null);
+  private readonly isFilterPanelOpenSignal = signal(false);
 
   // URL Sync State
   private lastSerializedState: string | null = null;
@@ -108,6 +109,7 @@ export class ComparisonToolService<T> {
   readonly pinnedData = this.pinnedDataSignal.asReadonly();
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
+  readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
 
   // Computed Query Accessors
   readonly query = this.querySignal.asReadonly();
@@ -364,6 +366,22 @@ export class ComparisonToolService<T> {
 
   hideHeatmapDetailsPanel(): void {
     this.heatmapDetailsPanelDataSignal.set(null);
+  }
+
+  /* ----------------------- *
+   *    Filter Panel
+   * ----------------------- */
+
+  toggleFilterPanel(): void {
+    this.isFilterPanelOpenSignal.update((isOpen) => !isOpen);
+  }
+
+  openFilterPanel(): void {
+    this.isFilterPanelOpenSignal.set(true);
+  }
+
+  closeFilterPanel(): void {
+    this.isFilterPanelOpenSignal.set(false);
   }
 
   setViewConfig(viewConfig: Partial<ComparisonToolViewConfig>) {

@@ -7,6 +7,8 @@ import {
   getQueryParamFromValues,
   getUnpinnedTable,
   pinByName,
+  runFilterPanelTests,
+  runHeatmapDetailsPanelTests,
   searchViaFilterbox,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
@@ -44,6 +46,13 @@ const cacul1Matches = [
 ];
 
 test.describe('gene expression', () => {
+  runFilterPanelTests(async (page) =>
+    navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams),
+  );
+  runHeatmapDetailsPanelTests(async (page) =>
+    navigateToComparison(page, CT_PAGE, true, 'url', categoriesQueryParams),
+  );
+
   test('filterbox search without comma returns partial case-insensitive matches', async ({
     page,
   }) => {

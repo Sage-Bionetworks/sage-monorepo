@@ -764,7 +764,7 @@ describe('ComparisonToolService', () => {
   });
 
   describe('heatmap details panel', () => {
-    const mockRowData = { gene_symbol: 'APOE', tissue: 'cortex' };
+    const mockRowData = { _id: 'row-123', gene_symbol: 'APOE', tissue: 'cortex' };
     const mockCellData = { log2_fc: 1.5, adj_p_val: 0.01 };
     const mockEvent = new MouseEvent('click');
 
@@ -827,6 +827,39 @@ describe('ComparisonToolService', () => {
       service.hideHeatmapDetailsPanel();
 
       expect(service.heatmapDetailsPanelData()).toBeNull();
+    });
+  });
+
+  describe('filter panel', () => {
+    it('should have filter panel closed initially', () => {
+      connectService();
+      expect(service.isFilterPanelOpen()).toBe(false);
+    });
+
+    it('should open filter panel', () => {
+      connectService();
+      service.openFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(true);
+    });
+
+    it('should close filter panel', () => {
+      connectService();
+      service.openFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(true);
+
+      service.closeFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(false);
+    });
+
+    it('should toggle filter panel', () => {
+      connectService();
+      expect(service.isFilterPanelOpen()).toBe(false);
+
+      service.toggleFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(true);
+
+      service.toggleFilterPanel();
+      expect(service.isFilterPanelOpen()).toBe(false);
     });
   });
 });
