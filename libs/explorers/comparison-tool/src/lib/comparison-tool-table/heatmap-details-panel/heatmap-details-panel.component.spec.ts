@@ -41,8 +41,7 @@ describe('Component: Heatmap - Details Panel', () => {
 
   it('should have data', async () => {
     const { component } = await setup();
-    const activeIndex = component.activePanelIndex();
-    expect(component.panelData()[activeIndex]).toEqual(heatmapDetailsPanelDataMock);
+    expect(component.panelData()).toEqual(heatmapDetailsPanelDataMock);
   });
 
   it('should have label', async () => {
@@ -100,7 +99,7 @@ describe('Component: Heatmap - Details Panel', () => {
       const { component, service, fixture } = await setup();
 
       // Initial state after first show
-      const initialIndex = component.activePanelIndex();
+      const initialIndex = component.activeIndex();
       expect(initialIndex).toBe(1); // After first show, index should be 1
 
       // Show new data
@@ -113,7 +112,7 @@ describe('Component: Heatmap - Details Panel', () => {
       fixture.detectChanges();
 
       // Index should have toggled
-      expect(component.activePanelIndex()).toBe(0);
+      expect(component.activeIndex()).toBe(0);
     });
   });
 

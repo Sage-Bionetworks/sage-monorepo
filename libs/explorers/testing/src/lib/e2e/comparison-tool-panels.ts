@@ -55,17 +55,21 @@ export const runFilterPanelTests = (navigateFn: (page: Page) => Promise<void>) =
  * @param navigateFn - Function that navigates to the comparison tool page
  */
 export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<void>) => {
+  /**
+   * Returns a locator for visible heatmap circle buttons.
+   * Some buttons may be hidden due to no data or significance filter,
+   * so we filter to only those with a visible circle (display: block).
+   */
+  const getVisibleHeatmapCircleButtons = (page: Page) =>
+    page
+      .locator('button.heatmap-circle-button')
+      .filter({ has: page.locator('.heatmap-circle[style*="display: block"]') });
+
   test.describe('heatmap details panel', () => {
     test('clicking a heatmap circle opens the details panel', async ({ page }) => {
       await navigateFn(page);
 
-      // Find a visible heatmap circle button (some may be hidden due to no data or significance filter)
-      // The circle div inside must be visible (display: block)
-      const heatmapButton = page
-        .locator('button.heatmap-circle-button')
-        .filter({ has: page.locator('.heatmap-circle[style*="display: block"]') })
-        .first();
-      await heatmapButton.scrollIntoViewIfNeeded();
+      const heatmapButton = getVisibleHeatmapCircleButtons(page).first();
       await expect(heatmapButton).toBeVisible();
       await heatmapButton.click();
 
@@ -76,60 +80,101 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
     test('clicking the same heatmap circle again closes the details panel', async ({ page }) => {
       await navigateFn(page);
 
-      const heatmapButton = page
-        .locator('button.heatmap-circle-button')
-        .filter({ has: page.locator('.heatmap-circle[style*="display: block"]') })
-        .first();
-      await heatmapButton.scrollIntoViewIfNeeded();
+      const heatmapButton = getVisibleHeatmapCircleButtons(page).first();
       await expect(heatmapButton).toBeVisible();
 
       // First click - open panel
       await heatmapButton.click();
-      await expect(page.locator('.heatmap-details-panel-heading').first()).toBeVisible();
+      const panelHeading = page.locator('.heatmap-details-panel-heading').first();
+      await expect(panelHeading).toBeVisible();
 
-      // Second click - close panel (toggle behavior)
-      await heatmapButton.click();
-      await expect(page.locator('.heatmap-details-panel-heading')).toBeHidden();
+      // Second click on the same button - close panel (toggle behavior)
+      // Use force:true to bypass any potential click interception by the popover
+      await heatmapButton.click({ force: true });
+      await expect(page.locator('.heatmap-details-panel-heading')).toHaveCount(0);
     });
 
     test('clicking a different heatmap circle updates the panel content', async ({ page }) => {
       await navigateFn(page);
 
-      const heatmapButtons = page
-        .locator('button.heatmap-circle-button')
-        .filter({ has: page.locator('.heatmap-circle[style*="display: block"]') });
+      const heatmapButtons = getVisibleHeatmapCircleButtons(page);
       const firstButton = heatmapButtons.first();
       // Use a button further down the list to avoid popover overlap
       const secondButton = heatmapButtons.nth(10);
 
-      // Click first button (scrolls into view automatically on click)
-      await firstButton.scrollIntoViewIfNeeded();
       await firstButton.click();
-      await expect(page.locator('.heatmap-details-panel-heading').first()).toBeVisible();
+
+      const panelData = page.locator('.heatmap-details-panel-data').first();
+      await expect(panelData).toBeVisible();
+
+      // Capture the initial panel data (values that change between circles)
+      const initialData = await panelData.textContent();
 
       // Click second button - use force: true in case popover still overlaps during transition
-      await secondButton.scrollIntoViewIfNeeded();
       await secondButton.click({ force: true });
 
-      // Panel should still be visible (showing different content)
-      await expect(page.locator('.heatmap-details-panel-heading').first()).toBeVisible();
+      // Panel should still be visible with different data values
+      await expect(panelData).toBeVisible();
+      await expect(panelData).not.toHaveText(initialData ?? '');
+    });
+
+    test('clicking a different heatmap circle repositions the panel near the new target', async ({
+      page,
+    }) => {
+      await navigateFn(page);
+
+      const heatmapButtons = getVisibleHeatmapCircleButtons(page);
+      const firstButton = heatmapButtons.first();
+      // Use a button further down the list to ensure different vertical position
+      const secondButton = heatmapButtons.nth(10);
+
+      // Click first button and get panel position
+      await firstButton.click();
+      const panelHeading = page.locator('.heatmap-details-panel-heading').first();
+      await expect(panelHeading).toBeVisible();
+      const firstPanelBox = await panelHeading.boundingBox();
+
+      // Get first button position for reference
+      const firstButtonBox = await firstButton.boundingBox();
+
+      // Click second button
+      await secondButton.click({ force: true });
+      await expect(panelHeading).toBeVisible();
+
+      // Get second button position
+      const secondButtonBox = await secondButton.boundingBox();
+
+      // Wait for panel to potentially reposition
+      await page.waitForTimeout(100);
+      const secondPanelBox = await panelHeading.boundingBox();
+
+      // Verify positions are available
+      expect(firstButtonBox).not.toBeNull();
+      expect(secondButtonBox).not.toBeNull();
+      expect(firstPanelBox).not.toBeNull();
+      expect(secondPanelBox).not.toBeNull();
+
+      // If buttons are at different vertical positions, panel should reposition accordingly
+      // The panel should be closer to its target button than to the other button
+      if (firstButtonBox && secondButtonBox && firstPanelBox && secondPanelBox) {
+        if (Math.abs(firstButtonBox.y - secondButtonBox.y) > 50) {
+          const panelMovedSignificantly = Math.abs(firstPanelBox.y - secondPanelBox.y) > 20;
+          expect(panelMovedSignificantly).toBe(true);
+        }
+      }
     });
 
     test('clicking outside the panel closes it', async ({ page }) => {
       await navigateFn(page);
 
-      const heatmapButton = page
-        .locator('button.heatmap-circle-button')
-        .filter({ has: page.locator('.heatmap-circle[style*="display: block"]') })
-        .first();
-      await heatmapButton.scrollIntoViewIfNeeded();
+      const heatmapButton = getVisibleHeatmapCircleButtons(page).first();
       await heatmapButton.click();
 
       await expect(page.locator('.heatmap-details-panel-heading').first()).toBeVisible();
 
       // Click outside the panel (on the page body)
       await page.locator('body').click({ position: { x: 10, y: 10 } });
-      await expect(page.locator('.heatmap-details-panel-heading')).toBeHidden();
+      await expect(page.locator('.heatmap-details-panel-heading')).toHaveCount(0);
     });
   });
 };

@@ -42,13 +42,14 @@
     </div>
   }
 </ng-template>
+<!-- Two popovers for double buffering: ensures correct positioning when switching targets -->
 <p-popover class="heatmap-details-panel" appendTo="" (onHide)="onPanelHide()">
   <ng-container
-    *ngTemplateOutlet="panelTemplate; context: { $implicit: panelData()[0] }"
+    *ngTemplateOutlet="panelTemplate; context: { $implicit: panelData() }"
   ></ng-container>
 </p-popover>
 <p-popover class="heatmap-details-panel" appendTo="" (onHide)="onPanelHide()">
   <ng-container
-    *ngTemplateOutlet="panelTemplate; context: { $implicit: panelData()[1] }"
+    *ngTemplateOutlet="panelTemplate; context: { $implicit: panelData() }"
   ></ng-container>
 </p-popover>

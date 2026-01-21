@@ -34,15 +34,13 @@ export class HeatmapDetailsPanelComponent {
   panels = viewChildren(Popover);
 
   /**
-   * Double buffering: Two popovers are used so we can hide one
-   * while showing the other at a new position.  Otherwise, PrimeNG won't
-   * reposition the new popover.
+   * Double buffering: Two popovers alternate so that we always show a fresh,
+   * hidden popover at the new position. PrimeNG's popover does not reliably
+   * reposition when calling show() on an already-visible popover, so we hide
+   * the current one and show the other at the new target location.
    */
-  activePanelIndex = signal(0);
-  panelData = signal<[HeatmapDetailsPanelData, HeatmapDetailsPanelData]>([
-    { ...defaultPanelData },
-    { ...defaultPanelData },
-  ]);
+  activeIndex = signal(0);
+  panelData = signal<HeatmapDetailsPanelData>({ ...defaultPanelData });
 
   constructor() {
     effect(() => {
@@ -58,20 +56,14 @@ export class HeatmapDetailsPanelComponent {
   }
 
   private show(event: Event, data: HeatmapDetailsPanelData) {
-    const currentIndex = this.activePanelIndex();
-    const newIndex = currentIndex === 0 ? 1 : 0;
+    const currentIndex = this.activeIndex();
+    const nextIndex = currentIndex === 0 ? 1 : 0;
 
-    // Update data for the next panel
-    this.panelData.update((arr) => {
-      const copy: [HeatmapDetailsPanelData, HeatmapDetailsPanelData] = [...arr];
-      copy[newIndex] = data;
-      return copy;
-    });
-    this.activePanelIndex.set(newIndex);
+    this.panelData.set(data);
+    this.activeIndex.set(nextIndex);
 
-    // Hide current, show next at new position
     this.panels()[currentIndex]?.hide();
-    this.panels()[newIndex]?.show(event, event.target);
+    this.panels()[nextIndex]?.show(event, event.target);
   }
 
   private hide() {
@@ -79,14 +71,46 @@ export class HeatmapDetailsPanelComponent {
   }
 
   /**
-   * Called when a popover is hidden by PrimeNG (e.g., clicking outside).
-   * Only clears service state if no panel is still visible.
+   * Handles the PrimeNG popover's `onHide` event, triggered when the popover
+   * closes (e.g., user clicks outside the panel).
+   *
+   * ## Why queueMicrotask is needed
+   *
+   * There's a race condition when clicking a heatmap button while a panel is open.
+   * A single click triggers TWO handlers in this order:
+   *
+   *   1. PrimeNG's document click listener fires first → calls `onHide()`
+   *   2. The button's click handler fires second → calls `showHeatmapDetailsPanel()`
+   *
+   * The button's handler checks if the same cell is already open (toggle logic):
+   * - If the signal has data for this cell → it hides the panel (toggle off)
+   * - If the signal is null → it shows a new panel (toggle on)
+   *
+   * ## The problem without queueMicrotask
+   *
+   * If `onPanelHide()` immediately clears the signal:
+   *   1. onHide → signal = null (cleared too early!)
+   *   2. Button click → sees signal is null → opens new panel (wrong behavior)
+   *
+   * Result: Clicking the same button opens a new panel instead of closing it.
+   *
+   * ## The solution with queueMicrotask
+   *
+   * `queueMicrotask` schedules the cleanup to run AFTER all synchronous handlers:
+   *   1. onHide → schedules cleanup (deferred, not yet run)
+   *   2. Button click → sees signal still has data → hides panel → signal = null
+   *   3. Microtask runs → signal is already null → cleanup skipped (correct!)
+   *
+   * For non-toggle scenarios (clicking empty space), the microtask runs and
+   * properly clears the signal since no button handler intervened.
    */
   onPanelHide() {
-    const anyVisible = this.panels().some((p) => p?.overlayVisible);
-    if (!anyVisible && this.comparisonToolService.heatmapDetailsPanelData()) {
-      this.comparisonToolService.hideHeatmapDetailsPanel();
-    }
+    queueMicrotask(() => {
+      const anyVisible = this.panels().some((p) => p?.overlayVisible);
+      if (!anyVisible && this.comparisonToolService.heatmapDetailsPanelData()) {
+        this.comparisonToolService.hideHeatmapDetailsPanel();
+      }
+    });
   }
 
   getSignificantFigures(n: number | null | undefined, significantDigits: number): string | number {
