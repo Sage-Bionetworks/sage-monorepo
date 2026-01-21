@@ -24,7 +24,7 @@ async function setup(showPanel = true) {
   if (showPanel) {
     const mockTarget = document.createElement('div');
     const mockEvent = new MouseEvent('click', { bubbles: true });
-    Object.defineProperty(mockEvent, 'target', { value: mockTarget });
+    Object.defineProperty(mockEvent, 'currentTarget', { value: mockTarget });
 
     service['heatmapDetailsPanelDataSignal'].set({
       data: structuredClone(heatmapDetailsPanelDataMock),
@@ -110,6 +110,7 @@ describe('Component: Heatmap - Details Panel', () => {
       const newTarget = document.createElement('div');
       const newEvent = new MouseEvent('click', { bubbles: true });
       Object.defineProperty(newEvent, 'target', { value: newTarget });
+      Object.defineProperty(newEvent, 'currentTarget', { value: newTarget });
 
       service['heatmapDetailsPanelDataSignal'].set({
         data: newData,
