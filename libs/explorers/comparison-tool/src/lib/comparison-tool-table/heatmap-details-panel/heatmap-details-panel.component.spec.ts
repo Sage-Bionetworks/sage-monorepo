@@ -109,7 +109,6 @@ describe('Component: Heatmap - Details Panel', () => {
       const newData = { ...heatmapDetailsPanelDataMock, heading: 'New Heading' };
       const newTarget = document.createElement('div');
       const newEvent = new MouseEvent('click', { bubbles: true });
-      Object.defineProperty(newEvent, 'target', { value: newTarget });
       Object.defineProperty(newEvent, 'currentTarget', { value: newTarget });
 
       service['heatmapDetailsPanelDataSignal'].set({

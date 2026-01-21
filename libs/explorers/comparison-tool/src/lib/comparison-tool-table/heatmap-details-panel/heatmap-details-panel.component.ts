@@ -71,10 +71,8 @@ export class HeatmapDetailsPanelComponent {
 
     if (event.currentTarget === this.lastCurrentTarget && isVisible) {
       this.hide();
-      this.lastCurrentTarget = null;
     } else {
       this.show(event, data);
-      this.lastCurrentTarget = event.currentTarget;
     }
   }
 
@@ -87,10 +85,12 @@ export class HeatmapDetailsPanelComponent {
 
     this.panels()[currentIndex]?.hide();
     this.panels()[nextIndex]?.show(event, event.currentTarget);
+    this.lastCurrentTarget = event.currentTarget;
   }
 
   private hide() {
     this.panels().forEach((panel) => panel?.hide());
+    this.lastCurrentTarget = null;
   }
 
   getSignificantFigures(n: number | null | undefined, significantDigits: number): string | number {
