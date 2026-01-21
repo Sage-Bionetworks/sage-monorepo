@@ -42,7 +42,7 @@ public class DiseaseCorrelationApiDelegateImpl implements DiseaseCorrelationApiD
   public ResponseEntity<DiseaseCorrelationsPageDto> getDiseaseCorrelations(
     DiseaseCorrelationSearchQueryDto query
   ) {
-    log.debug("Fetching disease correlations for categories: {}", query.getCategories());
+    log.debug("Fetching disease correlations with query: {}", query);
 
     // Validate query parameters
     ApiHelper.validateQueryParameters(VALID_QUERY_PARAMS);

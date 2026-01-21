@@ -38,7 +38,7 @@ public class GeneExpressionApiDelegateImpl implements GeneExpressionApiDelegate 
   public ResponseEntity<GeneExpressionsPageDto> getGeneExpressions(
     GeneExpressionSearchQueryDto query
   ) {
-    log.debug("Fetching gene expressions for categories: {}", query.getCategories());
+    log.debug("Fetching gene expressions with query: {}", query);
 
     // Validate query parameters
     ApiHelper.validateQueryParameters(VALID_QUERY_PARAMS);
