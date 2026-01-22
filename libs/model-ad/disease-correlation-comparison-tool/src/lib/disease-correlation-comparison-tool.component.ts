@@ -181,9 +181,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       currentQuery.multiSortMeta,
     );
 
-    const selectedFilters = this.comparisonToolHelperService.getSelectedFilters(
-      currentQuery.filters,
-    );
+    const selectedFilters = this.comparisonToolService.selectedFilters();
 
     const query: DiseaseCorrelationSearchQuery = {
       categories: currentQuery.categories,

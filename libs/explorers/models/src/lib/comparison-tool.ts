@@ -151,6 +151,7 @@ export interface ComparisonToolUrlParams {
   categories?: string[] | null;
   sortFields?: string[] | null;
   sortOrders?: SortOrder[] | null;
+  filterSelections?: Record<string, string[]> | null;
 }
 
 export interface PaginationParams {

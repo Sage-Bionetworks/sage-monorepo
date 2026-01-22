@@ -124,6 +124,7 @@ export class ComparisonToolService<T> {
   readonly multiSortMeta = computed(() => this.querySignal().multiSortMeta);
   readonly searchTerm = computed(() => this.querySignal().searchTerm);
   readonly filters = computed(() => this.querySignal().filters);
+  readonly selectedFilters = computed(() => this.helperService.getSelectedFilters(this.filters()));
   readonly first = computed(() => this.pageNumber() * this.pageSize());
 
   // pinnedItems cache may include more pins than are currently visible
@@ -151,8 +152,14 @@ export class ComparisonToolService<T> {
       const dropdownSelection = this.dropdownSelection();
       const visiblePinIds = this.visiblePinIds();
       const multiSortMeta = this.multiSortMeta();
+      const selectedFilters = this.selectedFilters();
 
-      const state = this.serializeSyncState({ dropdownSelection, visiblePinIds, multiSortMeta });
+      const state = this.serializeSyncState({
+        dropdownSelection,
+        visiblePinIds,
+        multiSortMeta,
+        selectedFilters,
+      });
       this.syncStateToUrl(state);
     });
   }
@@ -239,7 +246,7 @@ export class ComparisonToolService<T> {
 
     const selection = this.resolveInitialDropdownSelection(params, configs);
     const initialSort = this.resolveInitialSortMeta(params);
-    const initialFilters = this.initializeFiltersFromConfig(configs, selection);
+    const initialFilters = this.resolveInitialFilters(params, configs, selection);
 
     this.updateQuery({
       categories: selection,
@@ -286,12 +293,14 @@ export class ComparisonToolService<T> {
     return [];
   }
 
-  private initializeFiltersFromConfig(
+  private resolveInitialFilters(
+    params: ComparisonToolUrlParams,
     configs: ComparisonToolConfig[],
     selection: string[],
   ): ComparisonToolFilter[] {
     const targetConfig = this.findConfigForSelection(configs, selection);
-    return this.convertFiltersFromConfig(targetConfig?.filters);
+    const filters = this.convertFiltersFromConfig(targetConfig?.filters);
+    return this.createFiltersWithUrlSelections(filters, params.filterSelections);
   }
 
   private findConfigForSelection(
@@ -315,6 +324,15 @@ export class ComparisonToolService<T> {
     return prefixMatch ?? configs[0];
   }
 
+  /**
+   * Returns the base filter structure for a given dropdown selection.
+   * All filter options are initialized with `selected: false`.
+   */
+  private getFiltersForSelection(selection: string[]): ComparisonToolFilter[] {
+    const config = this.findConfigForSelection(this.configsSignal(), selection);
+    return this.convertFiltersFromConfig(config?.filters);
+  }
+
   private convertFiltersFromConfig(
     filterConfigs: ComparisonToolConfigFilter[] | undefined,
   ): ComparisonToolFilter[] {
@@ -331,6 +349,31 @@ export class ComparisonToolService<T> {
         selected: false,
       })),
     }));
+  }
+
+  /**
+   * Creates a new filter array with selections applied from the given selection map.
+   * Uses the filter structure from `filters` but sets selection state based on `selections`.
+   * If no selections are provided, all options are deselected.
+   */
+  private createFiltersWithUrlSelections(
+    filters: ComparisonToolFilter[],
+    selections: Record<string, string[]> | null | undefined,
+  ): ComparisonToolFilter[] {
+    const selectionMap = selections ?? {};
+
+    return filters.map((filter) => {
+      const selectedValues = selectionMap[filter.data_key];
+      const selectedSet = new Set(selectedValues ?? []);
+
+      return {
+        ...filter,
+        options: filter.options.map((option) => ({
+          ...option,
+          selected: selectedSet.has(option.label),
+        })),
+      };
+    });
   }
 
   setDropdownSelection(selection: string[]) {
@@ -564,8 +607,12 @@ export class ComparisonToolService<T> {
     // Preserve current pins when changing dropdown selection
     const currentPins = this.pinnedItems();
 
+    // Load filters from the new config (with no selections)
+    const newFilters = this.getFiltersForSelection(selection);
+
     this.updateQuery({
       categories: selection,
+      filters: newFilters,
       pinnedItems: currentPins,
       pageNumber: this.FIRST_PAGE_NUMBER,
     });
@@ -679,50 +726,40 @@ export class ComparisonToolService<T> {
     // Batch all query changes to avoid multiple updateQuery() calls
     const queryUpdates: Partial<ComparisonToolQuery> = {};
 
-    // Categories are handled in initializeFromConfig for first load,
-    // so only process category changes from URL on subsequent navigations
-    if (!options.isFirstLoad && params.categories) {
-      const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
-      const categoriesMatchLastSync = isEqual(
-        normalizedSelection,
-        this.lastSyncedUrlParamsState?.categories ?? [],
-      );
-
-      if (!categoriesMatchLastSync && !isEqual(normalizedSelection, this.dropdownSelection())) {
-        queryUpdates.categories = normalizedSelection;
+    // On first load, categories/sort/filters are already initialized in initializeFromConfig.
+    // Only pinned items need to be resolved here. For subsequent navigations, all values
+    // are resolved from URL changes.
+    if (!options.isFirstLoad) {
+      const resolvedCategories = this.resolveCategoriesFromUrl(params.categories);
+      if (resolvedCategories) {
+        queryUpdates.categories = resolvedCategories;
         queryUpdates.pageNumber = this.FIRST_PAGE_NUMBER;
+
+        // When categories change, load filters from the new config and apply URL selections
+        const newFilters = this.getFiltersForSelection(resolvedCategories);
+        queryUpdates.filters = this.createFiltersWithUrlSelections(
+          newFilters,
+          params.filterSelections,
+        );
+      } else {
+        // Categories unchanged, just apply URL filter selections to current filters
+        const resolvedFilters = this.resolveFiltersFromUrl(params.filterSelections);
+        if (resolvedFilters) {
+          queryUpdates.filters = resolvedFilters;
+        }
+      }
+
+      const resolvedSort = this.resolveSortFromUrl(params.sortFields, params.sortOrders);
+      if (resolvedSort) {
+        queryUpdates.multiSortMeta = resolvedSort;
       }
     }
 
-    if (params.sortFields?.length) {
-      const sortMeta = this.convertArraysToSortMeta(params.sortFields, params.sortOrders ?? []);
-      const lastSyncedSortMeta = this.convertArraysToSortMeta(
-        this.lastSyncedUrlParamsState?.sortFields ?? [],
-        this.lastSyncedUrlParamsState?.sortOrders ?? [],
-      );
-      const sortMatchesLastSync = isEqual(sortMeta, lastSyncedSortMeta);
-
-      if (!sortMatchesLastSync && !isEqual(sortMeta, this.multiSortMeta())) {
-        queryUpdates.multiSortMeta = sortMeta;
-      }
+    // Pinned items
+    const resolvedPinnedItems = this.resolvePinnedItemsFromUrl(params.pinnedItems);
+    if (resolvedPinnedItems !== null) {
+      queryUpdates.pinnedItems = resolvedPinnedItems;
     }
-
-    // Pinned items logic:
-    // - If URL pins match what we just synced, this is a self-triggered change - don't update query.pinnedItems
-    // - If URL pins differ, this is an external change (user edited URL, link navigation) - accept new pins
-    // - First load with no URL pins: start fresh with empty pins
-    const urlPinnedItems = params.pinnedItems ?? [];
-    const urlPinsMatchLastSync = isEqual(
-      urlPinnedItems,
-      this.lastSyncedUrlParamsState?.pinnedItems ?? [],
-    );
-
-    if (!urlPinsMatchLastSync) {
-      // External URL change - update query.pinnedItems
-      queryUpdates.pinnedItems =
-        urlPinnedItems.length > 0 ? Array.from(new Set(urlPinnedItems)) : [];
-    }
-    // If urlPinsMatchLastSync, we skip updating query.pinnedItems to preserve the full cache
 
     // Apply all batched changes in a single update
     if (Object.keys(queryUpdates).length > 0) {
@@ -732,6 +769,86 @@ export class ComparisonToolService<T> {
     if (!options.isFirstLoad) {
       this.updateSyncedStateCache();
     }
+  }
+
+  private resolveFiltersFromUrl(
+    urlFilterSelections: Record<string, string[]> | null | undefined,
+  ): ComparisonToolFilter[] | null {
+    const selections = urlFilterSelections ?? {};
+    const lastSyncedSelections = this.lastSyncedUrlParamsState?.filterSelections ?? {};
+
+    if (isEqual(selections, lastSyncedSelections)) {
+      return null;
+    }
+
+    return this.createFiltersWithUrlSelections(this.filters(), selections);
+  }
+
+  private resolveSortFromUrl(
+    sortFields: string[] | null | undefined,
+    sortOrders: SortOrder[] | null | undefined,
+  ): SortMeta[] | null {
+    if (!sortFields?.length) {
+      return null;
+    }
+
+    const sortMeta = this.convertArraysToSortMeta(sortFields, sortOrders ?? []);
+    const lastSyncedSortMeta = this.convertArraysToSortMeta(
+      this.lastSyncedUrlParamsState?.sortFields ?? [],
+      this.lastSyncedUrlParamsState?.sortOrders ?? [],
+    );
+
+    if (isEqual(sortMeta, lastSyncedSortMeta) || isEqual(sortMeta, this.multiSortMeta())) {
+      return null;
+    }
+
+    return sortMeta;
+  }
+
+  /**
+   * Resolves categories from URL params.
+   * Returns updated categories if URL differs from last synced state, null otherwise.
+   */
+  private resolveCategoriesFromUrl(urlCategories: string[] | null | undefined): string[] | null {
+    if (!urlCategories) {
+      return null;
+    }
+
+    const normalizedSelection = this.normalizeSelection(urlCategories, this.configsSignal());
+    const categoriesMatchLastSync = isEqual(
+      normalizedSelection,
+      this.lastSyncedUrlParamsState?.categories ?? [],
+    );
+
+    if (categoriesMatchLastSync || isEqual(normalizedSelection, this.dropdownSelection())) {
+      return null;
+    }
+
+    return normalizedSelection;
+  }
+
+  /**
+   * Resolves pinned items from URL params.
+   * Returns updated pinned items if URL differs from last synced state, null otherwise.
+   *
+   * Logic:
+   * - If URL pins match what we last synced, this is a self-triggered change - skip update
+   *   to preserve the full pinned items cache
+   * - If URL pins differ, this is an external change (user edited URL, link navigation) -
+   *   accept the new pins
+   */
+  private resolvePinnedItemsFromUrl(urlPinnedItems: string[] | null | undefined): string[] | null {
+    const pinnedItems = urlPinnedItems ?? [];
+    const urlPinsMatchLastSync = isEqual(
+      pinnedItems,
+      this.lastSyncedUrlParamsState?.pinnedItems ?? [],
+    );
+
+    if (urlPinsMatchLastSync) {
+      return null;
+    }
+
+    return pinnedItems.length > 0 ? Array.from(new Set(pinnedItems)) : [];
   }
 
   private syncStateToUrl(state: ComparisonToolUrlParams): void {
@@ -747,17 +864,20 @@ export class ComparisonToolService<T> {
     dropdownSelection: string[];
     visiblePinIds: string[];
     multiSortMeta: SortMeta[];
+    selectedFilters: Record<string, string[]>;
   }): ComparisonToolUrlParams {
     const pinned = options.visiblePinIds;
     const { sortFields, sortOrders } = this.convertSortMetaToArrays(options.multiSortMeta);
     const defaultSort = this.viewConfigSignal().defaultSort;
     const isDefaultSort = defaultSort && isEqual(options.multiSortMeta, defaultSort as SortMeta[]);
+    const hasFilters = Object.keys(options.selectedFilters).length > 0;
 
     return {
       pinnedItems: pinned.length ? pinned : null,
       categories: options.dropdownSelection.length ? options.dropdownSelection : null,
       sortFields: !isDefaultSort && sortFields.length ? sortFields : null,
       sortOrders: !isDefaultSort && sortOrders.length ? sortOrders : null,
+      filterSelections: hasFilters ? options.selectedFilters : null,
     };
   }
 
@@ -767,6 +887,7 @@ export class ComparisonToolService<T> {
         dropdownSelection: this.dropdownSelection(),
         visiblePinIds: this.visiblePinIds(),
         multiSortMeta: this.multiSortMeta(),
+        selectedFilters: this.selectedFilters(),
       }),
     );
   }
@@ -804,6 +925,7 @@ export class ComparisonToolService<T> {
       visiblePinIds: this.visiblePinIds(),
       dropdownSelection: this.dropdownSelection(),
       multiSortMeta: this.multiSortMeta(),
+      selectedFilters: this.selectedFilters(),
     });
   }
 

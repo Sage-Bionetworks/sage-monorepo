@@ -5,6 +5,7 @@ import {
   expectPinnedRows,
   getPinnedTable,
   getQueryParamFromValues,
+  getQueryParamsFromRecords,
   getUnpinnedTable,
   pinByName,
   runFilterPanelTests,
@@ -13,6 +14,9 @@ import {
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
+  testFilterSelectionRestoredFromUrl,
+  testFilterSelectionUpdatesUrl,
+  testFiltersRemovedFromUrlOnClearAll,
   testFullCaseInsensitiveMatch,
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
@@ -366,6 +370,51 @@ test.describe('gene expression', () => {
     test('Meta+click on existing sort columns toggles their order', async ({ page }) => {
       await navigateToComparison(page, CT_PAGE, true);
       await testMetaClickTogglesExistingSortOrder(page, sortColumns.slice(0, 2));
+    });
+  });
+
+  test.describe('filter URL sync', () => {
+    test('filter selections are added to URL when selected and removed when cleared', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testFilterSelectionUpdatesUrl(page, 'model_type', 'Model Type', 'Familial AD');
+    });
+
+    test('filter selections are restored from URL on page load', async ({ page }) => {
+      const expectedFilterParams = {
+        biodomains: ['Apoptosis', 'Epigenetic', 'Myelination'],
+        name: ['APOE4'],
+      };
+      const expectedSelectedFilters = {
+        'Biological Domain': ['Apoptosis', 'Epigenetic', 'Myelination'],
+        'Mouse Model': ['APOE4'],
+      };
+
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        getQueryParamsFromRecords(expectedFilterParams),
+      );
+      await testFilterSelectionRestoredFromUrl(page, expectedFilterParams, expectedSelectedFilters);
+    });
+
+    test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
+      const expectedInitialFilterParams = {
+        model_type: ['Familial AD'],
+        biodomains: ['Apoptosis', 'Epigenetic', 'Myelination'],
+      };
+
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        getQueryParamsFromRecords(expectedInitialFilterParams),
+      );
+      await testFiltersRemovedFromUrlOnClearAll(page, expectedInitialFilterParams);
     });
   });
 });

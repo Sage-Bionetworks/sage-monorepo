@@ -9,12 +9,16 @@ import {
   expectSortOrdersParams,
   getPinnedTable,
   getQueryParamFromValues,
+  getQueryParamsFromRecords,
   getRowByName,
   runFilterPanelTests,
   runHeatmapDetailsPanelTests,
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
+  testFilterSelectionRestoredFromUrl,
+  testFilterSelectionUpdatesUrl,
+  testFiltersRemovedFromUrlOnClearAll,
   testFullCaseInsensitiveMatch,
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
@@ -424,6 +428,51 @@ test.describe('disease correlation', () => {
       await expectCategoriesParams(page, categories);
       await expectSortFieldsParams(page, ['PHG', 'IFG']);
       await expectSortOrdersParams(page, [1, -1]);
+    });
+  });
+
+  test.describe('filter URL sync', () => {
+    test('filter selections are added to URL when selected and removed when cleared', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testFilterSelectionUpdatesUrl(page, 'sex', 'Sex', 'Female');
+    });
+
+    test('filter selections are restored from URL on page load', async ({ page }) => {
+      const expectedFilterParams = {
+        age: ['4 months', '12 months'],
+        sex: ['Female'],
+      };
+      const expectedSelectedFilters = {
+        Age: ['4 months', '12 months'],
+        Sex: ['Female'],
+      };
+
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        getQueryParamsFromRecords(expectedFilterParams),
+      );
+      await testFilterSelectionRestoredFromUrl(page, expectedFilterParams, expectedSelectedFilters);
+    });
+
+    test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
+      const expectedInitialFilterParams = {
+        age: ['4 months'],
+        modified_genes: ['Abca7', 'MAPT', 'Mthfr'],
+      };
+
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        getQueryParamsFromRecords(expectedInitialFilterParams),
+      );
+      await testFiltersRemovedFromUrlOnClearAll(page, expectedInitialFilterParams);
     });
   });
 });

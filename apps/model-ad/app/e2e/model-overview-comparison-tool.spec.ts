@@ -5,6 +5,7 @@ import {
   expectPinnedRows,
   expectUnpinnedTableOnly,
   getPinnedTable,
+  getQueryParamsFromRecords,
   getRowByName,
   getUnpinnedTable,
   pinByName,
@@ -12,6 +13,9 @@ import {
   testClickColumnTogglesSortOrder,
   testClickColumnUpdatesSortUrl,
   testClickDifferentColumnsReplacesSingleSort,
+  testFilterSelectionRestoredFromUrl,
+  testFilterSelectionUpdatesUrl,
+  testFiltersRemovedFromUrlOnClearAll,
   testFullCaseInsensitiveMatch,
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
@@ -274,6 +278,51 @@ test.describe('model overview', () => {
     test('Meta+click on existing sort columns toggles their order', async ({ page }) => {
       await navigateToComparison(page, CT_PAGE, true);
       await testMetaClickTogglesExistingSortOrder(page, sortColumns.slice(0, 3));
+    });
+  });
+
+  test.describe('filter URL sync', () => {
+    test('filter selections are added to URL when selected and removed when cleared', async ({
+      page,
+    }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testFilterSelectionUpdatesUrl(page, 'model_type', 'Model Type', 'Familial AD');
+    });
+
+    test('filter selections are restored from URL on page load', async ({ page }) => {
+      const expectedFilterParams = {
+        available_data: ['Biomarkers', 'Pathology'],
+        center: ['UCI'],
+      };
+      const expectedSelectedFilters = {
+        'Available Data': ['Biomarkers', 'Pathology'],
+        'Contributing Center': ['UCI'],
+      };
+
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        getQueryParamsFromRecords(expectedFilterParams),
+      );
+      await testFilterSelectionRestoredFromUrl(page, expectedFilterParams, expectedSelectedFilters);
+    });
+
+    test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
+      const expectedInitialFilterParams = {
+        model_type: ['Familial AD'],
+        available_data: ['Gene Expression'],
+      };
+
+      await navigateToComparison(
+        page,
+        CT_PAGE,
+        true,
+        'url',
+        getQueryParamsFromRecords(expectedInitialFilterParams),
+      );
+      await testFiltersRemovedFromUrlOnClearAll(page, expectedInitialFilterParams);
     });
   });
 });

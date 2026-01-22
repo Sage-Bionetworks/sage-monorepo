@@ -140,9 +140,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       currentQuery.multiSortMeta,
     );
 
-    const selectedFilters = this.comparisonToolHelperService.getSelectedFilters(
-      currentQuery.filters,
-    );
+    const selectedFilters = this.comparisonToolService.selectedFilters();
 
     const query: ModelOverviewSearchQuery = {
       items: currentQuery.pinnedItems,

@@ -1,8 +1,17 @@
 import { expect, Locator, Page } from '@playwright/test';
+import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
 
 export const getQueryParamFromValues = (values: string[], key: string): string => {
   // Query parameter values are encoded once by CT URL service and again by Angular router
   return `${key}=${values.map((value) => encodeURIComponent(encodeURIComponent(value))).join(',')}`;
+};
+
+export const getQueryParamsFromRecords = (records: Record<string, string[]>): string => {
+  const queryParams: string[] = [];
+  for (const [key, values] of Object.entries(records)) {
+    queryParams.push(getQueryParamFromValues(values, key));
+  }
+  return queryParams.join('&');
 };
 
 const getQueryParamValues = (url: string, key: string): string[] => {
@@ -41,14 +50,16 @@ export const getSortFieldsQueryParams = (url: string): string[] =>
 export const getSortOrdersQueryParams = (url: string): number[] =>
   getQueryParamValues(url, 'sortOrders').map((v) => parseInt(v, 10));
 
-export const getPageQueryParam = (url: string): number | null => {
-  const values = getQueryParamValues(url, 'page');
-  return values.length > 0 ? parseInt(values[0], 10) : null;
-};
-
-export const getSearchQueryParam = (url: string): string | null => {
-  const values = getQueryParamValues(url, 'search');
-  return values.length > 0 ? values[0] : null;
+export const getFiltersQueryParams = (url: string): Record<string, string[]> => {
+  const filters: Record<string, string[]> = {};
+  const keys: string[] = Array.from((new URL(url).searchParams as any).keys());
+  for (const key of keys) {
+    if (RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS.has(key)) {
+      continue;
+    }
+    filters[key] = getQueryParamValues(url, key);
+  }
+  return filters;
 };
 
 export const getPinnedTable = (page: Page): Locator => page.locator('explorers-base-table').first();
@@ -108,12 +119,12 @@ export const expectSortOrdersParams = async (page: Page, expected: number[]): Pr
   await expect.poll(() => getSortOrdersQueryParams(page.url())).toEqual(expected);
 };
 
-export const expectPageParam = async (page: Page, expected: number | null): Promise<void> => {
-  await expect.poll(() => getPageQueryParam(page.url())).toEqual(expected);
-};
-
-export const expectSearchParam = async (page: Page, expected: string | null): Promise<void> => {
-  await expect.poll(() => getSearchQueryParam(page.url())).toEqual(expected);
+// expected: key: filter data_key, value: array of selected filter option labels
+export const expectFiltersParams = async (
+  page: Page,
+  expected: Record<string, string[]>,
+): Promise<void> => {
+  await expect.poll(() => getFiltersQueryParams(page.url())).toEqual(expected);
 };
 
 export const expectPinnedRows = async (page: Page, rowNames: string[]): Promise<void> => {
@@ -128,6 +139,22 @@ export const expectCategories = async (page: Page, categories: string[]): Promis
   for (const category of categories) {
     await expect(page.getByText(category)).toBeVisible();
   }
+};
+
+// selectedFilters: key: filter name, value: array of selected filter option labels
+export const expectFilters = async (
+  page: Page,
+  selectedFilters: Record<string, string[]>,
+): Promise<void> => {
+  const filterPanelMain = await toggleFilterPanel(page);
+  for (const [filterMenuName, filterNames] of Object.entries(selectedFilters)) {
+    await openFilterPanelSecondaryPane(filterPanelMain, filterMenuName);
+    for (const filterName of filterNames) {
+      const filterCheckbox = await getFilterCheckbox(page, filterMenuName, filterName);
+      await expect(filterCheckbox).toBeChecked();
+    }
+  }
+  await toggleFilterPanel(page);
 };
 
 export const searchViaFilterbox = async (page: Page, searchTerm: string): Promise<void> => {
@@ -149,25 +176,50 @@ export async function goToLastPage(page: Page) {
   await expect(lastPageBtn).toBeDisabled();
 }
 
-export async function clickFilterCheckbox(page: Page, filterMenuName: string, filterName: string) {
+export const toggleFilterPanel = async (page: Page): Promise<Locator> => {
   const filterButton = page.getByRole('button', { name: 'Filter Results' });
   await filterButton.click();
 
   const filterPanelMain = page.locator('.filter-panel-main');
-  await expect(filterPanelMain).toBeVisible();
+  return filterPanelMain;
+};
 
+export const openFilterPanelSecondaryPane = async (
+  filterPanelMain: Locator,
+  filterMenuName: string,
+): Promise<void> => {
   const filterMenuButtonNameRegex = new RegExp(filterMenuName, 'i');
   const filterMenuButton = filterPanelMain.getByRole('button', {
     name: filterMenuButtonNameRegex,
   });
   await filterMenuButton.click();
+};
 
+export const getFilterCheckbox = async (
+  page: Page,
+  filterMenuName: string,
+  filterName: string,
+): Promise<Locator> => {
   const filterPanelSecondary = page.locator('.filter-panel-pane').filter({ visible: true });
   await expect(filterPanelSecondary.getByText(filterMenuName)).toBeVisible();
   const filterCheckboxNameRegex = new RegExp(filterName, 'i');
   const filterCheckbox = filterPanelSecondary.getByRole('checkbox', {
     name: filterCheckboxNameRegex,
   });
+  return filterCheckbox;
+};
+
+export async function clickFilterCheckbox(
+  filterPanelMain: Locator,
+  filterMenuName: string,
+  filterName: string,
+) {
+  await openFilterPanelSecondaryPane(filterPanelMain, filterMenuName);
+  const filterCheckbox = await getFilterCheckbox(
+    filterPanelMain.page(),
+    filterMenuName,
+    filterName,
+  );
   await filterCheckbox.click();
 }
 
@@ -175,6 +227,16 @@ export async function expectFirstPage(page: Page) {
   const firstPageBtn = page.getByRole('button', { name: /first page/i });
   await expect(firstPageBtn).toBeDisabled();
   await expect(page.getByRole('button', { name: /previous page/i })).toBeDisabled();
+}
+
+export async function openFilterMenuAndClickCheckbox(
+  page: Page,
+  filterMenuName: string,
+  filterName: string,
+): Promise<Locator> {
+  const filterPanelMain = await toggleFilterPanel(page);
+  await clickFilterCheckbox(filterPanelMain, filterMenuName, filterName);
+  return filterPanelMain;
 }
 
 export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
@@ -211,12 +273,12 @@ export async function testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
 ) {
   await goToLastPage(page);
 
-  await clickFilterCheckbox(page, filterName, filterValue);
+  await openFilterMenuAndClickCheckbox(page, filterName, filterValue);
   await expectFirstPage(page);
 
   await goToLastPage(page);
 
-  await clickFilterCheckbox(page, filterName, filterValue);
+  await openFilterMenuAndClickCheckbox(page, filterName, filterValue);
   await expectFirstPage(page);
 }
 

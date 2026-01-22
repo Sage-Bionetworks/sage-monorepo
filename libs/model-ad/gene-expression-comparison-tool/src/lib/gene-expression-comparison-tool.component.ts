@@ -194,9 +194,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       currentQuery.multiSortMeta,
     );
 
-    const selectedFilters = this.comparisonToolHelperService.getSelectedFilters(
-      currentQuery.filters,
-    );
+    const selectedFilters = this.comparisonToolService.selectedFilters();
 
     const query: GeneExpressionSearchQuery = {
       categories: currentQuery.categories,

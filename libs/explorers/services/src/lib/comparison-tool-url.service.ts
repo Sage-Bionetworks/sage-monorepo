@@ -1,6 +1,7 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS } from '@sagebionetworks/explorers/constants';
 import { ComparisonToolUrlParams, SortOrder } from '@sagebionetworks/explorers/models';
 import { isEqual } from 'lodash';
 import { Observable } from 'rxjs';
@@ -53,7 +54,8 @@ export class ComparisonToolUrlService {
       isEqual(current.pinnedItems ?? [], next.pinnedItems ?? []) &&
       isEqual(current.categories ?? [], next.categories ?? []) &&
       isEqual(current.sortFields ?? [], next.sortFields ?? []) &&
-      isEqual(current.sortOrders ?? [], next.sortOrders ?? [])
+      isEqual(current.sortOrders ?? [], next.sortOrders ?? []) &&
+      isEqual(current.filterSelections ?? {}, next.filterSelections ?? {})
     );
   }
 
@@ -64,6 +66,7 @@ export class ComparisonToolUrlService {
     this.serializeArrayParam(params, 'pinned', state.pinnedItems);
     this.serializeArrayParam(params, 'sortFields', state.sortFields);
     this.serializeNumberArrayParam(params, 'sortOrders', state.sortOrders);
+    this.serializeFilterSelections(params, state.filterSelections);
 
     return params;
   }
@@ -79,6 +82,31 @@ export class ComparisonToolUrlService {
       params[key] = value.map((v) => encodeURIComponent(v)).join(',');
     } else if (value !== undefined) {
       params[key] = null;
+    }
+  }
+
+  private serializeFilterSelections(
+    params: Params,
+    filterSelections: Record<string, string[]> | null | undefined,
+  ): void {
+    // Get current filter keys from URL that need to be cleared
+    const currentParams = this.route.snapshot.queryParams;
+    const currentFilterKeys = Object.keys(currentParams).filter(
+      (key) => !RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS.has(key),
+    );
+
+    // Clear all current filter keys first
+    for (const key of currentFilterKeys) {
+      params[key] = null;
+    }
+
+    // Then set any new filter values
+    if (filterSelections) {
+      for (const [dataKey, values] of Object.entries(filterSelections)) {
+        if (values && values.length > 0) {
+          params[dataKey] = values.map((v) => encodeURIComponent(v)).join(',');
+        }
+      }
     }
   }
 
@@ -113,7 +141,29 @@ export class ComparisonToolUrlService {
       }
     }
 
+    const filterSelections = this.deserializeFilterSelections(params);
+    if (Object.keys(filterSelections).length > 0) {
+      result.filterSelections = filterSelections;
+    }
+
     return result;
+  }
+
+  private deserializeFilterSelections(params: Params): Record<string, string[]> {
+    const filterSelections: Record<string, string[]> = {};
+
+    for (const [key, value] of Object.entries(params)) {
+      if (RESERVED_COMPARISON_TOOL_QUERY_PARAM_KEYS.has(key)) {
+        continue;
+      }
+
+      const values = this.parseCommaSeparatedParam(value);
+      if (values.length > 0) {
+        filterSelections[key] = values;
+      }
+    }
+
+    return filterSelections;
   }
 
   private parseCommaSeparatedParam(value: string | string[] | null | undefined): string[] {
