@@ -29,8 +29,8 @@ First, get the active pull request details:
 
 Categorize the changes by:
 
-- **Type**: feature, bugfix, chore, refactor, docs, test
-- **Scope**: affected applications/libraries in the monorepo
+- **Type**: Use repository-defined PR types from [lint-pr.yml](/.github/workflows/lint-pr.yml)
+- **Scope**: Use repository-defined scopes from [lint-pr.yml](/.github/workflows/lint-pr.yml)
 - **Technology stack**: Java/Spring Boot, TypeScript/Angular, Python, etc.
 - **Breaking changes**: API modifications, schema changes
 - **Configuration**: build files, application properties
