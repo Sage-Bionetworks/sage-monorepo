@@ -28,11 +28,10 @@ async function setup(isOpen = false) {
       ...provideComparisonToolFilterService(),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
-    componentInputs: {
-      filterConfigs: mockComparisonToolConfigFilters,
-    },
   });
   const ctService = component.fixture.debugElement.injector.get(ComparisonToolService);
+  ctService.updateQuery({ filters: structuredClone(mockComparisonToolFilters) });
+  component.fixture.detectChanges();
   if (isOpen) {
     ctService.openFilterPanel();
     component.fixture.detectChanges();

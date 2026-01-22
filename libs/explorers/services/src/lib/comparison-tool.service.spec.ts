@@ -115,10 +115,10 @@ describe('ComparisonToolService', () => {
       service.setPinnedData([{ _id: 'item1' }] as any[]);
       service.pinItem('item2');
       service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
-      expect(service.pinnedItems().size).toBe(2);
+      expect(service.pinnedItemsSet().size).toBe(2);
 
       service.setDropdownSelection(['category1', 'option2']);
-      expect(service.pinnedItems().size).toBe(2);
+      expect(service.pinnedItemsSet().size).toBe(2);
       expect(service.isPinned('item1')).toBe(true);
       expect(service.isPinned('item2')).toBe(true);
     });
@@ -148,20 +148,20 @@ describe('ComparisonToolService', () => {
       service.setPinnedData([{ _id: 'item1' }] as any[]);
       service.pinItem('item2');
       service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }] as any[]);
-      expect(service.pinnedItems().size).toBe(2);
+      expect(service.pinnedItemsSet().size).toBe(2);
 
       service.setDropdownSelection(['category1', 'option2']);
-      expect(service.pinnedItems().size).toBe(2);
+      expect(service.pinnedItemsSet().size).toBe(2);
 
       service.pinItem('item3');
       service.setPinnedData([{ _id: 'item1' }, { _id: 'item2' }, { _id: 'item3' }] as any[]);
-      expect(service.pinnedItems().size).toBe(3);
+      expect(service.pinnedItemsSet().size).toBe(3);
       expect(service.isPinned('item1')).toBe(true);
       expect(service.isPinned('item2')).toBe(true);
       expect(service.isPinned('item3')).toBe(true);
 
       service.setDropdownSelection(['category1', 'option1']);
-      expect(service.pinnedItems().size).toBe(3);
+      expect(service.pinnedItemsSet().size).toBe(3);
       expect(service.isPinned('item1')).toBe(true);
       expect(service.isPinned('item2')).toBe(true);
       expect(service.isPinned('item3')).toBe(true);
@@ -177,11 +177,11 @@ describe('ComparisonToolService', () => {
 
       service.unpinItem('item1');
       service.setPinnedData([{ _id: 'item2' }, { _id: 'item3' }] as any[]);
-      expect(service.pinnedItems().size).toBe(2);
+      expect(service.pinnedItemsSet().size).toBe(2);
       expect(service.isPinned('item1')).toBe(false);
 
       service.setDropdownSelection(['category1', 'option2']);
-      expect(service.pinnedItems().size).toBe(2);
+      expect(service.pinnedItemsSet().size).toBe(2);
       expect(service.isPinned('item1')).toBe(false);
       expect(service.isPinned('item2')).toBe(true);
       expect(service.isPinned('item3')).toBe(true);
@@ -208,18 +208,18 @@ describe('ComparisonToolService', () => {
 
     it('should handle pinning multiple items at once', () => {
       service.pinList(['item1', 'item2', 'item3']);
-      expect(service.pinnedItems().size).toBe(3);
+      expect(service.pinnedItemsSet().size).toBe(3);
 
       service.setDropdownSelection(['category2', 'option1']);
 
-      expect(service.pinnedItems().size).toBe(3);
+      expect(service.pinnedItemsSet().size).toBe(3);
       expect(service.isPinned('item1')).toBe(true);
       expect(service.isPinned('item2')).toBe(true);
       expect(service.isPinned('item3')).toBe(true);
 
       service.setDropdownSelection(['category1', 'option1']);
 
-      expect(service.pinnedItems().size).toBe(3);
+      expect(service.pinnedItemsSet().size).toBe(3);
       expect(service.isPinned('item1')).toBe(true);
       expect(service.isPinned('item2')).toBe(true);
       expect(service.isPinned('item3')).toBe(true);
@@ -264,8 +264,7 @@ describe('ComparisonToolService', () => {
       service.pinItem('id1');
       service.pinItem('id1');
 
-      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
-      expect(pinnedItemsArray).toEqual(['id1']);
+      expect(service.pinnedItems()).toEqual(['id1']);
       expect(service.isPinned('id1')).toBe(true);
     });
 
@@ -274,9 +273,8 @@ describe('ComparisonToolService', () => {
 
       service.setPinnedItems(['id1', 'id2', 'id1', 'id3', 'id2']);
 
-      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
-      expect(pinnedItemsArray).toEqual(['id1', 'id2', 'id3']);
-      expect(service.pinnedItems().size).toBe(3);
+      expect(service.pinnedItems()).toEqual(['id1', 'id2', 'id3']);
+      expect(service.pinnedItemsSet().size).toBe(3);
       expect(service.isPinned('id1')).toBe(true);
       expect(service.isPinned('id2')).toBe(true);
       expect(service.isPinned('id3')).toBe(true);
@@ -290,9 +288,8 @@ describe('ComparisonToolService', () => {
 
       service.setPinnedItems(null);
 
-      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
-      expect(pinnedItemsArray).toEqual([]);
-      expect(service.pinnedItems().size).toBe(0);
+      expect(service.pinnedItems()).toEqual([]);
+      expect(service.pinnedItemsSet().size).toBe(0);
     });
 
     it('should maintain data integrity when pinning, unpinning, and re-pinning same item', () => {
@@ -307,8 +304,7 @@ describe('ComparisonToolService', () => {
       service.pinItem('id1');
       expect(service.isPinned('id1')).toBe(true);
 
-      const pinnedItemsArray = (service as any).querySignal().pinnedItems;
-      expect(pinnedItemsArray).toEqual(['id1']);
+      expect(service.pinnedItems()).toEqual(['id1']);
     });
   });
 
@@ -361,7 +357,7 @@ describe('ComparisonToolService', () => {
         paramsSubject.next({ pinnedItems: ['id1', 'id2'] });
         tick();
 
-        expect(Array.from(service.pinnedItems())).toEqual(['id1', 'id2']);
+        expect(service.pinnedItems()).toEqual(['id1', 'id2']);
       }));
 
       it('should sync when unpinning items', fakeAsync(() => {
@@ -538,7 +534,7 @@ describe('ComparisonToolService', () => {
         flushInitialUrlSync();
 
         expect(service.dropdownSelection()).toEqual(['Category A', 'Option 2']);
-        expect(Array.from(service.pinnedItems())).toEqual(['id1', 'id2']);
+        expect(service.pinnedItems()).toEqual(['id1', 'id2']);
       }));
 
       it('should carry over pinned items across dropdown selections', fakeAsync(() => {
@@ -551,8 +547,8 @@ describe('ComparisonToolService', () => {
 
         service.setDropdownSelection(['Category A', 'Option 2']);
         tick();
-        expect(service.pinnedItems().size).toBe(1);
-        expect(Array.from(service.pinnedItems())).toEqual(['id1']);
+        expect(service.pinnedItems().length).toBe(1);
+        expect(service.pinnedItems()).toEqual(['id1']);
 
         service.pinItem('id2');
         service.setPinnedData([{ _id: 'id1' }, { _id: 'id2' }] as any);
@@ -560,7 +556,7 @@ describe('ComparisonToolService', () => {
 
         service.setDropdownSelection(['Category A', 'Option 1']);
         tick();
-        expect(Array.from(service.pinnedItems())).toEqual(['id1', 'id2']);
+        expect(service.pinnedItems()).toEqual(['id1', 'id2']);
 
         const lastCall = getLastNavigateCall();
         expect(lastCall?.[1]?.queryParams?.categories).toEqual('Category%20A,Option%201');

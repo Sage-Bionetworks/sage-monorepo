@@ -48,7 +48,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
-  dropdownSelection = this.comparisonToolService.dropdownSelection;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
@@ -145,9 +144,9 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
 
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const categories = this.query().categories;
-      const pinnedItems = this.query().pinnedItems;
-      const sortMeta = this.query().multiSortMeta;
+      const categories = this.comparisonToolService.dropdownSelection();
+      const pinnedItems = this.comparisonToolService.pinnedItems();
+      const sortMeta = this.comparisonToolService.multiSortMeta();
       this.getPinnedData(categories, pinnedItems, sortMeta);
     }
   });

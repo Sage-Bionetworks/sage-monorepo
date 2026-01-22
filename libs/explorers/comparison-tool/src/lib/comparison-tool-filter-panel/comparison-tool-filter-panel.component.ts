@@ -1,10 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  ComparisonToolConfigFilter,
-  ComparisonToolFilter,
-} from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolFilterService,
   ComparisonToolService,
@@ -31,31 +27,11 @@ export class ComparisonToolFilterPanelComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
   private readonly comparisonToolFilterService = inject(ComparisonToolFilterService);
 
-  filterConfigs = input<ComparisonToolConfigFilter[]>([]);
-
   filters = this.comparisonToolFilterService.filters;
   isOpen = this.comparisonToolService.isFilterPanelOpen;
 
   activePane = signal(-1);
   hasActivePane = computed(() => this.activePane() !== -1);
-
-  constructor() {
-    effect(() => {
-      const filters = this.filterConfigs().map((config) => {
-        const filter: ComparisonToolFilter = {
-          name: config.name,
-          data_key: config.data_key,
-          short_name: config.short_name,
-          options: config.values.map((value) => ({
-            label: value,
-            selected: false,
-          })),
-        };
-        return filter;
-      });
-      this.comparisonToolFilterService.setFilters(filters);
-    });
-  }
 
   handleChange() {
     this.comparisonToolFilterService.setFilters(this.filters());
