@@ -156,8 +156,9 @@ def build_quest_section(
             transform: scale(1.15);
         }}
 
-        /* Mobile responsive */
-        @media (max-width: 768px) {{
+        /* Mobile responsive - trigger when columns would be too small */
+        /* Left section < 500px OR right section < 400px */
+        @media (max-width: 1000px) {{
             #quest-section-grid {{
                 grid-template-columns: 1fr !important;
             }}
@@ -332,15 +333,36 @@ def build_quest_section(
             background-color: var(--panel-background-fill);
             border-radius: 12px;
             border: 1px solid var(--border-color-primary);
-            margin: 0 1.5rem;
-            padding-bottom: 2.5rem;
+            margin: 0 1.5rem !important;
+            padding: 0 !important;
+            padding-bottom: 2.5rem !important;
+            gap: 0 !important;
+            min-width: 0 !important;
+            width: auto !important;
+        }
+        #quest-section-container > .block {
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            gap: 0 !important;
+            min-width: 0 !important;
         }
         #quest-section-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
             gap: 2rem;
             align-items: start;
-            padding: 0 2.5rem;
+            padding: 0 1.5rem;
+            min-width: 0 !important;
+        }
+        #quest-section-grid > .block {
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            gap: 0 !important;
+            min-width: 0 !important;
         }
         .quest-cta-btn {
             margin-top: 1.5rem;
