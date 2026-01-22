@@ -407,6 +407,8 @@ def build_app():
                 cta_btn_login,
                 cta_helper_msg,
                 stats_container,
+                quest_container,
+                quest_button,
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
@@ -458,6 +460,11 @@ def build_app():
         )
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(
+            lambda: navigator.show_page(1),
+            outputs=pages,
+        )
+        # Quest CTA button - navigates to battle page
+        quest_button.click(
             lambda: navigator.show_page(1),
             outputs=pages,
         )

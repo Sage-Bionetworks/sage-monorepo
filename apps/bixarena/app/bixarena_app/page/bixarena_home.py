@@ -4,10 +4,12 @@ import gradio as gr
 from bixarena_api_client import UserApi
 
 from bixarena_app.api.api_client_helper import (
+    calculate_quest_progress,
     create_authenticated_api_client,
     fetch_public_stats,
 )
 from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
+from bixarena_app.page.bixarena_quest_section import build_quest_section
 
 logger = logging.getLogger(__name__)
 
@@ -237,6 +239,19 @@ def build_stats_section():
     return stats_container
 
 
+def build_quest_section_wrapper():
+    """Create the Community Quest section for the home page"""
+    try:
+        # Fetch real-time quest progress data
+        progress_data = calculate_quest_progress()
+        quest_container, quest_button = build_quest_section(progress_data)
+    except Exception as e:
+        logger.error(f"Error calculating quest progress: {e}")
+        # Fall back to default data if calculation fails
+        quest_container, quest_button = build_quest_section(None)
+    return quest_container, quest_button
+
+
 def build_how_it_works_section():
     """Create the How It Works section explaining the battle mode process"""
 
@@ -390,6 +405,9 @@ def build_home_page():
         # Stats Section (single horizontal bar)
         stats_container = build_stats_section()
 
+        # Community Quest Section (new)
+        quest_html, quest_button = build_quest_section_wrapper()
+
         # How It Works Section
         build_how_it_works_section()
 
@@ -399,4 +417,6 @@ def build_home_page():
         start_btn_login,
         cta_helper_msg,
         stats_container,
+        quest_html,
+        quest_button,
     )
