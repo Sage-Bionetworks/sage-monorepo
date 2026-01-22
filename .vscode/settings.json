@@ -85,6 +85,7 @@
     "rm": false,
     "rmdir": false,
     "wc": true,
-    "wget": false
+    "wget": false,
+    "chat.useAgentSkills": true
   }
 }
