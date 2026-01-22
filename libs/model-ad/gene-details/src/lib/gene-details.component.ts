@@ -60,33 +60,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
 
   csvData = computed(() => {
     if (!this.geneExpressionIndividualData) return [];
-
-    const columnHeaders = [
-      'ensembl_gene_id',
-      'gene_symbol',
-      'age',
-      'genotype',
-      'sex',
-      'individual_id',
-      'log2_cpm',
-    ];
-    const data: string[][] = [];
-    data.push(columnHeaders);
-
-    this.geneExpressionIndividualData.forEach((g: GeneExpressionIndividual) => {
-      const baseRow = [g.ensembl_gene_id, g.gene_symbol, g.age];
-      g.data.forEach((point: IndividualData) => {
-        data.push([
-          ...baseRow,
-          point.genotype,
-          point.sex,
-          point.individual_id,
-          String(point.value || ''),
-        ]);
-      });
-    });
-
-    return data;
+    return this.convertToCsvData(this.geneExpressionIndividualData);
   });
 
   filename = computed(() => {
@@ -164,5 +138,34 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     if (this.geneExpressionIndividualData?.length === 0) {
       this.isLoading = true;
     }
+  }
+
+  convertToCsvData(data: GeneExpressionIndividual[]): string[][] {
+    const columnHeaders = [
+      'ensembl_gene_id',
+      'gene_symbol',
+      'age',
+      'genotype',
+      'sex',
+      'individual_id',
+      'log2_cpm',
+    ];
+    const csvRows: string[][] = [];
+    csvRows.push(columnHeaders);
+
+    data.forEach((g: GeneExpressionIndividual) => {
+      const baseRow = [g.ensembl_gene_id, g.gene_symbol, g.age];
+      g.data.forEach((point: IndividualData) => {
+        csvRows.push([
+          ...baseRow,
+          point.genotype,
+          point.sex,
+          point.individual_id,
+          String(point.value || ''),
+        ]);
+      });
+    });
+
+    return csvRows;
   }
 }

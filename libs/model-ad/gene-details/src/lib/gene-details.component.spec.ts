@@ -2,7 +2,10 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { GeneExpressionIndividualService } from '@sagebionetworks/model-ad/api-client';
+import {
+  GeneExpressionIndividual,
+  GeneExpressionIndividualService,
+} from '@sagebionetworks/model-ad/api-client';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { geneExpressionIndividualMocks } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
@@ -88,5 +91,40 @@ describe('GeneDetailsComponent', () => {
     expect(
       screen.getByText(`${geneExpressionIndividualMocks[0].name} (Females & Males)`),
     ).toBeInTheDocument();
+  });
+
+  it('should convert data to CSV and set filename correctly', async () => {
+    const mockData: GeneExpressionIndividual[] = [
+      {
+        ensembl_gene_id: 'ENSMUSG00000001',
+        gene_symbol: 'TestGene',
+        tissue: 'Brain',
+        name: 'TestModel',
+        matched_control: 'ControlModel',
+        units: 'Log2 Counts',
+        result_order: ['ControlModel', 'TestModel'],
+        age: '6 months',
+        age_numeric: 6,
+        data: [
+          { genotype: 'ControlModel', sex: 'Female', individual_id: '001', value: 1.23 },
+          { genotype: 'TestModel', sex: 'Male', individual_id: '002', value: 4.56 },
+        ],
+      },
+    ];
+
+    const expectedCsvData: string[][] = [
+      ['ensembl_gene_id', 'gene_symbol', 'age', 'genotype', 'sex', 'individual_id', 'log2_cpm'],
+      ['ENSMUSG00000001', 'TestGene', '6 months', 'ControlModel', 'Female', '001', '1.23'],
+      ['ENSMUSG00000001', 'TestGene', '6 months', 'TestModel', 'Male', '002', '4.56'],
+    ];
+
+    const { component } = await setup(mockData);
+    const instance = component.fixture.componentInstance;
+
+    const csvData = instance.convertToCsvData(mockData);
+    const filename = instance.filename();
+
+    expect(csvData).toEqual(expectedCsvData);
+    expect(filename).toBe('gene-expression-individual-TestGene-TestModel-brain');
   });
 });
