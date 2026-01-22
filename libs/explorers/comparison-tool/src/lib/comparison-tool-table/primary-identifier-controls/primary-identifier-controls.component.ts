@@ -14,6 +14,7 @@ export class PrimaryIdentifierControlsComponent {
 
   id = input.required<string>();
   label = input.required<string>();
+  rowData = input<unknown>();
 
   @HostBinding('attr.role')
   protected readonly hostRole = 'group';
@@ -47,7 +48,7 @@ export class PrimaryIdentifierControlsComponent {
   });
 
   viewDetailsWasClicked(event: MouseEvent) {
-    this.viewConfig().viewDetailsClick(this.id(), this.label());
+    this.viewConfig().viewDetailsClick(this.rowData());
 
     // MG-629: Remove focus from button and its container to prevent focus-within state from persisting
     const button = event.currentTarget as HTMLElement;

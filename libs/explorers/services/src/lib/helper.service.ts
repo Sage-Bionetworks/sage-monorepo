@@ -133,4 +133,9 @@ export class HelperService {
     const mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
     return (Math.round(n * mult) / mult) * sign;
   }
+
+  cleanFilename(filename: string) {
+    const invalidFilenameCharsRegex = /[<>:"\\/|?*]/g;
+    return filename.replaceAll(invalidFilenameCharsRegex, '_').replaceAll(' ', '_');
+  }
 }

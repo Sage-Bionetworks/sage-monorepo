@@ -66,6 +66,11 @@ export const routes: Route[] = [
     },
   },
   {
+    path: `${ROUTE_PATHS.GENES}/:ensemblGeneId`,
+    loadChildren: () =>
+      import('@sagebionetworks/model-ad/gene-details').then((routes) => routes.routes),
+  },
+  {
     path: ROUTE_PATHS.DISEASE_CORRELATION,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/disease-correlation-comparison-tool').then(

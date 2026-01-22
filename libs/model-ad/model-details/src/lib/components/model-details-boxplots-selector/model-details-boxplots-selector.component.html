@@ -115,10 +115,10 @@
         <!-- Wrapper handles full-width positioning while keeping grid in normal document flow 
          so the full grid is captured in the download image -->
         <div class="boxplots-grid-wrapper">
-          <model-ad-model-details-boxplots-grid
-            [modelDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
-            [genotypeOrder]="genotypeOrder()"
-            [sexes]="selectedSexOption().value"
+          <model-ad-boxplots-grid
+            [boxplotDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
+            [xAxisOrder]="genotypeOrder()"
+            [sexFilter]="selectedSexOption().value"
           />
         </div>
         @if (!last) {

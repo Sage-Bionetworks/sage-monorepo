@@ -35,7 +35,7 @@ $heatmap-details-panel-content-padding: 12px;
   }
 
   .heatmap-details-panel-sub-headings {
-    color: var(--color-gray-800);
+    color: var(--color-text-secondary);
     font-size: 16px;
     font-weight: 700;
     margin-bottom: $heatmap-details-panel-content-padding;
@@ -48,7 +48,7 @@ $heatmap-details-panel-content-padding: 12px;
       &:first-child {
         display: flex;
         font-size: 14px;
-        color: var(--color-gray-800);
+        color: var(--color-text-secondary);
         font-weight: 600;
 
         > div {
@@ -79,7 +79,7 @@ $heatmap-details-panel-content-padding: 12px;
 
   .heatmap-details-panel-footer {
     font-size: 14px;
-    color: var(--color-gray-800);
+    color: var(--color-text-secondary);
     font-weight: 400;
   }
 }

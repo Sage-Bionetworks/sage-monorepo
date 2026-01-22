@@ -1,0 +1,45 @@
+@use 'styles/src/lib/variables';
+
+.gene-details {
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+
+  &.loading {
+    display: flex;
+  }
+
+  #loading {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gene-details-header {
+    .gene-details-label {
+      font-size: 14px;
+      color: var(--color-gray-600);
+      margin-bottom: 13px;
+
+      .gene-details-label-separator {
+        font-size: 12px;
+        color: var(--color-gray-300);
+        font-weight: 500;
+      }
+    }
+
+    h2 {
+      margin-bottom: 13px;
+    }
+
+    .gene-details-subtitle {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-text-secondary);
+    }
+  }
+
+  .gene-details-boxplots-download {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

@@ -27,15 +27,15 @@ import {
   TooltipButtonComponent,
 } from '@sagebionetworks/explorers/util';
 import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
+import { BoxplotsGridComponent } from '@sagebionetworks/model-ad/ui';
 import { SelectModule } from 'primeng/select';
-import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-grid/model-details-boxplots-grid.component';
 
 @Component({
   selector: 'model-ad-model-details-boxplots-selector',
   imports: [
     FormsModule,
     SelectModule,
-    ModelDetailsBoxplotsGridComponent,
+    BoxplotsGridComponent,
     ModalLinkComponent,
     DecodeGreekEntityPipe,
     DownloadDomImageComponent,
@@ -53,7 +53,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   readonly BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX = 20;
 
   boxplotsContainer = viewChild('boxplotsContainer', { read: ElementRef });
-  boxplotGrids = viewChildren(ModelDetailsBoxplotsGridComponent, { read: ElementRef });
+  boxplotGrids = viewChildren(BoxplotsGridComponent, { read: ElementRef });
 
   title = input.required<string>();
   modelName = input.required<string>();
@@ -310,21 +310,16 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   decodeHtmlEntities(text: string): string {
     const htmlEntityRegex = /&([^;]+);/g;
-    return text.replace(htmlEntityRegex, '$1');
-  }
-
-  cleanFilename(filename: string) {
-    const invalidFilenameCharsRegex = /[<>:"\\/|?*]/g;
-    return filename.replace(invalidFilenameCharsRegex, '_').replace(/ /g, '_');
+    return text.replaceAll(htmlEntityRegex, '$1');
   }
 
   generateBoxplotsZipFilename(tissue: string, sex: string[], modelName: string, title: string) {
     const filename = `${modelName}_${tissue}_${sex.join('_')}_${title}`;
-    return this.cleanFilename(filename);
+    return this.helperService.cleanFilename(filename);
   }
 
   generateBoxplotsFilename(evidenceType: string, tissue: string, sex: string[], modelName: string) {
     const filename = `${modelName}_${this.decodeHtmlEntities(evidenceType)}_${tissue}_${sex.join('_')}`;
-    return this.cleanFilename(filename);
+    return this.helperService.cleanFilename(filename);
   }
 }

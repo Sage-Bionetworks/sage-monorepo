@@ -1,0 +1,27 @@
+{
+  "name": "model-ad-gene-details",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/model-ad/gene-details/src",
+  "prefix": "model-ad",
+  "tags": ["type:feature", "scope:model-ad", "language:typescript"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/model-ad/gene-details"],
+      "options": {
+        "jestConfig": "libs/model-ad/gene-details/jest.config.ts",
+        "tsConfig": "libs/model-ad/gene-details/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  }
+}

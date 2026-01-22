@@ -60,7 +60,7 @@ export interface ComparisonToolViewConfig {
   filterResultsButtonTooltip: string;
   showSignificanceControls: boolean;
   viewDetailsTooltip: string;
-  viewDetailsClick: (id: string, label: string) => void;
+  viewDetailsClick: (rowData: unknown) => void;
   legendEnabled: boolean;
   legendPanelConfig: LegendPanelConfig;
   visualizationOverviewPanes: VisualizationOverviewPane[];

@@ -18,6 +18,7 @@ export const ROUTE_PATHS = {
   NEWS: 'news',
   MODEL_OVERVIEW: 'comparison/model',
   GENE_EXPRESSION: 'comparison/expression',
+  GENES: 'genes',
   DISEASE_CORRELATION: 'comparison/correlation',
   MODELS: 'models',
   TERMS_OF_SERVICE: 'terms-of-service',
@@ -25,7 +26,7 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
 } as const;
 
-export const MODEL_DETAILS_BOXPLOT_POINT_STYLES: PointStyle[] = [
+export const BOXPLOT_POINT_STYLES: PointStyle[] = [
   {
     label: 'Female',
     color: '#D72247',

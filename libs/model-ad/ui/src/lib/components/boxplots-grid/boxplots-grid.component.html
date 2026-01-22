@@ -1,0 +1,11 @@
+<div class="boxplots-grid">
+  @for (boxplotData of boxplotDataList(); track boxplotData; let i = $index) {
+    <model-ad-boxplot
+      [boxplotData]="boxplotData"
+      [sexFilter]="sexFilter()"
+      [showLegend]="false"
+      [xAxisOrder]="xAxisOrder()"
+    />
+  }
+</div>
+<div class="boxplots-grid-legend" sageLegend [pointStyles]="pointStyles()"></div>

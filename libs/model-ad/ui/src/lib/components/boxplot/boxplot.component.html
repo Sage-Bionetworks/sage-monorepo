@@ -1,12 +1,12 @@
-<h3>{{ modelData().age }}</h3>
+<h3>{{ boxplotData().age }}</h3>
 <div
   sageBoxplot
   [style.height]="450"
   [points]="points()"
   [xAxisLabelFormatter]="xAxisLabelFormatter"
-  [xAxisCategories]="genotypeOrder()"
+  [xAxisCategories]="xAxisOrder()"
   [yAxisTitle]="yAxisTitle()"
-  [yAxisMax]="modelData().y_axis_max"
+  [yAxisMax]="yAxisMax()"
   [pointTooltipFormatter]="pointTooltipFormatter"
   [pointCategoryColors]="pointCategoryColors"
   [pointCategoryShapes]="pointCategoryShapes"

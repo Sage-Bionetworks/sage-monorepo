@@ -13,6 +13,7 @@ import {
   ComparisonToolConfigService,
   ComparisonToolPage,
   ItemFilterTypeQuery,
+  ModelOverview,
   ModelOverviewSearchQuery,
   ModelOverviewService,
   ModelOverviewsPage,
@@ -82,8 +83,11 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
     showSignificanceControls: false,
     viewDetailsTooltip: 'Open model details page',
-    viewDetailsClick: (id: string, label: string) => {
-      const url = this.router.serializeUrl(this.router.createUrlTree([ROUTE_PATHS.MODELS, label]));
+    viewDetailsClick: (rowData: unknown) => {
+      const data = rowData as ModelOverview;
+      const url = this.router.serializeUrl(
+        this.router.createUrlTree([ROUTE_PATHS.MODELS, data.name]),
+      );
       window.open(url, '_blank');
     },
     legendEnabled: false,
