@@ -97,7 +97,7 @@ export class ComparisonToolService<T> {
   private readonly isFilterPanelOpenSignal = signal(false);
 
   // URL Sync State
-  private lastSyncedState: ComparisonToolUrlParams | null = null;
+  private lastSyncedUrlParamsState: ComparisonToolUrlParams | null = null;
   private initialSelection: string[] | undefined;
 
   // Public Readonly Signals
@@ -115,8 +115,10 @@ export class ComparisonToolService<T> {
   // Computed Query Accessors
   readonly query = this.querySignal.asReadonly();
   readonly dropdownSelection = computed(() => this.querySignal().categories);
-  readonly pinnedItems = computed(() => new Set(this.querySignal().pinnedItems));
-  readonly pinnedItemsArray = computed(() => this.querySignal().pinnedItems);
+  // set used to quickly check if an item is pinned
+  readonly pinnedItemsSet = computed(() => new Set(this.querySignal().pinnedItems));
+  // array exposed separately from query() to allow effects to depend only on pinnedItems changes
+  readonly pinnedItems = computed(() => this.querySignal().pinnedItems);
   readonly pageNumber = computed(() => this.querySignal().pageNumber);
   readonly pageSize = computed(() => this.querySignal().pageSize);
   readonly multiSortMeta = computed(() => this.querySignal().multiSortMeta);
@@ -435,7 +437,7 @@ export class ComparisonToolService<T> {
   }
 
   isPinned(id: string): boolean {
-    return this.pinnedItems().has(id);
+    return this.pinnedItemsSet().has(id);
   }
 
   togglePin(id: string) {
@@ -560,7 +562,7 @@ export class ComparisonToolService<T> {
     }
 
     // Preserve current pins when changing dropdown selection
-    const currentPins = this.query().pinnedItems;
+    const currentPins = this.pinnedItems();
 
     this.updateQuery({
       categories: selection,
@@ -683,7 +685,7 @@ export class ComparisonToolService<T> {
       const normalizedSelection = this.normalizeSelection(params.categories, this.configsSignal());
       const categoriesMatchLastSync = isEqual(
         normalizedSelection,
-        this.lastSyncedState?.categories ?? [],
+        this.lastSyncedUrlParamsState?.categories ?? [],
       );
 
       if (!categoriesMatchLastSync && !isEqual(normalizedSelection, this.dropdownSelection())) {
@@ -695,8 +697,8 @@ export class ComparisonToolService<T> {
     if (params.sortFields?.length) {
       const sortMeta = this.convertArraysToSortMeta(params.sortFields, params.sortOrders ?? []);
       const lastSyncedSortMeta = this.convertArraysToSortMeta(
-        this.lastSyncedState?.sortFields ?? [],
-        this.lastSyncedState?.sortOrders ?? [],
+        this.lastSyncedUrlParamsState?.sortFields ?? [],
+        this.lastSyncedUrlParamsState?.sortOrders ?? [],
       );
       const sortMatchesLastSync = isEqual(sortMeta, lastSyncedSortMeta);
 
@@ -710,7 +712,10 @@ export class ComparisonToolService<T> {
     // - If URL pins differ, this is an external change (user edited URL, link navigation) - accept new pins
     // - First load with no URL pins: start fresh with empty pins
     const urlPinnedItems = params.pinnedItems ?? [];
-    const urlPinsMatchLastSync = isEqual(urlPinnedItems, this.lastSyncedState?.pinnedItems ?? []);
+    const urlPinsMatchLastSync = isEqual(
+      urlPinnedItems,
+      this.lastSyncedUrlParamsState?.pinnedItems ?? [],
+    );
 
     if (!urlPinsMatchLastSync) {
       // External URL change - update query.pinnedItems
@@ -730,11 +735,11 @@ export class ComparisonToolService<T> {
   }
 
   private syncStateToUrl(state: ComparisonToolUrlParams): void {
-    if (isEqual(this.lastSyncedState, state)) {
+    if (isEqual(this.lastSyncedUrlParamsState, state)) {
       return;
     }
 
-    this.lastSyncedState = state;
+    this.lastSyncedUrlParamsState = state;
     this.urlService.syncToUrl(state);
   }
 
@@ -795,7 +800,7 @@ export class ComparisonToolService<T> {
   }
 
   private updateSyncedStateCache(): void {
-    this.lastSyncedState = this.serializeSyncState({
+    this.lastSyncedUrlParamsState = this.serializeSyncState({
       visiblePinIds: this.visiblePinIds(),
       dropdownSelection: this.dropdownSelection(),
       multiSortMeta: this.multiSortMeta(),
@@ -814,7 +819,7 @@ export class ComparisonToolService<T> {
       if (!this.coordinatorService.isActive(this)) {
         return;
       }
-      this.lastSyncedState = null;
+      this.lastSyncedUrlParamsState = null;
       this.syncCurrentStateToUrl();
     });
   }

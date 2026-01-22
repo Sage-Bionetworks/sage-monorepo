@@ -48,7 +48,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
-  dropdownSelection = this.comparisonToolService.dropdownSelection;
 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
@@ -151,8 +150,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   // Effect for pinned data - only re-fetch when pinnedItems, categories, or sort change
   readonly pinnedDataEffect = effect(() => {
     if (this.platformService.isBrowser && this.isInitialized()) {
-      const categories = this.dropdownSelection();
-      const pinnedItems = this.comparisonToolService.pinnedItemsArray();
+      const categories = this.comparisonToolService.dropdownSelection();
+      const pinnedItems = this.comparisonToolService.pinnedItems();
       const sortMeta = this.comparisonToolService.multiSortMeta();
       this.getPinnedData(categories, pinnedItems, sortMeta);
     }
