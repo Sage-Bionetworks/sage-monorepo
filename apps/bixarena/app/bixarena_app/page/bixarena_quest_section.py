@@ -10,7 +10,7 @@ QUEST_CONFIG = {
     "start_date": "2026-01-20",
     "end_date": "2026-04-20",
     "conversion_text": "1 Battle = 1 Block",
-    "conversion_description": "Every time you evaluate a model, you earn a block for the community build.",
+    "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "current_update": {
         "title": "Week 1 Update",
         "description": "We are building an inner wall of three blocks high with cobblestone blocks. (115 Blocks placed so far).",
