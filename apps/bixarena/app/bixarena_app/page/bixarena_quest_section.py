@@ -1,7 +1,5 @@
 """Community Quest section component for BioArena home page."""
 
-from datetime import datetime
-
 import gradio as gr
 
 # Quest configuration - hardcoded for Season 1
@@ -18,31 +16,31 @@ QUEST_CONFIG = {
         # Updates are displayed in chronological order (newest first)
         {
             "date": "2026-01-27",
-            "title": "Week 3 Update",
+            "title": "Update 3: Battlements & Gate",
             "description": "The outer wall is taking shape! We've added battlements and are working on the entrance gate structure. (350 blocks placed so far).",
             "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+3+View+1",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+3+View+2",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+3+View+3",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+3+View+1",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+3+View+2",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+3+View+3",
             ],
         },
         {
             "date": "2026-01-23",
-            "title": "Week 2 Update",
+            "title": "Update 2: Outer Walls",
             "description": "Great progress! The foundation is complete and we're building the first layer of the outer walls. (200 blocks placed so far).",
             "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+2+View+1",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+2+View+2",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+2+View+1",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+2+View+2",
             ],
         },
         {
             "date": "2026-01-20",
-            "title": "Week 1 Update",
+            "title": "Update 1: Foundation",
             "description": "We are building an inner wall of three blocks high with cobblestone blocks. (115 Blocks placed so far).",
             "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+1+View+1",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+1+View+2",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+1+View+3",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+1+View+1",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+1+View+2",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+1+View+3",
             ],
         },
     ],
