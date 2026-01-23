@@ -378,13 +378,13 @@ test.describe('gene expression', () => {
       page,
     }) => {
       await navigateToComparison(page, CT_PAGE, true);
-      await testFilterSelectionUpdatesUrl(page, 'model_type', 'Model Type', 'Familial AD');
+      await testFilterSelectionUpdatesUrl(page, 'modelTypes', 'Model Type', 'Familial AD');
     });
 
     test('filter selections are restored from URL on page load', async ({ page }) => {
       const expectedFilterParams = {
         biodomains: ['Apoptosis', 'Epigenetic', 'Myelination'],
-        name: ['APOE4'],
+        models: ['APOE4'],
       };
       const expectedSelectedFilters = {
         'Biological Domain': ['Apoptosis', 'Epigenetic', 'Myelination'],
@@ -403,7 +403,7 @@ test.describe('gene expression', () => {
 
     test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
       const expectedInitialFilterParams = {
-        model_type: ['Familial AD'],
+        modelTypes: ['Familial AD'],
         biodomains: ['Apoptosis', 'Epigenetic', 'Myelination'],
       };
 

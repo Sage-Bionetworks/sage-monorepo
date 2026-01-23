@@ -204,8 +204,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       pageSize: currentQuery.pageSize,
       search: currentQuery.searchTerm,
       biodomains: selectedFilters['biodomains'],
-      modelType: selectedFilters['model_type'],
-      name: selectedFilters['name'],
+      modelType: selectedFilters['modelTypes'],
+      name: selectedFilters['models'],
       sortFields,
       sortOrders,
     };

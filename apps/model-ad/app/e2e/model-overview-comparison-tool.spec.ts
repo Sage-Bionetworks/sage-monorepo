@@ -286,13 +286,13 @@ test.describe('model overview', () => {
       page,
     }) => {
       await navigateToComparison(page, CT_PAGE, true);
-      await testFilterSelectionUpdatesUrl(page, 'model_type', 'Model Type', 'Familial AD');
+      await testFilterSelectionUpdatesUrl(page, 'modelTypes', 'Model Type', 'Familial AD');
     });
 
     test('filter selections are restored from URL on page load', async ({ page }) => {
       const expectedFilterParams = {
-        available_data: ['Biomarkers', 'Pathology'],
-        center: ['UCI'],
+        availableData: ['Biomarkers', 'Pathology'],
+        centers: ['UCI'],
       };
       const expectedSelectedFilters = {
         'Available Data': ['Biomarkers', 'Pathology'],
@@ -311,8 +311,8 @@ test.describe('model overview', () => {
 
     test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
       const expectedInitialFilterParams = {
-        model_type: ['Familial AD'],
-        available_data: ['Gene Expression'],
+        modelTypes: ['Familial AD'],
+        availableData: ['Gene Expression'],
       };
 
       await navigateToComparison(

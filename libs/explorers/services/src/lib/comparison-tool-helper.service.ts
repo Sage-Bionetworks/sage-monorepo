@@ -206,9 +206,9 @@ export class ComparisonToolHelperService {
   }
 
   /**
-   * Returns selected filter options as a record keyed by data_key
+   * Returns selected filter options as a record keyed by query_param_key
    * @param filters Array of comparison tool filters
-   * @returns Object where keys are data_keys and values are arrays of selected option labels
+   * @returns Object where keys are query_param_keys and values are arrays of selected option labels
    */
   getSelectedFilters(filters: ComparisonToolFilter[]): Record<string, string[]> {
     return filters.reduce(
@@ -217,7 +217,7 @@ export class ComparisonToolHelperService {
           .filter((option) => option.selected)
           .map((option) => option.label);
         if (selectedLabels.length > 0) {
-          acc[filter.data_key] = selectedLabels;
+          acc[filter.query_param_key] = selectedLabels;
         }
         return acc;
       },

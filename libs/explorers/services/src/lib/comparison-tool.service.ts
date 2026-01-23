@@ -364,7 +364,7 @@ export class ComparisonToolService<T> {
     const selectionMap = selections ?? {};
 
     return filters.map((filter) => {
-      const selectedValues = selectionMap[filter.data_key];
+      const selectedValues = selectionMap[filter.query_param_key];
       const selectedSet = new Set(selectedValues ?? []);
 
       return {

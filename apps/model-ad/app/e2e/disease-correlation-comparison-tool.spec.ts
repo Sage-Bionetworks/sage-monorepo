@@ -436,13 +436,13 @@ test.describe('disease correlation', () => {
       page,
     }) => {
       await navigateToComparison(page, CT_PAGE, true);
-      await testFilterSelectionUpdatesUrl(page, 'sex', 'Sex', 'Female');
+      await testFilterSelectionUpdatesUrl(page, 'sexes', 'Sex', 'Female');
     });
 
     test('filter selections are restored from URL on page load', async ({ page }) => {
       const expectedFilterParams = {
-        age: ['4 months', '12 months'],
-        sex: ['Female'],
+        ages: ['4 months', '12 months'],
+        sexes: ['Female'],
       };
       const expectedSelectedFilters = {
         Age: ['4 months', '12 months'],
@@ -461,8 +461,8 @@ test.describe('disease correlation', () => {
 
     test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
       const expectedInitialFilterParams = {
-        age: ['4 months'],
-        modified_genes: ['Abca7', 'MAPT', 'Mthfr'],
+        ages: ['4 months'],
+        modifiedGenes: ['Abca7', 'CR2', 'Mthfr'],
       };
 
       await navigateToComparison(

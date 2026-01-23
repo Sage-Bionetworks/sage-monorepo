@@ -119,7 +119,7 @@ export const expectSortOrdersParams = async (page: Page, expected: number[]): Pr
   await expect.poll(() => getSortOrdersQueryParams(page.url())).toEqual(expected);
 };
 
-// expected: key: filter data_key, value: array of selected filter option labels
+// expected: key: filter query_param_key, value: array of selected filter option labels
 export const expectFiltersParams = async (
   page: Page,
   expected: Record<string, string[]>,

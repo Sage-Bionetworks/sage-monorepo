@@ -102,9 +102,9 @@ export class ComparisonToolUrlService {
 
     // Then set any new filter values
     if (filterSelections) {
-      for (const [dataKey, values] of Object.entries(filterSelections)) {
+      for (const [queryParamKey, values] of Object.entries(filterSelections)) {
         if (values && values.length > 0) {
-          params[dataKey] = values.map((v) => encodeURIComponent(v)).join(',');
+          params[queryParamKey] = values.map((v) => encodeURIComponent(v)).join(',');
         }
       }
     }

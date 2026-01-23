@@ -150,10 +150,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       search: currentQuery.searchTerm,
       sortFields,
       sortOrders,
-      availableData: selectedFilters['available_data'],
-      center: selectedFilters['center'],
-      modelType: selectedFilters['model_type'],
-      modifiedGenes: selectedFilters['modified_genes'],
+      availableData: selectedFilters['availableData'],
+      center: selectedFilters['centers'],
+      modelType: selectedFilters['modelTypes'],
+      modifiedGenes: selectedFilters['modifiedGenes'],
     };
     this.modelOverviewService
       .getModelOverviews(query)

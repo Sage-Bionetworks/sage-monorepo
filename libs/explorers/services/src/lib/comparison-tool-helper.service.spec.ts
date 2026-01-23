@@ -160,7 +160,7 @@ describe('Service: ComparisonToolHelper', () => {
       expect(ctHelperService.getSelectedFilters(filters)).toEqual({});
     });
 
-    it('should return selected option labels keyed by data_key', () => {
+    it('should return selected option labels keyed by query_param_key', () => {
       const filters: ComparisonToolFilter[] = [
         {
           name: 'Species',
@@ -175,7 +175,7 @@ describe('Service: ComparisonToolHelper', () => {
         {
           name: 'Status',
           data_key: 'status',
-          query_param_key: 'status',
+          query_param_key: 'statuses',
           options: [
             { label: 'Active', selected: true },
             { label: 'Inactive', selected: false },
@@ -185,7 +185,7 @@ describe('Service: ComparisonToolHelper', () => {
 
       expect(ctHelperService.getSelectedFilters(filters)).toEqual({
         species: ['Mouse', 'Rat'],
-        status: ['Active'],
+        statuses: ['Active'],
       });
     });
 
