@@ -1,5 +1,7 @@
 """Community Quest section component for BioArena home page."""
 
+from datetime import datetime
+
 import gradio as gr
 
 # Quest configuration - hardcoded for Season 1
@@ -25,14 +27,15 @@ QUEST_CONFIG = {
 
 def build_quest_section(
     progress_data: dict | None = None,
-) -> tuple[gr.Column, gr.HTML, gr.Button, gr.Button]:
+) -> tuple[gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str]:
     """Build the Community Quest section for home page.
 
     Args:
         progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
 
     Returns:
-        Tuple of (quest_container, progress_html_container, contribute_button_authenticated, contribute_button_login)
+        Tuple of (quest_container, progress_html_container, contribute_button_authenticated,
+                  contribute_button_login, carousel_init_trigger, carousel_id)
     """
     # Use provided progress data or defaults
     if progress_data is None:
@@ -52,13 +55,16 @@ def build_quest_section(
     percentage = progress_data["percentage"]
     days_remaining = progress_data["days_remaining"]
 
+    # Generate unique ID for this carousel instance
+    carousel_id = f"quest-carousel-{int(datetime.now().timestamp() * 1000)}"
+
     # Generate carousel images HTML
     images_html = ""
     indicators_html = ""
     for i, image_url in enumerate(QUEST_CONFIG["current_update"]["images"]):
         active_class = "active" if i == 0 else ""
         images_html += f'<img src="{image_url}" class="carousel-image {active_class}" alt="Minecraft arena progress" />\n'
-        indicators_html += f'<span class="indicator {active_class}" onclick="jumpToImage({i})" role="button" tabindex="0" aria-label="View image {i + 1}"></span>\n'
+        indicators_html += f'<span class="indicator {active_class}" data-index="{i}" role="button" tabindex="0" aria-label="View image {i + 1}"></span>\n'
 
     # Only show indicators if more than one image
     indicators_display = (
@@ -68,7 +74,7 @@ def build_quest_section(
     # Build the carousel HTML (left column)
     carousel_html = f"""
     <div style="position: relative; height: 100%;">
-        <div class="quest-carousel" onmouseenter="pauseCarousel()" onmouseleave="resumeCarousel()">
+        <div id="{carousel_id}" class="quest-carousel">
             <div class="carousel-container">
                 {images_html}
             </div>
@@ -168,57 +174,6 @@ def build_quest_section(
             }}
         }}
     </style>
-
-    <script>
-    (function() {{
-        const carouselId = 'quest-carousel-home-{datetime.now().timestamp()}';
-        let currentIndex = 0;
-        const images = document.querySelectorAll('.quest-carousel .carousel-image');
-        const indicators = document.querySelectorAll('.quest-carousel .indicator');
-        let autoRotateInterval;
-        const ROTATION_INTERVAL = 6000; // 6 seconds
-
-        function showImage(index) {{
-            // Hide all images, show selected
-            images.forEach((img, i) => {{
-                img.classList.toggle('active', i === index);
-            }});
-            // Update indicators
-            indicators.forEach((ind, i) => {{
-                ind.classList.toggle('active', i === index);
-            }});
-            currentIndex = index;
-        }}
-
-        function nextImage() {{
-            showImage((currentIndex + 1) % images.length);
-        }}
-
-        window.jumpToImage = function(index) {{
-            stopAutoRotate();
-            showImage(index);
-            startAutoRotate();
-        }};
-
-        function startAutoRotate() {{
-            if (images.length > 1) {{
-                autoRotateInterval = setInterval(nextImage, ROTATION_INTERVAL);
-            }}
-        }}
-
-        function stopAutoRotate() {{
-            if (autoRotateInterval) {{
-                clearInterval(autoRotateInterval);
-            }}
-        }}
-
-        window.pauseCarousel = stopAutoRotate;
-        window.resumeCarousel = startAutoRotate;
-
-        // Start auto-rotation if more than one image
-        startAutoRotate();
-    }})();
-    </script>
     """
 
     # Build progress and info HTML (right column - without button)
@@ -412,9 +367,16 @@ def build_quest_section(
         </style>
         """)
 
+        # Hidden button to trigger carousel initialization via JavaScript
+        carousel_init_trigger = gr.Button(
+            "Init Carousel", visible=False, elem_id="carousel-init-trigger"
+        )
+
     return (
         quest_container,
         progress_html_container,
         contribute_button_authenticated,
         contribute_button_login,
+        carousel_init_trigger,
+        carousel_id,
     )

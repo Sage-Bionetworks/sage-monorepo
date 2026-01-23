@@ -412,6 +412,8 @@ def build_app():
                 quest_progress_container,
                 quest_btn_authenticated,
                 quest_btn_login,
+                carousel_init_trigger,
+                carousel_id,
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
@@ -577,6 +579,145 @@ def build_app():
             fn=load_quest_progress_on_page_load,
             inputs=None,
             outputs=quest_progress_container,
+        )
+
+        # Initialize carousel on page load
+        carousel_init_trigger.click(
+            None,
+            js=f"""
+() => {{
+    console.log('Initializing carousel: {carousel_id}');
+    const carouselId = '{carousel_id}';
+    let retryCount = 0;
+    const MAX_RETRIES = 100;
+
+    function initCarousel() {{
+        retryCount++;
+        console.log('Attempting to initialize carousel:', carouselId, 'retry:', retryCount);
+
+        const carousel = document.getElementById(carouselId);
+        if (!carousel) {{
+            if (retryCount < MAX_RETRIES) {{
+                setTimeout(initCarousel, 50);
+            }} else {{
+                console.error('Carousel not found after max retries:', carouselId);
+            }}
+            return;
+        }}
+
+        const images = carousel.querySelectorAll('.carousel-image');
+        const indicators = carousel.querySelectorAll('.indicator');
+
+        console.log('Found carousel elements - images:', images.length, 'indicators:', indicators.length);
+
+        if (images.length === 0) {{
+            if (retryCount < MAX_RETRIES) {{
+                setTimeout(initCarousel, 50);
+            }} else {{
+                console.error('Carousel images not found');
+            }}
+            return;
+        }}
+
+        let currentIndex = 0;
+        let autoRotateInterval;
+        const ROTATION_INTERVAL = 6000;
+
+        function showImage(index) {{
+            console.log('Showing image:', index);
+            images.forEach((img, i) => {{
+                if (i === index) {{
+                    img.classList.add('active');
+                }} else {{
+                    img.classList.remove('active');
+                }}
+            }});
+            indicators.forEach((ind, i) => {{
+                if (i === index) {{
+                    ind.classList.add('active');
+                }} else {{
+                    ind.classList.remove('active');
+                }}
+            }});
+            currentIndex = index;
+        }}
+
+        function nextImage() {{
+            showImage((currentIndex + 1) % images.length);
+        }}
+
+        function jumpToImage(index) {{
+            console.log('Jump to image:', index);
+            stopAutoRotate();
+            showImage(index);
+            startAutoRotate();
+        }}
+
+        function startAutoRotate() {{
+            console.log('Starting auto-rotate');
+            stopAutoRotate();
+            if (images.length > 1) {{
+                autoRotateInterval = setInterval(nextImage, ROTATION_INTERVAL);
+            }}
+        }}
+
+        function stopAutoRotate() {{
+            if (autoRotateInterval) {{
+                console.log('Stopping auto-rotate');
+                clearInterval(autoRotateInterval);
+                autoRotateInterval = null;
+            }}
+        }}
+
+        console.log('Attaching event listeners to', indicators.length, 'indicators');
+        indicators.forEach((indicator, idx) => {{
+            indicator.addEventListener('click', function(e) {{
+                console.log('Indicator clicked:', idx);
+                e.preventDefault();
+                e.stopPropagation();
+                const index = parseInt(this.getAttribute('data-index'));
+                jumpToImage(index);
+            }});
+            indicator.addEventListener('keypress', function(e) {{
+                if (e.key === 'Enter' || e.key === ' ') {{
+                    e.preventDefault();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    jumpToImage(index);
+                }}
+            }});
+        }});
+
+        carousel.addEventListener('mouseenter', stopAutoRotate);
+        carousel.addEventListener('mouseleave', startAutoRotate);
+
+        startAutoRotate();
+        console.log('✓ Carousel initialized successfully:', carouselId);
+    }}
+
+    initCarousel();
+}}
+            """,
+        )
+
+        # Trigger carousel initialization on page load
+        demo.load(
+            None,
+            None,
+            None,
+            js=f"""
+() => {{
+    console.log('Page loaded, triggering carousel init');
+    setTimeout(() => {{
+        const btn = document.getElementById('carousel-init-trigger');
+        if (btn) {{
+            console.log('Found carousel init button, clicking it');
+            btn.click();
+        }} else {{
+            console.error('Carousel init button not found');
+        }}
+    }}, 500);
+}}
+        """,
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
