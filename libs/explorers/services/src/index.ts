@@ -7,6 +7,7 @@ export * from './lib/comparison-tool-coordinator.service';
 export * from './lib/comparison-tool-url.service';
 export * from './lib/comparison-tool.service';
 export * from './lib/comparison-tool.service.providers';
+export * from './lib/explorers-app-config.service';
 export * from './lib/github.service';
 export * from './lib/global-error-handler.service';
 export * from './lib/helper.service';

@@ -1,14 +1,6 @@
 import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
-import {
-  provideComparisonToolService,
-  provideExplorersConfig,
-} from '@sagebionetworks/explorers/services';
-import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
-import type { Meta, StoryObj } from '@storybook/angular';
-import { applicationConfig } from '@storybook/angular';
-import { VisualizationOverviewPanelComponent } from './visualization-overview-panel.component';
 
-const mockPanes: VisualizationOverviewPane[] = [
+export const VISUALIZATION_OVERVIEW_PANES: VisualizationOverviewPane[] = [
   {
     heading: 'Comparison Tool Tutorial',
     content: `<p>Comparison Tools allow you to discover, compare and share results and related information. While each Comparison Tool presents different kinds of information, they all support similar exploration features. This tutorial demonstrates how you can use these features to find, download, and share results.</p>
@@ -35,24 +27,3 @@ const mockPanes: VisualizationOverviewPane[] = [
       <div class="image-container"><img src="/model-ad-assets/images/gct-how-to-3.gif" /></div>`,
   },
 ];
-
-const meta: Meta<VisualizationOverviewPanelComponent> = {
-  component: VisualizationOverviewPanelComponent,
-  title: 'Comparison Tool/VisualizationOverviewPanelComponent',
-  decorators: [
-    applicationConfig({
-      providers: [
-        provideExplorersConfig({ visualizationOverviewPanes: mockPanes }),
-        ...provideComparisonToolService({
-          configs: mockComparisonToolDataConfig,
-        }),
-      ],
-    }),
-  ],
-};
-export default meta;
-type Story = StoryObj<VisualizationOverviewPanelComponent>;
-
-export const Demo: Story = {
-  args: {},
-};

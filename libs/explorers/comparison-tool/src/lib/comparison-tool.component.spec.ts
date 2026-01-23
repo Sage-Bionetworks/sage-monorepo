@@ -3,6 +3,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import {
   provideComparisonToolFilterService,
   provideComparisonToolService,
+  provideExplorersConfig,
   SvgIconService,
 } from '@sagebionetworks/explorers/services';
 import {
@@ -21,6 +22,7 @@ async function setup() {
       provideHttpClient(),
       provideNoopAnimations(),
       provideLoadingIconColors(),
+      provideExplorersConfig({ visualizationOverviewPanes: [] }),
       ...provideComparisonToolService({
         configs: mockComparisonToolConfigs,
       }),

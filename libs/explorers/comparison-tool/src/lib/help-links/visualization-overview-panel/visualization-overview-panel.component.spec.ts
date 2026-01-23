@@ -1,9 +1,14 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
 import {
   provideComparisonToolService,
   ComparisonToolService,
+  provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
-import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
+import {
+  mockComparisonToolDataConfig,
+  mockVisualizationOverviewPanes,
+} from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { AppCookieService } from '@sagebionetworks/explorers/services';
@@ -23,6 +28,7 @@ describe('VisualizationOverviewPanelComponent', () => {
       providers: [
         provideNoopAnimations(),
         { provide: AppCookieService, useValue: mockCookieService },
+        provideExplorersConfig({ visualizationOverviewPanes: mockVisualizationOverviewPanes }),
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
         }),
@@ -63,6 +69,44 @@ describe('VisualizationOverviewPanelComponent', () => {
     const { component } = await setup();
     expect(component.panes).toHaveLength(4);
     expect(component.panes[0].heading).toBe('Comparison Tool Tutorial');
+  });
+
+  it('should return empty array when empty panes are configured', async () => {
+    const mockCookieService = createMockCookieService(false);
+
+    const { fixture } = await render(VisualizationOverviewPanelComponent, {
+      providers: [
+        provideNoopAnimations(),
+        { provide: AppCookieService, useValue: mockCookieService },
+        provideExplorersConfig({ visualizationOverviewPanes: [] }),
+        ...provideComparisonToolService({
+          configs: mockComparisonToolDataConfig,
+        }),
+      ],
+    });
+
+    expect(fixture.componentInstance.panes).toHaveLength(0);
+  });
+
+  it('should use panes from provideExplorersConfig', async () => {
+    const mockCookieService = createMockCookieService(false);
+    const appConfigPanes: VisualizationOverviewPane[] = [
+      { heading: 'App Config Pane', content: '<p>From app config</p>' },
+    ];
+
+    const { fixture } = await render(VisualizationOverviewPanelComponent, {
+      providers: [
+        provideNoopAnimations(),
+        { provide: AppCookieService, useValue: mockCookieService },
+        provideExplorersConfig({ visualizationOverviewPanes: appConfigPanes }),
+        ...provideComparisonToolService({
+          configs: mockComparisonToolDataConfig,
+        }),
+      ],
+    });
+
+    expect(fixture.componentInstance.panes).toHaveLength(1);
+    expect(fixture.componentInstance.panes[0].heading).toBe('App Config Pane');
   });
 
   it('should display dialog when isVisualizationOverviewVisible is true', async () => {
