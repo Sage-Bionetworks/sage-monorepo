@@ -50,6 +50,89 @@ QUEST_CONFIG = {
 }
 
 
+def _build_progress_html(
+    current_blocks: int, goal_blocks: int, percentage: float, days_remaining: int
+) -> str:
+    """Build the progress HTML for the quest section.
+
+    Args:
+        current_blocks: Number of blocks currently placed
+        goal_blocks: Total goal blocks to be placed
+        percentage: Completion percentage (0-100+)
+        days_remaining: Days remaining in the quest
+
+    Returns:
+        HTML string for the progress section
+    """
+    return f"""
+    <div style="display: flex; flex-direction: column; gap: 1.5rem; height: 100%;">
+        <!-- Progress Bar Section -->
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                <span style="color: var(--body-text-color); font-weight: 500;">Arena Progress</span>
+                <span style="color: var(--body-text-color); font-weight: 600;">{int(percentage)}% Complete</span>
+            </div>
+
+            <div style="width: 100%; height: 16px; background-color: var(--background-fill-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color-primary); position: relative;">
+                <div style="height: 100%; background: linear-gradient(90deg, var(--accent-teal) 0%, #2dd4bf 100%); border-radius: 8px; width: {min(percentage, 100)}%;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+                <div>
+                    <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{current_blocks:,}</p>
+                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Blocks Placed</p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{goal_blocks:,}</p>
+                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        <!-- Info Cards -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Card 1: Conversion -->
+            <div style="display: flex; align-items: start; gap: 1rem;">
+                <div style="flex-shrink: 0; width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, var(--color-accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent); display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
+                        {QUEST_CONFIG["conversion_text"]}
+                    </h4>
+                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
+                        {QUEST_CONFIG["conversion_description"]}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 2: Time Remaining -->
+            <div style="display: flex; align-items: start; gap: 1rem;">
+                <div style="flex-shrink: 0; width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, #3b82f6 10%, transparent); border: 1px solid color-mix(in srgb, #3b82f6 30%, transparent); display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
+                        {days_remaining} Days Left
+                    </h4>
+                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
+                        We have {days_remaining} days to complete the arena structure before the season ends.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    """
+
+
 def build_quest_section(
     progress_data: dict | None = None,
 ) -> tuple[gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str, int]:
@@ -97,22 +180,22 @@ def build_quest_section(
     first_update = updates[0]
 
     # Generate carousel images HTML from first update
-    images_html = ""
-    indicators_html = ""
-    for i, image_url in enumerate(first_update["images"]):
-        active_class = "active" if i == 0 else ""
-        images_html += f'<img src="{image_url}" class="carousel-image {active_class}" alt="Minecraft arena progress" />\n'
-        indicators_html += f'<span class="indicator {active_class}" data-index="{i}" role="button" tabindex="0" aria-label="View image {i + 1}"></span>\n'
+    images_html = "".join(
+        f'<img src="{image_url}" class="carousel-image {"active" if i == 0 else ""}" alt="Minecraft arena progress" />\n'
+        for i, image_url in enumerate(first_update["images"])
+    )
+    indicators_html = "".join(
+        f'<span class="indicator {"active" if i == 0 else ""}" data-index="{i}" role="button" tabindex="0" aria-label="View image {i + 1}"></span>\n'
+        for i, _ in enumerate(first_update["images"])
+    )
 
     # Only show indicators if more than one image
     indicators_display = "" if len(first_update["images"]) > 1 else "display: none;"
 
     # Generate update cards HTML
-    update_cards_html = ""
-    for i, update in enumerate(updates):
-        is_active = i == 0
-        active_class = "active" if is_active else ""
-        # Store images as JSON in data attribute for JavaScript
+    def format_update_card(i: int, update: dict) -> str:
+        """Format a single update card HTML."""
+        active_class = "active" if i == 0 else ""
         images_json = json.dumps(update["images"]).replace('"', "&quot;")
 
         # Format date if available
@@ -124,7 +207,7 @@ def build_quest_section(
             except (ValueError, TypeError):
                 date_display = update["date"]
 
-        update_cards_html += f'''
+        return f'''
         <div class="quest-update-card {active_class}"
              data-images="{images_json}"
              role="button"
@@ -136,6 +219,10 @@ def build_quest_section(
             <p class="update-description">{update["description"]}</p>
         </div>
         '''
+
+    update_cards_html = "".join(
+        format_update_card(i, update) for i, update in enumerate(updates)
+    )
 
     # Build the carousel HTML (left column) - vertical stack
     carousel_html = f"""
@@ -301,73 +388,9 @@ def build_quest_section(
     """
 
     # Build progress and info HTML (right column - without button)
-    progress_html = f"""
-    <div style="display: flex; flex-direction: column; gap: 1.5rem; height: 100%;">
-        <!-- Progress Bar Section -->
-        <div>
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
-                <span style="color: var(--body-text-color); font-weight: 500;">Arena Progress</span>
-                <span style="color: var(--body-text-color); font-weight: 600;">{int(percentage)}% Complete</span>
-            </div>
-
-            <div style="width: 100%; height: 16px; background-color: var(--background-fill-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color-primary); position: relative;">
-                <div style="height: 100%; background: linear-gradient(90deg, var(--accent-teal) 0%, #2dd4bf 100%); border-radius: 8px; width: {min(percentage, 100)}%;"></div>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
-                <div>
-                    <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{current_blocks:,}</p>
-                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Blocks Placed</p>
-                </div>
-                <div style="text-align: right;">
-                    <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{goal_blocks:,}</p>
-                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Divider -->
-        <div style="height: 1px; background: var(--border-color-primary);"></div>
-
-        <!-- Info Cards -->
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-            <!-- Card 1: Conversion -->
-            <div style="display: flex; align-items: start; gap: 1rem;">
-                <div style="flex-shrink: 0; width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, var(--color-accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent); display: flex; align-items: center; justify-content: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    </svg>
-                </div>
-                <div style="flex: 1;">
-                    <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
-                        {QUEST_CONFIG["conversion_text"]}
-                    </h4>
-                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
-                        {QUEST_CONFIG["conversion_description"]}
-                    </p>
-                </div>
-            </div>
-
-            <!-- Card 2: Time Remaining -->
-            <div style="display: flex; align-items: start; gap: 1rem;">
-                <div style="flex-shrink: 0; width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, #3b82f6 10%, transparent); border: 1px solid color-mix(in srgb, #3b82f6 30%, transparent); display: flex; align-items: center; justify-content: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                </div>
-                <div style="flex: 1;">
-                    <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
-                        {days_remaining} Days Left
-                    </h4>
-                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
-                        We have {days_remaining} days to complete the arena in Minecraft before the season ends.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    """
+    progress_html = _build_progress_html(
+        current_blocks, goal_blocks, percentage, days_remaining
+    )
 
     # Build the complete quest section using Gradio layout components
     with gr.Column(elem_id="quest-section-wrapper") as quest_container:

@@ -9,7 +9,11 @@ from bixarena_app.api.api_client_helper import (
     fetch_public_stats,
 )
 from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
-from bixarena_app.page.bixarena_quest_section import QUEST_CONFIG, build_quest_section
+from bixarena_app.page.bixarena_quest_section import (
+    QUEST_CONFIG,
+    _build_progress_html,
+    build_quest_section,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -274,74 +278,10 @@ def load_quest_progress_on_page_load() -> dict:
     percentage = progress_data["percentage"]
     days_remaining = progress_data["days_remaining"]
 
-    # Build the progress HTML (matching the structure in bixarena_quest_section.py)
-    progress_html = f"""
-    <div style="display: flex; flex-direction: column; gap: 1.5rem; height: 100%;">
-        <!-- Progress Bar Section -->
-        <div>
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
-                <span style="color: var(--body-text-color); font-weight: 500;">Arena Progress</span>
-                <span style="color: var(--body-text-color); font-weight: 600;">{int(percentage)}% Complete</span>
-            </div>
-
-            <div style="width: 100%; height: 16px; background-color: var(--background-fill-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color-primary); position: relative;">
-                <div style="height: 100%; background: linear-gradient(90deg, var(--accent-teal) 0%, #2dd4bf 100%); border-radius: 8px; width: {min(percentage, 100)}%;"></div>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
-                <div>
-                    <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{current_blocks:,}</p>
-                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Blocks Placed</p>
-                </div>
-                <div style="text-align: right;">
-                    <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{goal_blocks:,}</p>
-                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Divider -->
-        <div style="height: 1px; background: var(--border-color-primary);"></div>
-
-        <!-- Info Cards -->
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-            <!-- Card 1: Conversion -->
-            <div style="display: flex; align-items: start; gap: 1rem;">
-                <div style="flex-shrink: 0; width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, var(--color-accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent); display: flex; align-items: center; justify-content: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    </svg>
-                </div>
-                <div style="flex: 1;">
-                    <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
-                        {QUEST_CONFIG["conversion_text"]}
-                    </h4>
-                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
-                        {QUEST_CONFIG["conversion_description"]}
-                    </p>
-                </div>
-            </div>
-
-            <!-- Card 2: Time Remaining -->
-            <div style="display: flex; align-items: start; gap: 1rem;">
-                <div style="flex-shrink: 0; width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, #3b82f6 10%, transparent); border: 1px solid color-mix(in srgb, #3b82f6 30%, transparent); display: flex; align-items: center; justify-content: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                </div>
-                <div style="flex: 1;">
-                    <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
-                        {days_remaining} Days Left
-                    </h4>
-                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
-                        We have {days_remaining} days to complete the arena structure before the season ends.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    """
+    # Build the progress HTML using shared helper function
+    progress_html = _build_progress_html(
+        current_blocks, goal_blocks, percentage, days_remaining
+    )
 
     return gr.update(value=progress_html)
 
