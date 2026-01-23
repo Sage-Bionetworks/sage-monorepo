@@ -121,7 +121,7 @@ def build_quest_section(
             try:
                 date_obj = datetime.strptime(update["date"], "%Y-%m-%d")
                 date_display = date_obj.strftime("%B %d, %Y")
-            except:
+            except (ValueError, TypeError):
                 date_display = update["date"]
 
         update_cards_html += f'''
