@@ -385,8 +385,11 @@ def build_quest_section(
 
         /* CTA button styling */
         .quest-cta-btn {
-            margin-top: 1.5rem;
+            margin-top: 1rem !important;
             width: 100%;
+        }
+        #quest-cta-button {
+            margin-top: 1rem !important;
         }
         </style>
         """)
