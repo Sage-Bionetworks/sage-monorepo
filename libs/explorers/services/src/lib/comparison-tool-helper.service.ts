@@ -6,7 +6,6 @@ import {
   ComparisonToolLink,
   HeatmapCircleData,
   PaginationParams,
-  VisualizationOverviewPane,
 } from '@sagebionetworks/explorers/models';
 import { TableLazyLoadEvent } from 'primeng/table';
 
@@ -24,13 +23,6 @@ export class ComparisonToolHelperService {
     const pageNumber = Math.floor((event.first ?? 0) / (event.rows ?? defaultRowsPerPage));
     const pageSize = event.rows ?? defaultRowsPerPage;
     return { pageNumber, pageSize };
-  }
-
-  createVisualizationOverviewPane(heading: string, htmlContent: string): VisualizationOverviewPane {
-    return {
-      heading,
-      content: htmlContent,
-    };
   }
 
   getComparisonToolDataFilename(config: ComparisonToolConfig): string {

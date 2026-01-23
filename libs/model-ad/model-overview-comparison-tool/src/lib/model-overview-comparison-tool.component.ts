@@ -53,31 +53,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
-  // TODO MG-485 - Update overview panes content and images
-  visualizationOverviewPanes = [
-    this.comparisonToolHelperService.createVisualizationOverviewPane(
-      ComparisonToolPage.ModelOverview,
-      `<p>Welcome to Agora's Model Overview Tool. This overview demonstrates how to use the tool to explore results about models related to AD. You can revisit this walkthrough by clicking the Visualization Overview link at the bottom of the page.</p>
-      <p>Click on the Legend link at the bottom of the page to view the legend for the current visualization.</p>
-      <img src="/explorer-assets/images/gct-how-to-0.svg" />`,
-    ),
-    this.comparisonToolHelperService.createVisualizationOverviewPane(
-      'View Detailed Expression Info',
-      `<p>Click on a circle to show detailed information about a result for a specific brain region.</p>
-      <img src="/explorer-assets/images/gct-how-to-1.gif" />`,
-    ),
-    this.comparisonToolHelperService.createVisualizationOverviewPane(
-      'Compare Multiple Genes',
-      `<p>You can pin several genes to visually compare them together. Then export the data about your pinned genes as a CSV file for further analysis.</p>
-      <img src="/explorer-assets/images/gct-how-to-2.gif" />`,
-    ),
-    this.comparisonToolHelperService.createVisualizationOverviewPane(
-      'Filter Gene Selection',
-      `<p>Filter genes by Nomination, Association with AD, Study and more. Or simply use the search bar to quickly find the genes you are interested in.</p>
-      <img src="/explorer-assets/images/gct-how-to-3.gif" />`,
-    ),
-  ];
-
   viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: ComparisonToolPage.ModelOverview,
     filterResultsButtonTooltip: 'Filter results by Model Type, Modified Gene, and more',
@@ -91,7 +66,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       window.open(url, '_blank');
     },
     legendEnabled: false,
-    visualizationOverviewPanes: this.visualizationOverviewPanes,
     rowsPerPage: 10,
     rowIdDataKey: 'name',
     allowPinnedImageDownload: false,
