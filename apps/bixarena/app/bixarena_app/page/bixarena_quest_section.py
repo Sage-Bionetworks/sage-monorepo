@@ -147,32 +147,29 @@ def build_quest_section(
 
         .carousel-indicators {{
             display: flex;
-            gap: 8px;
+            gap: 12px;
             padding: 8px 12px;
             background: var(--background-fill-secondary);
             border-radius: 20px;
-            border: 1px solid var(--border-color-primary);
         }}
 
         .indicator {{
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
+            width: 24px;
+            height: 8px;
+            border-radius: 4px;
             background: var(--body-text-color-subdued);
             opacity: 0.5;
             cursor: pointer;
-            transition: background 0.3s, transform 0.3s, opacity 0.3s;
+            transition: background 0.3s, opacity 0.3s;
         }}
 
         .indicator:hover {{
             opacity: 0.9;
-            transform: scale(1.3);
         }}
 
         .indicator.active {{
-            background: var(--accent-teal, #14b8a6);
+            background: var(--color-accent, #f97316);
             opacity: 1;
-            transform: scale(1.15);
         }}
 
         .carousel-update-box {{
