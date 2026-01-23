@@ -408,7 +408,8 @@ def build_app():
                 cta_helper_msg,
                 stats_container,
                 quest_container,
-                quest_button,
+                quest_btn_authenticated,
+                quest_btn_login,
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
@@ -463,10 +464,21 @@ def build_app():
             lambda: navigator.show_page(1),
             outputs=pages,
         )
-        # Quest CTA button - navigates to battle page
-        quest_button.click(
+        # Quest authenticated button - navigates to battle page
+        quest_btn_authenticated.click(
             lambda: navigator.show_page(1),
             outputs=pages,
+        )
+        # Quest login button - redirects to login page
+        quest_btn_login.click(
+            None,
+            js="""
+() => {
+  const el = document.getElementById('login-start-endpoint');
+  const url = el ? el.textContent.trim() : '';
+  if (url) window.location.href = url;
+}
+            """,
         )
 
         # Bind static args so Gradio can still inject request without warnings.
@@ -546,10 +558,16 @@ def build_app():
             outputs=stats_container,
         )
 
-        # Load CTA button visibility based on authentication
+        # Load CTA and Quest button visibility based on authentication
         demo.load(
             fn=update_cta_buttons_on_page_load,
-            outputs=[cta_btn_authenticated, cta_btn_login, cta_helper_msg],
+            outputs=[
+                cta_btn_authenticated,
+                cta_btn_login,
+                cta_helper_msg,
+                quest_btn_authenticated,
+                quest_btn_login,
+            ],
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)

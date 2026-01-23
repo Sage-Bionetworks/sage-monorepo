@@ -28,14 +28,14 @@ QUEST_CONFIG = {
 
 def build_quest_section(
     progress_data: dict | None = None,
-) -> tuple[gr.Column, gr.Button]:
+) -> tuple[gr.Column, gr.Button, gr.Button]:
     """Build the Community Quest section for home page.
 
     Args:
         progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
 
     Returns:
-        Tuple of (quest_container, contribute_button)
+        Tuple of (quest_container, contribute_button_authenticated, contribute_button_login)
     """
     # Use provided progress data or defaults
     if progress_data is None:
@@ -321,12 +321,23 @@ def build_quest_section(
                     gr.HTML(carousel_html)
                 with gr.Column(scale=1):
                     gr.HTML(progress_html)
-                    # CTA button positioned at bottom of right column
-                    contribute_button = gr.Button(
+                    # Two CTA buttons - visibility controlled by authentication state
+                    # Button for authenticated users - navigates to battle page
+                    contribute_button_authenticated = gr.Button(
                         "Contribute a Block Now",
                         variant="primary",
                         size="lg",
-                        elem_id="quest-cta-button",
+                        visible=False,
+                        elem_id="quest-cta-btn-authenticated",
+                        elem_classes=["quest-cta-btn"],
+                    )
+                    # Button for unauthenticated users - redirects to login
+                    contribute_button_login = gr.Button(
+                        "Contribute a Block Now",
+                        variant="primary",
+                        size="lg",
+                        visible=False,
+                        elem_id="quest-cta-btn-login",
                         elem_classes=["quest-cta-btn"],
                     )
 
@@ -388,10 +399,13 @@ def build_quest_section(
             margin-top: 1rem !important;
             width: 100%;
         }
-        #quest-cta-button {
+        #quest-cta-btn-authenticated {
+            margin-top: 1rem !important;
+        }
+        #quest-cta-btn-login {
             margin-top: 1rem !important;
         }
         </style>
         """)
 
-    return quest_container, contribute_button
+    return quest_container, contribute_button_authenticated, contribute_button_login

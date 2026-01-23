@@ -203,28 +203,33 @@ def load_user_battles_on_page_load(
 
 def update_cta_buttons_on_page_load(
     request: gr.Request,
-) -> tuple[dict, dict, dict]:
-    """Update CTA button visibility based on authentication state.
+) -> tuple[dict, dict, dict, dict, dict]:
+    """Update CTA and Quest button visibility based on authentication state.
 
     Args:
         request: Gradio request object
 
     Returns:
-        Tuple of (authenticated_btn_update, login_btn_update, cta_helper_msg_update)
+        Tuple of (authenticated_btn_update, login_btn_update, cta_helper_msg_update,
+                  quest_btn_authenticated_update, quest_btn_login_update)
     """
     if is_authenticated(request):
-        # Show authenticated button, hide login button and CTA helper message
+        # Show authenticated buttons, hide login buttons and CTA helper message
         return (
             gr.update(visible=True),
             gr.update(visible=False),
             gr.update(visible=False),
+            gr.update(visible=True),  # quest_btn_authenticated
+            gr.update(visible=False),  # quest_btn_login
         )
     else:
-        # Hide authenticated button, show login button and CTA helper message
+        # Hide authenticated buttons, show login buttons and CTA helper message
         return (
             gr.update(visible=False),
             gr.update(visible=True),
             gr.update(visible=True),
+            gr.update(visible=False),  # quest_btn_authenticated
+            gr.update(visible=True),  # quest_btn_login
         )
 
 
@@ -244,12 +249,16 @@ def build_quest_section_wrapper():
     try:
         # Fetch real-time quest progress data
         progress_data = calculate_quest_progress()
-        quest_container, quest_button = build_quest_section(progress_data)
+        quest_container, quest_btn_authenticated, quest_btn_login = build_quest_section(
+            progress_data
+        )
     except Exception as e:
         logger.error(f"Error calculating quest progress: {e}")
         # Fall back to default data if calculation fails
-        quest_container, quest_button = build_quest_section(None)
-    return quest_container, quest_button
+        quest_container, quest_btn_authenticated, quest_btn_login = build_quest_section(
+            None
+        )
+    return quest_container, quest_btn_authenticated, quest_btn_login
 
 
 def build_how_it_works_section():
@@ -406,7 +415,9 @@ def build_home_page():
         stats_container = build_stats_section()
 
         # Community Quest Section (new)
-        quest_html, quest_button = build_quest_section_wrapper()
+        quest_html, quest_btn_authenticated, quest_btn_login = (
+            build_quest_section_wrapper()
+        )
 
         # How It Works Section
         build_how_it_works_section()
@@ -418,5 +429,6 @@ def build_home_page():
         cta_helper_msg,
         stats_container,
         quest_html,
-        quest_button,
+        quest_btn_authenticated,
+        quest_btn_login,
     )
