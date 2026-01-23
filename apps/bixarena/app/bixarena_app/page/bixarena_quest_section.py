@@ -289,19 +289,6 @@ def build_quest_section(
             line-height: 1.5;
         }}
 
-        .quest-updates-hint {{
-            text-align: center;
-            padding: 0.75rem;
-            margin-top: 0.5rem;
-            font-size: 0.8125rem;
-            color: var(--body-text-color-subdued);
-            opacity: 0.8;
-        }}
-
-        .quest-updates-hint span {{
-            display: inline-block;
-        }}
-
         /* Mobile responsive - trigger when columns would be too small */
         /* Left section < 500px OR right section < 400px */
         @media (max-width: 1000px) {{
@@ -493,15 +480,13 @@ def build_quest_section(
         }
 
         /* CTA button styling */
-        .quest-cta-btn {
-            margin-top: 1rem !important;
-            width: 100%;
-        }
-        #quest-cta-btn-authenticated {
-            margin-top: 1rem !important;
-        }
+        .quest-cta-btn,
+        #quest-cta-btn-authenticated,
         #quest-cta-btn-login {
             margin-top: 1rem !important;
+        }
+        .quest-cta-btn {
+            width: 100%;
         }
         </style>
         """)
