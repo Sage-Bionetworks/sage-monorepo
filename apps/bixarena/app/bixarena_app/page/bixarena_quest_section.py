@@ -13,6 +13,7 @@ QUEST_CONFIG = {
     "end_date": "2026-04-20",
     "conversion_text": "1 Battle = 1 Block",
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
+    "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
     "current_update": {
         "title": "Week 1 Update",
         "description": "We are building an inner wall of three blocks high with cobblestone blocks. (115 Blocks placed so far).",
@@ -27,7 +28,7 @@ QUEST_CONFIG = {
 
 def build_quest_section(
     progress_data: dict | None = None,
-) -> tuple[gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str]:
+) -> tuple[gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str, int]:
     """Build the Community Quest section for home page.
 
     Args:
@@ -35,7 +36,7 @@ def build_quest_section(
 
     Returns:
         Tuple of (quest_container, progress_html_container, contribute_button_authenticated,
-                  contribute_button_login, carousel_init_trigger, carousel_id)
+                  contribute_button_login, carousel_init_trigger, carousel_id, rotation_interval)
     """
     # Use provided progress data or defaults
     if progress_data is None:
@@ -71,25 +72,30 @@ def build_quest_section(
         "" if len(QUEST_CONFIG["current_update"]["images"]) > 1 else "display: none;"
     )
 
-    # Build the carousel HTML (left column)
+    # Build the carousel HTML (left column) - vertical stack
     carousel_html = f"""
-    <div style="position: relative; height: 100%;">
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Image carousel -->
         <div id="{carousel_id}" class="quest-carousel">
             <div class="carousel-container">
                 {images_html}
             </div>
-            <div class="carousel-indicators" style="{indicators_display}">
+        </div>
+
+        <!-- Carousel indicators below image -->
+        <div class="carousel-indicators-wrapper" style="{indicators_display}">
+            <div class="carousel-indicators">
                 {indicators_html}
             </div>
         </div>
 
-        <!-- Update overlay -->
-        <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
-            <h4 style="color: white; font-weight: 600; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <!-- Update box below indicators -->
+        <div class="carousel-update-box">
+            <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.5rem;">
                 <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #22c55e;"></span>
                 {QUEST_CONFIG["current_update"]["title"]}
             </h4>
-            <p style="color: rgba(255, 255, 255, 0.9); font-size: 0.875rem; margin: 0;">
+            <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
                 {QUEST_CONFIG["current_update"]["description"]}
             </p>
         </div>
@@ -103,6 +109,7 @@ def build_quest_section(
             overflow: hidden;
             border-radius: 12px;
             background: #000;
+            height: 0; /* Ensure padding-bottom creates the height */
         }}
 
         .carousel-container {{
@@ -111,6 +118,7 @@ def build_quest_section(
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: 1;
         }}
 
         .carousel-image {{
@@ -123,44 +131,55 @@ def build_quest_section(
             opacity: 0;
             transition: opacity 0.6s ease-in-out;
             will-change: opacity;
+            z-index: 1;
         }}
 
         .carousel-image.active {{
             opacity: 1;
-            z-index: 1;
+            z-index: 2;
+        }}
+
+        .carousel-indicators-wrapper {{
+            display: flex;
+            justify-content: center;
+            margin: 0;
         }}
 
         .carousel-indicators {{
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
             gap: 8px;
-            z-index: 10;
             padding: 8px 12px;
-            background: rgba(0, 0, 0, 0.4);
+            background: var(--background-fill-secondary);
             border-radius: 20px;
-            backdrop-filter: blur(4px);
+            border: 1px solid var(--border-color-primary);
         }}
 
         .indicator {{
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
+            background: var(--body-text-color-subdued);
+            opacity: 0.5;
             cursor: pointer;
-            transition: background 0.3s, transform 0.3s;
+            transition: background 0.3s, transform 0.3s, opacity 0.3s;
         }}
 
         .indicator:hover {{
-            background: rgba(255, 255, 255, 0.9);
+            opacity: 0.9;
             transform: scale(1.3);
         }}
 
         .indicator.active {{
             background: var(--accent-teal, #14b8a6);
+            opacity: 1;
             transform: scale(1.15);
+        }}
+
+        .carousel-update-box {{
+            background: var(--panel-background-fill);
+            border: 1px solid var(--border-color-primary);
+            border-radius: 8px;
+            padding: 1rem;
         }}
 
         /* Mobile responsive - trigger when columns would be too small */
@@ -372,6 +391,9 @@ def build_quest_section(
             "Init Carousel", visible=False, elem_id="carousel-init-trigger"
         )
 
+    # Get rotation interval from config
+    rotation_interval = QUEST_CONFIG.get("carousel_rotation_interval", 6000)
+
     return (
         quest_container,
         progress_html_container,
@@ -379,4 +401,5 @@ def build_quest_section(
         contribute_button_login,
         carousel_init_trigger,
         carousel_id,
+        rotation_interval,
     )

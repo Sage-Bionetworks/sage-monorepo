@@ -414,6 +414,7 @@ def build_app():
                 quest_btn_login,
                 carousel_init_trigger,
                 carousel_id,
+                rotation_interval,
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
@@ -606,7 +607,9 @@ def build_app():
         }}
 
         const images = carousel.querySelectorAll('.carousel-image');
-        const indicators = carousel.querySelectorAll('.indicator');
+        // Indicators are now in a sibling container, not inside carousel
+        const carouselParent = carousel.parentElement;
+        const indicators = carouselParent.querySelectorAll('.indicator');
 
         console.log('Found carousel elements - images:', images.length, 'indicators:', indicators.length);
 
@@ -621,7 +624,7 @@ def build_app():
 
         let currentIndex = 0;
         let autoRotateInterval;
-        const ROTATION_INTERVAL = 6000;
+        const ROTATION_INTERVAL = {rotation_interval};
 
         function showImage(index) {{
             console.log('Showing image:', index);

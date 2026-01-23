@@ -361,6 +361,7 @@ def build_quest_section_wrapper():
             quest_btn_login,
             carousel_init_trigger,
             carousel_id,
+            rotation_interval,
         ) = build_quest_section(progress_data)
     except Exception as e:
         logger.error(f"Error calculating quest progress: {e}")
@@ -372,6 +373,7 @@ def build_quest_section_wrapper():
             quest_btn_login,
             carousel_init_trigger,
             carousel_id,
+            rotation_interval,
         ) = build_quest_section(None)
     return (
         quest_container,
@@ -380,6 +382,7 @@ def build_quest_section_wrapper():
         quest_btn_login,
         carousel_init_trigger,
         carousel_id,
+        rotation_interval,
     )
 
 
@@ -544,6 +547,7 @@ def build_home_page():
             quest_btn_login,
             carousel_init_trigger,
             carousel_id,
+            rotation_interval,
         ) = build_quest_section_wrapper()
 
         # How It Works Section
@@ -561,4 +565,5 @@ def build_home_page():
         quest_btn_login,
         carousel_init_trigger,
         carousel_id,
+        rotation_interval,
     )
