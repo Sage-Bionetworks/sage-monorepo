@@ -9,7 +9,7 @@ from bixarena_app.api.api_client_helper import (
     fetch_public_stats,
 )
 from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
-from bixarena_app.page.bixarena_quest_section import build_quest_section
+from bixarena_app.page.bixarena_quest_section import QUEST_CONFIG, build_quest_section
 
 logger = logging.getLogger(__name__)
 
@@ -258,11 +258,15 @@ def load_quest_progress_on_page_load() -> dict:
     except Exception as e:
         logger.error(f"Error calculating quest progress: {e}")
         # Use defaults on error
+        from datetime import datetime
+
+        end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
+        days_remaining = max(0, (end_date - datetime.now()).days)
         progress_data = {
             "current_blocks": 0,
-            "goal_blocks": 2850,
+            "goal_blocks": QUEST_CONFIG["goal"],
             "percentage": 0.0,
-            "days_remaining": 90,
+            "days_remaining": days_remaining,
         }
 
     current_blocks = progress_data["current_blocks"]
@@ -310,10 +314,10 @@ def load_quest_progress_on_page_load() -> dict:
                 </div>
                 <div style="flex: 1;">
                     <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
-                        1 Battle = 1 Block
+                        {QUEST_CONFIG["conversion_text"]}
                     </h4>
                     <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
-                        Every time you evaluate a model, you earn a block for the community build (up to 10/day).
+                        {QUEST_CONFIG["conversion_description"]}
                     </p>
                 </div>
             </div>

@@ -1,7 +1,5 @@
 """Community Quest section component for BioArena home page."""
 
-from datetime import datetime
-
 import gradio as gr
 
 # Quest configuration - hardcoded for Season 1
@@ -9,11 +7,10 @@ QUEST_CONFIG = {
     "title": "Building BioArena",
     "description": "We are constructing a medieval arena in Minecraft to symbolize our collective effort. Every battle counts towards the build.",
     "goal": 2850,
-    "start_date": "2026-02-01",
-    "duration_days": 90,
+    "start_date": "2026-01-20",
+    "end_date": "2026-04-20",
     "conversion_text": "1 Battle = 1 Block",
-    "conversion_description": "Every time you evaluate a model, you earn a block for the community build (up to 10/day).",
-    "daily_limit": 10,
+    "conversion_description": "Every time you evaluate a model, you earn a block for the community build.",
     "current_update": {
         "title": "Week 1 Update",
         "description": "We are building an inner wall of three blocks high with cobblestone blocks. (115 Blocks placed so far).",
@@ -39,11 +36,15 @@ def build_quest_section(
     """
     # Use provided progress data or defaults
     if progress_data is None:
+        from datetime import datetime
+
+        end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
+        days_remaining = max(0, (end_date - datetime.now()).days)
         progress_data = {
             "current_blocks": 0,
             "goal_blocks": QUEST_CONFIG["goal"],
             "percentage": 0.0,
-            "days_remaining": QUEST_CONFIG["duration_days"],
+            "days_remaining": days_remaining,
         }
 
     current_blocks = progress_data["current_blocks"]
@@ -281,7 +282,7 @@ def build_quest_section(
                         {days_remaining} Days Left
                     </h4>
                     <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
-                        We have {days_remaining} days to complete the arena structure before the season ends.
+                        We have {days_remaining} days to complete the arena in Minecraft before the season ends.
                     </p>
                 </div>
             </div>

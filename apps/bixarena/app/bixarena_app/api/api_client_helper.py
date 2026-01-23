@@ -108,22 +108,20 @@ def calculate_quest_progress() -> dict:
     Uses the existing fetch_public_stats() to get total battles completed,
     which represents blocks placed in the Minecraft arena (1 battle = 1 block).
 
-    Quest configuration (hardcoded for Season 1):
-    - Start date: February 1, 2026
-    - Duration: 90 days
-    - Goal: 2,850 blocks
+    Quest configuration is imported from QUEST_CONFIG in bixarena_quest_section.
 
     Returns:
         Dictionary with:
             - current_blocks: int (total battles completed)
-            - goal_blocks: int (hardcoded 2850)
+            - goal_blocks: int (from QUEST_CONFIG)
             - percentage: float (0-100+, can exceed 100%)
-            - days_remaining: int (calculated from start date + 90 days)
+            - days_remaining: int (calculated from end date)
     """
-    # Hardcoded quest configuration
-    QUEST_START_DATE = datetime(2026, 2, 1)
-    QUEST_DURATION_DAYS = 90
-    QUEST_GOAL_BLOCKS = 2850
+    # Import quest configuration
+    from bixarena_app.page.bixarena_quest_section import QUEST_CONFIG
+
+    QUEST_END_DATE = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
+    QUEST_GOAL_BLOCKS = QUEST_CONFIG["goal"]
 
     # Fetch current battle count (represents blocks placed)
     stats = fetch_public_stats()
@@ -135,9 +133,8 @@ def calculate_quest_progress() -> dict:
     )
 
     # Calculate days remaining
-    quest_end_date = QUEST_START_DATE + timedelta(days=QUEST_DURATION_DAYS)
     now = datetime.now()
-    days_remaining = max(0, (quest_end_date - now).days)
+    days_remaining = max(0, (QUEST_END_DATE - now).days)
 
     logger.info(
         f"Quest progress: {current_blocks}/{QUEST_GOAL_BLOCKS} blocks "
