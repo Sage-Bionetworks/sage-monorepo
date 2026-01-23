@@ -27,6 +27,7 @@ from bixarena_app.page.bixarena_header import (
 from bixarena_app.page.bixarena_home import (
     build_home_page,
     load_public_stats_on_page_load,
+    load_quest_progress_on_page_load,
     load_user_battles_on_page_load,
     update_cta_buttons_on_page_load,
 )
@@ -408,6 +409,7 @@ def build_app():
                 cta_helper_msg,
                 stats_container,
                 quest_container,
+                quest_progress_container,
                 quest_btn_authenticated,
                 quest_btn_login,
             ) = build_home_page()
@@ -568,6 +570,13 @@ def build_app():
                 quest_btn_authenticated,
                 quest_btn_login,
             ],
+        )
+
+        # Load quest progress on page load
+        demo.load(
+            fn=load_quest_progress_on_page_load,
+            inputs=None,
+            outputs=quest_progress_container,
         )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)

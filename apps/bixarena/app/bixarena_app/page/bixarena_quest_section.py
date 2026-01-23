@@ -28,14 +28,14 @@ QUEST_CONFIG = {
 
 def build_quest_section(
     progress_data: dict | None = None,
-) -> tuple[gr.Column, gr.Button, gr.Button]:
+) -> tuple[gr.Column, gr.HTML, gr.Button, gr.Button]:
     """Build the Community Quest section for home page.
 
     Args:
         progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
 
     Returns:
-        Tuple of (quest_container, contribute_button_authenticated, contribute_button_login)
+        Tuple of (quest_container, progress_html_container, contribute_button_authenticated, contribute_button_login)
     """
     # Use provided progress data or defaults
     if progress_data is None:
@@ -227,7 +227,7 @@ def build_quest_section(
         <div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
                 <span style="color: var(--body-text-color); font-weight: 500;">Arena Progress</span>
-                <span style="color: var(--body-text-color); font-weight: 600;">{percentage:.1f}% Complete</span>
+                <span style="color: var(--body-text-color); font-weight: 600;">{int(percentage)}% Complete</span>
             </div>
 
             <div style="width: 100%; height: 16px; background-color: var(--background-fill-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color-primary); position: relative;">
@@ -320,7 +320,10 @@ def build_quest_section(
                 with gr.Column(scale=1):
                     gr.HTML(carousel_html)
                 with gr.Column(scale=1):
-                    gr.HTML(progress_html)
+                    # Progress HTML container that can be updated dynamically
+                    progress_html_container = gr.HTML(
+                        progress_html, elem_id="quest-progress-container"
+                    )
                     # Two CTA buttons - visibility controlled by authentication state
                     # Button for authenticated users - navigates to battle page
                     contribute_button_authenticated = gr.Button(
@@ -408,4 +411,9 @@ def build_quest_section(
         </style>
         """)
 
-    return quest_container, contribute_button_authenticated, contribute_button_login
+    return (
+        quest_container,
+        progress_html_container,
+        contribute_button_authenticated,
+        contribute_button_login,
+    )

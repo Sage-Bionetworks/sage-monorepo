@@ -244,21 +244,133 @@ def build_stats_section():
     return stats_container
 
 
+def load_quest_progress_on_page_load() -> dict:
+    """Load quest progress and return HTML update.
+
+    Returns:
+        HTML update for the quest progress section (right column only)
+    """
+    try:
+        progress_data = calculate_quest_progress()
+        # TEMPORARY: Override with placeholder value for visualization
+        # progress_data["current_blocks"] = 1000
+        # progress_data["percentage"] = (1000 / progress_data["goal_blocks"] * 100)
+    except Exception as e:
+        logger.error(f"Error calculating quest progress: {e}")
+        # Use defaults on error
+        progress_data = {
+            "current_blocks": 0,
+            "goal_blocks": 2850,
+            "percentage": 0.0,
+            "days_remaining": 90,
+        }
+
+    current_blocks = progress_data["current_blocks"]
+    goal_blocks = progress_data["goal_blocks"]
+    percentage = progress_data["percentage"]
+    days_remaining = progress_data["days_remaining"]
+
+    # Build the progress HTML (matching the structure in bixarena_quest_section.py)
+    progress_html = f"""
+    <div style="display: flex; flex-direction: column; gap: 1.5rem; height: 100%;">
+        <!-- Progress Bar Section -->
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                <span style="color: var(--body-text-color); font-weight: 500;">Arena Progress</span>
+                <span style="color: var(--body-text-color); font-weight: 600;">{int(percentage)}% Complete</span>
+            </div>
+
+            <div style="width: 100%; height: 16px; background-color: var(--background-fill-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color-primary); position: relative;">
+                <div style="height: 100%; background: linear-gradient(90deg, var(--accent-teal) 0%, #2dd4bf 100%); border-radius: 8px; width: {min(percentage, 100)}%;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+                <div>
+                    <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{current_blocks:,}</p>
+                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Blocks Placed</p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{goal_blocks:,}</p>
+                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        <!-- Info Cards -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Card 1: Conversion -->
+            <div style="display: flex; align-items: start; gap: 1rem;">
+                <div style="flex-shrink: 0; width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, var(--color-accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent); display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
+                        1 Battle = 1 Block
+                    </h4>
+                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
+                        Every time you evaluate a model, you earn a block for the community build (up to 10/day).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 2: Time Remaining -->
+            <div style="display: flex; align-items: start; gap: 1rem;">
+                <div style="flex-shrink: 0; width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, #3b82f6 10%, transparent); border: 1px solid color-mix(in srgb, #3b82f6 30%, transparent); display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
+                        {days_remaining} Days Left
+                    </h4>
+                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
+                        We have {days_remaining} days to complete the arena structure before the season ends.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    """
+
+    return gr.update(value=progress_html)
+
+
 def build_quest_section_wrapper():
     """Create the Community Quest section for the home page"""
     try:
         # Fetch real-time quest progress data
         progress_data = calculate_quest_progress()
-        quest_container, quest_btn_authenticated, quest_btn_login = build_quest_section(
-            progress_data
-        )
+        # TEMPORARY: Override with placeholder value for visualization
+        # progress_data["current_blocks"] = 1000
+        # progress_data["percentage"] = (1000 / progress_data["goal_blocks"] * 100)
+        (
+            quest_container,
+            progress_html_container,
+            quest_btn_authenticated,
+            quest_btn_login,
+        ) = build_quest_section(progress_data)
     except Exception as e:
         logger.error(f"Error calculating quest progress: {e}")
         # Fall back to default data if calculation fails
-        quest_container, quest_btn_authenticated, quest_btn_login = build_quest_section(
-            None
-        )
-    return quest_container, quest_btn_authenticated, quest_btn_login
+        (
+            quest_container,
+            progress_html_container,
+            quest_btn_authenticated,
+            quest_btn_login,
+        ) = build_quest_section(None)
+    return (
+        quest_container,
+        progress_html_container,
+        quest_btn_authenticated,
+        quest_btn_login,
+    )
 
 
 def build_how_it_works_section():
@@ -415,9 +527,12 @@ def build_home_page():
         stats_container = build_stats_section()
 
         # Community Quest Section (new)
-        quest_html, quest_btn_authenticated, quest_btn_login = (
-            build_quest_section_wrapper()
-        )
+        (
+            quest_html,
+            quest_progress_container,
+            quest_btn_authenticated,
+            quest_btn_login,
+        ) = build_quest_section_wrapper()
 
         # How It Works Section
         build_how_it_works_section()
@@ -429,6 +544,7 @@ def build_home_page():
         cta_helper_msg,
         stats_container,
         quest_html,
+        quest_progress_container,
         quest_btn_authenticated,
         quest_btn_login,
     )
