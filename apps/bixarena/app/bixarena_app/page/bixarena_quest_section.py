@@ -141,13 +141,6 @@ def build_quest_section(
         </div>
         '''
 
-    # Add hint after all updates
-    update_cards_html += """
-        <div class="quest-updates-hint">
-            <span>Click any update to view its images</span>
-        </div>
-    """
-
     # Build the carousel HTML (left column) - vertical stack
     carousel_html = f"""
     <div style="display: flex; flex-direction: column; gap: 1rem;">
