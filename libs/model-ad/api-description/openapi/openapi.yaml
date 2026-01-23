@@ -685,6 +685,9 @@ components:
         age:
           type: string
           description: Age of the model
+        age_numeric:
+          type: number
+          description: Numeric representation of age
         sex:
           $ref: '#/components/schemas/Sex'
         IFG:
@@ -709,6 +712,7 @@ components:
         - modified_genes
         - cluster
         - age
+        - age_numeric
         - sex
     DiseaseCorrelationsPage:
       type: object
@@ -1271,6 +1275,10 @@ components:
           type: string
           description: Short name of the filter group
           example: Biodomain
+        query_param_key:
+          type: string
+          description: Query parameter key for the filter
+          example: modelType
         values:
           type: array
           description: List of filter values
@@ -1280,6 +1288,7 @@ components:
       required:
         - name
         - data_key
+        - query_param_key
         - values
     ComparisonToolConfig:
       type: object
@@ -1294,7 +1303,8 @@ components:
             example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
         row_count:
           type: string
-          description: Relative description of the total number of rows in the data
+          description: Deprecated field that is always null. Previously contained relative description of the total number of rows in the data
+          nullable: true
         columns:
           type: array
           description: List of column definitions

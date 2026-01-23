@@ -6,13 +6,14 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.List;
-import org.mockito.ArgumentCaptor;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.model.ad.api.next.model.document.DiseaseCorrelationDocument;
@@ -78,7 +79,11 @@ class DiseaseCorrelationServiceTest {
   @Test
   @DisplayName("should return all cluster items when exclude filter has no items")
   void shouldReturnAllClusterItemsWhenExcludeFilterHasNoItems() {
-    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument("Model1", "12 months", "Male");
+    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument(
+      "Model1",
+      new BigDecimal(12),
+      "Male"
+    );
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc));
 
     when(
@@ -112,7 +117,11 @@ class DiseaseCorrelationServiceTest {
   @Test
   @DisplayName("should respect search term when exclude filter has no items")
   void shouldRespectSearchTermWhenExcludeFilterHasNoItems() {
-    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument("TestModel", "12 months", "Male");
+    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument(
+      "TestModel",
+      new BigDecimal(12),
+      "Male"
+    );
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc));
 
     when(
@@ -147,11 +156,20 @@ class DiseaseCorrelationServiceTest {
   @Test
   @DisplayName("should return matching composite identifiers when include filter has items")
   void shouldReturnMatchingCompositeIdentifiersWhenIncludeFilterHasItems() {
-    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument("Model1", "12 months", "Male");
+    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument(
+      "Model1",
+      new BigDecimal(12),
+      "Male"
+    );
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc));
 
     when(
-      repository.findAll(any(Pageable.class), any(DiseaseCorrelationSearchQueryDto.class), any(), eq(CLUSTER))
+      repository.findAll(
+        any(Pageable.class),
+        any(DiseaseCorrelationSearchQueryDto.class),
+        any(),
+        eq(CLUSTER)
+      )
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
@@ -165,17 +183,31 @@ class DiseaseCorrelationServiceTest {
 
     assertThat(result.getDiseaseCorrelations()).hasSize(1);
     assertThat(result.getDiseaseCorrelations().get(0).getName()).isEqualTo("Model1");
-    verify(repository).findAll(any(Pageable.class), any(DiseaseCorrelationSearchQueryDto.class), any(), eq(CLUSTER));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(DiseaseCorrelationSearchQueryDto.class),
+      any(),
+      eq(CLUSTER)
+    );
   }
 
   @Test
   @DisplayName("should return non-matching composite identifiers when exclude filter has items")
   void shouldReturnNonMatchingCompositeIdentifiersWhenExcludeFilterHasItems() {
-    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument("Model2", "18 months", "Female");
+    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument(
+      "Model2",
+      new BigDecimal(18),
+      "Female"
+    );
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc));
 
     when(
-      repository.findAll(any(Pageable.class), any(DiseaseCorrelationSearchQueryDto.class), any(), eq(CLUSTER))
+      repository.findAll(
+        any(Pageable.class),
+        any(DiseaseCorrelationSearchQueryDto.class),
+        any(),
+        eq(CLUSTER)
+      )
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
@@ -189,13 +221,22 @@ class DiseaseCorrelationServiceTest {
 
     assertThat(result.getDiseaseCorrelations()).hasSize(1);
     assertThat(result.getDiseaseCorrelations().get(0).getName()).isEqualTo("Model2");
-    verify(repository).findAll(any(Pageable.class), any(DiseaseCorrelationSearchQueryDto.class), any(), eq(CLUSTER));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(DiseaseCorrelationSearchQueryDto.class),
+      any(),
+      eq(CLUSTER)
+    );
   }
 
   @Test
   @DisplayName("should apply data filters to repository query")
   void shouldApplyDataFiltersToRepositoryQuery() {
-    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument("Model1", "4 months", "Female");
+    DiseaseCorrelationDocument doc = createDiseaseCorrelationDocument(
+      "Model1",
+      new BigDecimal(4),
+      "Female"
+    );
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc));
 
     when(
@@ -231,12 +272,25 @@ class DiseaseCorrelationServiceTest {
   @Test
   @DisplayName("should handle multiple composite identifiers")
   void shouldHandleMultipleCompositeIdentifiers() {
-    DiseaseCorrelationDocument doc1 = createDiseaseCorrelationDocument("Model1", "12 months", "Male");
-    DiseaseCorrelationDocument doc2 = createDiseaseCorrelationDocument("Model2", "18 months", "Female");
+    DiseaseCorrelationDocument doc1 = createDiseaseCorrelationDocument(
+      "Model1",
+      new BigDecimal(12),
+      "Male"
+    );
+    DiseaseCorrelationDocument doc2 = createDiseaseCorrelationDocument(
+      "Model2",
+      new BigDecimal(18),
+      "Female"
+    );
     Page<DiseaseCorrelationDocument> page = new PageImpl<>(List.of(doc1, doc2));
 
     when(
-      repository.findAll(any(Pageable.class), any(DiseaseCorrelationSearchQueryDto.class), any(), eq(CLUSTER))
+      repository.findAll(
+        any(Pageable.class),
+        any(DiseaseCorrelationSearchQueryDto.class),
+        any(),
+        eq(CLUSTER)
+      )
     ).thenReturn(page);
 
     DiseaseCorrelationSearchQueryDto query = DiseaseCorrelationSearchQueryDto.builder()
@@ -249,7 +303,12 @@ class DiseaseCorrelationServiceTest {
     DiseaseCorrelationsPageDto result = service.loadDiseaseCorrelations(query, CLUSTER);
 
     assertThat(result.getDiseaseCorrelations()).hasSize(2);
-    verify(repository).findAll(any(Pageable.class), any(DiseaseCorrelationSearchQueryDto.class), any(), eq(CLUSTER));
+    verify(repository).findAll(
+      any(Pageable.class),
+      any(DiseaseCorrelationSearchQueryDto.class),
+      any(),
+      eq(CLUSTER)
+    );
   }
 
   @Test
@@ -289,14 +348,15 @@ class DiseaseCorrelationServiceTest {
 
   private DiseaseCorrelationDocument createDiseaseCorrelationDocument(
     String name,
-    String age,
+    BigDecimal ageNumeric,
     String sex
   ) {
     DiseaseCorrelationDocument document = new DiseaseCorrelationDocument();
     document.setId(new ObjectId());
     document.setCluster(CLUSTER);
     document.setName(name);
-    document.setAge(age);
+    document.setAge(ageNumeric + " months");
+    document.setAgeNumeric(ageNumeric);
     document.setSex(sex);
     document.setMatchedControl("Control1");
     document.setModelType("Familial AD");

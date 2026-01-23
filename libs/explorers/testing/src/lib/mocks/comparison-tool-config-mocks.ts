@@ -9,17 +9,20 @@ export const mockComparisonToolConfigFilters: ComparisonToolConfigFilter[] = [
   {
     name: 'Age',
     data_key: 'age',
+    query_param_key: 'age',
     values: ['4 months', '8 months', '12 months'],
   },
   {
     name: 'Model Type',
     data_key: 'model_type',
     short_name: 'Type',
+    query_param_key: 'modelType',
     values: ['Familial AD', 'Late Onset AD'],
   },
   {
     name: 'Sex',
     data_key: 'sex',
+    query_param_key: 'sex',
     values: ['Female', 'Male'],
   },
 ];

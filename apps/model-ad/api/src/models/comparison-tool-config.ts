@@ -9,6 +9,7 @@ const ComparisonToolConfigFilterSchema = new Schema<ComparisonToolConfigFilter>(
   name: { type: String, required: true },
   data_key: { type: String, required: true },
   short_name: { type: String, required: false },
+  query_param_key: { type: String, required: true },
   values: { type: [String], required: true },
 });
 

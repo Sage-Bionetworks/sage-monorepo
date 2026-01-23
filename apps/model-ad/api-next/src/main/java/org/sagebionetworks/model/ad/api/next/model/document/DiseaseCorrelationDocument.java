@@ -1,5 +1,6 @@
 package org.sagebionetworks.model.ad.api.next.model.document;
 
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +35,9 @@ public class DiseaseCorrelationDocument {
   private String cluster;
 
   private String age;
+
+  @Field("age_numeric")
+  private BigDecimal ageNumeric;
 
   private String sex;
 

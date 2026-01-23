@@ -10,7 +10,8 @@ properties:
       example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
   row_count:
     type: string
-    description: Relative description of the total number of rows in the data
+    description: Deprecated field that is always null. Previously contained relative description of the total number of rows in the data
+    nullable: true
   columns:
     type: array
     description: List of column definitions

@@ -18,9 +18,9 @@ export interface ComparisonToolConfig {
    */
   dropdowns: Array<string>;
   /**
-   * Relative description of the total number of rows in the data
+   * Deprecated field that is always null. Previously contained relative description of the total number of rows in the data
    */
-  row_count: string;
+  row_count: string | null;
   /**
    * List of column definitions
    */

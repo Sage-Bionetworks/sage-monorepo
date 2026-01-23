@@ -42,6 +42,10 @@ export interface DiseaseCorrelation {
    * Age of the model
    */
   age: string;
+  /**
+   * Numeric representation of age
+   */
+  age_numeric: number;
   sex: Sex;
   IFG?: CorrelationResult;
   PHG?: CorrelationResult;
