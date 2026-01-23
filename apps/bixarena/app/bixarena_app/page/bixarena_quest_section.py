@@ -6,7 +6,7 @@ import gradio as gr
 
 # Quest configuration - hardcoded for Season 1
 QUEST_CONFIG = {
-    "title": "Build the BioArena",
+    "title": "Building BioArena",
     "description": "We are constructing a medieval arena in Minecraft to symbolize our collective effort. Every battle counts towards the build.",
     "goal": 2850,
     "start_date": "2026-02-01",
@@ -290,57 +290,74 @@ def build_quest_section(
     """
 
     # Build the complete quest section using Gradio layout components
-    with gr.Column(elem_id="quest-section-container") as quest_container:
-        # Header with badge and title
+    with gr.Column(elem_id="quest-section-wrapper") as quest_container:
+        # Header section (outside bordered box, matching Arena Rules style)
         gr.HTML(f"""
-        <div style="padding: 2.5rem 1.5rem 0 1.5rem;">
-            <!-- Community Quest Badge -->
-            <div style="text-align: center; margin-bottom: 1rem;">
-                <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #22c55e; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
-                    Community Quest
-                </span>
+        <div style="padding: 2.5rem 1.5rem;">
+            <!-- Section Header -->
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <!-- Community Quest Badge -->
+                <div style="margin-bottom: 1rem;">
+                    <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #22c55e; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                        Community Quest
+                    </span>
+                </div>
+
+                <h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.75rem; font-weight: 600;">
+                    {QUEST_CONFIG["title"]}
+                </h1>
+
+                <p style="color: var(--body-text-color-subdued); font-size: var(--text-xl); max-width: 48rem; margin: 0 auto;">
+                    {QUEST_CONFIG["description"]}
+                </p>
             </div>
-
-            <h2 style="text-align: center; font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.75rem; font-weight: 600;">
-                {QUEST_CONFIG["title"]}
-            </h2>
-
-            <p style="text-align: center; color: var(--body-text-color-subdued); font-size: var(--text-lg); max-width: 42rem; margin: 0 auto 2.5rem auto;">
-                {QUEST_CONFIG["description"]}
-            </p>
         </div>
         """)
 
-        # Two-column layout with carousel and progress
-        with gr.Row(elem_id="quest-section-grid"):
-            with gr.Column(scale=1):
-                gr.HTML(carousel_html)
-            with gr.Column(scale=1):
-                gr.HTML(progress_html)
-                # CTA button positioned at bottom of right column
-                contribute_button = gr.Button(
-                    "Contribute a Block Now",
-                    variant="primary",
-                    size="lg",
-                    elem_id="quest-cta-button",
-                    elem_classes=["quest-cta-btn"],
-                )
+        # Content box (bordered container with carousel and progress)
+        with gr.Column(elem_id="quest-content-box"):
+            with gr.Row(elem_id="quest-section-grid"):
+                with gr.Column(scale=1):
+                    gr.HTML(carousel_html)
+                with gr.Column(scale=1):
+                    gr.HTML(progress_html)
+                    # CTA button positioned at bottom of right column
+                    contribute_button = gr.Button(
+                        "Contribute a Block Now",
+                        variant="primary",
+                        size="lg",
+                        elem_id="quest-cta-button",
+                        elem_classes=["quest-cta-btn"],
+                    )
 
-        # Container styling
+        # Styling
         gr.HTML("""
         <style>
-        #quest-section-container {
+        /* Wrapper for entire quest section */
+        #quest-section-wrapper {
+            padding: 0 !important;
+            gap: 0 !important;
+        }
+        #quest-section-wrapper > .block {
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            gap: 0 !important;
+        }
+
+        /* Content box with border */
+        #quest-content-box {
             background-color: var(--panel-background-fill);
             border-radius: 12px;
             border: 1px solid var(--border-color-primary);
             margin: 0 1.5rem !important;
-            padding: 0 !important;
-            padding-bottom: 2.5rem !important;
+            padding: 2.5rem 1.5rem !important;
             gap: 0 !important;
             min-width: 0 !important;
             width: auto !important;
         }
-        #quest-section-container > .block {
+        #quest-content-box > .block {
             padding: 0 !important;
             margin: 0 !important;
             border: none !important;
@@ -348,12 +365,13 @@ def build_quest_section(
             gap: 0 !important;
             min-width: 0 !important;
         }
+
+        /* Grid layout for content */
         #quest-section-grid {
             display: grid;
             grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
             gap: 2rem;
             align-items: start;
-            padding: 0 1.5rem;
             min-width: 0 !important;
         }
         #quest-section-grid > .block {
@@ -364,6 +382,8 @@ def build_quest_section(
             gap: 0 !important;
             min-width: 0 !important;
         }
+
+        /* CTA button styling */
         .quest-cta-btn {
             margin-top: 1.5rem;
             width: 100%;
