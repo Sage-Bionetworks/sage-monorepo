@@ -31,6 +31,7 @@ public class DiseaseCorrelationMapper {
       modifiedGenes,
       document.getCluster(),
       document.getAge(),
+      document.getAgeNumeric(),
       EnumConverter.toSexDto(document.getSex(), "disease correlation record")
     );
 

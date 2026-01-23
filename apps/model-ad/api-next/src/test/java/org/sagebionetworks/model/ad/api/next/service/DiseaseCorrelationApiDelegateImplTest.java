@@ -204,7 +204,6 @@ class DiseaseCorrelationApiDelegateImplTest {
     );
   }
 
-
   @Test
   @DisplayName("should omit correlation data when values incomplete")
   void shouldOmitCorrelationDataWhenValuesIncomplete() {
@@ -317,6 +316,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     document.setModifiedGenes(List.of("Gene 1", "Gene 2"));
     document.setCluster("Cluster A");
     document.setAge("10 weeks");
+    document.setAgeNumeric(new BigDecimal(10));
     document.setSex("Female");
     document.setIfg(correlation);
     return document;
@@ -333,6 +333,7 @@ class DiseaseCorrelationApiDelegateImplTest {
     document.setModifiedGenes(List.of("Gene 3"));
     document.setCluster("Cluster C");
     document.setAge("12 weeks");
+    document.setAgeNumeric(new BigDecimal(12));
     document.setSex("Male");
     document.setIfg(correlation);
     return document;

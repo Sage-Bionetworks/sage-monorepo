@@ -25,6 +25,9 @@ properties:
   age:
     type: string
     description: Age of the model
+  age_numeric:
+    type: number
+    description: Numeric representation of age
   sex:
     $ref: ./Sex.yaml
   IFG:
@@ -49,4 +52,5 @@ required:
   - modified_genes
   - cluster
   - age
+  - age_numeric
   - sex

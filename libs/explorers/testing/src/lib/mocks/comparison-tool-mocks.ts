@@ -114,11 +114,13 @@ export const mockComparisonToolDataConfig: ComparisonToolConfig[] = [
       {
         name: 'Model Type',
         data_key: 'model_type',
+        query_param_key: 'modelType',
         values: ['Familial AD', 'Late Onset AD'],
       },
       {
         name: 'Age',
         data_key: 'age',
+        query_param_key: 'age',
         values: ['4 months', '8 months', '12 months'],
       },
     ],

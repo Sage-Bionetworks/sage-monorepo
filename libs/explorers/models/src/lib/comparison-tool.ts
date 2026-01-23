@@ -88,6 +88,7 @@ export interface ComparisonToolConfigFilter {
   name: string;
   data_key: string;
   short_name?: string;
+  query_param_key: string;
   values: string[];
 }
 
@@ -126,7 +127,7 @@ export interface ComparisonToolColumn extends ComparisonToolConfigColumn {
 export interface ComparisonToolConfig {
   page: ComparisonToolPage;
   dropdowns: string[];
-  row_count: string;
+  row_count: string | null;
   columns: ComparisonToolConfigColumn[];
   filters: ComparisonToolConfigFilter[];
 }

@@ -622,6 +622,9 @@ components:
         age:
           type: string
           description: Age of the model
+        age_numeric:
+          type: number
+          description: Numeric representation of age
         sex:
           $ref: '#/components/schemas/Sex'
         IFG:
@@ -646,6 +649,7 @@ components:
         - modified_genes
         - cluster
         - age
+        - age_numeric
         - sex
     DiseaseCorrelationsPage:
       type: object

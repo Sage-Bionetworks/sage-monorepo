@@ -13,6 +13,10 @@ properties:
     type: string
     description: Short name of the filter group
     example: 'Biodomain'
+  query_param_key:
+    type: string
+    description: Query parameter key for the filter
+    example: 'modelType'
   values:
     type: array
     description: List of filter values
@@ -22,4 +26,5 @@ properties:
 required:
   - name
   - data_key
+  - query_param_key
   - values

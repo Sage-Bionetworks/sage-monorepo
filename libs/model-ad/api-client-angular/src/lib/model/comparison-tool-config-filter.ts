@@ -25,6 +25,10 @@ export interface ComparisonToolConfigFilter {
    */
   short_name?: string;
   /**
+   * Query parameter key for the filter
+   */
+  query_param_key: string;
+  /**
    * List of filter values
    */
   values: Array<string>;

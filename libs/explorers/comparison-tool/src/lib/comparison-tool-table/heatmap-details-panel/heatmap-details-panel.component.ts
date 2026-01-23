@@ -66,7 +66,7 @@ export class HeatmapDetailsPanelComponent {
    * Otherwise, show the panel at the new target.
    * PrimeNG handles "click outside" automatically.
    */
-  private toggle(event: Event, data: HeatmapDetailsPanelData) {
+  toggle(event: Event, data: HeatmapDetailsPanelData) {
     const isVisible = this.panels().some((p) => p?.overlayVisible);
 
     if (event.currentTarget === this.lastCurrentTarget && isVisible) {

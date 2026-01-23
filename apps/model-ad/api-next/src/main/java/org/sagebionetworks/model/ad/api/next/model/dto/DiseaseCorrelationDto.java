@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +46,8 @@ public class DiseaseCorrelationDto {
 
   private String age;
 
+  private BigDecimal ageNumeric;
+
   private SexDto sex;
 
   private @Nullable CorrelationResultDto IFG;
@@ -68,7 +71,7 @@ public class DiseaseCorrelationDto {
   /**
    * Constructor with only required parameters
    */
-  public DiseaseCorrelationDto(String compositeId, String name, String matchedControl, String modelType, List<String> modifiedGenes, String cluster, String age, SexDto sex) {
+  public DiseaseCorrelationDto(String compositeId, String name, String matchedControl, String modelType, List<String> modifiedGenes, String cluster, String age, BigDecimal ageNumeric, SexDto sex) {
     this.compositeId = compositeId;
     this.name = name;
     this.matchedControl = matchedControl;
@@ -76,6 +79,7 @@ public class DiseaseCorrelationDto {
     this.modifiedGenes = modifiedGenes;
     this.cluster = cluster;
     this.age = age;
+    this.ageNumeric = ageNumeric;
     this.sex = sex;
   }
 
@@ -225,6 +229,26 @@ public class DiseaseCorrelationDto {
 
   public void setAge(String age) {
     this.age = age;
+  }
+
+  public DiseaseCorrelationDto ageNumeric(BigDecimal ageNumeric) {
+    this.ageNumeric = ageNumeric;
+    return this;
+  }
+
+  /**
+   * Numeric representation of age
+   * @return ageNumeric
+   */
+  @NotNull @Valid 
+  @Schema(name = "age_numeric", description = "Numeric representation of age", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("age_numeric")
+  public BigDecimal getAgeNumeric() {
+    return ageNumeric;
+  }
+
+  public void setAgeNumeric(BigDecimal ageNumeric) {
+    this.ageNumeric = ageNumeric;
   }
 
   public DiseaseCorrelationDto sex(SexDto sex) {
@@ -403,6 +427,7 @@ public class DiseaseCorrelationDto {
         Objects.equals(this.modifiedGenes, diseaseCorrelation.modifiedGenes) &&
         Objects.equals(this.cluster, diseaseCorrelation.cluster) &&
         Objects.equals(this.age, diseaseCorrelation.age) &&
+        Objects.equals(this.ageNumeric, diseaseCorrelation.ageNumeric) &&
         Objects.equals(this.sex, diseaseCorrelation.sex) &&
         Objects.equals(this.IFG, diseaseCorrelation.IFG) &&
         Objects.equals(this.PHG, diseaseCorrelation.PHG) &&
@@ -415,7 +440,7 @@ public class DiseaseCorrelationDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(compositeId, name, matchedControl, modelType, modifiedGenes, cluster, age, sex, IFG, PHG, TCX, CBE, DLPFC, FP, STG);
+    return Objects.hash(compositeId, name, matchedControl, modelType, modifiedGenes, cluster, age, ageNumeric, sex, IFG, PHG, TCX, CBE, DLPFC, FP, STG);
   }
 
   @Override
@@ -429,6 +454,7 @@ public class DiseaseCorrelationDto {
     sb.append("    modifiedGenes: ").append(toIndentedString(modifiedGenes)).append("\n");
     sb.append("    cluster: ").append(toIndentedString(cluster)).append("\n");
     sb.append("    age: ").append(toIndentedString(age)).append("\n");
+    sb.append("    ageNumeric: ").append(toIndentedString(ageNumeric)).append("\n");
     sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
     sb.append("    IFG: ").append(toIndentedString(IFG)).append("\n");
     sb.append("    PHG: ").append(toIndentedString(PHG)).append("\n");
@@ -472,6 +498,7 @@ public class DiseaseCorrelationDto {
       this.instance.setModifiedGenes(value.modifiedGenes);
       this.instance.setCluster(value.cluster);
       this.instance.setAge(value.age);
+      this.instance.setAgeNumeric(value.ageNumeric);
       this.instance.setSex(value.sex);
       this.instance.setIFG(value.IFG);
       this.instance.setPHG(value.PHG);
@@ -515,6 +542,11 @@ public class DiseaseCorrelationDto {
     
     public DiseaseCorrelationDto.Builder age(String age) {
       this.instance.age(age);
+      return this;
+    }
+    
+    public DiseaseCorrelationDto.Builder ageNumeric(BigDecimal ageNumeric) {
+      this.instance.ageNumeric(ageNumeric);
       return this;
     }
     

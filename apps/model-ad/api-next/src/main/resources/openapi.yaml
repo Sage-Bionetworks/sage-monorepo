@@ -822,8 +822,8 @@ components:
     CorrelationResult:
       description: Correlation result
       example:
-        adj_p_val: 6.027456183070403
-        correlation: 0.8008281904610115
+        adj_p_val: 1.4658129805029452
+        correlation: 6.027456183070403
       properties:
         correlation:
           description: Correlation value
@@ -840,32 +840,33 @@ components:
       example:
         cluster: cluster
         DLPFC:
-          adj_p_val: 6.027456183070403
-          correlation: 0.8008281904610115
+          adj_p_val: 1.4658129805029452
+          correlation: 6.027456183070403
         sex: Female
         CBE:
-          adj_p_val: 6.027456183070403
-          correlation: 0.8008281904610115
+          adj_p_val: 1.4658129805029452
+          correlation: 6.027456183070403
         STG:
-          adj_p_val: 6.027456183070403
-          correlation: 0.8008281904610115
+          adj_p_val: 1.4658129805029452
+          correlation: 6.027456183070403
         model_type: model_type
         TCX:
-          adj_p_val: 6.027456183070403
-          correlation: 0.8008281904610115
+          adj_p_val: 1.4658129805029452
+          correlation: 6.027456183070403
         modified_genes:
           - modified_genes
           - modified_genes
+        age_numeric: 0.8008281904610115
         FP:
-          adj_p_val: 6.027456183070403
-          correlation: 0.8008281904610115
+          adj_p_val: 1.4658129805029452
+          correlation: 6.027456183070403
         IFG:
-          adj_p_val: 6.027456183070403
-          correlation: 0.8008281904610115
+          adj_p_val: 1.4658129805029452
+          correlation: 6.027456183070403
         matched_control: matched_control
         PHG:
-          adj_p_val: 6.027456183070403
-          correlation: 0.8008281904610115
+          adj_p_val: 1.4658129805029452
+          correlation: 6.027456183070403
         composite_id: APOE4~12 Months~Female
         name: name
         age: age
@@ -894,6 +895,9 @@ components:
         age:
           description: Age of the model
           type: string
+        age_numeric:
+          description: Numeric representation of age
+          type: number
         sex:
           $ref: '#/components/schemas/Sex'
         IFG:
@@ -912,6 +916,7 @@ components:
           $ref: '#/components/schemas/CorrelationResult'
       required:
         - age
+        - age_numeric
         - cluster
         - composite_id
         - matched_control
@@ -927,63 +932,65 @@ components:
         diseaseCorrelations:
           - cluster: cluster
             DLPFC:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             sex: Female
             CBE:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             STG:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             model_type: model_type
             TCX:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             modified_genes:
               - modified_genes
               - modified_genes
+            age_numeric: 0.8008281904610115
             FP:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             IFG:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             matched_control: matched_control
             PHG:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             composite_id: APOE4~12 Months~Female
             name: name
             age: age
           - cluster: cluster
             DLPFC:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             sex: Female
             CBE:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             STG:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             model_type: model_type
             TCX:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             modified_genes:
               - modified_genes
               - modified_genes
+            age_numeric: 0.8008281904610115
             FP:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             IFG:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             matched_control: matched_control
             PHG:
-              adj_p_val: 6.027456183070403
-              correlation: 0.8008281904610115
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
             composite_id: APOE4~12 Months~Female
             name: name
             age: age
