@@ -22,9 +22,9 @@ QUEST_CONFIG = {
             "title": "Update 3: Battlements & Gate",
             "description": "The outer wall is taking shape! We've added battlements and are working on the entrance gate structure. (350 blocks placed so far).",
             "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+3+View+1",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+3+View+2",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+3+View+3",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+3+View+1",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+3+View+2",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+3+View+3",
             ],
         },
         {
@@ -32,8 +32,8 @@ QUEST_CONFIG = {
             "title": "Update 2: Outer Walls",
             "description": "Great progress! The foundation is complete and we're building the first layer of the outer walls. (200 blocks placed so far).",
             "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+2+View+1",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+2+View+2",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+2+View+1",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+2+View+2",
             ],
         },
         {
@@ -41,9 +41,9 @@ QUEST_CONFIG = {
             "title": "Update 1: Foundation",
             "description": "We are building an inner wall of three blocks high with cobblestone blocks. (115 Blocks placed so far).",
             "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+1+View+1",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+1+View+2",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Phase+1+View+3",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+1+View+1",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+1+View+2",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+1+View+3",
             ],
         },
     ],
