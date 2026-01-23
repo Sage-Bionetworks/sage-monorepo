@@ -344,6 +344,7 @@ export class ComparisonToolService<T> {
       name: config.name,
       data_key: config.data_key,
       short_name: config.short_name,
+      query_param_key: config.query_param_key,
       options: config.values.map((value) => ({
         label: value,
         selected: false,
