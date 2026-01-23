@@ -240,12 +240,12 @@ test.describe('disease correlation', () => {
     );
 
     await testPartialCaseInsensitiveSearch(page, 'apo', [
-      'APOE4~12 months~Female',
-      'APOE4~12 months~Male',
       'APOE4~4 months~Female',
       'APOE4~4 months~Male',
       'APOE4~8 months~Female',
       'APOE4~8 months~Male',
+      'APOE4~12 months~Female',
+      'APOE4~12 months~Male',
     ]);
   });
 
@@ -255,10 +255,10 @@ test.describe('disease correlation', () => {
     expect(categories.length).toBeGreaterThan(1);
 
     const pinnedCorrelations = [
-      '5xFAD (IU/Jax/Pitt)~12 months~Female',
-      '5xFAD (IU/Jax/Pitt)~12 months~Male',
       '5xFAD (IU/Jax/Pitt)~4 months~Female',
       '5xFAD (IU/Jax/Pitt)~4 months~Male',
+      '5xFAD (IU/Jax/Pitt)~12 months~Female',
+      '5xFAD (IU/Jax/Pitt)~12 months~Male',
     ];
 
     const queryParameters = [
@@ -288,12 +288,12 @@ test.describe('disease correlation', () => {
       page,
       'load1,',
       [
-        'LOAD1~12 months~Female',
-        'LOAD1~12 months~Male',
         'LOAD1~4 months~Female',
         'LOAD1~4 months~Male',
         'LOAD1~8 months~Female',
         'LOAD1~8 months~Male',
+        'LOAD1~12 months~Female',
+        'LOAD1~12 months~Male',
       ],
       'LOAD1.Clasp2L163P~12 months~Female',
     );
@@ -315,10 +315,10 @@ test.describe('disease correlation', () => {
     );
 
     await testPartialCaseInsensitiveSearch(page, '(iu', [
-      '5xFAD (IU/Jax/Pitt)~12 months~Female',
-      '5xFAD (IU/Jax/Pitt)~12 months~Male',
       '5xFAD (IU/Jax/Pitt)~4 months~Female',
       '5xFAD (IU/Jax/Pitt)~4 months~Male',
+      '5xFAD (IU/Jax/Pitt)~12 months~Female',
+      '5xFAD (IU/Jax/Pitt)~12 months~Male',
     ]);
   });
 

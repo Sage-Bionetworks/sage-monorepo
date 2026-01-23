@@ -152,4 +152,45 @@ class CustomDiseaseCorrelationRepositoryImplTest {
       eq(DiseaseCorrelationDocument.class)
     );
   }
+
+  @Test
+  @DisplayName("should sort by age_numeric when age sort is requested")
+  void shouldSortByAgeNumericWhenAgeSortIsRequested() {
+    // given
+    DiseaseCorrelationSearchQueryDto query = new DiseaseCorrelationSearchQueryDto();
+    query.setItemFilterType(ItemFilterTypeQueryDto.INCLUDE);
+
+    Pageable pageable = PageRequest.of(0, 10, org.springframework.data.domain.Sort.by("age"));
+
+    when(
+      mongoTemplate.aggregate(
+        any(Aggregation.class),
+        eq("disease_correlation"),
+        eq(DiseaseCorrelationDocument.class)
+      )
+    ).thenReturn(aggregationResults);
+
+    // when
+    repository.findAll(pageable, query, List.of(), "Cluster A");
+
+    // then
+    ArgumentCaptor<Aggregation> aggregationCaptor = ArgumentCaptor.forClass(Aggregation.class);
+    verify(mongoTemplate).aggregate(
+      aggregationCaptor.capture(),
+      eq("disease_correlation"),
+      eq(DiseaseCorrelationDocument.class)
+    );
+
+    Aggregation capturedAggregation = aggregationCaptor.getValue();
+    String aggregationString = capturedAggregation.toString();
+
+    assertTrue(
+      aggregationString.contains("age_numeric"),
+      "Aggregation should sort by age_numeric field"
+    );
+    assertFalse(
+      aggregationString.contains("age_lower"),
+      "Aggregation should not create age_lower field"
+    );
+  }
 }
