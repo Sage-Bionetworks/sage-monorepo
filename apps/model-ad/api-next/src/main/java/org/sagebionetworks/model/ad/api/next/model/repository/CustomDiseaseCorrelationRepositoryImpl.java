@@ -124,7 +124,6 @@ public class CustomDiseaseCorrelationRepositoryImpl implements CustomDiseaseCorr
   private boolean needsCaseInsensitiveSort(String field) {
     return (
       "name".equals(field) ||
-      "age".equals(field) ||
       "sex".equals(field) ||
       "model_type".equals(field) ||
       "matched_control".equals(field) ||
@@ -291,8 +290,11 @@ public class CustomDiseaseCorrelationRepositoryImpl implements CustomDiseaseCorr
     for (Sort.Order order : sort) {
       String field = order.getProperty();
 
-      // Use lowercase version for string fields (case-insensitive sorting)
-      if (needsCaseInsensitiveSort(field)) {
+      // Map age to age_numeric for proper numeric sorting
+      if ("age".equals(field)) {
+        field = "age_numeric";
+      } else if (needsCaseInsensitiveSort(field)) {
+        // Use lowercase version for string fields (case-insensitive sorting)
         field = field + "_lower";
       }
       // Non-string fields (like correlation result objects) are sorted directly
