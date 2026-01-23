@@ -672,10 +672,8 @@ def build_app():
             }}
         }}
 
-        console.log('Attaching event listeners to', indicators.length, 'indicators');
-        indicators.forEach((indicator, idx) => {{
+        function attachIndicatorListeners(indicator) {{
             indicator.addEventListener('click', function(e) {{
-                console.log('Indicator clicked:', idx);
                 e.preventDefault();
                 e.stopPropagation();
                 const index = parseInt(this.getAttribute('data-index'));
@@ -688,7 +686,10 @@ def build_app():
                     jumpToImage(index);
                 }}
             }});
-        }});
+        }}
+
+        console.log('Attaching event listeners to', indicators.length, 'indicators');
+        indicators.forEach(attachIndicatorListeners);
 
         carousel.addEventListener('mouseenter', stopAutoRotate);
         carousel.addEventListener('mouseleave', startAutoRotate);
@@ -740,19 +741,7 @@ def build_app():
                     indicator.setAttribute('tabindex', '0');
                     indicator.setAttribute('aria-label', `View image ${{idx + 1}}`);
 
-                    indicator.addEventListener('click', function(e) {{
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const index = parseInt(this.getAttribute('data-index'));
-                        jumpToImage(index);
-                    }});
-                    indicator.addEventListener('keypress', function(e) {{
-                        if (e.key === 'Enter' || e.key === ' ') {{
-                            e.preventDefault();
-                            const index = parseInt(this.getAttribute('data-index'));
-                            jumpToImage(index);
-                        }}
-                    }});
+                    attachIndicatorListeners(indicator);
 
                     indicatorsContainer.appendChild(indicator);
                 }});
