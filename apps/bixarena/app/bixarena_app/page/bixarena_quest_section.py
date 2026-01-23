@@ -1,5 +1,8 @@
 """Community Quest section component for BioArena home page."""
 
+import json
+from datetime import datetime
+
 import gradio as gr
 
 # Quest configuration - hardcoded for Season 1
@@ -61,8 +64,6 @@ def build_quest_section(
     """
     # Use provided progress data or defaults
     if progress_data is None:
-        from datetime import datetime
-
         end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
         days_remaining = max(0, (end_date - datetime.now()).days)
         progress_data = {
@@ -107,8 +108,6 @@ def build_quest_section(
     indicators_display = "" if len(first_update["images"]) > 1 else "display: none;"
 
     # Generate update cards HTML
-    import json
-
     update_cards_html = ""
     for i, update in enumerate(updates):
         is_active = i == 0
@@ -127,7 +126,6 @@ def build_quest_section(
 
         update_cards_html += f'''
         <div class="quest-update-card {active_class}"
-             data-update-index="{i}"
              data-images="{images_json}"
              role="button"
              tabindex="0">
