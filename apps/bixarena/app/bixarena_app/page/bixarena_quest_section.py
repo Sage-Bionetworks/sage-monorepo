@@ -14,15 +14,38 @@ QUEST_CONFIG = {
     "conversion_text": "1 Battle = 1 Block",
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
-    "current_update": {
-        "title": "Week 1 Update",
-        "description": "We are building an inner wall of three blocks high with cobblestone blocks. (115 Blocks placed so far).",
-        "images": [
-            "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=View+1",
-            "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=View+2",
-            "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=View+3",
-        ],
-    },
+    "updates": [
+        # Updates are displayed in chronological order (newest first)
+        {
+            "date": "2026-01-27",
+            "title": "Week 3 Update",
+            "description": "The outer wall is taking shape! We've added battlements and are working on the entrance gate structure. (350 blocks placed so far).",
+            "images": [
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+3+View+1",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+3+View+2",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+3+View+3",
+            ],
+        },
+        {
+            "date": "2026-01-23",
+            "title": "Week 2 Update",
+            "description": "Great progress! The foundation is complete and we're building the first layer of the outer walls. (200 blocks placed so far).",
+            "images": [
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+2+View+1",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+2+View+2",
+            ],
+        },
+        {
+            "date": "2026-01-20",
+            "title": "Week 1 Update",
+            "description": "We are building an inner wall of three blocks high with cobblestone blocks. (115 Blocks placed so far).",
+            "images": [
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+1+View+1",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+1+View+2",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Week+1+View+3",
+            ],
+        },
+    ],
 }
 
 
@@ -59,18 +82,71 @@ def build_quest_section(
     # Generate unique ID for this carousel instance
     carousel_id = f"quest-carousel-{int(datetime.now().timestamp() * 1000)}"
 
-    # Generate carousel images HTML
+    # Get the first update (newest) to display initially
+    updates = QUEST_CONFIG.get("updates", [])
+    if not updates:
+        # Fallback if no updates configured
+        updates = [
+            {
+                "date": "",
+                "title": "No updates yet",
+                "description": "Check back soon for progress updates!",
+                "images": [],
+            }
+        ]
+
+    first_update = updates[0]
+
+    # Generate carousel images HTML from first update
     images_html = ""
     indicators_html = ""
-    for i, image_url in enumerate(QUEST_CONFIG["current_update"]["images"]):
+    for i, image_url in enumerate(first_update["images"]):
         active_class = "active" if i == 0 else ""
         images_html += f'<img src="{image_url}" class="carousel-image {active_class}" alt="Minecraft arena progress" />\n'
         indicators_html += f'<span class="indicator {active_class}" data-index="{i}" role="button" tabindex="0" aria-label="View image {i + 1}"></span>\n'
 
     # Only show indicators if more than one image
-    indicators_display = (
-        "" if len(QUEST_CONFIG["current_update"]["images"]) > 1 else "display: none;"
-    )
+    indicators_display = "" if len(first_update["images"]) > 1 else "display: none;"
+
+    # Generate update cards HTML
+    import json
+
+    update_cards_html = ""
+    for i, update in enumerate(updates):
+        is_active = i == 0
+        active_class = "active" if is_active else ""
+        # Store images as JSON in data attribute for JavaScript
+        images_json = json.dumps(update["images"]).replace('"', "&quot;")
+
+        # Format date if available
+        date_display = ""
+        if update.get("date"):
+            try:
+                date_obj = datetime.strptime(update["date"], "%Y-%m-%d")
+                date_display = date_obj.strftime("%B %d, %Y")
+            except:
+                date_display = update["date"]
+
+        update_cards_html += f'''
+        <div class="quest-update-card {active_class}"
+             data-update-index="{i}"
+             data-images="{images_json}"
+             role="button"
+             tabindex="0">
+            <div class="update-card-header">
+                <h4>{update["title"]}</h4>
+                {f'<span class="update-date">{date_display}</span>' if date_display else ""}
+            </div>
+            <p class="update-description">{update["description"]}</p>
+        </div>
+        '''
+
+    # Add hint after all updates
+    update_cards_html += """
+        <div class="quest-updates-hint">
+            <span>Click any update to view its images</span>
+        </div>
+    """
 
     # Build the carousel HTML (left column) - vertical stack
     carousel_html = f"""
@@ -84,20 +160,14 @@ def build_quest_section(
 
         <!-- Carousel indicators below image -->
         <div class="carousel-indicators-wrapper" style="{indicators_display}">
-            <div class="carousel-indicators">
+            <div class="carousel-indicators" id="{carousel_id}-indicators">
                 {indicators_html}
             </div>
         </div>
 
-        <!-- Update box below indicators -->
-        <div class="carousel-update-box">
-            <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #22c55e;"></span>
-                {QUEST_CONFIG["current_update"]["title"]}
-            </h4>
-            <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
-                {QUEST_CONFIG["current_update"]["description"]}
-            </p>
+        <!-- Update cards below indicators -->
+        <div class="quest-updates-container">
+            {update_cards_html}
         </div>
     </div>
 
@@ -172,11 +242,73 @@ def build_quest_section(
             opacity: 1;
         }}
 
-        .carousel-update-box {{
+        .quest-updates-container {{
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }}
+
+        .quest-update-card {{
             background: var(--panel-background-fill);
-            border: 1px solid var(--border-color-primary);
+            border: 2px solid var(--border-color-primary);
             border-radius: 8px;
             padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }}
+
+        .quest-update-card:hover {{
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }}
+
+        .quest-update-card.active {{
+            border-color: var(--color-accent);
+            background: color-mix(in srgb, var(--color-accent) 5%, var(--panel-background-fill));
+        }}
+
+        .update-card-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            gap: 1rem;
+        }}
+
+        .update-card-header h4 {{
+            color: var(--body-text-color);
+            font-weight: 600;
+            margin: 0;
+            font-size: 1rem;
+            flex: 1;
+        }}
+
+        .update-date {{
+            color: var(--body-text-color-subdued);
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }}
+
+        .update-description {{
+            color: var(--body-text-color-subdued);
+            font-size: 0.875rem;
+            margin: 0;
+            line-height: 1.5;
+        }}
+
+        .quest-updates-hint {{
+            text-align: center;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.8125rem;
+            color: var(--body-text-color-subdued);
+            opacity: 0.8;
+        }}
+
+        .quest-updates-hint span {{
+            display: inline-block;
         }}
 
         /* Mobile responsive - trigger when columns would be too small */

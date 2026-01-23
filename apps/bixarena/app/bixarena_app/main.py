@@ -606,10 +606,10 @@ def build_app():
             return;
         }}
 
-        const images = carousel.querySelectorAll('.carousel-image');
+        let images = carousel.querySelectorAll('.carousel-image');
         // Indicators are now in a sibling container, not inside carousel
         const carouselParent = carousel.parentElement;
-        const indicators = carouselParent.querySelectorAll('.indicator');
+        let indicators = carouselParent.querySelectorAll('.indicator');
 
         console.log('Found carousel elements - images:', images.length, 'indicators:', indicators.length);
 
@@ -692,6 +692,99 @@ def build_app():
 
         carousel.addEventListener('mouseenter', stopAutoRotate);
         carousel.addEventListener('mouseleave', startAutoRotate);
+
+        // Handle update card clicks to switch carousel images
+        const updateCards = carouselParent.querySelectorAll('.quest-update-card');
+        console.log('Found', updateCards.length, 'update cards');
+
+        function loadUpdateImages(card) {{
+            const newImagesJson = card.getAttribute('data-images');
+            if (!newImagesJson) {{
+                console.error('No images data found on card');
+                return;
+            }}
+
+            const newImages = JSON.parse(newImagesJson);
+            console.log('Loading', newImages.length, 'images from update');
+
+            // Stop auto-rotation
+            stopAutoRotate();
+
+            // Update active class on cards
+            updateCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+
+            // Rebuild carousel images
+            const container = carousel.querySelector('.carousel-container');
+            container.innerHTML = '';
+            newImages.forEach((url, idx) => {{
+                const img = document.createElement('img');
+                img.src = url;
+                img.className = 'carousel-image' + (idx === 0 ? ' active' : '');
+                img.alt = 'Minecraft arena progress';
+                container.appendChild(img);
+            }});
+
+            // Rebuild indicators
+            const indicatorsWrapper = carouselParent.querySelector('.carousel-indicators-wrapper');
+            const indicatorsContainer = indicatorsWrapper.querySelector('.carousel-indicators');
+            indicatorsContainer.innerHTML = '';
+
+            if (newImages.length > 1) {{
+                indicatorsWrapper.style.display = '';
+                newImages.forEach((url, idx) => {{
+                    const indicator = document.createElement('span');
+                    indicator.className = 'indicator' + (idx === 0 ? ' active' : '');
+                    indicator.setAttribute('data-index', idx);
+                    indicator.setAttribute('role', 'button');
+                    indicator.setAttribute('tabindex', '0');
+                    indicator.setAttribute('aria-label', `View image ${{idx + 1}}`);
+
+                    indicator.addEventListener('click', function(e) {{
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const index = parseInt(this.getAttribute('data-index'));
+                        jumpToImage(index);
+                    }});
+                    indicator.addEventListener('keypress', function(e) {{
+                        if (e.key === 'Enter' || e.key === ' ') {{
+                            e.preventDefault();
+                            const index = parseInt(this.getAttribute('data-index'));
+                            jumpToImage(index);
+                        }}
+                    }});
+
+                    indicatorsContainer.appendChild(indicator);
+                }});
+            }} else {{
+                indicatorsWrapper.style.display = 'none';
+            }}
+
+            // Re-initialize carousel state
+            currentIndex = 0;
+            // Re-query images and indicators after rebuild
+            const newImageElements = carousel.querySelectorAll('.carousel-image');
+            const newIndicatorElements = carouselParent.querySelectorAll('.indicator');
+
+            // Update references in showImage closure
+            images = newImageElements;
+            indicators = newIndicatorElements;
+
+            // Restart auto-rotation
+            startAutoRotate();
+        }}
+
+        updateCards.forEach(card => {{
+            card.addEventListener('click', function() {{
+                loadUpdateImages(this);
+            }});
+            card.addEventListener('keypress', function(e) {{
+                if (e.key === 'Enter' || e.key === ' ') {{
+                    e.preventDefault();
+                    loadUpdateImages(this);
+                }}
+            }});
+        }});
 
         startAutoRotate();
         console.log('✓ Carousel initialized successfully:', carouselId);
