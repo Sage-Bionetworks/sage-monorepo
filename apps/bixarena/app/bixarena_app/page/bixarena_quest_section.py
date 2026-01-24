@@ -65,7 +65,7 @@ QUEST_CONFIG = {
     },
     "quest_architect": {
         "name": "Thomas Schaffter",
-        "url": "www.linkedin.com/in/tschaffter",
+        "url": "https://www.linkedin.com/in/tschaffter",
     },
     "updates": [
         # Updates are displayed in chronological order (newest first)
