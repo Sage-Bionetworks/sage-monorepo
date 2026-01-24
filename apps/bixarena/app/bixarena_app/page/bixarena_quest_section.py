@@ -15,6 +15,58 @@ QUEST_CONFIG = {
     "conversion_text": "1 Battle = 1 Block",
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
+    "builders": [
+        # List of usernames who have contributed at least one block
+        # TODO: Replace with actual data from API
+        "alice_bio",
+        "bob_researcher",
+        "charlie_dev",
+        "diana_scientist",
+        "eve_analyst",
+        "frank_engineer",
+        "grace_data",
+        "henry_ml",
+        "iris_bioinf",
+        "jack_genomics",
+        "kate_phd",
+        "leo_postdoc",
+        "maria_lab",
+        "nathan_tech",
+        "olivia_research",
+        "peter_bio",
+        "quinn_analytics",
+        "rachel_science",
+        "sam_coder",
+        "tina_data",
+        "uma_researcher",
+        "victor_ai",
+        "wendy_biotech",
+        "xavier_dev",
+        "yara_scientist",
+        "zoe_engineer",
+        "alan_researcher",
+        "beth_analyst",
+        "carlos_phd",
+        "debra_lab",
+        "ethan_bio",
+        "fiona_data",
+        "george_ml",
+        "helen_scientist",
+        "ian_engineer",
+        "julia_genomics",
+        "kevin_tech",
+        "linda_research",
+        "mark_coder",
+        "nancy_bioinf",
+    ],
+    "arena_architect": {
+        "name": "Minecraft Creator Name",
+        "url": "https://youtube.com/@placeholder",
+    },
+    "quest_master": {
+        "name": "Your Name",
+        "url": "https://linkedin.com/in/placeholder",
+    },
     "updates": [
         # Updates are displayed in chronological order (newest first)
         {
@@ -127,6 +179,79 @@ def _build_progress_html(
                         We have {days_remaining} days to complete the arena structure before the season ends.
                     </p>
                 </div>
+            </div>
+        </div>
+    </div>
+    """
+
+
+def _build_builders_credits_html() -> str:
+    """Build the Builders and Credits HTML sections.
+
+    Returns:
+        HTML string for the builders and credits sections
+    """
+    return f"""
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;
+                height: 100%; margin-top: 0.75rem;">
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        <!-- Builders Section -->
+        <div style="flex: 1; display: flex; flex-direction: column;
+                    min-height: 0;">
+            <h4 style="color: var(--body-text-color); font-weight: 600;
+                       margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                Builders ({len(QUEST_CONFIG["builders"])})
+            </h4>
+            <div style="flex: 1; overflow-y: auto; min-height: 0;
+                        padding-right: 0.25rem;">
+                <div style="display: flex; flex-wrap: wrap;
+                            align-items: center; gap: 0.5rem;
+                            line-height: 1.5;">
+                    {
+        "".join(
+            f'<span style="color: var(--body-text-color); '
+            f'font-size: 0.875rem;">{builder}</span>'
+            + (
+                '<span style="color: var(--body-text-color-subdued); '
+                'font-size: 0.75rem;">•</span>'
+                if i < len(QUEST_CONFIG["builders"]) - 1
+                else ""
+            )
+            for i, builder in enumerate(QUEST_CONFIG["builders"])
+        )
+    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        <!-- Credits Section (no title) -->
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="font-size: 0.875rem;
+                        color: var(--body-text-color-subdued);">
+                <span>Arena Architect: </span>
+                <a href="{QUEST_CONFIG["arena_architect"]["url"]}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   style="color: var(--color-accent);
+                          text-decoration: none; font-weight: 500;">
+                    {QUEST_CONFIG["arena_architect"]["name"]}
+                </a>
+            </div>
+            <div style="font-size: 0.875rem;
+                        color: var(--body-text-color-subdued);">
+                <span>Quest Master: </span>
+                <a href="{QUEST_CONFIG["quest_master"]["url"]}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   style="color: var(--color-accent);
+                          text-decoration: none; font-weight: 500;">
+                    {QUEST_CONFIG["quest_master"]["name"]}
+                </a>
             </div>
         </div>
     </div>
@@ -494,6 +619,8 @@ def build_quest_section(
                         elem_id="quest-cta-btn-login",
                         elem_classes=["quest-cta-btn"],
                     )
+                    # Builders and Credits sections below CTA button
+                    gr.HTML(_build_builders_credits_html())
 
         # Styling
         gr.HTML("""
