@@ -361,18 +361,10 @@ def build_quest_section(
             transition: background 0.2s ease;
         }}
 
-        .accordion-header:hover {{
+        .quest-update-accordion:not(.active):hover .accordion-header {{
             background: color-mix(
                 in srgb,
                 var(--color-accent) 3%,
-                var(--panel-background-fill)
-            );
-        }}
-
-        .quest-update-accordion.active .accordion-header {{
-            background: color-mix(
-                in srgb,
-                var(--color-accent) 5%,
                 var(--panel-background-fill)
             );
         }}
