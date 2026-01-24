@@ -59,13 +59,13 @@ QUEST_CONFIG = {
         "mark_coder",
         "nancy_bioinf",
     ],
-    "arena_architect": {
-        "name": "Minecraft Creator Name",
-        "url": "https://youtube.com/@placeholder",
+    "minecraft_arena_designer": {
+        "name": "NeatCraft",
+        "url": "https://www.youtube.com/@Neatcraft",
     },
-    "quest_master": {
-        "name": "Your Name",
-        "url": "https://linkedin.com/in/placeholder",
+    "quest_architect": {
+        "name": "Thomas Schaffter",
+        "url": "www.linkedin.com/in/tschaffter",
     },
     "updates": [
         # Updates are displayed in chronological order (newest first)
@@ -233,24 +233,26 @@ def _build_builders_credits_html() -> str:
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
             <div style="font-size: 0.875rem;
                         color: var(--body-text-color-subdued);">
-                <span>Arena Architect: </span>
-                <a href="{QUEST_CONFIG["arena_architect"]["url"]}"
+                <span>Minecraft Arena Designer: </span>
+                <a href="{QUEST_CONFIG["minecraft_arena_designer"]["url"]}"
                    target="_blank"
                    rel="noopener noreferrer"
+                   class="credit-link"
                    style="color: var(--color-accent);
                           text-decoration: none; font-weight: 500;">
-                    {QUEST_CONFIG["arena_architect"]["name"]}
+                    {QUEST_CONFIG["minecraft_arena_designer"]["name"]}
                 </a>
             </div>
             <div style="font-size: 0.875rem;
                         color: var(--body-text-color-subdued);">
-                <span>Quest Master: </span>
-                <a href="{QUEST_CONFIG["quest_master"]["url"]}"
+                <span>Quest Architect: </span>
+                <a href="{QUEST_CONFIG["quest_architect"]["url"]}"
                    target="_blank"
                    rel="noopener noreferrer"
+                   class="credit-link"
                    style="color: var(--color-accent);
                           text-decoration: none; font-weight: 500;">
-                    {QUEST_CONFIG["quest_master"]["name"]}
+                    {QUEST_CONFIG["quest_architect"]["name"]}
                 </a>
             </div>
         </div>
@@ -545,6 +547,16 @@ def build_quest_section(
             font-size: 0.875rem;
             margin: 0;
             line-height: 1.5;
+        }}
+
+        /* Credit links */
+        a.credit-link {{
+            transition: text-decoration 0.2s ease;
+            text-underline-offset: 3px;
+        }}
+
+        a.credit-link:hover {{
+            text-decoration: underline !important;
         }}
 
         /* Mobile responsive - trigger when columns would be too small */
