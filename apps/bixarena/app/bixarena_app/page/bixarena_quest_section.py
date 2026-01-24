@@ -192,10 +192,12 @@ def build_quest_section(
     # Only show indicators if more than one image
     indicators_display = "" if len(first_update["images"]) > 1 else "display: none;"
 
-    # Generate update cards HTML
+    # Generate update cards HTML (accordion style)
     def format_update_card(i: int, update: dict) -> str:
-        """Format a single update card HTML."""
-        active_class = "active" if i == 0 else ""
+        """Format a single update accordion item HTML."""
+        is_expanded = i == 0  # First item expanded by default
+        active_class = "active" if is_expanded else ""
+        expanded_class = "expanded" if is_expanded else ""
         images_json = json.dumps(update["images"]).replace('"', "&quot;")
 
         # Format date if available
@@ -208,15 +210,25 @@ def build_quest_section(
                 date_display = update["date"]
 
         return f'''
-        <div class="quest-update-card {active_class}"
-             data-images="{images_json}"
-             role="button"
-             tabindex="0">
-            <div class="update-card-header">
-                <h4>{update["title"]}</h4>
-                {f'<span class="update-date">{date_display}</span>' if date_display else ""}
+        <div class="quest-update-accordion {active_class} {expanded_class}"
+             data-images="{images_json}">
+            <div class="accordion-header" role="button" tabindex="0">
+                <div class="accordion-title-wrapper">
+                    <h4>{update["title"]}</h4>
+                    {
+            f'<span class="update-date">{date_display}</span>' if date_display else ""
+        }
+                </div>
+                <svg class="accordion-chevron" xmlns="http://www.w3.org/2000/svg"
+                     width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </div>
-            <p class="update-description">{update["description"]}</p>
+            <div class="accordion-content">
+                <p class="update-description">{update["description"]}</p>
+            </div>
         </div>
         '''
 
@@ -321,43 +333,63 @@ def build_quest_section(
         .quest-updates-container {{
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.5rem;
             margin-top: 1.5rem;
         }}
 
-        .quest-update-card {{
+        /* Accordion item */
+        .quest-update-accordion {{
             background: var(--panel-background-fill);
             border: 2px solid var(--border-color-primary);
             border-radius: 8px;
-            padding: 1rem;
-            cursor: pointer;
+            overflow: hidden;
             transition: all 0.2s ease;
         }}
 
-        .quest-update-card:hover {{
+        .quest-update-accordion.active {{
             border-color: var(--color-accent);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }}
 
-        .quest-update-card.active {{
-            border-color: var(--color-accent);
-            background: color-mix(in srgb, var(--color-accent) 5%, var(--panel-background-fill));
-        }}
-
-        .update-card-header {{
+        /* Accordion header (always visible) */
+        .accordion-header {{
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
+            padding: 0.875rem 1rem;
+            cursor: pointer;
+            gap: 1rem;
+            transition: background 0.2s ease;
+        }}
+
+        .accordion-header:hover {{
+            background: color-mix(
+                in srgb,
+                var(--color-accent) 3%,
+                var(--panel-background-fill)
+            );
+        }}
+
+        .quest-update-accordion.active .accordion-header {{
+            background: color-mix(
+                in srgb,
+                var(--color-accent) 5%,
+                var(--panel-background-fill)
+            );
+        }}
+
+        .accordion-title-wrapper {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
             gap: 1rem;
         }}
 
-        .update-card-header h4 {{
+        .accordion-title-wrapper h4 {{
             color: var(--body-text-color);
             font-weight: 600;
             margin: 0;
-            font-size: 1rem;
+            font-size: 0.9375rem;
             flex: 1;
         }}
 
@@ -365,6 +397,30 @@ def build_quest_section(
             color: var(--body-text-color-subdued);
             font-size: 0.75rem;
             white-space: nowrap;
+        }}
+
+        /* Chevron icon */
+        .accordion-chevron {{
+            color: var(--body-text-color-subdued);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }}
+
+        .quest-update-accordion.expanded .accordion-chevron {{
+            transform: rotate(180deg);
+        }}
+
+        /* Accordion content (collapsible) */
+        .accordion-content {{
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 1rem;
+        }}
+
+        .quest-update-accordion.expanded .accordion-content {{
+            max-height: 500px;
+            padding: 0 1rem 1rem 1rem;
         }}
 
         .update-description {{

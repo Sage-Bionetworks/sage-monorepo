@@ -694,14 +694,14 @@ def build_app():
         carousel.addEventListener('mouseenter', stopAutoRotate);
         carousel.addEventListener('mouseleave', startAutoRotate);
 
-        // Handle update card clicks to switch carousel images
-        const updateCards = carouselParent.querySelectorAll('.quest-update-card');
-        console.log('Found', updateCards.length, 'update cards');
+        // Handle accordion clicks to expand/collapse and switch carousel images
+        const accordionItems = carouselParent.querySelectorAll('.quest-update-accordion');
+        console.log('Found', accordionItems.length, 'accordion items');
 
-        function loadUpdateImages(card) {{
-            const newImagesJson = card.getAttribute('data-images');
+        function loadUpdateImages(accordion) {{
+            const newImagesJson = accordion.getAttribute('data-images');
             if (!newImagesJson) {{
-                console.error('No images data found on card');
+                console.error('No images data found on accordion');
                 return;
             }}
 
@@ -711,9 +711,11 @@ def build_app():
             // Stop auto-rotation
             stopAutoRotate();
 
-            // Update active class on cards
-            updateCards.forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
+            // Collapse all accordions, then expand clicked one
+            accordionItems.forEach(item => {{
+                item.classList.remove('active', 'expanded');
+            }});
+            accordion.classList.add('active', 'expanded');
 
             // Rebuild carousel images
             const container = carousel.querySelector('.carousel-container');
@@ -763,14 +765,17 @@ def build_app():
             startAutoRotate();
         }}
 
-        updateCards.forEach(card => {{
-            card.addEventListener('click', function() {{
-                loadUpdateImages(this);
+        accordionItems.forEach(accordion => {{
+            const header = accordion.querySelector('.accordion-header');
+            header.addEventListener('click', function(e) {{
+                e.preventDefault();
+                e.stopPropagation();
+                loadUpdateImages(accordion);
             }});
-            card.addEventListener('keypress', function(e) {{
+            header.addEventListener('keypress', function(e) {{
                 if (e.key === 'Enter' || e.key === ' ') {{
                     e.preventDefault();
-                    loadUpdateImages(this);
+                    loadUpdateImages(accordion);
                 }}
             }});
         }});
