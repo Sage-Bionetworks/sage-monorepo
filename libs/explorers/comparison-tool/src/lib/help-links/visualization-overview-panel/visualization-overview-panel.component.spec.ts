@@ -20,15 +20,20 @@ describe('VisualizationOverviewPanelComponent', () => {
     setVisualizationOverviewHidden: jest.fn(),
   });
 
-  async function setup(options?: { isVisible?: boolean; isHidden?: boolean }) {
+  async function setup(options?: {
+    isVisible?: boolean;
+    isHidden?: boolean;
+    visualizationOverviewPanes?: VisualizationOverviewPane[];
+  }) {
     const user = userEvent.setup();
     const mockCookieService = createMockCookieService(options?.isHidden);
+    const panes = options?.visualizationOverviewPanes ?? mockVisualizationOverviewPanes;
 
     const { fixture } = await render(VisualizationOverviewPanelComponent, {
       providers: [
         provideNoopAnimations(),
         { provide: AppCookieService, useValue: mockCookieService },
-        provideExplorersConfig({ visualizationOverviewPanes: mockVisualizationOverviewPanes }),
+        provideExplorersConfig({ visualizationOverviewPanes: panes }),
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
         }),
@@ -72,41 +77,17 @@ describe('VisualizationOverviewPanelComponent', () => {
   });
 
   it('should return empty array when empty panes are configured', async () => {
-    const mockCookieService = createMockCookieService(false);
-
-    const { fixture } = await render(VisualizationOverviewPanelComponent, {
-      providers: [
-        provideNoopAnimations(),
-        { provide: AppCookieService, useValue: mockCookieService },
-        provideExplorersConfig({ visualizationOverviewPanes: [] }),
-        ...provideComparisonToolService({
-          configs: mockComparisonToolDataConfig,
-        }),
-      ],
-    });
-
-    expect(fixture.componentInstance.panes).toHaveLength(0);
+    const { component } = await setup({ visualizationOverviewPanes: [] });
+    expect(component.panes).toHaveLength(0);
   });
 
   it('should use panes from provideExplorersConfig', async () => {
-    const mockCookieService = createMockCookieService(false);
     const appConfigPanes: VisualizationOverviewPane[] = [
       { heading: 'App Config Pane', content: '<p>From app config</p>' },
     ];
-
-    const { fixture } = await render(VisualizationOverviewPanelComponent, {
-      providers: [
-        provideNoopAnimations(),
-        { provide: AppCookieService, useValue: mockCookieService },
-        provideExplorersConfig({ visualizationOverviewPanes: appConfigPanes }),
-        ...provideComparisonToolService({
-          configs: mockComparisonToolDataConfig,
-        }),
-      ],
-    });
-
-    expect(fixture.componentInstance.panes).toHaveLength(1);
-    expect(fixture.componentInstance.panes[0].heading).toBe('App Config Pane');
+    const { component } = await setup({ visualizationOverviewPanes: appConfigPanes });
+    expect(component.panes).toHaveLength(1);
+    expect(component.panes[0].heading).toBe('App Config Pane');
   });
 
   it('should display dialog when isVisualizationOverviewVisible is true', async () => {

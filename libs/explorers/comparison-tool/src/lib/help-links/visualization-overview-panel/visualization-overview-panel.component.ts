@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolService,
-  EXPLORERS_APP_CONFIG,
+  EXPLORERS_CONFIG,
   PlatformService,
 } from '@sagebionetworks/explorers/services';
 import { ButtonModule } from 'primeng/button';
@@ -23,7 +23,7 @@ export class VisualizationOverviewPanelComponent implements AfterViewChecked {
   comparisonToolService = inject(ComparisonToolService);
   platformService = inject(PlatformService);
   private elementRef = inject(ElementRef);
-  private appConfig = inject(EXPLORERS_APP_CONFIG);
+  private explorerConfig = inject(EXPLORERS_CONFIG);
 
   get willHide(): boolean {
     return this.comparisonToolService.isVisualizationOverviewHiddenByUser();
@@ -38,7 +38,7 @@ export class VisualizationOverviewPanelComponent implements AfterViewChecked {
 
   /** Gets the panes to display in the visualization overview dialog from app config. */
   get panes(): VisualizationOverviewPane[] {
-    return this.appConfig.visualizationOverviewPanes;
+    return this.explorerConfig.visualizationOverviewPanes;
   }
 
   get activePaneHasVideo(): boolean {
