@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Bixarena: Full-Stack Application Architecture</title>
+    <title>BixArena: AWS Infrastructure Architecture</title>
 
     <!-- Import Roboto font from Google Fonts -->
     <link
@@ -36,7 +36,7 @@
       }
 
       .mermaid {
-        width: 800px; /* Fixed width */
+        width: 1200px; /* Fixed width */
         max-width: 100%; /* Allow shrinking on smaller screens */
       }
     </style>
@@ -47,27 +47,110 @@
     <div class="diagram-container">
       <!-- prettier-ignore -->
       <div class="mermaid">
-      flowchart TD
+      flowchart TB
+        %% External User
         user[User Browser]
 
-        gw@{shape: icon, icon: 'logos:spring-icon', label: 'Spring Cloud Gateway'}
+        %% AWS Infrastructure Container
+        subgraph vpc["AWS VPC"]
+          direction TB
 
-        web@{shape: icon, icon: 'logos:gradio-icon', label: 'Gradio App'}
-        auth@{shape: icon, icon: 'logos:spring-icon', label: 'Auth Service<br>(Spring Boot)'}
-        api@{shape: icon, icon: 'logos:spring-icon', label: 'API Service<br>(Spring Boot)'}
-        ai@{shape: icon, icon: 'logos:fastapi-icon', label: 'AI Service<br>(FastAPI)'}
+          %% Public Subnet
+          subgraph public["Public Subnet"]
+            alb@{shape: icon, icon: 'logos:aws-elb', label: 'Application Load Balancer<br>(TLS, URL Rewrite)'}
+          end
 
-        user user_web@-->|"HTTP"| web
-        web web_gw@-->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| gw
+          %% Private Subnet - ECS Cluster
+          subgraph private["Private Subnet - ECS Cluster"]
+            direction TB
 
-        gw gw_auth@-.->|"HTTP /auth/\*\*"| auth
-        gw gw_api@-->|"HTTP /api/**"| api
-        gw gw_ai@-.->|"HTTP/WS /ai/**"| ai
+            %% Frontend Layer
+            subgraph frontend["Frontend Layer"]
+              app@{shape: icon, icon: 'logos:gradio-icon', label: 'Gradio App'}
+            end
 
-        user_web@{ animate: true }
-        web_gw@{ animate: true }
-        gw_auth@{ animate: true }
-        gw_api@{ animate: true }
+            %% API Gateway Layer
+            subgraph gateway["Gateway Layer"]
+              apigw@{shape: icon, icon: 'logos:spring-icon', label: 'API Gateway<br>(Spring Cloud Gateway)'}
+            end
+
+            %% Spring Boot Microservices
+            subgraph services["Microservices Layer"]
+              direction TB
+              auth@{shape: icon, icon: 'logos:spring-icon', label: 'Auth Service<br>(Spring Boot)'}
+              api@{shape: icon, icon: 'logos:spring-icon', label: 'API Service<br>(Spring Boot)'}
+              ai@{shape: icon, icon: 'logos:fastapi-icon', label: 'AI Service<br>(FastAPI)'}
+            end
+
+            %% Data Layer
+            subgraph data["Data Layer"]
+              direction LR
+              postgres@{shape: icon, icon: 'logos:aws-rds', label: 'RDS<br>(PostgreSQL)'}
+              valkey@{shape: icon, icon: 'logos:redis', label: 'ElastiCache<br>(Valkey)'}
+              postgres ~~~ valkey
+            end
+          end
+        end
+
+        %% External Services
+        openrouter@{shape: icon, icon: 'mdi:robot', label: 'OpenRouter<br>(LLM Proxy)'}
+
+        %% Connections - User to ALB
+        user user_alb@-->|HTTPS| alb
+
+        %% ALB to Frontend and Gateway
+        alb alb_app@-->|"/**"| app
+        alb alb_apigw@-->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| apigw
+
+        %% API Gateway to Services
+        apigw apigw_auth@-->|"HTTP /auth/**"| auth
+        apigw apigw_api@-->|"HTTP /api/**"| api
+        apigw apigw_ai@-->|"HTTP /ai/**"| ai
+
+        %% Gradio to OpenRouter
+        app app_openrouter@-->|"LLM Requests"| openrouter
+
+        %% Services to Data Layer
+        services services_data@--> data
+
+        %% Animate arrows
+        user_alb@{ animate: true }
+        alb_app@{ animate: true }
+        alb_apigw@{ animate: true }
+        apigw_auth@{ animate: true }
+        apigw_api@{ animate: true }
+        apigw_ai@{ animate: true }
+        app_openrouter@{ animate: true }
+        services_data@{ animate: true }
+
+        %% Styling for subgraphs
+        style vpc fill:none,stroke:#333,stroke-width:2px
+        style public fill:none,stroke:#333,stroke-width:1px
+        style private fill:none,stroke:#333,stroke-width:1px
+
+        %% Color backgrounds for different layers
+        style frontend fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+        style gateway fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+        style services fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+        style data fill:#e0f2f1,stroke:#00897b,stroke-width:2px
+
+        %% Style User Browser node with visible border
+        style user fill:#fff,stroke:#1976d2,stroke-width:2px
+
+        %% Style icon nodes with transparent background
+        style alb fill:transparent,stroke:none
+        style app fill:transparent,stroke:none
+        style apigw fill:transparent,stroke:none
+        style auth fill:transparent,stroke:none
+        style api fill:transparent,stroke:none
+        style ai fill:transparent,stroke:none
+        style postgres fill:transparent,stroke:none
+        style valkey fill:transparent,stroke:none
+
+        %% Style OpenRouter as external service
+        style openrouter fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+
+
       </div>
     </div>
 
@@ -104,8 +187,18 @@
       mermaid.initialize({
         startOnLoad: true,
         securityLevel: 'loose', // allow loading icons via fetch
-        theme: 'default',
-        flowchart: { useMaxWidth: true },
+        theme: 'base',
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true,
+        },
+        themeVariables: {
+          clusterBkg: 'transparent',
+          primaryColor: '#fff',
+          primaryTextColor: '#333',
+          primaryBorderColor: '#ddd',
+          lineColor: '#333',
+        },
       });
     </script>
   </body>
