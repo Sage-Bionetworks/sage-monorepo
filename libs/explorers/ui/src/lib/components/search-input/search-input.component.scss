@@ -5,6 +5,8 @@
 
 .search {
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
 
   input {
     background-color: transparent;
@@ -61,6 +63,7 @@
     align-items: center;
     padding-left: 15px;
     gap: 10px;
+    width: 100%;
 
     .search-bar-icon {
       display: flex;
@@ -71,12 +74,14 @@
     }
 
     .search-bar-close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+
       button {
         @include mixins.reset-button;
 
-        position: absolute;
-        top: 0;
-        right: 0;
         width: 40px;
         height: 100%;
         cursor: pointer;
@@ -98,6 +103,7 @@
       border: none;
       outline: none;
       box-sizing: border-box;
+      padding-right: 40px; // Reserve space for close button
 
       &:placeholder-shown {
         text-overflow: ellipsis;
