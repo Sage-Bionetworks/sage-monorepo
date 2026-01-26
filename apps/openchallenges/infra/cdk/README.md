@@ -155,8 +155,15 @@ USE_LOCAL_IMAGES=true
 
 **2. Export your Docker image as a tarball:**
 
+When using `USE_LOCAL_IMAGES=true`, all the Docker images must be built and exported as tarball initially. These two operations can be achieved by running:
+
 ```bash
-# After making changes to a service, export the image
+nx run-many -t=export-image-tarball -p=openchallenges-*
+```
+
+After making changes to a service, export its image as tarball. Only export the images of the service(s) you modified. If you export all the images using the command above, every tarball will be regenerated, causing the CDK app to redeploy all services rather than only the ones that changed.
+
+```bash
 nx run openchallenges-api-gateway:export-image-tarball
 nx run openchallenges-challenge-service:export-image-tarball
 nx run openchallenges-organization-service:export-image-tarball
