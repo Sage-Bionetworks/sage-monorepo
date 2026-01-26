@@ -4,23 +4,120 @@ AWS CDK infrastructure as code for OpenChallenges. This project defines and mana
 
 ## Project Structure
 
-TODO
+```
+openchallenges_infra_cdk/
+├── dev/                    # Development environment app
+│   └── app.py             # Main CDK app for dev
+├── shared/                # Shared infrastructure components
+│   ├── constructs/        # Reusable CDK constructs
+│   │   └── fargate_service_construct.py  # ECS Fargate service construct
+│   ├── stacks/            # CloudFormation stacks
+│   │   ├── alb_stack.py              # Application Load Balancer
+│   │   ├── api_gateway_stack.py      # Spring Cloud Gateway
+│   │   ├── bucket_stack.py           # S3 buckets
+│   │   ├── image_service_stack.py    # Image service (generates Thumbor URLs)
+│   │   ├── thumbor_stack.py          # Thumbor image processing
+│   │   ├── vpc_stack.py              # VPC and networking
+│   │   └── web_stack.py              # Angular web application
+│   └── utils.py           # Utility functions
+└── tests/                 # Unit tests
+```
 
 ## Quick Start
 
 ### Prerequisites
 
-- AWS CLI configured with appropriate credentials
+- AWS CLI installed and configured
 - Python 3.11 or later
 - Node.js and pnpm (for Nx commands)
 
+### AWS Account Access
+
+OpenChallenges uses AWS accounts with two IAM roles:
+
+- **Developer**: Standard role for deploying and managing your development resources
+- **Administrator**: Elevated role for administrative tasks (typically used by IT team)
+
+Most developers will use the **Developer** role for day-to-day work. The Administrator role is only needed for initial account setup tasks like CDK bootstrapping (usually done by IT).
+
+**AWS Profile Naming Convention:**
+
+Use this naming pattern for your AWS CLI profiles:
+
+```
+openchallenges-{account}-{role}
+```
+
+Examples:
+
+- `openchallenges-dev-Developer` (development account)
+- `openchallenges-dev-Administrator` (development account, admin role)
+- `openchallenges-prod-Developer` (production account, used for both stage and prod environments)
+- `openchallenges-prod-Administrator` (production account, admin role)
+
+### Configuring AWS CLI with SSO
+
+OpenChallenges uses AWS SSO for authentication. Add your profiles to `~/.aws/config`:
+
+```bash
+# Edit ~/.aws/config and add:
+[sso-session org-sagebase]
+sso_start_url = https://d-906769aa66.awsapps.com/start
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access
+
+[profile openchallenges-dev-Developer]
+sso_session = org-sagebase
+sso_account_id = 221082174873
+sso_role_name = Developer
+output = json
+cli_pager =
+
+[profile openchallenges-dev-Administrator]
+sso_session = org-sagebase
+sso_account_id = 221082174873
+sso_role_name = Administrator
+output = json
+cli_pager =
+
+[profile openchallenges-prod-Developer]
+sso_session = org-sagebase
+sso_account_id = 528757786185
+sso_role_name = Developer
+output = json
+cli_pager =
+
+[profile openchallenges-prod-Administrator]
+sso_session = org-sagebase
+sso_account_id = 528757786185
+sso_role_name = Administrator
+output = json
+cli_pager =
+```
+
+Then login with SSO:
+
+```bash
+# Login to start your SSO session
+aws sso login --profile openchallenges-dev-Developer
+
+# This will open a browser for authentication
+# You only need to login once - the session works for all profiles using the same sso-session
+```
+
 ### Environment Configuration
 
-The project uses environment variables for configuration. Nx automatically loads variables from `.env` files based on the target configuration.
+The project uses environment variables for configuration. Nx automatically loads variables from `.env` and `.env.{environment}` files based on the target configuration, which correspond to different environments (dev, stage, and prod).
+
+Create the configuration files from their templates:
+
+```bash
+nx create-config openchallenges-infra-cdk
+```
 
 #### Development Environment
 
-For the development environment, you must set `DEVELOPER_NAME` to create unique resource names:
+For the development environment, you must set `DEVELOPER_NAME` in `.env.dev`:
 
 ```bash
 # .env.dev
@@ -31,7 +128,135 @@ Resources will be named with the pattern: `openchallenges-dev-{developer-name}-{
 
 #### Stage and Production Environments
 
-No developer name is required for stage and production. Resources use the pattern: `openchallenges-{env}-{resource}`
+Stage and production deployments both use the **production AWS account**. No developer name is required. Resources use the pattern: `openchallenges-{environment}-{resource}`
+
+Set the AWS profile to use the production account:
+
+```bash
+# .env.stage (uses production account)
+AWS_PROFILE=openchallenges-prod-Developer
+
+# .env.prod (uses production account)
+AWS_PROFILE=openchallenges-prod-Developer
+```
+
+**Note**: Stage and prod deployments share the same AWS account but are isolated by resource naming and by VPC configuration.
+
+### Using Local Docker Images (Development Only)
+
+When developing microservices or containerized components, you can test local Docker images without publishing them to the container registry:
+
+**1. Enable local images in `.env.dev`:**
+
+```bash
+# .env.dev
+USE_LOCAL_IMAGES=true
+```
+
+**2. Export your Docker image as a tarball:**
+
+When using `USE_LOCAL_IMAGES=true`, all the Docker images must be built and exported as tarball initially. These two operations can be achieved by running:
+
+```bash
+nx run-many -t=export-image-tarball -p=openchallenges-*
+```
+
+After making changes to a service, export its image as tarball. Only export the images of the service(s) you modified. If you export all the images using the command above, every tarball will be regenerated, causing the CDK app to redeploy all services rather than only the ones that changed.
+
+```bash
+nx run openchallenges-api-gateway:export-image-tarball
+nx run openchallenges-challenge-service:export-image-tarball
+nx run openchallenges-organization-service:export-image-tarball
+# ... etc for any service you've modified
+```
+
+**3. Deploy with CDK:**
+
+The CDK app will automatically upload the tarball and deploy it.
+
+```bash
+nx run openchallenges-infra-cdk:deploy:dev [--require-approval never] [--concurrency N]
+```
+
+**Important Notes:**
+
+- **Development only**: Use this for dev environment testing. Stage and prod should use published images from the Sage monorepo CI/CD pipeline.
+- **Large assets**: Image tarballs can be hundreds of MB, increasing deployment time
+- **Stale images**: Remember to re-export tarballs after making code changes
+- **Default behavior**: When `USE_LOCAL_IMAGES=false` (default), images are pulled from `ghcr.io/sage-bionetworks`
+
+### Image Service Placeholder Mode
+
+The image service can operate in placeholder mode during development or initial deployment when images haven't been uploaded to S3 yet.
+
+**Configure placeholder mode in `.env.dev`, `.env.stage`, or `.env.prod`:**
+
+```bash
+# .env.dev (or .env.stage, .env.prod)
+
+# Enable placeholder mode to return URLs for placeholder images
+# Set to "false" once real images have been uploaded to S3
+IMAGE_SERVICE_PLACEHOLDER_ENABLED=true
+```
+
+**Behavior:**
+
+- When `IMAGE_SERVICE_PLACEHOLDER_ENABLED=true`: Image service returns URLs pointing to placeholder images (e.g., via placeholder.com). No images need to exist in the S3 bucket.
+- When `IMAGE_SERVICE_PLACEHOLDER_ENABLED=false`: Image service returns URLs pointing to real images stored in S3 via Thumbor.
+- **Default**: `true` (placeholder mode enabled)
+
+**Migrating Images to Your Environment:**
+
+Once you're ready to use real images, you can copy them from a reference bucket or restore from a backup:
+
+```bash
+# Option 1: Copy from a reference S3 bucket (e.g., production environment)
+# ============================================================================
+
+# 1. Download images from reference bucket to local directory
+AWS_PROFILE=openchallenges-prod-Administrator \
+  aws s3 sync s3://openchallenges-prod-img/ /tmp/openchallenges-img-backup/ \
+  --no-progress
+
+# 2. Find your target bucket name
+AWS_PROFILE=openchallenges-dev-Developer aws s3 ls | grep imagebucket
+# Example output: openchallenges-dev-jsmith-imagebucketc726ca21-abc123xyz
+
+# 3. Upload images to your environment's S3 bucket
+AWS_PROFILE=openchallenges-dev-Administrator \
+  aws s3 sync /tmp/openchallenges-img-backup/ \
+  s3://openchallenges-dev-jsmith-imagebucketc726ca21-abc123xyz/ \
+  --no-progress
+
+
+# Option 2: Restore from a Synapse backup
+# ============================================================================
+
+# 1. Download backup from Synapse (requires Synapse credentials)
+synapse get syn12345678 --downloadLocation /tmp/openchallenges-img-backup/
+
+# 2. Find your target bucket name
+AWS_PROFILE=openchallenges-dev-Developer aws s3 ls | grep imagebucket
+
+# 3. Upload to your environment's S3 bucket
+AWS_PROFILE=openchallenges-dev-Administrator \
+  aws s3 sync /tmp/openchallenges-img-backup/ \
+  s3://openchallenges-dev-jsmith-imagebucketc726ca21-abc123xyz/ \
+  --no-progress
+
+
+# After uploading images, disable placeholder mode
+# ============================================================================
+
+# 1. Update environment configuration
+# Edit .env.dev (or .env.stage, .env.prod) and set:
+IMAGE_SERVICE_PLACEHOLDER_ENABLED=false
+
+# 2. Redeploy the image service to pick up the new configuration
+nx run openchallenges-infra-cdk:deploy:dev
+```
+
+**Note:** The S3 bucket name includes a random hash suffix generated by CloudFormation. Use the `aws s3 ls` command shown above to find the exact bucket name for your environment.
 
 ### Synthesize CloudFormation Templates
 
@@ -39,13 +264,13 @@ Generate CloudFormation templates from the CDK code:
 
 ```bash
 # Development (requires DEVELOPER_NAME in .env.dev)
-nx synth openchallenges-infra-cdk:dev
+nx run openchallenges-infra-cdk:synth:dev
 
 # Staging
-nx synth openchallenges-infra-cdk:stage
+nx run openchallenges-infra-cdk:synth:stage
 
 # Production
-nx synth openchallenges-infra-cdk:prod
+nx run openchallenges-infra-cdk:synth:prod
 ```
 
 ### List Stacks
@@ -63,77 +288,9 @@ nx run openchallenges-infra-cdk:ls:prod
 Deploy the CDK stacks to AWS:
 
 ```bash
-# Development
-nx deploy openchallenges-infra-cdk:dev
-
-# Staging
-nx deploy openchallenges-infra-cdk:stage
-
-# Production
-nx deploy openchallenges-infra-cdk:prod
-```
-
-### Testing the Application Load Balancer
-
-After deploying, you can test the ALB health endpoint:
-
-#### 1. Get the ALB DNS Name
-
-After deployment, the ALB DNS name will be displayed in the CloudFormation outputs:
-
-```bash
-# Look for the "HealthCheckUrl" output
-nx deploy openchallenges-infra-cdk:dev
-```
-
-Or retrieve it from the CloudFormation stack:
-
-```bash
-# Using AWS CLI
-aws cloudformation describe-stacks \
-  --stack-name openchallenges-dev-{your-name}-alb \
-  --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerDnsName`].OutputValue' \
-  --output text
-```
-
-#### 2. Test the `/health` Endpoint
-
-**Using HTTP (no certificate configured):**
-
-```bash
-# From your terminal
-curl http://<alb-dns-name>/health
-
-# Or open in browser
-# http://<alb-dns-name>/health
-```
-
-**Using HTTPS (with certificate configured):**
-
-```bash
-# From your terminal
-curl https://<alb-dns-name>/health
-
-# Or open in browser
-# https://<alb-dns-name>/health
-```
-
-**Expected Response:**
-
-```json
-{
-  "status": "healthy",
-  "service": "openchallenges-alb"
-}
-```
-
-#### 3. Test Other Paths
-
-Since no backend services are configured yet, other paths will return 503:
-
-```bash
-curl http://<alb-dns-name>/api/v1/challenges
-# Returns: {"error":"Service Unavailable","message":"No backend services configured"}
+nx run openchallenges-infra-cdk:deploy:dev
+nx run openchallenges-infra-cdk:deploy:stage
+nx run openchallenges-infra-cdk:deploy:prod
 ```
 
 ### Destroy Infrastructure
@@ -141,179 +298,133 @@ curl http://<alb-dns-name>/api/v1/challenges
 Remove all deployed resources:
 
 ```bash
-# Development
-nx destroy openchallenges-infra-cdk:dev
-
-# Staging
-nx destroy openchallenges-infra-cdk:stage
-
-# Production
-nx destroy openchallenges-infra-cdk:prod
+nx run openchallenges-infra-cdk:destroy:dev
+nx run openchallenges-infra-cdk:destroy:stage
+nx run openchallenges-infra-cdk:destroy:prod
 ```
 
-## Developer Workflow
+## Accessing Private Resources
 
-### Setting Up Your Development Stack
+The PostgreSQL database and OpenSearch are deployed in private subnets. Access them via port forwarding through the bastion ECS service using the provided scripts.
 
-1. **Set your developer name** in `.env.dev`:
+**Note:** AWS Session Manager plugin is required and is already installed in the dev container.
 
-   ```bash
-   echo "DEVELOPER_NAME=your-github-username" >> .env.dev
-   ```
-
-2. **Configure AWS credentials** for the development account:
-
-   ```bash
-   aws configure --profile openchallenges-dev
-   ```
-
-3. **Bootstrap CDK** (first-time only):
-
-   ```bash
-   ENV=dev cdk bootstrap --profile openchallenges-dev
-   ```
-
-4. **Synthesize and deploy**:
-   ```bash
-   nx synth openchallenges-infra-cdk:dev
-   nx deploy openchallenges-infra-cdk:dev
-   ```
-
-### Making Changes
-
-1. Make changes to constructs or stacks in the `shared/` directory
-2. Test synthesis: `nx synth openchallenges-infra-cdk:dev`
-3. Review diff: `nx diff openchallenges-infra-cdk:dev`
-4. Deploy changes: `nx deploy openchallenges-infra-cdk:dev`
-
-### Cleaning Up
-
-When you're done with your development stack, destroy it to avoid charges:
+### PostgreSQL Database
 
 ```bash
-nx destroy openchallenges-infra-cdk:dev
+# Start database tunnel
+cd apps/openchallenges/infra/cdk
+./tools/start-db-tunnel.sh dev {developer-name}
+
+# The script will display the connection string:
+# postgresql://postgres:password@localhost:5432/openchallenges
 ```
 
-**Note on GuardDuty**: The CDK app now manages the GuardDuty VPC endpoint to ensure clean stack deletion. In earlier versions, GuardDuty created AWS-managed resources (VPC endpoints and security groups) outside of CloudFormation, which blocked VPC deletion. These are now explicitly managed by the CDK stack.
+Use the displayed connection string with:
 
-### Troubleshooting Stack Deletion
+- **VS Code**: [PostgreSQL extension](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres)
+- **psql**: `psql -h localhost -p 5432 -U postgres -d openchallenges`
 
-When you're done testing, destroy your development stack:
+### OpenSearch Dashboards
 
 ```bash
-nx destroy openchallenges-infra-cdk:dev
+# Start OpenSearch tunnel
+cd apps/openchallenges/infra/cdk
+./tools/start-opensearch-tunnel.sh dev {developer-name}
+
+# The script will display:
+# - Dashboard URL: https://localhost:9200/_dashboards
+# - Username and password
 ```
 
-## Phase 0: Minimal Infrastructure
+Open `https://localhost:9200/_dashboards` in your browser and login with the displayed credentials.
 
-This initial phase deploys a single S3 bucket to validate the multi-environment deployment workflow.
+**Note:** Keep the tunnel scripts running while accessing these resources. Press Ctrl+C to stop.
 
-### Resources Deployed
+## Deployed Infrastructure
 
-- **Image Bucket**: S3 bucket for storing images (used by Thumbor service)
-  - Encryption: S3-managed (AES256)
-  - Public access: Blocked
-  - Versioning: Disabled
-  - Naming:
-    - Dev: `openchallenges-dev-{developer-name}-img`
-    - Stage/Prod: `openchallenges-{env}-img`
+The OpenChallenges CDK app deploys a complete microservices architecture on AWS.
 
-### CloudFormation Outputs
+### Architecture Overview
 
-The bucket stack exports the following values:
+```
+Internet
+   │
+   ├─ HTTPS (443) / HTTP (80)
+   │
+   ▼
+Application Load Balancer
+   │
+   ├─ /health           → Fixed response (health check)
+   ├─ /api/*            → API Gateway (Spring Cloud Gateway)
+   ├─ /oauth2/*         → API Gateway (Keycloak authentication)
+   ├─ /.well-known/*    → API Gateway (OIDC discovery)
+   ├─ /img/*            → Thumbor (with URL rewrite: /img/* → /*)
+   └─ /*                → Web App (Angular frontend)
+```
 
-- `ImageBucketName`: Name of the S3 bucket
-- `ImageBucketArn`: ARN of the S3 bucket
+### Stacks Deployed
 
-These outputs can be referenced by other stacks or services.
+1. **VPC Stack**: Networking infrastructure
+2. **Image Bucket Stack**: S3 bucket for image storage
+3. **ALB Stack**: Application Load Balancer with routing rules
+4. **ECS Cluster Stack**: Fargate cluster for containerized services
+5. **Thumbor Stack**: Image processing service
+6. **Image Service Stack**: Generates Thumbor URLs for images
+7. **API Gateway Stack**: Spring Cloud Gateway for backend APIs
+8. **Web Stack**: Angular frontend application
 
-## Phase 1: Networking and Load Balancer
+### Architecture Decisions
 
-This phase deploys the core networking infrastructure and application load balancer.
+**1. ALB-First Routing (No Reverse Proxy)**
 
-### Resources Deployed
-
-#### VPC (Virtual Private Cloud)
-
-- **Configuration**:
-
-  - 2 Availability Zones for redundancy
-  - CIDR block: 10.0.0.0/16 (configurable via `VPC_CIDR` environment variable)
-  - Public subnets (/24): For ALB and NAT Gateway(s)
-  - Private subnets (/24): For ECS tasks and backend services
-  - DNS support: Enabled
-
-> [!NOTE]
-> It is important that every VPC CIDR be a unique value within our AWS organization. That will allow
-> us to easily setup private access via VPN and cross account VPC routing if needed. Check our
-> [wiki](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/2850586648/Setup+AWS+VPC) for
-> information on how to obtain a unique CIDR.
-
-- **NAT Gateway Configuration** (Environment-Specific):
-
-  - **Development**: 1 NAT Gateway
-
-    - Cost-optimized: ~$32.50/month
-    - Trade-off: Single point of failure for internet access from private subnets
-    - Suitable for dev/test environments where cost is prioritized over uptime
-
-  - **Stage/Production**: NAT Gateways = Number of Availability Zones (default: 2)
-    - High availability: ~$32.50/month per NAT Gateway
-    - One NAT Gateway per AZ ensures redundancy
-    - If one NAT or AZ fails, the other continues to provide internet access
-    - Recommended for production workloads requiring high uptime
-    - Configurable via `MAX_AZS` environment variable (scales automatically)
-
-#### Application Load Balancer (ALB)
-
-- **Configuration**:
-
-  - Internet-facing: Accessible from the public internet
-  - HTTP support: Always enabled on port 80
-  - HTTPS support: Optional, enabled when `CERTIFICATE_ARN` is provided
-  - Security groups: Allow HTTP (80) and HTTPS (443) from anywhere (0.0.0.0/0)
-  - Health check endpoint: `/health` returns 200 OK with JSON response
-  - Default action: Returns 503 "Service Unavailable" for unconfigured routes
-  - HTTP to HTTPS redirect: Automatically enabled when certificate is configured
-
-- **Listener Rules**:
-  - Priority 1: `/health` → Fixed response (200 OK, JSON)
-  - Default: All other paths → 503 Service Unavailable (until backends are configured)
-
-### CloudFormation Outputs
-
-#### VPC Stack
-
-- `VpcId`: ID of the VPC
-- `PublicSubnetIds`: Comma-separated list of public subnet IDs
-- `PrivateSubnetIds`: Comma-separated list of private subnet IDs
-
-#### ALB Stack
-
-- `LoadBalancerArn`: ARN of the Application Load Balancer
-- `LoadBalancerDnsName`: DNS name to access the ALB
-- `HealthCheckUrl`: Full URL to the health check endpoint
-
-### Architecture Notes
-
-This infrastructure replaces the Caddy reverse proxy used in the original deployment:
+The infrastructure uses ALB listener rules for all routing, eliminating the openchallenges-apex Caddy reverse proxy:
 
 - **Original**: ALB → Caddy container → Backend services
-- **New**: ALB → Backend services (direct)
+- **Current**: ALB → Backend services (direct)
 
-The ALB provides the same capabilities as Caddy:
-
-- Path-based routing (via listener rules)
-- HTTPS termination
-- Health checks
-- HTTP to HTTPS redirection
-
-Benefits of ALB-only approach:
+Benefits:
 
 - One less service to manage and monitor
 - Better AWS integration (CloudWatch metrics, access logs, WAF)
 - Higher availability (AWS-managed service)
-- Cost-effective (eliminates ECS task for Caddy)
+- Native URL rewriting via ALB transforms (October 2025 feature)
+
+**2. Thumbor URL Rewriting**
+
+Images are served through the `/img/*` path on the ALB. To strip the prefix before forwarding to Thumbor, we use ALB's native URL rewrite transforms:
+
+```python
+transforms=[
+    elbv2.CfnListenerRule.TransformProperty(
+        type="url-rewrite",
+        url_rewrite_config=elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+            rewrites=[
+                elbv2.CfnListenerRule.RewriteConfigProperty(
+                    regex="^/img/(.*)$",
+                    replace="/$1",
+                )
+            ]
+        ),
+    )
+]
+```
+
+This transforms requests like:
+
+- Request: `https://alb-dns/img/abc123=/500x500/image.jpg`
+- Forwarded to Thumbor: `/abc123=/500x500/image.jpg`
+
+**3. Service Discovery**
+
+All backend services use AWS Cloud Map for internal service-to-service communication via DNS:
+
+- Pattern: `{service-name}.{namespace}.local`
+- Example: `openchallenges-thumbor.openchallenges-dev-tschaffter.local:8889`
+
+**4. Environment Variable Injection**
+
+The web app (Angular) requires environment-specific configuration. Variables are injected at container startup by generating a `config.json` file that the app fetches at runtime.
 
 ## Testing
 
@@ -322,17 +433,6 @@ Benefits of ALB-only approach:
 ```bash
 nx test openchallenges-infra-cdk
 ```
-
-## Environment Variable Reference
-
-### Required for All Environments
-
-- `AWS_PROFILE`: Name of the AWS profile
-- `ENV`: Environment name (`dev`, `stage`, or `prod`)
-
-### Required for Development
-
-- `DEVELOPER_NAME`: Your identifier for resource naming (alphanumeric, hyphens, underscores only)
 
 ## Environment Variable Precedence
 
@@ -361,59 +461,3 @@ Examples:
 
 - `openchallenges-stage-img`
 - `openchallenges-prod-img`
-
-## Troubleshooting
-
-### "ENV environment variable is required"
-
-Make sure you're running commands with a configuration:
-
-```bash
-nx synth openchallenges-infra-cdk:dev  # Not just 'openchallenges-infra-cdk'
-```
-
-### "DEVELOPER_NAME environment variable is required for dev"
-
-Add your developer name to `.env.dev`:
-
-```bash
-echo "DEVELOPER_NAME=your-name" >> .env.dev
-```
-
-### "Invalid DEVELOPER_NAME"
-
-Developer names must contain only alphanumeric characters, hyphens, and underscores.
-
-### Stack name too long
-
-If your developer name is very long, CDK may reject the stack name. Try using a shorter name or abbreviation.
-
-### Environment-Specific Commands
-
-You can target specific environments by providing a configuration:
-
-```bash
-# Development (default)
-nx synth openchallenges-infra-cdk
-nx ls openchallenges-infra-cdk
-nx deploy openchallenges-infra-cdk
-
-# Staging
-nx synth openchallenges-infra-cdk:stage
-nx ls openchallenges-infra-cdk:stage
-nx deploy openchallenges-infra-cdk:stage
-
-# Production
-nx synth openchallenges-infra-cdk:prod
-nx ls openchallenges-infra-cdk:prod
-nx deploy openchallenges-infra-cdk:prod
-```
-
-### Environment Variable Precedence
-
-Environment variables are loaded by Nx with the following precedence (highest to lowest):
-
-1. Environment-specific file (`.env.dev`, `.env.stage`, or `.env.prod`)
-2. Base environment file (`.env`)
-
-Variables defined in environment-specific files will override any matching variables in the base `.env` file.

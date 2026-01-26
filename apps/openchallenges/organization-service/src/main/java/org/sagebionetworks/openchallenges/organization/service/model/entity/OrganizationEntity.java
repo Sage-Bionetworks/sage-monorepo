@@ -31,7 +31,7 @@ import org.sagebionetworks.openchallenges.organization.service.model.search.Orga
 import org.sagebionetworks.openchallenges.organization.service.model.search.UniqueChallengeCountValueBinder;
 
 @Entity
-@Table(name = "organization")
+@Table(name = "organization", schema = "organization")
 @Data
 @Builder
 @NoArgsConstructor

@@ -18,6 +18,8 @@ spring:
   flyway:
     enabled: true
     clean-disabled: false
+    schemas: organization
+    default-schema: organization
   jackson:
     date-format: org.sagebionetworks.openchallenges.organization.service.RFC3339DateFormat
     serialization:
@@ -28,6 +30,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
+        default_schema: organization
         search:
           enabled: true
           schema_management:

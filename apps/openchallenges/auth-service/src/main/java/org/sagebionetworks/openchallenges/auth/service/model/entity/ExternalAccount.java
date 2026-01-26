@@ -17,6 +17,7 @@ import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "external_account",
+    schema = "auth",
     uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_id", "provider"}),
         @UniqueConstraint(columnNames = {"provider", "external_id"})

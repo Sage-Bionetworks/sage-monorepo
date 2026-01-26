@@ -19,7 +19,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordFie
 import org.sagebionetworks.openchallenges.challenge.service.model.search.EdamSectionValueBridge;
 
 @Entity
-@Table(name = "edam_concept")
+@Table(name = "edam_concept", schema = "challenge")
 @Data
 @Builder
 @NoArgsConstructor

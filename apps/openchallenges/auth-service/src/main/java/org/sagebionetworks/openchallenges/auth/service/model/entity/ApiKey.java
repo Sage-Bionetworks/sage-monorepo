@@ -11,7 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "api_key")
+@Table(name = "api_key", schema = "auth")
 @Data
 @Builder
 @NoArgsConstructor

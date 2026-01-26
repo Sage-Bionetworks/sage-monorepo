@@ -15,7 +15,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "app_user", schema = "auth")
 @Getter
 @Setter
 @Builder

@@ -1,7 +1,7 @@
 # Development profile configuration
 spring:
   datasource:
-    url: jdbc:postgresql://openchallenges-postgres:8091/challenge_service
+    url: jdbc:postgresql://openchallenges-postgres:8091/openchallenges?currentSchema=challenge
     username: challenge_service
     password: changeme
     driver-class-name: org.postgresql.Driver

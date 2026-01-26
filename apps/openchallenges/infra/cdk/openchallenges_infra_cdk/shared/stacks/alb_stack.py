@@ -47,17 +47,54 @@ class AlbStack(cdk.Stack):
         self.alb = alb_construct.alb
         self.security_group = alb_construct.security_group
 
-        # Create target group for the app service
+        # Create target group for the web client (Angular SSR app)
         # This will be used by the Fargate service
         self.app_target_group = elbv2.ApplicationTargetGroup(
             self,
             "AppTargetGroup",
             vpc=vpc,
-            port=80,  # nginx port (change to 4200 for openchallenges-app)
+            port=4200,  # Angular SSR server port
             protocol=elbv2.ApplicationProtocol.HTTP,
             target_type=elbv2.TargetType.IP,
             health_check=elbv2.HealthCheck(
-                path="/",
+                path="/health",  # Angular app health check endpoint
+                interval=cdk.Duration.seconds(30),
+                timeout=cdk.Duration.seconds(5),
+                healthy_threshold_count=2,
+                unhealthy_threshold_count=3,
+            ),
+            deregistration_delay=cdk.Duration.seconds(30),
+        )
+
+        # Create target group for the API Gateway service
+        # API Gateway routes traffic to backend services (Auth, Challenge, Org, Image)
+        self.api_gateway_target_group = elbv2.ApplicationTargetGroup(
+            self,
+            "ApiGatewayTargetGroup",
+            vpc=vpc,
+            port=8082,  # API Gateway port
+            protocol=elbv2.ApplicationProtocol.HTTP,
+            target_type=elbv2.TargetType.IP,
+            health_check=elbv2.HealthCheck(
+                path="/actuator/health",  # Spring Boot Actuator health endpoint
+                interval=cdk.Duration.seconds(30),
+                timeout=cdk.Duration.seconds(5),
+                healthy_threshold_count=2,
+                unhealthy_threshold_count=3,
+            ),
+            deregistration_delay=cdk.Duration.seconds(30),
+        )
+
+        # Create target group for Thumbor image service
+        self.thumbor_target_group = elbv2.ApplicationTargetGroup(
+            self,
+            "ThumborTargetGroup",
+            vpc=vpc,
+            port=8889,  # Thumbor port
+            protocol=elbv2.ApplicationProtocol.HTTP,
+            target_type=elbv2.TargetType.IP,
+            health_check=elbv2.HealthCheck(
+                path="/healthcheck",  # Thumbor health endpoint
                 interval=cdk.Duration.seconds(30),
                 timeout=cdk.Duration.seconds(5),
                 healthy_threshold_count=2,
@@ -100,7 +137,65 @@ class AlbStack(cdk.Stack):
                 ),
             )
 
-            # Default action for HTTPS: forward to app service
+            # Route API traffic to API Gateway (priority 2)
+            # Includes: /api/*, /oauth2/*, /.well-known/*
+            https_listener.add_action(
+                "ApiGateway",
+                priority=2,
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(
+                        ["/api/*", "/oauth2/*", "/.well-known/*"]
+                    )
+                ],
+                action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
+            )
+
+            # Route image traffic to Thumbor (priority 3)
+            # Strip /img/ prefix using ALB URL rewrite transform (October 2025 feature)
+            # Transforms are separate from Actions in CloudFormation ListenerRule
+            elbv2.CfnListenerRule(
+                self,
+                "ThumborImagesHttpsRule",
+                listener_arn=https_listener.listener_arn,
+                priority=3,
+                conditions=[
+                    {
+                        "field": "path-pattern",
+                        "pathPatternConfig": {"values": ["/img/*"]},
+                    }
+                ],
+                actions=[
+                    {
+                        "type": "forward",
+                        "forwardConfig": {
+                            "targetGroups": [
+                                {
+                                    "targetGroupArn": (
+                                        self.thumbor_target_group.target_group_arn
+                                    ),
+                                    "weight": 1,
+                                }
+                            ],
+                            "targetGroupStickinessConfig": {"enabled": False},
+                        },
+                    }
+                ],
+                transforms=[
+                    elbv2.CfnListenerRule.TransformProperty(
+                        type="url-rewrite",
+                        url_rewrite_config=elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+                            rewrites=[
+                                elbv2.CfnListenerRule.RewriteConfigProperty(
+                                    regex="^/img/(.*)$",
+                                    replace="/$1",
+                                )
+                            ]
+                        ),
+                    )
+                ],
+            )
+
+            # Default action for HTTPS: forward to app service (frontend)
             https_listener.add_action(
                 "DefaultHttps",
                 action=elbv2.ListenerAction.forward([self.app_target_group]),
@@ -149,7 +244,65 @@ class AlbStack(cdk.Stack):
                 ),
             )
 
-            # Default action for HTTP: forward to app service
+            # Route API traffic to API Gateway (priority 2)
+            # Includes: /api/*, /oauth2/*, /.well-known/*
+            http_listener.add_action(
+                "ApiGateway",
+                priority=2,
+                conditions=[
+                    elbv2.ListenerCondition.path_patterns(
+                        ["/api/*", "/oauth2/*", "/.well-known/*"]
+                    )
+                ],
+                action=elbv2.ListenerAction.forward([self.api_gateway_target_group]),
+            )
+
+            # Route image traffic to Thumbor (priority 3)
+            # Strip /img/ prefix using ALB URL rewrite transform (October 2025 feature)
+            # Transforms are separate from Actions in CloudFormation ListenerRule
+            elbv2.CfnListenerRule(
+                self,
+                "ThumborImagesHttpRule",
+                listener_arn=http_listener.listener_arn,
+                priority=3,
+                conditions=[
+                    {
+                        "field": "path-pattern",
+                        "pathPatternConfig": {"values": ["/img/*"]},
+                    }
+                ],
+                actions=[
+                    {
+                        "type": "forward",
+                        "forwardConfig": {
+                            "targetGroups": [
+                                {
+                                    "targetGroupArn": (
+                                        self.thumbor_target_group.target_group_arn
+                                    ),
+                                    "weight": 1,
+                                }
+                            ],
+                            "targetGroupStickinessConfig": {"enabled": False},
+                        },
+                    }
+                ],
+                transforms=[
+                    elbv2.CfnListenerRule.TransformProperty(
+                        type="url-rewrite",
+                        url_rewrite_config=elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+                            rewrites=[
+                                elbv2.CfnListenerRule.RewriteConfigProperty(
+                                    regex="^/img/(.*)$",
+                                    replace="/$1",
+                                )
+                            ]
+                        ),
+                    )
+                ],
+            )
+
+            # Default action for HTTP: forward to app service (frontend)
             http_listener.add_action(
                 "DefaultHttp",
                 action=elbv2.ListenerAction.forward([self.app_target_group]),

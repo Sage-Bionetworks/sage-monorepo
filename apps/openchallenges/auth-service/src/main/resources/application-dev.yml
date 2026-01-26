@@ -3,7 +3,7 @@ spring:
   jpa:
     show-sql: true
   datasource:
-    url: jdbc:postgresql://openchallenges-postgres:8091/auth_service
+    url: jdbc:postgresql://openchallenges-postgres:8091/openchallenges?currentSchema=auth
 
 app:
   api-key:

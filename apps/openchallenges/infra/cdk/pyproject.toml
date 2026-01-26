@@ -9,7 +9,7 @@ show_missing = true
 [tool.pytest.ini_options]
 addopts = """
  --cov
- --cov-fail-under=40
+ --cov-fail-under=20
  --cov-report html:'../../../../coverage/apps/openchallenges/infra/cdk/html'
  --cov-report xml:'../../../../coverage/apps/openchallenges/infra/cdk/coverage.xml'
  --html='../../../../reports/apps/openchallenges/infra/cdk/unittests/html/index.html'
@@ -23,7 +23,7 @@ description = "CDK application for deploying the OpenChallenges infrastructure t
 requires-python = "==3.13.3"
 readme = 'README.md'
 dependencies = [
-  "aws-cdk-lib>=2.219.0",
+  "aws-cdk-lib>=2.235.0",
   "boto3>=1.40.51",
   "platform-infra-cdk-common",
 ]

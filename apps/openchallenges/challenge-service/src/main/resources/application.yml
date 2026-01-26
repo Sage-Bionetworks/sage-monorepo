@@ -20,6 +20,8 @@ spring:
   flyway:
     enabled: true
     clean-disabled: false
+    schemas: challenge
+    default-schema: challenge
   jackson:
     date-format: org.sagebionetworks.openchallenges.challenge.service.RFC3339DateFormat
     serialization:
@@ -30,6 +32,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
+        default_schema: challenge
         search:
           enabled: true
           schema_management:

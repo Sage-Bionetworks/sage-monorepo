@@ -22,7 +22,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordFie
 import org.sagebionetworks.openchallenges.challenge.service.model.search.ChallengePlatformNameValueBridge;
 
 @Entity
-@Table(name = "challenge_platform")
+@Table(name = "challenge_platform", schema = "challenge")
 @Data
 @Builder
 @NoArgsConstructor
