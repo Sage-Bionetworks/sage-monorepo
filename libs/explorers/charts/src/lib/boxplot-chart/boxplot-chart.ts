@@ -35,7 +35,11 @@ const defaultPointCategoryOffset = 0.3;
 const defaultPointCategoryJitterMax = 0.02;
 
 const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
-const SPACE_FOR_Y_AXIS_NAME = 15;
+const SPACE_FOR_Y_AXIS_NAME = 18;
+// The total left margin for the y-axis. Use a hardcoded value to ensure y-axis labels and plot areas
+// are aligned across multiple charts. ECharts' `containLabel: true` will shift the plot area if tick
+// labels or axis names change, so it can't guarantee cross-chart alignment.
+const Y_AXIS_LEFT_MARGIN = Y_AXIS_TICK_LABELS_MAX_WIDTH + SPACE_FOR_Y_AXIS_NAME;
 
 export class BoxplotChart {
   chart: ECharts | undefined;
@@ -180,6 +184,12 @@ export class BoxplotChart {
       max: yAxisMax ? yAxisMax + yAxisPadding : undefined,
     };
     return yAxisOptions;
+  }
+
+  private getYAxisLeftMargin(chartStyle: string): number {
+    // Handle grayGrid's smaller font to ensure y-axis label is at the leftmost edge of the plot
+    const adjustment = chartStyle === 'grayGrid' ? -3 : 0;
+    return Y_AXIS_LEFT_MARGIN + adjustment;
   }
 
   setOptions(boxplotProps: BoxplotProps) {
@@ -387,7 +397,7 @@ export class BoxplotChart {
       },
       grid: {
         top: title ? 60 : 20,
-        left: Y_AXIS_TICK_LABELS_MAX_WIDTH + SPACE_FOR_Y_AXIS_NAME,
+        left: this.getYAxisLeftMargin(chartStyle),
         right: 20,
         containLabel: false,
       },
