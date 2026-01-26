@@ -172,9 +172,10 @@ nx run openchallenges-organization-service:export-image-tarball
 
 **3. Deploy with CDK:**
 
+The CDK app will automatically upload the tarball and deploy it.
+
 ```bash
-# The CDK app will automatically upload the tarball and deploy it
-nx run openchallenges-infra-cdk:deploy:dev
+nx run openchallenges-infra-cdk:deploy:dev [--require-approval never] [--concurrency N]
 ```
 
 **Important Notes:**
