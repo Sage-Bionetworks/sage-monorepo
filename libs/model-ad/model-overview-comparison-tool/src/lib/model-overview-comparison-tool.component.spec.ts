@@ -6,6 +6,7 @@ import {
   PlatformService,
   provideComparisonToolService,
   provideComparisonToolFilterService,
+  provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import {
@@ -25,6 +26,7 @@ async function setup() {
     providers: [
       MessageService,
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
+      provideExplorersConfig({ visualizationOverviewPanes: [] }),
       provideHttpClient(),
       provideNoopAnimations(),
       provideRouter([]),
