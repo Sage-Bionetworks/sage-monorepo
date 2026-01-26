@@ -81,6 +81,7 @@ export interface ComparisonToolFilter {
   name: string;
   data_key: string;
   short_name?: string;
+  query_param_key: string;
   options: ComparisonToolFilterOption[];
 }
 
@@ -151,6 +152,7 @@ export interface ComparisonToolUrlParams {
   categories?: string[] | null;
   sortFields?: string[] | null;
   sortOrders?: SortOrder[] | null;
+  filterSelections?: Record<string, string[]> | null;
 }
 
 export interface PaginationParams {

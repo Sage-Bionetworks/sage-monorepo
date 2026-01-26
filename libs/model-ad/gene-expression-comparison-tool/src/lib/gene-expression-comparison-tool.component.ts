@@ -194,9 +194,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       currentQuery.multiSortMeta,
     );
 
-    const selectedFilters = this.comparisonToolHelperService.getSelectedFilters(
-      currentQuery.filters,
-    );
+    const selectedFilters = this.comparisonToolService.selectedFilters();
 
     const query: GeneExpressionSearchQuery = {
       categories: currentQuery.categories,
@@ -206,8 +204,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       pageSize: currentQuery.pageSize,
       search: currentQuery.searchTerm,
       biodomains: selectedFilters['biodomains'],
-      modelType: selectedFilters['model_type'],
-      name: selectedFilters['name'],
+      modelType: selectedFilters['modelTypes'],
+      name: selectedFilters['models'],
       sortFields,
       sortOrders,
     };

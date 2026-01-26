@@ -181,9 +181,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       currentQuery.multiSortMeta,
     );
 
-    const selectedFilters = this.comparisonToolHelperService.getSelectedFilters(
-      currentQuery.filters,
-    );
+    const selectedFilters = this.comparisonToolService.selectedFilters();
 
     const query: DiseaseCorrelationSearchQuery = {
       categories: currentQuery.categories,
@@ -192,11 +190,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       pageNumber: currentQuery.pageNumber,
       pageSize: currentQuery.pageSize,
       search: currentQuery.searchTerm,
-      age: selectedFilters['age'],
-      modelType: selectedFilters['model_type'],
-      modifiedGenes: selectedFilters['modified_genes'],
-      name: selectedFilters['name'],
-      sex: selectedFilters['sex'],
+      age: selectedFilters['ages'],
+      modelType: selectedFilters['modelTypes'],
+      modifiedGenes: selectedFilters['modifiedGenes'],
+      name: selectedFilters['models'],
+      sex: selectedFilters['sexes'],
       sortFields,
       sortOrders,
     };

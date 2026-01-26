@@ -19,8 +19,8 @@ describe('ComparisonToolFilterService', () => {
 
   it('should set filters', () => {
     const filters: ComparisonToolFilter[] = [
-      { name: 'Filter 1', data_key: 'f1', options: [] },
-      { name: 'Filter 2', data_key: 'f2', options: [] },
+      { name: 'Filter 1', data_key: 'f1', query_param_key: 'f1', options: [] },
+      { name: 'Filter 2', data_key: 'f2', query_param_key: 'f2', options: [] },
     ];
     service.setFilters(filters);
     expect(service.filters()).toEqual(filters);
@@ -34,6 +34,7 @@ describe('ComparisonToolFilterService', () => {
       {
         name: 'Test Filter',
         data_key: 'testField',
+        query_param_key: 'testField',
         options: [
           { label: 'Option 1', selected: true },
           { label: 'Option 2', selected: false },
