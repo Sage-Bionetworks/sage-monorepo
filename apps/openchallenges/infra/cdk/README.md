@@ -70,7 +70,6 @@ sso_registration_scopes = sso:account:access
 sso_session = org-sagebase
 sso_account_id = 221082174873
 sso_role_name = Developer
-region = us-east-1
 output = json
 cli_pager =
 
@@ -78,7 +77,6 @@ cli_pager =
 sso_session = org-sagebase
 sso_account_id = 221082174873
 sso_role_name = Administrator
-region = us-east-1
 output = json
 cli_pager =
 
@@ -86,7 +84,6 @@ cli_pager =
 sso_session = org-sagebase
 sso_account_id = 528757786185
 sso_role_name = Developer
-region = us-east-1
 output = json
 cli_pager =
 
@@ -94,7 +91,6 @@ cli_pager =
 sso_session = org-sagebase
 sso_account_id = 528757786185
 sso_role_name = Administrator
-region = us-east-1
 output = json
 cli_pager =
 ```
