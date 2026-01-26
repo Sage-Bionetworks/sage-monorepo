@@ -96,22 +96,32 @@
         openrouter@{shape: icon, icon: 'mdi:robot', label: 'OpenRouter<br>(LLM Proxy)'}
 
         %% Connections - User to ALB
-        user -->|HTTPS| alb
+        user user_alb@-->|HTTPS| alb
 
         %% ALB to Frontend and Gateway
-        alb -->|"/**"| app
-        alb -->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| apigw
+        alb alb_app@-->|"/**"| app
+        alb alb_apigw@-->|"proxy /api/\*\*, /ai/\*\*, /auth/\*\*"| apigw
 
         %% API Gateway to Services
-        apigw -->|"HTTP /auth/**"| auth
-        apigw -->|"HTTP /api/**"| api
-        apigw -->|"HTTP /ai/**"| ai
+        apigw apigw_auth@-->|"HTTP /auth/**"| auth
+        apigw apigw_api@-->|"HTTP /api/**"| api
+        apigw apigw_ai@-->|"HTTP /ai/**"| ai
 
         %% Gradio to OpenRouter
-        app -->|"LLM Requests"| openrouter
+        app app_openrouter@-->|"LLM Requests"| openrouter
 
         %% Services to Data Layer
-        services --> data
+        services services_data@--> data
+
+        %% Animate arrows
+        user_alb@{ animate: true }
+        alb_app@{ animate: true }
+        alb_apigw@{ animate: true }
+        apigw_auth@{ animate: true }
+        apigw_api@{ animate: true }
+        apigw_ai@{ animate: true }
+        app_openrouter@{ animate: true }
+        services_data@{ animate: true }
 
         %% Styling for subgraphs
         style vpc fill:none,stroke:#333,stroke-width:2px
