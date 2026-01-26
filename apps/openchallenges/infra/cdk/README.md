@@ -95,8 +95,6 @@ output = json
 cli_pager =
 ```
 
-**Note**: Replace `YOUR_PROD_ACCOUNT_ID` with your production AWS account ID.
-
 Then login with SSO:
 
 ```bash
