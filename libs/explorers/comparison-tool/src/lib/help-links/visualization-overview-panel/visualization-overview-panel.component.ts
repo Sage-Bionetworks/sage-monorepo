@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewEncapsulation, computed, inject } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, ViewEncapsulation, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
+import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolService,
+  EXPLORERS_CONFIG,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
@@ -14,10 +19,11 @@ import { TooltipModule } from 'primeng/tooltip';
   styleUrls: ['./visualization-overview-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class VisualizationOverviewPanelComponent {
+export class VisualizationOverviewPanelComponent implements AfterViewChecked {
   comparisonToolService = inject(ComparisonToolService);
   platformService = inject(PlatformService);
-  viewConfig = this.comparisonToolService.viewConfig;
+  private elementRef = inject(ElementRef);
+  private explorerConfig = inject(EXPLORERS_CONFIG);
 
   get willHide(): boolean {
     return this.comparisonToolService.isVisualizationOverviewHiddenByUser();
@@ -28,8 +34,75 @@ export class VisualizationOverviewPanelComponent {
   }
 
   activePane = 0;
+  private lastPlayedPane = -1;
 
-  panes = computed(() => this.viewConfig().visualizationOverviewPanes);
+  /** Gets the panes to display in the visualization overview dialog from app config. */
+  get panes(): VisualizationOverviewPane[] {
+    return this.explorerConfig.visualizationOverviewPanes;
+  }
+
+  get activePaneHasVideo(): boolean {
+    if (this.panes.length === 0) return false;
+    return this.panes[this.activePane]?.content?.includes('<video') ?? false;
+  }
+
+  get dialogStyle(): Record<string, string> {
+    return this.activePaneHasVideo
+      ? { width: '95vw', maxWidth: '1200px' }
+      : { width: '100%', maxWidth: '580px' };
+  }
+
+  ngAfterViewChecked() {
+    if (
+      this.platformService.isBrowser &&
+      this.comparisonToolService.isVisualizationOverviewVisible() &&
+      this.activePane !== this.lastPlayedPane
+    ) {
+      this.initializeMediaInActivePane();
+      this.lastPlayedPane = this.activePane;
+    }
+  }
+
+  private initializeMediaInActivePane() {
+    const activePane = this.elementRef.nativeElement.querySelector(
+      '.visualization-overview-panel-pane.active',
+    );
+    if (!activePane) return;
+
+    // Handle videos
+    const videos = activePane.querySelectorAll('video');
+    videos.forEach((video: HTMLVideoElement) => {
+      video.classList.add('loading');
+
+      const onCanPlay = () => {
+        video.classList.remove('loading');
+        video.removeEventListener('canplay', onCanPlay);
+      };
+      video.addEventListener('canplay', onCanPlay);
+
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          video.classList.remove('loading');
+        });
+      }
+    });
+
+    // Handle images
+    const images = activePane.querySelectorAll('.image-container img');
+    images.forEach((img: HTMLImageElement) => {
+      if (img.complete) {
+        img.classList.remove('loading');
+      } else {
+        img.classList.add('loading');
+        const onLoad = () => {
+          img.classList.remove('loading');
+          img.removeEventListener('load', onLoad);
+        };
+        img.addEventListener('load', onLoad);
+      }
+    });
+  }
 
   previous() {
     if (this.activePane > 0) {
@@ -38,13 +111,14 @@ export class VisualizationOverviewPanelComponent {
   }
 
   next() {
-    if (this.activePane < this.panes().length - 1) {
+    if (this.activePane < this.panes.length - 1) {
       this.activePane++;
     }
   }
 
   onHide() {
     this.activePane = 0;
+    this.lastPlayedPane = -1;
   }
 
   close() {

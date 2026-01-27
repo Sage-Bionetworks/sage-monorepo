@@ -63,7 +63,6 @@ export interface ComparisonToolViewConfig {
   viewDetailsClick: (rowData: unknown) => void;
   legendEnabled: boolean;
   legendPanelConfig: LegendPanelConfig;
-  visualizationOverviewPanes: VisualizationOverviewPane[];
   rowsPerPage: number;
   rowIdDataKey: string;
   allowPinnedImageDownload: boolean;

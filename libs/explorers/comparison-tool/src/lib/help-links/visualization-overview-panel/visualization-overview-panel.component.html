@@ -1,23 +1,23 @@
 @if (platformService.isBrowser) {
   <p-dialog
-    [header]="panes().length > 0 ? panes()[activePane].heading : ''"
+    [header]="panes.length > 0 ? panes[activePane].heading : ''"
     [visible]="comparisonToolService.isVisualizationOverviewVisible()"
     (visibleChange)="comparisonToolService.setVisualizationOverviewVisibility($event)"
     [modal]="true"
     [draggable]="false"
     [resizable]="false"
     [dismissableMask]="true"
-    [style]="{ width: '100%', maxWidth: '580px' }"
+    [style]="dialogStyle"
     styleClass="visualization-overview-panel"
     (onHide)="onHide()"
   >
     <div class="visualization-overview-panel-panes">
-      @for (pane of panes(); track pane; let i = $index) {
-        <div
-          class="visualization-overview-panel-pane active"
-          [ngClass]="{ active: activePane === i }"
-          [innerHtml]="pane.content"
-        ></div>
+      @for (pane of panes; track pane; let i = $index) {
+        <div class="visualization-overview-panel-pane" [ngClass]="{ active: activePane === i }">
+          @if (activePane === i) {
+            <div [innerHtml]="pane.content"></div>
+          }
+        </div>
       }
     </div>
 
@@ -49,7 +49,7 @@
             variant="outlined"
           ></p-button>
         }
-        @if (activePane !== panes().length - 1) {
+        @if (activePane !== panes.length - 1) {
           <p-button
             label="Next"
             (click)="next()"
@@ -59,7 +59,7 @@
             iconPos="right"
           ></p-button>
         }
-        @if (activePane === panes().length - 1) {
+        @if (activePane === panes.length - 1) {
           <p-button label="Close" (click)="close()" [rounded]="true" size="small"></p-button>
         }
       </div>

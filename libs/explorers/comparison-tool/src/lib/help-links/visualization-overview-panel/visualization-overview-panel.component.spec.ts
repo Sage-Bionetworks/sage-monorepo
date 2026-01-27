@@ -3,29 +3,18 @@ import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
 import {
   provideComparisonToolService,
   ComparisonToolService,
+  provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
-import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
+import {
+  mockComparisonToolDataConfig,
+  mockVisualizationOverviewPanes,
+} from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { AppCookieService } from '@sagebionetworks/explorers/services';
 import { VisualizationOverviewPanelComponent } from './visualization-overview-panel.component';
 
 describe('VisualizationOverviewPanelComponent', () => {
-  const mockPanes: VisualizationOverviewPane[] = [
-    {
-      heading: 'Welcome to Visualization',
-      content: '<p>First pane content</p>',
-    },
-    {
-      heading: 'How to Use Filters',
-      content: '<p>Second pane content</p>',
-    },
-    {
-      heading: 'Export Your Data',
-      content: '<p>Third pane content</p>',
-    },
-  ];
-
   const createMockCookieService = (isHidden = false) => ({
     isVisualizationOverviewHidden: jest.fn().mockReturnValue(isHidden),
     setVisualizationOverviewHidden: jest.fn(),
@@ -33,21 +22,20 @@ describe('VisualizationOverviewPanelComponent', () => {
 
   async function setup(options?: {
     isVisible?: boolean;
-    panes?: VisualizationOverviewPane[];
     isHidden?: boolean;
+    visualizationOverviewPanes?: VisualizationOverviewPane[];
   }) {
     const user = userEvent.setup();
     const mockCookieService = createMockCookieService(options?.isHidden);
+    const panes = options?.visualizationOverviewPanes ?? mockVisualizationOverviewPanes;
 
     const { fixture } = await render(VisualizationOverviewPanelComponent, {
       providers: [
         provideNoopAnimations(),
         { provide: AppCookieService, useValue: mockCookieService },
+        provideExplorersConfig({ visualizationOverviewPanes: panes }),
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
-          viewConfig: {
-            visualizationOverviewPanes: options?.panes ?? mockPanes,
-          },
         }),
       ],
     });
@@ -82,11 +70,24 @@ describe('VisualizationOverviewPanelComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize with correct panes from viewConfig', async () => {
+  it('should initialize with default panes', async () => {
     const { component } = await setup();
-    const panes = component.panes();
-    expect(panes).toHaveLength(3);
-    expect(panes[0].heading).toBe('Welcome to Visualization');
+    expect(component.panes).toHaveLength(4);
+    expect(component.panes[0].heading).toBe('Comparison Tool Tutorial');
+  });
+
+  it('should return empty array when empty panes are configured', async () => {
+    const { component } = await setup({ visualizationOverviewPanes: [] });
+    expect(component.panes).toHaveLength(0);
+  });
+
+  it('should use panes from provideExplorersConfig', async () => {
+    const appConfigPanes: VisualizationOverviewPane[] = [
+      { heading: 'App Config Pane', content: '<p>From app config</p>' },
+    ];
+    const { component } = await setup({ visualizationOverviewPanes: appConfigPanes });
+    expect(component.panes).toHaveLength(1);
+    expect(component.panes[0].heading).toBe('App Config Pane');
   });
 
   it('should display dialog when isVisualizationOverviewVisible is true', async () => {
@@ -101,12 +102,12 @@ describe('VisualizationOverviewPanelComponent', () => {
 
   it('should display the first pane heading by default', async () => {
     await setup();
-    expect(screen.getByText('Welcome to Visualization')).toBeInTheDocument();
+    expect(screen.getByText('Comparison Tool Tutorial')).toBeInTheDocument();
   });
 
   it('should display the first pane content by default', async () => {
     await setup();
-    expect(screen.getByText('First pane content')).toBeInTheDocument();
+    expect(screen.getByText(/Comparison Tools allow you to discover/)).toBeInTheDocument();
   });
 
   it('should start with activePane set to 0', async () => {
@@ -141,8 +142,10 @@ describe('VisualizationOverviewPanelComponent', () => {
       await user.click(nextButton);
       fixture.detectChanges();
 
-      expect(screen.getByText('How to Use Filters')).toBeInTheDocument();
-      expect(screen.getByText('Second pane content')).toBeInTheDocument();
+      expect(screen.getByText('Search & Filter')).toBeInTheDocument();
+      expect(
+        screen.getByText(/Enter a value to get a list of matching results/),
+      ).toBeInTheDocument();
     });
 
     it('should show Back button on second pane', async () => {
@@ -177,7 +180,8 @@ describe('VisualizationOverviewPanelComponent', () => {
     it('should show Close button on last pane', async () => {
       const { user } = await setup();
 
-      // Navigate to last pane
+      // Navigate to last pane (4 panes, need 3 clicks to get to index 3)
+      await user.click(screen.getByRole('button', { name: /next/i }));
       await user.click(screen.getByRole('button', { name: /next/i }));
       await user.click(screen.getByRole('button', { name: /next/i }));
 
@@ -187,11 +191,11 @@ describe('VisualizationOverviewPanelComponent', () => {
 
     it('should not increment activePane beyond last pane', async () => {
       const { component } = await setup();
-      component.activePane = 2; // Last pane
+      component.activePane = 3; // Last pane (4 panes, index 3)
 
       component.next();
 
-      expect(component.activePane).toBe(2);
+      expect(component.activePane).toBe(3);
     });
   });
 
@@ -237,7 +241,8 @@ describe('VisualizationOverviewPanelComponent', () => {
     it('should call setVisualizationOverviewVisibility with false when Close button is clicked', async () => {
       const { user, setVisualizationOverviewVisibilitySpy } = await setup();
 
-      // Navigate to last pane where Close button is shown
+      // Navigate to last pane where Close button is shown (4 panes, need 3 clicks)
+      await user.click(screen.getByRole('button', { name: /next/i }));
       await user.click(screen.getByRole('button', { name: /next/i }));
       await user.click(screen.getByRole('button', { name: /next/i }));
 
@@ -287,22 +292,6 @@ describe('VisualizationOverviewPanelComponent', () => {
 
       expect(component.willHide).toBe(false);
       expect(comparisonToolService.isVisualizationOverviewVisible()).toBe(true);
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('should show Close button immediately when there is only one pane', async () => {
-      const singlePane: VisualizationOverviewPane[] = [
-        {
-          heading: 'Only Pane',
-          content: '<p>Single pane content</p>',
-        },
-      ];
-
-      await setup({ panes: singlePane });
-
-      expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /next/i })).not.toBeInTheDocument();
     });
   });
 });

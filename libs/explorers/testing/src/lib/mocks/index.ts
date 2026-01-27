@@ -7,3 +7,4 @@ export * from './navigation-links-mocks';
 export * from './search-result-mocks';
 export * from './svg-icon-service-stub';
 export * from './synapse-mocks';
+export * from './visualization-overview-panes-mocks';

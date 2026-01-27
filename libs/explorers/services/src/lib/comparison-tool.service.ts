@@ -60,7 +60,6 @@ export class ComparisonToolService<T> {
       sizeChartUpperLabel: '',
       sizeChartText: '',
     },
-    visualizationOverviewPanes: [],
     rowsPerPage: 10,
     rowIdDataKey: '_id',
     allowPinnedImageDownload: true,
