@@ -1,3 +1,6 @@
+import { EChartsOption, SeriesOption } from 'echarts';
+import type { BoxplotSeriesOption } from 'echarts/charts';
+import type { TitleComponentOption } from 'echarts/components';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
 
 export type CategoryPoint = {
@@ -66,4 +69,25 @@ export interface BoxplotProps {
   pointOpacity?: number;
   noDataStyle?: 'textOnly' | 'grayBackground';
   chartStyle?: 'minimal' | 'grayGrid';
+}
+
+export interface BoxplotChartStyle {
+  boxplotItemStyle: BoxplotSeriesOption['itemStyle'];
+  getBoxplotMarkArea?: (xAxisCategories: string[]) => SeriesOption['markArea'];
+  titleTextStyle: TitleComponentOption['textStyle'];
+  xAxisLabelTextStyle: {
+    color: string;
+    fontWeight: 'normal' | 'bold';
+    fontSize: string;
+  };
+  yAxisTitleTextStyle: TitleComponentOption['textStyle'];
+  yAxisSplitLine: { show: boolean };
+  yAxisTickLabelMaxWidth: number;
+  pointSymbolSize: number;
+  tooltip: EChartsOption['tooltip'];
+  grid: {
+    left: number;
+    right: number;
+    containLabel: boolean;
+  };
 }

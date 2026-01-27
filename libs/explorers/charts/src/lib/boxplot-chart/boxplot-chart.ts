@@ -1,7 +1,7 @@
 import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
-import { DEFAULT_POINT_SIZE, GRAY_BACKGROUND_COLOR } from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
+import { BoxplotChartStyle } from '../models/boxplot';
 import {
   addXAxisValueToBoxplotSummaries,
   addXAxisValueToCategoryPoint,
@@ -13,18 +13,7 @@ import {
   initChart,
   setNoDataOption,
 } from '../utils';
-
-const titleTextStyle = {
-  fontWeight: 700,
-  fontSize: '18px',
-  color: 'black',
-};
-
-const boxplotStyle = {
-  borderColor: '#bcc0ca',
-  borderWidth: 2,
-  color: 'transparent',
-};
+import { grayGridBoxplotChartStyle, minimalBoxplotChartStyle } from './boxplot-chart-style';
 
 const yAxisPadding = 0.2;
 const defaultPointShape = 'circle';
@@ -33,13 +22,6 @@ const defaultPointOpacity = 0.8;
 
 const defaultPointCategoryOffset = 0.3;
 const defaultPointCategoryJitterMax = 0.02;
-
-const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
-const SPACE_FOR_Y_AXIS_NAME = 18;
-// The total left margin for the y-axis. Use a hardcoded value to ensure y-axis labels and plot areas
-// are aligned across multiple charts. ECharts' `containLabel: true` will shift the plot area if tick
-// labels or axis names change, so it can't guarantee cross-chart alignment.
-const Y_AXIS_LEFT_MARGIN = Y_AXIS_TICK_LABELS_MAX_WIDTH + SPACE_FOR_Y_AXIS_NAME;
 
 export class BoxplotChart {
   chart: ECharts | undefined;
@@ -53,7 +35,11 @@ export class BoxplotChart {
     this.chart?.dispose();
   }
 
-  private getTitleOptions(xAxisTitle?: string, title?: string) {
+  private getTitleOptions(
+    boxplotChartStyle: BoxplotChartStyle,
+    xAxisTitle?: string,
+    title?: string,
+  ) {
     const titles: EChartsOption['title'] = [];
     if (xAxisTitle) {
       titles.push(
@@ -62,7 +48,7 @@ export class BoxplotChart {
         // x-axis label tooltips are used
         {
           text: xAxisTitle,
-          textStyle: titleTextStyle,
+          textStyle: boxplotChartStyle.titleTextStyle,
           left: 'center',
           top: 'bottom',
         },
@@ -73,7 +59,7 @@ export class BoxplotChart {
         text: title,
         left: 'center',
         top: 'top',
-        textStyle: titleTextStyle,
+        textStyle: boxplotChartStyle.titleTextStyle,
       });
     }
     return titles;
@@ -83,7 +69,7 @@ export class BoxplotChart {
     xAxisCategories: string[],
     xAxisLabelFormatter: BoxplotProps['xAxisLabelFormatter'],
     xAxisLabelTooltipFormatter: BoxplotProps['xAxisLabelTooltipFormatter'],
-    chartStyle: string,
+    boxplotChartStyle: BoxplotChartStyle,
   ) {
     // Use two xAxes:
     //  - value: used to jitter points with multiple pointCategories, where
@@ -117,9 +103,7 @@ export class BoxplotChart {
         type: 'category',
         data: xAxisCategories,
         axisLabel: {
-          color: 'black',
-          fontWeight: chartStyle === 'grayGrid' ? 'normal' : 'bold',
-          fontSize: '14px',
+          ...boxplotChartStyle.xAxisLabelTextStyle,
           interval: 0, // ensure all labels are shown
           formatter: (value) => {
             if (xAxisLabelFormatter) {
@@ -154,42 +138,28 @@ export class BoxplotChart {
     yAxisTitle: BoxplotProps['yAxisTitle'],
     yAxisMin: BoxplotProps['yAxisMin'],
     yAxisMax: BoxplotProps['yAxisMax'],
-    chartStyle: BoxplotProps['chartStyle'],
+    boxplotChartStyle: BoxplotChartStyle,
   ) {
-    const grayGridTextStyle = {
-      fontWeight: 400,
-      fontSize: '14px',
-      color: 'black',
-    };
-
     const yAxisOptions: EChartsOption['yAxis'] = {
       type: 'value',
       name: yAxisTitle,
       nameLocation: 'middle',
-      nameGap: Y_AXIS_TICK_LABELS_MAX_WIDTH,
-      nameTextStyle: chartStyle === 'grayGrid' ? grayGridTextStyle : titleTextStyle,
+      nameGap: boxplotChartStyle.yAxisTickLabelMaxWidth,
+      nameTextStyle: boxplotChartStyle.yAxisTitleTextStyle,
       axisLine: {
         show: true,
       },
       axisLabel: {
-        width: Y_AXIS_TICK_LABELS_MAX_WIDTH,
+        width: boxplotChartStyle.yAxisTickLabelMaxWidth,
         hideOverlap: true,
         showMinLabel: yAxisMin == null,
         showMaxLabel: yAxisMax == null,
       },
-      splitLine: {
-        show: chartStyle === 'grayGrid',
-      },
+      splitLine: boxplotChartStyle.yAxisSplitLine,
       min: yAxisMin ? yAxisMin - yAxisPadding : undefined,
       max: yAxisMax ? yAxisMax + yAxisPadding : undefined,
     };
     return yAxisOptions;
-  }
-
-  private getYAxisLeftMargin(chartStyle: string): number {
-    // Handle grayGrid's smaller font to ensure y-axis label is at the leftmost edge of the plot
-    const adjustment = chartStyle === 'grayGrid' ? -3 : 0;
-    return Y_AXIS_LEFT_MARGIN + adjustment;
   }
 
   setOptions(boxplotProps: BoxplotProps) {
@@ -214,6 +184,8 @@ export class BoxplotChart {
     const showLegend = boxplotProps.showLegend || false;
     const noDataStyle = boxplotProps.noDataStyle || 'textOnly';
     const chartStyle = boxplotProps.chartStyle || 'minimal';
+    const boxplotChartStyle =
+      chartStyle === 'grayGrid' ? grayGridBoxplotChartStyle : minimalBoxplotChartStyle;
 
     const noPoints = points.length === 0;
     const noSummaries = summaries == null || summaries.length === 0;
@@ -297,25 +269,13 @@ export class BoxplotChart {
     const boxplotSeriesBase: SeriesOption = {
       type: 'boxplot',
       z: 1,
-      itemStyle: boxplotStyle,
+      itemStyle: boxplotChartStyle.boxplotItemStyle,
       boxWidth: [7, 115],
       silent: true,
       tooltip: {
         show: false,
       },
-      markArea:
-        chartStyle === 'grayGrid'
-          ? {
-              itemStyle: {
-                color: GRAY_BACKGROUND_COLOR,
-              },
-              data: xAxisCategories.map((pc, idx) => {
-                const spacing = 0.4;
-                const pcIndex = idx + 1;
-                return [{ xAxis: pcIndex - spacing }, { xAxis: pcIndex + spacing }];
-              }),
-            }
-          : undefined,
+      markArea: boxplotChartStyle.getBoxplotMarkArea?.(xAxisCategories),
     };
     if (summaries) {
       seriesOpts.push({
@@ -346,7 +306,7 @@ export class BoxplotChart {
           x: 'xAxisValue',
           y: 'value',
         },
-        symbolSize: chartStyle == 'grayGrid' ? DEFAULT_POINT_SIZE / 2 : DEFAULT_POINT_SIZE,
+        symbolSize: boxplotChartStyle.pointSymbolSize,
         symbol:
           id === 'points'
             ? defaultPointShape
@@ -391,17 +351,15 @@ export class BoxplotChart {
         orient: 'horizontal',
         left: 'left',
         top: 'bottom',
-        itemHeight: DEFAULT_POINT_SIZE,
-        itemWidth: DEFAULT_POINT_SIZE,
+        itemHeight: boxplotChartStyle.pointSymbolSize,
+        itemWidth: boxplotChartStyle.pointSymbolSize,
         selectedMode: false,
       },
       grid: {
+        ...boxplotChartStyle.grid,
         top: title ? 60 : 20,
-        left: this.getYAxisLeftMargin(chartStyle),
-        right: 20,
-        containLabel: false,
       },
-      title: this.getTitleOptions(xAxisTitle, title),
+      title: this.getTitleOptions(boxplotChartStyle, xAxisTitle, title),
       aria: {
         enabled: true,
       },
@@ -410,20 +368,10 @@ export class BoxplotChart {
         xAxisCategories,
         xAxisLabelFormatter,
         xAxisLabelTooltipFormatter,
-        chartStyle,
+        boxplotChartStyle,
       ),
-      yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax, chartStyle),
-      tooltip: {
-        confine: true,
-        position: 'top',
-        backgroundColor: chartStyle == 'grayGrid' ? 'white' : '#63676C',
-        borderColor: 'transparent',
-        textStyle: {
-          color: chartStyle == 'grayGrid' ? '#22252A' : 'white',
-        },
-        extraCssText:
-          'opacity: 0.9; width: auto; max-width: 300px; white-space: pre-wrap; text-align: center;',
-      },
+      yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax, boxplotChartStyle),
+      tooltip: boxplotChartStyle.tooltip,
       series: seriesOpts,
     };
 
