@@ -74,9 +74,11 @@ QUEST_CONFIG = {
             "title": "Update 3: Battlements & Gate",
             "description": "The outer wall is taking shape! We've added battlements and are working on the entrance gate structure. (350 blocks placed so far).",
             "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+3+View+1",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+3+View+2",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+3+View+3",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-1.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-2.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-3.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-4.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-5.jpg",
             ],
         },
         {
