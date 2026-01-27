@@ -90,6 +90,11 @@
     box-sizing: border-box;
   }
 
+  .search-container {
+    flex: 0 1 230px;
+    min-width: 0;
+  }
+
   .header-search {
     height: fit-content;
   }
