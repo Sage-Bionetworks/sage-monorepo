@@ -346,7 +346,7 @@ export class BoxplotChart {
           x: 'xAxisValue',
           y: 'value',
         },
-        symbolSize: DEFAULT_POINT_SIZE,
+        symbolSize: chartStyle == 'grayGrid' ? DEFAULT_POINT_SIZE / 2 : DEFAULT_POINT_SIZE,
         symbol:
           id === 'points'
             ? defaultPointShape
@@ -416,10 +416,10 @@ export class BoxplotChart {
       tooltip: {
         confine: true,
         position: 'top',
-        backgroundColor: '#63676C',
-        borderColor: 'none',
+        backgroundColor: chartStyle == 'grayGrid' ? 'white' : '#63676C',
+        borderColor: 'transparent',
         textStyle: {
-          color: 'white',
+          color: chartStyle == 'grayGrid' ? '#22252A' : 'white',
         },
         extraCssText:
           'opacity: 0.9; width: auto; max-width: 300px; white-space: pre-wrap; text-align: center;',
