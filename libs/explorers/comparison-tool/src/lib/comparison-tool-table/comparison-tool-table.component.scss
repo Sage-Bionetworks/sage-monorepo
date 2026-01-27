@@ -2,12 +2,8 @@
 @use 'explorers/styles/src/lib/mixins';
 
 .comparison-tool-table {
-  min-width: vars.$comparison-tool-min-width;
-
   .table-divider {
     background-color: var(--color-gray-300);
-    margin-left: -44px;
-    margin-right: -44px;
     font-size: var(--font-size-sm);
 
     .table-divider-inner {
@@ -99,7 +95,25 @@
   }
 
   table.p-datatable-table {
-    min-width: vars.$comparison-tool-min-width !important;
+    box-sizing: border-box;
+    max-width: 100%;
+    table-layout: fixed;
+  }
+
+  th,
+  td {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  th {
+    white-space: normal;
+  }
+
+  td {
+    white-space: nowrap;
   }
 
   .p-datatable-thead,
@@ -113,6 +127,10 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
+
+      &:first-child {
+        flex: 0 0 var(--comparison-tool-primary-column-width);
+      }
 
       &.primary {
         width: var(--comparison-tool-primary-column-width) !important;

@@ -18,12 +18,14 @@ main {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    overflow-x: auto;
 
     .comparison-tool-body-inner {
       position: relative;
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
+      min-width: vars.$comparison-tool-min-width;
 
       .comparison-tool-tables {
         flex: 1 1 auto;

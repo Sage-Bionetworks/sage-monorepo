@@ -6,9 +6,7 @@ $border-style: 1px solid var(--color-gray-300);
   position: relative;
   display: flex;
   flex-direction: row;
-  border: $border-style;
-  border-top: none;
-  min-width: vars.$comparison-tool-min-width;
+  border-bottom: $border-style;
 
   .controls-left {
     display: flex;
@@ -17,7 +15,6 @@ $border-style: 1px solid var(--color-gray-300);
     width: var(--comparison-tool-primary-column-width);
     padding: 20px;
     gap: 16px;
-    border-right: $border-style;
 
     explorers-comparison-tool-search-input {
       width: 100%;
@@ -32,6 +29,7 @@ $border-style: 1px solid var(--color-gray-300);
     justify-content: flex-end;
     flex-grow: 1;
     padding: 20px;
+    border-left: $border-style;
 
     .significance-and-column-selector {
       display: flex;
