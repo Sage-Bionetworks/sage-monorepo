@@ -128,12 +128,9 @@
       align-items: center;
       justify-content: flex-start;
 
-      &:first-child {
-        flex: 0 0 var(--comparison-tool-primary-column-width);
-      }
-
       &.primary {
         width: var(--comparison-tool-primary-column-width) !important;
+        flex: 0 0 var(--comparison-tool-primary-column-width);
         padding: 0 !important;
         justify-content: end;
 
