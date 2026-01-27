@@ -2,6 +2,8 @@
 @use 'explorers/styles/src/lib/mixins';
 
 .comparison-tool-table {
+  min-width: vars.$comparison-tool-min-width;
+
   .table-divider {
     background-color: var(--color-gray-300);
     margin-left: -44px;
@@ -93,7 +95,11 @@
   }
 
   .p-datatable-table-container {
-    overflow: hidden !important;
+    overflow: visible !important;
+  }
+
+  table.p-datatable-table {
+    min-width: vars.$comparison-tool-min-width !important;
   }
 
   .p-datatable-thead,
