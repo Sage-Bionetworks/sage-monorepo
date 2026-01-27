@@ -604,15 +604,20 @@ export class ComparisonToolService<T> {
       return;
     }
 
-    // Preserve current pins when changing dropdown selection
+    // Preserve current pins and filters when changing dropdown selection
     const currentPins = this.pinnedItems();
+    const selectedFilters = this.selectedFilters();
 
-    // Load filters from the new config (with no selections)
+    // Load filters from the new config and attempt to apply any previous selections
     const newFilters = this.getFiltersForSelection(selection);
+    const newFiltersWithSelections = this.createFiltersWithUrlSelections(
+      newFilters,
+      selectedFilters,
+    );
 
     this.updateQuery({
       categories: selection,
-      filters: newFilters,
+      filters: newFiltersWithSelections,
       pinnedItems: currentPins,
       pageNumber: this.FIRST_PAGE_NUMBER,
     });
