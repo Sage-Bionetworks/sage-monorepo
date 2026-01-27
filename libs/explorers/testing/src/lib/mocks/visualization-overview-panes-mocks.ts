@@ -8,7 +8,7 @@ export const mockVisualizationOverviewPanes: VisualizationOverviewPane[] = [
   },
   {
     heading: 'Search & Filter',
-    content: `<p>Quickly find results of interest using the search box.</p>
+    content: `<p>Enter a value to get a list of matching results, or perform a bulk search using a list of comma-separated full values.</p>
       <div class="video-container"><video autoplay muted loop playsinline><source src="/test-video.mp4" type="video/mp4"></video></div>`,
   },
   {

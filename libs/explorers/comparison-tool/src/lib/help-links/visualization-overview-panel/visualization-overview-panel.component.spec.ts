@@ -143,7 +143,9 @@ describe('VisualizationOverviewPanelComponent', () => {
       fixture.detectChanges();
 
       expect(screen.getByText('Search & Filter')).toBeInTheDocument();
-      expect(screen.getByText(/Quickly find results of interest/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Enter a value to get a list of matching results/),
+      ).toBeInTheDocument();
     });
 
     it('should show Back button on second pane', async () => {
