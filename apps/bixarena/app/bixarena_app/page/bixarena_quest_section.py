@@ -15,7 +15,8 @@ QUEST_CONFIG = {
     "conversion_text": "1 Battle = 1 Block",
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
-    "default_active_update_index": 1,  # Index of update to show expanded by default (0 = newest, -1 or None = latest)
+    # Index of update to show expanded by default (0 = newest, -1 or None = latest)
+    "active_update_index": 1,
     "builders": [
         # List of usernames who have contributed at least one block
         # TODO: Replace with actual data from API
@@ -307,15 +308,15 @@ def build_quest_section(
             }
         ]
 
-    # Get the default active update index (defaults to 0 if not specified)
-    default_active_index = QUEST_CONFIG.get("default_active_update_index", 0)
-    if default_active_index is None or default_active_index < 0:
-        default_active_index = 0
+    # Get the active update index (defaults to 0 if not specified)
+    active_index = QUEST_CONFIG.get("active_update_index", 0)
+    if active_index is None or active_index < 0:
+        active_index = 0
     # Ensure index is within bounds
-    default_active_index = min(default_active_index, len(updates) - 1)
+    active_index = min(active_index, len(updates) - 1)
 
     # Get the active update to display initially in the carousel
-    active_update = updates[default_active_index]
+    active_update = updates[active_index]
 
     # Generate carousel images HTML from active update
     images_html = "".join(
@@ -333,7 +334,7 @@ def build_quest_section(
     # Generate update cards HTML (accordion style)
     def format_update_card(i: int, update: dict) -> str:
         """Format a single update accordion item HTML."""
-        is_expanded = i == default_active_index  # Active update expanded by default
+        is_expanded = i == active_index  # Active update expanded by default
         active_class = "active" if is_expanded else ""
         expanded_class = "expanded" if is_expanded else ""
         images_json = json.dumps(update["images"]).replace('"', "&quot;")
