@@ -15,3 +15,8 @@ MAX_RESPONSE_TOKENS = int(os.getenv("MAX_RESPONSE_TOKENS", 2048))
 
 # Analytics
 GTM_CONTAINER_ID = os.getenv("GTM_CONTAINER_ID", "")
+
+# Features
+COMMUNITY_QUEST_ENABLED = (
+    os.getenv("APP_COMMUNITY_QUEST_ENABLED", "false").lower() == "true"
+)
