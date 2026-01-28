@@ -157,6 +157,19 @@ export const expectFilters = async (
   await toggleFilterPanel(page);
 };
 
+// selectedFilters: key: filter short name, value: array of selected filter option labels
+export const expectFilterChiclets = async (
+  page: Page,
+  selectedFilters: Record<string, string[]>,
+): Promise<void> => {
+  for (const [filterShortName, filterValues] of Object.entries(selectedFilters)) {
+    for (const filterValue of filterValues) {
+      const chiclet = page.getByText(`${filterShortName}: ${filterValue}`);
+      await expect(chiclet).toBeVisible();
+    }
+  }
+};
+
 export const searchViaFilterbox = async (page: Page, searchTerm: string): Promise<void> => {
   const searchInput = page.getByPlaceholder('Value1, Value2', { exact: true });
   await searchInput.clear();

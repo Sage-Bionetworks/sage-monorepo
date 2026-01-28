@@ -3,6 +3,8 @@ import {
   ColumnConfig,
   expectCategories,
   expectCategoriesParams,
+  expectFilterChiclets,
+  expectFiltersParams,
   expectPinnedParams,
   expectPinnedRows,
   expectSortFieldsParams,
@@ -81,6 +83,43 @@ test.describe('disease correlation', () => {
     const pinnedTable = getPinnedTable(page);
     await unPinByName(pinnedTable, page, firstCorrelation.composite_id);
     await expectPinnedParams(page, []);
+  });
+
+  test('selected filters are transferred when categories changed', async ({ page }) => {
+    const expectedFilterParams = {
+      ages: ['4 months', '12 months'],
+      sexes: ['Female'],
+    };
+    const expectedSelectedFilters = {
+      Age: ['4 months', '12 months'],
+      Sex: ['Female'],
+    };
+
+    await navigateToComparison(
+      page,
+      CT_PAGE,
+      true,
+      'url',
+      getQueryParamsFromRecords(expectedFilterParams),
+    );
+
+    await expectFiltersParams(page, expectedFilterParams);
+    await expectFilterChiclets(page, expectedSelectedFilters);
+
+    const dropdown = page.getByRole('combobox');
+    await dropdown.click();
+    const options = page.getByRole('option');
+    const secondOption = options.nth(1);
+    await secondOption.click();
+
+    await expectFiltersParams(page, expectedFilterParams);
+    await expectFilterChiclets(page, expectedSelectedFilters);
+
+    await dropdown.click();
+    await options.first().click();
+
+    await expectFiltersParams(page, expectedFilterParams);
+    await expectFilterChiclets(page, expectedSelectedFilters);
   });
 
   test('categories are added to URL on load', async ({ page }) => {
