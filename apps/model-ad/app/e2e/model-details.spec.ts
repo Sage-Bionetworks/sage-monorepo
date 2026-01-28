@@ -123,11 +123,20 @@ test.describe('model details', () => {
   }) => {
     const model = '3xTg-AD';
     await page.goto(`/models/${model}`);
-    await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
-    await expect(
-      page.getByRole('heading', { level: 2, name: 'Available Data' }),
-    ).not.toBeInViewport();
+
+    // The page should not scroll to the panel content; the top heading should be above the panel heading.
+    // With a larger viewport, both headings may be visible, so only check order and scroll position.
+
+    const mainHeading = page.getByRole('heading', { level: 1, name: model });
+    const panelHeading = page.getByRole('heading', { level: 2, name: 'Available Data' });
+
+    // Check that the page is at the top
     await expectPageAtTop(page);
+
+    // Check that the main heading is above the panel heading in the document
+    const mainBox = await mainHeading.boundingBox();
+    const panelBox = await panelHeading.boundingBox();
+    expect(mainBox && panelBox && mainBox.y < panelBox.y).toBe(true);
   });
 
   test('disabled tab in url defaults to first available tab and does not scroll', async ({
