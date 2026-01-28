@@ -299,7 +299,7 @@ export class ComparisonToolService<T> {
   ): ComparisonToolFilter[] {
     const targetConfig = this.findConfigForSelection(configs, selection);
     const filters = this.convertFiltersFromConfig(targetConfig?.filters);
-    return this.createFiltersWithUrlSelections(filters, params.filterSelections);
+    return this.createFiltersWithSelections(filters, params.filterSelections);
   }
 
   private findConfigForSelection(
@@ -356,7 +356,7 @@ export class ComparisonToolService<T> {
    * Uses the filter structure from `filters` but sets selection state based on `selections`.
    * If no selections are provided, all options are deselected.
    */
-  private createFiltersWithUrlSelections(
+  private createFiltersWithSelections(
     filters: ComparisonToolFilter[],
     selections: Record<string, string[]> | null | undefined,
   ): ComparisonToolFilter[] {
@@ -610,10 +610,7 @@ export class ComparisonToolService<T> {
 
     // Load filters from the new config and attempt to apply any previous selections
     const newFilters = this.getFiltersForSelection(selection);
-    const newFiltersWithSelections = this.createFiltersWithUrlSelections(
-      newFilters,
-      selectedFilters,
-    );
+    const newFiltersWithSelections = this.createFiltersWithSelections(newFilters, selectedFilters);
 
     this.updateQuery({
       categories: selection,
@@ -742,7 +739,7 @@ export class ComparisonToolService<T> {
 
         // When categories change, load filters from the new config and apply URL selections
         const newFilters = this.getFiltersForSelection(resolvedCategories);
-        queryUpdates.filters = this.createFiltersWithUrlSelections(
+        queryUpdates.filters = this.createFiltersWithSelections(
           newFilters,
           params.filterSelections,
         );
@@ -786,7 +783,7 @@ export class ComparisonToolService<T> {
       return null;
     }
 
-    return this.createFiltersWithUrlSelections(this.filters(), selections);
+    return this.createFiltersWithSelections(this.filters(), selections);
   }
 
   private resolveSortFromUrl(
