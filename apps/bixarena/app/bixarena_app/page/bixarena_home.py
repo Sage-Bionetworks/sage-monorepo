@@ -9,6 +9,7 @@ from bixarena_app.api.api_client_helper import (
     fetch_public_stats,
 )
 from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
+from bixarena_app.config.constants import COMMUNITY_QUEST_ENABLED
 from bixarena_app.page.bixarena_quest_section import (
     QUEST_CONFIG,
     _build_progress_html,
@@ -288,6 +289,24 @@ def load_quest_progress_on_page_load() -> dict:
 
 def build_quest_section_wrapper():
     """Create the Community Quest section for the home page"""
+    # Check if community quest feature is enabled
+    if not COMMUNITY_QUEST_ENABLED:
+        # Return None values if feature is disabled
+        with gr.Column(visible=False) as quest_container:
+            progress_html_container = gr.HTML("")
+            quest_btn_authenticated = gr.Button(visible=False)
+            quest_btn_login = gr.Button(visible=False)
+            carousel_init_trigger = gr.Button(visible=False)
+        return (
+            quest_container,
+            progress_html_container,
+            quest_btn_authenticated,
+            quest_btn_login,
+            carousel_init_trigger,
+            "",  # carousel_id
+            0,  # rotation_interval
+        )
+
     try:
         # Fetch real-time quest progress data
         progress_data = calculate_quest_progress()
