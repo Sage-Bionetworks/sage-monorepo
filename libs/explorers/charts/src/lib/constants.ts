@@ -1,2 +1,3 @@
 export const DEFAULT_POINT_SIZE = 18;
 export const GRAY_BACKGROUND_COLOR = '#AEB5BC1A';
+export const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;

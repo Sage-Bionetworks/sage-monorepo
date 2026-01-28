@@ -4,6 +4,7 @@ import {
   BoxplotProps,
   CategoryBoxplotSummary,
   CategoryPoint,
+  ChartStyle,
 } from '@sagebionetworks/explorers/charts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
@@ -34,7 +35,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() showLegend: undefined | boolean;
   @Input() pointOpacity: undefined | number;
   @Input() noDataStyle: undefined | 'textOnly' | 'grayBackground';
-  @Input() chartStyle: undefined | 'minimal' | 'grayGrid';
+  @Input() chartStyle: undefined | ChartStyle;
 
   ngOnInit() {
     this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());

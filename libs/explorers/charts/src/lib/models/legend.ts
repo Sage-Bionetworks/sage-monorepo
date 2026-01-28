@@ -1,3 +1,5 @@
+import { ChartStyle } from './chart';
+
 export interface PointStyle {
   label: string;
   color: string;
@@ -7,4 +9,5 @@ export interface PointStyle {
 
 export interface LegendProps {
   pointStyles: PointStyle[];
+  chartStyle?: ChartStyle;
 }
