@@ -27,7 +27,7 @@ spring-security = "6.5.4"
 spring-session = "3.5.2"
 springdoc = "2.8.13"
 squareup = "3.0.0"
-testcontainers = "1.21.3"
+testcontainers = "1.21.4"
 
 [libraries]
 # Jackson libraries
