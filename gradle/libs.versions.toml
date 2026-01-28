@@ -1,7 +1,7 @@
 [versions]
 caffeine = "3.2.2"
 findbugs = "3.0.2"
-flyway = "12.0.0"
+flyway = "11.13.0"
 graalvm = "0.11.0"
 gradle-versions = "0.53.0"
 h2database = "2.3.232"
