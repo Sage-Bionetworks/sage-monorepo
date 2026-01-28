@@ -10,8 +10,8 @@ QUEST_CONFIG = {
     "title": "Building BioArena",
     "description": "We are constructing a medieval arena in Minecraft to symbolize our collective effort. Every battle counts towards the build.",
     "goal": 2850,
-    "start_date": "2026-01-20",
-    "end_date": "2026-04-20",
+    "start_date": "2026-02-01",
+    "end_date": "2026-04-30",
     "conversion_text": "1 Battle = 1 Block",
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
@@ -72,34 +72,42 @@ QUEST_CONFIG = {
     "updates": [
         # Updates are displayed in chronological order (newest first)
         {
-            "date": "2026-01-27",
-            "title": "Update 3: Battlements & Gate",
-            "description": "The outer wall is taking shape! We've added battlements and are working on the entrance gate structure. (350 blocks placed so far).",
+            "date": "2026-02-01",
+            "title": "Update 1: Foundation Laid",
+            "description": (
+                "The journey begins! With 144 blocks earned from your "
+                "evaluations, we've started construction. The inner wall is "
+                "rising, three blocks high in sturdy cobblestone, marking the "
+                "heart of our arena. Work has also begun on the outer wall's "
+                "foundation. From these humble beginnings, something "
+                "extraordinary will emerge. Keep the battles coming!"
+            ),
+            "images": [
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Inner+Wall+Construction",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Arena+Overview",
+                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Cobblestone+Detail",
+            ],
+        },
+        {
+            "date": "2026-02-01",
+            "title": "Launch: Building BioArena Together",
+            "description": (
+                "Welcome to our Community Quest! AI is evolving fast. The best "
+                "model today might be overtaken tomorrow. That's why we're "
+                "building BioArena: a living leaderboard powered by researchers "
+                "like you, continuously identifying the top AI models across "
+                "biomedical topics. To celebrate this launch and the community "
+                "we're building together, we're constructing a medieval arena in "
+                "Minecraft, block by block, battle by battle. Every evaluation you "
+                "complete adds another stone to our foundation. Let's build "
+                "something legendary!"
+            ),
             "images": [
                 "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-1.jpg",
                 "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-2.jpg",
                 "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-3.jpg",
                 "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-4.jpg",
                 "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-5.jpg",
-            ],
-        },
-        {
-            "date": "2026-01-23",
-            "title": "Update 2: Outer Walls",
-            "description": "Great progress! The foundation is complete and we're building the first layer of the outer walls. (200 blocks placed so far).",
-            "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+2+View+1",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+2+View+2",
-            ],
-        },
-        {
-            "date": "2026-01-20",
-            "title": "Update 1: Foundation",
-            "description": "We are building an inner wall of three blocks high with cobblestone blocks. (115 Blocks placed so far).",
-            "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+1+View+1",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+1+View+2",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Update+1+View+3",
             ],
         },
     ],
