@@ -15,6 +15,7 @@ QUEST_CONFIG = {
     "conversion_text": "1 Battle = 1 Block",
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
+    "default_active_update_index": 1,  # Index of update to show expanded by default (0 = newest, -1 or None = latest)
     "builders": [
         # List of usernames who have contributed at least one block
         # TODO: Replace with actual data from API
@@ -293,7 +294,7 @@ def build_quest_section(
     # Generate unique ID for this carousel instance
     carousel_id = f"quest-carousel-{int(datetime.now().timestamp() * 1000)}"
 
-    # Get the first update (newest) to display initially
+    # Get the updates and determine which one should be active by default
     updates = QUEST_CONFIG.get("updates", [])
     if not updates:
         # Fallback if no updates configured
@@ -306,25 +307,33 @@ def build_quest_section(
             }
         ]
 
-    first_update = updates[0]
+    # Get the default active update index (defaults to 0 if not specified)
+    default_active_index = QUEST_CONFIG.get("default_active_update_index", 0)
+    if default_active_index is None or default_active_index < 0:
+        default_active_index = 0
+    # Ensure index is within bounds
+    default_active_index = min(default_active_index, len(updates) - 1)
 
-    # Generate carousel images HTML from first update
+    # Get the active update to display initially in the carousel
+    active_update = updates[default_active_index]
+
+    # Generate carousel images HTML from active update
     images_html = "".join(
         f'<img src="{image_url}" class="carousel-image {"active" if i == 0 else ""}" alt="Minecraft arena progress" />\n'
-        for i, image_url in enumerate(first_update["images"])
+        for i, image_url in enumerate(active_update["images"])
     )
     indicators_html = "".join(
         f'<span class="indicator {"active" if i == 0 else ""}" data-index="{i}" role="button" tabindex="0" aria-label="View image {i + 1}"></span>\n'
-        for i, _ in enumerate(first_update["images"])
+        for i, _ in enumerate(active_update["images"])
     )
 
     # Only show indicators if more than one image
-    indicators_display = "" if len(first_update["images"]) > 1 else "display: none;"
+    indicators_display = "" if len(active_update["images"]) > 1 else "display: none;"
 
     # Generate update cards HTML (accordion style)
     def format_update_card(i: int, update: dict) -> str:
         """Format a single update accordion item HTML."""
-        is_expanded = i == 0  # First item expanded by default
+        is_expanded = i == default_active_index  # Active update expanded by default
         active_class = "active" if is_expanded else ""
         expanded_class = "expanded" if is_expanded else ""
         images_json = json.dumps(update["images"]).replace('"', "&quot;")
