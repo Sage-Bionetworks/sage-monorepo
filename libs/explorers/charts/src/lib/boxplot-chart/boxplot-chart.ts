@@ -179,11 +179,11 @@ export class BoxplotChart {
       pointCategoryColors,
       pointCategoryShapes,
       pointOpacity,
+      chartStyle,
     } = boxplotProps;
 
     const showLegend = boxplotProps.showLegend || false;
     const noDataStyle = boxplotProps.noDataStyle || 'textOnly';
-    const chartStyle = boxplotProps.chartStyle || 'minimal';
     const boxplotChartStyle =
       chartStyle === 'grayGrid' ? grayGridBoxplotChartStyle : minimalBoxplotChartStyle;
 

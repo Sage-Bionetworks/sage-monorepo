@@ -1,5 +1,10 @@
 import { Directive, ElementRef, inject, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
-import { LegendChart, LegendProps, PointStyle } from '@sagebionetworks/explorers/charts';
+import {
+  ChartStyle,
+  LegendChart,
+  LegendProps,
+  PointStyle,
+} from '@sagebionetworks/explorers/charts';
 
 @Directive({
   selector: '[sageLegend]',
@@ -11,7 +16,7 @@ export class LegendDirective implements OnChanges, OnInit, OnDestroy {
   legend: LegendChart | undefined;
 
   @Input({ required: true }) pointStyles: PointStyle[] = [];
-  @Input() chartStyle: undefined | 'minimal' | 'grayGrid';
+  @Input() chartStyle: undefined | ChartStyle;
 
   ngOnInit() {
     this.legend = new LegendChart(this.el.nativeElement, this.getLegendProps());

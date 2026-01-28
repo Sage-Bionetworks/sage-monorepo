@@ -2,6 +2,7 @@ import { EChartsOption, SeriesOption } from 'echarts';
 import type { BoxplotSeriesOption } from 'echarts/charts';
 import type { TitleComponentOption } from 'echarts/components';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
+import type { ChartStyle } from './chart';
 
 export type CategoryPoint = {
   // x-axis category for this point
@@ -68,7 +69,7 @@ export interface BoxplotProps {
   showLegend?: boolean;
   pointOpacity?: number;
   noDataStyle?: 'textOnly' | 'grayBackground';
-  chartStyle?: 'minimal' | 'grayGrid';
+  chartStyle?: ChartStyle;
 }
 
 export interface BoxplotChartStyle {
