@@ -1,3 +1,5 @@
+@use 'explorers/styles/src/lib/variables' as vars;
+
 .p-datatable-thead {
   tr {
     min-height: 50px;
@@ -8,10 +10,10 @@
     display: flex;
     align-items: center;
     border-top: none !important;
-    border-bottom: none !important;
 
     &:first-child {
       border-left: none !important;
+      border-right: none !important;
     }
 
     &:last-child {

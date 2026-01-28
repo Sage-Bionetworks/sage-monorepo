@@ -5,6 +5,7 @@ main {
   flex-direction: column;
   width: 100%;
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  overflow: visible auto !important;
 
   #loading {
     flex: 1 1 auto;
@@ -17,17 +18,17 @@ main {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    overflow-x: auto;
 
     .comparison-tool-body-inner {
       position: relative;
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      min-width: vars.$comparison-tool-min-width;
 
       .comparison-tool-tables {
         flex: 1 1 auto;
-        overflow: hidden auto;
       }
     }
   }
