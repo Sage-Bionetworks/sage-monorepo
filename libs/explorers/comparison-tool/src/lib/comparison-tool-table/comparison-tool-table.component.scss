@@ -4,8 +4,6 @@
 .comparison-tool-table {
   .table-divider {
     background-color: var(--color-gray-300);
-    margin-left: -44px;
-    margin-right: -44px;
     font-size: var(--font-size-sm);
 
     .table-divider-inner {
@@ -93,7 +91,29 @@
   }
 
   .p-datatable-table-container {
-    overflow: hidden !important;
+    overflow: visible !important;
+  }
+
+  table.p-datatable-table {
+    box-sizing: border-box;
+    max-width: 100%;
+    table-layout: fixed;
+  }
+
+  th,
+  td {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  th {
+    white-space: normal;
+  }
+
+  td {
+    white-space: nowrap;
   }
 
   .p-datatable-thead,
@@ -110,6 +130,7 @@
 
       &.primary {
         width: var(--comparison-tool-primary-column-width) !important;
+        flex: 0 0 var(--comparison-tool-primary-column-width);
         padding: 0 !important;
         justify-content: end;
 
