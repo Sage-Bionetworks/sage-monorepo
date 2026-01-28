@@ -2,7 +2,7 @@ import { EChartsOption, SeriesOption } from 'echarts';
 import type { BoxplotSeriesOption } from 'echarts/charts';
 import type { TitleComponentOption } from 'echarts/components';
 import type { CallbackDataParams } from 'echarts/types/dist/shared';
-import type { ChartStyle } from './chart';
+import type { BaseChartTheme, ChartStyle } from './chart';
 
 export type CategoryPoint = {
   // x-axis category for this point
@@ -72,7 +72,7 @@ export interface BoxplotProps {
   chartStyle?: ChartStyle;
 }
 
-export interface BoxplotChartStyle {
+export interface BoxplotChartTheme extends BaseChartTheme {
   boxplotItemStyle: BoxplotSeriesOption['itemStyle'];
   getBoxplotMarkArea?: (xAxisCategories: string[]) => SeriesOption['markArea'];
   titleTextStyle: TitleComponentOption['textStyle'];
@@ -84,7 +84,6 @@ export interface BoxplotChartStyle {
   yAxisTitleTextStyle: TitleComponentOption['textStyle'];
   yAxisSplitLine: { show: boolean };
   yAxisTickLabelMaxWidth: number;
-  pointSymbolSize: number;
   tooltip: EChartsOption['tooltip'];
   grid: {
     left: number;

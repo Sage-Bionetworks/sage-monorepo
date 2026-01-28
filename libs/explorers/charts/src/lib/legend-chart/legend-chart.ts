@@ -1,5 +1,5 @@
 import { ECharts, EChartsOption } from 'echarts';
-import { DEFAULT_POINT_SIZE } from '../constants';
+import { grayGridBaseChartTheme, minimalBaseChartTheme } from '../chart-theme/base-theme';
 import { LegendProps } from '../models';
 import { initChart } from '../utils';
 
@@ -21,7 +21,7 @@ export class LegendChart {
 
     const { pointStyles, chartStyle } = legendProps;
 
-    const pointSize = chartStyle === 'grayGrid' ? DEFAULT_POINT_SIZE / 2 : DEFAULT_POINT_SIZE;
+    const chartTheme = chartStyle === 'grayGrid' ? grayGridBaseChartTheme : minimalBaseChartTheme;
 
     const option: EChartsOption = {
       legend: {
@@ -29,8 +29,8 @@ export class LegendChart {
         orient: 'horizontal',
         left: 'left',
         top: 'bottom',
-        itemHeight: pointSize,
-        itemWidth: pointSize,
+        itemHeight: chartTheme.pointSymbolSize,
+        itemWidth: chartTheme.pointSymbolSize,
         selectedMode: false,
       },
       xAxis: { show: false },
@@ -44,7 +44,7 @@ export class LegendChart {
           color: item.color,
           opacity: item.opacity,
         },
-        symbolSize: pointSize,
+        symbolSize: chartTheme.pointSymbolSize,
       })),
     };
 

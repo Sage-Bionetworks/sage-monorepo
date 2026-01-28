@@ -1,7 +1,11 @@
 import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
+import {
+  grayGridBoxplotChartTheme,
+  minimalBoxplotChartTheme,
+} from '../chart-theme/boxplot-chart-theme';
 import { BoxplotProps, CategoryPoint } from '../models';
-import { BoxplotChartStyle } from '../models/boxplot';
+import { BoxplotChartTheme } from '../models/boxplot';
 import {
   addXAxisValueToBoxplotSummaries,
   addXAxisValueToCategoryPoint,
@@ -13,7 +17,6 @@ import {
   initChart,
   setNoDataOption,
 } from '../utils';
-import { grayGridBoxplotChartStyle, minimalBoxplotChartStyle } from './boxplot-chart-style';
 
 const yAxisPadding = 0.2;
 const defaultPointShape = 'circle';
@@ -36,7 +39,7 @@ export class BoxplotChart {
   }
 
   private getTitleOptions(
-    boxplotChartStyle: BoxplotChartStyle,
+    boxplotChartStyle: BoxplotChartTheme,
     xAxisTitle?: string,
     title?: string,
   ) {
@@ -69,7 +72,7 @@ export class BoxplotChart {
     xAxisCategories: string[],
     xAxisLabelFormatter: BoxplotProps['xAxisLabelFormatter'],
     xAxisLabelTooltipFormatter: BoxplotProps['xAxisLabelTooltipFormatter'],
-    boxplotChartStyle: BoxplotChartStyle,
+    boxplotChartStyle: BoxplotChartTheme,
   ) {
     // Use two xAxes:
     //  - value: used to jitter points with multiple pointCategories, where
@@ -138,7 +141,7 @@ export class BoxplotChart {
     yAxisTitle: BoxplotProps['yAxisTitle'],
     yAxisMin: BoxplotProps['yAxisMin'],
     yAxisMax: BoxplotProps['yAxisMax'],
-    boxplotChartStyle: BoxplotChartStyle,
+    boxplotChartStyle: BoxplotChartTheme,
   ) {
     const yAxisOptions: EChartsOption['yAxis'] = {
       type: 'value',
@@ -185,7 +188,7 @@ export class BoxplotChart {
     const showLegend = boxplotProps.showLegend || false;
     const noDataStyle = boxplotProps.noDataStyle || 'textOnly';
     const boxplotChartStyle =
-      chartStyle === 'grayGrid' ? grayGridBoxplotChartStyle : minimalBoxplotChartStyle;
+      chartStyle === 'grayGrid' ? grayGridBoxplotChartTheme : minimalBoxplotChartTheme;
 
     const noPoints = points.length === 0;
     const noSummaries = summaries == null || summaries.length === 0;

@@ -1,12 +1,10 @@
 import type { SeriesOption } from 'echarts';
-import {
-  DEFAULT_POINT_SIZE,
-  GRAY_BACKGROUND_COLOR,
-  Y_AXIS_TICK_LABELS_MAX_WIDTH,
-} from '../constants';
-import { BoxplotChartStyle } from '../models/boxplot';
+import { GRAY_BACKGROUND_COLOR, Y_AXIS_TICK_LABELS_MAX_WIDTH } from '../constants';
+import { BoxplotChartTheme } from '../models/boxplot';
+import { grayGridBaseChartTheme, minimalBaseChartTheme } from './base-theme';
 
-export const minimalBoxplotChartStyle: BoxplotChartStyle = {
+export const minimalBoxplotChartTheme: BoxplotChartTheme = {
+  ...minimalBaseChartTheme,
   boxplotItemStyle: {
     borderColor: '#bcc0ca',
     borderWidth: 2,
@@ -29,7 +27,6 @@ export const minimalBoxplotChartStyle: BoxplotChartStyle = {
   },
   yAxisSplitLine: { show: false },
   yAxisTickLabelMaxWidth: Y_AXIS_TICK_LABELS_MAX_WIDTH,
-  pointSymbolSize: DEFAULT_POINT_SIZE,
   tooltip: {
     confine: true,
     position: 'top',
@@ -51,8 +48,9 @@ export const minimalBoxplotChartStyle: BoxplotChartStyle = {
   },
 };
 
-export const grayGridBoxplotChartStyle: BoxplotChartStyle = {
-  ...minimalBoxplotChartStyle,
+export const grayGridBoxplotChartTheme: BoxplotChartTheme = {
+  ...minimalBoxplotChartTheme,
+  ...grayGridBaseChartTheme,
   getBoxplotMarkArea: (xAxisCategories: string[]) => {
     const markArea: SeriesOption['markArea'] = {
       itemStyle: { color: GRAY_BACKGROUND_COLOR },
@@ -65,18 +63,17 @@ export const grayGridBoxplotChartStyle: BoxplotChartStyle = {
     return markArea;
   },
   xAxisLabelTextStyle: {
-    ...minimalBoxplotChartStyle.xAxisLabelTextStyle,
+    ...minimalBoxplotChartTheme.xAxisLabelTextStyle,
     fontWeight: 'normal',
   },
   yAxisTitleTextStyle: {
-    ...minimalBoxplotChartStyle.yAxisTitleTextStyle,
+    ...minimalBoxplotChartTheme.yAxisTitleTextStyle,
     fontWeight: 400,
     fontSize: '14px',
   },
   yAxisSplitLine: { show: true },
-  pointSymbolSize: DEFAULT_POINT_SIZE / 2,
   tooltip: {
-    ...minimalBoxplotChartStyle.tooltip,
+    ...minimalBoxplotChartTheme.tooltip,
     backgroundColor: 'white',
     borderRadius: 0,
     textStyle: {
@@ -84,7 +81,7 @@ export const grayGridBoxplotChartStyle: BoxplotChartStyle = {
     },
   },
   grid: {
-    ...minimalBoxplotChartStyle.grid,
-    left: minimalBoxplotChartStyle.grid.left - 3, // ensure y-axis title with smaller font is still at the leftmost edge of the plot
+    ...minimalBoxplotChartTheme.grid,
+    left: minimalBoxplotChartTheme.grid.left - 3, // ensure y-axis title with smaller font is still at the leftmost edge of the plot
   },
 };
