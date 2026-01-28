@@ -11,6 +11,7 @@ export class LegendDirective implements OnChanges, OnInit, OnDestroy {
   legend: LegendChart | undefined;
 
   @Input({ required: true }) pointStyles: PointStyle[] = [];
+  @Input() chartStyle: undefined | 'minimal' | 'grayGrid';
 
   ngOnInit() {
     this.legend = new LegendChart(this.el.nativeElement, this.getLegendProps());
@@ -27,6 +28,7 @@ export class LegendDirective implements OnChanges, OnInit, OnDestroy {
   private getLegendProps(): LegendProps {
     return {
       pointStyles: this.pointStyles,
+      chartStyle: this.chartStyle,
     };
   }
 }

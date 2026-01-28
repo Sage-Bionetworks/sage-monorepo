@@ -19,7 +19,9 @@ export class LegendChart {
   setOptions(legendProps: LegendProps) {
     if (!this.chart) return;
 
-    const { pointStyles } = legendProps;
+    const { pointStyles, chartStyle } = legendProps;
+
+    const pointSize = chartStyle === 'grayGrid' ? DEFAULT_POINT_SIZE / 2 : DEFAULT_POINT_SIZE;
 
     const option: EChartsOption = {
       legend: {
@@ -27,8 +29,8 @@ export class LegendChart {
         orient: 'horizontal',
         left: 'left',
         top: 'bottom',
-        itemHeight: DEFAULT_POINT_SIZE,
-        itemWidth: DEFAULT_POINT_SIZE,
+        itemHeight: pointSize,
+        itemWidth: pointSize,
         selectedMode: false,
       },
       xAxis: { show: false },
@@ -42,7 +44,7 @@ export class LegendChart {
           color: item.color,
           opacity: item.opacity,
         },
-        symbolSize: DEFAULT_POINT_SIZE,
+        symbolSize: pointSize,
       })),
     };
 

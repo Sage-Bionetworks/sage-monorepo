@@ -7,4 +7,5 @@ export interface PointStyle {
 
 export interface LegendProps {
   pointStyles: PointStyle[];
+  chartStyle?: 'minimal' | 'grayGrid';
 }
