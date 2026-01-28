@@ -1,5 +1,5 @@
 [versions]
-caffeine = "3.2.2"
+caffeine = "3.2.3"
 findbugs = "3.0.2"
 flyway = "11.13.0"
 graalvm = "0.11.0"
