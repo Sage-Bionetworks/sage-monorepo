@@ -39,7 +39,7 @@ export class BoxplotChart {
   }
 
   private getTitleOptions(
-    boxplotChartStyle: BoxplotChartTheme,
+    boxplotChartTheme: BoxplotChartTheme,
     xAxisTitle?: string,
     title?: string,
   ) {
@@ -51,7 +51,7 @@ export class BoxplotChart {
         // x-axis label tooltips are used
         {
           text: xAxisTitle,
-          textStyle: boxplotChartStyle.titleTextStyle,
+          textStyle: boxplotChartTheme.titleTextStyle,
           left: 'center',
           top: 'bottom',
         },
@@ -62,7 +62,7 @@ export class BoxplotChart {
         text: title,
         left: 'center',
         top: 'top',
-        textStyle: boxplotChartStyle.titleTextStyle,
+        textStyle: boxplotChartTheme.titleTextStyle,
       });
     }
     return titles;
@@ -72,7 +72,7 @@ export class BoxplotChart {
     xAxisCategories: string[],
     xAxisLabelFormatter: BoxplotProps['xAxisLabelFormatter'],
     xAxisLabelTooltipFormatter: BoxplotProps['xAxisLabelTooltipFormatter'],
-    boxplotChartStyle: BoxplotChartTheme,
+    boxplotChartTheme: BoxplotChartTheme,
   ) {
     // Use two xAxes:
     //  - value: used to jitter points with multiple pointCategories, where
@@ -106,7 +106,7 @@ export class BoxplotChart {
         type: 'category',
         data: xAxisCategories,
         axisLabel: {
-          ...boxplotChartStyle.xAxisLabelTextStyle,
+          ...boxplotChartTheme.xAxisLabelTextStyle,
           interval: 0, // ensure all labels are shown
           formatter: (value) => {
             if (xAxisLabelFormatter) {
@@ -141,24 +141,24 @@ export class BoxplotChart {
     yAxisTitle: BoxplotProps['yAxisTitle'],
     yAxisMin: BoxplotProps['yAxisMin'],
     yAxisMax: BoxplotProps['yAxisMax'],
-    boxplotChartStyle: BoxplotChartTheme,
+    boxplotChartTheme: BoxplotChartTheme,
   ) {
     const yAxisOptions: EChartsOption['yAxis'] = {
       type: 'value',
       name: yAxisTitle,
       nameLocation: 'middle',
-      nameGap: boxplotChartStyle.yAxisTickLabelMaxWidth,
-      nameTextStyle: boxplotChartStyle.yAxisTitleTextStyle,
+      nameGap: boxplotChartTheme.yAxisTickLabelMaxWidth,
+      nameTextStyle: boxplotChartTheme.yAxisTitleTextStyle,
       axisLine: {
         show: true,
       },
       axisLabel: {
-        width: boxplotChartStyle.yAxisTickLabelMaxWidth,
+        width: boxplotChartTheme.yAxisTickLabelMaxWidth,
         hideOverlap: true,
         showMinLabel: yAxisMin == null,
         showMaxLabel: yAxisMax == null,
       },
-      splitLine: boxplotChartStyle.yAxisSplitLine,
+      splitLine: boxplotChartTheme.yAxisSplitLine,
       min: yAxisMin ? yAxisMin - yAxisPadding : undefined,
       max: yAxisMax ? yAxisMax + yAxisPadding : undefined,
     };
@@ -187,7 +187,7 @@ export class BoxplotChart {
 
     const showLegend = boxplotProps.showLegend || false;
     const noDataStyle = boxplotProps.noDataStyle || 'textOnly';
-    const boxplotChartStyle =
+    const boxplotChartTheme =
       chartStyle === 'grayGrid' ? grayGridBoxplotChartTheme : minimalBoxplotChartTheme;
 
     const noPoints = points.length === 0;
@@ -272,13 +272,13 @@ export class BoxplotChart {
     const boxplotSeriesBase: SeriesOption = {
       type: 'boxplot',
       z: 1,
-      itemStyle: boxplotChartStyle.boxplotItemStyle,
+      itemStyle: boxplotChartTheme.boxplotItemStyle,
       boxWidth: [7, 115],
       silent: true,
       tooltip: {
         show: false,
       },
-      markArea: boxplotChartStyle.getBoxplotMarkArea?.(xAxisCategories),
+      markArea: boxplotChartTheme.getBoxplotMarkArea?.(xAxisCategories),
     };
     if (summaries) {
       seriesOpts.push({
@@ -309,7 +309,7 @@ export class BoxplotChart {
           x: 'xAxisValue',
           y: 'value',
         },
-        symbolSize: boxplotChartStyle.pointSymbolSize,
+        symbolSize: boxplotChartTheme.pointSymbolSize,
         symbol:
           id === 'points'
             ? defaultPointShape
@@ -354,15 +354,15 @@ export class BoxplotChart {
         orient: 'horizontal',
         left: 'left',
         top: 'bottom',
-        itemHeight: boxplotChartStyle.pointSymbolSize,
-        itemWidth: boxplotChartStyle.pointSymbolSize,
+        itemHeight: boxplotChartTheme.pointSymbolSize,
+        itemWidth: boxplotChartTheme.pointSymbolSize,
         selectedMode: false,
       },
       grid: {
-        ...boxplotChartStyle.grid,
+        ...boxplotChartTheme.grid,
         top: title ? 60 : 20,
       },
-      title: this.getTitleOptions(boxplotChartStyle, xAxisTitle, title),
+      title: this.getTitleOptions(boxplotChartTheme, xAxisTitle, title),
       aria: {
         enabled: true,
       },
@@ -371,10 +371,10 @@ export class BoxplotChart {
         xAxisCategories,
         xAxisLabelFormatter,
         xAxisLabelTooltipFormatter,
-        boxplotChartStyle,
+        boxplotChartTheme,
       ),
-      yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax, boxplotChartStyle),
-      tooltip: boxplotChartStyle.tooltip,
+      yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax, boxplotChartTheme),
+      tooltip: boxplotChartTheme.tooltip,
       series: seriesOpts,
     };
 
