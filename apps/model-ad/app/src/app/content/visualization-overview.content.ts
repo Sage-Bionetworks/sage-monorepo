@@ -10,8 +10,8 @@ export const VISUALIZATION_OVERVIEW_PANES: VisualizationOverviewPane[] = [
   },
   {
     heading: 'Search & Filter',
-    content: `<p>Enter a value to get a list of matching results, or perform a bulk search using a list of comma-separated full values.</p>
-      <p>You can also use the tool's supported filters to find results of interest. The filter region near the top of the page shows which filters are currently applied. You can clear specific filters, or all of the filters at once.</p>
+    content: `<p>Quickly find results of interest using the tool’s embedded search box. Enter a value to get a list of matching results, or perform a bulk search using a list of comma-separated full values.</p>
+      <p>You can also use the tool’s supported filters to find results of interest. The filter region near the top of the page shows which filters are currently applied. You can clear specific filters, or all of the filters at once.</p>
       <div class="video-container"><video autoplay muted loop playsinline preload="none" controls><source src="/model-ad-assets/videos/visualization-overview-2.mp4" type="video/mp4"></video></div>`,
   },
   {
@@ -24,6 +24,6 @@ export const VISUALIZATION_OVERVIEW_PANES: VisualizationOverviewPane[] = [
     content: `<p>Sort results on any column by clicking on the sort control for that column. You can sort by multiple columns by holding down the command (⌘ Mac) or control (Windows) key while clicking on additional sort controls.</p>
       <p>Use the p-value filter control to mask insignificant heatmap results based on a configurable p-value threshold.</p>
       <p>You can also control which columns are visible using the column picker.</p>
-      <div class="image-container"><img src="/model-ad-assets/images/gct-how-to-3.gif" /></div>`,
+      <div class="video-container"><video autoplay muted loop playsinline preload="none" controls><source src="/model-ad-assets/videos/visualization-overview-4.mp4" type="video/mp4"></video></div>`,
   },
 ];
