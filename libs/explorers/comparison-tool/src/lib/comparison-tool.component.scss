@@ -28,6 +28,7 @@ main {
       min-width: vars.$comparison-tool-min-width;
 
       .comparison-tool-tables {
+        position: relative;
         flex: 1 1 auto;
         min-height: 600px;
         border-bottom: 1px solid var(--color-gray-300);
