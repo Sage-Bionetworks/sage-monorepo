@@ -673,7 +673,7 @@ def build_quest_section(
         /* Content box with border */
         #quest-content-box {
             background-color: var(--panel-background-fill);
-            border-radius: 12px;
+            border-radius: 8px;
             border: 1px solid var(--border-color-primary);
             margin: 0 1.5rem !important;
             padding: 2.5rem 1.5rem !important;
