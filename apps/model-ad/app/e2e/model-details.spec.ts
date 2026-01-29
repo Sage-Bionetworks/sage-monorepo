@@ -121,10 +121,13 @@ test.describe('model details', () => {
   test('does not scroll to panel content on initial load when tab not specified in url', async ({
     page,
   }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
     const model = '3xTg-AD';
     await page.goto(`/models/${model}`);
-
-    // Only check that the page is at the top (not scrolled)
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Available Data' }),
+    ).not.toBeInViewport();
     await expectPageAtTop(page);
   });
 
