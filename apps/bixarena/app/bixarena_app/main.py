@@ -582,19 +582,18 @@ def build_app():
             outputs=quest_progress_container,
         )
 
-        # Initialize carousel on page load
-        carousel_init_trigger.click(
-            None,
-            js=f"""
+        # Initialize carousel on page load (only if community quest is enabled)
+        if carousel_id:
+            carousel_init_trigger.click(
+                None,
+                js=f"""
 () => {{
-    console.log('Initializing carousel: {carousel_id}');
     const carouselId = '{carousel_id}';
     let retryCount = 0;
     const MAX_RETRIES = 100;
 
     function initCarousel() {{
         retryCount++;
-        console.log('Attempting to initialize carousel:', carouselId, 'retry:', retryCount);
 
         const carousel = document.getElementById(carouselId);
         if (!carousel) {{
@@ -611,8 +610,6 @@ def build_app():
         const carouselParent = carousel.parentElement;
         let indicators = carouselParent.querySelectorAll('.indicator');
 
-        console.log('Found carousel elements - images:', images.length, 'indicators:', indicators.length);
-
         if (images.length === 0) {{
             if (retryCount < MAX_RETRIES) {{
                 setTimeout(initCarousel, 50);
@@ -627,7 +624,6 @@ def build_app():
         const ROTATION_INTERVAL = {rotation_interval};
 
         function showImage(index) {{
-            console.log('Showing image:', index);
             images.forEach((img, i) => {{
                 if (i === index) {{
                     img.classList.add('active');
@@ -650,14 +646,12 @@ def build_app():
         }}
 
         function jumpToImage(index) {{
-            console.log('Jump to image:', index);
             stopAutoRotate();
             showImage(index);
             startAutoRotate();
         }}
 
         function startAutoRotate() {{
-            console.log('Starting auto-rotate');
             stopAutoRotate();
             if (images.length > 1) {{
                 autoRotateInterval = setInterval(nextImage, ROTATION_INTERVAL);
@@ -666,7 +660,6 @@ def build_app():
 
         function stopAutoRotate() {{
             if (autoRotateInterval) {{
-                console.log('Stopping auto-rotate');
                 clearInterval(autoRotateInterval);
                 autoRotateInterval = null;
             }}
@@ -688,7 +681,6 @@ def build_app():
             }});
         }}
 
-        console.log('Attaching event listeners to', indicators.length, 'indicators');
         indicators.forEach(attachIndicatorListeners);
 
         carousel.addEventListener('mouseenter', stopAutoRotate);
@@ -696,7 +688,6 @@ def build_app():
 
         // Handle accordion clicks to expand/collapse and switch carousel images
         const accordionItems = carouselParent.querySelectorAll('.quest-update-accordion');
-        console.log('Found', accordionItems.length, 'accordion items');
 
         function loadUpdateImages(accordion) {{
             const newImagesJson = accordion.getAttribute('data-images');
@@ -706,7 +697,6 @@ def build_app():
             }}
 
             const newImages = JSON.parse(newImagesJson);
-            console.log('Loading', newImages.length, 'images from update');
 
             // Stop auto-rotation
             stopAutoRotate();
@@ -787,20 +777,18 @@ def build_app():
     initCarousel();
 }}
             """,
-        )
+            )
 
-        # Trigger carousel initialization on page load
-        demo.load(
-            None,
-            None,
-            None,
-            js=f"""
+            # Trigger carousel initialization on page load
+            demo.load(
+                None,
+                None,
+                None,
+                js=f"""
 () => {{
-    console.log('Page loaded, triggering carousel init');
     setTimeout(() => {{
         const btn = document.getElementById('carousel-init-trigger');
         if (btn) {{
-            console.log('Found carousel init button, clicking it');
             btn.click();
         }} else {{
             console.error('Carousel init button not found');
@@ -808,7 +796,7 @@ def build_app():
     }}, 500);
 }}
         """,
-        )
+            )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
 

@@ -257,9 +257,6 @@ def load_quest_progress_on_page_load() -> dict:
     """
     try:
         progress_data = calculate_quest_progress()
-        # TEMPORARY: Override with placeholder value for visualization
-        # progress_data["current_blocks"] = 1000
-        # progress_data["percentage"] = (1000 / progress_data["goal_blocks"] * 100)
     except Exception as e:
         logger.error(f"Error calculating quest progress: {e}")
         # Use defaults on error
@@ -310,9 +307,6 @@ def build_quest_section_wrapper():
     try:
         # Fetch real-time quest progress data
         progress_data = calculate_quest_progress()
-        # TEMPORARY: Override with placeholder value for visualization
-        # progress_data["current_blocks"] = 1000
-        # progress_data["percentage"] = (1000 / progress_data["goal_blocks"] * 100)
         (
             quest_container,
             progress_html_container,

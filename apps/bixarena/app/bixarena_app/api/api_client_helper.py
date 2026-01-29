@@ -1,7 +1,7 @@
 """Utilities for configuring BixArena API clients with authentication."""
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from bixarena_api_client import ApiClient, Configuration, StatsApi
 
@@ -132,9 +132,11 @@ def calculate_quest_progress() -> dict:
         (current_blocks / QUEST_GOAL_BLOCKS * 100) if QUEST_GOAL_BLOCKS > 0 else 0.0
     )
 
-    # Calculate days remaining
+    # Calculate days remaining (add 1 to show "1 day left" on the final day)
     now = datetime.now()
-    days_remaining = max(0, (QUEST_END_DATE - now).days)
+    days_remaining = (
+        max(1, (QUEST_END_DATE - now).days + 1) if now < QUEST_END_DATE else 0
+    )
 
     logger.info(
         f"Quest progress: {current_blocks}/{QUEST_GOAL_BLOCKS} blocks "
