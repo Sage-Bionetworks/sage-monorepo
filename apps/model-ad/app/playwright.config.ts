@@ -6,6 +6,9 @@ import { workspaceRoot } from '@nx/devkit';
 const port = 8000;
 export const baseURL = process.env['BASE_URL'] || `http://localhost:${port}`;
 
+/* Set a wider default viewport for all tests */
+const DESKTOP_VIEWPORT = { width: 1600, height: 900 };
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -40,7 +43,10 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: DESKTOP_VIEWPORT,
+      },
     },
 
     /* {
