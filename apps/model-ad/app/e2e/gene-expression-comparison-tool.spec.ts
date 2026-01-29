@@ -130,9 +130,11 @@ test.describe('gene expression', () => {
     await expectPinnedParams(page, pinnedItems);
 
     await dropdown.click();
+
     const femalesAndMalesOption = page.getByRole('option', { name: /sex - females & males/i });
     await femalesAndMalesOption.click();
-    await expect(femalesAndMalesOption).toBeHidden();
+    // Wait for the dropdown panel to close
+    await expect(page.locator('.p-select-dropdown-panel')).toBeHidden();
 
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
@@ -173,7 +175,8 @@ test.describe('gene expression', () => {
     await dropdown.click();
     const femalesAndMalesOption = page.getByRole('option', { name: /sex - females & males/i });
     await femalesAndMalesOption.click();
-    await expect(femalesAndMalesOption).toBeHidden();
+    // Wait for the dropdown panel to close
+    await expect(page.locator('.p-select-dropdown-panel')).toBeHidden();
 
     await expectPinnedRows(page, afterPinPinned);
     await expectPinnedParams(page, afterPinPinned);
@@ -308,10 +311,10 @@ test.describe('gene expression', () => {
 
     await navigateToComparison(page, CT_PAGE, true);
 
-    const link = page.getByRole('link', { name: '5xFAD (IU/Jax/Pitt)' }).first();
+    const link = page.getByRole('link', { name: specialModel }).first();
     await link.click();
 
-    await page.waitForURL(`/models/${specialModelEncoded}`);
+    await page.waitForURL((url) => url.toString().endsWith(`/models/${specialModelEncoded}`));
     await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
   });
 

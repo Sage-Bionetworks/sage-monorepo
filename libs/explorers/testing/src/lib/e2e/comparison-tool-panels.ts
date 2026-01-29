@@ -80,8 +80,7 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
 
       const heatmapButtons = getVisibleHeatmapCircleButtons(page);
       const firstButton = heatmapButtons.first();
-      // Use a button further down the list to avoid popover overlap
-      const secondButton = heatmapButtons.nth(10);
+      const lastButton = heatmapButtons.last();
 
       await firstButton.click();
 
@@ -91,8 +90,8 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
       // Capture the initial panel data (values that change between circles)
       const initialData = await panelData.textContent();
 
-      // Click second button - use force: true in case popover still overlaps during transition
-      await secondButton.click({ force: true });
+      // Click last button - use force: true in case popover still overlaps during transition
+      await lastButton.click({ force: true });
 
       // Panel should still be visible with different data values
       await expect(panelData).toBeVisible();
@@ -106,8 +105,7 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
 
       const heatmapButtons = getVisibleHeatmapCircleButtons(page);
       const firstButton = heatmapButtons.first();
-      // Use a button further down the list to ensure different vertical position
-      const secondButton = heatmapButtons.nth(10);
+      const lastButton = heatmapButtons.last();
 
       // Click first button and get panel position
       await firstButton.click();
@@ -118,28 +116,28 @@ export const runHeatmapDetailsPanelTests = (navigateFn: (page: Page) => Promise<
       // Get first button position for reference
       const firstButtonBox = await firstButton.boundingBox();
 
-      // Click second button
-      await secondButton.click({ force: true });
+      // Click last button
+      await lastButton.click({ force: true });
       await expect(panelHeading).toBeVisible();
 
-      // Get second button position
-      const secondButtonBox = await secondButton.boundingBox();
+      // Get last button position
+      const lastButtonBox = await lastButton.boundingBox();
 
       // Wait for panel to potentially reposition
       await page.waitForTimeout(100);
-      const secondPanelBox = await panelHeading.boundingBox();
+      const lastPanelBox = await panelHeading.boundingBox();
 
       // Verify positions are available
       expect(firstButtonBox).not.toBeNull();
-      expect(secondButtonBox).not.toBeNull();
+      expect(lastButtonBox).not.toBeNull();
       expect(firstPanelBox).not.toBeNull();
-      expect(secondPanelBox).not.toBeNull();
+      expect(lastPanelBox).not.toBeNull();
 
       // If buttons are at different vertical positions, panel should reposition accordingly
       // The panel should be closer to its target button than to the other button
-      if (firstButtonBox && secondButtonBox && firstPanelBox && secondPanelBox) {
-        if (Math.abs(firstButtonBox.y - secondButtonBox.y) > 50) {
-          const panelMovedSignificantly = Math.abs(firstPanelBox.y - secondPanelBox.y) > 20;
+      if (firstButtonBox && lastButtonBox && firstPanelBox && lastPanelBox) {
+        if (Math.abs(firstButtonBox.y - lastButtonBox.y) > 50) {
+          const panelMovedSignificantly = Math.abs(firstPanelBox.y - lastPanelBox.y) > 20;
           expect(panelMovedSignificantly).toBe(true);
         }
       }

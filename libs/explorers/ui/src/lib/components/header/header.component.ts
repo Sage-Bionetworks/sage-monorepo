@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   headerLogoPath = input('');
   headerLinks = input<NavigationLink[]>([]);
   footerLinks = input<NavigationLink[]>([]);
-  minDesktopWidth = input(768);
+  minDesktopWidth = input(1300);
 
   isMobile = false;
   isShown = false;

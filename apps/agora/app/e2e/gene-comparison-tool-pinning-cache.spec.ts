@@ -6,6 +6,7 @@ import {
   URL_GCT,
   URL_GCT_PROTEIN_TMT,
 } from './helpers/constants';
+import { baseURL } from '../playwright.config';
 import { gene2WithMultipleProteinsTMT, geneWithMultipleProteinsTMT } from './helpers/data';
 import { changeGctCategory, changeGctSubcategory, expectGctPageLoaded } from './helpers/gct';
 import {
@@ -25,7 +26,7 @@ test.describe('GCT: Caching pinned genes', () => {
     const genes = ['CYB561A3', 'MANBAL', 'PLEC', 'GFAP'];
     const nGenes = genes.length;
 
-    await page.goto(URL_GCT);
+    await page.goto(`${baseURL}${URL_GCT}`);
     await expectGctPageLoaded(page, GCT_CATEGORIES.RNA, GCT_RNA_SUBCATEGORIES.AD);
 
     await pinMultipleGenesViaSearch(page, genes);
@@ -77,7 +78,7 @@ test.describe('GCT: Caching pinned genes', () => {
     const genes = ['CYB561A3', 'MANBAL', 'PLEC', 'GFAP'];
     const nGenes = genes.length;
 
-    await page.goto(URL_GCT);
+    await page.goto(`${baseURL}${URL_GCT}`);
     await expectGctPageLoaded(page, GCT_CATEGORIES.RNA, GCT_RNA_SUBCATEGORIES.AD);
 
     await pinMultipleGenesViaSearch(page, genes);
@@ -125,7 +126,7 @@ test.describe('GCT: Caching pinned genes', () => {
     const proteins2 = gene2WithMultipleProteinsTMT.uniProtIds;
     const nProteins = proteins1.length + proteins2.length;
 
-    await page.goto(URL_GCT_PROTEIN_TMT);
+    await page.goto(`${baseURL}${URL_GCT_PROTEIN_TMT}`);
     await expectGctPageLoaded(page, GCT_CATEGORIES.PROTEIN, GCT_PROTEIN_SUBCATEGORIES.TMT);
 
     for (const gene of genes) {
@@ -182,7 +183,7 @@ test.describe('GCT: Caching pinned genes', () => {
     const proteins2 = gene2WithMultipleProteinsTMT.uniProtIds;
     const nProteins = proteins1.length + proteins2.length;
 
-    await page.goto(URL_GCT_PROTEIN_TMT);
+    await page.goto(`${baseURL}${URL_GCT_PROTEIN_TMT}`);
     await expectGctPageLoaded(page, GCT_CATEGORIES.PROTEIN, GCT_PROTEIN_SUBCATEGORIES.TMT);
 
     for (const gene of genes) {
@@ -233,7 +234,7 @@ test.describe('GCT: Caching pinned genes', () => {
     const proteinCategoryGene = gene2WithMultipleProteinsTMT.name;
 
     await test.step('pin proteins in Protein category', async () => {
-      await page.goto(URL_GCT_PROTEIN_TMT);
+      await page.goto(`${baseURL}${URL_GCT_PROTEIN_TMT}`);
       await expectGctPageLoaded(page, GCT_CATEGORIES.PROTEIN, GCT_PROTEIN_SUBCATEGORIES.TMT);
 
       await pinAllItemsViaSearchByGene(page, proteinCategoryGene);
@@ -286,7 +287,7 @@ test.describe('GCT: Caching pinned genes', () => {
     const proteinCategoryProteins = gene2WithMultipleProteinsTMT.uniProtIds;
 
     await test.step('pin genes in RNA category', async () => {
-      await page.goto(URL_GCT);
+      await page.goto(`${baseURL}${URL_GCT}`);
       await expectGctPageLoaded(page, GCT_CATEGORIES.RNA, GCT_RNA_SUBCATEGORIES.AD);
 
       await pinGeneViaSearch(page, rnaCategoryGene);
