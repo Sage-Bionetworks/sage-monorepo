@@ -2,6 +2,8 @@
 import { inject, provideAppInitializer } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AgoraPreset } from '@sagebionetworks/agora/themes';
+import { provideExplorersConfig } from '@sagebionetworks/explorers/services';
+import { mockVisualizationOverviewPanes } from '@sagebionetworks/explorers/testing';
 import { BasePreset } from '@sagebionetworks/explorers/themes';
 import { ModelAdPreset } from '@sagebionetworks/model-ad/themes';
 import { applicationConfig, Preview } from '@storybook/angular';
@@ -54,7 +56,13 @@ const preview: Preview = {
   },
   decorators: [
     applicationConfig({
-      providers: [provideAnimations(), provideAppInitializer(provideTheme)],
+      providers: [
+        provideAnimations(),
+        provideAppInitializer(provideTheme),
+        provideExplorersConfig({
+          visualizationOverviewPanes: mockVisualizationOverviewPanes,
+        }),
+      ],
     }),
   ],
 };
