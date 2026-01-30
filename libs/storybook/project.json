@@ -25,7 +25,14 @@
         "port": 4400,
         "configDir": "libs/storybook/.storybook",
         "browserTarget": "storybook:build-storybook",
-        "compodoc": false
+        "compodoc": false,
+        "styles": [
+          "libs/explorers/styles/src/index.scss",
+          "node_modules/primeicons/primeicons.css"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs", "libs/explorers/styles/src/lib", "libs/explorers/themes/src/lib"]
+        }
       },
       "configurations": {
         "ci": {
@@ -40,7 +47,14 @@
         "outputDir": "dist/storybook/storybook",
         "configDir": "libs/storybook/.storybook",
         "browserTarget": "storybook:build-storybook",
-        "compodoc": false
+        "compodoc": false,
+        "styles": [
+          "libs/explorers/styles/src/index.scss",
+          "node_modules/primeicons/primeicons.css"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs", "libs/explorers/styles/src/lib", "libs/explorers/themes/src/lib"]
+        }
       },
       "configurations": {
         "ci": {
