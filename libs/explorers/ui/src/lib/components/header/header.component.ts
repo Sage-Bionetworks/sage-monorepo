@@ -35,10 +35,17 @@ export class HeaderComponent implements OnInit {
 
   onResize() {
     if (typeof window !== 'undefined') this.isMobile = window.innerWidth < this.minDesktopWidth();
+    // Reset menu state when in desktop mode to prevent state leaking across mode transitions
+    if (!this.isMobile) {
+      this.isShown = false;
+    }
     this.refreshNavItems();
   }
 
   toggleNav() {
-    this.isShown = !this.isShown;
+    // Menu only visible to be toggled in mobile mode
+    if (this.isMobile) {
+      this.isShown = !this.isShown;
+    }
   }
 }
