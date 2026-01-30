@@ -19,6 +19,11 @@ const config: StorybookConfig = {
     name: getAbsolutePath('@storybook/angular'),
     options: {},
   },
+  staticDirs: [
+    { from: '../../agora/assets', to: '/agora-assets' },
+    { from: '../../explorers/assets', to: '/explorers-assets' },
+    { from: '../../model-ad/assets', to: '/model-ad-assets' },
+  ],
 };
 
 export default config;
