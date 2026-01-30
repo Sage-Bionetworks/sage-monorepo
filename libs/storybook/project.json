@@ -5,6 +5,16 @@
   "prefix": "lib",
   "projectType": "library",
   "tags": [],
+  "implicitDependencies": [
+    "agora-about",
+    "agora-charts",
+    "agora-news",
+    "explorers-charts-angular",
+    "explorers-comparison-tool",
+    "explorers-ui",
+    "explorers-util",
+    "results-visualization-framework-ui"
+  ],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"
