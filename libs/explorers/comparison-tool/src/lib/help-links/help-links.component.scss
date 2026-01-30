@@ -1,8 +1,7 @@
 .help-links {
   display: flex;
   align-items: center;
-  padding: 10px 0 10px calc(var(--comparison-tool-primary-column-width));
-  height: 75px;
+  padding: 20px 0 20px calc(var(--comparison-tool-primary-column-width));
   z-index: 100;
   pointer-events: none;
   position: relative;
