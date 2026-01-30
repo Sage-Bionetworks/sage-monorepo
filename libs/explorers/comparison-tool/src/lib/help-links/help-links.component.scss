@@ -1,17 +1,12 @@
 .help-links {
   display: flex;
   align-items: center;
-  padding: 10px 0 10px calc(var(--comparison-tool-primary-column-width));
-  height: 75px;
+  padding: 20px 0 20px calc(var(--comparison-tool-primary-column-width));
   z-index: 100;
   pointer-events: none;
-  border-top: 1px solid var(--color-gray-300);
-
-  &.has-data {
-    position: relative;
-    margin-top: -63px;
-    margin-bottom: 24px;
-  }
+  position: relative;
+  margin-top: -63px;
+  margin-bottom: 24px;
 
   .help-links-inner {
     display: flex;
