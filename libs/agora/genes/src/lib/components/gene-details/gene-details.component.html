@@ -7,7 +7,7 @@
           <button
             class="gene-details-nav-scroll gene-details-nav-scroll-prev"
             (click)="slideNavigation(-1)"
-            >
+          >
             <fa-icon [icon]="faAngleLeft"></fa-icon>
           </button>
         }
@@ -20,7 +20,7 @@
                   [ngClass]="{
                     active: activePanel === item.name || activeParent === item.name,
                   }"
-                  >
+                >
                   <a (click)="onNavigationItemClick(item)">
                     {{ item.label }}
                     <span class="gene-details-nav-icon"></span>
@@ -33,7 +33,7 @@
                             <li
                               class="gene-details-subnav-item"
                               [ngClass]="{ active: activePanel === subItem.name }"
-                              >
+                            >
                               <a (click)="onNavigationItemClick(subItem)">
                                 {{ subItem.label }}
                                 <span class="gene-details-nav-icon"></span>
@@ -53,7 +53,7 @@
           <button
             class="gene-details-nav-scroll gene-details-nav-scroll-next"
             (click)="slideNavigation(1)"
-            >
+          >
             <fa-icon [icon]="faAngleRight"></fa-icon>
           </button>
         }
@@ -61,58 +61,46 @@
     </div>
 
     <div class="gene-details-body">
-      <ng-template #panelTemplate let-panel>
-        @if (!panel.disabled) {
-          <div
-            class="gene-details-panel"
-            [ngClass]="{
-              active: activePanel === panel.name,
-            }"
-            >
-            @if (panel.name === 'summary') {
-              <agora-gene-soe [gene]="gene"></agora-gene-soe>
-            }
+      @if (activePanel === 'summary') {
+        <div class="gene-details-panel active">
+          <agora-gene-soe [gene]="gene"></agora-gene-soe>
+        </div>
+      }
 
-            @if (panel.name === 'rna') {
-              <agora-gene-evidence-rna [gene]="gene"></agora-gene-evidence-rna>
-            }
+      @if (activePanel === 'rna') {
+        <div class="gene-details-panel active">
+          <agora-gene-evidence-rna [gene]="gene"></agora-gene-evidence-rna>
+        </div>
+      }
 
-            @if (panel.name === 'protein') {
-              <agora-gene-evidence-proteomics [gene]="gene"></agora-gene-evidence-proteomics>
-            }
+      @if (activePanel === 'protein') {
+        <div class="gene-details-panel active">
+          <agora-gene-evidence-proteomics [gene]="gene"></agora-gene-evidence-proteomics>
+        </div>
+      }
 
-            @if (panel.name === 'metabolomics') {
-              <agora-gene-evidence-metabolomics [gene]="gene"></agora-gene-evidence-metabolomics>
-            }
+      @if (activePanel === 'metabolomics') {
+        <div class="gene-details-panel active">
+          <agora-gene-evidence-metabolomics [gene]="gene"></agora-gene-evidence-metabolomics>
+        </div>
+      }
 
-            @if (panel.name === 'resources') {
-              <agora-gene-resources [gene]="gene"></agora-gene-resources>
-            }
+      @if (activePanel === 'resources') {
+        <div class="gene-details-panel active">
+          <agora-gene-resources [gene]="gene"></agora-gene-resources>
+        </div>
+      }
 
-            @if (panel.name === 'nominations') {
-              <agora-gene-nominations [gene]="gene"></agora-gene-nominations>
-            }
+      @if (activePanel === 'nominations') {
+        <div class="gene-details-panel active">
+          <agora-gene-nominations [gene]="gene"></agora-gene-nominations>
+        </div>
+      }
 
-            @if (panel.name === 'experimental-validation') {
-              <agora-gene-experimental-validation
-                [gene]="gene"
-              ></agora-gene-experimental-validation>
-            }
-          </div>
-        }
-      </ng-template>
-
-      @for (panel of panels; track panel) {
-        <ng-container
-          *ngTemplateOutlet="panelTemplate; context: { $implicit: panel }"
-        ></ng-container>
-        @if (panel.children) {
-          @for (childPanel of panel.children; track childPanel) {
-            <ng-container
-              *ngTemplateOutlet="panelTemplate; context: { $implicit: childPanel }"
-            ></ng-container>
-          }
-        }
+      @if (activePanel === 'experimental-validation') {
+        <div class="gene-details-panel active">
+          <agora-gene-experimental-validation [gene]="gene"></agora-gene-experimental-validation>
+        </div>
       }
     </div>
   </div>
