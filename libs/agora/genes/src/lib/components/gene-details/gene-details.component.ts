@@ -109,7 +109,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   activeParent = '';
   navSlideIndex = 0;
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener('window:scroll')
   onWindowScroll() {
     if (isPlatformBrowser(this.platformId)) {
       const nav = document.querySelector<HTMLElement>('.gene-details-nav');
@@ -123,7 +123,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
     }
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onWindowResize() {
     if (isPlatformBrowser(this.platformId)) {
       const nav = document.querySelector<HTMLElement>('.gene-details-nav');
