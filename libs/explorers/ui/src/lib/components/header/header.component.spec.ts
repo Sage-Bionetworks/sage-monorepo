@@ -1,4 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { footerLinks, headerLinks } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
@@ -16,6 +18,9 @@ function changeWindowSize(width: number) {
 const MOBILE_WIDTH = 500;
 const DESKTOP_WIDTH = 1400;
 
+@Component({ template: '', standalone: true })
+class DummyComponent {}
+
 async function setup() {
   const user = userEvent.setup();
   const { fixture } = await render(HeaderComponent, {
@@ -25,6 +30,14 @@ async function setup() {
       footerLinks: footerLinks,
     },
     imports: [CommonModule, SvgImageComponent],
+    providers: [
+      provideRouter([
+        { path: 'header-link-1', component: DummyComponent },
+        { path: 'header-link-2', component: DummyComponent },
+        { path: 'footer-link-internal-1', component: DummyComponent },
+        { path: 'footer-link-internal-2', component: DummyComponent },
+      ]),
+    ],
   });
 
   const component = fixture.componentInstance;
@@ -85,6 +98,50 @@ describe('HeaderComponent', () => {
     await user.click(toggleButton);
 
     expect(component.isShown).toBe(true);
+  });
+
+  it('should not toggle isShown when clicking a link in desktop mode', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { component, user } = await setup();
+
+    expect(component.isShown).toBe(false);
+
+    const headerLink = screen.getByRole('link', { name: 'HeaderLink1' });
+    await user.click(headerLink);
+
+    expect(component.isShown).toBe(false);
+  });
+
+  it('should reset isShown to false when transitioning from mobile to desktop', async () => {
+    changeWindowSize(MOBILE_WIDTH);
+    const { component, user } = await setup();
+
+    const toggleButton = screen.getByRole('button', { name: 'Toggle navigation' });
+    await user.click(toggleButton);
+    expect(component.isShown).toBe(true);
+
+    changeWindowSize(DESKTOP_WIDTH);
+    component.onResize();
+
+    expect(component.isShown).toBe(false);
+  });
+
+  it('should not open menu when resizing to mobile after clicking a link in desktop mode', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    const { component, user } = await setup();
+
+    expect(component.isShown).toBe(false);
+
+    const headerLink = screen.getByRole('link', { name: 'HeaderLink1' });
+    await user.click(headerLink);
+
+    expect(component.isShown).toBe(false);
+
+    changeWindowSize(MOBILE_WIDTH);
+    component.onResize();
+
+    expect(component.isShown).toBe(false);
+    expect(component.isMobile).toBe(true);
   });
 
   function verifyHeaderLinks() {

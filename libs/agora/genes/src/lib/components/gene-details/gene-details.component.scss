@@ -152,23 +152,12 @@
 .gene-details-body {
   position: relative;
   overflow: hidden;
+  min-height: 1000px;
 }
 
 .gene-details-panel {
-  position: absolute;
+  position: relative;
   width: 100%;
-  top: 0;
-  opacity: 0;
-  visibility: hidden;
-  z-index: 100;
-
-  &.active {
-    opacity: 1;
-    visibility: visible;
-    position: relative;
-    top: auto;
-    z-index: 200;
-  }
 }
 
 .gene-details-nav:not(.scrollable) {

@@ -1,4 +1,5 @@
 import { expect, Page, test } from '@playwright/test';
+import { waitForScrollToStop } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
 import { GCT_RNA_SUBCATEGORIES } from './helpers/constants';
 import { waitForSpinnerNotVisible } from './helpers/utils';
@@ -25,6 +26,7 @@ test.describe('gene details', () => {
     await page.goto('/genes/ENSG00000178209/evidence/rna#consistency-of-change');
 
     await waitForSpinnerNotVisible(page);
+    await waitForScrollToStop(page);
 
     const header = page.getByRole('heading', { name: 'Consistency of Change in Expression' });
     await expect(header).toBeInViewport();

@@ -14,10 +14,6 @@
   position: relative;
   z-index: 999;
 
-  @media (width <= 965px) {
-    padding: 10px 30px 10px 10px;
-  }
-
   .header-inner {
     display: flex;
     justify-content: space-between;

@@ -37,9 +37,17 @@ export const navigateToComparison = async (
 ) => {
   if (navigateBy === 'url') {
     const path = COMPARISON_TOOL_PATHS[name];
+    const urlPath = queryParameters ? `${path}?${queryParameters}` : path;
+    const fullUrl = baseURL ? `${baseURL}${urlPath}` : urlPath;
+    await page.goto(fullUrl);
     const url = queryParameters ? `${path}?${queryParameters}` : path;
     await page.goto(url);
   } else {
+    // Open the hamburger menu if the button is visible (mobile breakpoint)
+    const menuButton = page.locator('.hamburger-menu-button');
+    if (await menuButton.isVisible().catch(() => false)) {
+      await menuButton.click();
+    }
     await page.getByRole('link', { name: name }).click();
   }
 
