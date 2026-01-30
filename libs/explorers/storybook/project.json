@@ -12,7 +12,7 @@
     "storybook": {
       "executor": "@storybook/angular:start-storybook",
       "options": {
-        "port": 4400,
+        "port": 4402,
         "configDir": "libs/explorers/storybook/.storybook",
         "browserTarget": "explorers-storybook:build-storybook",
         "compodoc": false,
