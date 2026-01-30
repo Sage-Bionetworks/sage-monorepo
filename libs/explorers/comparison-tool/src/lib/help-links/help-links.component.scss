@@ -5,12 +5,9 @@
   height: 75px;
   z-index: 100;
   pointer-events: none;
-
-  &.has-data {
-    position: relative;
-    margin-top: -63px;
-    margin-bottom: 24px;
-  }
+  position: relative;
+  margin-top: -63px;
+  margin-bottom: 24px;
 
   .help-links-inner {
     display: flex;
