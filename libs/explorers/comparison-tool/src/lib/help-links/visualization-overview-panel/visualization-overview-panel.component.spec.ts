@@ -1,8 +1,9 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { VisualizationOverviewPane } from '@sagebionetworks/explorers/models';
 import {
-  provideComparisonToolService,
+  AppCookieService,
   ComparisonToolService,
+  provideComparisonToolService,
   provideExplorersConfig,
 } from '@sagebionetworks/explorers/services';
 import {
@@ -11,7 +12,6 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { AppCookieService } from '@sagebionetworks/explorers/services';
 import { VisualizationOverviewPanelComponent } from './visualization-overview-panel.component';
 
 describe('VisualizationOverviewPanelComponent', () => {

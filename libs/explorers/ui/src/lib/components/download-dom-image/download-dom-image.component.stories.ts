@@ -12,7 +12,7 @@ import { DownloadDomImageComponent } from './download-dom-image.component';
         [heading]="heading"
         [buttonLabel]="buttonLabel"
         [hasCsvDownload]="hasCsvDownload"
-        [getData]="getData"
+        [data]="data"
       />
       <div
         #plot
@@ -31,7 +31,7 @@ class StorybookDownloadDomImageWrapper {
   heading = 'Download this plot as:';
   buttonLabel = '';
   hasCsvDownload = false;
-  getData: () => string[][] = () => [
+  data: string[][] = [
     ['Column 1', 'Column 2'],
     ['Data 1', 'Data 2'],
   ];
@@ -47,7 +47,7 @@ const meta: Meta<StorybookDownloadDomImageWrapper> = {
     heading: 'Download this plot as:',
   },
   argTypes: {
-    getData: { control: false },
+    data: { control: false },
   },
 };
 export default meta;
@@ -69,7 +69,7 @@ export const CsvData: Story = {
   args: {
     buttonLabel: 'Download',
     hasCsvDownload: true,
-    getData: () => [
+    data: [
       ['X', 'Y'],
       ['1', '2'],
       ['3', '4'],
