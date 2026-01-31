@@ -111,11 +111,11 @@ Typical triggers for an update:
 
 ## Workflow: Routine Upgrade (Patch / Minor)
 
-1. Identify candidate updates with `./gradlew dependencyUpdates`.
+1. Identify candidate updates with `./gradlew dependencyUpdates --no-parallel`.
 2. Edit the target version(s) in `gradle/libs.versions.toml`.
 3. Manually synchronize any hard‑coded versions in `buildSrc` (JUnit, JUnit Platform launcher, Lombok, Jacoco).
    Update those literals to match the catalog (or the selected new version) and add an inline comment if deliberate divergence.
-4. Rerun `./gradlew dependencyUpdates` to confirm that the updates have been applied.
+4. Rerun `./gradlew dependencyUpdates --no-parallel` to confirm that the updates have been applied.
 5. Run a clean build:
    ```bash
    ./gradlew clean build
@@ -165,7 +165,7 @@ Batching several low‑risk version bumps into a single PR reduces review overhe
 - [ ] Only patch/minor versions included
 - [ ] `gradle/libs.versions.toml` updated & tidy (no orphaned commented versions)
 - [ ] `buildSrc` literals (JUnit / Jacoco / Lombok) synced if touched
-- [ ] `./gradlew dependencyUpdates` now shows only pending majors (or nothing relevant)
+- [ ] `./gradlew dependencyUpdates --no-parallel` now shows only pending majors (or nothing relevant)
 - [ ] `./gradlew clean build` passes
 - [ ] Targeted / affected integration tests run (if any)
 - [ ] No new deprecation floods (or documented in PR description)
@@ -200,13 +200,13 @@ Batching several low‑risk version bumps into a single PR reduces review overhe
 
 ## Tooling & Commands
 
-| Action                            | Command                           | Notes                       |
-| --------------------------------- | --------------------------------- | --------------------------- |
-| List dependency insights          | `./gradlew dependencies`          | Per module                  |
-| (Optional) Check for new versions | `./gradlew dependencyUpdates`     | Requires versions plugin    |
-| Build & test all                  | `./gradlew clean build`           | Ensures no stale outputs    |
-| Run a single module build         | `./gradlew :path:to:module:build` | Faster feedback             |
-| Generate dependency report        | `./gradlew htmlDependencyReport`  | If report plugin configured |
+| Action                            | Command                                     | Notes                       |
+| --------------------------------- | ------------------------------------------- | --------------------------- |
+| List dependency insights          | `./gradlew dependencies`                    | Per module                  |
+| (Optional) Check for new versions | `./gradlew dependencyUpdates --no-parallel` | Requires versions plugin    |
+| Build & test all                  | `./gradlew clean build`                     | Ensures no stale outputs    |
+| Run a single module build         | `./gradlew :path:to:module:build`           | Faster feedback             |
+| Generate dependency report        | `./gradlew htmlDependencyReport`            | If report plugin configured |
 
 ## Dependency Scopes
 
@@ -383,7 +383,7 @@ These scripts cannot (directly) consume the central version catalog (`libs.versi
 
 ### Manual Sync Required
 
-When updating versions (e.g., via `./gradlew dependencyUpdates`):
+When updating versions (e.g., via `./gradlew dependencyUpdates --no-parallel`):
 
 1. Update `gradle/libs.versions.toml` for runtime & library use.
 2. Manually inspect `buildSrc/src/main/kotlin/*.gradle.kts` for hard-coded versions:
