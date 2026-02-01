@@ -47,7 +47,7 @@ def _get_default_progress_data() -> dict:
 # Quest configuration - hardcoded for Season 1
 QUEST_CONFIG = {
     "quest_id": "build-bioarena-together",  # Quest ID for API calls
-    "title": "Building BioArena",
+    "title": "Build BioArena Together",
     "description": "We are constructing a medieval arena in Minecraft to symbolize our collective effort. Every battle counts towards the build.",
     "goal": 2850,
     "start_date": "2026-02-01",
@@ -71,7 +71,7 @@ QUEST_CONFIG = {
             "date": "2026-02-01",
             "title": "Update 1: Foundation Laid",
             "description": (
-                "The journey begins! With 144 blocks earned from your "
+                "The journey begins! With 160 blocks earned from your "
                 "evaluations, we've started construction. The inner wall is "
                 "rising, three blocks high in sturdy cobblestone, marking the "
                 "heart of our arena. Work has also begun on the outer wall's "
@@ -86,7 +86,7 @@ QUEST_CONFIG = {
         },
         {
             "date": "2026-02-01",
-            "title": "Launch: Building BioArena Together",
+            "title": "Launch: Build BioArena Together",
             "description": (
                 "Welcome to our Community Quest! AI is evolving fast. The best "
                 "model today might be overtaken tomorrow. That's why we're "
