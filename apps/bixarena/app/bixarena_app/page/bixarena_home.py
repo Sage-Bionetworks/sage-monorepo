@@ -14,6 +14,7 @@ from bixarena_app.config.constants import COMMUNITY_QUEST_ENABLED
 from bixarena_app.page.bixarena_quest_section import (
     QUEST_CONFIG,
     _build_progress_html,
+    build_quest_not_found_section,
     build_quest_section,
 )
 
@@ -305,10 +306,13 @@ def build_quest_section_wrapper():
             0,  # rotation_interval
         )
 
-    try:
-        # Fetch real-time quest progress data and contributors
-        progress_data = calculate_quest_progress()
-        contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
+    # Try to fetch quest data and build section
+    # If quest doesn't exist or any error occurs, show error section
+    contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
+
+    # Check if quest was not found (error from API)
+    # Note: Warning already logged in api_client_helper, no need to log again
+    if contributors_data.get("error", False):
         (
             quest_container,
             progress_html_container,
@@ -317,19 +321,32 @@ def build_quest_section_wrapper():
             carousel_init_trigger,
             carousel_id,
             rotation_interval,
-        ) = build_quest_section(progress_data, contributors_data)
-    except Exception as e:
-        logger.error(f"Error calculating quest progress or fetching contributors: {e}")
-        # Fall back to default data if calculation fails
-        (
-            quest_container,
-            progress_html_container,
-            quest_btn_authenticated,
-            quest_btn_login,
-            carousel_init_trigger,
-            carousel_id,
-            rotation_interval,
-        ) = build_quest_section(None, None)
+        ) = build_quest_not_found_section()
+    else:
+        # Quest exists, fetch progress data and build normal section
+        try:
+            progress_data = calculate_quest_progress()
+            (
+                quest_container,
+                progress_html_container,
+                quest_btn_authenticated,
+                quest_btn_login,
+                carousel_init_trigger,
+                carousel_id,
+                rotation_interval,
+            ) = build_quest_section(progress_data, contributors_data)
+        except Exception as e:
+            logger.error(f"Error building quest section: {e}")
+            # Fall back to quest not found section if build fails
+            (
+                quest_container,
+                progress_html_container,
+                quest_btn_authenticated,
+                quest_btn_login,
+                carousel_init_trigger,
+                carousel_id,
+                rotation_interval,
+            ) = build_quest_not_found_section()
     return (
         quest_container,
         progress_html_container,

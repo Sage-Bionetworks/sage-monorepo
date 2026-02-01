@@ -7,7 +7,7 @@ import gradio as gr
 
 # Quest configuration - hardcoded for Season 1
 QUEST_CONFIG = {
-    "quest_id": "build-bioarena-together",  # Quest ID for API calls
+    "quest_id": "build-bioarena-together-fake",  # Quest ID for API calls
     "title": "Building BioArena",
     "description": "We are constructing a medieval arena in Minecraft to symbolize our collective effort. Every battle counts towards the build.",
     "goal": 2850,
@@ -18,50 +18,6 @@ QUEST_CONFIG = {
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
     # Index of update to show expanded by default (0 = newest, -1 or None = latest)
     "active_update_index": 1,
-    "builders": [
-        # List of usernames who have contributed at least one block
-        # TODO: Replace with actual data from API
-        "alice_bio",
-        "bob_researcher",
-        "charlie_dev",
-        "diana_scientist",
-        "eve_analyst",
-        "frank_engineer",
-        "grace_data",
-        "henry_ml",
-        "iris_bioinf",
-        "jack_genomics",
-        "kate_phd",
-        "leo_postdoc",
-        "maria_lab",
-        "nathan_tech",
-        "olivia_research",
-        "peter_bio",
-        "quinn_analytics",
-        "rachel_science",
-        "sam_coder",
-        "tina_data",
-        "uma_researcher",
-        "victor_ai",
-        "wendy_biotech",
-        "xavier_dev",
-        "yara_scientist",
-        "zoe_engineer",
-        "alan_researcher",
-        "beth_analyst",
-        "carlos_phd",
-        "debra_lab",
-        "ethan_bio",
-        "fiona_data",
-        "george_ml",
-        "helen_scientist",
-        "ian_engineer",
-        "julia_genomics",
-        "kevin_tech",
-        "linda_research",
-        "mark_coder",
-        "nancy_bioinf",
-    ],
     "minecraft_arena_designer": {
         "name": "NeatCraft",
         "url": "https://www.youtube.com/@Neatcraft",
@@ -113,6 +69,80 @@ QUEST_CONFIG = {
         },
     ],
 }
+
+
+def build_quest_not_found_section() -> tuple[
+    gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str, int
+]:
+    """Build a quest not found error section.
+
+    Returns:
+        Tuple of (quest_container, empty_html, hidden buttons, carousel_id, rotation_interval)
+    """
+    with gr.Column(
+        elem_id="quest-section-wrapper",
+        elem_classes=["quest-section-wrapper"],
+    ) as quest_container:
+        gr.HTML(f"""
+        <div style="padding: 3rem 1.5rem; text-align: center;">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div style="width: 64px; height: 64px; border-radius: 50%;
+                            background: color-mix(in srgb, #f59e0b 10%, transparent);
+                            border: 1px solid color-mix(in srgb, #f59e0b 30%, transparent);
+                            display: flex; align-items: center; justify-content: center;
+                            margin: 0 auto 1.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                         fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h2 style="color: var(--body-text-color); font-weight: 600;
+                           margin: 0 0 0.75rem 0; font-size: 1.5rem;">
+                    Quest Not Found
+                </h2>
+                <p style="color: var(--body-text-color-subdued); font-size: 1rem;
+                         margin: 0; line-height: 1.6;">
+                    The configured quest "<strong>{QUEST_CONFIG["quest_id"]}</strong>" doesn't exist in the database.
+                </p>
+            </div>
+        </div>
+        """)
+
+        # Add CSS to ensure hidden components stay hidden
+        gr.HTML("""
+        <style>
+        #quest-error-empty-html,
+        #quest-error-btn-auth,
+        #quest-error-btn-login,
+        #quest-error-carousel-trigger {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        </style>
+        """)
+
+        # Hidden components (required for return signature compatibility)
+        # These are inside the container but hidden with visible=False and CSS
+        empty_html = gr.HTML("", visible=False, elem_id="quest-error-empty-html")
+        quest_btn_authenticated = gr.Button(
+            visible=False, elem_id="quest-error-btn-auth"
+        )
+        quest_btn_login = gr.Button(visible=False, elem_id="quest-error-btn-login")
+        carousel_init_trigger = gr.Button(
+            visible=False, elem_id="quest-error-carousel-trigger"
+        )
+
+    return (
+        quest_container,
+        empty_html,
+        quest_btn_authenticated,
+        quest_btn_login,
+        carousel_init_trigger,
+        "",  # carousel_id
+        0,  # rotation_interval
+    )
 
 
 def _build_progress_html(
@@ -202,26 +232,72 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
     """Build the Builders and Credits HTML sections.
 
     Args:
-        contributors_data: Optional dict with contributors_by_tier and total_contributors
+        contributors_data: Optional dict with contributors_by_rank and total_contributors
 
     Returns:
         HTML string for the builders and credits sections
     """
-    # Use mock data if no contributors data provided (fallback)
+    # Show "no contributors yet" if quest exists but no contributors
     if contributors_data is None or contributors_data.get("total_contributors", 0) == 0:
-        builders_list = QUEST_CONFIG["builders"]
-        total_count = len(builders_list)
-        builders_html = "".join(
-            f'<span style="color: var(--body-text-color); '
-            f'font-size: 0.875rem;">{builder}</span>'
-            + (
-                '<span style="color: var(--body-text-color-subdued); '
-                'font-size: 0.75rem;">•</span>'
-                if i < len(builders_list) - 1
-                else ""
-            )
-            for i, builder in enumerate(builders_list)
-        )
+        return f"""
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;
+                height: 100%; margin-top: 0.75rem;">
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        <!-- No Contributors Message -->
+        <div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+            <h4 style="color: var(--body-text-color); font-weight: 600;
+                       margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                Builders (0)
+            </h4>
+            <div style="padding: 2rem; text-align: center;
+                        color: var(--body-text-color-subdued); font-size: 0.875rem;">
+                No builders yet. Be the first to contribute!
+            </div>
+
+            <!-- Quest Ranks Legend -->
+            <div style="margin-top: 1.5rem;">
+                <h4 style="color: var(--body-text-color); font-weight: 600;
+                           margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                    Quest Ranks
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 0.375rem;
+                            color: var(--body-text-color-subdued); font-size: 0.875rem;">
+                    <div>🏆 Champion (10+ battles/week)</div>
+                    <div>⚔️ Knight (5+ battles/week)</div>
+                    <div>🌟 Apprentice (&lt;5 battles/week)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        <!-- Credits Section -->
+        <div>
+            <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                Credits
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+                    <span style="color: var(--body-text-color-subdued);">Minecraft Arena Designer:</span>
+                    <a href="{QUEST_CONFIG["minecraft_arena_designer"]["url"]}"
+                       style="color: #3b82f6; text-decoration: none;">
+                       {QUEST_CONFIG["minecraft_arena_designer"]["name"]}
+                    </a>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+                    <span style="color: var(--body-text-color-subdued);">Quest Architect:</span>
+                    <a href="{QUEST_CONFIG["quest_architect"]["url"]}"
+                       style="color: #3b82f6; text-decoration: none;">
+                       {QUEST_CONFIG["quest_architect"]["name"]}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    """
     else:
         # Build real contributors list grouped by rank
         total_count = contributors_data["total_contributors"]
@@ -332,7 +408,7 @@ def build_quest_section(
 
     Args:
         progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
-        contributors_data: Optional dict with contributors info (contributors_by_tier, total_contributors)
+        contributors_data: Optional dict with contributors info (contributors_by_rank, total_contributors, error)
 
     Returns:
         Tuple of (quest_container, progress_html_container, contribute_button_authenticated,

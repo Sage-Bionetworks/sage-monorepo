@@ -165,7 +165,8 @@ def fetch_quest_contributors(
         Dictionary with:
             - contributors_by_rank: dict with 'champion', 'knight', 'apprentice' lists
             - total_contributors: int
-            Returns empty structure if API call fails.
+            - error: bool indicating if there was an error (quest not found, etc.)
+            Returns empty structure with error=True if API call fails.
     """
     try:
         configuration = get_api_configuration()
@@ -199,11 +200,19 @@ def fetch_quest_contributors(
             return {
                 "contributors_by_rank": contributors_by_rank,
                 "total_contributors": result.total_contributors,
+                "error": False,
             }
     except Exception as e:
-        logger.error(f"Error fetching quest contributors: {e}")
-        # Return empty structure if API call fails
+        # Check if it's a 404 (quest not found) - this is expected for invalid quest IDs
+        error_message = str(e)
+        if "404" in error_message or "Not Found" in error_message:
+            logger.warning(f"Quest not found: {quest_id}")
+        else:
+            logger.error(f"Error fetching quest contributors: {e}")
+
+        # Return empty structure with error flag if API call fails
         return {
             "contributors_by_rank": {"champion": [], "knight": [], "apprentice": []},
             "total_contributors": 0,
+            "error": True,
         }
