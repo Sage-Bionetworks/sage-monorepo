@@ -1,0 +1,32 @@
+type: object
+description: List of contributors to a quest with their battle counts
+properties:
+  questId:
+    type: string
+    description: The quest identifier
+    example: 'build-bioarena-together'
+  startDate:
+    type: string
+    format: date-time
+    description: Quest start date
+    example: '2026-01-20T00:00:00Z'
+  endDate:
+    type: string
+    format: date-time
+    description: Quest end date
+    example: '2026-04-20T23:59:59Z'
+  totalContributors:
+    type: integer
+    description: Total number of unique contributors
+    example: 42
+  contributors:
+    type: array
+    description: Contributors ordered by battle count (descending)
+    items:
+      $ref: QuestContributor.yaml
+required:
+  - questId
+  - startDate
+  - endDate
+  - totalContributors
+  - contributors

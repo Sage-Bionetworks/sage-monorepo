@@ -1,0 +1,7 @@
+name: questId
+in: path
+required: true
+schema:
+  type: string
+description: Unique identifier for a quest
+example: 'build-bioarena-together'
