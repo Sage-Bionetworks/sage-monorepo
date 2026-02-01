@@ -7,7 +7,7 @@ import gradio as gr
 
 # Quest configuration - hardcoded for Season 1
 QUEST_CONFIG = {
-    "quest_id": "build-bioarena-together-fake",  # Quest ID for API calls
+    "quest_id": "build-bioarena-together",  # Quest ID for API calls
     "title": "Building BioArena",
     "description": "We are constructing a medieval arena in Minecraft to symbolize our collective effort. Every battle counts towards the build.",
     "goal": 2850,
@@ -84,7 +84,7 @@ def build_quest_not_found_section() -> tuple[
         elem_classes=["quest-section-wrapper"],
     ) as quest_container:
         gr.HTML(f"""
-        <div style="padding: 3rem 1.5rem; text-align: center;">
+        <div style="padding: 2.5rem 1.5rem 2rem 1.5rem; text-align: center;">
             <div style="max-width: 600px; margin: 0 auto;">
                 <div style="width: 64px; height: 64px; border-radius: 50%;
                             background: color-mix(in srgb, #f59e0b 10%, transparent);
