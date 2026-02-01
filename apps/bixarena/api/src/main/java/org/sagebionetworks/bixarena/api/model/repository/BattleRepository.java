@@ -1,8 +1,11 @@
 package org.sagebionetworks.bixarena.api.model.repository;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
+import org.sagebionetworks.bixarena.api.model.projection.ContributorProjection;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -121,4 +124,36 @@ public interface BattleRepository
     nativeQuery = true
   )
   Long findUserRankByCompletedBattles(@Param("userId") UUID userId);
+
+  /**
+   * Find contributors to a quest by counting their completed battles within a date range.
+   * Returns username and battle count, ordered by battle count descending, then username ascending.
+   * Uses native query for better performance with GROUP BY and JOIN to auth.user.
+   *
+   * @param startDate quest start date
+   * @param endDate quest end date
+   * @param minBattles minimum battles to be included
+   * @param pageable pagination information (for limit)
+   * @return List of contributors with their battle counts
+   */
+  @Query(
+    value =
+      "SELECT " +
+      "  u.username AS username, " +
+      "  CAST(COUNT(b.id) AS INTEGER) AS battleCount " +
+      "FROM api.battle b " +
+      "INNER JOIN auth.user u ON b.user_id = u.id " +
+      "WHERE b.ended_at IS NOT NULL " +
+      "  AND b.ended_at >= :startDate " +
+      "  AND b.ended_at < :endDate " +
+      "GROUP BY u.id, u.username " +
+      "HAVING COUNT(b.id) >= :minBattles " +
+      "ORDER BY COUNT(b.id) DESC, u.username ASC",
+    nativeQuery = true
+  )
+  List<ContributorProjection> findContributorsByDateRange(
+      @Param("startDate") OffsetDateTime startDate,
+      @Param("endDate") OffsetDateTime endDate,
+      @Param("minBattles") int minBattles,
+      Pageable pageable);
 }

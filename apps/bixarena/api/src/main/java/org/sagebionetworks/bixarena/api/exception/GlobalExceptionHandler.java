@@ -82,6 +82,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
+  @ExceptionHandler(QuestNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleQuestNotFoundException(
+    QuestNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Quest Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
   @ExceptionHandler(DuplicateBattleEvaluationException.class)
   protected ResponseEntity<BasicErrorDto> handleDuplicateBattleEvaluation(
     DuplicateBattleEvaluationException ex,

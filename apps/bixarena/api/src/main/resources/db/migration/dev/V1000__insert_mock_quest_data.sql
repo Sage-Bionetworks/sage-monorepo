@@ -28,6 +28,21 @@ INSERT INTO api.quest (id, quest_id, start_date, end_date, created_at, updated_a
 
 
 -- ============================================================================
+-- Insert Mock Users for Quest Testing
+-- ============================================================================
+-- Note: These users are created in the auth schema for testing purposes
+INSERT INTO auth.user (id, username, created_at, updated_at) VALUES
+  ('00000000-0000-0000-0000-000000000001'::uuid, 'quest_champion_1', now(), now()),
+  ('00000000-0000-0000-0000-000000000002'::uuid, 'quest_champion_2', now(), now()),
+  ('00000000-0000-0000-0000-000000000003'::uuid, 'quest_knight_1', now(), now()),
+  ('00000000-0000-0000-0000-000000000004'::uuid, 'quest_knight_2', now(), now()),
+  ('00000000-0000-0000-0000-000000000005'::uuid, 'quest_apprentice_1', now(), now()),
+  ('00000000-0000-0000-0000-000000000006'::uuid, 'quest_apprentice_2', now(), now()),
+  ('00000000-0000-0000-0000-000000000007'::uuid, 'quest_apprentice_3', now(), now())
+ON CONFLICT (id) DO NOTHING;
+
+
+-- ============================================================================
 -- Insert Mock Completed Battles for Quest Contributors Testing
 -- ============================================================================
 -- Note: Using existing model IDs from reference data (V2__insert_reference_data.sql)

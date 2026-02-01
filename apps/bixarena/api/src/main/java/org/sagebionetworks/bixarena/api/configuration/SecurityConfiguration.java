@@ -47,6 +47,8 @@ public class SecurityConfiguration {
             "/v1/leaderboards/**",
             "/v1/models",
             "/v1/models/**",
+            "/v1/quests",
+            "/v1/quests/**",
             "/v1/stats",
             "/v3/api-docs/**"
           )
