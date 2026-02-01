@@ -276,14 +276,13 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
             </div>
 
             <!-- Quest Ranks Legend (below list) -->
-            <div style="margin-top: 0.75rem;
-                        padding-top: 0.75rem;
-                        border-top: 1px solid var(--border-color-primary);
-                        font-size: 0.8125rem;">
-                <div style="color: var(--body-text-color); font-weight: 600; margin-bottom: 0.5rem;">
-                    Quest Ranks:
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 0.375rem; color: var(--body-text-color-subdued);">
+            <div style="margin-top: 1.5rem;">
+                <h4 style="color: var(--body-text-color); font-weight: 600;
+                           margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                    Quest Ranks
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 0.375rem;
+                            color: var(--body-text-color-subdued); font-size: 0.875rem;">
                     <div>🏆 Champion (10+ battles/week)</div>
                     <div>⚔️ Knight (5+ battles/week)</div>
                     <div>🌟 Apprentice (&lt;5 battles/week)</div>
