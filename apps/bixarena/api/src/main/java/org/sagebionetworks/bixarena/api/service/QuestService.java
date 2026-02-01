@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.service;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -66,8 +67,8 @@ public class QuestService {
             quest.getStartDate(), quest.getEndDate(), minBattles, PageRequest.of(0, limit));
 
     // Calculate ranks and battles per week for each contributor
-    // Use quest end date if quest has ended, otherwise use current time
-    OffsetDateTime now = OffsetDateTime.now();
+    // Use quest end date if quest has ended, otherwise use current time (UTC)
+    OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
     OffsetDateTime effectiveEndDate =
         now.isAfter(quest.getEndDate()) ? quest.getEndDate() : now;
     double questWeeks = calculateWeeks(quest.getStartDate(), effectiveEndDate);

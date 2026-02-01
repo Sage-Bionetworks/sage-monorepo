@@ -130,8 +130,13 @@ public interface BattleRepository
    * Returns username and battle count, ordered by battle count descending, then username ascending.
    * Uses native query for better performance with GROUP BY and JOIN to auth.user.
    *
-   * @param startDate quest start date
-   * @param endDate quest end date
+   * <p>Date range semantics: [startDate, endDate) - inclusive of startDate, exclusive of endDate.
+   * This means battles with ended_at >= startDate AND ended_at < endDate are counted.
+   * For example, a quest from 2026-01-20 00:00:00 to 2026-02-17 23:59:59 will include
+   * battles that ended at any time from start of Jan 20 up to (but not including) Feb 17 23:59:59.
+   *
+   * @param startDate quest start date (inclusive)
+   * @param endDate quest end date (exclusive)
    * @param minBattles minimum battles to be included
    * @param pageable pagination information (for limit)
    * @return List of contributors with their battle counts

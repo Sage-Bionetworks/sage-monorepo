@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 
 from bixarena_api_client import ApiClient, Configuration, QuestApi, StatsApi
+from bixarena_api_client.exceptions import ApiException, NotFoundException
 
 from bixarena_app.config.utils import _get_api_base_url
 
@@ -202,15 +203,27 @@ def fetch_quest_contributors(
                 "total_contributors": result.total_contributors,
                 "error": False,
             }
+    except NotFoundException:
+        # Quest not found - this is expected for invalid quest IDs
+        logger.warning(f"Quest not found: {quest_id}")
+        return {
+            "contributors_by_rank": {"champion": [], "knight": [], "apprentice": []},
+            "total_contributors": 0,
+            "error": True,
+        }
+    except ApiException as e:
+        # Other API errors (400, 500, etc.)
+        logger.error(
+            f"API error fetching quest contributors (status {e.status}): {e.reason}"
+        )
+        return {
+            "contributors_by_rank": {"champion": [], "knight": [], "apprentice": []},
+            "total_contributors": 0,
+            "error": True,
+        }
     except Exception as e:
-        # Check if it's a 404 (quest not found) - this is expected for invalid quest IDs
-        error_message = str(e)
-        if "404" in error_message or "Not Found" in error_message:
-            logger.warning(f"Quest not found: {quest_id}")
-        else:
-            logger.error(f"Error fetching quest contributors: {e}")
-
-        # Return empty structure with error flag if API call fails
+        # Unexpected errors (network, parsing, etc.)
+        logger.error(f"Unexpected error fetching quest contributors: {e}")
         return {
             "contributors_by_rank": {"champion": [], "knight": [], "apprentice": []},
             "total_contributors": 0,
