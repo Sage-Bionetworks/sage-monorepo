@@ -5,6 +5,45 @@ from datetime import datetime
 
 import gradio as gr
 
+# Rank configuration for quest contributors
+RANK_CONFIG = {
+    "champion": {
+        "emoji": "🏆",
+        "color": "#fbbf24",  # Gold
+        "threshold": "10+",
+        "description": "10+ battles/week",
+    },
+    "knight": {
+        "emoji": "⚔️",
+        "color": "#c0c0c0",  # Silver
+        "threshold": "5+",
+        "description": "5+",
+    },
+    "apprentice": {
+        "emoji": "🌟",
+        "color": "#cd7f32",  # Bronze
+        "threshold": "<5",
+        "description": "<5",
+    },
+}
+
+
+def _get_default_progress_data() -> dict:
+    """Get default progress data structure for quest.
+
+    Returns:
+        Dictionary with current_blocks, goal_blocks, percentage, days_remaining
+    """
+    end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
+    days_remaining = max(0, (end_date - datetime.now()).days)
+    return {
+        "current_blocks": 0,
+        "goal_blocks": QUEST_CONFIG["goal"],
+        "percentage": 0.0,
+        "days_remaining": days_remaining,
+    }
+
+
 # Quest configuration - hardcoded for Season 1
 QUEST_CONFIG = {
     "quest_id": "build-bioarena-together",  # Quest ID for API calls
@@ -263,10 +302,14 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
                     Quest Ranks
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 0.375rem;
-                            color: var(--body-text-color-subdued); font-size: 0.875rem;">
-                    <div>🏆 Champion (10+ battles/week)</div>
-                    <div>⚔️ Knight (5+ battles/week)</div>
-                    <div>🌟 Apprentice (&lt;5 battles/week)</div>
+                            color: var(--body-text-color-subdued); \
+font-size: 0.875rem;">
+                    <div>{RANK_CONFIG["champion"]["emoji"]} Champion \
+({RANK_CONFIG["champion"]["description"]})</div>
+                    <div>{RANK_CONFIG["knight"]["emoji"]} Knight \
+({RANK_CONFIG["knight"]["description"]})</div>
+                    <div>{RANK_CONFIG["apprentice"]["emoji"]} Apprentice \
+({RANK_CONFIG["apprentice"]["description"]})</div>
                 </div>
             </div>
         </div>
@@ -303,19 +346,12 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
         total_count = contributors_data["total_contributors"]
         contributors_by_rank = contributors_data["contributors_by_rank"]
 
-        # Rank emoji and styling
-        rank_config = {
-            "champion": {"emoji": "🏆", "color": "#fbbf24"},  # Gold
-            "knight": {"emoji": "⚔️", "color": "#c0c0c0"},  # Silver
-            "apprentice": {"emoji": "🌟", "color": "#cd7f32"},  # Bronze
-        }
-
         builders_parts = []
         for rank in ["champion", "knight", "apprentice"]:
             rank_contributors = contributors_by_rank.get(rank, [])
             for contributor in rank_contributors:
                 username = contributor["username"]
-                emoji = rank_config[rank]["emoji"]
+                emoji = RANK_CONFIG[rank]["emoji"]
                 builders_parts.append(
                     f'<span style="color: var(--body-text-color); '
                     f'font-size: 0.875rem;">'
@@ -358,10 +394,14 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
                     Quest Ranks
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 0.375rem;
-                            color: var(--body-text-color-subdued); font-size: 0.875rem;">
-                    <div>🏆 Champion (10+ battles/week)</div>
-                    <div>⚔️ Knight (5+ battles/week)</div>
-                    <div>🌟 Apprentice (&lt;5 battles/week)</div>
+                            color: var(--body-text-color-subdued); \
+font-size: 0.875rem;">
+                    <div>{RANK_CONFIG["champion"]["emoji"]} Champion \
+({RANK_CONFIG["champion"]["description"]})</div>
+                    <div>{RANK_CONFIG["knight"]["emoji"]} Knight \
+({RANK_CONFIG["knight"]["description"]})</div>
+                    <div>{RANK_CONFIG["apprentice"]["emoji"]} Apprentice \
+({RANK_CONFIG["apprentice"]["description"]})</div>
                 </div>
             </div>
         </div>
@@ -416,14 +456,7 @@ def build_quest_section(
     """
     # Use provided progress data or defaults
     if progress_data is None:
-        end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
-        days_remaining = max(0, (end_date - datetime.now()).days)
-        progress_data = {
-            "current_blocks": 0,
-            "goal_blocks": QUEST_CONFIG["goal"],
-            "percentage": 0.0,
-            "days_remaining": days_remaining,
-        }
+        progress_data = _get_default_progress_data()
 
     current_blocks = progress_data["current_blocks"]
     goal_blocks = progress_data["goal_blocks"]

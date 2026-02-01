@@ -105,6 +105,87 @@ def create_intro_section():
             """)
 
 
+def _build_stats_html(public_stats: dict, user_stats=None) -> str:
+    """Build stats HTML with optional user stats.
+
+    Args:
+        public_stats: Dictionary with public stats
+            (models_evaluated, completed_battles, total_users)
+        user_stats: Optional user stats object with
+            completed_battles and rank attributes
+
+    Returns:
+        HTML string for stats section
+    """
+    # Build public stats items
+    models_count = public_stats["models_evaluated"]
+    battles_count = public_stats["completed_battles"]
+    users_count = public_stats["total_users"]
+
+    stats_items = f"""
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--accent-teal);">{models_count:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Models Evaluated</div>
+                </div>
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--accent-teal);">{battles_count:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Total Battles</div>
+                </div>
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--accent-teal);">{users_count:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Total Users</div>
+                </div>"""
+
+    # Add user stats if provided
+    if user_stats:
+        user_battles = user_stats.completed_battles
+        user_rank = user_stats.rank
+        stats_items += f"""
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--color-accent);">{user_battles:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Battles Completed</div>
+                </div>
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--color-accent);">#{user_rank:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Your Rank</div>
+                </div>"""
+
+    # Determine the ID based on whether user stats are included
+    stats_id = "stats-with-user" if user_stats else "stats-public-only"
+
+    border_style = "border: 1px solid var(--border-color-primary)"
+    bg_style = "background-color: var(--panel-background-fill)"
+    padding_style = "padding: 2.5rem 1.5rem"
+    margin_style = "margin: 0 1.5rem"
+    flex_style = "display: flex; flex-wrap: wrap; align-items: center"
+    justify_style = "justify-content: center; gap: 3rem"
+
+    return f"""
+    <div style="{border_style}; border-radius: 8px; {bg_style}; \
+{padding_style}; {margin_style};">
+        <div id="{stats_id}">
+            <div style="{flex_style}; {justify_style};">{stats_items}
+            </div>
+        </div>
+    </div>
+    """
+
+
 def load_public_stats_on_page_load() -> dict:
     """Load public stats and update the stats bar HTML.
 
@@ -112,35 +193,14 @@ def load_public_stats_on_page_load() -> dict:
         HTML update for the stats container
     """
     public_stats = fetch_public_stats()
-
-    stats_html = f"""
-    <div style="border: 1px solid var(--border-color-primary); border-radius: 8px; background-color: var(--panel-background-fill); padding: 2.5rem 1.5rem; margin: 0 1.5rem;">
-        <div id="stats-public-only">
-            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Models Evaluated</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Total Battles</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Total Users</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    """
-
+    stats_html = _build_stats_html(public_stats)
     return gr.update(value=stats_html)
 
 
 def load_user_battles_on_page_load(
     request: gr.Request,
 ) -> dict:
-    """Load user battles and rank data and update stats bar to include user stats.
+    """Load user battles and rank data and update stats bar.
 
     Args:
         request: Gradio request object
@@ -151,60 +211,8 @@ def load_user_battles_on_page_load(
     user_stats = fetch_user_stats(request)
     public_stats = fetch_public_stats()
 
-    if user_stats is None:
-        # Return only public stats when user is not authenticated
-        stats_html = f"""
-        <div style="border: 1px solid var(--border-color-primary); border-radius: 8px; background-color: var(--panel-background-fill); padding: 2.5rem 1.5rem; margin: 0 1.5rem;">
-            <div id="stats-public-only">
-                <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                        <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
-                        <div style="color: var(--body-text-color-subdued);">Models Evaluated</div>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                        <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
-                        <div style="color: var(--body-text-color-subdued);">Total Battles</div>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                        <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
-                        <div style="color: var(--body-text-color-subdued);">Total Users</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        """
-        return gr.update(value=stats_html)
-
-    # Return stats with user data included
-    stats_html = f"""
-    <div style="border: 1px solid var(--border-color-primary); border-radius: 8px; background-color: var(--panel-background-fill); padding: 2.5rem 1.5rem; margin: 0 1.5rem;">
-        <div id="stats-with-user">
-            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Models Evaluated</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Total Battles</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Total Users</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--color-accent);">{user_stats.completed_battles:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Battles Completed</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--color-accent);">#{user_stats.rank:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Your Rank</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    """
-
+    # Build stats HTML with or without user stats
+    stats_html = _build_stats_html(public_stats, user_stats)
     return gr.update(value=stats_html)
 
 
