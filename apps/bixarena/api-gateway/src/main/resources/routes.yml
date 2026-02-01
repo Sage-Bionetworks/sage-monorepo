@@ -56,6 +56,11 @@ app:
       anonymousAccess: true
       rateLimitRequestsPerMinute: 100
     - method: 'GET'
+      path: '/api/v1/quests/{questId}/contributors'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+      rateLimitRequestsPerMinute: 100
+    - method: 'GET'
       path: '/api/v1/stats'
       audience: 'urn:bixarena:api'
       anonymousAccess: true

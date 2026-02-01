@@ -123,6 +123,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _ModelApi_            | [**create_model_error**](docs/ModelApi.md#create_model_error)                     | **POST** /models/{modelId}/errors                       | Report a model error                       |
 | _ModelApi_            | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
 | _PromptValidationApi_ | [**validate_prompt**](docs/PromptValidationApi.md#validate_prompt)                | **GET** /validate-prompt                                | Validate biomedical prompt                 |
+| _QuestApi_            | [**get_quest_contributors**](docs/QuestApi.md#get_quest_contributors)             | **GET** /quests/{questId}/contributors                  | Get quest contributors                     |
 | _StatsApi_            | [**get_public_stats**](docs/StatsApi.md#get_public_stats)                         | **GET** /stats                                          | Get public platform statistics             |
 | _UserApi_             | [**get_user_stats**](docs/UserApi.md#get_user_stats)                              | **GET** /users/me/stats                                 | Get current user&#39;s statistics          |
 
@@ -175,6 +176,8 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [PageMetadata](docs/PageMetadata.md)
 - [PromptValidation](docs/PromptValidation.md)
 - [PublicStats](docs/PublicStats.md)
+- [QuestContributor](docs/QuestContributor.md)
+- [QuestContributors](docs/QuestContributors.md)
 - [RateLimitError](docs/RateLimitError.md)
 - [SortDirection](docs/SortDirection.md)
 - [Token200Response](docs/Token200Response.md)

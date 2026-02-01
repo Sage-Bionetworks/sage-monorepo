@@ -1,0 +1,145 @@
+-- ============================================================================
+-- DEV ENVIRONMENT ONLY: Mock Quest Data for Testing
+-- ============================================================================
+-- This migration inserts mock quest and battle data for local development
+-- and testing of the Quest Contributors feature.
+--
+-- Mock Users (UUIDs):
+-- - user1: 00000000-0000-0000-0000-000000000001 (Champion - 50 battles)
+-- - user2: 00000000-0000-0000-0000-000000000002 (Champion - 40 battles)
+-- - user3: 00000000-0000-0000-0000-000000000003 (Knight - 25 battles)
+-- - user4: 00000000-0000-0000-0000-000000000004 (Knight - 20 battles)
+-- - user5: 00000000-0000-0000-0000-000000000005 (Apprentice - 8 battles)
+-- - user6: 00000000-0000-0000-0000-000000000006 (Apprentice - 5 battles)
+-- - user7: 00000000-0000-0000-0000-000000000007 (Apprentice - 2 battles)
+--
+-- Quest Duration: 4 weeks (Jan 20 - Feb 17, 2026)
+-- Expected Tiers (battles/week thresholds):
+-- - Champions: ≥10 battles/week (≥40 battles in 4 weeks)
+-- - Knights: ≥5 battles/week (≥20 battles in 4 weeks)
+-- - Apprentices: <5 battles/week (<20 battles in 4 weeks)
+-- ============================================================================
+
+-- ============================================================================
+-- Insert Mock Quest
+-- ============================================================================
+INSERT INTO api.quest (id, quest_id, start_date, end_date, created_at, updated_at) VALUES
+  (1, 'build-bioarena-together', '2026-01-20 00:00:00+00', '2026-04-20 23:59:59+00', now(), now());
+
+
+-- ============================================================================
+-- Insert Mock Completed Battles for Quest Contributors Testing
+-- ============================================================================
+-- Note: Using existing model IDs from reference data (V2__insert_reference_data.sql)
+-- Model1: 3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0 (GPT-4)
+-- Model2: 8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11 (Claude-3.5-Sonnet)
+
+-- User1: 50 completed battles (Champion - 12.5 battles/week)
+-- Distribute battles across quest period
+INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000001'::uuid,
+  '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
+  '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
+  'Quest Battle ' || n,
+  '2026-01-20 00:00:00+00'::timestamptz + (n || ' hours')::interval,
+  '2026-01-20 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+FROM generate_series(1, 50) AS n;
+
+-- User2: 40 completed battles (Champion - 10 battles/week)
+INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000002'::uuid,
+  '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
+  '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
+  'Quest Battle ' || n,
+  '2026-01-21 00:00:00+00'::timestamptz + (n || ' hours')::interval,
+  '2026-01-21 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+FROM generate_series(1, 40) AS n;
+
+-- User3: 25 completed battles (Knight - 6.25 battles/week)
+INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000003'::uuid,
+  '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
+  '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
+  'Quest Battle ' || n,
+  '2026-01-22 00:00:00+00'::timestamptz + (n || ' hours')::interval,
+  '2026-01-22 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+FROM generate_series(1, 25) AS n;
+
+-- User4: 20 completed battles (Knight - exactly 5 battles/week)
+INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000004'::uuid,
+  '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
+  '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
+  'Quest Battle ' || n,
+  '2026-01-23 00:00:00+00'::timestamptz + (n || ' hours')::interval,
+  '2026-01-23 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+FROM generate_series(1, 20) AS n;
+
+-- User5: 8 completed battles (Apprentice - 2 battles/week)
+INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000005'::uuid,
+  '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
+  '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
+  'Quest Battle ' || n,
+  '2026-01-24 00:00:00+00'::timestamptz + (n || ' hours')::interval,
+  '2026-01-24 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+FROM generate_series(1, 8) AS n;
+
+-- User6: 5 completed battles (Apprentice - 1.25 battles/week)
+INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000006'::uuid,
+  '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
+  '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
+  'Quest Battle ' || n,
+  '2026-01-25 00:00:00+00'::timestamptz + (n || ' hours')::interval,
+  '2026-01-25 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+FROM generate_series(1, 5) AS n;
+
+-- User7: 2 completed battles (Apprentice - 0.5 battles/week)
+INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000007'::uuid,
+  '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
+  '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
+  'Quest Battle ' || n,
+  '2026-01-26 00:00:00+00'::timestamptz + (n || ' hours')::interval,
+  '2026-01-26 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+FROM generate_series(1, 2) AS n;
+
+-- Add some battles outside the quest period (should not be counted)
+-- User1: 10 battles before quest start (should not count)
+INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000001'::uuid,
+  '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
+  '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
+  'Pre-Quest Battle ' || n,
+  '2026-01-10 00:00:00+00'::timestamptz + (n || ' hours')::interval,
+  '2026-01-10 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+FROM generate_series(1, 10) AS n;
+
+-- User2: 5 incomplete battles during quest (ended_at is null, should not count)
+INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
+SELECT
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000002'::uuid,
+  '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
+  '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
+  'Incomplete Battle ' || n,
+  '2026-01-27 00:00:00+00'::timestamptz + (n || ' hours')::interval,
+  NULL
+FROM generate_series(1, 5) AS n;

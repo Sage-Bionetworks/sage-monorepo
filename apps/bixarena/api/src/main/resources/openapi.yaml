@@ -24,6 +24,8 @@ tags:
     name: Leaderboard
   - description: Operations about models.
     name: Model
+  - description: Operations about community quests.
+    name: Quest
   - description: Public statistics about the platform.
     name: Stats
   - description: Operations about the authenticated user.
@@ -720,6 +722,71 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Battle
+  /quests/{questId}/contributors:
+    get:
+      description: |
+        Get a list of users who have contributed to a specific quest,
+        ordered by their battle count during the quest period.
+        Results are calculated in real-time based on completed battles
+        within the quest's start and end dates.
+      operationId: getQuestContributors
+      parameters:
+        - description: Unique identifier for a quest
+          example: build-bioarena-together
+          explode: false
+          in: path
+          name: questId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: Minimum number of battles required to be listed
+          example: 1
+          explode: true
+          in: query
+          name: minBattles
+          required: false
+          schema:
+            default: 1
+            minimum: 1
+            type: integer
+          style: form
+        - description: Maximum number of contributors to return
+          example: 100
+          explode: true
+          in: query
+          name: limit
+          required: false
+          schema:
+            default: 100
+            maximum: 1000
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestContributors'
+          description: Success
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      summary: Get quest contributors
+      tags:
+        - Quest
+      x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Quest
   /stats:
     get:
       description: |
@@ -870,6 +937,16 @@ components:
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
       style: deepObject
+    questId:
+      description: Unique identifier for a quest
+      example: build-bioarena-together
+      explode: false
+      in: path
+      name: questId
+      required: true
+      schema:
+        type: string
+      style: simple
   responses:
     Unauthorized:
       content:
@@ -2345,6 +2422,88 @@ components:
         - createdAt
         - id
         - outcome
+      type: object
+    QuestContributor:
+      description: A user who contributed to the quest
+      example:
+        tier: champion
+        battlesPerWeek: 12.5
+        battleCount: 42
+        username: tschaffter
+      properties:
+        username:
+          description: User's display name
+          example: tschaffter
+          type: string
+        battleCount:
+          description: Number of completed battles during quest period
+          example: 42
+          type: integer
+        tier:
+          description: Contributor tier based on average battles per week
+          enum:
+            - champion
+            - knight
+            - apprentice
+          example: champion
+          type: string
+        battlesPerWeek:
+          description: Average battles completed per week during quest
+          example: 12.5
+          format: double
+          type: number
+      required:
+        - battleCount
+        - battlesPerWeek
+        - tier
+        - username
+      type: object
+    QuestContributors:
+      description: List of contributors to a quest with their battle counts
+      example:
+        questId: build-bioarena-together
+        endDate: 2026-04-20T23:59:59Z
+        contributors:
+          - tier: champion
+            battlesPerWeek: 12.5
+            battleCount: 42
+            username: tschaffter
+          - tier: champion
+            battlesPerWeek: 12.5
+            battleCount: 42
+            username: tschaffter
+        startDate: 2026-01-20T00:00:00Z
+        totalContributors: 42
+      properties:
+        questId:
+          description: The quest identifier
+          example: build-bioarena-together
+          type: string
+        startDate:
+          description: Quest start date
+          example: 2026-01-20T00:00:00Z
+          format: date-time
+          type: string
+        endDate:
+          description: Quest end date
+          example: 2026-04-20T23:59:59Z
+          format: date-time
+          type: string
+        totalContributors:
+          description: Total number of unique contributors
+          example: 42
+          type: integer
+        contributors:
+          description: Contributors ordered by battle count (descending)
+          items:
+            $ref: '#/components/schemas/QuestContributor'
+          type: array
+      required:
+        - contributors
+        - endDate
+        - questId
+        - startDate
+        - totalContributors
       type: object
     PublicStats:
       description: Public statistics about the BixArena platform.
