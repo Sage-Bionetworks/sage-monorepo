@@ -15,8 +15,7 @@ CREATE TABLE api.quest (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Create index for quest_id lookup (primary query path)
-CREATE INDEX idx_quest_quest_id ON api.quest(quest_id);
+-- Note: No explicit index needed for quest_id as UNIQUE constraint automatically creates one
 
 -- Create composite index for battle queries (user_id, ended_at, status check via ended_at IS NOT NULL)
 -- This index optimizes the contributor query that finds users with completed battles in date range
