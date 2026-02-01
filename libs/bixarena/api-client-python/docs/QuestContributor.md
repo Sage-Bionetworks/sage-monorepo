@@ -8,7 +8,7 @@ A user who contributed to the quest
 | -------------------- | --------- | -------------------------------------------------- | ----- |
 | **username**         | **str**   | User&#39;s display name                            |
 | **battle_count**     | **int**   | Number of completed battles during quest period    |
-| **tier**             | **str**   | Contributor tier based on average battles per week |
+| **rank**             | **str**   | Contributor rank based on average battles per week |
 | **battles_per_week** | **float** | Average battles completed per week during quest    |
 
 ## Example

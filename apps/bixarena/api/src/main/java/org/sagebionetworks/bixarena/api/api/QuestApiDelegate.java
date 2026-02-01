@@ -47,7 +47,7 @@ public interface QuestApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"questId\" : \"build-bioarena-together\", \"endDate\" : \"2026-04-20T23:59:59Z\", \"contributors\" : [ { \"tier\" : \"champion\", \"battlesPerWeek\" : 12.5, \"battleCount\" : 42, \"username\" : \"tschaffter\" }, { \"tier\" : \"champion\", \"battlesPerWeek\" : 12.5, \"battleCount\" : 42, \"username\" : \"tschaffter\" } ], \"startDate\" : \"2026-01-20T00:00:00Z\", \"totalContributors\" : 42 }";
+                    String exampleString = "{ \"questId\" : \"build-bioarena-together\", \"endDate\" : \"2026-04-20T23:59:59Z\", \"contributors\" : [ { \"rank\" : \"champion\", \"battlesPerWeek\" : 12.5, \"battleCount\" : 42, \"username\" : \"tschaffter\" }, { \"rank\" : \"champion\", \"battlesPerWeek\" : 12.5, \"battleCount\" : 42, \"username\" : \"tschaffter\" } ], \"startDate\" : \"2026-01-20T00:00:00Z\", \"totalContributors\" : 42 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -163,7 +163,7 @@ def fetch_quest_contributors(
 
     Returns:
         Dictionary with:
-            - contributors_by_tier: dict with 'champion', 'knight', 'apprentice' lists
+            - contributors_by_rank: dict with 'champion', 'knight', 'apprentice' lists
             - total_contributors: int
             Returns empty structure if API call fails.
     """
@@ -175,13 +175,13 @@ def fetch_quest_contributors(
                 quest_id, min_battles=min_battles, limit=limit
             )
 
-            # Group contributors by tier
-            contributors_by_tier = {"champion": [], "knight": [], "apprentice": []}
+            # Group contributors by rank
+            contributors_by_rank = {"champion": [], "knight": [], "apprentice": []}
 
             for contributor in result.contributors:
-                tier = contributor.tier.lower()
-                if tier in contributors_by_tier:
-                    contributors_by_tier[tier].append(
+                rank = contributor.rank.lower()
+                if rank in contributors_by_rank:
+                    contributors_by_rank[rank].append(
                         {
                             "username": contributor.username,
                             "battle_count": contributor.battle_count,
@@ -191,19 +191,19 @@ def fetch_quest_contributors(
 
             logger.info(
                 f"Fetched {result.total_contributors} quest contributors: "
-                f"{len(contributors_by_tier['champion'])} champions, "
-                f"{len(contributors_by_tier['knight'])} knights, "
-                f"{len(contributors_by_tier['apprentice'])} apprentices"
+                f"{len(contributors_by_rank['champion'])} champions, "
+                f"{len(contributors_by_rank['knight'])} knights, "
+                f"{len(contributors_by_rank['apprentice'])} apprentices"
             )
 
             return {
-                "contributors_by_tier": contributors_by_tier,
+                "contributors_by_rank": contributors_by_rank,
                 "total_contributors": result.total_contributors,
             }
     except Exception as e:
         logger.error(f"Error fetching quest contributors: {e}")
         # Return empty structure if API call fails
         return {
-            "contributors_by_tier": {"champion": [], "knight": [], "apprentice": []},
+            "contributors_by_rank": {"champion": [], "knight": [], "apprentice": []},
             "total_contributors": 0,
         }

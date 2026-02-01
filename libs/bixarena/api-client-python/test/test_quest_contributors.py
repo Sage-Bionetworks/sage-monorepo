@@ -43,7 +43,7 @@ class TestQuestContributors(unittest.TestCase):
                     bixarena_api_client.models.quest_contributor.QuestContributor(
                         username = 'tschaffter', 
                         battle_count = 42, 
-                        tier = 'champion', 
+                        rank = 'champion', 
                         battles_per_week = 12.5, )
                     ]
             )
@@ -57,7 +57,7 @@ class TestQuestContributors(unittest.TestCase):
                     bixarena_api_client.models.quest_contributor.QuestContributor(
                         username = 'tschaffter', 
                         battle_count = 42, 
-                        tier = 'champion', 
+                        rank = 'champion', 
                         battles_per_week = 12.5, )
                     ],
         )

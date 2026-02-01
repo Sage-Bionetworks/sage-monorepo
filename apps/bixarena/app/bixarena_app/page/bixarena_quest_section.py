@@ -223,23 +223,23 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
             for i, builder in enumerate(builders_list)
         )
     else:
-        # Build real contributors list grouped by tier
+        # Build real contributors list grouped by rank
         total_count = contributors_data["total_contributors"]
-        contributors_by_tier = contributors_data["contributors_by_tier"]
+        contributors_by_rank = contributors_data["contributors_by_rank"]
 
-        # Tier emoji and styling
-        tier_config = {
+        # Rank emoji and styling
+        rank_config = {
             "champion": {"emoji": "🏆", "color": "#fbbf24"},  # Gold
             "knight": {"emoji": "⚔️", "color": "#c0c0c0"},  # Silver
             "apprentice": {"emoji": "🌟", "color": "#cd7f32"},  # Bronze
         }
 
         builders_parts = []
-        for tier in ["champion", "knight", "apprentice"]:
-            tier_contributors = contributors_by_tier.get(tier, [])
-            for contributor in tier_contributors:
+        for rank in ["champion", "knight", "apprentice"]:
+            rank_contributors = contributors_by_rank.get(rank, [])
+            for contributor in rank_contributors:
                 username = contributor["username"]
-                emoji = tier_config[tier]["emoji"]
+                emoji = rank_config[rank]["emoji"]
                 builders_parts.append(
                     f'<span style="color: var(--body-text-color); '
                     f'font-size: 0.875rem;">'

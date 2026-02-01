@@ -40,8 +40,8 @@ class QuestContributor(BaseModel):
         description="Number of completed battles during quest period",
         alias="battleCount",
     )
-    tier: StrictStr = Field(
-        description="Contributor tier based on average battles per week"
+    rank: StrictStr = Field(
+        description="Contributor rank based on average battles per week"
     )
     battles_per_week: Union[StrictFloat, StrictInt] = Field(
         description="Average battles completed per week during quest",
@@ -50,12 +50,12 @@ class QuestContributor(BaseModel):
     __properties: ClassVar[List[str]] = [
         "username",
         "battleCount",
-        "tier",
+        "rank",
         "battlesPerWeek",
     ]
 
-    @field_validator("tier")
-    def tier_validate_enum(cls, value):
+    @field_validator("rank")
+    def rank_validate_enum(cls, value):
         """Validates the enum"""
         if value not in set(["champion", "knight", "apprentice"]):
             raise ValueError(
@@ -115,7 +115,7 @@ class QuestContributor(BaseModel):
             {
                 "username": obj.get("username"),
                 "battleCount": obj.get("battleCount"),
-                "tier": obj.get("tier"),
+                "rank": obj.get("rank"),
                 "battlesPerWeek": obj.get("battlesPerWeek"),
             }
         )
