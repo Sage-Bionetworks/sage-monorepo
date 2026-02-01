@@ -49,8 +49,8 @@ ON CONFLICT (id) DO NOTHING;
 -- Model1: 3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0 (GPT-4)
 -- Model2: 8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11 (Claude-3.5-Sonnet)
 
--- User1: 50 completed battles (Champion - 12.5 battles/week)
--- Distribute battles across quest period
+-- User1: 50 completed battles (Champion - ~12 battles/week based on current date)
+-- Distribute battles evenly over 4 weeks (~3 per day)
 INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
 SELECT
   gen_random_uuid(),
@@ -58,11 +58,12 @@ SELECT
   '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
   '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
   'Quest Battle ' || n,
-  '2026-01-20 00:00:00+00'::timestamptz + (n || ' hours')::interval,
-  '2026-01-20 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+  '2026-01-20 00:00:00+00'::timestamptz + ((n * 8) || ' hours')::interval,
+  '2026-01-20 00:00:00+00'::timestamptz + ((n * 8 + 1) || ' hours')::interval
 FROM generate_series(1, 50) AS n;
 
--- User2: 40 completed battles (Champion - 10 battles/week)
+-- User2: 40 completed battles (Champion - ~10 battles/week based on current date)
+-- Distribute battles evenly over 4 weeks (~2.5 per day)
 INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
 SELECT
   gen_random_uuid(),
@@ -70,11 +71,12 @@ SELECT
   '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
   '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
   'Quest Battle ' || n,
-  '2026-01-21 00:00:00+00'::timestamptz + (n || ' hours')::interval,
-  '2026-01-21 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+  '2026-01-20 06:00:00+00'::timestamptz + ((n * 10) || ' hours')::interval,
+  '2026-01-20 06:00:00+00'::timestamptz + ((n * 10 + 1) || ' hours')::interval
 FROM generate_series(1, 40) AS n;
 
--- User3: 25 completed battles (Knight - 6.25 battles/week)
+-- User3: 15 completed battles (Knight - ~8.8 battles/week based on 12 days elapsed)
+-- Distribute battles evenly over 12 days
 INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
 SELECT
   gen_random_uuid(),
@@ -82,11 +84,12 @@ SELECT
   '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
   '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
   'Quest Battle ' || n,
-  '2026-01-22 00:00:00+00'::timestamptz + (n || ' hours')::interval,
-  '2026-01-22 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
-FROM generate_series(1, 25) AS n;
+  '2026-01-20 12:00:00+00'::timestamptz + ((n * 19) || ' hours')::interval,
+  '2026-01-20 12:00:00+00'::timestamptz + ((n * 19 + 1) || ' hours')::interval
+FROM generate_series(1, 15) AS n;
 
--- User4: 20 completed battles (Knight - exactly 5 battles/week)
+-- User4: 10 completed battles (Knight - ~5.9 battles/week based on 12 days elapsed)
+-- Distribute battles evenly over 12 days
 INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
 SELECT
   gen_random_uuid(),
@@ -94,11 +97,12 @@ SELECT
   '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
   '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
   'Quest Battle ' || n,
-  '2026-01-23 00:00:00+00'::timestamptz + (n || ' hours')::interval,
-  '2026-01-23 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
-FROM generate_series(1, 20) AS n;
+  '2026-01-20 18:00:00+00'::timestamptz + ((n * 29) || ' hours')::interval,
+  '2026-01-20 18:00:00+00'::timestamptz + ((n * 29 + 1) || ' hours')::interval
+FROM generate_series(1, 10) AS n;
 
--- User5: 8 completed battles (Apprentice - 2 battles/week)
+-- User5: 8 completed battles (Apprentice - ~2 battles/week)
+-- Distribute battles evenly over 4 weeks
 INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
 SELECT
   gen_random_uuid(),
@@ -106,11 +110,12 @@ SELECT
   '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
   '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
   'Quest Battle ' || n,
-  '2026-01-24 00:00:00+00'::timestamptz + (n || ' hours')::interval,
-  '2026-01-24 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+  '2026-01-21 00:00:00+00'::timestamptz + ((n * 50) || ' hours')::interval,
+  '2026-01-21 00:00:00+00'::timestamptz + ((n * 50 + 1) || ' hours')::interval
 FROM generate_series(1, 8) AS n;
 
--- User6: 5 completed battles (Apprentice - 1.25 battles/week)
+-- User6: 5 completed battles (Apprentice - ~1.2 battles/week)
+-- Distribute battles evenly over 4 weeks
 INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
 SELECT
   gen_random_uuid(),
@@ -118,11 +123,12 @@ SELECT
   '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
   '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
   'Quest Battle ' || n,
-  '2026-01-25 00:00:00+00'::timestamptz + (n || ' hours')::interval,
-  '2026-01-25 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+  '2026-01-21 12:00:00+00'::timestamptz + ((n * 80) || ' hours')::interval,
+  '2026-01-21 12:00:00+00'::timestamptz + ((n * 80 + 1) || ' hours')::interval
 FROM generate_series(1, 5) AS n;
 
--- User7: 2 completed battles (Apprentice - 0.5 battles/week)
+-- User7: 2 completed battles (Apprentice - ~0.5 battles/week)
+-- Distribute battles evenly over 4 weeks
 INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
 SELECT
   gen_random_uuid(),
@@ -130,8 +136,8 @@ SELECT
   '3c4d5e6f-7081-4a92-b3c4-d5e6f7a8b9c0'::uuid,
   '8b7b9c2a-5b41-4a4f-9a7b-6c2b5f3e9d11'::uuid,
   'Quest Battle ' || n,
-  '2026-01-26 00:00:00+00'::timestamptz + (n || ' hours')::interval,
-  '2026-01-26 00:00:00+00'::timestamptz + ((n + 1) || ' hours')::interval
+  '2026-01-22 00:00:00+00'::timestamptz + ((n * 160) || ' hours')::interval,
+  '2026-01-22 00:00:00+00'::timestamptz + ((n * 160 + 1) || ' hours')::interval
 FROM generate_series(1, 2) AS n;
 
 -- Add some battles outside the quest period (should not be counted)

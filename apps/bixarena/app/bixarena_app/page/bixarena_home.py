@@ -7,6 +7,7 @@ from bixarena_app.api.api_client_helper import (
     calculate_quest_progress,
     create_authenticated_api_client,
     fetch_public_stats,
+    fetch_quest_contributors,
 )
 from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
 from bixarena_app.config.constants import COMMUNITY_QUEST_ENABLED
@@ -305,8 +306,9 @@ def build_quest_section_wrapper():
         )
 
     try:
-        # Fetch real-time quest progress data
+        # Fetch real-time quest progress data and contributors
         progress_data = calculate_quest_progress()
+        contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
         (
             quest_container,
             progress_html_container,
@@ -315,9 +317,9 @@ def build_quest_section_wrapper():
             carousel_init_trigger,
             carousel_id,
             rotation_interval,
-        ) = build_quest_section(progress_data)
+        ) = build_quest_section(progress_data, contributors_data)
     except Exception as e:
-        logger.error(f"Error calculating quest progress: {e}")
+        logger.error(f"Error calculating quest progress or fetching contributors: {e}")
         # Fall back to default data if calculation fails
         (
             quest_container,
@@ -327,7 +329,7 @@ def build_quest_section_wrapper():
             carousel_init_trigger,
             carousel_id,
             rotation_interval,
-        ) = build_quest_section(None)
+        ) = build_quest_section(None, None)
     return (
         quest_container,
         progress_html_container,

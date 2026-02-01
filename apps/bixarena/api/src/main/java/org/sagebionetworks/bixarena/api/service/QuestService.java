@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.bixarena.api.configuration.CacheNames;
 import org.sagebionetworks.bixarena.api.exception.QuestNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.QuestContributorDto;
 import org.sagebionetworks.bixarena.api.model.dto.QuestContributorDto.TierEnum;
@@ -36,6 +37,7 @@ public class QuestService {
 
   /**
    * Get contributors for a specific quest.
+   * Results are cached for 1 minute to reduce database load.
    *
    * @param questId the quest identifier
    * @param minBattles minimum battles required to be listed
@@ -43,6 +45,9 @@ public class QuestService {
    * @return quest contributors data
    * @throws QuestNotFoundException if quest not found
    */
+  @Cacheable(
+      value = CacheNames.QUEST_CONTRIBUTORS,
+      key = "#questId + '-' + #minBattles + '-' + #limit")
   @Transactional(readOnly = true)
   public QuestContributorsDto getQuestContributors(
       String questId, int minBattles, int limit) {

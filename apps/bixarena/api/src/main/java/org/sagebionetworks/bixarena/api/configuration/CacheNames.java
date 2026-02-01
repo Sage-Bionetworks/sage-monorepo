@@ -30,4 +30,12 @@ public final class CacheNames {
    * Invalidation: Event-driven when user completes a battle
    */
   public static final String USER_RANKS = "bixarena:api:userRanks";
+
+  /**
+   * Cache for quest contributors.
+   * Key format: bixarena:api:questContributors::{questId}-{minBattles}-{limit}
+   * TTL: 1 minute (same as public stats)
+   * Invalidation: Time-based (1 minute TTL)
+   */
+  public static final String QUEST_CONTRIBUTORS = "bixarena:api:questContributors";
 }

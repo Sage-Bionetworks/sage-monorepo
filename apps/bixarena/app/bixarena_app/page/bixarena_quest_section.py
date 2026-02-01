@@ -7,6 +7,7 @@ import gradio as gr
 
 # Quest configuration - hardcoded for Season 1
 QUEST_CONFIG = {
+    "quest_id": "build-bioarena-together",  # Quest ID for API calls
     "title": "Building BioArena",
     "description": "We are constructing a medieval arena in Minecraft to symbolize our collective effort. Every battle counts towards the build.",
     "goal": 2850,
@@ -197,12 +198,60 @@ def _build_progress_html(
     """
 
 
-def _build_builders_credits_html() -> str:
+def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
     """Build the Builders and Credits HTML sections.
+
+    Args:
+        contributors_data: Optional dict with contributors_by_tier and total_contributors
 
     Returns:
         HTML string for the builders and credits sections
     """
+    # Use mock data if no contributors data provided (fallback)
+    if contributors_data is None or contributors_data.get("total_contributors", 0) == 0:
+        builders_list = QUEST_CONFIG["builders"]
+        total_count = len(builders_list)
+        builders_html = "".join(
+            f'<span style="color: var(--body-text-color); '
+            f'font-size: 0.875rem;">{builder}</span>'
+            + (
+                '<span style="color: var(--body-text-color-subdued); '
+                'font-size: 0.75rem;">•</span>'
+                if i < len(builders_list) - 1
+                else ""
+            )
+            for i, builder in enumerate(builders_list)
+        )
+    else:
+        # Build real contributors list grouped by tier
+        total_count = contributors_data["total_contributors"]
+        contributors_by_tier = contributors_data["contributors_by_tier"]
+
+        # Tier emoji and styling
+        tier_config = {
+            "champion": {"emoji": "🏆", "color": "#fbbf24"},  # Gold
+            "knight": {"emoji": "⚔️", "color": "#c0c0c0"},  # Silver
+            "apprentice": {"emoji": "🌟", "color": "#cd7f32"},  # Bronze
+        }
+
+        builders_parts = []
+        for tier in ["champion", "knight", "apprentice"]:
+            tier_contributors = contributors_by_tier.get(tier, [])
+            for contributor in tier_contributors:
+                username = contributor["username"]
+                emoji = tier_config[tier]["emoji"]
+                builders_parts.append(
+                    f'<span style="color: var(--body-text-color); '
+                    f'font-size: 0.875rem;">'
+                    f'<span style="margin-right: 0.25rem;">{emoji}</span>{username}'
+                    f"</span>"
+                )
+
+        # Join with separators
+        builders_html = '<span style="color: var(--body-text-color-subdued); font-size: 0.75rem;">•</span>'.join(
+            builders_parts
+        )
+
     return f"""
     <div style="display: flex; flex-direction: column; gap: 1.5rem;
                 height: 100%; margin-top: 0.75rem;">
@@ -214,26 +263,30 @@ def _build_builders_credits_html() -> str:
                     min-height: 0;">
             <h4 style="color: var(--body-text-color); font-weight: 600;
                        margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-                Builders ({len(QUEST_CONFIG["builders"])})
+                Builders ({total_count})
             </h4>
+
             <div style="flex: 1; overflow-y: auto; min-height: 0;
                         padding-right: 0.25rem;">
                 <div style="display: flex; flex-wrap: wrap;
                             align-items: center; gap: 0.5rem;
                             line-height: 1.5;">
-                    {
-        "".join(
-            f'<span style="color: var(--body-text-color); '
-            f'font-size: 0.875rem;">{builder}</span>'
-            + (
-                '<span style="color: var(--body-text-color-subdued); '
-                'font-size: 0.75rem;">•</span>'
-                if i < len(QUEST_CONFIG["builders"]) - 1
-                else ""
-            )
-            for i, builder in enumerate(QUEST_CONFIG["builders"])
-        )
-    }
+                    {builders_html}
+                </div>
+            </div>
+
+            <!-- Quest Ranks Legend (below list) -->
+            <div style="margin-top: 0.75rem;
+                        padding-top: 0.75rem;
+                        border-top: 1px solid var(--border-color-primary);
+                        font-size: 0.8125rem;">
+                <div style="color: var(--body-text-color); font-weight: 600; margin-bottom: 0.5rem;">
+                    Quest Ranks:
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.375rem; color: var(--body-text-color-subdued);">
+                    <div>🏆 Champion (10+ battles/week)</div>
+                    <div>⚔️ Knight (5+ battles/week)</div>
+                    <div>🌟 Apprentice (&lt;5 battles/week)</div>
                 </div>
             </div>
         </div>
@@ -274,11 +327,13 @@ def _build_builders_credits_html() -> str:
 
 def build_quest_section(
     progress_data: dict | None = None,
+    contributors_data: dict | None = None,
 ) -> tuple[gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str, int]:
     """Build the Community Quest section for home page.
 
     Args:
         progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
+        contributors_data: Optional dict with contributors info (contributors_by_tier, total_contributors)
 
     Returns:
         Tuple of (quest_container, progress_html_container, contribute_button_authenticated,
@@ -652,7 +707,7 @@ def build_quest_section(
                         elem_classes=["quest-cta-btn"],
                     )
                     # Builders and Credits sections below CTA button
-                    gr.HTML(_build_builders_credits_html())
+                    gr.HTML(_build_builders_credits_html(contributors_data))
 
         # Styling
         gr.HTML("""
