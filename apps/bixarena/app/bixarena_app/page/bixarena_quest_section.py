@@ -11,7 +11,7 @@ TIER_CONFIG = {
         "emoji": "🏆",
         "color": "#fbbf24",  # Gold
         "threshold": "10+",
-        "description": "10+ battles/week",
+        "description": "10+ battles/week on average",
     },
     "knight": {
         "emoji": "⚔️",
@@ -170,6 +170,32 @@ def build_quest_not_found_section() -> tuple[
     )
 
 
+def _build_tier_legend_html() -> str:
+    """Build the tier legend HTML with descriptions and accuracy note.
+
+    Returns:
+        HTML string for the tier legend section
+    """
+    return f"""
+            <!-- Contributor Tiers Legend -->
+            <div style="margin-top: 1.5rem;">
+                <h4 style="color: var(--body-text-color); font-weight: 600;
+                           margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                    Contributor Tiers
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 0.375rem;
+                            color: var(--body-text-color-subdued); font-size: 0.875rem;">
+                    <div>{TIER_CONFIG["champion"]["emoji"]} Champion ({TIER_CONFIG["champion"]["description"]})</div>
+                    <div>{TIER_CONFIG["knight"]["emoji"]} Knight ({TIER_CONFIG["knight"]["description"]})</div>
+                    <div>{TIER_CONFIG["apprentice"]["emoji"]} Apprentice ({TIER_CONFIG["apprentice"]["description"]})</div>
+                </div>
+                <div style="margin-top: 0.75rem; color: var(--body-text-color-subdued); font-size: 0.8125rem; font-style: italic; line-height: 1.5;">
+                    Note: Tiers are calculated based on your average battle completion rate. As more days of the quest pass, tier assignments become increasingly accurate.
+                </div>
+            </div>
+"""
+
+
 def _build_progress_html(
     current_blocks: int, goal_blocks: int, percentage: float, days_remaining: int
 ) -> str:
@@ -281,24 +307,7 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
                 No builders yet. Be the first to contribute!
             </div>
 
-            <!-- Contributor Tiers Legend -->
-            <div style="margin-top: 1.5rem;">
-                <h4 style="color: var(--body-text-color); font-weight: 600;
-                           margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-                    Contributor Tiers
-                </h4>
-                <div style="display: flex; flex-direction: column; gap: 0.375rem;
-                            color: var(--body-text-color-subdued); \
-font-size: 0.875rem;">
-                    <div>{TIER_CONFIG["champion"]["emoji"]} Champion \
-({TIER_CONFIG["champion"]["description"]})</div>
-                    <div>{TIER_CONFIG["knight"]["emoji"]} Knight \
-({TIER_CONFIG["knight"]["description"]})</div>
-                    <div>{TIER_CONFIG["apprentice"]["emoji"]} Apprentice \
-({TIER_CONFIG["apprentice"]["description"]})</div>
-                </div>
-            </div>
-        </div>
+{_build_tier_legend_html()}        </div>
 
         <!-- Divider -->
         <div style="height: 1px; background: var(--border-color-primary);"></div>
@@ -373,24 +382,7 @@ font-size: 0.875rem;">
                 </div>
             </div>
 
-            <!-- Contributor Tiers Legend (below list) -->
-            <div style="margin-top: 1.5rem;">
-                <h4 style="color: var(--body-text-color); font-weight: 600;
-                           margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-                    Contributor Tiers
-                </h4>
-                <div style="display: flex; flex-direction: column; gap: 0.375rem;
-                            color: var(--body-text-color-subdued); \
-font-size: 0.875rem;">
-                    <div>{TIER_CONFIG["champion"]["emoji"]} Champion \
-({TIER_CONFIG["champion"]["description"]})</div>
-                    <div>{TIER_CONFIG["knight"]["emoji"]} Knight \
-({TIER_CONFIG["knight"]["description"]})</div>
-                    <div>{TIER_CONFIG["apprentice"]["emoji"]} Apprentice \
-({TIER_CONFIG["apprentice"]["description"]})</div>
-                </div>
-            </div>
-        </div>
+{_build_tier_legend_html()}        </div>
 
         <!-- Divider -->
         <div style="height: 1px; background: var(--border-color-primary);"></div>
