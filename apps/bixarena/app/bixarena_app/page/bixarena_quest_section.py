@@ -68,7 +68,7 @@ QUEST_CONFIG = {
     "updates": [
         # Updates are displayed in chronological order (newest first)
         {
-            "date": "2026-02-01",
+            "date": "2026-02-03",
             "title": "Launch: Build BioArena Together",
             "description": (
                 "Welcome to our Community Quest! AI is evolving fast. The best "
@@ -81,7 +81,7 @@ QUEST_CONFIG = {
                 "0 blocks, every evaluation you complete adds another stone to our "
                 "foundation. The screenshots above offer a glimpse into the future "
                 "arena we'll build together. We'll share progress updates every "
-                "two weeks with new screenshots showing how far we've come. "
+                "week with new screenshots showing how far we've come. "
                 "Let's build something legendary!"
             ),
             "images": [
