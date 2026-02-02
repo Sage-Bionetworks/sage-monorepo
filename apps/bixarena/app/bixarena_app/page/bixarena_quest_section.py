@@ -5,8 +5,8 @@ from datetime import datetime
 
 import gradio as gr
 
-# Rank configuration for quest contributors
-RANK_CONFIG = {
+# Tier configuration for quest contributors
+TIER_CONFIG = {
     "champion": {
         "emoji": "🏆",
         "color": "#fbbf24",  # Gold
@@ -257,7 +257,7 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
     """Build the Builders and Credits HTML sections.
 
     Args:
-        contributors_data: Optional dict with contributors_by_rank and total_contributors
+        contributors_data: Optional dict with contributors_by_tier and total_contributors
 
     Returns:
         HTML string for the builders and credits sections
@@ -281,21 +281,21 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
                 No builders yet. Be the first to contribute!
             </div>
 
-            <!-- Quest Ranks Legend -->
+            <!-- Contributor Tiers Legend -->
             <div style="margin-top: 1.5rem;">
                 <h4 style="color: var(--body-text-color); font-weight: 600;
                            margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-                    Quest Ranks
+                    Contributor Tiers
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 0.375rem;
                             color: var(--body-text-color-subdued); \
 font-size: 0.875rem;">
-                    <div>{RANK_CONFIG["champion"]["emoji"]} Champion \
-({RANK_CONFIG["champion"]["description"]})</div>
-                    <div>{RANK_CONFIG["knight"]["emoji"]} Knight \
-({RANK_CONFIG["knight"]["description"]})</div>
-                    <div>{RANK_CONFIG["apprentice"]["emoji"]} Apprentice \
-({RANK_CONFIG["apprentice"]["description"]})</div>
+                    <div>{TIER_CONFIG["champion"]["emoji"]} Champion \
+({TIER_CONFIG["champion"]["description"]})</div>
+                    <div>{TIER_CONFIG["knight"]["emoji"]} Knight \
+({TIER_CONFIG["knight"]["description"]})</div>
+                    <div>{TIER_CONFIG["apprentice"]["emoji"]} Apprentice \
+({TIER_CONFIG["apprentice"]["description"]})</div>
                 </div>
             </div>
         </div>
@@ -330,14 +330,14 @@ font-size: 0.875rem;">
     else:
         # Build real contributors list grouped by rank
         total_count = contributors_data["total_contributors"]
-        contributors_by_rank = contributors_data["contributors_by_rank"]
+        contributors_by_tier = contributors_data["contributors_by_tier"]
 
         builders_parts = []
         for rank in ["champion", "knight", "apprentice"]:
-            rank_contributors = contributors_by_rank.get(rank, [])
+            rank_contributors = contributors_by_tier.get(rank, [])
             for contributor in rank_contributors:
                 username = contributor["username"]
-                emoji = RANK_CONFIG[rank]["emoji"]
+                emoji = TIER_CONFIG[rank]["emoji"]
                 builders_parts.append(
                     f'<span style="color: var(--body-text-color); '
                     f'font-size: 0.875rem;">'
@@ -373,21 +373,21 @@ font-size: 0.875rem;">
                 </div>
             </div>
 
-            <!-- Quest Ranks Legend (below list) -->
+            <!-- Contributor Tiers Legend (below list) -->
             <div style="margin-top: 1.5rem;">
                 <h4 style="color: var(--body-text-color); font-weight: 600;
                            margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-                    Quest Ranks
+                    Contributor Tiers
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 0.375rem;
                             color: var(--body-text-color-subdued); \
 font-size: 0.875rem;">
-                    <div>{RANK_CONFIG["champion"]["emoji"]} Champion \
-({RANK_CONFIG["champion"]["description"]})</div>
-                    <div>{RANK_CONFIG["knight"]["emoji"]} Knight \
-({RANK_CONFIG["knight"]["description"]})</div>
-                    <div>{RANK_CONFIG["apprentice"]["emoji"]} Apprentice \
-({RANK_CONFIG["apprentice"]["description"]})</div>
+                    <div>{TIER_CONFIG["champion"]["emoji"]} Champion \
+({TIER_CONFIG["champion"]["description"]})</div>
+                    <div>{TIER_CONFIG["knight"]["emoji"]} Knight \
+({TIER_CONFIG["knight"]["description"]})</div>
+                    <div>{TIER_CONFIG["apprentice"]["emoji"]} Apprentice \
+({TIER_CONFIG["apprentice"]["description"]})</div>
                 </div>
             </div>
         </div>
@@ -434,7 +434,7 @@ def build_quest_section(
 
     Args:
         progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
-        contributors_data: Optional dict with contributors info (contributors_by_rank, total_contributors, error)
+        contributors_data: Optional dict with contributors info (contributors_by_tier, total_contributors, error)
 
     Returns:
         Tuple of (quest_container, progress_html_container, contribute_button_authenticated,

@@ -2426,7 +2426,7 @@ components:
     QuestContributor:
       description: A user who contributed to the quest
       example:
-        rank: champion
+        tier: champion
         battlesPerWeek: 12.5
         battleCount: 42
         username: tschaffter
@@ -2439,8 +2439,8 @@ components:
           description: Number of completed battles during quest period
           example: 42
           type: integer
-        rank:
-          description: Contributor rank based on average battles per week
+        tier:
+          description: Contributor tier based on average battles per week
           enum:
             - champion
             - knight
@@ -2455,7 +2455,7 @@ components:
       required:
         - battleCount
         - battlesPerWeek
-        - rank
+        - tier
         - username
       type: object
     QuestContributors:
@@ -2464,11 +2464,11 @@ components:
         questId: build-bioarena-together
         endDate: 2026-04-20T23:59:59Z
         contributors:
-          - rank: champion
+          - tier: champion
             battlesPerWeek: 12.5
             battleCount: 42
             username: tschaffter
-          - rank: champion
+          - tier: champion
             battlesPerWeek: 12.5
             battleCount: 42
             username: tschaffter

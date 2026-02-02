@@ -30,9 +30,9 @@ public class QuestContributorDto {
   private Integer battleCount;
 
   /**
-   * Contributor rank based on average battles per week
+   * Contributor tier based on average battles per week
    */
-  public enum RankEnum {
+  public enum TierEnum {
     CHAMPION("champion"),
     
     KNIGHT("knight"),
@@ -41,7 +41,7 @@ public class QuestContributorDto {
 
     private final String value;
 
-    RankEnum(String value) {
+    TierEnum(String value) {
       this.value = value;
     }
 
@@ -56,8 +56,8 @@ public class QuestContributorDto {
     }
 
     @JsonCreator
-    public static RankEnum fromValue(String value) {
-      for (RankEnum b : RankEnum.values()) {
+    public static TierEnum fromValue(String value) {
+      for (TierEnum b : TierEnum.values()) {
         if (b.value.equals(value)) {
           return b;
         }
@@ -66,7 +66,7 @@ public class QuestContributorDto {
     }
   }
 
-  private RankEnum rank;
+  private TierEnum tier;
 
   private Double battlesPerWeek;
 
@@ -77,10 +77,10 @@ public class QuestContributorDto {
   /**
    * Constructor with only required parameters
    */
-  public QuestContributorDto(String username, Integer battleCount, RankEnum rank, Double battlesPerWeek) {
+  public QuestContributorDto(String username, Integer battleCount, TierEnum tier, Double battlesPerWeek) {
     this.username = username;
     this.battleCount = battleCount;
-    this.rank = rank;
+    this.tier = tier;
     this.battlesPerWeek = battlesPerWeek;
   }
 
@@ -124,24 +124,24 @@ public class QuestContributorDto {
     this.battleCount = battleCount;
   }
 
-  public QuestContributorDto rank(RankEnum rank) {
-    this.rank = rank;
+  public QuestContributorDto tier(TierEnum tier) {
+    this.tier = tier;
     return this;
   }
 
   /**
-   * Contributor rank based on average battles per week
-   * @return rank
+   * Contributor tier based on average battles per week
+   * @return tier
    */
   @NotNull 
-  @Schema(name = "rank", example = "champion", description = "Contributor rank based on average battles per week", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("rank")
-  public RankEnum getRank() {
-    return rank;
+  @Schema(name = "tier", example = "champion", description = "Contributor tier based on average battles per week", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("tier")
+  public TierEnum getTier() {
+    return tier;
   }
 
-  public void setRank(RankEnum rank) {
-    this.rank = rank;
+  public void setTier(TierEnum tier) {
+    this.tier = tier;
   }
 
   public QuestContributorDto battlesPerWeek(Double battlesPerWeek) {
@@ -175,13 +175,13 @@ public class QuestContributorDto {
     QuestContributorDto questContributor = (QuestContributorDto) o;
     return Objects.equals(this.username, questContributor.username) &&
         Objects.equals(this.battleCount, questContributor.battleCount) &&
-        Objects.equals(this.rank, questContributor.rank) &&
+        Objects.equals(this.tier, questContributor.tier) &&
         Objects.equals(this.battlesPerWeek, questContributor.battlesPerWeek);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, battleCount, rank, battlesPerWeek);
+    return Objects.hash(username, battleCount, tier, battlesPerWeek);
   }
 
   @Override
@@ -190,7 +190,7 @@ public class QuestContributorDto {
     sb.append("class QuestContributorDto {\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    battleCount: ").append(toIndentedString(battleCount)).append("\n");
-    sb.append("    rank: ").append(toIndentedString(rank)).append("\n");
+    sb.append("    tier: ").append(toIndentedString(tier)).append("\n");
     sb.append("    battlesPerWeek: ").append(toIndentedString(battlesPerWeek)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -222,7 +222,7 @@ public class QuestContributorDto {
     protected Builder copyOf(QuestContributorDto value) { 
       this.instance.setUsername(value.username);
       this.instance.setBattleCount(value.battleCount);
-      this.instance.setRank(value.rank);
+      this.instance.setTier(value.tier);
       this.instance.setBattlesPerWeek(value.battlesPerWeek);
       return this;
     }
@@ -237,8 +237,8 @@ public class QuestContributorDto {
       return this;
     }
     
-    public QuestContributorDto.Builder rank(RankEnum rank) {
-      this.instance.rank(rank);
+    public QuestContributorDto.Builder tier(TierEnum tier) {
+      this.instance.tier(tier);
       return this;
     }
     

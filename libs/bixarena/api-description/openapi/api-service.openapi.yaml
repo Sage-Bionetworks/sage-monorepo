@@ -1655,13 +1655,13 @@ components:
           type: integer
           description: Number of completed battles during quest period
           example: 42
-        rank:
+        tier:
           type: string
           enum:
             - champion
             - knight
             - apprentice
-          description: Contributor rank based on average battles per week
+          description: Contributor tier based on average battles per week
           example: champion
         battlesPerWeek:
           type: number
@@ -1671,7 +1671,7 @@ components:
       required:
         - username
         - battleCount
-        - rank
+        - tier
         - battlesPerWeek
     QuestContributors:
       type: object

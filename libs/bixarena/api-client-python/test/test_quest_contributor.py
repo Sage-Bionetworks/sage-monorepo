@@ -37,14 +37,14 @@ class TestQuestContributor(unittest.TestCase):
             return QuestContributor(
                 username = 'tschaffter',
                 battle_count = 42,
-                rank = 'champion',
+                tier = 'champion',
                 battles_per_week = 12.5
             )
         else:
             return QuestContributor(
                 username = 'tschaffter',
                 battle_count = 42,
-                rank = 'champion',
+                tier = 'champion',
                 battles_per_week = 12.5,
         )
         """

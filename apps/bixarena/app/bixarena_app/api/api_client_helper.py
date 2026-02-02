@@ -178,13 +178,13 @@ def fetch_quest_contributors(
                 quest_id, min_battles=min_battles, limit=limit
             )
 
-            # Group contributors by rank
-            contributors_by_rank = {"champion": [], "knight": [], "apprentice": []}
+            # Group contributors by tier
+            contributors_by_tier = {"champion": [], "knight": [], "apprentice": []}
 
             for contributor in result.contributors:
-                rank = contributor.rank.lower()
-                if rank in contributors_by_rank:
-                    contributors_by_rank[rank].append(
+                tier = contributor.tier.lower()
+                if tier in contributors_by_tier:
+                    contributors_by_tier[tier].append(
                         {
                             "username": contributor.username,
                             "battle_count": contributor.battle_count,
@@ -194,13 +194,13 @@ def fetch_quest_contributors(
 
             logger.info(
                 f"Fetched {result.total_contributors} quest contributors: "
-                f"{len(contributors_by_rank['champion'])} champions, "
-                f"{len(contributors_by_rank['knight'])} knights, "
-                f"{len(contributors_by_rank['apprentice'])} apprentices"
+                f"{len(contributors_by_tier['champion'])} champions, "
+                f"{len(contributors_by_tier['knight'])} knights, "
+                f"{len(contributors_by_tier['apprentice'])} apprentices"
             )
 
             return {
-                "contributors_by_rank": contributors_by_rank,
+                "contributors_by_tier": contributors_by_tier,
                 "total_contributors": result.total_contributors,
                 "error": False,
             }
@@ -208,7 +208,7 @@ def fetch_quest_contributors(
         # Quest not found - this is expected for invalid quest IDs
         logger.warning(f"Quest not found: {quest_id}")
         return {
-            "contributors_by_rank": {"champion": [], "knight": [], "apprentice": []},
+            "contributors_by_tier": {"champion": [], "knight": [], "apprentice": []},
             "total_contributors": 0,
             "error": True,
         }
@@ -218,7 +218,7 @@ def fetch_quest_contributors(
             f"API error fetching quest contributors (status {e.status}): {e.reason}"
         )
         return {
-            "contributors_by_rank": {"champion": [], "knight": [], "apprentice": []},
+            "contributors_by_tier": {"champion": [], "knight": [], "apprentice": []},
             "total_contributors": 0,
             "error": True,
         }
@@ -226,7 +226,7 @@ def fetch_quest_contributors(
         # Unexpected errors (network, parsing, etc.)
         logger.error(f"Unexpected error fetching quest contributors: {e}")
         return {
-            "contributors_by_rank": {"champion": [], "knight": [], "apprentice": []},
+            "contributors_by_tier": {"champion": [], "knight": [], "apprentice": []},
             "total_contributors": 0,
             "error": True,
         }

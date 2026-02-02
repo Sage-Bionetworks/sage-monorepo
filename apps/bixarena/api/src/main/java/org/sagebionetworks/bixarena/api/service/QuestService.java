@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.CacheNames;
 import org.sagebionetworks.bixarena.api.exception.QuestNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.QuestContributorDto;
-import org.sagebionetworks.bixarena.api.model.dto.QuestContributorDto.RankEnum;
+import org.sagebionetworks.bixarena.api.model.dto.QuestContributorDto.TierEnum;
 import org.sagebionetworks.bixarena.api.model.dto.QuestContributorsDto;
 import org.sagebionetworks.bixarena.api.model.entity.QuestEntity;
 import org.sagebionetworks.bixarena.api.model.projection.ContributorProjection;
@@ -32,7 +32,7 @@ public class QuestService {
   private final QuestRepository questRepository;
   private final BattleRepository battleRepository;
 
-  // Rank thresholds (battles per week)
+  // Tier thresholds (battles per week)
   private static final double CHAMPION_THRESHOLD = 10.0;
   private static final double KNIGHT_THRESHOLD = 5.0;
 
@@ -66,25 +66,25 @@ public class QuestService {
         battleRepository.findContributorsByDateRange(
             quest.getStartDate(), quest.getEndDate(), minBattles, PageRequest.of(0, limit));
 
-    // Calculate ranks and battles per week for each contributor
+    // Calculate tiers and battles per week for each contributor
     // Use quest end date if quest has ended, otherwise use current time (UTC)
     OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
     OffsetDateTime effectiveEndDate =
         now.isAfter(quest.getEndDate()) ? quest.getEndDate() : now;
     double questWeeks = calculateWeeks(quest.getStartDate(), effectiveEndDate);
 
-    // Convert projections to DTOs with rank information
+    // Convert projections to DTOs with tier information
     List<QuestContributorDto> contributors =
         contributorProjections.stream()
             .map(
                 projection -> {
                   double battlesPerWeek = projection.getBattleCount() / questWeeks;
-                  RankEnum rank = calculateRank(battlesPerWeek);
+                  TierEnum tier = calculateTier(battlesPerWeek);
 
                   return QuestContributorDto.builder()
                       .username(projection.getUsername())
                       .battleCount(projection.getBattleCount())
-                      .rank(rank)
+                      .tier(tier)
                       .battlesPerWeek(battlesPerWeek)
                       .build();
                 })
@@ -119,21 +119,21 @@ public class QuestService {
   }
 
   /**
-   * Calculate contributor rank based on battles per week.
+   * Calculate contributor tier based on battles per week.
    *
-   * <p>Rank thresholds: - Champions (🏆): ≥10 battles/week - Knights (⚔️): ≥5 battles/week -
+   * <p>Tier thresholds: - Champions (🏆): ≥10 battles/week - Knights (⚔️): ≥5 battles/week -
    * Apprentices (🌟): <5 battles/week
    *
    * @param battlesPerWeek average battles per week
-   * @return contributor rank
+   * @return contributor tier
    */
-  private RankEnum calculateRank(double battlesPerWeek) {
+  private TierEnum calculateTier(double battlesPerWeek) {
     if (battlesPerWeek >= CHAMPION_THRESHOLD) {
-      return RankEnum.CHAMPION;
+      return TierEnum.CHAMPION;
     } else if (battlesPerWeek >= KNIGHT_THRESHOLD) {
-      return RankEnum.KNIGHT;
+      return TierEnum.KNIGHT;
     } else {
-      return RankEnum.APPRENTICE;
+      return TierEnum.APPRENTICE;
     }
   }
 }
