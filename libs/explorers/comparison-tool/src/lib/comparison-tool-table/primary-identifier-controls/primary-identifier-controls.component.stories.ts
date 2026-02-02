@@ -1,4 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
 import { provideComparisonToolService } from '@sagebionetworks/explorers/services';
 import type { Meta, StoryObj } from '@storybook/angular';
@@ -12,6 +13,7 @@ const meta: Meta<PrimaryIdentifierControlsComponent> = {
     applicationConfig({
       providers: [
         provideRouter([]),
+        provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService({
           viewConfig: { viewDetailsTooltip: 'View detailed results' },
@@ -41,6 +43,7 @@ export const Pinned: Story = {
     applicationConfig({
       providers: [
         provideRouter([]),
+        provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService({
           pinnedItems: ['68fff1aaeb12b9674515fd58', '68fff1aaeb12b9674515fd59'],
@@ -65,6 +68,7 @@ export const MaxPinnedReached: Story = {
     applicationConfig({
       providers: [
         provideRouter([]),
+        provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService({
           maxPinnedItems: 3,

@@ -1,4 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
@@ -9,7 +10,11 @@ const meta: Meta<ResourceCardComponent> = {
   title: 'UI/Cards/ResourceCardComponent',
   decorators: [
     applicationConfig({
-      providers: [provideRouter([]), provideHttpClient(withInterceptorsFromDi())],
+      providers: [
+        provideRouter([]),
+        provideLocationMocks(),
+        provideHttpClient(withInterceptorsFromDi()),
+      ],
     }),
   ],
 };
