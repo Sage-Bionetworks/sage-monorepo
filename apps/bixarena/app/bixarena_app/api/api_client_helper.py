@@ -1,9 +1,10 @@
 """Utilities for configuring BixArena API clients with authentication."""
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
-from bixarena_api_client import ApiClient, Configuration, StatsApi
+from bixarena_api_client import ApiClient, Configuration, QuestApi, StatsApi
+from bixarena_api_client.exceptions import ApiException, NotFoundException
 
 from bixarena_app.config.utils import _get_api_base_url
 
@@ -133,7 +134,8 @@ def calculate_quest_progress() -> dict:
     )
 
     # Calculate days remaining (add 1 to show "1 day left" on the final day)
-    now = datetime.now()
+    # Use UTC for consistency with backend timezone handling
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     days_remaining = (
         max(1, (QUEST_END_DATE - now).days + 1) if now < QUEST_END_DATE else 0
     )
@@ -149,3 +151,82 @@ def calculate_quest_progress() -> dict:
         "percentage": percentage,
         "days_remaining": days_remaining,
     }
+
+
+def fetch_quest_contributors(
+    quest_id: str, min_battles: int = 1, limit: int = 100
+) -> dict:
+    """Fetch contributors for a specific quest from the API.
+
+    Args:
+        quest_id: The quest identifier (e.g., 'build-bioarena-together')
+        min_battles: Minimum number of battles required to be listed (default: 1)
+        limit: Maximum number of contributors to return (default: 100)
+
+    Returns:
+        Dictionary with:
+            - contributors_by_rank: dict with 'champion', 'knight', 'apprentice' lists
+            - total_contributors: int
+            - error: bool indicating if there was an error (quest not found, etc.)
+            Returns empty structure with error=True if API call fails.
+    """
+    try:
+        configuration = get_api_configuration()
+        with ApiClient(configuration) as client:
+            api = QuestApi(client)
+            result = api.list_quest_contributors(
+                quest_id, min_battles=min_battles, limit=limit
+            )
+
+            # Group contributors by tier
+            contributors_by_tier = {"champion": [], "knight": [], "apprentice": []}
+
+            for contributor in result.contributors:
+                tier = contributor.tier.lower()
+                if tier in contributors_by_tier:
+                    contributors_by_tier[tier].append(
+                        {
+                            "username": contributor.username,
+                            "battle_count": contributor.battle_count,
+                            "battles_per_week": contributor.battles_per_week,
+                        }
+                    )
+
+            logger.info(
+                f"Fetched {result.total_contributors} quest contributors: "
+                f"{len(contributors_by_tier['champion'])} champions, "
+                f"{len(contributors_by_tier['knight'])} knights, "
+                f"{len(contributors_by_tier['apprentice'])} apprentices"
+            )
+
+            return {
+                "contributors_by_tier": contributors_by_tier,
+                "total_contributors": result.total_contributors,
+                "error": False,
+            }
+    except NotFoundException:
+        # Quest not found - this is expected for invalid quest IDs
+        logger.warning(f"Quest not found: {quest_id}")
+        return {
+            "contributors_by_tier": {"champion": [], "knight": [], "apprentice": []},
+            "total_contributors": 0,
+            "error": True,
+        }
+    except ApiException as e:
+        # Other API errors (400, 500, etc.)
+        logger.error(
+            f"API error fetching quest contributors (status {e.status}): {e.reason}"
+        )
+        return {
+            "contributors_by_tier": {"champion": [], "knight": [], "apprentice": []},
+            "total_contributors": 0,
+            "error": True,
+        }
+    except Exception as e:
+        # Unexpected errors (network, parsing, etc.)
+        logger.error(f"Unexpected error fetching quest contributors: {e}")
+        return {
+            "contributors_by_tier": {"champion": [], "knight": [], "apprentice": []},
+            "total_contributors": 0,
+            "error": True,
+        }

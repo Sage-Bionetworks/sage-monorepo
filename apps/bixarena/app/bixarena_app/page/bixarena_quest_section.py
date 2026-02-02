@@ -5,9 +5,49 @@ from datetime import datetime
 
 import gradio as gr
 
+# Tier configuration for quest contributors
+TIER_CONFIG = {
+    "champion": {
+        "emoji": "🏆",
+        "color": "#fbbf24",  # Gold
+        "threshold": "10+",
+        "description": "10+ battles/week on average",
+    },
+    "knight": {
+        "emoji": "⚔️",
+        "color": "#c0c0c0",  # Silver
+        "threshold": "5+",
+        "description": "5+",
+    },
+    "apprentice": {
+        "emoji": "🌟",
+        "color": "#cd7f32",  # Bronze
+        "threshold": "<5",
+        "description": "<5",
+    },
+}
+
+
+def _get_default_progress_data() -> dict:
+    """Get default progress data structure for quest.
+
+    Returns:
+        Dictionary with current_blocks, goal_blocks, percentage, days_remaining
+    """
+    end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
+    days_remaining = max(0, (end_date - datetime.now()).days)
+    return {
+        "current_blocks": 0,
+        "goal_blocks": QUEST_CONFIG["goal"],
+        "percentage": 0.0,
+        "days_remaining": days_remaining,
+    }
+
+
 # Quest configuration - hardcoded for Season 1
 QUEST_CONFIG = {
-    "title": "Building BioArena",
+    "quest_id": "build-bioarena-together",  # Quest ID for API calls
+    "title": "Build BioArena Together",
     "description": "We are constructing a medieval arena in Minecraft to symbolize our collective effort. Every battle counts towards the build.",
     "goal": 2850,
     "start_date": "2026-02-01",
@@ -16,51 +56,7 @@ QUEST_CONFIG = {
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
     # Index of update to show expanded by default (0 = newest, -1 or None = latest)
-    "active_update_index": 1,
-    "builders": [
-        # List of usernames who have contributed at least one block
-        # TODO: Replace with actual data from API
-        "alice_bio",
-        "bob_researcher",
-        "charlie_dev",
-        "diana_scientist",
-        "eve_analyst",
-        "frank_engineer",
-        "grace_data",
-        "henry_ml",
-        "iris_bioinf",
-        "jack_genomics",
-        "kate_phd",
-        "leo_postdoc",
-        "maria_lab",
-        "nathan_tech",
-        "olivia_research",
-        "peter_bio",
-        "quinn_analytics",
-        "rachel_science",
-        "sam_coder",
-        "tina_data",
-        "uma_researcher",
-        "victor_ai",
-        "wendy_biotech",
-        "xavier_dev",
-        "yara_scientist",
-        "zoe_engineer",
-        "alan_researcher",
-        "beth_analyst",
-        "carlos_phd",
-        "debra_lab",
-        "ethan_bio",
-        "fiona_data",
-        "george_ml",
-        "helen_scientist",
-        "ian_engineer",
-        "julia_genomics",
-        "kevin_tech",
-        "linda_research",
-        "mark_coder",
-        "nancy_bioinf",
-    ],
+    "active_update_index": None,
     "minecraft_arena_designer": {
         "name": "NeatCraft",
         "url": "https://www.youtube.com/@Neatcraft",
@@ -72,25 +68,8 @@ QUEST_CONFIG = {
     "updates": [
         # Updates are displayed in chronological order (newest first)
         {
-            "date": "2026-02-01",
-            "title": "Update 1: Foundation Laid",
-            "description": (
-                "The journey begins! With 144 blocks earned from your "
-                "evaluations, we've started construction. The inner wall is "
-                "rising, three blocks high in sturdy cobblestone, marking the "
-                "heart of our arena. Work has also begun on the outer wall's "
-                "foundation. From these humble beginnings, something "
-                "extraordinary will emerge. Keep the battles coming!"
-            ),
-            "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Inner+Wall+Construction",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Arena+Overview",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Cobblestone+Detail",
-            ],
-        },
-        {
-            "date": "2026-02-01",
-            "title": "Launch: Building BioArena Together",
+            "date": "2026-02-03",
+            "title": "Launch: Build BioArena Together",
             "description": (
                 "Welcome to our Community Quest! AI is evolving fast. The best "
                 "model today might be overtaken tomorrow. That's why we're "
@@ -98,9 +77,12 @@ QUEST_CONFIG = {
                 "like you, continuously identifying the top AI models across "
                 "biomedical topics. To celebrate this launch and the community "
                 "we're building together, we're constructing a medieval arena in "
-                "Minecraft, block by block, battle by battle. Every evaluation you "
-                "complete adds another stone to our foundation. Let's build "
-                "something legendary!"
+                "Minecraft, block by block, battle by battle. Starting today from "
+                "0 blocks, every evaluation you complete adds another stone to our "
+                "foundation. The screenshots above offer a glimpse into the future "
+                "arena we'll build together. We'll share progress updates every "
+                "week with new screenshots showing how far we've come. "
+                "Let's build something legendary!"
             ),
             "images": [
                 "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-1.jpg",
@@ -112,6 +94,106 @@ QUEST_CONFIG = {
         },
     ],
 }
+
+
+def build_quest_not_found_section() -> tuple[
+    gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str, int
+]:
+    """Build a quest not found error section.
+
+    Returns:
+        Tuple of (quest_container, empty_html, hidden buttons, carousel_id, rotation_interval)
+    """
+    with gr.Column(
+        elem_id="quest-section-wrapper",
+        elem_classes=["quest-section-wrapper"],
+    ) as quest_container:
+        gr.HTML(f"""
+        <div style="padding: 2.5rem 1.5rem 2rem 1.5rem; text-align: center;">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div style="width: 64px; height: 64px; border-radius: 50%;
+                            background: color-mix(in srgb, #f59e0b 10%, transparent);
+                            border: 1px solid color-mix(in srgb, #f59e0b 30%, transparent);
+                            display: flex; align-items: center; justify-content: center;
+                            margin: 0 auto 1.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                         fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h2 style="color: var(--body-text-color); font-weight: 600;
+                           margin: 0 0 0.75rem 0; font-size: 1.5rem;">
+                    Quest Not Found
+                </h2>
+                <p style="color: var(--body-text-color-subdued); font-size: 1rem;
+                         margin: 0; line-height: 1.6;">
+                    The configured quest "<strong>{QUEST_CONFIG["quest_id"]}</strong>" doesn't exist in the database.
+                </p>
+            </div>
+        </div>
+        """)
+
+        # Add CSS to ensure hidden components stay hidden
+        gr.HTML("""
+        <style>
+        #quest-error-empty-html,
+        #quest-error-btn-auth,
+        #quest-error-btn-login,
+        #quest-error-carousel-trigger {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        </style>
+        """)
+
+        # Hidden components (required for return signature compatibility)
+        # These are inside the container but hidden with visible=False and CSS
+        empty_html = gr.HTML("", visible=False, elem_id="quest-error-empty-html")
+        quest_btn_authenticated = gr.Button(
+            visible=False, elem_id="quest-error-btn-auth"
+        )
+        quest_btn_login = gr.Button(visible=False, elem_id="quest-error-btn-login")
+        carousel_init_trigger = gr.Button(
+            visible=False, elem_id="quest-error-carousel-trigger"
+        )
+
+    return (
+        quest_container,
+        empty_html,
+        quest_btn_authenticated,
+        quest_btn_login,
+        carousel_init_trigger,
+        "",  # carousel_id
+        0,  # rotation_interval
+    )
+
+
+def _build_tier_legend_html() -> str:
+    """Build the tier legend HTML with descriptions and accuracy note.
+
+    Returns:
+        HTML string for the tier legend section
+    """
+    return f"""
+            <!-- Contributor Tiers Legend -->
+            <div style="margin-top: 1.5rem;">
+                <h4 style="color: var(--body-text-color); font-weight: 600;
+                           margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                    Contributor Tiers
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 0.375rem;
+                            color: var(--body-text-color-subdued); font-size: 0.875rem;">
+                    <div>{TIER_CONFIG["champion"]["emoji"]} Champion ({TIER_CONFIG["champion"]["description"]})</div>
+                    <div>{TIER_CONFIG["knight"]["emoji"]} Knight ({TIER_CONFIG["knight"]["description"]})</div>
+                    <div>{TIER_CONFIG["apprentice"]["emoji"]} Apprentice ({TIER_CONFIG["apprentice"]["description"]})</div>
+                </div>
+                <div style="margin-top: 0.75rem; color: var(--body-text-color-subdued); font-size: 0.8125rem; font-style: italic; line-height: 1.5;">
+                    Note: Tiers are calculated based on your average battle completion rate. As more days of the quest pass, tier assignments become increasingly accurate.
+                </div>
+            </div>
+"""
 
 
 def _build_progress_html(
@@ -197,12 +279,86 @@ def _build_progress_html(
     """
 
 
-def _build_builders_credits_html() -> str:
+def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
     """Build the Builders and Credits HTML sections.
+
+    Args:
+        contributors_data: Optional dict with contributors_by_tier and total_contributors
 
     Returns:
         HTML string for the builders and credits sections
     """
+    # Show "no contributors yet" if quest exists but no contributors
+    if contributors_data is None or contributors_data.get("total_contributors", 0) == 0:
+        return f"""
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;
+                height: 100%; margin-top: 0.75rem;">
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        <!-- No Contributors Message -->
+        <div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+            <h4 style="color: var(--body-text-color); font-weight: 600;
+                       margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                Builders (0)
+            </h4>
+            <div style="padding: 2rem; text-align: center;
+                        color: var(--body-text-color-subdued); font-size: 0.875rem;">
+                No builders yet. Be the first to contribute!
+            </div>
+
+{_build_tier_legend_html()}        </div>
+
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        <!-- Credits Section -->
+        <div>
+            <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                Credits
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+                    <span style="color: var(--body-text-color-subdued);">Minecraft Arena Designer:</span>
+                    <a href="{QUEST_CONFIG["minecraft_arena_designer"]["url"]}"
+                       style="color: #3b82f6; text-decoration: none;">
+                       {QUEST_CONFIG["minecraft_arena_designer"]["name"]}
+                    </a>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+                    <span style="color: var(--body-text-color-subdued);">Quest Architect:</span>
+                    <a href="{QUEST_CONFIG["quest_architect"]["url"]}"
+                       style="color: #3b82f6; text-decoration: none;">
+                       {QUEST_CONFIG["quest_architect"]["name"]}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    """
+    else:
+        # Build real contributors list grouped by rank
+        total_count = contributors_data["total_contributors"]
+        contributors_by_tier = contributors_data["contributors_by_tier"]
+
+        builders_parts = []
+        for rank in ["champion", "knight", "apprentice"]:
+            rank_contributors = contributors_by_tier.get(rank, [])
+            for contributor in rank_contributors:
+                username = contributor["username"]
+                emoji = TIER_CONFIG[rank]["emoji"]
+                builders_parts.append(
+                    f'<span style="color: var(--body-text-color); '
+                    f'font-size: 0.875rem;">'
+                    f'<span style="margin-right: 0.25rem;">{emoji}</span>{username}'
+                    f"</span>"
+                )
+
+        # Join with separators
+        builders_html = '<span style="color: var(--body-text-color-subdued); font-size: 0.75rem;">•</span>'.join(
+            builders_parts
+        )
+
     return f"""
     <div style="display: flex; flex-direction: column; gap: 1.5rem;
                 height: 100%; margin-top: 0.75rem;">
@@ -214,29 +370,19 @@ def _build_builders_credits_html() -> str:
                     min-height: 0;">
             <h4 style="color: var(--body-text-color); font-weight: 600;
                        margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-                Builders ({len(QUEST_CONFIG["builders"])})
+                Builders ({total_count})
             </h4>
+
             <div style="flex: 1; overflow-y: auto; min-height: 0;
                         padding-right: 0.25rem;">
                 <div style="display: flex; flex-wrap: wrap;
                             align-items: center; gap: 0.5rem;
                             line-height: 1.5;">
-                    {
-        "".join(
-            f'<span style="color: var(--body-text-color); '
-            f'font-size: 0.875rem;">{builder}</span>'
-            + (
-                '<span style="color: var(--body-text-color-subdued); '
-                'font-size: 0.75rem;">•</span>'
-                if i < len(QUEST_CONFIG["builders"]) - 1
-                else ""
-            )
-            for i, builder in enumerate(QUEST_CONFIG["builders"])
-        )
-    }
+                    {builders_html}
                 </div>
             </div>
-        </div>
+
+{_build_tier_legend_html()}        </div>
 
         <!-- Divider -->
         <div style="height: 1px; background: var(--border-color-primary);"></div>
@@ -274,11 +420,13 @@ def _build_builders_credits_html() -> str:
 
 def build_quest_section(
     progress_data: dict | None = None,
+    contributors_data: dict | None = None,
 ) -> tuple[gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str, int]:
     """Build the Community Quest section for home page.
 
     Args:
         progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
+        contributors_data: Optional dict with contributors info (contributors_by_tier, total_contributors, error)
 
     Returns:
         Tuple of (quest_container, progress_html_container, contribute_button_authenticated,
@@ -286,14 +434,7 @@ def build_quest_section(
     """
     # Use provided progress data or defaults
     if progress_data is None:
-        end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
-        days_remaining = max(0, (end_date - datetime.now()).days)
-        progress_data = {
-            "current_blocks": 0,
-            "goal_blocks": QUEST_CONFIG["goal"],
-            "percentage": 0.0,
-            "days_remaining": days_remaining,
-        }
+        progress_data = _get_default_progress_data()
 
     current_blocks = progress_data["current_blocks"]
     goal_blocks = progress_data["goal_blocks"]
@@ -652,7 +793,7 @@ def build_quest_section(
                         elem_classes=["quest-cta-btn"],
                     )
                     # Builders and Credits sections below CTA button
-                    gr.HTML(_build_builders_credits_html())
+                    gr.HTML(_build_builders_credits_html(contributors_data))
 
         # Styling
         gr.HTML("""

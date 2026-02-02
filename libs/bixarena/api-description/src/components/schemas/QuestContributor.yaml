@@ -1,0 +1,26 @@
+type: object
+description: A user who contributed to the quest
+properties:
+  username:
+    type: string
+    description: User's display name
+    example: 'tschaffter'
+  battleCount:
+    type: integer
+    description: Number of completed battles during quest period
+    example: 42
+  tier:
+    type: string
+    enum: [champion, knight, apprentice]
+    description: Contributor tier based on average battles per week
+    example: 'champion'
+  battlesPerWeek:
+    type: number
+    format: double
+    description: Average battles completed per week during quest
+    example: 12.5
+required:
+  - username
+  - battleCount
+  - tier
+  - battlesPerWeek

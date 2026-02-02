@@ -24,6 +24,7 @@ __all__ = [
     "LeaderboardApi",
     "ModelApi",
     "PromptValidationApi",
+    "QuestApi",
     "StatsApi",
     "UserApi",
     "ApiResponse",
@@ -82,6 +83,8 @@ __all__ = [
     "PageMetadata",
     "PromptValidation",
     "PublicStats",
+    "QuestContributor",
+    "QuestContributors",
     "RateLimitError",
     "SortDirection",
     "Token200Response",
@@ -102,6 +105,7 @@ from bixarena_api_client.api.model_api import ModelApi as ModelApi
 from bixarena_api_client.api.prompt_validation_api import (
     PromptValidationApi as PromptValidationApi,
 )
+from bixarena_api_client.api.quest_api import QuestApi as QuestApi
 from bixarena_api_client.api.stats_api import StatsApi as StatsApi
 from bixarena_api_client.api.user_api import UserApi as UserApi
 
@@ -228,6 +232,12 @@ from bixarena_api_client.models.prompt_validation import (
     PromptValidation as PromptValidation,
 )
 from bixarena_api_client.models.public_stats import PublicStats as PublicStats
+from bixarena_api_client.models.quest_contributor import (
+    QuestContributor as QuestContributor,
+)
+from bixarena_api_client.models.quest_contributors import (
+    QuestContributors as QuestContributors,
+)
 from bixarena_api_client.models.rate_limit_error import RateLimitError as RateLimitError
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection
 from bixarena_api_client.models.token200_response import (
