@@ -1,49 +1,60 @@
 # Shared Storybook
 
-A unified Storybook instance that aggregates stories from all projects in the monorepo.
+A unified Storybook instance that aggregates stories from all projects in the monorepo using Storybook Composition.
 
-## Running Storybook
+## Architecture
+
+This storybook uses **Storybook Composition** to provide a single unified navigation experience while serving stories from multiple independent storybooks:
+
+- **Main Storybook** (port 4400): The composition host that provides unified navigation
+- **Agora Storybook** (port 4401): Child storybook for Agora domain stories
+- **Explorers Storybook** (port 4402): Child storybook for Explorers domain stories
+
+## Development
+
+### Running the Composition (Recommended)
 
 ```bash
 nx storybook storybook
 ```
 
-This will start the Storybook dev server on http://localhost:4400
+This runs the composition development server via `start-composition.sh`, which:
 
-## Building Storybook
+1. Starts all three storybook instances (main, agora, explorers)
+2. Provides unified navigation at http://localhost:4400
+3. Hot-reloads changes from all domains
+
+### Running Standalone (Single Storybook Only)
 
 ```bash
-nx build-storybook storybook
+nx storybook-dev storybook
 ```
+
+This runs only the main storybook without composition. Useful for debugging the main storybook configuration in isolation.
+
+## Building Static Storybook
+
+### Build for Production
+
+```bash
+nx build-static-composition storybook
+```
+
+This builds all three storybooks and assembles them into a single static site:
+
+1. Builds the main storybook to `dist/storybook/storybook/`
+2. Builds agora storybook to `dist/storybook/storybook/agora/`
+3. Builds explorers storybook to `dist/storybook/storybook/explorers/`
+4. Copies theme assets from child storybooks to the main output
 
 Output will be in `dist/storybook/storybook/`
 
-## Adding Stories from a New Library
+### Serve the Static Build
 
-When you add Storybook stories to a library that isn't already tracked by this shared Storybook:
+```bash
+nx static-storybook storybook
+```
 
-**IMPORTANT:** You must add the library's project name to the `implicitDependencies` array in `libs/storybook/project.json`.
+Builds (if needed) and serves the static composition at http://localhost:8080
 
-This ensures Nx properly invalidates the Storybook cache when that library changes.
-
-### Example
-
-If you add stories to `agora-teams`:
-
-1. Add story files in `libs/agora/teams/src/lib/**/*.stories.ts`
-2. Update `libs/storybook/project.json`:
-   ```json
-   "implicitDependencies": [
-     "agora-about",
-     "agora-teams",  // <-- Add this
-     ...
-   ]
-   ```
-
-### Why is this needed?
-
-Nx cannot automatically detect the dependencies from glob patterns in `.storybook/main.ts`, so we must explicitly declare them. Without this, Nx's cache may serve stale Storybook builds when your library changes.
-
-## Theme Switching
-
-This Storybook supports switching between different project themes (Explorers, Agora, Model-AD) via the theme dropdown in the Storybook toolbar.
+This is useful for testing the production build locally.
