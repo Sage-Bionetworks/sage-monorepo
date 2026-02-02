@@ -77,9 +77,12 @@ QUEST_CONFIG = {
                 "like you, continuously identifying the top AI models across "
                 "biomedical topics. To celebrate this launch and the community "
                 "we're building together, we're constructing a medieval arena in "
-                "Minecraft, block by block, battle by battle. Every evaluation you "
-                "complete adds another stone to our foundation. Let's build "
-                "something legendary!"
+                "Minecraft, block by block, battle by battle. Starting today from "
+                "0 blocks, every evaluation you complete adds another stone to our "
+                "foundation. The screenshots above offer a glimpse into the future "
+                "arena we'll build together. We'll share progress updates every "
+                "two weeks with new screenshots showing how far we've come. "
+                "Let's build something legendary!"
             ),
             "images": [
                 "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-1.jpg",
