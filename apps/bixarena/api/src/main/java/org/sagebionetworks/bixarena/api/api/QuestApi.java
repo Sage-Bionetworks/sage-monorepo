@@ -54,7 +54,7 @@ public interface QuestApi {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "getQuestContributors",
+        operationId = "listQuestContributors",
         summary = "Get quest contributors",
         description = "Get a list of users who have contributed to a specific quest, ordered by their battle count during the quest period. Results are calculated in real-time based on completed battles within the quest's start and end dates. ",
         tags = { "Quest" },
@@ -83,12 +83,12 @@ public interface QuestApi {
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<QuestContributorsDto> getQuestContributors(
+    default ResponseEntity<QuestContributorsDto> listQuestContributors(
         @Parameter(name = "questId", description = "Unique identifier for a quest", required = true, in = ParameterIn.PATH) @PathVariable("questId") String questId,
         @Min(1) @Parameter(name = "minBattles", description = "Minimum number of battles required to be listed", in = ParameterIn.QUERY) @Valid @RequestParam(value = "minBattles", required = false, defaultValue = "1") Integer minBattles,
         @Min(1) @Max(1000) @Parameter(name = "limit", description = "Maximum number of contributors to return", in = ParameterIn.QUERY) @Valid @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit
     ) {
-        return getDelegate().getQuestContributors(questId, minBattles, limit);
+        return getDelegate().listQuestContributors(questId, minBattles, limit);
     }
 
 }

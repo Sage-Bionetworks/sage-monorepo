@@ -20,11 +20,11 @@ public class QuestApiDelegateImpl implements QuestApiDelegate {
   private final QuestService questService;
 
   @Override
-  public ResponseEntity<QuestContributorsDto> getQuestContributors(
+  public ResponseEntity<QuestContributorsDto> listQuestContributors(
       String questId, Integer minBattles, Integer limit) {
 
     log.debug(
-        "getQuestContributors called: questId={}, minBattles={}, limit={}",
+        "listQuestContributors called: questId={}, minBattles={}, limit={}",
         questId,
         minBattles,
         limit);
@@ -53,7 +53,7 @@ public class QuestApiDelegateImpl implements QuestApiDelegate {
     }
 
     QuestContributorsDto contributors =
-        questService.getQuestContributors(questId, minBattlesValue, limitValue);
+        questService.listQuestContributors(questId, minBattlesValue, limitValue);
 
     return ResponseEntity.ok(contributors);
   }

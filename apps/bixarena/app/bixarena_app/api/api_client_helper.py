@@ -173,7 +173,7 @@ def fetch_quest_contributors(
         configuration = get_api_configuration()
         with ApiClient(configuration) as client:
             api = QuestApi(client)
-            result = api.get_quest_contributors(
+            result = api.list_quest_contributors(
                 quest_id, min_battles=min_battles, limit=limit
             )
 

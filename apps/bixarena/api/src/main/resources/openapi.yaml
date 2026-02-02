@@ -729,7 +729,7 @@ paths:
         ordered by their battle count during the quest period.
         Results are calculated in real-time based on completed battles
         within the quest's start and end dates.
-      operationId: getQuestContributors
+      operationId: listQuestContributors
       parameters:
         - description: Unique identifier for a quest
           example: build-bioarena-together

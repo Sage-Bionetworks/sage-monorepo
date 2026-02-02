@@ -39,9 +39,9 @@ public interface QuestApiDelegate {
      *         or The specified resource was not found (status code 404)
      *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see QuestApi#getQuestContributors
+     * @see QuestApi#listQuestContributors
      */
-    default ResponseEntity<QuestContributorsDto> getQuestContributors(String questId,
+    default ResponseEntity<QuestContributorsDto> listQuestContributors(String questId,
         Integer minBattles,
         Integer limit) {
         getRequest().ifPresent(request -> {

@@ -25,8 +25,8 @@ class TestQuestApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_get_quest_contributors(self) -> None:
-        """Test case for get_quest_contributors
+    def test_list_quest_contributors(self) -> None:
+        """Test case for list_quest_contributors
 
         Get quest contributors
         """

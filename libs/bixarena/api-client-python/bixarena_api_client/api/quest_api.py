@@ -39,7 +39,7 @@ class QuestApi:
         self.api_client = api_client
 
     @validate_call
-    def get_quest_contributors(
+    def list_quest_contributors(
         self,
         quest_id: Annotated[
             StrictStr, Field(description="Unique identifier for a quest")
@@ -96,7 +96,7 @@ class QuestApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._get_quest_contributors_serialize(
+        _param = self._list_quest_contributors_serialize(
             quest_id=quest_id,
             min_battles=min_battles,
             limit=limit,
@@ -122,7 +122,7 @@ class QuestApi:
         ).data
 
     @validate_call
-    def get_quest_contributors_with_http_info(
+    def list_quest_contributors_with_http_info(
         self,
         quest_id: Annotated[
             StrictStr, Field(description="Unique identifier for a quest")
@@ -179,7 +179,7 @@ class QuestApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._get_quest_contributors_serialize(
+        _param = self._list_quest_contributors_serialize(
             quest_id=quest_id,
             min_battles=min_battles,
             limit=limit,
@@ -205,7 +205,7 @@ class QuestApi:
         )
 
     @validate_call
-    def get_quest_contributors_without_preload_content(
+    def list_quest_contributors_without_preload_content(
         self,
         quest_id: Annotated[
             StrictStr, Field(description="Unique identifier for a quest")
@@ -262,7 +262,7 @@ class QuestApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._get_quest_contributors_serialize(
+        _param = self._list_quest_contributors_serialize(
             quest_id=quest_id,
             min_battles=min_battles,
             limit=limit,
@@ -283,7 +283,7 @@ class QuestApi:
         )
         return response_data.response
 
-    def _get_quest_contributors_serialize(
+    def _list_quest_contributors_serialize(
         self,
         quest_id,
         min_battles,

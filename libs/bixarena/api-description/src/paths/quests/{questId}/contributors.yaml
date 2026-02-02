@@ -12,7 +12,7 @@ get:
     ordered by their battle count during the quest period.
     Results are calculated in real-time based on completed battles
     within the quest's start and end dates.
-  operationId: getQuestContributors
+  operationId: listQuestContributors
   security: [] # Override global security to allow anonymous access
   parameters:
     - name: minBattles

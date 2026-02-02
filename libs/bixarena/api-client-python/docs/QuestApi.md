@@ -2,13 +2,13 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                                           | HTTP request                           | Description            |
-| ---------------------------------------------------------------- | -------------------------------------- | ---------------------- |
-| [**get_quest_contributors**](QuestApi.md#get_quest_contributors) | **GET** /quests/{questId}/contributors | Get quest contributors |
+| Method                                                             | HTTP request                           | Description            |
+| ------------------------------------------------------------------ | -------------------------------------- | ---------------------- |
+| [**list_quest_contributors**](QuestApi.md#list_quest_contributors) | **GET** /quests/{questId}/contributors | Get quest contributors |
 
-# **get_quest_contributors**
+# **list_quest_contributors**
 
-> QuestContributors get_quest_contributors(quest_id, min_battles=min_battles, limit=limit)
+> QuestContributors list_quest_contributors(quest_id, min_battles=min_battles, limit=limit)
 
 Get quest contributors
 
@@ -42,11 +42,11 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
     try:
         # Get quest contributors
-        api_response = api_instance.get_quest_contributors(quest_id, min_battles=min_battles, limit=limit)
-        print("The response of QuestApi->get_quest_contributors:\n")
+        api_response = api_instance.list_quest_contributors(quest_id, min_battles=min_battles, limit=limit)
+        print("The response of QuestApi->list_quest_contributors:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling QuestApi->get_quest_contributors: %s\n" % e)
+        print("Exception when calling QuestApi->list_quest_contributors: %s\n" % e)
 ```
 
 ### Parameters

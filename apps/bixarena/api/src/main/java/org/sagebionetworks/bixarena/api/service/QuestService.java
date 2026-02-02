@@ -37,7 +37,7 @@ public class QuestService {
   private static final double KNIGHT_THRESHOLD = 5.0;
 
   /**
-   * Get contributors for a specific quest.
+   * List contributors for a specific quest.
    * Results are cached for 1 minute to reduce database load.
    *
    * @param questId the quest identifier
@@ -50,7 +50,7 @@ public class QuestService {
       value = CacheNames.QUEST_CONTRIBUTORS,
       key = "#questId + '-' + #minBattles + '-' + #limit")
   @Transactional(readOnly = true)
-  public QuestContributorsDto getQuestContributors(
+  public QuestContributorsDto listQuestContributors(
       String questId, int minBattles, int limit) {
     log.debug("Fetching contributors for quest: {}", questId);
 
