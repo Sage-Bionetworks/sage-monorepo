@@ -1,7 +1,7 @@
 """Utilities for configuring BixArena API clients with authentication."""
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 from bixarena_api_client import ApiClient, Configuration, QuestApi, StatsApi
 from bixarena_api_client.exceptions import ApiException, NotFoundException
@@ -134,7 +134,8 @@ def calculate_quest_progress() -> dict:
     )
 
     # Calculate days remaining (add 1 to show "1 day left" on the final day)
-    now = datetime.now()
+    # Use UTC for consistency with backend timezone handling
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     days_remaining = (
         max(1, (QUEST_END_DATE - now).days + 1) if now < QUEST_END_DATE else 0
     )
