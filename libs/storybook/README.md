@@ -10,6 +10,15 @@ This storybook uses **Storybook Composition** to provide a single unified naviga
 - **Agora Storybook** (port 4401): Child storybook for Agora domain stories
 - **Explorers Storybook** (port 4402): Child storybook for Explorers domain stories
 
+## Usage Guide
+
+| Scenario                                  | Use                                                              | Why                                                                          |
+| ----------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **Active development on a single domain** | Domain-specific storybook (`nx storybook agora-storybook`)       | Faster startup and hot-reload, no iframe overhead, focused on your work      |
+| **Cross-domain component review**         | Composite dev mode (`nx storybook storybook`)                    | Unified navigation to browse all stories, but slower due to iframe rendering |
+| **Production documentation**              | Static composite build (`nx build-static-composition storybook`) | Single deployable artifact with all stories, optimized for viewing           |
+| **Testing production build locally**      | Static server (`nx static-storybook storybook`)                  | Verify production behavior without deployment                                |
+
 ## Development
 
 ### Running the Composition (Recommended)
