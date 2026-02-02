@@ -56,7 +56,7 @@ QUEST_CONFIG = {
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
     # Index of update to show expanded by default (0 = newest, -1 or None = latest)
-    "active_update_index": 1,
+    "active_update_index": None,
     "minecraft_arena_designer": {
         "name": "NeatCraft",
         "url": "https://www.youtube.com/@Neatcraft",
@@ -67,23 +67,6 @@ QUEST_CONFIG = {
     },
     "updates": [
         # Updates are displayed in chronological order (newest first)
-        {
-            "date": "2026-02-01",
-            "title": "Update 1: Foundation Laid",
-            "description": (
-                "The journey begins! With 160 blocks earned from your "
-                "evaluations, we've started construction. The inner wall is "
-                "rising, three blocks high in sturdy cobblestone, marking the "
-                "heart of our arena. Work has also begun on the outer wall's "
-                "foundation. From these humble beginnings, something "
-                "extraordinary will emerge. Keep the battles coming!"
-            ),
-            "images": [
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Inner+Wall+Construction",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Arena+Overview",
-                "https://placehold.co/1920x1080/1a1a1a/14b8a6?text=Cobblestone+Detail",
-            ],
-        },
         {
             "date": "2026-02-01",
             "title": "Launch: Build BioArena Together",
