@@ -14,19 +14,43 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Bio Domain
-    description: Operations about bio domains.
   - name: Data Version
     description: Operations about the data version.
+    x-displayName: Data Version
+  - name: Bio Domain
+    description: Operations about bio domains.
+    x-displayName: Bio Domain
   - name: Distribution
     description: Operations about distributions.
+    x-displayName: Distribution
   - name: Gene
     description: Operations about genes.
+    x-displayName: Gene
   - name: Nominated Gene
     description: Operations about nominated genes.
+    x-displayName: Nominated Gene
   - name: Team
     description: Operations about teams.
+    x-displayName: Team
 paths:
+  /data-version:
+    get:
+      tags:
+        - Data Version
+      summary: Get data version
+      description: Get data version
+      operationId: getDataVersion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataVersion'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /bio-domains:
     get:
       tags:
@@ -205,24 +229,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /data-version:
-    get:
-      tags:
-        - Data Version
-      summary: Get data version
-      description: Get data version
-      operationId: getDataVersion
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataVersion'
-          description: Success
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /distribution:
     get:
       tags:
@@ -291,14 +297,20 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    BioDomainInfo:
+    DataVersion:
       type: object
-      description: BioDomainInfo
+      description: Synapse data version
       properties:
-        name:
+        data_file:
+          type: string
+        data_version:
+          type: string
+        team_images_id:
           type: string
       required:
-        - name
+        - data_file
+        - data_version
+        - team_images_id
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -321,6 +333,14 @@ components:
       required:
         - title
         - status
+    BioDomainInfo:
+      type: object
+      description: BioDomainInfo
+      properties:
+        name:
+          type: string
+      required:
+        - name
     BioDomain:
       type: object
       description: BioDomain
@@ -1172,20 +1192,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Gene'
-    DataVersion:
-      type: object
-      description: Synapse data version
-      properties:
-        data_file:
-          type: string
-        data_version:
-          type: string
-        team_images_id:
-          type: string
-      required:
-        - data_file
-        - data_version
-        - team_images_id
     RnaDistribution:
       type: object
       description: Distributions
@@ -1394,3 +1400,14 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+x-tagGroups:
+  - name: Agora API Next
+    tags:
+      - Data Version
+  - name: Agora API
+    tags:
+      - Bio Domain
+      - Distribution
+      - Gene
+      - Nominated Gene
+      - Team

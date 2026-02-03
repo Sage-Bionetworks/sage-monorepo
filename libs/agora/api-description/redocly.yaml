@@ -14,7 +14,7 @@
 apis:
   # Agora API
   agora-public:
-    root: ./openapi/api-public.openapi.yaml
+    root: ./openapi/openapi.yaml
     decorators:
       info-override:
         version: 1.0.0
@@ -33,7 +33,8 @@ apis:
   api-public:
     root: ./src/api.openapi.yaml
     decorators:
-      remove-x-internal: on
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
   api-service:
     root: ./src/api.openapi.yaml
 
@@ -41,6 +42,7 @@ apis:
   api-next-public:
     root: ./src/api-next.openapi.yaml
     decorators:
-      remove-x-internal: on
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
   api-next-service:
     root: ./src/api-next.openapi.yaml

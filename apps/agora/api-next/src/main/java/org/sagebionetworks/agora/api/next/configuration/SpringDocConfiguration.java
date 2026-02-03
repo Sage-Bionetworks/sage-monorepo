@@ -30,7 +30,7 @@ public class SpringDocConfiguration {
                                                 .name("Apache 2.0")
                                                 .url("https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt")
                                 )
-                                .version("1.0.0-draft")
+                                .version("1.0.0")
                 )
         ;
     }
