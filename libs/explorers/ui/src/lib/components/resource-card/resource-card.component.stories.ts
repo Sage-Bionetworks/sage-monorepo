@@ -22,7 +22,7 @@ export const InternalLinkHomeCard: Story = {
     description: 'View Gene Expression results for this model in the comparison tool.',
     imagePath: '/model-ad-assets/images/gene-expression.svg',
     altText: 'gene expression icon',
-    link: '/comparison/expression?model=APOE4',
+    link: '/comparison/expression?models=APOE4',
   },
 };
 

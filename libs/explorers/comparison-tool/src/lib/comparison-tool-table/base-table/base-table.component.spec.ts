@@ -75,7 +75,7 @@ describe('BaseTableComponent', () => {
 
     const resultsLinks = screen
       .getAllByRole('link', { name: 'Results' })
-      .filter((link) => link.getAttribute('href')?.includes('comparison/correlation?model=5xFAD'));
+      .filter((link) => link.getAttribute('href')?.includes('comparison/correlation?models=5xFAD'));
     expect(resultsLinks.length).toBe(1);
   });
 

@@ -21,13 +21,13 @@ const cards = [
     imagePath: '/model-ad-assets/images/gene-expression.svg',
     description: 'View Gene Expression results for this model in the comparison tool.',
     title: 'Gene Expression',
-    link: '/comparison/expression?model=APOE4',
+    link: '/comparison/expression?models=APOE4',
   },
   {
     imagePath: '/model-ad-assets/images/disease-correlation.svg',
     description: 'View Disease Correlation results for this model in the comparison tool.',
     title: 'Disease Correlation',
-    link: '/comparison/correlation?model=APOE4',
+    link: '/comparison/correlation?models=APOE4',
   },
   {
     imagePath: '/model-ad-assets/images/allen-institute-logo.svg',
