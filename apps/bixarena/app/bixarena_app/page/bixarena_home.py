@@ -266,7 +266,8 @@ def load_quest_progress_on_page_load() -> dict:
         HTML update for the quest progress section (right column only)
     """
     try:
-        progress_data = calculate_quest_progress()
+        contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
+        progress_data = calculate_quest_progress(contributors_data)
     except Exception as e:
         logger.error(f"Error calculating quest progress: {e}")
         # Use defaults on error
@@ -333,7 +334,7 @@ def build_quest_section_wrapper():
     else:
         # Quest exists, fetch progress data and build normal section
         try:
-            progress_data = calculate_quest_progress()
+            progress_data = calculate_quest_progress(contributors_data)
             (
                 quest_container,
                 progress_html_container,
