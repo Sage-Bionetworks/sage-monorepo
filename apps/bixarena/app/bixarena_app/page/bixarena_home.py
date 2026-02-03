@@ -271,8 +271,8 @@ def load_quest_content_on_page_load() -> tuple[dict, dict, dict]:
         # Fetch contributors (single API call for all data)
         contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
 
-        # Calculate progress
-        progress_data = calculate_quest_progress()
+        # Calculate progress using contributors data
+        progress_data = calculate_quest_progress(contributors_data)
 
         # Build progress HTML
         progress_html = _build_progress_html(
@@ -349,7 +349,7 @@ def build_quest_section_wrapper():
     else:
         # Quest exists, fetch progress data and build normal section
         try:
-            progress_data = calculate_quest_progress()
+            progress_data = calculate_quest_progress(contributors_data)
             (
                 quest_container,
                 progress_html_container,
