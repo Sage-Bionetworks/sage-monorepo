@@ -22,7 +22,7 @@ public class ComparisonToolConfigApiDelegateImpl implements ComparisonToolConfig
   public ResponseEntity<List<ComparisonToolConfigDto>> getComparisonToolConfig(
     ComparisonToolPageDto page
   ) {
-    log.debug("Fetching comparison tool config by page: {})", page);
+    log.debug("Fetching comparison tool config by page: {}", page);
     List<ComparisonToolConfigDto> config = comparisonToolConfigService.getConfigsByPage(page);
 
     log.debug("Successfully retrieved comparison tool config for page: {}", page);

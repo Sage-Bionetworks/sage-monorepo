@@ -61,6 +61,10 @@ public class ComparisonToolConfigMapper {
   private ComparisonToolConfigFilterDto toComparisonToolConfigFilterDto(
     ComparisonToolConfigDocument.ComparisonToolConfigFilter filter
   ) {
+    if (filter == null) {
+      return null;
+    }
+
     ComparisonToolConfigFilterDto dto = new ComparisonToolConfigFilterDto(
       filter.getName(),
       filter.getDataKey(),
