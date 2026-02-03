@@ -103,17 +103,19 @@ def fetch_public_stats() -> dict:
         }
 
 
-def calculate_quest_progress() -> dict:
-    """Calculate Community Quest progress using existing public stats.
+def calculate_quest_progress(contributors_data: dict) -> dict:
+    """Calculate Community Quest progress from contributors data.
 
-    Uses the existing fetch_public_stats() to get total battles completed,
-    which represents blocks placed in the Minecraft arena (1 battle = 1 block).
+    Counts battles completed during the quest period by summing up all
+    contributors' battle counts.
 
-    Quest configuration is imported from QUEST_CONFIG in bixarena_quest_section.
+    Args:
+        contributors_data: Dict from fetch_quest_contributors() containing
+                          contributors with their battle counts.
 
     Returns:
         Dictionary with:
-            - current_blocks: int (total battles completed)
+            - current_blocks: int (battles during quest period only)
             - goal_blocks: int (from QUEST_CONFIG)
             - percentage: float (0-100+, can exceed 100%)
             - days_remaining: int (calculated from end date)
@@ -124,9 +126,12 @@ def calculate_quest_progress() -> dict:
     QUEST_END_DATE = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
     QUEST_GOAL_BLOCKS = QUEST_CONFIG["goal"]
 
-    # Fetch current battle count (represents blocks placed)
-    stats = fetch_public_stats()
-    current_blocks = stats["completed_battles"]
+    # Sum all contributors' battle counts (only battles in quest period)
+    current_blocks = sum(
+        contributor["battle_count"]
+        for tier_list in contributors_data.get("contributors_by_tier", {}).values()
+        for contributor in tier_list
+    )
 
     # Calculate percentage (allow >100% if goal exceeded)
     percentage = (
