@@ -753,7 +753,7 @@ def build_quest_section(
     days_remaining = progress_data["days_remaining"]
 
     # Generate unique ID for this carousel instance
-    carousel_id = f"quest-carousel-{int(datetime.now().timestamp() * 1000)}"
+    carousel_id = "quest-carousel"
 
     # Build carousel HTML
     carousel_html = _build_carousel_html(carousel_id)

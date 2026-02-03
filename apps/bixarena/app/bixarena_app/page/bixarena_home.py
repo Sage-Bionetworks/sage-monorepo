@@ -286,7 +286,7 @@ def load_quest_content_on_page_load() -> tuple[dict, dict, dict]:
         contributors_html = _build_builders_credits_html(contributors_data)
 
         # Build carousel HTML (images from config, but rebuildable)
-        carousel_html = _build_carousel_html(f"quest-carousel-{id(contributors_data)}")
+        carousel_html = _build_carousel_html("quest-carousel")
 
         return (
             gr.update(value=progress_html),
