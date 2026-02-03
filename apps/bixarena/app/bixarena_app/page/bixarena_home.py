@@ -271,6 +271,10 @@ def load_quest_content_on_page_load() -> tuple[dict, dict, dict]:
         # Fetch contributors (single API call for all data)
         contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
 
+        # If quest doesn't exist, skip building content HTML
+        if contributors_data.get("error", False):
+            return (gr.update(), gr.update(), gr.update())
+
         # Calculate progress using contributors data
         progress_data = calculate_quest_progress(contributors_data)
 

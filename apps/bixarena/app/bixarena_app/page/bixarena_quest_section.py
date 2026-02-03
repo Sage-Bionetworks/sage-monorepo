@@ -151,11 +151,9 @@ def build_quest_not_found_section() -> tuple[
 
         # Hidden components (required for return signature compatibility)
         # These are inside the container but hidden with visible=False and CSS
-        empty_html = gr.HTML("", visible=False, elem_id="quest-error-empty-html")
-        empty_contributors_html = gr.HTML(
-            "", visible=False, elem_id="quest-error-contributors"
-        )
-        empty_carousel_html = gr.HTML("", visible=False, elem_id="quest-error-carousel")
+        empty_html = gr.HTML("", visible=False)
+        empty_contributors_html = gr.HTML("", visible=False)
+        empty_carousel_html = gr.HTML("", visible=False)
         quest_btn_authenticated = gr.Button(
             visible=False, elem_id="quest-error-btn-auth"
         )
