@@ -181,7 +181,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
     cluster: 'Cluster A',
     matched_controls: ['C57BL/6J'],
     disease_correlation: {
-      link_url: 'comparison/correlation?model=5xFAD (IU/Jax/Pitt)',
+      link_url: 'comparison/correlation?models=5xFAD (IU/Jax/Pitt)',
     },
     center: {
       link_text: 'IU/Jax/Pitt',
@@ -229,7 +229,7 @@ export const mockComparisonToolData: Record<string, any>[] = [
     cluster: 'Cluster A',
     matched_controls: ['C57BL/6J'],
     disease_correlation: {
-      link_url: 'comparison/correlation?model=APOE4',
+      link_url: 'comparison/correlation?models=APOE4',
     },
     age: '12 months',
     center: {

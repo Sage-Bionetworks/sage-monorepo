@@ -10,7 +10,7 @@ export const modelMock: Model = {
   jax_id: '004807',
   alzforum_id: '3xtg',
   genotype: 'B6;129-Tg(APPSwe,tauP301L)1Lfa <i>Psen1<sup>tm1Mpm</sup></i>/Mmjax',
-  gene_expression: 'comparison/expression?model=3xTg-AD',
+  gene_expression: 'comparison/expression?models=3xTg-AD',
   disease_correlation: null,
   spatial_transcriptomics: null,
   aliases: ['3xTg'],

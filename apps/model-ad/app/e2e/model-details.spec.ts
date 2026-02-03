@@ -157,7 +157,7 @@ test.describe('model details - omics', () => {
       name: /view gene expression results.*comparison tool/i,
     });
     await card.click();
-    await page.waitForURL('/comparison/expression?model=APOE4');
+    await page.waitForURL('/comparison/expression?models=APOE4');
   });
 
   test('disease correlation card links to disease correlation CT', async ({ page }) => {
@@ -166,7 +166,7 @@ test.describe('model details - omics', () => {
       name: /view disease correlation results.*comparison tool/i,
     });
     await card.click();
-    await page.waitForURL('/comparison/correlation?model=APOE4');
+    await page.waitForURL('/comparison/correlation?models=APOE4');
   });
 });
 
