@@ -97,12 +97,13 @@ QUEST_CONFIG = {
 
 
 def build_quest_not_found_section() -> tuple[
-    gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str, int
+    gr.Column, gr.HTML, gr.HTML, gr.HTML, gr.Button, gr.Button, gr.Button, str, int
 ]:
     """Build a quest not found error section.
 
     Returns:
-        Tuple of (quest_container, empty_html, hidden buttons, carousel_id, rotation_interval)
+        Tuple of (quest_container, empty_html, empty_contributors_html,
+                  empty_carousel_html, hidden buttons, carousel_id, rotation_interval)
     """
     with gr.Column(
         elem_id="quest-section-wrapper",
@@ -151,6 +152,10 @@ def build_quest_not_found_section() -> tuple[
         # Hidden components (required for return signature compatibility)
         # These are inside the container but hidden with visible=False and CSS
         empty_html = gr.HTML("", visible=False, elem_id="quest-error-empty-html")
+        empty_contributors_html = gr.HTML(
+            "", visible=False, elem_id="quest-error-contributors"
+        )
+        empty_carousel_html = gr.HTML("", visible=False, elem_id="quest-error-carousel")
         quest_btn_authenticated = gr.Button(
             visible=False, elem_id="quest-error-btn-auth"
         )
@@ -162,6 +167,8 @@ def build_quest_not_found_section() -> tuple[
     return (
         quest_container,
         empty_html,
+        empty_contributors_html,
+        empty_carousel_html,
         quest_btn_authenticated,
         quest_btn_login,
         carousel_init_trigger,
@@ -418,32 +425,15 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
     """
 
 
-def build_quest_section(
-    progress_data: dict | None = None,
-    contributors_data: dict | None = None,
-) -> tuple[gr.Column, gr.HTML, gr.Button, gr.Button, gr.Button, str, int]:
-    """Build the Community Quest section for home page.
+def _build_carousel_html(carousel_id: str) -> str:
+    """Build the carousel HTML for quest images.
 
     Args:
-        progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
-        contributors_data: Optional dict with contributors info (contributors_by_tier, total_contributors, error)
+        carousel_id: Unique ID for this carousel instance
 
     Returns:
-        Tuple of (quest_container, progress_html_container, contribute_button_authenticated,
-                  contribute_button_login, carousel_init_trigger, carousel_id, rotation_interval)
+        HTML string for the carousel with images and controls
     """
-    # Use provided progress data or defaults
-    if progress_data is None:
-        progress_data = _get_default_progress_data()
-
-    current_blocks = progress_data["current_blocks"]
-    goal_blocks = progress_data["goal_blocks"]
-    percentage = progress_data["percentage"]
-    days_remaining = progress_data["days_remaining"]
-
-    # Generate unique ID for this carousel instance
-    carousel_id = f"quest-carousel-{int(datetime.now().timestamp() * 1000)}"
-
     # Get the updates and determine which one should be active by default
     updates = QUEST_CONFIG.get("updates", [])
     if not updates:
@@ -733,6 +723,41 @@ def build_quest_section(
     </style>
     """
 
+    return carousel_html
+
+
+def build_quest_section(
+    progress_data: dict | None = None,
+    contributors_data: dict | None = None,
+) -> tuple[
+    gr.Column, gr.HTML, gr.HTML, gr.HTML, gr.Button, gr.Button, gr.Button, str, int
+]:
+    """Build the Community Quest section for home page.
+
+    Args:
+        progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
+        contributors_data: Optional dict with contributors info (contributors_by_tier, total_contributors, error)
+
+    Returns:
+        Tuple of (quest_container, progress_html_container, contributors_html_container,
+                  carousel_html_container, contribute_button_authenticated,
+                  contribute_button_login, carousel_init_trigger, carousel_id, rotation_interval)
+    """
+    # Use provided progress data or defaults
+    if progress_data is None:
+        progress_data = _get_default_progress_data()
+
+    current_blocks = progress_data["current_blocks"]
+    goal_blocks = progress_data["goal_blocks"]
+    percentage = progress_data["percentage"]
+    days_remaining = progress_data["days_remaining"]
+
+    # Generate unique ID for this carousel instance
+    carousel_id = f"quest-carousel-{int(datetime.now().timestamp() * 1000)}"
+
+    # Build carousel HTML
+    carousel_html = _build_carousel_html(carousel_id)
+
     # Build progress and info HTML (right column - without button)
     progress_html = _build_progress_html(
         current_blocks, goal_blocks, percentage, days_remaining
@@ -767,7 +792,10 @@ def build_quest_section(
         with gr.Column(elem_id="quest-content-box"):
             with gr.Row(elem_id="quest-section-grid"):
                 with gr.Column(scale=1):
-                    gr.HTML(carousel_html)
+                    # Carousel HTML container that can be updated dynamically
+                    carousel_html_container = gr.HTML(
+                        carousel_html, elem_id="quest-carousel-container"
+                    )
                 with gr.Column(scale=1):
                     # Progress HTML container that can be updated dynamically
                     progress_html_container = gr.HTML(
@@ -793,7 +821,10 @@ def build_quest_section(
                         elem_classes=["quest-cta-btn"],
                     )
                     # Builders and Credits sections below CTA button
-                    gr.HTML(_build_builders_credits_html(contributors_data))
+                    contributors_html_container = gr.HTML(
+                        _build_builders_credits_html(contributors_data),
+                        elem_id="quest-contributors-container",
+                    )
 
         # Styling
         gr.HTML("""
@@ -871,6 +902,8 @@ def build_quest_section(
     return (
         quest_container,
         progress_html_container,
+        contributors_html_container,
+        carousel_html_container,
         contribute_button_authenticated,
         contribute_button_login,
         carousel_init_trigger,
