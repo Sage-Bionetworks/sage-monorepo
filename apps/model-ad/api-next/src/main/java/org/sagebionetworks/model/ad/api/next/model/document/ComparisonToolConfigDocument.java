@@ -25,7 +25,7 @@ public class ComparisonToolConfigDocument {
   private List<String> dropdowns;
 
   @Field("row_count")
-  private String rowCount;
+  private @Nullable String rowCount;
 
   private List<ComparisonToolConfigColumn> columns;
 
