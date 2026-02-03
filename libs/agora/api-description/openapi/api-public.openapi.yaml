@@ -16,8 +16,6 @@ servers:
 tags:
   - name: Bio Domain
     description: Operations about bio domains.
-  - name: Data Version
-    description: Operations about the data version.
   - name: Distribution
     description: Operations about distributions.
   - name: Gene
@@ -201,24 +199,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NominatedGenesList'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /data-version:
-    get:
-      tags:
-        - Data Version
-      summary: Get data version
-      description: Get data version
-      operationId: getDataVersion
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataVersion'
-          description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -1172,20 +1152,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Gene'
-    DataVersion:
-      type: object
-      description: Synapse data version
-      properties:
-        data_file:
-          type: string
-        data_version:
-          type: string
-        team_images_id:
-          type: string
-      required:
-        - data_file
-        - data_version
-        - team_images_id
     RnaDistribution:
       type: object
       description: Distributions

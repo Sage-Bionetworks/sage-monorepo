@@ -1,7 +1,7 @@
 package org.sagebionetworks.agora.api.next.api;
 
 import org.sagebionetworks.agora.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.api.next.model.dto.HealthCheckDto;
+import org.sagebionetworks.agora.api.next.model.dto.DataVersionDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,30 +17,30 @@ import java.util.Optional;
 import jakarta.annotation.Generated;
 
 /**
- * A delegate to be called by the {@link HealthCheckApiController}}.
+ * A delegate to be called by the {@link DataVersionApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public interface HealthCheckApiDelegate {
+public interface DataVersionApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
     /**
-     * GET /next/health-check : Get health check information
-     * Get information about the health of the service
+     * GET /data-version : Get data version
+     * Get data version
      *
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see HealthCheckApi#getHealthCheck
+     * @see DataVersionApi#getDataVersion
      */
-    default ResponseEntity<HealthCheckDto> getHealthCheck() {
+    default ResponseEntity<DataVersionDto> getDataVersion() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"status\" : \"pass\" }";
+                    String exampleString = "{ \"data_file\" : \"data_file\", \"data_version\" : \"data_version\", \"team_images_id\" : \"team_images_id\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

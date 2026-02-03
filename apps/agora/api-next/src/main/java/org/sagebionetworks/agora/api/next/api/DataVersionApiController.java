@@ -1,7 +1,7 @@
 package org.sagebionetworks.agora.api.next.api;
 
 import org.sagebionetworks.agora.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.api.next.model.dto.HealthCheckDto;
+import org.sagebionetworks.agora.api.next.model.dto.DataVersionDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +30,16 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
 @RequestMapping("${openapi.agoraAPINext.base-path:/v1}")
-public class HealthCheckApiController implements HealthCheckApi {
+public class DataVersionApiController implements DataVersionApi {
 
-    private final HealthCheckApiDelegate delegate;
+    private final DataVersionApiDelegate delegate;
 
-    public HealthCheckApiController(@Autowired(required = false) HealthCheckApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new HealthCheckApiDelegate() {});
+    public DataVersionApiController(@Autowired(required = false) DataVersionApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new DataVersionApiDelegate() {});
     }
 
     @Override
-    public HealthCheckApiDelegate getDelegate() {
+    public DataVersionApiDelegate getDelegate() {
         return delegate;
     }
 

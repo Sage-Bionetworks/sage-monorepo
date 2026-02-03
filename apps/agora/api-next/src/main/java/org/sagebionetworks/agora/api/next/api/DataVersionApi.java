@@ -6,7 +6,7 @@
 package org.sagebionetworks.agora.api.next.api;
 
 import org.sagebionetworks.agora.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.api.next.model.dto.HealthCheckDto;
+import org.sagebionetworks.agora.api.next.model.dto.DataVersionDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,30 +33,30 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Health Check", description = "Operations about health checks.")
-public interface HealthCheckApi {
+@Tag(name = "Data Version", description = "Operations about the data version.")
+public interface DataVersionApi {
 
-    default HealthCheckApiDelegate getDelegate() {
-        return new HealthCheckApiDelegate() {};
+    default DataVersionApiDelegate getDelegate() {
+        return new DataVersionApiDelegate() {};
     }
 
     /**
-     * GET /next/health-check : Get health check information
-     * Get information about the health of the service
+     * GET /data-version : Get data version
+     * Get data version
      *
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "getHealthCheck",
-        summary = "Get health check information",
-        description = "Get information about the health of the service",
-        tags = { "Health Check" },
+        operationId = "getDataVersion",
+        summary = "Get data version",
+        description = "Get data version",
+        tags = { "Data Version" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = HealthCheckDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = HealthCheckDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = DataVersionDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = DataVersionDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -70,14 +70,14 @@ public interface HealthCheckApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/next/health-check",
+        value = "/data-version",
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<HealthCheckDto> getHealthCheck(
+    default ResponseEntity<DataVersionDto> getDataVersion(
         
     ) {
-        return getDelegate().getHealthCheck();
+        return getDelegate().getDataVersion();
     }
 
 }
