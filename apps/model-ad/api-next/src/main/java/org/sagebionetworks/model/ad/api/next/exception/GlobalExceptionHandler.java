@@ -36,6 +36,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .body(errorDto);
   }
 
+  @ExceptionHandler(ComparisonToolConfigNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleComparisonToolConfigNotFound(
+    ComparisonToolConfigNotFoundException ex,
+    NativeWebRequest request,
+    Locale locale
+  ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.ENTITY_NOT_FOUND.getTitle())
+      .status(ErrorConstants.ENTITY_NOT_FOUND.getStatus().value())
+      .detail(ex.getMessage())
+      .instance(resolveInstance(request))
+      .build();
+    return ResponseEntity.status(ErrorConstants.ENTITY_NOT_FOUND.getStatus())
+      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+      .body(errorDto);
+  }
+
   @ExceptionHandler(InvalidObjectIdException.class)
   protected ResponseEntity<BasicErrorDto> handleInvalidObjectId(
     InvalidObjectIdException ex,

@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.model.ad.api.next.configuration.CacheNames;
+import org.sagebionetworks.model.ad.api.next.exception.ComparisonToolConfigNotFoundException;
 import org.sagebionetworks.model.ad.api.next.model.document.ComparisonToolConfigDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolConfigDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolPageDto;
@@ -25,8 +26,11 @@ public class ComparisonToolConfigService {
   @Cacheable(key = "#page")
   public List<ComparisonToolConfigDto> getConfigsByPage(ComparisonToolPageDto page) {
     List<ComparisonToolConfigDocument> documents = repository.findByPage(page.getValue());
-    return documents == null
-      ? List.of()
-      : documents.stream().map(comparisonToolConfigMapper::toDto).toList();
+    
+    if (documents == null || documents.isEmpty()) {
+      throw new ComparisonToolConfigNotFoundException(page.getValue());
+    }
+    
+    return documents.stream().map(comparisonToolConfigMapper::toDto).toList();
   }
 }

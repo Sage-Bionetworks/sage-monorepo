@@ -45,25 +45,6 @@ class ComparisonToolConfigApiDelegateImplTest {
   }
 
   @Test
-  @DisplayName("should return empty list when service returns no configs")
-  void shouldReturnEmptyListWhenServiceReturnsNoConfigs() {
-    // given
-    ComparisonToolPageDto page = ComparisonToolPageDto.GENE_EXPRESSION;
-    when(service.getConfigsByPage(page)).thenReturn(List.of());
-
-    // when
-    ResponseEntity<List<ComparisonToolConfigDto>> response = delegate.getComparisonToolConfig(page);
-
-    // then
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getBody()).isEmpty();
-    assertThat(response.getHeaders().getCacheControl()).contains("no-cache");
-    assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
-
-    verify(service).getConfigsByPage(page);
-  }
-
-  @Test
   @DisplayName("should return configs when service returns data")
   void shouldReturnConfigsWhenServiceReturnsData() {
     // given
@@ -93,7 +74,9 @@ class ComparisonToolConfigApiDelegateImplTest {
   void shouldSetNoCacheHeadersInResponse() {
     // given
     ComparisonToolPageDto page = ComparisonToolPageDto.DISEASE_CORRELATION;
-    when(service.getConfigsByPage(page)).thenReturn(List.of());
+    ComparisonToolConfigDto config = new ComparisonToolConfigDto();
+    config.setPage(page);
+    when(service.getConfigsByPage(page)).thenReturn(List.of(config));
 
     // when
     ResponseEntity<List<ComparisonToolConfigDto>> response = delegate.getComparisonToolConfig(page);

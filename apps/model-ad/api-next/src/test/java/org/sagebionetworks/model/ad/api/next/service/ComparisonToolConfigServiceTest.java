@@ -1,6 +1,7 @@
 package org.sagebionetworks.model.ad.api.next.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.model.ad.api.next.exception.ComparisonToolConfigNotFoundException;
 import org.sagebionetworks.model.ad.api.next.model.document.ComparisonToolConfigDocument;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolConfigDto;
 import org.sagebionetworks.model.ad.api.next.model.dto.ComparisonToolPageDto;
@@ -35,32 +37,32 @@ class ComparisonToolConfigServiceTest {
   }
 
   @Test
-  @DisplayName("should return empty list when repository returns null")
-  void shouldReturnEmptyListWhenRepositoryReturnsNull() {
+  @DisplayName("should throw exception when repository returns null")
+  void shouldThrowExceptionWhenRepositoryReturnsNull() {
     // given
     ComparisonToolPageDto page = ComparisonToolPageDto.GENE_EXPRESSION;
     when(repository.findByPage(page.getValue())).thenReturn(null);
 
-    // when
-    List<ComparisonToolConfigDto> result = service.getConfigsByPage(page);
+    // when & then
+    assertThatThrownBy(() -> service.getConfigsByPage(page))
+      .isInstanceOf(ComparisonToolConfigNotFoundException.class)
+      .hasMessage("Comparison Tool config not found for page: Gene Expression");
 
-    // then
-    assertThat(result).isEmpty();
     verify(repository).findByPage("Gene Expression");
   }
 
   @Test
-  @DisplayName("should return empty list when repository returns empty list")
-  void shouldReturnEmptyListWhenRepositoryReturnsEmptyList() {
+  @DisplayName("should throw exception when repository returns empty list")
+  void shouldThrowExceptionWhenRepositoryReturnsEmptyList() {
     // given
     ComparisonToolPageDto page = ComparisonToolPageDto.MODEL_OVERVIEW;
     when(repository.findByPage(page.getValue())).thenReturn(List.of());
 
-    // when
-    List<ComparisonToolConfigDto> result = service.getConfigsByPage(page);
+    // when & then
+    assertThatThrownBy(() -> service.getConfigsByPage(page))
+      .isInstanceOf(ComparisonToolConfigNotFoundException.class)
+      .hasMessage("Comparison Tool config not found for page: Model Overview");
 
-    // then
-    assertThat(result).isEmpty();
     verify(repository).findByPage("Model Overview");
   }
 
