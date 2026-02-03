@@ -96,6 +96,7 @@ class WebStack(cdk.Stack):
             "BATTLE_ROUND_LIMIT": "5",
             "MAX_RESPONSE_TOKENS": "2048",
             "PROMPT_LEN_LIMIT": "5000",
+            "APP_COMMUNITY_QUEST_ENABLED": "true",
         }
 
         # Create AWS Secrets Manager secret for OpenRouter API key
