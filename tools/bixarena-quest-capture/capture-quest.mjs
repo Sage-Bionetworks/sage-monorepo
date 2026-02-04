@@ -193,16 +193,22 @@ const dimensions = await page.evaluate(() => {
   const finalTop = bbox.top + cropTop;
   const finalLeft = bbox.left + cropLeft;
 
+  // Round dimensions to even numbers for video encoding compatibility
+  const evenWidth = Math.floor(finalWidth / 2) * 2;
+  const evenHeight = Math.floor(finalHeight / 2) * 2;
+
   console.log('Final dimensions:', {
     finalWidth,
     finalHeight,
+    evenWidth,
+    evenHeight,
     finalTop,
     finalLeft
   });
 
   return {
-    width: Math.ceil(finalWidth),
-    height: Math.ceil(finalHeight),
+    width: evenWidth,
+    height: evenHeight,
     top: Math.max(0, Math.floor(finalTop)),
     left: Math.max(0, Math.floor(finalLeft)),
   };
@@ -333,16 +339,18 @@ if (wantGif) {
   // Calculate scaled dimensions
   const scaledWidth = Math.round(dimensions.width * (SCALE_PERCENT / 100));
 
+  // Crop 4 pixels from the right to remove white line artifact
+  const cropWidth = Math.floor(scaledWidth / 2) * 2 - 4;  // Ensure even number
+
   // H.264 encoding with high compression for small file size
   // -crf 28 balances quality and file size (lower = better quality, 18-28 is good range)
   // -preset slow gives better compression at same quality
   // -pix_fmt yuv420p ensures compatibility with all players
   // -movflags +faststart enables progressive download (video starts before fully loaded)
-  // -stream_loop -1 would loop infinitely in some players, but not widely supported
-  // Note: LinkedIn and most social platforms auto-loop videos in feed regardless
+  // crop filter removes the white line artifact on the right edge
   const ffmpegCmd =
     `ffmpeg -hide_banner -loglevel error -i "${webmFile}" ` +
-    `-vf "fps=${GIF_FPS},scale=${scaledWidth}:-1:flags=lanczos" ` +
+    `-vf "fps=${GIF_FPS},scale=${scaledWidth}:-1:flags=lanczos,crop=${cropWidth}:ih:0:0" ` +
     `-c:v libx264 -crf 28 -preset slow -pix_fmt yuv420p ` +
     `-movflags +faststart "${outputFile}" -y`;
 
