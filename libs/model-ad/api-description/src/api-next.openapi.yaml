@@ -14,6 +14,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Comparison Tool Config
+    description: Operations about Comparison Tool UI configuration.
   - name: Data Version
     description: Operations about the data version.
   - name: Model
@@ -29,6 +31,8 @@ tags:
 paths:
   /data-version:
     $ref: paths/data-version.yaml
+  /comparison-tool-config:
+    $ref: paths/comparison-tool-config.yaml
   /comparison-tools/model-overview:
     $ref: paths/comparison-tools/model-overview.yaml
   /comparison-tools/disease-correlation:

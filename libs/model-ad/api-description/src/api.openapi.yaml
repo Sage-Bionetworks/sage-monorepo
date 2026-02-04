@@ -19,10 +19,6 @@ tags:
     # x-sage-internal: true # Now defined in the new API service; making this node internal does not
     # prevent merging conflicts because it just centralize the tag description and does not prevent
     # its creation if at least one endpoint references it, so commenting it out for now.
-  - name: Comparison Tool Config
-    description: Operations about Comparison Tool UI configuration.
 paths:
   /models/search:
     $ref: paths/model-search.yaml
-  /comparison-tool-config:
-    $ref: paths/comparison-tool-config.yaml
