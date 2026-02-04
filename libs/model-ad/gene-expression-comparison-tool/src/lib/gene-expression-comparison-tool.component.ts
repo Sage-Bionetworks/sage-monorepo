@@ -80,18 +80,18 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     selectorsWikiParams: this.selectorsWikiParams,
     headerTitle: ComparisonToolPage.GeneExpression,
     filterResultsButtonTooltip: 'Filter results by Model, Biological Domain, and more',
-    viewDetailsTooltip: 'Open gene details page',
+    viewDetailsTooltip: 'View individual results',
     viewDetailsClick: (rowData: unknown) => {
       const row = rowData as GeneExpression;
-      if (row.model_group === null) {
-        this.router.navigate([ROUTE_PATHS.GENES, row.ensembl_gene_id], {
-          queryParams: { model: row.name.link_text, tissue: row.tissue },
-        });
-      } else {
-        this.router.navigate([ROUTE_PATHS.GENES, row.ensembl_gene_id], {
-          queryParams: { modelGroup: row.model_group, tissue: row.tissue },
-        });
-      }
+      const url = this.router.serializeUrl(
+        this.router.createUrlTree([ROUTE_PATHS.GENES, row.ensembl_gene_id], {
+          queryParams:
+            row.model_group === null
+              ? { model: row.name.link_text, tissue: row.tissue }
+              : { modelGroup: row.model_group, tissue: row.tissue },
+        }),
+      );
+      window.open(url, '_blank');
     },
     legendPanelConfig: this.legendPanelConfig,
     rowsPerPage: 10,
