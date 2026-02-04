@@ -1,0 +1,18 @@
+services:
+  agora-api-next:
+    image: ghcr.io/sage-bionetworks/agora-api-next:${AGORA_VERSION:-local}
+    container_name: agora-api-next
+    restart: always
+    env_file:
+      - ../../../apps/agora/api-next/.env
+    networks:
+      - agora
+    ports:
+      - '3334:3334'
+    depends_on:
+      agora-mongo:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 1G
