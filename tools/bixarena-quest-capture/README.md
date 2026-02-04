@@ -6,9 +6,12 @@ A Node.js tool for capturing the BioArena Community Quest section as animated We
 
 - 📹 Record quest section with carousel animation as WebM video
 - 🎞️ Convert to high-quality GIF with optimized palette
+- 🎬 Convert to MP4 video (H.264) for much smaller file sizes (recommended for LinkedIn)
 - 📐 Automatically detects quest section dimensions for perfect framing
 - 🎯 Captures only the quest section from the running app (no need for standalone HTML)
 - ⚡ Smooth carousel animations with configurable recording duration
+- ✂️ Automatic trimming to remove loading artifacts and page transitions
+- 🎨 Dark theme support for professional appearance
 - 🎨 Advanced color palette generation and dithering for high-quality GIFs
 
 ## Prerequisites
@@ -60,18 +63,26 @@ sudo apt-get install -y ffmpeg
 ### Generate WebM Video
 
 ```bash
-node tools/quest-capture/capture-quest.mjs
+node tools/bixarena-quest-capture/capture-quest.mjs
 ```
 
-Output: Creates `bixarena-quest.webm` in `tools/quest-capture/` directory.
+Output: Creates `bixarena-quest.webm` in `tools/bixarena-quest-capture/` directory.
+
+### Generate MP4 Video (Recommended for LinkedIn)
+
+```bash
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=6
+```
+
+Output: Creates `bixarena-quest.mp4` (~500KB-2MB for 30s video, well under 5MB limit).
 
 ### Generate GIF
 
 ```bash
-node tools/quest-capture/capture-quest.mjs --gif
+node tools/bixarena-quest-capture/capture-quest.mjs --gif
 ```
 
-Output: Creates `bixarena-quest.gif` in `tools/quest-capture/` directory.
+Output: Creates `bixarena-quest.gif` (Note: GIFs are much larger than MP4 for same content).
 
 ### Custom Options
 
@@ -83,22 +94,31 @@ node tools/quest-capture/capture-quest.mjs --gif --fps=10
 # Default is 12000ms = 2 carousel rotations at 6s each
 node tools/quest-capture/capture-quest.mjs --gif --record-ms=18000
 
+# Custom trim duration (removes N seconds from start to eliminate loading)
+# Default is 5 seconds
+node tools/quest-capture/capture-quest.mjs --gif --trim-start=6
+
+# Scale output size (percentage, default: 100)
+# 75 = 75% of original dimensions
+node tools/quest-capture/capture-quest.mjs --gif --scale=75
+
 # Custom app URL (if running on different port)
 node tools/quest-capture/capture-quest.mjs --url=http://localhost:7860
 
-# Combine options
-node tools/quest-capture/capture-quest.mjs --gif --fps=15 --record-ms=18000
+# Combine options for smaller file size
+node tools/quest-capture/capture-quest.mjs --gif --fps=8 --scale=75 --trim-start=6
 ```
 
 ## How It Works
 
 1. **Connect to running app** at http://localhost:8100
-2. **Wait for page load** and quest section to render
+2. **Wait for page load** and quest section to render in dark theme
 3. **Measure quest section dimensions** by querying DOM elements
 4. **Launch recording browser** with viewport sized to quest section
-5. **Navigate and scroll** to quest section
-6. **Record carousel animation** for specified duration (default: 12 seconds)
-7. **For GIF**: Convert WebM to GIF using FFmpeg with optimized palette
+5. **Navigate and position** to quest section instantly
+6. **Record carousel animation** for specified duration (default: 12 seconds + 5s extra)
+7. **Trim video** to remove first 5 seconds (loading artifacts and transitions)
+8. **For GIF**: Convert trimmed WebM to GIF using FFmpeg with optimized palette
 
 ## Quality Settings
 
@@ -121,11 +141,32 @@ node tools/quest-capture/capture-quest.mjs --gif --fps=15 --record-ms=18000
 
 Typical file sizes for a ~1200x800px quest section:
 
-- **WebM**: ~200-400 KB (12 seconds)
-- **GIF (15fps)**: ~1-2 MB (12 seconds)
-- **GIF (10fps)**: ~700 KB - 1.2 MB (12 seconds)
+### MP4 (H.264) - RECOMMENDED
 
-Lower FPS reduces file size but makes animation less smooth. 15 fps is a good balance.
+- **30 seconds, 15fps, 100% scale**: ~800KB - 1.5MB ✅
+- **30 seconds, 15fps, 90% scale**: ~600KB - 1MB ✅
+- **12 seconds, 15fps, 100% scale**: ~300KB - 600KB ✅
+
+### GIF (Not Recommended for Large Videos)
+
+- **12 seconds, 15fps, 100% scale**: ~1-2 MB
+- **12 seconds, 10fps, 100% scale**: ~700 KB - 1.2 MB
+- **12 seconds, 8fps, 75% scale**: ~400-800 KB
+- **30 seconds, 8fps, 75% scale**: ~2-5 MB (often exceeds LinkedIn limit)
+
+### WebM
+
+- **12 seconds**: ~200-400 KB
+- **30 seconds**: ~500-800 KB
+
+**Why MP4 is better than GIF:**
+
+- MP4 uses modern video compression (10-20x smaller for same quality)
+- GIF uses 256-color palette (poor for photos/screenshots)
+- LinkedIn, Twitter, and all social platforms support MP4
+- MP4 maintains higher quality at smaller file sizes
+
+**For LinkedIn (< 5 MB limit):** Use `--mp4` format. Even 30-second videos at full quality stay under 2 MB.
 
 ## Carousel Timing
 
@@ -179,21 +220,57 @@ Increase the recording duration:
 node tools/quest-capture/capture-quest.mjs --gif --record-ms=18000
 ```
 
+### Loading animation or page transitions visible in output
+
+If you still see the Gradio loading indicator or page scrolling in the final output:
+
+1. Increase the trim duration to remove more from the start:
+
+```bash
+node tools/quest-capture/capture-quest.mjs --gif --trim-start=6
+```
+
+2. Or if that removes too much of the actual carousel, increase the recording duration:
+
+```bash
+node tools/quest-capture/capture-quest.mjs --gif --record-ms=18000 --trim-start=6
+```
+
 ## Advanced Usage
 
 ### For LinkedIn Posts
 
-For optimal LinkedIn compatibility:
+For optimal LinkedIn compatibility (< 5 MB limit):
 
 ```bash
-# Generate GIF with moderate FPS for smaller file size
-node tools/quest-capture/capture-quest.mjs --gif --fps=12 --record-ms=12000
+# RECOMMENDED: Use MP4 format - shows all 5 carousel images, ~1-2 MB
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=6
+
+# If you need smaller file size:
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=6 --scale=90
+
+# For highest quality at full resolution:
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=6 --fps=20
 ```
 
-LinkedIn's file size limits:
+**Why MP4 instead of GIF?**
 
-- Images/GIFs: Up to 5 MB
-- If your GIF exceeds this, reduce FPS or duration
+- MP4 is 10-20x smaller than GIF for the same content
+- LinkedIn fully supports MP4 videos in posts
+- Better quality, smaller file size, smoother playback
+- GIFs struggle with photographic content and large dimensions
+- **LinkedIn auto-loops videos in the feed** (just like GIFs)
+
+**Video Looping:**
+
+- LinkedIn, Twitter, and most social platforms automatically loop videos in feeds
+- No special looping flag needed - platforms handle this automatically
+- Videos behave just like GIFs when posted to social media
+
+**LinkedIn file size limits:**
+
+- Videos/GIFs: Up to 5 MB
+- MP4 format easily stays under 2 MB for 30-second videos
 
 ### For Documentation
 

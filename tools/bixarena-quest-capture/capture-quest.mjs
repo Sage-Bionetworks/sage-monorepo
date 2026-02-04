@@ -4,16 +4,21 @@
 // Usage:
 //   node capture-quest.mjs
 //   node capture-quest.mjs --gif
-//   node capture-quest.mjs --gif --fps=15 --record-ms=12000
+//   node capture-quest.mjs --mp4
+//   node capture-quest.mjs --mp4 --fps=15 --record-ms=30000 --trim-start=6
 //   node capture-quest.mjs --url=http://localhost:7860
 //
 // Notes:
 // - Captures just the quest section from the running BioArena app
-// - --gif creates a GIF (otherwise WebM is kept).
-// - --fps controls GIF framerate (default: 15).
+// - --gif creates a GIF (default: WebM is kept).
+// - --mp4 creates an MP4 video (RECOMMENDED for LinkedIn - much smaller than GIF).
+// - --fps controls output framerate (default: 15).
 // - --record-ms controls how long to record (default: 12000 ms = 2 carousel rotations at 6s each).
+// - --trim-start removes N seconds from start to eliminate loading artifacts (default: 5).
+// - --scale controls output size as percentage (default: 100, use 75-90 for smaller files).
 // - --url specifies the app URL (default: http://localhost:8100).
-// - Quest carousel rotates every 6 seconds by default.
+// - Quest carousel rotates every 6 seconds by default (5 images = 30 seconds total).
+// - For LinkedIn (< 5 MB): use --mp4 (produces files ~500KB-2MB for 30s videos).
 //
 // Requirements:
 // - BioArena app running on localhost:8100
@@ -63,13 +68,18 @@ const __dirname = path.dirname(__filename);
 const args = process.argv.slice(2);
 
 const wantGif = hasFlag(args, 'gif');
-const format = wantGif ? 'gif' : 'webm';
+const wantMp4 = hasFlag(args, 'mp4');
+const format = wantGif ? 'gif' : wantMp4 ? 'mp4' : 'webm';
 const GIF_FPS = parseFlagNum(args, 'fps', 15);
 // Default: 12 seconds = 2 full carousel rotations (6s each)
 const RECORD_MS = parseFlagNum(args, 'record-ms', 12000);
 const APP_URL = parseFlagString(args, 'url', 'http://localhost:8100');
 // Wait 3 seconds for initial render and potential redirects
 const PRE_WAIT_MS = 3000;
+// Trim first N seconds from video to remove loading artifacts
+const TRIM_START_SECONDS = parseFlagNum(args, 'trim-start', 5);
+// Scale output (percentage, 100 = original size, 75 = 75% of original)
+const SCALE_PERCENT = parseFlagNum(args, 'scale', 100);
 
 // Output files
 const outputDir = __dirname;
@@ -79,14 +89,17 @@ const outputFile = path.join(outputDir, `bixarena-quest.${format}`);
 console.log(`App URL: ${APP_URL}`);
 console.log(`Output format: ${format.toUpperCase()}`);
 console.log(`Record duration: ${RECORD_MS}ms (${RECORD_MS / 1000}s)`);
-if (wantGif) {
-  console.log(`GIF framerate: ${GIF_FPS} fps`);
+console.log(`Trim first: ${TRIM_START_SECONDS}s (to remove loading artifacts)`);
+if (wantGif || wantMp4) {
+  console.log(`Output framerate: ${GIF_FPS} fps`);
+  console.log(`Scale: ${SCALE_PERCENT}%`);
 }
 
 // ---------- Pass 1: measure quest section dimensions ----------
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({
   viewport: { width: 1920, height: 1080 },
+  colorScheme: 'dark', // Force dark mode
 });
 const page = await context.newPage();
 
@@ -114,6 +127,26 @@ try {
   process.exit(1);
 }
 
+// Switch to dark mode
+console.log('Switching to dark mode...');
+await page.evaluate(() => {
+  // Gradio's theme toggle button
+  const themeToggle = document.querySelector('button[id*="theme"]') ||
+                      document.querySelector('button[aria-label*="theme"]') ||
+                      document.querySelector('button[aria-label*="Theme"]');
+
+  if (themeToggle) {
+    // Check if we're in light mode and need to toggle
+    const html = document.documentElement;
+    const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+    if (currentTheme === 'light') {
+      themeToggle.click();
+    }
+  }
+});
+// Wait for theme transition
+await page.waitForTimeout(500);
+
 console.log('Measuring quest section dimensions...');
 const dimensions = await page.evaluate(() => {
   const questSection = document.querySelector('#quest-section-wrapper');
@@ -137,13 +170,15 @@ console.log(
 );
 await browser.close();
 
-// ---------- Pass 2: record video with clipping ----------
-console.log('Starting recording...');
+// ---------- Pass 2: Record with extra time at start ----------
+console.log('Starting video recording...');
 const recordingBrowser = await chromium.launch({ headless: true });
 
-// Use full viewport size for navigation, then we'll clip during recording
+// Create context with video recording
+// Record EXTRA time to capture loading, then we'll trim it with FFmpeg
 const recordingContext = await recordingBrowser.newContext({
-  viewport: { width: 1920, height: 1080 },
+  viewport: { width: dimensions.width, height: dimensions.height },
+  colorScheme: 'dark',
   deviceScaleFactor: 2,
   recordVideo: {
     dir: outputDir,
@@ -153,38 +188,38 @@ const recordingContext = await recordingBrowser.newContext({
 
 const recordingPage = await recordingContext.newPage();
 
-console.log('Loading page for recording...');
+console.log('Loading page and positioning...');
 await recordingPage.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
 await recordingPage.waitForTimeout(PRE_WAIT_MS);
-
-// Wait for quest section
 await recordingPage.waitForSelector('#quest-section-wrapper');
 
-// Scroll to quest section and center it in viewport
+// Switch to dark mode
 await recordingPage.evaluate(() => {
-  const questSection = document.querySelector('#quest-section-wrapper');
-  if (questSection) {
-    questSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const themeToggle = document.querySelector('button[id*="theme"]') ||
+                      document.querySelector('button[aria-label*="theme"]') ||
+                      document.querySelector('button[aria-label*="Theme"]');
+  if (themeToggle) {
+    const html = document.documentElement;
+    const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+    if (currentTheme === 'light') {
+      themeToggle.click();
+    }
   }
 });
+await recordingPage.waitForTimeout(500);
 
-// Wait for scroll to finish
-await recordingPage.waitForTimeout(1000);
-
-// Set viewport clip to capture only the quest section
-await recordingPage.setViewportSize({
-  width: dimensions.width,
-  height: dimensions.height,
-});
-
-// Scroll back to quest section after viewport change
+// Position instantly to quest section
 await recordingPage.evaluate(({ top, left }) => {
-  window.scrollTo(left, top);
+  window.scrollTo({ top, left, behavior: 'instant' });
 }, { top: dimensions.top, left: dimensions.left });
 
-// Record carousel animation
-console.log(`Recording for ${RECORD_MS / 1000} seconds...`);
-await recordingPage.waitForTimeout(RECORD_MS);
+// Wait for rendering to stabilize before starting the "real" recording
+await recordingPage.waitForTimeout(1000);
+
+// Record carousel animation (+ extra time that will be trimmed)
+const totalRecordMs = RECORD_MS + (TRIM_START_SECONDS * 1000);
+console.log(`Recording for ${totalRecordMs / 1000}s (will trim first ${TRIM_START_SECONDS}s)...`);
+await recordingPage.waitForTimeout(totalRecordMs);
 
 // Close page/context to finalize the video
 const videoObj = await recordingPage.video();
@@ -202,18 +237,40 @@ if (!videoObj) {
 // After page is closed, path() becomes available
 const recordedPath = await videoObj.path();
 
-// Move/rename recorded file to deterministic name
-await fs.rename(recordedPath, webmFile);
-console.log(`Recorded WebM: ${webmFile}`);
+// Temporary files
+const rawWebmFile = path.join(outputDir, `bixarena-quest-raw.webm`);
+await fs.rename(recordedPath, rawWebmFile);
+console.log(`Recorded raw WebM: ${rawWebmFile}`);
 
-// ---------- Convert to GIF (if requested) ----------
+// ---------- Trim video to remove loading artifacts ----------
+await ensureFfmpeg();
+console.log(`Trimming first ${TRIM_START_SECONDS}s from video...`);
+// Note: -ss AFTER -i for frame-accurate seeking (vs keyframe seeking before -i)
+// Using -c copy is fast but may be slightly imprecise at trim point
+const trimCmd =
+  `ffmpeg -hide_banner -loglevel error -i "${rawWebmFile}" -ss ${TRIM_START_SECONDS} ` +
+  `-c copy "${webmFile}" -y`;
+
+try {
+  await execAsync(trimCmd);
+  console.log('Trimming complete. Cleaning up raw WebM...');
+  await fs.unlink(rawWebmFile);
+} catch (error) {
+  console.error('Error trimming video:', error?.stderr || error);
+  console.log(`Raw WebM kept at: ${rawWebmFile}`);
+  process.exit(1);
+}
+
+// ---------- Convert to GIF or MP4 (if requested) ----------
 if (wantGif) {
-  await ensureFfmpeg();
   console.log('Converting WebM to GIF...');
+  // Calculate scaled dimensions
+  const scaledWidth = Math.round(dimensions.width * (SCALE_PERCENT / 100));
+
   // Palettegen/paletteuse chain for quality; lanczos scaling; user FPS
   const ffmpegCmd =
     `ffmpeg -hide_banner -loglevel error -i "${webmFile}" ` +
-    `-vf "fps=${GIF_FPS},scale=${dimensions.width}:-1:flags=lanczos,` +
+    `-vf "fps=${GIF_FPS},scale=${scaledWidth}:-1:flags=lanczos,` +
     `split[s0][s1];[s0]palettegen=max_colors=256:stats_mode=diff[p];` +
     `[s1][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle" ` +
     `-loop 0 "${outputFile}" -y`;
@@ -228,6 +285,34 @@ if (wantGif) {
     process.exit(1);
   }
   console.log(`GIF saved to: ${outputFile}`);
+} else if (wantMp4) {
+  console.log('Converting WebM to MP4...');
+  // Calculate scaled dimensions
+  const scaledWidth = Math.round(dimensions.width * (SCALE_PERCENT / 100));
+
+  // H.264 encoding with high compression for small file size
+  // -crf 28 balances quality and file size (lower = better quality, 18-28 is good range)
+  // -preset slow gives better compression at same quality
+  // -pix_fmt yuv420p ensures compatibility with all players
+  // -movflags +faststart enables progressive download (video starts before fully loaded)
+  // -stream_loop -1 would loop infinitely in some players, but not widely supported
+  // Note: LinkedIn and most social platforms auto-loop videos in feed regardless
+  const ffmpegCmd =
+    `ffmpeg -hide_banner -loglevel error -i "${webmFile}" ` +
+    `-vf "fps=${GIF_FPS},scale=${scaledWidth}:-1:flags=lanczos" ` +
+    `-c:v libx264 -crf 28 -preset slow -pix_fmt yuv420p ` +
+    `-movflags +faststart "${outputFile}" -y`;
+
+  try {
+    await execAsync(ffmpegCmd);
+    console.log('MP4 conversion complete. Cleaning up WebM...');
+    await fs.unlink(webmFile);
+  } catch (error) {
+    console.error('Error converting to MP4:', error?.stderr || error);
+    console.log(`WebM kept at: ${webmFile}`);
+    process.exit(1);
+  }
+  console.log(`MP4 saved to: ${outputFile}`);
 } else {
   console.log(`WEBM saved to: ${webmFile}`);
 }
