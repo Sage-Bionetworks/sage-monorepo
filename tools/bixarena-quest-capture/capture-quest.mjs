@@ -155,13 +155,56 @@ const dimensions = await page.evaluate(() => {
   }
 
   const bbox = questSection.getBoundingClientRect();
-  const padding = 20;
+
+  // Use scrollHeight/scrollWidth which includes overflow content
+  const scrollHeight = questSection.scrollHeight;
+  const scrollWidth = questSection.scrollWidth;
+
+  // Use the larger of bbox or scroll dimensions
+  const actualWidth = Math.max(bbox.width, scrollWidth);
+  const actualHeight = Math.max(bbox.height, scrollHeight);
+
+  // Debug: log the computed bounds
+  console.log('Computed bounds:', {
+    bboxTop: bbox.top,
+    bboxLeft: bbox.left,
+    bboxWidth: bbox.width,
+    bboxHeight: bbox.height,
+    scrollWidth,
+    scrollHeight,
+    actualWidth,
+    actualHeight
+  });
+
+  // Manual adjustments based on visual inspection
+  // cropTop: move down N pixels from top edge
+  // cropLeft: move right N pixels from left edge
+  // cropRight: reduce width by N pixels from right edge
+  // cropBottom: reduce height by N pixels from bottom edge
+  // Use negative values to ADD space beyond detected bounds
+
+  const cropTop = 0;       // No crop from top
+  const cropLeft = 0;      // No crop from left
+  const cropRight = 4;     // Trim 4px from right (remove white line)
+  const cropBottom = -50;  // Add 50px to bottom (capture more content)
+
+  const finalWidth = actualWidth - cropLeft - cropRight;
+  const finalHeight = actualHeight - cropTop - cropBottom;
+  const finalTop = bbox.top + cropTop;
+  const finalLeft = bbox.left + cropLeft;
+
+  console.log('Final dimensions:', {
+    finalWidth,
+    finalHeight,
+    finalTop,
+    finalLeft
+  });
 
   return {
-    width: Math.ceil(bbox.width + padding * 2),
-    height: Math.ceil(bbox.height + padding * 2),
-    top: Math.max(0, Math.floor(bbox.top - padding)),
-    left: Math.max(0, Math.floor(bbox.left - padding)),
+    width: Math.ceil(finalWidth),
+    height: Math.ceil(finalHeight),
+    top: Math.max(0, Math.floor(finalTop)),
+    left: Math.max(0, Math.floor(finalLeft)),
   };
 });
 
@@ -305,8 +348,9 @@ if (wantGif) {
 
   try {
     await execAsync(ffmpegCmd);
-    console.log('MP4 conversion complete. Cleaning up WebM...');
-    await fs.unlink(webmFile);
+    console.log('MP4 conversion complete.');
+    console.log(`WebM kept at: ${webmFile} (for debugging)`);
+    // await fs.unlink(webmFile); // Keep for debugging
   } catch (error) {
     console.error('Error converting to MP4:', error?.stderr || error);
     console.log(`WebM kept at: ${webmFile}`);
