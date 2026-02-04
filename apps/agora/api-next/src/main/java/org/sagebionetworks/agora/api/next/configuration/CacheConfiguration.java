@@ -10,15 +10,15 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Cache configuration for the Agora API service.
- * Configures in-memory caching for comparison tool data queries to reduce MongoDB load and
- * improve response times. Uses Caffeine cache for high-performance local caching.
+ * Configures in-memory caching to reduce MongoDB load and improve response times.
+ * Uses Caffeine cache for high-performance local caching.
  */
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
 
   /**
-   * Configure cache manager with size limits for comparison tool data.
+   * Configure cache manager.
    */
   @Bean
   public CacheManager cacheManager() {
