@@ -4,7 +4,6 @@ import {
   allBiodomainsRoute,
   biodomainsRoute,
   comparisonGenesRoute,
-  dataVersionRoute,
   distributionRoute,
   geneRoute,
   genesRoute,
@@ -58,7 +57,6 @@ const router = express.Router();
 mongoose.connection.once('open', async () => {
   router.get('/bio-domains', allBiodomainsRoute);
   router.get('/bio-domains/:id', biodomainsRoute);
-  router.get('/data-version', dataVersionRoute);
   router.get('/distribution', distributionRoute);
   router.get('/genes/search/enhanced', searchGeneEnhancedRoute);
   router.get('/genes/comparison', comparisonGenesRoute);
