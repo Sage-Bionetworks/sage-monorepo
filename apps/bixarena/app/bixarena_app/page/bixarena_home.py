@@ -13,6 +13,8 @@ from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
 from bixarena_app.config.constants import COMMUNITY_QUEST_ENABLED
 from bixarena_app.page.bixarena_quest_section import (
     QUEST_CONFIG,
+    _build_builders_credits_html,
+    _build_carousel_html,
     _build_progress_html,
     build_quest_not_found_section,
     build_quest_section,
@@ -259,40 +261,51 @@ def build_stats_section():
     return stats_container
 
 
-def load_quest_progress_on_page_load() -> dict:
-    """Load quest progress and return HTML update.
+def load_quest_content_on_page_load() -> tuple[dict, dict, dict]:
+    """Load all dynamic quest content on page load (progress, contributors, carousel).
 
     Returns:
-        HTML update for the quest progress section (right column only)
+        Tuple of (progress_html_update, contributors_html_update, carousel_html_update)
     """
     try:
+        # Fetch contributors (single API call for all data)
         contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
+
+        # If quest doesn't exist, skip building content HTML
+        if contributors_data.get("error", False):
+            return (gr.update(), gr.update(), gr.update())
+
+        # Calculate progress using contributors data
         progress_data = calculate_quest_progress(contributors_data)
+
+        # Build progress HTML
+        progress_html = _build_progress_html(
+            progress_data["current_blocks"],
+            progress_data["goal_blocks"],
+            progress_data["percentage"],
+            progress_data["days_remaining"],
+        )
+
+        # Build contributors HTML
+        contributors_html = _build_builders_credits_html(contributors_data)
+
+        # Build carousel HTML (images from config, but rebuildable)
+        carousel_html = _build_carousel_html("quest-carousel")
+
+        return (
+            gr.update(value=progress_html),
+            gr.update(value=contributors_html),
+            gr.update(value=carousel_html),
+        )
+
     except Exception as e:
-        logger.error(f"Error calculating quest progress: {e}")
-        # Use defaults on error
-        from datetime import datetime
-
-        end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
-        days_remaining = max(0, (end_date - datetime.now()).days)
-        progress_data = {
-            "current_blocks": 0,
-            "goal_blocks": QUEST_CONFIG["goal"],
-            "percentage": 0.0,
-            "days_remaining": days_remaining,
-        }
-
-    current_blocks = progress_data["current_blocks"]
-    goal_blocks = progress_data["goal_blocks"]
-    percentage = progress_data["percentage"]
-    days_remaining = progress_data["days_remaining"]
-
-    # Build the progress HTML using shared helper function
-    progress_html = _build_progress_html(
-        current_blocks, goal_blocks, percentage, days_remaining
-    )
-
-    return gr.update(value=progress_html)
+        logger.error(f"Error refreshing quest content: {e}")
+        # Return empty updates on error (keep existing content)
+        return (
+            gr.update(),
+            gr.update(),
+            gr.update(),
+        )
 
 
 def build_quest_section_wrapper():
@@ -302,12 +315,16 @@ def build_quest_section_wrapper():
         # Return None values if feature is disabled
         with gr.Column(visible=False) as quest_container:
             progress_html_container = gr.HTML("")
+            contributors_html_container = gr.HTML("")
+            carousel_html_container = gr.HTML("")
             quest_btn_authenticated = gr.Button(visible=False)
             quest_btn_login = gr.Button(visible=False)
             carousel_init_trigger = gr.Button(visible=False)
         return (
             quest_container,
             progress_html_container,
+            contributors_html_container,
+            carousel_html_container,
             quest_btn_authenticated,
             quest_btn_login,
             carousel_init_trigger,
@@ -325,6 +342,8 @@ def build_quest_section_wrapper():
         (
             quest_container,
             progress_html_container,
+            contributors_html_container,
+            carousel_html_container,
             quest_btn_authenticated,
             quest_btn_login,
             carousel_init_trigger,
@@ -338,6 +357,8 @@ def build_quest_section_wrapper():
             (
                 quest_container,
                 progress_html_container,
+                contributors_html_container,
+                carousel_html_container,
                 quest_btn_authenticated,
                 quest_btn_login,
                 carousel_init_trigger,
@@ -350,6 +371,8 @@ def build_quest_section_wrapper():
             (
                 quest_container,
                 progress_html_container,
+                contributors_html_container,
+                carousel_html_container,
                 quest_btn_authenticated,
                 quest_btn_login,
                 carousel_init_trigger,
@@ -359,6 +382,8 @@ def build_quest_section_wrapper():
     return (
         quest_container,
         progress_html_container,
+        contributors_html_container,
+        carousel_html_container,
         quest_btn_authenticated,
         quest_btn_login,
         carousel_init_trigger,
@@ -524,6 +549,8 @@ def build_home_page():
         (
             quest_html,
             quest_progress_container,
+            quest_contributors_container,
+            quest_carousel_container,
             quest_btn_authenticated,
             quest_btn_login,
             carousel_init_trigger,
@@ -542,6 +569,8 @@ def build_home_page():
         stats_container,
         quest_html,
         quest_progress_container,
+        quest_contributors_container,
+        quest_carousel_container,
         quest_btn_authenticated,
         quest_btn_login,
         carousel_init_trigger,
