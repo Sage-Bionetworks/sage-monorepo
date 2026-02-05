@@ -22,16 +22,16 @@ import type { Meta, StoryObj } from '@storybook/angular';
       <p>Start the composition storybook (automatically starts all child storybooks):</p>
       <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto;">
 <code># Start composition with all child storybooks
-nx storybook storybook            # http://localhost:4400</code>
+nx start storybook            # http://localhost:4400</code>
       </pre>
 
       <p>Or start individual storybooks separately:</p>
       <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto;">
 <code># Agora storybook only
-nx storybook agora-storybook      # http://localhost:4401
+nx start agora-storybook      # http://localhost:4401
 
 # Explorers storybook only
-nx storybook explorers-storybook  # http://localhost:4402</code>
+nx start explorers-storybook  # http://localhost:4402</code>
       </pre>
 
       <h2>Learn More</h2>

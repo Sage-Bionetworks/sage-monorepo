@@ -14,8 +14,8 @@ This storybook uses **Storybook Composition** to provide a single unified naviga
 
 | Scenario                                  | Use                                                              | Why                                                                          |
 | ----------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| **Active development on a single domain** | Domain-specific storybook (`nx storybook agora-storybook`)       | Faster startup and hot-reload, no iframe overhead, focused on your work      |
-| **Cross-domain component review**         | Composite dev mode (`nx storybook storybook`)                    | Unified navigation to browse all stories, but slower due to iframe rendering |
+| **Active development on a single domain** | Domain-specific storybook (`nx start agora-storybook`)           | Faster startup and hot-reload, no iframe overhead, focused on your work      |
+| **Cross-domain component review**         | Composite dev mode (`nx start storybook`)                        | Unified navigation to browse all stories, but slower due to iframe rendering |
 | **Production documentation**              | Static composite build (`nx build-static-composition storybook`) | Single deployable artifact with all stories, optimized for viewing           |
 | **Testing production build locally**      | Static server (`nx static-storybook storybook`)                  | Verify production behavior without deployment                                |
 
@@ -24,7 +24,7 @@ This storybook uses **Storybook Composition** to provide a single unified naviga
 ### Running the Composition (Recommended)
 
 ```bash
-nx storybook storybook
+nx start storybook
 ```
 
 This runs the composition development server via `start-composition.sh`, which:

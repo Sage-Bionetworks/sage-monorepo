@@ -9,7 +9,7 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
-    "storybook": {
+    "start": {
       "executor": "@storybook/angular:start-storybook",
       "options": {
         "port": 4402,

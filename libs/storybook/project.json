@@ -9,7 +9,7 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
-    "storybook": {
+    "start": {
       "executor": "nx:run-commands",
       "options": {
         "command": "bash libs/storybook/start-composition.sh"
