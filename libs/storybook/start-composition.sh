@@ -22,7 +22,7 @@ cleanup() {
   echo ""
   echo "🛑 Shutting down storybooks..."
   kill $AGORA_PID $EXPLORERS_PID 2>/dev/null || true
-  exit
+  exit 0
 }
 
 # Trap Ctrl+C and other termination signals
@@ -52,6 +52,11 @@ wait_for_url() {
 echo "   Waiting for child storybooks to start..."
 wait_for_url "http://localhost:4401" "Agora storybook" || cleanup
 wait_for_url "http://localhost:4402" "Explorers storybook" || cleanup
+
+# Wait for story indexes to be ready (needed for composition to work on first run)
+echo "   Waiting for story indexes..."
+wait_for_url "http://localhost:4401/index.json" "Agora story index" || cleanup
+wait_for_url "http://localhost:4402/index.json" "Explorers story index" || cleanup
 
 echo ""
 echo "✨ Starting composition host on port 4400..."
