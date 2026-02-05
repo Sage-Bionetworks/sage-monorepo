@@ -17,47 +17,46 @@
 -- ============================================================================
 -- Insert Mock Challenge Contributions
 -- ============================================================================
+-- IMPORTANT: These contributions mirror the challenge_participation table
+-- in the organization service. The challenge_id and organization_id values
+-- must match exactly between both services.
+--
 -- Links challenges to organizations (IDs reference organization service)
 -- Roles: challenge_organizer, data_contributor, sponsor
 -- ============================================================================
 
 INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
 -- Challenge 1: Network Topology
-(1, 1, 1, 'challenge_organizer'),
-
--- Challenge 2: Breast Cancer Prognosis
-(2, 2, 1, 'challenge_organizer'),
-(3, 2, 15, 'sponsor'),
+-- Mirrors organization service challenge_participation records
+(1, 1, 75, 'sponsor'),
 
 -- Challenge 9: ICGC-TCGA Mutation Calling
-(9, 9, 1, 'challenge_organizer'),
-(10, 9, 150, 'data_contributor'),
-(11, 9, 41, 'data_contributor'),
-
--- Challenge 12: Alzheimer's Disease
-(12, 12, 1, 'challenge_organizer'),
-(13, 12, 15, 'sponsor'),
-(14, 12, 31, 'sponsor'),
+-- Mirrors organization service challenge_participation records
+(60, 9, 150, 'challenge_organizer'),
 
 -- Challenge 15: ALS Stratification
-(15, 15, 1, 'challenge_organizer'),
+-- Mirrors organization service challenge_participation records
+(139, 15, 1, 'challenge_organizer'),
 
 -- Challenge 20: Disease Module Identification
-(20, 20, 1, 'challenge_organizer'),
-(21, 20, 15, 'sponsor'),
+-- Mirrors organization service challenge_participation records
+(167, 20, 1, 'challenge_organizer'),
 
 -- Challenge 24: Digital Mammography
-(24, 24, 1, 'challenge_organizer'),
-(25, 24, 134, 'data_contributor'),
+-- Mirrors organization service challenge_participation records
+(187, 24, 1, 'challenge_organizer'),
 
--- Challenge 200: Cell Painting (Active)
-(200, 200, 1, 'challenge_organizer'),
-(201, 200, 41, 'data_contributor'),
+-- Challenge 50: CAGI 6
+-- Mirrors organization service challenge_participation records
+(350, 50, 20, 'challenge_organizer'),
 
--- Challenge 250: Drug Response (Active)
-(250, 250, 1, 'challenge_organizer'),
-(251, 250, 150, 'sponsor'),
-(252, 250, 58, 'data_contributor');
+-- Challenge 100: COVID-19 Image Segmentation
+-- Mirrors organization service challenge_participation records
+(500, 100, 41, 'challenge_organizer'),
+(501, 100, 58, 'data_contributor'),
+(502, 100, 101, 'data_contributor'),
+(503, 100, 32, 'sponsor'),
+(504, 100, 31, 'sponsor');
 
 -- ============================================================================
 -- Insert Mock Challenge Incentives
