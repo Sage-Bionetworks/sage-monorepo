@@ -4,8 +4,8 @@ import { dirname, join } from 'node:path';
 
 const require = createRequire(import.meta.url);
 
-// Use relative paths for production builds, localhost URLs for dev mode
-const isProductionBuild = process.env['NODE_ENV'] === 'production';
+// Use relative paths for static builds, localhost URLs for dev mode
+const isStaticStorybookBuild = process.env['STORYBOOK_STATIC_BUILD'] === 'true';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
@@ -14,7 +14,7 @@ const config: StorybookConfig = {
     name: getAbsolutePath('@storybook/angular'),
     options: {},
   },
-  refs: isProductionBuild
+  refs: isStaticStorybookBuild
     ? {
         agora: {
           title: 'Agora',

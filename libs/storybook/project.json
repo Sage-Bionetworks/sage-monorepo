@@ -54,9 +54,9 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "NODE_ENV=production nx build-storybook storybook",
-          "NODE_ENV=production nx build-storybook agora-storybook --outputDir=dist/storybook/storybook/agora",
-          "NODE_ENV=production nx build-storybook explorers-storybook --outputDir=dist/storybook/storybook/explorers",
+          "STORYBOOK_STATIC_BUILD=true nx build-storybook storybook",
+          "STORYBOOK_STATIC_BUILD=true nx build-storybook agora-storybook --outputDir=dist/storybook/storybook/agora",
+          "STORYBOOK_STATIC_BUILD=true nx build-storybook explorers-storybook --outputDir=dist/storybook/storybook/explorers",
           "cp -r dist/storybook/storybook/agora/agora-assets dist/storybook/storybook/",
           "cp -r dist/storybook/storybook/explorers/explorers-assets dist/storybook/storybook/",
           "cp -r dist/storybook/storybook/explorers/model-ad-assets dist/storybook/storybook/"
