@@ -77,7 +77,7 @@ const APP_URL = parseFlagString(args, 'url', 'http://localhost:8100');
 // Wait 3 seconds for initial render and potential redirects
 const PRE_WAIT_MS = 3000;
 // Trim first N seconds from video to remove loading artifacts
-const TRIM_START_SECONDS = parseFlagNum(args, 'trim-start', 5);
+const TRIM_START_SECONDS = parseFlagNum(args, 'trim-start', 2);
 // Scale output (percentage, 100 = original size, 75 = 75% of original)
 const SCALE_PERCENT = parseFlagNum(args, 'scale', 100);
 
@@ -219,31 +219,26 @@ console.log(
 );
 await browser.close();
 
-// ---------- Pass 2: Record with extra time at start ----------
-console.log('Starting video recording...');
+// ---------- Pass 2: Pre-position page BEFORE recording ----------
+console.log('Pre-positioning page before recording...');
 const recordingBrowser = await chromium.launch({ headless: true });
 
-// Create context with video recording
-// Record EXTRA time to capture loading, then we'll trim it with FFmpeg
-const recordingContext = await recordingBrowser.newContext({
+// Create context WITHOUT recording to position the page first
+const prepContext = await recordingBrowser.newContext({
   viewport: { width: dimensions.width, height: dimensions.height },
   colorScheme: 'dark',
   deviceScaleFactor: 2,
-  recordVideo: {
-    dir: outputDir,
-    size: { width: dimensions.width, height: dimensions.height },
-  },
 });
 
-const recordingPage = await recordingContext.newPage();
+const prepPage = await prepContext.newPage();
 
-console.log('Loading page and positioning...');
-await recordingPage.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
-await recordingPage.waitForTimeout(PRE_WAIT_MS);
-await recordingPage.waitForSelector('#quest-section-wrapper');
+console.log('Loading and positioning page...');
+await prepPage.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+await prepPage.waitForTimeout(PRE_WAIT_MS);
+await prepPage.waitForSelector('#quest-section-wrapper');
 
 // Switch to dark mode
-await recordingPage.evaluate(() => {
+await prepPage.evaluate(() => {
   const themeToggle = document.querySelector('button[id*="theme"]') ||
                       document.querySelector('button[aria-label*="theme"]') ||
                       document.querySelector('button[aria-label*="Theme"]');
@@ -255,20 +250,56 @@ await recordingPage.evaluate(() => {
     }
   }
 });
-await recordingPage.waitForTimeout(500);
+await prepPage.waitForTimeout(500);
 
-// Position instantly to quest section
+// Position to quest section
+await prepPage.evaluate(({ top, left }) => {
+  window.scrollTo({ top, left, behavior: 'instant' });
+}, { top: dimensions.top, left: dimensions.left });
+
+// Wait for everything to stabilize
+await prepPage.waitForTimeout(1000);
+
+console.log('Page ready. Starting recording context...');
+
+// Get the current page state/cookies to reuse
+const cookies = await prepContext.cookies();
+const storageState = await prepContext.storageState();
+
+// Close prep context
+await prepPage.close();
+await prepContext.close();
+
+// ---------- Pass 3: Record from pre-positioned state ----------
+// Create NEW context WITH recording
+const recordingContext = await recordingBrowser.newContext({
+  viewport: { width: dimensions.width, height: dimensions.height },
+  colorScheme: 'dark',
+  deviceScaleFactor: 2,
+  storageState, // Restore state from prep
+  recordVideo: {
+    dir: outputDir,
+    size: { width: dimensions.width, height: dimensions.height },
+  },
+});
+
+await recordingContext.addCookies(cookies);
+const recordingPage = await recordingContext.newPage();
+
+// Quickly navigate to same position
+console.log('Recording starting...');
+await recordingPage.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+await recordingPage.waitForTimeout(1000); // Brief wait for page load
+await recordingPage.waitForSelector('#quest-section-wrapper', { timeout: 5000 });
+
+// Quick position
 await recordingPage.evaluate(({ top, left }) => {
   window.scrollTo({ top, left, behavior: 'instant' });
 }, { top: dimensions.top, left: dimensions.left });
 
-// Wait for rendering to stabilize before starting the "real" recording
-await recordingPage.waitForTimeout(1000);
-
-// Record carousel animation (+ extra time that will be trimmed)
-const totalRecordMs = RECORD_MS + (TRIM_START_SECONDS * 1000);
-console.log(`Recording for ${totalRecordMs / 1000}s (will trim first ${TRIM_START_SECONDS}s)...`);
-await recordingPage.waitForTimeout(totalRecordMs);
+// Start recording the carousel immediately
+console.log(`Recording for ${RECORD_MS / 1000}s...`);
+await recordingPage.waitForTimeout(RECORD_MS);
 
 // Close page/context to finalize the video
 const videoObj = await recordingPage.video();
@@ -342,16 +373,19 @@ if (wantGif) {
   // Crop 4 pixels from the right to remove white line artifact
   const cropWidth = Math.floor(scaledWidth / 2) * 2 - 4;  // Ensure even number
 
-  // H.264 encoding with high compression for small file size
-  // -crf 28 balances quality and file size (lower = better quality, 18-28 is good range)
-  // -preset slow gives better compression at same quality
-  // -pix_fmt yuv420p ensures compatibility with all players
-  // -movflags +faststart enables progressive download (video starts before fully loaded)
-  // crop filter removes the white line artifact on the right edge
+  // H.264 encoding with high quality settings for better blacks and text readability
+  // -crf 20 = high quality (lower = better quality, 18-23 is very good range)
+  // -preset slow = better compression at same quality
+  // -pix_fmt yuv420p = compatibility with all players
+  // -colorspace bt709 = modern color space for better color accuracy
+  // -color_primaries bt709 = standard HD primaries
+  // -color_trc bt709 = standard HD transfer characteristics
+  // -movflags +faststart = progressive download
   const ffmpegCmd =
     `ffmpeg -hide_banner -loglevel error -i "${webmFile}" ` +
     `-vf "fps=${GIF_FPS},scale=${scaledWidth}:-1:flags=lanczos,crop=${cropWidth}:ih:0:0" ` +
-    `-c:v libx264 -crf 28 -preset slow -pix_fmt yuv420p ` +
+    `-c:v libx264 -crf 20 -preset slow ` +
+    `-pix_fmt yuv420p -colorspace bt709 -color_primaries bt709 -color_trc bt709 ` +
     `-movflags +faststart "${outputFile}" -y`;
 
   try {
