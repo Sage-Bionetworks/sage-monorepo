@@ -51,6 +51,14 @@ export const navigateToComparison = async (
     await page.getByRole('link', { name: name }).click();
   }
 
+  await expectComparisonToolTableLoaded(page, name, shouldCloseVisualizationOverviewDialog);
+};
+
+export const expectComparisonToolTableLoaded = async (
+  page: Page,
+  name: string,
+  shouldCloseVisualizationOverviewDialog: boolean,
+) => {
   if (shouldCloseVisualizationOverviewDialog) {
     await closeVisualizationOverviewDialog(page);
   }

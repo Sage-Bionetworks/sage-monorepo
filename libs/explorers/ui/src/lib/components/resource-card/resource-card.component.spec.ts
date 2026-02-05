@@ -1,9 +1,5 @@
-import { Router } from '@angular/router';
 import { render, screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
 import { ResourceCardComponent } from './resource-card.component';
-
-const navigateMock = jest.fn();
 
 const mockTitle = 'Test title';
 const mockDescription = 'Test description';
@@ -14,7 +10,6 @@ const mockAltText = 'Test alt text';
 
 describe('ResourceCardComponent', () => {
   async function setup(inputs?: Partial<ResourceCardComponent>) {
-    const user = userEvent.setup();
     const component = await render(ResourceCardComponent, {
       componentInputs: {
         imagePath: '/assets/test.svg',
@@ -23,19 +18,9 @@ describe('ResourceCardComponent', () => {
         altText: mockAltText,
         ...inputs,
       },
-      providers: [
-        {
-          provide: Router,
-          useValue: { navigateByUrl: navigateMock },
-        },
-      ],
     });
-    return { user, component };
+    return { component };
   }
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
 
   it('should render title, description, and image', async () => {
     await setup({ title: mockTitle });
@@ -47,23 +32,21 @@ describe('ResourceCardComponent', () => {
     expect(img).toBeInTheDocument();
   });
 
-  it('should open external link in new tab when links starts with http', async () => {
-    const openSpy = jest.spyOn(window, 'open').mockImplementation();
+  it('should have a link with correct href and target for external link', async () => {
+    await setup({ link: mockExternalLink });
+    const link = screen.getByRole('link', { name: mockDescription });
 
-    const { user } = await setup({ link: mockExternalLink });
-    const button = screen.getByRole('button', { name: mockDescription });
-    await user.click(button);
-
-    expect(openSpy).toHaveBeenCalledWith(mockExternalLink, '_blank');
-    openSpy.mockRestore();
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', mockExternalLink);
+    expect(link).toHaveAttribute('target', '_blank');
   });
 
-  it('should navigate internally when link does not start with http', async () => {
-    const { user } = await setup({ link: mockInternalLink });
+  it('should have a link with correct href and target for internal link', async () => {
+    await setup({ link: mockInternalLink });
+    const link = screen.getByRole('link', { name: mockDescription });
 
-    const button = screen.getByRole('button', { name: mockDescription });
-    await user.click(button);
-
-    expect(navigateMock).toHaveBeenCalledWith(mockInternalLink);
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', mockInternalLink);
+    expect(link).toHaveAttribute('target', '_blank');
   });
 });

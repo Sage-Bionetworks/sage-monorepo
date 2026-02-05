@@ -5,7 +5,7 @@
         >{{ linkText() }} <i class="pi pi-external-link"></i
       ></a>
     } @else {
-      <a [routerLink]="internalLinkPath()" [queryParams]="internalLinkQueryParams()"
+      <a target="_blank" [routerLink]="internalLinkPath()" [queryParams]="internalLinkQueryParams()"
         >{{ linkText() }} <i class="pi pi-external-link"></i
       ></a>
     }
