@@ -30,10 +30,13 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
+    show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
         default_schema: organization
         search:
           enabled: true

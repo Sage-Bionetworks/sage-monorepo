@@ -33,9 +33,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+    show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
         default_schema: challenge
         search:
           enabled: true

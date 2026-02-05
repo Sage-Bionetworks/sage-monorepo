@@ -5,7 +5,9 @@ spring:
   datasource:
     url: jdbc:postgresql://openchallenges-postgres-prod:8091/openchallenges?currentSchema=auth
   flyway:
-    enabled: false
+    enabled: true
+    clean-disabled: true # Never clean prod database
+    validate-on-migrate: true # Extra safety: validate migrations before running
 
 app:
   api-key:
