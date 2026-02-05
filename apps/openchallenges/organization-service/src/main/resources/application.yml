@@ -17,7 +17,11 @@ spring:
     name: openchallenges-organization-service
   flyway:
     enabled: true
-    clean-disabled: false
+    baseline-on-migrate: true
+    baseline-version: 0
+    validate-on-migrate: true
+    clean-disabled: true # Safety: prevent accidental data loss
+    locations: classpath:db/migration/common # Default: schema migrations only
     schemas: organization
     default-schema: organization
   jackson:
