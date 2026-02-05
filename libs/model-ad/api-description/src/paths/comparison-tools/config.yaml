@@ -10,7 +10,7 @@ get:
       description: Name of the page to retrieve the Comparison Tool configuration for
       required: true
       schema:
-        $ref: ../components/schemas/ComparisonToolPage.yaml
+        $ref: ../../components/schemas/ComparisonToolPage.yaml
   responses:
     '200':
       description: Successfully retrieved Comparison Tool configuration
@@ -19,10 +19,10 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/ComparisonToolConfig.yaml
+              $ref: ../../components/schemas/ComparisonToolConfig.yaml
     '400':
-      $ref: ../components/responses/BadRequest.yaml
+      $ref: ../../components/responses/BadRequest.yaml
     '404':
-      $ref: ../components/responses/NotFound.yaml
+      $ref: ../../components/responses/NotFound.yaml
     '500':
-      $ref: ../components/responses/InternalServerError.yaml
+      $ref: ../../components/responses/InternalServerError.yaml

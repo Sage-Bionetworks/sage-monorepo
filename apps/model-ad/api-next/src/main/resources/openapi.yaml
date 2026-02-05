@@ -12,265 +12,265 @@ info:
     url: https://dev.modeladexplorer.org/opengraph/opengraph.png
     altText: Model-AD Explorer
 servers:
-- url: http://localhost/v1
+  - url: http://localhost/v1
 tags:
-- description: Operations about Comparison Tool UI configuration.
-  name: Comparison Tool Config
-- description: Operations about the data version.
-  name: Data Version
-- description: Operations about models.
-  name: Model
-- description: Operations about Model Overview.
-  name: Model Overview
-- description: Operations about Disease Correlation results.
-  name: Disease Correlation
-- description: Operations about Gene Expression results.
-  name: Gene Expression
-- description: Operations about Individual Gene Expression results.
-  name: Gene Expression Individual
+  - description: Operations about Comparison Tool UI configuration.
+    name: Comparison Tool Config
+  - description: Operations about the data version.
+    name: Data Version
+  - description: Operations about models.
+    name: Model
+  - description: Operations about Model Overview.
+    name: Model Overview
+  - description: Operations about Disease Correlation results.
+    name: Disease Correlation
+  - description: Operations about Gene Expression results.
+    name: Gene Expression
+  - description: Operations about Individual Gene Expression results.
+    name: Gene Expression Individual
 paths:
   /data-version:
     get:
       description: Get data version
       operationId: getDataVersion
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DataVersion"
+                $ref: '#/components/schemas/DataVersion'
           description: Success
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get data version
       tags:
-      - Data Version
+        - Data Version
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Data Version
+        - tag: Data Version
     x-audience:
-    - public
-  /comparison-tool-config:
+      - public
+  /comparison-tools/config:
     get:
       description: Retrieve the Comparison Tool configuration schema for the Model-AD
         application
       operationId: getComparisonToolConfig
       parameters:
-      - description: Name of the page to retrieve the Comparison Tool configuration
-          for
-        explode: true
-        in: query
-        name: page
-        required: true
-        schema:
-          $ref: "#/components/schemas/ComparisonToolPage"
-        style: form
+        - description: Name of the page to retrieve the Comparison Tool configuration
+            for
+          explode: true
+          in: query
+          name: page
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComparisonToolPage'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 items:
-                  $ref: "#/components/schemas/ComparisonToolConfig"
+                  $ref: '#/components/schemas/ComparisonToolConfig'
                 type: array
           description: Successfully retrieved Comparison Tool configuration
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get Comparison Tool configuration
       tags:
-      - Comparison Tool Config
+        - Comparison Tool Config
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Comparison Tool Config
+        - tag: Comparison Tool Config
   /comparison-tools/model-overview:
     get:
       description: Returns a paginated list of model overview objects for use in comparison
         tools.
       operationId: getModelOverviews
       parameters:
-      - description: The search query used to find and filter model overviews.
-        explode: true
-        in: query
-        name: modelOverviewSearchQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/ModelOverviewSearchQuery"
-        style: deepObject
+        - description: The search query used to find and filter model overviews.
+          explode: true
+          in: query
+          name: modelOverviewSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ModelOverviewSearchQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ModelOverviewsPage"
+                $ref: '#/components/schemas/ModelOverviewsPage'
           description: A paginated list of model overview objects
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get model overview for comparison tools
       tags:
-      - Model Overview
+        - Model Overview
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Model Overview
+        - tag: Model Overview
   /comparison-tools/disease-correlation:
     get:
       description: Returns a paginated list of disease correlation objects for use
         in comparison tools.
       operationId: getDiseaseCorrelations
       parameters:
-      - description: The search query used to find and filter disease correlations.
-        explode: true
-        in: query
-        name: diseaseCorrelationSearchQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/DiseaseCorrelationSearchQuery"
-        style: deepObject
+        - description: The search query used to find and filter disease correlations.
+          explode: true
+          in: query
+          name: diseaseCorrelationSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DiseaseCorrelationsPage"
+                $ref: '#/components/schemas/DiseaseCorrelationsPage'
           description: A paginated response containing disease correlation objects
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get disease correlation comparison data
       tags:
-      - Disease Correlation
+        - Disease Correlation
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Disease Correlation
+        - tag: Disease Correlation
   /comparison-tools/gene-expression:
     get:
       description: Returns a paginated list of gene expression objects for use in
         comparison tools.
       operationId: getGeneExpressions
       parameters:
-      - description: The search query used to find and filter gene expressions.
-        explode: true
-        in: query
-        name: geneExpressionSearchQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/GeneExpressionSearchQuery"
-        style: deepObject
+        - description: The search query used to find and filter gene expressions.
+          explode: true
+          in: query
+          name: geneExpressionSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/GeneExpressionSearchQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GeneExpressionsPage"
+                $ref: '#/components/schemas/GeneExpressionsPage'
           description: A paginated response containing gene expression objects
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get gene expression comparison data
       tags:
-      - Gene Expression
+        - Gene Expression
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Gene Expression
+        - tag: Gene Expression
   /gene-expression-individual:
     get:
       description: Retrieve gene expression individual data based on specified filter
         criteria.
       operationId: getGeneExpressionIndividual
       parameters:
-      - description: The filter query used to retrieve a specific set of gene expression
-          individual data.
-        explode: true
-        in: query
-        name: geneExpressionIndividualFilterQuery
-        required: true
-        schema:
-          $ref: "#/components/schemas/GeneExpressionIndividualFilterQuery"
-        style: deepObject
+        - description: The filter query used to retrieve a specific set of gene expression
+            individual data.
+          explode: true
+          in: query
+          name: geneExpressionIndividualFilterQuery
+          required: true
+          schema:
+            $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 items:
-                  $ref: "#/components/schemas/GeneExpressionIndividual"
+                  $ref: '#/components/schemas/GeneExpressionIndividual'
                 type: array
           description: Successfully retrieved individual gene expression data
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get gene expression individual data
       tags:
-      - Gene Expression Individual
+        - Gene Expression Individual
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Gene Expression Individual
+        - tag: Gene Expression Individual
   /models/{name}:
     get:
       description: Retrieve detailed information for a specific model by its name
       operationId: getModelByName
       parameters:
-      - description: Name of the model to retrieve
-        explode: false
-        in: path
-        name: name
-        required: true
-        schema:
-          type: string
-        style: simple
+        - description: Name of the model to retrieve
+          explode: false
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+          style: simple
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Model"
+                $ref: '#/components/schemas/Model'
           description: Successfully retrieved model details
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get details for a specific model
       tags:
-      - Model
+        - Model
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Model
+        - tag: Model
 components:
   parameters:
     modelOverviewSearchQuery:
@@ -280,7 +280,7 @@ components:
       name: modelOverviewSearchQuery
       required: false
       schema:
-        $ref: "#/components/schemas/ModelOverviewSearchQuery"
+        $ref: '#/components/schemas/ModelOverviewSearchQuery'
       style: deepObject
     diseaseCorrelationSearchQuery:
       description: The search query used to find and filter disease correlations.
@@ -289,7 +289,7 @@ components:
       name: diseaseCorrelationSearchQuery
       required: false
       schema:
-        $ref: "#/components/schemas/DiseaseCorrelationSearchQuery"
+        $ref: '#/components/schemas/DiseaseCorrelationSearchQuery'
       style: deepObject
     geneExpressionSearchQuery:
       description: The search query used to find and filter gene expressions.
@@ -298,7 +298,7 @@ components:
       name: geneExpressionSearchQuery
       required: false
       schema:
-        $ref: "#/components/schemas/GeneExpressionSearchQuery"
+        $ref: '#/components/schemas/GeneExpressionSearchQuery'
       style: deepObject
     geneExpressionIndividualFilterQuery:
       description: The filter query used to retrieve a specific set of gene expression
@@ -308,26 +308,26 @@ components:
       name: geneExpressionIndividualFilterQuery
       required: true
       schema:
-        $ref: "#/components/schemas/GeneExpressionIndividualFilterQuery"
+        $ref: '#/components/schemas/GeneExpressionIndividualFilterQuery'
       style: deepObject
   responses:
     BadRequest:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: Invalid request
     NotFound:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
     InternalServerError:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
     DataVersion:
@@ -341,8 +341,8 @@ components:
         data_version:
           type: string
       required:
-      - data_file
-      - data_version
+        - data_file
+        - data_version
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -365,15 +365,15 @@ components:
             the problem
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       type: object
     ComparisonToolPage:
       description: The type of comparison tool page
       enum:
-      - Model Overview
-      - Gene Expression
-      - Disease Correlation
+        - Model Overview
+        - Gene Expression
+        - Disease Correlation
       example: Gene Expression
       type: string
     ComparisonToolConfigColumn:
@@ -396,11 +396,11 @@ components:
             \ 'link_external', or 'primary', where 'primary' is the primary key column\
             \ that uniquely identifies each record in the table."
           enum:
-          - text
-          - heat_map
-          - link_internal
-          - link_external
-          - primary
+            - text
+            - heat_map
+            - link_internal
+            - link_external
+            - primary
           type: string
         data_key:
           description: The key used to retrieve data for this column from the data
@@ -426,17 +426,17 @@ components:
             UI.
           type: boolean
       required:
-      - data_key
-      - is_exported
-      - is_hidden
-      - type
+        - data_key
+        - is_exported
+        - is_hidden
+        - type
       type: object
     ComparisonToolConfigFilter:
       description: Comparison Tool Config Filter
       example:
         values:
-        - Apoptosis
-        - Apoptosis
+          - Apoptosis
+          - Apoptosis
         name: Biological Domain
         short_name: Biodomain
         data_key: model_type
@@ -465,55 +465,55 @@ components:
             type: string
           type: array
       required:
-      - data_key
-      - name
-      - query_param_key
-      - values
+        - data_key
+        - name
+        - query_param_key
+        - values
       type: object
     ComparisonToolConfig:
       example:
         columns:
-        - name: name
-          tooltip: tooltip
-          is_hidden: true
-          link_url: link_url
-          sort_tooltip: sort_tooltip
-          is_exported: true
-          type: text
-          data_key: data_key
-          link_text: link_text
-        - name: name
-          tooltip: tooltip
-          is_hidden: true
-          link_url: link_url
-          sort_tooltip: sort_tooltip
-          is_exported: true
-          type: text
-          data_key: data_key
-          link_text: link_text
+          - name: name
+            tooltip: tooltip
+            is_hidden: true
+            link_url: link_url
+            sort_tooltip: sort_tooltip
+            is_exported: true
+            type: text
+            data_key: data_key
+            link_text: link_text
+          - name: name
+            tooltip: tooltip
+            is_hidden: true
+            link_url: link_url
+            sort_tooltip: sort_tooltip
+            is_exported: true
+            type: text
+            data_key: data_key
+            link_text: link_text
         page: Gene Expression
         dropdowns:
-        - "RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males"
-        - "RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males"
+          - 'RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males'
+          - 'RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males'
         filters:
-        - values:
-          - Apoptosis
-          - Apoptosis
-          name: Biological Domain
-          short_name: Biodomain
-          data_key: model_type
-          query_param_key: modelType
-        - values:
-          - Apoptosis
-          - Apoptosis
-          name: Biological Domain
-          short_name: Biodomain
-          data_key: model_type
-          query_param_key: modelType
+          - values:
+              - Apoptosis
+              - Apoptosis
+            name: Biological Domain
+            short_name: Biodomain
+            data_key: model_type
+            query_param_key: modelType
+          - values:
+              - Apoptosis
+              - Apoptosis
+            name: Biological Domain
+            short_name: Biodomain
+            data_key: model_type
+            query_param_key: modelType
         row_count: row_count
       properties:
         page:
-          $ref: "#/components/schemas/ComparisonToolPage"
+          $ref: '#/components/schemas/ComparisonToolPage'
         dropdowns:
           description: List of dropdown options
           items:
@@ -529,19 +529,19 @@ components:
         columns:
           description: List of column definitions
           items:
-            $ref: "#/components/schemas/ComparisonToolConfigColumn"
+            $ref: '#/components/schemas/ComparisonToolConfigColumn'
           type: array
         filters:
           description: List of filter configurations
           items:
-            $ref: "#/components/schemas/ComparisonToolConfigFilter"
+            $ref: '#/components/schemas/ComparisonToolConfigFilter'
           type: array
       required:
-      - columns
-      - dropdowns
-      - filters
-      - page
-      - row_count
+        - columns
+        - dropdowns
+        - filters
+        - page
+        - row_count
       type: object
     ItemFilterTypeQuery:
       default: include
@@ -549,8 +549,8 @@ components:
         - include: Include only the specified items.
         - exclude: Exclude the specified items.
       enum:
-      - include
-      - exclude
+        - include
+        - exclude
       type: string
     ModelOverviewSearchQuery:
       description: Model overview search query with pagination and filtering options.
@@ -574,27 +574,27 @@ components:
           description: |
             List of item names to filter by.
           example:
-          - 3xTg-AD
-          - 5xFAD (UCI)
+            - 3xTg-AD
+            - 5xFAD (UCI)
           items:
             type: string
           nullable: true
           type: array
         itemFilterType:
-          $ref: "#/components/schemas/ItemFilterTypeQuery"
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
           description: |
             Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
             Examples: '3xtg-ad,5xfad' (comma-separated list) or 'fad' (partial match). Only applied when
             itemFilterType is 'exclude'.
-          example: "3xtg-ad,5xfad"
+          example: '3xtg-ad,5xfad'
           nullable: true
           type: string
         availableData:
           description: Filter by available data types.
           example:
-          - Biomarkers
-          - Disease Correlation
+            - Biomarkers
+            - Disease Correlation
           items:
             type: string
           nullable: true
@@ -602,8 +602,8 @@ components:
         center:
           description: Filter by contributing center.
           example:
-          - IU/Jax/Pitt
-          - UCI
+            - IU/Jax/Pitt
+            - UCI
           items:
             type: string
           nullable: true
@@ -611,8 +611,8 @@ components:
         modelType:
           description: Filter by model type.
           example:
-          - Familial AD
-          - Late Onset AD
+            - Familial AD
+            - Late Onset AD
           items:
             type: string
           nullable: true
@@ -620,8 +620,8 @@ components:
         modifiedGenes:
           description: Filter by modified genes.
           example:
-          - APP
-          - MAPT
+            - APP
+            - MAPT
           items:
             type: string
           nullable: true
@@ -631,8 +631,8 @@ components:
             List of field names to sort by (e.g., ["model_type", "name"]).
             Each field in sortFields must have a corresponding order in sortOrders.
           example:
-          - model_type
-          - name
+            - model_type
+            - name
           items:
             type: string
           minItems: 1
@@ -643,19 +643,19 @@ components:
             Values: 1 (ascending) or -1 (descending).
             Must have the same length as sortFields.
           example:
-          - -1
-          - 1
+            - -1
+            - 1
           items:
             enum:
-            - 1
-            - -1
+              - 1
+              - -1
             format: int32
             type: integer
           minItems: 1
           type: array
       required:
-      - sortFields
-      - sortOrders
+        - sortFields
+        - sortOrders
       type: object
     Link:
       description: Link
@@ -690,14 +690,14 @@ components:
           link_text: link_text
         model_type: model_type
         matched_controls:
-        - matched_controls
-        - matched_controls
+          - matched_controls
+          - matched_controls
         modified_genes:
-        - modified_genes
-        - modified_genes
+          - modified_genes
+          - modified_genes
         available_data:
-        - Gene Expression
-        - Gene Expression
+          - Gene Expression
+          - Gene Expression
         name: name
         jax_strain:
           link_url: link_url
@@ -714,7 +714,7 @@ components:
           description: Model name
           type: string
         model_type:
-          description: "Model type (e.g., Late Onset AD, Familial AD)"
+          description: 'Model type (e.g., Late Onset AD, Familial AD)'
           type: string
         matched_controls:
           description: List of matched control models
@@ -722,19 +722,19 @@ components:
             type: string
           type: array
         gene_expression:
-          $ref: "#/components/schemas/Link"
+          $ref: '#/components/schemas/Link'
         disease_correlation:
-          $ref: "#/components/schemas/Link"
+          $ref: '#/components/schemas/Link'
         biomarkers:
-          $ref: "#/components/schemas/Link"
+          $ref: '#/components/schemas/Link'
         pathology:
-          $ref: "#/components/schemas/Link"
+          $ref: '#/components/schemas/Link'
         study_data:
-          $ref: "#/components/schemas/Link"
+          $ref: '#/components/schemas/Link'
         jax_strain:
-          $ref: "#/components/schemas/Link"
+          $ref: '#/components/schemas/Link'
         center:
-          $ref: "#/components/schemas/Link"
+          $ref: '#/components/schemas/Link'
         modified_genes:
           description: List of modified genes in the model
           items:
@@ -743,22 +743,22 @@ components:
         available_data:
           items:
             enum:
-            - Gene Expression
-            - Pathology
-            - Biomarkers
-            - Disease Correlation
+              - Gene Expression
+              - Pathology
+              - Biomarkers
+              - Disease Correlation
             type: string
           type: array
       required:
-      - _id
-      - available_data
-      - center
-      - jax_strain
-      - matched_controls
-      - model_type
-      - modified_genes
-      - name
-      - study_data
+        - _id
+        - available_data
+        - center
+        - jax_strain
+        - matched_controls
+        - model_type
+        - modified_genes
+        - name
+        - study_data
       type: object
     PageMetadata:
       description: The metadata of a page.
@@ -796,83 +796,83 @@ components:
           example: false
           type: boolean
       required:
-      - hasNext
-      - hasPrevious
-      - number
-      - size
-      - totalElements
-      - totalPages
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
       type: object
     ModelOverviewsPage:
       description: A page of model overview objects.
       example:
         modelOverviews:
-        - pathology:
-            link_url: link_url
-            link_text: link_text
-          biomarkers:
-            link_url: link_url
-            link_text: link_text
-          gene_expression:
-            link_url: link_url
-            link_text: link_text
-          disease_correlation:
-            link_url: link_url
-            link_text: link_text
-          center:
-            link_url: link_url
-            link_text: link_text
-          model_type: model_type
-          matched_controls:
-          - matched_controls
-          - matched_controls
-          modified_genes:
-          - modified_genes
-          - modified_genes
-          available_data:
-          - Gene Expression
-          - Gene Expression
-          name: name
-          jax_strain:
-            link_url: link_url
-            link_text: link_text
-          _id: _id
-          study_data:
-            link_url: link_url
-            link_text: link_text
-        - pathology:
-            link_url: link_url
-            link_text: link_text
-          biomarkers:
-            link_url: link_url
-            link_text: link_text
-          gene_expression:
-            link_url: link_url
-            link_text: link_text
-          disease_correlation:
-            link_url: link_url
-            link_text: link_text
-          center:
-            link_url: link_url
-            link_text: link_text
-          model_type: model_type
-          matched_controls:
-          - matched_controls
-          - matched_controls
-          modified_genes:
-          - modified_genes
-          - modified_genes
-          available_data:
-          - Gene Expression
-          - Gene Expression
-          name: name
-          jax_strain:
-            link_url: link_url
-            link_text: link_text
-          _id: _id
-          study_data:
-            link_url: link_url
-            link_text: link_text
+          - pathology:
+              link_url: link_url
+              link_text: link_text
+            biomarkers:
+              link_url: link_url
+              link_text: link_text
+            gene_expression:
+              link_url: link_url
+              link_text: link_text
+            disease_correlation:
+              link_url: link_url
+              link_text: link_text
+            center:
+              link_url: link_url
+              link_text: link_text
+            model_type: model_type
+            matched_controls:
+              - matched_controls
+              - matched_controls
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            available_data:
+              - Gene Expression
+              - Gene Expression
+            name: name
+            jax_strain:
+              link_url: link_url
+              link_text: link_text
+            _id: _id
+            study_data:
+              link_url: link_url
+              link_text: link_text
+          - pathology:
+              link_url: link_url
+              link_text: link_text
+            biomarkers:
+              link_url: link_url
+              link_text: link_text
+            gene_expression:
+              link_url: link_url
+              link_text: link_text
+            disease_correlation:
+              link_url: link_url
+              link_text: link_text
+            center:
+              link_url: link_url
+              link_text: link_text
+            model_type: model_type
+            matched_controls:
+              - matched_controls
+              - matched_controls
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            available_data:
+              - Gene Expression
+              - Gene Expression
+            name: name
+            jax_strain:
+              link_url: link_url
+              link_text: link_text
+            _id: _id
+            study_data:
+              link_url: link_url
+              link_text: link_text
         page:
           number: 0
           size: 100
@@ -884,13 +884,13 @@ components:
         modelOverviews:
           description: List of model overviews in this page.
           items:
-            $ref: "#/components/schemas/ModelOverview"
+            $ref: '#/components/schemas/ModelOverview'
           type: array
         page:
-          $ref: "#/components/schemas/PageMetadata"
+          $ref: '#/components/schemas/PageMetadata'
       required:
-      - modelOverviews
-      - page
+        - modelOverviews
+        - page
       type: object
     DiseaseCorrelationSearchQuery:
       description: Disease correlation search query with pagination and filtering
@@ -917,8 +917,8 @@ components:
             The API will parse these to extract the cluster information.
             Expected format: [mainCategory, clusterCategory]
           example:
-          - CONSENSUS NETWORK MODULES
-          - Consensus Cluster A - ECM Organization
+            - CONSENSUS NETWORK MODULES
+            - Consensus Cluster A - ECM Organization
           items:
             type: string
           maxItems: 2
@@ -932,28 +932,28 @@ components:
             Example: "APOE4~4 months~Female" filters for documents matching that exact combination.
             Multiple items can be provided to filter for multiple specific combinations.
           example:
-          - APOE4~4 months~Female
-          - APOE4~8 months~Male
-          - 5xFAD (IU/Jax/Pitt)~12 months~Female
+            - APOE4~4 months~Female
+            - APOE4~8 months~Male
+            - 5xFAD (IU/Jax/Pitt)~12 months~Female
           items:
             type: string
           nullable: true
           type: array
         itemFilterType:
-          $ref: "#/components/schemas/ItemFilterTypeQuery"
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
           description: |
             Search by model name (case-insensitive partial match) or by comma separated list of model names (case-insensitive full matches).
             Examples: '3xtg-ad,5xfad (uci)' (comma-separated list) or 'fad' (partial match). Only applied when
             itemFilterType is 'exclude'.
-          example: "3xtg-ad,5xfad (uci)"
+          example: '3xtg-ad,5xfad (uci)'
           nullable: true
           type: string
         age:
           description: Filter by age.
           example:
-          - 4 months
-          - 12 months
+            - 4 months
+            - 12 months
           items:
             type: string
           nullable: true
@@ -961,8 +961,8 @@ components:
         modelType:
           description: Filter by model type.
           example:
-          - Familial AD
-          - Late Onset AD
+            - Familial AD
+            - Late Onset AD
           items:
             type: string
           nullable: true
@@ -970,8 +970,8 @@ components:
         modifiedGenes:
           description: Filter by modified genes.
           example:
-          - APOE
-          - Trem2
+            - APOE
+            - Trem2
           items:
             type: string
           nullable: true
@@ -979,8 +979,8 @@ components:
         name:
           description: Filter by mouse model name.
           example:
-          - 3xTg-AD
-          - 5xFAD (IU/Jax/Pitt)
+            - 3xTg-AD
+            - 5xFAD (IU/Jax/Pitt)
           items:
             type: string
           nullable: true
@@ -988,8 +988,8 @@ components:
         sex:
           description: Filter by sex.
           example:
-          - Female
-          - Male
+            - Female
+            - Male
           items:
             type: string
           nullable: true
@@ -999,9 +999,9 @@ components:
             List of field names to sort by (e.g., ["name", "age", "sex"]).
             Each field in sortFields must have a corresponding order in sortOrders.
           example:
-          - name
-          - age
-          - sex
+            - name
+            - age
+            - sex
           items:
             type: string
           minItems: 1
@@ -1012,27 +1012,27 @@ components:
             Values: 1 (ascending) or -1 (descending).
             Must have the same length as sortFields.
           example:
-          - 1
-          - -1
-          - 1
-          items:
-            enum:
             - 1
             - -1
+            - 1
+          items:
+            enum:
+              - 1
+              - -1
             format: int32
             type: integer
           minItems: 1
           type: array
       required:
-      - categories
-      - sortFields
-      - sortOrders
+        - categories
+        - sortFields
+        - sortOrders
       type: object
     Sex:
       description: Sex
       enum:
-      - Female
-      - Male
+        - Female
+        - Male
       type: string
     CorrelationResult:
       description: Correlation result
@@ -1047,8 +1047,8 @@ components:
           description: Adjusted p-value
           type: number
       required:
-      - adj_p_val
-      - correlation
+        - adj_p_val
+        - correlation
       type: object
     DiseaseCorrelation:
       description: Disease Correlation
@@ -1069,8 +1069,8 @@ components:
           adj_p_val: 1.4658129805029452
           correlation: 6.027456183070403
         modified_genes:
-        - modified_genes
-        - modified_genes
+          - modified_genes
+          - modified_genes
         age_numeric: 0.8008281904610115
         FP:
           adj_p_val: 1.4658129805029452
@@ -1114,101 +1114,101 @@ components:
           description: Numeric representation of age
           type: number
         sex:
-          $ref: "#/components/schemas/Sex"
+          $ref: '#/components/schemas/Sex'
         IFG:
-          $ref: "#/components/schemas/CorrelationResult"
+          $ref: '#/components/schemas/CorrelationResult'
         PHG:
-          $ref: "#/components/schemas/CorrelationResult"
+          $ref: '#/components/schemas/CorrelationResult'
         TCX:
-          $ref: "#/components/schemas/CorrelationResult"
+          $ref: '#/components/schemas/CorrelationResult'
         CBE:
-          $ref: "#/components/schemas/CorrelationResult"
+          $ref: '#/components/schemas/CorrelationResult'
         DLPFC:
-          $ref: "#/components/schemas/CorrelationResult"
+          $ref: '#/components/schemas/CorrelationResult'
         FP:
-          $ref: "#/components/schemas/CorrelationResult"
+          $ref: '#/components/schemas/CorrelationResult'
         STG:
-          $ref: "#/components/schemas/CorrelationResult"
+          $ref: '#/components/schemas/CorrelationResult'
       required:
-      - age
-      - age_numeric
-      - cluster
-      - composite_id
-      - matched_control
-      - model_type
-      - modified_genes
-      - name
-      - sex
+        - age
+        - age_numeric
+        - cluster
+        - composite_id
+        - matched_control
+        - model_type
+        - modified_genes
+        - name
+        - sex
       type: object
     DiseaseCorrelationsPage:
       description: A paginated response containing disease correlation objects and
         pagination metadata.
       example:
         diseaseCorrelations:
-        - cluster: cluster
-          DLPFC:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          sex: Female
-          CBE:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          STG:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          model_type: model_type
-          TCX:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          modified_genes:
-          - modified_genes
-          - modified_genes
-          age_numeric: 0.8008281904610115
-          FP:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          IFG:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          matched_control: matched_control
-          PHG:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          composite_id: APOE4~12 Months~Female
-          name: name
-          age: age
-        - cluster: cluster
-          DLPFC:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          sex: Female
-          CBE:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          STG:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          model_type: model_type
-          TCX:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          modified_genes:
-          - modified_genes
-          - modified_genes
-          age_numeric: 0.8008281904610115
-          FP:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          IFG:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          matched_control: matched_control
-          PHG:
-            adj_p_val: 1.4658129805029452
-            correlation: 6.027456183070403
-          composite_id: APOE4~12 Months~Female
-          name: name
-          age: age
+          - cluster: cluster
+            DLPFC:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            sex: Female
+            CBE:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            STG:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            model_type: model_type
+            TCX:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            age_numeric: 0.8008281904610115
+            FP:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            IFG:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            matched_control: matched_control
+            PHG:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            composite_id: APOE4~12 Months~Female
+            name: name
+            age: age
+          - cluster: cluster
+            DLPFC:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            sex: Female
+            CBE:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            STG:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            model_type: model_type
+            TCX:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            modified_genes:
+              - modified_genes
+              - modified_genes
+            age_numeric: 0.8008281904610115
+            FP:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            IFG:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            matched_control: matched_control
+            PHG:
+              adj_p_val: 1.4658129805029452
+              correlation: 6.027456183070403
+            composite_id: APOE4~12 Months~Female
+            name: name
+            age: age
         page:
           number: 0
           size: 100
@@ -1220,13 +1220,13 @@ components:
         diseaseCorrelations:
           description: The list of disease correlation objects for the current page
           items:
-            $ref: "#/components/schemas/DiseaseCorrelation"
+            $ref: '#/components/schemas/DiseaseCorrelation'
           type: array
         page:
-          $ref: "#/components/schemas/PageMetadata"
+          $ref: '#/components/schemas/PageMetadata'
       required:
-      - diseaseCorrelations
-      - page
+        - diseaseCorrelations
+        - page
       type: object
     GeneExpressionSearchQuery:
       description: Gene expression search query with pagination and filtering options.
@@ -1252,9 +1252,9 @@ components:
             The API will parse these to extract the tissue and sex_cohort information.
             Expected format: [mainCategory, tissueCategory, sexCohortCategory]
           example:
-          - RNA - DIFFERENTIAL EXPRESSION
-          - Tissue - Hemibrain
-          - Sex - Females & Males
+            - RNA - DIFFERENTIAL EXPRESSION
+            - Tissue - Hemibrain
+            - Sex - Females & Males
           items:
             type: string
           maxItems: 3
@@ -1268,27 +1268,27 @@ components:
             Example: "ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)" filters for documents matching that exact gene ID and name.
             Multiple items can be provided to filter for multiple specific combinations.
           example:
-          - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
-          - ENSMUSG00000000028~APOE4
+            - ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            - ENSMUSG00000000028~APOE4
           items:
             type: string
           nullable: true
           type: array
         itemFilterType:
-          $ref: "#/components/schemas/ItemFilterTypeQuery"
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
         search:
           description: |
             Search by gene symbol (case-insensitive partial match) or by comma separated list of gene symbols (case-insensitive full matches).
             Examples: 'gnai,cdc45' (comma-separated list) or 'gna' (partial match). Only applied when
             itemFilterType is 'exclude'.
-          example: "gnai,cdc45"
+          example: 'gnai,cdc45'
           nullable: true
           type: string
         biodomains:
           description: Filter by biological domains.
           example:
-          - Apoptosis
-          - Cell Cycle
+            - Apoptosis
+            - Cell Cycle
           items:
             type: string
           nullable: true
@@ -1296,8 +1296,8 @@ components:
         modelType:
           description: Filter by model type.
           example:
-          - Familial AD
-          - Late Onset AD
+            - Familial AD
+            - Late Onset AD
           items:
             type: string
           nullable: true
@@ -1305,8 +1305,8 @@ components:
         name:
           description: Filter by mouse model name.
           example:
-          - 3xTg-AD
-          - 5xFAD (IU/Jax/Pitt)
+            - 3xTg-AD
+            - 5xFAD (IU/Jax/Pitt)
           items:
             type: string
           nullable: true
@@ -1316,8 +1316,8 @@ components:
             List of field names to sort by (e.g., "gene_symbol,name").
             Each field in sortFields must have a corresponding order in sortOrders.
           example:
-          - gene_symbol
-          - name
+            - gene_symbol
+            - name
           items:
             type: string
           minItems: 1
@@ -1328,27 +1328,27 @@ components:
             Values: 1 (ascending) or -1 (descending).
             Must have the same length as sortFields.
           example:
-          - 1
-          - -1
-          items:
-            enum:
             - 1
             - -1
+          items:
+            enum:
+              - 1
+              - -1
             format: int32
             type: integer
           minItems: 1
           type: array
       required:
-      - categories
-      - sortFields
-      - sortOrders
+        - categories
+        - sortFields
+        - sortOrders
       type: object
     SexCohort:
       description: Sex Cohort
       enum:
-      - Females
-      - Females & Males
-      - Males
+        - Females
+        - Females & Males
+        - Males
       type: string
     FoldChangeResult:
       description: Fold Change result
@@ -1363,8 +1363,8 @@ components:
           description: Adjusted p-value
           type: number
       required:
-      - adj_p_val
-      - log2_fc
+        - adj_p_val
+        - log2_fc
       type: object
     GeneExpression:
       description: Gene Expression
@@ -1373,7 +1373,7 @@ components:
         gene_symbol: Gnai3
         model_type: Familial AD
         tissue: Hemibrain
-        "4 months":
+        '4 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
         matched_control: C57BL/6J
@@ -1383,15 +1383,15 @@ components:
           link_url: link_url
           link_text: link_text
         sex_cohort: Females
-        "12 months":
+        '12 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
-        "18 months":
+        '18 months':
           log2_fc: 0.8008281904610115
           adj_p_val: 6.027456183070403
         biodomains:
-        - biodomains
-        - biodomains
+          - biodomains
+          - biodomains
       properties:
         composite_id:
           description: Unique identifier for the gene expression object
@@ -1410,7 +1410,7 @@ components:
             type: string
           type: array
         name:
-          $ref: "#/components/schemas/Link"
+          $ref: '#/components/schemas/Link'
         matched_control:
           description: Matched control for the model
           example: C57BL/6J
@@ -1428,24 +1428,24 @@ components:
           example: Hemibrain
           type: string
         sex_cohort:
-          $ref: "#/components/schemas/SexCohort"
-        "4 months":
-          $ref: "#/components/schemas/FoldChangeResult"
-        "12 months":
-          $ref: "#/components/schemas/FoldChangeResult"
-        "18 months":
-          $ref: "#/components/schemas/FoldChangeResult"
+          $ref: '#/components/schemas/SexCohort'
+        '4 months':
+          $ref: '#/components/schemas/FoldChangeResult'
+        '12 months':
+          $ref: '#/components/schemas/FoldChangeResult'
+        '18 months':
+          $ref: '#/components/schemas/FoldChangeResult'
       required:
-      - biodomains
-      - composite_id
-      - ensembl_gene_id
-      - gene_symbol
-      - matched_control
-      - model_group
-      - model_type
-      - name
-      - sex_cohort
-      - tissue
+        - biodomains
+        - composite_id
+        - ensembl_gene_id
+        - gene_symbol
+        - matched_control
+        - model_group
+        - model_type
+        - name
+        - sex_cohort
+        - tissue
       type: object
     GeneExpressionsPage:
       description: A paginated response containing gene expression objects and pagination
@@ -1459,63 +1459,63 @@ components:
           hasNext: true
           totalElements: 250
         geneExpressions:
-        - model_group: model_group
-          gene_symbol: Gnai3
-          model_type: Familial AD
-          tissue: Hemibrain
-          "4 months":
-            log2_fc: 0.8008281904610115
-            adj_p_val: 6.027456183070403
-          matched_control: C57BL/6J
-          composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
-          ensembl_gene_id: ensembl_gene_id
-          name:
-            link_url: link_url
-            link_text: link_text
-          sex_cohort: Females
-          "12 months":
-            log2_fc: 0.8008281904610115
-            adj_p_val: 6.027456183070403
-          "18 months":
-            log2_fc: 0.8008281904610115
-            adj_p_val: 6.027456183070403
-          biodomains:
-          - biodomains
-          - biodomains
-        - model_group: model_group
-          gene_symbol: Gnai3
-          model_type: Familial AD
-          tissue: Hemibrain
-          "4 months":
-            log2_fc: 0.8008281904610115
-            adj_p_val: 6.027456183070403
-          matched_control: C57BL/6J
-          composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
-          ensembl_gene_id: ensembl_gene_id
-          name:
-            link_url: link_url
-            link_text: link_text
-          sex_cohort: Females
-          "12 months":
-            log2_fc: 0.8008281904610115
-            adj_p_val: 6.027456183070403
-          "18 months":
-            log2_fc: 0.8008281904610115
-            adj_p_val: 6.027456183070403
-          biodomains:
-          - biodomains
-          - biodomains
+          - model_group: model_group
+            gene_symbol: Gnai3
+            model_type: Familial AD
+            tissue: Hemibrain
+            '4 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            matched_control: C57BL/6J
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            ensembl_gene_id: ensembl_gene_id
+            name:
+              link_url: link_url
+              link_text: link_text
+            sex_cohort: Females
+            '12 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            '18 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            biodomains:
+              - biodomains
+              - biodomains
+          - model_group: model_group
+            gene_symbol: Gnai3
+            model_type: Familial AD
+            tissue: Hemibrain
+            '4 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            matched_control: C57BL/6J
+            composite_id: ENSMUSG00000000001~5xFAD (Jax/IU/Pitt)
+            ensembl_gene_id: ensembl_gene_id
+            name:
+              link_url: link_url
+              link_text: link_text
+            sex_cohort: Females
+            '12 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            '18 months':
+              log2_fc: 0.8008281904610115
+              adj_p_val: 6.027456183070403
+            biodomains:
+              - biodomains
+              - biodomains
       properties:
         geneExpressions:
           description: The list of gene expression objects for the current page
           items:
-            $ref: "#/components/schemas/GeneExpression"
+            $ref: '#/components/schemas/GeneExpression'
           type: array
         page:
-          $ref: "#/components/schemas/PageMetadata"
+          $ref: '#/components/schemas/PageMetadata'
       required:
-      - geneExpressions
-      - page
+        - geneExpressions
+        - page
       type: object
     ModelIdentifierType:
       description: |
@@ -1523,8 +1523,8 @@ components:
         - name: The identifier is a model name.
         - modelGroup: The identifier is a model group.
       enum:
-      - name
-      - modelGroup
+        - name
+        - modelGroup
       type: string
     GeneExpressionIndividualFilterQuery:
       description: Gene expression individual filter query options
@@ -1538,16 +1538,16 @@ components:
           example: 5xFAD (Jax/IU/Pitt)
           type: string
         modelIdentifierType:
-          $ref: "#/components/schemas/ModelIdentifierType"
+          $ref: '#/components/schemas/ModelIdentifierType'
         ensemblGeneId:
           description: Ensembl Gene ID to filter by
           example: ENSMUSG00000000001
           type: string
       required:
-      - ensemblGeneId
-      - modelIdentifier
-      - modelIdentifierType
-      - tissue
+        - ensemblGeneId
+        - modelIdentifier
+        - modelIdentifierType
+        - tissue
       type: object
     IndividualData:
       description: Data for an individual
@@ -1561,7 +1561,7 @@ components:
           description: Genotype of the individual
           type: string
         sex:
-          $ref: "#/components/schemas/Sex"
+          $ref: '#/components/schemas/Sex'
         individual_id:
           description: Unique identifier for the individual
           type: string
@@ -1569,28 +1569,28 @@ components:
           description: Value for the individual
           type: number
       required:
-      - genotype
-      - individual_id
-      - sex
-      - value
+        - genotype
+        - individual_id
+        - sex
+        - value
       type: object
     GeneExpressionIndividual:
       description: Gene Expression Individual
       example:
         model_group: model_group
         data:
-        - sex: Female
-          value: 0.8008281904610115
-          genotype: genotype
-          individual_id: individual_id
-        - sex: Female
-          value: 0.8008281904610115
-          genotype: genotype
-          individual_id: individual_id
+          - sex: Female
+            value: 0.8008281904610115
+            genotype: genotype
+            individual_id: individual_id
+          - sex: Female
+            value: 0.8008281904610115
+            genotype: genotype
+            individual_id: individual_id
         ensembl_gene_id: ensembl_gene_id
         result_order:
-        - C57BL6J
-        - Trem2
+          - C57BL6J
+          - Trem2
         gene_symbol: Gnai3
         name: name
         tissue: Hemibrain
@@ -1636,27 +1636,27 @@ components:
         result_order:
           description: List of genotypes in the order to display results
           example:
-          - C57BL6J
-          - Trem2
+            - C57BL6J
+            - Trem2
           items:
             type: string
           type: array
         data:
           description: List of individual gene expression data points
           items:
-            $ref: "#/components/schemas/IndividualData"
+            $ref: '#/components/schemas/IndividualData'
           type: array
       required:
-      - age
-      - age_numeric
-      - data
-      - ensembl_gene_id
-      - gene_symbol
-      - matched_control
-      - name
-      - result_order
-      - tissue
-      - units
+        - age
+        - age_numeric
+        - data
+        - ensembl_gene_id
+        - gene_symbol
+        - matched_control
+        - name
+        - result_order
+        - tissue
+        - units
       type: object
     GeneticInfo:
       description: Genetic information about a model
@@ -1683,25 +1683,25 @@ components:
           description: MGI allele ID
           type: number
       required:
-      - allele
-      - allele_type
-      - ensembl_gene_id
-      - mgi_allele_id
-      - modified_gene
+        - allele
+        - allele_type
+        - ensembl_gene_id
+        - mgi_allele_id
+        - modified_gene
       type: object
     ModelData:
       description: Data associated with a model
       example:
         evidence_type: evidence_type
         data:
-        - sex: Female
-          value: 0.8008281904610115
-          genotype: genotype
-          individual_id: individual_id
-        - sex: Female
-          value: 0.8008281904610115
-          genotype: genotype
-          individual_id: individual_id
+          - sex: Female
+            value: 0.8008281904610115
+            genotype: genotype
+            individual_id: individual_id
+          - sex: Female
+            value: 0.8008281904610115
+            genotype: genotype
+            individual_id: individual_id
         name: name
         tissue: tissue
         units: units
@@ -1729,102 +1729,102 @@ components:
         data:
           description: Values for each individual
           items:
-            $ref: "#/components/schemas/IndividualData"
+            $ref: '#/components/schemas/IndividualData'
           type: array
       required:
-      - age
-      - data
-      - evidence_type
-      - name
-      - tissue
-      - units
-      - y_axis_max
+        - age
+        - data
+        - evidence_type
+        - name
+        - tissue
+        - units
+        - y_axis_max
       type: object
     Model:
       description: Model details
       example:
         genetic_info:
-        - modified_gene: modified_gene
-          ensembl_gene_id: ensembl_gene_id
-          allele: allele
-          mgi_allele_id: 0.8008281904610115
-          allele_type: allele_type
-        - modified_gene: modified_gene
-          ensembl_gene_id: ensembl_gene_id
-          allele: allele
-          mgi_allele_id: 0.8008281904610115
-          allele_type: allele_type
+          - modified_gene: modified_gene
+            ensembl_gene_id: ensembl_gene_id
+            allele: allele
+            mgi_allele_id: 0.8008281904610115
+            allele_type: allele_type
+          - modified_gene: modified_gene
+            ensembl_gene_id: ensembl_gene_id
+            allele: allele
+            mgi_allele_id: 0.8008281904610115
+            allele_type: allele_type
         aliases:
-        - aliases
-        - aliases
+          - aliases
+          - aliases
         pathology:
-        - evidence_type: evidence_type
-          data:
-          - sex: Female
-            value: 0.8008281904610115
-            genotype: genotype
-            individual_id: individual_id
-          - sex: Female
-            value: 0.8008281904610115
-            genotype: genotype
-            individual_id: individual_id
-          name: name
-          tissue: tissue
-          units: units
-          y_axis_max: 6.027456183070403
-          age: age
-        - evidence_type: evidence_type
-          data:
-          - sex: Female
-            value: 0.8008281904610115
-            genotype: genotype
-            individual_id: individual_id
-          - sex: Female
-            value: 0.8008281904610115
-            genotype: genotype
-            individual_id: individual_id
-          name: name
-          tissue: tissue
-          units: units
-          y_axis_max: 6.027456183070403
-          age: age
+          - evidence_type: evidence_type
+            data:
+              - sex: Female
+                value: 0.8008281904610115
+                genotype: genotype
+                individual_id: individual_id
+              - sex: Female
+                value: 0.8008281904610115
+                genotype: genotype
+                individual_id: individual_id
+            name: name
+            tissue: tissue
+            units: units
+            y_axis_max: 6.027456183070403
+            age: age
+          - evidence_type: evidence_type
+            data:
+              - sex: Female
+                value: 0.8008281904610115
+                genotype: genotype
+                individual_id: individual_id
+              - sex: Female
+                value: 0.8008281904610115
+                genotype: genotype
+                individual_id: individual_id
+            name: name
+            tissue: tissue
+            units: units
+            y_axis_max: 6.027456183070403
+            age: age
         contributing_group: contributing_group
         biomarkers:
-        - evidence_type: evidence_type
-          data:
-          - sex: Female
-            value: 0.8008281904610115
-            genotype: genotype
-            individual_id: individual_id
-          - sex: Female
-            value: 0.8008281904610115
-            genotype: genotype
-            individual_id: individual_id
-          name: name
-          tissue: tissue
-          units: units
-          y_axis_max: 6.027456183070403
-          age: age
-        - evidence_type: evidence_type
-          data:
-          - sex: Female
-            value: 0.8008281904610115
-            genotype: genotype
-            individual_id: individual_id
-          - sex: Female
-            value: 0.8008281904610115
-            genotype: genotype
-            individual_id: individual_id
-          name: name
-          tissue: tissue
-          units: units
-          y_axis_max: 6.027456183070403
-          age: age
+          - evidence_type: evidence_type
+            data:
+              - sex: Female
+                value: 0.8008281904610115
+                genotype: genotype
+                individual_id: individual_id
+              - sex: Female
+                value: 0.8008281904610115
+                genotype: genotype
+                individual_id: individual_id
+            name: name
+            tissue: tissue
+            units: units
+            y_axis_max: 6.027456183070403
+            age: age
+          - evidence_type: evidence_type
+            data:
+              - sex: Female
+                value: 0.8008281904610115
+                genotype: genotype
+                individual_id: individual_id
+              - sex: Female
+                value: 0.8008281904610115
+                genotype: genotype
+                individual_id: individual_id
+            name: name
+            tissue: tissue
+            units: units
+            y_axis_max: 6.027456183070403
+            age: age
         gene_expression: gene_expression
         disease_correlation: disease_correlation
         matched_controls:
-        - matched_controls
-        - matched_controls
+          - matched_controls
+          - matched_controls
         model_type: model_type
         jax_id: jax_id
         rrid: rrid
@@ -1883,33 +1883,33 @@ components:
         genetic_info:
           description: Genetic information related to the Model
           items:
-            $ref: "#/components/schemas/GeneticInfo"
+            $ref: '#/components/schemas/GeneticInfo'
           type: array
         biomarkers:
           description: List of biomarker data associated with the model
           items:
-            $ref: "#/components/schemas/ModelData"
+            $ref: '#/components/schemas/ModelData'
           type: array
         pathology:
           description: List of pathology data associated with the model
           items:
-            $ref: "#/components/schemas/ModelData"
+            $ref: '#/components/schemas/ModelData'
           type: array
       required:
-      - aliases
-      - alzforum_id
-      - biomarkers
-      - contributing_group
-      - disease_correlation
-      - gene_expression
-      - genetic_info
-      - genotype
-      - jax_id
-      - matched_controls
-      - model_type
-      - name
-      - pathology
-      - rrid
-      - spatial_transcriptomics
-      - study_synid
+        - aliases
+        - alzforum_id
+        - biomarkers
+        - contributing_group
+        - disease_correlation
+        - gene_expression
+        - genetic_info
+        - genotype
+        - jax_id
+        - matched_controls
+        - model_type
+        - name
+        - pathology
+        - rrid
+        - spatial_transcriptomics
+        - study_synid
       type: object

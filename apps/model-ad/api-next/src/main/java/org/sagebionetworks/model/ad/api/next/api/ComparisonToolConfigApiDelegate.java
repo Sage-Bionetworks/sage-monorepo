@@ -29,7 +29,7 @@ public interface ComparisonToolConfigApiDelegate {
     }
 
     /**
-     * GET /comparison-tool-config : Get Comparison Tool configuration
+     * GET /comparison-tools/config : Get Comparison Tool configuration
      * Retrieve the Comparison Tool configuration schema for the Model-AD application
      *
      * @param page Name of the page to retrieve the Comparison Tool configuration for (required)

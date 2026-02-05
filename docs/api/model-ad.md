@@ -24,7 +24,7 @@ This API provides 4 endpoints:
 
 ### ComparisonToolConfig
 
-- **GET** `/comparison-tool-config`
+- **GET** `/comparison-tools/config`
   Get Comparison Tool configuration
 
   Retrieve the Comparison Tool configuration schema for the Model-AD application
