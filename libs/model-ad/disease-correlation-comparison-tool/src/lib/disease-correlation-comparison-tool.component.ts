@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
+  AppError,
   ComparisonToolQuery,
   ComparisonToolViewConfig,
   HeatmapCircleClickTransformFnContext,
@@ -10,12 +11,11 @@ import {
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
 import {
-  ComparisonToolHelperService,
   ComparisonToolUrlService,
+  LoggerService,
   PlatformService,
 } from '@sagebionetworks/explorers/services';
 import {
-  ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
   CorrelationResult,
@@ -27,7 +27,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, of, shareReplay } from 'rxjs';
+import { catchError, EMPTY, shareReplay } from 'rxjs';
 import { DiseaseCorrelationComparisonToolService } from './services/disease-correlation-comparison-tool.service';
 
 @Component({
@@ -39,9 +39,9 @@ import { DiseaseCorrelationComparisonToolService } from './services/disease-corr
 export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
-  private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
@@ -53,9 +53,12 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
     .pipe(
       catchError((error) => {
-        console.error('Error retrieving comparison tool config: ', error);
-        this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
-        return of<ComparisonToolConfig[]>([]);
+        this.logger.error('Error retrieving comparison tool config', error);
+        this.router.navigate([ROUTE_PATHS.ERROR], {
+          skipLocationChange: true,
+          queryParams: { message: 'Error: Unable to load comparison tool configuration.' },
+        });
+        return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
@@ -184,9 +187,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
-        error: (error) => {
-          console.error('Error in getUnpinnedData:', error);
-          throw new Error('Error fetching disease correlation data:', { cause: error });
+        error: () => {
+          throw new AppError(
+            'Unable to load unpinned disease correlation data. Please reload the page.',
+            true,
+          );
         },
       });
   }
@@ -211,8 +216,11 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
-        error: (error) => {
-          throw new Error('Error fetching disease correlation data:', { cause: error });
+        error: () => {
+          throw new AppError(
+            'Unable to load pinned disease correlation data. Please reload the page.',
+            true,
+          );
         },
       });
   }

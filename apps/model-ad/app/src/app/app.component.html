@@ -1,6 +1,16 @@
 @if (useGoogleTagManager) {
   <sage-google-tag-manager />
 }
+@if (hasActiveError()) {
+  <div class="error-overlay"></div>
+  <div class="warning-banner">
+    <div class="warning-banner-content">
+      <i class="pi pi-exclamation-triangle warning-icon"></i>
+      <span>Something went wrong. Please reload the page.</span>
+      <button class="reload-button" (click)="reloadPage()">Reload Page</button>
+    </div>
+  </div>
+}
 <div id="container">
   <explorers-header
     headerLogoPath="/model-ad-assets/images/header-logo.svg"
@@ -19,4 +29,3 @@
     [dataVersion]="dataVersion"
   ></explorers-footer>
 </div>
-<p-toast class="global-toast" position="bottom-center"></p-toast>

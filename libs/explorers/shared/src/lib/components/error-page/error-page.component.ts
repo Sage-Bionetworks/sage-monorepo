@@ -29,7 +29,7 @@ export class ErrorPageComponent {
     this.router.navigateByUrl(this.retryUrl);
   }
 
-  goHome() {
-    this.router.navigate(['/']);
+  reload() {
+    window.location.reload();
   }
 }

@@ -19,11 +19,8 @@ import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/syna
 import { providePrimeNG } from 'primeng/config';
 import { AgoraPreset } from './primeNGPreset';
 
-import {
-  httpErrorInterceptor,
-  rollbarFactory,
-  RollbarService,
-} from '@sagebionetworks/agora/services';
+import { rollbarFactory, RollbarService } from '@sagebionetworks/agora/services';
+import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { MessageService } from 'primeng/api';
 import { CustomUrlSerializer } from './app.custom-uri-serializer';
 import { routes } from './app.routes';

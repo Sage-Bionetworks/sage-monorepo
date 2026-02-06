@@ -9,7 +9,7 @@ import { MessageService, SortMeta } from 'primeng/api';
 import { BehaviorSubject, of } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { ComparisonToolService } from './comparison-tool.service';
-import { NotificationService } from './notification.service';
+import { ToastNotificationService } from './toast-notification.service';
 
 export type ComparisonToolServiceOptions = {
   configs?: ComparisonToolConfig[];
@@ -43,7 +43,7 @@ export const provideComparisonToolService = (
 ): Provider[] => {
   const useUrlSync = options?.urlSync ?? false;
 
-  const providers: Provider[] = [MessageService, NotificationService];
+  const providers: Provider[] = [MessageService, ToastNotificationService];
 
   if (useUrlSync) {
     providers.push(ComparisonToolUrlService);
