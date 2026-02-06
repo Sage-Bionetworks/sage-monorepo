@@ -52,11 +52,11 @@ describe('ErrorPageComponent', () => {
     expect(retryButton).not.toBeInTheDocument();
   });
 
-  it('should have home button', async () => {
+  it('should have reload button', async () => {
     await setup();
-    // The home button should be present (by role or text)
-    const homeButton = screen.getByRole('button', { name: /Go Home/i });
-    expect(homeButton).toBeInTheDocument();
+    // The reload button should be present (by role or text)
+    const reloadButton = screen.getByRole('button', { name: /Reload/i });
+    expect(reloadButton).toBeInTheDocument();
   });
 
   it('should display the support email', async () => {
