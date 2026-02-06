@@ -156,6 +156,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     | 'GRID_REPLICA'
     | 'GRID_CONNECTION'
     | 'GRID_PATCH'
+    | 'GRID_SNAPSHOT'
     | 'CURATION_TASK'
     | 'USER_STATUS'
     | 'RECORDSET_VALIDATION_STATS'
@@ -288,6 +289,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     GridReplica: 'GRID_REPLICA' as MigrationTypeEnum,
     GridConnection: 'GRID_CONNECTION' as MigrationTypeEnum,
     GridPatch: 'GRID_PATCH' as MigrationTypeEnum,
+    GridSnapshot: 'GRID_SNAPSHOT' as MigrationTypeEnum,
     CurationTask: 'CURATION_TASK' as MigrationTypeEnum,
     UserStatus: 'USER_STATUS' as MigrationTypeEnum,
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as MigrationTypeEnum,
@@ -420,6 +422,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     | 'GRID_REPLICA'
     | 'GRID_CONNECTION'
     | 'GRID_PATCH'
+    | 'GRID_SNAPSHOT'
     | 'CURATION_TASK'
     | 'USER_STATUS'
     | 'RECORDSET_VALIDATION_STATS'
@@ -551,6 +554,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     GridReplica: 'GRID_REPLICA' as TypeEnum,
     GridConnection: 'GRID_CONNECTION' as TypeEnum,
     GridPatch: 'GRID_PATCH' as TypeEnum,
+    GridSnapshot: 'GRID_SNAPSHOT' as TypeEnum,
     CurationTask: 'CURATION_TASK' as TypeEnum,
     UserStatus: 'USER_STATUS' as TypeEnum,
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as TypeEnum,
