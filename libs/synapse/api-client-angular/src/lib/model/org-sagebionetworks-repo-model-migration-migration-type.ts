@@ -135,6 +135,7 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'GRID_REPLICA'
   | 'GRID_CONNECTION'
   | 'GRID_PATCH'
+  | 'GRID_SNAPSHOT'
   | 'CURATION_TASK'
   | 'USER_STATUS'
   | 'RECORDSET_VALIDATION_STATS'
@@ -293,6 +294,7 @@ export const OrgSagebionetworksRepoModelMigrationMigrationType = {
   GridReplica: 'GRID_REPLICA' as OrgSagebionetworksRepoModelMigrationMigrationType,
   GridConnection: 'GRID_CONNECTION' as OrgSagebionetworksRepoModelMigrationMigrationType,
   GridPatch: 'GRID_PATCH' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  GridSnapshot: 'GRID_SNAPSHOT' as OrgSagebionetworksRepoModelMigrationMigrationType,
   CurationTask: 'CURATION_TASK' as OrgSagebionetworksRepoModelMigrationMigrationType,
   UserStatus: 'USER_STATUS' as OrgSagebionetworksRepoModelMigrationMigrationType,
   RecordsetValidationStats:

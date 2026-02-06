@@ -142,6 +142,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'GRID_REPLICA'
     | 'GRID_CONNECTION'
     | 'GRID_PATCH'
+    | 'GRID_SNAPSHOT'
     | 'CURATION_TASK'
     | 'USER_STATUS'
     | 'RECORDSET_VALIDATION_STATS'
@@ -273,6 +274,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     GridReplica: 'GRID_REPLICA' as ListEnum,
     GridConnection: 'GRID_CONNECTION' as ListEnum,
     GridPatch: 'GRID_PATCH' as ListEnum,
+    GridSnapshot: 'GRID_SNAPSHOT' as ListEnum,
     CurationTask: 'CURATION_TASK' as ListEnum,
     UserStatus: 'USER_STATUS' as ListEnum,
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as ListEnum,
