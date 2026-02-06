@@ -27,6 +27,7 @@ from bixarena_app.page.bixarena_header import (
 from bixarena_app.page.bixarena_home import (
     build_home_page,
     load_public_stats_on_page_load,
+    load_quest_progress_on_page_load,
     load_user_battles_on_page_load,
     update_cta_buttons_on_page_load,
 )
@@ -407,6 +408,13 @@ def build_app():
                 cta_btn_login,
                 cta_helper_msg,
                 stats_container,
+                quest_container,
+                quest_progress_container,
+                quest_btn_authenticated,
+                quest_btn_login,
+                carousel_init_trigger,
+                carousel_id,
+                rotation_interval,
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
@@ -460,6 +468,22 @@ def build_app():
         cta_btn_authenticated.click(
             lambda: navigator.show_page(1),
             outputs=pages,
+        )
+        # Quest authenticated button - navigates to battle page
+        quest_btn_authenticated.click(
+            lambda: navigator.show_page(1),
+            outputs=pages,
+        )
+        # Quest login button - redirects to login page
+        quest_btn_login.click(
+            None,
+            js="""
+() => {
+  const el = document.getElementById('login-start-endpoint');
+  const url = el ? el.textContent.trim() : '';
+  if (url) window.location.href = url;
+}
+            """,
         )
 
         # Bind static args so Gradio can still inject request without warnings.
@@ -539,11 +563,240 @@ def build_app():
             outputs=stats_container,
         )
 
-        # Load CTA button visibility based on authentication
+        # Load CTA and Quest button visibility based on authentication
         demo.load(
             fn=update_cta_buttons_on_page_load,
-            outputs=[cta_btn_authenticated, cta_btn_login, cta_helper_msg],
+            outputs=[
+                cta_btn_authenticated,
+                cta_btn_login,
+                cta_helper_msg,
+                quest_btn_authenticated,
+                quest_btn_login,
+            ],
         )
+
+        # Load quest progress on page load
+        demo.load(
+            fn=load_quest_progress_on_page_load,
+            inputs=None,
+            outputs=quest_progress_container,
+        )
+
+        # Initialize carousel on page load (only if community quest is enabled)
+        if carousel_id:
+            carousel_init_trigger.click(
+                None,
+                js=f"""
+() => {{
+    const carouselId = '{carousel_id}';
+    let retryCount = 0;
+    const MAX_RETRIES = 100;
+
+    function initCarousel() {{
+        retryCount++;
+
+        const carousel = document.getElementById(carouselId);
+        if (!carousel) {{
+            if (retryCount < MAX_RETRIES) {{
+                setTimeout(initCarousel, 50);
+            }} else {{
+                console.error('Carousel not found after max retries:', carouselId);
+            }}
+            return;
+        }}
+
+        let images = carousel.querySelectorAll('.carousel-image');
+        // Indicators are now in a sibling container, not inside carousel
+        const carouselParent = carousel.parentElement;
+        let indicators = carouselParent.querySelectorAll('.indicator');
+
+        if (images.length === 0) {{
+            if (retryCount < MAX_RETRIES) {{
+                setTimeout(initCarousel, 50);
+            }} else {{
+                console.error('Carousel images not found');
+            }}
+            return;
+        }}
+
+        let currentIndex = 0;
+        let autoRotateInterval;
+        const ROTATION_INTERVAL = {rotation_interval};
+
+        function showImage(index) {{
+            images.forEach((img, i) => {{
+                if (i === index) {{
+                    img.classList.add('active');
+                }} else {{
+                    img.classList.remove('active');
+                }}
+            }});
+            indicators.forEach((ind, i) => {{
+                if (i === index) {{
+                    ind.classList.add('active');
+                }} else {{
+                    ind.classList.remove('active');
+                }}
+            }});
+            currentIndex = index;
+        }}
+
+        function nextImage() {{
+            showImage((currentIndex + 1) % images.length);
+        }}
+
+        function jumpToImage(index) {{
+            stopAutoRotate();
+            showImage(index);
+            startAutoRotate();
+        }}
+
+        function startAutoRotate() {{
+            stopAutoRotate();
+            if (images.length > 1) {{
+                autoRotateInterval = setInterval(nextImage, ROTATION_INTERVAL);
+            }}
+        }}
+
+        function stopAutoRotate() {{
+            if (autoRotateInterval) {{
+                clearInterval(autoRotateInterval);
+                autoRotateInterval = null;
+            }}
+        }}
+
+        function attachIndicatorListeners(indicator) {{
+            indicator.addEventListener('click', function(e) {{
+                e.preventDefault();
+                e.stopPropagation();
+                const index = parseInt(this.getAttribute('data-index'));
+                jumpToImage(index);
+            }});
+            indicator.addEventListener('keypress', function(e) {{
+                if (e.key === 'Enter' || e.key === ' ') {{
+                    e.preventDefault();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    jumpToImage(index);
+                }}
+            }});
+        }}
+
+        indicators.forEach(attachIndicatorListeners);
+
+        carousel.addEventListener('mouseenter', stopAutoRotate);
+        carousel.addEventListener('mouseleave', startAutoRotate);
+
+        // Handle accordion clicks to expand/collapse and switch carousel images
+        const accordionItems = carouselParent.querySelectorAll('.quest-update-accordion');
+
+        function loadUpdateImages(accordion) {{
+            const newImagesJson = accordion.getAttribute('data-images');
+            if (!newImagesJson) {{
+                console.error('No images data found on accordion');
+                return;
+            }}
+
+            const newImages = JSON.parse(newImagesJson);
+
+            // Stop auto-rotation
+            stopAutoRotate();
+
+            // Collapse all accordions, then expand clicked one
+            accordionItems.forEach(item => {{
+                item.classList.remove('active', 'expanded');
+            }});
+            accordion.classList.add('active', 'expanded');
+
+            // Rebuild carousel images
+            const container = carousel.querySelector('.carousel-container');
+            container.innerHTML = '';
+            newImages.forEach((url, idx) => {{
+                const img = document.createElement('img');
+                img.src = url;
+                img.className = 'carousel-image' + (idx === 0 ? ' active' : '');
+                img.alt = 'Minecraft arena progress';
+                container.appendChild(img);
+            }});
+
+            // Rebuild indicators
+            const indicatorsWrapper = carouselParent.querySelector('.carousel-indicators-wrapper');
+            const indicatorsContainer = indicatorsWrapper.querySelector('.carousel-indicators');
+            indicatorsContainer.innerHTML = '';
+
+            if (newImages.length > 1) {{
+                indicatorsWrapper.style.display = '';
+                newImages.forEach((url, idx) => {{
+                    const indicator = document.createElement('span');
+                    indicator.className = 'indicator' + (idx === 0 ? ' active' : '');
+                    indicator.setAttribute('data-index', idx);
+                    indicator.setAttribute('role', 'button');
+                    indicator.setAttribute('tabindex', '0');
+                    indicator.setAttribute('aria-label', `View image ${{idx + 1}}`);
+
+                    attachIndicatorListeners(indicator);
+
+                    indicatorsContainer.appendChild(indicator);
+                }});
+            }} else {{
+                indicatorsWrapper.style.display = 'none';
+            }}
+
+            // Re-initialize carousel state
+            currentIndex = 0;
+            // Re-query images and indicators after rebuild
+            const newImageElements = carousel.querySelectorAll('.carousel-image');
+            const newIndicatorElements = carouselParent.querySelectorAll('.indicator');
+
+            // Update references in showImage closure
+            images = newImageElements;
+            indicators = newIndicatorElements;
+
+            // Restart auto-rotation
+            startAutoRotate();
+        }}
+
+        accordionItems.forEach(accordion => {{
+            const header = accordion.querySelector('.accordion-header');
+            header.addEventListener('click', function(e) {{
+                e.preventDefault();
+                e.stopPropagation();
+                loadUpdateImages(accordion);
+            }});
+            header.addEventListener('keypress', function(e) {{
+                if (e.key === 'Enter' || e.key === ' ') {{
+                    e.preventDefault();
+                    loadUpdateImages(accordion);
+                }}
+            }});
+        }});
+
+        startAutoRotate();
+        console.log('✓ Carousel initialized successfully:', carouselId);
+    }}
+
+    initCarousel();
+}}
+            """,
+            )
+
+            # Trigger carousel initialization on page load
+            demo.load(
+                None,
+                None,
+                None,
+                js=f"""
+() => {{
+    setTimeout(() => {{
+        const btn = document.getElementById('carousel-init-trigger');
+        if (btn) {{
+            btn.click();
+        }} else {{
+            console.error('Carousel init button not found');
+        }}
+    }}, 500);
+}}
+        """,
+            )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
 

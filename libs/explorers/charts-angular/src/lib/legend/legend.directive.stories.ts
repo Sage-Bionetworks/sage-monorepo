@@ -7,7 +7,7 @@ const meta: Meta<LegendDirective> = {
   title: 'directives/sageLegend',
   render: (args: LegendProps) => ({
     props: args,
-    template: `<div sageLegend [pointStyles]="pointStyles"></div>`,
+    template: `<div sageLegend [pointStyles]="pointStyles" [chartStyle]="chartStyle"></div>`,
   }),
 };
 export default meta;
@@ -22,5 +22,6 @@ export const NoData: Story = {
 export const Demo: Story = {
   args: {
     pointStyles: mockPointStyles,
+    chartStyle: 'grayGrid',
   },
 };

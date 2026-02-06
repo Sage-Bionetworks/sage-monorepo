@@ -1,4 +1,5 @@
 import { expect, Page, test } from '@playwright/test';
+import { waitForScrollToStop } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
 import { searchAndGetSearchListItems } from './helpers/search';
 
@@ -12,30 +13,6 @@ async function expectPageAtTop(page: Page) {
 
 async function expectPageNotAtTop(page: Page) {
   expect(await isPageAtTop(page)).toBe(false);
-}
-
-async function waitForScrollToStop(page: Page, timeout = 5000) {
-  let previousOffset = await page.evaluate(() => window.pageYOffset);
-  let stableCount = 0;
-  const requiredStableChecks = 10;
-
-  await expect
-    .poll(
-      async () => {
-        const currentOffset = await page.evaluate(() => window.pageYOffset);
-
-        if (currentOffset === previousOffset) {
-          stableCount++;
-          return stableCount >= requiredStableChecks;
-        } else {
-          stableCount = 0;
-          previousOffset = currentOffset;
-          return false;
-        }
-      },
-      { timeout, intervals: [200] },
-    )
-    .toBe(true);
 }
 
 test.describe('model details', () => {
@@ -121,6 +98,7 @@ test.describe('model details', () => {
   test('does not scroll to panel content on initial load when tab not specified in url', async ({
     page,
   }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
     const model = '3xTg-AD';
     await page.goto(`/models/${model}`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();

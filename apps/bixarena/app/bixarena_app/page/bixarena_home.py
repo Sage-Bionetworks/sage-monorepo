@@ -4,10 +4,17 @@ import gradio as gr
 from bixarena_api_client import UserApi
 
 from bixarena_app.api.api_client_helper import (
+    calculate_quest_progress,
     create_authenticated_api_client,
     fetch_public_stats,
 )
 from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
+from bixarena_app.config.constants import COMMUNITY_QUEST_ENABLED
+from bixarena_app.page.bixarena_quest_section import (
+    QUEST_CONFIG,
+    _build_progress_html,
+    build_quest_section,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -201,28 +208,33 @@ def load_user_battles_on_page_load(
 
 def update_cta_buttons_on_page_load(
     request: gr.Request,
-) -> tuple[dict, dict, dict]:
-    """Update CTA button visibility based on authentication state.
+) -> tuple[dict, dict, dict, dict, dict]:
+    """Update CTA and Quest button visibility based on authentication state.
 
     Args:
         request: Gradio request object
 
     Returns:
-        Tuple of (authenticated_btn_update, login_btn_update, cta_helper_msg_update)
+        Tuple of (authenticated_btn_update, login_btn_update, cta_helper_msg_update,
+                  quest_btn_authenticated_update, quest_btn_login_update)
     """
     if is_authenticated(request):
-        # Show authenticated button, hide login button and CTA helper message
+        # Show authenticated buttons, hide login buttons and CTA helper message
         return (
             gr.update(visible=True),
             gr.update(visible=False),
             gr.update(visible=False),
+            gr.update(visible=True),  # quest_btn_authenticated
+            gr.update(visible=False),  # quest_btn_login
         )
     else:
-        # Hide authenticated button, show login button and CTA helper message
+        # Hide authenticated buttons, show login buttons and CTA helper message
         return (
             gr.update(visible=False),
             gr.update(visible=True),
             gr.update(visible=True),
+            gr.update(visible=False),  # quest_btn_authenticated
+            gr.update(visible=True),  # quest_btn_login
         )
 
 
@@ -235,6 +247,96 @@ def build_stats_section():
     )
 
     return stats_container
+
+
+def load_quest_progress_on_page_load() -> dict:
+    """Load quest progress and return HTML update.
+
+    Returns:
+        HTML update for the quest progress section (right column only)
+    """
+    try:
+        progress_data = calculate_quest_progress()
+    except Exception as e:
+        logger.error(f"Error calculating quest progress: {e}")
+        # Use defaults on error
+        from datetime import datetime
+
+        end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
+        days_remaining = max(0, (end_date - datetime.now()).days)
+        progress_data = {
+            "current_blocks": 0,
+            "goal_blocks": QUEST_CONFIG["goal"],
+            "percentage": 0.0,
+            "days_remaining": days_remaining,
+        }
+
+    current_blocks = progress_data["current_blocks"]
+    goal_blocks = progress_data["goal_blocks"]
+    percentage = progress_data["percentage"]
+    days_remaining = progress_data["days_remaining"]
+
+    # Build the progress HTML using shared helper function
+    progress_html = _build_progress_html(
+        current_blocks, goal_blocks, percentage, days_remaining
+    )
+
+    return gr.update(value=progress_html)
+
+
+def build_quest_section_wrapper():
+    """Create the Community Quest section for the home page"""
+    # Check if community quest feature is enabled
+    if not COMMUNITY_QUEST_ENABLED:
+        # Return None values if feature is disabled
+        with gr.Column(visible=False) as quest_container:
+            progress_html_container = gr.HTML("")
+            quest_btn_authenticated = gr.Button(visible=False)
+            quest_btn_login = gr.Button(visible=False)
+            carousel_init_trigger = gr.Button(visible=False)
+        return (
+            quest_container,
+            progress_html_container,
+            quest_btn_authenticated,
+            quest_btn_login,
+            carousel_init_trigger,
+            "",  # carousel_id
+            0,  # rotation_interval
+        )
+
+    try:
+        # Fetch real-time quest progress data
+        progress_data = calculate_quest_progress()
+        (
+            quest_container,
+            progress_html_container,
+            quest_btn_authenticated,
+            quest_btn_login,
+            carousel_init_trigger,
+            carousel_id,
+            rotation_interval,
+        ) = build_quest_section(progress_data)
+    except Exception as e:
+        logger.error(f"Error calculating quest progress: {e}")
+        # Fall back to default data if calculation fails
+        (
+            quest_container,
+            progress_html_container,
+            quest_btn_authenticated,
+            quest_btn_login,
+            carousel_init_trigger,
+            carousel_id,
+            rotation_interval,
+        ) = build_quest_section(None)
+    return (
+        quest_container,
+        progress_html_container,
+        quest_btn_authenticated,
+        quest_btn_login,
+        carousel_init_trigger,
+        carousel_id,
+        rotation_interval,
+    )
 
 
 def build_how_it_works_section():
@@ -390,6 +492,17 @@ def build_home_page():
         # Stats Section (single horizontal bar)
         stats_container = build_stats_section()
 
+        # Community Quest Section (new)
+        (
+            quest_html,
+            quest_progress_container,
+            quest_btn_authenticated,
+            quest_btn_login,
+            carousel_init_trigger,
+            carousel_id,
+            rotation_interval,
+        ) = build_quest_section_wrapper()
+
         # How It Works Section
         build_how_it_works_section()
 
@@ -399,4 +512,11 @@ def build_home_page():
         start_btn_login,
         cta_helper_msg,
         stats_container,
+        quest_html,
+        quest_progress_container,
+        quest_btn_authenticated,
+        quest_btn_login,
+        carousel_init_trigger,
+        carousel_id,
+        rotation_interval,
     )

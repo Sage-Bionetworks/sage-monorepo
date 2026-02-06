@@ -6,10 +6,11 @@ import { LegendDirective } from './legend.directive';
 const renderTestComponent = async (props: LegendProps) => {
   @Component({
     imports: [LegendDirective],
-    template: `<div sageLegend [pointStyles]="pointStyles"></div>`,
+    template: `<div sageLegend [pointStyles]="pointStyles" [chartStyle]="chartStyle"></div>`,
   })
   class TestComponent {
     pointStyles = props.pointStyles;
+    chartStyle = props.chartStyle;
   }
 
   return await render(TestComponent, {

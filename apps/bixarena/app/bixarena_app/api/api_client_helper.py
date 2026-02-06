@@ -1,6 +1,7 @@
 """Utilities for configuring BixArena API clients with authentication."""
 
 import logging
+from datetime import datetime
 
 from bixarena_api_client import ApiClient, Configuration, StatsApi
 
@@ -99,3 +100,52 @@ def fetch_public_stats() -> dict:
             "completed_battles": 0,
             "total_users": 0,
         }
+
+
+def calculate_quest_progress() -> dict:
+    """Calculate Community Quest progress using existing public stats.
+
+    Uses the existing fetch_public_stats() to get total battles completed,
+    which represents blocks placed in the Minecraft arena (1 battle = 1 block).
+
+    Quest configuration is imported from QUEST_CONFIG in bixarena_quest_section.
+
+    Returns:
+        Dictionary with:
+            - current_blocks: int (total battles completed)
+            - goal_blocks: int (from QUEST_CONFIG)
+            - percentage: float (0-100+, can exceed 100%)
+            - days_remaining: int (calculated from end date)
+    """
+    # Import quest configuration
+    from bixarena_app.page.bixarena_quest_section import QUEST_CONFIG
+
+    QUEST_END_DATE = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
+    QUEST_GOAL_BLOCKS = QUEST_CONFIG["goal"]
+
+    # Fetch current battle count (represents blocks placed)
+    stats = fetch_public_stats()
+    current_blocks = stats["completed_battles"]
+
+    # Calculate percentage (allow >100% if goal exceeded)
+    percentage = (
+        (current_blocks / QUEST_GOAL_BLOCKS * 100) if QUEST_GOAL_BLOCKS > 0 else 0.0
+    )
+
+    # Calculate days remaining (add 1 to show "1 day left" on the final day)
+    now = datetime.now()
+    days_remaining = (
+        max(1, (QUEST_END_DATE - now).days + 1) if now < QUEST_END_DATE else 0
+    )
+
+    logger.info(
+        f"Quest progress: {current_blocks}/{QUEST_GOAL_BLOCKS} blocks "
+        f"({percentage:.1f}%), {days_remaining} days remaining"
+    )
+
+    return {
+        "current_blocks": current_blocks,
+        "goal_blocks": QUEST_GOAL_BLOCKS,
+        "percentage": percentage,
+        "days_remaining": days_remaining,
+    }
