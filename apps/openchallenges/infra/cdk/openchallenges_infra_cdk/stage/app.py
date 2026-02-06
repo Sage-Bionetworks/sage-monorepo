@@ -230,28 +230,6 @@ def main() -> None:
         description="Allow Organization service to access OpenSearch",
     )
 
-    # Create Image service stack (stateless, no database)
-    # Thumbor is exposed via ALB at /img/ path for public access
-    protocol = "https" if (certificate_arn and certificate_arn.strip()) else "http"
-    thumbor_base_url = fqdn if fqdn else alb_stack.alb.load_balancer_dns_name
-    thumbor_public_url = f"{protocol}://{thumbor_base_url}/img/"
-
-    ImageServiceStack(
-        app,
-        f"{stack_prefix}-image-service",
-        stack_prefix=stack_prefix,
-        environment=environment,
-        developer_name=None,  # Stage is shared
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
-        app_version=app_version,
-        # Thumbor configuration - use public ALB URL for image URLs
-        thumbor_host=thumbor_public_url,
-        thumbor_security_key="changeme",
-        placeholder_enabled=placeholder_enabled,
-        description=f"Image service for OpenChallenges {environment} environment",
-    )
-
     # Create Auth service stack (depends on database, ECS cluster)
     AuthServiceStack(
         app,
@@ -270,23 +248,6 @@ def main() -> None:
         app_version=app_version,
         description=f"Auth service for OpenChallenges {environment} environment",
     )
-
-    # Create API Gateway stack (depends on backend services)
-    # Spring Cloud Gateway routes requests to backend microservices
-    api_gateway_stack = ApiGatewayStack(
-        app,
-        f"{stack_prefix}-api-gateway",
-        stack_prefix=stack_prefix,
-        environment=environment,
-        developer_name=None,  # Stage is shared
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
-        target_group=alb_stack.api_gateway_target_group,
-        app_version=app_version,
-        description=f"API Gateway for OpenChallenges {environment} environment",
-    )
-    api_gateway_stack.add_dependency(ecs_cluster_stack)
-    api_gateway_stack.add_dependency(alb_stack)
 
     # Create bucket stack
     bucket_stack = BucketStack(
@@ -313,8 +274,49 @@ def main() -> None:
         security_key="changeme",  # TODO: Use secrets manager in production
         description=f"Thumbor service for OpenChallenges {environment} environment",
     )
+    thumbor_stack.add_dependency(bucket_stack)
     thumbor_stack.add_dependency(ecs_cluster_stack)
     thumbor_stack.add_dependency(alb_stack)
+
+    # Create Image service stack (stateless, no database)
+    # Thumbor is exposed via ALB at /img/ path for public access
+    protocol = "https" if (certificate_arn and certificate_arn.strip()) else "http"
+    thumbor_base_url = fqdn if fqdn else alb_stack.alb.load_balancer_dns_name
+    thumbor_public_url = f"{protocol}://{thumbor_base_url}/img/"
+
+    ImageServiceStack(
+        app,
+        f"{stack_prefix}-image-service",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=None,  # Stage is shared
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        app_version=app_version,
+        # Thumbor configuration - use public ALB URL for image URLs
+        thumbor_host=thumbor_public_url,
+        thumbor_security_key="changeme",
+        placeholder_enabled=placeholder_enabled,
+        description=f"Image service for OpenChallenges {environment} environment",
+    )
+
+    # Create API Gateway stack (depends on ALB and ECS cluster)
+    # API Gateway routes traffic to Auth, Challenge, Organization, and Image services
+    # Note: Dependencies on service stacks are automatic via CloudFormation references
+    api_gateway_stack = ApiGatewayStack(
+        app,
+        f"{stack_prefix}-api-gateway",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=None,  # Stage is shared
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        target_group=alb_stack.api_gateway_target_group,
+        app_version=app_version,
+        description=f"API Gateway for OpenChallenges {environment} environment",
+    )
+    api_gateway_stack.add_dependency(alb_stack)
+    api_gateway_stack.add_dependency(ecs_cluster_stack)
 
     # Create web stack (Angular SSR app) - depends on ECS cluster and ALB
     # Uses ALB DNS name by default, or custom FQDN if provided
