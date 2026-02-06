@@ -1,9 +1,11 @@
 # Development profile configuration
 spring:
   jpa:
-    show-sql: true
+    show-sql: false
   datasource:
     url: jdbc:postgresql://openchallenges-postgres:8091/openchallenges?currentSchema=auth
+  flyway:
+    clean-disabled: false # Allow clean in dev environment
 
 app:
   api-key:

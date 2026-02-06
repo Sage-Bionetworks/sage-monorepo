@@ -17,7 +17,11 @@ spring:
     name: openchallenges-organization-service
   flyway:
     enabled: true
-    clean-disabled: false
+    baseline-on-migrate: true
+    baseline-version: 0
+    validate-on-migrate: true
+    clean-disabled: true # Safety: prevent accidental data loss
+    locations: classpath:db/migration/common # Default: schema migrations only
     schemas: organization
     default-schema: organization
   jackson:
@@ -26,10 +30,13 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
+    show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
         default_schema: organization
         search:
           enabled: true

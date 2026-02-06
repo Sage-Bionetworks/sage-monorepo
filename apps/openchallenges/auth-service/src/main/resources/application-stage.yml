@@ -5,7 +5,8 @@ spring:
   datasource:
     url: jdbc:postgresql://openchallenges-postgres-stage:8091/openchallenges?currentSchema=auth
   flyway:
-    enabled: false
+    enabled: true
+    clean-disabled: true # Never clean stage database
 
 app:
   api-key:
