@@ -1,14 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { TOAST_DURATION_MS } from '@sagebionetworks/explorers/constants';
 import { MessageService } from 'primeng/api';
 
+const TOAST_DURATION_MS = 5000;
+
 @Injectable({ providedIn: 'root' })
-export class NotificationService {
+export class ToastNotificationService {
   private readonly messageService = inject(MessageService);
 
   showError(message: string) {
-    this.messageService.clear();
-
     this.messageService.add({
       severity: 'error',
       sticky: true,
@@ -22,11 +21,33 @@ export class NotificationService {
   }
 
   showWarning(message: string) {
-    this.messageService.clear();
-
     this.messageService.add({
       severity: 'warn',
       summary: 'Warning',
+      detail: message,
+    });
+
+    setTimeout(() => {
+      this.messageService.clear();
+    }, TOAST_DURATION_MS);
+  }
+
+  showSuccess(message: string) {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: message,
+    });
+
+    setTimeout(() => {
+      this.messageService.clear();
+    }, TOAST_DURATION_MS);
+  }
+
+  showInfo(message: string) {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Info',
       detail: message,
     });
 

@@ -1,0 +1,52 @@
+.error-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgb(0 0 0 / 30%);
+  z-index: 1001;
+}
+
+.warning-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 24px 40px;
+  z-index: 1002;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+
+  .warning-banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    .warning-icon {
+      color: #856404;
+      flex-shrink: 0;
+      font-size: 24px;
+    }
+
+    > span {
+      color: #856404;
+      font-weight: 500;
+    }
+
+    .reload-button {
+      background-color: #ffc107;
+      border: none;
+      border-radius: 4px;
+      color: #212529;
+      cursor: pointer;
+      font-weight: 500;
+      padding: 8px 16px;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #e0a800;
+      }
+    }
+  }
+}

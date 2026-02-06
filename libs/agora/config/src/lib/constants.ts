@@ -4,6 +4,13 @@ export const HELP_URL = 'https://help.adknowledgeportal.org/apd/Agora-Resources.
 
 export const SUPPORT_EMAIL = 'agora@sagebionetworks.org';
 
+// Use color-secondary to match agora-loading-icon
+export const AGORA_LOADING_ICON_COLORS: LoadingIconColors = {
+  colorInnermost: '#8b8ad1',
+  colorCentral: '#8b8ad1',
+  colorOutermost: '#8b8ad1',
+};
+
 export const ROUTE_PATHS = {
   HOME: '',
   GENE_COMPARISON: 'genes/comparison',
@@ -16,10 +23,3 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
   DETAILS: 'genes',
 } as const;
-
-// Use color-secondary to match agora-loading-icon
-export const AGORA_LOADING_ICON_COLORS: LoadingIconColors = {
-  colorInnermost: '#8b8ad1',
-  colorCentral: '#8b8ad1',
-  colorOutermost: '#8b8ad1',
-};

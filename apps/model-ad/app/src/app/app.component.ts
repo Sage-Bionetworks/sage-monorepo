@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
 import {
   MetaTagService,
+  ErrorOverlayService,
   PlatformService,
   VersionService,
 } from '@sagebionetworks/explorers/services';
@@ -17,14 +18,12 @@ import {
   GoogleTagManagerComponent,
   isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
-import { ToastModule } from 'primeng/toast';
 
 @Component({
   imports: [
     RouterModule,
     FooterComponent,
     HeaderComponent,
-    ToastModule,
     GoogleTagManagerComponent,
     SearchInputComponent,
   ],
@@ -50,7 +49,10 @@ export class AppComponent implements OnInit {
   configService = inject(ConfigService);
   dataVersionService = inject(DataVersionService);
   metaTagService = inject(MetaTagService);
+  errorOverlayService = inject(ErrorOverlayService);
   versionService = inject(VersionService);
+
+  hasActiveError = this.errorOverlayService.hasActiveError;
 
   readonly useGoogleTagManager: boolean;
 
@@ -83,5 +85,9 @@ export class AppComponent implements OnInit {
     this.versionService.getSiteVersion(this.configService.config, (siteVersion) => {
       this.siteVersion = siteVersion;
     });
+  }
+
+  reloadPage() {
+    window.location.reload();
   }
 }
