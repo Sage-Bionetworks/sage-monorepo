@@ -49,7 +49,7 @@ export class BaseTableComponent {
     rows: 10,
     showCurrentPageReport: true,
     currentPageReportTemplate: '{first}-{last} of {totalRecords}',
-    showPageLinks: false,
+    showPageLinks: true,
     paginatorStyleClass: 'comparison-tool-paginator',
   };
 

@@ -22,9 +22,12 @@
   }
 
   .comparison-tool-paginator {
-    display: block;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
     padding: 20px 30px;
-    text-align: right;
     border-top: 1px solid var(--color-gray-300);
 
     .p-paginator-current {
@@ -47,10 +50,32 @@
       opacity: 0.5;
     }
 
-    button {
-      transform: translateY(3px);
-      height: 16px;
-      min-width: 16px;
+    // Navigation buttons (first, prev, next, last)
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      height: 32px;
+      min-width: 32px;
+    }
+
+    // Page number buttons
+    .p-paginator-pages {
+      display: flex;
+      align-items: center;
+
+      .p-paginator-page {
+        min-width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: 14px;
+        margin: 0 2px;
+      }
+    }
+
+    // Rows per page dropdown
+    .p-paginator-rpp-dropdown {
+      margin-left: 8px;
     }
   }
 
