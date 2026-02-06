@@ -16,8 +16,6 @@ servers:
 tags:
   - name: Bio Domain
     description: Operations about bio domains.
-  - name: Data Version
-    description: Operations about the data version.
   - name: Distribution
     description: Operations about distributions.
   - name: Gene
@@ -41,8 +39,6 @@ paths:
     $ref: paths/genes/comparison.yaml
   /genes/nominated:
     $ref: paths/genes/nominated.yaml
-  /data-version:
-    $ref: paths/data-version.yaml
   /distribution:
     $ref: paths/distribution.yaml
   /teams:
