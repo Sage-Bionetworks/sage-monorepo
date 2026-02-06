@@ -3937,6 +3937,8 @@ paths:
           description: the starting index of the returned results (default 0)
           schema:
             type: integer
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Auto-generated description
@@ -15344,6 +15346,7 @@ components:
               - GRID_REPLICA
               - GRID_CONNECTION
               - GRID_PATCH
+              - GRID_SNAPSHOT
               - CURATION_TASK
               - USER_STATUS
               - RECORDSET_VALIDATION_STATS
@@ -15742,6 +15745,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -15876,6 +15880,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -17103,6 +17108,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -17968,6 +17974,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -18434,6 +18441,7 @@ components:
         - GRID_REPLICA
         - GRID_CONNECTION
         - GRID_PATCH
+        - GRID_SNAPSHOT
         - CURATION_TASK
         - USER_STATUS
         - RECORDSET_VALIDATION_STATS
@@ -23666,6 +23674,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -26088,6 +26097,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -27521,6 +27531,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -29371,6 +29382,7 @@ components:
               - GRID_REPLICA
               - GRID_CONNECTION
               - GRID_PATCH
+              - GRID_SNAPSHOT
               - CURATION_TASK
               - USER_STATUS
               - RECORDSET_VALIDATION_STATS
@@ -31842,6 +31854,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -32410,6 +32423,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -32559,6 +32573,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -33221,6 +33236,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -34491,6 +34507,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -35000,6 +35017,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS
@@ -36036,6 +36054,7 @@ components:
             - GRID_REPLICA
             - GRID_CONNECTION
             - GRID_PATCH
+            - GRID_SNAPSHOT
             - CURATION_TASK
             - USER_STATUS
             - RECORDSET_VALIDATION_STATS

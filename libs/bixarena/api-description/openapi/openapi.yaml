@@ -31,6 +31,9 @@ tags:
   - name: Model
     description: Operations about models.
     x-displayName: Model
+  - name: Quest
+    description: Operations about community quests.
+    x-displayName: Quest
   - name: Stats
     description: Public statistics about the platform.
     x-displayName: Stats
@@ -579,6 +582,53 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
+  /quests/{questId}/contributors:
+    parameters:
+      - $ref: '#/components/parameters/questId'
+    get:
+      x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
+      tags:
+        - Quest
+      summary: Get quest contributors
+      description: |
+        Get a list of users who have contributed to a specific quest,
+        ordered by their battle count during the quest period.
+        Results are calculated in real-time based on completed battles
+        within the quest's start and end dates.
+      operationId: listQuestContributors
+      security: []
+      parameters:
+        - name: minBattles
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Minimum number of battles required to be listed
+          example: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+            minimum: 1
+            maximum: 1000
+          description: Maximum number of contributors to return
+          example: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestContributors'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /stats:
     get:
       x-anonymous-access: true
@@ -1867,6 +1917,69 @@ components:
         - battleId
         - outcome
         - createdAt
+    QuestContributor:
+      type: object
+      description: A user who contributed to the quest
+      properties:
+        username:
+          type: string
+          description: User's display name
+          example: tschaffter
+        battleCount:
+          type: integer
+          description: Number of completed battles during quest period
+          example: 42
+        tier:
+          type: string
+          enum:
+            - champion
+            - knight
+            - apprentice
+          description: Contributor tier based on average battles per week
+          example: champion
+        battlesPerWeek:
+          type: number
+          format: double
+          description: Average battles completed per week during quest
+          example: 12.5
+      required:
+        - username
+        - battleCount
+        - tier
+        - battlesPerWeek
+    QuestContributors:
+      type: object
+      description: List of contributors to a quest with their battle counts
+      properties:
+        questId:
+          type: string
+          description: The quest identifier
+          example: build-bioarena-together
+        startDate:
+          type: string
+          format: date-time
+          description: Quest start date
+          example: '2026-01-20T00:00:00Z'
+        endDate:
+          type: string
+          format: date-time
+          description: Quest end date
+          example: '2026-04-20T23:59:59Z'
+        totalContributors:
+          type: integer
+          description: Total number of unique contributors
+          example: 42
+        contributors:
+          type: array
+          description: Contributors ordered by battle count (descending)
+          items:
+            $ref: '#/components/schemas/QuestContributor'
+      required:
+        - questId
+        - startDate
+        - endDate
+        - totalContributors
+        - contributors
     PublicStats:
       type: object
       description: Public statistics about the BixArena platform.
@@ -2115,6 +2228,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
+    questId:
+      name: questId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Unique identifier for a quest
+      example: build-bioarena-together
 x-tagGroups:
   - name: BixArena AI Service
     tags:
@@ -2126,6 +2247,7 @@ x-tagGroups:
       - Example Prompt
       - Leaderboard
       - Model
+      - Quest
       - Stats
       - User
   - name: BixArena Auth Service

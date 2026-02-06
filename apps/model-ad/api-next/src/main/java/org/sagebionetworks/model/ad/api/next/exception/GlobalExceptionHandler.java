@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import org.sagebionetworks.model.ad.api.next.model.dto.BasicErrorDto;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(ModelNotFoundException.class)
   protected ResponseEntity<BasicErrorDto> handleModelNotFound(
     ModelNotFoundException ex,
+    NativeWebRequest request,
+    Locale locale
+  ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.ENTITY_NOT_FOUND.getTitle())
+      .status(ErrorConstants.ENTITY_NOT_FOUND.getStatus().value())
+      .detail(ex.getMessage())
+      .instance(resolveInstance(request))
+      .build();
+    return ResponseEntity.status(ErrorConstants.ENTITY_NOT_FOUND.getStatus())
+      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+      .body(errorDto);
+  }
+
+  @ExceptionHandler(ComparisonToolConfigNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleComparisonToolConfigNotFound(
+    ComparisonToolConfigNotFoundException ex,
     NativeWebRequest request,
     Locale locale
   ) {

@@ -1,4 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
 import {
   provideComparisonToolFilterService,
@@ -19,6 +20,7 @@ const meta: Meta<BaseTableComponent> = {
     applicationConfig({
       providers: [
         provideRouter([]),
+        provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,

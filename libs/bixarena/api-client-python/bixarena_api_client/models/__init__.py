@@ -78,6 +78,8 @@ from bixarena_api_client.models.model_sort import ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata
 from bixarena_api_client.models.prompt_validation import PromptValidation
 from bixarena_api_client.models.public_stats import PublicStats
+from bixarena_api_client.models.quest_contributor import QuestContributor
+from bixarena_api_client.models.quest_contributors import QuestContributors
 from bixarena_api_client.models.rate_limit_error import RateLimitError
 from bixarena_api_client.models.sort_direction import SortDirection
 from bixarena_api_client.models.token200_response import Token200Response

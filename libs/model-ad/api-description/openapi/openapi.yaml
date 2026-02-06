@@ -14,6 +14,9 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Comparison Tool Config
+    description: Operations about Comparison Tool UI configuration.
+    x-displayName: Comparison Tool Config
   - name: Data Version
     description: Operations about the data version.
     x-displayName: Data Version
@@ -32,9 +35,6 @@ tags:
   - name: Gene Expression Individual
     description: Operations about Individual Gene Expression results.
     x-displayName: Gene Expression Individual
-  - name: Comparison Tool Config
-    description: Operations about Comparison Tool UI configuration.
-    x-displayName: Comparison Tool Config
 paths:
   /data-version:
     get:
@@ -50,6 +50,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataVersion'
           description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/config:
+    get:
+      tags:
+        - Comparison Tool Config
+      summary: Get Comparison Tool configuration
+      description: Retrieve the Comparison Tool configuration schema for the Model-AD application
+      operationId: getComparisonToolConfig
+      parameters:
+        - name: page
+          in: query
+          description: Name of the page to retrieve the Comparison Tool configuration for
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComparisonToolPage'
+      responses:
+        '200':
+          description: Successfully retrieved Comparison Tool configuration
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComparisonToolConfig'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -200,35 +229,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /comparison-tool-config:
-    get:
-      tags:
-        - Comparison Tool Config
-      summary: Get Comparison Tool configuration
-      description: Retrieve the Comparison Tool configuration schema for the Model-AD application
-      operationId: getComparisonToolConfig
-      parameters:
-        - name: page
-          in: query
-          description: Name of the page to retrieve the Comparison Tool configuration for
-          required: true
-          schema:
-            $ref: '#/components/schemas/ComparisonToolPage'
-      responses:
-        '200':
-          description: Successfully retrieved Comparison Tool configuration
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ComparisonToolConfig'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
     DataVersion:
@@ -264,6 +264,117 @@ components:
       required:
         - title
         - status
+    ComparisonToolPage:
+      type: string
+      description: The type of comparison tool page
+      enum:
+        - Model Overview
+        - Gene Expression
+        - Disease Correlation
+      example: Gene Expression
+    ComparisonToolConfigColumn:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The display name of the column.
+        type:
+          type: string
+          enum:
+            - text
+            - heat_map
+            - link_internal
+            - link_external
+            - primary
+          description: The data type of the column. Must be 'text', 'heat_map', 'link_internal', 'link_external', or 'primary', where 'primary' is the primary key column that uniquely identifies each record in the table.
+        data_key:
+          type: string
+          description: The key used to retrieve data for this column from the data source.
+        tooltip:
+          type: string
+          description: Tooltip text for the column.
+        sort_tooltip:
+          type: string
+          description: Tooltip text for the column's sort functionality.
+        link_text:
+          type: string
+          description: The default text for a link in this column.
+        link_url:
+          type: string
+          description: The default URL for this column.
+        is_exported:
+          type: boolean
+          description: Indicates whether the column is included in data exports.
+        is_hidden:
+          type: boolean
+          description: Indicates whether the column is shown in the comparison table UI.
+      required:
+        - type
+        - data_key
+        - is_exported
+        - is_hidden
+    ComparisonToolConfigFilter:
+      type: object
+      description: Comparison Tool Config Filter
+      properties:
+        name:
+          type: string
+          description: Name of the filter group
+          example: Biological Domain
+        data_key:
+          type: string
+          description: Field to filter on
+          example: model_type
+        short_name:
+          type: string
+          description: Short name of the filter group
+          example: Biodomain
+        query_param_key:
+          type: string
+          description: Query parameter key for the filter
+          example: modelType
+        values:
+          type: array
+          description: List of filter values
+          items:
+            type: string
+            example: Apoptosis
+      required:
+        - name
+        - data_key
+        - query_param_key
+        - values
+    ComparisonToolConfig:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/ComparisonToolPage'
+        dropdowns:
+          type: array
+          description: List of dropdown options
+          items:
+            type: string
+            example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
+        row_count:
+          type: string
+          description: Deprecated field that is always null. Previously contained relative description of the total number of rows in the data
+          nullable: true
+        columns:
+          type: array
+          description: List of column definitions
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigColumn'
+        filters:
+          type: array
+          description: List of filter configurations
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigFilter'
+      required:
+        - page
+        - dropdowns
+        - row_count
+        - columns
+        - filters
     ItemFilterTypeQuery:
       type: string
       enum:
@@ -1210,117 +1321,6 @@ components:
         - id
         - match_field
         - match_value
-    ComparisonToolPage:
-      type: string
-      description: The type of comparison tool page
-      enum:
-        - Model Overview
-        - Gene Expression
-        - Disease Correlation
-      example: Gene Expression
-    ComparisonToolConfigColumn:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The display name of the column.
-        type:
-          type: string
-          enum:
-            - text
-            - heat_map
-            - link_internal
-            - link_external
-            - primary
-          description: The data type of the column. Must be 'text', 'heat_map', 'link_internal', 'link_external', or 'primary', where 'primary' is the primary key column that uniquely identifies each record in the table.
-        data_key:
-          type: string
-          description: The key used to retrieve data for this column from the data source.
-        tooltip:
-          type: string
-          description: Tooltip text for the column.
-        sort_tooltip:
-          type: string
-          description: Tooltip text for the column's sort functionality.
-        link_text:
-          type: string
-          description: The default text for a link in this column.
-        link_url:
-          type: string
-          description: The default URL for this column.
-        is_exported:
-          type: boolean
-          description: Indicates whether the column is included in data exports.
-        is_hidden:
-          type: boolean
-          description: Indicates whether the column is shown in the comparison table UI.
-      required:
-        - type
-        - data_key
-        - is_exported
-        - is_hidden
-    ComparisonToolConfigFilter:
-      type: object
-      description: Comparison Tool Config Filter
-      properties:
-        name:
-          type: string
-          description: Name of the filter group
-          example: Biological Domain
-        data_key:
-          type: string
-          description: Field to filter on
-          example: model_type
-        short_name:
-          type: string
-          description: Short name of the filter group
-          example: Biodomain
-        query_param_key:
-          type: string
-          description: Query parameter key for the filter
-          example: modelType
-        values:
-          type: array
-          description: List of filter values
-          items:
-            type: string
-            example: Apoptosis
-      required:
-        - name
-        - data_key
-        - query_param_key
-        - values
-    ComparisonToolConfig:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/ComparisonToolPage'
-        dropdowns:
-          type: array
-          description: List of dropdown options
-          items:
-            type: string
-            example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
-        row_count:
-          type: string
-          description: Deprecated field that is always null. Previously contained relative description of the total number of rows in the data
-          nullable: true
-        columns:
-          type: array
-          description: List of column definitions
-          items:
-            $ref: '#/components/schemas/ComparisonToolConfigColumn'
-        filters:
-          type: array
-          description: List of filter configurations
-          items:
-            $ref: '#/components/schemas/ComparisonToolConfigFilter'
-      required:
-        - page
-        - dropdowns
-        - row_count
-        - columns
-        - filters
   responses:
     BadRequest:
       description: Invalid request

@@ -1,4 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
 import { provideComparisonToolService } from '@sagebionetworks/explorers/services';
 import {
@@ -17,6 +18,7 @@ const meta: Meta<ComparisonToolCategorySelectorsComponent> = {
     applicationConfig({
       providers: [
         provideRouter([]),
+        provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
         ...provideLoadingIconColors(),
       ],

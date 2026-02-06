@@ -1,7 +1,9 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideLocationMocks } from '@angular/common/testing';
 import { Component, input, ViewChild } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { HeatmapDetailsPanelData } from '@sagebionetworks/explorers/models';
+import { provideComparisonToolService } from '@sagebionetworks/explorers/services';
 import { heatmapDetailsPanelDataMock } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig, moduleMetadata } from '@storybook/angular';
@@ -32,7 +34,12 @@ const meta: Meta<HeatmapDetailsPanelWrapperComponent> = {
   title: 'Comparison Tool/ComparisonToolTable/HeatmapDetailsPanelComponent',
   decorators: [
     applicationConfig({
-      providers: [provideRouter([]), provideHttpClient(withInterceptorsFromDi())],
+      providers: [
+        provideRouter([]),
+        provideLocationMocks(),
+        provideHttpClient(withInterceptorsFromDi()),
+        ...provideComparisonToolService(),
+      ],
     }),
     moduleMetadata({
       imports: [HeatmapDetailsPanelWrapperComponent],

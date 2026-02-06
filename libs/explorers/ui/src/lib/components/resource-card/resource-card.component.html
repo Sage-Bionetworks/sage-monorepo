@@ -1,5 +1,5 @@
 <div class="resource-card">
-  <button [attr.aria-label]="description" (click)="onClick()">
+  <a target="_blank" [href]="link" [attr.aria-label]="description">
     <div [class]="`content ${title ? 'row' : 'column'}`">
       <div class="image">
         <explorers-svg-image [imagePath]="imagePath" [altText]="altText" />
@@ -11,5 +11,5 @@
         <div class="description">{{ description }}</div>
       </div>
     </div>
-  </button>
+  </a>
 </div>

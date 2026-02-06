@@ -245,28 +245,8 @@ def main() -> None:
             "container at runtime. Never exposed in CloudFormation or logs."
         )
 
-    # Create web stack (depends on ECS cluster and ALB)
-    # Uses ALB DNS name by default, or custom FQDN if provided
+    # Determine HTTPS usage for service URLs
     use_https = certificate_arn is not None and certificate_arn.strip() != ""
-    web_stack = WebStack(
-        app,
-        f"{stack_prefix}-web",
-        stack_prefix=stack_prefix,
-        environment=environment,
-        developer_name=developer_name,
-        vpc=vpc_stack.vpc_construct.vpc,
-        cluster=ecs_cluster_stack.cluster_construct.cluster,
-        target_group=alb_stack.web_target_group,
-        app_version=app_version,
-        alb_dns_name=alb_stack.alb_construct.alb.load_balancer_dns_name,
-        fqdn=fqdn if fqdn else None,
-        use_https=use_https,
-        openrouter_api_key=os.getenv("OPENROUTER_API_KEY", ""),
-        gtm_container_id=gtm_container_id,
-        description=f"Web client for BixArena {environment} environment",
-    )
-    web_stack.add_dependency(ecs_cluster_stack)
-    web_stack.add_dependency(alb_stack)
 
     # Create API service stack (depends on database, valkey, and ECS cluster)
     # Database secret is guaranteed to exist since we use from_generated_secret()
@@ -343,6 +323,29 @@ def main() -> None:
     # This ensures backend services are available when Gateway starts
     api_gateway_stack.add_dependency(_api_service_stack)
     api_gateway_stack.add_dependency(_auth_service_stack)
+
+    # Create web stack (depends on ECS cluster, ALB, and API Gateway)
+    # Uses ALB DNS name by default, or custom FQDN if provided
+    web_stack = WebStack(
+        app,
+        f"{stack_prefix}-web",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
+        target_group=alb_stack.web_target_group,
+        app_version=app_version,
+        alb_dns_name=alb_stack.alb_construct.alb.load_balancer_dns_name,
+        fqdn=fqdn if fqdn else None,
+        use_https=use_https,
+        openrouter_api_key=os.getenv("OPENROUTER_API_KEY", ""),
+        gtm_container_id=gtm_container_id,
+        description=f"Web client for BixArena {environment} environment",
+    )
+    web_stack.add_dependency(ecs_cluster_stack)
+    web_stack.add_dependency(alb_stack)
+    web_stack.add_dependency(api_gateway_stack)
 
     # Note: Security group rules are configured within the constructs to allow
     # connections from the VPC CIDR range, avoiding cyclic dependencies

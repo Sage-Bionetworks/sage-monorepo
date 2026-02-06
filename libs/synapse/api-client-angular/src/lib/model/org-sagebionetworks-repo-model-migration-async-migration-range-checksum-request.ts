@@ -168,6 +168,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationRangeChecksum
     | 'GRID_REPLICA'
     | 'GRID_CONNECTION'
     | 'GRID_PATCH'
+    | 'GRID_SNAPSHOT'
     | 'CURATION_TASK'
     | 'USER_STATUS'
     | 'RECORDSET_VALIDATION_STATS'
@@ -300,6 +301,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationRangeChecksum
     GridReplica: 'GRID_REPLICA' as MigrationTypeEnum,
     GridConnection: 'GRID_CONNECTION' as MigrationTypeEnum,
     GridPatch: 'GRID_PATCH' as MigrationTypeEnum,
+    GridSnapshot: 'GRID_SNAPSHOT' as MigrationTypeEnum,
     CurationTask: 'CURATION_TASK' as MigrationTypeEnum,
     UserStatus: 'USER_STATUS' as MigrationTypeEnum,
     RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as MigrationTypeEnum,

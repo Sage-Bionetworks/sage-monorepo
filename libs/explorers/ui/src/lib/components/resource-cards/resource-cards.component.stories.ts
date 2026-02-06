@@ -1,4 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
@@ -9,7 +10,11 @@ const meta: Meta<ResourceCardsComponent> = {
   title: 'UI/Cards/ResourceCardsComponent',
   decorators: [
     applicationConfig({
-      providers: [provideRouter([]), provideHttpClient(withInterceptorsFromDi())],
+      providers: [
+        provideRouter([]),
+        provideLocationMocks(),
+        provideHttpClient(withInterceptorsFromDi()),
+      ],
     }),
   ],
 };
@@ -21,13 +26,13 @@ const cards = [
     imagePath: '/model-ad-assets/images/gene-expression.svg',
     description: 'View Gene Expression results for this model in the comparison tool.',
     title: 'Gene Expression',
-    link: '/comparison/expression?model=APOE4',
+    link: '/comparison/expression?models=APOE4',
   },
   {
     imagePath: '/model-ad-assets/images/disease-correlation.svg',
     description: 'View Disease Correlation results for this model in the comparison tool.',
     title: 'Disease Correlation',
-    link: '/comparison/correlation?model=APOE4',
+    link: '/comparison/correlation?models=APOE4',
   },
   {
     imagePath: '/model-ad-assets/images/allen-institute-logo.svg',

@@ -18,7 +18,10 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
   flyway:
     enabled: true
-    clean-disabled: false
+    baseline-on-migrate: true
+    baseline-version: 0
+    validate-on-migrate: true
+    clean-disabled: true # Safety: prevent accidental data loss
     schemas: auth
     default-schema: auth
   datasource:

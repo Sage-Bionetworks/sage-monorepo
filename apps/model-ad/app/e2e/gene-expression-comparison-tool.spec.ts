@@ -311,11 +311,13 @@ test.describe('gene expression', () => {
 
     await navigateToComparison(page, CT_PAGE, true);
 
+    const popupPromise = page.waitForEvent('popup');
     const link = page.getByRole('link', { name: specialModel }).first();
     await link.click();
+    const popup = await popupPromise;
 
-    await page.waitForURL((url) => url.toString().endsWith(`/models/${specialModelEncoded}`));
-    await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
+    await popup.waitForURL((url) => url.toString().endsWith(`/models/${specialModelEncoded}`));
+    await expect(popup.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
   });
 
   test.describe('sort URL sync', () => {

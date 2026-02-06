@@ -7,12 +7,16 @@ from bixarena_app.api.api_client_helper import (
     calculate_quest_progress,
     create_authenticated_api_client,
     fetch_public_stats,
+    fetch_quest_contributors,
 )
 from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
 from bixarena_app.config.constants import COMMUNITY_QUEST_ENABLED
 from bixarena_app.page.bixarena_quest_section import (
     QUEST_CONFIG,
+    _build_builders_credits_html,
+    _build_carousel_html,
     _build_progress_html,
+    build_quest_not_found_section,
     build_quest_section,
 )
 
@@ -103,6 +107,87 @@ def create_intro_section():
             """)
 
 
+def _build_stats_html(public_stats: dict, user_stats=None) -> str:
+    """Build stats HTML with optional user stats.
+
+    Args:
+        public_stats: Dictionary with public stats
+            (models_evaluated, completed_battles, total_users)
+        user_stats: Optional user stats object with
+            completed_battles and rank attributes
+
+    Returns:
+        HTML string for stats section
+    """
+    # Build public stats items
+    models_count = public_stats["models_evaluated"]
+    battles_count = public_stats["completed_battles"]
+    users_count = public_stats["total_users"]
+
+    stats_items = f"""
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--accent-teal);">{models_count:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Models Evaluated</div>
+                </div>
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--accent-teal);">{battles_count:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Total Battles</div>
+                </div>
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--accent-teal);">{users_count:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Total Users</div>
+                </div>"""
+
+    # Add user stats if provided
+    if user_stats:
+        user_battles = user_stats.completed_battles
+        user_rank = user_stats.rank
+        stats_items += f"""
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--color-accent);">{user_battles:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Battles Completed</div>
+                </div>
+                <div style="display: flex; flex-direction: column; \
+align-items: center; gap: 0.25rem;">
+                    <div style="font-size: 3.5rem; font-weight: 600; \
+color: var(--color-accent);">#{user_rank:,}</div>
+                    <div style="color: var(--body-text-color-subdued);">\
+Your Rank</div>
+                </div>"""
+
+    # Determine the ID based on whether user stats are included
+    stats_id = "stats-with-user" if user_stats else "stats-public-only"
+
+    border_style = "border: 1px solid var(--border-color-primary)"
+    bg_style = "background-color: var(--panel-background-fill)"
+    padding_style = "padding: 2.5rem 1.5rem"
+    margin_style = "margin: 0 1.5rem"
+    flex_style = "display: flex; flex-wrap: wrap; align-items: center"
+    justify_style = "justify-content: center; gap: 3rem"
+
+    return f"""
+    <div style="{border_style}; border-radius: 8px; {bg_style}; \
+{padding_style}; {margin_style};">
+        <div id="{stats_id}">
+            <div style="{flex_style}; {justify_style};">{stats_items}
+            </div>
+        </div>
+    </div>
+    """
+
+
 def load_public_stats_on_page_load() -> dict:
     """Load public stats and update the stats bar HTML.
 
@@ -110,35 +195,14 @@ def load_public_stats_on_page_load() -> dict:
         HTML update for the stats container
     """
     public_stats = fetch_public_stats()
-
-    stats_html = f"""
-    <div style="border: 1px solid var(--border-color-primary); border-radius: 8px; background-color: var(--panel-background-fill); padding: 2.5rem 1.5rem; margin: 0 1.5rem;">
-        <div id="stats-public-only">
-            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Models Evaluated</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Total Battles</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Total Users</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    """
-
+    stats_html = _build_stats_html(public_stats)
     return gr.update(value=stats_html)
 
 
 def load_user_battles_on_page_load(
     request: gr.Request,
 ) -> dict:
-    """Load user battles and rank data and update stats bar to include user stats.
+    """Load user battles and rank data and update stats bar.
 
     Args:
         request: Gradio request object
@@ -149,60 +213,8 @@ def load_user_battles_on_page_load(
     user_stats = fetch_user_stats(request)
     public_stats = fetch_public_stats()
 
-    if user_stats is None:
-        # Return only public stats when user is not authenticated
-        stats_html = f"""
-        <div style="border: 1px solid var(--border-color-primary); border-radius: 8px; background-color: var(--panel-background-fill); padding: 2.5rem 1.5rem; margin: 0 1.5rem;">
-            <div id="stats-public-only">
-                <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                        <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
-                        <div style="color: var(--body-text-color-subdued);">Models Evaluated</div>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                        <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
-                        <div style="color: var(--body-text-color-subdued);">Total Battles</div>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                        <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
-                        <div style="color: var(--body-text-color-subdued);">Total Users</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        """
-        return gr.update(value=stats_html)
-
-    # Return stats with user data included
-    stats_html = f"""
-    <div style="border: 1px solid var(--border-color-primary); border-radius: 8px; background-color: var(--panel-background-fill); padding: 2.5rem 1.5rem; margin: 0 1.5rem;">
-        <div id="stats-with-user">
-            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["models_evaluated"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Models Evaluated</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["completed_battles"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Total Battles</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--accent-teal);">{public_stats["total_users"]:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Total Users</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--color-accent);">{user_stats.completed_battles:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Battles Completed</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-                    <div style="font-size: 3.5rem; font-weight: 600; color: var(--color-accent);">#{user_stats.rank:,}</div>
-                    <div style="color: var(--body-text-color-subdued);">Your Rank</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    """
-
+    # Build stats HTML with or without user stats
+    stats_html = _build_stats_html(public_stats, user_stats)
     return gr.update(value=stats_html)
 
 
@@ -249,39 +261,51 @@ def build_stats_section():
     return stats_container
 
 
-def load_quest_progress_on_page_load() -> dict:
-    """Load quest progress and return HTML update.
+def load_quest_content_on_page_load() -> tuple[dict, dict, dict]:
+    """Load all dynamic quest content on page load (progress, contributors, carousel).
 
     Returns:
-        HTML update for the quest progress section (right column only)
+        Tuple of (progress_html_update, contributors_html_update, carousel_html_update)
     """
     try:
-        progress_data = calculate_quest_progress()
+        # Fetch contributors (single API call for all data)
+        contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
+
+        # If quest doesn't exist, skip building content HTML
+        if contributors_data.get("error", False):
+            return (gr.update(), gr.update(), gr.update())
+
+        # Calculate progress using contributors data
+        progress_data = calculate_quest_progress(contributors_data)
+
+        # Build progress HTML
+        progress_html = _build_progress_html(
+            progress_data["current_blocks"],
+            progress_data["goal_blocks"],
+            progress_data["percentage"],
+            progress_data["days_remaining"],
+        )
+
+        # Build contributors HTML
+        contributors_html = _build_builders_credits_html(contributors_data)
+
+        # Build carousel HTML (images from config, but rebuildable)
+        carousel_html = _build_carousel_html("quest-carousel")
+
+        return (
+            gr.update(value=progress_html),
+            gr.update(value=contributors_html),
+            gr.update(value=carousel_html),
+        )
+
     except Exception as e:
-        logger.error(f"Error calculating quest progress: {e}")
-        # Use defaults on error
-        from datetime import datetime
-
-        end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
-        days_remaining = max(0, (end_date - datetime.now()).days)
-        progress_data = {
-            "current_blocks": 0,
-            "goal_blocks": QUEST_CONFIG["goal"],
-            "percentage": 0.0,
-            "days_remaining": days_remaining,
-        }
-
-    current_blocks = progress_data["current_blocks"]
-    goal_blocks = progress_data["goal_blocks"]
-    percentage = progress_data["percentage"]
-    days_remaining = progress_data["days_remaining"]
-
-    # Build the progress HTML using shared helper function
-    progress_html = _build_progress_html(
-        current_blocks, goal_blocks, percentage, days_remaining
-    )
-
-    return gr.update(value=progress_html)
+        logger.error(f"Error refreshing quest content: {e}")
+        # Return empty updates on error (keep existing content)
+        return (
+            gr.update(),
+            gr.update(),
+            gr.update(),
+        )
 
 
 def build_quest_section_wrapper():
@@ -291,12 +315,16 @@ def build_quest_section_wrapper():
         # Return None values if feature is disabled
         with gr.Column(visible=False) as quest_container:
             progress_html_container = gr.HTML("")
+            contributors_html_container = gr.HTML("")
+            carousel_html_container = gr.HTML("")
             quest_btn_authenticated = gr.Button(visible=False)
             quest_btn_login = gr.Button(visible=False)
             carousel_init_trigger = gr.Button(visible=False)
         return (
             quest_container,
             progress_html_container,
+            contributors_html_container,
+            carousel_html_container,
             quest_btn_authenticated,
             quest_btn_login,
             carousel_init_trigger,
@@ -304,33 +332,58 @@ def build_quest_section_wrapper():
             0,  # rotation_interval
         )
 
-    try:
-        # Fetch real-time quest progress data
-        progress_data = calculate_quest_progress()
+    # Try to fetch quest data and build section
+    # If quest doesn't exist or any error occurs, show error section
+    contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
+
+    # Check if quest was not found (error from API)
+    # Note: Warning already logged in api_client_helper, no need to log again
+    if contributors_data.get("error", False):
         (
             quest_container,
             progress_html_container,
+            contributors_html_container,
+            carousel_html_container,
             quest_btn_authenticated,
             quest_btn_login,
             carousel_init_trigger,
             carousel_id,
             rotation_interval,
-        ) = build_quest_section(progress_data)
-    except Exception as e:
-        logger.error(f"Error calculating quest progress: {e}")
-        # Fall back to default data if calculation fails
-        (
-            quest_container,
-            progress_html_container,
-            quest_btn_authenticated,
-            quest_btn_login,
-            carousel_init_trigger,
-            carousel_id,
-            rotation_interval,
-        ) = build_quest_section(None)
+        ) = build_quest_not_found_section()
+    else:
+        # Quest exists, fetch progress data and build normal section
+        try:
+            progress_data = calculate_quest_progress(contributors_data)
+            (
+                quest_container,
+                progress_html_container,
+                contributors_html_container,
+                carousel_html_container,
+                quest_btn_authenticated,
+                quest_btn_login,
+                carousel_init_trigger,
+                carousel_id,
+                rotation_interval,
+            ) = build_quest_section(progress_data, contributors_data)
+        except Exception as e:
+            logger.error(f"Error building quest section: {e}")
+            # Fall back to quest not found section if build fails
+            (
+                quest_container,
+                progress_html_container,
+                contributors_html_container,
+                carousel_html_container,
+                quest_btn_authenticated,
+                quest_btn_login,
+                carousel_init_trigger,
+                carousel_id,
+                rotation_interval,
+            ) = build_quest_not_found_section()
     return (
         quest_container,
         progress_html_container,
+        contributors_html_container,
+        carousel_html_container,
         quest_btn_authenticated,
         quest_btn_login,
         carousel_init_trigger,
@@ -496,6 +549,8 @@ def build_home_page():
         (
             quest_html,
             quest_progress_container,
+            quest_contributors_container,
+            quest_carousel_container,
             quest_btn_authenticated,
             quest_btn_login,
             carousel_init_trigger,
@@ -514,6 +569,8 @@ def build_home_page():
         stats_container,
         quest_html,
         quest_progress_container,
+        quest_contributors_container,
+        quest_carousel_container,
         quest_btn_authenticated,
         quest_btn_login,
         carousel_init_trigger,
