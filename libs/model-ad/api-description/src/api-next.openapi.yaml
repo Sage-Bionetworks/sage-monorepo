@@ -31,8 +31,8 @@ tags:
 paths:
   /data-version:
     $ref: paths/data-version.yaml
-  /comparison-tool-config:
-    $ref: paths/comparison-tool-config.yaml
+  /comparison-tools/config:
+    $ref: paths/comparison-tools/config.yaml
   /comparison-tools/model-overview:
     $ref: paths/comparison-tools/model-overview.yaml
   /comparison-tools/disease-correlation:

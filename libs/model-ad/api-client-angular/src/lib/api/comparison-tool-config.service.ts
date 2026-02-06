@@ -199,7 +199,7 @@ export class ComparisonToolConfigService {
       }
     }
 
-    let localVarPath = `/comparison-tool-config`;
+    let localVarPath = `/comparison-tools/config`;
     return this.httpClient.request<Array<ComparisonToolConfig>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,

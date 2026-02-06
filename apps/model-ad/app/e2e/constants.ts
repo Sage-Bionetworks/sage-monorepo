@@ -10,7 +10,7 @@ export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
   'Disease Correlation': '/comparison-tools/disease-correlation',
 };
 
-export const COMPARISON_TOOL_CONFIG_PATH = 'comparison-tool-config';
+export const COMPARISON_TOOL_CONFIG_PATH = 'comparison-tools/config';
 
 // Default sort configurations for each comparison tool (required by API)
 export const COMPARISON_TOOL_DEFAULT_SORTS: Record<string, { field: string; order: 1 | -1 }[]> = {
