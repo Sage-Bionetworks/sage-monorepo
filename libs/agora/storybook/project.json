@@ -9,10 +9,10 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
-    "storybook": {
+    "start": {
       "executor": "@storybook/angular:start-storybook",
       "options": {
-        "port": 4400,
+        "port": 4401,
         "configDir": "libs/agora/storybook/.storybook",
         "browserTarget": "agora-storybook:build-storybook",
         "compodoc": false,

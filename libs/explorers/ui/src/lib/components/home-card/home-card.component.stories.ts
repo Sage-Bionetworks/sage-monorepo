@@ -1,4 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
 import {
   mockCheckQueryForErrors,
@@ -15,7 +16,11 @@ const meta: Meta<HomeCardComponent> = {
   title: 'UI/Cards/HomeCardComponent',
   decorators: [
     applicationConfig({
-      providers: [provideRouter([]), provideHttpClient(withInterceptorsFromDi())],
+      providers: [
+        provideRouter([]),
+        provideLocationMocks(),
+        provideHttpClient(withInterceptorsFromDi()),
+      ],
     }),
   ],
 };

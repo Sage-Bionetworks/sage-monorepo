@@ -109,6 +109,7 @@
     "@nx/plugin": "21.5.3",
     "@nx/storybook": "21.5.3",
     "@nx/vite": "21.5.3",
+    "@nx/web": "21.5.3",
     "@nx/webpack": "21.5.3",
     "@nx/workspace": "21.5.3",
     "@nxlv/python": "21.0.3",

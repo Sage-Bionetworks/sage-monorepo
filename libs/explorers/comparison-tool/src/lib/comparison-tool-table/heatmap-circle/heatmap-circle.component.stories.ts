@@ -1,5 +1,6 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { Component, effect, inject, input } from '@angular/core';
+import { provideLocationMocks } from '@angular/common/testing';
 import { provideRouter } from '@angular/router';
 import { HeatmapCircleData } from '@sagebionetworks/explorers/models';
 import {
@@ -61,6 +62,7 @@ const meta: Meta<HeatmapCircleStoryArgs> = {
       applicationConfig: {
         providers: [
           provideRouter([]),
+          provideLocationMocks(),
           provideHttpClient(withInterceptorsFromDi()),
           ...provideComparisonToolService(),
           ...provideComparisonToolFilterService({

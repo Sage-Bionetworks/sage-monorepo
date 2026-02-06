@@ -1,0 +1,78 @@
+{
+  "name": "storybook",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/storybook/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash libs/storybook/start-composition.sh"
+      }
+    },
+    "storybook-dev": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "libs/storybook/.storybook",
+        "browserTarget": "storybook:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/storybook",
+        "configDir": "libs/storybook/.storybook",
+        "browserTarget": "storybook:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "test-storybook -c libs/storybook/.storybook --url=http://localhost:4400"
+      }
+    },
+    "build-static-composition": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "STORYBOOK_STATIC_BUILD=true nx build-storybook storybook",
+          "STORYBOOK_STATIC_BUILD=true nx build-storybook agora-storybook --outputDir=dist/storybook/storybook/agora",
+          "STORYBOOK_STATIC_BUILD=true nx build-storybook explorers-storybook --outputDir=dist/storybook/storybook/explorers",
+          "cp -r dist/storybook/storybook/agora/agora-assets dist/storybook/storybook/",
+          "cp -r dist/storybook/storybook/explorers/explorers-assets dist/storybook/storybook/",
+          "cp -r dist/storybook/storybook/explorers/model-ad-assets dist/storybook/storybook/"
+        ],
+        "parallel": false
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "dependsOn": ["build-static-composition"],
+      "options": {
+        "buildTarget": "storybook:build-static-composition",
+        "staticFilePath": "dist/storybook/storybook",
+        "port": 8080,
+        "spa": true
+      }
+    }
+  }
+}
