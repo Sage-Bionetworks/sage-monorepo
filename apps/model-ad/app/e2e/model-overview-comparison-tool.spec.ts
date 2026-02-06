@@ -1,9 +1,11 @@
 import { expect, test } from '@playwright/test';
 import {
   ColumnConfig,
+  expectFiltersParams,
   expectPinnedParams,
   expectPinnedRows,
   expectUnpinnedTableOnly,
+  getFiltersQueryParams,
   getPinnedTable,
   getQueryParamsFromRecords,
   getRowByName,
@@ -324,5 +326,20 @@ test.describe('model overview', () => {
       );
       await testFiltersRemovedFromUrlOnClearAll(page, expectedInitialFilterParams);
     });
+  });
+
+  test('gene expression link opens gene expression CT in new tab', async ({ page }) => {
+    await navigateToComparison(page, CT_PAGE, true);
+
+    const link = page.getByRole('link', { name: 'Results' }).first();
+    const linkHref = await link.getAttribute('href');
+    const filtersQueryParams = linkHref ? getFiltersQueryParams(`${baseURL}${linkHref}`) : {};
+
+    const popupPromise = page.waitForEvent('popup');
+    await link.click();
+    const popup = await popupPromise;
+
+    await popup.waitForURL(linkHref || '');
+    await expectFiltersParams(popup, filtersQueryParams);
   });
 });

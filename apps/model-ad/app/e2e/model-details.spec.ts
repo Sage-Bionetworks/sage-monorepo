@@ -1,6 +1,11 @@
 import { expect, Page, test } from '@playwright/test';
-import { waitForScrollToStop } from '@sagebionetworks/explorers/testing/e2e';
+import {
+  expectFilters,
+  expectFiltersParams,
+  waitForScrollToStop,
+} from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
+import { expectComparisonToolTableLoaded } from './helpers/comparison-tool';
 import { searchAndGetSearchListItems } from './helpers/search';
 
 async function isPageAtTop(page: Page) {
@@ -151,22 +156,36 @@ test.describe('model details', () => {
 });
 
 test.describe('model details - omics', () => {
-  test('gene expression card links to gene expression CT', async ({ page }) => {
+  test('gene expression card links to gene expression CT in new tab', async ({ page }) => {
     await page.goto('/models/APOE4');
-    const card = page.getByRole('button', {
+    const card = page.getByRole('link', {
       name: /view gene expression results.*comparison tool/i,
     });
+
+    const popupPromise = page.waitForEvent('popup');
     await card.click();
-    await page.waitForURL('/comparison/expression?models=APOE4');
+    const popup = await popupPromise;
+
+    await popup.waitForURL('/comparison/expression?models=APOE4');
+    await expectComparisonToolTableLoaded(popup, 'Gene Expression', true);
+    await expectFiltersParams(popup, { models: ['APOE4'] });
+    await expectFilters(popup, { 'Mouse Model': ['APOE4'] });
   });
 
-  test('disease correlation card links to disease correlation CT', async ({ page }) => {
+  test('disease correlation card links to disease correlation CT in new tab', async ({ page }) => {
     await page.goto('/models/APOE4');
-    const card = page.getByRole('button', {
+    const card = page.getByRole('link', {
       name: /view disease correlation results.*comparison tool/i,
     });
+
+    const popupPromise = page.waitForEvent('popup');
     await card.click();
-    await page.waitForURL('/comparison/correlation?models=APOE4');
+    const popup = await popupPromise;
+
+    await popup.waitForURL('/comparison/correlation?models=APOE4');
+    await expectComparisonToolTableLoaded(popup, 'Disease Correlation', true);
+    await expectFiltersParams(popup, { models: ['APOE4'] });
+    await expectFilters(popup, { 'Mouse Model': ['APOE4'] });
   });
 });
 
@@ -175,7 +194,7 @@ test.describe('model details - resources', () => {
 
   test('AD knowledge portal card links to ADKP study page for this model', async ({ page }) => {
     await page.goto(resourcesUrl);
-    const card = page.getByRole('button', {
+    const card = page.getByRole('link', {
       name: /ad knowledge portal/i,
     });
 
@@ -191,7 +210,7 @@ test.describe('model details - resources', () => {
 
   test('alzforum card links to alzforum page for this model', async ({ page }) => {
     await page.goto(resourcesUrl);
-    const card = page.getByRole('button', {
+    const card = page.getByRole('link', {
       name: /alzforum/i,
     });
 
@@ -205,7 +224,7 @@ test.describe('model details - resources', () => {
 
   test('JAX card links to JAX page for this model', async ({ page }) => {
     await page.goto(resourcesUrl);
-    const card = page.getByRole('button', {
+    const card = page.getByRole('link', {
       name: /jax/i,
     });
 
