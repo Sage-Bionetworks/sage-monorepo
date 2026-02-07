@@ -456,7 +456,7 @@ export const BasePreset = definePreset(Lara, {
           floatLabelFocusColor: '{primary.600}',
           floatLabelActiveColor: '{surface.500}',
           floatLabelInvalidColor: '{form.field.invalid.placeholder.color}',
-          iconColor: '#ffffff',
+          iconColor: '{surface.500}',
           shadow: 'none',
         },
         text: {
