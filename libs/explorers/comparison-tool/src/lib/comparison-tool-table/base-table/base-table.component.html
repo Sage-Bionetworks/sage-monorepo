@@ -17,6 +17,8 @@
     [paginator]="!!pagination"
     [paginatorStyleClass]="pagination?.paginatorStyleClass ?? ''"
     [rows]="pagination?.rows"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    paginatorDropdownAppendTo="body"
     [showCurrentPageReport]="!!pagination?.showCurrentPageReport"
     [currentPageReportTemplate]="pagination?.currentPageReportTemplate ?? ''"
     [showPageLinks]="pagination?.showPageLinks ?? null"

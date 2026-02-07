@@ -456,7 +456,7 @@ export const BasePreset = definePreset(Lara, {
           floatLabelFocusColor: '{primary.600}',
           floatLabelActiveColor: '{surface.500}',
           floatLabelInvalidColor: '{form.field.invalid.placeholder.color}',
-          iconColor: '#ffffff',
+          iconColor: '{surface.500}',
           shadow: 'none',
         },
         text: {
@@ -3775,10 +3775,10 @@ export const BasePreset = definePreset(Lara, {
       navButton: {
         background: 'transparent',
         hoverBackground: '{content.hover.background}',
-        selectedBackground: '{highlight.background}',
+        selectedBackground: '{primary.700}',
         color: '{text.muted.color}',
         hoverColor: '{text.hover.muted.color}',
-        selectedColor: '{highlight.color}',
+        selectedColor: '{primary.contrast.color}',
         width: '2.5rem',
         height: '2.5rem',
         borderRadius: '50%',
