@@ -21,7 +21,6 @@ body:
       multiple: true
       options:
         - Agora
-        - AMP-ALS
         - iAtlas
         - MODEL-AD
         - OpenChallenges

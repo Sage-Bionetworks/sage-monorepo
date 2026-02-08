@@ -62,7 +62,6 @@ All our APIs are documented in the [API section](../api/overview.md). Each servi
 API documentation is auto-generated and available for:
 
 - [Agora API](../api/agora.md)
-- [AMP-ALS API](../api/amp-als.md)
 - [BixArena API](../api/bixarena.md)
 - [Model-AD API](../api/model-ad.md)
 - [OpenChallenges API](../api/openchallenges.md)

@@ -11,8 +11,6 @@ rules:
 
 # The path to the API description files is relative to the location of this file.
 apis:
-  amp-als-api-description:
-    root: libs/amp-als/api-description/openapi/openapi.yaml
   agora-api-description:
     root: libs/agora/api-description/openapi/openapi.yaml
   bixarena-api-description:

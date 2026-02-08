@@ -146,7 +146,7 @@ This Sage monorepo uses a multi-module Gradle setup. **You no longer need to nav
 
 ```bash
 # Run from repository root /workspaces/sage-monorepo
-./gradlew :amp-als-user-service:test --info
+./gradlew :bixarena-api:test --info
 ./gradlew :agora-api:test --info
 ```
 
