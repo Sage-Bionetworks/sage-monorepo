@@ -465,24 +465,30 @@ if (wantPortrait) {
       console.log('Hidden: quest-updates-container');
     }
 
-    // Hide builders/contributors list by looking for heading
+    // Remove ALL horizontal divider elements with inline style "height: 1px; background: var(--border-color-primary)"
+    let questSection = document.querySelector('#quest-section-wrapper');
+    let removedCount = 0;
+    if (questSection) {
+      // Get all divs in quest section
+      const allDivs = questSection.querySelectorAll('div');
+
+      Array.from(allDivs).forEach(div => {
+        const inlineStyle = div.getAttribute('style') || '';
+
+        // Look for the exact pattern: height: 1px with background variable
+        if (inlineStyle.includes('height: 1px') || inlineStyle.includes('height:1px')) {
+          if (inlineStyle.includes('--border-color') || inlineStyle.includes('background:')) {
+            div.parentNode.removeChild(div);
+            removedCount++;
+          }
+        }
+      });
+    }
+
+    // Hide Contributor Tiers and Credits sections, but keep Builders section visible
     const allHeadings = document.querySelectorAll('h2, h3, .text-xl, .font-semibold');
     allHeadings.forEach(heading => {
       const text = heading.textContent.trim();
-
-      // Hide "Builders (N)" section
-      if (/^Builders\s*\(\d+\)/.test(text)) {
-        // Find the parent container and hide it
-        let container = heading.parentElement;
-        while (container && container.tagName !== 'SECTION' && !container.classList.contains('quest-section')) {
-          if (container.classList.length > 0 || container.id) {
-            container.style.display = 'none';
-            console.log('Hidden: Builders section');
-            break;
-          }
-          container = container.parentElement;
-        }
-      }
 
       // Hide "Contributor Tiers" legend
       if (text === 'Contributor Tiers') {
@@ -512,7 +518,6 @@ if (wantPortrait) {
     });
 
     // Aggressively reduce spacing throughout the quest section for portrait mode
-    const questSection = document.querySelector('#quest-section-wrapper');
     if (questSection) {
       // Reduce gap on the main quest section if it's a flex container
       const sectionStyle = window.getComputedStyle(questSection);
@@ -595,6 +600,24 @@ if (wantPortrait) {
 
   // Wait for layout to stabilize after hiding elements
   await recordingPage.waitForTimeout(500);
+
+  // Second pass: Remove dividers again after layout stabilizes (they might be added dynamically)
+  await recordingPage.evaluate(() => {
+    const questSection = document.querySelector('#quest-section-wrapper');
+    if (questSection) {
+      const allDivs = questSection.querySelectorAll('div');
+      Array.from(allDivs).forEach(div => {
+        const inlineStyle = div.getAttribute('style') || '';
+        // Match divs with height: 1px and background color variable
+        if ((inlineStyle.includes('height: 1px') || inlineStyle.includes('height:1px')) &&
+            (inlineStyle.includes('--border-color') || inlineStyle.includes('background'))) {
+          div.remove();
+        }
+      });
+    }
+  });
+
+  await recordingPage.waitForTimeout(100);
 }
 
 // Find where the quest section actually is in the viewport for cropping
