@@ -73,11 +73,26 @@ Output: Creates `bixarena-quest.webm` in `tools/bixarena-quest-capture/` directo
 
 ### Generate MP4 Video (Recommended for LinkedIn)
 
+**Landscape (default):**
+
 ```bash
 node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=2
 ```
 
+**Portrait (0.8 aspect ratio, optimized for LinkedIn mobile):**
+
+```bash
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --portrait --record-ms=30000 --trim-start=2
+```
+
 Output: Creates `bixarena-quest.mp4` (~500KB-2MB for 30s video, well under 5MB limit).
+
+**Portrait mode features:**
+
+- 1080x1350 resolution (0.8 aspect ratio)
+- Stacked vertical layout: carousel → progress bar → contributors
+- Automatically hides: CTA buttons, tier legend, and credits section
+- Perfect for LinkedIn and Instagram posts
 
 ### Generate GIF
 
@@ -251,11 +266,23 @@ node tools/quest-capture/capture-quest.mjs --gif --record-ms=18000 --trim-start=
 
 For optimal LinkedIn compatibility (< 5 MB limit):
 
+**Portrait mode (recommended for mobile-first engagement):**
+
 ```bash
-# RECOMMENDED: Use MP4 format - shows all 5 carousel images, ~1-2 MB
+# Portrait video (1080x1350, 0.8 aspect ratio) - optimized for LinkedIn mobile
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --portrait --record-ms=30000 --trim-start=2
+
+# Portrait with smaller file size:
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --portrait --record-ms=30000 --trim-start=2 --scale=90
+```
+
+**Landscape mode (traditional desktop format):**
+
+```bash
+# Landscape MP4 - shows all 5 carousel images, ~1-2 MB
 node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=2
 
-# If you need smaller file size:
+# Landscape with smaller file size:
 node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=2 --scale=90
 
 # For highest quality at full resolution:
