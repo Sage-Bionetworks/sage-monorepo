@@ -453,11 +453,67 @@ await recordingPage.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 3000
 await recordingPage.waitForTimeout(1000); // Brief wait for page load
 await recordingPage.waitForSelector('#quest-section-wrapper', { timeout: 5000 });
 
-// For portrait mode, let the mobile responsive layout handle everything naturally
-// No CSS injection or element hiding needed
+// For portrait mode, hide specific elements to fit in viewport
 if (wantPortrait) {
-  // Just wait for the mobile layout to stabilize
-  await recordingPage.waitForTimeout(1000);
+  console.log('Applying portrait mode element hiding...');
+
+  await recordingPage.evaluate(() => {
+    // Hide text updates section
+    const updatesContainer = document.querySelector('.quest-updates-container');
+    if (updatesContainer) {
+      updatesContainer.style.display = 'none';
+      console.log('Hidden: quest-updates-container');
+    }
+
+    // Hide builders/contributors list by looking for heading
+    const allHeadings = document.querySelectorAll('h2, h3, .text-xl, .font-semibold');
+    allHeadings.forEach(heading => {
+      const text = heading.textContent.trim();
+
+      // Hide "Builders (N)" section
+      if (/^Builders\s*\(\d+\)/.test(text)) {
+        // Find the parent container and hide it
+        let container = heading.parentElement;
+        while (container && container.tagName !== 'SECTION' && !container.classList.contains('quest-section')) {
+          if (container.classList.length > 0 || container.id) {
+            container.style.display = 'none';
+            console.log('Hidden: Builders section');
+            break;
+          }
+          container = container.parentElement;
+        }
+      }
+
+      // Hide "Contributor Tiers" legend
+      if (text === 'Contributor Tiers') {
+        let container = heading.parentElement;
+        while (container && container.tagName !== 'SECTION' && !container.classList.contains('quest-section')) {
+          if (container.classList.length > 0 || container.id) {
+            container.style.display = 'none';
+            console.log('Hidden: Contributor Tiers section');
+            break;
+          }
+          container = container.parentElement;
+        }
+      }
+
+      // Hide "Credits" section
+      if (text === 'Minecraft Arena Designer' || text.includes('Quest Architect')) {
+        let container = heading.parentElement;
+        while (container && container.tagName !== 'SECTION' && !container.classList.contains('quest-section')) {
+          if (container.classList.length > 0 || container.id) {
+            container.style.display = 'none';
+            console.log('Hidden: Credits section');
+            break;
+          }
+          container = container.parentElement;
+        }
+      }
+    });
+  });
+
+  // Wait for layout to stabilize after hiding elements
+  await recordingPage.waitForTimeout(500);
 }
 
 // Find where the quest section actually is in the viewport for cropping
