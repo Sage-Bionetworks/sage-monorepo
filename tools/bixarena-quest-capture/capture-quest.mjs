@@ -423,13 +423,18 @@ await prepContext.close();
 
 // ---------- Pass 3: Record from pre-positioned state ----------
 // Create NEW context WITH recording
-// For portrait mode, record at full size and crop later with FFmpeg
+// For portrait mode, use mobile viewport width to trigger responsive layout
+const portraitWidth = 864; // 0.8 aspect ratio when height is 1080
+const recordViewport = wantPortrait
+  ? { width: portraitWidth, height: 1080 }  // Mobile viewport for portrait
+  : { width: 1920, height: 1080 };
+
 const recordVideoSize = wantPortrait
-  ? { width: 1920, height: 1080 }  // Record full size for portrait
+  ? { width: portraitWidth, height: 1080 }  // Record at mobile size for portrait
   : { width: dimensions.width, height: dimensions.height };
 
 const recordingContext = await recordingBrowser.newContext({
-  viewport: { width: 1920, height: 1080 },  // Always use full viewport for recording
+  viewport: recordViewport,
   colorScheme: 'dark',
   deviceScaleFactor: 2,
   storageState, // Restore state from prep
@@ -448,51 +453,10 @@ await recordingPage.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 3000
 await recordingPage.waitForTimeout(1000); // Brief wait for page load
 await recordingPage.waitForSelector('#quest-section-wrapper', { timeout: 5000 });
 
-// For portrait mode, we'll hide elements but skip the layout CSS to avoid breaking the page
-// We'll crop to portrait dimensions in post-processing instead
+// For portrait mode, let the mobile responsive layout handle everything naturally
+// No CSS injection or element hiding needed
 if (wantPortrait) {
-  await recordingPage.evaluate(() => {
-    // Hide CTA buttons
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(btn => {
-      if (btn.textContent.includes('Contribute a Block')) {
-        btn.style.display = 'none';
-      }
-    });
-
-    // Find and hide tier legend and credits by content - be more specific to avoid hiding quest section
-    const questSection = document.querySelector('#quest-section-wrapper');
-    if (!questSection) return;
-
-    // Only search within the quest section
-    const allElements = questSection.querySelectorAll('div, h4, h3');
-    allElements.forEach(el => {
-      const text = el.textContent.trim();
-
-      // Hide Contributor Tiers legend - only if it's a heading
-      if ((el.tagName === 'H4' || el.tagName === 'H3') &&
-          (text === 'Contributor Tiers' || text.includes('Contributor Tiers'))) {
-        // Hide the parent container
-        let parent = el.parentElement;
-        while (parent && parent !== questSection) {
-          // Look for the tier legend container (usually has class or specific structure)
-          if (parent.querySelector('h4, h3') === el) {
-            parent.style.display = 'none';
-            break;
-          }
-          parent = parent.parentElement;
-        }
-      }
-
-      // Hide Credits section - only exact match on heading
-      if ((el.tagName === 'H4' || el.tagName === 'H3') && text === 'Credits') {
-        let parent = el.parentElement;
-        if (parent && parent !== questSection) {
-          parent.style.display = 'none';
-        }
-      }
-    });
-  });
+  // Just wait for the mobile layout to stabilize
   await recordingPage.waitForTimeout(1000);
 }
 
@@ -556,18 +520,32 @@ if (actualQuestPosition.found && actualQuestPosition.width > 0 && actualQuestPos
     // Re-measure position after scroll
     const newPosition = await recordingPage.evaluate(() => {
       const questSection = document.querySelector('#quest-section-wrapper');
-      if (!questSection) return { top: 0, left: 0 };
+      if (!questSection) return { top: 0, left: 0, scrollY: 0, found: false };
       const bbox = questSection.getBoundingClientRect();
+
+      // Get the element's text content to verify it's the quest section
+      const titleEl = questSection.querySelector('h2, h3');
+      const title = titleEl ? titleEl.textContent.trim().substring(0, 30) : 'no title';
+
       return {
         top: Math.floor(bbox.top),
         left: Math.floor(bbox.left),
-        scrollY: window.scrollY
+        width: Math.floor(bbox.width),
+        height: Math.floor(bbox.height),
+        scrollY: window.scrollY,
+        scrollX: window.scrollX,
+        found: true,
+        title
       };
     });
 
     dimensions.top = newPosition.top;
     dimensions.left = newPosition.left;
-    console.log(`After scroll - Quest section at: (${dimensions.left}, ${dimensions.top}), window.scrollY: ${newPosition.scrollY}`);
+    console.log(`After scroll - Quest section "${newPosition.title}" at: (${dimensions.left}, ${dimensions.top}), scroll: (${newPosition.scrollX}, ${newPosition.scrollY}), size: ${newPosition.width}x${newPosition.height}`);
+
+    // Take a debug screenshot
+    await recordingPage.screenshot({ path: path.join(outputDir, 'debug-after-scroll.png') });
+    console.log('Debug screenshot saved: debug-after-scroll.png');
   }
 } else if (!actualQuestPosition.found) {
   console.error(`Error: ${actualQuestPosition.error}`);
@@ -623,47 +601,48 @@ try {
 
 // ---------- Crop for portrait mode if needed ----------
 if (wantPortrait) {
-  const uncropWebm = path.join(outputDir, `bixarena-quest-uncropped.webm`);
-  await fs.rename(webmFile, uncropWebm);
-
-  // The recorded video is 1920x1080
-  const recordedWidth = 1920;
+  // Portrait mode: video was recorded at 864x1080 (mobile viewport)
+  // We may need to crop vertically to show only the quest section
+  const recordedWidth = 864;
   const recordedHeight = 1080;
 
-  // For portrait mode with 0.8 aspect ratio (width/height = 0.8)
-  // We're limited by the recording height of 1080
-  // So: width = height * 0.8 = 1080 * 0.8 = 864
-  const portraitWidth = Math.floor((recordedHeight * 0.8) / 2) * 2; // 864, ensure even
-  const portraitHeight = recordedHeight; // Use full height
+  // Check if we need to crop to show only quest section
+  if (dimensions.top > 0 || dimensions.height < recordedHeight) {
+    const uncropWebm = path.join(outputDir, `bixarena-quest-uncropped.webm`);
+    await fs.rename(webmFile, uncropWebm);
 
-  // Center the crop horizontally in the quest section
-  // The quest section is at dimensions.left, we want to center our portrait crop within it
-  const cropX = Math.max(0, Math.floor(dimensions.left + (dimensions.width - portraitWidth) / 2));
+    // Crop vertically to show quest section
+    const cropX = 0; // Full width
+    const cropY = Math.max(0, dimensions.top);
+    const cropWidth = recordedWidth;
+    const cropHeight = Math.min(dimensions.height, recordedHeight - cropY);
 
-  // Crop from the top of the quest section
-  const cropY = Math.max(0, dimensions.top);
+    console.log(`Cropping portrait video: ${cropWidth}x${cropHeight} at (${cropX},${cropY}) from ${recordedWidth}x${recordedHeight}...`);
+    console.log(`Portrait aspect ratio: ${(cropWidth / cropHeight).toFixed(2)}`);
 
-  console.log(`Cropping to portrait: ${portraitWidth}x${portraitHeight} at (${cropX},${cropY}) from ${recordedWidth}x${recordedHeight}...`);
-  console.log(`Portrait aspect ratio: ${(portraitWidth / portraitHeight).toFixed(2)} (target: 0.80)`);
+    // Crop the video
+    const cropCmd =
+      `ffmpeg -hide_banner -loglevel error -i "${uncropWebm}" ` +
+      `-vf "crop=${cropWidth}:${cropHeight}:${cropX}:${cropY}" ` +
+      `-c:v libvpx-vp9 -crf 30 -b:v 0 "${webmFile}" -y`;
 
-  // Crop the video to portrait dimensions
-  const cropCmd =
-    `ffmpeg -hide_banner -loglevel error -i "${uncropWebm}" ` +
-    `-vf "crop=${portraitWidth}:${portraitHeight}:${cropX}:${cropY}" ` +
-    `-c:v libvpx-vp9 -crf 30 -b:v 0 "${webmFile}" -y`;
+    try {
+      await execAsync(cropCmd);
+      console.log('Portrait crop complete. Cleaning up uncropped WebM...');
+      await fs.unlink(uncropWebm);
 
-  try {
-    await execAsync(cropCmd);
-    console.log('Portrait crop complete. Cleaning up uncropped WebM...');
-    await fs.unlink(uncropWebm);
-
-    // Update dimensions to reflect actual crop
-    dimensions.width = portraitWidth;
-    dimensions.height = portraitHeight;
-  } catch (error) {
-    console.error('Error cropping video:', error?.stderr || error);
-    console.log(`Uncropped WebM kept at: ${uncropWebm}`);
-    process.exit(1);
+      // Update dimensions to reflect actual crop
+      dimensions.width = cropWidth;
+      dimensions.height = cropHeight;
+    } catch (error) {
+      console.error('Error cropping video:', error?.stderr || error);
+      console.log(`Uncropped WebM kept at: ${uncropWebm}`);
+      process.exit(1);
+    }
+  } else {
+    console.log(`Portrait video recorded at ${recordedWidth}x${recordedHeight} - no crop needed.`);
+    dimensions.width = recordedWidth;
+    dimensions.height = recordedHeight;
   }
 }
 
