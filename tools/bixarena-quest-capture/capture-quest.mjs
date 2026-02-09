@@ -453,9 +453,9 @@ await recordingPage.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 3000
 await recordingPage.waitForTimeout(1000); // Brief wait for page load
 await recordingPage.waitForSelector('#quest-section-wrapper', { timeout: 5000 });
 
-// For portrait mode, hide specific elements to fit in viewport
+// For portrait mode, hide specific elements and compact spacing
 if (wantPortrait) {
-  console.log('Applying portrait mode element hiding...');
+  console.log('Applying portrait mode element hiding and spacing adjustments...');
 
   await recordingPage.evaluate(() => {
     // Hide text updates section
@@ -510,6 +510,87 @@ if (wantPortrait) {
         }
       }
     });
+
+    // Aggressively reduce spacing throughout the quest section for portrait mode
+    const questSection = document.querySelector('#quest-section-wrapper');
+    if (questSection) {
+      // Reduce gap on the main quest section if it's a flex container
+      const sectionStyle = window.getComputedStyle(questSection);
+      if (sectionStyle.display === 'flex') {
+        questSection.style.gap = '16px';
+        console.log('Reduced quest section flex gap to 16px');
+      }
+
+      // Find ALL divs in the quest section and reduce excessive spacing
+      const allDivs = questSection.querySelectorAll('div');
+      allDivs.forEach(div => {
+        const children = Array.from(div.children);
+        const style = window.getComputedStyle(div);
+
+        // Check for pagination dots container
+        const hasMultipleDots = children.length >= 3 && children.length <= 10 &&
+          children.every(child => child.tagName === 'BUTTON' || child.tagName === 'SPAN');
+
+        if (hasMultipleDots) {
+          // Pagination dots - minimize spacing
+          div.style.margin = '4px 0';
+          div.style.padding = '0px';
+          div.style.gap = '6px';
+          console.log('Reduced pagination dots spacing');
+          return; // Don't apply other spacing rules to pagination dots
+        }
+
+        // Skip if this looks like it contains images/carousel content
+        const hasImage = div.querySelector('img') !== null;
+        const hasVideo = div.querySelector('video') !== null;
+        if (hasImage || hasVideo) {
+          // Only reduce very large spacing on image containers
+          if (parseInt(style.marginTop) > 20) {
+            div.style.marginTop = '16px';
+          }
+          if (parseInt(style.marginBottom) > 20) {
+            div.style.marginBottom = '16px';
+          }
+          return; // Don't aggressively reduce padding on image containers
+        }
+
+        // Reduce all margins/paddings greater than 12px for non-image elements
+        if (parseInt(style.marginTop) > 12) {
+          div.style.marginTop = '12px';
+        }
+        if (parseInt(style.marginBottom) > 12) {
+          div.style.marginBottom = '12px';
+        }
+        if (parseInt(style.paddingTop) > 12) {
+          div.style.paddingTop = '12px';
+        }
+        if (parseInt(style.paddingBottom) > 12) {
+          div.style.paddingBottom = '12px';
+        }
+
+        // Reduce flex gaps greater than 16px
+        if (style.display === 'flex' && parseInt(style.gap) > 16) {
+          div.style.gap = '16px';
+        }
+      });
+
+      // Compact the header/title area at the top
+      const titleElements = questSection.querySelectorAll('h1, h2, .text-2xl, .text-3xl');
+      titleElements.forEach(title => {
+        title.style.marginTop = '8px';
+        title.style.marginBottom = '8px';
+        console.log('Reduced title spacing');
+      });
+
+      // Compact description/paragraph text
+      const paragraphs = questSection.querySelectorAll('p');
+      paragraphs.forEach(p => {
+        p.style.marginTop = '6px';
+        p.style.marginBottom = '6px';
+      });
+
+      console.log('Applied comprehensive spacing reduction for portrait mode');
+    }
   });
 
   // Wait for layout to stabilize after hiding elements
