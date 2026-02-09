@@ -423,17 +423,16 @@ await prepContext.close();
 
 // ---------- Pass 3: Record from pre-positioned state ----------
 // Create NEW context WITH recording
-// For portrait mode, use narrow mobile viewport to trigger responsive layout
-// Record at mobile size, then scale up to 1080x1350 using FFmpeg
-const mobileViewportWidth = 864; // Width that triggers mobile layout
-const mobileViewportHeight = 1080; // Height for mobile viewport
+// For portrait mode, record at 1080x1350 and inject CSS to trigger mobile layout
+const portraitWidth = 1080;
+const portraitHeight = 1350;
 
 const recordViewport = wantPortrait
-  ? { width: mobileViewportWidth, height: mobileViewportHeight }  // Mobile viewport triggers responsive layout
+  ? { width: portraitWidth, height: portraitHeight }  // Record at target resolution
   : { width: 1920, height: 1080 };
 
 const recordVideoSize = wantPortrait
-  ? { width: mobileViewportWidth, height: mobileViewportHeight }  // Record at mobile size (864x1080)
+  ? { width: portraitWidth, height: portraitHeight }  // Record at 1080x1350
   : { width: dimensions.width, height: dimensions.height };
 
 const recordingContext = await recordingBrowser.newContext({
@@ -461,6 +460,17 @@ if (wantPortrait) {
   console.log('Applying portrait mode element hiding and spacing adjustments...');
 
   await recordingPage.evaluate(() => {
+    // Inject CSS to override responsive breakpoint for mobile layout
+    // The actual breakpoint is @media (max-width: 1000px) targeting #quest-section-grid
+    const style = document.createElement('style');
+    style.textContent = `
+      /* Force mobile grid layout at 1080px (override max-width: 1000px breakpoint) */
+      #quest-section-grid {
+        grid-template-columns: 1fr !important;
+      }
+    `;
+    document.head.appendChild(style);
+
     // Hide text updates section
     const updatesContainer = document.querySelector('.quest-updates-container');
     if (updatesContainer) {
@@ -762,40 +772,12 @@ try {
   process.exit(1);
 }
 
-// ---------- Scale portrait video to 1080x1350 ----------
+// ---------- Portrait mode recorded at native 1080x1350 ----------
 if (wantPortrait) {
-  // Portrait mode: video was recorded at 864x1080 (mobile viewport)
-  // Scale it up to 1080x1350 to maintain 0.8 aspect ratio at higher resolution
-  const recordedWidth = 864;
-  const recordedHeight = 1080;
-  const targetWidth = 1080;
-  const targetHeight = 1350;
-
-  console.log(`Scaling portrait video from ${recordedWidth}x${recordedHeight} to ${targetWidth}x${targetHeight}...`);
-
-  const unscaledWebm = path.join(outputDir, `bixarena-quest-unscaled.webm`);
-  await fs.rename(webmFile, unscaledWebm);
-
-  // Scale and pad to exactly 1080x1350
-  // Scale to fit within 1080x1350, then pad with black bars to reach exact size
-  const scaleCmd =
-    `ffmpeg -hide_banner -loglevel error -i "${unscaledWebm}" ` +
-    `-vf "scale=${targetWidth}:${targetHeight}:force_original_aspect_ratio=decrease,pad=${targetWidth}:${targetHeight}:(ow-iw)/2:(oh-ih)/2:black" ` +
-    `-c:v libvpx-vp9 -crf 30 -b:v 0 "${webmFile}" -y`;
-
-  try {
-    await execAsync(scaleCmd);
-    console.log('Portrait scaling complete. Cleaning up unscaled WebM...');
-    await fs.unlink(unscaledWebm);
-
-    // Update dimensions to reflect scaled size
-    dimensions.width = targetWidth;
-    dimensions.height = targetHeight;
-  } catch (error) {
-    console.error('Error scaling video:', error?.stderr || error);
-    console.log(`Unscaled WebM kept at: ${unscaledWebm}`);
-    process.exit(1);
-  }
+  // Portrait mode: video recorded at 1080x1350 with CSS zoom to trigger mobile layout
+  console.log(`Portrait video recorded at 1080x1350 - no scaling needed.`);
+  dimensions.width = 1080;
+  dimensions.height = 1350;
 }
 
 // ---------- Convert to GIF or MP4 (if requested) ----------
