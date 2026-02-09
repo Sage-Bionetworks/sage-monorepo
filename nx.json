@@ -209,6 +209,10 @@
     "@nxlv/python:ruff-check": {
       "cache": true,
       "inputs": ["defaultPython"]
+    },
+    "@nx/gradle:gradle": {
+      "cache": true,
+      "inputs": ["defaultGradle", "^productionGradle"]
     }
   },
   "namedInputs": {
@@ -231,7 +235,16 @@
       "{workspaceRoot}/pyproject.toml",
       "{workspaceRoot}/uv.lock"
     ],
-    "productionPython": ["defaultPython"]
+    "productionPython": ["defaultPython"],
+    "defaultGradle": [
+      "{projectRoot}/**/*",
+      "{workspaceRoot}/gradle/libs.versions.toml",
+      "{workspaceRoot}/gradle/wrapper/**/*",
+      "{workspaceRoot}/buildSrc/**/*",
+      "{workspaceRoot}/build.gradle.kts",
+      "{workspaceRoot}/settings.gradle.kts"
+    ],
+    "productionGradle": ["defaultGradle"]
   },
   "useInferencePlugins": false,
   "defaultBase": "main",
