@@ -460,13 +460,19 @@ if (wantPortrait) {
   console.log('Applying portrait mode element hiding and spacing adjustments...');
 
   await recordingPage.evaluate(() => {
-    // Inject CSS to override responsive breakpoint for mobile layout
+    // Inject CSS to override responsive breakpoint and increase font sizes
     // The actual breakpoint is @media (max-width: 1000px) targeting #quest-section-grid
     const style = document.createElement('style');
     style.textContent = `
       /* Force mobile grid layout at 1080px (override max-width: 1000px breakpoint) */
       #quest-section-grid {
         grid-template-columns: 1fr !important;
+      }
+
+      /* Scale the entire quest section content by 1.15x */
+      #quest-section-wrapper {
+        transform: scale(1.15) !important;
+        transform-origin: top center !important;
       }
     `;
     document.head.appendChild(style);
@@ -478,7 +484,7 @@ if (wantPortrait) {
       console.log('Hidden: quest-updates-container');
     }
 
-    // Remove ALL horizontal divider elements with inline style "height: 1px; background: var(--border-color-primary)"
+    // Remove horizontal dividers to save vertical space and show more builders
     let questSection = document.querySelector('#quest-section-wrapper');
     let removedCount = 0;
     if (questSection) {
