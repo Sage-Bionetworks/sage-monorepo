@@ -8,7 +8,7 @@ A Node.js tool for capturing the BioArena Community Quest section as animated We
 - 🎞️ Convert to high-quality GIF with optimized palette
 - 🎬 Convert to MP4 video (H.264) for much smaller file sizes (recommended for LinkedIn)
 - 📐 Automatically detects quest section dimensions for perfect framing
-- 🎯 Captures only the quest section from the running app (no need for standalone HTML)
+- 🎯 Captures directly from https://bioarena.io or local deployment
 - ⚡ Smooth carousel animations with configurable recording duration
 - ✂️ Automatic trimming to remove loading artifacts and page transitions
 - 🎨 Dark theme support for professional appearance
@@ -18,15 +18,18 @@ A Node.js tool for capturing the BioArena Community Quest section as animated We
 
 ### BioArena App
 
-The BioArena web app must be running locally:
+By default, the tool captures from the live site at https://bioarena.io.
+
+To capture from a local deployment instead:
 
 ```bash
 # From monorepo root
 nx serve bixarena-app
 # App will be available at http://localhost:8100
-```
 
-Make sure `APP_COMMUNITY_QUEST_ENABLED=true` is set in your environment.
+# Use --url flag to specify local URL
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --url=http://localhost:8100
+```
 
 ### Node.js Dependencies
 
@@ -71,7 +74,7 @@ Output: Creates `bixarena-quest.webm` in `tools/bixarena-quest-capture/` directo
 ### Generate MP4 Video (Recommended for LinkedIn)
 
 ```bash
-node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=6
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=2
 ```
 
 Output: Creates `bixarena-quest.mp4` (~500KB-2MB for 30s video, well under 5MB limit).
@@ -111,14 +114,14 @@ node tools/quest-capture/capture-quest.mjs --gif --fps=8 --scale=75 --trim-start
 
 ## How It Works
 
-1. **Connect to running app** at http://localhost:8100
+1. **Connect to BioArena** at https://bioarena.io (or custom URL)
 2. **Wait for page load** and quest section to render in dark theme
 3. **Measure quest section dimensions** by querying DOM elements
-4. **Launch recording browser** with viewport sized to quest section
-5. **Navigate and position** to quest section instantly
-6. **Record carousel animation** for specified duration (default: 12 seconds + 5s extra)
-7. **Trim video** to remove first 5 seconds (loading artifacts and transitions)
-8. **For GIF**: Convert trimmed WebM to GIF using FFmpeg with optimized palette
+4. **Pre-position page** without recording to prepare stable state
+5. **Start recording** with viewport sized to quest section
+6. **Record carousel animation** for specified duration (default: 12 seconds)
+7. **Trim video** to remove first 2 seconds (loading artifacts and transitions)
+8. **Convert to MP4/GIF** using FFmpeg with optimized quality settings
 
 ## Quality Settings
 
@@ -180,17 +183,23 @@ The quest carousel rotates images every 6 seconds. Recommended recording duratio
 
 ### "Could not connect" error
 
-Make sure the BioArena app is running:
+By default, the tool connects to https://bioarena.io. If you see connection errors:
+
+- Check your internet connection
+- Verify https://bioarena.io is accessible in your browser
+- If capturing from local deployment, make sure the app is running:
 
 ```bash
 nx serve bixarena-app
+# Then use: --url=http://localhost:8100
 ```
-
-Check that it's accessible at http://localhost:8100
 
 ### "Quest section not found" error
 
-Make sure the Community Quest feature is enabled:
+If the quest section is not found on the page:
+
+- Verify the Community Quest is active on https://bioarena.io
+- For local deployments, make sure the feature is enabled:
 
 ```bash
 export APP_COMMUNITY_QUEST_ENABLED=true
@@ -244,13 +253,13 @@ For optimal LinkedIn compatibility (< 5 MB limit):
 
 ```bash
 # RECOMMENDED: Use MP4 format - shows all 5 carousel images, ~1-2 MB
-node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=6
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=2
 
 # If you need smaller file size:
-node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=6 --scale=90
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=2 --scale=90
 
 # For highest quality at full resolution:
-node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=6 --fps=20
+node tools/bixarena-quest-capture/capture-quest.mjs --mp4 --record-ms=30000 --trim-start=2 --fps=20
 ```
 
 **Why MP4 instead of GIF?**

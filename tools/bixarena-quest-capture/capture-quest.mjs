@@ -9,21 +9,20 @@
 //   node capture-quest.mjs --url=http://localhost:7860
 //
 // Notes:
-// - Captures just the quest section from the running BioArena app
+// - Captures just the quest section from the BioArena app
 // - --gif creates a GIF (default: WebM is kept).
 // - --mp4 creates an MP4 video (RECOMMENDED for LinkedIn - much smaller than GIF).
 // - --fps controls output framerate (default: 15).
 // - --record-ms controls how long to record (default: 12000 ms = 2 carousel rotations at 6s each).
-// - --trim-start removes N seconds from start to eliminate loading artifacts (default: 5).
+// - --trim-start removes N seconds from start to eliminate loading artifacts (default: 2).
 // - --scale controls output size as percentage (default: 100, use 75-90 for smaller files).
-// - --url specifies the app URL (default: http://localhost:8100).
+// - --url specifies the app URL (default: https://bioarena.io).
 // - Quest carousel rotates every 6 seconds by default (5 images = 30 seconds total).
 // - For LinkedIn (< 5 MB): use --mp4 (produces files ~500KB-2MB for 30s videos).
 //
 // Requirements:
-// - BioArena app running on localhost:8100
 // - Playwright (Chromium) installed: `pnpm dlx playwright install chromium --with-deps`
-// - ffmpeg available on PATH for GIF conversion
+// - ffmpeg available on PATH for MP4/GIF conversion
 
 import { chromium } from '@playwright/test';
 import path from 'path';
@@ -73,7 +72,7 @@ const format = wantGif ? 'gif' : wantMp4 ? 'mp4' : 'webm';
 const GIF_FPS = parseFlagNum(args, 'fps', 15);
 // Default: 12 seconds = 2 full carousel rotations (6s each)
 const RECORD_MS = parseFlagNum(args, 'record-ms', 12000);
-const APP_URL = parseFlagString(args, 'url', 'http://localhost:8100');
+const APP_URL = parseFlagString(args, 'url', 'https://bioarena.io');
 // Wait 3 seconds for initial render and potential redirects
 const PRE_WAIT_MS = 3000;
 // Trim first N seconds from video to remove loading artifacts
