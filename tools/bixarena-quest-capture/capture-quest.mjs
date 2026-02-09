@@ -423,14 +423,17 @@ await prepContext.close();
 
 // ---------- Pass 3: Record from pre-positioned state ----------
 // Create NEW context WITH recording
-// For portrait mode, use mobile viewport width to trigger responsive layout
-const portraitWidth = 864; // 0.8 aspect ratio when height is 1080
+// For portrait mode, use narrow mobile viewport to trigger responsive layout
+// Record at mobile size, then scale up to 1080x1350 using FFmpeg
+const mobileViewportWidth = 864; // Width that triggers mobile layout
+const mobileViewportHeight = 1080; // Height for mobile viewport
+
 const recordViewport = wantPortrait
-  ? { width: portraitWidth, height: 1080 }  // Mobile viewport for portrait
+  ? { width: mobileViewportWidth, height: mobileViewportHeight }  // Mobile viewport triggers responsive layout
   : { width: 1920, height: 1080 };
 
 const recordVideoSize = wantPortrait
-  ? { width: portraitWidth, height: 1080 }  // Record at mobile size for portrait
+  ? { width: mobileViewportWidth, height: mobileViewportHeight }  // Record at mobile size (864x1080)
   : { width: dimensions.width, height: dimensions.height };
 
 const recordingContext = await recordingBrowser.newContext({
@@ -759,50 +762,39 @@ try {
   process.exit(1);
 }
 
-// ---------- Crop for portrait mode if needed ----------
+// ---------- Scale portrait video to 1080x1350 ----------
 if (wantPortrait) {
   // Portrait mode: video was recorded at 864x1080 (mobile viewport)
-  // We may need to crop vertically to show only the quest section
+  // Scale it up to 1080x1350 to maintain 0.8 aspect ratio at higher resolution
   const recordedWidth = 864;
   const recordedHeight = 1080;
+  const targetWidth = 1080;
+  const targetHeight = 1350;
 
-  // Check if we need to crop to show only quest section
-  if (dimensions.top > 0 || dimensions.height < recordedHeight) {
-    const uncropWebm = path.join(outputDir, `bixarena-quest-uncropped.webm`);
-    await fs.rename(webmFile, uncropWebm);
+  console.log(`Scaling portrait video from ${recordedWidth}x${recordedHeight} to ${targetWidth}x${targetHeight}...`);
 
-    // Crop vertically to show quest section
-    const cropX = 0; // Full width
-    const cropY = Math.max(0, dimensions.top);
-    const cropWidth = recordedWidth;
-    const cropHeight = Math.min(dimensions.height, recordedHeight - cropY);
+  const unscaledWebm = path.join(outputDir, `bixarena-quest-unscaled.webm`);
+  await fs.rename(webmFile, unscaledWebm);
 
-    console.log(`Cropping portrait video: ${cropWidth}x${cropHeight} at (${cropX},${cropY}) from ${recordedWidth}x${recordedHeight}...`);
-    console.log(`Portrait aspect ratio: ${(cropWidth / cropHeight).toFixed(2)}`);
+  // Scale and pad to exactly 1080x1350
+  // Scale to fit within 1080x1350, then pad with black bars to reach exact size
+  const scaleCmd =
+    `ffmpeg -hide_banner -loglevel error -i "${unscaledWebm}" ` +
+    `-vf "scale=${targetWidth}:${targetHeight}:force_original_aspect_ratio=decrease,pad=${targetWidth}:${targetHeight}:(ow-iw)/2:(oh-ih)/2:black" ` +
+    `-c:v libvpx-vp9 -crf 30 -b:v 0 "${webmFile}" -y`;
 
-    // Crop the video
-    const cropCmd =
-      `ffmpeg -hide_banner -loglevel error -i "${uncropWebm}" ` +
-      `-vf "crop=${cropWidth}:${cropHeight}:${cropX}:${cropY}" ` +
-      `-c:v libvpx-vp9 -crf 30 -b:v 0 "${webmFile}" -y`;
+  try {
+    await execAsync(scaleCmd);
+    console.log('Portrait scaling complete. Cleaning up unscaled WebM...');
+    await fs.unlink(unscaledWebm);
 
-    try {
-      await execAsync(cropCmd);
-      console.log('Portrait crop complete. Cleaning up uncropped WebM...');
-      await fs.unlink(uncropWebm);
-
-      // Update dimensions to reflect actual crop
-      dimensions.width = cropWidth;
-      dimensions.height = cropHeight;
-    } catch (error) {
-      console.error('Error cropping video:', error?.stderr || error);
-      console.log(`Uncropped WebM kept at: ${uncropWebm}`);
-      process.exit(1);
-    }
-  } else {
-    console.log(`Portrait video recorded at ${recordedWidth}x${recordedHeight} - no crop needed.`);
-    dimensions.width = recordedWidth;
-    dimensions.height = recordedHeight;
+    // Update dimensions to reflect scaled size
+    dimensions.width = targetWidth;
+    dimensions.height = targetHeight;
+  } catch (error) {
+    console.error('Error scaling video:', error?.stderr || error);
+    console.log(`Unscaled WebM kept at: ${unscaledWebm}`);
+    process.exit(1);
   }
 }
 
@@ -832,26 +824,28 @@ if (wantGif) {
   console.log(`GIF saved to: ${outputFile}`);
 } else if (wantMp4) {
   console.log('Converting WebM to MP4...');
-  // Calculate scaled dimensions
-  const scaledWidth = Math.round(dimensions.width * (SCALE_PERCENT / 100));
 
-  // Crop 4 pixels from the right to remove white line artifact
-  const cropWidth = Math.floor(scaledWidth / 2) * 2 - 4;  // Ensure even number
+  let ffmpegCmd;
+  if (wantPortrait) {
+    // Portrait mode: WebM is already at correct size (1080x1350), just convert codec
+    ffmpegCmd =
+      `ffmpeg -hide_banner -loglevel error -i "${webmFile}" ` +
+      `-vf "fps=${GIF_FPS}" ` +
+      `-c:v libx264 -crf 20 -preset slow ` +
+      `-pix_fmt yuv420p -colorspace bt709 -color_primaries bt709 -color_trc bt709 ` +
+      `-movflags +faststart "${outputFile}" -y`;
+  } else {
+    // Landscape mode: Calculate scaled dimensions and crop
+    const scaledWidth = Math.round(dimensions.width * (SCALE_PERCENT / 100));
+    const cropWidth = Math.floor(scaledWidth / 2) * 2 - 4;  // Ensure even number, crop 4px to remove artifact
 
-  // H.264 encoding with high quality settings for better blacks and text readability
-  // -crf 20 = high quality (lower = better quality, 18-23 is very good range)
-  // -preset slow = better compression at same quality
-  // -pix_fmt yuv420p = compatibility with all players
-  // -colorspace bt709 = modern color space for better color accuracy
-  // -color_primaries bt709 = standard HD primaries
-  // -color_trc bt709 = standard HD transfer characteristics
-  // -movflags +faststart = progressive download
-  const ffmpegCmd =
-    `ffmpeg -hide_banner -loglevel error -i "${webmFile}" ` +
-    `-vf "fps=${GIF_FPS},scale=${scaledWidth}:-1:flags=lanczos,crop=${cropWidth}:ih:0:0" ` +
-    `-c:v libx264 -crf 20 -preset slow ` +
-    `-pix_fmt yuv420p -colorspace bt709 -color_primaries bt709 -color_trc bt709 ` +
-    `-movflags +faststart "${outputFile}" -y`;
+    ffmpegCmd =
+      `ffmpeg -hide_banner -loglevel error -i "${webmFile}" ` +
+      `-vf "fps=${GIF_FPS},scale=${scaledWidth}:-1:flags=lanczos,crop=${cropWidth}:ih:0:0" ` +
+      `-c:v libx264 -crf 20 -preset slow ` +
+      `-pix_fmt yuv420p -colorspace bt709 -color_primaries bt709 -color_trc bt709 ` +
+      `-movflags +faststart "${outputFile}" -y`;
+  }
 
   try {
     await execAsync(ffmpegCmd);
