@@ -185,8 +185,12 @@ export const expectNoResultsFound = async (page: Page): Promise<void> => {
 export async function goToLastPage(page: Page) {
   const lastPageBtn = page.getByRole('button', { name: /last page/i });
   await expect(lastPageBtn).toBeEnabled();
+
   await lastPageBtn.click();
   await expect(lastPageBtn).toBeDisabled();
+
+  // Wait for the paginator to show a non-first page (text should NOT start with "1-")
+  await expect(page.locator('.p-paginator-current')).not.toContainText(/^1-/);
 }
 
 export const toggleFilterPanel = async (page: Page): Promise<Locator> => {
@@ -240,6 +244,8 @@ export async function expectFirstPage(page: Page) {
   const firstPageBtn = page.getByRole('button', { name: /first page/i });
   await expect(firstPageBtn).toBeDisabled();
   await expect(page.getByRole('button', { name: /previous page/i })).toBeDisabled();
+  // Wait for paginator to show first page range (e.g., "1-10 of X")
+  await expect(page.locator('.p-paginator-current')).toContainText(/^1-/);
 }
 
 export async function openFilterMenuAndClickCheckbox(
@@ -286,12 +292,20 @@ export async function testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
 ) {
   await goToLastPage(page);
 
-  await openFilterMenuAndClickCheckbox(page, filterName, filterValue);
+  // Apply filter - should return to first page
+  const filterPanel1 = await openFilterMenuAndClickCheckbox(page, filterName, filterValue);
+  // Close filter panel to ensure UI has settled
+  await toggleFilterPanel(page);
+  await expect(filterPanel1).toBeHidden();
   await expectFirstPage(page);
 
   await goToLastPage(page);
 
-  await openFilterMenuAndClickCheckbox(page, filterName, filterValue);
+  // Remove filter - should return to first page
+  const filterPanel2 = await openFilterMenuAndClickCheckbox(page, filterName, filterValue);
+  // Close filter panel to ensure UI has settled
+  await toggleFilterPanel(page);
+  await expect(filterPanel2).toBeHidden();
   await expectFirstPage(page);
 }
 
@@ -310,12 +324,22 @@ export async function testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared
 export async function testTableReturnsToFirstPageWhenCategoriesChanged(page: Page) {
   await goToLastPage(page);
 
-  const dropdown = page.getByRole('combobox').last();
+  const categorySelectors = page.locator('.comparison-tool-category-selectors');
+  const dropdown = categorySelectors.getByRole('combobox').last();
+  const listbox = page.getByRole('listbox');
+
+  // Click dropdown to open
   await dropdown.click();
+  await expect(listbox).toBeVisible();
+
+  // Select the second option
   const options = page.getByRole('option');
   const secondOption = options.nth(1);
+  await expect(secondOption).toBeVisible();
   await secondOption.click();
-  await expect(secondOption).toBeHidden();
+
+  // Wait for listbox to close (dropdown selection complete)
+  await expect(listbox).toBeHidden();
 
   await expectFirstPage(page);
 }

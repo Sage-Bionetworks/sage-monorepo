@@ -65,17 +65,23 @@ test.describe('disease correlation', () => {
     await expectPinnedParams(page, pinnedItems);
     await expectPinnedRows(page, pinnedItems);
 
-    const dropdown = page.getByRole('combobox');
+    const categorySelectors = page.locator('.comparison-tool-category-selectors');
+    const dropdown = categorySelectors.getByRole('combobox');
+    const listbox = page.getByRole('listbox');
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const options = page.getByRole('option');
     const secondOption = options.nth(1);
     await secondOption.click();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedParams(page, pinnedItems);
     await expectPinnedRows(page, pinnedItems);
 
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     await options.first().click();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedParams(page, pinnedItems);
     await expectPinnedRows(page, pinnedItems);
@@ -106,17 +112,23 @@ test.describe('disease correlation', () => {
     await expectFiltersParams(page, expectedFilterParams);
     await expectFilterChiclets(page, expectedSelectedFilters);
 
-    const dropdown = page.getByRole('combobox');
+    const categorySelectors = page.locator('.comparison-tool-category-selectors');
+    const dropdown = categorySelectors.getByRole('combobox');
+    const listbox = page.getByRole('listbox');
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const options = page.getByRole('option');
     const secondOption = options.nth(1);
     await secondOption.click();
+    await expect(listbox).toBeHidden();
 
     await expectFiltersParams(page, expectedFilterParams);
     await expectFilterChiclets(page, expectedSelectedFilters);
 
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     await options.first().click();
+    await expect(listbox).toBeHidden();
 
     await expectFiltersParams(page, expectedFilterParams);
     await expectFilterChiclets(page, expectedSelectedFilters);
@@ -170,13 +182,16 @@ test.describe('disease correlation', () => {
 
     await expectCategoriesParams(page, defaultCategories);
 
-    const dropdown = page.getByRole('combobox').last();
+    const categorySelectors = page.locator('.comparison-tool-category-selectors');
+    const dropdown = categorySelectors.getByRole('combobox').last();
+    const listbox = page.getByRole('listbox');
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const options = page.getByRole('option');
     const secondOption = options.nth(1);
     const secondOptionText = await secondOption.textContent();
     await secondOption.click();
-    await expect(secondOption).toBeHidden();
+    await expect(listbox).toBeHidden();
 
     const newCategories = [...defaultCategories.slice(0, -1), secondOptionText ?? ''];
     await expectCategoriesParams(page, newCategories);
