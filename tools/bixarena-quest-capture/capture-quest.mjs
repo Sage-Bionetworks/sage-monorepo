@@ -780,11 +780,11 @@ console.log(`Recorded raw WebM: ${rawWebmFile}`);
 await ensureFfmpeg();
 const trimSeconds = TRIM_START_MS / 1000; // Convert ms to seconds for FFmpeg
 console.log(`Trimming first ${TRIM_START_MS}ms (${trimSeconds}s) from video...`);
-// Note: For accurate trimming, we re-encode instead of using -c copy
-// -ss AFTER -i for frame-accurate seeking
+// Note: Using -c copy for fast, lossless trimming (seeks to nearest keyframe, may be imprecise)
+// -ss AFTER -i for better accuracy than before -i
 const trimCmd =
   `ffmpeg -hide_banner -loglevel error -i "${rawWebmFile}" -ss ${trimSeconds} ` +
-  `-c:v libvpx-vp9 -crf 30 -b:v 0 "${webmFile}" -y`;
+  `-c copy "${webmFile}" -y`;
 
 try {
   await execAsync(trimCmd);
