@@ -6,7 +6,7 @@
 //   node capture-quest.mjs --gif
 //   node capture-quest.mjs --mp4
 //   node capture-quest.mjs --mp4 --portrait --record-ms=30000
-//   node capture-quest.mjs --mp4 --fps=15 --record-ms=30000 --trim-start=6
+//   node capture-quest.mjs --mp4 --fps=15 --record-ms=30000 --trim-start-ms=3000
 //   node capture-quest.mjs --url=http://localhost:7860
 //
 // Notes:
@@ -16,7 +16,7 @@
 // - --portrait creates 0.8 aspect ratio portrait video (1080x1350) showing carousel, progress, and contributors.
 // - --fps controls output framerate (default: 15).
 // - --record-ms controls how long to record (default: 12000 ms = 2 carousel rotations at 6s each).
-// - --trim-start removes N seconds from start to eliminate loading artifacts (default: 2).
+// - --trim-start-ms removes N milliseconds from start to eliminate loading artifacts (default: 2000).
 // - --scale controls output size as percentage (default: 100, use 75-90 for smaller files).
 // - --url specifies the app URL (default: https://bioarena.io).
 // - Quest carousel rotates every 6 seconds by default (5 images = 30 seconds total).
@@ -79,8 +79,8 @@ const RECORD_MS = parseFlagNum(args, 'record-ms', 12000);
 const APP_URL = parseFlagString(args, 'url', 'https://bioarena.io');
 // Wait 3 seconds for initial render and potential redirects
 const PRE_WAIT_MS = 3000;
-// Trim first N seconds from video to remove loading artifacts
-const TRIM_START_SECONDS = parseFlagNum(args, 'trim-start', 2);
+// Trim first N milliseconds from video to remove loading artifacts
+const TRIM_START_MS = parseFlagNum(args, 'trim-start-ms', 2000);
 // Scale output (percentage, 100 = original size, 75 = 75% of original)
 const SCALE_PERCENT = parseFlagNum(args, 'scale', 100);
 
@@ -93,7 +93,7 @@ console.log(`App URL: ${APP_URL}`);
 console.log(`Output format: ${format.toUpperCase()}`);
 console.log(`Mode: ${wantPortrait ? 'Portrait (0.8 aspect ratio)' : 'Landscape'}`);
 console.log(`Record duration: ${RECORD_MS}ms (${RECORD_MS / 1000}s)`);
-console.log(`Trim first: ${TRIM_START_SECONDS}s (to remove loading artifacts)`);
+console.log(`Trim first: ${TRIM_START_MS}ms (to remove loading artifacts)`);
 if (wantGif || wantMp4) {
   console.log(`Output framerate: ${GIF_FPS} fps`);
   console.log(`Scale: ${SCALE_PERCENT}%`);
@@ -456,13 +456,13 @@ await recordingPage.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 3000
 // Speed up carousel rotation from 6 seconds to 4 seconds (must be done before carousel initializes)
 if (wantPortrait) {
   await recordingPage.evaluate(() => {
-    // Override setInterval to change carousel timing from 6000ms to 4000ms
+    // Override setInterval to change carousel timing from 6000ms to 5000ms
     const originalSetInterval = window.setInterval;
     window.setInterval = function(callback, delay, ...args) {
-      // If this looks like a carousel interval (6000ms), change to 4000ms
+      // If this looks like a carousel interval (6000ms), change to 5000ms
       if (delay === 6000) {
-        console.log('Overriding carousel interval from 6000ms to 4000ms');
-        return originalSetInterval(callback, 4000, ...args);
+        console.log('Overriding carousel interval from 6000ms to 5000ms');
+        return originalSetInterval(callback, 5000, ...args);
       }
       return originalSetInterval(callback, delay, ...args);
     };
@@ -778,12 +778,13 @@ console.log(`Recorded raw WebM: ${rawWebmFile}`);
 
 // ---------- Trim video to remove loading artifacts ----------
 await ensureFfmpeg();
-console.log(`Trimming first ${TRIM_START_SECONDS}s from video...`);
-// Note: -ss AFTER -i for frame-accurate seeking (vs keyframe seeking before -i)
-// Using -c copy is fast but may be slightly imprecise at trim point
+const trimSeconds = TRIM_START_MS / 1000; // Convert ms to seconds for FFmpeg
+console.log(`Trimming first ${TRIM_START_MS}ms (${trimSeconds}s) from video...`);
+// Note: For accurate trimming, we re-encode instead of using -c copy
+// -ss AFTER -i for frame-accurate seeking
 const trimCmd =
-  `ffmpeg -hide_banner -loglevel error -i "${rawWebmFile}" -ss ${TRIM_START_SECONDS} ` +
-  `-c copy "${webmFile}" -y`;
+  `ffmpeg -hide_banner -loglevel error -i "${rawWebmFile}" -ss ${trimSeconds} ` +
+  `-c:v libvpx-vp9 -crf 30 -b:v 0 "${webmFile}" -y`;
 
 try {
   await execAsync(trimCmd);
