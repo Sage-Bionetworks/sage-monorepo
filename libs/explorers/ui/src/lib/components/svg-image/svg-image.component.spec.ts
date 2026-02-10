@@ -25,7 +25,7 @@ describe('SvgImageComponent', () => {
 
   it('should populate innerHTML in the div when imagePath changes', () => {
     // Mock input change to trigger ngOnChanges
-    component.imagePath = '/explorers-assets/images/background1.svg';
+    component.imagePath = 'explorers-assets/images/background1.svg';
 
     // Trigger change detection
     fixture.detectChanges();
@@ -36,7 +36,7 @@ describe('SvgImageComponent', () => {
   });
 
   it('should apply the correct class based on sizeMode', () => {
-    component.imagePath = '/explorers-assets/images/background1.svg';
+    component.imagePath = 'explorers-assets/images/background1.svg';
 
     component.sizeMode = 'full-height';
     fixture.detectChanges();

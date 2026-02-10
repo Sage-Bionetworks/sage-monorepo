@@ -25,7 +25,7 @@ export const InternalLinkHomeCard: Story = {
   args: {
     title: 'Gene Expression',
     description: 'View Gene Expression results for this model in the comparison tool.',
-    imagePath: '/model-ad-assets/images/gene-expression.svg',
+    imagePath: 'model-ad-assets/images/gene-expression.svg',
     altText: 'gene expression icon',
     link: '/comparison/expression?models=APOE4',
   },
@@ -34,7 +34,7 @@ export const InternalLinkHomeCard: Story = {
 export const ExternalLinkHomeCard: Story = {
   args: {
     description: "View Gene Expression results for this model on the Allen Institute's site.",
-    imagePath: '/model-ad-assets/images/allen-institute-logo.svg',
+    imagePath: 'model-ad-assets/images/allen-institute-logo.svg',
     altText: 'allen institute logo',
     link: 'https://alleninstitute.org/division/brain-science',
   },
