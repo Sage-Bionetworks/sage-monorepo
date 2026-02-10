@@ -8,7 +8,6 @@ $home-mobile-xs-max-width: 385px;
 #home-page {
   position: relative;
   overflow: hidden;
-  background-image: url('/model-ad-assets/images/home-arc-bg.svg');
   background-position: center calc(0% - var(--header-height));
   background-repeat: no-repeat;
 }
@@ -113,10 +112,6 @@ explorers-home-card {
 }
 
 @media (width < $home-mobile-md-max-width) {
-  #home-page {
-    background-image: url('/model-ad-assets/images/home-arc-bg-mobile.svg');
-  }
-
   .section {
     padding: 70px clamp(30px, 5vw, 160px);
   }

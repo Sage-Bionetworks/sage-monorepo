@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
 })
-export class NotFoundComponent {}
+export class NotFoundComponent {
+  readonly backgroundImagePath = 'agora-assets/images/hero-background.svg';
+}
