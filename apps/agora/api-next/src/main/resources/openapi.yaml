@@ -7,41 +7,39 @@ info:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   title: Agora API Next
-  version: 1.0.0-draft
+  version: 1.0.0
   x-logo:
     url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
     altText: Agora
 servers:
   - url: http://localhost/v1
 tags:
-  - description: Operations about health checks.
-    name: Health Check
-    x-audience:
-      - internal
+  - description: Operations about the data version.
+    name: Data Version
 paths:
-  /next/health-check:
+  /data-version:
     get:
-      description: Get information about the health of the service
-      operationId: getHealthCheck
+      description: Get data version
+      operationId: getDataVersion
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheck'
+                $ref: '#/components/schemas/DataVersion'
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      summary: Get health check information
+      summary: Get data version
       tags:
-        - Health Check
+        - Data Version
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: Health Check
+        - tag: Data Version
 components:
   responses:
     BadRequest:
@@ -57,20 +55,23 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
-    HealthCheck:
-      description: Represents the health of a service
+    DataVersion:
+      description: Synapse data version
       example:
-        status: pass
+        data_file: data_file
+        data_version: data_version
+        team_images_id: team_images_id
       properties:
-        status:
-          description: Indicates whether the service status is acceptable or not
-          enum:
-            - pass
-            - fail
-            - warn
+        data_file:
+          type: string
+        data_version:
+          type: string
+        team_images_id:
           type: string
       required:
-        - status
+        - data_file
+        - data_version
+        - team_images_id
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)

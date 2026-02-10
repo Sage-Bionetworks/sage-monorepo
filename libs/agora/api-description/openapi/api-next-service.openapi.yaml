@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 1.0.0-draft
+  version: 1.0.0
   title: Agora API Next
   license:
     name: Apache 2.0
@@ -14,43 +14,43 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Health Check
-    description: Operations about health checks.
-    x-internal: true
+  - name: Data Version
+    description: Operations about the data version.
 paths:
-  /next/health-check:
+  /data-version:
     get:
       tags:
-        - Health Check
-      summary: Get health check information
-      description: Get information about the health of the service
-      operationId: getHealthCheck
+        - Data Version
+      summary: Get data version
+      description: Get data version
+      operationId: getDataVersion
       responses:
         '200':
-          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheck'
+                $ref: '#/components/schemas/DataVersion'
+          description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    HealthCheck:
+    DataVersion:
       type: object
-      description: Represents the health of a service
+      description: Synapse data version
       properties:
-        status:
-          description: Indicates whether the service status is acceptable or not
+        data_file:
           type: string
-          enum:
-            - pass
-            - fail
-            - warn
+        data_version:
+          type: string
+        team_images_id:
+          type: string
       required:
-        - status
+        - data_file
+        - data_version
+        - team_images_id
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)

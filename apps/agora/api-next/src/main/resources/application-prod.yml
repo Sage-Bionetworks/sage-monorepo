@@ -1,0 +1,4 @@
+# Production profile configuration
+logging:
+  level:
+    org.sagebionetworks.agora: INFO

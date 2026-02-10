@@ -21,6 +21,7 @@
 
 /apps/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
+/docker/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /.github/workflows/e2e-agora.yaml @Sage-Bionetworks/sage-monorepo-agora
 
 /libs/shared/ @hallieswan
