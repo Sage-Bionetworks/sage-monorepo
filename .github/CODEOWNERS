@@ -13,7 +13,7 @@
 # OpenChallenges
 /apps/openchallenges/ @rrchai
 /libs/openchallenges/ @rrchai
-/libs/openchallenges/web/config/angular
+/libs/openchallenges/web/config/angular @rrchai
 
 ## Sage
 /apps/sage/ @hallieswan
