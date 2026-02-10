@@ -1,34 +1,29 @@
-* @tschaffter
+* @hallieswan
 
 # Repository administration
-/.devcontainer @tschaffter
-/.github @tschaffter
-/.vscode @tschaffter
-/.yarn @tschaffter
+/.devcontainer @hallieswan
+/.github @hallieswan
+/.vscode @hallieswan
 
 # BixArena
-/apps/bixarena/ @rrchai @tschaffter
-/libs/bixarena/ @rrchai @tschaffter
-/docker/bixarena/ @rrchai @tschaffter
+/apps/bixarena/ @rrchai
+/libs/bixarena/ @rrchai
+/docker/bixarena/ @rrchai
 
 # OpenChallenges
-/apps/openchallenges/ @rrchai @tschaffter
-/libs/openchallenges/ @rrchai @tschaffter
-/libs/openchallenges/web/config/angular @tschaffter
-
-## DB content
-/apps/openchallenges/challenge-service/src/main/resources/db/     @tschaffter @gaiaandreoletti
-/apps/openchallenges/organization-service/src/main/resources/db/  @tschaffter @gaiaandreoletti
+/apps/openchallenges/ @rrchai
+/libs/openchallenges/ @rrchai
+/libs/openchallenges/web/config/angular
 
 ## Sage
-/apps/sage/ @tschaffter
-/libs/sage/ @tschaffter
+/apps/sage/ @hallieswan
+/libs/sage/ @hallieswan
 
 /apps/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /.github/workflows/e2e-agora.yaml @Sage-Bionetworks/sage-monorepo-agora
 
-/libs/shared/ @tschaffter
+/libs/shared/ @hallieswan
 
 /apps/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
 /docker/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
@@ -40,7 +35,7 @@
 /libs/synapse/ @Sage-Bionetworks/sage-monorepo-agora
 
 # Platform
-/libs/platform/config/angular @tschaffter
+/libs/platform/config/angular @hallieswan
 
 # Web Shared
-/libs/web-shared/angular/analtyics/gtm @tschaffter
+/libs/web-shared/angular/analtyics/gtm @hallieswan
