@@ -1,8 +1,0 @@
-name: pageNumber
-description: The page number.
-in: query
-schema:
-  type: integer
-  format: int32
-  default: 0
-  minimum: 0

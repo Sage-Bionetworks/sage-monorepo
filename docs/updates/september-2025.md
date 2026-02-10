@@ -22,7 +22,7 @@ Deterministic environments improved through Gradle 9 adoption, ES target unifica
 
 ### API modernization initiative
 
-Kebab-case path/file conventions, tag singularization, vendor extension standardization (`x-audience`→`x-internal`), and removal of deprecated annotations drove a cleaner, more discoverable OpenAPI surface across Agora, Model-AD, AMP-ALS, Synapse, and Explorers—laying groundwork for consistent client generation.
+Kebab-case path/file conventions, tag singularization, vendor extension standardization (`x-audience`→`x-internal`), and removal of deprecated annotations drove a cleaner, more discoverable OpenAPI surface across Agora, Model-AD, Synapse, and Explorers—laying groundwork for consistent client generation.
 
 ### User interface enhancements
 

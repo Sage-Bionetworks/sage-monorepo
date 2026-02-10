@@ -1,8 +1,0 @@
-type: oauth2
-description: For more information, see https://api.openchallenges.org/docs/oauth
-flows:
-  implicit:
-    authorizationUrl: '/oauth2/authorize'
-    scopes:
-      read:users: read users info
-      write:users: modify or remove users

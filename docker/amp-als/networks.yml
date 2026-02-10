@@ -1,4 +1,0 @@
-networks:
-  amp-als:
-    name: amp-als
-    driver: bridge

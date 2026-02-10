@@ -17,9 +17,8 @@
   "features": {},
   "forwardPorts": [
     2000, 2432, 3333, 3334, 4200, 4211, 4400, 4401, 4402, 5200, 5601, 8010, 8071, 8000, 8080, 8082,
-    8084, 8085, 8086, 8087, 8091, 8100, 8111, 8112, 8113, 8114, 8115, 8116, 8400, 8401, 8402, 8403,
-    8404, 8405, 8406, 8200, 8500, 8501, 8502, 8503, 8504, 8505, 8506, 8507, 8508, 8509, 8510, 8511,
-    8887, 8888, 8889, 9200, 21000, 27017
+    8084, 8085, 8086, 8087, 8091, 8100, 8111, 8112, 8113, 8114, 8115, 8116, 8200, 8500, 8501, 8502,
+    8503, 8504, 8505, 8506, 8507, 8508, 8509, 8510, 8511, 8887, 8888, 8889, 9200, 21000, 27017
   ],
   "portsAttributes": {
     "2000": {
@@ -132,34 +131,6 @@
     },
     "8116": {
       "label": "bixarena-valkey",
-      "onAutoForward": "silent"
-    },
-    "8400": {
-      "label": "amp-als-apex",
-      "onAutoForward": "silent"
-    },
-    "8401": {
-      "label": "amp-als-postgres",
-      "onAutoForward": "silent"
-    },
-    "8402": {
-      "label": "amp-als-opensearch",
-      "onAutoForward": "silent"
-    },
-    "8403": {
-      "label": "amp-als-api-docs",
-      "onAutoForward": "silent"
-    },
-    "8404": {
-      "label": "amp-als-dataset-service",
-      "onAutoForward": "silent"
-    },
-    "8405": {
-      "label": "amp-als-keycloak",
-      "onAutoForward": "silent"
-    },
-    "8406": {
-      "label": "amp-als-user-service",
       "onAutoForward": "silent"
     },
     "8500": {

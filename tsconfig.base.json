@@ -38,7 +38,6 @@
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],
       "@sagebionetworks/agora/util": ["libs/agora/util/src/index.ts"],
       "@sagebionetworks/agora/wiki": ["libs/agora/wiki/src/index.ts"],
-      "@sagebionetworks/amp-als/api-client": ["libs/amp-als/api-client-angular/src/index.ts"],
       "@sagebionetworks/explorers/charts": ["libs/explorers/charts/src/index.ts"],
       "@sagebionetworks/explorers/charts-angular": ["libs/explorers/charts-angular/src/index.ts"],
       "@sagebionetworks/explorers/comparison-tool": ["libs/explorers/comparison-tool/src/index.ts"],
