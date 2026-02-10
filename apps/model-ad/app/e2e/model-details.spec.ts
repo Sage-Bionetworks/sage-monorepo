@@ -166,9 +166,10 @@ test.describe('model details - omics', () => {
     await card.click();
     const popup = await popupPromise;
 
-    // Wait for navigation to comparison tool expression page
-    await popup.waitForURL(/\/comparison\/expression/);
+    await popup.waitForURL('/comparison/expression?models=APOE4');
     await expectComparisonToolTableLoaded(popup, 'Gene Expression', true);
+    await expectFiltersParams(popup, { models: ['APOE4'] });
+    await expectFilters(popup, { 'Mouse Model': ['APOE4'] });
   });
 
   test('disease correlation card links to disease correlation CT in new tab', async ({ page }) => {
@@ -181,9 +182,10 @@ test.describe('model details - omics', () => {
     await card.click();
     const popup = await popupPromise;
 
-    // Wait for navigation to comparison tool correlation page
-    await popup.waitForURL(/\/comparison\/correlation/);
+    await popup.waitForURL('/comparison/correlation?models=APOE4');
     await expectComparisonToolTableLoaded(popup, 'Disease Correlation', true);
+    await expectFiltersParams(popup, { models: ['APOE4'] });
+    await expectFilters(popup, { 'Mouse Model': ['APOE4'] });
   });
 });
 

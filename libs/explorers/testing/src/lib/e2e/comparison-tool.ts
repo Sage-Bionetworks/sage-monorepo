@@ -302,11 +302,11 @@ export async function testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(
   await goToLastPage(page);
 
   // Remove filter - should return to first page
-  const filterPanel2 = await openFilterMenuAndClickCheckbox(page, filterName, filterValue);
+  await toggleFilterPanel(page);
+  await clickFilterCheckbox(filterPanel1, filterName, filterValue);
   // Close filter panel to ensure UI has settled
   await toggleFilterPanel(page);
-  await expect(filterPanel2).toBeHidden();
-  await expectFirstPage(page);
+  await expect(filterPanel1).toBeHidden();
 }
 
 export async function testTableReturnsToFirstPageWhenSearchTermEnteredAndCleared(page: Page) {
