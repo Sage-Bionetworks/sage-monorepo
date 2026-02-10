@@ -212,7 +212,10 @@
     },
     "@nx/gradle:gradle": {
       "cache": true,
-      "inputs": ["defaultGradle", "^productionGradle"]
+      "inputs": ["defaultGradle", "^productionGradle"],
+      "options": {
+        "excludeDependsOn": false
+      }
     }
   },
   "namedInputs": {
