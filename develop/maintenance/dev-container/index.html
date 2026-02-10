@@ -1,0 +1,5521 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A development environment for building robust apps faster.">
+      
+      
+      
+      
+        <link rel="prev" href="../docker-images/">
+      
+      
+        <link rel="next" href="../security/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Dev Container - Sage Monorepo</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1%207.775V2.75C1%201.784%201.784%201%202.75%201h5.025c.464%200%20.91.184%201.238.513l6.25%206.25a1.75%201.75%200%200%201%200%202.474l-5.026%205.026a1.75%201.75%200%200%201-2.474%200l-6.25-6.25A1.75%201.75%200%200%201%201%207.775m1.5%200c0%20.066.026.13.073.177l6.25%206.25a.25.25%200%200%200%20.354%200l5.025-5.025a.25.25%200%200%200%200-.354l-6.25-6.25a.25.25%200%200%200-.177-.073H2.75a.25.25%200%200%200-.25.25ZM6%205a1%201%200%201%201%200%202%201%201%200%200%201%200-2%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75M8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dev-container-updates" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Sage Monorepo" class="md-header__button md-logo" aria-label="Sage Monorepo" data-md-component="logo">
+      
+  <img src="../../../images/sage.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sage Monorepo
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dev Container
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Sage-Bionetworks/sage-monorepo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sage-monorepo
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../updates/" class="md-tabs__link">
+          
+  
+  
+  Updates
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../blog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../products/services/" class="md-tabs__link">
+          
+  
+  
+  Products
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../quick-start/" class="md-tabs__link">
+          
+  
+  
+  Develop
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../api/overview/" class="md-tabs__link">
+          
+  
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../resources/faq/" class="md-tabs__link">
+          
+  
+  
+  Resources
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../technical-documentation-overview/" class="md-tabs__link">
+          
+  
+  
+  Technical Documentation
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Sage Monorepo" class="md-nav__button md-logo" aria-label="Sage Monorepo" data-md-component="logo">
+      
+  <img src="../../../images/sage.png" alt="logo">
+
+    </a>
+    Sage Monorepo
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Sage-Bionetworks/sage-monorepo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sage-monorepo
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Updates
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/september-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    September 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/june-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    June 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/may-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    May 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/april-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    April 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/march-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    March 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/february-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    February 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Products
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Products
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../products/services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Service Catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../products/agora/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agora
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/bixarena/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BixArena
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/model-ad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model-AD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../products/openchallenges/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenChallenges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/synapse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synapse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Develop
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Develop
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../remote-dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/what-is-nx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nx Workspace
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/what-is-devcontainer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Containers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/terraform-infrastructure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terraform Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_1" id="__nav_5_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Angular
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Angular
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-api-client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add API Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-component/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add Component
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_2" id="__nav_5_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Java
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/java/add-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/java/add-rest-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_3" id="__nav_5_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/python/add-rest-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_4" id="__nav_5_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/docker/new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New Project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_5" id="__nav_5_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    R
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/r/new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New Project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_6" id="__nav_5_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terraform
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Terraform
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/terraform/create-backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create Backend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/terraform/create-reusable-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create Reusable Module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintenance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Maintenance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../java/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Node / TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../r/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-images/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Base Images
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Container
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Container
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminology
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-step-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two-Step Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rationale-for-separation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rationale for Separation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typical-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1a-update-the-docker-base-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1a: Update the Docker Base Image
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1a: Update the Docker Base Image">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#base-image-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Base Image Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-version-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Version Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-package-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Package Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-management-and-removal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Management and Removal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1b-update-dev-container-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1b: Update Dev Container Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1b: Update Dev Container Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#feature-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-feature-evaluation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Feature Evaluation Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-specific-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature-Specific Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Feature-Specific Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-in-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker-in-Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Java
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#go" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Go
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kubernetes Tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1c-test-the-dev-container-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1c: Test the Dev Container Locally
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1c: Test the Dev Container Locally">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-dev-container-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Dev Container Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manual Dev Container Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-the-dev-container-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build the Dev Container Image
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-container-startup-and-functionality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Container Startup and Functionality
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headless-monorepo-runtime-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headless Monorepo Runtime Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Headless Monorepo Runtime Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verify-local-image-availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify Local Image Availability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-dev-container-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update Dev Container Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-with-monorepo-codebase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploy with Monorepo Codebase
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ide-ci-integration-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IDE &amp; CI Integration Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1d-build-publish-image-pr-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1d: Build &amp; Publish Image (PR 1)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1d: Build &amp; Publish Image (PR 1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-the-build-pr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating the Build PR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publishing-the-new-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing the New Image
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-activate-published-image-pr-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Activate Published Image (PR 2)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Activate Published Image (PR 2)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#activation-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activation Overview
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-deployment-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-Deployment Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Update Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#during-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        During Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-functionality-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Functionality Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headless-monorepo-runtime-testing_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headless Monorepo Runtime Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs-code-integration-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VS Code Integration Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-Update
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Post-Update">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#first-pr-dev-container-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First PR - Dev Container Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-pr-activate-new-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Second PR - Activate New Container
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Failures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dev-container-build-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dev Container Build Failures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dev-container-runtime-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dev Container Runtime Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recovery-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recovery Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Considerations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#image-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#access-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Access Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automation-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automation Opportunities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security & Compliance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting & FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/developing-on-a-remote-host/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/creating-a-commit-with-multiple-authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-author Commits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/agora/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agora
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/bixarena/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BixArena
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/model-ad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model-AD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/openchallenges/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenChallenges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/synapse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synapse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Resources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/bug-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bug Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/feature-requests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature Requests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributions/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/oc-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenChallenges Schemas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../technical-documentation-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../submission-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Submission Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rfcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RFCs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADRs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminology
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-step-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two-Step Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rationale-for-separation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rationale for Separation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typical-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1a-update-the-docker-base-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1a: Update the Docker Base Image
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1a: Update the Docker Base Image">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#base-image-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Base Image Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-version-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Version Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-package-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Package Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-management-and-removal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Management and Removal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1b-update-dev-container-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1b: Update Dev Container Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1b: Update Dev Container Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#feature-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-feature-evaluation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Feature Evaluation Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-specific-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature-Specific Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Feature-Specific Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-in-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker-in-Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Java
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#go" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Go
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kubernetes Tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1c-test-the-dev-container-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1c: Test the Dev Container Locally
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1c: Test the Dev Container Locally">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-dev-container-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Dev Container Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manual Dev Container Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-the-dev-container-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build the Dev Container Image
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-container-startup-and-functionality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Container Startup and Functionality
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headless-monorepo-runtime-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headless Monorepo Runtime Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Headless Monorepo Runtime Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verify-local-image-availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify Local Image Availability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-dev-container-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update Dev Container Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-with-monorepo-codebase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploy with Monorepo Codebase
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ide-ci-integration-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IDE &amp; CI Integration Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1d-build-publish-image-pr-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1d: Build &amp; Publish Image (PR 1)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1d: Build &amp; Publish Image (PR 1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-the-build-pr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating the Build PR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publishing-the-new-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing the New Image
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-activate-published-image-pr-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Activate Published Image (PR 2)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Activate Published Image (PR 2)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#activation-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activation Overview
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-deployment-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-Deployment Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Update Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#during-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        During Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-functionality-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Functionality Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headless-monorepo-runtime-testing_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headless Monorepo Runtime Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs-code-integration-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VS Code Integration Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-Update
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Post-Update">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#first-pr-dev-container-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First PR - Dev Container Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-pr-activate-new-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Second PR - Activate New Container
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Failures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dev-container-build-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dev Container Build Failures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dev-container-runtime-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dev Container Runtime Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recovery-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recovery Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Considerations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#image-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#access-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Access Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automation-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automation Opportunities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="dev-container-updates">Dev Container Updates<a class="headerlink" href="#dev-container-updates" title="Permanent link">&para;</a></h1>
+<p>This guide provides comprehensive instructions for updating the development container used in the
+Sage Monorepo. The dev container provides a consistent development environment across all
+contributors and includes all necessary tools and dependencies.</p>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>Updating the dev container is an intentionally <strong>two-step, two-PR workflow</strong> that separates
+image BUILD from image ACTIVATION. This decoupling lets us publish and test a new image across
+multiple branches before the whole team is switched over.</p>
+<h3 id="terminology">Terminology<a class="headerlink" href="#terminology" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Dockerfile</strong> (<code>.github/.devcontainer/Dockerfile</code>): Defines the base Ubuntu LTS image, pinned
+  build ARG versions, and any tools installed directly via shell/apt scripts.</li>
+<li><strong>Build Definition (Intermediate) devcontainer.json</strong> (<code>.github/.devcontainer/devcontainer.json</code>):
+  Extends the Dockerfile with Dev Container Features (Docker-in-Docker, Java, Go, Kubernetes tooling, etc.).
+  This file is used only to BUILD &amp; PUBLISH the final composite image to GHCR. It is NOT what VS Code opens.</li>
+<li><strong>Active devcontainer.json</strong> (<code>.devcontainer/devcontainer.json</code>): The definition actually consumed
+  by VS Code / <code>devcontainer up</code> when developers open the monorepo. It references an already-published
+  image tag (from GHCR) and should remain stable except when activating a new image.</li>
+<li><strong>Published Image</strong>: <code>ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:&lt;tag&gt;</code> produced by Step 1.</li>
+</ul>
+<h3 id="two-step-workflow">Two-Step Workflow<a class="headerlink" href="#two-step-workflow" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>PR Focus</th>
+<th>Touched Files</th>
+<th>Result</th>
+<th>Why Separate?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>BUILD &amp; PUBLISH new image</td>
+<td><code>.github/.devcontainer/Dockerfile</code>, <code>.github/.devcontainer/devcontainer.json</code></td>
+<td>New image pushed to GHCR (tag = commit SHA or version)</td>
+<td>Allows iterative hardening &amp; branch testing without forcing all developers onto a possibly unstable image</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ACTIVATE published image</td>
+<td><code>.devcontainer/devcontainer.json</code></td>
+<td>Team starts using the new image</td>
+<td>Minimal diff; easy rollback by reverting single tag change</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rationale-for-separation">Rationale for Separation<a class="headerlink" href="#rationale-for-separation" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Safety</strong> – Risky base upgrades (Ubuntu date tag, Docker engine, language majors) are isolated from the day-to-day environment until validated.</li>
+<li><strong>Parallel Testing</strong> – Multiple feature branches can temporarily reference the newly published image for smoke tests before activation.</li>
+<li><strong>Fast Rollback</strong> – If problems surface after activation, reverting one commit (image tag change) restores the previous environment.</li>
+<li><strong>Auditability</strong> – PR 1 documents image construction changes; PR 2 documents operational adoption.</li>
+</ol>
+<h3 id="typical-flow">Typical Flow<a class="headerlink" href="#typical-flow" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Create branch <code>chore/devcontainer/build-&lt;date&gt;</code> and update:</p>
+<p>- Dockerfile (Ubuntu date tag + tool ARG bumps + removals)
+  - Build Definition devcontainer file (feature version bumps, add/remove Features)</p>
+</li>
+<li>
+<p>Open PR (BUILD). Opening and updating the PR triggers a build of the Docker images.</p>
+</li>
+<li>Merge PR (PUBLISH). Builds &amp; publishes image → GHCR tag.</li>
+<li>(Optional) Test in other branches by temporarily overriding the active file locally (do NOT commit those overrides) or using <code>devcontainer build/up/exec</code> commands referencing the new image.</li>
+<li>Once validated, create branch <code>chore/devcontainer/activate-&lt;tag&gt;</code> updating only <code>.devcontainer/devcontainer.json</code> to the new image tag.</li>
+<li>Open PR (ACTIVATE). After merge, developers rebuild / reopen in container and begin using the new environment.</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Keep any temporary local tag substitutions (e.g., <code>:local</code>) out of committed code. Only SHA or explicitly versioned tags should appear in the activated definition.</p>
+</div>
+<h3 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h3>
+<p>You modify two different <code>devcontainer.json</code> files for two distinct purposes:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+<th>When Edited</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.github/.devcontainer/devcontainer.json</code></td>
+<td>Compose &amp; bake the final published image together with Features</td>
+<td>Step 1 (BUILD) only</td>
+</tr>
+<tr>
+<td><code>.devcontainer/devcontainer.json</code></td>
+<td>Point developer workflows at an existing published image</td>
+<td>Step 2 (ACTIVATE) only</td>
+</tr>
+</tbody>
+</table>
+<p>The remainder of this guide details how to update the Docker base image, tool versions, Features, test the resulting image, and safely activate it.</p>
+<h3 id="key-files">Key Files<a class="headerlink" href="#key-files" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File / Path</th>
+<th>Role / Purpose</th>
+<th>Maintenance Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.github/.devcontainer/Dockerfile</code></td>
+<td>Base layer (Ubuntu LTS date tag + apt + direct installs of some tools).</td>
+<td>Step 1 only. Pin ARG versions; prefer removing rather than leaving unused tooling. Keep image reproducible (no moving tags).</td>
+</tr>
+<tr>
+<td><code>.github/.devcontainer/devcontainer.json</code></td>
+<td>BUILD Definition: aggregates the Dockerfile + Dev Container Features to bake the final image that will be published to GHCR. Not used directly by developers in VS Code.</td>
+<td>Edit in Step 1 only. Use explicit feature versions. Treat as build recipe; never reference a production image tag here—always <code>build</code> from the Dockerfile.</td>
+</tr>
+<tr>
+<td><code>.devcontainer/devcontainer.json</code></td>
+<td>ACTIVE Definition: points to the published image tag developers consume locally and in CI.</td>
+<td>Edit in Step 2 only. Single-line diff (image tag) ideally. Keep clean—should not contain build-time Feature composition once image is published.</td>
+</tr>
+<tr>
+<td><code>dev-env.sh</code></td>
+<td>Workspace initialization (env vars, helper functions, wrappers).</td>
+<td>Review after major tool/runtime bumps. Sync deprecated tool names or paths.</td>
+</tr>
+<tr>
+<td><code>tools/prepare-*-envs.js</code></td>
+<td>Language ecosystem setup (Node, Python, Java, R, etc.).</td>
+<td>Validate they still succeed after base image &amp; feature updates (Node majors, Python minors, JDK changes). Update literals referencing versions/paths.</td>
+</tr>
+<tr>
+<td><code>.github/workflows/*devcontainer*.yml</code>*</td>
+<td>CI workflows that build &amp; push the Step 1 image.</td>
+<td>Ensure cache key changes when ARGs change. Confirm push includes immutable tag (SHA) and optional semantic tag.</td>
+</tr>
+</tbody>
+</table>
+<p>* Actual workflow filenames may vary; search for <code>devcontainer</code> in <code>.github/workflows</code> when adjusting build logic.</p>
+<div class="admonition note">
+<p class="admonition-title">Maintenance Guide Scope</p>
+<p>Only files directly influencing the container build, configuration, or activation workflow are listed. Application/service Dockerfiles are out of scope for this maintenance guide.</p>
+</div>
+<h2 id="step-1a-update-the-docker-base-image">Step 1a: Update the Docker Base Image<a class="headerlink" href="#step-1a-update-the-docker-base-image" title="Permanent link">&para;</a></h2>
+<div class="admonition tip quick reference">
+<p class="admonition-title">Tip</p>
+<p>See the <a href="#update-checklist">Update Checklist</a> at the end of this document for an actionable summary of this section.</p>
+</div>
+<h3 id="base-image-update">Base Image Update<a class="headerlink" href="#base-image-update" title="Permanent link">&para;</a></h3>
+<p>The dev container uses Ubuntu as its base image. To update:</p>
+<div class="highlight"><pre><span></span><code><span class="c"># Current example:</span>
+<span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:noble-20250910</span>
+
+<span class="c"># To update, change to newer tag with release date:</span>
+<span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:noble-20251015</span><span class="w">  </span><span class="c"># Use date-specific tag</span>
+</code></pre></div>
+<p><strong>Ubuntu Version Requirements &amp; Tagging:</strong></p>
+<p>Use only Ubuntu LTS date-specific tags for reproducibility (e.g. <code>ubuntu:noble-20250910</code>). Avoid moving tags (<code>noble</code>, <code>latest</code>) and non‑LTS releases. Update periodically (e.g. monthly or when security fixes land). Reference: official LTS list at https://releases.ubuntu.com and available date tags at Docker Hub. Always test locally before committing and track EOL to plan major migrations.</p>
+<h3 id="tool-version-updates">Tool Version Updates<a class="headerlink" href="#tool-version-updates" title="Permanent link">&para;</a></h3>
+<p>The Dockerfile includes numerous tools with pinned versions. Update the build arguments at the top of the file:</p>
+<div class="highlight"><pre><span></span><code><span class="c"># Example updates:</span>
+<span class="k">ARG</span><span class="w"> </span><span class="nv">hyperfineVersion</span><span class="o">=</span><span class="s2">&quot;1.19.0&quot;</span><span class="w">        </span>#<span class="w"> </span>Check:<span class="w"> </span>https://github.com/sharkdp/hyperfine
+<span class="k">ARG</span><span class="w"> </span><span class="nv">devcontainerCliVersion</span><span class="o">=</span><span class="s2">&quot;0.80.0&quot;</span><span class="w">  </span>#<span class="w"> </span>Check:<span class="w"> </span>https://www.npmjs.com/package/@devcontainers/cli
+<span class="k">ARG</span><span class="w"> </span><span class="nv">uvVersion</span><span class="o">=</span><span class="s2">&quot;0.7.21&quot;</span><span class="w">               </span>#<span class="w"> </span>Check:<span class="w"> </span>https://github.com/astral-sh/uv
+<span class="k">ARG</span><span class="w"> </span><span class="nv">rVersion</span><span class="o">=</span><span class="s2">&quot;4.5.1&quot;</span><span class="w">                 </span>#<span class="w"> </span>Check:<span class="w"> </span>https://docs.posit.co/resources/install-r/
+<span class="k">ARG</span><span class="w"> </span><span class="nv">trivyVersion</span><span class="o">=</span><span class="s2">&quot;0.64.1&quot;</span><span class="w">            </span>#<span class="w"> </span>Check:<span class="w"> </span>https://aquasecurity.github.io/trivy
+<span class="k">ARG</span><span class="w"> </span><span class="nv">nodeVersionMajor</span><span class="o">=</span><span class="s2">&quot;22&quot;</span><span class="w">            </span>#<span class="w"> </span>Check:<span class="w"> </span>https://nodejs.org/en/about/previous-releases
+<span class="k">ARG</span><span class="w"> </span><span class="nv">pnpmVersion</span><span class="o">=</span><span class="s2">&quot;10.13.1&quot;</span><span class="w">            </span>#<span class="w"> </span>Check:<span class="w"> </span>https://github.com/pnpm/pnpm/releases
+</code></pre></div>
+<p><strong>Selection Criteria (condensed):</strong> Prefer LTS where applicable, skip anything &lt;24h old, avoid pre-releases, prefer versions with security fixes, and note breaking changes on major bumps.</p>
+<p><strong>Process:</strong> Check release page → confirm age ≥1 day → confirm LTS (when relevant) → update ARG → build &amp; smoke test critical tooling.</p>
+<p><strong>Node.js:</strong> Use even-numbered LTS majors (18/20/22). Avoid odd majors. Check the Node.js release schedule for current LTS + EOL.</p>
+<h3 id="system-package-updates">System Package Updates<a class="headerlink" href="#system-package-updates" title="Permanent link">&para;</a></h3>
+<p>System packages are installed via apt. While most use latest available versions, some may be pinned:</p>
+<div class="highlight"><pre><span></span><code><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span>-y<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noninteractive<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>--no-install-recommends<span class="w"> </span>-qq<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ca-certificates<span class="w"> </span>curl<span class="w"> </span>git<span class="w"> </span>bash-completion<span class="w"> </span>gnupg2<span class="w"> </span>lsb-release<span class="w"> </span>ssh<span class="w"> </span>sudo<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3-pip<span class="w"> </span>python3-dev<span class="w"> </span>python-is-python3<span class="w"> </span>pipx<span class="w"> </span>openjdk-17-jdk<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>#<span class="w"> </span>...<span class="w"> </span>other<span class="w"> </span>packages
+</code></pre></div>
+<p><strong>Considerations:</strong></p>
+<ul>
+<li>Most packages will automatically use latest versions from Ubuntu repositories</li>
+<li>Major Ubuntu version changes may affect package availability</li>
+<li>Test package installations if changing base Ubuntu version</li>
+</ul>
+<h3 id="tool-management-and-removal">Tool Management and Removal<a class="headerlink" href="#tool-management-and-removal" title="Permanent link">&para;</a></h3>
+<p>To maintain security and reduce the attack surface, the dev container tool set should be periodically reviewed and pruned.</p>
+<p><strong>Tool Removal Guidelines:</strong></p>
+<ul>
+<li><strong>Security First</strong>: Remove rarely used tools to reduce potential attack vectors</li>
+<li><strong>Usage Analysis</strong>: Regularly assess which tools are actively used by the development team</li>
+<li><strong>Team Consensus</strong>: Tool removal requires consensus among team members before implementation</li>
+<li><strong>Impact Assessment</strong>: Evaluate potential workflow disruption before removing any tool</li>
+</ul>
+<p><strong>Review Process:</strong></p>
+<ol>
+<li><strong>Quarterly Reviews</strong>: Conduct tool usage reviews every 3-4 months</li>
+<li><strong>Usage Tracking</strong>: Monitor which tools are being used in CI/CD pipelines and development workflows (future work)</li>
+<li><strong>Team Survey</strong>: Poll team members about tool usage and necessity</li>
+<li><strong>Deprecation Notice</strong>: Provide advance notice before removing tools to allow workflow adjustments</li>
+<li><strong>Documentation</strong>: Update documentation when tools are removed</li>
+</ol>
+<p><strong>Tools to Monitor for Removal:</strong></p>
+<ul>
+<li>Development utilities with overlapping functionality</li>
+<li>Language-specific tools for unused programming languages</li>
+<li>CLI tools that haven't been used in recent projects</li>
+<li>Legacy tools that have modern replacements</li>
+</ul>
+<p><strong>Before Removing a Tool:</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Confirm tool is not used in any CI/CD pipelines</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Check if tool is referenced in documentation</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Verify no active projects depend on the tool</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Get explicit approval from team leads</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Plan migration path if tool replacement is needed</li>
+</ul>
+<h2 id="step-1b-update-dev-container-features">Step 1b: Update Dev Container Features<a class="headerlink" href="#step-1b-update-dev-container-features" title="Permanent link">&para;</a></h2>
+<div class="admonition tip quick reference">
+<p class="admonition-title">Tip</p>
+<p>See the <a href="#update-checklist">Update Checklist</a> at the end of this document for an actionable summary of this section.</p>
+</div>
+<p>After updating the Dockerfile (Step 1a), update <code>.github/.devcontainer/devcontainer.json</code> (feature set &amp; runtime configuration). This remains part of Step 1 (BUILD &amp; PUBLISH).</p>
+<h3 id="feature-set">Feature Set<a class="headerlink" href="#feature-set" title="Permanent link">&para;</a></h3>
+<p>The <code>devcontainer.json</code> file references the updated Dockerfile and uses pre-built features from the Dev Containers specification:</p>
+<div class="highlight"><pre><span></span><code>&quot;features&quot;: {
+  &quot;ghcr.io/devcontainers/features/docker-in-docker:2.12.2&quot;: {
+    &quot;version&quot;: &quot;28.3.2&quot;,
+    &quot;installDockerComposeSwitch&quot;: false
+  },
+  &quot;ghcr.io/devcontainers/features/java:1.6.3&quot;: {
+    &quot;version&quot;: &quot;21.0.7-ms&quot;,
+    &quot;additionalVersions&quot;: [&quot;21.0.7-graal&quot;]
+  },
+  &quot;ghcr.io/devcontainers/features/go:1.3.2&quot;: {
+    &quot;version&quot;: &quot;1.24.5&quot;,
+    &quot;golangciLintVersion&quot;: &quot;2.2.2&quot;
+  },
+  &quot;ghcr.io/devcontainers/features/kubectl-helm-minikube:1.2.2&quot;: {
+    &quot;version&quot;: &quot;1.33.3&quot;,
+    &quot;helm&quot;: &quot;3.17.0&quot;,
+    &quot;minikube&quot;: &quot;1.36.0&quot;
+  }
+}
+</code></pre></div>
+<p><strong>Selection &amp; Trust (condensed):</strong> Prefer official sources (<code>devcontainers</code>, <code>microsoft</code>, <code>docker</code>, major vendors). For community features: ≥50 stars, active in last 3 months, multi-contributor, semantic releases, documented, responsive issues, passes source/security skim. Always pin immutable version tags.</p>
+<p><strong>Mini Process:</strong> Look up latest → validate trust → pin explicit version → ensure cross-feature compatibility → test build.</p>
+<h3 id="community-feature-evaluation-checklist">Community Feature Evaluation Checklist<a class="headerlink" href="#community-feature-evaluation-checklist" title="Permanent link">&para;</a></h3>
+<p>When considering features from smaller communities, use this evaluation checklist:</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The checkboxes below are clickable—check them as you evaluate a community feature for inclusion in the dev container to track your review progress.</p>
+</div>
+<p><strong>Repository Assessment:</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> GitHub repository has 50+ stars</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Repository is actively maintained (commits within last 3 months)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Issues are actively triaged and responded to</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Multiple contributors (not single-person projects)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Clear contribution guidelines and code of conduct</li>
+</ul>
+<p><strong>Release Management:</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Regular release cadence (at least quarterly)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Semantic versioning is used</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Release notes document changes clearly</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> No breaking changes without major version bumps</li>
+</ul>
+<p><strong>Code Quality:</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Comprehensive README with usage examples</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Automated testing (CI/CD pipelines)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Security scanning in place</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Code follows security best practices</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Dependencies are up-to-date and secure</li>
+</ul>
+<p><strong>Community Health:</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Active maintainer response to issues</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Community discussions and engagement</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Clear project roadmap or vision</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Responsive to security vulnerability reports</li>
+</ul>
+<p><strong>Feature-Specific Review:</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Source code review for security vulnerabilities</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Feature functionality aligns with monorepo needs</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> No unnecessary privileges or access requirements</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Compatible with existing features and tools</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Performance impact is acceptable</li>
+</ul>
+<p><strong>Approval Process:</strong></p>
+<ol>
+<li>Complete evaluation checklist</li>
+<li>Document findings and recommendation</li>
+<li>Get approval from security team (if applicable)</li>
+<li>Test feature in isolated environment</li>
+<li>Get team consensus before adding to production</li>
+</ol>
+<h3 id="feature-specific-notes">Feature-Specific Notes<a class="headerlink" href="#feature-specific-notes" title="Permanent link">&para;</a></h3>
+<h4 id="docker-in-docker">Docker-in-Docker<a class="headerlink" href="#docker-in-docker" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Update Docker version to latest stable</li>
+</ul>
+<h4 id="java">Java<a class="headerlink" href="#java" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Coordinate with project Java version requirements</li>
+<li>Update both primary and additional JDK versions</li>
+<li>Ensure compatibility with Gradle configurations</li>
+</ul>
+<h4 id="go">Go<a class="headerlink" href="#go" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Update Go version for latest language features</li>
+<li>Update golangci-lint for latest linting rules</li>
+</ul>
+<h4 id="kubernetes-tools">Kubernetes Tools<a class="headerlink" href="#kubernetes-tools" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Update kubectl to match target Kubernetes versions</li>
+<li>Update Helm for latest chart compatibility</li>
+<li>Update Minikube for local development</li>
+</ul>
+<h2 id="step-1c-test-the-dev-container-locally">Step 1c: Test the Dev Container Locally<a class="headerlink" href="#step-1c-test-the-dev-container-locally" title="Permanent link">&para;</a></h2>
+<div class="admonition tip quick reference">
+<p class="admonition-title">Tip</p>
+<p>See the <a href="#update-checklist">Update Checklist</a> at the end of this document for an actionable summary of this section.</p>
+</div>
+<h3 id="manual-dev-container-testing">Manual Dev Container Testing<a class="headerlink" href="#manual-dev-container-testing" title="Permanent link">&para;</a></h3>
+<p>After updating both the Dockerfile and <code>devcontainer.json</code>, perform comprehensive testing using the devcontainer CLI.</p>
+<h4 id="build-the-dev-container-image">Build the Dev Container Image<a class="headerlink" href="#build-the-dev-container-image" title="Permanent link">&para;</a></h4>
+<p>The dev container includes the devcontainer CLI, so you can build the new container from within an existing dev container.</p>
+<p>From the root workspace directory:</p>
+<div class="highlight"><pre><span></span><code>devcontainer<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--workspace-folder<span class="w"> </span>.github<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--image-name<span class="w"> </span>ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:local
+</code></pre></div>
+<p><strong>Build Troubleshooting:</strong></p>
+<ul>
+<li><strong>Docker Version Issues</strong>: If build fails, the Docker engine version in <code>devcontainer.json</code> might be too recent<pre><code>- Try specifying an older Docker version in the `docker-in-docker` feature
+- Example: Change from `"version": "28.3.2"` to `"version": "27.3.2"` or earlier
+- Check [Docker releases](https://docs.docker.com/engine/release-notes/) for stable versions
+</code></pre>
+</li>
+</ul>
+<h4 id="test-container-startup-and-functionality">Test Container Startup and Functionality<a class="headerlink" href="#test-container-startup-and-functionality" title="Permanent link">&para;</a></h4>
+<ol>
+<li>
+<p>Start the dev container:
+    <div class="highlight"><pre><span></span><code>devcontainer<span class="w"> </span>up<span class="w"> </span>--workspace-folder<span class="w"> </span>.github
+</code></pre></div></p>
+</li>
+<li>
+<p>Connect to the running container:
+    <div class="highlight"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>sage-monorepo-devcontainer-prebuild<span class="w"> </span>bash
+</code></pre></div></p>
+</li>
+<li>
+<p>Verify tool installations, especially new and updates tools:
+    <div class="highlight"><pre><span></span><code><span class="c1"># Test key tools are available and working</span>
+docker<span class="w"> </span>--version
+go<span class="w"> </span>version
+java<span class="w"> </span>--version
+kubectl<span class="w"> </span>version<span class="w"> </span>--client
+node<span class="w"> </span>--version
+python<span class="w"> </span>--version
+trivy<span class="w"> </span>--version
+uv<span class="w"> </span>--version
+</code></pre></div></p>
+</li>
+<li>
+<p>Exit the container:
+    <div class="highlight"><pre><span></span><code><span class="c1"># Use Ctrl+C to exit the container session or enter:</span>
+<span class="nb">exit</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Clean up the test container:
+    <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>sage-monorepo-devcontainer-prebuild
+</code></pre></div></p>
+</li>
+</ol>
+<h3 id="headless-monorepo-runtime-testing">Headless Monorepo Runtime Testing<a class="headerlink" href="#headless-monorepo-runtime-testing" title="Permanent link">&para;</a></h3>
+<p>After basic functionality testing, run a comprehensive, CLI‑driven test pass with the entire monorepo mounted into the container using the devcontainer CLI <strong>without opening the workspace in VS Code</strong> (i.e. VS Code is not attached to this container yet). This validates the baked image + features + toolchain against real workspace code (builds, tests, scripts) but does <strong>not</strong> exercise:</p>
+<ul>
+<li>VS Code extension set / settings sync</li>
+<li>Editor‑integrated language servers started via the active <code>devcontainer.json</code></li>
+<li>Any VS Code tasks, launch configs, or UI workflows</li>
+</ul>
+<p>For those editor integration aspects, see the later section <a href="#ide-ci-integration-testing">IDE &amp; CI Integration Testing</a> which performs an actual VS Code rebuild using the active dev container definition.</p>
+<div class="admonition note">
+<p class="admonition-title">Why 'Headless'?</p>
+<p>"Headless" here means the container is running and the repo is mounted, but VS Code has not been reopened against it, so no editor extensions, language servers, tasks, or settings from the active devcontainer definition have initialized. It’s a fast runtime/tooling validation step before paying the cost of a full VS Code rebuild &amp; attachment.</p>
+</div>
+<h4 id="verify-local-image-availability">Verify Local Image Availability<a class="headerlink" href="#verify-local-image-availability" title="Permanent link">&para;</a></h4>
+<p>Confirm the dev container image was built successfully:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>images<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>devcontainer
+<span class="c1"># Expected output:</span>
+<span class="c1"># ghcr.io/sage-bionetworks/sage-monorepo-devcontainer   local   &lt;image-id&gt;   &lt;time&gt;   ~5GB</span>
+</code></pre></div>
+<h4 id="update-dev-container-definition">Update Dev Container Definition<a class="headerlink" href="#update-dev-container-definition" title="Permanent link">&para;</a></h4>
+<p>Update the main dev container configuration file (<code>.devcontainer/devcontainer.json</code>) to reference the new local image if needed for testing.</p>
+<p>Example diff (do NOT commit this change; for local testing only):</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span>// .devcontainer/devcontainer.json
+<span class="w"> </span>{
+<span class="w"> </span>   &quot;name&quot;: &quot;Sage Monorepo Dev Container&quot;,
+<span class="gd">-  &quot;image&quot;: &quot;ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-6269b9b3d863831c296f843edd84b2c7e1d4733d&quot;,</span>
+<span class="gi">+  &quot;image&quot;: &quot;ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:local&quot;,</span>
+<span class="w"> </span>   // ... rest of configuration
+<span class="w"> </span>}
+</code></pre></div>
+<p>After testing, revert the image line back to the published SHA tag before opening or updating any PRs.</p>
+<h4 id="deploy-with-monorepo-codebase">Deploy with Monorepo Codebase<a class="headerlink" href="#deploy-with-monorepo-codebase" title="Permanent link">&para;</a></h4>
+<p>Instead of manually stepping into the test container, you can run the comprehensive test from your current dev container:</p>
+<div class="admonition warning">
+<p class="admonition-title">Workspace Side Effects</p>
+<p>The steps below mount your <em>current</em> monorepo working copy into a throwaway dev container. Any
+tasks you run (e.g. <code>workspace-install</code>, Nx builds, tests) will mutate files <strong>on your host</strong>, not
+inside an isolated scratch layer. Typical side effects include updates to:</p>
+<ul>
+<li><code>node_modules/</code></li>
+<li>Nx / build caches (e.g. <code>.nx/cache</code>)</li>
+<li>Generated artifacts (dist / build folders)</li>
+<li>Potential lockfile adjustments if dependency resolution differs</li>
+</ul>
+<p>These changes persist after you remove the test container. To avoid unexpected diffs or
+performance regressions when you return to other feature work, choose one of the following
+strategies:</p>
+<p><strong>Safer Approaches</strong></p>
+<p>1. Use a temporary clone or worktree:
+    - <code>git worktree add ../sage-devcontainer-test &lt;branch&gt;</code>
+    - Run all container tests from that directory
+    - Remove when done: <code>git worktree remove ../sage-devcontainer-test</code>
+  2. Copy the repo for testing (choose one):
+     - Tar stream (preserves permissions, excludes .git):
+       <div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>../sage-devcontainer-test-copy
+tar<span class="w"> </span>--exclude<span class="w"> </span>.git<span class="w"> </span>-cf<span class="w"> </span>-<span class="w"> </span>.<span class="w"> </span><span class="p">|</span><span class="w"> </span>tar<span class="w"> </span>-C<span class="w"> </span>../sage-devcontainer-test-copy<span class="w"> </span>-xf<span class="w"> </span>-
+</code></pre></div>
+     - Simple cp fallback (copies .git then removes it):
+       <div class="highlight"><pre><span></span><code>cp<span class="w"> </span>-a<span class="w"> </span>.<span class="w"> </span>../sage-devcontainer-test-copy
+rm<span class="w"> </span>-rf<span class="w"> </span>../sage-devcontainer-test-copy/.git
+</code></pre></div>
+  3. If testing in-place, plan cleanup:
+    - Remove build caches: <code>rm -rf .nx/cache</code> (and any <code>dist/</code> or <code>build/</code> dirs)
+    - Recreate dependencies fresh: <code>rm -rf node_modules &amp;&amp; workspace-install</code>
+    - Discard unintended changes: <code>git restore .</code> / <code>git clean -fdX</code> (review before running)</p>
+<p>If you notice unexplained build speed regressions after testing, clear caches as above before
+investigating further.</p>
+</div>
+<ol>
+<li>
+<p>Start dev container with monorepo:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># From the root of the monorepo</span>
+devcontainer<span class="w"> </span>up<span class="w"> </span>--workspace-folder<span class="w"> </span>.
+</code></pre></div>
+</li>
+<li>
+<p>Execute comprehensive test directly:</p>
+<div class="highlight"><pre><span></span><code>devcontainer<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--workspace-folder<span class="w"> </span>.<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;. ./dev-env.sh \</span>
+<span class="s2">  &amp;&amp; workspace-install \</span>
+<span class="s2">  &amp;&amp; nx run-many --target=create-config,build,test --skip-nx-cache&quot;</span>
+</code></pre></div>
+</li>
+<li>
+<p>Clean up test container:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># After the command completes, remove the test container</span>
+docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>sage-monorepo-devcontainer
+</code></pre></div>
+</li>
+</ol>
+<p><strong>Benefits of this approach:</strong></p>
+<ul>
+<li><strong>Streamlined</strong>: No need to manually connect and navigate inside the test container</li>
+<li><strong>Automated</strong>: Single command runs the entire test suite</li>
+<li><strong>Clean</strong>: Remains in your active development environment throughout</li>
+<li><strong>Efficient</strong>: Uses <code>--skip-nx-cache</code> to ensure fresh builds and tests</li>
+</ul>
+<h3 id="ide-ci-integration-testing">IDE &amp; CI Integration Testing<a class="headerlink" href="#ide-ci-integration-testing" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Test in VS Code:</strong></p>
+<p>- Open the project in VS Code
+  - Select "Rebuild and Reopen in Container"
+  - Verify all extensions load correctly
+  - Test basic development workflows</p>
+</li>
+<li>
+<p><strong>Test CI/CD compatibility:</strong></p>
+<p>- Ensure GitHub Actions continue to work
+  - Verify any external integrations still function</p>
+</li>
+</ol>
+<h2 id="step-1d-build-publish-image-pr-1">Step 1d: Build &amp; Publish Image (PR 1)<a class="headerlink" href="#step-1d-build-publish-image-pr-1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>The checklist later includes an abbreviated version of these PR 1 steps.</p>
+</blockquote>
+<h3 id="creating-the-build-pr">Creating the Build PR<a class="headerlink" href="#creating-the-build-pr" title="Permanent link">&para;</a></h3>
+<p>After successful local testing:</p>
+<ol>
+<li>
+<p><strong>Revert local testing changes:</strong></p>
+<p>- <strong>Critical</strong>: Revert any image tag changes in <code>.devcontainer/devcontainer.json</code> made for local testing
+  - Ensure the file references the current production image tag, not "local" or test configurations
+  - Example: Change from <code>"image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:local"</code> back to the current SHA-based tag</p>
+</li>
+<li>
+<p><strong>Create feature branch PR:</strong></p>
+<p>- Create a pull request with all dev container changes
+  - Include comprehensive description of updates made
+  - Document any breaking changes or new requirements
+  - Verify <code>.devcontainer/devcontainer.json</code> uses production image reference</p>
+</li>
+<li>
+<p><strong>PR triggers automated build:</strong></p>
+<p>- GitHub workflow will build the new dev container image
+  - Automated tests will validate the container functionality
+  - Review any build failures or test issues</p>
+</li>
+</ol>
+<h3 id="publishing-the-new-image">Publishing the New Image<a class="headerlink" href="#publishing-the-new-image" title="Permanent link">&para;</a></h3>
+<p>Upon merging the PR to the main branch:</p>
+<ol>
+<li>
+<p><strong>Automated image build and publish:</strong></p>
+<p>- Docker image is built automatically via GitHub Actions
+  - Image is published to GitHub Container Registry (GHCR)
+  - New image receives a unique tag based on commit SHA</p>
+</li>
+<li>
+<p><strong>Image availability:</strong></p>
+<p>- Published image becomes available at <code>ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:&lt;tag&gt;</code>
+  - Tag format typically includes commit SHA or version identifier</p>
+</li>
+</ol>
+<h2 id="step-2-activate-published-image-pr-2">Step 2: Activate Published Image (PR 2)<a class="headerlink" href="#step-2-activate-published-image-pr-2" title="Permanent link">&para;</a></h2>
+<div class="admonition tip quick reference">
+<p class="admonition-title">Tip</p>
+<p>See the <a href="#update-checklist">Update Checklist</a> at the end of this document for an actionable summary of this section.</p>
+</div>
+<h3 id="activation-overview">Activation Overview<a class="headerlink" href="#activation-overview" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Activation PR</p>
+<p><strong>Important</strong>: Using the new dev container requires a second PR. This <em>activation</em> PR is what
+actually enables the new image for <strong>all contributors</strong>. Until it merges, only users who
+temporarily point their local <code>.devcontainer/devcontainer.json</code> at the new image (or use a
+local <code>:local</code> tag) will experience the changes.</p>
+<p>After the activation PR is merged into <code>main</code>:</p>
+<ul>
+<li>When contributors pull the updated <code>main</code> branch, VS Code detects the changed dev container
+  image reference and pops a notification prompting them to "Rebuild" / "Reopen in Container".</li>
+<li>A reminder line is also printed in their terminal the next time the workspace starts inside
+  the prior container, advising a rebuild to pick up the new environment.</li>
+<li>Rebuilding pulls the published GHCR image directly (does not re-run the full Docker build
+  locally unless the layer cache is cold).</li>
+</ul>
+<p>If a developer dismisses the prompt, they can manually trigger it later via the command palette
+("Dev Containers: Rebuild and Reopen in Container"). They remain on the previous environment
+until they rebuild, which can explain version skew in support questions.</p>
+</div>
+<ol>
+<li>
+<p><strong>Update image reference:</strong></p>
+<p>- Create a new PR updating <code>.devcontainer/devcontainer.json</code>
+  - Change the image tag to reference the newly published image
+  - Example: Update from previous tag to new GHCR tag</p>
+</li>
+<li>
+<p><strong>Two-step deployment rationale:</strong></p>
+<p>- <strong>Safety</strong>: Separates image building from activation
+  - <strong>Validation</strong>: Allows testing of published image before activation
+  - <strong>Rollback</strong>: Easy to revert to previous working image if issues arise</p>
+</li>
+<li>
+<p><strong>Activation process:</strong>
+   <div class="highlight"><pre><span></span><code>// In .devcontainer/devcontainer.json
+{
+  &quot;name&quot;: &quot;Sage Monorepo Dev Container&quot;,
+  &quot;image&quot;: &quot;ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:&lt;new-tag&gt;&quot;,
+  // ... rest of configuration
+}
+</code></pre></div></p>
+</li>
+</ol>
+<h3 id="post-deployment-verification">Post-Deployment Verification<a class="headerlink" href="#post-deployment-verification" title="Permanent link">&para;</a></h3>
+<p>After the activation PR is merged:</p>
+<ol>
+<li>
+<p><strong>Team notification:</strong></p>
+<p>- (Auto) Notify team members of the new dev container availability
+  - Provide any migration notes or new requirements
+  - Document any workflow changes</p>
+</li>
+<li>
+<p><strong>Monitor for issues:</strong></p>
+<p>- Watch for team reports of container problems
+  - Check CI/CD pipeline functionality
+  - Be prepared to quickly rollback if critical issues arise</p>
+</li>
+</ol>
+<h2 id="update-checklist">Update Checklist<a class="headerlink" href="#update-checklist" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Interactive Checklist</p>
+<p>The checkboxes below are clickable in rendered docs. Use them to track your progress while performing an update; you can clear them to rehearse or review the process later. Their state lives only in your browser and is not persisted or shared. Opening the page in another browser or device, or after clearing site data, resets all boxes.</p>
+</div>
+<h3 id="pre-update">Pre-Update<a class="headerlink" href="#pre-update" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Document current versions for rollback reference</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Check changelogs for breaking changes in tools being updated</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Coordinate with team on timing of updates</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Review tool usage and identify candidates for removal</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Get team consensus on any tool removals</li>
+</ul>
+<h3 id="during-update">During Update<a class="headerlink" href="#during-update" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Update base Ubuntu image tag (LTS with date-specific tag only)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Verify all tool releases are at least 1 day old</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Ensure Node.js uses LTS version (even-numbered major versions)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Update all tool versions in Dockerfile build args to latest stable releases</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Update dev container features using non-moving version tags only</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Verify all features are from trusted organizations or approved community sources</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Complete community feature evaluation for any new features</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Update any hardcoded version references in scripts</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Remove approved unused tools to reduce attack surface</li>
+</ul>
+<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
+<h4 id="basic-functionality-testing">Basic Functionality Testing<a class="headerlink" href="#basic-functionality-testing" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Build prebuild image</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> If build fails, consult "Build Troubleshooting" (adjust Docker version if needed)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Start container</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Attach shell</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Spot‑check core tools (all versions print successfully)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Exercise representative workflows (package install, Gradle tasks, Docker, kubectl) — no errors</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Remove prebuild container</li>
+</ul>
+<h4 id="headless-monorepo-runtime-testing_1">Headless Monorepo Runtime Testing<a class="headerlink" href="#headless-monorepo-runtime-testing_1" title="Permanent link">&para;</a></h4>
+<p>Headless = dev container started via CLI (devcontainer up / exec) with the monorepo mounted, but VS Code not reopened inside that container yet. Editor extensions/settings activation is validated later under "VS Code Integration Testing".</p>
+<p><strong>Option A: Manual Testing (step-by-step)</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> (Optional) Temporarily point <code>.devcontainer/devcontainer.json</code> to <code>:local</code> for this session — do NOT commit</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> (If using interactive flow) Attach a shell to the running container</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Initialize environment &amp; install dependencies (source <code>dev-env.sh</code>, then install; see prior section for details)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Run full create-config / build / test targets (refer to combined Nx targets described earlier)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Verify all projects succeed (review output; no failures reported)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Remove the throwaway test container</li>
+</ul>
+<p><strong>Option B: Streamlined Testing (automated)</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Confirm local image built</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Run the single exec-based end‑to‑end test flow</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Review output for failures (all targets should pass)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Remove test container</li>
+</ul>
+<h4 id="vs-code-integration-testing">VS Code Integration Testing<a class="headerlink" href="#vs-code-integration-testing" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Test in VS Code dev container environment ("Rebuild and Reopen in Container")</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Verify all extensions load correctly and development workflows function</li>
+</ul>
+<h3 id="post-update">Post-Update<a class="headerlink" href="#post-update" title="Permanent link">&para;</a></h3>
+<h4 id="first-pr-dev-container-changes">First PR - Dev Container Changes<a class="headerlink" href="#first-pr-dev-container-changes" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Revert local testing changes</strong>: Ensure <code>.devcontainer/devcontainer.json</code> uses production image tag, not "local"</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Update documentation if new tools added/removed</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Create PR with clear description of changes (Dockerfile, devcontainer.json, etc.)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Verify PR includes only production-ready configurations</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Ensure PR includes comprehensive changelog of all updates</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Monitor GitHub Actions build of new dev container image</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Verify successful image publication to GHCR after merge</li>
+</ul>
+<h4 id="second-pr-activate-new-container">Second PR - Activate New Container<a class="headerlink" href="#second-pr-activate-new-container" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Create second PR updating <code>.devcontainer/devcontainer.json</code> image reference</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Update image tag to newly published GHCR image</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Test the published image before merging activation PR</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Monitor CI/CD pipelines after activation merge</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Notify team of new dev container availability and any workflow changes</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="common-issues">Common Issues<a class="headerlink" href="#common-issues" title="Permanent link">&para;</a></h3>
+<h4 id="build-failures">Build Failures<a class="headerlink" href="#build-failures" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Package not found</strong>: Check if package names changed in new Ubuntu version</li>
+<li><strong>Version conflicts</strong>: Ensure all pinned versions are still available</li>
+<li><strong>Architecture issues</strong>: Verify all tools support the target architecture</li>
+</ul>
+<h4 id="dev-container-build-failures">Dev Container Build Failures<a class="headerlink" href="#dev-container-build-failures" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Description</th>
+<th>Solution</th>
+<th>Additional Checks / Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker version compatibility</td>
+<td>Latest Docker versions in <code>docker-in-docker</code> feature may cause build failures</td>
+<td>Specify an older, stable Docker version (e.g. <code>"version": "27.3.2"</code> instead of <code>"28.3.2"</code>)</td>
+<td>Check logs for Docker daemon startup errors or compatibility issues</td>
+</tr>
+<tr>
+<td>Feature conflicts</td>
+<td>Multiple features trying to install the same tools</td>
+<td>Remove duplicate installations or use feature-specific configurations</td>
+<td>Review feature documentation for known conflicts</td>
+</tr>
+<tr>
+<td>Memory / disk space</td>
+<td>Large feature installations may exceed available resources</td>
+<td>Increase Docker Desktop memory/disk limits or use smaller base images</td>
+<td>Monitor Docker system resource usage during build</td>
+</tr>
+<tr>
+<td>Network issues</td>
+<td>Features downloading from external sources may fail</td>
+<td>Retry build or check network connectivity</td>
+<td>Use cached or mirror sources when available</td>
+</tr>
+<tr>
+<td>Permission errors</td>
+<td>Features may fail to install due to user permission issues</td>
+<td>Ensure proper user configuration in <code>devcontainer.json</code></td>
+<td>Verify the <code>remoteUser</code> setting matches the Dockerfile user</td>
+</tr>
+</tbody>
+</table>
+<h4 id="dev-container-runtime-issues">Dev Container Runtime Issues<a class="headerlink" href="#dev-container-runtime-issues" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Description</th>
+<th>Solution</th>
+<th>Additional Checks / Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Container won't start</td>
+<td><code>devcontainer up</code> fails to start container</td>
+<td>Verify all required ports are available and not in use</td>
+<td>Ensure Docker daemon is running and accessible</td>
+</tr>
+<tr>
+<td>Tools not available</td>
+<td>Installed tools not found in PATH</td>
+<td>Check if feature installation completed successfully</td>
+<td>Connect to container and manually verify tool locations</td>
+</tr>
+<tr>
+<td>VS Code integration fails</td>
+<td>Container starts but VS Code can't connect</td>
+<td>Rebuild container with "Rebuild and Reopen in Container"</td>
+<td>Verify VS Code Dev Containers extension is updated</td>
+</tr>
+</tbody>
+</table>
+<h4 id="runtime-issues">Runtime Issues<a class="headerlink" href="#runtime-issues" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Tool missing</strong>: Check if installation commands succeeded</li>
+<li><strong>Permission errors</strong>: Verify user permissions and sudo access</li>
+<li><strong>Path issues</strong>: Ensure all tools are in PATH correctly</li>
+</ul>
+<h4 id="performance-issues">Performance Issues<a class="headerlink" href="#performance-issues" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Slow builds</strong>: Consider multi-stage builds or caching strategies</li>
+<li><strong>Large image size</strong>: Remove unused packages and clean up in same RUN command</li>
+<li><strong>Memory usage</strong>: Monitor resource consumption of new tools</li>
+</ul>
+<h3 id="recovery-process">Recovery Process<a class="headerlink" href="#recovery-process" title="Permanent link">&para;</a></h3>
+<p>If issues arise after an update:</p>
+<ol>
+<li><strong>Immediate rollback</strong>: Revert to previous Dockerfile/devcontainer.json</li>
+<li><strong>Isolate the issue</strong>: Test changes incrementally</li>
+<li><strong>Check compatibility</strong>: Verify tool versions work together</li>
+<li><strong>Consult documentation</strong>: Review tool-specific upgrade guides</li>
+</ol>
+<h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
+<h3 id="image-security">Image Security<a class="headerlink" href="#image-security" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Regularly scan base images for vulnerabilities</li>
+<li>Use minimal base images when possible</li>
+<li>Keep system packages updated</li>
+</ul>
+<h3 id="tool-security">Tool Security<a class="headerlink" href="#tool-security" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Verify checksums/signatures when downloading tools</li>
+<li>Use official distribution sources</li>
+<li>Monitor security advisories for installed tools</li>
+</ul>
+<h3 id="access-security">Access Security<a class="headerlink" href="#access-security" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Limit container privileges</li>
+<li>Use non-root user when possible</li>
+<li>Secure secrets and credentials</li>
+</ul>
+<h2 id="automation-opportunities">Automation Opportunities<a class="headerlink" href="#automation-opportunities" title="Permanent link">&para;</a></h2>
+<p>Consider automating parts of the update process:</p>
+<ul>
+<li><strong>Dependabot</strong>: For automatic dependency updates</li>
+<li><strong>Scheduled builds</strong>: Regular container rebuilds with latest packages</li>
+<li><strong>Security scanning</strong>: Automated vulnerability scanning</li>
+<li><strong>Version checking</strong>: Scripts to check for tool updates</li>
+</ul>
+<h2 id="resources">Resources<a class="headerlink" href="#resources" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://containers.dev/">Dev Containers Specification</a></li>
+<li><a href="https://containers.dev/features">Dev Container Features</a></li>
+<li><a href="https://hub.docker.com/_/ubuntu">Ubuntu Docker Images</a></li>
+<li><a href="https://code.visualstudio.com/docs/devcontainers/containers">VS Code Dev Containers Documentation</a></li>
+</ul>
+<hr />
+<p>For questions or issues with dev container updates, please create an issue in the repository or reach out to the maintenance team.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../docker-images/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Docker Base Images">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Docker Base Images
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../security/" class="md-footer__link md-footer__link--next" aria-label="Next: Security &amp; Compliance">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Security & Compliance
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.copy", "navigation.footer", "navigation.sections", "navigation.tabs", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

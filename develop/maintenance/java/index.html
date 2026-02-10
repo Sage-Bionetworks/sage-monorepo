@@ -1,0 +1,4953 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A development environment for building robust apps faster.">
+      
+      
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../node/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Java - Sage Monorepo</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1%207.775V2.75C1%201.784%201.784%201%202.75%201h5.025c.464%200%20.91.184%201.238.513l6.25%206.25a1.75%201.75%200%200%201%200%202.474l-5.026%205.026a1.75%201.75%200%200%201-2.474%200l-6.25-6.25A1.75%201.75%200%200%201%201%207.775m1.5%200c0%20.066.026.13.073.177l6.25%206.25a.25.25%200%200%200%20.354%200l5.025-5.025a.25.25%200%200%200%200-.354l-6.25-6.25a.25.25%200%200%200-.177-.073H2.75a.25.25%200%200%200-.25.25ZM6%205a1%201%200%201%201%200%202%201%201%200%200%201%200-2%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75M8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#java-build-dependency-maintenance" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Sage Monorepo" class="md-header__button md-logo" aria-label="Sage Monorepo" data-md-component="logo">
+      
+  <img src="../../../images/sage.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sage Monorepo
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Java
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Sage-Bionetworks/sage-monorepo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sage-monorepo
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../updates/" class="md-tabs__link">
+          
+  
+  
+  Updates
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../blog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../products/services/" class="md-tabs__link">
+          
+  
+  
+  Products
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../quick-start/" class="md-tabs__link">
+          
+  
+  
+  Develop
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../api/overview/" class="md-tabs__link">
+          
+  
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../resources/faq/" class="md-tabs__link">
+          
+  
+  
+  Resources
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../technical-documentation-overview/" class="md-tabs__link">
+          
+  
+  
+  Technical Documentation
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Sage Monorepo" class="md-nav__button md-logo" aria-label="Sage Monorepo" data-md-component="logo">
+      
+  <img src="../../../images/sage.png" alt="logo">
+
+    </a>
+    Sage Monorepo
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Sage-Bionetworks/sage-monorepo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sage-monorepo
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Updates
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/september-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    September 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/june-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    June 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/may-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    May 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/april-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    April 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/march-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    March 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../updates/february-2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    February 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Products
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Products
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../products/services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Service Catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../products/agora/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agora
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/bixarena/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BixArena
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/model-ad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model-AD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../products/openchallenges/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenChallenges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/synapse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synapse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Develop
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Develop
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../remote-dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/what-is-nx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nx Workspace
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/what-is-devcontainer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Containers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/terraform-infrastructure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terraform Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_1" id="__nav_5_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Angular
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Angular
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-api-client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add API Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-component/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add Component
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_2" id="__nav_5_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Java
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/java/add-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/java/add-rest-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_3" id="__nav_5_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/python/add-rest-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Add REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_4" id="__nav_5_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/docker/new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New Project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_5" id="__nav_5_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    R
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/r/new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New Project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4_6" id="__nav_5_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terraform
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Terraform
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/terraform/create-backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create Backend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/terraform/create-reusable-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create Reusable Module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintenance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Maintenance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dependency Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-catalog-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Catalog Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Version Catalog Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-catalog-structure-excerpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Catalog Structure (Excerpt)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#naming-transformation-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naming Transformation Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#antipatterns-vs-preferred" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti‑Patterns vs Preferred
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update Sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-routine-upgrade-patch-minor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow: Routine Upgrade (Patch / Minor)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow: Routine Upgrade (Patch / Minor)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#batching-patch-minor-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batching Patch &amp; Minor Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-major-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow: Major Upgrade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-cve-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security / CVE Response
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tooling-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tooling &amp; Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Scopes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managing-transitive-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing Transitive Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Managing Transitive Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-enforcement-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Enforcement Block
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-rarely-to-use-forcing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When (Rarely) to Use Forcing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prefer-these-alternatives-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prefer These Alternatives First
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#temporary-force-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Temporary Force Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migration-off-a-force" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Off a Force
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auditing-existing-forces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditing Existing Forces
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-alignment-boms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Alignment / BOMs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-strategy-after-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Strategy After Upgrades
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-regression-checks-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance &amp; Regression Checks (Optional)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-issues-resolutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues &amp; Resolutions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pr-review-checklist-java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR Review Checklist (Java)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future Improvements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-gradle-extensions-buildsrc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Gradle Extensions (buildSrc)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Gradle Extensions (buildSrc)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-are-they" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Are They?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-they-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where They Live
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-versions-are-duplicated-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Versions Are Duplicated Here
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-sync-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Sync Required
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suggested-future-improvement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suggested Future Improvement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr-review-checklist-additions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR Review Checklist Additions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-tool-jdk-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Tool &amp; JDK Upgrades
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Tool &amp; JDK Upgrades">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#upgrading-gradle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrading Gradle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrading Gradle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Upgrade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preflight-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre‑Flight Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upgrade-procedure-example-910" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrade Procedure (Example: 9.1.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postupgrade-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post‑Upgrade Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rollback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updating-java-placeholder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updating Java (Placeholder)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Node / TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../r/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker-images/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Base Images
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev-container/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Container
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security & Compliance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting & FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/developing-on-a-remote-host/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/creating-a-commit-with-multiple-authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-author Commits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/agora/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agora
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/bixarena/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BixArena
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/model-ad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model-AD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/openchallenges/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenChallenges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/synapse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synapse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Resources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/bug-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bug Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/feature-requests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature Requests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributions/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../resources/oc-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenChallenges Schemas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../technical-documentation-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../submission-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Submission Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rfcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RFCs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADRs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dependency Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-catalog-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Catalog Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Version Catalog Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-catalog-structure-excerpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Catalog Structure (Excerpt)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#naming-transformation-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naming Transformation Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#antipatterns-vs-preferred" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti‑Patterns vs Preferred
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update Sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-routine-upgrade-patch-minor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow: Routine Upgrade (Patch / Minor)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow: Routine Upgrade (Patch / Minor)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#batching-patch-minor-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batching Patch &amp; Minor Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-major-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow: Major Upgrade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-cve-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security / CVE Response
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tooling-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tooling &amp; Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Scopes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managing-transitive-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing Transitive Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Managing Transitive Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-enforcement-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Enforcement Block
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-rarely-to-use-forcing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When (Rarely) to Use Forcing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prefer-these-alternatives-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prefer These Alternatives First
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#temporary-force-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Temporary Force Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migration-off-a-force" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Off a Force
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auditing-existing-forces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditing Existing Forces
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-alignment-boms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Alignment / BOMs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-strategy-after-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Strategy After Upgrades
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-regression-checks-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance &amp; Regression Checks (Optional)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-issues-resolutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues &amp; Resolutions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pr-review-checklist-java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR Review Checklist (Java)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future Improvements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-gradle-extensions-buildsrc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Gradle Extensions (buildSrc)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Gradle Extensions (buildSrc)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-are-they" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Are They?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-they-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where They Live
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-versions-are-duplicated-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Versions Are Duplicated Here
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-sync-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Sync Required
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suggested-future-improvement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suggested Future Improvement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr-review-checklist-additions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR Review Checklist Additions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-tool-jdk-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Tool &amp; JDK Upgrades
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Tool &amp; JDK Upgrades">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#upgrading-gradle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrading Gradle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrading Gradle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Upgrade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preflight-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre‑Flight Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upgrade-procedure-example-910" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrade Procedure (Example: 9.1.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postupgrade-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post‑Upgrade Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rollback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updating-java-placeholder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updating Java (Placeholder)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="java-build-dependency-maintenance">Java Build &amp; Dependency Maintenance<a class="headerlink" href="#java-build-dependency-maintenance" title="Permanent link">&para;</a></h1>
+<p>This guide covers governance of Java dependencies and maintenance of the Java build toolchain (Gradle wrapper and JDK) for the monorepo. It emphasizes a centralized version catalog for consistency plus clearly isolated procedures for upgrading Gradle and the JDK.</p>
+<p>The dependency model is described below; build tool &amp; JDK upgrade procedures live at the end under "Build Tool &amp; JDK Upgrades".</p>
+<h2 id="dependency-model">Dependency Model<a class="headerlink" href="#dependency-model" title="Permanent link">&para;</a></h2>
+<p>Java dependencies are managed primarily via the Gradle Version Catalog located at <code>gradle/libs.versions.toml</code>. Individual <code>build.gradle.kts</code> files reference aliases defined there. Centralizing versions:</p>
+<ul>
+<li>Ensures alignment across services and libraries</li>
+<li>Simplifies upgrades and security remediation</li>
+<li>Reduces dependency drift</li>
+</ul>
+<h3 id="key-files">Key Files<a class="headerlink" href="#key-files" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File / Path</th>
+<th>Role / Purpose</th>
+<th>Maintenance Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gradle/libs.versions.toml</code></td>
+<td>Central Gradle Version Catalog (aliases, bundles, plugin &amp; lib versions)</td>
+<td>Primary source of truth for versions</td>
+</tr>
+<tr>
+<td><code>settings.gradle.kts</code></td>
+<td>Declares included projects &amp; (optionally) plugin management</td>
+<td>Keep aligned with catalog usage</td>
+</tr>
+<tr>
+<td><code>build.gradle.kts</code> (root)</td>
+<td>Common repositories, shared plugin/application of conventions</td>
+<td>Avoid hard‑coded versions; delegate to catalog</td>
+</tr>
+<tr>
+<td><code>apps/*/build.gradle.kts</code>, <code>libs/*/build.gradle.kts</code></td>
+<td>Module build scripts consuming catalog aliases</td>
+<td>Should not redefine versions directly</td>
+</tr>
+<tr>
+<td><code>gradle.properties</code></td>
+<td>JVM &amp; Gradle configuration (memory, flags, toolchain hints)</td>
+<td>Version bumps rarely here</td>
+</tr>
+<tr>
+<td><code>buildSrc/</code></td>
+<td>Local convention plugins (Java, Spring Boot, Lombok, Jacoco, publishing)</td>
+<td>Contains a few hard‑coded versions (JUnit, Lombok, Jacoco) that must be manually synced</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">buildSrc maintenance</p>
+<p>Individual plugin scripts inside <code>buildSrc</code> are intentionally not listed here; treat the directory as a single maintenance surface. During updates, grep for literal versions inside <code>buildSrc</code> and align them with the catalog.</p>
+</div>
+<h2 id="version-catalog-conventions">Version Catalog Conventions<a class="headerlink" href="#version-catalog-conventions" title="Permanent link">&para;</a></h2>
+<p>The goal of the catalog is to provide a single, predictable naming scheme that makes it obvious which family a dependency belongs to and how versions are shared. Consistent aliasing reduces diffs, improves discoverability, and prevents accidental version divergence.</p>
+<h3 id="general-rules">General Rules<a class="headerlink" href="#general-rules" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Derive library family aliases from the dependency <code>group</code> (not the full <code>group:artifact</code>) when multiple artifacts share a version (e.g., <code>com.fasterxml.jackson.core</code> → <code>jackson</code>).</li>
+<li>Use kebab-case for all aliases: <code>spring-boot</code>, <code>spring-cloud</code>, <code>jackson</code>, <code>logback</code>, <code>micrometer</code>, <code>junit</code>, <code>lombok</code>.</li>
+<li>Use a single version key per family in <code>[versions]</code>; individual artifacts reference it via <code>version.ref</code>.</li>
+<li>Do not encode version numbers in alias names (avoid <code>jackson-2-18</code>).</li>
+<li>Use suffixes only when they add semantic clarity:<ul>
+<li><code>-bom</code> for Bill of Materials / platform entries (e.g., <code>spring-boot-bom</code>).</li>
+<li><code>-plugin</code> for Gradle plugin entries where an ID could collide (<code>spotless-plugin</code>).</li>
+</ul>
+</li>
+<li>Keep aliases stable; renaming causes repo‑wide churn. Only rename to correct a clear inconsistency.</li>
+<li>Prefer short, unambiguous roots. If a group has a long prefix chain (<code>io.github.resilience4j</code>), choose <code>resilience4j</code>.</li>
+<li>For a single artifact with no family context, derive alias from the artifact, trimming redundant prefixes (e.g., <code>micrometer-registry-prometheus</code> → <code>micrometer-prometheus</code>).</li>
+</ol>
+<h3 id="recommended-catalog-structure-excerpt">Recommended Catalog Structure (Excerpt)<a class="headerlink" href="#recommended-catalog-structure-excerpt" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">[versions]</span>
+<span class="n">jackson</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;2.18.0&quot;</span>
+<span class="n">spring-boot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;3.3.3&quot;</span>
+<span class="n">junit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;5.10.2&quot;</span>
+
+<span class="k">[libraries]</span>
+<span class="n">jackson-core</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;com.fasterxml.jackson.core&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;jackson-core&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="p">.</span><span class="n">ref</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;jackson&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="n">jackson-databind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;com.fasterxml.jackson.core&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;jackson-databind&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="p">.</span><span class="n">ref</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;jackson&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="n">junit-jupiter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;org.junit.jupiter&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;junit-jupiter&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="p">.</span><span class="n">ref</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;junit&quot;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">[bundles]</span>
+<span class="n">jackson</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;jackson-core&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;jackson-databind&quot;</span><span class="p">]</span>
+
+<span class="k">[plugins]</span>
+<span class="n">spring-boot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;org.springframework.boot&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="p">.</span><span class="n">ref</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;spring-boot&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="naming-transformation-examples">Naming Transformation Examples<a class="headerlink" href="#naming-transformation-examples" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Group / Artifact</th>
+<th>Rationale</th>
+<th>Alias / Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>com.fasterxml.jackson.core</code> (family)</td>
+<td>Shared version across multiple artifacts</td>
+<td><code>jackson</code> (version key)</td>
+</tr>
+<tr>
+<td><code>org.springframework.boot</code></td>
+<td>Core Spring Boot ecosystem / plugin</td>
+<td><code>spring-boot</code></td>
+</tr>
+<tr>
+<td><code>org.springframework.cloud</code></td>
+<td>Distinct Spring sub-ecosystem</td>
+<td><code>spring-cloud</code></td>
+</tr>
+<tr>
+<td><code>io.micrometer:micrometer-registry-prometheus</code></td>
+<td>Artifact-specific; family root <code>micrometer</code></td>
+<td><code>micrometer-prometheus</code></td>
+</tr>
+<tr>
+<td><code>ch.qos.logback</code></td>
+<td>Simple unique family</td>
+<td><code>logback</code></td>
+</tr>
+<tr>
+<td><code>org.projectlombok:lombok</code></td>
+<td>Single artifact; group &amp; artifact align</td>
+<td><code>lombok</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="antipatterns-vs-preferred">Anti‑Patterns vs Preferred<a class="headerlink" href="#antipatterns-vs-preferred" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Anti‑Pattern</th>
+<th>Issue</th>
+<th>Preferred</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>com-fasterxml-jackson-core</code></td>
+<td>Leaks full group, verbose</td>
+<td><code>jackson</code></td>
+</tr>
+<tr>
+<td><code>springBoot</code></td>
+<td>Mixed casing, not kebab</td>
+<td><code>spring-boot</code></td>
+</tr>
+<tr>
+<td><code>jackson-databind-version</code> key</td>
+<td>Version name tied to specific artifact</td>
+<td><code>jackson</code> (family version)</td>
+</tr>
+<tr>
+<td><code>micrometerRegistryPrometheus</code></td>
+<td>CamelCase and artifact untrimmed</td>
+<td><code>micrometer-prometheus</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">When to introduce a new version key</p>
+<p>Create a new version entry only when artifacts within the same group must intentionally diverge in version. Document the divergence with an inline comment to avoid future “cleanup” PRs that accidentally re‑align them.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Renaming Aliases</p>
+<p>Renaming an existing alias creates a large diff across the repository. Avoid unless the current name is misleading or blocks adoption of a consistent pattern.</p>
+</div>
+<h2 id="update-sources">Update Sources<a class="headerlink" href="#update-sources" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Planned (Cadence) Updates</p>
+<p>Run a scheduled dependency refresh (e.g., monthly for patch/minor; quarterly review for majors / platform upgrades) even if no urgent trigger appears. This prevents large, risky jumps later.</p>
+</div>
+<p>Typical triggers for an update:</p>
+<ul>
+<li>Scheduled maintenance window (planned cadence refresh)</li>
+<li>Security advisory (CVE) or transitive vulnerability exposure</li>
+<li>Framework / BOM alignment (e.g., Spring Boot + Spring Cloud compatibility)</li>
+<li>New feature / API needed in a newer library version</li>
+<li>Upcoming EOL (JDK, framework, or library support window closing)</li>
+<li>Performance / memory / stability regression fix available upstream</li>
+<li>Build warnings or deprecations indicating future breakage</li>
+<li>(Future) Automated bot PR (Renovate / Dependabot) once enabled</li>
+</ul>
+<h2 id="workflow-routine-upgrade-patch-minor">Workflow: Routine Upgrade (Patch / Minor)<a class="headerlink" href="#workflow-routine-upgrade-patch-minor" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Identify candidate updates with <code>./gradlew dependencyUpdates --no-parallel</code>.</li>
+<li>Edit the target version(s) in <code>gradle/libs.versions.toml</code>.</li>
+<li>Manually synchronize any hard‑coded versions in <code>buildSrc</code> (JUnit, JUnit Platform launcher, Lombok, Jacoco).
+   Update those literals to match the catalog (or the selected new version) and add an inline comment if deliberate divergence.</li>
+<li>Rerun <code>./gradlew dependencyUpdates --no-parallel</code> to confirm that the updates have been applied.</li>
+<li>Run a clean build:
+   <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>clean<span class="w"> </span>build
+</code></pre></div></li>
+<li>Run tests selectively if change is scoped, otherwise full test suite.</li>
+<li>Commit with message: <code>chore(deps): bump &lt;lib&gt; to &lt;version&gt;</code>.</li>
+<li>Push branch &amp; open/refresh PR.</li>
+</ol>
+<h3 id="batching-patch-minor-updates">Batching Patch &amp; Minor Updates<a class="headerlink" href="#batching-patch-minor-updates" title="Permanent link">&para;</a></h3>
+<p>Batching several low‑risk version bumps into a single PR reduces review overhead and keeps the catalog tidy. Follow these guidelines to keep risk controlled:</p>
+<p><strong>Safe to Batch When</strong></p>
+<ul>
+<li>All changes are patch or minor (no majors / milestones / RCs / betas).</li>
+<li>No code changes or API migrations required (catalog + lock + <code>buildSrc</code> literals only).</li>
+<li>All libraries belong to a small number of logical families (e.g., testing, logging, serialization) OR are clearly unrelated but trivially safe (pure patch).</li>
+<li>Build, tests, and lint produce no new warnings that demand immediate action.</li>
+</ul>
+<p><strong>Good Grouping Examples</strong></p>
+<ul>
+<li>Testing stack: JUnit, Mockito, AssertJ, Testcontainers.</li>
+<li>Jackson family (core / databind / annotations) at the same patch.</li>
+<li>Spring Boot + compatible Spring Cloud patch/minor (after checking release notes).</li>
+<li>Observability: Micrometer core + registry modules.</li>
+</ul>
+<p><strong>When to Split Instead</strong></p>
+<ul>
+<li>Any major version is involved.</li>
+<li>A dependency has known behavioral change even in a minor (e.g., Hibernate SQL generation tweaks, Netty event loop adjustments).</li>
+<li>A security fix (CVE) needs fast‑track isolation for audit clarity.</li>
+<li>A build tool / Gradle plugin upgrade could impact cache keys or task wiring.</li>
+<li>You must add resolution strategy rules or exclusions to resolve conflicts.</li>
+</ul>
+<p><strong>Practical Limits</strong></p>
+<ul>
+<li>Aim for ≤ ~15 edited version lines (catalog + <code>buildSrc</code>) per batch PR.</li>
+<li>If reviewing the diff requires excessive scrolling, split by family.</li>
+</ul>
+<p><strong>Commit / PR Style</strong></p>
+<ul>
+<li>Single commit: <code>chore(deps): batch patch/minor updates (testing + jackson)</code></li>
+<li>Or one commit per family inside one PR if you want granular blame.</li>
+</ul>
+<p><strong>Checklist for a Batched PR</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Only patch/minor versions included</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <code>gradle/libs.versions.toml</code> updated &amp; tidy (no orphaned commented versions)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <code>buildSrc</code> literals (JUnit / Jacoco / Lombok) synced if touched</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <code>./gradlew dependencyUpdates --no-parallel</code> now shows only pending majors (or nothing relevant)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <code>./gradlew clean build</code> passes</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Targeted / affected integration tests run (if any)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> No new deprecation floods (or documented in PR description)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> PR description lists families updated + highlights anything security‑related</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Avoid over‑broad batches</p>
+<p>Mixing unrelated ecosystems (e.g., database driver + logging + Spring + build plugins) increases risk and review fatigue. Smaller, coherent batches are merged faster.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Automate grouping later</p>
+<p>A future enhancement could script grouping by scanning the catalog diff and clustering changes by group prefix (e.g., <code>com.fasterxml.jackson.*</code>).</p>
+</div>
+<h2 id="workflow-major-upgrade">Workflow: Major Upgrade<a class="headerlink" href="#workflow-major-upgrade" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Review upstream release notes &amp; migration guide.</li>
+<li>Create a dedicated branch: <code>chore/deps/java-&lt;lib&gt;-&lt;major&gt;-upgrade</code>.</li>
+<li>Update version in <code>libs.versions.toml</code>.</li>
+<li>Run build &amp; inspect compilation/runtime failures.</li>
+<li>Apply required code/config migrations (document in PR description).</li>
+<li>Run extended test matrix (integration, contract, API compatibility if applicable).</li>
+<li>Add <code>BREAKING CHANGE:</code> footer to the PR description if public API impact.</li>
+<li>Request second reviewer (recommended for high-risk changes).</li>
+</ol>
+<h2 id="security-cve-response">Security / CVE Response<a class="headerlink" href="#security-cve-response" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open branch: <code>security/deps/&lt;cve-id&gt;-&lt;lib&gt;</code>.</li>
+<li>Update only the affected library versions.</li>
+<li>Run targeted tests + any security scan tasks.</li>
+<li>Merge promptly after review.</li>
+<li>Include mitigation note in release summary.</li>
+</ol>
+<h2 id="tooling-commands">Tooling &amp; Commands<a class="headerlink" href="#tooling-commands" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Command</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>List dependency insights</td>
+<td><code>./gradlew dependencies</code></td>
+<td>Per module</td>
+</tr>
+<tr>
+<td>(Optional) Check for new versions</td>
+<td><code>./gradlew dependencyUpdates --no-parallel</code></td>
+<td>Requires versions plugin</td>
+</tr>
+<tr>
+<td>Build &amp; test all</td>
+<td><code>./gradlew clean build</code></td>
+<td>Ensures no stale outputs</td>
+</tr>
+<tr>
+<td>Run a single module build</td>
+<td><code>./gradlew :path:to:module:build</code></td>
+<td>Faster feedback</td>
+</tr>
+<tr>
+<td>Generate dependency report</td>
+<td><code>./gradlew htmlDependencyReport</code></td>
+<td>If report plugin configured</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dependency-scopes">Dependency Scopes<a class="headerlink" href="#dependency-scopes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Use For</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>implementation</code></td>
+<td>Internal library use</td>
+<td>Not exposed transitively</td>
+</tr>
+<tr>
+<td><code>api</code></td>
+<td>Libraries whose APIs leak to consumers</td>
+<td>Use sparingly</td>
+</tr>
+<tr>
+<td><code>compileOnly</code></td>
+<td>Annotation processors, compile-time only</td>
+<td>Avoid runtime reliance</td>
+</tr>
+<tr>
+<td><code>runtimeOnly</code></td>
+<td>Drivers, logging impls</td>
+<td>Not needed at compile time</td>
+</tr>
+<tr>
+<td><code>testImplementation</code></td>
+<td>Test frameworks &amp; utilities</td>
+<td>Keep isolation</td>
+</tr>
+</tbody>
+</table>
+<h2 id="managing-transitive-dependencies">Managing Transitive Dependencies<a class="headerlink" href="#managing-transitive-dependencies" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Prefer allowing Gradle to resolve transitives unless a direct version is required to fix a CVE or conflict.</li>
+<li>Use <code>strictly</code> or <code>reject</code> rules only when necessary.</li>
+<li>Document any enforced versions in a dedicated section (e.g., below) to avoid accidental removal.</li>
+</ul>
+<h3 id="example-enforcement-block">Example Enforcement Block<a class="headerlink" href="#example-enforcement-block" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">configurations</span><span class="p">.</span><span class="na">all</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">resolutionStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">force</span><span class="p">(</span><span class="s">&quot;com.fasterxml.jackson.core:jackson-databind:2.18.0&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>(Shift to version catalog alignment if possible instead of forcing.)</p>
+<h3 id="when-rarely-to-use-forcing">When (Rarely) to Use Forcing<a class="headerlink" href="#when-rarely-to-use-forcing" title="Permanent link">&para;</a></h3>
+<p>Use a forced version only as a short‑lived mitigation when one of these applies:</p>
+<ul>
+<li>A transitive dependency pulls an older vulnerable version (security / CVE hotfix).</li>
+<li>Upstream libraries have not yet released an aligned version and you must unblock a build.</li>
+<li>You are bisecting a regression and need to pin a single suspect artifact temporarily.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Forces are global</p>
+<p>A <code>force</code> statement affects every configuration it touches. It can hide legitimate incompatibilities and introduce subtle runtime or test failures later. Treat it as an exception, not a pattern.</p>
+</div>
+<h3 id="prefer-these-alternatives-first">Prefer These Alternatives First<a class="headerlink" href="#prefer-these-alternatives-first" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Preferred Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keep related artifacts aligned</td>
+<td>Shared version key in <code>libs.versions.toml</code></td>
+</tr>
+<tr>
+<td>Enforce a coherent ecosystem version</td>
+<td>Import a BOM/platform (<code>platform(libs.spring.boot.bom)</code>)</td>
+</tr>
+<tr>
+<td>Override one problematic transitive</td>
+<td>Dependency constraint (<code>constraints { implementation(...) }</code>)</td>
+</tr>
+<tr>
+<td>Remove obsolete / conflicting module</td>
+<td>Exclusion on the specific dependency (<code>exclude(group = "...", module = "...")</code>)</td>
+</tr>
+<tr>
+<td>Document intentional divergence</td>
+<td>Inline comment + constraint (not a force)</td>
+</tr>
+</tbody>
+</table>
+<p>Example constraint (scoped, clearer intent than a global force):</p>
+<div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">constraints</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">implementation</span><span class="p">(</span><span class="s">&quot;com.fasterxml.jackson.core:jackson-databind:2.18.0&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">because</span><span class="p">(</span><span class="s">&quot;CVE-2024-XXXX fixed in 2.18.0&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="temporary-force-checklist">Temporary Force Checklist<a class="headerlink" href="#temporary-force-checklist" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Justification (CVE, blocking regression) noted as a code comment.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Issue / ticket created to remove the force.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Catalog already reflects the target version (avoid hidden divergence).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Evaluated BOM / constraint alternative and documented why not used.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Full build + tests + key integration tests pass.</li>
+</ul>
+<h3 id="migration-off-a-force">Migration Off a Force<a class="headerlink" href="#migration-off-a-force" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Monitor upstream releases until dependencies naturally resolve to the desired version.</li>
+<li>Remove the <code>force</code> clause.</li>
+<li>Run dependency insight to ensure the resolved graph is clean:
+   <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>dependencyInsight<span class="w"> </span>--dependency<span class="w"> </span>jackson-databind
+</code></pre></div></li>
+<li>If multiple versions remain, add a constraint instead of re‑adding the force.</li>
+<li>Commit: <code>chore(deps): remove temporary force on jackson-databind</code>.</li>
+</ol>
+<h3 id="auditing-existing-forces">Auditing Existing Forces<a class="headerlink" href="#auditing-existing-forces" title="Permanent link">&para;</a></h3>
+<p>Quick commands to discover and validate enforced versions:</p>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>List all places using strategy</td>
+<td><code>grep -R "resolutionStrategy" -n .</code></td>
+</tr>
+<tr>
+<td>Inspect resolution path</td>
+<td><code>./gradlew dependencyInsight --dependency jackson-databind</code></td>
+</tr>
+<tr>
+<td>View runtime graph (sample)</td>
+<td><code>./gradlew dependencies --configuration runtimeClasspath</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Automate enforcement hygiene</p>
+<p>Consider a small CI script that fails if new <code>force(</code> usages are added without an inline <code># justified:</code> marker, encouraging disciplined use.</p>
+</div>
+<h2 id="version-alignment-boms">Version Alignment / BOMs<a class="headerlink" href="#version-alignment-boms" title="Permanent link">&para;</a></h2>
+<p>If a platform (BOM) is used (e.g., Spring Boot):</p>
+<div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">implementation</span><span class="p">(</span><span class="n">platform</span><span class="p">(</span><span class="n">libs</span><span class="p">.</span><span class="na">spring</span><span class="p">.</span><span class="na">boot</span><span class="p">.</span><span class="na">bom</span><span class="p">))</span>
+<span class="w">    </span><span class="n">implementation</span><span class="p">(</span><span class="n">libs</span><span class="p">.</span><span class="na">spring</span><span class="p">.</span><span class="na">boot</span><span class="p">.</span><span class="na">starter</span><span class="p">.</span><span class="na">web</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Keep BOM version updates isolated to ease troubleshooting.</p>
+<h2 id="testing-strategy-after-upgrades">Testing Strategy After Upgrades<a class="headerlink" href="#testing-strategy-after-upgrades" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Unit tests (fast feedback)</li>
+<li>Integration tests (service wiring, DB migrations)</li>
+<li>Contract/API tests (if publishing endpoints or libraries)</li>
+<li>Performance smoke (optional: startup time, memory)</li>
+</ol>
+<h2 id="performance-regression-checks-optional">Performance &amp; Regression Checks (Optional)<a class="headerlink" href="#performance-regression-checks-optional" title="Permanent link">&para;</a></h2>
+<p>Track key metrics (startup time, heap, request latency). For significant framework upgrades, capture before/after diffs.</p>
+<h2 id="common-issues-resolutions">Common Issues &amp; Resolutions<a class="headerlink" href="#common-issues-resolutions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Cause</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NoSuchMethodError</code></td>
+<td>Mixed library versions</td>
+<td>Ensure single version in catalog</td>
+</tr>
+<tr>
+<td>Annotation processor conflicts</td>
+<td>Duplicate processors</td>
+<td>Exclude older processor</td>
+</tr>
+<tr>
+<td>Classpath length errors</td>
+<td>Deep transitive graph</td>
+<td>Prune unused libs, prefer lighter alternatives</td>
+</tr>
+<tr>
+<td>Build cache misses</td>
+<td>Unstable inputs</td>
+<td>Pin plugin versions, avoid timestamp-based tasks</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pr-review-checklist-java">PR Review Checklist (Java)<a class="headerlink" href="#pr-review-checklist-java" title="Permanent link">&para;</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Versions updated only in <code>libs.versions.toml</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> No stray version strings left in module <code>build.gradle.kts</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> All tests pass locally/CI</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Release notes/migration doc referenced (for majors)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> No forced resolutions added without justification</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Security concerns addressed / CVE linked if relevant</li>
+</ul>
+<h2 id="future-improvements">Future Improvements<a class="headerlink" href="#future-improvements" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Adopt automated version report in CI</li>
+<li>Add SBOM generation (e.g., CycloneDX Gradle plugin)</li>
+<li>Integrate vulnerability scanning (OWASP, Snyk, etc.)</li>
+</ul>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Gradle Version Catalogs: https://docs.gradle.org/current/userguide/platforms.html</li>
+<li>Dependency Management Best Practices: https://docs.gradle.org</li>
+</ul>
+<hr />
+<h2 id="custom-gradle-extensions-buildsrc">Custom Gradle Extensions (buildSrc)<a class="headerlink" href="#custom-gradle-extensions-buildsrc" title="Permanent link">&para;</a></h2>
+<p>The monorepo defines reusable Gradle convention plugins and helper scripts in <code>buildSrc/</code>. These act like lightweight, locally published plugins automatically available to every build without extra coordinates.</p>
+<h3 id="what-are-they">What Are They?<a class="headerlink" href="#what-are-they" title="Permanent link">&para;</a></h3>
+<p>Gradle loads any code under <code>buildSrc/</code> as an included build. Kotlin script files under <code>buildSrc/src/main/kotlin/</code> (e.g. <code>sage.java-library.gradle.kts</code>) are effectively precompiled script plugins. Applying <code>id("sage.java-library")</code> in a module delegates to the corresponding file.</p>
+<h3 id="where-they-live">Where They Live<a class="headerlink" href="#where-they-live" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sage.java-common.gradle.kts</code></td>
+<td>Base Java configuration (Java 21, encoding)</td>
+</tr>
+<tr>
+<td><code>sage.java-library.gradle.kts</code></td>
+<td>Library conventions + JUnit (publishing)</td>
+</tr>
+<tr>
+<td><code>sage.spring-boot-application.gradle.kts</code></td>
+<td>Spring Boot app conventions (tests, image)</td>
+</tr>
+<tr>
+<td><code>sage.spring-boot-library.gradle.kts</code></td>
+<td>Spring Boot library conventions (no bootJar)</td>
+</tr>
+<tr>
+<td><code>sage.lombok.gradle.kts</code></td>
+<td>Lombok annotation processing/version override support</td>
+</tr>
+<tr>
+<td><code>sage.jacoco-coverage.gradle.kts</code></td>
+<td>Jacoco coverage + verification rules</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-versions-are-duplicated-here">Why Versions Are Duplicated Here<a class="headerlink" href="#why-versions-are-duplicated-here" title="Permanent link">&para;</a></h3>
+<p>These scripts cannot (directly) consume the central version catalog (<code>libs.versions.toml</code>) because Gradle resolves <code>buildSrc</code> earlier in the lifecycle. As a result, any dependency or tool versions hard-coded inside these scripts (e.g., JUnit, Jacoco, Lombok) must be kept manually in sync with the catalog to avoid drift.</p>
+<h3 id="manual-sync-required">Manual Sync Required<a class="headerlink" href="#manual-sync-required" title="Permanent link">&para;</a></h3>
+<p>When updating versions (e.g., via <code>./gradlew dependencyUpdates --no-parallel</code>):</p>
+<ol>
+<li>Update <code>gradle/libs.versions.toml</code> for runtime &amp; library use.</li>
+<li>Manually inspect <code>buildSrc/src/main/kotlin/*.gradle.kts</code> for hard-coded versions:<ul>
+<li>JUnit (<code>org.junit.jupiter:junit-jupiter:&lt;ver&gt;</code>)</li>
+<li>JUnit Platform launcher</li>
+<li>Lombok default version in <code>LombokExtension</code></li>
+<li>Jacoco <code>toolVersion</code></li>
+</ul>
+</li>
+<li>Bump those values to match the catalog (if defined there) or to the chosen new version if catalog does not track it yet.</li>
+<li>Run a clean build to detect mismatches:
+   <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>clean<span class="w"> </span>build
+</code></pre></div></li>
+<li>If a version in <code>buildSrc</code> intentionally differs (rare), document the rationale in an inline comment.</li>
+</ol>
+<h3 id="suggested-future-improvement">Suggested Future Improvement<a class="headerlink" href="#suggested-future-improvement" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Introduce a verification task that parses <code>buildSrc</code> for known version literals and compares them to <code>libs.versions.toml</code>, failing the build when they diverge.</li>
+<li>Optionally migrate to an included build (composite) plugin project that can itself use a version catalog.</li>
+</ul>
+<h3 id="pr-review-checklist-additions">PR Review Checklist Additions<a class="headerlink" href="#pr-review-checklist-additions" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <code>buildSrc</code> scripts updated for any dependency bumped in catalog</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> JUnit / Jacoco / Lombok versions aligned</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Inline comment added if intentional divergence</li>
+</ul>
+<hr />
+<h2 id="build-tool-jdk-upgrades">Build Tool &amp; JDK Upgrades<a class="headerlink" href="#build-tool-jdk-upgrades" title="Permanent link">&para;</a></h2>
+<p>This section covers upgrading the Gradle build tool itself and the Java toolchain used by the monorepo. Perform these upgrades separately from routine library dependency batches for clearer review and rollback.</p>
+<h3 id="upgrading-gradle">Upgrading Gradle<a class="headerlink" href="#upgrading-gradle" title="Permanent link">&para;</a></h3>
+<p>Upgrading Gradle keeps build performance, security, and deprecation coverage current. Wrapper‑based upgrades are low risk when validated systematically.</p>
+<h4 id="when-to-upgrade">When to Upgrade<a class="headerlink" href="#when-to-upgrade" title="Permanent link">&para;</a></h4>
+<ul>
+<li>New major or minor with performance improvements or important bug fixes</li>
+<li>Deprecation warnings appearing in current builds that will become errors next release</li>
+<li>Plugin ecosystem (e.g., Spring Boot plugin) now officially supports a newer Gradle baseline</li>
+<li>Security advisory in an older Gradle distribution</li>
+</ul>
+<h4 id="preflight-checklist">Pre‑Flight Checklist<a class="headerlink" href="#preflight-checklist" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Review <a href="https://gradle.org/releases">latest Gradle release</a> and its release notes</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Verify core &amp; third‑party plugins declare compatibility</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Ensure CI images / dev container already have a compatible JDK (Gradle 9 requires Java 21+)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> No custom init scripts or build logic relying on removed APIs</li>
+</ul>
+<h4 id="upgrade-procedure-example-910">Upgrade Procedure (Example: 9.1.0)<a class="headerlink" href="#upgrade-procedure-example-910" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Baseline build:
+   <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>clean<span class="w"> </span>build
+</code></pre></div></li>
+<li>Regenerate wrapper:
+   <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>wrapper<span class="w"> </span>--gradle-version<span class="w"> </span><span class="m">9</span>.1.0<span class="w"> </span>--distribution-type<span class="w"> </span>bin
+</code></pre></div></li>
+<li>Inspect changes:<ul>
+<li><code>gradle/wrapper/gradle-wrapper.properties</code> updated (distributionUrl points to <code>gradle-9.1.0-bin.zip</code>)</li>
+<li><code>gradlew</code> / <code>gradlew.bat</code> updated (commit them)</li>
+<li>Do not manually edit wrapper JAR/scripts; regenerate if unexpected</li>
+</ul>
+</li>
+<li>
+<p>Verify version:</p>
+<div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>--version
+</code></pre></div>
+<p>Expected style of output:</p>
+<div class="highlight"><pre><span></span><code><span class="go">------------------------------------------------------------</span>
+<span class="go">Gradle 9.1.0</span>
+<span class="go">------------------------------------------------------------</span>
+
+<span class="go">Build time:    2025-09-18 13:05:56 UTC</span>
+<span class="go">Revision:      e45a8dbf2470c2e2474ccc25be9f49331406a07e</span>
+
+<span class="go">Kotlin:        2.2.0</span>
+<span class="go">Groovy:        4.0.28</span>
+<span class="go">Ant:           Apache Ant(TM) version 1.10.15 compiled on August 25 2024</span>
+<span class="go">Launcher JVM:  21.0.7 (Microsoft 21.0.7+6-LTS)</span>
+<span class="go">Daemon JVM:    /usr/local/sdkman/candidates/java/21.0.7-ms</span>
+<span class="go">OS:            Linux 6.1.148-173.267.amzn2023.x86_64 amd64</span>
+</code></pre></div>
+</li>
+<li>
+<p>Full rebuild to surface deprecations:
+   <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>clean<span class="w"> </span>build
+</code></pre></div></p>
+</li>
+<li>Validate multi‑project &amp; Docker image builds:
+   <div class="highlight"><pre><span></span><code>nx<span class="w"> </span>run-many<span class="w"> </span>--target<span class="o">=</span>build,build-image<span class="w"> </span>--projects<span class="o">=</span>tag:language:java
+</code></pre></div></li>
+<li>Remove the Gradle wrapper for Windows:
+   <div class="highlight"><pre><span></span><code>rm<span class="w"> </span>-fr<span class="w"> </span>gradlew.bat
+</code></pre></div></li>
+<li>Commit:
+   <div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>gradle/wrapper/gradle-wrapper.properties<span class="w"> </span>gradlew
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;build: upgrade to Gradle 9.1.0&quot;</span>
+</code></pre></div></li>
+<li>PR description should include:<ul>
+<li>Release notes link</li>
+<li>Summary of any new deprecation warnings (or none)</li>
+<li>Confirmation of successful full + Docker image builds</li>
+</ul>
+</li>
+</ol>
+<h4 id="postupgrade-validation">Post‑Upgrade Validation<a class="headerlink" href="#postupgrade-validation" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> CI pipelines green</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> No new flaky tests introduced</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> (If using scans) No major regression in configuration time</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Team notified to clear local caches only if necessary</li>
+</ul>
+<h4 id="rollback">Rollback<a class="headerlink" href="#rollback" title="Permanent link">&para;</a></h4>
+<p>If a blocking issue appears:</p>
+<div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>wrapper<span class="w"> </span>--gradle-version<span class="w"> </span>&lt;previous-version&gt;<span class="w"> </span>--distribution-type<span class="w"> </span>bin
+git<span class="w"> </span>add<span class="w"> </span>gradle/wrapper/gradle-wrapper.properties<span class="w"> </span>gradlew<span class="w"> </span>gradlew.bat
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;revert: downgrade Gradle to &lt;previous-version&gt; (regression)&quot;</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Plugin Compatibility</p>
+<p>Confirm critical plugins (Spring Boot, Spotless, Jacoco, Testcontainers, publishing) list the new Gradle version in their matrix. Upgrade lagging plugins first.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Wrapper Integrity</p>
+<p>Always regenerate rather than manually editing wrapper files to ensure checksum authenticity.</p>
+</div>
+<h3 id="updating-java-placeholder">Updating Java (Placeholder)<a class="headerlink" href="#updating-java-placeholder" title="Permanent link">&para;</a></h3>
+<!-- To be documented in a future PR: JDK toolchain strategy, supported majors, upgrade cadence, testing matrix, rollback guidance. -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Overview
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../node/" class="md-footer__link md-footer__link--next" aria-label="Next: Node / TypeScript">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Node / TypeScript
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.copy", "navigation.footer", "navigation.sections", "navigation.tabs", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>OpenChallenges: AWS Infrastructure Architecture</title>
+
+    <!-- Import Roboto font from Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        margin: 2rem;
+        background-color: #fff;
+        color: #222;
+        text-align: center; /* Center the heading and general layout */
+      }
+
+      h2 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        font-size: 1.8rem;
+        color: #1a1a1a;
+        margin-bottom: 1.5rem;
+      }
+
+      /* Center the Mermaid diagram horizontally */
+      .diagram-container {
+        display: flex;
+        justify-content: center; /* Centers horizontally */
+        align-items: flex-start; /* Keep top-aligned */
+        width: 100%;
+      }
+
+      .mermaid {
+        width: 1200px; /* Fixed width */
+        max-width: 100%; /* Allow shrinking on smaller screens */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <h2>BixArena MVP: Full-Stack Application Architecture</h2> -->
+
+    <div class="diagram-container">
+      <!-- prettier-ignore -->
+      <div class="mermaid">
+      flowchart TB
+        %% External User
+        user[User Browser]
+
+        %% AWS Infrastructure Container
+        subgraph vpc["AWS VPC"]
+          direction TB
+
+          %% Public Subnet
+          subgraph public["Public Subnet"]
+            alb@{shape: icon, icon: 'logos:aws-elb', label: 'Application Load<br>Balancer'}
+          end
+
+          %% Private Subnet - ECS Cluster
+          subgraph private["Private Subnet - ECS Cluster"]
+            direction TB
+
+            %% Frontend Layer
+            subgraph frontend["Frontend Layer"]
+              app@{shape: icon, icon: 'logos:angular-icon', label: 'Web App<br>(Angular)'}
+            end
+
+            %% API Gateway Layer
+            subgraph gateway["Gateway Layer"]
+              apigw@{shape: icon, icon: 'logos:spring-icon', label: 'API Gateway<br>(Spring Cloud Gateway)'}
+            end
+
+            %% Spring Boot Microservices
+            subgraph services["Microservices Layer"]
+              direction TB
+              challenge@{shape: icon, icon: 'logos:spring-icon', label: 'Challenge Service<br>(Spring Boot)'}
+              org@{shape: icon, icon: 'logos:spring-icon', label: 'Organization Service<br>(Spring Boot)'}
+              image@{shape: icon, icon: 'logos:spring-icon', label: 'Image Service<br>(Spring Boot)'}
+              auth@{shape: icon, icon: 'logos:spring-icon', label: 'Auth Service<br>(Spring Boot)'}
+            end
+
+            %% Infrastructure Services
+            subgraph infra["Infrastructure Layer"]
+              direction TB
+              thumbor@{shape: icon, icon: 'system-uicons:picture', label: 'Thumbor<br>(Image Processing)'}
+              s3@{shape: icon, icon: 'logos:aws-s3', label: 'S3 Bucket<br>(Images)'}
+            end
+
+            %% Data Layer
+            subgraph data["Data Layer"]
+              direction LR
+              postgres@{shape: icon, icon: 'logos:aws-rds', label: 'RDS<br>(PostgreSQL)'}
+              elastic@{shape: icon, icon: 'logos:elasticsearch', label: 'Elasticsearch'}
+              postgres ~~~ elastic
+            end
+          end
+        end
+
+        %% Connections - User to ALB
+        user -->|HTTPS| alb
+
+        %% ALB to Frontend and Gateway
+        alb -->|"/"| app
+        alb -->|"/api/**"| apigw
+        alb -->|"/img/**"| thumbor
+
+        %% API Gateway to Services
+        apigw --> challenge
+        apigw --> org
+        apigw --> image
+        apigw --> auth
+
+        %% Services to Data and Infrastructure
+        services --> data
+        image --> thumbor
+
+        %% Infrastructure dependencies
+        thumbor --> s3
+
+        %% Styling for subgraphs
+        style vpc fill:none,stroke:#333,stroke-width:2px
+        style public fill:none,stroke:#333,stroke-width:1px
+        style private fill:none,stroke:#333,stroke-width:1px
+
+        %% Color backgrounds for different layers
+        style frontend fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+        style gateway fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+        style services fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+        style infra fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+        style data fill:#e0f2f1,stroke:#00897b,stroke-width:2px
+
+        %% Style Thumbor node with orange background
+        style thumbor fill:#ff9800,stroke:#f57c00,stroke-width:2px
+
+        %% Style User Browser node with visible border
+        style user fill:#fff,stroke:#1976d2,stroke-width:2px
+
+
+      </div>
+    </div>
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+      // Register icon packs (loaded from the Iconify JSON CDN)
+      mermaid.registerIconPacks([
+        {
+          name: 'logos',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'mdi',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/mdi@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'catppuccin',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/catppuccin@1/icons.json').then((r) => r.json()),
+        },
+        {
+          name: 'system-uicons',
+          loader: () =>
+            fetch('https://unpkg.com/@iconify-json/system-uicons@1.2.4/icons.json').then((r) =>
+              r.json(),
+            ),
+        },
+      ]);
+
+      // Initialize Mermaid
+      mermaid.initialize({
+        startOnLoad: true,
+        securityLevel: 'loose', // allow loading icons via fetch
+        theme: 'base',
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true,
+        },
+        themeVariables: {
+          clusterBkg: 'transparent',
+          primaryColor: '#fff',
+          primaryTextColor: '#333',
+          primaryBorderColor: '#ddd',
+          lineColor: '#333',
+          secondaryColor: '#fff',
+          tertiaryColor: '#fff',
+        },
+      });
+    </script>
+  </body>
+</html>
