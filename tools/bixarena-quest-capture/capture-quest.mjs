@@ -452,6 +452,23 @@ const recordingPage = await recordingContext.newPage();
 // Quickly navigate to same position
 console.log('Recording starting...');
 await recordingPage.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+
+// Speed up carousel rotation from 6 seconds to 4 seconds (must be done before carousel initializes)
+if (wantPortrait) {
+  await recordingPage.evaluate(() => {
+    // Override setInterval to change carousel timing from 6000ms to 4000ms
+    const originalSetInterval = window.setInterval;
+    window.setInterval = function(callback, delay, ...args) {
+      // If this looks like a carousel interval (6000ms), change to 4000ms
+      if (delay === 6000) {
+        console.log('Overriding carousel interval from 6000ms to 4000ms');
+        return originalSetInterval(callback, 4000, ...args);
+      }
+      return originalSetInterval(callback, delay, ...args);
+    };
+  });
+}
+
 await recordingPage.waitForTimeout(1000); // Brief wait for page load
 await recordingPage.waitForSelector('#quest-section-wrapper', { timeout: 5000 });
 
