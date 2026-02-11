@@ -14,10 +14,14 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Comparison Tool Config
+    description: Operations about Comparison Tool UI configuration.
   - name: Health Check
     description: Operations about health checks.
     x-internal: true
 paths:
+  /comparison-tools/config:
+    $ref: paths/comparison-tools/config.yaml
   # We prefix all the paths with the segment "next/" to prevent conflicts with the primary API
   /next/health-check:
     $ref: paths/next/health-check.yaml

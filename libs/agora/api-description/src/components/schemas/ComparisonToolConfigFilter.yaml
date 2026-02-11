@@ -1,0 +1,30 @@
+type: object
+description: Comparison Tool Config Filter
+properties:
+  name:
+    type: string
+    description: Name of the filter group
+    example: 'Biological Domain'
+  data_key:
+    type: string
+    description: Field to filter on
+    example: 'biodomains'
+  short_name:
+    type: string
+    description: Short name of the filter group
+    example: 'Biodomain'
+  query_param_key:
+    type: string
+    description: Query parameter key for the filter
+    example: 'biodomain'
+  values:
+    type: array
+    description: List of filter values
+    items:
+      type: string
+      example: 'Apoptosis'
+required:
+  - name
+  - data_key
+  - query_param_key
+  - values

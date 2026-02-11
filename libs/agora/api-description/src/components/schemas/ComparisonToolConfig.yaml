@@ -1,0 +1,30 @@
+type: object
+properties:
+  page:
+    $ref: './ComparisonToolConfigPage.yaml'
+  dropdowns:
+    type: array
+    description: List of dropdown options
+    items:
+      type: string
+      example: RNA - DIFFERENTIAL EXPRESSION
+  row_count:
+    type: string
+    description: Deprecated field that is always null. Previously contained relative description of the total number of rows in the data
+    nullable: true
+  columns:
+    type: array
+    description: List of column definitions
+    items:
+      $ref: './ComparisonToolConfigColumn.yaml'
+  filters:
+    type: array
+    description: List of filter configurations
+    items:
+      $ref: './ComparisonToolConfigFilter.yaml'
+required:
+  - page
+  - dropdowns
+  - row_count
+  - columns
+  - filters
