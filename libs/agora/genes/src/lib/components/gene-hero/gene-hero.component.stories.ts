@@ -4,7 +4,7 @@ import { GeneHeroComponent } from './gene-hero.component';
 
 const meta: Meta<GeneHeroComponent> = {
   component: GeneHeroComponent,
-  title: 'Gene Comparison Tool/GeneHero',
+  title: 'Genes/GeneHero',
 };
 export default meta;
 type Story = StoryObj<GeneHeroComponent>;
