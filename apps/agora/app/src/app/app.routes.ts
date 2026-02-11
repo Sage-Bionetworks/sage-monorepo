@@ -1,11 +1,5 @@
 import { Route } from '@angular/router';
-import {
-  DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
-  DEFAULT_WIKI_OWNER_ID,
-  ROUTE_PATHS,
-  SUPPORT_EMAIL,
-} from '@sagebionetworks/agora/config';
-import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 
 export const routes: Route[] = [
   {
@@ -19,34 +13,19 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.ABOUT,
-    loadChildren: () =>
-      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
+    loadChildren: () => import('@sagebionetworks/agora/about').then((routes) => routes.routes),
     data: {
       title: 'About Agora',
       description:
         'Agora is funded by the National Institute on Aging, and is developed and maintained by Sage Bionetworks.',
-      heroTitle: 'About',
-      wikiParams: {
-        ownerId: DEFAULT_WIKI_OWNER_ID,
-        wikiId: '612058',
-      } as SynapseWikiParams,
-      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
     path: ROUTE_PATHS.NEWS,
-    loadChildren: () =>
-      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
+    loadChildren: () => import('@sagebionetworks/agora/news').then((routes) => routes.routes),
     data: {
       title: 'News | Agora Releases',
       description: "See what's new in Agora, from new features to our latest data updates.",
-      heroTitle: 'Agora News',
-      wikiParams: {
-        ownerId: DEFAULT_WIKI_OWNER_ID,
-        wikiId: '611426',
-      } as SynapseWikiParams,
-      className: 'news-page-content',
-      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
@@ -134,14 +113,10 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.NOT_FOUND,
-    loadChildren: () =>
-      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
+    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
     data: {
-      title: 'Agora | Page Not Found',
-      description:
-        "Explore transcriptomic, proteomic, and metabolomic evidence for whether or not genes are associated with Alzheimer's disease using the Agora portal.",
-      supportEmail: SUPPORT_EMAIL,
-      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+      title: 'Page not found',
+      description: '',
     },
   },
   {

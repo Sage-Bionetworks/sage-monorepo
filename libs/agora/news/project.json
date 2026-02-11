@@ -1,0 +1,27 @@
+{
+  "name": "agora-news",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/agora/news/src",
+  "prefix": "agora",
+  "tags": ["type:feature", "scope:agora", "language:typescript"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/news"],
+      "options": {
+        "jestConfig": "libs/agora/news/jest.config.ts",
+        "tsConfig": "libs/agora/news/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  }
+}

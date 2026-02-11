@@ -1,0 +1,25 @@
+@use 'agora/styles/src/lib/variables';
+@use 'agora/styles/src/lib/mixins';
+
+.page-not-found {
+  min-height: calc(100vh - var(--header-height) - var(--footer-height) + 1px);
+  background-image: url('/agora-assets/images/hero-background.svg');
+  background-size: cover !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  h1 {
+    text-align: center;
+    color: #fff;
+  }
+
+  .page-not-found-heading {
+    font-size: 60px;
+  }
+
+  .page-not-found-message {
+    margin-bottom: 0;
+  }
+}
