@@ -1,5 +1,0 @@
-description: The request conflicts with current state of the target resource
-content:
-  application/problem+json:
-    schema:
-      $ref: ../schemas/BasicError.yaml

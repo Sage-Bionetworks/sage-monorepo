@@ -23,8 +23,11 @@ services:
         condition: service_healthy
       agora-app:
         condition: service_healthy
+      agora-api-next:
+        condition: service_started
     extra_hosts:
       - 'agora-api-docs:host-gateway'
+      - 'agora-api-next:host-gateway'
       - 'agora-api:host-gateway'
       - 'agora-app:host-gateway'
     deploy:

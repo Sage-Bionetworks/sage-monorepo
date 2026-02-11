@@ -30,7 +30,6 @@ _Last updated: 2025-08-23T22:04:00.590Z_
 - **monorepo**: 3 projects
 - **results-visualization-framework**: 1 projects
 - **bixarena**: 1 projects
-- **amp-als**: 1 projects
 - **frontend**: 1 projects
 - **admin**: 1 projects
 - **client**: 1 projects
@@ -242,17 +241,6 @@ This library was generated with Nx.
 - **Available Tasks**: test, lint
 - **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/libs/agora/util/README.md)
 
-## Amp-als Projects
-
-### Libraries
-
-#### amp-als-app-config-data
-
-- **Type**: library
-- **Language**: java
-- **Location**: `libs/amp-als/app-config-data`
-- **Available Tasks**:
-
 ## Backend Projects
 
 ### Applications
@@ -289,48 +277,6 @@ This Python project downloads an Agora data release from Synapse, then seeds and
 - **Language**: unknown
 - **Location**: `apps/agora/mongo`
 - **Available Tasks**: create-config, serve-detach, scan-image
-
-#### amp-als-apex
-
-- **Language**: unknown
-- **Location**: `apps/amp-als/apex`
-- **Available Tasks**: create-config, serve-detach, scan-image
-
-#### amp-als-api-docs
-
-- **Language**: unknown
-- **Location**: `apps/amp-als/api-docs`
-- **Available Tasks**: create-config, build, serve, serve-detach, scan-image
-
-#### amp-als-dataset-service
-
-- **Language**: java
-- **Location**: `apps/amp-als/dataset-service`
-- **Available Tasks**: create-config, build-dev, serve, serve-detach, build-image-base, scan-image, generate
-
-#### amp-als-keycloak
-
-- **Language**: unknown
-- **Location**: `apps/amp-als/keycloak`
-- **Available Tasks**: create-config, serve-detach, scan-image
-
-#### amp-als-opensearch
-
-- **Language**: unknown
-- **Location**: `apps/amp-als/opensearch`
-- **Available Tasks**: create-config, serve-detach, scan-image
-
-#### amp-als-postgres
-
-- **Language**: unknown
-- **Location**: `apps/amp-als/postgres`
-- **Available Tasks**: create-config, serve-detach
-
-#### amp-als-user-service
-
-- **Language**: java
-- **Location**: `apps/amp-als/user-service`
-- **Available Tasks**: create-config, build-dev, serve, serve-detach, build-image-base, scan-image, generate
 
 #### bixarena-apex
 
@@ -1098,20 +1044,6 @@ nx build sandbox-lambda-nodejs
 - **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/apps/sandbox/lambda-nodejs/README.md)
 
 ### Libraries
-
-#### amp-als-api-client-angular
-
-- **Type**: unknown
-- **Language**: typescript
-- **Location**: `libs/amp-als/api-client-angular`
-- **Available Tasks**: build, test, lint-fix, generate
-
-#### amp-als-api-description
-
-- **Type**: unknown
-- **Language**: openapi
-- **Location**: `libs/amp-als/api-description`
-- **Available Tasks**: build-individuals, build, lint, clean
 
 #### bixarena-api-client-python
 

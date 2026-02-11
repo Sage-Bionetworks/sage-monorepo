@@ -1,9 +1,0 @@
-name: direction
-description: Can be either `asc` or `desc`. Ignored without `sort` parameter.
-in: query
-required: false
-schema:
-  type: string
-  enum:
-    - asc
-    - desc

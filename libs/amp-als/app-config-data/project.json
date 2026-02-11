@@ -1,8 +1,0 @@
-{
-  "name": "amp-als-app-config-data",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/amp-als/app-config-data/src",
-  "projectType": "library",
-  "targets": {},
-  "tags": ["type:library", "scope:amp-als", "language:java", "package-manager:gradle"]
-}

@@ -212,7 +212,6 @@ Group PRs by the following categories:
 
    - Agora improvements
    - OpenChallenges features
-   - AMP-ALS updates
    - BixArena changes
    - Model-AD enhancements
    - Synapse improvements
