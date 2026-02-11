@@ -14,8 +14,12 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Comparison Tool Config
+    description: Operations about Comparison Tool UI configuration.
   - name: Data Version
     description: Operations about the data version.
 paths:
+  /comparison-tools/config:
+    $ref: paths/comparison-tools/config.yaml
   /data-version:
     $ref: paths/data-version.yaml

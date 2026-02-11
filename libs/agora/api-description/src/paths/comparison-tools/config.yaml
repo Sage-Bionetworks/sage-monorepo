@@ -1,0 +1,28 @@
+get:
+  tags:
+    - Comparison Tool Config
+  summary: Get Comparison Tool configuration
+  description: Retrieve the Comparison Tool configuration schema for the Agora application
+  operationId: getComparisonToolsConfig
+  parameters:
+    - name: page
+      in: query
+      description: Name of the page to retrieve the Comparison Tool configuration for
+      required: true
+      schema:
+        $ref: ../../components/schemas/ComparisonToolConfigPage.yaml
+  responses:
+    '200':
+      description: Successfully retrieved Comparison Tool configuration
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../components/schemas/ComparisonToolConfig.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
