@@ -120,21 +120,23 @@ test.describe('gene expression', () => {
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
 
-    const dropdown = page.getByRole('combobox').last();
+    const categorySelectors = page.locator('.comparison-tool-category-selectors');
+    const dropdown = categorySelectors.getByRole('combobox').last();
+    const listbox = page.getByRole('listbox');
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const malesOption = page.getByRole('option', { name: /sex - males/i });
     await malesOption.click();
-    await expect(malesOption).toBeHidden();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
 
     await dropdown.click();
-
+    await expect(listbox).toBeVisible();
     const femalesAndMalesOption = page.getByRole('option', { name: /sex - females & males/i });
     await femalesAndMalesOption.click();
-    // Wait for the dropdown panel to close
-    await expect(page.locator('.p-select-dropdown-panel')).toBeHidden();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, pinnedItems);
     await expectPinnedParams(page, pinnedItems);
@@ -158,11 +160,14 @@ test.describe('gene expression', () => {
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
-    const dropdown = page.getByRole('combobox').last();
+    const categorySelectors = page.locator('.comparison-tool-category-selectors');
+    const dropdown = categorySelectors.getByRole('combobox').last();
+    const listbox = page.getByRole('listbox');
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const malesOption = page.getByRole('option', { name: /sex - males/i });
     await malesOption.click();
-    await expect(malesOption).toBeHidden();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
@@ -173,10 +178,10 @@ test.describe('gene expression', () => {
     await expectPinnedParams(page, afterPinPinned);
 
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const femalesAndMalesOption = page.getByRole('option', { name: /sex - females & males/i });
     await femalesAndMalesOption.click();
-    // Wait for the dropdown panel to close
-    await expect(page.locator('.p-select-dropdown-panel')).toBeHidden();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, afterPinPinned);
     await expectPinnedParams(page, afterPinPinned);
@@ -200,11 +205,14 @@ test.describe('gene expression', () => {
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
 
-    const dropdown = page.getByRole('combobox').last();
+    const categorySelectors = page.locator('.comparison-tool-category-selectors');
+    const dropdown = categorySelectors.getByRole('combobox').last();
+    const listbox = page.getByRole('listbox');
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const malesOption = page.getByRole('option', { name: /sex - males/i });
     await malesOption.click();
-    await expect(malesOption).toBeHidden();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, initialPinned);
     await expectPinnedParams(page, initialPinned);
@@ -214,9 +222,10 @@ test.describe('gene expression', () => {
     await expectPinnedParams(page, afterUnpinPinned);
 
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const femalesAndMalesOption = page.getByRole('option', { name: /sex - females & males/i });
     await femalesAndMalesOption.click();
-    await expect(femalesAndMalesOption).toBeHidden();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, afterUnpinPinned);
     await expectPinnedParams(page, afterUnpinPinned);
@@ -245,19 +254,23 @@ test.describe('gene expression', () => {
     await expectPinnedRows(page, firstPinned);
     await expectPinnedParams(page, firstPinned);
 
-    const dropdown = page.getByRole('combobox').first();
+    const categorySelectors = page.locator('.comparison-tool-category-selectors');
+    const dropdown = categorySelectors.getByRole('combobox').first();
+    const listbox = page.getByRole('listbox');
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const cerebralCortexOption = page.getByRole('option', { name: /tissue - cerebral cortex/i });
     await cerebralCortexOption.click();
-    await expect(cerebralCortexOption).toBeHidden();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, expectedSecondPinned);
     await expectPinnedParams(page, expectedSecondPinned);
 
     await dropdown.click();
+    await expect(listbox).toBeVisible();
     const hippocampusOption = page.getByRole('option', { name: /tissue - hippocampus/i });
     await hippocampusOption.click();
-    await expect(hippocampusOption).toBeHidden();
+    await expect(listbox).toBeHidden();
 
     await expectPinnedRows(page, firstPinned);
     await expectPinnedParams(page, firstPinned);
