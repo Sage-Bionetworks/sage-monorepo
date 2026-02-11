@@ -1,0 +1,29 @@
+server:
+  port: 3334
+  forward-headers-strategy: native
+
+spring:
+  application:
+    name: agora-api-next
+  data:
+    mongodb:
+      host: agora-mongo
+      port: 27017
+      database: agora
+      username: root
+      password: changeme
+      authentication-database: admin
+  jackson:
+    date-format: org.sagebionetworks.agora.api.next.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 1.0.0-draft
+  version: 1.0.0
   title: Agora API Next
   license:
     name: Apache 2.0
@@ -16,6 +16,8 @@ servers:
 tags:
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
+  - name: Data Version
+    description: Operations about the data version.
 paths:
   /comparison-tools/config:
     get:
@@ -46,20 +48,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /next/health-check:
+  /data-version:
     get:
       tags:
-        - Health Check
-      summary: Get health check information
-      description: Get information about the health of the service
-      operationId: getHealthCheck
+        - Data Version
+      summary: Get data version
+      description: Get data version
+      operationId: getDataVersion
       responses:
         '200':
-          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheck'
+                $ref: '#/components/schemas/DataVersion'
+          description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -198,19 +200,20 @@ components:
       required:
         - title
         - status
-    HealthCheck:
+    DataVersion:
       type: object
-      description: Represents the health of a service
+      description: Synapse data version
       properties:
-        status:
-          description: Indicates whether the service status is acceptable or not
+        data_file:
           type: string
-          enum:
-            - pass
-            - fail
-            - warn
+        data_version:
+          type: string
+        team_images_id:
+          type: string
       required:
-        - status
+        - data_file
+        - data_version
+        - team_images_id
   responses:
     BadRequest:
       description: Invalid request
