@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'explorers-not-found',
@@ -7,9 +7,5 @@ import { Component, computed, input } from '@angular/core';
 })
 export class NotFoundComponent {
   supportEmail = input('supportEmail'); // from the route data
-  heroBackgroundImagePath = input<string | undefined>(); // from the route data
-
-  heroBackgroundImagePathOrDefault = computed(
-    () => this.heroBackgroundImagePath() ?? 'explorers-assets/images/background.svg',
-  );
+  readonly backgroundImagePath = 'explorers-assets/images/background.svg';
 }

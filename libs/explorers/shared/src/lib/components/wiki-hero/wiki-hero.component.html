@@ -1,11 +1,11 @@
 <div id="wiki-hero-container">
   <explorers-hero
     [title]="heroTitle()"
-    [backgroundImagePath]="heroBackgroundImagePathOrDefault()"
+    backgroundImagePath="explorers-assets/images/background.svg"
   />
   <div class="wiki-hero">
     <div class="wiki-hero-content">
-      <explorers-wiki [wikiParams]="wikiParams()" [className]="className()" />
+      <explorers-wiki [wikiParams]="wikiParams()" [className]="className" />
     </div>
   </div>
 </div>
