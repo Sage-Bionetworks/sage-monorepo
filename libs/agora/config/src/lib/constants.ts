@@ -6,6 +6,8 @@ export const SUPPORT_EMAIL = 'agora@sagebionetworks.org';
 
 export const DEFAULT_WIKI_OWNER_ID = 'syn25913473';
 
+export const DEFAULT_HERO_BACKGROUND_IMAGE_PATH = 'agora-assets/images/hero-background.svg';
+
 export const ROUTE_PATHS = {
   HOME: '',
   GENE_COMPARISON: 'genes/comparison',

@@ -1,5 +1,10 @@
 import { Route } from '@angular/router';
-import { DEFAULT_WIKI_OWNER_ID, ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import {
+  DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+  DEFAULT_WIKI_OWNER_ID,
+  ROUTE_PATHS,
+  SUPPORT_EMAIL,
+} from '@sagebionetworks/agora/config';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
 export const routes: Route[] = [
@@ -25,6 +30,7 @@ export const routes: Route[] = [
         ownerId: DEFAULT_WIKI_OWNER_ID,
         wikiId: '612058',
       } as SynapseWikiParams,
+      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
@@ -40,6 +46,7 @@ export const routes: Route[] = [
         wikiId: '611426',
       } as SynapseWikiParams,
       className: 'news-page-content',
+      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
@@ -122,15 +129,19 @@ export const routes: Route[] = [
       title: 'Agora | Terms of Service',
       description:
         'Agora is powered by Synapse, a platform for supporting scientific collaborations centered around shared biomedical data sets. Our goal is to make biomedical research more transparent, more reproducible, and more accessible to a broader audience of scientists.',
-      heroBackgroundImagePath: 'agora-assets/images/hero-background.svg',
+      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
     path: ROUTE_PATHS.NOT_FOUND,
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
     data: {
-      title: 'Page not found',
-      description: '',
+      title: 'Agora | Page Not Found',
+      description:
+        "Explore transcriptomic, proteomic, and metabolomic evidence for whether or not genes are associated with Alzheimer's disease using the Agora portal.",
+      supportEmail: SUPPORT_EMAIL,
+      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
