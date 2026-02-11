@@ -3,6 +3,7 @@ README.md
 api.module.ts
 api/api.ts
 api/bio-domain.service.ts
+api/comparison-tool-config.service.ts
 api/data-version.service.ts
 api/distribution.service.ts
 api/gene.service.ts
@@ -15,6 +16,10 @@ model/basic-error.ts
 model/bio-domain-info.ts
 model/bio-domain.ts
 model/bio-domains.ts
+model/comparison-tool-config-column.ts
+model/comparison-tool-config-filter.ts
+model/comparison-tool-config-page.ts
+model/comparison-tool-config.ts
 model/data-version.ts
 model/distribution.ts
 model/druggability.ts
