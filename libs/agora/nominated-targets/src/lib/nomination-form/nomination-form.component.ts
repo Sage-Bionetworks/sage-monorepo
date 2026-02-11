@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
 
 @Component({
   selector: 'agora-nomination-form',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './nomination-form.component.html',
   styleUrls: ['./nomination-form.component.scss'],
 })
-export class NominationFormComponent {}
+export class NominationFormComponent {
+  readonly heroBackgroundImagePath = DEFAULT_HERO_BACKGROUND_IMAGE_PATH;
+}

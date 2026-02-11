@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GeneService, TargetNomination } from '@sagebionetworks/agora/api-client';
+import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
 import { GeneTableComponent } from '@sagebionetworks/agora/genes';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
@@ -24,6 +25,7 @@ import { ButtonModule } from 'primeng/button';
 export class NominatedTargetsComponent implements OnInit {
   apiService = inject(GeneService);
 
+  readonly heroBackgroundImagePath = DEFAULT_HERO_BACKGROUND_IMAGE_PATH;
   magnifyingIcon = faMagnifyingGlass;
   genes: Gene[] = [];
   searchTerm = '';

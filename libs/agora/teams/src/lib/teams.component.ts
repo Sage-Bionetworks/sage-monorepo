@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Team, TeamService, TeamsList } from '@sagebionetworks/agora/api-client';
+import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { catchError, finalize, map, Observable, of } from 'rxjs';
 import { TeamListComponent } from './team-list/team-list.component';
@@ -13,12 +14,14 @@ import { TeamListComponent } from './team-list/team-list.component';
   styleUrls: ['./teams.component.scss'],
 })
 export class TeamsComponent implements OnInit {
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   helperService = inject(HelperService);
   teamService = inject(TeamService);
 
   teams$!: Observable<Team[]>;
+
+  readonly heroBackgroundImagePath = DEFAULT_HERO_BACKGROUND_IMAGE_PATH;
 
   ngOnInit() {
     this.loadTeams();
