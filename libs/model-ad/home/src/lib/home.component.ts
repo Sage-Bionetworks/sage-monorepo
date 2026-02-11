@@ -45,9 +45,8 @@ export class HomeComponent {
   ];
 
   constructor() {
-    // Subtract 1px to match the SCSS media query logic (width < 850px = max-width: 849px)
     this.breakpointObserver
-      .observe([`(max-width: ${this.MOBILE_BREAKPOINT - 1}px)`])
+      .observe([`(width < ${this.MOBILE_BREAKPOINT}px)`])
       .pipe(takeUntilDestroyed())
       .subscribe((result) => {
         this.backgroundImage.set(

@@ -13,22 +13,22 @@ export class SvgIconService {
    * Service for managing SVG icons in the Explorer applications
    *
    * This service provides the following functionality:
-   * - Load SVG files from the `explorers-assets/icons/` directory
+   * - Load SVG files from `*-assets/icons/` directories (e.g., explorers-assets, agora-assets, model-ad-assets)
    * - Cache SVGs to prevent redundant HTTP requests
    * - Sanitize SVG content for safe rendering in the browser
    * - Preload commonly used SVG icons for better performance
    *
    * The service ensures security by:
-   * - Only allowing SVGs from the approved assets directory
+   * - Only allowing SVGs from approved asset directories matching the pattern `[app]-assets/icons/*.svg`
    * - Sanitizing SVG content before rendering
    */
-  private http = inject(HttpClient);
-  private sanitizer = inject(DomSanitizer);
-  private svgCache = new Map<string, Observable<SafeHtml>>();
+  private readonly http = inject(HttpClient);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly svgCache = new Map<string, Observable<SafeHtml>>();
   private readonly platformId = inject(PLATFORM_ID);
 
   // Common SVGs we want to preload
-  private commonSvgPaths = [
+  private readonly commonSvgPaths = [
     'explorers-assets/icons/card-arrow.svg',
     'explorers-assets/icons/caret-right-outline.svg',
     'explorers-assets/icons/close.svg',
