@@ -1,7 +1,8 @@
 import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SynapseApiService } from '@sagebionetworks/agora/services';
-import { server, synapseWikiMock } from '@sagebionetworks/agora/testing';
+import { synapseWikiMock } from '@sagebionetworks/agora/testing';
+import { server } from '@sagebionetworks/agora/testing/msw';
 import { http, HttpResponse } from 'msw';
 import { WikiComponent } from './wiki.component';
 

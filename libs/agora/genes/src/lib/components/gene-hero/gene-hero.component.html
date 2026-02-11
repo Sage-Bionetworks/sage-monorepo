@@ -1,5 +1,8 @@
 @if (gene) {
-  <div class="section section-hero">
+  <div
+    class="section section-hero"
+    [style.background-image]="'url(' + heroBackgroundImagePath + ')'"
+  >
     <div class="section-inner">
       <div class="container-sm">
         <h1 class="gene-hero-heading">
@@ -53,38 +56,35 @@
             @if (gene.ensembl_info.ensembl_possible_replacements.length > 0) {
               <p class="aliases">
                 <a [href]="getPossibleReplacementsURL()"
-                  >Possible replacement value@if (gene.ensembl_info.ensembl_possible_replacements.length > 1) {
-                  <span
-                    >s</span
-                    >
-                    }</a
-                    >:
-                    {{ gene.ensembl_info.ensembl_possible_replacements.join(', ') }}
-                  </p>
-                }
-                @if (gene.uniprotkb_accessions) {
-                  <p class="aliases">
-                    UNIPROTKB
-                    @for (accession of gene.uniprotkb_accessions; track accession; let isLast = $last) {
-                      <ng-container
-                        class="aliases"
-                        >
-                        <a [href]="getUniProtKBLink(accession)" target="_blank">{{ accession }}</a
-                          >@if (!isLast) {
-                          <span>, </span>
-                        }
-                      </ng-container>
+                  >Possible replacement value
+                  @if (gene.ensembl_info.ensembl_possible_replacements.length > 1) {
+                    <span>s</span>
+                  }</a
+                >:
+                {{ gene.ensembl_info.ensembl_possible_replacements.join(', ') }}
+              </p>
+            }
+            @if (gene.uniprotkb_accessions) {
+              <p class="aliases">
+                UNIPROTKB
+                @for (accession of gene.uniprotkb_accessions; track accession; let isLast = $last) {
+                  <ng-container class="aliases">
+                    <a [href]="getUniProtKBLink(accession)" target="_blank">{{ accession }}</a>
+                    @if (!isLast) {
+                      <span>, </span>
                     }
-                  </p>
-                  @if (gene.alias.length > 0) {
-                    <p class="aliases">
-                      {{ getAliases() }}
-                    </p>
-                  }
+                  </ng-container>
                 }
-              </div>
+              </p>
+              @if (gene.alias.length > 0) {
+                <p class="aliases">
+                  {{ getAliases() }}
+                </p>
+              }
             }
           </div>
-        </div>
+        }
       </div>
-    }
+    </div>
+  </div>
+}
