@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
-import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { DEFAULT_WIKI_OWNER_ID, ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
 export const routes: Route[] = [
   {
@@ -13,11 +14,17 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.ABOUT,
-    loadChildren: () => import('@sagebionetworks/agora/about').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
       title: 'About Agora',
       description:
         'Agora is funded by the National Institute on Aging, and is developed and maintained by Sage Bionetworks.',
+      heroTitle: 'About',
+      wikiParams: {
+        ownerId: DEFAULT_WIKI_OWNER_ID,
+        wikiId: '612058',
+      } as SynapseWikiParams,
     },
   },
   {

@@ -4,6 +4,8 @@ export const HELP_URL = 'https://help.adknowledgeportal.org/apd/Agora-Resources.
 
 export const SUPPORT_EMAIL = 'agora@sagebionetworks.org';
 
+export const DEFAULT_WIKI_OWNER_ID = 'syn25913473';
+
 export const ROUTE_PATHS = {
   HOME: '',
   GENE_COMPARISON: 'genes/comparison',
