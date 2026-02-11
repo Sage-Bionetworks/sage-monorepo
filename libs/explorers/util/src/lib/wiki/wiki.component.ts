@@ -16,11 +16,10 @@ import { finalize } from 'rxjs/operators';
 export class WikiComponent implements OnInit {
   synapseApiService = inject(SynapseApiService);
   domSanitizer = inject(DomSanitizer);
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   wikiParams = input<SynapseWikiParams>();
-
-  className = '';
+  className = input<string>('');
   isLoading = true;
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
 
@@ -60,10 +59,10 @@ export class WikiComponent implements OnInit {
   }
 
   getClassName() {
-    const className = [this.className];
+    const classNames = [this.className()];
     if (this.isLoading) {
-      className.push('loading');
+      classNames.push('loading');
     }
-    return className;
+    return classNames;
   }
 }

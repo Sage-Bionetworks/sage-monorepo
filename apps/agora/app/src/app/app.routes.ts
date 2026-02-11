@@ -29,10 +29,17 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.NEWS,
-    loadChildren: () => import('@sagebionetworks/agora/news').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
       title: 'News | Agora Releases',
       description: "See what's new in Agora, from new features to our latest data updates.",
+      heroTitle: 'Agora News',
+      wikiParams: {
+        ownerId: DEFAULT_WIKI_OWNER_ID,
+        wikiId: '611426',
+      } as SynapseWikiParams,
+      className: 'news-page-content',
     },
   },
   {

@@ -26,7 +26,6 @@
       "@sagebionetworks/agora/genes": ["libs/agora/genes/src/index.ts"],
       "@sagebionetworks/agora/home": ["libs/agora/home/src/index.ts"],
       "@sagebionetworks/agora/models": ["libs/agora/models/index.ts"],
-      "@sagebionetworks/agora/news": ["libs/agora/news/src/index.ts"],
       "@sagebionetworks/agora/nominated-targets": ["libs/agora/nominated-targets/src/index.ts"],
       "@sagebionetworks/agora/not-found": ["libs/agora/not-found/src/index.ts"],
       "@sagebionetworks/agora/services": ["libs/agora/services/src/index.ts"],
