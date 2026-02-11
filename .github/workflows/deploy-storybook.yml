@@ -1,0 +1,66 @@
+# Reusable workflow: Deploys individual storybooks without rebuilding the entire site.
+# Called by build-deploy-docs.yml when individual parent products are affected.
+
+name: Deploy Storybook
+
+on:
+  workflow_call:
+    inputs:
+      storybooks:
+        description: 'Storybooks to deploy (space-separated)'
+        required: true
+        type: string
+        # Examples: "agora", "explorers", "agora explorers"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Build storybooks
+        env:
+          STORYBOOKS: ${{ inputs.storybooks }}
+        run: |
+          echo "=== Building storybooks: $STORYBOOKS ==="
+
+          for storybook in $STORYBOOKS; do
+            echo ""
+            echo "=== Building ${storybook} storybook ==="
+            devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+                && STORYBOOK_STATIC_BUILD=true nx build-storybook ${storybook}-storybook --outputDir=dist/storybook/storybook/${storybook}"
+          done
+
+      - name: Configure Git credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Deploy storybooks
+        env:
+          STORYBOOKS: ${{ inputs.storybooks }}
+        run: |
+          echo "=== Deploying storybooks ==="
+
+          for storybook in $STORYBOOKS; do
+            echo "Deploying storybook/${storybook}"
+            devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+                && uv run ghp-import -p -f -m 'Deploy storybook/${storybook}' -x storybook/${storybook} dist/storybook/storybook/${storybook}"
+          done
+
+          echo ""
+          echo "=== Deployment complete ==="
+
+      - name: Remove the dev container
+        if: always()
+        run: docker rm -f sage_devcontainer
