@@ -183,6 +183,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       sortOrders,
     };
 
+    this.comparisonToolService.startFetch();
     this.geneExpressionService
       .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -210,6 +211,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
       sortOrders,
     };
 
+    this.comparisonToolService.startFetch();
     this.geneExpressionService
       .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))

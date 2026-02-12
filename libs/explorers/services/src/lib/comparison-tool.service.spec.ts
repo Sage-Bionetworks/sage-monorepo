@@ -859,4 +859,68 @@ describe('ComparisonToolService', () => {
       expect(service.isFilterPanelOpen()).toBe(false);
     });
   });
+
+  describe('loading state', () => {
+    it('should have isLoading false initially', () => {
+      connectService();
+      expect(service.isLoading()).toBe(false);
+    });
+
+    it('should set isLoading to true when startFetch is called', () => {
+      connectService();
+      service.startFetch();
+      expect(service.isLoading()).toBe(true);
+    });
+
+    it('should set isLoading to false when setUnpinnedData is called', () => {
+      connectService();
+      service.startFetch();
+      expect(service.isLoading()).toBe(true);
+
+      service.setUnpinnedData([]);
+      expect(service.isLoading()).toBe(false);
+    });
+
+    it('should set isLoading to false when setPinnedData is called', () => {
+      connectService();
+      service.startFetch();
+      expect(service.isLoading()).toBe(true);
+
+      service.setPinnedData([]);
+      expect(service.isLoading()).toBe(false);
+    });
+
+    it('should track multiple concurrent fetches', () => {
+      connectService();
+
+      // Start two fetches (simulating parallel pinned and unpinned data fetches)
+      service.startFetch();
+      service.startFetch();
+      expect(service.isLoading()).toBe(true);
+
+      // Complete first fetch - should still be loading
+      service.setUnpinnedData([]);
+      expect(service.isLoading()).toBe(true);
+
+      // Complete second fetch - should no longer be loading
+      service.setPinnedData([]);
+      expect(service.isLoading()).toBe(false);
+    });
+
+    it('should not go below zero pending fetches', () => {
+      connectService();
+      expect(service.isLoading()).toBe(false);
+
+      // Call setUnpinnedData without startFetch
+      service.setUnpinnedData([]);
+      expect(service.isLoading()).toBe(false);
+
+      // Should still work correctly after
+      service.startFetch();
+      expect(service.isLoading()).toBe(true);
+
+      service.setUnpinnedData([]);
+      expect(service.isLoading()).toBe(false);
+    });
+  });
 });

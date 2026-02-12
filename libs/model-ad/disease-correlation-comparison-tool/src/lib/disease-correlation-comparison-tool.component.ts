@@ -175,6 +175,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       sortOrders,
     };
 
+    this.comparisonToolService.startFetch();
     this.diseaseCorrelationService
       .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -202,6 +203,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
       sortOrders,
     };
 
+    this.comparisonToolService.startFetch();
     this.diseaseCorrelationService
       .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))

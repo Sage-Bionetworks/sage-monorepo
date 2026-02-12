@@ -22,6 +22,7 @@ import {
   testFilterSelectionUpdatesUrl,
   testFiltersRemovedFromUrlOnClearAll,
   testFullCaseInsensitiveMatch,
+  testLoadingIndicatorAppearsDuringDataFetch,
   testMetaClickBuildsMultiColumnSort,
   testMetaClickTogglesExistingSortOrder,
   testMultiColumnSortRestoredFromUrl,
@@ -527,6 +528,13 @@ test.describe('disease correlation', () => {
         getQueryParamsFromRecords(expectedInitialFilterParams),
       );
       await testFiltersRemovedFromUrlOnClearAll(page, expectedInitialFilterParams);
+    });
+  });
+
+  test.describe('loading indicator', () => {
+    test('loading indicator appears during data fetch', async ({ page }) => {
+      await navigateToComparison(page, CT_PAGE, true);
+      await testLoadingIndicatorAppearsDuringDataFetch(page);
     });
   });
 });
