@@ -20,7 +20,8 @@ jobs:
           fi
   check-explorer-affected:
     needs: validate-explorer-input
-    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     outputs:
       explorer_affected: ${{ steps.explorer_affected.outputs.affected }}
     steps:
