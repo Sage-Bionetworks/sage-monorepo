@@ -11,8 +11,9 @@
 /**
  * The type of comparison tool page
  */
-export type ComparisonToolConfigPage = 'Gene Expression';
+export type ComparisonToolConfigPage = 'Nominated Drugs' | 'Nominated Targets';
 
 export const ComparisonToolConfigPage = {
-  GeneExpression: 'Gene Expression' as ComparisonToolConfigPage,
+  NominatedDrugs: 'Nominated Drugs' as ComparisonToolConfigPage,
+  NominatedTargets: 'Nominated Targets' as ComparisonToolConfigPage,
 };
