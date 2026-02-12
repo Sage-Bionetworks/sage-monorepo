@@ -9,11 +9,7 @@ const config: StorybookConfig = {
   addons: [getAbsolutePath('@storybook/addon-docs')],
   framework: {
     name: getAbsolutePath('@storybook/angular'),
-    options: {
-      builder: {
-        baseHref: '/agora/',
-      },
-    },
+    options: {},
   },
   staticDirs: [
     { from: '../../../explorers/assets', to: 'explorers-assets' },
