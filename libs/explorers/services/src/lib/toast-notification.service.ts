@@ -1,8 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
-
-const TOAST_DURATION_MS = 5000;
-
+import { TOAST_DURATION_MS } from '@sagebionetworks/explorers/constants';
 @Injectable({ providedIn: 'root' })
 export class ToastNotificationService {
   private readonly messageService = inject(MessageService);

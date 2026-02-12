@@ -54,10 +54,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     .pipe(
       catchError((error) => {
         this.logger.error('Error retrieving comparison tool config', error);
-        this.router.navigate([ROUTE_PATHS.ERROR], {
-          skipLocationChange: true,
-          queryParams: { message: 'Error: Unable to load comparison tool configuration.' },
-        });
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),

@@ -273,10 +273,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       },
       error: () => {
         this.isLoading = false;
-        this.router.navigate([ROUTE_PATHS.ERROR], {
-          skipLocationChange: true,
-          queryParams: { message: 'Unable to load gene comparison data. Please reload the page.' },
-        });
       },
     });
   }

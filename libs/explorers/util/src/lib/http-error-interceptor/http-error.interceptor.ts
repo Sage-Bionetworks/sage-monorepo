@@ -5,10 +5,11 @@ import {
   HttpHandlerFn,
   HttpErrorResponse,
 } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable, throwError, timer } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { AppError } from '@sagebionetworks/explorers/models';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/services';
 
 /**
  * HTTP interceptor that handles errors from HTTP requests.
@@ -16,20 +17,21 @@ import { LoggerService } from '@sagebionetworks/explorers/services';
  * This interceptor:
  * - Retries failed requests once for transient errors (network issues, 5xx)
  * - Does NOT retry client errors (4xx) as they won't succeed
- * - Logs errors for debugging
+ * - Shows error overlay for connectivity errors (network failures, 5xx server errors)
+ * - Logs all errors for debugging
  * - Re-throws errors as AppError for consistent error handling
  *
- * Error notifications are NOT shown here. Instead:
- * - Components can catch errors and throw AppError with isUserFacingError=true
- *   and a custom message, which GlobalErrorHandler will display
- * - If no component catches the error, it bubbles up as AppError with
- *   isUserFacingError=false (no toast shown)
+ * Connectivity errors (status 0 or 5xx) are handled centrally here to provide
+ * a consistent user experience. Components should catch errors for cleanup
+ * but don't need to show their own error messages for these cases.
  */
 export const httpErrorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn,
 ): Observable<any> => {
   const logger = inject(LoggerService);
+  const errorOverlayService = inject(ErrorOverlayService);
+  const router = inject(Router);
 
   return next(req).pipe(
     retry({
@@ -49,12 +51,26 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
       // Log error for debugging
       logger.error(`HTTP Error: ${errorMessage}`, error);
 
-      // Re-throw as AppError with isUserFacingError=false
-      // Components can catch and throw their own AppError with custom message and isUserFacingError=true
+      // Show error overlay for connectivity issues,
+      // but not if the user is already on the error page.
+      // These errors indicate the app cannot function properly.
+      const isOnErrorPage = router.url.includes('/not-found');
+      if (isConnectivityError(error) && !isOnErrorPage) {
+        errorOverlayService.showError(errorMessage);
+      }
+
+      // Re-throw as AppError - components can catch for cleanup but don't need to show errors
       return throwError(() => new AppError(errorMessage, false));
     }),
   );
 };
+
+/**
+ * Determines if the error is a connectivity issue (network or server error).
+ */
+function isConnectivityError(error: HttpErrorResponse): boolean {
+  return error.status === 0 || (error.status >= 500 && error.status < 600);
+}
 
 /**
  * Builds a user-friendly error message from an HttpErrorResponse.
@@ -69,20 +85,16 @@ function buildErrorMessage(error: HttpErrorResponse): string {
   switch (error.status) {
     case 0:
       return 'Unable to connect to the server. Please check your connection.';
-    case 400:
-      return 'Invalid request. Please check your input and try again.';
-    case 401:
-      return 'You are not authorized. Please log in and try again.';
-    case 403:
-      return 'You do not have permission to perform this action.';
     case 404:
       return 'The requested resource was not found.';
     case 500:
       return 'An internal server error occurred. Please try again later.';
     case 502:
+      return 'The server encountered a temporary error. Please try again later.';
     case 503:
-    case 504:
       return 'The server is temporarily unavailable. Please try again later.';
+    case 504:
+      return 'The server is taking too long to respond. Please try again later.';
     default:
       return `An error occurred (Error ${error.status}). Please try again.`;
   }

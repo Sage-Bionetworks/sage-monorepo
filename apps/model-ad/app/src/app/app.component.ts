@@ -1,13 +1,13 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
+import { MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
 import {
-  MetaTagService,
-  ErrorOverlayService,
-  PlatformService,
-  VersionService,
-} from '@sagebionetworks/explorers/services';
-import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
+  ErrorOverlayComponent,
+  FooterComponent,
+  HeaderComponent,
+} from '@sagebionetworks/explorers/ui';
 import { DataVersionService } from '@sagebionetworks/model-ad/api-client';
 import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
@@ -18,14 +18,17 @@ import {
   GoogleTagManagerComponent,
   isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   imports: [
     RouterModule,
+    ErrorOverlayComponent,
     FooterComponent,
-    HeaderComponent,
     GoogleTagManagerComponent,
+    HeaderComponent,
     SearchInputComponent,
+    ToastModule,
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -43,16 +46,12 @@ import {
   ],
 })
 export class AppComponent implements OnInit {
-  private readonly platformService = inject(PlatformService);
   private readonly destroyRef = inject(DestroyRef);
 
   configService = inject(ConfigService);
   dataVersionService = inject(DataVersionService);
   metaTagService = inject(MetaTagService);
-  errorOverlayService = inject(ErrorOverlayService);
   versionService = inject(VersionService);
-
-  hasActiveError = this.errorOverlayService.hasActiveError;
 
   readonly useGoogleTagManager: boolean;
 
@@ -76,18 +75,22 @@ export class AppComponent implements OnInit {
   }
 
   getDataVersion() {
-    this.versionService.getDataVersion(this.dataVersionService, (dataVersion) => {
-      this.dataVersion = dataVersion;
-    });
+    this.versionService
+      .getDataVersion$(this.dataVersionService)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (v) => (this.dataVersion = v),
+        error: () => (this.dataVersion = 'unknown'),
+      });
   }
 
   getSiteVersion() {
-    this.versionService.getSiteVersion(this.configService.config, (siteVersion) => {
-      this.siteVersion = siteVersion;
-    });
-  }
-
-  reloadPage() {
-    window.location.reload();
+    this.versionService
+      .getSiteVersion$(this.configService.config)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (v) => (this.siteVersion = v),
+        error: () => (this.siteVersion = 'unknown'),
+      });
   }
 }

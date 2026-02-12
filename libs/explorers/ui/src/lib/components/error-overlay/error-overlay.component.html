@@ -1,0 +1,10 @@
+@if (hasActiveError()) {
+  <div class="error-overlay"></div>
+  <div class="warning-banner">
+    <div class="warning-banner-content">
+      <i class="pi pi-exclamation-triangle warning-icon"></i>
+      <span>{{ activeErrorMessage() }}</span>
+      <button class="reload-button" (click)="onReload()">Reload Page</button>
+    </div>
+  </div>
+}

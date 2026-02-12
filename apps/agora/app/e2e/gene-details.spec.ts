@@ -14,7 +14,7 @@ test.describe('gene details', () => {
     await waitForSpinnerNotVisible(page);
 
     // expect a title "to contain" a substring.
-    await expect(page).toHaveTitle('Page not found');
+    await expect(page).toHaveTitle(/Page not found/);
 
     // expect div for page not found content to be visible
     await expect(page.getByRole('heading', { name: 'Page not found.' })).toBeVisible();

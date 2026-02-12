@@ -1,17 +1,17 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { DataVersionService } from '@sagebionetworks/agora/api-client';
 import { AGORA_LOADING_ICON_COLORS, ConfigService } from '@sagebionetworks/agora/config';
 import { SearchInputComponent } from '@sagebionetworks/agora/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/agora/util';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
+import { MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
 import {
-  GitHubService,
-  MetaTagService,
-  PlatformService,
-  VersionService,
-} from '@sagebionetworks/explorers/services';
-import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
+  ErrorOverlayComponent,
+  FooterComponent,
+  HeaderComponent,
+} from '@sagebionetworks/explorers/ui';
 import {
   CONFIG_SERVICE_TOKEN,
   createGoogleTagManagerIdProvider,
@@ -23,11 +23,12 @@ import { ToastModule } from 'primeng/toast';
 @Component({
   imports: [
     RouterModule,
-    HeaderComponent,
+    ErrorOverlayComponent,
     FooterComponent,
-    ToastModule,
     GoogleTagManagerComponent,
+    HeaderComponent,
     SearchInputComponent,
+    ToastModule,
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -45,12 +46,10 @@ import { ToastModule } from 'primeng/toast';
   ],
 })
 export class AppComponent implements OnInit {
-  private readonly platformService = inject(PlatformService);
   private readonly destroyRef = inject(DestroyRef);
 
   configService = inject(ConfigService);
   dataVersionService = inject(DataVersionService);
-  gitHubService = inject(GitHubService);
   metaTagService = inject(MetaTagService);
   versionService = inject(VersionService);
 
@@ -76,14 +75,22 @@ export class AppComponent implements OnInit {
   }
 
   getDataVersion() {
-    this.versionService.getDataVersion(this.dataVersionService, (dataVersion) => {
-      this.dataVersion = dataVersion;
-    });
+    this.versionService
+      .getDataVersion$(this.dataVersionService)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (v) => (this.dataVersion = v),
+        error: () => (this.dataVersion = 'unknown'),
+      });
   }
 
   getSiteVersion() {
-    this.versionService.getSiteVersion(this.configService.config, (siteVersion) => {
-      this.siteVersion = siteVersion;
-    });
+    this.versionService
+      .getSiteVersion$(this.configService.config)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (v) => (this.siteVersion = v),
+        error: () => (this.siteVersion = 'unknown'),
+      });
   }
 }

@@ -1,7 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { firstValueFrom } from 'rxjs';
 import { GitHubService } from './github.service';
+import { LoggerService } from './logger.service';
 
 // Mock Octokit
 const mockOctokit = {
@@ -21,10 +23,20 @@ jest.mock('@octokit/rest', () => ({
 
 describe('GitHubService', () => {
   let service: GitHubService;
+  let mockLoggerService: Partial<LoggerService>;
 
   beforeEach(() => {
+    mockLoggerService = {
+      error: jest.fn(),
+    };
+
     TestBed.configureTestingModule({
-      providers: [GitHubService, provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        GitHubService,
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: LoggerService, useValue: mockLoggerService },
+      ],
     });
     service = TestBed.inject(GitHubService);
 
@@ -68,7 +80,7 @@ describe('GitHubService', () => {
 
     mockOctokit.paginate.iterator.mockReturnValue(mockIterator);
 
-    const result = await service.getCommitSHA(tag);
+    const result = await firstValueFrom(service.getCommitSHA(tag));
     expect(result).toBe(expectedSHA);
   });
 
@@ -91,7 +103,7 @@ describe('GitHubService', () => {
 
     mockOctokit.paginate.iterator.mockReturnValue(mockIterator);
 
-    const result = await service.getCommitSHA(tag);
+    const result = await firstValueFrom(service.getCommitSHA(tag));
     expect(result).toBe('');
   });
 
@@ -102,14 +114,9 @@ describe('GitHubService', () => {
       throw new Error('Network error');
     });
 
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-
-    const result = await service.getCommitSHA(tag);
-
+    const result = await firstValueFrom(service.getCommitSHA(tag));
     expect(result).toBe('');
-    expect(consoleSpy).toHaveBeenCalledWith('Error fetching tags:', expect.any(Error));
-
-    consoleSpy.mockRestore();
+    expect(mockLoggerService.error).toHaveBeenCalledWith('Error fetching tags', expect.any(Error));
   });
 
   describe('getShortSHA', () => {

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { GitHubService } from './github.service';
 import { PlatformService } from './platform.service';
 import { DataVersion, VersionConfig, VersionService } from './version.service';
@@ -108,11 +109,11 @@ describe('VersionService', () => {
   });
 
   describe('getSiteVersion', () => {
-    it('should get site version successfully with commit SHA', async () => {
-      (mockGitHubService.getCommitSHA as jest.Mock).mockResolvedValue('abc1234');
+    it('should get site version successfully with commit SHA', () => {
+      (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(of('abc1234'));
 
       let result = '';
-      await service.getSiteVersion(mockVersionConfig, (siteVersion) => {
+      service.getSiteVersion(mockVersionConfig, (siteVersion) => {
         result = siteVersion;
       });
 
@@ -120,40 +121,30 @@ describe('VersionService', () => {
       expect(mockGitHubService.getCommitSHA).toHaveBeenCalledWith('agora/v1.2.3');
     });
 
-    it('should fallback to app version when GitHub service fails', async () => {
-      const error = new Error('GitHub API error');
-      (mockGitHubService.getCommitSHA as jest.Mock).mockRejectedValue(error);
+    it('should fallback to app version when GitHub service returns empty SHA', () => {
+      (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(of(''));
 
       let result = '';
-      await service.getSiteVersion(mockVersionConfig, (siteVersion) => {
+      service.getSiteVersion(mockVersionConfig, (siteVersion) => {
         result = siteVersion;
       });
 
       expect(result).toBe('1.2.3');
     });
 
-    it('should call onError when both GitHub service and fallback fail', async () => {
-      const error = new Error('GitHub API error');
+    it('should call onSuccess with unknown when SHA is empty and appVersion is empty', () => {
       const config: VersionConfig = {
         appVersion: '',
         tagName: 'test/tag',
       };
-      (mockGitHubService.getCommitSHA as jest.Mock).mockRejectedValue(error);
+      (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(of(''));
 
-      let errorReceived: any;
-      let successCalled = false;
-      await service.getSiteVersion(
-        config,
-        () => {
-          successCalled = true;
-        },
-        (err) => {
-          errorReceived = err;
-        },
-      );
+      let result = '';
+      service.getSiteVersion(config, (siteVersion) => {
+        result = siteVersion;
+      });
 
-      expect(successCalled).toBe(false);
-      expect(errorReceived).toBe(error);
+      expect(result).toBe('unknown');
     });
   });
 });
