@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
-import { SvgIconService } from './svg-icon.service';
 import { TestBed } from '@angular/core/testing';
+import { SvgIconService } from './svg-icon.service';
 
 describe('SvgIconService', () => {
   let service: SvgIconService;
@@ -14,7 +14,7 @@ describe('SvgIconService', () => {
 
   it('should load SVG if imagePath is valid', async () => {
     // Test valid path
-    expect(service.isValidImagePath('/agora-assets/icons/cog.svg')).toBe(true);
+    expect(service.isValidImagePath('agora-assets/icons/cog.svg')).toBe(true);
   });
 
   it('should not load SVG if imagePath is invalid', async () => {

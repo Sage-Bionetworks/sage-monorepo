@@ -23,19 +23,19 @@ type Story = StoryObj<ResourceCardsComponent>;
 
 const cards = [
   {
-    imagePath: '/model-ad-assets/images/gene-expression.svg',
+    imagePath: 'model-ad-assets/images/gene-expression.svg',
     description: 'View Gene Expression results for this model in the comparison tool.',
     title: 'Gene Expression',
     link: '/comparison/expression?models=APOE4',
   },
   {
-    imagePath: '/model-ad-assets/images/disease-correlation.svg',
+    imagePath: 'model-ad-assets/images/disease-correlation.svg',
     description: 'View Disease Correlation results for this model in the comparison tool.',
     title: 'Disease Correlation',
     link: '/comparison/correlation?models=APOE4',
   },
   {
-    imagePath: '/model-ad-assets/images/allen-institute-logo.svg',
+    imagePath: 'model-ad-assets/images/allen-institute-logo.svg',
     description: "View Gene Expression results for this model on the Allen Institute's site.",
     link: 'https://alleninstitute.org/division/brain-science/',
   },

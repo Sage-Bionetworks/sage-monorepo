@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Gene } from '@sagebionetworks/agora/api-client';
+import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
 import { ascending } from 'd3';
 
 @Component({
@@ -10,6 +11,8 @@ import { ascending } from 'd3';
 })
 export class GeneHeroComponent {
   @Input() gene: Gene | undefined;
+
+  readonly heroBackgroundImagePath = DEFAULT_HERO_BACKGROUND_IMAGE_PATH;
 
   showNominationsOrTEP() {
     if (!this.gene) return false;

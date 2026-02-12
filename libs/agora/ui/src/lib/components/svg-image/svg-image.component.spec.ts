@@ -25,7 +25,7 @@ describe('SvgImageComponent', () => {
 
   it('should populate innerHTML in the div when imagePath changes', () => {
     // Mock input change to trigger ngOnChanges
-    component.imagePath = '/agora-assets/images/background1.svg';
+    component.imagePath = 'agora-assets/images/background1.svg';
 
     // Trigger change detection
     fixture.detectChanges();

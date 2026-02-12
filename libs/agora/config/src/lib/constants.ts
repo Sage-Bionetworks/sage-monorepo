@@ -4,6 +4,8 @@ export const HELP_URL = 'https://help.adknowledgeportal.org/apd/Agora-Resources.
 
 export const SUPPORT_EMAIL = 'agora@sagebionetworks.org';
 
+export const DEFAULT_HERO_BACKGROUND_IMAGE_PATH = 'agora-assets/images/hero-background.svg';
+
 export const ROUTE_PATHS = {
   HOME: '',
   GENE_COMPARISON: 'genes/comparison',

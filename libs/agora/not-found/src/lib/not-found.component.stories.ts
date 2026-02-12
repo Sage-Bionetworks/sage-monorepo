@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { WikiComponent } from '@sagebionetworks/agora/shared';
 import { applicationConfig, moduleMetadata, type Meta, type StoryObj } from '@storybook/angular';
-import { NewsComponent } from './news.component';
+import { NotFoundComponent } from './not-found.component';
 
-const meta: Meta<NewsComponent> = {
-  component: NewsComponent,
-  title: 'Pages/News',
+const meta: Meta<NotFoundComponent> = {
+  component: NotFoundComponent,
+  title: 'Pages/NotFound',
   decorators: [
     applicationConfig({
       providers: [provideHttpClient(withInterceptorsFromDi())],
@@ -17,8 +17,8 @@ const meta: Meta<NewsComponent> = {
   ],
 };
 export default meta;
-type Story = StoryObj<NewsComponent>;
+type Story = StoryObj<NotFoundComponent>;
 
-export const News: Story = {
+export const NotFound: Story = {
   args: {},
 };

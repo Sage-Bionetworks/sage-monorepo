@@ -10,12 +10,12 @@
               viewBox="0 0 21 21"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              >
+            >
               <path
                 d="M19.9999 1L1.3999 19.6M1.3999 1L19.9999 19.6"
                 stroke="#C4C4C4"
                 stroke-width="2"
-                />
+              />
             </svg>
           </button>
         </div>
@@ -26,7 +26,7 @@
               <li
                 class="gct-filter-panel-main-menu-item-{{ filter.name }}"
                 [ngClass]="{ active: activePane === i }"
-                >
+              >
                 <button (click)="openPane(i)">
                   <div>
                     {{ filter.label }}
@@ -38,12 +38,12 @@
                       viewBox="0 0 9 15"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      >
+                    >
                       <path
                         d="M0.999999 1.59998L7 7.59998L1 13.6"
                         stroke="currentColor"
                         stroke-width="2"
-                        />
+                      />
                     </svg>
                   </div>
                 </button>
@@ -59,16 +59,16 @@
         <div
           class="gct-filter-panel-pane gct-filter-panel-pane-{{ filter.name }}"
           [ngClass]="{ open: activePane === i }"
-          >
+        >
           <div class="gct-filter-panel-pane-inner">
             <div class="gct-filter-panel-pane-top">
               <button class="gct-filter-panel-close" (click)="close()">
                 <agora-svg-icon
-                  imagePath="/agora-assets/icons/close.svg"
+                  imagePath="agora-assets/icons/close.svg"
                   [width]="21"
                   [height]="21"
                   altText="close"
-                  >
+                >
                 </agora-svg-icon>
               </button>
             </div>
@@ -79,9 +79,9 @@
                 [pTooltip]="filter.description || ''"
                 tooltipPosition="top"
                 tooltipStyleClass="tooltip gct-tooltip-filter"
-                >
+              >
                 <agora-svg-icon
-                  imagePath="/agora-assets/icons/info-circle.svg"
+                  imagePath="agora-assets/icons/info-circle.svg"
                   [width]="20"
                   [height]="20"
                   altText="info"
@@ -98,7 +98,7 @@
                       (ngModelChange)="handleChange(option)"
                       [inputId]="option.label"
                       size="small"
-                      />
+                    />
                     <label [for]="option.label">
                       {{ option.label }}
                     </label>
