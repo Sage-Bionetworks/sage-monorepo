@@ -108,12 +108,12 @@ describe('VersionService', () => {
     });
   });
 
-  describe('getSiteVersion', () => {
+  describe('getSiteVersion$', () => {
     it('should get site version successfully with commit SHA', () => {
       (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(of('abc1234'));
 
       let result = '';
-      service.getSiteVersion(mockVersionConfig, (siteVersion) => {
+      service.getSiteVersion$(mockVersionConfig).subscribe((siteVersion: string) => {
         result = siteVersion;
       });
 
@@ -125,14 +125,14 @@ describe('VersionService', () => {
       (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(of(''));
 
       let result = '';
-      service.getSiteVersion(mockVersionConfig, (siteVersion) => {
+      service.getSiteVersion$(mockVersionConfig).subscribe((siteVersion: string) => {
         result = siteVersion;
       });
 
       expect(result).toBe('1.2.3');
     });
 
-    it('should call onSuccess with unknown when SHA is empty and appVersion is empty', () => {
+    it('should return empty string when SHA is empty and appVersion is empty', () => {
       const config: VersionConfig = {
         appVersion: '',
         tagName: 'test/tag',
@@ -140,11 +140,11 @@ describe('VersionService', () => {
       (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(of(''));
 
       let result = '';
-      service.getSiteVersion(config, (siteVersion) => {
+      service.getSiteVersion$(config).subscribe((siteVersion: string) => {
         result = siteVersion;
       });
 
-      expect(result).toBe('unknown');
+      expect(result).toBe('');
     });
   });
 });
