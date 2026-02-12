@@ -24,7 +24,8 @@ env:
 
 jobs:
   check-affected:
-    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
     outputs:
       docs_changed: ${{ steps.check-changes.outputs.docs_changed }}
       composite_storybook_affected: ${{ steps.check-storybook.outputs.composite_affected }}
