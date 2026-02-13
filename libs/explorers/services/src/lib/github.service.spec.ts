@@ -96,15 +96,14 @@ describe('GitHubService', () => {
     expect(result).toBe('');
   });
 
-  it('should return empty string when fetching tags fails', async () => {
+  it('should propagate errors when fetching tags fails', async () => {
     const tag = 'any-tag';
 
     mockOctokit.paginate.iterator.mockImplementation(() => {
       throw new Error('Network error');
     });
 
-    const result = await firstValueFrom(service.getCommitSHA(tag));
-    expect(result).toBe('');
+    await expect(firstValueFrom(service.getCommitSHA(tag))).rejects.toThrow('Network error');
   });
 
   describe('getShortSHA', () => {

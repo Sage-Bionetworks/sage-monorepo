@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { catchError, EMPTY, map, Observable, throwError } from 'rxjs';
+import { catchError, EMPTY, map, Observable, of, throwError } from 'rxjs';
 import { GitHubService } from './github.service';
 import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
@@ -44,9 +44,13 @@ export class VersionService {
     if (this.platformService.isServer) {
       return EMPTY;
     }
-    return this.gitHubService
-      .getCommitSHA(config.tagName)
-      .pipe(map((sha) => this.formatSiteVersion(sha, config)));
+    return this.gitHubService.getCommitSHA(config.tagName).pipe(
+      map((sha) => this.formatSiteVersion(sha, config)),
+      catchError((error) => {
+        this.logger.error('Error loading commit SHA', error);
+        return of(this.formatSiteVersion('', config));
+      }),
+    );
   }
 
   formatDataVersion(dataVersion: DataVersion): string {
