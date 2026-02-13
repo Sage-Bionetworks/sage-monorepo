@@ -60,7 +60,7 @@ async function setup(
     componentInputs: {
       ...optionalInputs,
       searchPlaceholder: searchPlaceholder,
-      searchImagePath: '/explorers-assets/icons/gene-search-icon.svg',
+      searchImagePath: 'explorers-assets/icons/gene-search-icon.svg',
       searchImageAltText: 'gene search icon',
       hasThickBorder: true,
       navigateToResult: mockNavigateToResult,

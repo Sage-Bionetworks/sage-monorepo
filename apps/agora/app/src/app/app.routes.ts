@@ -1,5 +1,9 @@
 import { Route } from '@angular/router';
-import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/agora/config';
+import {
+  DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+  ROUTE_PATHS,
+  SUPPORT_EMAIL,
+} from '@sagebionetworks/agora/config';
 
 export const routes: Route[] = [
   {
@@ -108,7 +112,7 @@ export const routes: Route[] = [
       title: 'Agora | Terms of Service',
       description:
         'Agora is powered by Synapse, a platform for supporting scientific collaborations centered around shared biomedical data sets. Our goal is to make biomedical research more transparent, more reproducible, and more accessible to a broader audience of scientists.',
-      heroBackgroundImagePath: 'agora-assets/images/hero-background.svg',
+      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {

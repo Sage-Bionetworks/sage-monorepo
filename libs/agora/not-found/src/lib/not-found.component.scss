@@ -3,7 +3,6 @@
 
 .page-not-found {
   min-height: calc(100vh - var(--header-height) - var(--footer-height) + 1px);
-  background-image: url('/agora-assets/images/hero-background.svg');
   background-size: cover !important;
   display: flex;
   justify-content: center;

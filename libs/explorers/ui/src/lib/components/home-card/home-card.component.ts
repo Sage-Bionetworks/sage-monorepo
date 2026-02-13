@@ -14,7 +14,7 @@ export class HomeCardComponent {
   title = input.required<string>();
   description = input.required<string>();
 
-  imagePath = input<string>('/explorers-assets/images/warning-circle.svg');
+  imagePath = input<string>('explorers-assets/images/warning-circle.svg');
   imageAltText = input<string>('Warning');
   routerLink = input<string | undefined>();
 }

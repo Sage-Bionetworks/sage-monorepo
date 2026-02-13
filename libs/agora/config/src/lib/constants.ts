@@ -4,12 +4,7 @@ export const HELP_URL = 'https://help.adknowledgeportal.org/apd/Agora-Resources.
 
 export const SUPPORT_EMAIL = 'agora@sagebionetworks.org';
 
-// Use color-secondary to match agora-loading-icon
-export const AGORA_LOADING_ICON_COLORS: LoadingIconColors = {
-  colorInnermost: '#8b8ad1',
-  colorCentral: '#8b8ad1',
-  colorOutermost: '#8b8ad1',
-};
+export const DEFAULT_HERO_BACKGROUND_IMAGE_PATH = 'agora-assets/images/hero-background.svg';
 
 export const ROUTE_PATHS = {
   HOME: '',
@@ -23,3 +18,10 @@ export const ROUTE_PATHS = {
   ERROR: 'error',
   DETAILS: 'genes',
 } as const;
+
+// Use color-secondary to match agora-loading-icon
+export const AGORA_LOADING_ICON_COLORS: LoadingIconColors = {
+  colorInnermost: '#8b8ad1',
+  colorCentral: '#8b8ad1',
+  colorOutermost: '#8b8ad1',
+};

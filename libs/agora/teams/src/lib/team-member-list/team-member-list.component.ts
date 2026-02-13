@@ -9,6 +9,7 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./team-member-list.component.scss'],
 })
 export class TeamMemberListComponent {
+  readonly placeholderImagePath = 'agora-assets/images/team-member.svg';
   teamService = inject(TeamService);
 
   _team: Team = {} as Team;

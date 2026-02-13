@@ -15,7 +15,7 @@ export class ModelDetailsOmicsComponent {
     const cards = [];
     if (this.model().gene_expression) {
       cards.push({
-        imagePath: '/model-ad-assets/images/gene-expression.svg',
+        imagePath: 'model-ad-assets/images/gene-expression.svg',
         description: 'View Gene Expression results for this model in the comparison tool.',
         title: 'Gene Expression',
         link: `/${this.model().gene_expression}`,
@@ -23,7 +23,7 @@ export class ModelDetailsOmicsComponent {
     }
     if (this.model().disease_correlation) {
       cards.push({
-        imagePath: '/model-ad-assets/images/disease-correlation.svg',
+        imagePath: 'model-ad-assets/images/disease-correlation.svg',
         description: 'View Disease Correlation results for this model in the comparison tool.',
         title: 'Disease Correlation',
         link: `/${this.model().disease_correlation}`,

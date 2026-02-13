@@ -65,14 +65,14 @@ describe('ComparisonToolTableComponent', () => {
       pinnedData: [pinnedItemData],
       maxPinnedItems: 5,
     });
-    expect(screen.getByText(/Pinned Items/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pinned Results/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /download/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /clear all/i })).toBeInTheDocument();
   });
 
   it('should not show pinned section when there are no pinned items', async () => {
     await setup();
-    expect(screen.queryByText(/Pinned Items/i)).toBeNull();
+    expect(screen.queryByText(/Pinned Results/i)).toBeNull();
     expect(screen.queryByRole('button', { name: /clear all/i })).toBeNull();
   });
 
@@ -106,8 +106,8 @@ describe('ComparisonToolTableComponent', () => {
     expect(pinAll).toBeDisabled();
   });
 
-  it('should show All Items divider when not searching/filtering and pinned exist', async () => {
+  it('should show All Results divider when not searching/filtering and pinned exist', async () => {
     await setup({ pinnedItems: ['68fff1aaeb12b9674515fd58'] });
-    expect(screen.getByText(/All Items/i)).toBeInTheDocument();
+    expect(screen.getByText(/All Results/i)).toBeInTheDocument();
   });
 });
