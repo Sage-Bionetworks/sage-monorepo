@@ -68,6 +68,25 @@ QUEST_CONFIG = {
     "updates": [
         # Updates are displayed in chronological order (newest first)
         {
+            "date": "2026-02-13",
+            "title": "Chapter 1: Laying the First Stones",
+            "description": (
+                "I arrived at the edge of the village just as the morning light touched the snowy mountain and the waterfall beyond it. A quiet stretch of land lay waiting beside the houses. Even the bees seemed curious, circling lazily over the grass where something new was about to rise.\n\n"
+                "An iron golem stood nearby, steady and watchful. One by one, the first contributions had made their way here, carried from afar by unseen hands and tireless golems. Soon, a small stack of cobblestone rested between the village houses. Thirty-eight blocks in total, each one sent by someone who believed this arena should exist.\n\n"
+                "I stepped forward and set the first stone into the ground. Then another. The outline of the inner wall began to take shape. One day it will stand three blocks high, enclosing the heart of the arena. For now, it rises only a single block in most places, incomplete and waiting for more stone to continue its climb.\n\n"
+                "When I stepped back, the foundation was modest but real. What began as a shared effort had taken solid form in stone, now part of the world itself.\n\n"
+                "And this is only the beginning."
+            ),
+            "images": [
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-1.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-2.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-3.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-4.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-5.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-6.jpg",
+            ],
+        },
+        {
             "date": "2026-02-03",
             "title": "Launch: Build BioArena Together",
             "description": (
@@ -485,6 +504,15 @@ def _build_carousel_html(carousel_id: str) -> str:
             except (ValueError, TypeError):
                 date_display = update["date"]
 
+        # Convert description to paragraphs (split on \n\n)
+        description: str = update["description"]
+        paragraphs: list[str] = [
+            p.strip() for p in description.split("\n\n") if p.strip()
+        ]
+        description_html: str = "".join(
+            f'<p class="update-description">{p}</p>' for p in paragraphs
+        )
+
         return f'''
         <div class="quest-update-accordion {active_class} {expanded_class}"
              data-images="{images_json}">
@@ -503,7 +531,7 @@ def _build_carousel_html(carousel_id: str) -> str:
                 </svg>
             </div>
             <div class="accordion-content">
-                <p class="update-description">{update["description"]}</p>
+                {description_html}
             </div>
         </div>
         '''
@@ -694,8 +722,12 @@ def _build_carousel_html(carousel_id: str) -> str:
         .update-description {{
             color: var(--body-text-color-subdued);
             font-size: 0.875rem;
-            margin: 0;
+            margin: 0 0 0.75rem 0;
             line-height: 1.5;
+        }}
+
+        .update-description:last-child {{
+            margin-bottom: 0;
         }}
 
         /* Credit links */
