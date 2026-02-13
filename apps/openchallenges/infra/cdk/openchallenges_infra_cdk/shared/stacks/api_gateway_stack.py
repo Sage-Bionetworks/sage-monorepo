@@ -50,7 +50,7 @@ class ApiGatewayStack(cdk.Stack):
             self,
             "ApiGatewayImage",
             "openchallenges-api-gateway",
-            f"ghcr.io/sage-bionetworks/openchallenges/api-gateway:{app_version}",
+            f"ghcr.io/sage-bionetworks/openchallenges-api-gateway:{app_version}",
         )
 
         # Build service discovery URLs for backend services

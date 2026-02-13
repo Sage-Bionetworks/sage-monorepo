@@ -271,60 +271,6 @@ def main() -> None:
         description=f"Auth service for OpenChallenges {environment} environment",
     )
 
-    # Create web stack (Angular SSR app) - depends on ECS cluster and ALB
-    # Uses ALB DNS name by default, or custom FQDN if provided
-    use_https = certificate_arn is not None and certificate_arn.strip() != ""
-    web_stack = WebStack(
-        app,
-        f"{stack_prefix}-web",
-        stack_prefix=stack_prefix,
-        environment=environment,
-        developer_name=developer_name,
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
-        target_group=alb_stack.app_target_group,
-        app_version=app_version,
-        alb_dns_name=alb_stack.alb.load_balancer_dns_name,
-        fqdn=fqdn if fqdn else None,
-        use_https=use_https,
-        data_updated_on=data_updated_on,
-        description=f"Web client for OpenChallenges {environment} environment",
-    )
-    web_stack.add_dependency(ecs_cluster_stack)
-    web_stack.add_dependency(alb_stack)
-
-    # Create bucket stack
-    bucket_stack = BucketStack(
-        app,
-        f"{stack_prefix}-bucket",
-        stack_prefix=stack_prefix,
-        environment=environment,
-        developer_name=developer_name,
-        description=f"S3 buckets for OpenChallenges {environment} environment",
-    )
-
-    # Create Thumbor stack (depends on bucket, ECS cluster, and ALB)
-    thumbor_stack = ThumborStack(
-        app,
-        f"{stack_prefix}-thumbor",
-        stack_prefix=stack_prefix,
-        environment=environment,
-        developer_name=developer_name,
-        vpc=vpc_stack.vpc,
-        cluster=ecs_cluster_stack.cluster,
-        image_bucket=bucket_stack.image_bucket.bucket,
-        target_group=alb_stack.thumbor_target_group,
-        app_version=app_version,
-        security_key="changeme",  # TODO: Use secrets manager in production
-        description=(
-            f"Thumbor image processing service for OpenChallenges "
-            f"{environment} environment"
-        ),
-    )
-    thumbor_stack.add_dependency(bucket_stack)
-    thumbor_stack.add_dependency(ecs_cluster_stack)
-    thumbor_stack.add_dependency(alb_stack)
-
     # Create API Gateway stack (depends on ALB and ECS cluster)
     # API Gateway routes traffic to Auth, Challenge, Organization, and Image services
     # Note: Dependencies on service stacks are automatic via CloudFormation references
@@ -397,6 +343,61 @@ def main() -> None:
         group_id=api_gateway_stack.security_group.security_group_id,
         description="Allow ALB to forward traffic to API Gateway",
     )
+
+    # Create web stack (Angular SSR app) - depends on ECS cluster, ALB, and API Gateway
+    # Uses ALB DNS name by default, or custom FQDN if provided
+    use_https = certificate_arn is not None and certificate_arn.strip() != ""
+    web_stack = WebStack(
+        app,
+        f"{stack_prefix}-web",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        target_group=alb_stack.app_target_group,
+        app_version=app_version,
+        alb_dns_name=alb_stack.alb.load_balancer_dns_name,
+        fqdn=fqdn if fqdn else None,
+        use_https=use_https,
+        data_updated_on=data_updated_on,
+        description=f"Web client for OpenChallenges {environment} environment",
+    )
+    web_stack.add_dependency(ecs_cluster_stack)
+    web_stack.add_dependency(alb_stack)
+    web_stack.add_dependency(api_gateway_stack)
+
+    # Create bucket stack
+    bucket_stack = BucketStack(
+        app,
+        f"{stack_prefix}-bucket",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        description=f"S3 buckets for OpenChallenges {environment} environment",
+    )
+
+    # Create Thumbor stack (depends on bucket, ECS cluster, and ALB)
+    thumbor_stack = ThumborStack(
+        app,
+        f"{stack_prefix}-thumbor",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc,
+        cluster=ecs_cluster_stack.cluster,
+        image_bucket=bucket_stack.image_bucket.bucket,
+        target_group=alb_stack.thumbor_target_group,
+        app_version=app_version,
+        security_key="changeme",  # TODO: Use secrets manager in production
+        description=(
+            f"Thumbor image processing service for OpenChallenges "
+            f"{environment} environment"
+        ),
+    )
+    thumbor_stack.add_dependency(bucket_stack)
+    thumbor_stack.add_dependency(ecs_cluster_stack)
+    thumbor_stack.add_dependency(alb_stack)
 
     app.synth()
 
