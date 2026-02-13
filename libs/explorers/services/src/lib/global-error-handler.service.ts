@@ -1,6 +1,6 @@
 import { ErrorHandler, inject, Injectable } from '@angular/core';
 import { LoggerService } from './logger.service';
-import { NotificationService } from './notification.service';
+import { ErrorOverlayService } from './error-overlay.service';
 import { AppError } from '@sagebionetworks/explorers/models';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { AppError } from '@sagebionetworks/explorers/models';
 })
 export class GlobalErrorHandler implements ErrorHandler {
   private logger = inject(LoggerService);
-  private notificationService = inject(NotificationService);
+  private errorOverlayService = inject(ErrorOverlayService);
 
   handleError(error: any): void;
   handleError(message: string): void;
@@ -22,7 +22,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     const notifyUser = this.isUserFacingError(error);
     if (notifyUser) {
-      this.notificationService.showError(message);
+      this.errorOverlayService.showError(message);
     }
   }
 

@@ -1,7 +1,7 @@
-import { DestroyRef, inject, Injectable } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { catchError, EMPTY, map, Observable, of, throwError } from 'rxjs';
 import { GitHubService } from './github.service';
+import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
 
 export interface VersionConfig {
@@ -24,56 +24,33 @@ export interface DataVersionService {
 })
 export class VersionService {
   private readonly platformService = inject(PlatformService);
-  private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
   private readonly gitHubService = inject(GitHubService);
 
-  getDataVersion(
-    dataVersionService: DataVersionService,
-    onSuccess: (dataVersion: string) => void,
-    onError?: (error: any) => void,
-  ): void {
-    if (this.platformService.isBrowser) {
-      dataVersionService
-        .getDataVersion()
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (data) => {
-            const formattedVersion = this.formatDataVersion(data);
-            onSuccess(formattedVersion);
-          },
-          error: (error) => {
-            console.error('Error loading data version:', error);
-            if (onError) {
-              onError(error);
-            }
-          },
-        });
+  getDataVersion$(dataVersionService: DataVersionService): Observable<string> {
+    if (this.platformService.isServer) {
+      return EMPTY;
     }
+    return dataVersionService.getDataVersion().pipe(
+      map((data) => this.formatDataVersion(data)),
+      catchError((error) => {
+        this.logger.error('Error loading data version', error);
+        return throwError(() => error);
+      }),
+    );
   }
 
-  async getSiteVersion(
-    config: VersionConfig,
-    onSuccess: (siteVersion: string) => void,
-    onError?: (error: any) => void,
-  ): Promise<void> {
-    if (this.platformService.isBrowser) {
-      try {
-        const sha = await this.gitHubService.getCommitSHA(config.tagName);
-        const siteVersion = this.formatSiteVersion(sha, config);
-        onSuccess(siteVersion);
-      } catch (error) {
-        console.error('Error loading commit SHA:', error);
-        const fallbackVersion = this.formatSiteVersion('', config);
-        if (fallbackVersion) {
-          onSuccess(fallbackVersion);
-        } else {
-          console.error('Error loading appVersion');
-          if (onError) {
-            onError(error);
-          }
-        }
-      }
+  getSiteVersion$(config: VersionConfig): Observable<string> {
+    if (this.platformService.isServer) {
+      return EMPTY;
     }
+    return this.gitHubService.getCommitSHA(config.tagName).pipe(
+      map((sha) => this.formatSiteVersion(sha, config)),
+      catchError((error) => {
+        this.logger.error('Error loading commit SHA', error);
+        return of(this.formatSiteVersion('', config));
+      }),
+    );
   }
 
   formatDataVersion(dataVersion: DataVersion): string {

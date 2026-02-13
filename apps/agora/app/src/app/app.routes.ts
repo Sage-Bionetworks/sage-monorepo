@@ -1,5 +1,9 @@
 import { Route } from '@angular/router';
-import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH, ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import {
+  DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+  ROUTE_PATHS,
+  SUPPORT_EMAIL,
+} from '@sagebionetworks/agora/config';
 
 export const routes: Route[] = [
   {
@@ -112,20 +116,30 @@ export const routes: Route[] = [
     },
   },
   {
-    path: ROUTE_PATHS.NOT_FOUND,
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
-    data: {
-      title: 'Page not found',
-      description: '',
-    },
-  },
-  {
     path: ROUTE_PATHS.TEAMS,
     loadChildren: () => import('@sagebionetworks/agora/teams').then((routes) => routes.routes),
     data: {
       title: 'Contributing Teams',
       description:
         'Find information about the NIA-funded and community research teams that have contributed evidence to Agora.',
+    },
+  },
+  {
+    path: ROUTE_PATHS.ERROR,
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.errorPageRoute),
+    data: {
+      title: 'Agora | Error',
+      description: 'Error Page',
+      supportEmail: SUPPORT_EMAIL,
+    },
+  },
+  {
+    path: ROUTE_PATHS.NOT_FOUND,
+    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    data: {
+      title: 'Agora | Page not found',
+      description: '',
     },
   },
   {

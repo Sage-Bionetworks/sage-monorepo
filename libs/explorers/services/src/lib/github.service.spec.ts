@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { firstValueFrom } from 'rxjs';
 import { GitHubService } from './github.service';
 
 // Mock Octokit
@@ -68,7 +69,7 @@ describe('GitHubService', () => {
 
     mockOctokit.paginate.iterator.mockReturnValue(mockIterator);
 
-    const result = await service.getCommitSHA(tag);
+    const result = await firstValueFrom(service.getCommitSHA(tag));
     expect(result).toBe(expectedSHA);
   });
 
@@ -91,25 +92,18 @@ describe('GitHubService', () => {
 
     mockOctokit.paginate.iterator.mockReturnValue(mockIterator);
 
-    const result = await service.getCommitSHA(tag);
+    const result = await firstValueFrom(service.getCommitSHA(tag));
     expect(result).toBe('');
   });
 
-  it('should handle errors when fetching tags', async () => {
+  it('should propagate errors when fetching tags fails', async () => {
     const tag = 'any-tag';
 
     mockOctokit.paginate.iterator.mockImplementation(() => {
       throw new Error('Network error');
     });
 
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-
-    const result = await service.getCommitSHA(tag);
-
-    expect(result).toBe('');
-    expect(consoleSpy).toHaveBeenCalledWith('Error fetching tags:', expect.any(Error));
-
-    consoleSpy.mockRestore();
+    await expect(firstValueFrom(service.getCommitSHA(tag))).rejects.toThrow('Network error');
   });
 
   describe('getShortSHA', () => {

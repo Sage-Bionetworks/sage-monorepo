@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { of, throwError } from 'rxjs';
 import { GitHubService } from './github.service';
+import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
 import { DataVersion, VersionConfig, VersionService } from './version.service';
 
@@ -21,6 +23,7 @@ describe('VersionService', () => {
   let service: VersionService;
   let mockGitHubService: Partial<GitHubService>;
   let mockPlatformService: Partial<PlatformService>;
+  let mockLoggerService: Partial<LoggerService>;
 
   const mockVersionConfig: VersionConfig = {
     appVersion: '1.2.3-rc1',
@@ -42,11 +45,16 @@ describe('VersionService', () => {
       isBrowser: true,
     };
 
+    mockLoggerService = {
+      error: jest.fn(),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         VersionService,
         { provide: GitHubService, useValue: mockGitHubService },
         { provide: PlatformService, useValue: mockPlatformService },
+        { provide: LoggerService, useValue: mockLoggerService },
       ],
     });
 
@@ -107,12 +115,12 @@ describe('VersionService', () => {
     });
   });
 
-  describe('getSiteVersion', () => {
-    it('should get site version successfully with commit SHA', async () => {
-      (mockGitHubService.getCommitSHA as jest.Mock).mockResolvedValue('abc1234');
+  describe('getSiteVersion$', () => {
+    it('should get site version successfully with commit SHA', () => {
+      (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(of('abc1234'));
 
       let result = '';
-      await service.getSiteVersion(mockVersionConfig, (siteVersion) => {
+      service.getSiteVersion$(mockVersionConfig).subscribe((siteVersion: string) => {
         result = siteVersion;
       });
 
@@ -120,40 +128,46 @@ describe('VersionService', () => {
       expect(mockGitHubService.getCommitSHA).toHaveBeenCalledWith('agora/v1.2.3');
     });
 
-    it('should fallback to app version when GitHub service fails', async () => {
-      const error = new Error('GitHub API error');
-      (mockGitHubService.getCommitSHA as jest.Mock).mockRejectedValue(error);
+    it('should fallback to app version when GitHub service returns empty SHA', () => {
+      (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(of(''));
 
       let result = '';
-      await service.getSiteVersion(mockVersionConfig, (siteVersion) => {
+      service.getSiteVersion$(mockVersionConfig).subscribe((siteVersion: string) => {
         result = siteVersion;
       });
 
       expect(result).toBe('1.2.3');
     });
 
-    it('should call onError when both GitHub service and fallback fail', async () => {
-      const error = new Error('GitHub API error');
+    it('should return empty string when SHA is empty and appVersion is empty', () => {
       const config: VersionConfig = {
         appVersion: '',
         tagName: 'test/tag',
       };
-      (mockGitHubService.getCommitSHA as jest.Mock).mockRejectedValue(error);
+      (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(of(''));
 
-      let errorReceived: any;
-      let successCalled = false;
-      await service.getSiteVersion(
-        config,
-        () => {
-          successCalled = true;
-        },
-        (err) => {
-          errorReceived = err;
-        },
+      let result = '';
+      service.getSiteVersion$(config).subscribe((siteVersion: string) => {
+        result = siteVersion;
+      });
+
+      expect(result).toBe('');
+    });
+
+    it('should fallback to appVersion when GitHubService throws error', () => {
+      const error = new Error('Network error');
+      (mockGitHubService.getCommitSHA as jest.Mock).mockReturnValue(throwError(() => error));
+
+      let result = '';
+      service.getSiteVersion$(mockVersionConfig).subscribe((siteVersion: string) => {
+        result = siteVersion;
+      });
+
+      expect(result).toBe('1.2.3');
+      expect(TestBed.inject(LoggerService).error).toHaveBeenCalledWith(
+        'Error loading commit SHA',
+        error,
       );
-
-      expect(successCalled).toBe(false);
-      expect(errorReceived).toBe(error);
     });
   });
 });

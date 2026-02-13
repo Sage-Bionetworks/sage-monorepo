@@ -2,14 +2,17 @@ import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angul
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
-  ComparisonToolHelperService,
+  AppError,
+  ComparisonToolQuery,
+  ComparisonToolViewConfig,
+} from '@sagebionetworks/explorers/models';
+import {
   ComparisonToolUrlService,
+  LoggerService,
   PlatformService,
 } from '@sagebionetworks/explorers/services';
 import {
-  ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
   ItemFilterTypeQuery,
@@ -20,7 +23,7 @@ import {
 } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { SortMeta } from 'primeng/api';
-import { catchError, of, shareReplay } from 'rxjs';
+import { catchError, EMPTY, shareReplay } from 'rxjs';
 import { ModelOverviewComparisonToolService } from './services/model-overview-comparison-tool.service';
 
 @Component({
@@ -31,9 +34,9 @@ import { ModelOverviewComparisonToolService } from './services/model-overview-co
 })
 export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
-  private readonly comparisonToolHelperService = inject(ComparisonToolHelperService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
   private readonly modelOverviewService = inject(ModelOverviewService);
   private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
@@ -46,9 +49,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
     .pipe(
       catchError((error) => {
-        console.error('Error retrieving comparison tool config: ', error);
-        this.router.navigateByUrl(ROUTE_PATHS.ERROR, { skipLocationChange: true });
-        return of<ComparisonToolConfig[]>([]);
+        this.logger.error('Error retrieving comparison tool config', error);
+        return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
@@ -139,8 +141,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
-        error: (error) => {
-          throw new Error('Error fetching model overview data:', { cause: error });
+        error: () => {
+          throw new AppError('Unable to load unpinned model data. Please reload the page.', true);
         },
       });
   }
@@ -165,8 +167,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
-        error: (error) => {
-          throw new Error('Error fetching model overview data:', { cause: error });
+        error: () => {
+          throw new AppError('Unable to load pinned model data. Please reload the page.', true);
         },
       });
   }

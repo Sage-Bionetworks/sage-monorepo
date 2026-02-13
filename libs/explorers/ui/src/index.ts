@@ -1,6 +1,7 @@
 export * from './lib/components/base-download-dom-image/base-download-dom-image.component';
 export * from './lib/components/download-dom-image/download-dom-image.component';
 export * from './lib/components/download-dom-images-zip/download-dom-images-zip.component';
+export * from './lib/components/error-overlay/error-overlay.component';
 export * from './lib/components/footer/footer.component';
 export * from './lib/components/header/header.component';
 export * from './lib/components/hero/hero.component';

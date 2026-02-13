@@ -21,12 +21,12 @@ import { AppCookieService } from './app-cookie.service';
 import { ComparisonToolCoordinatorService } from './comparison-tool-coordinator.service';
 import { ComparisonToolHelperService } from './comparison-tool-helper.service';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
-import { NotificationService } from './notification.service';
+import { ToastNotificationService } from './toast-notification.service';
 
 /** Core state management service for comparison tool pages. */
 @Injectable()
 export class ComparisonToolService<T> {
-  private readonly notificationService = inject(NotificationService);
+  private readonly toastNotificationService = inject(ToastNotificationService);
   private readonly urlService = inject(ComparisonToolUrlService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly helperService = inject(ComparisonToolHelperService);
@@ -496,7 +496,7 @@ export class ComparisonToolService<T> {
 
   pinItem(id: string) {
     if (this.hasMaxPinnedItems()) {
-      this.notificationService.showWarning(
+      this.toastNotificationService.showWarning(
         `You have reached the maximum number of pinned items (${this.maxPinnedItems()}). Please unpin an item before pinning a new one.`,
       );
       return;
@@ -517,7 +517,7 @@ export class ComparisonToolService<T> {
     for (const id of ids) {
       if (visiblePins.size >= this.maxPinnedItems()) {
         const messagePrefix = itemsAdded === 0 ? 'No rows' : `Only ${itemsAdded} rows`;
-        this.notificationService.showWarning(
+        this.toastNotificationService.showWarning(
           `${messagePrefix} were pinned, because you reached the maximum of ${this.maxPinnedItems()} pinned items.`,
         );
         break;

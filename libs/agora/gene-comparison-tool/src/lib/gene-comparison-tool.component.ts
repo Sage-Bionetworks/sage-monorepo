@@ -16,6 +16,7 @@ import {
   GeneService,
   OverallScoresDistribution,
 } from '@sagebionetworks/agora/api-client';
+import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import {
   GCTColumn,
   GCTDetailsPanelData,
@@ -258,16 +259,21 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     const genesApi$ = this.geneService.getComparisonGenes(this.category, this.subCategory);
     const distributionApi$ = this.distributionService.getDistribution();
 
-    combineLatest([genesApi$, distributionApi$]).subscribe(([genesResult, distributionResult]) => {
-      if (genesResult.items) {
-        this.initData(genesResult.items);
-        this.sortTable(this.headerTable);
-        this.refresh();
+    combineLatest([genesApi$, distributionApi$]).subscribe({
+      next: ([genesResult, distributionResult]) => {
+        if (genesResult.items) {
+          this.initData(genesResult.items);
+          this.sortTable(this.headerTable);
+          this.refresh();
 
-        this.scoresDistribution = distributionResult.overall_scores;
+          this.scoresDistribution = distributionResult.overall_scores;
 
+          this.isLoading = false;
+        }
+      },
+      error: () => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
