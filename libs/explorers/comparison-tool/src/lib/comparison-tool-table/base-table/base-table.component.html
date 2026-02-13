@@ -7,7 +7,7 @@
     [totalRecords]="totalRecords()"
     [first]="first()"
     [lazy]="true"
-    [loading]="comparisonToolService.isLoading()"
+    [loading]="data().length > 0 && comparisonToolService.isLoadingTableData()"
     (onLazyLoad)="onLazyLoad($event)"
     sortMode="multiple"
     [multiSortMeta]="comparisonToolService.multiSortMeta()"

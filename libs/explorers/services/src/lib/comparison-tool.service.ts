@@ -111,7 +111,8 @@ export class ComparisonToolService<T> {
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
   readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
-  readonly isLoading = computed(() => this.pendingFetchesSignal() > 0);
+  readonly pendingFetches = this.pendingFetchesSignal.asReadonly();
+  readonly isLoadingTableData = computed(() => this.pendingFetches() > 0);
 
   // Computed Query Accessors
   readonly query = this.querySignal.asReadonly();

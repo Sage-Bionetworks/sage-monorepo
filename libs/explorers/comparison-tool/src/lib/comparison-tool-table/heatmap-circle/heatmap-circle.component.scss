@@ -2,12 +2,10 @@
 
 .heatmap-circle {
   display: block;
-  position: relative;
   width: 40px;
   height: 40px;
   margin: 0 auto;
   border-radius: 50%;
-  z-index: 100;
   border: 1px solid transparent;
   transition: vars.$transition-duration;
 

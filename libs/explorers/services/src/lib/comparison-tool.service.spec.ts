@@ -863,31 +863,31 @@ describe('ComparisonToolService', () => {
   describe('loading state', () => {
     it('should have isLoading false initially', () => {
       connectService();
-      expect(service.isLoading()).toBe(false);
+      expect(service.isLoadingTableData()).toBe(false);
     });
 
     it('should set isLoading to true when startFetch is called', () => {
       connectService();
       service.startFetch();
-      expect(service.isLoading()).toBe(true);
+      expect(service.isLoadingTableData()).toBe(true);
     });
 
     it('should set isLoading to false when setUnpinnedData is called', () => {
       connectService();
       service.startFetch();
-      expect(service.isLoading()).toBe(true);
+      expect(service.isLoadingTableData()).toBe(true);
 
       service.setUnpinnedData([]);
-      expect(service.isLoading()).toBe(false);
+      expect(service.isLoadingTableData()).toBe(false);
     });
 
     it('should set isLoading to false when setPinnedData is called', () => {
       connectService();
       service.startFetch();
-      expect(service.isLoading()).toBe(true);
+      expect(service.isLoadingTableData()).toBe(true);
 
       service.setPinnedData([]);
-      expect(service.isLoading()).toBe(false);
+      expect(service.isLoadingTableData()).toBe(false);
     });
 
     it('should track multiple concurrent fetches', () => {
@@ -896,31 +896,36 @@ describe('ComparisonToolService', () => {
       // Start two fetches (simulating parallel pinned and unpinned data fetches)
       service.startFetch();
       service.startFetch();
-      expect(service.isLoading()).toBe(true);
+      expect(service.isLoadingTableData()).toBe(true);
 
       // Complete first fetch - should still be loading
       service.setUnpinnedData([]);
-      expect(service.isLoading()).toBe(true);
+      expect(service.isLoadingTableData()).toBe(true);
 
       // Complete second fetch - should no longer be loading
       service.setPinnedData([]);
-      expect(service.isLoading()).toBe(false);
+      expect(service.isLoadingTableData()).toBe(false);
     });
 
     it('should not go below zero pending fetches', () => {
       connectService();
-      expect(service.isLoading()).toBe(false);
+      expect(service.pendingFetches()).toBe(0);
 
-      // Call setUnpinnedData without startFetch
+      // Call setUnpinnedData without startFetch - should stay at 0
       service.setUnpinnedData([]);
-      expect(service.isLoading()).toBe(false);
+      expect(service.pendingFetches()).toBe(0);
+
+      // Multiple unmatched complete calls - should stay at 0
+      service.setUnpinnedData([]);
+      service.setPinnedData([]);
+      expect(service.pendingFetches()).toBe(0);
 
       // Should still work correctly after
       service.startFetch();
-      expect(service.isLoading()).toBe(true);
+      expect(service.pendingFetches()).toBe(1);
 
       service.setUnpinnedData([]);
-      expect(service.isLoading()).toBe(false);
+      expect(service.pendingFetches()).toBe(0);
     });
   });
 });
