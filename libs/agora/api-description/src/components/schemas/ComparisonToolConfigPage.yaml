@@ -1,5 +1,6 @@
 type: string
 description: The type of comparison tool page
 enum:
-  - Gene Expression
-example: Gene Expression
+  - Nominated Drugs
+  - Nominated Targets
+example: Nominated Targets

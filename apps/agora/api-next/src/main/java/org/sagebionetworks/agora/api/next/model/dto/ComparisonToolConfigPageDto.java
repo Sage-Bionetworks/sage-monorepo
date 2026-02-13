@@ -22,7 +22,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum ComparisonToolConfigPageDto {
   
-  GENE_EXPRESSION("Gene Expression");
+  NOMINATED_DRUGS("Nominated Drugs"),
+  
+  NOMINATED_TARGETS("Nominated Targets");
 
   private final String value;
 

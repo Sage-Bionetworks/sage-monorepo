@@ -104,8 +104,9 @@ components:
     ComparisonToolConfigPage:
       description: The type of comparison tool page
       enum:
-        - Gene Expression
-      example: Gene Expression
+        - Nominated Drugs
+        - Nominated Targets
+      example: Nominated Targets
       type: string
     ComparisonToolConfigColumn:
       example:
@@ -223,7 +224,7 @@ components:
             type: text
             data_key: data_key
             link_text: link_text
-        page: Gene Expression
+        page: Nominated Targets
         dropdowns:
           - RNA - DIFFERENTIAL EXPRESSION
           - RNA - DIFFERENTIAL EXPRESSION
