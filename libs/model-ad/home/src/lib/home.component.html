@@ -1,4 +1,4 @@
-<div id="home-page">
+<div id="home-page" [style.background-image]="'url(' + backgroundImage() + ')'">
   <div class="section">
     <div class="content">
       <div class="text-marquee">
@@ -17,7 +17,7 @@
             'View summary information about all available AD models and learn what data is currently available in the Explorer. New data and analyses will be incorporated as they are available.'
           "
           [routerLink]="ROUTE_PATHS.MODEL_OVERVIEW"
-          [imagePath]="'/model-ad-assets/images/mouse.svg'"
+          [imagePath]="'model-ad-assets/images/mouse.svg'"
           [imageAltText]="'mouse icon'"
         />
         <explorers-home-card
@@ -28,7 +28,7 @@
         >
           <model-ad-search-input
             [searchPlaceholder]="'Find model by name or ID...'"
-            [searchImagePath]="'/model-ad-assets/images/mouse.svg'"
+            [searchImagePath]="'model-ad-assets/images/mouse.svg'"
             [searchImageAltText]="'mouse icon'"
             [hasThickBorder]="true"
           />
@@ -39,7 +39,7 @@
             'Explore differential RNA expression results for the available models by sex and age. Build custom result sets by sorting, filtering, and searching for genes of particular interest.'
           "
           [routerLink]="ROUTE_PATHS.GENE_EXPRESSION"
-          [imagePath]="'/model-ad-assets/images/gene-expression.svg'"
+          [imagePath]="'model-ad-assets/images/gene-expression.svg'"
           [imageAltText]="'gene expression icon'"
         />
         <explorers-home-card
@@ -48,7 +48,7 @@
             'Compare how gene expression changes in mouse models correlate with gene expression changes in human disease.'
           "
           [routerLink]="ROUTE_PATHS.DISEASE_CORRELATION"
-          [imagePath]="'/model-ad-assets/images/disease-correlation.svg'"
+          [imagePath]="'model-ad-assets/images/disease-correlation.svg'"
           [imageAltText]="'disease correlation icon'"
         />
       </div>
@@ -73,7 +73,7 @@
         </div>
         <div class="methodology-image">
           <explorers-svg-image
-            imagePath="/model-ad-assets/images/methodology.svg"
+            imagePath="model-ad-assets/images/methodology.svg"
             altText="methodology image"
             sizeMode="full-width"
           />

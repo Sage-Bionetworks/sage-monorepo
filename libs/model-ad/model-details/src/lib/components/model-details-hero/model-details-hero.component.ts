@@ -11,6 +11,7 @@ import sanitizeHtml from 'sanitize-html';
   styleUrls: ['./model-details-hero.component.scss'],
 })
 export class ModelDetailsHeroComponent {
+  readonly backgroundImagePath = 'explorers-assets/images/background.svg';
   readonly JAX_STRAIN_URL = 'https://www.jax.org/strain';
 
   readonly MATCHED_CONTROLS_URLS: Record<string, string> = {

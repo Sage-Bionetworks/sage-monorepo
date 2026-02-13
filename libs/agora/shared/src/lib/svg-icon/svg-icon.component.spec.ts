@@ -45,7 +45,7 @@ describe('SvgIconComponent', () => {
 
   it('should load SVG through service and set as svgContent', async () => {
     const mockSvg = '<svg><circle cx="50" cy="50" r="40" /></svg>';
-    const validPath = '/agora-assets/icons/cog.svg';
+    const validPath = 'agora-assets/icons/cog.svg';
     const sanitizedSvg = sanitizer.bypassSecurityTrustHtml(mockSvg);
 
     // Spy on service method

@@ -3,7 +3,10 @@
     @if (team.members.length) {
       @for (member of team.members; track member) {
         <div class="team-member">
-          <div class="team-member-image">
+          <div
+            class="team-member-image"
+            [style.background-image]="'url(' + placeholderImagePath + ')'"
+          >
             @if (images[member.name]) {
               <img [src]="images[member.name]" alt="{{ member.name }} profile picture" />
             }

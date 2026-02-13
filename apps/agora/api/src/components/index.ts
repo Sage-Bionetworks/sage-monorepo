@@ -1,6 +1,5 @@
 export * from './biodomains';
 export * from './comparison';
-export * from './data-version';
 export * from './distribution';
 export * from './experimental-validation';
 export * from './gene-links';

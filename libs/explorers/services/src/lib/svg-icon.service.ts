@@ -2,8 +2,8 @@ import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Observable, map, of, shareReplay } from 'rxjs';
 import { isExternalLink } from '@sagebionetworks/shared/util';
+import { Observable, map, of, shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,35 +13,35 @@ export class SvgIconService {
    * Service for managing SVG icons in the Explorer applications
    *
    * This service provides the following functionality:
-   * - Load SVG files from the `/explorers-assets/icons/` directory
+   * - Load SVG files from `*-assets/icons/` directories (e.g., explorers-assets, agora-assets, model-ad-assets)
    * - Cache SVGs to prevent redundant HTTP requests
    * - Sanitize SVG content for safe rendering in the browser
    * - Preload commonly used SVG icons for better performance
    *
    * The service ensures security by:
-   * - Only allowing SVGs from the approved assets directory
+   * - Only allowing SVGs from approved asset directories matching the pattern `[app]-assets/icons/*.svg`
    * - Sanitizing SVG content before rendering
    */
-  private http = inject(HttpClient);
-  private sanitizer = inject(DomSanitizer);
-  private svgCache = new Map<string, Observable<SafeHtml>>();
+  private readonly http = inject(HttpClient);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly svgCache = new Map<string, Observable<SafeHtml>>();
   private readonly platformId = inject(PLATFORM_ID);
 
   // Common SVGs we want to preload
-  private commonSvgPaths = [
-    '/explorers-assets/icons/card-arrow.svg',
-    '/explorers-assets/icons/caret-right-outline.svg',
-    '/explorers-assets/icons/close.svg',
-    '/explorers-assets/icons/cog.svg',
-    '/explorers-assets/icons/column.svg',
-    '/explorers-assets/icons/download.svg',
-    '/explorers-assets/icons/external-link.svg',
-    '/explorers-assets/icons/gct.svg',
-    '/explorers-assets/icons/info-circle.svg',
-    '/explorers-assets/icons/link.svg',
-    '/explorers-assets/icons/pin.svg',
-    '/explorers-assets/icons/search.svg',
-    '/explorers-assets/icons/trash.svg',
+  private readonly commonSvgPaths = [
+    'explorers-assets/icons/card-arrow.svg',
+    'explorers-assets/icons/caret-right-outline.svg',
+    'explorers-assets/icons/close.svg',
+    'explorers-assets/icons/cog.svg',
+    'explorers-assets/icons/column.svg',
+    'explorers-assets/icons/download.svg',
+    'explorers-assets/icons/external-link.svg',
+    'explorers-assets/icons/gct.svg',
+    'explorers-assets/icons/info-circle.svg',
+    'explorers-assets/icons/link.svg',
+    'explorers-assets/icons/pin.svg',
+    'explorers-assets/icons/search.svg',
+    'explorers-assets/icons/trash.svg',
   ];
 
   constructor() {
@@ -60,8 +60,8 @@ export class SvgIconService {
     if (isExternalLink(path)) {
       return false;
     }
-    // Ensure the path comes from '.*/icons/*.svg'
-    return Boolean(path) && /\/icons\/[^/]+\.svg$/.test(path);
+    // Ensure the path comes from '*-assets/icons/*.svg'
+    return Boolean(path) && /^[a-z-]+-assets\/icons\/[^/]+\.svg$/.test(path);
   }
 
   getSvg(path: string): Observable<SafeHtml> {

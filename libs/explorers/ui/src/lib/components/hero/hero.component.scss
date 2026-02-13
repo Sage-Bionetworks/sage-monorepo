@@ -6,6 +6,7 @@
   justify-content: center;
   align-items: center;
   height: clamp(100px, 15vw, 200px);
+  background-size: cover;
 
   @media (width < vars.$main-content-total-width) {
     padding: 0 vars.$main-content-margin;

@@ -16,7 +16,6 @@ nav:
   - Products:
       - Service Catalog: products/services.md
       - Agora: products/agora.md
-      - AMP-ALS: api/amp-als.md
       - BixArena: api/bixarena.md
       - Model-AD: api/model-ad.md
       - OpenChallenges: products/openchallenges.md
@@ -62,7 +61,6 @@ nav:
   - API:
       - Overview: api/overview.md
       - Agora: api/agora.md
-      - AMP-ALS: api/amp-als.md
       - BixArena: api/bixarena.md
       - Model-AD: api/model-ad.md
       - OpenChallenges: api/openchallenges.md

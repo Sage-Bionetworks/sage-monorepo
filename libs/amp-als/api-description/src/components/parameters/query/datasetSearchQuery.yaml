@@ -1,5 +1,0 @@
-name: datasetSearchQuery
-description: The search query used to find datasets.
-in: query
-schema:
-  $ref: ../../schemas/DatasetSearchQuery.yaml

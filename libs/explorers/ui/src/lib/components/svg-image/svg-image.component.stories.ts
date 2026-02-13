@@ -65,7 +65,7 @@ type Story = StoryObj<SvgImageComponent>;
 
 export const SvgImage: Story = {
   args: {
-    imagePath: '/explorers-assets/images/gene-search-icon.svg',
+    imagePath: 'explorers-assets/images/gene-search-icon.svg',
     sizeMode: 'original',
   },
 };

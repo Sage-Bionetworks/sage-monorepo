@@ -48,7 +48,6 @@ jobs:
           # These are regex patterns auto-wrapped in `^ $`.
           scopes: |
             agora
-            amp-als
             bixarena
             bridge2ai
             common

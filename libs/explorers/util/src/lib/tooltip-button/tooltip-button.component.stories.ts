@@ -31,7 +31,7 @@ const mockOnClick = (): void => {
 export const IconButton: Story = {
   args: {
     buttonSvgIconConfig: {
-      imagePath: '/explorers-assets/icons/link.svg',
+      imagePath: 'explorers-assets/icons/link.svg',
       altText: 'Icon button',
       color: 'blue',
       height: 12,
@@ -55,7 +55,7 @@ export const TextIconButton: Story = {
   args: {
     buttonLabel: 'Text Icon Button',
     buttonSvgIconConfig: {
-      imagePath: '/explorers-assets/icons/info-circle.svg',
+      imagePath: 'explorers-assets/icons/info-circle.svg',
       altText: 'Icon button',
     },
     tooltipText: 'This is a text icon button',

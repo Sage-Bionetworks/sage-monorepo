@@ -1,0 +1,41 @@
+type: object
+properties:
+  name:
+    type: string
+    description: The display name of the column.
+  type:
+    type: string
+    enum:
+      - text
+      - heat_map
+      - link_internal
+      - link_external
+      - primary
+      - numeric
+    description: The data type of the column. Must be 'text', 'heat_map', 'link_internal', 'link_external', 'primary', or 'numeric', where 'primary' is the primary key column that uniquely identifies each record in the table.
+  data_key:
+    type: string
+    description: The key used to retrieve data for this column from the data source.
+  tooltip:
+    type: string
+    description: Tooltip text for the column.
+  sort_tooltip:
+    type: string
+    description: Tooltip text for the column's sort functionality.
+  link_text:
+    type: string
+    description: The default text for a link in this column.
+  link_url:
+    type: string
+    description: The default URL for this column.
+  is_exported:
+    type: boolean
+    description: Indicates whether the column is included in data exports.
+  is_hidden:
+    type: boolean
+    description: Indicates whether the column is shown in the comparison table UI.
+required:
+  - type
+  - data_key
+  - is_exported
+  - is_hidden

@@ -6,7 +6,7 @@ import { NewsComponent } from './news.component';
 
 const meta: Meta<NewsComponent> = {
   component: NewsComponent,
-  title: 'News',
+  title: 'Pages/News',
   decorators: [
     applicationConfig({
       providers: [provideHttpClient(withInterceptorsFromDi())],
@@ -19,6 +19,6 @@ const meta: Meta<NewsComponent> = {
 export default meta;
 type Story = StoryObj<NewsComponent>;
 
-export const Primary: Story = {
+export const News: Story = {
   args: {},
 };

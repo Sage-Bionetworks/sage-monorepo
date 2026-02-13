@@ -7,41 +7,79 @@ info:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   title: Agora API Next
-  version: 1.0.0-draft
+  version: 1.0.0
   x-logo:
     url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
     altText: Agora
 servers:
   - url: http://localhost/v1
 tags:
-  - description: Operations about health checks.
-    name: Health Check
-    x-audience:
-      - internal
+  - description: Operations about Comparison Tool UI configuration.
+    name: Comparison Tool Config
+  - description: Operations about the data version.
+    name: Data Version
 paths:
-  /next/health-check:
+  /comparison-tools/config:
     get:
-      description: Get information about the health of the service
-      operationId: getHealthCheck
+      description: Retrieve the Comparison Tool configuration schema for the Agora
+        application
+      operationId: getComparisonToolsConfig
+      parameters:
+        - description: Name of the page to retrieve the Comparison Tool configuration
+            for
+          explode: true
+          in: query
+          name: page
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComparisonToolConfigPage'
+          style: form
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheck'
+                items:
+                  $ref: '#/components/schemas/ComparisonToolConfig'
+                type: array
+          description: Successfully retrieved Comparison Tool configuration
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get Comparison Tool configuration
+      tags:
+        - Comparison Tool Config
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Comparison Tool Config
+  /data-version:
+    get:
+      description: Get data version
+      operationId: getDataVersion
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataVersion'
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      summary: Get health check information
+      summary: Get data version
       tags:
-        - Health Check
+        - Data Version
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: Health Check
+        - tag: Data Version
 components:
   responses:
     BadRequest:
@@ -50,6 +88,12 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Invalid request
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
     InternalServerError:
       content:
         application/problem+json:
@@ -57,20 +101,178 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
-    HealthCheck:
-      description: Represents the health of a service
+    ComparisonToolConfigPage:
+      description: The type of comparison tool page
+      enum:
+        - Gene Expression
+      example: Gene Expression
+      type: string
+    ComparisonToolConfigColumn:
       example:
-        status: pass
+        name: name
+        tooltip: tooltip
+        is_hidden: true
+        link_url: link_url
+        sort_tooltip: sort_tooltip
+        is_exported: true
+        type: text
+        data_key: data_key
+        link_text: link_text
       properties:
-        status:
-          description: Indicates whether the service status is acceptable or not
-          enum:
-            - pass
-            - fail
-            - warn
+        name:
+          description: The display name of the column.
           type: string
+        type:
+          description: "The data type of the column. Must be 'text', 'heat_map', 'link_internal',\
+            \ 'link_external', 'primary', or 'numeric', where 'primary' is the primary\
+            \ key column that uniquely identifies each record in the table."
+          enum:
+            - text
+            - heat_map
+            - link_internal
+            - link_external
+            - primary
+            - numeric
+          type: string
+        data_key:
+          description: The key used to retrieve data for this column from the data
+            source.
+          type: string
+        tooltip:
+          description: Tooltip text for the column.
+          type: string
+        sort_tooltip:
+          description: Tooltip text for the column's sort functionality.
+          type: string
+        link_text:
+          description: The default text for a link in this column.
+          type: string
+        link_url:
+          description: The default URL for this column.
+          type: string
+        is_exported:
+          description: Indicates whether the column is included in data exports.
+          type: boolean
+        is_hidden:
+          description: Indicates whether the column is shown in the comparison table
+            UI.
+          type: boolean
       required:
-        - status
+        - data_key
+        - is_exported
+        - is_hidden
+        - type
+      type: object
+    ComparisonToolConfigFilter:
+      description: Comparison Tool Config Filter
+      example:
+        values:
+          - Apoptosis
+          - Apoptosis
+        name: Biological Domain
+        short_name: Biodomain
+        data_key: biodomains
+        query_param_key: biodomain
+      properties:
+        name:
+          description: Name of the filter group
+          example: Biological Domain
+          type: string
+        data_key:
+          description: Field to filter on
+          example: biodomains
+          type: string
+        short_name:
+          description: Short name of the filter group
+          example: Biodomain
+          type: string
+        query_param_key:
+          description: Query parameter key for the filter
+          example: biodomain
+          type: string
+        values:
+          description: List of filter values
+          items:
+            example: Apoptosis
+            type: string
+          type: array
+      required:
+        - data_key
+        - name
+        - query_param_key
+        - values
+      type: object
+    ComparisonToolConfig:
+      example:
+        columns:
+          - name: name
+            tooltip: tooltip
+            is_hidden: true
+            link_url: link_url
+            sort_tooltip: sort_tooltip
+            is_exported: true
+            type: text
+            data_key: data_key
+            link_text: link_text
+          - name: name
+            tooltip: tooltip
+            is_hidden: true
+            link_url: link_url
+            sort_tooltip: sort_tooltip
+            is_exported: true
+            type: text
+            data_key: data_key
+            link_text: link_text
+        page: Gene Expression
+        dropdowns:
+          - RNA - DIFFERENTIAL EXPRESSION
+          - RNA - DIFFERENTIAL EXPRESSION
+        filters:
+          - values:
+              - Apoptosis
+              - Apoptosis
+            name: Biological Domain
+            short_name: Biodomain
+            data_key: biodomains
+            query_param_key: biodomain
+          - values:
+              - Apoptosis
+              - Apoptosis
+            name: Biological Domain
+            short_name: Biodomain
+            data_key: biodomains
+            query_param_key: biodomain
+        row_count: row_count
+      properties:
+        page:
+          $ref: '#/components/schemas/ComparisonToolConfigPage'
+        dropdowns:
+          description: List of dropdown options
+          items:
+            example: RNA - DIFFERENTIAL EXPRESSION
+            type: string
+          type: array
+        row_count:
+          description: Deprecated field that is always null. Previously contained
+            relative description of the total number of rows in the data
+          nullable: true
+          type: string
+        columns:
+          description: List of column definitions
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigColumn'
+          type: array
+        filters:
+          description: List of filter configurations
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigFilter'
+          type: array
+      required:
+        - columns
+        - dropdowns
+        - filters
+        - page
+        - row_count
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -95,4 +297,22 @@ components:
       required:
         - status
         - title
+      type: object
+    DataVersion:
+      description: Synapse data version
+      example:
+        data_file: data_file
+        data_version: data_version
+        team_images_id: team_images_id
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+        team_images_id:
+          type: string
+      required:
+        - data_file
+        - data_version
+        - team_images_id
       type: object

@@ -91,10 +91,6 @@ function openchallenges-infra {
   node dist/apps/openchallenges/infra/src/main.js "$@"
 }
 
-function amp-als-build-images {
-  nx run-many --target=build-image --projects=amp-als-* --parallel=3
-}
-
 function agora-build-images {
   nx run-many --target=build-image --projects=agora-* --parallel=3
 }

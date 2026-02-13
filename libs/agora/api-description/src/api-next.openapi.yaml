@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 1.0.0-draft
+  version: 1.0.0
   title: Agora API Next
   license:
     name: Apache 2.0
@@ -14,10 +14,12 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Health Check
-    description: Operations about health checks.
-    x-internal: true
+  - name: Comparison Tool Config
+    description: Operations about Comparison Tool UI configuration.
+  - name: Data Version
+    description: Operations about the data version.
 paths:
-  # We prefix all the paths with the segment "next/" to prevent conflicts with the primary API
-  /next/health-check:
-    $ref: paths/next/health-check.yaml
+  /comparison-tools/config:
+    $ref: paths/comparison-tools/config.yaml
+  /data-version:
+    $ref: paths/data-version.yaml

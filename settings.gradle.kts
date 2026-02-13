@@ -3,11 +3,6 @@ rootProject.name = "sagebionetworks"
 // Include the Agora projects as submodules
 include(":agora-api-next")
 
-// Include the AMP-ALS projects as submodules
-include(":amp-als-app-config-data")
-include(":amp-als-dataset-service")
-include(":amp-als-user-service")
-
 // Include the BixArena projects as submodules
 include(":bixarena-api-gateway")
 include(":bixarena-api")
@@ -30,9 +25,6 @@ include(":sagebionetworks-util")
 
 // Set the project directories
 project(":agora-api-next").projectDir = file("apps/agora/api-next")
-project(":amp-als-app-config-data").projectDir = file("libs/amp-als/app-config-data")
-project(":amp-als-dataset-service").projectDir = file("apps/amp-als/dataset-service")
-project(":amp-als-user-service").projectDir = file("apps/amp-als/user-service")
 project(":bixarena-api-gateway").projectDir = file("apps/bixarena/api-gateway")
 project(":bixarena-api").projectDir = file("apps/bixarena/api")
 project(":bixarena-auth-service").projectDir = file("apps/bixarena/auth-service")

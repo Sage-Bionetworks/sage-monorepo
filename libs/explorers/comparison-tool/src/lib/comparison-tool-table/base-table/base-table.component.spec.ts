@@ -19,7 +19,8 @@ import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { BaseTableComponent } from './base-table.component';
 
-async function setup() {
+async function setup(options: { shouldPaginate?: boolean } = {}) {
+  const { shouldPaginate = false } = options;
   const user = userEvent.setup();
   const component = await render(BaseTableComponent, {
     imports: [RouterModule],
@@ -32,7 +33,7 @@ async function setup() {
     ],
     componentInputs: {
       data: mockComparisonToolData,
-      shouldPaginate: false,
+      shouldPaginate,
     },
   });
 
@@ -148,6 +149,57 @@ describe('BaseTableComponent', () => {
         expect.any(String),
         expect.any(MouseEvent),
       );
+    });
+  });
+
+  describe('pagination', () => {
+    it('should not render paginator when shouldPaginate is false', async () => {
+      const { nativeElement } = await setup({ shouldPaginate: false });
+      const paginator = nativeElement.querySelector('.p-paginator');
+      expect(paginator).toBeNull();
+    });
+
+    it('should render paginator when shouldPaginate is true', async () => {
+      const { nativeElement } = await setup({ shouldPaginate: true });
+      const paginator = nativeElement.querySelector('.p-paginator');
+      expect(paginator).toBeTruthy();
+    });
+
+    it('should render page links when pagination is enabled', async () => {
+      const { nativeElement } = await setup({ shouldPaginate: true });
+      const pageLinks = nativeElement.querySelector('.p-paginator-pages');
+      expect(pageLinks).toBeTruthy();
+    });
+
+    it('should render rows per page dropdown', async () => {
+      const { nativeElement } = await setup({ shouldPaginate: true });
+      const dropdown = nativeElement.querySelector('.p-paginator-rpp-dropdown');
+      expect(dropdown).toBeTruthy();
+    });
+
+    it('should render current page report template', async () => {
+      const { nativeElement } = await setup({ shouldPaginate: true });
+      const currentReport = nativeElement.querySelector('.p-paginator-current');
+      expect(currentReport).toBeTruthy();
+    });
+
+    it('should apply comparison-tool-paginator style class', async () => {
+      const { nativeElement } = await setup({ shouldPaginate: true });
+      const paginator = nativeElement.querySelector('.comparison-tool-paginator');
+      expect(paginator).toBeTruthy();
+    });
+
+    it('should render navigation buttons (first, prev, next, last)', async () => {
+      const { nativeElement } = await setup({ shouldPaginate: true });
+      const firstBtn = nativeElement.querySelector('.p-paginator-first');
+      const prevBtn = nativeElement.querySelector('.p-paginator-prev');
+      const nextBtn = nativeElement.querySelector('.p-paginator-next');
+      const lastBtn = nativeElement.querySelector('.p-paginator-last');
+
+      expect(firstBtn).toBeTruthy();
+      expect(prevBtn).toBeTruthy();
+      expect(nextBtn).toBeTruthy();
+      expect(lastBtn).toBeTruthy();
     });
   });
 });

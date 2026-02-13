@@ -6,7 +6,7 @@
       <div class="table-divider table-divider-1">
         <div class="table-divider-inner">
           <div id="pinned-genes-header">
-            <span> Pinned Items ({{ pinnedResultsCount() }}/{{ maxPinnedItems() }}) </span>
+            <span> Pinned Results ({{ pinnedResultsCount() }}/{{ maxPinnedItems() }}) </span>
           </div>
           <div class="pinned-items-controls">
             <explorers-download-dom-image
@@ -46,7 +46,7 @@
               "
               tooltipPosition="left"
             >
-              <explorers-svg-icon imagePath="/explorers-assets/icons/pin.svg" altText="pin" />
+              <explorers-svg-icon imagePath="explorers-assets/icons/pin.svg" altText="pin" />
               <span>Pin All</span>
             </button>
           </div>
@@ -57,7 +57,7 @@
   @if (!searchTerm() && !hasSelectedFilters() && pinnedResultsCount() > 0) {
     <div class="table-divider">
       <div class="table-divider-inner">
-        <div>All Items</div>
+        <div>All Results</div>
       </div>
     </div>
   }
