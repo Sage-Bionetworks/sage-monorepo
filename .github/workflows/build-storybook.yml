@@ -19,7 +19,7 @@ on:
 jobs:
   build:
     timeout-minutes: 15
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:
       - uses: actions/checkout@v4
         with:

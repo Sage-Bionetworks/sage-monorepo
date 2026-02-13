@@ -25,7 +25,7 @@ env:
 jobs:
   check-affected:
     timeout-minutes: 15
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     outputs:
       docs_changed: ${{ steps.check-changes.outputs.docs_changed }}
       composite_storybook_affected: ${{ steps.check-storybook.outputs.composite_affected }}
