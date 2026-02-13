@@ -1,42 +1,35 @@
+# Reusable workflow: Validates MkDocs documentation build.
+# Called by build-deploy-docs.yml for PR validation.
+
 name: Build Docs
+
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/build-docs.yml'
-      - 'docs/**'
-      - 'mkdocs.yml'
-  pull_request:
-    paths:
-      - '.github/workflows/build-docs.yml'
-      - 'docs/**'
-      - 'mkdocs.yml'
+  workflow_call:
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: 3.x
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-      - uses: actions/cache@v3
+
+      - name: Set up MkDocs cache
+        run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+
+      - name: Restore MkDocs cache
+        uses: actions/cache@v3
         with:
           key: mkdocs-material-${{ env.cache_id }}
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs-material mkdocstrings mkdocstrings-python termynal mdx-truly-sane-lists
-      - name: Build docs (PR validation)
-        if: github.event_name == 'pull_request'
+
+      - name: Install MkDocs dependencies
+        run: pip install mkdocs-material mkdocstrings mkdocstrings-python termynal mdx-truly-sane-lists
+
+      - name: Build docs
         run: mkdocs build --strict
-      - name: Configure Git Credentials
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      - name: Deploy docs to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: mkdocs gh-deploy --force

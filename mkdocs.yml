@@ -23,6 +23,7 @@ nav:
   - Develop:
       - Quick Start: develop/quick-start.md
       - Remote Development: develop/remote-dev.md
+      - Component Storybooks: storybooks.md
       - Architecture:
           - Nx Workspace: develop/architecture/what-is-nx.md
           - Dev Containers: develop/architecture/what-is-devcontainer.md

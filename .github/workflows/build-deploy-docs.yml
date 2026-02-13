@@ -1,0 +1,137 @@
+# Coordinating workflow for docs and storybook CI/CD.
+# - On PRs: validates affected docs/storybooks without deploying
+# - On push to main: deploys full site OR individual storybooks (mutually exclusive)
+
+name: Build & Deploy Docs
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: write # Required for ghp-import to push to gh-pages
+
+concurrency:
+  group: 'pages-${{ github.ref }}'
+  cancel-in-progress: false
+
+# Parent products with storybooks (space-separated)
+# Update this list when adding new storybooks to composite storybook
+env:
+  STORYBOOK_PRODUCTS: 'agora explorers'
+
+jobs:
+  check-affected:
+    timeout-minutes: 15
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
+    outputs:
+      docs_changed: ${{ steps.check-changes.outputs.docs_changed }}
+      composite_storybook_affected: ${{ steps.check-storybook.outputs.composite_affected }}
+      affected_storybooks: ${{ steps.check-storybook.outputs.affected_storybooks }}
+      has_affected_storybooks: ${{ steps.check-storybook.outputs.has_affected_storybooks }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Check if docs changed
+        id: check-changes
+        run: |
+          # Check if any docs-related files changed
+          if git diff --name-only $NX_BASE $NX_HEAD | grep -qE '^(docs/|mkdocs\.yml)'; then
+            echo "docs_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "docs_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up the dev container
+        id: setup-dev-container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Check storybook affected status
+        id: check-storybook
+        run: |
+          IFS=',' read -ra PROJECTS <<< "${{ steps.setup-dev-container.outputs.affected_projects }}"
+
+          # Check if composite storybook is affected
+          COMPOSITE_AFFECTED="false"
+          for project in "${PROJECTS[@]}"; do
+            if [[ "$project" == "storybook" ]]; then
+              COMPOSITE_AFFECTED="true"
+              break
+            fi
+          done
+          echo "composite_affected=$COMPOSITE_AFFECTED" >> $GITHUB_OUTPUT
+
+          # Check individual parent products
+          AFFECTED_STORYBOOKS=""
+          for product in $STORYBOOK_PRODUCTS; do
+            for project in "${PROJECTS[@]}"; do
+              if [[ "$project" == "${product}"-* ]]; then
+                if [[ -z "$AFFECTED_STORYBOOKS" ]]; then
+                  AFFECTED_STORYBOOKS="$product"
+                else
+                  AFFECTED_STORYBOOKS="$AFFECTED_STORYBOOKS $product"
+                fi
+                break
+              fi
+            done
+          done
+
+          echo "affected_storybooks=$AFFECTED_STORYBOOKS" >> $GITHUB_OUTPUT
+          if [[ -n "$AFFECTED_STORYBOOKS" ]]; then
+            echo "has_affected_storybooks=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_affected_storybooks=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Remove the dev container
+        if: always()
+        run: docker rm -f sage_devcontainer
+
+  # PR validation: build docs without deploying
+  validate-pr-docs:
+    needs: check-affected
+    if: github.event_name == 'pull_request' && needs.check-affected.outputs.docs_changed == 'true'
+    uses: ./.github/workflows/build-docs.yml
+
+  # PR validation: build storybooks without deploying
+  validate-pr-storybooks:
+    needs: check-affected
+    if: |
+      github.event_name == 'pull_request' &&
+      (needs.check-affected.outputs.has_affected_storybooks == 'true' || needs.check-affected.outputs.composite_storybook_affected == 'true')
+    uses: ./.github/workflows/build-storybook.yml
+    with:
+      build_composite: ${{ needs.check-affected.outputs.composite_storybook_affected == 'true' }}
+      storybooks: ${{ needs.check-affected.outputs.affected_storybooks }}
+
+  # Deploy full site when docs changed OR composite storybook affected
+  deploy-full-site:
+    needs: check-affected
+    if: |
+      github.repository == 'Sage-Bionetworks/sage-monorepo' &&
+      github.event_name == 'push' &&
+      github.ref_name == 'main' &&
+      (needs.check-affected.outputs.docs_changed == 'true' || needs.check-affected.outputs.composite_storybook_affected == 'true')
+    uses: ./.github/workflows/deploy-docs.yml
+
+  # Deploy individual storybooks when parent products affected (but NOT when full site deploy is happening)
+  deploy-individual-storybooks:
+    needs: check-affected
+    if: |
+      github.repository == 'Sage-Bionetworks/sage-monorepo' &&
+      github.event_name == 'push' &&
+      github.ref_name == 'main' &&
+      needs.check-affected.outputs.has_affected_storybooks == 'true' &&
+      needs.check-affected.outputs.docs_changed == 'false' &&
+      needs.check-affected.outputs.composite_storybook_affected == 'false'
+    uses: ./.github/workflows/deploy-storybook.yml
+    with:
+      storybooks: ${{ needs.check-affected.outputs.affected_storybooks }}
