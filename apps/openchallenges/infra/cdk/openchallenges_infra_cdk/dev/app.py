@@ -344,7 +344,7 @@ def main() -> None:
         description="Allow ALB to forward traffic to API Gateway",
     )
 
-    # Create web stack (Angular SSR app) - depends on ECS cluster, ALB, and API Gateway
+    # Create web stack (Angular SSR app) - depends on ECS cluster and API Gateway
     # Uses ALB DNS name by default, or custom FQDN if provided
     use_https = certificate_arn is not None and certificate_arn.strip() != ""
     web_stack = WebStack(
@@ -364,7 +364,6 @@ def main() -> None:
         description=f"Web client for OpenChallenges {environment} environment",
     )
     web_stack.add_dependency(ecs_cluster_stack)
-    web_stack.add_dependency(alb_stack)
     web_stack.add_dependency(api_gateway_stack)
 
     # Create bucket stack
