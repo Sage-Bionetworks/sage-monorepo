@@ -13,7 +13,7 @@
 -- - user6: 00000000-0000-0000-0000-000000000006 (Apprentice - 5 battles, 1.25/week)
 -- - user7: 00000000-0000-0000-0000-000000000007 (Apprentice - 2 battles, 0.5/week)
 --
--- Quest Duration: 4 weeks (Jan 20 - Feb 17, 2026)
+-- Quest Duration: ~3 months (Feb 1 - Apr 30, 2026)
 -- Expected Tiers (battles/week thresholds):
 -- - Champions: ≥10 battles/week (≥40 battles in 4 weeks)
 -- - Knights: ≥5 battles/week (≥20 battles in 4 weeks)
@@ -24,7 +24,7 @@
 -- Insert Mock Quest
 -- ============================================================================
 INSERT INTO api.quest (id, quest_id, start_date, end_date, created_at, updated_at) VALUES
-  (1, 'build-bioarena-together', '2026-01-20 00:00:00+00', '2026-02-17 23:59:59+00', now(), now());
+  (1, 'build-bioarena-together', '2026-02-01 00:00:00+00', '2026-04-30 23:59:59+00', now(), now());
 
 
 -- ============================================================================
