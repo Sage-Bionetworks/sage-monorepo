@@ -17,13 +17,13 @@ import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/s
  * This interceptor:
  * - Retries failed requests once for transient errors (network issues, 5xx)
  * - Does NOT retry client errors (4xx) as they won't succeed
- * - Shows error overlay for connectivity errors (network failures, 5xx server errors)
+ * - Shows error overlay for all errors so users are informed when requests fail
  * - Logs all errors for debugging
  * - Re-throws errors as AppError for consistent error handling
  *
- * Connectivity errors (status 0 or 5xx) are handled centrally here to provide
- * a consistent user experience. Components should catch errors for cleanup
- * but don't need to show their own error messages for these cases.
+ * Errors are handled centrally here to provide a consistent user experience.
+ * Components should catch errors for cleanup but don't need to show their own
+ * error messages.
  */
 export const httpErrorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
@@ -51,11 +51,11 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
       // Log error for debugging
       logger.error(`HTTP Error: ${errorMessage}`, error);
 
-      // Show error overlay for connectivity issues,
+      // Show error overlay for all errors so users know when requests fail,
       // but not if the user is already on the error page.
-      // These errors indicate the app cannot function properly.
+      // TODO - in the future, we may want to track specific routes through configuration (MG-771)
       const isOnErrorPage = router.url.includes('/not-found');
-      if (isConnectivityError(error) && !isOnErrorPage) {
+      if (!isOnErrorPage) {
         errorOverlayService.showError(errorMessage);
       }
 
@@ -64,13 +64,6 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
     }),
   );
 };
-
-/**
- * Determines if the error is a connectivity issue (network or server error).
- */
-function isConnectivityError(error: HttpErrorResponse): boolean {
-  return error.status === 0 || (error.status >= 500 && error.status < 600);
-}
 
 /**
  * Builds a user-friendly error message from an HttpErrorResponse.

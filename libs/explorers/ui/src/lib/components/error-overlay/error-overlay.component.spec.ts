@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 import { signal } from '@angular/core';
 import { ErrorOverlayService } from '@sagebionetworks/explorers/services';
 import { ErrorOverlayComponent } from './error-overlay.component';
@@ -17,9 +18,10 @@ function createMockErrorOverlayService(hasError = false, errorMessage = '') {
 
 async function setup(hasError = false, errorMessage = '') {
   const mockService = createMockErrorOverlayService(hasError, errorMessage);
-  return await render(ErrorOverlayComponent, {
+  const renderResult = await render(ErrorOverlayComponent, {
     providers: [{ provide: ErrorOverlayService, useValue: mockService }],
   });
+  return { ...renderResult, mockService };
 }
 
 describe('ErrorOverlayComponent', () => {
@@ -41,25 +43,21 @@ describe('ErrorOverlayComponent', () => {
   });
 
   it('should call reloadPage when button is clicked', async () => {
-    const mockService = createMockErrorOverlayService(true, 'Error');
-    await render(ErrorOverlayComponent, {
-      providers: [{ provide: ErrorOverlayService, useValue: mockService }],
-    });
+    const user = userEvent.setup();
+    const { mockService } = await setup(true, 'Error');
 
     const reloadButton = screen.getByRole('button', { name: 'Reload Page' });
-    fireEvent.click(reloadButton);
+    await user.click(reloadButton);
 
     expect(mockService.reloadPage).toHaveBeenCalled();
   });
 
   it('should not trigger any action when overlay background is clicked', async () => {
-    const mockService = createMockErrorOverlayService(true, 'Error');
-    const { container } = await render(ErrorOverlayComponent, {
-      providers: [{ provide: ErrorOverlayService, useValue: mockService }],
-    });
+    const user = userEvent.setup();
+    const { container, mockService } = await setup(true, 'Error');
 
     const overlay = container.querySelector('.error-overlay') as HTMLElement;
-    fireEvent.click(overlay);
+    await user.click(overlay);
 
     expect(mockService.reloadPage).not.toHaveBeenCalled();
   });

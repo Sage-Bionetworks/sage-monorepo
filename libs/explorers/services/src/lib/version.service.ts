@@ -28,7 +28,7 @@ export class VersionService {
   private readonly gitHubService = inject(GitHubService);
 
   getDataVersion$(dataVersionService: DataVersionService): Observable<string> {
-    if (!this.platformService.isBrowser) {
+    if (this.platformService.isServer) {
       return EMPTY;
     }
     return dataVersionService.getDataVersion().pipe(
@@ -41,16 +41,12 @@ export class VersionService {
   }
 
   getSiteVersion$(config: VersionConfig): Observable<string> {
-    if (!this.platformService.isBrowser) {
+    if (this.platformService.isServer) {
       return EMPTY;
     }
-    return this.gitHubService.getCommitSHA(config.tagName).pipe(
-      map((sha) => this.formatSiteVersion(sha, config)),
-      catchError((error) => {
-        this.logger.error('Error loading site version', error);
-        return throwError(() => error);
-      }),
-    );
+    return this.gitHubService
+      .getCommitSHA(config.tagName)
+      .pipe(map((sha) => this.formatSiteVersion(sha, config)));
   }
 
   formatDataVersion(dataVersion: DataVersion): string {

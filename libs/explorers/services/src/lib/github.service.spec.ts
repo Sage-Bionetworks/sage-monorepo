@@ -3,7 +3,6 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 import { GitHubService } from './github.service';
-import { LoggerService } from './logger.service';
 
 // Mock Octokit
 const mockOctokit = {
@@ -23,20 +22,10 @@ jest.mock('@octokit/rest', () => ({
 
 describe('GitHubService', () => {
   let service: GitHubService;
-  let mockLoggerService: Partial<LoggerService>;
 
   beforeEach(() => {
-    mockLoggerService = {
-      error: jest.fn(),
-    };
-
     TestBed.configureTestingModule({
-      providers: [
-        GitHubService,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        { provide: LoggerService, useValue: mockLoggerService },
-      ],
+      providers: [GitHubService, provideHttpClient(), provideHttpClientTesting()],
     });
     service = TestBed.inject(GitHubService);
 
@@ -107,7 +96,7 @@ describe('GitHubService', () => {
     expect(result).toBe('');
   });
 
-  it('should handle errors when fetching tags', async () => {
+  it('should return empty string when fetching tags fails', async () => {
     const tag = 'any-tag';
 
     mockOctokit.paginate.iterator.mockImplementation(() => {
@@ -116,7 +105,6 @@ describe('GitHubService', () => {
 
     const result = await firstValueFrom(service.getCommitSHA(tag));
     expect(result).toBe('');
-    expect(mockLoggerService.error).toHaveBeenCalledWith('Error fetching tags', expect.any(Error));
   });
 
   describe('getShortSHA', () => {
