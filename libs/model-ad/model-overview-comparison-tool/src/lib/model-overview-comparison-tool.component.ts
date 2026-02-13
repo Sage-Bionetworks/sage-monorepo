@@ -129,6 +129,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       modelType: selectedFilters['modelTypes'],
       modifiedGenes: selectedFilters['modifiedGenes'],
     };
+    this.comparisonToolService.startFetch();
     this.modelOverviewService
       .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -154,6 +155,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       sortOrders,
     };
 
+    this.comparisonToolService.startFetch();
     this.modelOverviewService
       .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))

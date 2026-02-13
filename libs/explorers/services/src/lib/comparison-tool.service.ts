@@ -94,6 +94,7 @@ export class ComparisonToolService<T> {
     event: Event;
   } | null>(null);
   private readonly isFilterPanelOpenSignal = signal(false);
+  private readonly pendingFetchesSignal = signal(0);
 
   // URL Sync State
   private lastSyncedUrlParamsState: ComparisonToolUrlParams | null = null;
@@ -110,6 +111,8 @@ export class ComparisonToolService<T> {
   readonly isInitialized = this.isInitializedSignal.asReadonly();
   readonly heatmapDetailsPanelData = this.heatmapDetailsPanelDataSignal.asReadonly();
   readonly isFilterPanelOpen = this.isFilterPanelOpenSignal.asReadonly();
+  readonly pendingFetches = this.pendingFetchesSignal.asReadonly();
+  readonly isLoadingTableData = computed(() => this.pendingFetches() > 0);
 
   // Computed Query Accessors
   readonly query = this.querySignal.asReadonly();
@@ -569,10 +572,22 @@ export class ComparisonToolService<T> {
 
   setUnpinnedData(unpinnedData: T[]) {
     this.unpinnedDataSignal.set(unpinnedData);
+    this.completeFetch();
   }
 
   setPinnedData(pinnedData: T[]) {
     this.pinnedDataSignal.set(pinnedData);
+    this.completeFetch();
+  }
+
+  /** Call before starting a data fetch to increment loading counter */
+  startFetch() {
+    this.pendingFetchesSignal.update((count) => count + 1);
+  }
+
+  /** Call when a data fetch completes (success or error) to decrement loading counter */
+  private completeFetch() {
+    this.pendingFetchesSignal.update((count) => Math.max(0, count - 1));
   }
 
   updateQuery(query: Partial<ComparisonToolQuery>) {

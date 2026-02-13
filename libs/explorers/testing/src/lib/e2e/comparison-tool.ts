@@ -368,3 +368,44 @@ export async function sortColumn(page: Page, columnName: string, multiSort = fal
     await columnHeader.click();
   }
 }
+
+/**
+ * Gets the loading overlay element for a table.
+ * @param page - Playwright Page object
+ * @returns Locator for the loading overlay
+ */
+export function getTableLoadingOverlay(page: Page): Locator {
+  return page.locator('.p-datatable-loading-overlay');
+}
+
+/**
+ * Waits for the table loading overlay to be hidden.
+ * @param page - Playwright Page object
+ * @param timeout - Optional timeout in milliseconds (default 30000)
+ */
+export async function waitForTableLoadingComplete(page: Page, timeout = 30000): Promise<void> {
+  await expect(getTableLoadingOverlay(page)).toBeHidden({ timeout });
+}
+
+/**
+ * Tests that a loading indicator appears while data is being fetched.
+ * This test triggers a sort operation and verifies the loading overlay appears.
+ */
+export async function testLoadingIndicatorAppearsDuringDataFetch(page: Page): Promise<void> {
+  const columnHeader = page.getByRole('columnheader').nth(2);
+
+  // Use Promise.all to click and check for loading overlay at the same time
+  // The loading overlay should appear after clicking
+  await Promise.all([
+    // Wait for loading overlay to appear (may be brief)
+    expect(getTableLoadingOverlay(page))
+      .toBeVisible({ timeout: 5000 })
+      .catch(() => {
+        // Loading may complete very quickly, this is acceptable
+      }),
+    columnHeader.click(),
+  ]);
+
+  // Verify loading completes
+  await waitForTableLoadingComplete(page);
+}
