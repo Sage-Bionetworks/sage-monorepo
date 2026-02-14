@@ -141,6 +141,7 @@ model/org-sagebionetworks-repo-model-auth-access-token-generation-request.ts
 model/org-sagebionetworks-repo-model-auth-access-token-generation-response.ts
 model/org-sagebionetworks-repo-model-auth-access-token-record-list.ts
 model/org-sagebionetworks-repo-model-auth-access-token-record.ts
+model/org-sagebionetworks-repo-model-auth-access-token-response.ts
 model/org-sagebionetworks-repo-model-auth-access-token-state.ts
 model/org-sagebionetworks-repo-model-auth-authenticated-on.ts
 model/org-sagebionetworks-repo-model-auth-authentication-receipt-token.ts

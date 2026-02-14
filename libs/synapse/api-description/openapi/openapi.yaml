@@ -1707,6 +1707,24 @@ paths:
       responses:
         '204':
           description: Void
+  /auth/v1/anonymousToken:
+    get:
+      tags:
+        - Authentication Services
+      operationId: get-/auth/v1/anonymousToken
+      parameters:
+        - name: realm
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.auth.AccessTokenResponse'
   /auth/v1/login2:
     post:
       tags:
@@ -15052,6 +15070,13 @@ components:
           type: string
           description: The disposition of the attachment either attachment or inline.
       description: Multipart Message Attachment
+    org.sagebionetworks.repo.model.auth.AccessTokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: A token that authorizes subsequent requests
+      description: An access token
     org.sagebionetworks.repo.model.doi.v2.DoiResourceType:
       type: object
       properties:
@@ -17749,6 +17774,7 @@ components:
             - GOOGLE_OAUTH_2_0
             - ORCID
             - ARCUS_BIOSCIENCES
+            - SAGE_BIONETWORKS
         authenticationCode:
           type: string
           description: The authorization code passed with the redirectUrl after successful user authentication from a 3rd party OAuth provider.  This code is used by Synapse to lookup the user's information from the OAuthProvider.
@@ -21158,6 +21184,7 @@ components:
             - GOOGLE_OAUTH_2_0
             - ORCID
             - ARCUS_BIOSCIENCES
+            - SAGE_BIONETWORKS
         authenticationCode:
           type: string
           description: The authorization code passed with the redirectUrl after successful user authentication from a 3rd party OAuth provider.  This code is used by Synapse to lookup the user's information from the OAuthProvider.
@@ -21208,6 +21235,7 @@ components:
             - GOOGLE_OAUTH_2_0
             - ORCID
             - ARCUS_BIOSCIENCES
+            - SAGE_BIONETWORKS
       description: Identity Provider representing an OAuth Provider
       required:
         - concreteType
@@ -22333,6 +22361,7 @@ components:
             - GOOGLE_OAUTH_2_0
             - ORCID
             - ARCUS_BIOSCIENCES
+            - SAGE_BIONETWORKS
         subject:
           type: string
           description: When the user is created through an oauth provider, this value identifies the user in the provider.
@@ -23813,6 +23842,7 @@ components:
         - GOOGLE_OAUTH_2_0
         - ORCID
         - ARCUS_BIOSCIENCES
+        - SAGE_BIONETWORKS
     org.sagebionetworks.repo.model.table.ColumnType:
       type: string
       enum:
@@ -24418,6 +24448,7 @@ components:
             - GOOGLE_OAUTH_2_0
             - ORCID
             - ARCUS_BIOSCIENCES
+            - SAGE_BIONETWORKS
         authenticationCode:
           type: string
           description: The authorization code passed with the redirectUrl after successful user authentication from a 3rd party OAuth provider.  This code is used by Synapse to lookup the user's information from the OAuthProvider.
@@ -27585,6 +27616,7 @@ components:
             - GOOGLE_OAUTH_2_0
             - ORCID
             - ARCUS_BIOSCIENCES
+            - SAGE_BIONETWORKS
         redirectUrl:
           type: string
           description: The URL that the OAuth provider is expected to redirect to after authenticating the user.
