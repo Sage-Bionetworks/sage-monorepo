@@ -7,6 +7,14 @@
   "tags": [],
   "implicitDependencies": ["agora-styles", "agora-themes", "shared-typescript-assets"],
   "targets": {
+    "set-sentry-release": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "echo \"export const SENTRY_RELEASE = '${SENTRY_RELEASE:-local}';\" > apps/agora/app/src/sentry-release.ts"
+        ]
+      }
+    },
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
@@ -75,7 +83,8 @@
               "maximumError": "20kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "sourceMap": true
         },
         "development": {
           "optimization": false,
@@ -153,6 +162,22 @@
       "options": {
         "config": "{projectRoot}/playwright.config.ts"
       }
+    },
+    "sentry-upload": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "sentry-cli sourcemaps upload --org sage-bionetworks --project javascript-angular --release $SENTRY_RELEASE dist/apps/agora/app/browser"
+        ]
+      },
+      "dependsOn": ["build"]
+    },
+    "sentry-cleanup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["find dist/apps/agora/app -name '*.map' -type f -delete"]
+      },
+      "dependsOn": ["sentry-upload"]
     }
   }
 }

@@ -47,10 +47,27 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=lint"
 
+      - name: Set Sentry release version for agora-app
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && export SENTRY_RELEASE=${{ github.sha }} \
+            && nx run agora-app:set-sentry-release"
+
       - name: Build the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=build,server"
+
+      - name: Upload Sentry source maps for agora-app
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && if [ -d 'dist/apps/agora/app/browser' ]; then \
+                 export SENTRY_RELEASE=${{ github.sha }} \
+                 && nx run agora-app:sentry-upload \
+                 && nx run agora-app:sentry-cleanup; \
+               fi"
 
       - name: Test the affected projects (unit)
         run: |
