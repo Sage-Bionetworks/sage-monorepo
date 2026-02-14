@@ -7,10 +7,11 @@
     "postinstall": "husky",
     "prepare": "husky",
     "affected:apps": "nx affected:apps",
-    "affected:build": "nx affected:build",
+    "affected:build": "nx affected:build && pnpm sentry:sourcemaps",
     "affected:test": "nx affected:test",
     "affected:e2e": "nx affected:e2e",
-    "affected:dep-graph": "nx affected:dep-graph"
+    "affected:dep-graph": "nx affected:dep-graph",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sage-bionetworks --project javascript-angular ./dist/apps/agora/app/browser && sentry-cli sourcemaps upload --org sage-bionetworks --project javascript-angular ./dist/apps/agora/app/browser"
   },
   "private": true,
   "dependencies": {
@@ -41,6 +42,8 @@
     "@opentelemetry/sdk-trace-web": "2.0.1",
     "@opentelemetry/semantic-conventions": "1.34.0",
     "@primeng/themes": "19.0.9",
+    "@sentry/angular": "10.38.0",
+    "@sentry/cli": "^2.58.4",
     "angular-google-tag-manager": "1.11.0",
     "compression": "1.8.0",
     "crossfilter2": "1.5.4",
@@ -68,7 +71,6 @@
     "node-cache": "5.1.2",
     "normalize.css": "8.0.1",
     "primeng": "19.0.9",
-    "rollbar": "2.26.4",
     "rxjs": "7.8.1",
     "sanitize-html": "2.13.0",
     "screenfull": "5.2.0",

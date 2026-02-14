@@ -49,6 +49,29 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install-affected"
 
+      - name: Set Sentry release version for agora-app
+        if: ${{ env.PRODUCT == 'agora' }}
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && export SENTRY_RELEASE=agora-app@${{ env.VERSION }} \
+            && nx run agora-app:set-sentry-release"
+
+      - name: Build agora-app for Sentry source map upload
+        if: ${{ env.PRODUCT == 'agora' }}
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx run agora-app:build:production"
+
+      - name: Upload Sentry source maps for agora-app
+        if: ${{ env.PRODUCT == 'agora' }}
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && export SENTRY_RELEASE=agora-app@${{ env.VERSION }} \
+            && nx run agora-app:sentry-upload \
+            && nx run agora-app:sentry-cleanup"
+
       - name: Build the Docker images for the specified product
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
