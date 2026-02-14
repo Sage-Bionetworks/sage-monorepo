@@ -68,7 +68,6 @@
     "node-cache": "5.1.2",
     "normalize.css": "8.0.1",
     "primeng": "19.0.9",
-    "rollbar": "2.26.4",
     "rxjs": "7.8.1",
     "sanitize-html": "2.13.0",
     "screenfull": "5.2.0",
