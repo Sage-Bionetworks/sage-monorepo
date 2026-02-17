@@ -29,7 +29,7 @@ export class ModalLinkComponent {
   }
 
   getTextColor() {
-    return this.textColor ? { color: this.textColor } : {};
+    return this.textColor() ? { color: this.textColor() } : {};
   }
 
   close() {

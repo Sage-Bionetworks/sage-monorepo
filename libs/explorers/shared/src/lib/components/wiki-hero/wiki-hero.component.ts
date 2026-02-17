@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 import { HeroComponent } from '@sagebionetworks/explorers/ui';
 import { WikiComponent } from '@sagebionetworks/explorers/util';
@@ -13,5 +13,9 @@ import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 export class WikiHeroComponent {
   wikiParams = input<SynapseWikiParams>(); // from the route data
   heroTitle = input('heroTitle'); // from the route data
-  className = 'wiki-hero-page-content';
+  heroBackgroundImagePath = input<string | undefined>(); // from the route data
+
+  heroBackgroundImagePathOrDefault = computed(
+    () => this.heroBackgroundImagePath() ?? 'explorers-assets/images/background.svg',
+  );
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
-import { WikiComponent } from '@sagebionetworks/agora/shared';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { WikiComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'agora-about',
@@ -9,8 +10,7 @@ import { WikiComponent } from '@sagebionetworks/agora/shared';
   styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent {
-  wikiId = '612058';
-  className = 'about-page-content';
+  wikiParams: SynapseWikiParams = { ownerId: 'syn25913473', wikiId: '612058' };
 
   readonly heroBackgroundImagePath = DEFAULT_HERO_BACKGROUND_IMAGE_PATH;
 }

@@ -6,7 +6,7 @@ import { Gene, GeneService, TargetNomination } from '@sagebionetworks/agora/api-
 import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
 import { GeneTableComponent } from '@sagebionetworks/agora/genes';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
-import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
+import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { ButtonModule } from 'primeng/button';
 
 @Component({

@@ -29,14 +29,13 @@
                   that led to its nomination
                 </strong>
               </p>
-              <agora-modal-link
+              <explorers-modal-link
                 text="Learn more about Nominated Targets "
                 title="About the Nominated Targets"
-                wikiId="617955"
+                [wikiParams]="{ ownerId: 'syn25913473', wikiId: '617955' }"
                 [iconWidth]="16"
                 [iconHeight]="16"
-              >
-              </agora-modal-link>
+              />
             </div>
             <div>
               <div class="search-box">
@@ -86,13 +85,13 @@
 
       <div class="bottom-text">
         <div class="bottom-text-icon">
-          <agora-svg-icon
+          <explorers-svg-icon
             imagePath="agora-assets/icons/info-circle.svg"
             [width]="16"
             [height]="16"
             altText="info"
             [enableHoverEffects]="false"
-          ></agora-svg-icon>
+          ></explorers-svg-icon>
         </div>
         Use
         <a

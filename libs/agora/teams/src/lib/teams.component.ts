@@ -34,13 +34,12 @@ export class TeamsComponent implements OnInit {
   loadTeams() {
     if (isPlatformBrowser(this.platformId)) {
       this.helperService.setLoading(true);
+      this.logger.log('TeamsComponent: Loading teams');
 
       this.teams$ = this.teamService.listTeams().pipe(
         takeUntilDestroyed(this.destroyRef),
         map((res: TeamsList) => res.items || []),
-        catchError((error: Error) => {
-          this.logger.error('TeamsComponent: Failed to load teams', error);
-          this.logger.trackError(error);
+        catchError(() => {
           this.errorOverlayService.showError('Failed to load teams. Please try again later.');
           return of([]);
         }),

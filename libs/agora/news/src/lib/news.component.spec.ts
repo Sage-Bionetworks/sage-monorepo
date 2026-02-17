@@ -23,6 +23,6 @@ describe('NewsComponent', () => {
   });
 
   it('should have wiki component', () => {
-    expect(element.querySelector('agora-wiki')).toBeTruthy();
+    expect(element.querySelector('explorers-wiki')).toBeTruthy();
   });
 });

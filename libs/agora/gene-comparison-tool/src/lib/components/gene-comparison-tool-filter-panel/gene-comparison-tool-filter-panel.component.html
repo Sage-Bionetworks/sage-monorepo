@@ -1,4 +1,4 @@
-<div class="gct-filter-panel" [ngClass]="{ open: isOpen, active: activePane > -1 }">
+<div class="gct-filter-panel" [class.open]="isOpen" [class.active]="activePane > -1">
   <div class="gct-filter-panel-inner">
     <div class="gct-filter-panel-main">
       <div class="gct-filter-panel-main-inner">
@@ -25,7 +25,7 @@
             @for (filter of filters; track filter; let i = $index) {
               <li
                 class="gct-filter-panel-main-menu-item-{{ filter.name }}"
-                [ngClass]="{ active: activePane === i }"
+                [class.active]="activePane === i"
               >
                 <button (click)="openPane(i)">
                   <div>
@@ -58,18 +58,18 @@
       @for (filter of filters; track filter; let i = $index) {
         <div
           class="gct-filter-panel-pane gct-filter-panel-pane-{{ filter.name }}"
-          [ngClass]="{ open: activePane === i }"
+          [class.open]="activePane === i"
         >
           <div class="gct-filter-panel-pane-inner">
             <div class="gct-filter-panel-pane-top">
               <button class="gct-filter-panel-close" (click)="close()">
-                <agora-svg-icon
+                <explorers-svg-icon
                   imagePath="agora-assets/icons/close.svg"
                   [width]="21"
                   [height]="21"
                   altText="close"
                 >
-                </agora-svg-icon>
+                </explorers-svg-icon>
               </button>
             </div>
             <div class="gct-filter-panel-pane-heading">
@@ -80,12 +80,12 @@
                 tooltipPosition="top"
                 tooltipStyleClass="tooltip gct-tooltip-filter"
               >
-                <agora-svg-icon
+                <explorers-svg-icon
                   imagePath="agora-assets/icons/info-circle.svg"
                   [width]="20"
                   [height]="20"
                   altText="info"
-                ></agora-svg-icon>
+                ></explorers-svg-icon>
               </div>
             </div>
             <ul>

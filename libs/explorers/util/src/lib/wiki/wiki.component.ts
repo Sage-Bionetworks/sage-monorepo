@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   DestroyRef,
@@ -20,7 +20,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs/operators';
 @Component({
   selector: 'explorers-wiki',
-  imports: [CommonModule, LoadingIconComponent],
+  imports: [LoadingIconComponent],
   templateUrl: './wiki.component.html',
   styleUrls: ['./wiki.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -35,7 +35,6 @@ export class WikiComponent implements OnInit {
 
   wikiParams = input<SynapseWikiParams>();
 
-  className = '';
   isLoading = true;
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
 
@@ -48,11 +47,13 @@ export class WikiComponent implements OnInit {
       const ownerId = this.wikiParams()?.ownerId;
       const wikiId = this.wikiParams()?.wikiId;
       if (!ownerId || !wikiId) {
-        this.logger.warn('WikiComponent: Wiki parameter(s) missing');
+        const error = new Error('WikiComponent: Wiki parameter(s) missing');
+        this.logger.trackError(error);
         return;
       }
 
       this.isLoading = true;
+      this.logger.log('WikiComponent: Loading wiki content', { ownerId, wikiId });
 
       this.synapseApiService
         .getWikiMarkdown(ownerId, wikiId)
@@ -69,22 +70,12 @@ export class WikiComponent implements OnInit {
               this.synapseApiService.renderHtml(wiki.markdown),
             );
           },
-          error: (err) => {
-            this.logger.error('WikiComponent: Failed to load wiki content', err);
-            this.logger.trackError(err);
+          error: () => {
             this.errorOverlayService.showError(
               'Failed to load wiki content. Please try again later.',
             );
           },
         });
     }
-  }
-
-  getClassName() {
-    const className = [this.className];
-    if (this.isLoading) {
-      className.push('loading');
-    }
-    return className;
   }
 }

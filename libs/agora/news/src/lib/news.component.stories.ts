@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { WikiComponent } from '@sagebionetworks/agora/shared';
+import { WikiComponent } from '@sagebionetworks/explorers/util';
 import { applicationConfig, moduleMetadata, type Meta, type StoryObj } from '@storybook/angular';
 import { NewsComponent } from './news.component';
 

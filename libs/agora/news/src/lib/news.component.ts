@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
-import { WikiComponent } from '@sagebionetworks/agora/shared';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { WikiComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'agora-news',
@@ -10,8 +11,7 @@ import { WikiComponent } from '@sagebionetworks/agora/shared';
   encapsulation: ViewEncapsulation.None,
 })
 export class NewsComponent {
-  wikiId = '611426';
-  className = 'news-page-content';
+  wikiParams: SynapseWikiParams = { ownerId: 'syn25913473', wikiId: '611426' };
 
   readonly heroBackgroundImagePath = DEFAULT_HERO_BACKGROUND_IMAGE_PATH;
 }

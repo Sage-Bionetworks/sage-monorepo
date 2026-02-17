@@ -59,7 +59,7 @@
         @for (column of columns; track column; let i = $index) {
           <th
             [style]="{ width: column.width + 'px' }"
-            [ngClass]="{ hidden: !selectedColumns.includes(column) }"
+            [class.hidden]="!selectedColumns.includes(column)"
           >
             <div class="tr">
               <div [pSortableColumn]="column.field" class="th">
@@ -76,7 +76,7 @@
         @for (column of columns; track column) {
           <td
             [style]="{ width: column.width + 'px' }"
-            [ngClass]="{ hidden: !selectedColumns.includes(column) }"
+            [class.hidden]="!selectedColumns.includes(column)"
           >
             {{ item[column.field] | capitalizeBoolean }}
           </td>
