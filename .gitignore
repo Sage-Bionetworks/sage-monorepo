@@ -153,3 +153,6 @@ vitest.config.*.timestamp*
 *.tfstate.*
 *.tfvars
 !*.tfvars.example
+
+# Sentry Config File
+.sentryclirc

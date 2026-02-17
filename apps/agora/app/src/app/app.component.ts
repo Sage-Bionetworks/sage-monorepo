@@ -93,4 +93,8 @@ export class AppComponent implements OnInit {
         error: () => (this.siteVersion = 'unknown'),
       });
   }
+
+  public throwTestError(): void {
+    throw new Error('Sentry Test Error');
+  }
 }
