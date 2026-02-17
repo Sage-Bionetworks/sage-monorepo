@@ -19,7 +19,6 @@ import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/syna
 import { providePrimeNG } from 'primeng/config';
 import { AgoraPreset } from './primeNGPreset';
 
-import { rollbarFactory, RollbarService } from '@sagebionetworks/agora/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { MessageService } from 'primeng/api';
 import { CustomUrlSerializer } from './app.custom-uri-serializer';
@@ -59,10 +58,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([httpErrorInterceptor])),
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    {
-      provide: RollbarService,
-      useFactory: rollbarFactory,
-    },
     provideMarkdown(),
     provideRouter(
       routes,
