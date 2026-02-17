@@ -18,6 +18,8 @@ tags:
     description: Operations about Comparison Tool UI configuration.
   - name: Data Version
     description: Operations about the data version.
+  - name: Nominated Target
+    description: Operations about Nominated Target results.
 paths:
   /comparison-tools/config:
     get:
@@ -42,6 +44,28 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ComparisonToolConfig'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/nominated-target:
+    get:
+      tags:
+        - Nominated Target
+      summary: Get nominated target results for comparison tools
+      description: Returns a paginated list of nominated target results for use in comparison tools.
+      operationId: getNominatedTargets
+      parameters:
+        - $ref: '#/components/parameters/nominatedTargetSearchQuery'
+      responses:
+        '200':
+          description: A paginated list of nominated target results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NominatedTargetsPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -201,6 +225,268 @@ components:
       required:
         - title
         - status
+    ItemFilterTypeQuery:
+      type: string
+      enum:
+        - include
+        - exclude
+      description: |
+        - include: Include only the specified items.
+        - exclude: Exclude the specified items.
+      default: include
+    NominatedTargetSearchQuery:
+      type: object
+      description: Nominated Target search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          description: The page number to return (index starts from 0).
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+          example: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+          maximum: 100
+          example: 100
+        items:
+          description: |
+            List of hgnc_symbol values to filter by.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - CFH
+            - SEMA3F
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          nullable: true
+        search:
+          description: |
+            Search by hgnc_symbol value (case-insensitive partial match) or by comma separated list of hgnc_symbol values (case-insensitive full matches).
+            Examples: 'pten,plec' (comma-separated list) or 'ple' (partial match). Only applied when
+            itemFilterType is 'exclude'.
+          type: string
+          nullable: true
+          example: pten,plec
+        cohortStudies:
+          description: Filter by cohort studies.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - ABA
+            - ACT
+        inputData:
+          description: Filter by input data types.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Behavior
+            - Clinical
+        initialNomination:
+          description: Filter by initial nomination year.
+          type: array
+          items:
+            type: integer
+          nullable: true
+          example:
+            - 2021
+            - 2022
+        nominatingTeams:
+          description: Filter by nominating teams.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - ASU
+            - Chang Lab
+        pharosClass:
+          description: Filter by Pharos class.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Tclin
+            - Tchem
+        programs:
+          description: Filter by programs.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - AMP-AD
+            - Community
+        totalNominations:
+          description: Filter by total nominations.
+          type: array
+          items:
+            type: integer
+          nullable: true
+          example:
+            - 1
+            - 2
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["total_nominations", "hgnc_symbol"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - total_nominations
+            - hgnc_symbol
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - -1
+            - 1
+      required:
+        - sortFields
+        - sortOrders
+    NominatedTarget:
+      type: object
+      description: Nominated Target object for comparison tools
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the nominated target object
+        ensembl_gene_id:
+          type: string
+          description: Ensembl gene ID for the nominated target
+          example: ENSG00000141510
+        hgnc_symbol:
+          type: string
+          description: HGNC gene symbol for the nominated target
+          example: TP53
+        total_nominations:
+          type: integer
+          description: Total number of nominations for this target
+          example: 5
+        initial_nomination:
+          type: integer
+          description: Year of the initial nomination for this target
+          example: 2021
+        nominating_teams:
+          type: array
+          items:
+            type: string
+          description: List of teams that nominated this target
+          example:
+            - Duke
+            - Emory
+        cohort_studies:
+          type: array
+          items:
+            type: string
+          description: List of cohort studies that nominated this target
+          example:
+            - ROSMAP
+            - Mayo
+        input_data:
+          type: array
+          items:
+            type: string
+          description: List of input data types that support this nomination
+          example:
+            - RNA
+            - Protein
+        programs:
+          type: array
+          items:
+            type: string
+          description: List of programs that nominated this target
+          example:
+            - AMP-AD
+            - Community
+        pharos_class:
+          type: string
+          description: Pharos target development level for this target
+          example: Tbio
+      required:
+        - _id
+        - ensembl_gene_id
+        - hgnc_symbol
+        - total_nominations
+        - initial_nomination
+        - nominating_teams
+        - cohort_studies
+        - input_data
+        - programs
+        - pharos_class
+    PageMetadata:
+      type: object
+      description: The metadata of a page.
+      properties:
+        number:
+          type: integer
+          description: The page number.
+          example: 0
+        size:
+          type: integer
+          description: The number of items in a single page.
+          example: 100
+        totalElements:
+          type: integer
+          format: int64
+          description: Total number of elements in the result set.
+          example: 250
+        totalPages:
+          type: integer
+          description: Total number of pages in the result set.
+          example: 3
+        hasNext:
+          type: boolean
+          description: Returns if there is a next page.
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Returns if there is a previous page.
+          example: false
+      required:
+        - number
+        - size
+        - totalElements
+        - totalPages
+        - hasNext
+        - hasPrevious
+    NominatedTargetsPage:
+      type: object
+      description: A page of nominated target objects.
+      properties:
+        nominatedTargets:
+          type: array
+          description: List of nominated targets in this page.
+          items:
+            $ref: '#/components/schemas/NominatedTarget'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - nominatedTargets
+        - page
     DataVersion:
       type: object
       description: Synapse data version
@@ -234,3 +520,12 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+  parameters:
+    nominatedTargetSearchQuery:
+      name: nominatedTargetSearchQuery
+      description: The search query used to find and filter nominated targets.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/NominatedTargetSearchQuery'

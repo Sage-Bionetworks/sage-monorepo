@@ -7,6 +7,7 @@ api/comparison-tool-config.service.ts
 api/data-version.service.ts
 api/distribution.service.ts
 api/gene.service.ts
+api/nominated-target.service.ts
 api/team.service.ts
 configuration.ts
 encoder.ts
@@ -31,13 +32,18 @@ model/gct-gene.ts
 model/gct-genes-list.ts
 model/gene-network-links.ts
 model/gene.ts
+model/item-filter-type-query.ts
 model/median-expression.ts
 model/metabolomics.ts
 model/models.ts
 model/neuropathologic-correlation.ts
 model/nominated-genes-list.ts
+model/nominated-target-search-query.ts
+model/nominated-target.ts
+model/nominated-targets-page.ts
 model/overall-scores-distribution.ts
 model/overall-scores.ts
+model/page-metadata.ts
 model/protein-differential-expression.ts
 model/proteomics-distribution.ts
 model/rna-differential-expression.ts
