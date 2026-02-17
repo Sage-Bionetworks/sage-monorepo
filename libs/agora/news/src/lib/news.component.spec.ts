@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NewsComponent } from './news.component';
 import { provideHttpClient } from '@angular/common/http';
+import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 
 describe('NewsComponent', () => {
   let component: NewsComponent;
@@ -10,7 +11,7 @@ describe('NewsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [],
-      providers: [provideHttpClient()],
+      providers: [provideHttpClient(), ...provideLoadingIconColors()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NewsComponent);

@@ -41,7 +41,7 @@
     "@opentelemetry/sdk-trace-web": "2.0.1",
     "@opentelemetry/semantic-conventions": "1.34.0",
     "@primeng/themes": "19.0.9",
-    "@sentry/angular": "^10.38.0",
+    "@sentry/angular": "10.38.0",
     "angular-google-tag-manager": "1.11.0",
     "compression": "1.8.0",
     "crossfilter2": "1.5.4",

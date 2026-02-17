@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +7,7 @@ import { Gene, GeneService, TargetNomination } from '@sagebionetworks/agora/api-
 import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
 import { GeneTableComponent } from '@sagebionetworks/agora/genes';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { ButtonModule } from 'primeng/button';
 
@@ -23,6 +25,9 @@ import { ButtonModule } from 'primeng/button';
   styleUrls: ['./nominated-targets.component.scss'],
 })
 export class NominatedTargetsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
+
   apiService = inject(GeneService);
 
   readonly heroBackgroundImagePath = DEFAULT_HERO_BACKGROUND_IMAGE_PATH;
@@ -62,65 +67,71 @@ export class NominatedTargetsComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.apiService.getNominatedGenes().subscribe((response) => {
-      if (!response.items) return;
-      const genes = response.items;
+    this.logger.log('NominatedTargetsComponent: Loading nominated genes');
 
-      genes.forEach((de: Gene) => {
-        let teamsArray: string[] = [];
-        let studyArray: string[] = [];
-        let programsArray: string[] = [];
-        let inputDataArray: string[] = [];
-        let initialNominationArray: number[] = [];
+    this.apiService
+      .getNominatedGenes()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        if (!response.items) return;
+        const genes = response.items;
 
-        if (de.total_nominations) {
-          if (!this.nominations.includes(de.total_nominations)) {
-            this.nominations.push(de.total_nominations);
-            this.nominations.sort();
+        genes.forEach((de: Gene) => {
+          let teamsArray: string[] = [];
+          let studyArray: string[] = [];
+          let programsArray: string[] = [];
+          let inputDataArray: string[] = [];
+          let initialNominationArray: number[] = [];
+
+          if (de.total_nominations) {
+            if (!this.nominations.includes(de.total_nominations)) {
+              this.nominations.push(de.total_nominations);
+              this.nominations.sort();
+            }
           }
-        }
 
-        // Handle TargetNomination fields
-        // First map all entries nested in the data to a new array
-        if (de.target_nominations?.length) {
-          teamsArray = de.target_nominations.map((nt: TargetNomination) => nt.team);
-          studyArray = this.removeNullAndEmptyStrings(
-            de.target_nominations.map((nt: TargetNomination) => nt.study),
-          );
-          programsArray = de.target_nominations.map((nt: TargetNomination) => nt.source);
-          inputDataArray = de.target_nominations.map((nt: TargetNomination) => nt.input_data);
+          // Handle TargetNomination fields
+          // First map all entries nested in the data to a new array
+          if (de.target_nominations?.length) {
+            teamsArray = de.target_nominations.map((nt: TargetNomination) => nt.team);
+            studyArray = this.removeNullAndEmptyStrings(
+              de.target_nominations.map((nt: TargetNomination) => nt.study),
+            );
+            programsArray = de.target_nominations.map((nt: TargetNomination) => nt.source);
+            inputDataArray = de.target_nominations.map((nt: TargetNomination) => nt.input_data);
 
-          initialNominationArray = de.target_nominations
-            .map((nt: TargetNomination) => nt.initial_nomination)
-            .filter((item) => item !== undefined);
-        }
+            initialNominationArray = de.target_nominations
+              .map((nt: TargetNomination) => nt.initial_nomination)
+              .filter((item) => item !== undefined);
+          }
 
-        // Check if there are any strings with commas inside,
-        // if there are separate those into new split strings
-        teamsArray = this.commaFlattenArray(teamsArray);
-        studyArray = this.commaFlattenArray(studyArray);
-        programsArray = this.commaFlattenArray(programsArray);
-        inputDataArray = this.commaFlattenArray(inputDataArray);
+          // Check if there are any strings with commas inside,
+          // if there are separate those into new split strings
+          teamsArray = this.commaFlattenArray(teamsArray);
+          studyArray = this.commaFlattenArray(studyArray);
+          programsArray = this.commaFlattenArray(programsArray);
+          inputDataArray = this.commaFlattenArray(inputDataArray);
 
-        // Populate targetNomination display fields
-        de.teams_display_value = this.getCommaSeparatedStringOfUniqueSortedValues(teamsArray);
-        de.study_display_value = this.getCommaSeparatedStringOfUniqueSortedValues(studyArray);
-        de.programs_display_value = this.getCommaSeparatedStringOfUniqueSortedValues(programsArray);
-        de.input_data_display_value =
-          this.getCommaSeparatedStringOfUniqueSortedValues(inputDataArray);
+          // Populate targetNomination display fields
+          de.teams_display_value = this.getCommaSeparatedStringOfUniqueSortedValues(teamsArray);
+          de.study_display_value = this.getCommaSeparatedStringOfUniqueSortedValues(studyArray);
+          de.programs_display_value =
+            this.getCommaSeparatedStringOfUniqueSortedValues(programsArray);
+          de.input_data_display_value =
+            this.getCommaSeparatedStringOfUniqueSortedValues(inputDataArray);
 
-        de.initial_nomination_display_value = initialNominationArray.length
-          ? Math.min(...initialNominationArray)
-          : undefined;
+          de.initial_nomination_display_value = initialNominationArray.length
+            ? Math.min(...initialNominationArray)
+            : undefined;
 
-        // Populate Druggability display fields
-        if (de.druggability) {
-          de.pharos_class_display_value = de.druggability.pharos_class;
-        }
+          // Populate Druggability display fields
+          if (de.druggability) {
+            de.pharos_class_display_value = de.druggability.pharos_class;
+          }
+        });
+
+        this.genes = genes;
       });
-
-      this.genes = genes;
-    });
   }
 
   removeNullAndEmptyStrings(items: (string | null)[]) {
