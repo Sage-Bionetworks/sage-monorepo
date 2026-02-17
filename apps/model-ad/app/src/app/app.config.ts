@@ -15,7 +15,7 @@ import {
   withComponentInputBinding,
   withInMemoryScrolling,
 } from '@angular/router';
-import { GlobalErrorHandler, provideExplorersConfig } from '@sagebionetworks/explorers/services';
+import { provideExplorersConfig } from '@sagebionetworks/explorers/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client';
 import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
@@ -26,6 +26,7 @@ import { CustomUrlSerializer } from './app.custom-url-serializer';
 import { routes } from './app.routes';
 import { VISUALIZATION_OVERVIEW_PANES } from './content/visualization-overview.content';
 import { ModelAdPreset } from './primeNGPreset';
+import * as Sentry from '@sentry/angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -67,6 +68,12 @@ export const appConfig: ApplicationConfig = {
     ),
     { provide: UrlSerializer, useClass: CustomUrlSerializer },
     MessageService,
-    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler(),
+    },
+    provideAppInitializer(() => {
+      inject(Sentry.TraceService);
+    }),
   ],
 };

@@ -2,6 +2,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import {
   APP_ID,
   ApplicationConfig,
+  ErrorHandler,
   inject,
   provideAppInitializer,
   provideZoneChangeDetection,
@@ -25,6 +26,7 @@ import { CustomUrlSerializer } from './app.custom-uri-serializer';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideMarkdown } from 'ngx-markdown';
+import * as Sentry from '@sentry/angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -68,5 +70,12 @@ export const appConfig: ApplicationConfig = {
     ),
     { provide: UrlSerializer, useClass: CustomUrlSerializer },
     MessageService,
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler(),
+    },
+    provideAppInitializer(() => {
+      inject(Sentry.TraceService);
+    }),
   ],
 };
