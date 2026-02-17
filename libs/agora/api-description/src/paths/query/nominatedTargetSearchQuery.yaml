@@ -1,0 +1,7 @@
+name: nominatedTargetSearchQuery
+description: The search query used to find and filter nominated targets.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../components/schemas/NominatedTargetSearchQuery.yaml

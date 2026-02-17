@@ -1,0 +1,61 @@
+type: object
+description: Nominated Target object for comparison tools
+properties:
+  _id:
+    type: string
+    description: Unique identifier for the nominated target object
+  ensembl_gene_id:
+    type: string
+    description: Ensembl gene ID for the nominated target
+    example: 'ENSG00000141510'
+  hgnc_symbol:
+    type: string
+    description: HGNC gene symbol for the nominated target
+    example: 'TP53'
+  total_nominations:
+    type: integer
+    description: Total number of nominations for this target
+    example: 5
+  initial_nomination:
+    type: integer
+    description: Year of the initial nomination for this target
+    example: 2021
+  nominating_teams:
+    type: array
+    items:
+      type: string
+    description: List of teams that nominated this target
+    example: ['Duke', 'Emory']
+  cohort_studies:
+    type: array
+    items:
+      type: string
+    description: List of cohort studies that nominated this target
+    example: ['ROSMAP', 'Mayo']
+  input_data:
+    type: array
+    items:
+      type: string
+    description: List of input data types that support this nomination
+    example: ['RNA', 'Protein']
+  programs:
+    type: array
+    items:
+      type: string
+    description: List of programs that nominated this target
+    example: ['AMP-AD', 'Community']
+  pharos_class:
+    type: string
+    description: Pharos target development level for this target
+    example: 'Tbio'
+required:
+  - _id
+  - ensembl_gene_id
+  - hgnc_symbol
+  - total_nominations
+  - initial_nomination
+  - nominating_teams
+  - cohort_studies
+  - input_data
+  - programs
+  - pharos_class

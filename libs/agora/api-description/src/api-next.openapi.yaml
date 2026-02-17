@@ -18,8 +18,12 @@ tags:
     description: Operations about Comparison Tool UI configuration.
   - name: Data Version
     description: Operations about the data version.
+  - name: Nominated Target
+    description: Operations about Nominated Target results.
 paths:
   /comparison-tools/config:
     $ref: paths/comparison-tools/config.yaml
+  /comparison-tools/nominated-target:
+    $ref: paths/comparison-tools/nominated-target.yaml
   /data-version:
     $ref: paths/data-version.yaml
