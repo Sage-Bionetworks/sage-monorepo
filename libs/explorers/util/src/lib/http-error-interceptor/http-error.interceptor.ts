@@ -50,7 +50,6 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 
       // Log error for debugging (also sends to Sentry)
       logger.error(`HTTP Error: ${errorMessage}`, error);
-      logger.trackError(error);
 
       // Show error overlay for all errors so users know when requests fail,
       // but not if the user is already on the error page.

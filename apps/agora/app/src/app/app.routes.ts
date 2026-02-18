@@ -26,6 +26,7 @@ export const routes: Route[] = [
         'Agora is funded by the National Institute on Aging, and is developed and maintained by Sage Bionetworks.',
       heroTitle: 'About',
       heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+      className: 'about-page-content',
       wikiParams: {
         ownerId: 'syn25913473',
         wikiId: '612058',
@@ -39,8 +40,9 @@ export const routes: Route[] = [
     data: {
       title: 'News | Agora Releases',
       description: "See what's new in Agora, from new features to our latest data updates.",
-      heroTitle: "What's New in Agora",
+      heroTitle: 'Agora News',
       heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+      className: 'news-page-content',
       wikiParams: {
         ownerId: 'syn25913473',
         wikiId: '611426',

@@ -1,6 +1,9 @@
-<div class="wiki" [class.loading]="isLoading">
-  <div class="wiki-loading">
-    <explorers-loading-icon />
-  </div>
-  <div class="wiki-inner" [innerHtml]="safeHtml"></div>
+<div class="wiki" [class]="className()">
+  @if (isLoading()) {
+    <div class="loading-icon">
+      <explorers-loading-icon />
+    </div>
+  } @else {
+    <div class="wiki-inner" [innerHtml]="safeHtml"></div>
+  }
 </div>

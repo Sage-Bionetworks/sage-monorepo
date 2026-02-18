@@ -6,6 +6,7 @@ import {
   input,
   OnInit,
   PLATFORM_ID,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -34,8 +35,9 @@ export class WikiComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   wikiParams = input<SynapseWikiParams>();
+  className = input<string>('');
 
-  isLoading = true;
+  isLoading = signal(true);
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
 
   ngOnInit() {
@@ -47,12 +49,11 @@ export class WikiComponent implements OnInit {
       const ownerId = this.wikiParams()?.ownerId;
       const wikiId = this.wikiParams()?.wikiId;
       if (!ownerId || !wikiId) {
-        const error = new Error('WikiComponent: Wiki parameter(s) missing');
-        this.logger.trackError(error);
+        this.logger.error('WikiComponent: Wiki parameter(s) missing');
         return;
       }
 
-      this.isLoading = true;
+      this.isLoading.set(true);
       this.logger.log('WikiComponent: Loading wiki content', { ownerId, wikiId });
 
       this.synapseApiService
@@ -60,7 +61,7 @@ export class WikiComponent implements OnInit {
         .pipe(
           takeUntilDestroyed(this.destroyRef),
           finalize(() => {
-            this.isLoading = false;
+            this.isLoading.set(false);
           }),
         )
         .subscribe({
