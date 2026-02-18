@@ -48,7 +48,7 @@ runs:
 
     - name: Install the Dev Container CLI
       shell: bash
-      run: npm install -g @devcontainers/cli@0.72.0
+      run: npm install -g @devcontainers/cli@0.83.1
 
     - name: Start the dev container
       env:
