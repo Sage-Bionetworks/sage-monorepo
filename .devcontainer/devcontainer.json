@@ -1,6 +1,6 @@
 {
   "name": "Sage Monorepo Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-093fd166d46cf813e81450b0015fe0638afaa5e7",
+  "image": "ghcr.io/rrchai/sage-monorepo-devcontainer:test",
   "containerEnv": {
     "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}",
     "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
