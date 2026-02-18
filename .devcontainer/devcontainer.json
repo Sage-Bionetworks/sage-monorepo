@@ -1,30 +1,7 @@
 {
   "name": "Sage Monorepo Dev Container",
-  "build": {
-    "dockerfile": "../.github/.devcontainer/Dockerfile"
-  },
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.12.4": {
-      "version": "28.3.3",
-      "installDockerComposeSwitch": false,
-      "azureDnsAutoDetection": false
-    },
-    "ghcr.io/devcontainers/features/java:1.6.3": {
-      "version": "21.0.8-ms",
-      "additionalVersions": ["21.0.8-graal"]
-    },
-    "ghcr.io/devcontainers/features/go:1.3.2": {
-      "version": "1.25.1",
-      "golangciLintVersion": "2.5.0"
-    },
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1.2.2": {
-      "version": "1.34.1",
-      "helm": "3.19.0",
-      "minikube": "1.37.0"
-    }
-  },
+  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-db91d6849b048b6ef69472cdeb80caad262b3e68",
   "containerEnv": {
-    "AZURE_DNS_AUTO_DETECTION": "${localEnv:AZURE_DNS_AUTO_DETECTION}",
     "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}",
     "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
     "NX_BASE": "${localEnv:NX_BASE}",
@@ -37,6 +14,7 @@
     "SONAR_TOKEN": "${localEnv:SONAR_TOKEN}",
     "UV_CACHE_DIR": "${containerWorkspaceFolder}/.cache/uv"
   },
+  "features": {},
   "forwardPorts": [
     2000, 2432, 3333, 3334, 4200, 4211, 4400, 4401, 4402, 5200, 5601, 8010, 8071, 8000, 8080, 8082,
     8084, 8085, 8086, 8087, 8091, 8100, 8111, 8112, 8113, 8114, 8115, 8116, 8200, 8500, 8501, 8502,
@@ -232,7 +210,6 @@
     "onAutoForward": "silent"
   },
   "shutdownAction": "stopContainer",
-  "remoteUser": "ubuntu",
   "runArgs": ["--name", "sage-monorepo-devcontainer"],
   "customizations": {
     "vscode": {
