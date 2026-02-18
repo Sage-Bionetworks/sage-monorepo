@@ -10,7 +10,8 @@
   },
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.12.4": {
-      "version": "28.3.3",
+      "version": "27.3.2",
+      "moby": false,
       "installDockerComposeSwitch": false,
       "azureDnsAutoDetection": false
     },
