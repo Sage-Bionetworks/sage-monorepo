@@ -10,9 +10,8 @@
   },
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.12.4": {
-      "installDockerComposeSwitch": false,
-      "moby": false,
-      "version": "28.5.2"
+      "version": "28.3.3",
+      "installDockerComposeSwitch": false
     },
     "ghcr.io/devcontainers/features/java:1.6.3": {
       "version": "21.0.8-ms",
