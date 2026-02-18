@@ -50,6 +50,28 @@ runs:
       shell: bash
       run: npm install -g @devcontainers/cli@0.72.0
 
+    - name: Prepare Docker-in-Docker environment
+      shell: bash
+      run: |
+        echo "=== Loading required kernel modules ==="
+        sudo modprobe ip_tables
+        sudo modprobe ip6_tables
+        sudo modprobe xt_conntrack
+
+        echo "=== Configuring iptables to use legacy mode ==="
+        sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+        sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+
+        echo "=== Verifying configuration ==="
+        echo "Loaded kernel modules:"
+        lsmod | grep -E 'ip_tables|ip6_tables|xt_conntrack' || true
+        echo ""
+        echo "iptables configuration:"
+        update-alternatives --display iptables
+        echo ""
+        echo "ip6tables configuration:"
+        update-alternatives --display ip6tables
+
     - name: Start the dev container
       env:
         DEVCONTAINER_USER: ${{ inputs.devcontainer-user }}
