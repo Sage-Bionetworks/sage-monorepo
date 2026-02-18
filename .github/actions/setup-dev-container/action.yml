@@ -54,6 +54,7 @@ runs:
       env:
         DEVCONTAINER_USER: ${{ inputs.devcontainer-user }}
         NX_CI_EXECUTION_ENV: 'ubuntu-22.04'
+        AZURE_DNS_AUTO_DETECTION: 'false'
       shell: bash
       run: |
         mkdir -p \
