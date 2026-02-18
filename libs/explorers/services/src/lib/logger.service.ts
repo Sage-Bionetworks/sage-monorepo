@@ -3,36 +3,38 @@ import * as Sentry from '@sentry/angular';
 
 @Injectable({ providedIn: 'root' })
 export class LoggerService {
-  log(message: string, ...args: any[]) {
+  log(message: string, data?: Record<string, unknown>) {
     if (isDevMode()) {
-      console.log('[LOG]', message, ...args);
+      console.log('[LOG]', message, data);
     }
     Sentry.addBreadcrumb({
       message,
       level: 'info',
-      data: args.length ? { args } : undefined,
+      data,
     });
   }
 
-  warn(message: string, ...args: any[]) {
-    console.warn('[WARN]', message, ...args);
+  warn(message: string, data?: Record<string, unknown>) {
+    console.warn('[WARN]', message, data);
     Sentry.addBreadcrumb({
       message,
       level: 'warning',
-      data: args.length ? { args } : undefined,
+      data,
     });
   }
 
-  error(message: string, ...args: any[]) {
-    console.error('[ERROR]', message, ...args);
-    Sentry.addBreadcrumb({
-      message,
-      level: 'error',
-      data: args.length ? { args } : undefined,
-    });
-  }
+  /**
+   * Log an error message and send it to Sentry. If an error object is provided,
+   * it will be captured as an exception. Otherwise, the message is captured
+   * as a Sentry event.
+   */
+  error(message: string, error?: unknown) {
+    console.error('[ERROR]', message, error);
 
-  trackError(err: any) {
-    Sentry.captureException(err);
+    if (error) {
+      Sentry.captureException(error);
+    } else {
+      Sentry.captureMessage(message, 'error');
+    }
   }
 }

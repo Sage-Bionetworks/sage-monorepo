@@ -31,6 +31,8 @@ import { OrgSagebionetworksRepoModelAuthAccessTokenRecord } from '../model/org-s
 // @ts-ignore
 import { OrgSagebionetworksRepoModelAuthAccessTokenRecordList } from '../model/org-sagebionetworks-repo-model-auth-access-token-record-list';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelAuthAccessTokenResponse } from '../model/org-sagebionetworks-repo-model-auth-access-token-response';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelAuthAuthenticatedOn } from '../model/org-sagebionetworks-repo-model-auth-authenticated-on';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelAuthChangePasswordInterface } from '../model/org-sagebionetworks-repo-model-auth-change-password-interface';
@@ -497,6 +499,112 @@ export class AuthenticationServicesService {
       transferCache: localVarTransferCache,
       reportProgress: reportProgress,
     });
+  }
+
+  /**
+   * @param realm
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getAuthV1AnonymousToken(
+    realm: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelAuthAccessTokenResponse>;
+  public getAuthV1AnonymousToken(
+    realm: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAuthAccessTokenResponse>>;
+  public getAuthV1AnonymousToken(
+    realm: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAuthAccessTokenResponse>>;
+  public getAuthV1AnonymousToken(
+    realm: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (realm === null || realm === undefined) {
+      throw new Error(
+        'Required parameter realm was null or undefined when calling getAuthV1AnonymousToken.',
+      );
+    }
+
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (realm !== undefined && realm !== null) {
+      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>realm, 'realm');
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/auth/v1/anonymousToken`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelAuthAccessTokenResponse>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        params: localVarQueryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
   }
 
   /**

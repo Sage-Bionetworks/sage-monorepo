@@ -30,10 +30,15 @@ export interface OrgSagebionetworksRepoModelOauthOAuthAccountCreationRequest {
   userName?: string;
 }
 export namespace OrgSagebionetworksRepoModelOauthOAuthAccountCreationRequest {
-  export type ProviderEnum = 'GOOGLE_OAUTH_2_0' | 'ORCID' | 'ARCUS_BIOSCIENCES';
+  export type ProviderEnum =
+    | 'GOOGLE_OAUTH_2_0'
+    | 'ORCID'
+    | 'ARCUS_BIOSCIENCES'
+    | 'SAGE_BIONETWORKS';
   export const ProviderEnum = {
     GoogleOauth20: 'GOOGLE_OAUTH_2_0' as ProviderEnum,
     Orcid: 'ORCID' as ProviderEnum,
     ArcusBiosciences: 'ARCUS_BIOSCIENCES' as ProviderEnum,
+    SageBionetworks: 'SAGE_BIONETWORKS' as ProviderEnum,
   };
 }
