@@ -48,7 +48,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
     catchError((error: HttpErrorResponse) => {
       const errorMessage = buildErrorMessage(error);
 
-      // Log error for debugging
+      // Log error for debugging (also sends to Sentry)
       logger.error(`HTTP Error: ${errorMessage}`, error);
 
       // Show error overlay for all errors so users know when requests fail,

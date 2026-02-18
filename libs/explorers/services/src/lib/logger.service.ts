@@ -1,23 +1,40 @@
 import { Injectable, isDevMode } from '@angular/core';
+import * as Sentry from '@sentry/angular';
 
 @Injectable({ providedIn: 'root' })
 export class LoggerService {
-  log(message: string, ...args: any[]) {
+  log(message: string, data?: Record<string, unknown>) {
     if (isDevMode()) {
-      console.log('[LOG]', message, ...args);
+      console.log('[LOG]', message, data);
     }
+    Sentry.addBreadcrumb({
+      message,
+      level: 'info',
+      data,
+    });
   }
 
-  warn(message: string, ...args: any[]) {
-    console.warn('[WARN]', message, ...args);
+  warn(message: string, data?: Record<string, unknown>) {
+    console.warn('[WARN]', message, data);
+    Sentry.addBreadcrumb({
+      message,
+      level: 'warning',
+      data,
+    });
   }
 
-  error(message: string, ...args: any[]) {
-    console.error('[ERROR]', message, ...args);
-  }
+  /**
+   * Log an error message and send it to Sentry. If an error object is provided,
+   * it will be captured as an exception. Otherwise, the message is captured
+   * as a Sentry event.
+   */
+  error(message: string, error?: unknown) {
+    console.error('[ERROR]', message, error);
 
-  // Send to remote server
-  trackError(err: any) {
-    // TODO implement remote logging https://sagebionetworks.jira.com/browse/MG-230
+    if (error) {
+      Sentry.captureException(error);
+    } else {
+      Sentry.captureMessage(message, 'error');
+    }
   }
 }

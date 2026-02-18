@@ -84,6 +84,7 @@ export * from './org-sagebionetworks-repo-model-auth-access-token-generation-req
 export * from './org-sagebionetworks-repo-model-auth-access-token-generation-response';
 export * from './org-sagebionetworks-repo-model-auth-access-token-record';
 export * from './org-sagebionetworks-repo-model-auth-access-token-record-list';
+export * from './org-sagebionetworks-repo-model-auth-access-token-response';
 export * from './org-sagebionetworks-repo-model-auth-access-token-state';
 export * from './org-sagebionetworks-repo-model-auth-authenticated-on';
 export * from './org-sagebionetworks-repo-model-auth-authentication-receipt-token';

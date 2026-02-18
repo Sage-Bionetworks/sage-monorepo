@@ -2,6 +2,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import {
   APP_ID,
   ApplicationConfig,
+  ErrorHandler,
   inject,
   provideAppInitializer,
   provideZoneChangeDetection,
@@ -19,13 +20,13 @@ import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/syna
 import { providePrimeNG } from 'primeng/config';
 import { AgoraPreset } from './primeNGPreset';
 
-import { rollbarFactory, RollbarService } from '@sagebionetworks/agora/services';
 import { httpErrorInterceptor } from '@sagebionetworks/explorers/util';
 import { MessageService } from 'primeng/api';
 import { CustomUrlSerializer } from './app.custom-uri-serializer';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideMarkdown } from 'ngx-markdown';
+import * as Sentry from '@sentry/angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -59,10 +60,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([httpErrorInterceptor])),
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    {
-      provide: RollbarService,
-      useFactory: rollbarFactory,
-    },
     provideMarkdown(),
     provideRouter(
       routes,
@@ -73,5 +70,12 @@ export const appConfig: ApplicationConfig = {
     ),
     { provide: UrlSerializer, useClass: CustomUrlSerializer },
     MessageService,
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler(),
+    },
+    provideAppInitializer(() => {
+      inject(Sentry.TraceService);
+    }),
   ],
 };
