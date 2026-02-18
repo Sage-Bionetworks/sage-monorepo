@@ -2,6 +2,7 @@
   "name": "Sage Monorepo Dev Container",
   "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-db91d6849b048b6ef69472cdeb80caad262b3e68",
   "containerEnv": {
+    "AZURE_DNS_AUTO_DETECTION": "${localEnv:AZURE_DNS_AUTO_DETECTION}",
     "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}",
     "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
     "NX_BASE": "${localEnv:NX_BASE}",
