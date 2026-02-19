@@ -66,6 +66,9 @@
                 [linkUrl]="cellData?.link_url || column.link_url"
               />
             }
+            @if (columnType === 'numeric') {
+              {{ cellData }}
+            }
           </td>
         }
       </tr>
