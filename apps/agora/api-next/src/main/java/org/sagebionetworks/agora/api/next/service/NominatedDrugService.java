@@ -22,7 +22,7 @@ public class NominatedDrugService {
   private final NominatedDrugRepository repository;
   private final NominatedDrugMapper nominatedDrugMapper;
 
-  @Cacheable
+  @Cacheable(key = "'nominatedDrug'")
   public List<NominatedDrugDto> listNominatedDrugs() {
     List<NominatedDrugDocument> documents = repository.findAll();
 
