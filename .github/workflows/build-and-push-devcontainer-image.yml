@@ -114,8 +114,8 @@ jobs:
           done
 
           # Build the image
-          npm install -g @devcontainers/cli@0.72.0 \
-            --integrity="sha512-vDv33/I5POw1wDJmcMbOCTWd3xTk4bbVruJ9Qgr5eiLSl1OsfufN5WfeTZqgK1HeqrNqtH/xPyCKB2LXDNIv3w=="
+          npm install -g @devcontainers/cli@0.83.1 \
+            --integrity="sha512-GJx9XxwF9+KxzXeseB1rcGcik6S5oVMSYZiRRZB3ASR0OH8M/S0/k6p2wC1kjPt7jJ9p3qEYBRCx2JhHDdHhkg=="
           devcontainer build \
             --workspace-folder "${DEVCONTAINER_WORKSPACE_FOLDER}" \
             ${images}
