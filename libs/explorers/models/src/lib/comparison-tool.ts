@@ -93,7 +93,12 @@ export interface ComparisonToolConfigFilter {
   values: string[];
 }
 
-export type ComparisonToolPage = 'Model Overview' | 'Gene Expression' | 'Disease Correlation';
+export type ComparisonToolPage =
+  | 'Model Overview'
+  | 'Gene Expression'
+  | 'Disease Correlation'
+  | 'Nominated Targets'
+  | 'Nominated Drugs';
 
 export type ComparisonToolConfigColumnType =
   | 'text'
