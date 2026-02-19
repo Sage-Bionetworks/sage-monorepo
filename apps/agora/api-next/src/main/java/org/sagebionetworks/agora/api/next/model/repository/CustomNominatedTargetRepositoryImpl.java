@@ -39,7 +39,7 @@ public class CustomNominatedTargetRepositoryImpl implements CustomNominatedTarge
   private static final String COLLECTION_NAME = "nominatedtargets";
   private static final String PRIMARY_FIELD = "hgnc_symbol";
 
-  /** Array fields that need $size computation for sorting. */
+  /** Array fields that need computed fields for custom sort handling */
   private static final Set<String> ARRAY_FIELDS = Set.of(
     "nominating_teams",
     "cohort_studies",
@@ -73,7 +73,7 @@ public class CustomNominatedTargetRepositoryImpl implements CustomNominatedTarge
     // $match first to filter documents
     operations.add(Aggregation.match(matchCriteria));
 
-    // Add computed sort fields for arrays (using $size) and strings (using $toLower)
+    // Add computed sort fields for arrays
     buildSortFields(operations, pageable.getSort());
 
     // Add $sort using computed fields
