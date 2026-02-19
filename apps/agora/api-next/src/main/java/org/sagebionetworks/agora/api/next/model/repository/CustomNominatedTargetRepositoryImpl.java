@@ -28,8 +28,8 @@ import org.springframework.stereotype.Repository;
  * Custom repository implementation using MongoDB aggregation pipeline.
  *
  * <p>Uses aggregation to support sorting by array fields. MongoDB cannot sort by multiple
- * array fields simultaneously ("parallel arrays"), so we compute scalar sort fields by
- * sorting array elements and concatenating them into a string for lexicographic comparison.
+ * array fields simultaneously ("parallel arrays"), so we compute scalar sort fields for
+ * lexicographic comparison.
  */
 @Repository
 @RequiredArgsConstructor
