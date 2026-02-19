@@ -1,0 +1,53 @@
+# Reusable workflow: Deploys the full GitHub Pages site (MkDocs documentation + all storybooks).
+# Called by build-deploy-docs.yml when docs or composite storybook is affected.
+
+name: Deploy Docs
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Build MkDocs site
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && uv run mkdocs build --strict"
+
+      - name: Build all storybooks
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && nx build-static-composition storybook"
+
+      - name: Assemble site
+        run: |
+          # Copy storybook into docs site
+          mkdir -p site/storybook
+          cp -r dist/storybook/storybook/* site/storybook/
+
+      - name: Configure Git credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Deploy to GitHub Pages
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && uv run ghp-import -n -p -f -m 'Deploy full site (docs + all storybooks)' site"
+
+      - name: Remove the dev container
+        if: always()
+        run: docker rm -f sage_devcontainer

@@ -1,6 +1,6 @@
+import type { StorybookConfig } from '@storybook/angular';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
-import type { StorybookConfig } from '@storybook/angular';
 
 const require = createRequire(import.meta.url);
 
@@ -12,8 +12,8 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: [
-    { from: '../../../explorers/assets', to: '/explorers-assets' },
-    { from: '../../../agora/assets', to: '/agora-assets' },
+    { from: '../../../explorers/assets', to: 'explorers-assets' },
+    { from: '../../../agora/assets', to: 'agora-assets' },
   ],
 };
 
