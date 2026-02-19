@@ -22,4 +22,11 @@ public final class CacheNames {
    * Key format: Static key "comparisonToolConfig"
    */
   public static final String COMPARISON_TOOL_CONFIG = "comparisonToolConfig";
+
+  /**
+   * Cache for nominated drug queries.
+   * Stores the list of nominated drugs.
+   * Key format: Static key "nominatedDrug"
+   */
+  public static final String NOMINATED_DRUG = "nominatedDrug";
 }
