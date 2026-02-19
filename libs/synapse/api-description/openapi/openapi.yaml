@@ -1542,6 +1542,27 @@ paths:
             application/json:
               schema:
                 type: object
+  /auth/v1/oauth2/introspect:
+    post:
+      tags:
+        - OpenID Connect Services
+      operationId: post-/auth/v1/oauth2/introspect
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.oauth.OAuthTokenIntrospectionRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.oauth.OAuthTokenIntrospectionResponse'
   /auth/v1/oauth2/audit/grantedClients:
     get:
       tags:
@@ -4510,7 +4531,7 @@ paths:
         - bearerAuth: []
       responses:
         '200':
-          description: The UserGroups for individuals
+          description: The UserGroups (not individuals)
           content:
             application/json:
               schema:
@@ -8067,6 +8088,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridCsvImportResponse'
+  /repo/v1/grid/synchronize/async/start:
+    post:
+      tags:
+        - Grid Services
+      operationId: post-/repo/v1/grid/synchronize/async/start
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.SynchronizeGridRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: The async job ID to track the synchronization progress
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
+  /repo/v1/grid/synchronize/async/get/{asyncToken}:
+    get:
+      tags:
+        - Grid Services
+      operationId: get-/repo/v1/grid/synchronize/async/get/{asyncToken}
+      parameters:
+        - name: asyncToken
+          in: path
+          required: true
+          description: The job ID returned from the start request
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The synchronization results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.SynchronizeGridResponse'
   /repo/v1/userProfile:
     get:
       tags:
@@ -8309,6 +8372,8 @@ paths:
                         ,</p>
           schema:
             type: integer
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Auto-generated description
@@ -8328,6 +8393,8 @@ paths:
             schema:
               $ref: '#/components/schemas/org.sagebionetworks.repo.model.principal.AliasList'
         required: true
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: |-
@@ -20590,6 +20657,7 @@ components:
           type: string
       description: The body of an Asynchronous job request.
       oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.SynchronizeGridRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.DownloadFromTableRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListPackageRequest'
@@ -24760,6 +24828,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.UploadToTableResult'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.GetValidationSchemaResponse'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.SynchronizeGridResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.report.DownloadStorageReportResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.DownloadFromGridResult'
@@ -25659,6 +25728,47 @@ components:
             description: JSON Schema for a list of suggested replacements for a search term
           description: The list of suggestion for the queried search term.
       description: JSON schema for a suggestion result.
+    org.sagebionetworks.repo.model.oauth.OAuthTokenIntrospectionResponse:
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: Whether the token is active
+        scope:
+          type: string
+          description: A JSON string containing a space-separated list of scopes associated with this token, in the format described in Section 3.3 of OAuth 2.0
+        aud:
+          type: string
+          description: The audience (realm or OAuth Client) the token was issued for
+        sub:
+          type: string
+          description: Subject identifier. For a first-party access token, this is the Synapse user ID. For tokens issued to OAuth Clients, this is a PPID (Pairwise Pseudonymous Identifier)
+        token_type:
+          type: string
+          enum:
+            - OIDC_ACCESS_TOKEN
+            - OIDC_ID_TOKEN
+            - PERSONAL_ACCESS_TOKEN
+            - WEBHOOK_MESSAGE_TOKEN
+        exp:
+          type: integer
+          description: Expiration time (seconds since epoch)
+          format: int32
+        iat:
+          type: integer
+          description: Issued at time (seconds since epoch)
+          format: int32
+        auth_time:
+          type: integer
+          description: Time of user authentication (seconds since epoch)
+          format: int32
+        iss:
+          type: string
+          description: Token issuer
+        jti:
+          type: string
+          description: Unique token identifier
+      description: Response from token introspection conforming to <a href="https://tools.ietf.org/html/rfc7662">RFC 7662</a>.
     org.sagebionetworks.repo.model.subscription.SubscriptionRequest:
       type: object
       properties:
@@ -28257,6 +28367,19 @@ components:
           description: The total run time (MS) of the last processing job.
           format: int32
       description: Object used to track the status of a Table.
+    org.sagebionetworks.repo.model.grid.SynchronizeGridRequest:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.SynchronizeGridRequest
+        gridSessionId:
+          type: string
+          description: The ID of the grid session to synchronize.
+      description: Start a new job to synchronize a grid session with its source data.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.grid.query.RowIsValidFilter:
       type: object
       properties:
@@ -33640,6 +33763,17 @@ components:
       description: Response for the <a href="${org.sagebionetworks.repo.model.table.ViewColumnModelRequest}">ViewColumnModelRequest</a> containing a page of suggested column models
       required:
         - concreteType
+    org.sagebionetworks.repo.model.oauth.OAuthTokenIntrospectionRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          description: The access token to introspect
+        max_age:
+          type: integer
+          description: Optional maximum authentication age in seconds. If the user's authentication occurred more than this many seconds ago, the token is considered inactive.
+          format: int32
+      description: Request to introspect an OAuth 2.0 access token, loosely based on <a href="https://tools.ietf.org/html/rfc7662">RFC 7662</a>.
     org.sagebionetworks.repo.model.download.QueryResponseDetails:
       type: object
       properties:
@@ -34651,6 +34785,9 @@ components:
         userinfo_endpoint:
           type: string
           description: URL of the Synapse UserInfo Endpoint
+        introspection_endpoint:
+          type: string
+          description: URL of the Synapse OAuth 2.0 Token Introspection Endpoint
         jwks_uri:
           type: string
           description: URL of the Synapse JSON Web Key Set [JWK] document.
@@ -34898,6 +35035,24 @@ components:
           type: boolean
           description: true iff the user has permissions to review data access submissions on at least one access requirement (This is always true for an ACT member)
       description: JSON schema for UserProfile POJO
+    org.sagebionetworks.repo.model.grid.SynchronizeGridResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.SynchronizeGridResponse
+        gridSessionId:
+          type: string
+          description: The ID of the grid session to synchronize.
+        errorMessages:
+          type: array
+          items:
+            type: string
+          description: Any error messages generated during the synchronization process.
+      description: The result of a job to synchronize a grid session with its source data.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.BaseError:
       type: object
       properties:
@@ -34912,6 +35067,13 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.auth.TokenType:
+      type: string
+      enum:
+        - OIDC_ACCESS_TOKEN
+        - OIDC_ID_TOKEN
+        - PERSONAL_ACCESS_TOKEN
+        - WEBHOOK_MESSAGE_TOKEN
     org.sagebionetworks.repo.model.migration.BackupTypeRangeRequest:
       type: object
       properties:

@@ -115,6 +115,7 @@ export * from './org-sagebionetworks-repo-model-auth-terms-of-service-requiremen
 export * from './org-sagebionetworks-repo-model-auth-terms-of-service-sign-request';
 export * from './org-sagebionetworks-repo-model-auth-terms-of-service-state';
 export * from './org-sagebionetworks-repo-model-auth-terms-of-service-status';
+export * from './org-sagebionetworks-repo-model-auth-token-type';
 export * from './org-sagebionetworks-repo-model-auth-totp-secret';
 export * from './org-sagebionetworks-repo-model-auth-totp-secret-activation-request';
 export * from './org-sagebionetworks-repo-model-auth-two-factor-auth-disable-request';
@@ -442,6 +443,8 @@ export * from './org-sagebionetworks-repo-model-grid-query-select-item';
 export * from './org-sagebionetworks-repo-model-grid-query-select-selection';
 export * from './org-sagebionetworks-repo-model-grid-query-validation-operator';
 export * from './org-sagebionetworks-repo-model-grid-replica-selection-model';
+export * from './org-sagebionetworks-repo-model-grid-synchronize-grid-request';
+export * from './org-sagebionetworks-repo-model-grid-synchronize-grid-response';
 export * from './org-sagebionetworks-repo-model-grid-update-grid-request';
 export * from './org-sagebionetworks-repo-model-grid-update-grid-response';
 export * from './org-sagebionetworks-repo-model-grid-update-grid-update-request';
@@ -552,6 +555,8 @@ export * from './org-sagebionetworks-repo-model-oauth-o-auth-refresh-token-infor
 export * from './org-sagebionetworks-repo-model-oauth-o-auth-response-type';
 export * from './org-sagebionetworks-repo-model-oauth-o-auth-scope';
 export * from './org-sagebionetworks-repo-model-oauth-o-auth-scope-list';
+export * from './org-sagebionetworks-repo-model-oauth-o-auth-token-introspection-request';
+export * from './org-sagebionetworks-repo-model-oauth-o-auth-token-introspection-response';
 export * from './org-sagebionetworks-repo-model-oauth-o-auth-token-revocation-request';
 export * from './org-sagebionetworks-repo-model-oauth-o-auth-url-request';
 export * from './org-sagebionetworks-repo-model-oauth-o-auth-url-response';
