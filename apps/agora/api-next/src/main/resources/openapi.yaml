@@ -537,7 +537,7 @@ components:
             type: string
           type: array
         cohort_studies:
-          description: List of cohort studies that nominated this target
+          description: List of cohort studies associated with this target
           example:
             - ROSMAP
             - Mayo
@@ -545,7 +545,7 @@ components:
             type: string
           type: array
         input_data:
-          description: List of input data types that support this nomination
+          description: List of input data types associated with this target
           example:
             - RNA
             - Protein
@@ -553,7 +553,7 @@ components:
             type: string
           type: array
         programs:
-          description: List of programs that nominated this target
+          description: List of programs associated with this target
           example:
             - AMP-AD
             - Community

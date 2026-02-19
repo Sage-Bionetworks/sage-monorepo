@@ -30,19 +30,19 @@ properties:
     type: array
     items:
       type: string
-    description: List of cohort studies that nominated this target
+    description: List of cohort studies associated with this target
     example: ['ROSMAP', 'Mayo']
   input_data:
     type: array
     items:
       type: string
-    description: List of input data types that support this nomination
+    description: List of input data types associated with this target
     example: ['RNA', 'Protein']
   programs:
     type: array
     items:
       type: string
-    description: List of programs that nominated this target
+    description: List of programs associated with this target
     example: ['AMP-AD', 'Community']
   pharos_class:
     type: string

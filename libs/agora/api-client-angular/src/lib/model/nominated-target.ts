@@ -37,15 +37,15 @@ export interface NominatedTarget {
    */
   nominating_teams: Array<string>;
   /**
-   * List of cohort studies that nominated this target
+   * List of cohort studies associated with this target
    */
   cohort_studies: Array<string>;
   /**
-   * List of input data types that support this nomination
+   * List of input data types associated with this target
    */
   input_data: Array<string>;
   /**
-   * List of programs that nominated this target
+   * List of programs associated with this target
    */
   programs: Array<string>;
   /**

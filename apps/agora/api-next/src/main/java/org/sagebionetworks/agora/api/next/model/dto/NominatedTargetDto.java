@@ -213,11 +213,11 @@ public class NominatedTargetDto {
   }
 
   /**
-   * List of cohort studies that nominated this target
+   * List of cohort studies associated with this target
    * @return cohortStudies
    */
   @NotNull 
-  @Schema(name = "cohort_studies", example = "[\"ROSMAP\",\"Mayo\"]", description = "List of cohort studies that nominated this target", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "cohort_studies", example = "[\"ROSMAP\",\"Mayo\"]", description = "List of cohort studies associated with this target", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("cohort_studies")
   public List<String> getCohortStudies() {
     return cohortStudies;
@@ -241,11 +241,11 @@ public class NominatedTargetDto {
   }
 
   /**
-   * List of input data types that support this nomination
+   * List of input data types associated with this target
    * @return inputData
    */
   @NotNull 
-  @Schema(name = "input_data", example = "[\"RNA\",\"Protein\"]", description = "List of input data types that support this nomination", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "input_data", example = "[\"RNA\",\"Protein\"]", description = "List of input data types associated with this target", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("input_data")
   public List<String> getInputData() {
     return inputData;
@@ -269,11 +269,11 @@ public class NominatedTargetDto {
   }
 
   /**
-   * List of programs that nominated this target
+   * List of programs associated with this target
    * @return programs
    */
   @NotNull 
-  @Schema(name = "programs", example = "[\"AMP-AD\",\"Community\"]", description = "List of programs that nominated this target", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "programs", example = "[\"AMP-AD\",\"Community\"]", description = "List of programs associated with this target", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("programs")
   public List<String> getPrograms() {
     return programs;
