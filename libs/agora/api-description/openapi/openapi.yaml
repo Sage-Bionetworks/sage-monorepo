@@ -17,6 +17,9 @@ tags:
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
     x-displayName: Comparison Tool Config
+  - name: Nominated Drug
+    description: Operations about Nominated Drugs.
+    x-displayName: Nominated Drug
   - name: Data Version
     description: Operations about the data version.
     x-displayName: Data Version
@@ -63,6 +66,24 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/drugs:
+    get:
+      tags:
+        - Nominated Drug
+      summary: List Nominated Drugs
+      description: Retrieve the list of nominated drugs
+      operationId: listNominatedDrugs
+      responses:
+        '200':
+          description: Successfully retrieved nominated drugs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NominatedDrug'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /data-version:
@@ -462,6 +483,42 @@ components:
       required:
         - title
         - status
+    NominatedDrug:
+      type: object
+      description: A nominated drug entry
+      properties:
+        common_name:
+          type: string
+          description: The common name of the drug
+          example: Agomelatine
+        total_nominations:
+          type: integer
+          description: The total number of nominations for the drug
+          example: 1
+        year_first_nominated:
+          type: integer
+          description: The year the drug was first nominated
+          example: 2025
+        principal_investigators:
+          type: array
+          description: The principal investigators who nominated the drug
+          items:
+            type: string
+          example:
+            - Xie
+        programs:
+          type: array
+          description: The programs associated with the drug nomination
+          items:
+            type: string
+          example:
+            - ACTDRx AD
+      required:
+        - common_name
+        - total_nominations
+        - year_first_nominated
+        - principal_investigators
+        - programs
     DataVersion:
       type: object
       description: Synapse data version
@@ -1547,6 +1604,7 @@ x-tagGroups:
   - name: Agora API Next
     tags:
       - Comparison Tool Config
+      - Nominated Drug
       - Data Version
   - name: Agora API
     tags:
