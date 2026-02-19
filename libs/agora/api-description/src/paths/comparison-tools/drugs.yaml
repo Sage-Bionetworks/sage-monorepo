@@ -1,0 +1,17 @@
+get:
+  tags:
+    - Nominated Drug
+  summary: List Nominated Drugs
+  description: Retrieve the list of nominated drugs
+  operationId: listNominatedDrugs
+  responses:
+    '200':
+      description: Successfully retrieved nominated drugs
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../components/schemas/NominatedDrug.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

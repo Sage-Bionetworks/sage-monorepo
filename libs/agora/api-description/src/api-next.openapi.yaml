@@ -16,10 +16,14 @@ servers:
 tags:
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
+  - name: Nominated Drug
+    description: Operations about Nominated Drugs.
   - name: Data Version
     description: Operations about the data version.
 paths:
   /comparison-tools/config:
     $ref: paths/comparison-tools/config.yaml
+  /comparison-tools/drugs:
+    $ref: paths/comparison-tools/drugs.yaml
   /data-version:
     $ref: paths/data-version.yaml
