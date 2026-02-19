@@ -26,6 +26,7 @@ import { OrgSagebionetworksRepoModelTableTableUpdateTransactionResponse } from '
 import { OrgSagebionetworksRepoModelTableRow } from './org-sagebionetworks-repo-model-table-row';
 import { OrgSagebionetworksRepoModelTableRowSet } from './org-sagebionetworks-repo-model-table-row-set';
 import { OrgSagebionetworksRepoModelSchemaJsonSchemaVersionInfo } from './org-sagebionetworks-repo-model-schema-json-schema-version-info';
+import { OrgSagebionetworksRepoModelGridSynchronizeGridResponse } from './org-sagebionetworks-repo-model-grid-synchronize-grid-response';
 import { OrgSagebionetworksRepoModelSchemaJsonSchema } from './org-sagebionetworks-repo-model-schema-json-schema';
 import { OrgSagebionetworksRepoModelGridDownloadFromGridResult } from './org-sagebionetworks-repo-model-grid-download-from-grid-result';
 import { OrgSagebionetworksRepoModelFileFileHandleRestoreResult } from './org-sagebionetworks-repo-model-file-file-handle-restore-result';
@@ -83,6 +84,7 @@ export type OrgSagebionetworksRepoModelAsynchAsynchronousResponseBody =
   | OrgSagebionetworksRepoModelGridDownloadFromGridResult
   | OrgSagebionetworksRepoModelGridGridCsvImportResponse
   | OrgSagebionetworksRepoModelGridGridRecordSetExportResponse
+  | OrgSagebionetworksRepoModelGridSynchronizeGridResponse
   | OrgSagebionetworksRepoModelMigrationAsyncMigrationResponse
   | OrgSagebionetworksRepoModelReportDownloadStorageReportResponse
   | OrgSagebionetworksRepoModelSchemaCreateSchemaResponse

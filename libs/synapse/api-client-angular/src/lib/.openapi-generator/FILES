@@ -172,6 +172,7 @@ model/org-sagebionetworks-repo-model-auth-terms-of-service-requirements.ts
 model/org-sagebionetworks-repo-model-auth-terms-of-service-sign-request.ts
 model/org-sagebionetworks-repo-model-auth-terms-of-service-state.ts
 model/org-sagebionetworks-repo-model-auth-terms-of-service-status.ts
+model/org-sagebionetworks-repo-model-auth-token-type.ts
 model/org-sagebionetworks-repo-model-auth-totp-secret-activation-request.ts
 model/org-sagebionetworks-repo-model-auth-totp-secret.ts
 model/org-sagebionetworks-repo-model-auth-two-factor-auth-disable-request.ts
@@ -499,6 +500,8 @@ model/org-sagebionetworks-repo-model-grid-query-select-item.ts
 model/org-sagebionetworks-repo-model-grid-query-select-selection.ts
 model/org-sagebionetworks-repo-model-grid-query-validation-operator.ts
 model/org-sagebionetworks-repo-model-grid-replica-selection-model.ts
+model/org-sagebionetworks-repo-model-grid-synchronize-grid-request.ts
+model/org-sagebionetworks-repo-model-grid-synchronize-grid-response.ts
 model/org-sagebionetworks-repo-model-grid-update-grid-request.ts
 model/org-sagebionetworks-repo-model-grid-update-grid-response.ts
 model/org-sagebionetworks-repo-model-grid-update-grid-update-request.ts
@@ -609,6 +612,8 @@ model/org-sagebionetworks-repo-model-oauth-o-auth-refresh-token-information.ts
 model/org-sagebionetworks-repo-model-oauth-o-auth-response-type.ts
 model/org-sagebionetworks-repo-model-oauth-o-auth-scope-list.ts
 model/org-sagebionetworks-repo-model-oauth-o-auth-scope.ts
+model/org-sagebionetworks-repo-model-oauth-o-auth-token-introspection-request.ts
+model/org-sagebionetworks-repo-model-oauth-o-auth-token-introspection-response.ts
 model/org-sagebionetworks-repo-model-oauth-o-auth-token-revocation-request.ts
 model/org-sagebionetworks-repo-model-oauth-o-auth-url-request.ts
 model/org-sagebionetworks-repo-model-oauth-o-auth-url-response.ts
