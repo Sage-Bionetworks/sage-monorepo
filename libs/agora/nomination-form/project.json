@@ -1,17 +1,17 @@
 {
-  "name": "agora-nominated-targets",
+  "name": "agora-nomination-form",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/agora/nominated-targets/src",
+  "sourceRoot": "libs/agora/nomination-form/src",
   "prefix": "agora",
   "tags": ["type:feature", "scope:agora", "language:typescript"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/agora/nominated-targets"],
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/nomination-form"],
       "options": {
-        "jestConfig": "libs/agora/nominated-targets/jest.config.ts",
-        "tsConfig": "libs/agora/nominated-targets/tsconfig.spec.json"
+        "jestConfig": "libs/agora/nomination-form/jest.config.ts",
+        "tsConfig": "libs/agora/nomination-form/tsconfig.spec.json"
       }
     },
     "lint": {

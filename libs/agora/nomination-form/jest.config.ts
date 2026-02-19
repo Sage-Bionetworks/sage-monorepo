@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'agora-nominated-targets',
+  displayName: 'agora-nomination-form',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../coverage/libs/agora/nominated-targets',
+  coverageDirectory: '../../../coverage/libs/agora/nomination-form',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

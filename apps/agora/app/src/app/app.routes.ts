@@ -96,9 +96,7 @@ export const routes: Route[] = [
   {
     path: 'nomination-form',
     loadChildren: () =>
-      import('@sagebionetworks/agora/nominated-targets').then(
-        (routes) => routes.nominationFormRoute,
-      ),
+      import('@sagebionetworks/agora/nomination-form').then((routes) => routes.nominationFormRoute),
     data: {
       title: 'Nominate a Target | Suggest a new AD therapeutic target',
       description: 'Nominate a gene as a new candidate for AD treatment or prevention.',
