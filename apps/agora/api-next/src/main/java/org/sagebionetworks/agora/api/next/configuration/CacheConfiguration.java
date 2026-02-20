@@ -29,7 +29,13 @@ public class CacheConfiguration {
     cacheManager.setCaffeine(Caffeine.newBuilder().recordStats());
 
     // Define the cache names used by query services
-    cacheManager.setCacheNames(List.of(CacheNames.DATA_VERSION, CacheNames.COMPARISON_TOOL_CONFIG));
+    cacheManager.setCacheNames(
+      List.of(
+        CacheNames.DATA_VERSION,
+        CacheNames.COMPARISON_TOOL_CONFIG,
+        CacheNames.NOMINATED_TARGET
+      )
+    );
 
     return cacheManager;
   }

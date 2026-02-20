@@ -1,4 +1,4 @@
-package org.sagebionetworks.model.ad.api.next.util;
+package org.sagebionetworks.agora.api.next.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;

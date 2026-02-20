@@ -1,0 +1,13 @@
+type: object
+description: A page of nominated target objects.
+properties:
+  nominatedTargets:
+    type: array
+    description: List of nominated targets in this page.
+    items:
+      $ref: ./NominatedTarget.yaml
+  page:
+    $ref: ./PageMetadata.yaml
+required:
+  - nominatedTargets
+  - page
