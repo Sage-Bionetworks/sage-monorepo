@@ -13,9 +13,14 @@
     align-items: center;
     width: 100%;
 
-    h1 {
-      font-size: 24px;
-      font-weight: 600;
+    .comparison-tool-header-title {
+      display: flex;
+      gap: 5px;
+
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+      }
     }
   }
 }

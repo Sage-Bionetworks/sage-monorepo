@@ -3,7 +3,12 @@
     <explorers-comparison-tool-filter-results-button
       [tooltip]="viewConfig().filterResultsButtonTooltip"
     />
-    <h1>{{ viewConfig().headerTitle }}</h1>
+    <div class="comparison-tool-header-title">
+      <h1>{{ viewConfig().headerTitle }}</h1>
+      @if (viewConfig().headerTitleWikiParams) {
+        <explorers-popover-link [wikiParams]="viewConfig().headerTitleWikiParams" />
+      }
+    </div>
     <explorers-comparison-tool-share-url-button />
   </div>
 </div>
