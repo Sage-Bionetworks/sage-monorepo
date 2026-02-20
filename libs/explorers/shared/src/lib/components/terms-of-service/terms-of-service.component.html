@@ -4,13 +4,14 @@
     [backgroundImagePath]="heroBackgroundImagePathOrDefault()"
   />
   <div class="terms-of-service">
-    @if (isLoading) {
+    @if (isLoading()) {
       <div class="loading-icon">
         <explorers-loading-icon />
       </div>
+    } @else {
+      <div class="terms-of-service-content">
+        <markdown [data]="content" />
+      </div>
     }
-    <div class="terms-of-service-content">
-      <markdown [data]="content" />
-    </div>
   </div>
 </div>

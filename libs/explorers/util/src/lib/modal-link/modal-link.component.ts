@@ -16,7 +16,7 @@ export class ModalLinkComponent {
   text = input('');
   textColor = input('');
   title = input('');
-  wikiParams = input<SynapseWikiParams>();
+  wikiParams = input.required<SynapseWikiParams>();
   iconWidth = input(14);
   iconHeight = input(14);
   enableHoverEffects = input(true);
@@ -29,7 +29,7 @@ export class ModalLinkComponent {
   }
 
   getTextColor() {
-    return this.textColor ? { color: this.textColor } : {};
+    return this.textColor() ? { color: this.textColor() } : {};
   }
 
   close() {

@@ -13,7 +13,7 @@
   </button>
   <p-popover #popover>
     <div class="popover-link-content">
-      @if (wikiParams() && isActive) {
+      @if (isActive) {
         <explorers-wiki [wikiParams]="wikiParams()" />
       }
     </div>
