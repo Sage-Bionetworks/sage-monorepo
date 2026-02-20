@@ -1,0 +1,110 @@
+type: object
+description: Nominated Target search query with pagination and filtering options.
+properties:
+  pageNumber:
+    description: The page number to return (index starts from 0).
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    maximum: 100
+    example: 100
+  items:
+    description: |
+      List of hgnc_symbol values to filter by.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['CFH', 'SEMA3F']
+  itemFilterType:
+    $ref: ItemFilterTypeQuery.yaml
+    nullable: true
+  search:
+    description: |
+      Search by hgnc_symbol value (case-insensitive partial match) or by comma separated list of hgnc_symbol values (case-insensitive full matches).
+      Examples: 'pten,plec' (comma-separated list) or 'ple' (partial match). Only applied when
+      itemFilterType is 'exclude'.
+    type: string
+    nullable: true
+    example: 'pten,plec'
+  cohortStudies:
+    description: Filter by cohort studies.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['ABA', 'ACT']
+  inputData:
+    description: Filter by input data types.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Behavior', 'Clinical']
+  initialNomination:
+    description: Filter by initial nomination year.
+    type: array
+    items:
+      type: integer
+    nullable: true
+    example: [2021, 2022]
+  nominatingTeams:
+    description: Filter by nominating teams.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['ASU', 'Chang Lab']
+  pharosClass:
+    description: Filter by Pharos class.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Tclin', 'Tchem']
+  programs:
+    description: Filter by programs.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['AMP-AD', 'Community']
+  totalNominations:
+    description: Filter by total nominations.
+    type: array
+    items:
+      type: integer
+    nullable: true
+    example: [1, 2]
+  sortFields:
+    description: |
+      List of field names to sort by (e.g., ["total_nominations", "hgnc_symbol"]).
+      Each field in sortFields must have a corresponding order in sortOrders.
+    type: array
+    items:
+      type: string
+    minItems: 1
+    example: ['total_nominations', 'hgnc_symbol']
+  sortOrders:
+    description: |
+      List of sort directions corresponding to sortFields.
+      Values: 1 (ascending) or -1 (descending).
+      Must have the same length as sortFields.
+    type: array
+    items:
+      type: integer
+      format: int32
+      enum: [1, -1]
+    minItems: 1
+    example: [-1, 1]
+required:
+  - sortFields
+  - sortOrders

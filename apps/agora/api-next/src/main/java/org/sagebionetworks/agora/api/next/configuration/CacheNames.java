@@ -25,8 +25,15 @@ public final class CacheNames {
 
   /**
    * Cache for nominated drug queries.
-   * Stores the list of nominated drugs.
-   * Key format: Static key "nominatedDrug"
+   * Stores results from nominated drug comparison queries filtered by items and filter type.
+   * Key format: Dynamic based on query parameters (items, filterType)
    */
   public static final String NOMINATED_DRUG = "nominatedDrug";
+
+  /**
+   * Cache for nominated target queries.
+   * Stores results from nominated target comparison queries filtered by items and filter type.
+   * Key format: Dynamic based on query parameters (items, filterType)
+   */
+  public static final String NOMINATED_TARGET = "nominatedTarget";
 }
