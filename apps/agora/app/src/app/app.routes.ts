@@ -43,6 +43,15 @@ export const routes: Route[] = [
     },
   },
   {
+    path: ROUTE_PATHS.NOMINATED_DRUGS,
+    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    data: {
+      title: "Nominated Drugs | Candidate drugs for Alzheimer's Disease treatment or prevention",
+      description:
+        "Explore a list of potential Alzheimer's Disease therapeutic agents that researchers have identified using integrated computational and experimental approaches.",
+    },
+  },
+  {
     path: ROUTE_PATHS.NOMINATED_TARGETS,
     loadChildren: () =>
       import('@sagebionetworks/agora/nominated-targets-comparison-tool').then(
