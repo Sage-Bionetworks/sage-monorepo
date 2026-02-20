@@ -4,6 +4,7 @@ import {
   ROUTE_PATHS,
   SUPPORT_EMAIL,
 } from '@sagebionetworks/agora/config';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
 export const routes: Route[] = [
   {
@@ -17,19 +18,35 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.ABOUT,
-    loadChildren: () => import('@sagebionetworks/agora/about').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
       title: 'About Agora',
       description:
         'Agora is funded by the National Institute on Aging, and is developed and maintained by Sage Bionetworks.',
+      heroTitle: 'About',
+      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+      className: 'about-page-content',
+      wikiParams: {
+        ownerId: 'syn25913473',
+        wikiId: '612058',
+      } as SynapseWikiParams,
     },
   },
   {
     path: ROUTE_PATHS.NEWS,
-    loadChildren: () => import('@sagebionetworks/agora/news').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
       title: 'News | Agora Releases',
       description: "See what's new in Agora, from new features to our latest data updates.",
+      heroTitle: 'Agora News',
+      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+      className: 'news-page-content',
+      wikiParams: {
+        ownerId: 'syn25913473',
+        wikiId: '611426',
+      } as SynapseWikiParams,
     },
   },
   {

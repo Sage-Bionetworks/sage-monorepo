@@ -1,7 +1,11 @@
-@use 'agora/styles/src/lib/variables';
-@use 'agora/styles/src/lib/mixins';
+.about-page-content {
+  margin-top: 30px;
+  line-height: normal;
+}
 
 .news-page-content {
+  margin-top: 30px;
+
   h3 {
     font-size: var(--font-size-md);
     font-weight: 700;

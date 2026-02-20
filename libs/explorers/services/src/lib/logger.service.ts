@@ -5,7 +5,11 @@ import * as Sentry from '@sentry/angular';
 export class LoggerService {
   log(message: string, data?: Record<string, unknown>) {
     if (isDevMode()) {
-      console.log('[LOG]', message, data);
+      if (data) {
+        console.log('[LOG]', message, data);
+      } else {
+        console.log('[LOG]', message);
+      }
     }
     Sentry.addBreadcrumb({
       message,
@@ -15,7 +19,11 @@ export class LoggerService {
   }
 
   warn(message: string, data?: Record<string, unknown>) {
-    console.warn('[WARN]', message, data);
+    if (data) {
+      console.warn('[WARN]', message, data);
+    } else {
+      console.warn('[WARN]', message);
+    }
     Sentry.addBreadcrumb({
       message,
       level: 'warning',
@@ -29,7 +37,11 @@ export class LoggerService {
    * as a Sentry event.
    */
   error(message: string, error?: unknown) {
-    console.error('[ERROR]', message, error);
+    if (error) {
+      console.error('[ERROR]', message, error);
+    } else {
+      console.error('[ERROR]', message);
+    }
 
     if (error) {
       Sentry.captureException(error);

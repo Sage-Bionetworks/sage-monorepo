@@ -15,4 +15,3 @@ export * from './activated-route-stub';
 export * from './api-service-stub';
 export * from './genes-service-stub';
 export * from './svg-icon-service-stub';
-export * from './synapse-api-service-stub';
