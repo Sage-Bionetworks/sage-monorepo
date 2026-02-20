@@ -165,16 +165,6 @@ This library was generated with Nx.
 - **Available Tasks**: test, lint
 - **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/libs/agora/services/README.md)
 
-#### agora-shared
-
-This library was generated with Nx.
-
-- **Type**: feature
-- **Language**: typescript
-- **Location**: `libs/agora/shared`
-- **Available Tasks**: test, lint, lint-fix
-- **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/libs/agora/shared/README.md)
-
 #### agora-storybook
 
 This library was generated with Nx.

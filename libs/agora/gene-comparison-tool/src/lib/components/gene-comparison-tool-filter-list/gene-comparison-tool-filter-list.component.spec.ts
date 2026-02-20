@@ -1,5 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import { SvgIconService } from '@sagebionetworks/agora/services';
+import { SvgIconService } from '@sagebionetworks/explorers/services';
 import { gctFiltersMocks, SvgIconServiceStub } from '@sagebionetworks/agora/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';

@@ -1,7 +1,7 @@
 @if (gene) {
   <div class="gene-details">
     <agora-gene-hero [gene]="gene"></agora-gene-hero>
-    <div class="gene-details-nav" [ngClass]="{ 'has-active-child': activeParent }">
+    <div class="gene-details-nav" [class.has-active-child]="activeParent">
       <div class="gene-details-nav-inner">
         @if (navSlideIndex > 0) {
           <button
@@ -17,9 +17,7 @@
               @if (!item.disabled) {
                 <li
                   class="gene-details-nav-item"
-                  [ngClass]="{
-                    active: activePanel === item.name || activeParent === item.name,
-                  }"
+                  [class.active]="activePanel === item.name || activeParent === item.name"
                 >
                   <a (click)="onNavigationItemClick(item)">
                     {{ item.label }}
@@ -32,7 +30,7 @@
                           @if (!subItem.disabled) {
                             <li
                               class="gene-details-subnav-item"
-                              [ngClass]="{ active: activePanel === subItem.name }"
+                              [class.active]="activePanel === subItem.name"
                             >
                               <a (click)="onNavigationItemClick(subItem)">
                                 {{ subItem.label }}

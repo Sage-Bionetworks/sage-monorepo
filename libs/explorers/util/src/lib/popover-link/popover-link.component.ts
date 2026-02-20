@@ -12,7 +12,7 @@ import { WikiComponent } from '../wiki/wiki.component';
   styleUrls: ['./popover-link.component.scss'],
 })
 export class PopoverLinkComponent {
-  wikiParams = input<SynapseWikiParams>();
+  wikiParams = input.required<SynapseWikiParams>();
 
   isActive = false;
 

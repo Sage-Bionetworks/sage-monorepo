@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
 import { GCTFilter, GCTFilterOption } from '@sagebionetworks/agora/models';
 
 import { GeneComparisonToolFilterListItemComponent } from '../gene-comparison-tool-filter-list-item/gene-comparison-tool-filter-list-item.component';
-import { SvgIconComponent } from '@sagebionetworks/agora/shared';
+import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'agora-gene-comparison-tool-filter-list',
