@@ -268,7 +268,7 @@ export const filters: GCTFilter[] = [
   {
     name: 'year',
     field: 'nominations.year',
-    label: 'Year First Nominated',
+    label: 'First Nominated',
     short: 'Year',
     description:
       'Filter for genes based on the year that they were first nominated as a potential target for AD.',

@@ -35,7 +35,7 @@ export class NominatedTargetsComponent implements OnInit {
     { field: 'total_nominations', header: 'Nominations', selected: true },
     {
       field: 'initial_nomination_display_value',
-      header: 'Year First Nominated',
+      header: 'First Nominated',
       selected: true,
     },
     {
