@@ -84,7 +84,7 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Nominated Drug
-  /comparison-tools/nominated-target:
+  /comparison-tools/targets:
     get:
       description: Returns a paginated list of nominated target results for use in
         comparison tools.

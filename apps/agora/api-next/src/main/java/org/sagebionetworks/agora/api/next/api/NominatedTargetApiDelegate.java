@@ -29,7 +29,7 @@ public interface NominatedTargetApiDelegate {
     }
 
     /**
-     * GET /comparison-tools/nominated-target : Get nominated target results for comparison tools
+     * GET /comparison-tools/targets : Get nominated target results for comparison tools
      * Returns a paginated list of nominated target results for use in comparison tools.
      *
      * @param nominatedTargetSearchQuery The search query used to find and filter nominated targets. (optional)
