@@ -66,7 +66,7 @@ class NominatedTargetApiControllerWebTest {
     mockMvc
       .perform(
         get("/v1/comparison-tools/nominated-target")
-          .param("item", hgncSymbol)
+          .param("items", hgncSymbol)
           .param("sortFields", "hgnc_symbol")
           .param("sortOrders", "1")
       )

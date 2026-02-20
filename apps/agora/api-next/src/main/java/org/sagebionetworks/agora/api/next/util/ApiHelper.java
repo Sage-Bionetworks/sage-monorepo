@@ -50,22 +50,15 @@ public final class ApiHelper {
 
   /**
    * Creates a Spring Data Sort object from sortFields and sortOrders lists.
-   * Returns Sort.unsorted() if no sort parameters are provided.
+   * Both parameters are required and must be non-empty (enforced by OpenAPI schema validation).
    * Validates that sortFields and sortOrders have matching element counts.
    *
-   * @param sortFields list of field names to sort by
-   * @param sortOrders list of sort orders (1 for ascending, -1 for descending)
+   * @param sortFields list of field names to sort by (required, non-empty)
+   * @param sortOrders list of sort orders (required, non-empty, 1 for ascending, -1 for descending)
    * @return Sort object for use with Spring Data repositories
    * @throws IllegalArgumentException if sortFields and sortOrders have different lengths
    */
-  public static Sort createSort(
-    @Nullable List<String> sortFields,
-    @Nullable List<Integer> sortOrders
-  ) {
-    if (sortFields == null || sortFields.isEmpty() || sortOrders == null || sortOrders.isEmpty()) {
-      return Sort.unsorted();
-    }
-
+  public static Sort createSort(List<String> sortFields, List<Integer> sortOrders) {
     validateSortParameters(sortFields, sortOrders);
 
     Sort sort = Sort.unsorted();
