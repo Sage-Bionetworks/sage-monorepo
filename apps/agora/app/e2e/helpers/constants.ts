@@ -23,7 +23,7 @@ export const URL_GCT_PROTEIN_TMT = `${URL_GCT_PROTEIN}&subCategory=TMT`;
 
 // --------- explorers-based CTs -------------------------------------------------------------------
 export const COMPARISON_TOOL_PATHS: Record<string, string> = {
-  'Nominated Targets': '/comparison/nominated-targets',
+  'Nominated Targets': '/comparison/targets',
 };
 
 export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
