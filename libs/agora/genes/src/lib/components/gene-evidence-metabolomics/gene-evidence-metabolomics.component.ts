@@ -3,7 +3,7 @@ import { Gene } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
 import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
+import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 
 @Component({

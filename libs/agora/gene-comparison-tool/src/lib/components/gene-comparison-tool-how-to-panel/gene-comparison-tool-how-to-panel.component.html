@@ -8,12 +8,12 @@
   [style]="{ width: '100%', maxWidth: '580px' }"
   styleClass="gct-how-to-panel"
   (onHide)="onHide()"
-  >
+>
   <div class="gct-how-to-panel-panes">
     @for (pane of panes; track pane; let i = $index) {
       <div
         class="gct-how-to-panel-pane active"
-        [ngClass]="{ active: activePane === i }"
+        [class.active]="activePane === i"
         [innerHtml]="pane.content"
       ></div>
     }
@@ -59,7 +59,7 @@
 
   @if (loading) {
     <div class="gct-how-to-panel-loading">
-      <agora-loading-icon></agora-loading-icon>
+      <explorers-loading-icon></explorers-loading-icon>
     </div>
   }
 </p-dialog>
