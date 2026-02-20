@@ -9,6 +9,7 @@ export const DEFAULT_HERO_BACKGROUND_IMAGE_PATH = 'agora-assets/images/hero-back
 export const ROUTE_PATHS = {
   HOME: '',
   GENE_COMPARISON: 'genes/comparison',
+  NOMINATED_DRUGS: 'comparison/drugs',
   NOMINATED_TARGETS: 'genes/nominated-targets',
   TEAMS: 'teams',
   NEWS: 'news',

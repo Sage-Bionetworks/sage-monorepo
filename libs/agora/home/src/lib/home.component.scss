@@ -3,9 +3,9 @@
 @use 'agora/styles/src/lib/mixins';
 
 explorers-home-card {
-  --color-arrow: #5bb0b5;
-  --description-font-size: var(--font-size-xl);
-  --description-line-height: var(--line-height-xxl);
+  --color-arrow: var(--color-action-primary);
+  --description-font-size: 16px;
+  --description-line-height: 20px;
 }
 
 .section {
@@ -41,6 +41,10 @@ explorers-home-card {
   flex-direction: column;
   gap: 40px;
   padding: var(--spacing-md);
+
+  h1 {
+    max-width: 650px;
+  }
 }
 
 .description {
@@ -74,9 +78,10 @@ explorers-home-card {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-auto-rows: auto;
+  gap: 10px;
 
   @media (width >= 990px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 25px;
   }
 

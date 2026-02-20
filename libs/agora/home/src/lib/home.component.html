@@ -23,13 +23,10 @@
           <h1 class="home-heading">Discover Alzheimer&#39;s Disease Genes</h1>
         </div>
         <p class="description mb-lg">
-          Agora hosts high-dimensional human transcriptomic, proteomic, and metabolomic evidence for
-          whether or not genes are associated with Alzheimer’s Disease (AD). Agora also contains a
-          list of over 900 nascent AD drug targets that were nominated by researchers from the
-          National Institute on Aging's
-          <a class="link" href="https://www.nia.nih.gov/research/amp-ad" target="_blank">AMP-AD</a>
-          consortium and <a class="link" href="https://treatad.org/" target="_blank">TREAT-AD</a>
-          centers, as well as by other AD research teams.
+          Agora hosts high-dimensional human multi-omic evidence for whether or not genes are
+          associated with Alzheimer's disease (AD). Agora also lists nascent AD drug targets and
+          therapeutic agents nominated by researchers from the National Institute on Aging, and by
+          other AD research teams.
           <a
             class="link"
             href="https://help.adknowledgeportal.org/apd/Agora-Resources.2646671361.html"
@@ -43,7 +40,7 @@
         <explorers-home-card
           [title]="'Gene Comparison'"
           [description]="
-            'Compare differential RNA and protein expression results for 20k+ human genes in AD. Build custom result sets by sorting, filtering, and searching for genes of interest.'
+            'Compare differential RNA and protein expression results for 20k+ human genes. Build custom result sets by sorting, filtering, and searching for genes of interest.'
           "
           [routerLink]="`/${ROUTE_PATHS.GENE_COMPARISON}`"
           [imagePath]="'agora-assets/images/gene-comparison-icon.svg'"
@@ -65,11 +62,20 @@
         <explorers-home-card
           [title]="'Nominated Targets'"
           [description]="
-            'Browse the list of over 900 genes that research teams have nominated as potential new therapeutic targets for AD treatment or prevention.'
+            'Explore over 950 genes that research teams have nominated as potential new therapeutic targets for AD treatment or prevention .'
           "
           [routerLink]="`/${ROUTE_PATHS.NOMINATED_TARGETS}`"
           [imagePath]="'agora-assets/images/nominated-targets-icon.svg'"
           [imageAltText]="'nominated targets icon'"
+        />
+        <explorers-home-card
+          [title]="'Nominated Drugs'"
+          [description]="
+            'Explore over 65 agents that research teams have nominated as potential therapies for AD treatment or prevention.'
+          "
+          [routerLink]="`/${ROUTE_PATHS.NOMINATED_DRUGS}`"
+          [imagePath]="'agora-assets/images/nominated-drugs-icon.svg'"
+          [imageAltText]="'nominated drugs icon'"
         />
       </div>
     </div>
