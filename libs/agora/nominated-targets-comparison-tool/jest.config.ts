@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'agora-nominated-targets',
+  displayName: 'agora-nominated-targets-comparison-tool',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../coverage/libs/agora/nominated-targets',
+  coverageDirectory: '../../../coverage/libs/agora/nominated-targets-comparison-tool',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -14,13 +14,10 @@ export default {
       },
     ],
   },
+  testEnvironment: 'jest-fixed-jsdom',
   transformIgnorePatterns: [
     'node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|@octokit/.*|universal-user-agent|before-after-hook))',
   ],
-  moduleNameMapper: {
-    d3: '<rootDir>/../../../node_modules/d3/dist/d3.min.js',
-    '^d3-(.*)$': '<rootDir>/../../../node_modules/d3-$1/dist/d3-$1.min.js',
-  },
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

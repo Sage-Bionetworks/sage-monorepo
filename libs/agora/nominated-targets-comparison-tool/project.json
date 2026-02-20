@@ -1,17 +1,17 @@
 {
-  "name": "agora-nominated-targets",
+  "name": "agora-nominated-targets-comparison-tool",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/agora/nominated-targets/src",
+  "sourceRoot": "libs/agora/nominated-targets-comparison-tool/src",
   "prefix": "agora",
   "tags": ["type:feature", "scope:agora", "language:typescript"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/agora/nominated-targets"],
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/nominated-targets-comparison-tool"],
       "options": {
-        "jestConfig": "libs/agora/nominated-targets/jest.config.ts",
-        "tsConfig": "libs/agora/nominated-targets/tsconfig.spec.json"
+        "jestConfig": "libs/agora/nominated-targets-comparison-tool/jest.config.ts",
+        "tsConfig": "libs/agora/nominated-targets-comparison-tool/tsconfig.spec.json"
       }
     },
     "lint": {

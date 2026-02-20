@@ -14,10 +14,13 @@
 
   .p-datatable-tbody {
     td {
-      height: 56px !important;
+      min-height: 56px !important;
       padding-top: 4px !important;
       padding-bottom: 4px !important;
       vertical-align: middle;
+      white-space: normal;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
   }
 

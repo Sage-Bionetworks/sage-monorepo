@@ -1,11 +1,11 @@
 import { expect, Page, test } from '@playwright/test';
 import {
+  expectComparisonToolTableLoaded,
   expectFilters,
   expectFiltersParams,
   waitForScrollToStop,
 } from '@sagebionetworks/explorers/testing/e2e';
 import { baseURL } from '../playwright.config';
-import { expectComparisonToolTableLoaded } from './helpers/comparison-tool';
 import { searchAndGetSearchListItems } from './helpers/search';
 
 async function isPageAtTop(page: Page) {

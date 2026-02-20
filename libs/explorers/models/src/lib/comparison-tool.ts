@@ -93,20 +93,27 @@ export interface ComparisonToolConfigFilter {
   values: string[];
 }
 
-export type ComparisonToolPage = 'Model Overview' | 'Gene Expression' | 'Disease Correlation';
+export type ComparisonToolPage =
+  | 'Model Overview'
+  | 'Gene Expression'
+  | 'Disease Correlation'
+  | 'Nominated Targets'
+  | 'Nominated Drugs';
 
 export type ComparisonToolConfigColumnType =
   | 'text'
   | 'heat_map'
   | 'link_internal'
   | 'link_external'
-  | 'primary';
+  | 'primary'
+  | 'numeric';
 export const ComparisonToolConfigColumnTypeEnum = {
   Text: 'text' as ComparisonToolConfigColumnType,
   HeatMap: 'heat_map' as ComparisonToolConfigColumnType,
   LinkInternal: 'link_internal' as ComparisonToolConfigColumnType,
   LinkExternal: 'link_external' as ComparisonToolConfigColumnType,
   Primary: 'primary' as ComparisonToolConfigColumnType,
+  Numeric: 'numeric' as ComparisonToolConfigColumnType,
 } as const;
 
 export interface ComparisonToolConfigColumn {
