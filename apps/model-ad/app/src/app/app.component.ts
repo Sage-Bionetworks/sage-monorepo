@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
-import { MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
+import { LoggerService, MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
 import {
   ErrorOverlayComponent,
   FooterComponent,
@@ -47,6 +47,7 @@ import { ToastModule } from 'primeng/toast';
 })
 export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
 
   configService = inject(ConfigService);
   dataVersionService = inject(DataVersionService);
@@ -75,22 +76,32 @@ export class AppComponent implements OnInit {
   }
 
   getDataVersion() {
+    this.logger.log('AppComponent: Loading data version');
+
     this.versionService
       .getDataVersion$(this.dataVersionService)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (v) => (this.dataVersion = v),
-        error: () => (this.dataVersion = 'unknown'),
+        error: () => {
+          this.dataVersion = 'unknown';
+          this.logger.error('Failed to get data version');
+        },
       });
   }
 
   getSiteVersion() {
+    this.logger.log('AppComponent: Loading site version');
+
     this.versionService
       .getSiteVersion$(this.configService.config)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (v) => (this.siteVersion = v),
-        error: () => (this.siteVersion = 'unknown'),
+        error: () => {
+          this.siteVersion = 'unknown';
+          this.logger.error('Failed to get site version');
+        },
       });
   }
 }

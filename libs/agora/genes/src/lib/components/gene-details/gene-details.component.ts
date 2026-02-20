@@ -4,16 +4,19 @@ import {
   AfterViewChecked,
   AfterViewInit,
   Component,
+  DestroyRef,
   HostListener,
   inject,
   OnInit,
   PLATFORM_ID,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/services';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';
 import { GeneEvidenceRnaComponent } from '../gene-evidence-rna/gene-evidence-rna.component';
@@ -48,7 +51,10 @@ interface Panel {
   styleUrls: ['./gene-details.component.scss'],
 })
 export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly logger = inject(LoggerService);
+  private readonly errorOverlayService = inject(ErrorOverlayService);
 
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -158,50 +164,62 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params: ParamMap) => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: ParamMap) => {
       this.reset();
       this.helperService.setLoading(true);
 
       if (params.get('id')) {
-        this.geneService.getGene(params.get('id') as string).subscribe((gene) => {
-          if (!gene) {
-            this.helperService.setLoading(false);
-            // https://github.com/angular/angular/issues/45202
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this.router.navigateByUrl('/404-not-found', { skipLocationChange: true });
-          } else {
-            this.gene = gene;
+        const geneId = params.get('id') as string;
+        this.logger.log(`GeneDetailsComponent: Loading gene ${geneId}`);
 
-            this.panels.forEach((p: Panel) => {
-              if (p.name == 'nominations' && !this.gene?.total_nominations) {
-                p.disabled = true;
-              } else if (
-                p.name == 'experimental-validation' &&
-                !this.gene?.experimental_validation?.length
-              ) {
-                p.disabled = true;
+        this.geneService
+          .getGene(geneId)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (gene) => {
+              if (!gene) {
+                this.helperService.setLoading(false);
+                // https://github.com/angular/angular/issues/45202
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                this.router.navigateByUrl('/not-found', { skipLocationChange: true });
               } else {
-                p.disabled = false;
+                this.gene = gene;
+
+                this.panels.forEach((p: Panel) => {
+                  if (p.name == 'nominations' && !this.gene?.total_nominations) {
+                    p.disabled = true;
+                  } else if (
+                    p.name == 'experimental-validation' &&
+                    !this.gene?.experimental_validation?.length
+                  ) {
+                    p.disabled = true;
+                  } else {
+                    p.disabled = false;
+                  }
+                });
+
+                const nominationsPanel = this.panels.find((p) => p.name == 'nominations');
+                if (nominationsPanel) {
+                  nominationsPanel.disabled = !this.gene.total_nominations ? true : false;
+                }
+
+                const experimentalValidationPanel = this.panels.find(
+                  (p) => p.name == 'experimental-validation',
+                );
+                if (experimentalValidationPanel) {
+                  experimentalValidationPanel.disabled = !this.gene.experimental_validation?.length
+                    ? true
+                    : false;
+                }
+
+                this.helperService.setLoading(false);
               }
-            });
-
-            const nominationsPanel = this.panels.find((p) => p.name == 'nominations');
-            if (nominationsPanel) {
-              nominationsPanel.disabled = !this.gene.total_nominations ? true : false;
-            }
-
-            const experimentalValidationPanel = this.panels.find(
-              (p) => p.name == 'experimental-validation',
-            );
-            if (experimentalValidationPanel) {
-              experimentalValidationPanel.disabled = !this.gene.experimental_validation?.length
-                ? true
-                : false;
-            }
-
-            this.helperService.setLoading(false);
-          }
-        });
+            },
+            error: () => {
+              this.helperService.setLoading(false);
+              this.errorOverlayService.showError('Failed to load gene details. Please try again.');
+            },
+          });
       }
 
       if (params.get('subtab')) {

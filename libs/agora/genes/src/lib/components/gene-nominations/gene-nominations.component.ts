@@ -1,6 +1,8 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Gene, Team, TeamService } from '@sagebionetworks/agora/api-client';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { TargetNominationWithTeamData } from '../../models/TargetNominationWithTeamData';
 
 @Component({
@@ -10,6 +12,9 @@ import { TargetNominationWithTeamData } from '../../models/TargetNominationWithT
   styleUrls: ['./gene-nominations.component.scss'],
 })
 export class GeneNominationsComponent {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
+
   teamService = inject(TeamService);
 
   _gene: Gene | undefined;
@@ -35,11 +40,16 @@ export class GeneNominationsComponent {
       return;
     }
 
-    this.teamService.listTeams().subscribe((response) => {
-      if (response.items) {
-        this.nominations = this.sortNominations(response.items);
-      }
-    });
+    this.logger.log('GeneNominationsComponent: Loading teams for nominations');
+
+    this.teamService
+      .listTeams()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        if (response.items) {
+          this.nominations = this.sortNominations(response.items);
+        }
+      });
   }
 
   sortNominations(teams: Team[]): TargetNominationWithTeamData[] {
