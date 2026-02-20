@@ -1,7 +1,8 @@
 package org.sagebionetworks.agora.api.next.api;
 
 import org.sagebionetworks.agora.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugsPageDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

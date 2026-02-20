@@ -6,7 +6,8 @@
 package org.sagebionetworks.agora.api.next.api;
 
 import org.sagebionetworks.agora.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,21 +42,32 @@ public interface NominatedDrugApi {
     }
 
     /**
-     * GET /comparison-tools/drugs : List Nominated Drugs
-     * Retrieve the list of nominated drugs
+     * GET /comparison-tools/drugs : Get nominated drug results for comparison tools
+     * Returns a paginated list of nominated drug results for use in comparison tools.
      *
-     * @return Successfully retrieved nominated drugs (status code 200)
+     * @param nominatedDrugSearchQuery The search query used to find and filter nominated drugs. (optional)
+     * @return A paginated list of nominated drug results (status code 200)
+     *         or Invalid request (status code 400)
+     *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "listNominatedDrugs",
-        summary = "List Nominated Drugs",
-        description = "Retrieve the list of nominated drugs",
+        operationId = "getNominatedDrugs",
+        summary = "Get nominated drug results for comparison tools",
+        description = "Returns a paginated list of nominated drug results for use in comparison tools.",
         tags = { "Nominated Drug" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved nominated drugs", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = NominatedDrugDto.class))),
-                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = NominatedDrugDto.class)))
+            @ApiResponse(responseCode = "200", description = "A paginated list of nominated drug results", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = NominatedDrugsPageDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = NominatedDrugsPageDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -69,10 +81,10 @@ public interface NominatedDrugApi {
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<List<NominatedDrugDto>> listNominatedDrugs(
-        
+    default ResponseEntity<NominatedDrugsPageDto> getNominatedDrugs(
+        @Parameter(name = "nominatedDrugSearchQuery", description = "The search query used to find and filter nominated drugs.", in = ParameterIn.QUERY) @Valid @Nullable NominatedDrugSearchQueryDto nominatedDrugSearchQuery
     ) {
-        return getDelegate().listNominatedDrugs();
+        return getDelegate().getNominatedDrugs(nominatedDrugSearchQuery);
     }
 
 }
