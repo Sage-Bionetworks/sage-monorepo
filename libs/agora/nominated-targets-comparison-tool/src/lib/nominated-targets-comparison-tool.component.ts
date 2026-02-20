@@ -57,6 +57,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: ComparisonToolConfigPage.NominatedTargets,
+    headerTitleWikiParams: { ownerId: 'syn25913473', wikiId: '639222' },
     filterResultsButtonTooltip:
       'Filter results by Nominating Team, Program, Pharos Class, and more',
     showSignificanceControls: false,
