@@ -89,7 +89,7 @@ paths:
                   $ref: '#/components/schemas/NominatedDrug'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /comparison-tools/nominated-target:
+  /comparison-tools/targets:
     get:
       tags:
         - Nominated Target

@@ -27,7 +27,7 @@ paths:
     $ref: paths/comparison-tools/config.yaml
   /comparison-tools/drugs:
     $ref: paths/comparison-tools/drugs.yaml
-  /comparison-tools/nominated-target:
-    $ref: paths/comparison-tools/nominated-target.yaml
+  /comparison-tools/targets:
+    $ref: paths/comparison-tools/targets.yaml
   /data-version:
     $ref: paths/data-version.yaml
