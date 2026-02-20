@@ -63,7 +63,7 @@ describe('WikiComponent', () => {
       const { component } = await setup(validWikiParams[0]);
 
       await waitFor(() => {
-        expect(component.isLoading).toBe(false);
+        expect(component.isLoading()).toBe(false);
         expect(mockDomSanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
         expect(component.safeHtml).toContain(validMarkdown);
       });
@@ -85,7 +85,7 @@ describe('WikiComponent', () => {
       const { component } = await setup(invalidWikiParam);
 
       await waitFor(() => {
-        expect(component.isLoading).toBe(false);
+        expect(component.isLoading()).toBe(false);
         expect(component.safeHtml).toBe('<div class="wiki-no-data">No data found...</div>');
       });
     });

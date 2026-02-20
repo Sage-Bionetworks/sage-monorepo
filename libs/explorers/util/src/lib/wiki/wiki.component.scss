@@ -1,8 +1,17 @@
 @use 'explorers/styles/src/lib/variables';
 @use 'explorers/styles/src/lib/mixins';
 
+explorers-wiki {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
 .wiki {
-  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .wiki-inner {
     white-space: pre-wrap;
@@ -41,11 +50,9 @@
     }
   }
 
-  .wiki-loading {
-    display: none;
-    position: absolute;
-    inset: 0;
-    background-color: #fff;
+  .loading-icon {
+    flex: 1 1 auto;
+    display: flex;
     align-items: center;
     justify-content: center;
   }

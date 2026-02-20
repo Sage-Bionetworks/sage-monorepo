@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   computed,
@@ -5,6 +6,8 @@ import {
   inject,
   input,
   OnInit,
+  PLATFORM_ID,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -26,9 +29,10 @@ import { finalize } from 'rxjs/operators';
 export class TermsOfServiceComponent implements OnInit {
   synapseService = inject(SynapseApiService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   content = '';
-  isLoading = true;
+  isLoading = signal(true);
   heroBackgroundImagePath = input<string | undefined>();
 
   heroBackgroundImagePathOrDefault = computed(
@@ -40,21 +44,23 @@ export class TermsOfServiceComponent implements OnInit {
   }
 
   loadTOS() {
-    this.synapseService
-      .getTermsOfService()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        finalize(() => {
-          this.isLoading = false;
-        }),
-      )
-      .subscribe({
-        next: (markdown) => {
-          this.content = markdown;
-        },
-        error: (error) => {
-          console.error('Error loading terms of service:', error);
-        },
-      });
+    if (isPlatformBrowser(this.platformId)) {
+      this.synapseService
+        .getTermsOfService()
+        .pipe(
+          takeUntilDestroyed(this.destroyRef),
+          finalize(() => {
+            this.isLoading.set(false);
+          }),
+        )
+        .subscribe({
+          next: (markdown) => {
+            this.content = markdown;
+          },
+          error: (error) => {
+            console.error('Error loading terms of service:', error);
+          },
+        });
+    }
   }
 }
