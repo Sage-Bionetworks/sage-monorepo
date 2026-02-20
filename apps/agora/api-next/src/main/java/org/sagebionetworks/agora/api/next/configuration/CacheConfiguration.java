@@ -33,6 +33,7 @@ public class CacheConfiguration {
       List.of(
         CacheNames.DATA_VERSION,
         CacheNames.COMPARISON_TOOL_CONFIG,
+        CacheNames.NOMINATED_DRUG,
         CacheNames.NOMINATED_TARGET
       )
     );

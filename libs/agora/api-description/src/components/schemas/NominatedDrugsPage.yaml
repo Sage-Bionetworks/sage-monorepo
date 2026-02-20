@@ -1,0 +1,12 @@
+type: object
+description: A page of nominated drug objects.
+properties:
+  nominatedDrugs:
+    type: array
+    items:
+      $ref: NominatedDrug.yaml
+  page:
+    $ref: PageMetadata.yaml
+required:
+  - nominatedDrugs
+  - page

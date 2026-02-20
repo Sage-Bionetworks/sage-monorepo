@@ -6,8 +6,8 @@
 package org.sagebionetworks.agora.api.next.api;
 
 import org.sagebionetworks.agora.api.next.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.api.next.model.dto.NominatedTargetSearchQueryDto;
-import org.sagebionetworks.agora.api.next.model.dto.NominatedTargetsPageDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,32 +34,32 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Nominated Target", description = "Operations about Nominated Target results.")
-public interface NominatedTargetApi {
+@Tag(name = "Nominated Drug", description = "Operations about Nominated Drugs.")
+public interface NominatedDrugApi {
 
-    default NominatedTargetApiDelegate getDelegate() {
-        return new NominatedTargetApiDelegate() {};
+    default NominatedDrugApiDelegate getDelegate() {
+        return new NominatedDrugApiDelegate() {};
     }
 
     /**
-     * GET /comparison-tools/targets : Get nominated target results for comparison tools
-     * Returns a paginated list of nominated target results for use in comparison tools.
+     * GET /comparison-tools/drugs : Get nominated drug results for comparison tools
+     * Returns a paginated list of nominated drug results for use in comparison tools.
      *
-     * @param nominatedTargetSearchQuery The search query used to find and filter nominated targets. (optional)
-     * @return A paginated list of nominated target results (status code 200)
+     * @param nominatedDrugSearchQuery The search query used to find and filter nominated drugs. (optional)
+     * @return A paginated list of nominated drug results (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "getNominatedTargets",
-        summary = "Get nominated target results for comparison tools",
-        description = "Returns a paginated list of nominated target results for use in comparison tools.",
-        tags = { "Nominated Target" },
+        operationId = "getNominatedDrugs",
+        summary = "Get nominated drug results for comparison tools",
+        description = "Returns a paginated list of nominated drug results for use in comparison tools.",
+        tags = { "Nominated Drug" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "A paginated list of nominated target results", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = NominatedTargetsPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = NominatedTargetsPageDto.class))
+            @ApiResponse(responseCode = "200", description = "A paginated list of nominated drug results", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = NominatedDrugsPageDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = NominatedDrugsPageDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -77,14 +77,14 @@ public interface NominatedTargetApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/comparison-tools/targets",
+        value = "/comparison-tools/drugs",
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<NominatedTargetsPageDto> getNominatedTargets(
-        @Parameter(name = "nominatedTargetSearchQuery", description = "The search query used to find and filter nominated targets.", in = ParameterIn.QUERY) @Valid @Nullable NominatedTargetSearchQueryDto nominatedTargetSearchQuery
+    default ResponseEntity<NominatedDrugsPageDto> getNominatedDrugs(
+        @Parameter(name = "nominatedDrugSearchQuery", description = "The search query used to find and filter nominated drugs.", in = ParameterIn.QUERY) @Valid @Nullable NominatedDrugSearchQueryDto nominatedDrugSearchQuery
     ) {
-        return getDelegate().getNominatedTargets(nominatedTargetSearchQuery);
+        return getDelegate().getNominatedDrugs(nominatedDrugSearchQuery);
     }
 
 }

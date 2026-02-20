@@ -1,0 +1,21 @@
+get:
+  tags:
+    - Nominated Drug
+  summary: Get nominated drug results for comparison tools
+  description: Returns a paginated list of nominated drug results for use in comparison tools.
+  operationId: getNominatedDrugs
+  parameters:
+    - $ref: ../query/nominatedDrugSearchQuery.yaml
+  responses:
+    '200':
+      description: A paginated list of nominated drug results
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/NominatedDrugsPage.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
