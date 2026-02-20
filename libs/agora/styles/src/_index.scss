@@ -2,6 +2,8 @@
 @import 'normalize.css';
 @import './lib/mixins';
 @import './lib/variables';
+@import './lib/general';
+@import './lib/wiki-pages';
 @import './lib/components/button';
 @import './lib/components/chart';
 @import './lib/components/chart_d3';
@@ -15,4 +17,3 @@
 @import './lib/components/table';
 @import './lib/components/tooltip';
 @import './lib/components/typography';
-@import './lib/general';

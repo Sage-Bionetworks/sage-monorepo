@@ -7,7 +7,7 @@ import {
   OverallScoresDistribution,
 } from '@sagebionetworks/agora/api-client';
 import { ScoreBarChartComponent } from '@sagebionetworks/agora/charts';
-import { PopoverLinkComponent } from '../popover-link/popover-link.component';
+import { PopoverLinkComponent } from '@sagebionetworks/explorers/util';
 
 export interface SOEChartProps {
   title: string;

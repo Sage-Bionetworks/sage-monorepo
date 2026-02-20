@@ -1,6 +1,6 @@
-import { SynapseWiki } from '@sagebionetworks/agora/models';
+import { SynapseWikiMarkdown } from '@sagebionetworks/explorers/models';
 
-export const synapseWikiMock: SynapseWiki = {
+export const synapseWikiMarkdownMock: SynapseWikiMarkdown = {
   id: '612058',
   title: 'About',
   markdown:
