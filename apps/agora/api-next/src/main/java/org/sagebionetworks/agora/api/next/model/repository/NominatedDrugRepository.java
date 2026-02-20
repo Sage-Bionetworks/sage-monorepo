@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
  * collection.
  */
 @Repository
-public interface NominatedDrugRepository extends MongoRepository<NominatedDrugDocument, ObjectId> {}
+public interface NominatedDrugRepository
+  extends MongoRepository<NominatedDrugDocument, ObjectId>, CustomNominatedDrugRepository {}
