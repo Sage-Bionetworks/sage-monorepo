@@ -715,8 +715,10 @@ def _build_carousel_html(carousel_id: str) -> str:
         }}
 
         .quest-update-accordion.expanded .accordion-content {{
-            max-height: 500px;
+            max-height: 400px;
+            overflow-y: auto;
             padding: 0 1rem 1rem 1rem;
+            scrollbar-color: var(--border-color-primary) transparent;
         }}
 
         .update-description {{
