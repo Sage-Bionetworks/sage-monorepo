@@ -68,6 +68,52 @@ QUEST_CONFIG = {
     "updates": [
         # Updates are displayed in chronological order (newest first)
         {
+            "date": "2026-02-20",
+            "title": "Chapter 2: Shadows Over Stone",
+            "description": (
+                "At first light, I stood above the village, standing atop the old church tower as the wind rolled in from the surrounding waters. Our hill rose like a crown from the sea, protected on all sides by water save for the western stretch where the land sloped down to meet the greater continent beyond. It was a natural fortress, a fitting cradle for an arena meant to test champions.\n\n"
+                "Below me, the village stirred to life.\n\n"
+                "Earlier, I had wandered its narrow paths, stepping into quiet houses still scented with wood and bread. In one corner, I discovered a brewing stand, its glass bottles empty but full of promise. With the right ingredients, it could yield draughts of strength, swiftness, even potions to breathe beneath the waves that encircle our hill.\n\n"
+                "Beyond the village, to the south, stretched something extraordinary.\n\n"
+                "In the distance shimmered a forest of cherry trees, their pale blossoms glowing whenever the sun brushed their crowns. Even from the tower, I could almost see petals drifting like slow-falling embers of light. I have decided to call it the Sunpetal Expanse, a place I will explore once the arena's inner wall stands complete.\n\n"
+                "As I stood there, watching the Sunpetal Expanse blaze softly in the morning light, I felt it. The faint but undeniable sense that I was not alone in my vigil.\n\n"
+                "The feeling passed as quickly as it came.\n\n"
+                "New blocks had arrived since the last count, forty contributions carried into this world through shared effort. I descended from the tower and made my way to the site.\n\n"
+                "Stone met stone in steady rhythm. With these additions, the full perimeter of the inner wall now stood one block high, complete. It felt significant, seeing the arena's heart fully outlined at last. Without pause, I began raising sections to a second block. Already, the difference was tangible. Two blocks high, and most wandering creatures would think twice before crossing into the arena's bounds.\n\n"
+                "Progress is a powerful thing. It makes one bold.\n\n"
+                "Too bold, perhaps.\n\n"
+                "I worked longer than I intended. By the time I stepped back to admire the rising wall, dusk had crept across the sky and drained the color from the world. Shadows pooled in the spaces I had neglected, the unwatched corners, the unlit stretches of ground.\n\n"
+                "In my eagerness to build, I had failed to secure the site with proper lighting.\n\n"
+                "Night answered swiftly.\n\n"
+                "A groan echoed between the houses. Then another. Shapes emerged at the village's edge, shambling figures and the sharp silhouettes of archers drawing unseen bows. I ran to the square, sword in hand, where the iron golem already stood braced for impact.\n\n"
+                "Steel flashed. The first zombie fell beneath my blade. I struck the village bell beside the fountain, its urgent toll rolling through the streets, a warning for every villager to seek shelter indoors.\n\n"
+                "Arrows hissed through the dark. The golem moved with heavy, resolute force, sending skeletons scattering into bone and silence. Together we pressed outward, driving back the intruders before they could reach the livestock pens or batter down wooden doors.\n\n"
+                "Only when the square fell quiet did I notice movement near the arena.\n\n"
+                "A lone creeper had slipped inside the unfinished wall.\n\n"
+                "The golem and I rushed toward it as the creature advanced with dreadful intent. Its body began to tremble, swelling with volatile energy, a rising hiss escaping from within as though the very air around it were being devoured. It was not rage that drove it, but inevitability, a creature built for a single catastrophic purpose.\n\n"
+                "The golem lunged.\n\n"
+                "The impact came at the same instant as the detonation. A violent burst of force rippled across the arena floor, scattering fragments of stone and earth. When the smoke cleared, the creeper was gone, replaced by a shallow crater torn into the very center of our work.\n\n"
+                "The wall still stood.\n\n"
+                "By the time the last shadows retreated, dawn had broken across the hilltop. The rising sun burned away any lingering threats beyond the village, leaving only drifting ash where night's creatures once stood.\n\n"
+                "Only then did I kneel at the heart of the arena and fill the wound with fresh dirt. In time, grass would reclaim it, and little evidence of the blast would remain. But I would remember. Even the strongest walls demand foresight. Light will come, in its proper time. For now, the stones must continue to rise.\n\n"
+                "I stood once more in the center of the arena, the inner wall catching the morning light. Two blocks high in places. One block elsewhere. Incomplete but rising.\n\n"
+                "Again, that feeling returned. A quiet awareness at the edge of perception. As though unseen eyes measured each stone, each decision.\n\n"
+                "I shook it off and turned toward the village.\n\n"
+                "There will be time to wonder later. For now, there is breakfast to share, walls to raise, and many days still ahead.\n\n"
+                "The arena grows."
+            ),
+            "images": [
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-1.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-2.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-3.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-4.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-5.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-6.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-7.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-8.jpg",
+            ],
+        },
+        {
             "date": "2026-02-13",
             "title": "Chapter 1: Laying the First Stones",
             "description": (
