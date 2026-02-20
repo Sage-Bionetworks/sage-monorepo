@@ -11,7 +11,7 @@ import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
   styleUrls: ['./wiki-hero.component.scss'],
 })
 export class WikiHeroComponent {
-  wikiParams = input<SynapseWikiParams>(); // from the route data
+  wikiParams = input.required<SynapseWikiParams>(); // from the route data
   heroTitle = input('heroTitle'); // from the route data
   heroBackgroundImagePath = input<string | undefined>(); // from the route data
   className = input<string>(''); // from the route data

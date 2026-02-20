@@ -20,7 +20,7 @@
     >
     </agora-score-barchart>
 
-    @if (scoreDistribution) {
+    @if (scoreDistribution && wikiParams) {
       <div class="gct-score-panel-wiki">
         <explorers-wiki [wikiParams]="wikiParams"></explorers-wiki>
       </div>

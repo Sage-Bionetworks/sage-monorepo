@@ -22,4 +22,11 @@ public final class CacheNames {
    * Key format: Static key "comparisonToolConfig"
    */
   public static final String COMPARISON_TOOL_CONFIG = "comparisonToolConfig";
+
+  /**
+   * Cache for nominated target queries.
+   * Stores results from nominated target comparison queries filtered by items and filter type.
+   * Key format: Dynamic based on query parameters (items, filterType)
+   */
+  public static final String NOMINATED_TARGET = "nominatedTarget";
 }

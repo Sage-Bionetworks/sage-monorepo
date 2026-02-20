@@ -66,7 +66,7 @@ class ModelOverviewApiControllerWebTest {
     mockMvc
       .perform(
         get("/v1/comparison-tools/model-overview")
-          .param("item", modelName)
+          .param("items", modelName)
           .param("sortFields", "name")
           .param("sortOrders", "1")
       )

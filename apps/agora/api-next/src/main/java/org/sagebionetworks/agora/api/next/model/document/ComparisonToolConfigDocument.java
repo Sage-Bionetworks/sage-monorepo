@@ -14,7 +14,7 @@ import org.springframework.lang.Nullable;
 @Getter
 @Setter
 @NoArgsConstructor
-@Document(collection = "ui_config")
+@Document(collection = "uiconfig")
 public class ComparisonToolConfigDocument {
 
   @Id

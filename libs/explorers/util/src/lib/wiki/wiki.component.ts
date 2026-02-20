@@ -18,7 +18,7 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs';
 @Component({
   selector: 'explorers-wiki',
   imports: [LoadingIconComponent],
@@ -32,9 +32,9 @@ export class WikiComponent implements OnInit {
   private readonly errorOverlayService = inject(ErrorOverlayService);
   synapseApiService = inject(SynapseApiService);
   domSanitizer = inject(DomSanitizer);
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
-  wikiParams = input<SynapseWikiParams>();
+  wikiParams = input.required<SynapseWikiParams>();
   className = input<string>('');
 
   isLoading = signal(true);
@@ -46,12 +46,7 @@ export class WikiComponent implements OnInit {
 
   getWikiMarkdown() {
     if (isPlatformBrowser(this.platformId)) {
-      const ownerId = this.wikiParams()?.ownerId;
-      const wikiId = this.wikiParams()?.wikiId;
-      if (!ownerId || !wikiId) {
-        this.logger.error('WikiComponent: Wiki parameter(s) missing');
-        return;
-      }
+      const { ownerId, wikiId } = this.wikiParams();
 
       this.isLoading.set(true);
       this.logger.log('WikiComponent: Loading wiki content', { ownerId, wikiId });

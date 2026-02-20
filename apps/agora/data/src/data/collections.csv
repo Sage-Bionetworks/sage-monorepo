@@ -8,9 +8,12 @@ genesneuropathcorr,neuropath_corr.json
 geneexpvalidation,target_exp_validation_harmonized.json
 genescoredistribution,distribution_data.json
 genesoverallscores,overall_scores.json
+nominateddrugs,nominated_drugs.json
+nominatedtargets,nominated_targets.json
 rnaboxdistribution,rna_distribution_data.json
 proteomicsboxdistribution,proteomics_distribution_data.json
 proteomicstmt,proteomics_tmt.json
 proteomicssrm,proteomics_srm.json
 genesbiodomains,genes_biodomains.json
 biodomaininfo,biodomain_info.json
+uiconfig,ui_config.json

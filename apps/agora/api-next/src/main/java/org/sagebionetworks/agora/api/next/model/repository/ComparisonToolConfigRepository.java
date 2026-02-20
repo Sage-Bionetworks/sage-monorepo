@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 /**
  * Repository interface for ComparisonToolConfig documents in MongoDB.
  *
- * <p>Provides type-safe query methods for retrieving comparison tool config data from the ui_config
+ * <p>Provides type-safe query methods for retrieving comparison tool config data from the uiconfig
  * collection.
  */
 @Repository

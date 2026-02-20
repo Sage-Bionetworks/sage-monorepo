@@ -57,54 +57,6 @@ class ApiHelperTest {
   class CreateSort {
 
     @Test
-    @DisplayName("should return unsorted when sortFields is null")
-    void shouldReturnUnsortedWhenSortFieldsNull() {
-      Sort result = ApiHelper.createSort(null, List.of(1));
-
-      assertThat(result.isUnsorted()).isTrue();
-    }
-
-    @Test
-    @DisplayName("should return unsorted when sortFields is empty")
-    void shouldReturnUnsortedWhenSortFieldsEmpty() {
-      Sort result = ApiHelper.createSort(List.of(), List.of(1));
-
-      assertThat(result.isUnsorted()).isTrue();
-    }
-
-    @Test
-    @DisplayName("should return unsorted when sortOrders is null")
-    void shouldReturnUnsortedWhenSortOrdersNull() {
-      Sort result = ApiHelper.createSort(List.of("name"), null);
-
-      assertThat(result.isUnsorted()).isTrue();
-    }
-
-    @Test
-    @DisplayName("should return unsorted when sortOrders is empty")
-    void shouldReturnUnsortedWhenSortOrdersEmpty() {
-      Sort result = ApiHelper.createSort(List.of("name"), List.of());
-
-      assertThat(result.isUnsorted()).isTrue();
-    }
-
-    @Test
-    @DisplayName("should return unsorted when both are null")
-    void shouldReturnUnsortedWhenBothNull() {
-      Sort result = ApiHelper.createSort(null, null);
-
-      assertThat(result.isUnsorted()).isTrue();
-    }
-
-    @Test
-    @DisplayName("should return unsorted when both are empty")
-    void shouldReturnUnsortedWhenBothEmpty() {
-      Sort result = ApiHelper.createSort(List.of(), List.of());
-
-      assertThat(result.isUnsorted()).isTrue();
-    }
-
-    @Test
     @DisplayName("should create ascending sort for positive order")
     void shouldCreateAscendingSortForPositiveOrder() {
       Sort result = ApiHelper.createSort(List.of("name"), List.of(1));

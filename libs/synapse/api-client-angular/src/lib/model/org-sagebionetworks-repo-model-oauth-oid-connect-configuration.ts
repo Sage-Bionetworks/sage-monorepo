@@ -33,6 +33,10 @@ export interface OrgSagebionetworksRepoModelOauthOIDConnectConfiguration {
    */
   userinfo_endpoint?: string;
   /**
+   * URL of the Synapse OAuth 2.0 Token Introspection Endpoint
+   */
+  introspection_endpoint?: string;
+  /**
    * URL of the Synapse JSON Web Key Set [JWK] document.
    */
   jwks_uri?: string;

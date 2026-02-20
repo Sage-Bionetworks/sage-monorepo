@@ -57,6 +57,7 @@ export interface ComparisonToolQuery {
 export interface ComparisonToolViewConfig {
   selectorsWikiParams: Record<string, SynapseWikiParams>;
   headerTitle: string;
+  headerTitleWikiParams?: SynapseWikiParams;
   filterResultsButtonTooltip: string;
   showSignificanceControls: boolean;
   viewDetailsTooltip: string;
