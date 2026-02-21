@@ -9,7 +9,7 @@
       altText="info"
     />
     @if (text()) {
-      <span class="modal-link-text" [ngStyle]="getTextColor()">
+      <span class="modal-link-text" [ngStyle]="textColorStyle()">
         {{ text() }}
       </span>
     }
