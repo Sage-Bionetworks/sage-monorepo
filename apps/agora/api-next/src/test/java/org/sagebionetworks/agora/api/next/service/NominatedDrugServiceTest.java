@@ -347,7 +347,9 @@ class NominatedDrugServiceTest {
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
       .principalInvestigators(List.of("PI One"))
+      .programs(List.of("ACTDRx AD"))
       .totalNominations(List.of(3))
+      .yearFirstNominated(List.of(2022))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .pageNumber(0)
       .pageSize(100)

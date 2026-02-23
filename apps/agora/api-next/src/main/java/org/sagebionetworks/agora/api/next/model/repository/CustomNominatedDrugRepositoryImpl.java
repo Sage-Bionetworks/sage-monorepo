@@ -40,7 +40,10 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
   private static final String PRIMARY_FIELD = "common_name";
 
   /** Array fields that need computed fields for custom sort handling */
-  private static final Set<String> ARRAY_FIELDS = Set.of("principal_investigators");
+  private static final Set<String> ARRAY_FIELDS = Set.of(
+    "principal_investigators",
+    "programs"
+  );
 
   private final MongoTemplate mongoTemplate;
 
@@ -106,7 +109,9 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
     // Add data filters (AND between fields, OR within field)
     addDataFilterCriteria(
       query.getPrincipalInvestigators(),
+      query.getPrograms(),
       query.getTotalNominations(),
+      query.getYearFirstNominated(),
       andCriteria
     );
 
@@ -198,7 +203,9 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
 
   private void addDataFilterCriteria(
     List<String> principalInvestigators,
+    List<String> programs,
     List<Integer> totalNominations,
+    List<Integer> yearFirstNominated,
     List<Criteria> andCriteria
   ) {
     // principal_investigators: array field - use $in (matches if array contains any value)
@@ -206,9 +213,19 @@ public class CustomNominatedDrugRepositoryImpl implements CustomNominatedDrugRep
       andCriteria.add(Criteria.where("principal_investigators").in(principalInvestigators));
     }
 
+    // programs: array field - use $in (matches if array contains any value)
+    if (programs != null && !programs.isEmpty()) {
+      andCriteria.add(Criteria.where("programs").in(programs));
+    }
+
     // totalNominations: scalar field - use $in
     if (totalNominations != null && !totalNominations.isEmpty()) {
       andCriteria.add(Criteria.where("total_nominations").in(totalNominations));
+    }
+
+    // yearFirstNominated: scalar field - use $in
+    if (yearFirstNominated != null && !yearFirstNominated.isEmpty()) {
+      andCriteria.add(Criteria.where("year_first_nominated").in(yearFirstNominated));
     }
   }
 

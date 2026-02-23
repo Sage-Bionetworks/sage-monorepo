@@ -35,9 +35,17 @@ export interface NominatedDrugSearchQuery {
    */
   principalInvestigators?: Array<string> | null;
   /**
+   * Filter by programs.
+   */
+  programs?: Array<string> | null;
+  /**
    * Filter by total nominations.
    */
   totalNominations?: Array<number> | null;
+  /**
+   * Filter by year first nominated.
+   */
+  yearFirstNominated?: Array<number> | null;
   /**
    * List of field names to sort by (e.g., [\"total_nominations\", \"common_name\"]). Each field in sortFields must have a corresponding order in sortOrders.
    */
