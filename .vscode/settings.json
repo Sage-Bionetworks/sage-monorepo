@@ -87,5 +87,6 @@
     "wc": true,
     "wget": false
   },
-  "chat.useAgentSkills": true
+  "chat.useAgentSkills": true,
+  "github.copilot.chat.searchSubagent.enabled": true
 }
