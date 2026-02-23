@@ -7,5 +7,5 @@ import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
   template: '<div>wiki</div>',
 })
 export class MockWikiComponent {
-  wikiParams = input<SynapseWikiParams>();
+  wikiParams = input.required<SynapseWikiParams>();
 }

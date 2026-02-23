@@ -19,10 +19,10 @@
     }
 
     .loading-icon {
+      flex: 1;
       display: flex;
-      justify-content: center;
       align-items: center;
-      width: min(vars.$main-content-desktop-width, 100%);
+      justify-content: center;
     }
 
     .terms-of-service-content {

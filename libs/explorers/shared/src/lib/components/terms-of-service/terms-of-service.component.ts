@@ -5,12 +5,13 @@ import {
   inject,
   input,
   OnInit,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import { PlatformService, SynapseApiService } from '@sagebionetworks/explorers/services';
 import { HeroComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { MarkdownModule } from 'ngx-markdown';
@@ -26,9 +27,10 @@ import { finalize } from 'rxjs/operators';
 export class TermsOfServiceComponent implements OnInit {
   synapseService = inject(SynapseApiService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly platformService = inject(PlatformService);
 
   content = '';
-  isLoading = true;
+  isLoading = signal(true);
   heroBackgroundImagePath = input<string | undefined>();
 
   heroBackgroundImagePathOrDefault = computed(
@@ -40,21 +42,23 @@ export class TermsOfServiceComponent implements OnInit {
   }
 
   loadTOS() {
-    this.synapseService
-      .getTermsOfService()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        finalize(() => {
-          this.isLoading = false;
-        }),
-      )
-      .subscribe({
-        next: (markdown) => {
-          this.content = markdown;
-        },
-        error: (error) => {
-          console.error('Error loading terms of service:', error);
-        },
-      });
+    if (this.platformService.isBrowser) {
+      this.synapseService
+        .getTermsOfService()
+        .pipe(
+          takeUntilDestroyed(this.destroyRef),
+          finalize(() => {
+            this.isLoading.set(false);
+          }),
+        )
+        .subscribe({
+          next: (markdown) => {
+            this.content = markdown;
+          },
+          error: (error) => {
+            console.error('Error loading terms of service:', error);
+          },
+        });
+    }
   }
 }

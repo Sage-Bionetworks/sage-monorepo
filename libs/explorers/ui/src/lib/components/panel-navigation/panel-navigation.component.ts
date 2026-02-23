@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   AfterViewChecked,
   AfterViewInit,
@@ -7,12 +7,11 @@ import {
   inject,
   input,
   output,
-  PLATFORM_ID,
 } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Panel } from '@sagebionetworks/explorers/models';
-import { HelperService } from '@sagebionetworks/explorers/services';
+import { HelperService, PlatformService } from '@sagebionetworks/explorers/services';
 
 @Component({
   selector: 'explorers-panel-navigation',
@@ -23,7 +22,7 @@ import { HelperService } from '@sagebionetworks/explorers/services';
 })
 export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked {
   helperService = inject(HelperService);
-  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
+  private readonly platformService = inject(PlatformService);
 
   panels = input.required<Panel[]>();
   activePanel = input.required<string>();
@@ -37,9 +36,9 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
   private readonly DEFAULT_NAV_SLIDE_INDEX = 0;
   navSlideIndex = this.DEFAULT_NAV_SLIDE_INDEX;
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener('window:scroll')
   onWindowScroll() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       const nav = document.querySelector<HTMLElement>('.panel-navigation');
       const rect = nav?.getBoundingClientRect();
 
@@ -51,9 +50,9 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
     }
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onWindowResize() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       const nav = document.querySelector<HTMLElement>('.panel-navigation');
       const navContainer = nav?.querySelector<HTMLElement>('.panel-navigation-container');
       const navList = nav?.querySelector<HTMLElement>('.panel-navigation-container > ul');
@@ -92,7 +91,7 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
   }
 
   activatePanel(panel: Panel) {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       this.panelChange.emit(panel);
       this.scrollToPanelNavElement();
     }
