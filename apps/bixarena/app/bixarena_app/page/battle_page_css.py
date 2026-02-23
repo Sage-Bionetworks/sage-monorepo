@@ -314,5 +314,6 @@ NEXT_BATTLE_BUTTON_CSS = """
 #next-battle-btn,
 #battle-again-btn {
     max-width: 240px;
+    min-height: 4em;
 }
 """
