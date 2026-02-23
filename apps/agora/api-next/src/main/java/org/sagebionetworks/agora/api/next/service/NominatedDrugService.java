@@ -34,8 +34,8 @@ public class NominatedDrugService {
   @Cacheable(
     key = "T(org.sagebionetworks.agora.api.next.util.ApiHelper)" +
     ".buildCacheKey('nominatedDrug', #query.itemFilterType, " +
-    "#query.items, #query.search, #query.principalInvestigators, #query.programs, " +
-    "#query.totalNominations, #query.yearFirstNominated, #query.pageNumber, " +
+    "#query.items, #query.search, #query.principalInvestigators, " +
+    "#query.totalNominations, #query.pageNumber, " +
     "#query.pageSize, #query.sortFields, #query.sortOrders)"
   )
   public NominatedDrugsPageDto loadNominatedDrugs(NominatedDrugSearchQueryDto query) {

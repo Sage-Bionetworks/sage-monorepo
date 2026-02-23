@@ -44,13 +44,7 @@ public class NominatedDrugSearchQueryDto {
   private @Nullable List<String> principalInvestigators;
 
   @Valid
-  private @Nullable List<String> programs;
-
-  @Valid
   private @Nullable List<Integer> totalNominations;
-
-  @Valid
-  private @Nullable List<Integer> yearFirstNominated;
 
   @Valid
   private List<String> sortFields = new ArrayList<>();
@@ -244,34 +238,6 @@ public class NominatedDrugSearchQueryDto {
     this.principalInvestigators = principalInvestigators;
   }
 
-  public NominatedDrugSearchQueryDto programs(@Nullable List<String> programs) {
-    this.programs = programs;
-    return this;
-  }
-
-  public NominatedDrugSearchQueryDto addProgramsItem(String programsItem) {
-    if (this.programs == null) {
-      this.programs = new ArrayList<>();
-    }
-    this.programs.add(programsItem);
-    return this;
-  }
-
-  /**
-   * Filter by programs.
-   * @return programs
-   */
-  
-  @Schema(name = "programs", example = "[\"ACTDRx AD\",\"AMP-AD\"]", description = "Filter by programs.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("programs")
-  public @Nullable List<String> getPrograms() {
-    return programs;
-  }
-
-  public void setPrograms(@Nullable List<String> programs) {
-    this.programs = programs;
-  }
-
   public NominatedDrugSearchQueryDto totalNominations(@Nullable List<Integer> totalNominations) {
     this.totalNominations = totalNominations;
     return this;
@@ -298,34 +264,6 @@ public class NominatedDrugSearchQueryDto {
 
   public void setTotalNominations(@Nullable List<Integer> totalNominations) {
     this.totalNominations = totalNominations;
-  }
-
-  public NominatedDrugSearchQueryDto yearFirstNominated(@Nullable List<Integer> yearFirstNominated) {
-    this.yearFirstNominated = yearFirstNominated;
-    return this;
-  }
-
-  public NominatedDrugSearchQueryDto addYearFirstNominatedItem(Integer yearFirstNominatedItem) {
-    if (this.yearFirstNominated == null) {
-      this.yearFirstNominated = new ArrayList<>();
-    }
-    this.yearFirstNominated.add(yearFirstNominatedItem);
-    return this;
-  }
-
-  /**
-   * Filter by year first nominated.
-   * @return yearFirstNominated
-   */
-  
-  @Schema(name = "yearFirstNominated", example = "[2024,2025]", description = "Filter by year first nominated.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("yearFirstNominated")
-  public @Nullable List<Integer> getYearFirstNominated() {
-    return yearFirstNominated;
-  }
-
-  public void setYearFirstNominated(@Nullable List<Integer> yearFirstNominated) {
-    this.yearFirstNominated = yearFirstNominated;
   }
 
   public NominatedDrugSearchQueryDto sortFields(List<String> sortFields) {
@@ -399,16 +337,14 @@ public class NominatedDrugSearchQueryDto {
         Objects.equals(this.itemFilterType, nominatedDrugSearchQuery.itemFilterType) &&
         Objects.equals(this.search, nominatedDrugSearchQuery.search) &&
         Objects.equals(this.principalInvestigators, nominatedDrugSearchQuery.principalInvestigators) &&
-        Objects.equals(this.programs, nominatedDrugSearchQuery.programs) &&
         Objects.equals(this.totalNominations, nominatedDrugSearchQuery.totalNominations) &&
-        Objects.equals(this.yearFirstNominated, nominatedDrugSearchQuery.yearFirstNominated) &&
         Objects.equals(this.sortFields, nominatedDrugSearchQuery.sortFields) &&
         Objects.equals(this.sortOrders, nominatedDrugSearchQuery.sortOrders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, principalInvestigators, programs, totalNominations, yearFirstNominated, sortFields, sortOrders);
+    return Objects.hash(pageNumber, pageSize, items, itemFilterType, search, principalInvestigators, totalNominations, sortFields, sortOrders);
   }
 
   @Override
@@ -421,9 +357,7 @@ public class NominatedDrugSearchQueryDto {
     sb.append("    itemFilterType: ").append(toIndentedString(itemFilterType)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    principalInvestigators: ").append(toIndentedString(principalInvestigators)).append("\n");
-    sb.append("    programs: ").append(toIndentedString(programs)).append("\n");
     sb.append("    totalNominations: ").append(toIndentedString(totalNominations)).append("\n");
-    sb.append("    yearFirstNominated: ").append(toIndentedString(yearFirstNominated)).append("\n");
     sb.append("    sortFields: ").append(toIndentedString(sortFields)).append("\n");
     sb.append("    sortOrders: ").append(toIndentedString(sortOrders)).append("\n");
     sb.append("}");
@@ -460,9 +394,7 @@ public class NominatedDrugSearchQueryDto {
       this.instance.setItemFilterType(value.itemFilterType);
       this.instance.setSearch(value.search);
       this.instance.setPrincipalInvestigators(value.principalInvestigators);
-      this.instance.setPrograms(value.programs);
       this.instance.setTotalNominations(value.totalNominations);
-      this.instance.setYearFirstNominated(value.yearFirstNominated);
       this.instance.setSortFields(value.sortFields);
       this.instance.setSortOrders(value.sortOrders);
       return this;
@@ -498,18 +430,8 @@ public class NominatedDrugSearchQueryDto {
       return this;
     }
     
-    public NominatedDrugSearchQueryDto.Builder programs(List<String> programs) {
-      this.instance.programs(programs);
-      return this;
-    }
-    
     public NominatedDrugSearchQueryDto.Builder totalNominations(List<Integer> totalNominations) {
       this.instance.totalNominations(totalNominations);
-      return this;
-    }
-    
-    public NominatedDrugSearchQueryDto.Builder yearFirstNominated(List<Integer> yearFirstNominated) {
-      this.instance.yearFirstNominated(yearFirstNominated);
       return this;
     }
     

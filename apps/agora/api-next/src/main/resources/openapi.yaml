@@ -448,29 +448,11 @@ components:
             type: string
           nullable: true
           type: array
-        programs:
-          description: Filter by programs.
-          example:
-            - ACTDRx AD
-            - AMP-AD
-          items:
-            type: string
-          nullable: true
-          type: array
         totalNominations:
           description: Filter by total nominations.
           example:
             - 1
             - 2
-          items:
-            type: integer
-          nullable: true
-          type: array
-        yearFirstNominated:
-          description: Filter by year first nominated.
-          example:
-            - 2024
-            - 2025
           items:
             type: integer
           nullable: true

@@ -59,7 +59,7 @@ class CustomNominatedDrugRepositoryImplTest {
     when(aggregationResults.getMappedResults()).thenReturn(List.of());
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
-      .programs(List.of("ACTDRx AD"))
+      .principalInvestigators(List.of("Xie"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
@@ -94,10 +94,7 @@ class CustomNominatedDrugRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
-    Sort sort = Sort.by(
-      Sort.Order.asc("principal_investigators"),
-      Sort.Order.desc("programs")
-    );
+    Sort sort = Sort.by(Sort.Order.asc("principal_investigators"));
     Pageable pageable = PageRequest.of(0, 10, sort);
 
     repository.findAll(pageable, query, List.of());
@@ -112,7 +109,6 @@ class CustomNominatedDrugRepositoryImplTest {
     String pipelineString = aggregationCaptor.getValue().toString();
 
     assertThat(pipelineString).contains("principal_investigators_sort");
-    assertThat(pipelineString).contains("programs_sort");
   }
 
   @Test
@@ -129,7 +125,7 @@ class CustomNominatedDrugRepositoryImplTest {
     when(aggregationResults.getMappedResults()).thenReturn(List.of());
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
-      .programs(List.of("ACTDRx AD"))
+      .principalInvestigators(List.of("Xie"))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
@@ -178,8 +174,8 @@ class CustomNominatedDrugRepositoryImplTest {
   }
 
   @Test
-  @DisplayName("should handle parallel array sorting by concatenating array elements")
-  void shouldHandleParallelArraySorting() {
+  @DisplayName("should handle array sorting by concatenating array elements")
+  void shouldHandleArraySorting() {
     when(mongoTemplate.count(any(Query.class), eq(COLLECTION_NAME))).thenReturn(10L);
     when(
       mongoTemplate.aggregate(
@@ -194,11 +190,7 @@ class CustomNominatedDrugRepositoryImplTest {
       .itemFilterType(ItemFilterTypeQueryDto.EXCLUDE)
       .build();
 
-    // Sort by both array fields simultaneously — would fail without scalar computation
-    Sort sort = Sort.by(
-      Sort.Order.asc("principal_investigators"),
-      Sort.Order.desc("programs")
-    );
+    Sort sort = Sort.by(Sort.Order.asc("principal_investigators"));
     Pageable pageable = PageRequest.of(0, 10, sort);
 
     repository.findAll(pageable, query, List.of());
@@ -215,9 +207,6 @@ class CustomNominatedDrugRepositoryImplTest {
     assertThat(pipelineString)
       .as("Should compute sort field for principal_investigators")
       .contains("principal_investigators_sort");
-    assertThat(pipelineString)
-      .as("Should compute sort field for programs")
-      .contains("programs_sort");
     assertThat(pipelineString)
       .as("Should use $reduce to concatenate elements")
       .contains("$reduce");
@@ -284,9 +273,7 @@ class CustomNominatedDrugRepositoryImplTest {
 
     NominatedDrugSearchQueryDto query = NominatedDrugSearchQueryDto.builder()
       .principalInvestigators(List.of("PI One"))
-      .programs(List.of("ACTDRx AD"))
       .totalNominations(List.of(3))
-      .yearFirstNominated(List.of(2022))
       .itemFilterType(ItemFilterTypeQueryDto.INCLUDE)
       .build();
 
@@ -304,8 +291,6 @@ class CustomNominatedDrugRepositoryImplTest {
     String pipelineString = aggregationCaptor.getValue().toString();
 
     assertThat(pipelineString).contains("principal_investigators");
-    assertThat(pipelineString).contains("programs");
     assertThat(pipelineString).contains("total_nominations");
-    assertThat(pipelineString).contains("year_first_nominated");
   }
 }

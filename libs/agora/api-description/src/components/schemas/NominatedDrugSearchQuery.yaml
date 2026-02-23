@@ -42,13 +42,6 @@ properties:
       type: string
     nullable: true
     example: ['Bhatt', 'Bhattacharya']
-  programs:
-    description: Filter by programs.
-    type: array
-    items:
-      type: string
-    nullable: true
-    example: ['ACTDRx AD', 'AMP-AD']
   totalNominations:
     description: Filter by total nominations.
     type: array
@@ -56,13 +49,6 @@ properties:
       type: integer
     nullable: true
     example: [1, 2]
-  yearFirstNominated:
-    description: Filter by year first nominated.
-    type: array
-    items:
-      type: integer
-    nullable: true
-    example: [2024, 2025]
   sortFields:
     description: |
       List of field names to sort by (e.g., ["total_nominations", "common_name"]).
