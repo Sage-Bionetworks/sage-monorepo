@@ -44,7 +44,10 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.NOMINATED_DRUGS,
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/agora/nominated-drugs-comparison-tool').then(
+        (routes) => routes.routes,
+      ),
     data: {
       title: "Nominated Drugs | Candidate drugs for Alzheimer's Disease treatment or prevention",
       description:
