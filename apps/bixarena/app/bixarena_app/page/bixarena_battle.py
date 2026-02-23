@@ -234,7 +234,7 @@ def vote_last_response(
         battle_session.last_prompt is not None
         and battle_session.prompt_reuse_remaining > 0
     )
-    battle_again_upd = gr.Button(
+    same_prompt_upd = gr.Button(
         value=f"New Battle\nSame Prompt ({battle_session.prompt_reuse_remaining} left)",
         variant="primary",
         visible=can_reuse,
@@ -256,8 +256,10 @@ def vote_last_response(
         + (gr.HTML(visible=False),)  # page_header: hide
         + (gr.Row(visible=False),)  # textbox_row: hide
         + (gr.HTML(visible=False),)  # disclaimer: hide
-        + (battle_again_upd,)  # battle_again_btn: show/hide based on reuse count
-        + (gr.Button(variant="secondary" if can_reuse else "primary"),)  # clear_btn
+        + (same_prompt_upd,)  # same_prompt_btn: show/hide based on reuse count
+        + (
+            gr.Button(variant="secondary" if can_reuse else "primary"),
+        )  # new_battle_btn
     )
 
 
@@ -361,13 +363,13 @@ def clear_history(
     return base_outputs
 
 
-def battle_again(battle_session: BattleSession, request: gr.Request = None):
+def new_battle_same_prompt(battle_session: BattleSession, request: gr.Request = None):
     """Reset battle state and prepare to resubmit the last prompt.
 
     Similar to clear_history() but preserves and reuses the last prompt,
     decrementing the reuse counter.
     """
-    logger.info("battle_again: reusing last prompt.")
+    logger.info("new_battle_same_prompt: reusing last prompt.")
 
     cookies = get_session_cookie(request)
 
@@ -382,7 +384,7 @@ def battle_again(battle_session: BattleSession, request: gr.Request = None):
 
     # Update button text for the next round
     can_reuse = battle_session.prompt_reuse_remaining > 0
-    battle_again_upd = gr.Button(
+    same_prompt_upd = gr.Button(
         value=f"New Battle\nSame Prompt ({battle_session.prompt_reuse_remaining} left)",
         variant="primary",
         visible=can_reuse,
@@ -413,8 +415,8 @@ def battle_again(battle_session: BattleSession, request: gr.Request = None):
         + [gr.Row(visible=True)]  # textbox_row: show temporarily
         + [gr.HTML(visible=False)]  # disclaimer: hide
         + [gr.Column(visible=False)]  # example_prompts_group: hide
-        + [battle_again_upd]  # battle_again_btn: update counter
-        + [gr.Button(variant="secondary" if can_reuse else "primary")]  # clear_btn
+        + [same_prompt_upd]  # same_prompt_btn: update counter
+        + [gr.Button(variant="secondary" if can_reuse else "primary")]  # new_battle_btn
     )
 
 
@@ -607,13 +609,13 @@ def build_side_by_side_ui_anony():
 
         # New Battle / Same Prompt buttons
         with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
-            battle_again_btn = gr.Button(
+            same_prompt_btn = gr.Button(
                 value=f"New Battle\nSame Prompt ({PROMPT_REUSE_LIMIT} left)",
                 variant="primary",
                 elem_id="battle-again-btn",
                 visible=False,
             )
-            clear_btn = gr.Button(
+            new_battle_btn = gr.Button(
                 value="New Battle",
                 variant="primary",
                 elem_id="next-battle-btn",
@@ -647,8 +649,8 @@ def build_side_by_side_ui_anony():
         + [textbox]
         + [left_vote_btn, tie_btn, right_vote_btn]
         + [voting_row, next_battle_row, page_header, textbox_row, disclaimer]
-        + [battle_again_btn]
-        + [clear_btn]
+        + [same_prompt_btn]
+        + [new_battle_btn]
     )
     left_vote_btn.click(
         left_vote_last_response,
@@ -665,7 +667,7 @@ def build_side_by_side_ui_anony():
         states + [battle_session] + model_selectors,
         vote_outputs,
     )
-    clear_btn.click(
+    new_battle_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
         [battle_session],
         states
@@ -682,7 +684,7 @@ def build_side_by_side_ui_anony():
     )
 
     # Direct JavaScript functions for enter key control
-    # (defined early so battle_again_btn handler can reference them)
+    # (defined early so same_prompt_btn handler can reference them)
     disable_enter_js = """
     () => {
         const textbox = document.querySelector('#input_box textarea');
@@ -744,8 +746,8 @@ def build_side_by_side_ui_anony():
     """
 
     # "Same Prompt" button: reset + auto-resubmit stored prompt
-    battle_again_btn.click(
-        battle_again,
+    same_prompt_btn.click(
+        new_battle_same_prompt,
         [battle_session],
         states
         + [battle_session]
@@ -757,8 +759,8 @@ def build_side_by_side_ui_anony():
         + [page_header, textbox_row]
         + [disclaimer]
         + [example_prompts_group]
-        + [battle_again_btn]
-        + [clear_btn],
+        + [same_prompt_btn]
+        + [new_battle_btn],
     ).then(
         add_text,
         states + [battle_session] + model_selectors + [textbox],
