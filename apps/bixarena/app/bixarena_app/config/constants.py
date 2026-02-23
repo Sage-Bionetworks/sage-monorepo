@@ -7,7 +7,7 @@ import os
 # User input limits
 PROMPT_LEN_LIMIT = int(os.getenv("PROMPT_LEN_LIMIT", 5000))
 BATTLE_ROUND_LIMIT = int(os.getenv("BATTLE_ROUND_LIMIT", 20))
-PROMPT_REUSE_LIMIT = int(os.getenv("PROMPT_REUSE_LIMIT", 1))
+PROMPT_REUSE_LIMIT = int(os.getenv("PROMPT_REUSE_LIMIT", 4))
 
 # Generation parameters
 DEFAULT_TEMPERATURE = 0.7
