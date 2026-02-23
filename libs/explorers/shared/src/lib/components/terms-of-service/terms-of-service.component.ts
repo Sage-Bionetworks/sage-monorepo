@@ -1,4 +1,3 @@
-import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   computed,
@@ -6,14 +5,13 @@ import {
   inject,
   input,
   OnInit,
-  PLATFORM_ID,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import { PlatformService, SynapseApiService } from '@sagebionetworks/explorers/services';
 import { HeroComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { MarkdownModule } from 'ngx-markdown';
@@ -29,7 +27,7 @@ import { finalize } from 'rxjs/operators';
 export class TermsOfServiceComponent implements OnInit {
   synapseService = inject(SynapseApiService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly platformId = inject(PLATFORM_ID);
+  private readonly platformService = inject(PlatformService);
 
   content = '';
   isLoading = signal(true);
@@ -44,7 +42,7 @@ export class TermsOfServiceComponent implements OnInit {
   }
 
   loadTOS() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       this.synapseService
         .getTermsOfService()
         .pipe(
