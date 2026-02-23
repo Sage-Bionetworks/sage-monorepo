@@ -235,7 +235,7 @@ def vote_last_response(
         and battle_session.prompt_reuse_remaining > 0
     )
     battle_again_upd = gr.Button(
-        value=f"Same Prompt ({battle_session.prompt_reuse_remaining} left)",
+        value=f"New Battle\nSame Prompt ({battle_session.prompt_reuse_remaining} left)",
         variant="primary",
         visible=can_reuse,
         interactive=can_reuse,
@@ -382,7 +382,7 @@ def battle_again(battle_session: BattleSession, request: gr.Request = None):
     # Update button text for the next round
     can_reuse = battle_session.prompt_reuse_remaining > 0
     battle_again_upd = gr.Button(
-        value=f"Same Prompt ({battle_session.prompt_reuse_remaining} left)",
+        value=f"New Battle\nSame Prompt ({battle_session.prompt_reuse_remaining} left)",
         variant="primary",
         visible=can_reuse,
         interactive=can_reuse,
@@ -606,7 +606,7 @@ def build_side_by_side_ui_anony():
         # Next Round / Battle Again buttons
         with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
             battle_again_btn = gr.Button(
-                value=f"Same Prompt ({PROMPT_REUSE_LIMIT} left)",
+                value=f"New Battle\nSame Prompt ({PROMPT_REUSE_LIMIT} left)",
                 variant="primary",
                 elem_id="battle-again-btn",
                 visible=False,

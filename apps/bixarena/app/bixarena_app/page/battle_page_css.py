@@ -309,11 +309,16 @@ NEXT_BATTLE_BUTTON_CSS = """
 #next-battle-row {
     justify-content: center;
     gap: 12px;
+    align-items: stretch;
 }
 
 #next-battle-btn,
 #battle-again-btn {
     max-width: 240px;
     min-height: 4em;
+}
+
+#battle-again-btn {
+    white-space: pre-line;
 }
 """
