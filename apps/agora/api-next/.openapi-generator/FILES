@@ -7,6 +7,9 @@ src/main/java/org/sagebionetworks/agora/api/next/api/ComparisonToolConfigApiDele
 src/main/java/org/sagebionetworks/agora/api/next/api/DataVersionApi.java
 src/main/java/org/sagebionetworks/agora/api/next/api/DataVersionApiController.java
 src/main/java/org/sagebionetworks/agora/api/next/api/DataVersionApiDelegate.java
+src/main/java/org/sagebionetworks/agora/api/next/api/NominatedDrugApi.java
+src/main/java/org/sagebionetworks/agora/api/next/api/NominatedDrugApiController.java
+src/main/java/org/sagebionetworks/agora/api/next/api/NominatedDrugApiDelegate.java
 src/main/java/org/sagebionetworks/agora/api/next/api/NominatedTargetApi.java
 src/main/java/org/sagebionetworks/agora/api/next/api/NominatedTargetApiController.java
 src/main/java/org/sagebionetworks/agora/api/next/api/NominatedTargetApiDelegate.java
@@ -20,6 +23,9 @@ src/main/java/org/sagebionetworks/agora/api/next/model/dto/ComparisonToolConfigF
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/ComparisonToolConfigPageDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/DataVersionDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/ItemFilterTypeQueryDto.java
+src/main/java/org/sagebionetworks/agora/api/next/model/dto/NominatedDrugDto.java
+src/main/java/org/sagebionetworks/agora/api/next/model/dto/NominatedDrugSearchQueryDto.java
+src/main/java/org/sagebionetworks/agora/api/next/model/dto/NominatedDrugsPageDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/NominatedTargetDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/NominatedTargetSearchQueryDto.java
 src/main/java/org/sagebionetworks/agora/api/next/model/dto/NominatedTargetsPageDto.java

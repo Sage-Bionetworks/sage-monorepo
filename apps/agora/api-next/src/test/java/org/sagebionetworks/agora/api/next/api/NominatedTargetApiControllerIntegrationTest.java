@@ -53,7 +53,7 @@ class NominatedTargetApiControllerIntegrationTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/nominated-target")
+        get("/v1/comparison-tools/targets")
           .param("sortFields", "hgnc_symbol")
           .param("sortOrders", "1")
           .accept(MediaType.APPLICATION_JSON)
@@ -70,7 +70,7 @@ class NominatedTargetApiControllerIntegrationTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/nominated-target")
+        get("/v1/comparison-tools/targets")
           .param("sortFields", "total_nominations")
           .param("sortOrders", "-1")
           .accept(MediaType.APPLICATION_JSON)
@@ -87,7 +87,7 @@ class NominatedTargetApiControllerIntegrationTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/nominated-target")
+        get("/v1/comparison-tools/targets")
           .param("itemFilterType", "exclude")
           .param("sortFields", "hgnc_symbol")
           .param("sortOrders", "1")
@@ -105,7 +105,7 @@ class NominatedTargetApiControllerIntegrationTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/nominated-target")
+        get("/v1/comparison-tools/targets")
           .param("sortFields", "total_nominations", "hgnc_symbol")
           .param("sortOrders", "-1", "1")
           .accept(MediaType.APPLICATION_JSON)
@@ -122,7 +122,7 @@ class NominatedTargetApiControllerIntegrationTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/nominated-target")
+        get("/v1/comparison-tools/targets")
           .param("pageNumber", "0")
           .param("pageSize", "20")
           .param("items", "APOE", "TREM2")
@@ -147,7 +147,7 @@ class NominatedTargetApiControllerIntegrationTest {
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/nominated-target")
+        get("/v1/comparison-tools/targets")
           .param("sortFields", "hgnc_symbol")
           .param("sortOrders", "1")
           .accept(MediaType.APPLICATION_JSON)

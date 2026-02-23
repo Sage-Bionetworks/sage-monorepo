@@ -8,6 +8,8 @@ export * from './distribution.service';
 import { DistributionService } from './distribution.service';
 export * from './gene.service';
 import { GeneService } from './gene.service';
+export * from './nominated-drug.service';
+import { NominatedDrugService } from './nominated-drug.service';
 export * from './nominated-target.service';
 import { NominatedTargetService } from './nominated-target.service';
 export * from './team.service';
@@ -18,6 +20,7 @@ export const APIS = [
   DataVersionService,
   DistributionService,
   GeneService,
+  NominatedDrugService,
   NominatedTargetService,
   TeamService,
 ];

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.agora.api.next.exception.GlobalExceptionHandler;
 import org.sagebionetworks.agora.api.next.model.dto.ItemFilterTypeQueryDto;
-import org.sagebionetworks.agora.api.next.model.dto.NominatedTargetSearchQueryDto;
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpStatus;
@@ -19,15 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.server.ResponseStatusException;
 
-class NominatedTargetApiControllerWebTest {
+class NominatedDrugApiControllerWebTest {
 
-  private NominatedTargetApiDelegate delegate;
+  private NominatedDrugApiDelegate delegate;
   private MockMvc mockMvc;
 
   @BeforeEach
   void setUp() {
-    delegate = mock(NominatedTargetApiDelegate.class);
-    var controller = new NominatedTargetApiController(delegate);
+    delegate = mock(NominatedDrugApiDelegate.class);
+    var controller = new NominatedDrugApiController(delegate);
     var conversionService = new FormattingConversionService();
     conversionService.addConverter(
       new Converter<String, ItemFilterTypeQueryDto>() {
@@ -38,10 +38,10 @@ class NominatedTargetApiControllerWebTest {
       }
     );
     conversionService.addConverter(
-      new Converter<String, NominatedTargetSearchQueryDto.SortOrdersEnum>() {
+      new Converter<String, NominatedDrugSearchQueryDto.SortOrdersEnum>() {
         @Override
-        public NominatedTargetSearchQueryDto.SortOrdersEnum convert(String source) {
-          return NominatedTargetSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
+        public NominatedDrugSearchQueryDto.SortOrdersEnum convert(String source) {
+          return NominatedDrugSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
         }
       }
     );
@@ -52,22 +52,22 @@ class NominatedTargetApiControllerWebTest {
   }
 
   @Test
-  @DisplayName("should return not found problem when nominated target not found")
-  void shouldReturnNotFoundProblemWhenDelegateRaisesNominatedTargetNotFoundException()
+  @DisplayName("should return not found problem when nominated drug not found")
+  void shouldReturnNotFoundProblemWhenDelegateRaisesNominatedDrugNotFoundException()
     throws Exception {
-    String hgncSymbol = "TP53";
-    when(delegate.getNominatedTargets(any())).thenThrow(
+    String commonName = "Agomelatine";
+    when(delegate.getNominatedDrugs(any())).thenThrow(
       new ResponseStatusException(
         HttpStatus.NOT_FOUND,
-        "Nominated target not found with hgnc_symbol: " + hgncSymbol
+        "Nominated drug not found with common_name: " + commonName
       )
     );
 
     mockMvc
       .perform(
-        get("/v1/comparison-tools/targets")
-          .param("items", hgncSymbol)
-          .param("sortFields", "hgnc_symbol")
+        get("/v1/comparison-tools/drugs")
+          .param("items", commonName)
+          .param("sortFields", "common_name")
           .param("sortOrders", "1")
       )
       .andExpect(status().isNotFound());
