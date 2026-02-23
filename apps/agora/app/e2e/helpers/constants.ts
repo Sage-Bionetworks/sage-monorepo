@@ -24,10 +24,12 @@ export const URL_GCT_PROTEIN_TMT = `${URL_GCT_PROTEIN}&subCategory=TMT`;
 // --------- explorers-based CTs -------------------------------------------------------------------
 export const COMPARISON_TOOL_PATHS: Record<string, string> = {
   'Nominated Targets': '/comparison/targets',
+  'Nominated Drugs': '/comparison/drugs',
 };
 
 export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
   'Nominated Targets': '/comparison-tools/nominated-target',
+  'Nominated Drugs': '/comparison-tools/drugs',
 };
 
 export const COMPARISON_TOOL_CONFIG_PATH = 'comparison-tools/config';
@@ -37,5 +39,9 @@ export const COMPARISON_TOOL_DEFAULT_SORTS: Record<string, { field: string; orde
   'Nominated Targets': [
     { field: 'total_nominations', order: -1 },
     { field: 'hgnc_symbol', order: 1 },
+  ],
+  'Nominated Drugs': [
+    { field: 'total_nominations', order: -1 },
+    { field: 'common_name', order: 1 },
   ],
 };
