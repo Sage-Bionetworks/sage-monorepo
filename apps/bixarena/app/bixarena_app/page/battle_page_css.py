@@ -310,6 +310,7 @@ NEXT_BATTLE_BUTTON_CSS = """
     justify-content: center;
     gap: 12px;
     align-items: stretch;
+    margin-top: 12px;
 }
 
 #next-battle-btn,
