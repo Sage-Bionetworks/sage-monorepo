@@ -84,11 +84,16 @@ async function createNodesInternal(
   const pluginConfig = createPluginConfiguration(options || {});
 
   // We do not want to alter how the hash is calculated, so appending the config file path to the
-  // hash to prevent the project files overwriting the target cache created by the other project
+  // hash to prevent the project files overwriting the target cache created by the other project.
+  // NX_CONTAINER_BUILDER is included because it affects the generated build-image target config
+  // (see build-image-target.ts). Without it, cached targets may lack the builder option if the
+  // env var was not set when the cache was first created.
   const hash =
     (await calculateHashForCreateNodes(projectRoot, pluginConfig, context, [
       getLockFileName(detectPackageManager(context.workspaceRoot)),
-    ])) + configFilePath;
+    ])) +
+    configFilePath +
+    (process.env['NX_CONTAINER_BUILDER'] || '');
 
   const projectConfigurationBuilderOptions: ProjectConfigurationBuilderOptions = {
     projectRoot,
