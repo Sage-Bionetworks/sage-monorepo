@@ -29,6 +29,9 @@
       "@sagebionetworks/agora/models": ["libs/agora/models/index.ts"],
       "@sagebionetworks/agora/news": ["libs/agora/news/src/index.ts"],
       "@sagebionetworks/agora/nomination-form": ["libs/agora/nomination-form/src/index.ts"],
+      "@sagebionetworks/agora/nominated-drugs-comparison-tool": [
+        "libs/agora/nominated-drugs-comparison-tool/src/index.ts"
+      ],
       "@sagebionetworks/agora/nominated-targets-comparison-tool": [
         "libs/agora/nominated-targets-comparison-tool/src/index.ts"
       ],
