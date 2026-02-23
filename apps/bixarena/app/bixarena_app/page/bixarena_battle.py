@@ -229,7 +229,7 @@ def vote_last_response(
         f'<div class="model-name-footer">{states[0].model_name}</div>',
         f'<div class="model-name-footer">{states[1].model_name}</div>',
     )
-    # Determine "Battle Again" button state
+    # Determine "Same Prompt" button state
     can_reuse = (
         battle_session.last_prompt is not None
         and battle_session.prompt_reuse_remaining > 0
@@ -462,7 +462,7 @@ def add_text(
         battle_id, model1, model2 = create_battle(battle_title, cookies)
         if battle_id and model1 and model2:
             battle_session.battle_id = battle_id
-            # Track prompt for "Battle Again" reuse
+            # Track prompt for "Same Prompt" reuse
             if text != battle_session.last_prompt:
                 battle_session.prompt_reuse_remaining = PROMPT_REUSE_LIMIT
             battle_session.last_prompt = text
@@ -605,7 +605,7 @@ def build_side_by_side_ui_anony():
                 elem_classes=["prompt_input"],
             )
 
-        # Next Round / Battle Again buttons
+        # New Battle / Same Prompt buttons
         with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
             battle_again_btn = gr.Button(
                 value=f"New Battle\nSame Prompt ({PROMPT_REUSE_LIMIT} left)",
@@ -743,7 +743,7 @@ def build_side_by_side_ui_anony():
     }
     """
 
-    # "Battle Again" button: reset + auto-resubmit stored prompt
+    # "Same Prompt" button: reset + auto-resubmit stored prompt
     battle_again_btn.click(
         battle_again,
         [battle_session],

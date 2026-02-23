@@ -304,7 +304,7 @@ DISCLAIMER_CSS = """
 }
 """
 
-# CSS for Next Battle / Battle Again buttons
+# CSS for New Battle / Same Prompt buttons
 NEXT_BATTLE_BUTTON_CSS = """
 #next-battle-row {
     justify-content: center;
