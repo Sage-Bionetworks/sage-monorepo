@@ -1,5 +1,6 @@
 import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import {
   ComparisonToolConfigPage,
   ComparisonToolConfigService,
@@ -8,6 +9,7 @@ import {
   NominatedDrugService,
   NominatedDrugsPage,
 } from '@sagebionetworks/agora/api-client';
+import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   AppError,
@@ -32,6 +34,7 @@ import { NominatedDrugsComparisonToolService } from './services/nominated-drugs-
 export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
   private readonly nominatedDrugsService = inject(NominatedDrugService);
@@ -56,6 +59,11 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     headerTitleWikiParams: { ownerId: 'syn25913473', wikiId: '639223' },
     filterResultsButtonTooltip: 'Filter results by Nominating PI and more',
     showSignificanceControls: false,
+    viewDetailsTooltip: 'Open drug details',
+    viewDetailsClick: () => {
+      const url = this.router.serializeUrl(this.router.createUrlTree([ROUTE_PATHS.NOT_FOUND]));
+      window.open(url, '_blank');
+    },
     legendEnabled: false,
     rowsPerPage: 10,
     rowIdDataKey: 'common_name',
