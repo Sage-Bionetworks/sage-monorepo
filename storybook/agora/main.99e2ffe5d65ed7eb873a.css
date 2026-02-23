@@ -603,6 +603,16 @@ div.p-select:hover .p-select-dropdown-icon {
   color: var(--color-action-primary);
 }
 
+explorers-comparison-tool h1,
+explorers-comparison-tool h2,
+explorers-comparison-tool h3,
+explorers-comparison-tool h4,
+explorers-comparison-tool h5,
+explorers-comparison-tool h6,
+explorers-comparison-tool p {
+  margin-bottom: 0;
+}
+
 .hero-container h1 {
   margin-bottom: 0;
 }
