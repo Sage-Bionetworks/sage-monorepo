@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { NominatedTargetSearchQuery } from '../model/nominated-target-search-query';
+import { NominatedDrugSearchQuery } from '../model/nominated-drug-search-query';
 // @ts-ignore
-import { NominatedTargetsPage } from '../model/nominated-targets-page';
+import { NominatedDrugsPage } from '../model/nominated-drugs-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -36,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class NominatedTargetService {
+export class NominatedDrugService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -109,14 +109,14 @@ export class NominatedTargetService {
   }
 
   /**
-   * Get nominated target results for comparison tools
-   * Returns a paginated list of nominated target results for use in comparison tools.
-   * @param nominatedTargetSearchQuery The search query used to find and filter nominated targets.
+   * Get nominated drug results for comparison tools
+   * Returns a paginated list of nominated drug results for use in comparison tools.
+   * @param nominatedDrugSearchQuery The search query used to find and filter nominated drugs.
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getNominatedTargets(
-    nominatedTargetSearchQuery?: NominatedTargetSearchQuery,
+  public getNominatedDrugs(
+    nominatedDrugSearchQuery?: NominatedDrugSearchQuery,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -124,9 +124,9 @@ export class NominatedTargetService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<NominatedTargetsPage>;
-  public getNominatedTargets(
-    nominatedTargetSearchQuery?: NominatedTargetSearchQuery,
+  ): Observable<NominatedDrugsPage>;
+  public getNominatedDrugs(
+    nominatedDrugSearchQuery?: NominatedDrugSearchQuery,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -134,9 +134,9 @@ export class NominatedTargetService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<NominatedTargetsPage>>;
-  public getNominatedTargets(
-    nominatedTargetSearchQuery?: NominatedTargetSearchQuery,
+  ): Observable<HttpResponse<NominatedDrugsPage>>;
+  public getNominatedDrugs(
+    nominatedDrugSearchQuery?: NominatedDrugSearchQuery,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -144,9 +144,9 @@ export class NominatedTargetService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<NominatedTargetsPage>>;
-  public getNominatedTargets(
-    nominatedTargetSearchQuery?: NominatedTargetSearchQuery,
+  ): Observable<HttpEvent<NominatedDrugsPage>>;
+  public getNominatedDrugs(
+    nominatedDrugSearchQuery?: NominatedDrugSearchQuery,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -156,11 +156,11 @@ export class NominatedTargetService {
     },
   ): Observable<any> {
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (nominatedTargetSearchQuery !== undefined && nominatedTargetSearchQuery !== null) {
+    if (nominatedDrugSearchQuery !== undefined && nominatedDrugSearchQuery !== null) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>nominatedTargetSearchQuery,
-        'nominatedTargetSearchQuery',
+        <any>nominatedDrugSearchQuery,
+        'nominatedDrugSearchQuery',
       );
     }
 
@@ -197,8 +197,8 @@ export class NominatedTargetService {
       }
     }
 
-    let localVarPath = `/comparison-tools/targets`;
-    return this.httpClient.request<NominatedTargetsPage>(
+    let localVarPath = `/comparison-tools/drugs`;
+    return this.httpClient.request<NominatedDrugsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
