@@ -2,9 +2,9 @@ import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   input,
-  OnInit,
   PLATFORM_ID,
   signal,
   ViewEncapsulation,
@@ -26,7 +26,7 @@ import { finalize } from 'rxjs';
   styleUrls: ['./wiki.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class WikiComponent implements OnInit {
+export class WikiComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly logger = inject(LoggerService);
   private readonly errorOverlayService = inject(ErrorOverlayService);
@@ -40,8 +40,10 @@ export class WikiComponent implements OnInit {
   isLoading = signal(true);
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
 
-  ngOnInit() {
-    this.getWikiMarkdown();
+  constructor() {
+    effect(() => {
+      this.getWikiMarkdown();
+    });
   }
 
   getWikiMarkdown() {
