@@ -257,6 +257,7 @@ def vote_last_response(
         + (gr.Row(visible=False),)  # textbox_row: hide
         + (gr.HTML(visible=False),)  # disclaimer: hide
         + (battle_again_upd,)  # battle_again_btn: show/hide based on reuse count
+        + (gr.Button(variant="secondary" if can_reuse else "primary"),)  # clear_btn
     )
 
 
@@ -413,6 +414,7 @@ def battle_again(battle_session: BattleSession, request: gr.Request = None):
         + [gr.HTML(visible=False)]  # disclaimer: hide
         + [gr.Column(visible=False)]  # example_prompts_group: hide
         + [battle_again_upd]  # battle_again_btn: update counter
+        + [gr.Button(variant="secondary" if can_reuse else "primary")]  # clear_btn
     )
 
 
@@ -613,7 +615,7 @@ def build_side_by_side_ui_anony():
             )
             clear_btn = gr.Button(
                 value="New Battle",
-                variant="secondary",
+                variant="primary",
                 elem_id="next-battle-btn",
             )
 
@@ -646,6 +648,7 @@ def build_side_by_side_ui_anony():
         + [left_vote_btn, tie_btn, right_vote_btn]
         + [voting_row, next_battle_row, page_header, textbox_row, disclaimer]
         + [battle_again_btn]
+        + [clear_btn]
     )
     left_vote_btn.click(
         left_vote_last_response,
@@ -754,7 +757,8 @@ def build_side_by_side_ui_anony():
         + [page_header, textbox_row]
         + [disclaimer]
         + [example_prompts_group]
-        + [battle_again_btn],
+        + [battle_again_btn]
+        + [clear_btn],
     ).then(
         add_text,
         states + [battle_session] + model_selectors + [textbox],
