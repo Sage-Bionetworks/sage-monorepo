@@ -1,5 +1,6 @@
 package org.sagebionetworks.agora.api.next.configuration;
 
+import org.sagebionetworks.agora.api.next.model.dto.NominatedDrugSearchQueryDto;
 import org.sagebionetworks.agora.api.next.model.dto.NominatedTargetSearchQueryDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,16 @@ public class IntegerEnumConverterConfiguration {
       @Override
       public NominatedTargetSearchQueryDto.SortOrdersEnum convert(String source) {
         return NominatedTargetSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
+      }
+    };
+  }
+
+  @Bean
+  Converter<String, NominatedDrugSearchQueryDto.SortOrdersEnum> nominatedDrugSortOrdersConverter() {
+    return new Converter<String, NominatedDrugSearchQueryDto.SortOrdersEnum>() {
+      @Override
+      public NominatedDrugSearchQueryDto.SortOrdersEnum convert(String source) {
+        return NominatedDrugSearchQueryDto.SortOrdersEnum.fromValue(Integer.parseInt(source));
       }
     };
   }

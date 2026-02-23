@@ -16,6 +16,8 @@ servers:
 tags:
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
+  - name: Nominated Drug
+    description: Operations about Nominated Drugs.
   - name: Data Version
     description: Operations about the data version.
   - name: Nominated Target
@@ -50,7 +52,29 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /comparison-tools/nominated-target:
+  /comparison-tools/drugs:
+    get:
+      tags:
+        - Nominated Drug
+      summary: Get nominated drug results for comparison tools
+      description: Returns a paginated list of nominated drug results for use in comparison tools.
+      operationId: getNominatedDrugs
+      parameters:
+        - $ref: '#/components/parameters/nominatedDrugSearchQuery'
+      responses:
+        '200':
+          description: A paginated list of nominated drug results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NominatedDrugsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/targets:
     get:
       tags:
         - Nominated Target
@@ -234,6 +258,197 @@ components:
         - include: Include only the specified items.
         - exclude: Exclude the specified items.
       default: include
+    NominatedDrugSearchQuery:
+      type: object
+      description: Nominated Drug search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          description: The page number to return (index starts from 0).
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+          example: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+          maximum: 100
+          example: 100
+        items:
+          description: |
+            List of common_name values to filter by.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Agomelatine
+            - Bexarotene
+        itemFilterType:
+          $ref: '#/components/schemas/ItemFilterTypeQuery'
+          nullable: true
+        search:
+          description: |
+            Search by common_name value (case-insensitive partial match) or by comma separated list of common_name values (case-insensitive full matches).
+            Examples: 'agomelatine,bexarotene' (comma-separated list) or 'agom' (partial match). Only applied when
+            itemFilterType is 'exclude'.
+          type: string
+          nullable: true
+          example: agomelatine,bexarotene
+        principalInvestigators:
+          description: Filter by principal investigators.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - Bhatt
+            - Bhattacharya
+        programs:
+          description: Filter by programs.
+          type: array
+          items:
+            type: string
+          nullable: true
+          example:
+            - ACTDRx AD
+            - AMP-AD
+        totalNominations:
+          description: Filter by total nominations.
+          type: array
+          items:
+            type: integer
+          nullable: true
+          example:
+            - 1
+            - 2
+        yearFirstNominated:
+          description: Filter by year first nominated.
+          type: array
+          items:
+            type: integer
+          nullable: true
+          example:
+            - 2024
+            - 2025
+        sortFields:
+          description: |
+            List of field names to sort by (e.g., ["total_nominations", "common_name"]).
+            Each field in sortFields must have a corresponding order in sortOrders.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+            - total_nominations
+            - common_name
+        sortOrders:
+          description: |
+            List of sort directions corresponding to sortFields.
+            Values: 1 (ascending) or -1 (descending).
+            Must have the same length as sortFields.
+          type: array
+          items:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - -1
+          minItems: 1
+          example:
+            - -1
+            - 1
+      required:
+        - sortFields
+        - sortOrders
+    NominatedDrug:
+      type: object
+      description: A nominated drug entry
+      properties:
+        common_name:
+          type: string
+          description: The common name of the drug
+          example: Agomelatine
+        total_nominations:
+          type: integer
+          description: The total number of nominations for the drug
+          example: 1
+        year_first_nominated:
+          type: integer
+          description: The year the drug was first nominated
+          example: 2025
+        principal_investigators:
+          type: array
+          description: The principal investigators who nominated the drug
+          items:
+            type: string
+          example:
+            - Xie
+        programs:
+          type: array
+          description: The programs associated with the drug nomination
+          items:
+            type: string
+          example:
+            - ACTDRx AD
+      required:
+        - common_name
+        - total_nominations
+        - year_first_nominated
+        - principal_investigators
+        - programs
+    PageMetadata:
+      type: object
+      description: The metadata of a page.
+      properties:
+        number:
+          type: integer
+          description: The page number.
+          example: 0
+        size:
+          type: integer
+          description: The number of items in a single page.
+          example: 100
+        totalElements:
+          type: integer
+          format: int64
+          description: Total number of elements in the result set.
+          example: 250
+        totalPages:
+          type: integer
+          description: Total number of pages in the result set.
+          example: 3
+        hasNext:
+          type: boolean
+          description: Returns if there is a next page.
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Returns if there is a previous page.
+          example: false
+      required:
+        - number
+        - size
+        - totalElements
+        - totalPages
+        - hasNext
+        - hasPrevious
+    NominatedDrugsPage:
+      type: object
+      description: A page of nominated drug objects.
+      properties:
+        nominatedDrugs:
+          type: array
+          items:
+            $ref: '#/components/schemas/NominatedDrug'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+        - nominatedDrugs
+        - page
     NominatedTargetSearchQuery:
       type: object
       description: Nominated Target search query with pagination and filtering options.
@@ -437,42 +652,6 @@ components:
         - input_data
         - programs
         - pharos_class
-    PageMetadata:
-      type: object
-      description: The metadata of a page.
-      properties:
-        number:
-          type: integer
-          description: The page number.
-          example: 0
-        size:
-          type: integer
-          description: The number of items in a single page.
-          example: 100
-        totalElements:
-          type: integer
-          format: int64
-          description: Total number of elements in the result set.
-          example: 250
-        totalPages:
-          type: integer
-          description: Total number of pages in the result set.
-          example: 3
-        hasNext:
-          type: boolean
-          description: Returns if there is a next page.
-          example: true
-        hasPrevious:
-          type: boolean
-          description: Returns if there is a previous page.
-          example: false
-      required:
-        - number
-        - size
-        - totalElements
-        - totalPages
-        - hasNext
-        - hasPrevious
     NominatedTargetsPage:
       type: object
       description: A page of nominated target objects.
@@ -521,6 +700,14 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
   parameters:
+    nominatedDrugSearchQuery:
+      name: nominatedDrugSearchQuery
+      description: The search query used to find and filter nominated drugs.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/NominatedDrugSearchQuery'
     nominatedTargetSearchQuery:
       name: nominatedTargetSearchQuery
       description: The search query used to find and filter nominated targets.

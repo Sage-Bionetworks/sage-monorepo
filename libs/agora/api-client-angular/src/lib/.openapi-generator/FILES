@@ -7,6 +7,7 @@ api/comparison-tool-config.service.ts
 api/data-version.service.ts
 api/distribution.service.ts
 api/gene.service.ts
+api/nominated-drug.service.ts
 api/nominated-target.service.ts
 api/team.service.ts
 configuration.ts
@@ -37,6 +38,9 @@ model/median-expression.ts
 model/metabolomics.ts
 model/models.ts
 model/neuropathologic-correlation.ts
+model/nominated-drug-search-query.ts
+model/nominated-drug.ts
+model/nominated-drugs-page.ts
 model/nominated-genes-list.ts
 model/nominated-target-search-query.ts
 model/nominated-target.ts

@@ -1,11 +1,9 @@
-import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   input,
-  OnInit,
-  PLATFORM_ID,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
@@ -14,6 +12,7 @@ import { SynapseWikiMarkdown, SynapseWikiParams } from '@sagebionetworks/explore
 import {
   ErrorOverlayService,
   LoggerService,
+  PlatformService,
   SynapseApiService,
 } from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
@@ -26,8 +25,8 @@ import { finalize } from 'rxjs';
   styleUrls: ['./wiki.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class WikiComponent implements OnInit {
-  private readonly platformId = inject(PLATFORM_ID);
+export class WikiComponent {
+  private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
   private readonly errorOverlayService = inject(ErrorOverlayService);
   synapseApiService = inject(SynapseApiService);
@@ -40,13 +39,16 @@ export class WikiComponent implements OnInit {
   isLoading = signal(true);
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
 
-  ngOnInit() {
-    this.getWikiMarkdown();
+  constructor() {
+    effect(() => {
+      const wikiParams = this.wikiParams();
+      this.getWikiMarkdown(wikiParams);
+    });
   }
 
-  getWikiMarkdown() {
-    if (isPlatformBrowser(this.platformId)) {
-      const { ownerId, wikiId } = this.wikiParams();
+  getWikiMarkdown(wikiParams: SynapseWikiParams) {
+    if (this.platformService.isBrowser) {
+      const { ownerId, wikiId } = wikiParams;
 
       this.isLoading.set(true);
       this.logger.log('WikiComponent: Loading wiki content', { ownerId, wikiId });

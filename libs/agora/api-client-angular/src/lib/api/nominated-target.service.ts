@@ -197,7 +197,7 @@ export class NominatedTargetService {
       }
     }
 
-    let localVarPath = `/comparison-tools/nominated-target`;
+    let localVarPath = `/comparison-tools/targets`;
     return this.httpClient.request<NominatedTargetsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
