@@ -45,13 +45,13 @@ export const routes: Route[] = [
   {
     path: ROUTE_PATHS.NOMINATED_TARGETS,
     loadChildren: () =>
-      import('@sagebionetworks/agora/nominated-targets').then(
-        (routes) => routes.nominatedTargetsRoute,
+      import('@sagebionetworks/agora/nominated-targets-comparison-tool').then(
+        (routes) => routes.routes,
       ),
     data: {
-      title: 'Nominated Targets | Candidate genes for AD treatment or prevention',
+      title: "Nominated Targets | Candidate genes for Alzheimer's Disease treatment or prevention",
       description:
-        'Browse a list of genes that researchers have identified using computational analyses of high-dimensional human genomic, proteomic and metabolomic data.',
+        "Explore a list of potential Alzheimer's Disease therapeutic targets that researchers have identified using computational analyses of high-dimensional human genomic, proteomic and metabolomic data.",
     },
   },
   {
@@ -96,9 +96,7 @@ export const routes: Route[] = [
   {
     path: 'nomination-form',
     loadChildren: () =>
-      import('@sagebionetworks/agora/nominated-targets').then(
-        (routes) => routes.nominationFormRoute,
-      ),
+      import('@sagebionetworks/agora/nomination-form').then((routes) => routes.nominationFormRoute),
     data: {
       title: 'Nominate a Target | Suggest a new AD therapeutic target',
       description: 'Nominate a gene as a new candidate for AD treatment or prevention.',

@@ -28,7 +28,10 @@
       "@sagebionetworks/agora/home": ["libs/agora/home/src/index.ts"],
       "@sagebionetworks/agora/models": ["libs/agora/models/index.ts"],
       "@sagebionetworks/agora/news": ["libs/agora/news/src/index.ts"],
-      "@sagebionetworks/agora/nominated-targets": ["libs/agora/nominated-targets/src/index.ts"],
+      "@sagebionetworks/agora/nomination-form": ["libs/agora/nomination-form/src/index.ts"],
+      "@sagebionetworks/agora/nominated-targets-comparison-tool": [
+        "libs/agora/nominated-targets-comparison-tool/src/index.ts"
+      ],
       "@sagebionetworks/agora/not-found": ["libs/agora/not-found/src/index.ts"],
       "@sagebionetworks/agora/services": ["libs/agora/services/src/index.ts"],
       "@sagebionetworks/agora/shared": ["libs/agora/shared/src/index.ts"],

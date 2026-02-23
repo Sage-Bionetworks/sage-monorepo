@@ -1,21 +1,13 @@
 import { Page, expect } from '@playwright/test';
 import { expectComparisonToolTableLoaded } from '@sagebionetworks/explorers/testing/e2e';
-import {
-  ComparisonToolConfig,
-  DiseaseCorrelation,
-  DiseaseCorrelationsPage,
-  GeneExpression,
-  GeneExpressionsPage,
-  ModelOverview,
-  ModelOverviewsPage,
-} from '@sagebionetworks/model-ad/api-client';
+import { ComparisonToolConfig } from '@sagebionetworks/model-ad/api-client';
 import { baseURL } from '../../playwright.config';
 import {
   COMPARISON_TOOL_API_PATHS,
   COMPARISON_TOOL_CONFIG_PATH,
   COMPARISON_TOOL_DEFAULT_SORTS,
   COMPARISON_TOOL_PATHS,
-} from '../constants';
+} from './constants';
 
 export const navigateToComparison = async (
   page: Page,
@@ -64,35 +56,6 @@ export const fetchComparisonToolData = async <T>(
   expect(response.ok()).toBeTruthy();
   const data = (await response.json()) as T;
   return data;
-};
-
-export const fetchModelOverviews = async (page: Page): Promise<ModelOverview[]> => {
-  const data = await fetchComparisonToolData<ModelOverviewsPage>(page, 'Model Overview');
-  return data.modelOverviews;
-};
-
-export const fetchDiseaseCorrelations = async (
-  page: Page,
-  categories = ['CONSENSUS NETWORK MODULES', 'Consensus Cluster A - ECM Organization'],
-): Promise<DiseaseCorrelation[]> => {
-  const data = await fetchComparisonToolData<DiseaseCorrelationsPage>(
-    page,
-    'Disease Correlation',
-    categories,
-  );
-  return data.diseaseCorrelations;
-};
-
-export const fetchGeneExpressions = async (
-  page: Page,
-  categories = ['RNA - DIFFERENTIAL EXPRESSION', 'Tissue - Cortex', 'female'],
-): Promise<GeneExpression[]> => {
-  const data = await fetchComparisonToolData<GeneExpressionsPage>(
-    page,
-    'Gene Expression',
-    categories,
-  );
-  return data.geneExpressions;
 };
 
 export const fetchComparisonToolConfig = async (
