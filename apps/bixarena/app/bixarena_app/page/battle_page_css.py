@@ -304,13 +304,15 @@ DISCLAIMER_CSS = """
 }
 """
 
-# CSS for Next Battle button
+# CSS for Next Battle / Battle Again buttons
 NEXT_BATTLE_BUTTON_CSS = """
 #next-battle-row {
     justify-content: center;
+    gap: 12px;
 }
 
-#next-battle-btn {
+#next-battle-btn,
+#battle-again-btn {
     max-width: 240px;
 }
 """

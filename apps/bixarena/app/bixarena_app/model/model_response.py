@@ -15,6 +15,7 @@ from bixarena_app.config.constants import (
     DEFAULT_TEMPERATURE,
     DEFAULT_TOP_P,
     MAX_RESPONSE_TOKENS,
+    PROMPT_REUSE_LIMIT,
 )
 from bixarena_app.config.conversation import (
     CONTINUATION_PROMPT,
@@ -74,8 +75,11 @@ class BattleSession:
     def __init__(self):
         self.battle_id: UUID | None = None
         self.round_id: UUID | None = None
+        self.last_prompt: str | None = None
+        self.prompt_reuse_remaining: int = PROMPT_REUSE_LIMIT
 
     def reset(self):
+        """Reset battle/round IDs while preserving prompt history for reuse."""
         self.battle_id = None
         self.round_id = None
 
