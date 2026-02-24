@@ -262,19 +262,12 @@ def _build_user_progress_card_html(
     if tier == "champion":
         # Already at max tier
         return f"""
-        <div style="border: 1px solid {tier_color}; border-radius: 8px;
-                    padding: 0.75rem 1rem; margin-bottom: 1rem;
-                    background: color-mix(in srgb, {tier_color} 5%, transparent);">
-            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-                <span style="font-size: 1.125rem;">{emoji}</span>
-                <span style="font-weight: 600; color: var(--body-text-color); font-size: 0.9375rem;">
-                    {tier_name}
-                </span>
-                <span style="color: var(--body-text-color-subdued); font-size: 0.8125rem;">
-                    &bull; {username}
-                </span>
-            </div>
-            <div style="color: var(--body-text-color-subdued); font-size: 0.8125rem; line-height: 1.4;">
+        <div style="margin-bottom: 0.5rem;">
+            <h4 style="color: var(--body-text-color); font-weight: 600;
+                       margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                {emoji} {tier_name} &middot; {username}
+            </h4>
+            <div style="color: var(--body-text-color-subdued); font-size: 0.875rem; line-height: 1.4;">
                 {battles_per_week:.1f} battles/week &mdash; You're a Champion! Keep it up to hold your title.
             </div>
         </div>
@@ -292,39 +285,27 @@ def _build_user_progress_card_html(
     next_name = next_tier.capitalize()
 
     progress_pct = min((battles_per_week / next_threshold) * 100, 100)
-    remaining = max(next_threshold - battles_per_week, 0)
 
     return f"""
-    <div style="border: 1px solid {tier_color}; border-radius: 8px;
-                padding: 0.75rem 1rem; margin-bottom: 1rem;
-                background: color-mix(in srgb, {tier_color} 5%, transparent);">
-        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-            <span style="font-size: 1.125rem;">{emoji}</span>
-            <span style="font-weight: 600; color: var(--body-text-color); font-size: 0.9375rem;">
-                {tier_name}
-            </span>
-            <span style="color: var(--body-text-color-subdued); font-size: 0.8125rem;">
-                &bull; {username}
-            </span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.375rem;">
-            <span style="color: var(--body-text-color); font-size: 0.8125rem; font-weight: 500;">
-                {battles_per_week:.1f} battles/week
-            </span>
+    <div style="margin-bottom: 0.5rem;">
+        <h4 style="color: var(--body-text-color); font-weight: 600;
+                   margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+            {emoji} {tier_name} &middot; {username}
+        </h4>
+        <div style="color: var(--body-text-color); font-size: 0.875rem; margin-bottom: 0.375rem;">
+            {battles_per_week:.1f} battles/week
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
             <div style="flex: 1; height: 8px; background-color: var(--background-fill-secondary);
-                        border-radius: 4px; overflow: hidden;">
+                        border-radius: 4px; overflow: hidden;
+                        border: 1px solid var(--border-color-primary);">
                 <div style="height: 100%; width: {progress_pct:.0f}%;
-                            background: linear-gradient(90deg, var(--accent-teal) 0%, #2dd4bf 100%);
+                            background: var(--color-accent, #f97316);
                             border-radius: 4px;"></div>
             </div>
-            <span style="color: var(--body-text-color-subdued); font-size: 0.75rem; white-space: nowrap;">
+            <span style="color: var(--body-text-color); font-size: 0.875rem; white-space: nowrap;">
                 {progress_pct:.0f}% to {next_emoji} {next_name}
             </span>
-        </div>
-        <div style="color: var(--body-text-color-subdued); font-size: 0.75rem; margin-top: 0.375rem;">
-            {remaining:.1f} more battles/week needed to reach {next_name}
         </div>
     </div>
     """
