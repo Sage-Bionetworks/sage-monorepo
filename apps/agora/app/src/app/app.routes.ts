@@ -156,10 +156,14 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.NOT_FOUND,
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
     data: {
-      title: 'Agora | Page not found',
-      description: '',
+      title: 'Agora | Page Not Found',
+      description:
+        "Explore transcriptomic, proteomic, and metabolomic evidence for whether or not genes are associated with Alzheimer's disease using the Agora portal.",
+      supportEmail: SUPPORT_EMAIL,
+      backgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
