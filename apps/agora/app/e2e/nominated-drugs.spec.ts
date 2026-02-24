@@ -192,7 +192,7 @@ test.describe('nominated drugs - comparison tool', () => {
     test('filters are removed from URL when Clear All is clicked', async ({ page }) => {
       const expectedInitialFilterParams = {
         totalNominations: ['2'],
-        nominatingPis: ['Albers', 'Xie'],
+        nominatingPis: ['Krumsiek', 'Marina Sirota'],
       };
 
       await navigateToComparison(
