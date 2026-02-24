@@ -577,7 +577,8 @@ def build_app():
             ],
         )
 
-        # Load quest content on page load
+        # Load quest content on page load (includes personalized progress card
+        # for authenticated users)
         demo.load(
             fn=load_quest_content_on_page_load,
             inputs=None,

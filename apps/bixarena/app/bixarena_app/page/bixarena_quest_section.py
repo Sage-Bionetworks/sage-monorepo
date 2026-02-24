@@ -240,6 +240,96 @@ def build_quest_not_found_section() -> tuple[
     )
 
 
+def _build_user_progress_card_html(
+    username: str, tier: str, battles_per_week: float
+) -> str:
+    """Build the personal tier progress card HTML for the logged-in user.
+
+    Args:
+        username: The user's display name
+        tier: Current tier ('champion', 'knight', or 'apprentice')
+        battles_per_week: The user's average battles per week
+
+    Returns:
+        HTML string for the progress card
+    """
+    tier_info = TIER_CONFIG.get(tier, TIER_CONFIG["apprentice"])
+    emoji = tier_info["emoji"]
+    tier_name = tier.capitalize()
+    tier_color = tier_info["color"]
+
+    # Determine next tier and progress
+    if tier == "champion":
+        # Already at max tier
+        return f"""
+        <div style="border: 1px solid {tier_color}; border-radius: 8px;
+                    padding: 0.75rem 1rem; margin-bottom: 1rem;
+                    background: color-mix(in srgb, {tier_color} 5%, transparent);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span style="font-size: 1.125rem;">{emoji}</span>
+                <span style="font-weight: 600; color: var(--body-text-color); font-size: 0.9375rem;">
+                    {tier_name}
+                </span>
+                <span style="color: var(--body-text-color-subdued); font-size: 0.8125rem;">
+                    &bull; {username}
+                </span>
+            </div>
+            <div style="color: var(--body-text-color-subdued); font-size: 0.8125rem; line-height: 1.4;">
+                {battles_per_week:.1f} battles/week &mdash; You're a Champion! Keep it up to hold your title.
+            </div>
+        </div>
+        """
+
+    # For apprentice -> knight or knight -> champion
+    if tier == "apprentice":
+        next_threshold = 5.0
+        next_tier = "knight"
+    else:  # knight
+        next_threshold = 10.0
+        next_tier = "champion"
+
+    next_emoji = TIER_CONFIG[next_tier]["emoji"]
+    next_name = next_tier.capitalize()
+
+    progress_pct = min((battles_per_week / next_threshold) * 100, 100)
+    remaining = max(next_threshold - battles_per_week, 0)
+
+    return f"""
+    <div style="border: 1px solid {tier_color}; border-radius: 8px;
+                padding: 0.75rem 1rem; margin-bottom: 1rem;
+                background: color-mix(in srgb, {tier_color} 5%, transparent);">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span style="font-size: 1.125rem;">{emoji}</span>
+            <span style="font-weight: 600; color: var(--body-text-color); font-size: 0.9375rem;">
+                {tier_name}
+            </span>
+            <span style="color: var(--body-text-color-subdued); font-size: 0.8125rem;">
+                &bull; {username}
+            </span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.375rem;">
+            <span style="color: var(--body-text-color); font-size: 0.8125rem; font-weight: 500;">
+                {battles_per_week:.1f} battles/week
+            </span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div style="flex: 1; height: 8px; background-color: var(--background-fill-secondary);
+                        border-radius: 4px; overflow: hidden;">
+                <div style="height: 100%; width: {progress_pct:.0f}%;
+                            background: linear-gradient(90deg, var(--accent-teal) 0%, #2dd4bf 100%);
+                            border-radius: 4px;"></div>
+            </div>
+            <span style="color: var(--body-text-color-subdued); font-size: 0.75rem; white-space: nowrap;">
+                {progress_pct:.0f}% to {next_emoji} {next_name}
+            </span>
+        </div>
+        <div style="color: var(--body-text-color-subdued); font-size: 0.75rem; margin-top: 0.375rem;">
+            {remaining:.1f} more battles/week needed to reach {next_name}
+        </div>
+    </div>
+    """
+
+
 def _build_tier_legend_html() -> str:
     """Build the tier legend HTML with descriptions and accuracy note.
 
@@ -349,11 +439,16 @@ def _build_progress_html(
     """
 
 
-def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
+def _build_builders_credits_html(
+    contributors_data: dict | None = None,
+    current_user_data: dict | None = None,
+) -> str:
     """Build the Builders and Credits HTML sections.
 
     Args:
         contributors_data: Optional dict with contributors_by_tier and total_contributors
+        current_user_data: Optional dict with username, tier, battles_per_week for the
+            logged-in user. When provided, a personal progress card is shown above the list.
 
     Returns:
         HTML string for the builders and credits sections
@@ -429,11 +524,22 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
             builders_parts
         )
 
+    # Build optional progress card for logged-in user
+    progress_card_html = ""
+    if current_user_data is not None:
+        progress_card_html = _build_user_progress_card_html(
+            username=current_user_data["username"],
+            tier=current_user_data["tier"],
+            battles_per_week=current_user_data["battles_per_week"],
+        )
+
     return f"""
     <div style="display: flex; flex-direction: column; gap: 1.5rem;
                 height: 100%; margin-top: 0.75rem;">
         <!-- Divider -->
         <div style="height: 1px; background: var(--border-color-primary);"></div>
+
+        {progress_card_html}
 
         <!-- Builders Section -->
         <div style="flex: 1; display: flex; flex-direction: column;

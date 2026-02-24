@@ -1,6 +1,8 @@
 import logging
+import os
 
 import gradio as gr
+import requests as http_requests
 from bixarena_api_client import UserApi
 
 from bixarena_app.api.api_client_helper import (
@@ -9,7 +11,11 @@ from bixarena_app.api.api_client_helper import (
     fetch_public_stats,
     fetch_quest_contributors,
 )
-from bixarena_app.auth.request_auth import get_session_cookie, is_authenticated
+from bixarena_app.auth.request_auth import (
+    get_session_cookie,
+    get_username,
+    is_authenticated,
+)
 from bixarena_app.config.constants import COMMUNITY_QUEST_ENABLED
 from bixarena_app.page.bixarena_quest_section import (
     QUEST_CONFIG,
@@ -261,8 +267,51 @@ def build_stats_section():
     return stats_container
 
 
-def load_quest_content_on_page_load() -> tuple[dict, dict, dict]:
+def _get_username_from_session(request: gr.Request) -> str | None:
+    """Get the username directly from the auth service using the session cookie.
+
+    This bypasses UserState (which may not be populated yet during concurrent
+    demo.load() calls) and fetches the preferred_username directly from the
+    auth service's /userinfo endpoint.
+
+    Args:
+        request: Gradio request object
+
+    Returns:
+        The preferred_username if authenticated, None otherwise
+    """
+    try:
+        jsessionid = request.cookies.get("JSESSIONID") if request else None
+        if not jsessionid:
+            return None
+
+        auth_base = os.environ.get("AUTH_BASE_URL_SSR", "").rstrip("/")
+        if not auth_base:
+            return None
+
+        resp = http_requests.get(
+            f"{auth_base}/userinfo",
+            cookies={"JSESSIONID": jsessionid},
+            timeout=2,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            return data.get("preferred_username") or data.get("sub")
+    except Exception as e:
+        logger.debug(f"Could not resolve username from session: {e}")
+    return None
+
+
+def load_quest_content_on_page_load(
+    request: gr.Request,
+) -> tuple[dict, dict, dict]:
     """Load all dynamic quest content on page load (progress, contributors, carousel).
+
+    If the user is authenticated and found in the contributors list, a personal
+    tier progress card is included above the builders list.
+
+    Args:
+        request: Gradio request object
 
     Returns:
         Tuple of (progress_html_update, contributors_html_update, carousel_html_update)
@@ -286,8 +335,31 @@ def load_quest_content_on_page_load() -> tuple[dict, dict, dict]:
             progress_data["days_remaining"],
         )
 
-        # Build contributors HTML
-        contributors_html = _build_builders_credits_html(contributors_data)
+        # Find the current user in contributors for the progress card.
+        # We fetch the username directly from the auth service rather than
+        # using UserState, which may not be populated yet since all
+        # demo.load() handlers run concurrently.
+        current_user_data = None
+        username = _get_username_from_session(request)
+        if username:
+            for tier_name in ["champion", "knight", "apprentice"]:
+                for contributor in contributors_data["contributors_by_tier"].get(
+                    tier_name, []
+                ):
+                    if contributor["username"] == username:
+                        current_user_data = {
+                            "username": username,
+                            "tier": tier_name,
+                            "battles_per_week": contributor["battles_per_week"],
+                        }
+                        break
+                if current_user_data:
+                    break
+
+        # Build contributors HTML (with progress card if user found)
+        contributors_html = _build_builders_credits_html(
+            contributors_data, current_user_data=current_user_data
+        )
 
         # Build carousel HTML (images from config, but rebuildable)
         carousel_html = _build_carousel_html("quest-carousel")
