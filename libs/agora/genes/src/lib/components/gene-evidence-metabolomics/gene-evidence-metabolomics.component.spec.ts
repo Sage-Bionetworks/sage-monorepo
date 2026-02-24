@@ -8,8 +8,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 // -------------------------------------------------------------------------- //
 import { provideHttpClient } from '@angular/common/http';
 import { GeneService } from '@sagebionetworks/agora/api-client';
-import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
-import { SvgIconServiceStub } from '@sagebionetworks/agora/testing';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { SvgIconService } from '@sagebionetworks/explorers/services';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { GeneEvidenceMetabolomicsComponent } from './gene-evidence-metabolomics.component';
 
 // -------------------------------------------------------------------------- //

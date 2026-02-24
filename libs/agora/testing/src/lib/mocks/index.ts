@@ -14,4 +14,3 @@ export * from './team-service-mock';
 export * from './activated-route-stub';
 export * from './api-service-stub';
 export * from './genes-service-stub';
-export * from './svg-icon-service-stub';
