@@ -18,6 +18,7 @@ export const ROUTE_PATHS = {
   NOT_FOUND: 'not-found',
   ERROR: 'error',
   DETAILS: 'genes',
+  DRUG_DETAILS: 'drugs',
 } as const;
 
 // Use color-secondary to match agora-loading-icon

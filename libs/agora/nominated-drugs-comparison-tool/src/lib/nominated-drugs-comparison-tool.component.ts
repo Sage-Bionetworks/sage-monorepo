@@ -5,6 +5,7 @@ import {
   ComparisonToolConfigPage,
   ComparisonToolConfigService,
   ItemFilterTypeQuery,
+  NominatedDrug,
   NominatedDrugSearchQuery,
   NominatedDrugService,
   NominatedDrugsPage,
@@ -60,8 +61,12 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     filterResultsButtonTooltip: 'Filter results by Nominating PI and more',
     showSignificanceControls: false,
     viewDetailsTooltip: 'Open drug details',
-    viewDetailsClick: () => {
-      const url = this.router.serializeUrl(this.router.createUrlTree([ROUTE_PATHS.NOT_FOUND]));
+    viewDetailsClick: (rowData: unknown) => {
+      const drug = rowData as NominatedDrug;
+      // TODO: replace common_name with chembl_id once available in the backend
+      const url = this.router.serializeUrl(
+        this.router.createUrlTree([ROUTE_PATHS.DRUG_DETAILS, drug.common_name]),
+      );
       window.open(url, '_blank');
     },
     legendEnabled: false,

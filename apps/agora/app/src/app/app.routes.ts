@@ -55,6 +55,15 @@ export const routes: Route[] = [
     },
   },
   {
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chembl_id`,
+    // TODO: replace not-found with drug detail page
+    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    data: {
+      title: 'Agora | Drug Details',
+      description: "View information and evidence about a drug candidate for Alzheimer's disease.",
+    },
+  },
+  {
     path: ROUTE_PATHS.NOMINATED_TARGETS,
     loadChildren: () =>
       import('@sagebionetworks/agora/nominated-targets-comparison-tool').then(
