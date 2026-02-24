@@ -153,6 +153,7 @@ export const routes: Route[] = [
       title: 'Agora | Error',
       description: 'Error Page',
       supportEmail: SUPPORT_EMAIL,
+      backgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
