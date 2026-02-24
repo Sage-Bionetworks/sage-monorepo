@@ -1,8 +1,6 @@
 import logging
-import os
 
 import gradio as gr
-import requests as http_requests
 from bixarena_api_client import UserApi
 
 from bixarena_app.api.api_client_helper import (
@@ -13,7 +11,7 @@ from bixarena_app.api.api_client_helper import (
 )
 from bixarena_app.auth.request_auth import (
     get_session_cookie,
-    get_username,
+    get_username_from_request,
     is_authenticated,
 )
 from bixarena_app.config.constants import COMMUNITY_QUEST_ENABLED
@@ -267,41 +265,6 @@ def build_stats_section():
     return stats_container
 
 
-def _get_username_from_session(request: gr.Request) -> str | None:
-    """Get the username directly from the auth service using the session cookie.
-
-    This bypasses UserState (which may not be populated yet during concurrent
-    demo.load() calls) and fetches the preferred_username directly from the
-    auth service's /userinfo endpoint.
-
-    Args:
-        request: Gradio request object
-
-    Returns:
-        The preferred_username if authenticated, None otherwise
-    """
-    try:
-        jsessionid = request.cookies.get("JSESSIONID") if request else None
-        if not jsessionid:
-            return None
-
-        auth_base = os.environ.get("AUTH_BASE_URL_SSR", "").rstrip("/")
-        if not auth_base:
-            return None
-
-        resp = http_requests.get(
-            f"{auth_base}/userinfo",
-            cookies={"JSESSIONID": jsessionid},
-            timeout=2,
-        )
-        if resp.status_code == 200:
-            data = resp.json()
-            return data.get("preferred_username") or data.get("sub")
-    except Exception as e:
-        logger.debug(f"Could not resolve username from session: {e}")
-    return None
-
-
 def load_quest_content_on_page_load(
     request: gr.Request,
 ) -> tuple[dict, dict, dict]:
@@ -340,7 +303,7 @@ def load_quest_content_on_page_load(
         # using UserState, which may not be populated yet since all
         # demo.load() handlers run concurrently.
         current_user_data = None
-        username = _get_username_from_session(request)
+        username = get_username_from_request(request)
         if username:
             for tier_name in ["champion", "knight", "apprentice"]:
                 for contributor in contributors_data["contributors_by_tier"].get(
