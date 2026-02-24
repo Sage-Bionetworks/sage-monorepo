@@ -28,7 +28,7 @@ export const COMPARISON_TOOL_PATHS: Record<string, string> = {
 };
 
 export const COMPARISON_TOOL_API_PATHS: Record<string, string> = {
-  'Nominated Targets': '/comparison-tools/nominated-target',
+  'Nominated Targets': '/comparison-tools/targets',
   'Nominated Drugs': '/comparison-tools/drugs',
 };
 
