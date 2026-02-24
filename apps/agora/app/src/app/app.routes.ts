@@ -57,7 +57,8 @@ export const routes: Route[] = [
   {
     path: `${ROUTE_PATHS.DRUG_DETAILS}/:chembl_id`,
     // TODO (AG-1970): replace not-found with drug detail page
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
     data: {
       title: 'Agora | Drug Details',
       description:

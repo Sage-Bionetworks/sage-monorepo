@@ -35,7 +35,6 @@
       "@sagebionetworks/agora/nominated-targets-comparison-tool": [
         "libs/agora/nominated-targets-comparison-tool/src/index.ts"
       ],
-      "@sagebionetworks/agora/not-found": ["libs/agora/not-found/src/index.ts"],
       "@sagebionetworks/agora/services": ["libs/agora/services/src/index.ts"],
       "@sagebionetworks/agora/shared": ["libs/agora/shared/src/index.ts"],
       "@sagebionetworks/agora/storybook": ["libs/agora/storybook/src/index.ts"],
