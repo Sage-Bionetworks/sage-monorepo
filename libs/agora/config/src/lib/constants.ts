@@ -6,6 +6,8 @@ export const SUPPORT_EMAIL = 'agora@sagebionetworks.org';
 
 export const DEFAULT_HERO_BACKGROUND_IMAGE_PATH = 'agora-assets/images/hero-background.svg';
 
+export const DEFAULT_SYNAPSE_WIKI_OWNER_ID = 'syn25913473';
+
 export const ROUTE_PATHS = {
   HOME: '',
   GENE_COMPARISON: 'genes/comparison',
@@ -20,7 +22,6 @@ export const ROUTE_PATHS = {
   DETAILS: 'genes',
 } as const;
 
-// Use color-secondary to match explorers-loading-icon
 export const AGORA_LOADING_ICON_COLORS: LoadingIconColors = {
   colorInnermost: '#8b8ad1',
   colorCentral: '#8b8ad1',

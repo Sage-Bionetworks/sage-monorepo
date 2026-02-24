@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+  DEFAULT_SYNAPSE_WIKI_OWNER_ID,
   ROUTE_PATHS,
   SUPPORT_EMAIL,
 } from '@sagebionetworks/agora/config';
@@ -28,7 +29,7 @@ export const routes: Route[] = [
       heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
       className: 'about-page-content',
       wikiParams: {
-        ownerId: 'syn25913473',
+        ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
         wikiId: '612058',
       } as SynapseWikiParams,
     },
@@ -44,7 +45,7 @@ export const routes: Route[] = [
       heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
       className: 'news-page-content',
       wikiParams: {
-        ownerId: 'syn25913473',
+        ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
         wikiId: '611426',
       } as SynapseWikiParams,
     },
