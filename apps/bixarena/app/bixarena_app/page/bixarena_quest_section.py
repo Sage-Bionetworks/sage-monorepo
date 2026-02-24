@@ -275,9 +275,11 @@ def _build_user_progress_card_html(
 
     # For apprentice -> knight or knight -> champion
     if tier == "apprentice":
+        prev_threshold = 0.0
         next_threshold = 5.0
         next_tier = "knight"
     else:  # knight
+        prev_threshold = 5.0
         next_threshold = 10.0
         next_tier = "champion"
 
@@ -285,7 +287,8 @@ def _build_user_progress_card_html(
     next_name = next_tier.capitalize()
     article = "an" if tier == "apprentice" else "a"
 
-    progress_pct = min((battles_per_week / next_threshold) * 100, 100)
+    band = next_threshold - prev_threshold
+    progress_pct = min((battles_per_week - prev_threshold) / band * 100, 100)
 
     return f"""
     <div style="margin-bottom: 0.5rem;">
