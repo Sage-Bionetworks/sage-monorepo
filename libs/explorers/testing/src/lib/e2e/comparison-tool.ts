@@ -184,10 +184,10 @@ export const expectNoResultsFound = async (page: Page): Promise<void> => {
 
 export async function goToLastPage(page: Page) {
   const lastPageBtn = page.getByRole('button', { name: /last page/i });
-  await expect(lastPageBtn).toBeEnabled();
+  await expect(lastPageBtn).not.toHaveClass(/p-disabled/);
 
   await lastPageBtn.click();
-  await expect(lastPageBtn).toBeDisabled();
+  await expect(lastPageBtn).toHaveClass(/p-disabled/);
 
   // Wait for the paginator to show a non-first page (text should NOT start with "1-")
   await expect(page.locator('.p-paginator-current')).not.toContainText(/^1-/);
@@ -242,8 +242,8 @@ export async function clickFilterCheckbox(
 
 export async function expectFirstPage(page: Page) {
   const firstPageBtn = page.getByRole('button', { name: /first page/i });
-  await expect(firstPageBtn).toBeDisabled();
-  await expect(page.getByRole('button', { name: /previous page/i })).toBeDisabled();
+  await expect(firstPageBtn).toHaveClass(/p-disabled/);
+  await expect(page.getByRole('button', { name: /previous page/i })).toHaveClass(/p-disabled/);
   // Wait for paginator to show first page range (e.g., "1-10 of X")
   await expect(page.locator('.p-paginator-current')).toContainText(/^1-/);
 }
@@ -260,7 +260,7 @@ export async function openFilterMenuAndClickCheckbox(
 
 export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
   const lastPageBtn = page.getByRole('button', { name: /last page/i });
-  await expect(lastPageBtn).toBeEnabled();
+  await expect(lastPageBtn).not.toHaveClass(/p-disabled/);
 
   const unpinnedTable = getUnpinnedTable(page);
 
@@ -269,7 +269,7 @@ export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
   await expect(firstRow).toBeVisible();
 
   await lastPageBtn.click();
-  await expect(lastPageBtn).toBeDisabled();
+  await expect(lastPageBtn).toHaveClass(/p-disabled/);
   await expect(firstRow).not.toBeVisible(); // wait for first row to no longer be visible, so data has loaded
 
   const pinButtonsCount = await unpinnedTable.getByRole('button', { name: 'Pin' }).count();
@@ -282,7 +282,7 @@ export async function testPinLastItemLastPageGoesToPreviousPage(page: Page) {
   }
 
   await expect(unpinnedTable.getByRole('row')).toHaveCount(10); // previous full page loaded
-  await expect(lastPageBtn).toBeDisabled();
+  await expect(lastPageBtn).toHaveClass(/p-disabled/);
 }
 
 export async function testTableReturnsToFirstPageWhenFilterSelectedAndRemoved(

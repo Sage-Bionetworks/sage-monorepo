@@ -51,7 +51,7 @@ describe('BaseDownloadDomImageComponent', () => {
 
     expect(overlayPanel).toBeTruthy();
     expect(overlayPanel.querySelectorAll('p-radiobutton>.p-radiobutton-input')?.length).toEqual(
-      component.types.length,
+      component.types().length,
     );
   });
 });
