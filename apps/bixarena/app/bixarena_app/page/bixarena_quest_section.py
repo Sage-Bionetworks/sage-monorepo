@@ -265,7 +265,7 @@ def _build_user_progress_card_html(
         <div style="margin-bottom: 0.5rem;">
             <h4 style="color: var(--body-text-color); font-weight: 600;
                        margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-                {emoji} You're a Champion
+                {emoji} Welcome back, Champion {username}
             </h4>
             <div style="color: var(--body-text-color-subdued); font-size: 0.875rem; line-height: 1.4;">
                 {battles_per_week:.1f} battles/week &mdash; Keep battling to hold your title!
@@ -291,7 +291,7 @@ def _build_user_progress_card_html(
     <div style="margin-bottom: 0.5rem;">
         <h4 style="color: var(--body-text-color); font-weight: 600;
                    margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-            {emoji} You're {article} {tier_name}, {username}
+            {emoji} Welcome back, {tier_name} {username}
         </h4>
         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
             <span style="color: var(--body-text-color); font-weight: 500; font-size: 0.875rem;">Tier Progress</span>
