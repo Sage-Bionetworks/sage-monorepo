@@ -292,20 +292,20 @@ def _build_user_progress_card_html(
                    margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
             {emoji} {tier_name} &middot; {username}
         </h4>
-        <div style="color: var(--body-text-color); font-size: 0.875rem; margin-bottom: 0.375rem;">
-            {battles_per_week:.1f} battles/week
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+            <span style="color: var(--body-text-color); font-weight: 500; font-size: 0.875rem;">Tier Progress</span>
+            <span style="color: var(--body-text-color); font-weight: 600; font-size: 0.875rem;">{progress_pct:.0f}% to {next_emoji} {next_name}</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <div style="flex: 1; height: 8px; background-color: var(--background-fill-secondary);
-                        border-radius: 4px; overflow: hidden;
-                        border: 1px solid var(--border-color-primary);">
-                <div style="height: 100%; width: {progress_pct:.0f}%;
-                            background: var(--color-accent, #f97316);
-                            border-radius: 4px;"></div>
-            </div>
-            <span style="color: var(--body-text-color); font-size: 0.875rem; white-space: nowrap;">
-                {progress_pct:.0f}% to {next_emoji} {next_name}
-            </span>
+        <div style="width: 100%; height: 10px; background-color: var(--background-fill-secondary);
+                    border-radius: 5px; overflow: hidden;
+                    border: 1px solid var(--border-color-primary);">
+            <div style="height: 100%; width: {progress_pct:.0f}%;
+                        background: var(--color-accent, #f97316);
+                        border-radius: 5px;"></div>
+        </div>
+        <div style="margin-top: 0.75rem;">
+            <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{battles_per_week:.1f}</p>
+            <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Battles/Week</p>
         </div>
     </div>
     """
