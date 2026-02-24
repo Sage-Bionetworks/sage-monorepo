@@ -60,7 +60,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     headerTitleWikiParams: { ownerId: 'syn25913473', wikiId: '639223' },
     filterResultsButtonTooltip: 'Filter results by Nominating PI and more',
     showSignificanceControls: false,
-    viewDetailsTooltip: 'Open drug details',
+    viewDetailsTooltip: 'Open nominated drugs details page',
     viewDetailsClick: (rowData: unknown) => {
       const drug = rowData as NominatedDrug;
       // TODO (AG-1996): replace common_name with chembl_id once available in the backend
