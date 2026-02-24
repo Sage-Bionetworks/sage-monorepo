@@ -22,14 +22,14 @@
       </div>
       <div class="sort-field">
         <span class="sort-title">Sort by</span>
-        <p-dropdown
+        <p-select
           [options]="sortFilters"
           [(ngModel)]="sortedBy"
           optionLabel="label"
           optionValue="value"
           scrollHeight="unset"
           (onChange)="onParamChange({ sort: sortedBy })"
-        ></p-dropdown>
+        ></p-select>
       </div>
     </div>
   </section>
