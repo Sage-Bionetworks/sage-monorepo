@@ -265,10 +265,10 @@ def _build_user_progress_card_html(
         <div style="margin-bottom: 0.5rem;">
             <h4 style="color: var(--body-text-color); font-weight: 600;
                        margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-                {emoji} {tier_name} &middot; {username}
+                {emoji} You're a Champion
             </h4>
             <div style="color: var(--body-text-color-subdued); font-size: 0.875rem; line-height: 1.4;">
-                {battles_per_week:.1f} battles/week &mdash; You're a Champion! Keep it up to hold your title.
+                {battles_per_week:.1f} battles/week &mdash; Keep battling to hold your title!
             </div>
         </div>
         """
@@ -283,6 +283,7 @@ def _build_user_progress_card_html(
 
     next_emoji = TIER_CONFIG[next_tier]["emoji"]
     next_name = next_tier.capitalize()
+    article = "an" if tier == "apprentice" else "a"
 
     progress_pct = min((battles_per_week / next_threshold) * 100, 100)
 
@@ -290,7 +291,7 @@ def _build_user_progress_card_html(
     <div style="margin-bottom: 0.5rem;">
         <h4 style="color: var(--body-text-color); font-weight: 600;
                    margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-            {emoji} {tier_name} &middot; {username}
+            {emoji} You're {article} {tier_name}
         </h4>
         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
             <span style="color: var(--body-text-color); font-weight: 500; font-size: 0.875rem;">Tier Progress</span>
