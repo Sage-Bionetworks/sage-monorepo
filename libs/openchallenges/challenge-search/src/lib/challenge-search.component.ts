@@ -60,7 +60,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -79,7 +79,7 @@ import { ChallengeSearchDropdown, CHALLENGE_SEARCH_DROPDOWNS } from './challenge
     CheckboxFilterComponent,
     DatePickerModule,
     DividerModule,
-    DropdownModule,
+    SelectModule,
     FooterComponent,
     FormsModule,
     InputTextModule,
@@ -113,6 +113,8 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   public apiDocsUrl: string;
   public enableOperationFilter: boolean;
   datePipe: DatePipe = new DatePipe('en-US');
+  minDateValue: Date = new Date(2000, 0, 1);
+  maxDateValue: Date = new Date(2030, 11, 31);
 
   private readonly query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({});

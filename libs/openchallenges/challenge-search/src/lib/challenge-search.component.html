@@ -18,19 +18,19 @@
             [(ngModel)]="searchedTerms"
             (input)="onSearchChange('challenges', searchedTerms)"
             placeholder="Search challenges"
-            />
+          />
         </p-inputGroup>
       </div>
       <div class="sort-field">
         <span class="sort-title">Sort by</span>
-        <p-dropdown
+        <p-select
           [options]="sortFilters"
           [(ngModel)]="sortedBy"
           optionLabel="label"
           optionValue="value"
           scrollHeight="unset"
           (onChange)="onParamChange({ sort: sortedBy })"
-        ></p-dropdown>
+        ></p-select>
       </div>
     </div>
   </section>
@@ -40,46 +40,46 @@
         header="{{ incentivesFilter.label }}"
         [toggleable]="true"
         [collapsed]="incentivesFilter.collapsed"
-        >
+      >
         <openchallenges-checkbox-filter
           [options]="incentivesFilter.options"
           [selectedOptions]="selectedValues['incentives']"
           (selectionChange)="onParamChange({ incentives: $event })"
           inputId="{{ incentivesFilter.query }}"
-          />
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
         header="{{ statusFilter.label }}"
         [toggleable]="true"
         [collapsed]="statusFilter.collapsed"
-        >
+      >
         <openchallenges-checkbox-filter
           [options]="statusFilter.options"
           [selectedOptions]="selectedValues['status']"
           (selectionChange)="onParamChange({ status: $event })"
           inputId="{{ statusFilter.query }}"
-          />
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
         header="{{ categoriesFilter.label }}"
         [toggleable]="true"
         [collapsed]="categoriesFilter.collapsed"
-        >
+      >
         <openchallenges-checkbox-filter
           [options]="categoriesFilter.options"
           [selectedOptions]="selectedValues['categories']"
           (selectionChange)="onParamChange({ categories: $event })"
           inputId="{{ categoriesFilter.query }}"
-          />
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
         header="{{ dropdownFilters['platforms'].label }}"
         [toggleable]="true"
         [collapsed]="dropdownFilters['platforms'].collapsed"
-        >
+      >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['platforms'].options"
           [optionsPerPage]="defaultDropdownOptionSize"
@@ -90,14 +90,14 @@
           (selectionChange)="onParamChange({ platforms: $event })"
           (searchChange)="onSearchChange('platforms', $event)"
           (pageChange)="onLazyLoad('platforms', $event)"
-          />
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
         header="{{ dropdownFilters['inputDataTypes'].label }}"
         [toggleable]="true"
         [collapsed]="dropdownFilters['inputDataTypes'].collapsed"
-        >
+      >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['inputDataTypes'].options"
           [optionsPerPage]="defaultDropdownOptionSize"
@@ -108,14 +108,14 @@
           (selectionChange)="onParamChange({ inputDataTypes: $event })"
           (searchChange)="onSearchChange('inputDataTypes', $event)"
           (pageChange)="onLazyLoad('inputDataTypes', $event)"
-          />
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
         header="{{ dropdownFilters['organizations'].label }}"
         [toggleable]="true"
         [collapsed]="dropdownFilters['organizations'].collapsed"
-        >
+      >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['organizations'].options"
           [optionsPerPage]="defaultDropdownOptionSize"
@@ -127,14 +127,14 @@
           (selectionChange)="onParamChange({ organizations: $event })"
           (searchChange)="onSearchChange('organizations', $event)"
           (pageChange)="onLazyLoad('organizations', $event)"
-          />
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
         header="Challenge Year"
         [toggleable]="true"
         [collapsed]="startYearRangeFilter.collapsed"
-        >
+      >
         @for (year of startYearRangeFilter.options; track year) {
           <div class="year-btn-group">
             <p-radioButton
@@ -159,8 +159,8 @@
               (onSelect)="onCalendarChange()"
               (onInput)="onCalendarChange()"
               [showIcon]="true"
-              [yearNavigator]="true"
-              yearRange="2000:2030"
+              [minDate]="minDateValue"
+              [maxDate]="maxDateValue"
             ></p-datepicker>
           </div>
         }
@@ -170,13 +170,13 @@
         header="{{ submissionTypesFilter.label }}"
         [toggleable]="true"
         [collapsed]="submissionTypesFilter.collapsed"
-        >
+      >
         <openchallenges-checkbox-filter
           [options]="submissionTypesFilter.options"
           [selectedOptions]="selectedValues['submissionTypes']"
           (selectionChange)="onParamChange({ submissionTypes: $event })"
           inputId="{{ submissionTypesFilter.query }}"
-          />
+        />
       </p-panel>
       @if (enableOperationFilter) {
         <p-divider></p-divider>
@@ -186,7 +186,7 @@
           header="{{ dropdownFilters['operations'].label }}"
           [toggleable]="true"
           [collapsed]="dropdownFilters['operations'].collapsed"
-          >
+        >
           <openchallenges-search-dropdown-filter
             [options]="dropdownFilters['operations'].options"
             [optionsPerPage]="defaultDropdownOptionSize"
@@ -197,32 +197,31 @@
             (selectionChange)="onParamChange({ operations: $event })"
             (searchChange)="onSearchChange('operations', $event)"
             (pageChange)="onLazyLoad('operations', $event)"
-            />
+          />
         </p-panel>
       }
     </div>
     <div class="main col">
       <h3>
-        Results @if (searchResultsCount !== undefined) {
-        <span>({{ searchResultsCount }})</span>
-      }
-    </h3>
-    <div class="card-group">
-      @for (challenge of challenges; track challenge) {
-        <openchallenges-challenge-card
-          [challenge]="challenge"
-          />
-      }
-    </div>
-    <openchallenges-paginator
-      #paginator
-      [pageNumber]="selectedPageNumber || defaultPageNumber"
-      [pageSize]="selectedPageSize || defaultPageSize"
-      [totalElements]="searchResultsCount"
-      (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows })"
+        Results
+        @if (searchResultsCount !== undefined) {
+          <span>({{ searchResultsCount }})</span>
+        }
+      </h3>
+      <div class="card-group">
+        @for (challenge of challenges; track challenge) {
+          <openchallenges-challenge-card [challenge]="challenge" />
+        }
+      </div>
+      <openchallenges-paginator
+        #paginator
+        [pageNumber]="selectedPageNumber || defaultPageNumber"
+        [pageSize]="selectedPageSize || defaultPageSize"
+        [totalElements]="searchResultsCount"
+        (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows })"
       />
-  </div>
-</section>
+    </div>
+  </section>
 </main>
 
 <openchallenges-footer
@@ -231,4 +230,4 @@
   [privacyPolicyUrl]="privacyPolicyUrl"
   [termsOfUseUrl]="termsOfUseUrl"
   [apiDocsUrl]="apiDocsUrl"
-  />
+/>
