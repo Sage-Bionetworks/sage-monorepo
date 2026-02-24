@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
@@ -13,7 +13,11 @@ export class ErrorPageComponent {
   private readonly route = inject(ActivatedRoute);
 
   supportEmail = input('supportEmail'); // from the route data
-  readonly backgroundImagePath = 'explorers-assets/images/background.svg';
+  backgroundImagePath = input<string | undefined>(); // from the route data
+
+  backgroundImagePathOrDefault = computed(
+    () => this.backgroundImagePath() || 'explorers-assets/images/background.svg',
+  );
 
   errorMessage = '';
   retryUrl = '';
