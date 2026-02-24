@@ -8,7 +8,7 @@
   [autoHide]="false"
   [tooltipEvent]="'focus'"
   [tooltipPosition]="tooltipPosition()"
-  [buttonProps]="buttonProps()"
+  [buttonProps]="buttonProps() ?? {}"
 >
   @if (buttonSvgIconConfig()?.imagePath) {
     @let cfg = buttonSvgIconConfig()!;
