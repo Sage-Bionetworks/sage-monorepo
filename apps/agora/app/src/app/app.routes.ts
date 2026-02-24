@@ -60,7 +60,8 @@ export const routes: Route[] = [
     loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
     data: {
       title: 'Agora | Drug Details',
-      description: "View information and evidence about a drug candidate for Alzheimer's disease.",
+      description:
+        "View information and evidence about potential therapeutic agents for Alzheimer's disease.",
     },
   },
   {
