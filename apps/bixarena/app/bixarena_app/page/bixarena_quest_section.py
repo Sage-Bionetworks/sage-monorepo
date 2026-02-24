@@ -291,11 +291,11 @@ def _build_user_progress_card_html(
     <div style="margin-bottom: 0.5rem;">
         <h4 style="color: var(--body-text-color); font-weight: 600;
                    margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-            {emoji} You're {article} {tier_name}
+            {emoji} You're {article} {tier_name}, {username}
         </h4>
         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
             <span style="color: var(--body-text-color); font-weight: 500; font-size: 0.875rem;">Tier Progress</span>
-            <span style="color: var(--body-text-color); font-weight: 600; font-size: 0.875rem;">{progress_pct:.0f}% to {next_emoji} {next_name}</span>
+            <span style="color: var(--body-text-color); font-weight: 600; font-size: 0.875rem;">{progress_pct:.0f}% Complete</span>
         </div>
         <div style="width: 100%; height: 10px; background-color: var(--background-fill-secondary);
                     border-radius: 5px; overflow: hidden;
@@ -304,9 +304,15 @@ def _build_user_progress_card_html(
                         background: var(--color-accent, #f97316);
                         border-radius: 5px;"></div>
         </div>
-        <div style="margin-top: 0.75rem;">
-            <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{battles_per_week:.1f}</p>
-            <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Battles/Week</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+            <div>
+                <p style="font-size: 1.25rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{battles_per_week:.1f}</p>
+                <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Battles/Week</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="font-size: 1.25rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{next_emoji} {next_name}</p>
+                <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
+            </div>
         </div>
     </div>
     """
