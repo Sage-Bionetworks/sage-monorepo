@@ -34,7 +34,7 @@ export class TermsOfServiceComponent implements OnInit {
   heroBackgroundImagePath = input<string | undefined>();
 
   heroBackgroundImagePathOrDefault = computed(
-    () => this.heroBackgroundImagePath() ?? 'explorers-assets/images/background.svg',
+    () => this.heroBackgroundImagePath() || 'explorers-assets/images/background.svg',
   );
 
   ngOnInit() {
