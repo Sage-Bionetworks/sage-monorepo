@@ -63,7 +63,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     viewDetailsTooltip: 'Open drug details',
     viewDetailsClick: (rowData: unknown) => {
       const drug = rowData as NominatedDrug;
-      // TODO: replace common_name with chembl_id once available in the backend
+      // TODO (AG-1996): replace common_name with chembl_id once available in the backend
       const url = this.router.serializeUrl(
         this.router.createUrlTree([ROUTE_PATHS.DRUG_DETAILS, drug.common_name]),
       );
