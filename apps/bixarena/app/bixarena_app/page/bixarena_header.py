@@ -26,7 +26,9 @@ def build_header():
                 """
             )
         with gr.Column(scale=1, min_width=180):
-            battle_btn = gr.Button("Battle", variant="primary", visible=False)
+            home_btn = gr.Button("Home", variant="primary")
+        with gr.Column(scale=1, min_width=180, visible=False) as battle_col:
+            battle_btn = gr.Button("Battle", variant="secondary")
         with gr.Column(scale=1, min_width=180):
             leaderboard_btn = gr.Button("Leaderboard", variant="secondary")
         with gr.Column(scale=1, min_width=180):
@@ -53,7 +55,7 @@ def build_header():
 </style>
         """
     )
-    return header, battle_btn, leaderboard_btn, login_btn
+    return header, home_btn, battle_col, battle_btn, leaderboard_btn, login_btn
 
 
 def update_login_button(request: gr.Request | None = None):
@@ -64,10 +66,12 @@ def update_login_button(request: gr.Request | None = None):
     return gr.update(value="Login", variant="primary")
 
 
-def update_battle_button(request: gr.Request | None = None):
-    """Return gr.update for battle button based on Python-side auth state.
+def update_battle_column(request: gr.Request | None = None):
+    """Return gr.update for battle column based on Python-side auth state.
 
-    The Battle button should only be visible when the user is authenticated.
+    The Battle column (and its button) should only be visible when the user
+    is authenticated. We toggle the column rather than the button so that
+    hidden state collapses the layout gap.
     """
     state = get_user_state(request)
     if state.is_authenticated():
