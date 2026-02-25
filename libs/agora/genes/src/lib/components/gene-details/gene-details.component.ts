@@ -215,8 +215,9 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
                 this.helperService.setLoading(false);
               }
             },
-            error: () => {
+            error: (error) => {
               this.helperService.setLoading(false);
+              this.logger.error('Failed to load gene details', error);
               this.errorOverlayService.showError('Failed to load gene details. Please try again.');
             },
           });

@@ -141,8 +141,12 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
-        error: () => {
-          throw new AppError('Unable to load unpinned model data. Please reload the page.', true);
+        error: (error) => {
+          this.logger.error('Unable to load unpinned model overview data.', error);
+          throw new AppError(
+            'Unable to load unpinned model overview data. Please reload the page.',
+            true,
+          );
         },
       });
   }
@@ -167,8 +171,12 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
-        error: () => {
-          throw new AppError('Unable to load pinned model data. Please reload the page.', true);
+        error: (error) => {
+          this.logger.error('Unable to load pinned model overview data.', error);
+          throw new AppError(
+            'Unable to load pinned model overview data. Please reload the page.',
+            true,
+          );
         },
       });
   }

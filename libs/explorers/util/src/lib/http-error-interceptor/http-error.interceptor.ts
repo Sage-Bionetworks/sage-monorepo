@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { Observable, throwError, timer } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
 import { AppError } from '@sagebionetworks/explorers/models';
 import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/services';
 
@@ -52,10 +53,12 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
       logger.error(`HTTP Error: ${errorMessage}`, error);
 
       // Show error overlay for all errors so users know when requests fail,
-      // but not if the user is already on the error page.
+      // but not if the user is already on the error page or if the request
+      // explicitly opts out (e.g., non-critical requests like version checks).
       // TODO - in the future, we may want to track specific routes through configuration (MG-771)
+      const suppressOverlay = req.context.get(SUPPRESS_ERROR_OVERLAY);
       const isOnErrorPage = router.url.includes('/not-found');
-      if (!isOnErrorPage) {
+      if (!suppressOverlay && !isOnErrorPage) {
         errorOverlayService.showError(errorMessage);
       }
 

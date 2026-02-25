@@ -68,7 +68,8 @@ export class WikiComponent {
               this.synapseApiService.renderHtml(wiki.markdown),
             );
           },
-          error: () => {
+          error: (error) => {
+            this.logger.error('Failed to load wiki content', error);
             this.errorOverlayService.showError(
               'Failed to load wiki content. Please try again later.',
             );

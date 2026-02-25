@@ -184,7 +184,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
-        error: () => {
+        error: (error) => {
+          this.logger.error('Unable to load unpinned disease correlation data.', error);
           throw new AppError(
             'Unable to load unpinned disease correlation data. Please reload the page.',
             true,
@@ -214,7 +215,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
-        error: () => {
+        error: (error) => {
+          this.logger.error('Unable to load pinned disease correlation data.', error);
           throw new AppError(
             'Unable to load pinned disease correlation data. Please reload the page.',
             true,

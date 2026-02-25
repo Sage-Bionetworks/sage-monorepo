@@ -142,7 +142,8 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
-        error: () => {
+        error: (error) => {
+          this.logger.error('Unable to load unpinned nominated drugs data.', error);
           throw new AppError(
             'Unable to load unpinned nominated drugs data. Please reload the page.',
             true,
@@ -171,7 +172,8 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
-        error: () => {
+        error: (error) => {
+          this.logger.error('Unable to load pinned nominated drugs data.', error);
           throw new AppError(
             'Unable to load pinned nominated drugs data. Please reload the page.',
             true,

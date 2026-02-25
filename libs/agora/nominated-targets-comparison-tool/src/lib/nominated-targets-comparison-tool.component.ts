@@ -149,7 +149,8 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
-        error: () => {
+        error: (error) => {
+          this.logger.error('Unable to load unpinned nominated targets data.', error);
           throw new AppError(
             'Unable to load unpinned nominated targets data. Please reload the page.',
             true,
@@ -178,7 +179,8 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
-        error: () => {
+        error: (error) => {
+          this.logger.error('Unable to load pinned nominated targets data.', error);
           throw new AppError(
             'Unable to load pinned nominated targets data. Please reload the page.',
             true,

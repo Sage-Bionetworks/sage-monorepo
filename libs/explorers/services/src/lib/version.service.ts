@@ -1,4 +1,6 @@
+import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
 import { catchError, EMPTY, map, Observable, of, throwError } from 'rxjs';
 import { GitHubService } from './github.service';
 import { LoggerService } from './logger.service';
@@ -16,7 +18,11 @@ export interface DataVersion {
 }
 
 export interface DataVersionService {
-  getDataVersion(): Observable<DataVersion>;
+  getDataVersion(
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: { context?: HttpContext },
+  ): Observable<DataVersion>;
 }
 
 @Injectable({
@@ -31,7 +37,8 @@ export class VersionService {
     if (this.platformService.isServer) {
       return EMPTY;
     }
-    return dataVersionService.getDataVersion().pipe(
+    const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
+    return dataVersionService.getDataVersion('body', false, { context }).pipe(
       map((data) => this.formatDataVersion(data)),
       catchError((error) => {
         this.logger.error('Error loading data version', error);

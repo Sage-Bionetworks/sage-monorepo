@@ -83,9 +83,9 @@ export class AppComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (v) => (this.dataVersion = v),
-        error: () => {
+        error: (error) => {
           this.dataVersion = 'unknown';
-          this.logger.error('Failed to get data version');
+          this.logger.error('Failed to get data version', error);
         },
       });
   }
@@ -98,9 +98,9 @@ export class AppComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (v) => (this.siteVersion = v),
-        error: () => {
+        error: (error) => {
           this.siteVersion = 'unknown';
-          this.logger.error('Failed to get site version');
+          this.logger.error('Failed to get site version', error);
         },
       });
   }

@@ -288,7 +288,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
             this.isLoading = false;
           }
         },
-        error: () => {
+        error: (error) => {
+          this.logger.error('Failed to load gene comparison data', error);
           this.isLoading = false;
         },
       });

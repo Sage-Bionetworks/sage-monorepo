@@ -89,8 +89,9 @@ export class GeneSimilarComponent implements OnInit {
                 this.init();
               }
             },
-            error: () => {
+            error: (error) => {
               this.helperService.setLoading(false);
+              this.logger.error('Failed to load similar genes', error);
               this.errorOverlayService.showError('Failed to load similar genes. Please try again.');
             },
           });
@@ -135,8 +136,9 @@ export class GeneSimilarComponent implements OnInit {
           this.genes = genes;
           this.helperService.setLoading(false);
         },
-        error: () => {
+        error: (error) => {
           this.helperService.setLoading(false);
+          this.logger.error('Failed to load similar genes data', error);
           this.errorOverlayService.showError('Failed to load similar genes data.');
         },
       });
