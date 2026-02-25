@@ -6,7 +6,12 @@ import { AGORA_LOADING_ICON_COLORS, ConfigService } from '@sagebionetworks/agora
 import { SearchInputComponent } from '@sagebionetworks/agora/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/agora/util';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
-import { LoggerService, MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
+import {
+  LoggerService,
+  MetaTagService,
+  PlatformService,
+  VersionService,
+} from '@sagebionetworks/explorers/services';
 import {
   ErrorOverlayComponent,
   FooterComponent,
@@ -48,6 +53,7 @@ import { ToastModule } from 'primeng/toast';
 export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
+  private readonly platformService = inject(PlatformService);
 
   configService = inject(ConfigService);
   dataVersionService = inject(DataVersionService);
@@ -71,8 +77,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getDataVersion();
-    this.getSiteVersion();
+    if (this.platformService.isBrowser) {
+      this.getDataVersion();
+      this.getSiteVersion();
+    }
   }
 
   getDataVersion() {

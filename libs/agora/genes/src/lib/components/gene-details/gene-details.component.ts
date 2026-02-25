@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { CommonModule, isPlatformBrowser, Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import {
   AfterViewChecked,
   AfterViewInit,
@@ -8,7 +8,6 @@ import {
   HostListener,
   inject,
   OnInit,
-  PLATFORM_ID,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -16,7 +15,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/services';
+import {
+  ErrorOverlayService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';
 import { GeneEvidenceRnaComponent } from '../gene-evidence-rna/gene-evidence-rna.component';
@@ -52,7 +55,7 @@ interface Panel {
 })
 export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly platformId = inject(PLATFORM_ID);
+  private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
   private readonly errorOverlayService = inject(ErrorOverlayService);
 
@@ -118,7 +121,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
 
   @HostListener('window:scroll')
   onWindowScroll() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       const nav = document.querySelector<HTMLElement>('.gene-details-nav');
       const rect = nav?.getBoundingClientRect();
 
@@ -132,7 +135,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
 
   @HostListener('window:resize')
   onWindowResize() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       const nav = document.querySelector<HTMLElement>('.gene-details-nav');
       const navContainer = nav?.querySelector<HTMLElement>('.gene-details-nav-container');
       const navList = nav?.querySelector<HTMLElement>('.gene-details-nav-container > ul');
@@ -283,7 +286,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
       url = this.helperService.addSingleUrlParam(url, 'model', modelUrlParam);
     }
 
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       const nav = document.querySelector('.gene-details-nav');
       if (nav) {
         window.scrollTo(0, this.helperService.getOffset(nav).top);
@@ -302,7 +305,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   slideNavigation(direction: number) {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       this.navSlideIndex += direction;
 
       if (this.navSlideIndex < 0) {

@@ -2,7 +2,12 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
-import { LoggerService, MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
+import {
+  LoggerService,
+  MetaTagService,
+  PlatformService,
+  VersionService,
+} from '@sagebionetworks/explorers/services';
 import {
   ErrorOverlayComponent,
   FooterComponent,
@@ -48,6 +53,7 @@ import { ToastModule } from 'primeng/toast';
 export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
+  private readonly platformService = inject(PlatformService);
 
   configService = inject(ConfigService);
   dataVersionService = inject(DataVersionService);
@@ -71,8 +77,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getDataVersion();
-    this.getSiteVersion();
+    if (this.platformService.isBrowser) {
+      this.getDataVersion();
+      this.getSiteVersion();
+    }
   }
 
   getDataVersion() {

@@ -1,10 +1,14 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, DestroyRef, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Team, TeamService, TeamsList } from '@sagebionetworks/agora/api-client';
 import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/services';
+import {
+  ErrorOverlayService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import { catchError, finalize, map, Observable, of } from 'rxjs';
 import { TeamListComponent } from './team-list/team-list.component';
 
@@ -16,7 +20,7 @@ import { TeamListComponent } from './team-list/team-list.component';
 })
 export class TeamsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly platformId = inject(PLATFORM_ID);
+  private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
   private readonly errorOverlayService = inject(ErrorOverlayService);
 
@@ -32,7 +36,7 @@ export class TeamsComponent implements OnInit {
   }
 
   loadTeams() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       this.helperService.setLoading(true);
       this.logger.log('TeamsComponent: Loading teams');
 

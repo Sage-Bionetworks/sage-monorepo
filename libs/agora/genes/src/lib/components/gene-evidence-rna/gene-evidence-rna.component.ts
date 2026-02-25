@@ -1,15 +1,5 @@
-import {
-  AfterViewChecked,
-  Component,
-  DestroyRef,
-  inject,
-  Input,
-  PLATFORM_ID,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewChecked, Component, DestroyRef, inject, Input, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-import { isPlatformBrowser } from '@angular/common';
 import {
   DistributionService,
   Gene,
@@ -25,7 +15,7 @@ import {
 import { BoxPlotChartItem, RowChartItem } from '@sagebionetworks/agora/models';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import { LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { getStatisticalModels } from '../../helpers';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
@@ -50,7 +40,7 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
 })
 export class GeneEvidenceRnaComponent implements AfterViewChecked {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
+  private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
 
   helperService = inject(HelperService);
@@ -124,7 +114,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   }
 
   scrollToAnchorLink() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       // AG-1408 - wait for differential expression box plot to finish loading before scrolling
       if (this.boxPlotComponent?.isInitialized && !this.hasScrolled) {
         const hash = window.location.hash.slice(1);
