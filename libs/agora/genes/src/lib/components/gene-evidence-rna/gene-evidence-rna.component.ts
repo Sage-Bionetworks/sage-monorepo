@@ -14,8 +14,9 @@ import {
   RowChartComponent,
 } from '@sagebionetworks/agora/charts';
 import { BoxPlotChartItem, RowChartItem } from '@sagebionetworks/agora/models';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
+import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { getStatisticalModels } from '../../helpers';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { GeneModelSelectorComponent } from '../gene-model-selector/gene-model-selector.component';
@@ -41,6 +42,8 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
   helperService = inject(HelperService);
   distributionService = inject(DistributionService);
+
+  readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
 
   _gene: Gene | undefined;
   get gene(): Gene | undefined {

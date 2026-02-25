@@ -9,8 +9,9 @@
             </h2>
           </div>
           <div>
-            <agora-popover-link [ownerId]="chart.syn_id" [wikiId]="chart.wiki_id">
-            </agora-popover-link>
+            <explorers-popover-link
+              [wikiParams]="{ ownerId: chart.syn_id, wikiId: chart.wiki_id }"
+            />
           </div>
         </div>
         @defer {

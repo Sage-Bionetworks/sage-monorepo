@@ -1,6 +1,6 @@
 @if (isLoading) {
   <div id="loading">
-    <agora-loading-icon></agora-loading-icon>
+    <explorers-loading-icon></explorers-loading-icon>
   </div>
 }
 <div #gct class="gct" (window:resize)="onResize()">
@@ -106,10 +106,14 @@
                   </div>
                   <div>
                     @if (category === 'RNA - Differential Expression') {
-                      <agora-popover-link wikiId="618276"></agora-popover-link>
+                      <explorers-popover-link
+                        [wikiParams]="{ ownerId: defaultSynapseWikiOwnerId, wikiId: '618276' }"
+                      />
                     }
                     @if (category === 'Protein - Differential Expression') {
-                      <agora-popover-link wikiId="618278"></agora-popover-link>
+                      <explorers-popover-link
+                        [wikiParams]="{ ownerId: defaultSynapseWikiOwnerId, wikiId: '618278' }"
+                      />
                     }
                   </div>
                 </div>
@@ -152,12 +156,12 @@
                       tooltipPosition="top"
                       tooltipStyleClass="tooltip"
                     >
-                      <agora-svg-icon
+                      <explorers-svg-icon
                         imagePath="agora-assets/icons/cog.svg"
                         [width]="16"
                         [height]="16"
                         altText="cog"
-                      ></agora-svg-icon>
+                      ></explorers-svg-icon>
                     </button>
                   </div>
                   <div>
@@ -203,12 +207,12 @@
                       tooltipPosition="top"
                       tooltipStyleClass="tooltip-xs"
                     >
-                      <agora-svg-icon
+                      <explorers-svg-icon
                         imagePath="agora-assets/icons/column.svg"
                         [width]="20"
                         [height]="16"
                         altText="column"
-                      ></agora-svg-icon>
+                      ></explorers-svg-icon>
                     </button>
                   </div>
                 </div>
@@ -286,10 +290,10 @@
                   </div>
                   <div class="csv-download-button">
                     <button (click)="downloadPinnedCsv()">
-                      <agora-svg-icon
+                      <explorers-svg-icon
                         imagePath="agora-assets/icons/download.svg"
                         altText="download"
-                      ></agora-svg-icon
+                      ></explorers-svg-icon
                       >Download as CSV
                     </button>
                   </div>
@@ -324,11 +328,11 @@
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
                         >
-                          <agora-svg-icon
+                          <explorers-svg-icon
                             imagePath="agora-assets/icons/external-link.svg"
                             [enableHoverEffects]="false"
                             altText="link"
-                          ></agora-svg-icon>
+                          ></explorers-svg-icon>
                         </button>
                       </div>
                       <div>
@@ -338,11 +342,11 @@
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
                         >
-                          <agora-svg-icon
+                          <explorers-svg-icon
                             imagePath="agora-assets/icons/pin.svg"
                             [enableHoverEffects]="false"
                             altText="pin"
-                          ></agora-svg-icon>
+                          ></explorers-svg-icon>
                         </button>
                       </div>
                     </div>
@@ -436,9 +440,7 @@
                       <button
                         class="pin-all-button"
                         [disabled]="getPinDisabledStatus()"
-                        [ngClass]="{
-                          disabled: getPinDisabledStatus(),
-                        }"
+                        [class.disabled]="getPinDisabledStatus()"
                         (click)="onPinAllClick()"
                         [pTooltip]="
                           getPinDisabledStatus()
@@ -450,10 +452,10 @@
                         tooltipPosition="left"
                         tooltipStyleClass="tooltip"
                       >
-                        <agora-svg-icon
+                        <explorers-svg-icon
                           imagePath="agora-assets/icons/pin.svg"
                           altText="pin"
-                        ></agora-svg-icon>
+                        ></explorers-svg-icon>
                         <span>Pin All</span>
                       </button>
                     </div>
@@ -504,20 +506,18 @@
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
                         >
-                          <agora-svg-icon
+                          <explorers-svg-icon
                             imagePath="agora-assets/icons/external-link.svg"
                             [enableHoverEffects]="false"
                             altText="link"
-                          ></agora-svg-icon>
+                          ></explorers-svg-icon>
                         </button>
                       </div>
                       <div>
                         <button
                           (click)="onPinGeneClick(gene)"
                           [disabled]="getPinDisabledStatus()"
-                          [ngClass]="{
-                            disabled: getPinDisabledStatus(),
-                          }"
+                          [class.disabled]="getPinDisabledStatus()"
                           [pTooltip]="
                             getPinDisabledStatus()
                               ? 'You have already pinned the maximum number of genes (' +
@@ -528,11 +528,11 @@
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
                         >
-                          <agora-svg-icon
+                          <explorers-svg-icon
                             imagePath="agora-assets/icons/pin.svg"
                             [enableHoverEffects]="false"
                             altText="pin"
-                          ></agora-svg-icon>
+                          ></explorers-svg-icon>
                         </button>
                       </div>
                     </div>

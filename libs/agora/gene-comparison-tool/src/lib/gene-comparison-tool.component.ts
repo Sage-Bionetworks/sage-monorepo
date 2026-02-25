@@ -16,7 +16,6 @@ import {
   GeneService,
   OverallScoresDistribution,
 } from '@sagebionetworks/agora/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import {
   GCTColumn,
   GCTDetailsPanelData,
@@ -24,6 +23,7 @@ import {
   GCTSelectOption,
   GCTSortEvent,
 } from '@sagebionetworks/agora/models';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { cloneDeep } from 'lodash';
 import { FilterService, MessageService, SortEvent } from 'primeng/api';
@@ -41,8 +41,11 @@ import { GeneComparisonToolPinnedGenesModalComponent } from './components/gene-c
 import { GeneComparisonToolScorePanelComponent } from './components/gene-comparison-tool-score-panel/gene-comparison-tool-score-panel.component';
 
 import { FormsModule } from '@angular/forms';
-import { PopoverLinkComponent } from '@sagebionetworks/agora/genes';
-import { LoadingIconComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
+import {
+  LoadingIconComponent,
+  PopoverLinkComponent,
+  SvgIconComponent,
+} from '@sagebionetworks/explorers/util';
 import { PopoverModule } from 'primeng/popover';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -86,6 +89,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   helperService = inject(HelperService);
   messageService = inject(MessageService);
   filterService = inject(FilterService);
+
+  readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
 
   isLoading = true;
 

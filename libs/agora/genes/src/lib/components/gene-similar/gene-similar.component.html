@@ -14,15 +14,14 @@
       @if (!gene.ensembl_gene_id) {
         <p>Genes that are similar based on network coexpression.</p>
       }
-      <agora-modal-link
+      <explorers-modal-link
         text="Learn more about this table"
         title="Similar genes"
-        wikiId="612974"
+        [wikiParams]="{ ownerId: defaultSynapseWikiOwnerId, wikiId: '612974' }"
         [textColor]="'#fff'"
         [iconWidth]="16"
         [iconHeight]="16"
-      >
-      </agora-modal-link>
+      />
     </div>
   </div>
 </div>
@@ -44,7 +43,7 @@
         ></agora-gene-table>
       </div>
       <div>
-        <agora-svg-icon name="info-circle" class="mr-xs text-gray-600"></agora-svg-icon>
+        <explorers-svg-icon name="info-circle" class="mr-xs text-gray-600"></explorers-svg-icon>
         Use
         <a class="link" (click)="navigateToGeneComparisonTool()">Agora's Gene Comparison Tool</a>
         to compare similar genes in this list.

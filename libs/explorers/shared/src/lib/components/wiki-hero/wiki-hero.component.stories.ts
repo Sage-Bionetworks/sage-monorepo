@@ -24,7 +24,8 @@ const meta: Meta<WikiHeroComponent> = {
 export default meta;
 type Story = StoryObj<WikiHeroComponent>;
 
-export const About: Story = {
+/** Model-AD About page */
+export const ModelADAbout: Story = {
   args: {
     heroTitle: 'About',
     wikiParams: {
@@ -35,7 +36,8 @@ export const About: Story = {
   },
 };
 
-export const News: Story = {
+/** Model-AD News page */
+export const ModelADNews: Story = {
   args: {
     heroTitle: 'News',
     wikiParams: {
@@ -43,5 +45,31 @@ export const News: Story = {
       ownerId: 'syn66271427',
     } as SynapseWikiParams,
     heroBackgroundImagePath: '',
+  },
+};
+
+/** Agora About page */
+export const AgoraAbout: Story = {
+  args: {
+    wikiParams: {
+      ownerId: 'syn25913473',
+      wikiId: '612058',
+    },
+    heroTitle: 'About',
+    heroBackgroundImagePath: 'agora-assets/images/hero-background.svg',
+    className: '',
+  },
+};
+
+/** Agora News page */
+export const AgoraNews: Story = {
+  args: {
+    wikiParams: {
+      ownerId: 'syn25913473',
+      wikiId: '611426',
+    },
+    heroTitle: 'Agora News',
+    heroBackgroundImagePath: 'agora-assets/images/hero-background.svg',
+    className: '',
   },
 };

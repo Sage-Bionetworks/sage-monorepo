@@ -10,7 +10,7 @@ import {
   NominatedDrugService,
   NominatedDrugsPage,
 } from '@sagebionetworks/agora/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   AppError,
@@ -57,7 +57,7 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: ComparisonToolConfigPage.NominatedDrugs,
-    headerTitleWikiParams: { ownerId: 'syn25913473', wikiId: '639223' },
+    headerTitleWikiParams: { ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID, wikiId: '639223' },
     filterResultsButtonTooltip: 'Filter results by Nominating PI and more',
     showSignificanceControls: false,
     viewDetailsTooltip: 'Open nominated drugs details page',

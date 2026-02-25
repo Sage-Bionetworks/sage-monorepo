@@ -9,5 +9,4 @@ export * from './misc';
 export * from './navigation-link';
 export * from './ResourceCard';
 export * from './scores';
-export * from './synapse-wiki';
 export * from './unsub';

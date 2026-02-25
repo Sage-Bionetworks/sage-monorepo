@@ -48,12 +48,13 @@ interface Panel {
   styleUrls: ['./gene-details.component.scss'],
 })
 export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+  private readonly platformId = inject(PLATFORM_ID);
+
   route = inject(ActivatedRoute);
   router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
   geneService = inject(GeneService);
-  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
 
   faAngleRight = faAngleRight;
   faAngleLeft = faAngleLeft;
