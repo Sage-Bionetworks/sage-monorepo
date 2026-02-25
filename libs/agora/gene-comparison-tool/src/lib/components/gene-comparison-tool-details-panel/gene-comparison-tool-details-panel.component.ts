@@ -10,7 +10,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { GCTDetailsPanelData } from '@sagebionetworks/agora/models';
-import { HelperService } from '@sagebionetworks/agora/services';
+import { HelperService as ExplorersHelperService } from '@sagebionetworks/explorers/services';
 import { Popover, PopoverModule } from 'primeng/popover';
 
 @Component({
@@ -21,7 +21,7 @@ import { Popover, PopoverModule } from 'primeng/popover';
   encapsulation: ViewEncapsulation.None,
 })
 export class GeneComparisonToolDetailsPanelComponent {
-  helperService = inject(HelperService);
+  explorersHelperService = inject(ExplorersHelperService);
 
   event: any = null;
   dataIndex = 1;
@@ -89,7 +89,7 @@ export class GeneComparisonToolDetailsPanelComponent {
   getSignificantFigures(n: any, b: any) {
     const emdash = '\u2014'; // Shift+Option+Hyphen
     if (n === null || n === undefined) return emdash;
-    return this.helperService.getSignificantFigures(n, b);
+    return this.explorersHelperService.getSignificantFigures(n, b);
   }
 
   showLegend() {

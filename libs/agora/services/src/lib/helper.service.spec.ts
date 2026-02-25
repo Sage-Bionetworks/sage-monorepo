@@ -37,16 +37,6 @@ describe('Service: Helper', () => {
     expect(res).toEqual('Anterior Cingulate Cortex');
   });
 
-  it('should get scroll top', () => {
-    const res = helperService.getScrollTop();
-    expect(res).toEqual({ x: 0, y: 0 });
-  });
-
-  it('should get offset', () => {
-    const res = helperService.getOffset('');
-    expect(res).toEqual({ top: 0, left: 0 });
-  });
-
   it('should round 0.123 to 0.12', () => {
     const res = helperService.roundNumber(0.123, 2);
     expect(res).toEqual('0.12');
@@ -92,11 +82,6 @@ describe('Service: Helper', () => {
     expect(res).toEqual('128.02');
   });
 
-  it('should get significant figures', () => {
-    const res = helperService.getSignificantFigures(0.123, 2);
-    expect(res).toEqual(0.12);
-  });
-
   it('should set GCT selection', () => {
     const mock = ['A'];
     helperService.setGCTSelection(mock);
@@ -120,12 +105,6 @@ describe('Service: Helper', () => {
   it('should get color', () => {
     const res = helperService.getColor('primary');
     expect(res).toEqual('#3c4a63');
-  });
-
-  it('should get url param', () => {
-    // window.location.search = '?test=42';
-    const res = helperService.getUrlParam('test');
-    expect(res).toEqual(null);
   });
 
   it('should capitalize first letter of string', () => {

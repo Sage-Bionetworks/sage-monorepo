@@ -1,11 +1,11 @@
 import { Component, inject, Input } from '@angular/core';
 import { Gene } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
-import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
-import { HelperService } from '@sagebionetworks/agora/services';
-import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
+import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
+import { HelperService as ExplorersHelperService } from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
+import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'agora-gene-evidence-metabolomics',
@@ -14,7 +14,7 @@ import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
   styleUrls: ['./gene-evidence-metabolomics.component.scss'],
 })
 export class GeneEvidenceMetabolomicsComponent {
-  helperService = inject(HelperService);
+  explorersHelperService = inject(ExplorersHelperService);
 
   readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
 
@@ -55,7 +55,7 @@ export class GeneEvidenceMetabolomicsComponent {
   }
 
   getSignificantFigures(n: any, b: any) {
-    return this.helperService.getSignificantFigures(n, b);
+    return this.explorersHelperService.getSignificantFigures(n, b);
   }
 
   getSignificantText(pval: number): string {
