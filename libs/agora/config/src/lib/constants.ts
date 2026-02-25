@@ -20,6 +20,7 @@ export const ROUTE_PATHS = {
   NOT_FOUND: 'not-found',
   ERROR: 'error',
   DETAILS: 'genes',
+  DRUG_DETAILS: 'drugs',
 } as const;
 
 export const AGORA_LOADING_ICON_COLORS: LoadingIconColors = {

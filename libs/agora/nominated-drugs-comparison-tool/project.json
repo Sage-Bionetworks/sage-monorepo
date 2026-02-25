@@ -1,17 +1,17 @@
 {
-  "name": "agora-not-found",
+  "name": "agora-nominated-drugs-comparison-tool",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/agora/not-found/src",
+  "sourceRoot": "libs/agora/nominated-drugs-comparison-tool/src",
   "prefix": "agora",
   "tags": ["type:feature", "scope:agora", "language:typescript"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/agora/not-found"],
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/nominated-drugs-comparison-tool"],
       "options": {
-        "jestConfig": "libs/agora/not-found/jest.config.ts",
-        "tsConfig": "libs/agora/not-found/tsconfig.spec.json"
+        "jestConfig": "libs/agora/nominated-drugs-comparison-tool/jest.config.ts",
+        "tsConfig": "libs/agora/nominated-drugs-comparison-tool/tsconfig.spec.json"
       }
     },
     "lint": {

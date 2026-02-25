@@ -1,8 +1,8 @@
 import { Component, computed, input } from '@angular/core';
 
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HeroComponent } from '@sagebionetworks/explorers/ui';
 import { WikiComponent } from '@sagebionetworks/explorers/util';
-import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
 @Component({
   selector: 'explorers-wiki-hero',
@@ -17,6 +17,6 @@ export class WikiHeroComponent {
   className = input<string>(''); // from the route data
 
   heroBackgroundImagePathOrDefault = computed(
-    () => this.heroBackgroundImagePath() ?? 'explorers-assets/images/background.svg',
+    () => this.heroBackgroundImagePath() || 'explorers-assets/images/background.svg',
   );
 }

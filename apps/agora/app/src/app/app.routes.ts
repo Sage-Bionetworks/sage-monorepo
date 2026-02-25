@@ -62,11 +62,25 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.NOMINATED_DRUGS,
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/agora/nominated-drugs-comparison-tool').then(
+        (routes) => routes.routes,
+      ),
     data: {
       title: "Nominated Drugs | Candidate drugs for Alzheimer's Disease treatment or prevention",
       description:
         "Explore a list of potential Alzheimer's Disease therapeutic agents that researchers have identified using integrated computational and experimental approaches.",
+    },
+  },
+  {
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chembl_id`,
+    // TODO (AG-1970): replace not-found with drug detail page
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
+    data: {
+      title: 'Agora | Drug Details',
+      description:
+        "View information and evidence about potential therapeutic agents for Alzheimer's disease.",
     },
   },
   {
@@ -157,14 +171,19 @@ export const routes: Route[] = [
       title: 'Agora | Error',
       description: 'Error Page',
       supportEmail: SUPPORT_EMAIL,
+      backgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
     path: ROUTE_PATHS.NOT_FOUND,
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
     data: {
-      title: 'Agora | Page not found',
-      description: '',
+      title: 'Agora | Page Not Found',
+      description:
+        "Explore transcriptomic, proteomic, and metabolomic evidence for whether or not genes are associated with Alzheimer's disease using the Agora portal.",
+      supportEmail: SUPPORT_EMAIL,
+      backgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {

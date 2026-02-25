@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'web-not-found',
+  displayName: 'agora-nominated-drugs-comparison-tool',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../coverage/libs/agora/not-found',
+  coverageDirectory: '../../../coverage/libs/agora/nominated-drugs-comparison-tool',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -14,7 +14,10 @@ export default {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  testEnvironment: 'jest-fixed-jsdom',
+  transformIgnorePatterns: [
+    'node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|@octokit/.*|universal-user-agent|before-after-hook))',
+  ],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

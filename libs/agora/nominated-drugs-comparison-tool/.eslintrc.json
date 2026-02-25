@@ -17,7 +17,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "modelAd",
+            "prefix": "agora",
             "style": "camelCase"
           }
         ],

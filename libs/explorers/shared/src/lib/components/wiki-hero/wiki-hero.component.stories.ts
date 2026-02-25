@@ -1,4 +1,7 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideLocationMocks } from '@angular/common/testing';
+import { provideRouter } from '@angular/router';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
@@ -9,15 +12,44 @@ const meta: Meta<WikiHeroComponent> = {
   title: 'Pages/WikiHero',
   decorators: [
     applicationConfig({
-      providers: [provideHttpClient(), ...provideLoadingIconColors()],
+      providers: [
+        provideRouter([]),
+        provideLocationMocks(),
+        provideHttpClient(withInterceptorsFromDi()),
+        ...provideLoadingIconColors(),
+      ],
     }),
   ],
 };
 export default meta;
 type Story = StoryObj<WikiHeroComponent>;
 
+/** Model-AD About page */
+export const ModelADAbout: Story = {
+  args: {
+    heroTitle: 'About',
+    wikiParams: {
+      wikiId: '631750',
+      ownerId: 'syn66271427',
+    } as SynapseWikiParams,
+    heroBackgroundImagePath: '',
+  },
+};
+
+/** Model-AD News page */
+export const ModelADNews: Story = {
+  args: {
+    heroTitle: 'News',
+    wikiParams: {
+      wikiId: '631751',
+      ownerId: 'syn66271427',
+    } as SynapseWikiParams,
+    heroBackgroundImagePath: '',
+  },
+};
+
 /** Agora About page */
-export const About: Story = {
+export const AgoraAbout: Story = {
   args: {
     wikiParams: {
       ownerId: 'syn25913473',
@@ -30,7 +62,7 @@ export const About: Story = {
 };
 
 /** Agora News page */
-export const News: Story = {
+export const AgoraNews: Story = {
   args: {
     wikiParams: {
       ownerId: 'syn25913473',
