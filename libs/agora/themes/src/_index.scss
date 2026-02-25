@@ -1,7 +1,0 @@
-@use 'libs/agora/not-found/src/lib-theme' as agora-not-found;
-// @use 'libs/agora/ui/src/lib-theme' as agora-ui;
-
-@mixin theme($theme) {
-  @include agora-not-found.theme($theme);
-  // @include agora-ui.theme($theme);
-}

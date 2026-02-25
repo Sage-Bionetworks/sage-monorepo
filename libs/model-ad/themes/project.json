@@ -1,9 +1,0 @@
-{
-  "name": "model-ad-themes",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/model-ad/themes/src",
-  "projectType": "library",
-  "generators": {},
-  "targets": {},
-  "tags": ["type:themes", "scope:model-ad", "language:typescript"]
-}
