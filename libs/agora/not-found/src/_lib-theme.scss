@@ -1,5 +1,0 @@
-@use './lib/not-found-theme';
-
-@mixin theme($theme) {
-  @include not-found-theme.theme($theme);
-}

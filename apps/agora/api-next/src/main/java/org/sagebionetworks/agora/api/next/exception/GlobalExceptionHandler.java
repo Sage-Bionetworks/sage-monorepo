@@ -30,6 +30,40 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       .body(errorDto);
   }
 
+  @ExceptionHandler(NominatedDrugNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleNominatedDrugNotFound(
+    NominatedDrugNotFoundException ex,
+    NativeWebRequest request,
+    Locale locale
+  ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.ENTITY_NOT_FOUND.getTitle())
+      .status(ErrorConstants.ENTITY_NOT_FOUND.getStatus().value())
+      .detail(ex.getMessage())
+      .instance(resolveInstance(request))
+      .build();
+    return ResponseEntity.status(ErrorConstants.ENTITY_NOT_FOUND.getStatus())
+      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+      .body(errorDto);
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  protected ResponseEntity<BasicErrorDto> handleIllegalArgument(
+    IllegalArgumentException ex,
+    NativeWebRequest request,
+    Locale locale
+  ) {
+    BasicErrorDto errorDto = BasicErrorDto.builder()
+      .title(ErrorConstants.BAD_REQUEST.getTitle())
+      .status(ErrorConstants.BAD_REQUEST.getStatus().value())
+      .detail(ex.getMessage())
+      .instance(resolveInstance(request))
+      .build();
+    return ResponseEntity.status(ErrorConstants.BAD_REQUEST.getStatus())
+      .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+      .body(errorDto);
+  }
+
   @ExceptionHandler({ Exception.class })
   protected ResponseEntity<BasicErrorDto> handleGenericException(
     Exception ex,

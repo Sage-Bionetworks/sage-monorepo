@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+  DEFAULT_SYNAPSE_WIKI_OWNER_ID,
   ROUTE_PATHS,
   SUPPORT_EMAIL,
 } from '@sagebionetworks/agora/config';
@@ -28,7 +29,7 @@ export const routes: Route[] = [
       heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
       className: 'about-page-content',
       wikiParams: {
-        ownerId: 'syn25913473',
+        ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
         wikiId: '612058',
       } as SynapseWikiParams,
     },
@@ -44,7 +45,7 @@ export const routes: Route[] = [
       heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
       className: 'news-page-content',
       wikiParams: {
-        ownerId: 'syn25913473',
+        ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
         wikiId: '611426',
       } as SynapseWikiParams,
     },
@@ -60,15 +61,38 @@ export const routes: Route[] = [
     },
   },
   {
-    path: ROUTE_PATHS.NOMINATED_TARGETS,
+    path: ROUTE_PATHS.NOMINATED_DRUGS,
     loadChildren: () =>
-      import('@sagebionetworks/agora/nominated-targets').then(
-        (routes) => routes.nominatedTargetsRoute,
+      import('@sagebionetworks/agora/nominated-drugs-comparison-tool').then(
+        (routes) => routes.routes,
       ),
     data: {
-      title: 'Nominated Targets | Candidate genes for AD treatment or prevention',
+      title: "Nominated Drugs | Candidate drugs for Alzheimer's Disease treatment or prevention",
       description:
-        'Browse a list of genes that researchers have identified using computational analyses of high-dimensional human genomic, proteomic and metabolomic data.',
+        "Explore a list of potential Alzheimer's Disease therapeutic agents that researchers have identified using integrated computational and experimental approaches.",
+    },
+  },
+  {
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chembl_id`,
+    // TODO (AG-1970): replace not-found with drug detail page
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
+    data: {
+      title: 'Agora | Drug Details',
+      description:
+        "View information and evidence about potential therapeutic agents for Alzheimer's disease.",
+    },
+  },
+  {
+    path: ROUTE_PATHS.NOMINATED_TARGETS,
+    loadChildren: () =>
+      import('@sagebionetworks/agora/nominated-targets-comparison-tool').then(
+        (routes) => routes.routes,
+      ),
+    data: {
+      title: "Nominated Targets | Candidate genes for Alzheimer's Disease treatment or prevention",
+      description:
+        "Explore a list of potential Alzheimer's Disease therapeutic targets that researchers have identified using computational analyses of high-dimensional human genomic, proteomic and metabolomic data.",
     },
   },
   {
@@ -113,9 +137,7 @@ export const routes: Route[] = [
   {
     path: 'nomination-form',
     loadChildren: () =>
-      import('@sagebionetworks/agora/nominated-targets').then(
-        (routes) => routes.nominationFormRoute,
-      ),
+      import('@sagebionetworks/agora/nomination-form').then((routes) => routes.nominationFormRoute),
     data: {
       title: 'Nominate a Target | Suggest a new AD therapeutic target',
       description: 'Nominate a gene as a new candidate for AD treatment or prevention.',
@@ -149,14 +171,19 @@ export const routes: Route[] = [
       title: 'Agora | Error',
       description: 'Error Page',
       supportEmail: SUPPORT_EMAIL,
+      backgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
     path: ROUTE_PATHS.NOT_FOUND,
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
     data: {
-      title: 'Agora | Page not found',
-      description: '',
+      title: 'Agora | Page Not Found',
+      description:
+        "Explore transcriptomic, proteomic, and metabolomic evidence for whether or not genes are associated with Alzheimer's disease using the Agora portal.",
+      supportEmail: SUPPORT_EMAIL,
+      backgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {

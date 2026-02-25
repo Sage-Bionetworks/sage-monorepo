@@ -24,6 +24,13 @@ public final class CacheNames {
   public static final String COMPARISON_TOOL_CONFIG = "comparisonToolConfig";
 
   /**
+   * Cache for nominated drug queries.
+   * Stores results from nominated drug comparison queries filtered by items and filter type.
+   * Key format: Dynamic based on query parameters (items, filterType)
+   */
+  public static final String NOMINATED_DRUG = "nominatedDrug";
+
+  /**
    * Cache for nominated target queries.
    * Stores results from nominated target comparison queries filtered by items and filter type.
    * Key format: Dynamic based on query parameters (items, filterType)

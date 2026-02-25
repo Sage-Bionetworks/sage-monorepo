@@ -23,6 +23,7 @@ import {
   RowChartComponent,
 } from '@sagebionetworks/agora/charts';
 import { BoxPlotChartItem, RowChartItem } from '@sagebionetworks/agora/models';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { LoggerService } from '@sagebionetworks/explorers/services';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
@@ -54,6 +55,8 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
 
   helperService = inject(HelperService);
   distributionService = inject(DistributionService);
+
+  readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
 
   _gene: Gene | undefined;
   get gene(): Gene | undefined {

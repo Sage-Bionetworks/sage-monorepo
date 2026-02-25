@@ -1,0 +1,89 @@
+type: object
+description: Nominated Drug search query with pagination and filtering options.
+properties:
+  pageNumber:
+    description: The page number to return (index starts from 0).
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    maximum: 100
+    example: 100
+  items:
+    description: |
+      List of common_name values to filter by.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Agomelatine', 'Bexarotene']
+  itemFilterType:
+    $ref: ItemFilterTypeQuery.yaml
+    nullable: true
+  search:
+    description: |
+      Search by common_name value (case-insensitive partial match) or by comma separated list of common_name values (case-insensitive full matches).
+      Examples: 'agomelatine,bexarotene' (comma-separated list) or 'agom' (partial match). Only applied when
+      itemFilterType is 'exclude'.
+    type: string
+    nullable: true
+    example: 'agomelatine,bexarotene'
+  principalInvestigators:
+    description: Filter by principal investigators.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['Bhatt', 'Bhattacharya']
+  programs:
+    description: Filter by programs.
+    type: array
+    items:
+      type: string
+    nullable: true
+    example: ['ACTDRx AD', 'AMP-AD']
+  totalNominations:
+    description: Filter by total nominations.
+    type: array
+    items:
+      type: integer
+    nullable: true
+    example: [1, 2]
+  yearFirstNominated:
+    description: Filter by year first nominated.
+    type: array
+    items:
+      type: integer
+    nullable: true
+    example: [2024, 2025]
+  sortFields:
+    description: |
+      List of field names to sort by (e.g., ["total_nominations", "common_name"]).
+      Each field in sortFields must have a corresponding order in sortOrders.
+    type: array
+    items:
+      type: string
+    minItems: 1
+    example: ['total_nominations', 'common_name']
+  sortOrders:
+    description: |
+      List of sort directions corresponding to sortFields.
+      Values: 1 (ascending) or -1 (descending).
+      Must have the same length as sortFields.
+    type: array
+    items:
+      type: integer
+      format: int32
+      enum: [1, -1]
+    minItems: 1
+    example: [-1, 1]
+required:
+  - sortFields
+  - sortOrders

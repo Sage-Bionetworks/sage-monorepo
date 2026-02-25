@@ -7,6 +7,7 @@ import { SvgIconServiceStub } from '@sagebionetworks/agora/testing';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
 import { GeneComparisonToolComponent } from './gene-comparison-tool.component';
+import { AGORA_LOADING_ICON_COLORS } from '@sagebionetworks/agora/config';
 
 describe('GeneComparisonToolComponent', () => {
   let component: GeneComparisonToolComponent;
@@ -20,7 +21,7 @@ describe('GeneComparisonToolComponent', () => {
         provideHttpClient(),
         MessageService,
         { provide: SvgIconService, useClass: SvgIconServiceStub },
-        ...provideLoadingIconColors(),
+        ...provideLoadingIconColors(AGORA_LOADING_ICON_COLORS),
       ],
     }).compileComponents();
 

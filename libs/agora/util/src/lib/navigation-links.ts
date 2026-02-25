@@ -16,6 +16,10 @@ export const headerLinks: NavigationLink[] = [
     routerLink: [ROUTE_PATHS.NOMINATED_TARGETS],
   },
   {
+    label: 'Nominated Drugs',
+    routerLink: [ROUTE_PATHS.NOMINATED_DRUGS],
+  },
+  {
     label: 'Teams',
     routerLink: [ROUTE_PATHS.TEAMS],
   },

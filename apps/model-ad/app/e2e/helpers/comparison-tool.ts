@@ -1,5 +1,5 @@
-import { Page, expect, test } from '@playwright/test';
-import { getUnpinnedTable } from '@sagebionetworks/explorers/testing/e2e';
+import { Page, expect } from '@playwright/test';
+import { expectComparisonToolTableLoaded } from '@sagebionetworks/explorers/testing/e2e';
 import {
   ComparisonToolConfig,
   DiseaseCorrelation,
@@ -16,17 +16,6 @@ import {
   COMPARISON_TOOL_DEFAULT_SORTS,
   COMPARISON_TOOL_PATHS,
 } from '../constants';
-
-export const closeVisualizationOverviewDialog = async (page: Page) => {
-  await test.step('close visualization overview dialog', async () => {
-    const dialog = page.getByRole('dialog');
-
-    const closeBtn = dialog.getByRole('button').first();
-    await closeBtn.click();
-
-    await expect(dialog).toBeHidden();
-  });
-};
 
 export const navigateToComparison = async (
   page: Page,
@@ -49,20 +38,6 @@ export const navigateToComparison = async (
   }
 
   await expectComparisonToolTableLoaded(page, name, shouldCloseVisualizationOverviewDialog);
-};
-
-export const expectComparisonToolTableLoaded = async (
-  page: Page,
-  name: string,
-  shouldCloseVisualizationOverviewDialog: boolean,
-) => {
-  if (shouldCloseVisualizationOverviewDialog) {
-    await closeVisualizationOverviewDialog(page);
-  }
-
-  await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
-  await expect(page.locator('explorers-base-table')).toHaveCount(2);
-  await expect(getUnpinnedTable(page).locator('tbody tr').first()).toBeVisible();
 };
 
 export const fetchComparisonToolData = async <T>(

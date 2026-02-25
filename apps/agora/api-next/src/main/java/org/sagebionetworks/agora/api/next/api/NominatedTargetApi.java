@@ -42,7 +42,7 @@ public interface NominatedTargetApi {
     }
 
     /**
-     * GET /comparison-tools/nominated-target : Get nominated target results for comparison tools
+     * GET /comparison-tools/targets : Get nominated target results for comparison tools
      * Returns a paginated list of nominated target results for use in comparison tools.
      *
      * @param nominatedTargetSearchQuery The search query used to find and filter nominated targets. (optional)
@@ -77,7 +77,7 @@ public interface NominatedTargetApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/comparison-tools/nominated-target",
+        value = "/comparison-tools/targets",
         produces = { "application/json", "application/problem+json" }
     )
     
