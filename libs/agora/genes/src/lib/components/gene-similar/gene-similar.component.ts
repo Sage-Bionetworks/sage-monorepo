@@ -1,7 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
-import { DEFAULT_HERO_BACKGROUND_IMAGE_PATH } from '@sagebionetworks/agora/config';
+import {
+  DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+  DEFAULT_SYNAPSE_WIKI_OWNER_ID,
+} from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { GeneTableComponent } from '../gene-table/gene-table.component';
@@ -26,6 +29,7 @@ export class GeneSimilarComponent implements OnInit {
   helperService = inject(HelperService);
 
   readonly heroBackgroundImagePath = DEFAULT_HERO_BACKGROUND_IMAGE_PATH;
+  readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
 
   gene: Gene = {} as Gene;
   genes: Gene[] = [];

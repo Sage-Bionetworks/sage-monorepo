@@ -2,6 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import { Gene } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
 import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
@@ -14,6 +15,8 @@ import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 })
 export class GeneEvidenceMetabolomicsComponent {
   helperService = inject(HelperService);
+
+  readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
 
   _gene: Gene | undefined;
   get gene(): Gene | undefined {

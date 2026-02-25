@@ -8,6 +8,7 @@ import {
 } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
 import { BoxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
@@ -27,6 +28,8 @@ import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-prot
 export class GeneEvidenceProteomicsComponent {
   helperService = inject(HelperService);
   distributionService = inject(DistributionService);
+
+  readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
 
   _gene: Gene | undefined;
   get gene(): Gene | undefined {
