@@ -3,7 +3,7 @@ import { NominationFormComponent } from './nomination-form.component';
 
 const meta: Meta<NominationFormComponent> = {
   component: NominationFormComponent,
-  title: 'Nomination Targets/NominationForm',
+  title: 'Pages/NominationForm',
 };
 export default meta;
 type Story = StoryObj<NominationFormComponent>;
