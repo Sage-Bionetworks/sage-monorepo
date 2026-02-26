@@ -12,11 +12,7 @@ import {
 } from '@sagebionetworks/agora/api-client';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import {
-  AppError,
-  ComparisonToolQuery,
-  ComparisonToolViewConfig,
-} from '@sagebionetworks/explorers/models';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolUrlService,
   LoggerService,
@@ -144,10 +140,6 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
         },
         error: (error) => {
           this.logger.error('Unable to load unpinned nominated drugs data.', error);
-          throw new AppError(
-            'Unable to load unpinned nominated drugs data. Please reload the page.',
-            true,
-          );
         },
       });
   }
@@ -174,10 +166,6 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
         },
         error: (error) => {
           this.logger.error('Unable to load pinned nominated drugs data.', error);
-          throw new AppError(
-            'Unable to load pinned nominated drugs data. Please reload the page.',
-            true,
-          );
         },
       });
   }

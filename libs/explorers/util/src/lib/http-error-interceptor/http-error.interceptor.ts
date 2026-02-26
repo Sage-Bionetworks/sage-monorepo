@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
 import { Observable, throwError, timer } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
-import { AppError } from '@sagebionetworks/explorers/models';
 import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/services';
 
 /**
@@ -20,7 +19,7 @@ import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/s
  * - Does NOT retry client errors (4xx) as they won't succeed
  * - Shows error overlay for all errors so users are informed when requests fail
  * - Logs all errors for debugging
- * - Re-throws errors as AppError for consistent error handling
+ * - Re-throws errors for consistent error handling
  *
  * Errors are handled centrally here to provide a consistent user experience.
  * Components should catch errors for cleanup but don't need to show their own
@@ -62,8 +61,8 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
         errorOverlayService.showError(errorMessage);
       }
 
-      // Re-throw as AppError - components can catch for cleanup but don't need to show errors
-      return throwError(() => new AppError(errorMessage, false));
+      // Re-throw - components can catch for cleanup but don't need to show errors
+      return throwError(() => new Error(errorMessage));
     }),
   );
 };

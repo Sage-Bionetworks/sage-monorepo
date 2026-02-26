@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
-  AppError,
   ComparisonToolQuery,
   ComparisonToolViewConfig,
   HeatmapCircleClickTransformFnContext,
@@ -194,10 +193,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
         },
         error: (error) => {
           this.logger.error('Unable to load unpinned gene expression data.', error);
-          throw new AppError(
-            'Unable to load unpinned gene expression data. Please reload the page.',
-            true,
-          );
         },
       });
   }
@@ -225,10 +220,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
         },
         error: (error) => {
           this.logger.error('Unable to load pinned gene expression data.', error);
-          throw new AppError(
-            'Unable to load pinned gene expression data. Please reload the page.',
-            true,
-          );
         },
       });
   }

@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
-  AppError,
   ComparisonToolQuery,
   ComparisonToolViewConfig,
   HeatmapCircleClickTransformFnContext,
@@ -186,10 +185,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
         },
         error: (error) => {
           this.logger.error('Unable to load unpinned disease correlation data.', error);
-          throw new AppError(
-            'Unable to load unpinned disease correlation data. Please reload the page.',
-            true,
-          );
         },
       });
   }
@@ -217,10 +212,6 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
         },
         error: (error) => {
           this.logger.error('Unable to load pinned disease correlation data.', error);
-          throw new AppError(
-            'Unable to load pinned disease correlation data. Please reload the page.',
-            true,
-          );
         },
       });
   }

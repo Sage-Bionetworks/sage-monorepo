@@ -2,11 +2,7 @@ import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angul
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import {
-  AppError,
-  ComparisonToolQuery,
-  ComparisonToolViewConfig,
-} from '@sagebionetworks/explorers/models';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolUrlService,
   LoggerService,
@@ -143,10 +139,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           this.logger.error('Unable to load unpinned model overview data.', error);
-          throw new AppError(
-            'Unable to load unpinned model overview data. Please reload the page.',
-            true,
-          );
         },
       });
   }
@@ -173,10 +165,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           this.logger.error('Unable to load pinned model overview data.', error);
-          throw new AppError(
-            'Unable to load pinned model overview data. Please reload the page.',
-            true,
-          );
         },
       });
   }
