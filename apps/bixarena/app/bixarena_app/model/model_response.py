@@ -15,7 +15,7 @@ from bixarena_app.config.constants import (
     DEFAULT_TEMPERATURE,
     DEFAULT_TOP_P,
     MAX_RESPONSE_TOKENS,
-    PROMPT_REUSE_LIMIT,
+    PROMPT_USE_LIMIT,
 )
 from bixarena_app.config.conversation import (
     CONTINUATION_PROMPT,
@@ -76,7 +76,7 @@ class BattleSession:
         self.battle_id: UUID | None = None
         self.round_id: UUID | None = None
         self.last_prompt: str | None = None
-        self.prompt_reuse_remaining: int = PROMPT_REUSE_LIMIT
+        self.prompt_use_remaining: int = PROMPT_USE_LIMIT
 
     def reset(self):
         """Reset battle/round IDs while preserving prompt history for reuse."""
@@ -235,6 +235,8 @@ def bot_response_multi(
             gr.Row(visible=False),  # next_battle_row: hide
             gr.HTML(visible=False),  # page_header: hide
             gr.Row(visible=False),  # textbox_row: hide
+            gr.update(),  # new_battle_same_prompt_btn: unchanged
+            gr.update(),  # new_battle_btn: unchanged
         )
         return
 
@@ -281,6 +283,8 @@ def bot_response_multi(
             + [gr.Row(visible=False)]  # next_battle_row: hide
             + [gr.HTML(visible=False)]  # page_header: hide
             + [gr.Row(visible=True)]  # textbox_row: show
+            + [gr.update()]  # new_battle_same_prompt_btn: unchanged
+            + [gr.update()]  # new_battle_btn: unchanged
         )
         if stop:
             break
@@ -289,6 +293,11 @@ def bot_response_multi(
 
     # State 3B: Error occurred
     if any(state.has_error for state in states):
+        # Show "New Battle Same Prompt" button on error so user can retry
+        can_reuse = (
+            battle_session.last_prompt is not None
+            and battle_session.prompt_use_remaining > 0
+        )
         yield (
             states  # state0, state1: error state
             + [battle_session]  # battle_session: unchanged
@@ -297,6 +306,17 @@ def bot_response_multi(
             + [gr.Row(visible=True)]  # next_battle_row: show
             + [gr.HTML(visible=False)]  # page_header: hide
             + [gr.Row(visible=True)]  # textbox_row: show
+            + [
+                gr.Button(
+                    value=f"New Battle\nSame Prompt ({battle_session.prompt_use_remaining} left)",
+                    variant="primary",
+                    visible=can_reuse,
+                    interactive=can_reuse,
+                )
+            ]  # new_battle_same_prompt_btn: show on error
+            + [
+                gr.Button(variant="secondary" if can_reuse else "primary")
+            ]  # new_battle_btn: adjust variant
         )
     else:
         # State 3A: Both models succeeded
@@ -308,4 +328,6 @@ def bot_response_multi(
             + [gr.Row(visible=False)]  # next_battle_row: hide
             + [gr.HTML(visible=False)]  # page_header: hide
             + [gr.Row(visible=True)]  # textbox_row: show
+            + [gr.update()]  # new_battle_same_prompt_btn: unchanged
+            + [gr.update()]  # new_battle_btn: unchanged
         )

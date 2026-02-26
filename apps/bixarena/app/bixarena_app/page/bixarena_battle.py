@@ -25,7 +25,7 @@ from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import (
     BATTLE_ROUND_LIMIT,
     PROMPT_LEN_LIMIT,
-    PROMPT_REUSE_LIMIT,
+    PROMPT_USE_LIMIT,
 )
 from bixarena_app.config.conversation import create_system_message_html
 from bixarena_app.model import model_response
@@ -229,13 +229,18 @@ def vote_last_response(
         f'<div class="model-name-footer">{states[0].model_name}</div>',
         f'<div class="model-name-footer">{states[1].model_name}</div>',
     )
+    # Decrement prompt use counter after a successful vote
+    battle_session.prompt_use_remaining = max(
+        0, battle_session.prompt_use_remaining - 1
+    )
+
     # Determine "New Battle Same Prompt" button state
     can_reuse = (
         battle_session.last_prompt is not None
-        and battle_session.prompt_reuse_remaining > 0
+        and battle_session.prompt_use_remaining > 0
     )
     new_battle_same_prompt_upd = gr.Button(
-        value=f"New Battle\nSame Prompt ({battle_session.prompt_reuse_remaining} left)",
+        value=f"New Battle\nSame Prompt ({battle_session.prompt_use_remaining} left)",
         variant="primary",
         visible=can_reuse,
         interactive=can_reuse,
@@ -368,8 +373,8 @@ def clear_history(
 def new_battle_same_prompt(battle_session: BattleSession, request: gr.Request = None):
     """Reset battle state and prepare to resubmit the last prompt.
 
-    Similar to clear_history() but preserves and reuses the last prompt,
-    decrementing the reuse counter.
+    Similar to clear_history() but preserves and reuses the last prompt.
+    The use counter is not decremented here — it is decremented after voting.
     """
     logger.info("new_battle_same_prompt: reusing last prompt.")
 
@@ -380,14 +385,13 @@ def new_battle_same_prompt(battle_session: BattleSession, request: gr.Request = 
         end_battle(battle_session.battle_id, cookies)
 
     battle_session.reset()
-    battle_session.prompt_reuse_remaining -= 1
 
     last_prompt = battle_session.last_prompt or ""
 
     # Update button text for the next round
-    can_reuse = battle_session.prompt_reuse_remaining > 0
+    can_reuse = battle_session.prompt_use_remaining > 0
     new_battle_same_prompt_upd = gr.Button(
-        value=f"New Battle\nSame Prompt ({battle_session.prompt_reuse_remaining} left)",
+        value=f"New Battle\nSame Prompt ({battle_session.prompt_use_remaining} left)",
         variant="primary",
         visible=can_reuse,
         interactive=can_reuse,
@@ -468,7 +472,7 @@ def add_text(
             battle_session.battle_id = battle_id
             # Track prompt for "New Battle Same Prompt" reuse
             if text != battle_session.last_prompt:
-                battle_session.prompt_reuse_remaining = PROMPT_REUSE_LIMIT
+                battle_session.prompt_use_remaining = PROMPT_USE_LIMIT
             battle_session.last_prompt = text
             # Initialize states with the models selected by the backend
             states = [
@@ -612,7 +616,7 @@ def build_side_by_side_ui_anony():
         # New Battle / Same Prompt buttons
         with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
             new_battle_same_prompt_btn = gr.Button(
-                value=f"New Battle\nSame Prompt ({PROMPT_REUSE_LIMIT} left)",
+                value=f"New Battle\nSame Prompt ({PROMPT_USE_LIMIT} left)",
                 variant="primary",
                 elem_id="battle-again-btn",
                 visible=False,
@@ -783,7 +787,8 @@ def build_side_by_side_ui_anony():
         states
         + [battle_session]
         + chatbots
-        + [voting_row, next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row]
+        + [new_battle_same_prompt_btn, new_battle_btn],
     ).then(
         lambda: None,
         [],
@@ -811,7 +816,8 @@ def build_side_by_side_ui_anony():
         states
         + [battle_session]
         + chatbots
-        + [voting_row, next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row]
+        + [new_battle_same_prompt_btn, new_battle_btn],
     ).then(
         lambda: None,  # Enable enter key
         [],
@@ -845,7 +851,8 @@ def build_side_by_side_ui_anony():
             states
             + [battle_session]
             + chatbots
-            + [voting_row, next_battle_row, page_header, textbox_row],
+            + [voting_row, next_battle_row, page_header, textbox_row]
+            + [new_battle_same_prompt_btn, new_battle_btn],
         ).then(
             lambda: None,
             [],
