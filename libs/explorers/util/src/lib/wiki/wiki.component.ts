@@ -9,12 +9,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SynapseWikiMarkdown, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import {
-  ErrorOverlayService,
-  LoggerService,
-  PlatformService,
-  SynapseApiService,
-} from '@sagebionetworks/explorers/services';
+import { PlatformService, SynapseApiService } from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
@@ -27,14 +22,13 @@ import { finalize } from 'rxjs';
 })
 export class WikiComponent {
   private readonly platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
-  private readonly errorOverlayService = inject(ErrorOverlayService);
   synapseApiService = inject(SynapseApiService);
   domSanitizer = inject(DomSanitizer);
   private readonly destroyRef = inject(DestroyRef);
 
   wikiParams = input.required<SynapseWikiParams>();
   className = input<string>('');
+  suppressErrorOverlay = input(false);
 
   isLoading = signal(true);
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
@@ -51,10 +45,9 @@ export class WikiComponent {
       const { ownerId, wikiId } = wikiParams;
 
       this.isLoading.set(true);
-      this.logger.log('WikiComponent: Loading wiki content', { ownerId, wikiId });
 
       this.synapseApiService
-        .getWikiMarkdown(ownerId, wikiId)
+        .getWikiMarkdown(ownerId, wikiId, this.suppressErrorOverlay())
         .pipe(
           takeUntilDestroyed(this.destroyRef),
           finalize(() => {
@@ -68,11 +61,8 @@ export class WikiComponent {
               this.synapseApiService.renderHtml(wiki.markdown),
             );
           },
-          error: (error) => {
-            this.logger.error('Failed to load wiki content', error);
-            this.errorOverlayService.showError(
-              'Failed to load wiki content. Please try again later.',
-            );
+          error: () => {
+            this.safeHtml = 'No data found, please try again later.';
           },
         });
     }

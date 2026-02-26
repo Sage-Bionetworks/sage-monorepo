@@ -6,6 +6,7 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
+import * as Sentry from '@sentry/angular';
 import { Observable, throwError, timer } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
@@ -47,9 +48,24 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
     }),
     catchError((error: HttpErrorResponse) => {
       const errorMessage = buildErrorMessage(error);
+      const urlPath = extractUrlPath(error.url);
 
-      // Log error for debugging (also sends to Sentry)
-      logger.error(`HTTP Error: ${errorMessage}`, error);
+      // Log error with Sentry context for proper grouping by endpoint + status
+      Sentry.withScope((scope) => {
+        scope.setFingerprint(['http-error', String(error.status), urlPath]);
+        scope.setTag('http.method', req.method);
+        scope.setTag('http.status_code', String(error.status));
+        scope.setTag('http.url', urlPath);
+        scope.setExtra('errorResponse', {
+          url: error.url,
+          status: error.status,
+          statusText: error.statusText,
+        });
+
+        // grouping by status + method + urlPath
+        const sentryError = new Error(`HTTP ${error.status} ${req.method} ${urlPath}`);
+        logger.error(`HTTP Error: ${errorMessage}`, sentryError);
+      });
 
       // Show error overlay for all errors so users know when requests fail,
       // but not if the user is already on the error page or if the request
@@ -66,6 +82,19 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
     }),
   );
 };
+
+/**
+ * Extracts the URL path from a full URL, stripping the host and query params.
+ * e.g. "https://api.example.com/v1/genes?id=123" → "/v1/genes"
+ */
+function extractUrlPath(url: string | null): string {
+  if (!url) return 'unknown';
+  try {
+    return new URL(url).pathname;
+  } catch {
+    return url;
+  }
+}
 
 /**
  * Builds a user-friendly error message from an HttpErrorResponse.

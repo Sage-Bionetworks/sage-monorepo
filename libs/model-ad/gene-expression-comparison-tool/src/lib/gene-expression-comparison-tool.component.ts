@@ -9,11 +9,7 @@ import {
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
-import {
-  ComparisonToolUrlService,
-  LoggerService,
-  PlatformService,
-} from '@sagebionetworks/explorers/services';
+import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
   ComparisonToolPage,
@@ -40,7 +36,6 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
   private readonly geneExpressionService = inject(GeneExpressionService);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
@@ -51,10 +46,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
     .pipe(
-      catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', error);
-        return EMPTY;
-      }),
+      catchError(() => EMPTY),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
@@ -191,8 +183,9 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
-        error: (error) => {
-          this.logger.error('Unable to load unpinned gene expression data.', error);
+        error: () => {
+          this.comparisonToolService.setUnpinnedData([]);
+          this.comparisonToolService.totalResultsCount.set(0);
         },
       });
   }
@@ -218,8 +211,9 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
-        error: (error) => {
-          this.logger.error('Unable to load pinned gene expression data.', error);
+        error: () => {
+          this.comparisonToolService.setPinnedData([]);
+          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

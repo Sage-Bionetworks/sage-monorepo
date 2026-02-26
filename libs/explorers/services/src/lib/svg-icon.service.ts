@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
 import { isExternalLink } from '@sagebionetworks/shared/util';
 import { Observable, map, of, shareReplay } from 'rxjs';
 import { PlatformService } from './platform.service';
@@ -78,7 +79,8 @@ export class SvgIconService {
       return cached;
     }
 
-    const request = this.http.get(path, { responseType: 'text' }).pipe(
+    const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
+    const request = this.http.get(path, { responseType: 'text', context }).pipe(
       map((svg) => this.sanitizer.bypassSecurityTrustHtml(svg)),
       shareReplay(1),
     );

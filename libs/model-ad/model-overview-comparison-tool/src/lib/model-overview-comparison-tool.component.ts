@@ -3,11 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
-import {
-  ComparisonToolUrlService,
-  LoggerService,
-  PlatformService,
-} from '@sagebionetworks/explorers/services';
+import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
   ComparisonToolPage,
@@ -32,7 +28,6 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
   private readonly modelOverviewService = inject(ModelOverviewService);
   private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
@@ -44,10 +39,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
     .pipe(
-      catchError((error) => {
-        this.logger.error('Error retrieving comparison tool config', error);
-        return EMPTY;
-      }),
+      catchError(() => EMPTY),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
@@ -137,8 +129,9 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
           this.comparisonToolService.setUnpinnedData(data);
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
-        error: (error) => {
-          this.logger.error('Unable to load unpinned model overview data.', error);
+        error: () => {
+          this.comparisonToolService.setUnpinnedData([]);
+          this.comparisonToolService.totalResultsCount.set(0);
         },
       });
   }
@@ -163,8 +156,9 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
           this.comparisonToolService.setPinnedData(data);
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
-        error: (error) => {
-          this.logger.error('Unable to load pinned model overview data.', error);
+        error: () => {
+          this.comparisonToolService.setPinnedData([]);
+          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

@@ -7,7 +7,7 @@ import {
   DEFAULT_SYNAPSE_WIKI_OWNER_ID,
 } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/services';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { GeneTableComponent } from '../gene-table/gene-table.component';
 
@@ -27,7 +27,6 @@ interface TableColumn {
 export class GeneSimilarComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
-  private readonly errorOverlayService = inject(ErrorOverlayService);
 
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -81,18 +80,13 @@ export class GeneSimilarComponent implements OnInit {
             next: (gene: Gene | null) => {
               if (!gene) {
                 this.helperService.setLoading(false);
-                // https://github.com/angular/angular/issues/45202
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                this.router.navigateByUrl('/not-found', { skipLocationChange: true });
               } else {
                 this.gene = gene;
                 this.init();
               }
             },
-            error: (error) => {
+            error: () => {
               this.helperService.setLoading(false);
-              this.logger.error('Failed to load similar genes', error);
-              this.errorOverlayService.showError('Failed to load similar genes. Please try again.');
             },
           });
       }
@@ -136,10 +130,8 @@ export class GeneSimilarComponent implements OnInit {
           this.genes = genes;
           this.helperService.setLoading(false);
         },
-        error: (error) => {
+        error: () => {
           this.helperService.setLoading(false);
-          this.logger.error('Failed to load similar genes data', error);
-          this.errorOverlayService.showError('Failed to load similar genes data.');
         },
       });
   }

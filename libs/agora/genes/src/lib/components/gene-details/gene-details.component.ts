@@ -177,9 +177,6 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
             next: (gene) => {
               if (!gene) {
                 this.helperService.setLoading(false);
-                // https://github.com/angular/angular/issues/45202
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                this.router.navigateByUrl('/not-found', { skipLocationChange: true });
               } else {
                 this.gene = gene;
 

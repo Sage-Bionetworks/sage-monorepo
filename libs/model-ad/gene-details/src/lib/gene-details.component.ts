@@ -122,15 +122,12 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
             this.geneExpressionIndividualData = geneExpressionIndividualData;
             this.isLoading = false;
           },
-          error: (error) => {
-            console.error('Error retrieving gene expression individual data: ', error);
+          error: () => {
             this.isLoading = false;
-            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });
     } else {
       this.isLoading = false;
-      this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
     }
   }
 

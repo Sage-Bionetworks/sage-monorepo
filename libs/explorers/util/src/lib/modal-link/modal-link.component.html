@@ -26,7 +26,7 @@
   >
     <div class="modal-link-content">
       @if (hasActivated) {
-        <explorers-wiki [wikiParams]="wikiParams()" />
+        <explorers-wiki [wikiParams]="wikiParams()" [suppressErrorOverlay]="true" />
       }
     </div>
   </p-dialog>

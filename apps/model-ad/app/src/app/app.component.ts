@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
 import {
-  LoggerService,
   MetaTagService,
   PlatformService,
   VersionService,
@@ -52,7 +51,6 @@ import { ToastModule } from 'primeng/toast';
 })
 export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
   private readonly platformService = inject(PlatformService);
 
   configService = inject(ConfigService);
@@ -84,31 +82,25 @@ export class AppComponent implements OnInit {
   }
 
   getDataVersion() {
-    this.logger.log('AppComponent: Loading data version');
-
     this.versionService
       .getDataVersion$(this.dataVersionService)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (v) => (this.dataVersion = v),
-        error: (error) => {
+        error: () => {
           this.dataVersion = 'unknown';
-          this.logger.error('Failed to get data version', error);
         },
       });
   }
 
   getSiteVersion() {
-    this.logger.log('AppComponent: Loading site version');
-
     this.versionService
       .getSiteVersion$(this.configService.config)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (v) => (this.siteVersion = v),
-        error: (error) => {
+        error: () => {
           this.siteVersion = 'unknown';
-          this.logger.error('Failed to get site version', error);
         },
       });
   }

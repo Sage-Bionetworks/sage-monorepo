@@ -105,10 +105,8 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
               this.maybeScrollToPanelNavElementOnInitialLoad;
             this.isLoading = false;
           },
-          error: (error) => {
-            console.error('Error retrieving model: ', error);
+          error: () => {
             this.isLoading = false;
-            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });
     }
