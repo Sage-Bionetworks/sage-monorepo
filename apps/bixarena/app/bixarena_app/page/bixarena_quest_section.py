@@ -241,12 +241,16 @@ def build_quest_not_found_section() -> tuple[
 
 
 def _build_user_progress_card_html(
-    username: str, tier: str, battles_per_week: float
+    username: str | None, tier: str, battles_per_week: float
 ) -> str:
-    """Build the personal tier progress card HTML for the logged-in user.
+    """Build the tier progress card HTML.
+
+    Shown to all users. For authenticated contributors, displays personalized
+    progress. For anonymous visitors or non-contributors, shows the default
+    apprentice state with 0 battles/week as motivation to start.
 
     Args:
-        username: The user's display name
+        username: The user's display name, or None for anonymous/non-contributors
         tier: Current tier ('champion', 'knight', or 'apprentice')
         battles_per_week: The user's average battles per week
 
@@ -285,16 +289,21 @@ def _build_user_progress_card_html(
 
     next_emoji = TIER_CONFIG[next_tier]["emoji"]
     next_name = next_tier.capitalize()
-    article = "an" if tier == "apprentice" else "a"
 
     band = next_threshold - prev_threshold
     progress_pct = min((battles_per_week - prev_threshold) / band * 100, 100)
+
+    # Header varies based on whether the user is known
+    if username:
+        header = f"{emoji} Welcome back, {tier_name} {username}"
+    else:
+        header = f"{next_emoji} Become a {next_name}!"
 
     return f"""
     <div style="margin-bottom: 0.5rem;">
         <h4 style="color: var(--body-text-color); font-weight: 600;
                    margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
-            {emoji} Welcome back, {tier_name} {username}
+            {header}
         </h4>
         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
             <span style="color: var(--body-text-color); font-weight: 500; font-size: 0.875rem;">Tier Progress</span>
@@ -515,13 +524,16 @@ def _build_builders_credits_html(
             builders_parts
         )
 
-    # Build optional progress card for logged-in user
-    progress_card_html = ""
+    # Build progress card (personalized for contributors, default for others)
     if current_user_data is not None:
         progress_card_html = _build_user_progress_card_html(
             username=current_user_data["username"],
             tier=current_user_data["tier"],
             battles_per_week=current_user_data["battles_per_week"],
+        )
+    else:
+        progress_card_html = _build_user_progress_card_html(
+            username=None, tier="apprentice", battles_per_week=0.0
         )
 
     return f"""
