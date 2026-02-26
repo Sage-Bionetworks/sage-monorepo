@@ -29,9 +29,9 @@ type StoryArgs = Omit<
   'viewDetailsClick' | 'heatmapCircleClickTransformFn' | 'rowsPerPage'
 > & {
   // Data properties
-  configs: ComparisonToolConfig[];
-  data: Record<string, unknown>[];
-  pinnedItems: string[];
+  configs: readonly ComparisonToolConfig[];
+  data: readonly Record<string, unknown>[];
+  pinnedItems: readonly string[];
   // Panel visibility
   legendVisible?: boolean;
   visualizationOverviewVisible?: boolean;
@@ -48,12 +48,7 @@ type StoryArgs = Omit<
 class ComparisonToolInnerComponent {
   // Header inputs
   headerTitle = input<string>();
-  headerTitleWikiParams = input<SynapseWikiParams | undefined, SynapseWikiParams | undefined>(
-    undefined,
-    {
-      transform: (value: SynapseWikiParams | undefined) => (value ? { ...value } : undefined),
-    },
-  );
+  headerTitleWikiParams = input<SynapseWikiParams>();
   selectorsWikiParams = input<Record<string, SynapseWikiParams>>();
   // Controls inputs
   filterResultsButtonTooltip = input<string>();
@@ -93,8 +88,9 @@ class ComparisonToolInnerComponent {
   });
 
   constructor() {
-    // Effect to initialize the service - must set view config BEFORE connect()
-    effect(() => {
+    // Must set view config BEFORE calling connect() so that
+    // defaultSort and other view configs are available during service initialization
+    effect((onCleanup) => {
       const configs = this.configs();
       if (!configs || configs.length === 0) {
         return;
@@ -121,6 +117,11 @@ class ComparisonToolInnerComponent {
       this.comparisonToolService.connect({
         config$: of(configs),
         queryParams$: of({}),
+      });
+
+      // Cleanup when effect re-runs or component is destroyed
+      onCleanup(() => {
+        this.comparisonToolService.disconnect();
       });
     });
 
@@ -202,9 +203,12 @@ class ComparisonToolStoryWrapperComponent {
   visualizationOverviewVisible = input<boolean>();
 
   // Key changes when configs or defaultSort change, triggering inner component remount
-  protected readonly configKey = computed(() =>
-    JSON.stringify({ configs: this.configs(), defaultSort: this.defaultSort() }),
-  );
+  private remountCounter = 0;
+  protected readonly configKey = computed(() => {
+    const configsLength = this.configs()?.length ?? 0;
+    const defaultSortLength = this.defaultSort()?.length ?? 0;
+    return `${configsLength}-${defaultSortLength}-${++this.remountCounter}`;
+  });
 }
 
 const meta: Meta<StoryArgs> = {
