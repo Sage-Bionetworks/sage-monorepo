@@ -399,7 +399,7 @@ def build_app():
                 visible=True,
             )
 
-        _, home_btn, battle_col, battle_btn, leaderboard_btn, login_btn = build_header()
+        _, battle_col, battle_btn, leaderboard_btn, login_btn = build_header()
 
         with gr.Column(visible=True, elem_classes=["page-content"]) as home_page:
             (
@@ -457,25 +457,26 @@ def build_app():
         navigator = PageNavigator(pages)
         current_page = gr.State(value=0)
 
-        # Nav buttons that participate in active-page highlighting
-        nav_buttons = [home_btn, battle_btn, leaderboard_btn]
+        # Nav buttons that participate in active-page highlighting.
+        # Maps page index -> button. Home (0) has no button (logo serves as home link).
+        nav_button_page_map = {1: battle_btn, 2: leaderboard_btn}
+        nav_buttons = [battle_btn, leaderboard_btn]
 
         def navigate_to(page_index):
             """Navigate to a page and highlight the corresponding nav button."""
             page_updates = navigator.show_page(page_index)
             btn_updates = [
-                gr.update(variant="primary" if i == page_index else "secondary")
-                for i in range(len(nav_buttons))
+                gr.update(
+                    variant="primary"
+                    if btn is nav_button_page_map.get(page_index)
+                    else "secondary"
+                )
+                for btn in nav_buttons
             ]
             return page_updates + btn_updates + [page_index]
 
         nav_outputs = pages + nav_buttons + [current_page]
 
-        # Navigation - Home button
-        home_btn.click(
-            lambda: navigate_to(0),
-            outputs=nav_outputs,
-        )
         # Navigation - battle page will refresh prompts via its own load handler
         battle_btn.click(
             lambda: navigate_to(1),
@@ -510,7 +511,6 @@ def build_app():
 
         # Nav highlight updates for Home page (used after login/logout)
         home_nav_highlights = [
-            gr.update(variant="primary"),  # home_btn
             gr.update(variant="secondary"),  # battle_btn
             gr.update(variant="secondary"),  # leaderboard_btn
             0,  # current_page state

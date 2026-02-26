@@ -25,8 +25,6 @@ def build_header():
 </div>
                 """
             )
-        with gr.Column(scale=1, min_width=180):
-            home_btn = gr.Button("Home", variant="primary")
         with gr.Column(scale=1, min_width=180, visible=False) as battle_col:
             battle_btn = gr.Button("Battle", variant="secondary")
         with gr.Column(scale=1, min_width=180):
@@ -55,7 +53,7 @@ def build_header():
 </style>
         """
     )
-    return header, home_btn, battle_col, battle_btn, leaderboard_btn, login_btn
+    return header, battle_col, battle_btn, leaderboard_btn, login_btn
 
 
 def update_login_button(request: gr.Request | None = None):
