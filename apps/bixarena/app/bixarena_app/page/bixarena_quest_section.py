@@ -268,7 +268,7 @@ def _build_user_progress_card_html(
         return f"""
         <div style="margin-bottom: 0.5rem;">
             <h4 style="color: var(--body-text-color); font-weight: 600;
-                       margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                       margin: 0 0 0.75rem 0; font-size: 1rem;">
                 {emoji} Welcome back, Champion {username}
             </h4>
             <div style="color: var(--body-text-color-subdued); font-size: 0.875rem; line-height: 1.4;">
@@ -302,7 +302,7 @@ def _build_user_progress_card_html(
     return f"""
     <div style="margin-bottom: 0.5rem;">
         <h4 style="color: var(--body-text-color); font-weight: 600;
-                   margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                   margin: 0 0 0.75rem 0; font-size: 1rem;">
             {header}
         </h4>
         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
@@ -340,7 +340,7 @@ def _build_tier_legend_html() -> str:
             <!-- Contributor Tiers Legend -->
             <div style="margin-top: 1.5rem;">
                 <h4 style="color: var(--body-text-color); font-weight: 600;
-                           margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                           margin: 0 0 0.75rem 0; font-size: 1rem;">
                     Contributor Tiers
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 0.375rem;
@@ -464,7 +464,7 @@ def _build_builders_credits_html(
         <!-- No Contributors Message -->
         <div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
             <h4 style="color: var(--body-text-color); font-weight: 600;
-                       margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                       margin: 0 0 0.75rem 0; font-size: 1rem;">
                 Builders (0)
             </h4>
             <div style="padding: 2rem; text-align: center;
@@ -479,7 +479,7 @@ def _build_builders_credits_html(
 
         <!-- Credits Section -->
         <div>
-            <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+            <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.75rem 0; font-size: 1rem;">
                 Credits
             </h4>
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
@@ -548,7 +548,7 @@ def _build_builders_credits_html(
         <div style="flex: 1; display: flex; flex-direction: column;
                     min-height: 0;">
             <h4 style="color: var(--body-text-color); font-weight: 600;
-                       margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                       margin: 0 0 0.75rem 0; font-size: 1rem;">
                 Builders ({total_count})
             </h4>
 
@@ -840,7 +840,7 @@ def _build_carousel_html(carousel_id: str) -> str:
             color: var(--body-text-color);
             font-weight: 600;
             margin: 0;
-            font-size: 0.9375rem;
+            font-size: 1rem;
             flex: 1;
         }}
 
