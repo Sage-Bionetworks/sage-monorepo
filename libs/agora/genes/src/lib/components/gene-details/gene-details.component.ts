@@ -15,11 +15,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
-import {
-  ErrorOverlayService,
-  LoggerService,
-  PlatformService,
-} from '@sagebionetworks/explorers/services';
+import { LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';
 import { GeneEvidenceRnaComponent } from '../gene-evidence-rna/gene-evidence-rna.component';
@@ -57,7 +53,6 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
-  private readonly errorOverlayService = inject(ErrorOverlayService);
 
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -218,10 +213,8 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
                 this.helperService.setLoading(false);
               }
             },
-            error: (error) => {
+            error: () => {
               this.helperService.setLoading(false);
-              this.logger.error('Failed to load gene details', error);
-              this.errorOverlayService.showError('Failed to load gene details. Please try again.');
             },
           });
       }
