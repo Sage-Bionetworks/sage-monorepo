@@ -225,9 +225,19 @@ def vote_last_response(
         "primary" if outcome == BattleEvaluationOutcome.MODEL2 else "secondary"
     )
 
+    left_winner = outcome in (
+        BattleEvaluationOutcome.MODEL1,
+        BattleEvaluationOutcome.TIE,
+    )
+    right_winner = outcome in (
+        BattleEvaluationOutcome.MODEL2,
+        BattleEvaluationOutcome.TIE,
+    )
+    left_cls = "model-name-footer winner" if left_winner else "model-name-footer"
+    right_cls = "model-name-footer winner" if right_winner else "model-name-footer"
     names = (
-        f'<div class="model-name-footer">{states[0].model_name}</div>',
-        f'<div class="model-name-footer">{states[1].model_name}</div>',
+        f'<div class="{left_cls}">{states[0].model_name}</div>',
+        f'<div class="{right_cls}">{states[1].model_name}</div>',
     )
     # Decrement prompt use counter after a successful vote
     battle_session.prompt_use_remaining = max(
