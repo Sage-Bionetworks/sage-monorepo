@@ -5,7 +5,7 @@
   "prefix": "app",
   "sourceRoot": "apps/agora/app/src",
   "tags": [],
-  "implicitDependencies": ["agora-styles", "agora-themes", "shared-typescript-assets"],
+  "implicitDependencies": ["agora-styles", "shared-typescript-assets"],
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",

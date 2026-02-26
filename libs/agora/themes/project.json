@@ -1,9 +1,0 @@
-{
-  "name": "agora-themes",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/agora/themes/src",
-  "projectType": "library",
-  "generators": {},
-  "targets": {},
-  "tags": ["type:themes", "scope:agora", "language:typescript"]
-}
