@@ -23,6 +23,7 @@ const baseConfig: ComparisonToolConfig = {
     {
       type: 'primary',
       data_key: 'name',
+      name: 'Model Name',
       is_exported: true,
       is_hidden: false,
     },
@@ -34,6 +35,7 @@ const baseConfig: ComparisonToolConfig = {
     },
     {
       type: 'text',
+      name: 'Model Type',
       data_key: 'model_type',
       tooltip: '',
       sort_tooltip: 'Sort by Model Type value',

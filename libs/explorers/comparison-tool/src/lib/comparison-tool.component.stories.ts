@@ -16,7 +16,6 @@ import {
 import {
   mockComparisonToolData,
   mockComparisonToolDataConfigWithDropdowns,
-  mockComparisonToolSelectorsWikiParams,
   provideLoadingIconColors,
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
@@ -38,13 +37,15 @@ type StoryArgs = Omit<
   visualizationOverviewVisible?: boolean;
 };
 
+// Inner component that provides services - will be remounted when configs change
 @Component({
-  selector: 'explorers-comparison-tool-story-wrapper',
+  selector: 'explorers-comparison-tool-inner',
   standalone: true,
   imports: [ComparisonToolComponent],
+  providers: [...provideComparisonToolService(), ...provideComparisonToolFilterService()],
   template: '<explorers-comparison-tool [isLoading]="false" />',
 })
-class ComparisonToolStoryWrapperComponent {
+class ComparisonToolInnerComponent {
   // Header inputs
   headerTitle = input<string>();
   headerTitleWikiParams = input<SynapseWikiParams | undefined, SynapseWikiParams | undefined>(
@@ -92,21 +93,15 @@ class ComparisonToolStoryWrapperComponent {
   });
 
   constructor() {
-    // Effect to initialize the service with configs
+    // Effect to initialize the service - must set view config BEFORE connect()
     effect(() => {
       const configs = this.configs();
-      if (configs && configs.length > 0) {
-        this.comparisonToolService.connect({
-          config$: of(configs),
-          queryParams$: of({}),
-        });
+      if (!configs || configs.length === 0) {
+        return;
       }
-    });
 
-    // Effect to update view config
-    effect(() => {
+      // Set view config first so defaultSort is available during initialization
       const viewConfig: Partial<ComparisonToolViewConfig> = {};
-
       viewConfig.headerTitle = this.headerTitle();
       viewConfig.headerTitleWikiParams = this.headerTitleWikiParams();
       viewConfig.selectorsWikiParams = this.selectorsWikiParams();
@@ -121,6 +116,12 @@ class ComparisonToolStoryWrapperComponent {
       viewConfig.linkExportField = this.linkExportField();
 
       this.comparisonToolService.setViewConfig(viewConfig);
+
+      // Now connect - initialization will read the view config we just set
+      this.comparisonToolService.connect({
+        config$: of(configs),
+        queryParams$: of({}),
+      });
     });
 
     // Effect to update data
@@ -151,6 +152,61 @@ class ComparisonToolStoryWrapperComponent {
   }
 }
 
+// Outer component that manages remounting when configs change
+@Component({
+  selector: 'explorers-comparison-tool-story-wrapper',
+  standalone: true,
+  imports: [ComparisonToolInnerComponent],
+  template: `
+    @for (key of [configKey()]; track key) {
+      <explorers-comparison-tool-inner
+        [headerTitle]="headerTitle()"
+        [headerTitleWikiParams]="headerTitleWikiParams()"
+        [selectorsWikiParams]="selectorsWikiParams()"
+        [filterResultsButtonTooltip]="filterResultsButtonTooltip()"
+        [showSignificanceControls]="showSignificanceControls()"
+        [viewDetailsTooltip]="viewDetailsTooltip()"
+        [legendEnabled]="legendEnabled()"
+        [legendPanelConfig]="legendPanelConfig()"
+        [rowIdDataKey]="rowIdDataKey()"
+        [allowPinnedImageDownload]="allowPinnedImageDownload()"
+        [defaultSort]="defaultSort()"
+        [linkExportField]="linkExportField()"
+        [configs]="configs()"
+        [data]="data()"
+        [pinnedItems]="pinnedItems()"
+        [legendVisible]="legendVisible()"
+        [visualizationOverviewVisible]="visualizationOverviewVisible()"
+      />
+    }
+  `,
+})
+class ComparisonToolStoryWrapperComponent {
+  // All inputs just for pass-through
+  headerTitle = input<string>();
+  headerTitleWikiParams = input<SynapseWikiParams | undefined>();
+  selectorsWikiParams = input<Record<string, SynapseWikiParams>>();
+  filterResultsButtonTooltip = input<string>();
+  showSignificanceControls = input<boolean>();
+  viewDetailsTooltip = input<string>();
+  legendEnabled = input<boolean>();
+  legendPanelConfig = input<LegendPanelConfig>();
+  rowIdDataKey = input<string>();
+  allowPinnedImageDownload = input<boolean>();
+  defaultSort = input<readonly { readonly field: string; readonly order: 1 | -1 }[]>();
+  linkExportField = input<'link_url' | 'link_text'>();
+  configs = input<ComparisonToolConfig[]>();
+  data = input<Record<string, unknown>[]>();
+  pinnedItems = input<string[]>();
+  legendVisible = input<boolean>();
+  visualizationOverviewVisible = input<boolean>();
+
+  // Key changes when configs or defaultSort change, triggering inner component remount
+  protected readonly configKey = computed(() =>
+    JSON.stringify({ configs: this.configs(), defaultSort: this.defaultSort() }),
+  );
+}
+
 const meta: Meta<StoryArgs> = {
   component: ComparisonToolStoryWrapperComponent,
   title: 'Comparison Tool/ComparisonToolComponent',
@@ -169,13 +225,14 @@ const meta: Meta<StoryArgs> = {
     },
     headerTitleWikiParams: {
       control: 'object',
-      description: 'Synapse wiki parameters for the header title info button',
+      description: 'Synapse wiki parameters for optional header title info button',
       table: { category: 'Header' },
     },
     selectorsWikiParams: {
       control: 'object',
-      description: 'Map of category dropdown options to Synapse wiki parameters for info buttons',
-      table: { category: 'Header', disable: true },
+      description:
+        'Map of category dropdown options to Synapse wiki parameters for optional info buttons next to each dropdown',
+      table: { category: 'Header' },
     },
     // Controls category
     filterResultsButtonTooltip: {
@@ -213,7 +270,7 @@ const meta: Meta<StoryArgs> = {
     legendPanelConfig: {
       control: 'object',
       description: 'Configuration for the legend panel including labels and descriptions',
-      table: { category: 'Legend', disable: true },
+      table: { category: 'Legend' },
     },
     // Table category
     rowIdDataKey: {
@@ -230,7 +287,7 @@ const meta: Meta<StoryArgs> = {
     defaultSort: {
       control: 'object',
       description: 'Default sort configuration (array of `{field, order}` objects)',
-      table: { category: 'Table', disable: true },
+      table: { category: 'Table' },
     },
     linkExportField: {
       control: 'select',
@@ -244,7 +301,7 @@ const meta: Meta<StoryArgs> = {
       description:
         'Array of comparison tool configurations defining columns, filters, and dropdowns. ' +
         'Each config defines the table structure with columns, filters, and dropdown options for different data views. ' +
-        'Should only include one value for `page`.',
+        'For story configuration, only include one value for `page` across all objects.',
       table: { category: 'Data' },
     },
     data: {
@@ -273,8 +330,6 @@ const meta: Meta<StoryArgs> = {
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
-        ...provideComparisonToolService(),
-        ...provideComparisonToolFilterService(),
         ...provideLoadingIconColors(),
       ],
     }),
@@ -288,7 +343,9 @@ export const Demo: Story = {
     // Header
     headerTitle: 'Gene Comparison',
     headerTitleWikiParams: { ownerId: 'syn25913473', wikiId: '639222' },
-    selectorsWikiParams: mockComparisonToolSelectorsWikiParams,
+    selectorsWikiParams: {
+      'RNA - Differential Expression': { ownerId: 'syn66271427', wikiId: '632874' },
+    },
     // Controls
     filterResultsButtonTooltip: 'Filter the results based on the selected criteria',
     showSignificanceControls: true,
@@ -308,7 +365,10 @@ export const Demo: Story = {
     // Table
     rowIdDataKey: 'name',
     allowPinnedImageDownload: true,
-    defaultSort: [{ field: 'name', order: 1 }],
+    defaultSort: [
+      { field: 'name', order: 1 },
+      { field: 'model_type', order: -1 },
+    ],
     linkExportField: 'link_text',
     // Data
     configs: mockComparisonToolDataConfigWithDropdowns,
