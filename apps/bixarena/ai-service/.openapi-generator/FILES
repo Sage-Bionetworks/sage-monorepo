@@ -10,6 +10,7 @@ bixarena_ai_service/models/basic_error.py
 bixarena_ai_service/models/extra_models.py
 bixarena_ai_service/models/health_check.py
 bixarena_ai_service/models/prompt_validation.py
+bixarena_ai_service/models/prompt_validation_request.py
 bixarena_ai_service/security_api.py
 tests/conftest.py
 tests/test_health_check_api.py

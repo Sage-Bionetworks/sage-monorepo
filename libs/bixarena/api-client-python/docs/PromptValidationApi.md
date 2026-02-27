@@ -2,13 +2,13 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                                        | HTTP request             | Description                |
-| ------------------------------------------------------------- | ------------------------ | -------------------------- |
-| [**validate_prompt**](PromptValidationApi.md#validate_prompt) | **GET** /validate-prompt | Validate biomedical prompt |
+| Method                                                        | HTTP request              | Description                |
+| ------------------------------------------------------------- | ------------------------- | -------------------------- |
+| [**validate_prompt**](PromptValidationApi.md#validate_prompt) | **POST** /validate-prompt | Validate biomedical prompt |
 
 # **validate_prompt**
 
-> PromptValidation validate_prompt(prompt)
+> PromptValidation validate_prompt(prompt_validation_request)
 
 Validate biomedical prompt
 
@@ -21,6 +21,7 @@ Validates whether a prompt is biomedically related and returns a confidence scor
 ```python
 import bixarena_api_client
 from bixarena_api_client.models.prompt_validation import PromptValidation
+from bixarena_api_client.models.prompt_validation_request import PromptValidationRequest
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
@@ -44,11 +45,11 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.PromptValidationApi(api_client)
-    prompt = 'prompt_example' # str | The prompt text to validate
+    prompt_validation_request = bixarena_api_client.PromptValidationRequest() # PromptValidationRequest |
 
     try:
         # Validate biomedical prompt
-        api_response = api_instance.validate_prompt(prompt)
+        api_response = api_instance.validate_prompt(prompt_validation_request)
         print("The response of PromptValidationApi->validate_prompt:\n")
         pprint(api_response)
     except Exception as e:
@@ -57,9 +58,9 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-| Name       | Type    | Description                 | Notes |
-| ---------- | ------- | --------------------------- | ----- |
-| **prompt** | **str** | The prompt text to validate |
+| Name                          | Type                                                      | Description | Notes |
+| ----------------------------- | --------------------------------------------------------- | ----------- | ----- |
+| **prompt_validation_request** | [**PromptValidationRequest**](PromptValidationRequest.md) |             |
 
 ### Return type
 
@@ -71,7 +72,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json, application/problem+json
 
 ### HTTP response details

@@ -122,7 +122,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _LeaderboardApi_      | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards            |
 | _ModelApi_            | [**create_model_error**](docs/ModelApi.md#create_model_error)                     | **POST** /models/{modelId}/errors                       | Report a model error                       |
 | _ModelApi_            | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                |
-| _PromptValidationApi_ | [**validate_prompt**](docs/PromptValidationApi.md#validate_prompt)                | **GET** /validate-prompt                                | Validate biomedical prompt                 |
+| _PromptValidationApi_ | [**validate_prompt**](docs/PromptValidationApi.md#validate_prompt)                | **POST** /validate-prompt                               | Validate biomedical prompt                 |
 | _QuestApi_            | [**list_quest_contributors**](docs/QuestApi.md#list_quest_contributors)           | **GET** /quests/{questId}/contributors                  | Get quest contributors                     |
 | _StatsApi_            | [**get_public_stats**](docs/StatsApi.md#get_public_stats)                         | **GET** /stats                                          | Get public platform statistics             |
 | _UserApi_             | [**get_user_stats**](docs/UserApi.md#get_user_stats)                              | **GET** /users/me/stats                                 | Get current user&#39;s statistics          |
@@ -175,6 +175,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [ModelSort](docs/ModelSort.md)
 - [PageMetadata](docs/PageMetadata.md)
 - [PromptValidation](docs/PromptValidation.md)
+- [PromptValidationRequest](docs/PromptValidationRequest.md)
 - [PublicStats](docs/PublicStats.md)
 - [QuestContributor](docs/QuestContributor.md)
 - [QuestContributors](docs/QuestContributors.md)

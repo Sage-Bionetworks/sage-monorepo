@@ -62,6 +62,7 @@ bixarena_api_client/models/model_search_query.py
 bixarena_api_client/models/model_sort.py
 bixarena_api_client/models/page_metadata.py
 bixarena_api_client/models/prompt_validation.py
+bixarena_api_client/models/prompt_validation_request.py
 bixarena_api_client/models/public_stats.py
 bixarena_api_client/models/quest_contributor.py
 bixarena_api_client/models/quest_contributors.py
@@ -126,6 +127,7 @@ docs/ModelSort.md
 docs/PageMetadata.md
 docs/PromptValidation.md
 docs/PromptValidationApi.md
+docs/PromptValidationRequest.md
 docs/PublicStats.md
 docs/QuestApi.md
 docs/QuestContributor.md
@@ -192,6 +194,7 @@ test/test_model_sort.py
 test/test_page_metadata.py
 test/test_prompt_validation.py
 test/test_prompt_validation_api.py
+test/test_prompt_validation_request.py
 test/test_public_stats.py
 test/test_quest_api.py
 test/test_quest_contributor.py

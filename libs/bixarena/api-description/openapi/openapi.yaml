@@ -45,21 +45,18 @@ tags:
     x-displayName: Auth
 paths:
   /validate-prompt:
-    get:
+    post:
       tags:
         - Prompt Validation
       summary: Validate biomedical prompt
       description: Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
       operationId: validatePrompt
-      parameters:
-        - name: prompt
-          in: query
-          required: true
-          description: The prompt text to validate
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 10000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptValidationRequest'
+        required: true
       responses:
         '200':
           description: Success
@@ -862,6 +859,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    PromptValidationRequest:
+      type: object
+      description: The prompt text to validate for biomedical relevance.
+      properties:
+        prompt:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: The prompt text to validate
+      required:
+        - prompt
     PromptValidation:
       type: object
       properties:

@@ -16,9 +16,8 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field
-from typing_extensions import Annotated
 from bixarena_api_client.models.prompt_validation import PromptValidation
+from bixarena_api_client.models.prompt_validation_request import PromptValidationRequest
 
 from bixarena_api_client.api_client import ApiClient, RequestSerialized
 from bixarena_api_client.api_response import ApiResponse
@@ -40,15 +39,7 @@ class PromptValidationApi:
     @validate_call
     def validate_prompt(
         self,
-        prompt: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=10000,
-                description="The prompt text to validate",
-            ),
-        ],
+        prompt_validation_request: PromptValidationRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -65,8 +56,8 @@ class PromptValidationApi:
 
         Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
 
-        :param prompt: The prompt text to validate (required)
-        :type prompt: str
+        :param prompt_validation_request: (required)
+        :type prompt_validation_request: PromptValidationRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -90,7 +81,7 @@ class PromptValidationApi:
         """  # noqa: E501
 
         _param = self._validate_prompt_serialize(
-            prompt=prompt,
+            prompt_validation_request=prompt_validation_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -115,15 +106,7 @@ class PromptValidationApi:
     @validate_call
     def validate_prompt_with_http_info(
         self,
-        prompt: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=10000,
-                description="The prompt text to validate",
-            ),
-        ],
+        prompt_validation_request: PromptValidationRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -140,8 +123,8 @@ class PromptValidationApi:
 
         Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
 
-        :param prompt: The prompt text to validate (required)
-        :type prompt: str
+        :param prompt_validation_request: (required)
+        :type prompt_validation_request: PromptValidationRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -165,7 +148,7 @@ class PromptValidationApi:
         """  # noqa: E501
 
         _param = self._validate_prompt_serialize(
-            prompt=prompt,
+            prompt_validation_request=prompt_validation_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -190,15 +173,7 @@ class PromptValidationApi:
     @validate_call
     def validate_prompt_without_preload_content(
         self,
-        prompt: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=10000,
-                description="The prompt text to validate",
-            ),
-        ],
+        prompt_validation_request: PromptValidationRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -215,8 +190,8 @@ class PromptValidationApi:
 
         Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
 
-        :param prompt: The prompt text to validate (required)
-        :type prompt: str
+        :param prompt_validation_request: (required)
+        :type prompt_validation_request: PromptValidationRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -240,7 +215,7 @@ class PromptValidationApi:
         """  # noqa: E501
 
         _param = self._validate_prompt_serialize(
-            prompt=prompt,
+            prompt_validation_request=prompt_validation_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -260,7 +235,7 @@ class PromptValidationApi:
 
     def _validate_prompt_serialize(
         self,
-        prompt,
+        prompt_validation_request,
         _request_auth,
         _content_type,
         _headers,
@@ -281,12 +256,11 @@ class PromptValidationApi:
 
         # process the path parameters
         # process the query parameters
-        if prompt is not None:
-            _query_params.append(("prompt", prompt))
-
         # process the header parameters
         # process the form parameters
         # process the body parameter
+        if prompt_validation_request is not None:
+            _body_params = prompt_validation_request
 
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
@@ -294,11 +268,21 @@ class PromptValidationApi:
                 ["application/json", "application/problem+json"]
             )
 
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params["Content-Type"] = _content_type
+        else:
+            _default_content_type = self.api_client.select_header_content_type(
+                ["application/json"]
+            )
+            if _default_content_type is not None:
+                _header_params["Content-Type"] = _default_content_type
+
         # authentication setting
         _auth_settings: List[str] = ["jwtBearer"]
 
         return self.api_client.param_serialize(
-            method="GET",
+            method="POST",
             resource_path="/validate-prompt",
             path_params=_path_params,
             query_params=_query_params,
