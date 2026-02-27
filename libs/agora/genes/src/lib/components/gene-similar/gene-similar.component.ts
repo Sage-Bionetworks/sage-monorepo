@@ -5,6 +5,7 @@ import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
   DEFAULT_SYNAPSE_WIKI_OWNER_ID,
+  ROUTE_PATHS,
 } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { LoggerService } from '@sagebionetworks/explorers/services';
@@ -80,6 +81,8 @@ export class GeneSimilarComponent implements OnInit {
             next: (gene: Gene | null) => {
               if (!gene) {
                 this.helperService.setLoading(false);
+                this.logger.log(`GeneSimilarComponent: Gene ${geneId} not found, redirecting`);
+                this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
               } else {
                 this.gene = gene;
                 this.init();

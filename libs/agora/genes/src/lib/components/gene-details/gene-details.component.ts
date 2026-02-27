@@ -28,6 +28,7 @@ import { GeneHeroComponent } from '../gene-hero/gene-hero.component';
 import { GeneNominationsComponent } from '../gene-nominations/gene-nominations.component';
 import { GeneResourcesComponent } from '../gene-resources/gene-resources.component';
 import { GeneSoeComponent } from '../gene-soe/gene-soe.component';
+import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
 
 interface Panel {
   name: string;
@@ -182,6 +183,8 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
             next: (gene) => {
               if (!gene) {
                 this.helperService.setLoading(false);
+                this.logger.log(`GeneDetailsComponent: Gene ${geneId} not found, redirecting`);
+                this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
               } else {
                 this.gene = gene;
 

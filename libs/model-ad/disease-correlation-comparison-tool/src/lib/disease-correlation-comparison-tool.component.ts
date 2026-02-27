@@ -9,7 +9,11 @@ import {
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
-import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolUrlService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
   ComparisonToolPage,
@@ -39,6 +43,7 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService);
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -46,7 +51,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.DiseaseCorrelation)
     .pipe(
-      catchError(() => EMPTY),
+      catchError((error) => {
+        this.logger.error('Error retrieving comparison tool config', error);
+        return EMPTY;
+      }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
@@ -166,6 +174,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `DiseaseCorrelationComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+    );
+
     this.diseaseCorrelationService
       .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -194,6 +206,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `DiseaseCorrelationComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
+    );
+
     this.diseaseCorrelationService
       .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))

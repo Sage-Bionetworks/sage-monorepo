@@ -1,8 +1,10 @@
 import { Location } from '@angular/common';
 import { AfterViewInit, Component, computed, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpContext } from '@angular/common/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { HelperService, PlatformService } from '@sagebionetworks/explorers/services';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
+import { HelperService, LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import {
@@ -30,6 +32,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
   geneExpressionIndividualService = inject(GeneExpressionIndividualService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
+  private readonly logger = inject(LoggerService);
 
   isLoading = true;
 
@@ -115,7 +118,9 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
       };
 
       this.geneExpressionIndividualService
-        .getGeneExpressionIndividual(query)
+        .getGeneExpressionIndividual(query, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (geneExpressionIndividualData: GeneExpressionIndividual[]) => {
@@ -124,10 +129,18 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
           },
           error: () => {
             this.isLoading = false;
+            this.logger.log(
+              `GeneDetailsComponent: loadGeneExpressionIndividualData: query: ${JSON.stringify(query)}, redirecting`,
+            );
+            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });
     } else {
       this.isLoading = false;
+      this.logger.log(
+        `GeneDetailsComponent: loadGeneExpressionIndividualData: ensemblGeneId: ${ensemblGeneId} modelIdentifierType: ${this.modelIdentifierType} modelIdentifier: ${this.modelIdentifier}, redirecting`,
+      );
+      this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
     }
   }
 

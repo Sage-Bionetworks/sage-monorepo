@@ -9,7 +9,11 @@ import {
   LegendPanelConfig,
   SynapseWikiParams,
 } from '@sagebionetworks/explorers/models';
-import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolUrlService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
   ComparisonToolPage,
@@ -39,6 +43,7 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   private readonly geneExpressionService = inject(GeneExpressionService);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService);
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -46,7 +51,10 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.GeneExpression)
     .pipe(
-      catchError(() => EMPTY),
+      catchError((error) => {
+        this.logger.error('Error retrieving comparison tool config', error);
+        return EMPTY;
+      }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
@@ -174,6 +182,10 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `GeneExpressionComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+    );
+
     this.geneExpressionService
       .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -202,6 +214,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(`GeneExpressionComparisonToolComponent: pinned query ${JSON.stringify(query)}`);
+
     this.geneExpressionService
       .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))

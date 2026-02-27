@@ -3,7 +3,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
-import { ComparisonToolUrlService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  ComparisonToolUrlService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfigService,
   ComparisonToolPage,
@@ -32,6 +36,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService);
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -39,7 +44,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   readonly config$ = this.comparisonToolConfigService
     .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
     .pipe(
-      catchError(() => EMPTY),
+      catchError((error) => {
+        this.logger.error('Error retrieving comparison tool config', error);
+        return EMPTY;
+      }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
@@ -120,6 +128,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       modifiedGenes: selectedFilters['modifiedGenes'],
     };
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `ModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+    );
+
     this.modelOverviewService
       .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -147,6 +159,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(`ModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`);
+
     this.modelOverviewService
       .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))

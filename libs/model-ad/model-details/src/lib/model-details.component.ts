@@ -1,9 +1,11 @@
 import { Location } from '@angular/common';
 import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpContext } from '@angular/common/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
 import { Panel, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { HelperService, PlatformService } from '@sagebionetworks/explorers/services';
+import { HelperService, LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelService } from '@sagebionetworks/model-ad/api-client';
@@ -34,6 +36,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   modelService = inject(ModelService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
+  private logger = inject(LoggerService);
 
   isLoading = true;
 
@@ -93,7 +96,9 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     const modelName = params.get('name');
     if (modelName) {
       this.modelService
-        .getModelByName(modelName)
+        .getModelByName(modelName, 'body', false, {
+          context: new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true),
+        })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (model: Model) => {
@@ -107,6 +112,10 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
           },
           error: () => {
             this.isLoading = false;
+            this.logger.log(
+              `ModelDetailsComponent: loadPanelData: Model ${modelName} not found, redirecting`,
+            );
+            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });
     }

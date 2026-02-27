@@ -5,7 +5,6 @@ import {
   HttpHandlerFn,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Router } from '@angular/router';
 import * as Sentry from '@sentry/angular';
 import { Observable, throwError, timer } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -32,7 +31,6 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 ): Observable<any> => {
   const logger = inject(LoggerService);
   const errorOverlayService = inject(ErrorOverlayService);
-  const router = inject(Router);
 
   return next(req).pipe(
     retry({
@@ -67,13 +65,10 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
         logger.error(`HTTP Error: ${errorMessage}`, sentryError);
       });
 
-      // Show error overlay for all errors so users know when requests fail,
-      // but not if the user is already on the error page or if the request
+      // Show error overlay so users know when requests fail, unless the request
       // explicitly opts out (e.g., non-critical requests like version checks).
-      // TODO - in the future, we may want to track specific routes through configuration (MG-771)
       const suppressOverlay = req.context.get(SUPPRESS_ERROR_OVERLAY);
-      const isOnErrorPage = router.url.includes('/not-found');
-      if (!suppressOverlay && !isOnErrorPage) {
+      if (!suppressOverlay) {
         errorOverlayService.showError(errorMessage);
       }
 
