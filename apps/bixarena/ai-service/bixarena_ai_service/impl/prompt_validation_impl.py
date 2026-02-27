@@ -18,6 +18,7 @@ from openai import AsyncOpenAI
 from bixarena_ai_service.apis.prompt_validation_api_base import BasePromptValidationApi
 from bixarena_ai_service.config import get_settings
 from bixarena_ai_service.models.prompt_validation import PromptValidation
+from bixarena_ai_service.models.prompt_validation_request import PromptValidationRequest
 
 logger = logging.getLogger(__name__)
 
@@ -67,17 +68,18 @@ class PromptValidationApiImpl(BasePromptValidationApi):
 
     async def validate_prompt(
         self,
-        prompt: str,
+        prompt_validation_request: PromptValidationRequest,
     ) -> PromptValidation:
         """Validate whether a prompt is biomedically related.
 
         The prompt text is sent to an LLM classifier via OpenRouter.  The LLM
         is instructed to treat the text as opaque data (not as instructions) and
         return a confidence score.  On any failure the endpoint returns an
-        *inconclusive* result (confidence=0.5, is_biomedical=False) so callers
+        *inconclusive* result (confidence=0.0, is_biomedical=False) so callers
         can decide how to proceed.
         """
         settings = get_settings()
+        prompt = prompt_validation_request.prompt
 
         logger.info("Prompt validation requested")
 
