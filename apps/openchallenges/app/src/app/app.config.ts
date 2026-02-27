@@ -14,7 +14,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
 import { provideGtmConfig, provideGtmId } from '@sagebionetworks/web-shared/angular/analytics/gtm';
-import Lara from '@primeng/themes/lara';
+import Lara from '@primeuix/themes/lara';
 import { telemetryFactory } from './telemetry.factory';
 
 export const appConfig: ApplicationConfig = {

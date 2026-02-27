@@ -1303,7 +1303,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   updateColumnWidth() {
     const count = this.columns.length < 5 ? 5 : this.columns.length;
-    const width = this.headerTable?.containerViewChild?.nativeElement?.offsetWidth || 0;
+    const width = this.headerTable?.el?.nativeElement?.offsetWidth || 0;
     this.columnWidth = Math.ceil((width - 300) / count) + 'px';
   }
 

@@ -62,7 +62,7 @@ import { Location } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -77,7 +77,7 @@ import { assign } from 'lodash';
   selector: 'openchallenges-org-search',
   imports: [
     DividerModule,
-    DropdownModule,
+    SelectModule,
     InputGroupModule,
     InputGroupAddonModule,
     InputTextModule,

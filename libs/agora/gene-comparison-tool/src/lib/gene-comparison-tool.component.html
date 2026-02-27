@@ -54,7 +54,7 @@
               <div class="gene-label">DISPLAYED GENES</div>
               @if (genesTable) {
                 <div class="gene-count" data-testid="gene-count">
-                  {{ (genesTable?._totalRecords || 0) + uniquePinnedGenesCount }}
+                  {{ (genesTable?.totalRecords || 0) + uniquePinnedGenesCount }}
                 </div>
               }
               <div class="gct-search">

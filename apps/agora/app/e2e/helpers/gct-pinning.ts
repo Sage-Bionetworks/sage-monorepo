@@ -31,7 +31,9 @@ export const expectPinnedGenesCountText = async (page: Page, nGenes: number) => 
 };
 
 export const expectPinnedProteinsCountText = async (page: Page, nProteins: number) => {
-  await expect(page.getByText(`${nProteins} Protein${nProteins > 1 ? 's' : ''}`)).toBeVisible();
+  await expect(
+    page.getByText(`${nProteins} Protein${nProteins > 1 ? 's' : ''}`, { exact: true }),
+  ).toBeVisible();
 };
 
 export const expectTooManyPinnedGenesToast = async (page: Page) => {
