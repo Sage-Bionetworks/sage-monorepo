@@ -99,6 +99,11 @@ CHATBOT_BATTLE_CSS = """
     font-weight: 500;
 }
 
+.model-name-footer.winner {
+    background: var(--button-primary-background-fill);
+    color: var(--button-primary-text-color);
+}
+
 /* Responsive layout */
 @media (max-width: 768px) {
     #chatbot-container #chatbot {
@@ -304,13 +309,22 @@ DISCLAIMER_CSS = """
 }
 """
 
-# CSS for Next Battle button
+# CSS for New Battle / Same Prompt buttons
 NEXT_BATTLE_BUTTON_CSS = """
 #next-battle-row {
     justify-content: center;
+    gap: 12px;
+    align-items: stretch;
+    margin-top: 12px;
 }
 
-#next-battle-btn {
+#next-battle-btn,
+#battle-again-btn {
     max-width: 240px;
+    min-height: 4em;
+}
+
+#battle-again-btn {
+    white-space: pre-line;
 }
 """

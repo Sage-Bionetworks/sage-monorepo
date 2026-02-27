@@ -15,7 +15,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  HelperService as ExplorersHelperService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';
 import { GeneEvidenceRnaComponent } from '../gene-evidence-rna/gene-evidence-rna.component';
@@ -58,6 +62,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
+  explorersHelperService = inject(ExplorersHelperService);
   geneService = inject(GeneService);
 
   faAngleRight = faAngleRight;
@@ -271,7 +276,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
     }
 
     // added logic to support dropdown state when page is refreshed
-    const modelUrlParam = this.helperService.getUrlParam('model');
+    const modelUrlParam = this.explorersHelperService.getUrlParam('model');
     if (modelUrlParam) {
       url = this.helperService.addSingleUrlParam(url, 'model', modelUrlParam);
     }
@@ -279,7 +284,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
     if (this.platformService.isBrowser) {
       const nav = document.querySelector('.gene-details-nav');
       if (nav) {
-        window.scrollTo(0, this.helperService.getOffset(nav).top);
+        window.scrollTo(0, this.explorersHelperService.getOffset(nav).top);
       }
     }
 

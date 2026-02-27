@@ -8,12 +8,14 @@ import {
   ProteomicsDistribution,
 } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
-import { BoxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
-import { HelperService } from '@sagebionetworks/agora/services';
-import { LoggerService } from '@sagebionetworks/explorers/services';
-import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
+import { BoxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
+import {
+  HelperService as ExplorersHelperService,
+  LoggerService,
+} from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
+import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-protein-selector.component';
 
 @Component({
@@ -31,7 +33,7 @@ export class GeneEvidenceProteomicsComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
 
-  helperService = inject(HelperService);
+  explorersHelperService = inject(ExplorersHelperService);
   distributionService = inject(DistributionService);
 
   readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
@@ -236,7 +238,7 @@ export class GeneEvidenceProteomicsComponent {
   }
 
   getTooltipText(item: ProteinDifferentialExpression) {
-    const tooltipText = `${item.hgnc_symbol || item.ensembl_gene_id} is${item.cor_pval <= 0.05 ? '' : ' not'} significantly differentially expressed in ${item.tissue} with a log fold change value of ${this.helperService.getSignificantFigures(item.log2_fc, 3)} and an adjusted p-value of ${this.helperService.getSignificantFigures(item.cor_pval, 3)}.`;
+    const tooltipText = `${item.hgnc_symbol || item.ensembl_gene_id} is${item.cor_pval <= 0.05 ? '' : ' not'} significantly differentially expressed in ${item.tissue} with a log fold change value of ${this.explorersHelperService.getSignificantFigures(item.log2_fc, 3)} and an adjusted p-value of ${this.explorersHelperService.getSignificantFigures(item.cor_pval, 3)}.`;
     return tooltipText;
   }
 }

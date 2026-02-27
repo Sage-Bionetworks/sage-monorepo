@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
+import { gctFiltersMocks } from '@sagebionetworks/agora/testing';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
-import { gctFiltersMocks, SvgIconServiceStub } from '@sagebionetworks/agora/testing';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { GeneComparisonToolFilterListComponent } from './gene-comparison-tool-filter-list.component';

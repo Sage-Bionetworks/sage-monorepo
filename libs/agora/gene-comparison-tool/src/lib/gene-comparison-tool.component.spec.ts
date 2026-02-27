@@ -2,12 +2,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+import { AGORA_LOADING_ICON_COLORS } from '@sagebionetworks/agora/config';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
-import { SvgIconServiceStub } from '@sagebionetworks/agora/testing';
-import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import { SvgIconServiceStub, provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
 import { GeneComparisonToolComponent } from './gene-comparison-tool.component';
-import { AGORA_LOADING_ICON_COLORS } from '@sagebionetworks/agora/config';
 
 describe('GeneComparisonToolComponent', () => {
   let component: GeneComparisonToolComponent;

@@ -12,13 +12,16 @@ import {
   MedianBarChartComponent,
   RowChartComponent,
 } from '@sagebionetworks/agora/charts';
-import { BoxPlotChartItem, RowChartItem } from '@sagebionetworks/agora/models';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
-import { HelperService } from '@sagebionetworks/agora/services';
-import { LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
+import { BoxPlotChartItem, RowChartItem } from '@sagebionetworks/agora/models';
+import {
+  HelperService as ExplorersHelperService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
+import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { getStatisticalModels } from '../../helpers';
-import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { GeneModelSelectorComponent } from '../gene-model-selector/gene-model-selector.component';
 import { GeneNetworkComponent } from '../gene-network/gene-network.component';
 
@@ -43,7 +46,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   private readonly platformService = inject(PlatformService);
   private readonly logger = inject(LoggerService);
 
-  helperService = inject(HelperService);
+  explorersHelperService = inject(ExplorersHelperService);
   distributionService = inject(DistributionService);
 
   readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
@@ -101,7 +104,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
 
     this.statisticalModels = getStatisticalModels(this._gene);
 
-    const urlModelParam = this.helperService.getUrlParam('model');
+    const urlModelParam = this.explorersHelperService.getUrlParam('model');
     this.selectedStatisticalModel = urlModelParam || this.statisticalModels[0];
 
     this.initMedianExpression();
@@ -121,7 +124,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
         if (hash) {
           const target = document.getElementById(hash);
           if (target) {
-            window.scrollTo(0, this.helperService.getOffset(target).top - 150);
+            window.scrollTo(0, this.explorersHelperService.getOffset(target).top - 150);
             this.hasScrolled = true;
           }
         }
@@ -199,9 +202,9 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
                   'significantly differentially expressed in ' +
                   item.tissue +
                   ' with a log fold change value of ' +
-                  this.helperService.getSignificantFigures(item.logfc, 3) +
+                  this.explorersHelperService.getSignificantFigures(item.logfc, 3) +
                   ' and an adjusted p-value of ' +
-                  this.helperService.getSignificantFigures(item.adj_p_val, 3) +
+                  this.explorersHelperService.getSignificantFigures(item.adj_p_val, 3) +
                   '.',
               },
               quartiles:

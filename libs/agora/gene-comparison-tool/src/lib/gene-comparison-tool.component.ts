@@ -27,7 +27,10 @@ import {
 } from '@sagebionetworks/agora/models';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { LoggerService } from '@sagebionetworks/explorers/services';
+import {
+  HelperService as ExplorersHelperService,
+  LoggerService,
+} from '@sagebionetworks/explorers/services';
 import { cloneDeep } from 'lodash';
 import { FilterService, MessageService, SortEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -93,6 +96,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   geneService = inject(GeneService);
   distributionService = inject(DistributionService);
   helperService = inject(HelperService);
+  explorersHelperService = inject(ExplorersHelperService);
   messageService = inject(MessageService);
   filterService = inject(FilterService);
 
@@ -1092,7 +1096,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   getCircleColor(logfc: number | undefined) {
     if (logfc === undefined) return '#F0F0F0';
 
-    const rounded = this.helperService.getSignificantFigures(logfc, 3);
+    const rounded = this.explorersHelperService.getSignificantFigures(logfc, 3);
     if (rounded > 0) {
       if (rounded < 0.1) {
         return '#B5CBEF';
@@ -1178,10 +1182,10 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     if (tissue) {
       return (
         'L2FC: ' +
-        this.helperService.getSignificantFigures(tissue.logfc, 3) +
+        this.explorersHelperService.getSignificantFigures(tissue.logfc, 3) +
         '\n' +
         'P-value: ' +
-        this.helperService.getSignificantFigures(tissue.adj_p_val, 3) +
+        this.explorersHelperService.getSignificantFigures(tissue.adj_p_val, 3) +
         '\n\n' +
         'Click for more details'
       );
@@ -1323,8 +1327,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   getRoundedGeneData(gene: GCTDetailsPanelData) {
     return {
-      l2fc: this.helperService.getSignificantFigures(gene.value || 0, 3),
-      pValue: this.helperService.getSignificantFigures(gene.pValue || 0, 3),
+      l2fc: this.explorersHelperService.getSignificantFigures(gene.value || 0, 3),
+      pValue: this.explorersHelperService.getSignificantFigures(gene.pValue || 0, 3),
     };
   }
 

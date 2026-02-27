@@ -54,4 +54,10 @@ describe('Service: Helper', () => {
     const res = helperService.getSignificantFigures(0.123, 2);
     expect(res).toEqual(0.12);
   });
+
+  it('should get url param', () => {
+    // window.location.search = '?test=42';
+    const res = helperService.getUrlParam('test');
+    expect(res).toEqual(null);
+  });
 });
