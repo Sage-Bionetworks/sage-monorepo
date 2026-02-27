@@ -4,9 +4,15 @@ This module provides helpers to check authentication state from Gradio request o
 enabling components to adapt based on whether the user is logged in.
 """
 
+import logging
+import os
+
 import gradio as gr
+import requests
 
 from bixarena_app.auth.user_state import get_user_state
+
+logger = logging.getLogger(__name__)
 
 
 def is_authenticated(request: gr.Request | None) -> bool:
@@ -146,4 +152,43 @@ def get_session_cookie(request: gr.Request | None) -> dict[str, str] | None:
     jsessionid = request.cookies.get("JSESSIONID")
     if jsessionid:
         return {"JSESSIONID": jsessionid}
+    return None
+
+
+def get_username_from_request(request: gr.Request | None) -> str | None:
+    """Get the username directly from the auth service using the session cookie.
+
+    Unlike get_username() which reads from UserState (and may return None if
+    UserState hasn't been populated yet), this function makes a direct HTTP call
+    to the auth service's /userinfo endpoint. This makes it safe to use in
+    concurrent demo.load() handlers where UserState may not be populated yet.
+
+    Args:
+        request: Gradio request object (can be None)
+
+    Returns:
+        The preferred_username if authenticated, None otherwise
+    """
+    if not request:
+        return None
+
+    jsessionid = request.cookies.get("JSESSIONID")
+    if not jsessionid:
+        return None
+
+    auth_base = os.environ.get("AUTH_BASE_URL_SSR", "").rstrip("/")
+    if not auth_base:
+        return None
+
+    try:
+        resp = requests.get(
+            f"{auth_base}/userinfo",
+            cookies={"JSESSIONID": jsessionid},
+            timeout=2,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            return data.get("preferred_username") or data.get("sub")
+    except Exception as e:
+        logger.debug(f"Could not resolve username from session: {e}")
     return None

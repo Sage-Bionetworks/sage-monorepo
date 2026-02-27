@@ -240,6 +240,96 @@ def build_quest_not_found_section() -> tuple[
     )
 
 
+def _build_user_progress_card_html(
+    username: str | None, tier: str, battles_per_week: float
+) -> str:
+    """Build the tier progress card HTML.
+
+    Shown to all users. For authenticated contributors, displays personalized
+    progress. For anonymous visitors or non-contributors, shows the default
+    apprentice state with 0 battles/week as motivation to start.
+
+    Args:
+        username: The user's display name, or None for anonymous/non-contributors
+        tier: Current tier ('champion', 'knight', or 'apprentice')
+        battles_per_week: The user's average battles per week
+
+    Returns:
+        HTML string for the progress card
+    """
+    tier_info = TIER_CONFIG.get(tier, TIER_CONFIG["apprentice"])
+    emoji = tier_info["emoji"]
+    tier_name = tier.capitalize()
+    tier_color = tier_info["color"]
+
+    # Determine next tier and progress
+    if tier == "champion":
+        # Already at max tier
+        return f"""
+        <div style="margin-bottom: 0.5rem;">
+            <h4 style="color: var(--body-text-color); font-weight: 600;
+                       margin: 0 0 0.75rem 0; font-size: 1rem;">
+                {emoji} Welcome back, Champion {username}
+            </h4>
+            <div style="color: var(--body-text-color-subdued); font-size: 0.875rem; line-height: 1.4;">
+                {battles_per_week:.1f} battles/week &mdash; Keep battling to hold your title!
+            </div>
+        </div>
+        """
+
+    # For apprentice -> knight or knight -> champion
+    if tier == "apprentice":
+        prev_threshold = 0.0
+        next_threshold = 5.0
+        next_tier = "knight"
+    else:  # knight
+        prev_threshold = 5.0
+        next_threshold = 10.0
+        next_tier = "champion"
+
+    next_emoji = TIER_CONFIG[next_tier]["emoji"]
+    next_name = next_tier.capitalize()
+
+    band = next_threshold - prev_threshold
+    progress_pct = min((battles_per_week - prev_threshold) / band * 100, 100)
+
+    # Header varies based on whether the user is known
+    if username:
+        header = f"{emoji} Welcome back, {tier_name} {username}"
+    else:
+        header = f"{next_emoji} Become a {next_name}!"
+
+    return f"""
+    <div style="margin-bottom: 0.5rem;">
+        <h4 style="color: var(--body-text-color); font-weight: 600;
+                   margin: 0 0 0.75rem 0; font-size: 1rem;">
+            {header}
+        </h4>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+            <span style="color: var(--body-text-color); font-weight: 500; font-size: 0.875rem;">Tier Progress</span>
+            <span style="color: var(--body-text-color); font-weight: 600; font-size: 0.875rem;">{progress_pct:.0f}% Complete</span>
+        </div>
+        <div style="width: 100%; height: 10px; background-color: var(--background-fill-secondary);
+                    border-radius: 5px; overflow: hidden;
+                    border: 1px solid var(--border-color-primary);">
+            <div style="height: 100%; width: {progress_pct:.0f}%;
+                        background: var(--color-accent, #f97316);
+                        border-radius: 5px;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+            <div>
+                <p style="font-size: 1.25rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{battles_per_week:.1f}</p>
+                <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Battles/Week</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="font-size: 1.25rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{next_emoji} {next_name}</p>
+                <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
+            </div>
+        </div>
+    </div>
+    """
+
+
 def _build_tier_legend_html() -> str:
     """Build the tier legend HTML with descriptions and accuracy note.
 
@@ -250,7 +340,7 @@ def _build_tier_legend_html() -> str:
             <!-- Contributor Tiers Legend -->
             <div style="margin-top: 1.5rem;">
                 <h4 style="color: var(--body-text-color); font-weight: 600;
-                           margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                           margin: 0 0 0.75rem 0; font-size: 1rem;">
                     Contributor Tiers
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 0.375rem;
@@ -349,11 +439,16 @@ def _build_progress_html(
     """
 
 
-def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
+def _build_builders_credits_html(
+    contributors_data: dict | None = None,
+    current_user_data: dict | None = None,
+) -> str:
     """Build the Builders and Credits HTML sections.
 
     Args:
         contributors_data: Optional dict with contributors_by_tier and total_contributors
+        current_user_data: Optional dict with username, tier, battles_per_week for the
+            logged-in user. When provided, a personal progress card is shown above the list.
 
     Returns:
         HTML string for the builders and credits sections
@@ -369,7 +464,7 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
         <!-- No Contributors Message -->
         <div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
             <h4 style="color: var(--body-text-color); font-weight: 600;
-                       margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                       margin: 0 0 0.75rem 0; font-size: 1rem;">
                 Builders (0)
             </h4>
             <div style="padding: 2rem; text-align: center;
@@ -384,7 +479,7 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
 
         <!-- Credits Section -->
         <div>
-            <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+            <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.75rem 0; font-size: 1rem;">
                 Credits
             </h4>
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
@@ -429,17 +524,31 @@ def _build_builders_credits_html(contributors_data: dict | None = None) -> str:
             builders_parts
         )
 
+    # Build progress card (personalized for contributors, default for others)
+    if current_user_data is not None:
+        progress_card_html = _build_user_progress_card_html(
+            username=current_user_data["username"],
+            tier=current_user_data["tier"],
+            battles_per_week=current_user_data["battles_per_week"],
+        )
+    else:
+        progress_card_html = _build_user_progress_card_html(
+            username=None, tier="apprentice", battles_per_week=0.0
+        )
+
     return f"""
     <div style="display: flex; flex-direction: column; gap: 1.5rem;
                 height: 100%; margin-top: 0.75rem;">
         <!-- Divider -->
         <div style="height: 1px; background: var(--border-color-primary);"></div>
 
+        {progress_card_html}
+
         <!-- Builders Section -->
         <div style="flex: 1; display: flex; flex-direction: column;
                     min-height: 0;">
             <h4 style="color: var(--body-text-color); font-weight: 600;
-                       margin: 0 0 0.75rem 0; font-size: 0.9375rem;">
+                       margin: 0 0 0.75rem 0; font-size: 1rem;">
                 Builders ({total_count})
             </h4>
 
@@ -731,7 +840,7 @@ def _build_carousel_html(carousel_id: str) -> str:
             color: var(--body-text-color);
             font-weight: 600;
             margin: 0;
-            font-size: 0.9375rem;
+            font-size: 1rem;
             flex: 1;
         }}
 
