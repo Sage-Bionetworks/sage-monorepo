@@ -77,6 +77,7 @@ from bixarena_api_client.models.model_search_query import ModelSearchQuery
 from bixarena_api_client.models.model_sort import ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata
 from bixarena_api_client.models.prompt_validation import PromptValidation
+from bixarena_api_client.models.prompt_validation_request import PromptValidationRequest
 from bixarena_api_client.models.public_stats import PublicStats
 from bixarena_api_client.models.quest_contributor import QuestContributor
 from bixarena_api_client.models.quest_contributors import QuestContributors

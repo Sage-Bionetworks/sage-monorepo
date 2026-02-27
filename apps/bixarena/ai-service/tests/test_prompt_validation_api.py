@@ -3,10 +3,9 @@
 from fastapi.testclient import TestClient
 
 
-from pydantic import Field  # noqa: F401
-from typing_extensions import Annotated  # noqa: F401
 from bixarena_ai_service.models.basic_error import BasicError  # noqa: F401
 from bixarena_ai_service.models.prompt_validation import PromptValidation  # noqa: F401
+from bixarena_ai_service.models.prompt_validation_request import PromptValidationRequest  # noqa: F401
 
 
 def test_validate_prompt(client: TestClient):
@@ -14,14 +13,15 @@ def test_validate_prompt(client: TestClient):
 
     Validate biomedical prompt
     """
-    params = [("prompt", "prompt_example")]
+    prompt_validation_request = {"prompt": "prompt"}
+
     headers = {}
     # uncomment below to make a request
     # response = client.request(
-    #    "GET",
+    #    "POST",
     #    "/validate-prompt",
     #    headers=headers,
-    #    params=params,
+    #    json=prompt_validation_request,
     # )
 
     # uncomment below to assert the status code of the HTTP response

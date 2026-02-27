@@ -82,6 +82,7 @@ __all__ = [
     "ModelSort",
     "PageMetadata",
     "PromptValidation",
+    "PromptValidationRequest",
     "PublicStats",
     "QuestContributor",
     "QuestContributors",
@@ -230,6 +231,9 @@ from bixarena_api_client.models.model_sort import ModelSort as ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
 from bixarena_api_client.models.prompt_validation import (
     PromptValidation as PromptValidation,
+)
+from bixarena_api_client.models.prompt_validation_request import (
+    PromptValidationRequest as PromptValidationRequest,
 )
 from bixarena_api_client.models.public_stats import PublicStats as PublicStats
 from bixarena_api_client.models.quest_contributor import (
