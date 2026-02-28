@@ -5,10 +5,10 @@ import {
   HttpHandlerFn,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Router } from '@angular/router';
+import * as Sentry from '@sentry/angular';
 import { Observable, throwError, timer } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import { AppError } from '@sagebionetworks/explorers/models';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
 import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/services';
 
 /**
@@ -19,7 +19,7 @@ import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/s
  * - Does NOT retry client errors (4xx) as they won't succeed
  * - Shows error overlay for all errors so users are informed when requests fail
  * - Logs all errors for debugging
- * - Re-throws errors as AppError for consistent error handling
+ * - Re-throws errors for consistent error handling
  *
  * Errors are handled centrally here to provide a consistent user experience.
  * Components should catch errors for cleanup but don't need to show their own
@@ -31,7 +31,6 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
 ): Observable<any> => {
   const logger = inject(LoggerService);
   const errorOverlayService = inject(ErrorOverlayService);
-  const router = inject(Router);
 
   return next(req).pipe(
     retry({
@@ -47,23 +46,50 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
     }),
     catchError((error: HttpErrorResponse) => {
       const errorMessage = buildErrorMessage(error);
+      const urlPath = extractUrlPath(error.url);
 
-      // Log error for debugging (also sends to Sentry)
-      logger.error(`HTTP Error: ${errorMessage}`, error);
+      // Log error with Sentry context for proper grouping by endpoint + status
+      Sentry.withScope((scope) => {
+        scope.setFingerprint(['http-error', String(error.status), urlPath]);
+        scope.setTag('http.method', req.method);
+        scope.setTag('http.status_code', String(error.status));
+        scope.setTag('http.url', urlPath);
+        scope.setExtra('errorResponse', {
+          url: error.url,
+          status: error.status,
+          statusText: error.statusText,
+        });
 
-      // Show error overlay for all errors so users know when requests fail,
-      // but not if the user is already on the error page.
-      // TODO - in the future, we may want to track specific routes through configuration (MG-771)
-      const isOnErrorPage = router.url.includes('/not-found');
-      if (!isOnErrorPage) {
+        // grouping by status + method + urlPath
+        const sentryError = new Error(`HTTP ${error.status} ${req.method} ${urlPath}`);
+        logger.error(`HTTP Error: ${errorMessage}`, sentryError);
+      });
+
+      // Show error overlay so users know when requests fail, unless the request
+      // explicitly opts out (e.g., non-critical requests like version checks).
+      const suppressOverlay = req.context.get(SUPPRESS_ERROR_OVERLAY);
+      if (!suppressOverlay) {
         errorOverlayService.showError(errorMessage);
       }
 
-      // Re-throw as AppError - components can catch for cleanup but don't need to show errors
-      return throwError(() => new AppError(errorMessage, false));
+      // Re-throw - components can catch for cleanup but don't need to show errors
+      return throwError(() => new Error(errorMessage));
     }),
   );
 };
+
+/**
+ * Extracts the URL path from a full URL, stripping the host and query params.
+ * e.g. "https://api.example.com/v1/genes?id=123" → "/v1/genes"
+ */
+function extractUrlPath(url: string | null): string {
+  if (!url) return 'unknown';
+  try {
+    return new URL(url).pathname;
+  } catch {
+    return url;
+  }
+}
 
 /**
  * Builds a user-friendly error message from an HttpErrorResponse.

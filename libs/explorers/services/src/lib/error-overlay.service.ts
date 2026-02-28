@@ -1,10 +1,7 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
-import { LoggerService } from './logger.service';
+import { computed, Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorOverlayService {
-  private readonly logger = inject(LoggerService);
-
   /** Signal containing the current error message, or null if no error */
   private errorMessage = signal<string | null>(null);
 
@@ -19,7 +16,6 @@ export class ErrorOverlayService {
     if (this.errorMessage() === null) {
       this.errorMessage.set(message);
     }
-    this.logger.error(message);
   }
 
   reloadPage() {

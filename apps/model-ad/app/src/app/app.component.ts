@@ -2,7 +2,11 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
-import { MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
+import {
+  MetaTagService,
+  PlatformService,
+  VersionService,
+} from '@sagebionetworks/explorers/services';
 import {
   ErrorOverlayComponent,
   FooterComponent,
@@ -47,6 +51,7 @@ import { ToastModule } from 'primeng/toast';
 })
 export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly platformService = inject(PlatformService);
 
   configService = inject(ConfigService);
   dataVersionService = inject(DataVersionService);
@@ -70,8 +75,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getDataVersion();
-    this.getSiteVersion();
+    if (this.platformService.isBrowser) {
+      this.getDataVersion();
+      this.getSiteVersion();
+    }
   }
 
   getDataVersion() {
@@ -80,7 +87,9 @@ export class AppComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (v) => (this.dataVersion = v),
-        error: () => (this.dataVersion = 'unknown'),
+        error: () => {
+          this.dataVersion = 'unknown';
+        },
       });
   }
 
@@ -90,7 +99,9 @@ export class AppComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (v) => (this.siteVersion = v),
-        error: () => (this.siteVersion = 'unknown'),
+        error: () => {
+          this.siteVersion = 'unknown';
+        },
       });
   }
 }

@@ -1,7 +1,8 @@
+import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, EMPTY, map, Observable, of, throwError } from 'rxjs';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
+import { catchError, EMPTY, map, Observable, of } from 'rxjs';
 import { GitHubService } from './github.service';
-import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
 
 export interface VersionConfig {
@@ -16,7 +17,11 @@ export interface DataVersion {
 }
 
 export interface DataVersionService {
-  getDataVersion(): Observable<DataVersion>;
+  getDataVersion(
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: { context?: HttpContext },
+  ): Observable<DataVersion>;
 }
 
 @Injectable({
@@ -24,20 +29,16 @@ export interface DataVersionService {
 })
 export class VersionService {
   private readonly platformService = inject(PlatformService);
-  private readonly logger = inject(LoggerService);
   private readonly gitHubService = inject(GitHubService);
 
   getDataVersion$(dataVersionService: DataVersionService): Observable<string> {
     if (this.platformService.isServer) {
       return EMPTY;
     }
-    return dataVersionService.getDataVersion().pipe(
-      map((data) => this.formatDataVersion(data)),
-      catchError((error) => {
-        this.logger.error('Error loading data version', error);
-        return throwError(() => error);
-      }),
-    );
+    const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
+    return dataVersionService
+      .getDataVersion('body', false, { context })
+      .pipe(map((data) => this.formatDataVersion(data)));
   }
 
   getSiteVersion$(config: VersionConfig): Observable<string> {
@@ -46,8 +47,7 @@ export class VersionService {
     }
     return this.gitHubService.getCommitSHA(config.tagName).pipe(
       map((sha) => this.formatSiteVersion(sha, config)),
-      catchError((error) => {
-        this.logger.error('Error loading commit SHA', error);
+      catchError(() => {
         return of(this.formatSiteVersion('', config));
       }),
     );

@@ -1,9 +1,10 @@
-import { isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
 import { isExternalLink } from '@sagebionetworks/shared/util';
 import { Observable, map, of, shareReplay } from 'rxjs';
+import { PlatformService } from './platform.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,7 @@ export class SvgIconService {
   private readonly http = inject(HttpClient);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly svgCache = new Map<string, Observable<SafeHtml>>();
-  private readonly platformId = inject(PLATFORM_ID);
+  private readonly platformService = inject(PlatformService);
 
   // Common SVGs we want to preload
   private readonly commonSvgPaths = [
@@ -66,7 +67,7 @@ export class SvgIconService {
 
   getSvg(path: string): Observable<SafeHtml> {
     // Do not load SVGs on the server side
-    if (isPlatformServer(this.platformId)) return of('');
+    if (this.platformService.isServer) return of('');
 
     if (!this.isValidImagePath(path)) {
       throw new Error('Invalid SVG path');
@@ -78,7 +79,8 @@ export class SvgIconService {
       return cached;
     }
 
-    const request = this.http.get(path, { responseType: 'text' }).pipe(
+    const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
+    const request = this.http.get(path, { responseType: 'text', context }).pipe(
       map((svg) => this.sanitizer.bypassSecurityTrustHtml(svg)),
       shareReplay(1),
     );

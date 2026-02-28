@@ -98,6 +98,9 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
   }
 
   scrollToPanelNavElement() {
+    if (this.platformService.isServer) {
+      return;
+    }
     // Add slight delay to allow panel to render before scrolling
     setTimeout(() => {
       const nav = document.querySelector('.panel-navigation');

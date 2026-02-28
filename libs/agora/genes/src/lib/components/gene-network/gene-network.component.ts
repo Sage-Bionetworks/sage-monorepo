@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewEncapsulation, inject } from '@angular/core';
+import { Component, DestroyRef, Input, ViewEncapsulation, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -16,6 +17,7 @@ import {
   NetworkChartLink,
   NetworkChartNode,
 } from '@sagebionetworks/agora/models';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
@@ -26,6 +28,9 @@ import { TooltipModule } from 'primeng/tooltip';
   encapsulation: ViewEncapsulation.None,
 })
 export class GeneNetworkComponent {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
+
   router = inject(Router);
   geneService = inject(GeneService);
 
@@ -90,9 +95,14 @@ export class GeneNetworkComponent {
   }
 
   onNodeClick(node: NetworkChartNode) {
-    this.geneService.getGene(node.id).subscribe((gene) => {
-      this.selectedGene = gene;
-    });
+    this.logger.log(`GeneNetworkComponent: Loading gene ${node.id}`);
+
+    this.geneService
+      .getGene(node.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((gene) => {
+        this.selectedGene = gene;
+      });
   }
 
   navigateToSimilarGenes() {

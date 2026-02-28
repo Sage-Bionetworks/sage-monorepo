@@ -1,10 +1,11 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
 import sanitizeHtml from 'sanitize-html';
 
 // -------------------------------------------------------------------------- //
@@ -26,20 +27,25 @@ export class SynapseApiService {
     terms: null,
   };
 
-  getWikiMarkdown(ownerId: string, wikiId: string): Observable<SynapseWikiMarkdown> {
+  getWikiMarkdown(
+    ownerId: string,
+    wikiId: string,
+    suppressErrorOverlay = false,
+  ): Observable<SynapseWikiMarkdown> {
     const key = ownerId + wikiId;
     if (this.cache['wikis'][key]) {
       return of(this.cache['wikis'][key]);
     } else {
+      const context = suppressErrorOverlay
+        ? new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true)
+        : undefined;
       return this.http
-        .get('https://repo-prod.prod.sagebase.org/repo/v1/entity/' + ownerId + '/wiki/' + wikiId)
+        .get('https://repo-prod.prod.sagebase.org/repo/v1/entity/' + ownerId + '/wiki/' + wikiId, {
+          context,
+        })
         .pipe(
           tap((wiki: any) => {
             this.cache['wikis'][key] = wiki;
-          }),
-          catchError((error) => {
-            console.error('Error loading wiki:', error);
-            return throwError(() => new Error('Failed to fetch wiki'));
           }),
         );
     }
@@ -61,10 +67,6 @@ export class SynapseApiService {
             }),
           ),
         ),
-        catchError((error) => {
-          console.error('Failed to fetch Terms of Service:', error);
-          return throwError(() => new Error('Failed to fetch Terms of Service'));
-        }),
       );
   }
 

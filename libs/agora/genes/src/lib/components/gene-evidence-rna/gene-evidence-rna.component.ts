@@ -1,6 +1,5 @@
-import { AfterViewChecked, Component, inject, Input, PLATFORM_ID, ViewChild } from '@angular/core';
-
-import { isPlatformBrowser } from '@angular/common';
+import { AfterViewChecked, Component, DestroyRef, inject, Input, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   DistributionService,
   Gene,
@@ -15,7 +14,11 @@ import {
 } from '@sagebionetworks/agora/charts';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { BoxPlotChartItem, RowChartItem } from '@sagebionetworks/agora/models';
-import { HelperService as ExplorersHelperService } from '@sagebionetworks/explorers/services';
+import {
+  HelperService as ExplorersHelperService,
+  LoggerService,
+  PlatformService,
+} from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { getStatisticalModels } from '../../helpers';
@@ -39,7 +42,10 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
   styleUrls: ['./gene-evidence-rna.component.scss'],
 })
 export class GeneEvidenceRnaComponent implements AfterViewChecked {
-  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly platformService = inject(PlatformService);
+  private readonly logger = inject(LoggerService);
+
   explorersHelperService = inject(ExplorersHelperService);
   distributionService = inject(DistributionService);
 
@@ -111,7 +117,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   }
 
   scrollToAnchorLink() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformService.isBrowser) {
       // AG-1408 - wait for differential expression box plot to finish loading before scrolling
       if (this.boxPlotComponent?.isInitialized && !this.hasScrolled) {
         const hash = window.location.hash.slice(1);
@@ -147,71 +153,78 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
       return g.model === this.selectedStatisticalModel;
     });
 
-    this.distributionService.getDistribution().subscribe((data) => {
-      const distribution = data.rna_differential_expression.filter((data) => {
-        return data.model === this.selectedStatisticalModel;
-      });
+    this.logger.log(
+      `GeneEvidenceRnaComponent: Loading distribution for model ${this.selectedStatisticalModel}`,
+    );
 
-      const differentialExpressionChartData: BoxPlotChartItem[] = [];
-
-      this.differentialExpression.forEach((item) => {
-        const data = distribution.find((d) => {
-          return d.tissue === item.tissue;
+    this.distributionService
+      .getDistribution()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        const distribution = data.rna_differential_expression.filter((data) => {
+          return data.model === this.selectedStatisticalModel;
         });
 
-        if (data) {
-          const yAxisMin = item.logfc < data.min ? item.logfc : data.min;
-          const yAxisMax = item.logfc > data.max ? item.logfc : data.max;
+        const differentialExpressionChartData: BoxPlotChartItem[] = [];
 
-          if (
-            this.differentialExpressionYAxisMin === undefined ||
-            yAxisMin < this.differentialExpressionYAxisMin
-          ) {
-            this.differentialExpressionYAxisMin = yAxisMin;
-          }
-
-          if (
-            this.differentialExpressionYAxisMax === undefined ||
-            yAxisMax > this.differentialExpressionYAxisMax
-          ) {
-            this.differentialExpressionYAxisMax = yAxisMax;
-          }
-
-          differentialExpressionChartData.push({
-            key: data.tissue,
-            value: [data.min, data.median, data.max],
-            circle: {
-              value: item.logfc,
-              tooltip:
-                (item.hgnc_symbol || item.ensembl_gene_id) +
-                ' is ' +
-                (item.adj_p_val <= 0.05 ? ' ' : 'not ') +
-                'significantly differentially expressed in ' +
-                item.tissue +
-                ' with a log fold change value of ' +
-                this.explorersHelperService.getSignificantFigures(item.logfc, 3) +
-                ' and an adjusted p-value of ' +
-                this.explorersHelperService.getSignificantFigures(item.adj_p_val, 3) +
-                '.',
-            },
-            quartiles:
-              data.first_quartile > data.third_quartile
-                ? [data.third_quartile, data.median, data.first_quartile]
-                : [data.first_quartile, data.median, data.third_quartile],
+        this.differentialExpression.forEach((item) => {
+          const data = distribution.find((d) => {
+            return d.tissue === item.tissue;
           });
+
+          if (data) {
+            const yAxisMin = item.logfc < data.min ? item.logfc : data.min;
+            const yAxisMax = item.logfc > data.max ? item.logfc : data.max;
+
+            if (
+              this.differentialExpressionYAxisMin === undefined ||
+              yAxisMin < this.differentialExpressionYAxisMin
+            ) {
+              this.differentialExpressionYAxisMin = yAxisMin;
+            }
+
+            if (
+              this.differentialExpressionYAxisMax === undefined ||
+              yAxisMax > this.differentialExpressionYAxisMax
+            ) {
+              this.differentialExpressionYAxisMax = yAxisMax;
+            }
+
+            differentialExpressionChartData.push({
+              key: data.tissue,
+              value: [data.min, data.median, data.max],
+              circle: {
+                value: item.logfc,
+                tooltip:
+                  (item.hgnc_symbol || item.ensembl_gene_id) +
+                  ' is ' +
+                  (item.adj_p_val <= 0.05 ? ' ' : 'not ') +
+                  'significantly differentially expressed in ' +
+                  item.tissue +
+                  ' with a log fold change value of ' +
+                  this.explorersHelperService.getSignificantFigures(item.logfc, 3) +
+                  ' and an adjusted p-value of ' +
+                  this.explorersHelperService.getSignificantFigures(item.adj_p_val, 3) +
+                  '.',
+              },
+              quartiles:
+                data.first_quartile > data.third_quartile
+                  ? [data.third_quartile, data.median, data.first_quartile]
+                  : [data.first_quartile, data.median, data.third_quartile],
+            });
+          }
+        });
+
+        if (this.differentialExpressionYAxisMin) {
+          this.differentialExpressionYAxisMin -= 0.2;
         }
+
+        if (this.differentialExpressionYAxisMax) {
+          this.differentialExpressionYAxisMax += 0.2;
+        }
+
+        this.differentialExpressionChartData = differentialExpressionChartData;
       });
-
-      if (this.differentialExpressionYAxisMin) {
-        this.differentialExpressionYAxisMin -= 0.2;
-      }
-
-      if (this.differentialExpressionYAxisMax) {
-        this.differentialExpressionYAxisMax += 0.2;
-      }
-
-      this.differentialExpressionChartData = differentialExpressionChartData;
-    });
   }
 
   initConsistencyOfChange() {

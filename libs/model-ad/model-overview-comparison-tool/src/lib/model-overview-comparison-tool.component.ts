@@ -2,11 +2,7 @@ import { Component, DestroyRef, effect, inject, OnDestroy, OnInit } from '@angul
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import {
-  AppError,
-  ComparisonToolQuery,
-  ComparisonToolViewConfig,
-} from '@sagebionetworks/explorers/models';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolUrlService,
   LoggerService,
@@ -36,11 +32,11 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
   private readonly platformService = inject(PlatformService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
   private readonly modelOverviewService = inject(ModelOverviewService);
   private readonly comparisonToolService = inject(ModelOverviewComparisonToolService);
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService);
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -132,6 +128,10 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
       modifiedGenes: selectedFilters['modifiedGenes'],
     };
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `ModelOverviewComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+    );
+
     this.modelOverviewService
       .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -142,7 +142,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: () => {
-          throw new AppError('Unable to load unpinned model data. Please reload the page.', true);
+          this.comparisonToolService.setUnpinnedData([]);
+          this.comparisonToolService.totalResultsCount.set(0);
         },
       });
   }
@@ -158,6 +159,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(`ModelOverviewComparisonToolComponent: pinned query ${JSON.stringify(query)}`);
+
     this.modelOverviewService
       .getModelOverviews(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -168,7 +171,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit, OnDestroy {
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
-          throw new AppError('Unable to load pinned model data. Please reload the page.', true);
+          this.comparisonToolService.setPinnedData([]);
+          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

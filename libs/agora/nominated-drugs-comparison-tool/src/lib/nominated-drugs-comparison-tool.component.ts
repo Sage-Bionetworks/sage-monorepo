@@ -12,11 +12,7 @@ import {
 } from '@sagebionetworks/agora/api-client';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import {
-  AppError,
-  ComparisonToolQuery,
-  ComparisonToolViewConfig,
-} from '@sagebionetworks/explorers/models';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolUrlService,
   LoggerService,
@@ -37,10 +33,10 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
   private readonly nominatedDrugsService = inject(NominatedDrugService);
   private readonly comparisonToolService = inject(NominatedDrugsComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService);
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -133,6 +129,10 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `NominatedDrugsComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+    );
+
     this.nominatedDrugsService
       .getNominatedDrugs(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -143,10 +143,8 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: () => {
-          throw new AppError(
-            'Unable to load unpinned nominated drugs data. Please reload the page.',
-            true,
-          );
+          this.comparisonToolService.setUnpinnedData([]);
+          this.comparisonToolService.totalResultsCount.set(0);
         },
       });
   }
@@ -162,6 +160,8 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(`NominatedDrugsComparisonToolComponent: pinned query ${JSON.stringify(query)}`);
+
     this.nominatedDrugsService
       .getNominatedDrugs(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -172,10 +172,8 @@ export class NominatedDrugsComparisonToolComponent implements OnInit, OnDestroy 
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
-          throw new AppError(
-            'Unable to load pinned nominated drugs data. Please reload the page.',
-            true,
-          );
+          this.comparisonToolService.setPinnedData([]);
+          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

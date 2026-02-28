@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { GitHubService } from './github.service';
-import { LoggerService } from './logger.service';
 import { PlatformService } from './platform.service';
 import { DataVersion, VersionConfig, VersionService } from './version.service';
 
@@ -23,8 +22,6 @@ describe('VersionService', () => {
   let service: VersionService;
   let mockGitHubService: Partial<GitHubService>;
   let mockPlatformService: Partial<PlatformService>;
-  let mockLoggerService: Partial<LoggerService>;
-
   const mockVersionConfig: VersionConfig = {
     appVersion: '1.2.3-rc1',
     tagName: 'agora/v1.2.3',
@@ -45,16 +42,11 @@ describe('VersionService', () => {
       isBrowser: true,
     };
 
-    mockLoggerService = {
-      error: jest.fn(),
-    };
-
     TestBed.configureTestingModule({
       providers: [
         VersionService,
         { provide: GitHubService, useValue: mockGitHubService },
         { provide: PlatformService, useValue: mockPlatformService },
-        { provide: LoggerService, useValue: mockLoggerService },
       ],
     });
 
@@ -164,10 +156,6 @@ describe('VersionService', () => {
       });
 
       expect(result).toBe('1.2.3');
-      expect(TestBed.inject(LoggerService).error).toHaveBeenCalledWith(
-        'Error loading commit SHA',
-        error,
-      );
     });
   });
 });
