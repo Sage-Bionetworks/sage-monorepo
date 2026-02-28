@@ -30,4 +30,8 @@ export interface OrgSagebionetworksRepoModelGridQueryQuery {
    * Optional. specifies the offset of the first row to return.
    */
   offset?: number;
+  /**
+   * When false, the \'allValidationMessages\' array in the response will be omitted to save tokens. Defaults to false.
+   */
+  includeValidationMessages?: boolean;
 }

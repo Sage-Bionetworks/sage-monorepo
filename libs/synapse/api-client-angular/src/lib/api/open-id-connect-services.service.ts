@@ -1096,11 +1096,13 @@ export class OpenIDConnectServicesService {
 
   /**
    * @param synapseAuthorization
+   * @param accept
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getAuthV1Oauth2Userinfo(
     synapseAuthorization?: string,
+    accept?: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -1111,6 +1113,7 @@ export class OpenIDConnectServicesService {
   ): Observable<object>;
   public getAuthV1Oauth2Userinfo(
     synapseAuthorization?: string,
+    accept?: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -1121,6 +1124,7 @@ export class OpenIDConnectServicesService {
   ): Observable<HttpResponse<object>>;
   public getAuthV1Oauth2Userinfo(
     synapseAuthorization?: string,
+    accept?: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -1131,6 +1135,7 @@ export class OpenIDConnectServicesService {
   ): Observable<HttpEvent<object>>;
   public getAuthV1Oauth2Userinfo(
     synapseAuthorization?: string,
+    accept?: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -1142,6 +1147,9 @@ export class OpenIDConnectServicesService {
     let localVarHeaders = this.defaultHeaders;
     if (synapseAuthorization !== undefined && synapseAuthorization !== null) {
       localVarHeaders = localVarHeaders.set('Synapse-Authorization', String(synapseAuthorization));
+    }
+    if (accept !== undefined && accept !== null) {
+      localVarHeaders = localVarHeaders.set('Accept', String(accept));
     }
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -2415,11 +2423,13 @@ export class OpenIDConnectServicesService {
 
   /**
    * @param synapseAuthorization
+   * @param accept
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public postAuthV1Oauth2Userinfo(
     synapseAuthorization?: string,
+    accept?: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -2430,6 +2440,7 @@ export class OpenIDConnectServicesService {
   ): Observable<object>;
   public postAuthV1Oauth2Userinfo(
     synapseAuthorization?: string,
+    accept?: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -2440,6 +2451,7 @@ export class OpenIDConnectServicesService {
   ): Observable<HttpResponse<object>>;
   public postAuthV1Oauth2Userinfo(
     synapseAuthorization?: string,
+    accept?: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -2450,6 +2462,7 @@ export class OpenIDConnectServicesService {
   ): Observable<HttpEvent<object>>;
   public postAuthV1Oauth2Userinfo(
     synapseAuthorization?: string,
+    accept?: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -2461,6 +2474,9 @@ export class OpenIDConnectServicesService {
     let localVarHeaders = this.defaultHeaders;
     if (synapseAuthorization !== undefined && synapseAuthorization !== null) {
       localVarHeaders = localVarHeaders.set('Synapse-Authorization', String(synapseAuthorization));
+    }
+    if (accept !== undefined && accept !== null) {
+      localVarHeaders = localVarHeaders.set('Accept', String(accept));
     }
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
