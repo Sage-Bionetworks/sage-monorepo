@@ -660,6 +660,12 @@
             "in": "header",
             "required": false,
             "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -675,6 +681,12 @@
         "parameters": [
           {
             "name": "Synapse-Authorization",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept",
             "in": "header",
             "required": false,
             "schema": { "type": "string" }
@@ -28427,7 +28439,7 @@
           "allValidationMessages": {
             "type": "array",
             "items": { "type": "string" },
-            "description": "If the object is not valid according to the schema, a the flat list of error messages will be provided with one error message per sub-schema."
+            "description": "If the object is not valid according to the schema, a the flat list of error messages will be provided with one error message per sub-schema. Included only if includeValidationMessages was set to true in the query. Otherwise, this array is omitted to optimize performance."
           }
         },
         "description": "Results of a grid row against a JSON schema"
@@ -32086,6 +32098,10 @@
             "type": "integer",
             "description": "Optional. specifies the offset of the first row to return.",
             "format": "int32"
+          },
+          "includeValidationMessages": {
+            "type": "boolean",
+            "description": "When false, the 'allValidationMessages' array in the response will be omitted to save tokens. Defaults to false."
           }
         },
         "description": "Defines a structured query using JSON SelectItems and Filters objects - NOT SQL syntax. Use the predefined SelectItems and Filters with specific concreteType values."
