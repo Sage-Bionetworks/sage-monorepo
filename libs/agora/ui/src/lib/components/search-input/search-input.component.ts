@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { GeneService, SearchResult } from '@sagebionetworks/agora/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { isEnsemblId, sanitizeSearchQuery } from '@sagebionetworks/agora/util';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
 import { Observable, tap } from 'rxjs';
 
@@ -14,6 +15,8 @@ import { Observable, tap } from 'rxjs';
   styleUrls: ['./search-input.component.scss'],
 })
 export class SearchInputComponent {
+  private readonly logger = inject(LoggerService);
+
   router = inject(Router);
   geneService = inject(GeneService);
   destroyRef = inject(DestroyRef);
@@ -52,6 +55,8 @@ export class SearchInputComponent {
   }
 
   getSearchResults = (query: string): Observable<SearchResult[]> => {
+    this.logger.log(`SearchInputComponent: Searching for "${query}"`);
+
     return this.geneService.searchGeneEnhanced(query).pipe(
       tap((results) => {
         this.getHgncSymbolCounts(results);

@@ -1,4 +1,3 @@
-import { isPlatformServer } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -9,7 +8,6 @@ import {
   inject,
   input,
   output,
-  PLATFORM_ID,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,6 +17,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { DEBOUNCE_TIME_MS } from '@sagebionetworks/explorers/constants';
 import { SearchResult } from '@sagebionetworks/explorers/models';
+import { PlatformService } from '@sagebionetworks/explorers/services';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import {
   catchError,
@@ -41,7 +40,7 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
   standalone: true,
 })
 export class SearchInputComponent implements AfterViewInit {
-  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
+  private readonly platformService = inject(PlatformService);
   router = inject(Router);
   elementRef = inject(ElementRef);
   destroyRef = inject(DestroyRef);
@@ -96,7 +95,7 @@ export class SearchInputComponent implements AfterViewInit {
   input = viewChild.required<ElementRef<HTMLInputElement>>('input');
 
   isServer = computed(() => {
-    return isPlatformServer(this.platformId);
+    return this.platformService.isServer;
   });
 
   @HostListener('document:click', ['$event'])

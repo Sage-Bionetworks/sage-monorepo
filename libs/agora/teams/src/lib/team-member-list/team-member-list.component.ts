@@ -1,5 +1,7 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Team, TeamMember, TeamService } from '@sagebionetworks/agora/api-client';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { map, Observable } from 'rxjs';
 
 @Component({
@@ -9,6 +11,9 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./team-member-list.component.scss'],
 })
 export class TeamMemberListComponent {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
+
   readonly placeholderImagePath = 'agora-assets/images/team-member.svg';
   teamService = inject(TeamService);
 
@@ -31,12 +36,16 @@ export class TeamMemberListComponent {
 
     team.members.forEach((member: TeamMember) => {
       const name = member.name.toLowerCase().replace(/[- ]/g, '-');
-      this.getTeamMemberImageUrl(name).subscribe((url) => {
-        if (!url) {
-          return;
-        }
-        this.images[member.name] = url;
-      });
+      this.logger.log(`TeamMemberListComponent: Loading image for ${name}`);
+
+      this.getTeamMemberImageUrl(name)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((url) => {
+          if (!url) {
+            return;
+          }
+          this.images[member.name] = url;
+        });
     });
 
     this.sort(team.members);

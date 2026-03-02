@@ -40,8 +40,7 @@ export const getGeneRowButtons = async (page: Page, name: string) => {
   await geneName.hover();
 
   const buttons = page.getByRole('cell', { name: name }).getByRole('button');
-  const count = await buttons.count();
-  expect(count).toBe(2);
+  await expect(buttons).toHaveCount(2);
 
   return {
     open: buttons.first(),
@@ -59,12 +58,11 @@ const changeGctDropdown = async (page: Page, current: string, desired: string) =
     });
 
     await test.step('wait for dropdown to stabilize', async () => {
-      // Must wait for the listbox displaying the options to be stable
+      // Must wait for the listbox displaying the options to be visible and stable
       // ...before attempting to click on an option
       // ...otherwise, clicking an option will be flaky and intermittently fail
-      // eslint-disable-next-line playwright/no-element-handle
-      const listbox = await page.$('ul[role=listbox]');
-      await listbox?.waitForElementState('stable');
+      const listbox = page.locator('ul[role=listbox]');
+      await expect(listbox).toBeVisible();
     });
 
     const option = await test.step('select new option', async () => {
@@ -77,6 +75,11 @@ const changeGctDropdown = async (page: Page, current: string, desired: string) =
       await expect(() => {
         expect(page.url()).not.toEqual(url);
       }).toPass({ timeout: 5 * 60 * 1000 });
+    });
+
+    // Wait for the data request triggered by the URL change to complete
+    await test.step('wait for data to load', async () => {
+      await waitForSpinnerNotVisible(page);
     });
 
     // Handle case where listbox doesn't close after page redirects

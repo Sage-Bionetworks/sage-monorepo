@@ -12,11 +12,7 @@ import {
 } from '@sagebionetworks/agora/api-client';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
-import {
-  AppError,
-  ComparisonToolQuery,
-  ComparisonToolViewConfig,
-} from '@sagebionetworks/explorers/models';
+import { ComparisonToolQuery, ComparisonToolViewConfig } from '@sagebionetworks/explorers/models';
 import {
   ComparisonToolUrlService,
   LoggerService,
@@ -37,10 +33,10 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
   private readonly nominatedTargetsService = inject(NominatedTargetService);
   private readonly comparisonToolService = inject(NominatedTargetsComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService);
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -140,6 +136,10 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `NominatedTargetsComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+    );
+
     this.nominatedTargetsService
       .getNominatedTargets(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -150,10 +150,8 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: () => {
-          throw new AppError(
-            'Unable to load unpinned nominated targets data. Please reload the page.',
-            true,
-          );
+          this.comparisonToolService.setUnpinnedData([]);
+          this.comparisonToolService.totalResultsCount.set(0);
         },
       });
   }
@@ -169,6 +167,10 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `NominatedTargetsComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
+    );
+
     this.nominatedTargetsService
       .getNominatedTargets(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -179,10 +181,8 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
-          throw new AppError(
-            'Unable to load pinned nominated targets data. Please reload the page.',
-            true,
-          );
+          this.comparisonToolService.setPinnedData([]);
+          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

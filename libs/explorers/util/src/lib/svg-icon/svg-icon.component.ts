@@ -34,7 +34,9 @@ export class SvgIconComponent implements OnInit {
 
     this.svgService.getSvg(this.imagePath).subscribe({
       next: (svg) => (this.svgContent = svg),
-      error: (error) => console.error('Error loading svg:', error),
+      error: () => {
+        // Handled by httpErrorInterceptor
+      },
     });
   }
 }

@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
-  AppError,
   ComparisonToolQuery,
   ComparisonToolViewConfig,
   HeatmapCircleClickTransformFnContext,
@@ -41,10 +40,10 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
   private readonly geneExpressionService = inject(GeneExpressionService);
   private readonly comparisonToolService = inject(GeneExpressionComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService);
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -183,6 +182,10 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `GeneExpressionComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+    );
+
     this.geneExpressionService
       .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -193,10 +196,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: () => {
-          throw new AppError(
-            'Unable to load unpinned gene expression data. Please reload the page.',
-            true,
-          );
+          this.comparisonToolService.setUnpinnedData([]);
+          this.comparisonToolService.totalResultsCount.set(0);
         },
       });
   }
@@ -213,6 +214,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(`GeneExpressionComparisonToolComponent: pinned query ${JSON.stringify(query)}`);
+
     this.geneExpressionService
       .getGeneExpressions(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -223,10 +226,8 @@ export class GeneExpressionComparisonToolComponent implements OnInit, OnDestroy 
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
-          throw new AppError(
-            'Unable to load pinned gene expression data. Please reload the page.',
-            true,
-          );
+          this.comparisonToolService.setPinnedData([]);
+          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

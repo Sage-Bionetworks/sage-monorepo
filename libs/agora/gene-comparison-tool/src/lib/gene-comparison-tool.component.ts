@@ -2,12 +2,14 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   inject,
   OnDestroy,
   OnInit,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   DistributionService,
@@ -25,7 +27,10 @@ import {
 } from '@sagebionetworks/agora/models';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { HelperService as ExplorersHelperService } from '@sagebionetworks/explorers/services';
+import {
+  HelperService as ExplorersHelperService,
+  LoggerService,
+} from '@sagebionetworks/explorers/services';
 import { cloneDeep } from 'lodash';
 import { FilterService, MessageService, SortEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -83,6 +88,9 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
   encapsulation: ViewEncapsulation.None,
 })
 export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
+
   router = inject(Router);
   route = inject(ActivatedRoute);
   geneService = inject(GeneService);
@@ -263,25 +271,31 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.genes = [];
     this.pinnedItems = [];
 
+    this.logger.log(
+      `GeneComparisonToolComponent: Loading genes for ${this.category} / ${this.subCategory}`,
+    );
+
     const genesApi$ = this.geneService.getComparisonGenes(this.category, this.subCategory);
     const distributionApi$ = this.distributionService.getDistribution();
 
-    combineLatest([genesApi$, distributionApi$]).subscribe({
-      next: ([genesResult, distributionResult]) => {
-        if (genesResult.items) {
-          this.initData(genesResult.items);
-          this.sortTable(this.headerTable);
-          this.refresh();
+    combineLatest([genesApi$, distributionApi$])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ([genesResult, distributionResult]) => {
+          if (genesResult.items) {
+            this.initData(genesResult.items);
+            this.sortTable(this.headerTable);
+            this.refresh();
 
-          this.scoresDistribution = distributionResult.overall_scores;
+            this.scoresDistribution = distributionResult.overall_scores;
 
+            this.isLoading = false;
+          }
+        },
+        error: () => {
           this.isLoading = false;
-        }
-      },
-      error: () => {
-        this.isLoading = false;
-      },
-    });
+        },
+      });
   }
 
   getGeneProperty(gene: GCTGene, property: string) {

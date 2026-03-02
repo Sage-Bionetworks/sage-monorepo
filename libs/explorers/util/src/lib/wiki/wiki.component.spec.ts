@@ -86,7 +86,7 @@ describe('WikiComponent', () => {
 
       await waitFor(() => {
         expect(component.isLoading()).toBe(false);
-        expect(component.safeHtml).toBe('<div class="wiki-no-data">No data found...</div>');
+        expect(component.safeHtml).toBe('No data found, please try again later.');
       });
     });
   });

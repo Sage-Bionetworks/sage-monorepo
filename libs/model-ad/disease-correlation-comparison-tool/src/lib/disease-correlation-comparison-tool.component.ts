@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
-  AppError,
   ComparisonToolQuery,
   ComparisonToolViewConfig,
   HeatmapCircleClickTransformFnContext,
@@ -41,10 +40,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
   private readonly comparisonToolConfigService = inject(ComparisonToolConfigService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
   private readonly diseaseCorrelationService = inject(DiseaseCorrelationService);
   private readonly comparisonToolService = inject(DiseaseCorrelationComparisonToolService);
   private readonly comparisonToolUrlService = inject(ComparisonToolUrlService);
+  private readonly logger = inject(LoggerService);
 
   isInitialized = this.comparisonToolService.isInitialized;
   query = this.comparisonToolService.query;
@@ -175,6 +174,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `DiseaseCorrelationComparisonToolComponent: unpinned query ${JSON.stringify(query)}`,
+    );
+
     this.diseaseCorrelationService
       .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -185,10 +188,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
           this.comparisonToolService.totalResultsCount.set(response.page.totalElements);
         },
         error: () => {
-          throw new AppError(
-            'Unable to load unpinned disease correlation data. Please reload the page.',
-            true,
-          );
+          this.comparisonToolService.setUnpinnedData([]);
+          this.comparisonToolService.totalResultsCount.set(0);
         },
       });
   }
@@ -205,6 +206,10 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
     };
 
     this.comparisonToolService.startFetch();
+    this.logger.log(
+      `DiseaseCorrelationComparisonToolComponent: pinned query ${JSON.stringify(query)}`,
+    );
+
     this.diseaseCorrelationService
       .getDiseaseCorrelations(query)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -215,10 +220,8 @@ export class DiseaseCorrelationComparisonToolComponent implements OnInit, OnDest
           this.comparisonToolService.pinnedResultsCount.set(data.length);
         },
         error: () => {
-          throw new AppError(
-            'Unable to load pinned disease correlation data. Please reload the page.',
-            true,
-          );
+          this.comparisonToolService.setPinnedData([]);
+          this.comparisonToolService.pinnedResultsCount.set(0);
         },
       });
   }

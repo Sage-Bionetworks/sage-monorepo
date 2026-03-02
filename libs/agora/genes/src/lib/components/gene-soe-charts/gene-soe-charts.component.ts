@@ -1,4 +1,5 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import {
   Distribution,
@@ -7,6 +8,7 @@ import {
   OverallScoresDistribution,
 } from '@sagebionetworks/agora/api-client';
 import { ScoreBarChartComponent } from '@sagebionetworks/agora/charts';
+import { LoggerService } from '@sagebionetworks/explorers/services';
 import { PopoverLinkComponent } from '@sagebionetworks/explorers/util';
 
 export interface SOEChartProps {
@@ -26,6 +28,9 @@ export interface SOEChartProps {
   styleUrls: ['./gene-soe-charts.component.scss'],
 })
 export class GeneSoeChartsComponent {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
+
   distributionService = inject(DistributionService);
 
   _gene: Gene | undefined;
@@ -67,14 +72,19 @@ export class GeneSoeChartsComponent {
   }
 
   init() {
-    this.distributionService.getDistribution().subscribe((data: Distribution) => {
-      this.scoreDistributions = data.overall_scores;
-      this.customSortDistributions(this.scoreDistributions);
-      // remove literature score
-      this.scoreDistributions = this.scoreDistributions.filter(
-        (item: any) => item.name !== 'Literature Score',
-      );
-    });
+    this.logger.log('GeneSoeChartsComponent: Loading score distributions');
+
+    this.distributionService
+      .getDistribution()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data: Distribution) => {
+        this.scoreDistributions = data.overall_scores;
+        this.customSortDistributions(this.scoreDistributions);
+        // remove literature score
+        this.scoreDistributions = this.scoreDistributions.filter(
+          (item: any) => item.name !== 'Literature Score',
+        );
+      });
   }
 
   getBarColor(chartName: string | undefined) {

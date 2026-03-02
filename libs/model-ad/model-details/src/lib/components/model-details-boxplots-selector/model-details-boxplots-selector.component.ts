@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { HelperService } from '@sagebionetworks/explorers/services';
+import { HelperService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   DownloadDomImageComponent,
   DownloadDomImagesZipComponent,
@@ -49,6 +49,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
   private readonly helperService = inject(HelperService);
   private readonly location = inject(Location);
   private readonly clipboard = inject(Clipboard);
+  private readonly platformService = inject(PlatformService);
 
   readonly BOXPLOT_DOWNLOAD_IMAGE_PADDING_PX = 20;
 
@@ -121,11 +122,15 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy 
 
   ngOnInit(): void {
     this.initializeOptionsFromUrlParams();
-    window.addEventListener('popstate', this.onPopState);
+    if (this.platformService.isBrowser) {
+      window.addEventListener('popstate', this.onPopState);
+    }
   }
 
   ngOnDestroy(): void {
-    window.removeEventListener('popstate', this.onPopState);
+    if (this.platformService.isBrowser) {
+      window.removeEventListener('popstate', this.onPopState);
+    }
   }
 
   selectedModelDataList = computed(() => {

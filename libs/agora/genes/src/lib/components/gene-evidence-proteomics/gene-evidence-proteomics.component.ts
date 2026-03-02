@@ -1,4 +1,5 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import {
   DistributionService,
@@ -9,7 +10,10 @@ import {
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { BoxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
-import { HelperService as ExplorersHelperService } from '@sagebionetworks/explorers/services';
+import {
+  HelperService as ExplorersHelperService,
+  LoggerService,
+} from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-protein-selector.component';
@@ -26,6 +30,9 @@ import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-prot
   styleUrls: ['./gene-evidence-proteomics.component.scss'],
 })
 export class GeneEvidenceProteomicsComponent {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
+
   explorersHelperService = inject(ExplorersHelperService);
   distributionService = inject(DistributionService);
 
@@ -136,74 +143,89 @@ export class GeneEvidenceProteomicsComponent {
 
   initSRM() {
     this.resetSRM();
-    this.distributionService.getDistribution().subscribe((data) => {
-      const distribution = data.proteomics_SRM;
-      const differentialExpression = this._gene?.proteomics_SRM || [];
-      const proteomicData: BoxPlotChartItem[] = [];
+    this.logger.log('GeneEvidenceProteomicsComponent: Loading SRM distribution');
 
-      differentialExpression.forEach((item) => {
-        const data = distribution.find((d) => {
-          return d.tissue === item.tissue;
+    this.distributionService
+      .getDistribution()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        const distribution = data.proteomics_SRM;
+        const differentialExpression = this._gene?.proteomics_SRM || [];
+        const proteomicData: BoxPlotChartItem[] = [];
+
+        differentialExpression.forEach((item) => {
+          const data = distribution.find((d) => {
+            return d.tissue === item.tissue;
+          });
+
+          if (data) {
+            if (!this.SRMRange) this.SRMRange = new ChartRange(data.min, data.max);
+            this.processDifferentialExpressionData(item, data, this.SRMRange, proteomicData);
+          }
         });
 
-        if (data) {
-          if (!this.SRMRange) this.SRMRange = new ChartRange(data.min, data.max);
-          this.processDifferentialExpressionData(item, data, this.SRMRange, proteomicData);
-        }
+        this.SRMData = proteomicData;
       });
-
-      this.SRMData = proteomicData;
-    });
   }
 
   initLFQ() {
     this.resetLFQ();
-    this.distributionService.getDistribution().subscribe((data) => {
-      const distribution = data.proteomics_LFQ;
-      const differentialExpression =
-        this._gene?.proteomics_LFQ?.filter((item) => {
-          return item.uniprotid === this.selectedUniProtId;
-        }) || [];
-      const proteomicData: BoxPlotChartItem[] = [];
+    this.logger.log('GeneEvidenceProteomicsComponent: Loading LFQ distribution');
 
-      differentialExpression.forEach((item) => {
-        const data = distribution.find((d) => {
-          return d.tissue === item.tissue;
+    this.distributionService
+      .getDistribution()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        const distribution = data.proteomics_LFQ;
+        const differentialExpression =
+          this._gene?.proteomics_LFQ?.filter((item) => {
+            return item.uniprotid === this.selectedUniProtId;
+          }) || [];
+        const proteomicData: BoxPlotChartItem[] = [];
+
+        differentialExpression.forEach((item) => {
+          const data = distribution.find((d) => {
+            return d.tissue === item.tissue;
+          });
+
+          if (data) {
+            if (!this.LFQRange) this.LFQRange = new ChartRange(data.min, data.max);
+            this.processDifferentialExpressionData(item, data, this.LFQRange, proteomicData);
+          }
         });
 
-        if (data) {
-          if (!this.LFQRange) this.LFQRange = new ChartRange(data.min, data.max);
-          this.processDifferentialExpressionData(item, data, this.LFQRange, proteomicData);
-        }
+        this.LFQData = proteomicData;
       });
-
-      this.LFQData = proteomicData;
-    });
   }
 
   initTMT() {
     this.resetTMT();
-    this.distributionService.getDistribution().subscribe((data) => {
-      const distribution = data.proteomics_TMT;
-      const differentialExpression =
-        this._gene?.proteomics_TMT?.filter((item) => {
-          return item.uniprotid === this.selectedUniProtId;
-        }) || [];
-      const proteomicData: BoxPlotChartItem[] = [];
+    this.logger.log('GeneEvidenceProteomicsComponent: Loading TMT distribution');
 
-      differentialExpression.forEach((item) => {
-        const data = distribution.find((d) => {
-          return d.tissue === item.tissue;
+    this.distributionService
+      .getDistribution()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        const distribution = data.proteomics_TMT;
+        const differentialExpression =
+          this._gene?.proteomics_TMT?.filter((item) => {
+            return item.uniprotid === this.selectedUniProtId;
+          }) || [];
+        const proteomicData: BoxPlotChartItem[] = [];
+
+        differentialExpression.forEach((item) => {
+          const data = distribution.find((d) => {
+            return d.tissue === item.tissue;
+          });
+
+          if (data) {
+            if (!this.TMTRange) this.TMTRange = new ChartRange(data.min, data.max);
+            this.processDifferentialExpressionData(item, data, this.TMTRange, proteomicData);
+          }
         });
 
-        if (data) {
-          if (!this.TMTRange) this.TMTRange = new ChartRange(data.min, data.max);
-          this.processDifferentialExpressionData(item, data, this.TMTRange, proteomicData);
-        }
+        this.TMTData = proteomicData;
       });
-
-      this.TMTData = proteomicData;
-    });
   }
 
   onProteinChange(event: any) {

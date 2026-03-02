@@ -55,8 +55,8 @@ export class TermsOfServiceComponent implements OnInit {
           next: (markdown) => {
             this.content = markdown;
           },
-          error: (error) => {
-            console.error('Error loading terms of service:', error);
+          error: () => {
+            // Handled by httpErrorInterceptor
           },
         });
     }

@@ -14,7 +14,7 @@
   <p-popover #popover>
     <div class="popover-link-content">
       @if (isActive) {
-        <explorers-wiki [wikiParams]="wikiParams()" />
+        <explorers-wiki [wikiParams]="wikiParams()" [suppressErrorOverlay]="true" />
       }
     </div>
   </p-popover>

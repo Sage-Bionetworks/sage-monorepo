@@ -1,4 +1,3 @@
-export * from './lib/app-error';
 export * from './lib/comparison-tool';
 export * from './lib/loading-icon-colors';
 export * from './lib/navigation-link';

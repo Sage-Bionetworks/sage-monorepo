@@ -10,6 +10,7 @@ export * from './lib/comparison-tool.service.providers';
 export * from './lib/explorers-app-config.service';
 export * from './lib/github.service';
 export * from './lib/helper.service';
+export * from './lib/http-context-tokens';
 export * from './lib/logger.service';
 export * from './lib/meta-tag.service';
 export * from './lib/error-overlay.service';
