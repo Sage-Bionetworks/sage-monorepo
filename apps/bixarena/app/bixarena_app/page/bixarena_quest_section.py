@@ -90,7 +90,7 @@ QUEST_CONFIG = {
                 "I did not yet know who it was for.\n\n"
                 "That answer came later, when a black cat appeared at the edge of the cleared ground, drawn by the scent of fish at my belt. I set a piece down. The cat ate, then sat and regarded me with the calm of a creature that had already made up its mind. I took the name tag to the anvil and inscribed it: Dvoelkl. It had the feeling of someone who shows up, does the work, and asks for nothing in return. I fastened the tag, and a red collar appeared around its neck, as though the world itself had decided to make it official.\n\n"
                 "The wall is rising. The furnace is running. And it seems I have company now.\n\n"
-                "Before long, I expect a visitor, someone who reads landscapes the way I read stone. Together, we may finally see this place whole."
+                "Before long, I expect a visitor. Someone who reads landscapes the way I read stone. For the first time, this place may find itself on a map."
             ),
             "images": [
                 "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-1.jpg",
