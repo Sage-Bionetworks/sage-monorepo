@@ -86,14 +86,13 @@ QUEST_CONFIG = {
                 "Before long, I expect a visitor, someone who reads landscapes the way I read stone. Together, we may finally see this place whole."
             ),
             "images": [
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-1.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-2.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-3.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-4.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-5.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-6.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-7.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-8.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-1.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-2.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-3.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-4.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-5.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-6.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-7.jpg",
             ],
         },
         {
