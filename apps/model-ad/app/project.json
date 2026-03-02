@@ -5,7 +5,7 @@
   "prefix": "app",
   "sourceRoot": "apps/model-ad/app/src",
   "tags": [],
-  "implicitDependencies": ["model-ad-styles", "model-ad-themes", "shared-typescript-assets"],
+  "implicitDependencies": ["model-ad-styles", "shared-typescript-assets"],
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",

@@ -10,7 +10,7 @@ import {
   NominatedTargetService,
   NominatedTargetsPage,
 } from '@sagebionetworks/agora/api-client';
-import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID, ROUTE_PATHS } from '@sagebionetworks/agora/config';
 import { ComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tool';
 import {
   AppError,
@@ -57,7 +57,7 @@ export class NominatedTargetsComparisonToolComponent implements OnInit, OnDestro
 
   viewConfig: Partial<ComparisonToolViewConfig> = {
     headerTitle: ComparisonToolConfigPage.NominatedTargets,
-    headerTitleWikiParams: { ownerId: 'syn25913473', wikiId: '639222' },
+    headerTitleWikiParams: { ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID, wikiId: '639222' },
     filterResultsButtonTooltip:
       'Filter results by Nominating Team, Program, Pharos Class, and more',
     showSignificanceControls: false,

@@ -84,45 +84,6 @@ export class HelperService {
     }
   }
 
-  getScrollTop() {
-    if (typeof window === 'undefined' || typeof document == 'undefined') {
-      return { x: 0, y: 0 };
-    }
-
-    const supportPageOffset = window.pageXOffset !== undefined;
-    const isCSS1Compat = (document.compatMode || '') === 'CSS1Compat';
-
-    if (supportPageOffset) {
-      return {
-        x: window.pageXOffset,
-        y: window.pageYOffset,
-      };
-    } else if (isCSS1Compat) {
-      return {
-        x: document.documentElement.scrollLeft,
-        y: document.documentElement.scrollTop,
-      };
-    } else {
-      return {
-        x: document.body.scrollLeft,
-        y: document.body.scrollTop,
-      };
-    }
-  }
-
-  getOffset(el: any) {
-    if (typeof window === 'undefined' || typeof document === 'undefined' || !el) {
-      return { top: 0, left: 0 };
-    }
-
-    const rect = el.getBoundingClientRect();
-    const scroll = this.getScrollTop();
-    return {
-      top: rect.top + scroll.y,
-      left: rect.left + scroll.x,
-    };
-  }
-
   roundNumberAsString(num: string, fixed: number): string {
     const n = parseFloat(num);
     return this.roundNumber(n, fixed);
@@ -135,20 +96,6 @@ export class HelperService {
     const paddedResult = roundedResult.toFixed(decimalPlaces);
     // return as string
     return paddedResult.toString();
-  }
-
-  getSignificantFigures(n: number, sig = 2) {
-    let sign = 1;
-    if (n === 0) {
-      return 0;
-    }
-    if (n < 0) {
-      n *= -1;
-      sign = -1;
-    }
-
-    const mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
-    return (Math.round(n * mult) / mult) * sign;
   }
 
   setGCTSelection(genes: string[]) {
@@ -169,14 +116,6 @@ export class HelperService {
     if (name === 'tertiary') return '#42c7bb';
     if (name === 'action-primary') return '#5081a7';
     return '';
-  }
-
-  getUrlParam(name: string) {
-    if (typeof window === 'undefined') return null;
-
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    return urlParams.get(name);
   }
 
   addSingleUrlParam(url: string, paramName: string, paramValue: string | number | boolean) {

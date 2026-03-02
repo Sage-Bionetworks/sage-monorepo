@@ -9,7 +9,8 @@ import {
 import { OverallScoresDistribution } from '@sagebionetworks/agora/api-client';
 import { ScoreBarChartComponent } from '@sagebionetworks/agora/charts';
 import { GCTScorePanelData } from '@sagebionetworks/agora/models';
-import { WikiComponent } from '@sagebionetworks/agora/shared';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { WikiComponent } from '@sagebionetworks/explorers/util';
 import { Popover, PopoverModule } from 'primeng/popover';
 import * as helpers from '../../gene-comparison-tool.helpers';
 
@@ -34,6 +35,13 @@ export class GeneComparisonToolScorePanelComponent {
   @ViewChild('popover') popover!: Popover;
 
   scoreDistribution: OverallScoresDistribution | undefined;
+
+  get wikiParams(): SynapseWikiParams | undefined {
+    if (this.scoreDistribution?.syn_id && this.scoreDistribution?.wiki_id) {
+      return { ownerId: this.scoreDistribution.syn_id, wikiId: this.scoreDistribution.wiki_id };
+    }
+    return undefined;
+  }
 
   getValuePosition(data: any) {
     const percentage = Math.round(((data.value - data.min) / (data.max - data.min)) * 100);

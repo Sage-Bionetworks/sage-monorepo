@@ -1,9 +1,11 @@
 import { Route } from '@angular/router';
 import {
   DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+  DEFAULT_SYNAPSE_WIKI_OWNER_ID,
   ROUTE_PATHS,
   SUPPORT_EMAIL,
 } from '@sagebionetworks/agora/config';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
 export const routes: Route[] = [
   {
@@ -17,19 +19,35 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.ABOUT,
-    loadChildren: () => import('@sagebionetworks/agora/about').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
       title: 'About Agora',
       description:
         'Agora is funded by the National Institute on Aging, and is developed and maintained by Sage Bionetworks.',
+      heroTitle: 'About',
+      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+      className: 'about-page-content',
+      wikiParams: {
+        ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
+        wikiId: '612058',
+      } as SynapseWikiParams,
     },
   },
   {
     path: ROUTE_PATHS.NEWS,
-    loadChildren: () => import('@sagebionetworks/agora/news').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
       title: 'News | Agora Releases',
       description: "See what's new in Agora, from new features to our latest data updates.",
+      heroTitle: 'Agora News',
+      heroBackgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
+      className: 'news-page-content',
+      wikiParams: {
+        ownerId: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
+        wikiId: '611426',
+      } as SynapseWikiParams,
     },
   },
   {
@@ -44,11 +62,25 @@ export const routes: Route[] = [
   },
   {
     path: ROUTE_PATHS.NOMINATED_DRUGS,
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/agora/nominated-drugs-comparison-tool').then(
+        (routes) => routes.routes,
+      ),
     data: {
       title: "Nominated Drugs | Candidate drugs for Alzheimer's Disease treatment or prevention",
       description:
         "Explore a list of potential Alzheimer's Disease therapeutic agents that researchers have identified using integrated computational and experimental approaches.",
+    },
+  },
+  {
+    path: `${ROUTE_PATHS.DRUG_DETAILS}/:chembl_id`,
+    // TODO (AG-1970): replace not-found with drug detail page
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
+    data: {
+      title: 'Agora | Drug Details',
+      description:
+        "View information and evidence about potential therapeutic agents for Alzheimer's disease.",
     },
   },
   {
@@ -139,14 +171,19 @@ export const routes: Route[] = [
       title: 'Agora | Error',
       description: 'Error Page',
       supportEmail: SUPPORT_EMAIL,
+      backgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {
     path: ROUTE_PATHS.NOT_FOUND,
-    loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
     data: {
-      title: 'Agora | Page not found',
-      description: '',
+      title: 'Agora | Page Not Found',
+      description:
+        "Explore transcriptomic, proteomic, and metabolomic evidence for whether or not genes are associated with Alzheimer's disease using the Agora portal.",
+      supportEmail: SUPPORT_EMAIL,
+      backgroundImagePath: DEFAULT_HERO_BACKGROUND_IMAGE_PATH,
     },
   },
   {

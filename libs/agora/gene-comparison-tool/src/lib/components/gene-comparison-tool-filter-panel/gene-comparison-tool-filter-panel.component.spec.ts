@@ -2,8 +2,10 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
-import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
-import { gctFiltersMocks, SvgIconServiceStub } from '@sagebionetworks/agora/testing';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { gctFiltersMocks } from '@sagebionetworks/agora/testing';
+import { SvgIconService } from '@sagebionetworks/explorers/services';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { GeneComparisonToolFilterPanelComponent } from './gene-comparison-tool-filter-panel.component';
 
 describe('Component: Gene Comparison Tool - Filter Panel', () => {

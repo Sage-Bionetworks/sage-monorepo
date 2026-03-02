@@ -2,13 +2,10 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { GeneService } from '@sagebionetworks/agora/api-client';
-import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
-import {
-  geneMock1,
-  geneMock2,
-  geneMock3,
-  SvgIconServiceStub,
-} from '@sagebionetworks/agora/testing';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { geneMock1, geneMock2, geneMock3 } from '@sagebionetworks/agora/testing';
+import { SvgIconService } from '@sagebionetworks/explorers/services';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { GeneSimilarComponent } from './gene-similar.component';
 
 // -------------------------------------------------------------------------- //

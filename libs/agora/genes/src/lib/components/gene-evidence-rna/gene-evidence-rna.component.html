@@ -9,14 +9,13 @@
             post-mortem brains from AD cases and controls. The samples were obtained from three
             human cohort studies across a total of nine different brain regions.
           </p>
-          <agora-modal-link
+          <explorers-modal-link
             text="Data and Methods"
             title="About the RNAseq Analysis"
-            wikiId="618276"
+            [wikiParams]="{ ownerId: defaultSynapseWikiOwnerId, wikiId: '618276' }"
             [iconWidth]="16"
             [iconHeight]="16"
-          >
-          </agora-modal-link>
+          />
 
           <hr class="separator separator-md" />
 
@@ -57,14 +56,13 @@
         <div class="container-sm">
           <h2 class="text-default mb-sm">
             Filter the following charts by statistical model
-            <agora-modal-link
+            <explorers-modal-link
               text=""
               title="Statistical Models"
-              wikiId="612816"
+              [wikiParams]="{ ownerId: defaultSynapseWikiOwnerId, wikiId: '612816' }"
               [iconWidth]="16"
               [iconHeight]="16"
-            >
-            </agora-modal-link>
+            />
           </h2>
           <agora-gene-model-selector
             [options]="statisticalModels"
@@ -163,14 +161,13 @@
             ></explorers-download-dom-image>
           </h3>
           <div class="mb-md">
-            <agora-modal-link
+            <explorers-modal-link
               text="View more information"
               title="About the Association with Neuropathology and Cognition"
-              wikiId="612817"
+              [wikiParams]="{ ownerId: defaultSynapseWikiOwnerId, wikiId: '612817' }"
               [iconWidth]="16"
               [iconHeight]="16"
-            >
-            </agora-modal-link>
+            />
           </div>
           <p class="mb-0">
             This plot depicts the association between expression levels of the selected gene in the

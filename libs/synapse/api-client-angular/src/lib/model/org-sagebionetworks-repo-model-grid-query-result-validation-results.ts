@@ -21,7 +21,7 @@ export interface OrgSagebionetworksRepoModelGridQueryResultValidationResults {
    */
   validationErrorMessage?: string;
   /**
-   * If the object is not valid according to the schema, a the flat list of error messages will be provided with one error message per sub-schema.
+   * If the object is not valid according to the schema, a the flat list of error messages will be provided with one error message per sub-schema. Included only if includeValidationMessages was set to true in the query. Otherwise, this array is omitted to optimize performance.
    */
   allValidationMessages?: Array<string>;
 }

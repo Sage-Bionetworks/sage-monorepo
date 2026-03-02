@@ -2,8 +2,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
-import { SvgIconService } from '@sagebionetworks/agora/services';
-import { SvgIconServiceStub } from '@sagebionetworks/agora/testing';
+import { AGORA_LOADING_ICON_COLORS } from '@sagebionetworks/agora/config';
+import { SvgIconService } from '@sagebionetworks/explorers/services';
+import { SvgIconServiceStub, provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
 import { GeneComparisonToolComponent } from './gene-comparison-tool.component';
 
@@ -19,6 +20,7 @@ describe('GeneComparisonToolComponent', () => {
         provideHttpClient(),
         MessageService,
         { provide: SvgIconService, useClass: SvgIconServiceStub },
+        ...provideLoadingIconColors(AGORA_LOADING_ICON_COLORS),
       ],
     }).compileComponents();
 

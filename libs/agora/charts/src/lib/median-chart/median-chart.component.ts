@@ -12,6 +12,7 @@ import * as dc from 'dc';
 // -------------------------------------------------------------------------- //
 import { MedianExpression } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { HelperService as ExplorersHelperService } from '@sagebionetworks/explorers/services';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 // -------------------------------------------------------------------------- //
@@ -25,6 +26,7 @@ import { BaseChartComponent } from '../base-chart/base-chart.component';
 })
 export class MedianChartComponent extends BaseChartComponent {
   helperService = inject(HelperService);
+  explorersHelperService = inject(ExplorersHelperService);
 
   _data: MedianExpression[] = [];
   get data() {
@@ -58,7 +60,7 @@ export class MedianChartComponent extends BaseChartComponent {
     this.dimension = ndx.dimension((d: any) => d.tissue);
     this.group = this.dimension
       .group()
-      .reduceSum((d: any) => this.helperService.getSignificantFigures(d.median));
+      .reduceSum((d: any) => this.explorersHelperService.getSignificantFigures(d.median));
   }
 
   initChart() {

@@ -7,6 +7,7 @@ import * as dc from 'dc';
 
 import { RowChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { HelperService as ExplorersHelperService } from '@sagebionetworks/explorers/services';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 // Using a d3 v4 function to get all nodes
@@ -27,6 +28,7 @@ d3.selection.prototype['nodes'] = function () {
 })
 export class RowChartComponent extends BaseChartComponent {
   helperService = inject(HelperService);
+  explorersHelperService = inject(ExplorersHelperService);
 
   _data: RowChartItem[] = [];
   get data(): RowChartItem[] {
@@ -92,7 +94,7 @@ export class RowChartComponent extends BaseChartComponent {
       .gap(4)
       .title(false)
       .valueAccessor((d: any) => {
-        return self.helperService.getSignificantFigures(+d.value.logfc, 3);
+        return self.explorersHelperService.getSignificantFigures(+d.value.logfc, 3);
       })
       .keyAccessor((d: any) => {
         return d.key[0];
@@ -489,7 +491,7 @@ export class RowChartComponent extends BaseChartComponent {
 
   // Compares the current value from a group to the gene expected value
   compareAttributeValue(cValue: number, gValue: number): boolean {
-    return this.helperService.getSignificantFigures(cValue) === gValue;
+    return this.explorersHelperService.getSignificantFigures(cValue) === gValue;
   }
 
   // Changes the chart row rects into squares of the square size
@@ -523,8 +525,8 @@ export class RowChartComponent extends BaseChartComponent {
 
       circle
         .on('mouseover', function (event: any, d: any) {
-          const offset = self.helperService.getOffset(this);
-          const text = `Log Fold Change: ${self.helperService.getSignificantFigures(
+          const offset = self.explorersHelperService.getOffset(this);
+          const text = `Log Fold Change: ${self.explorersHelperService.getSignificantFigures(
             +d.value.logfc,
             3,
           )}`;

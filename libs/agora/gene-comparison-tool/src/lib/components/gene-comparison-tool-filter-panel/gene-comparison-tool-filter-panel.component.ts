@@ -5,7 +5,7 @@ import { GCTFilter } from '@sagebionetworks/agora/models';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { TooltipModule } from 'primeng/tooltip';
-import { SvgIconComponent } from '@sagebionetworks/agora/shared';
+import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'agora-gene-comparison-tool-filter-panel',

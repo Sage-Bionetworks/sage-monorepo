@@ -1,4 +1,5 @@
 import { Distribution, OverallScoresDistribution } from '@sagebionetworks/agora/api-client';
+import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 
 export const distributionMock: Distribution = {
   rna_differential_expression: [
@@ -460,7 +461,7 @@ export const distributionMock: Distribution = {
       first_quartile: 1,
       third_quartile: 2,
       name: 'Genetics Score',
-      syn_id: 'syn25913473',
+      syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
       wiki_id: '613104',
     },
     {
@@ -483,7 +484,7 @@ export const distributionMock: Distribution = {
       first_quartile: 0,
       third_quartile: 1,
       name: 'Genomics Score',
-      syn_id: 'syn25913473',
+      syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
       wiki_id: '613106',
     },
     {
@@ -506,7 +507,7 @@ export const distributionMock: Distribution = {
       first_quartile: 0,
       third_quartile: 1,
       name: 'Literature Score',
-      syn_id: 'syn25913473',
+      syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
       wiki_id: '613105',
     },
     {
@@ -529,7 +530,7 @@ export const distributionMock: Distribution = {
       first_quartile: 1,
       third_quartile: 3,
       name: 'Overall Score',
-      syn_id: 'syn25913473',
+      syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
       wiki_id: '613107',
     },
   ],
@@ -556,7 +557,7 @@ export const overallScoresMock1: OverallScoresDistribution[] = [
     first_quartile: 1,
     third_quartile: 3,
     name: 'Target Risk Score',
-    syn_id: 'syn25913473',
+    syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
     wiki_id: '621071',
   },
   {
@@ -579,7 +580,7 @@ export const overallScoresMock1: OverallScoresDistribution[] = [
     first_quartile: 1,
     third_quartile: 2,
     name: 'Genetic Risk Score',
-    syn_id: 'syn25913473',
+    syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
     wiki_id: '621069',
   },
   {
@@ -602,7 +603,7 @@ export const overallScoresMock1: OverallScoresDistribution[] = [
     first_quartile: 0,
     third_quartile: 1,
     name: 'Multi-omic Risk Score',
-    syn_id: 'syn25913473',
+    syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
     wiki_id: '621070',
   },
   {
@@ -625,7 +626,7 @@ export const overallScoresMock1: OverallScoresDistribution[] = [
     first_quartile: 0,
     third_quartile: 1,
     name: 'Literature Score',
-    syn_id: 'syn25913473',
+    syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
     wiki_id: '613105',
   },
 ];
@@ -651,7 +652,7 @@ export const overallScoresMock2: OverallScoresDistribution[] = [
     first_quartile: 1,
     third_quartile: 2,
     name: 'Genetic Risk Score',
-    syn_id: 'syn25913473',
+    syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
     wiki_id: '621069',
   },
   {
@@ -674,7 +675,7 @@ export const overallScoresMock2: OverallScoresDistribution[] = [
     first_quartile: 1,
     third_quartile: 3,
     name: 'Target Risk Score',
-    syn_id: 'syn25913473',
+    syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
     wiki_id: '621071',
   },
   {
@@ -697,7 +698,7 @@ export const overallScoresMock2: OverallScoresDistribution[] = [
     first_quartile: 0,
     third_quartile: 1,
     name: 'Literature Score',
-    syn_id: 'syn25913473',
+    syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
     wiki_id: '613105',
   },
   {
@@ -720,7 +721,7 @@ export const overallScoresMock2: OverallScoresDistribution[] = [
     first_quartile: 0,
     third_quartile: 1,
     name: 'Multi-omic Risk Score',
-    syn_id: 'syn25913473',
+    syn_id: DEFAULT_SYNAPSE_WIKI_OWNER_ID,
     wiki_id: '621070',
   },
 ];

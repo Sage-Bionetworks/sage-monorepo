@@ -1,5 +1,0 @@
-@use 'model-ad/not-found/src/lib-theme' as model-ad-not-found;
-
-@mixin theme($theme) {
-  @include model-ad-not-found.theme($theme);
-}

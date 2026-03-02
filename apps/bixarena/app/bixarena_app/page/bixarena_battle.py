@@ -25,6 +25,7 @@ from bixarena_app.auth.request_auth import get_session_cookie
 from bixarena_app.config.constants import (
     BATTLE_ROUND_LIMIT,
     PROMPT_LEN_LIMIT,
+    PROMPT_USE_LIMIT,
 )
 from bixarena_app.config.conversation import create_system_message_html
 from bixarena_app.model import model_response
@@ -224,10 +225,37 @@ def vote_last_response(
         "primary" if outcome == BattleEvaluationOutcome.MODEL2 else "secondary"
     )
 
-    names = (
-        f'<div class="model-name-footer">{states[0].model_name}</div>',
-        f'<div class="model-name-footer">{states[1].model_name}</div>',
+    left_winner = outcome in (
+        BattleEvaluationOutcome.MODEL1,
+        BattleEvaluationOutcome.TIE,
     )
+    right_winner = outcome in (
+        BattleEvaluationOutcome.MODEL2,
+        BattleEvaluationOutcome.TIE,
+    )
+    left_cls = "model-name-footer winner" if left_winner else "model-name-footer"
+    right_cls = "model-name-footer winner" if right_winner else "model-name-footer"
+    names = (
+        f'<div class="{left_cls}">{states[0].model_name}</div>',
+        f'<div class="{right_cls}">{states[1].model_name}</div>',
+    )
+    # Decrement prompt use counter after a successful vote
+    battle_session.prompt_use_remaining = max(
+        0, battle_session.prompt_use_remaining - 1
+    )
+
+    # Determine "New Battle Same Prompt" button state
+    can_reuse = (
+        battle_session.last_prompt is not None
+        and battle_session.prompt_use_remaining > 0
+    )
+    new_battle_same_prompt_upd = gr.Button(
+        value=f"New Battle\nSame Prompt ({battle_session.prompt_use_remaining} left)",
+        variant="primary",
+        visible=can_reuse,
+        interactive=can_reuse,
+    )
+
     yield (
         names  # model_selector0, model_selector1: reveal model names
         + (
@@ -243,6 +271,12 @@ def vote_last_response(
         + (gr.HTML(visible=False),)  # page_header: hide
         + (gr.Row(visible=False),)  # textbox_row: hide
         + (gr.HTML(visible=False),)  # disclaimer: hide
+        + (
+            new_battle_same_prompt_upd,
+        )  # new_battle_same_prompt_btn: show/hide based on reuse count
+        + (
+            gr.Button(variant="secondary" if can_reuse else "primary"),
+        )  # new_battle_btn
     )
 
 
@@ -346,6 +380,62 @@ def clear_history(
     return base_outputs
 
 
+def new_battle_same_prompt(battle_session: BattleSession, request: gr.Request = None):
+    """Reset battle state and prepare to resubmit the last prompt.
+
+    Similar to clear_history() but preserves and reuses the last prompt.
+    The use counter is not decremented here — it is decremented after voting.
+    """
+    logger.info("new_battle_same_prompt: reusing last prompt.")
+
+    cookies = get_session_cookie(request)
+
+    # End the active battle if one exists
+    if battle_session.battle_id:
+        end_battle(battle_session.battle_id, cookies)
+
+    battle_session.reset()
+
+    last_prompt = battle_session.last_prompt or ""
+
+    # Update button text for the next round
+    can_reuse = battle_session.prompt_use_remaining > 0
+    new_battle_same_prompt_upd = gr.Button(
+        value=f"New Battle\nSame Prompt ({battle_session.prompt_use_remaining} left)",
+        variant="primary",
+        visible=can_reuse,
+        interactive=can_reuse,
+    )
+
+    return (
+        [None] * num_sides  # state0, state1: reset
+        + [battle_session]  # battle_session: reset (last_prompt preserved)
+        + [None] * num_sides  # chatbot0, chatbot1: clear
+        + anony_names  # model_selector0, model_selector1: clear names
+        + [
+            gr.update(
+                value=last_prompt,
+                interactive=True,
+                placeholder="Ask anything biomedical...",
+            )
+        ]  # textbox: prefill with last prompt
+        + [
+            gr.Button(variant="secondary", interactive=True),
+            gr.Button(variant="secondary", interactive=True),
+            gr.Button(variant="secondary", interactive=True),
+        ]  # voting buttons: reset to default state
+        + [gr.Group(visible=False)]  # battle_interface: hide
+        + [gr.Row(visible=False)]  # voting_row: hide
+        + [gr.Row(visible=False)]  # next_battle_row: hide
+        + [gr.HTML(visible=False)]  # page_header: hide (going straight to battle)
+        + [gr.Row(visible=True)]  # textbox_row: show temporarily
+        + [gr.HTML(visible=False)]  # disclaimer: hide
+        + [gr.Column(visible=False)]  # example_prompts_group: hide
+        + [new_battle_same_prompt_upd]  # new_battle_same_prompt_btn: update counter
+        + [gr.Button(variant="secondary" if can_reuse else "primary")]  # new_battle_btn
+    )
+
+
 def add_text(
     state0,
     state1,
@@ -390,6 +480,10 @@ def add_text(
         battle_id, model1, model2 = create_battle(battle_title, cookies)
         if battle_id and model1 and model2:
             battle_session.battle_id = battle_id
+            # Track prompt for "New Battle Same Prompt" reuse
+            if text != battle_session.last_prompt:
+                battle_session.prompt_use_remaining = PROMPT_USE_LIMIT
+            battle_session.last_prompt = text
             # Initialize states with the models selected by the backend
             states = [
                 State(model1),
@@ -529,10 +623,16 @@ def build_side_by_side_ui_anony():
                 elem_classes=["prompt_input"],
             )
 
-        # Next Round button
+        # New Battle / Same Prompt buttons
         with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
-            clear_btn = gr.Button(
-                value="Next Battle",
+            new_battle_same_prompt_btn = gr.Button(
+                value=f"New Battle\nSame Prompt ({PROMPT_USE_LIMIT} left)",
+                variant="primary",
+                elem_id="battle-again-btn",
+                visible=False,
+            )
+            new_battle_btn = gr.Button(
+                value="New Battle",
                 variant="primary",
                 elem_id="next-battle-btn",
             )
@@ -560,31 +660,30 @@ def build_side_by_side_ui_anony():
         )
 
     # Register listeners
-    left_vote_btn.click(
-        left_vote_last_response,
-        states + [battle_session] + model_selectors,
+    vote_outputs = (
         model_selectors
         + [textbox]
         + [left_vote_btn, tie_btn, right_vote_btn]
-        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer],
+        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer]
+        + [new_battle_same_prompt_btn]
+        + [new_battle_btn]
+    )
+    left_vote_btn.click(
+        left_vote_last_response,
+        states + [battle_session] + model_selectors,
+        vote_outputs,
     )
     right_vote_btn.click(
         right_vote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors
-        + [textbox]
-        + [left_vote_btn, tie_btn, right_vote_btn]
-        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer],
+        vote_outputs,
     )
     tie_btn.click(
         tie_vote_last_response,
         states + [battle_session] + model_selectors,
-        model_selectors
-        + [textbox]
-        + [left_vote_btn, tie_btn, right_vote_btn]
-        + [voting_row, next_battle_row, page_header, textbox_row, disclaimer],
+        vote_outputs,
     )
-    clear_btn.click(
+    new_battle_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
         [battle_session],
         states
@@ -601,6 +700,7 @@ def build_side_by_side_ui_anony():
     )
 
     # Direct JavaScript functions for enter key control
+    # (defined early so new_battle_same_prompt_btn handler can reference them)
     disable_enter_js = """
     () => {
         const textbox = document.querySelector('#input_box textarea');
@@ -661,6 +761,51 @@ def build_side_by_side_ui_anony():
     }
     """
 
+    # "New Battle Same Prompt" button: reset + auto-resubmit stored prompt
+    new_battle_same_prompt_btn.click(
+        new_battle_same_prompt,
+        [battle_session],
+        states
+        + [battle_session]
+        + chatbots
+        + model_selectors
+        + [textbox]
+        + [left_vote_btn, tie_btn, right_vote_btn]
+        + [battle_interface, voting_row, next_battle_row]
+        + [page_header, textbox_row]
+        + [disclaimer]
+        + [example_prompts_group]
+        + [new_battle_same_prompt_btn]
+        + [new_battle_btn],
+    ).then(
+        add_text,
+        states + [battle_session] + model_selectors + [textbox],
+        states
+        + [battle_session]
+        + chatbots
+        + [textbox]
+        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
+        + [page_header, textbox_row, disclaimer],
+    ).then(
+        lambda: None,
+        [],
+        [],
+        js=disable_enter_js,
+    ).then(
+        bot_response_multi,
+        states + [battle_session],
+        states
+        + [battle_session]
+        + chatbots
+        + [voting_row, next_battle_row, page_header, textbox_row]
+        + [new_battle_same_prompt_btn, new_battle_btn],
+    ).then(
+        lambda: None,
+        [],
+        [],
+        js=enable_enter_js,
+    )
+
     textbox.submit(
         add_text,
         states + [battle_session] + model_selectors + [textbox],
@@ -681,7 +826,8 @@ def build_side_by_side_ui_anony():
         states
         + [battle_session]
         + chatbots
-        + [voting_row, next_battle_row, page_header, textbox_row],
+        + [voting_row, next_battle_row, page_header, textbox_row]
+        + [new_battle_same_prompt_btn, new_battle_btn],
     ).then(
         lambda: None,  # Enable enter key
         [],
@@ -715,7 +861,8 @@ def build_side_by_side_ui_anony():
             states
             + [battle_session]
             + chatbots
-            + [voting_row, next_battle_row, page_header, textbox_row],
+            + [voting_row, next_battle_row, page_header, textbox_row]
+            + [new_battle_same_prompt_btn, new_battle_btn],
         ).then(
             lambda: None,
             [],

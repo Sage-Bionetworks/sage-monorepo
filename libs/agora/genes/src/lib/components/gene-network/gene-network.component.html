@@ -9,7 +9,7 @@
               <div class="gene-network-filters-inner">
                 <span>&gt;0</span>
                 @for (n of filters; track n) {
-                  <div [ngClass]="{ active: n === selectedFilter }">
+                  <div [class.active]="n === selectedFilter">
                     <a
                       (click)="selectedFilter = n"
                       pTooltip="&gt;{{ n - 1 }}"

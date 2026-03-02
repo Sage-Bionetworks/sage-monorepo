@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 
 import { Gene } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { HelperService as ExplorersHelperService } from '@sagebionetworks/explorers/services';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 @Component({
@@ -14,6 +15,7 @@ import { BaseChartComponent } from '../base-chart/base-chart.component';
 })
 export class CandlestickChartComponent extends BaseChartComponent {
   helperService = inject(HelperService);
+  explorersHelperService = inject(ExplorersHelperService);
 
   _gene: Gene | undefined;
   get gene(): Gene | undefined {
@@ -166,14 +168,14 @@ export class CandlestickChartComponent extends BaseChartComponent {
           self._gene?.hgnc_symbol || self._gene?.ensembl_gene_id
         } ${isOrNot} significantly correlated with ${
           d.key
-        }, with an odds ratio of ${self.helperService.getSignificantFigures(
+        }, with an odds ratio of ${self.explorersHelperService.getSignificantFigures(
           d.value.mean,
           3,
-        )} and an adjusted p-value of ${self.helperService.getSignificantFigures(
+        )} and an adjusted p-value of ${self.explorersHelperService.getSignificantFigures(
           d.value.pval_adj,
           3,
         )}.`;
-        const offset = self.helperService.getOffset(this);
+        const offset = self.explorersHelperService.getOffset(this);
 
         tooltip
           .text(text)
