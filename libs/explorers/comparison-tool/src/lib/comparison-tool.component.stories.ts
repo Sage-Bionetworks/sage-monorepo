@@ -203,11 +203,10 @@ class ComparisonToolStoryWrapperComponent {
   visualizationOverviewVisible = input<boolean>();
 
   // Key changes when configs or defaultSort change, triggering inner component remount
-  private remountCounter = 0;
   protected readonly configKey = computed(() => {
-    const configsLength = this.configs()?.length ?? 0;
-    const defaultSortLength = this.defaultSort()?.length ?? 0;
-    return `${configsLength}-${defaultSortLength}-${++this.remountCounter}`;
+    const configs = this.configs();
+    const defaultSort = this.defaultSort();
+    return `${JSON.stringify(configs)}-${JSON.stringify(defaultSort)}`;
   });
 }
 
