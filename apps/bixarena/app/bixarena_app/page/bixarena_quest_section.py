@@ -68,6 +68,35 @@ QUEST_CONFIG = {
     "updates": [
         # Updates are displayed in chronological order (newest first)
         {
+            "date": "2026-03-02",
+            "title": "Chapter 3: Embers and Earth",
+            "description": (
+                "Twenty-four new blocks had arrived, carried here by the same quiet dedication that has driven this work from the start. I set them into the inner wall one by one, and watched the structure climb a little higher. More imposing now. More like something that meant it.\n\n"
+                "The arena would need more than stone to become what I imagined.\n\n"
+                "I descended into the earth.\n\n"
+                "The caves beneath the hill opened generously. Coal ran through the rock in dark veins, copper glinted green, iron jutted from the walls in steady clusters. Further in, gold burned warm against the cold stone. Deep red veins of redstone threaded through the rock too, a vital find for the machines and mechanisms the arena would one day require. And deeper still, the unmistakable pale glint of diamonds.\n\n"
+                "I climbed back toward the light with full pockets and a good feeling about the days ahead.\n\n"
+                "On the south side of the arena, I cleared a patch of ground, releasing a bucket of water across the surface to sweep away the grass and wildflowers in one clean pass. In the open space that remained, I built a small automatic smelting station: a blast furnace at its heart, a chest on the side holding coal for fuel, a hopper feeding raw ore down from above, and another below carrying finished metals into a waiting chest. Once loaded, it ran on its own. There is something quietly satisfying about a machine that works without being watched.\n\n"
+                "As the afternoon light softened over the hill, I took the boat out onto the surrounding water. The fishing was unhurried and peaceful. Salmon came easily, and among the catch surfaced a name tag, still perfectly intact.\n\n"
+                "I did not yet know who it was for.\n\n"
+                "That answer came later, when a black cat appeared at the edge of the cleared ground, drawn by the scent of fish at my belt. I set a piece down. The cat ate, then sat and regarded me with the calm of a creature that had already made up its mind. The red collar seemed to appear on its own.\n\n"
+                "I took out the name tag. The name arrived with a quiet logic: Dvoelkl. It had the feeling of someone who shows up, does the work, and asks for nothing in return. The cat blinked slowly and seemed entirely at peace with it.\n\n"
+                "So was I.\n\n"
+                "The wall is rising. The furnace is running. And it seems I have company now.\n\n"
+                "Before long, I expect a visitor, someone who reads landscapes the way I read stone. Together, we may finally see this place whole."
+            ),
+            "images": [
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-1.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-2.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-3.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-4.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-5.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-6.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-7.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-8.jpg",
+            ],
+        },
+        {
             "date": "2026-02-20",
             "title": "Chapter 2: Shadows Over Stone",
             "description": (
