@@ -69,7 +69,7 @@ QUEST_CONFIG = {
         # Updates are displayed in chronological order (newest first)
         {
             "date": "",
-            "title": "\u2694\ufe0f The Knight\u2019s Codex \u2014 Chapter 1: The Gate Between Worlds",
+            "title": "\u2694\ufe0f The Knight\u2019s Codex \u2014 Folio 1: The Gate Between Worlds",
             "description": (
                 "This chapter of the Knight\u2019s Codex is reserved for those who have earned the Knight contribution tier. It will be unveiled soon.\n\n"
                 "Beneath the hill, something stirs. There is more to this world than the arena walls let on. While the arena rises stone by stone, quieter preparations are underway. Preparations that will take us somewhere far beyond these familiar grounds. Not all discoveries made in the deep were meant for open daylight. The Nether does not welcome the unprepared."
