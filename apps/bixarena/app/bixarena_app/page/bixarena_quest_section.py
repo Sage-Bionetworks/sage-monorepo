@@ -56,7 +56,7 @@ QUEST_CONFIG = {
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
     # Index of update to show expanded by default (0 = newest, -1 or None = latest)
-    "active_update_index": None,
+    "active_update_index": 1,
     "minecraft_arena_designer": {
         "name": "NeatCraft",
         "url": "https://www.youtube.com/@Neatcraft",
@@ -67,6 +67,15 @@ QUEST_CONFIG = {
     },
     "updates": [
         # Updates are displayed in chronological order (newest first)
+        {
+            "date": "",
+            "title": "\u2694\ufe0f The Knight\u2019s Codex \u2014 Chapter 1: The Gate Between Worlds",
+            "description": (
+                "This chapter of the Knight\u2019s Codex is reserved for those who have earned the Knight contribution tier. It will be unveiled soon.\n\n"
+                "Beneath the hill, something stirs. There is more to this world than the arena walls let on. While the arena rises stone by stone, quieter preparations are underway. Preparations that will take us somewhere far beyond these familiar grounds. Not all discoveries made in the deep were meant for open daylight. The Nether does not welcome the unprepared."
+            ),
+            "images": [],
+        },
         {
             "date": "2026-03-02",
             "title": "Chapter 3: Embers and Earth",
