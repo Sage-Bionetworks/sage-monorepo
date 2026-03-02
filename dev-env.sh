@@ -242,6 +242,19 @@ function workspace-unset-empty-nx-env-vars {
   fi
 }
 
+function workspace-setup-docker-builder {
+  # Work around Rosetta + docker-in-docker issues on Apple Silicon Macs. The default buildx
+  # `docker` driver fails to execute Dockerfile RUN commands in this environment. Using the
+  # `docker-container` driver runs BuildKit in its own container, bypassing the broken Rosetta
+  # prestart hook. See: https://github.com/docker/for-mac/issues/7292
+  local builder_name="container-builder"
+  if ! docker buildx inspect "$builder_name" &> /dev/null; then
+    echo "Creating Docker buildx builder '$builder_name' (docker-container driver)..."
+    docker buildx create --name "$builder_name" --driver docker-container
+  fi
+  export NX_CONTAINER_BUILDER="$builder_name"
+}
+
 function workspace-initialize-env {
   workspace-welcome
 
@@ -260,6 +273,13 @@ function workspace-initialize-env {
   # Prevent Corepack showing the URL when it needs to download software
   # https://github.com/nodejs/corepack/blob/main/README.md#environment-variables
   export COREPACK_ENABLE_DOWNLOAD_PROMPT="0"
+
+  # Set up Docker buildx builder for Apple Silicon compatibility. The linuxkit kernel indicates
+  # Docker Desktop (Mac/Windows), where Rosetta + docker-in-docker causes buildx failures. Native
+  # Linux (CI, Linux dev machines) does not need this.
+  if uname -r | grep -q linuxkit && command -v docker &> /dev/null && docker info &> /dev/null; then
+    workspace-setup-docker-builder
+  fi
 }
 
 function workspace-nuke {
