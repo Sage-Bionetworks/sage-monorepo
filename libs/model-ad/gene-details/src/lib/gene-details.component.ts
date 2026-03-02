@@ -3,8 +3,12 @@ import { AfterViewInit, Component, computed, DestroyRef, inject, OnInit } from '
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpContext } from '@angular/common/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
-import { HelperService, LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  HelperService,
+  LoggerService,
+  PlatformService,
+  SUPPRESS_ERROR_OVERLAY,
+} from '@sagebionetworks/explorers/services';
 import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import {

@@ -5,7 +5,7 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
+import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import sanitizeHtml from 'sanitize-html';
 
 // -------------------------------------------------------------------------- //

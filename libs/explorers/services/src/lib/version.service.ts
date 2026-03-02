@@ -1,6 +1,6 @@
 import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
+import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import { catchError, EMPTY, map, Observable, of } from 'rxjs';
 import { GitHubService } from './github.service';
 import { PlatformService } from './platform.service';

@@ -3,9 +3,13 @@ import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/c
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpContext } from '@angular/common/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
 import { Panel, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { HelperService, LoggerService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  HelperService,
+  LoggerService,
+  PlatformService,
+  SUPPRESS_ERROR_OVERLAY,
+} from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelService } from '@sagebionetworks/model-ad/api-client';

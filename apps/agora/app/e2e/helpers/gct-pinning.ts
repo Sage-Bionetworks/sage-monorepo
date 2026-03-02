@@ -53,8 +53,7 @@ export const getPinnedItemsFromUrl = (url: string) => {
 export const confirmPinnedItemsCount = async (page: Page, nPinned: number) => {
   await test.step(`confirm pinned items count is ${nPinned}`, async () => {
     const rows = page.locator('tr.pinned');
-    const rowsCount = await rows.count();
-    expect(rowsCount).toBe(nPinned);
+    await expect(rows).toHaveCount(nPinned);
   });
 };
 
@@ -65,10 +64,9 @@ export const confirmPinnedItemsByGeneName = async (
 ) => {
   await test.step(`confirm ${nItems} pinned items for ${geneName}`, async () => {
     const rows = page.getByRole('row').filter({ hasText: geneName });
-    const nRows = await rows.count();
-    expect(nRows).toEqual(nItems);
+    await expect(rows).toHaveCount(nItems);
 
-    for (let i = 0; i < nRows; ++i) {
+    for (let i = 0; i < nItems; ++i) {
       await expect(rows.nth(i)).toHaveClass(/pinned/i);
     }
   });

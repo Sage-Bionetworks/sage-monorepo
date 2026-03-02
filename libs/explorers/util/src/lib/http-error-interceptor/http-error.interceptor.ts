@@ -8,8 +8,11 @@ import {
 import * as Sentry from '@sentry/angular';
 import { Observable, throwError, timer } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
-import { ErrorOverlayService, LoggerService } from '@sagebionetworks/explorers/services';
+import {
+  ErrorOverlayService,
+  LoggerService,
+  SUPPRESS_ERROR_OVERLAY,
+} from '@sagebionetworks/explorers/services';
 
 /**
  * HTTP interceptor that handles errors from HTTP requests.

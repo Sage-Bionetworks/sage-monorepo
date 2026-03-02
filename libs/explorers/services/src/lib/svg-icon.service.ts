@@ -1,7 +1,7 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { SUPPRESS_ERROR_OVERLAY } from '@sagebionetworks/explorers/constants';
+import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
 import { isExternalLink } from '@sagebionetworks/shared/util';
 import { Observable, map, of, shareReplay } from 'rxjs';
 import { PlatformService } from './platform.service';
