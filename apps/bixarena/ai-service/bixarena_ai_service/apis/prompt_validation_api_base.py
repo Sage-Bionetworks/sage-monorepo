@@ -13,6 +13,7 @@ class BasePromptValidationApi:
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         BasePromptValidationApi.subclasses = BasePromptValidationApi.subclasses + (cls,)
+
     async def validate_prompt(
         self,
         prompt_validation_request: PromptValidationRequest,

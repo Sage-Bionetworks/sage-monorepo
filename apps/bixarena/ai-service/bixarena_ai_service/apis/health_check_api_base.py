@@ -12,6 +12,7 @@ class BaseHealthCheckApi:
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         BaseHealthCheckApi.subclasses = BaseHealthCheckApi.subclasses + (cls,)
+
     async def get_health_check(
         self,
     ) -> HealthCheck:

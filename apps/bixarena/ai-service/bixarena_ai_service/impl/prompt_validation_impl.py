@@ -106,14 +106,10 @@ class PromptValidationApiImpl(BasePromptValidationApi):
 
         # Cache miss — classify via LLM.
         confidence = await self._classify(sanitized, settings)
-        is_biomedical = (
-            confidence >= settings.prompt_validation_confidence_threshold
-        )
+        is_biomedical = confidence >= settings.prompt_validation_confidence_threshold
 
         # Store in cache (fire-and-forget on failure).
-        await set_cached_validation(
-            sanitized, confidence, is_biomedical, settings
-        )
+        await set_cached_validation(sanitized, confidence, is_biomedical, settings)
 
         result = PromptValidation(
             prompt=prompt,

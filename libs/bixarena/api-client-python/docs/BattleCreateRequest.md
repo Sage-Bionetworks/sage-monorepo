@@ -4,9 +4,9 @@ The information used to create a new battle.
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**title** | **str** | Title of the battle. | [optional] 
+| Name      | Type    | Description          | Notes      |
+| --------- | ------- | -------------------- | ---------- |
+| **title** | **str** | Title of the battle. | [optional] |
 
 ## Example
 
@@ -25,6 +25,5 @@ battle_create_request_dict = battle_create_request_instance.to_dict()
 # create an instance of BattleCreateRequest from a dict
 battle_create_request_from_dict = BattleCreateRequest.from_dict(battle_create_request_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

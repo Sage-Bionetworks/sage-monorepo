@@ -47,9 +47,7 @@ async def _get_client(settings: Settings) -> valkey.Valkey:
     return _client
 
 
-async def get_cached_validation(
-    prompt: str, settings: Settings
-) -> dict | None:
+async def get_cached_validation(prompt: str, settings: Settings) -> dict | None:
     """Look up a cached validation result.
 
     Returns a dict with 'confidence' and 'is_biomedical' keys,
@@ -80,9 +78,7 @@ async def set_cached_validation(
     try:
         client = await _get_client(settings)
         key = _make_key(settings.prompt_validation_method, prompt)
-        value = json.dumps(
-            {"confidence": confidence, "is_biomedical": is_biomedical}
-        )
+        value = json.dumps({"confidence": confidence, "is_biomedical": is_biomedical})
         await client.set(key, value, ex=settings.valkey_cache_ttl)
         logger.debug("Cached prompt validation result")
     except Exception:

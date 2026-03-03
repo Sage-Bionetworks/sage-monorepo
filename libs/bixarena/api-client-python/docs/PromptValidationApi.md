@@ -2,12 +2,12 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**validate_prompt**](PromptValidationApi.md#validate_prompt) | **POST** /validate-prompt | Validate biomedical prompt
-
+| Method                                                        | HTTP request              | Description                |
+| ------------------------------------------------------------- | ------------------------- | -------------------------- |
+| [**validate_prompt**](PromptValidationApi.md#validate_prompt) | **POST** /validate-prompt | Validate biomedical prompt |
 
 # **validate_prompt**
+
 > PromptValidation validate_prompt(prompt_validation_request)
 
 Validate biomedical prompt
@@ -16,7 +16,7 @@ Validates whether a prompt is biomedically related and returns a confidence scor
 
 ### Example
 
-* Bearer (JWT) Authentication (jwtBearer):
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -45,7 +45,7 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.PromptValidationApi(api_client)
-    prompt_validation_request = bixarena_api_client.PromptValidationRequest() # PromptValidationRequest | 
+    prompt_validation_request = bixarena_api_client.PromptValidationRequest() # PromptValidationRequest |
 
     try:
         # Validate biomedical prompt
@@ -56,14 +56,11 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling PromptValidationApi->validate_prompt: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **prompt_validation_request** | [**PromptValidationRequest**](PromptValidationRequest.md)|  | 
+| Name                          | Type                                                      | Description | Notes |
+| ----------------------------- | --------------------------------------------------------- | ----------- | ----- |
+| **prompt_validation_request** | [**PromptValidationRequest**](PromptValidationRequest.md) |             |
 
 ### Return type
 
@@ -75,17 +72,16 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**400** | Invalid request |  -  |
-**401** | Unauthorized |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

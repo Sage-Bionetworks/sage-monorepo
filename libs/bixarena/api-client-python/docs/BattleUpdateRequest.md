@@ -4,10 +4,10 @@ The information used to update a battle.
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**title** | **str** | Title of the battle. | [optional] 
-**ended_at** | **datetime** | Timestamp when the entity ended. | [optional] 
+| Name         | Type         | Description                      | Notes      |
+| ------------ | ------------ | -------------------------------- | ---------- |
+| **title**    | **str**      | Title of the battle.             | [optional] |
+| **ended_at** | **datetime** | Timestamp when the entity ended. | [optional] |
 
 ## Example
 
@@ -26,6 +26,5 @@ battle_update_request_dict = battle_update_request_instance.to_dict()
 # create an instance of BattleUpdateRequest from a dict
 battle_update_request_from_dict = BattleUpdateRequest.from_dict(battle_update_request_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

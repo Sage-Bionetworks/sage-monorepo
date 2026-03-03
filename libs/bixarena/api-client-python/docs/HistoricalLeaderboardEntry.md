@@ -4,15 +4,15 @@ A historical entry representing a model's performance at a specific point in tim
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**snapshot_id** | **str** | Identifier for the snapshot/timepoint | 
-**bt_score** | **float** | Bradley-Terry score - primary ranking metric at this point in time | 
-**vote_count** | **int** | Number of votes/evaluations at this point in time | 
-**rank** | **int** | Rank position at this point in time (1-based) | 
-**bootstrap_q025** | **float** | Bootstrap confidence interval lower bound (2.5th percentile) | 
-**bootstrap_q975** | **float** | Bootstrap confidence interval upper bound (97.5th percentile) | 
-**created_at** | **datetime** | When this snapshot was created | 
+| Name               | Type         | Description                                                        | Notes |
+| ------------------ | ------------ | ------------------------------------------------------------------ | ----- |
+| **snapshot_id**    | **str**      | Identifier for the snapshot/timepoint                              |
+| **bt_score**       | **float**    | Bradley-Terry score - primary ranking metric at this point in time |
+| **vote_count**     | **int**      | Number of votes/evaluations at this point in time                  |
+| **rank**           | **int**      | Rank position at this point in time (1-based)                      |
+| **bootstrap_q025** | **float**    | Bootstrap confidence interval lower bound (2.5th percentile)       |
+| **bootstrap_q975** | **float**    | Bootstrap confidence interval upper bound (97.5th percentile)      |
+| **created_at**     | **datetime** | When this snapshot was created                                     |
 
 ## Example
 
@@ -31,6 +31,5 @@ historical_leaderboard_entry_dict = historical_leaderboard_entry_instance.to_dic
 # create an instance of HistoricalLeaderboardEntry from a dict
 historical_leaderboard_entry_from_dict = HistoricalLeaderboardEntry.from_dict(historical_leaderboard_entry_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-
