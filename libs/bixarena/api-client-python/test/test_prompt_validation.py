@@ -37,13 +37,15 @@ class TestPromptValidation(unittest.TestCase):
             return PromptValidation(
                 prompt = '',
                 confidence = 0,
-                is_biomedical = True
+                is_biomedical = True,
+                method = ''
             )
         else:
             return PromptValidation(
                 prompt = '',
                 confidence = 0,
                 is_biomedical = True,
+                method = '',
         )
         """
 

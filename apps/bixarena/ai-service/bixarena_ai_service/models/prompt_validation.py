@@ -43,7 +43,15 @@ class PromptValidation(BaseModel):
         description="Whether the prompt is considered biomedically related (confidence >= 0.5)",
         alias="isBiomedical",
     )
-    __properties: ClassVar[List[str]] = ["prompt", "confidence", "isBiomedical"]
+    method: Annotated[str, Field(strict=True, max_length=100)] = Field(
+        description="The validation method used (e.g. 'openrouter-haiku-v1')"
+    )
+    __properties: ClassVar[List[str]] = [
+        "prompt",
+        "confidence",
+        "isBiomedical",
+        "method",
+    ]
 
     model_config = {
         "populate_by_name": True,
@@ -96,6 +104,7 @@ class PromptValidation(BaseModel):
                 "prompt": obj.get("prompt"),
                 "confidence": obj.get("confidence"),
                 "isBiomedical": obj.get("isBiomedical"),
+                "method": obj.get("method"),
             }
         )
         return _obj

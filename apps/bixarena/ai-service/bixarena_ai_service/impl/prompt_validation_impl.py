@@ -95,6 +95,8 @@ class PromptValidationApiImpl(BasePromptValidationApi):
         # (defense-in-depth; the API layer already validates length).
         sanitized = prompt.strip()[: settings.prompt_max_length]
 
+        method = settings.prompt_validation_method
+
         # Check Valkey cache first.
         cached = await get_cached_validation(sanitized, settings)
         if cached is not None:
@@ -102,6 +104,7 @@ class PromptValidationApiImpl(BasePromptValidationApi):
                 prompt=prompt,
                 confidence=cached["confidence"],
                 is_biomedical=cached["is_biomedical"],
+                method=method,
             )
 
         # Cache miss — classify via LLM.
@@ -115,6 +118,7 @@ class PromptValidationApiImpl(BasePromptValidationApi):
             prompt=prompt,
             confidence=confidence,
             is_biomedical=is_biomedical,
+            method=method,
         )
 
         logger.info(
