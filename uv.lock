@@ -8,6 +8,7 @@ members = [
     "bixarena-api-client",
     "bixarena-app",
     "bixarena-infra-cdk",
+    "bixarena-leaderboard",
     "bixarena-tools",
     "openchallenges-api-client",
     "openchallenges-client",
@@ -304,6 +305,25 @@ requires-dist = [
     { name = "aws-cdk-lib", specifier = ">=2.219.0" },
     { name = "boto3", specifier = ">=1.40.51" },
     { name = "platform-infra-cdk-common", editable = "libs/platform/infra/cdk/common" },
+]
+
+[[package]]
+name = "bixarena-leaderboard"
+version = "1.0.0"
+source = { editable = "libs/bixarena/leaderboard/python" }
+dependencies = [
+    { name = "numpy" },
+    { name = "psycopg", extra = ["binary"] },
+    { name = "scipy" },
+    { name = "tqdm" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "numpy", specifier = ">=1.26.0" },
+    { name = "psycopg", extras = ["binary"], specifier = ">=3.0.0" },
+    { name = "scipy", specifier = ">=1.11.0" },
+    { name = "tqdm", specifier = ">=4.60.0" },
 ]
 
 [[package]]
