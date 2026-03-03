@@ -4,9 +4,9 @@ Payload to create a new battle round with the user prompt.
 
 ## Properties
 
-| Name               | Type                                  | Description | Notes |
-| ------------------ | ------------------------------------- | ----------- | ----- |
-| **prompt_message** | [**MessageCreate**](MessageCreate.md) |             |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**prompt_message** | [**MessageCreate**](MessageCreate.md) |  | 
 
 ## Example
 
@@ -25,5 +25,6 @@ battle_round_create_request_dict = battle_round_create_request_instance.to_dict(
 # create an instance of BattleRoundCreateRequest from a dict
 battle_round_create_request_from_dict = BattleRoundCreateRequest.from_dict(battle_round_create_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

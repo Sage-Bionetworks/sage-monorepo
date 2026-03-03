@@ -2,12 +2,12 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                               | HTTP request   | Description                    |
-| ---------------------------------------------------- | -------------- | ------------------------------ |
-| [**get_public_stats**](StatsApi.md#get_public_stats) | **GET** /stats | Get public platform statistics |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**get_public_stats**](StatsApi.md#get_public_stats) | **GET** /stats | Get public platform statistics
+
 
 # **get_public_stats**
-
 > PublicStats get_public_stats()
 
 Get public platform statistics
@@ -16,7 +16,9 @@ Retrieve publicly accessible statistics about the BixArena platform.
 This endpoint can be accessed without authentication and is designed
 for use on the home page to showcase platform activity.
 
+
 ### Example
+
 
 ```python
 import bixarena_api_client
@@ -45,6 +47,8 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling StatsApi->get_public_stats: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
 This endpoint does not need any parameter.
@@ -59,15 +63,16 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **200**     | Public statistics retrieved successfully                                                          | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Public statistics retrieved successfully |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+

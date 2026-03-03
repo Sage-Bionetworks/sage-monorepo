@@ -18,6 +18,7 @@ from openai import AsyncOpenAI
 from bixarena_ai_service.apis.prompt_validation_api_base import (
     BasePromptValidationApi,
 )
+from bixarena_ai_service.cache import get_cached_validation, set_cached_validation
 from bixarena_ai_service.config import get_settings
 from bixarena_ai_service.models.prompt_validation import PromptValidation
 from bixarena_ai_service.models.prompt_validation_request import (
@@ -94,12 +95,30 @@ class PromptValidationApiImpl(BasePromptValidationApi):
         # (defense-in-depth; the API layer already validates length).
         sanitized = prompt.strip()[: settings.prompt_max_length]
 
+        # Check Valkey cache first.
+        cached = await get_cached_validation(sanitized, settings)
+        if cached is not None:
+            return PromptValidation(
+                prompt=prompt,
+                confidence=cached["confidence"],
+                is_biomedical=cached["is_biomedical"],
+            )
+
+        # Cache miss — classify via LLM.
         confidence = await self._classify(sanitized, settings)
+        is_biomedical = (
+            confidence >= settings.prompt_validation_confidence_threshold
+        )
+
+        # Store in cache (fire-and-forget on failure).
+        await set_cached_validation(
+            sanitized, confidence, is_biomedical, settings
+        )
 
         result = PromptValidation(
             prompt=prompt,
             confidence=confidence,
-            is_biomedical=confidence >= settings.prompt_validation_confidence_threshold,
+            is_biomedical=is_biomedical,
         )
 
         logger.info(

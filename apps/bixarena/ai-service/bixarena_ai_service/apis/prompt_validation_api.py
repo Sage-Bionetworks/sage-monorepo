@@ -41,10 +41,7 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
         200: {"model": PromptValidation, "description": "Success"},
         400: {"model": BasicError, "description": "Invalid request"},
         401: {"model": BasicError, "description": "Unauthorized"},
-        500: {
-            "model": BasicError,
-            "description": "The request cannot be fulfilled due to an unexpected server error",
-        },
+        500: {"model": BasicError, "description": "The request cannot be fulfilled due to an unexpected server error"},
     },
     tags=["Prompt Validation"],
     summary="Validate biomedical prompt",
@@ -56,6 +53,4 @@ async def validate_prompt(
     """Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)"""
     if not BasePromptValidationApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
-    return await BasePromptValidationApi.subclasses[0]().validate_prompt(
-        prompt_validation_request
-    )
+    return await BasePromptValidationApi.subclasses[0]().validate_prompt(prompt_validation_request)

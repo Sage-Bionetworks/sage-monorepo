@@ -1,12 +1,13 @@
 # Token200Response
 
+
 ## Properties
 
-| Name             | Type    | Description | Notes |
-| ---------------- | ------- | ----------- | ----- |
-| **access_token** | **str** |             |
-| **token_type**   | **str** |             |
-| **expires_in**   | **int** |             |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**access_token** | **str** |  | 
+**token_type** | **str** |  | 
+**expires_in** | **int** |  | 
 
 ## Example
 
@@ -25,5 +26,6 @@ token200_response_dict = token200_response_instance.to_dict()
 # create an instance of Token200Response from a dict
 token200_response_from_dict = Token200Response.from_dict(token200_response_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

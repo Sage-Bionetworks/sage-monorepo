@@ -40,6 +40,12 @@ class Settings(BaseSettings):
     # Bump when changing the classification prompt or model.
     prompt_validation_method: str = "openrouter-haiku-v1"
 
+    # Valkey configuration (DB 3 — DB 0/1/2 used by api/gateway/auth)
+    valkey_host: str = "bixarena-valkey"
+    valkey_port: int = 8116
+    valkey_db: int = 3
+    valkey_cache_ttl: int = 2592000  # 30 days in seconds
+
     class Config:
         env_prefix = "BIXARENA_AI_"
         case_sensitive = False

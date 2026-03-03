@@ -2,19 +2,19 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                                                | HTTP request                                   | Description                |
-| --------------------------------------------------------------------- | ---------------------------------------------- | -------------------------- |
-| [**create_battle**](BattleApi.md#create_battle)                       | **POST** /battles                              | Create a battle            |
-| [**create_battle_evaluation**](BattleApi.md#create_battle_evaluation) | **POST** /battles/{battleId}/evaluations       | Create a battle evaluation |
-| [**create_battle_round**](BattleApi.md#create_battle_round)           | **POST** /battles/{battleId}/rounds            | Create a battle round      |
-| [**delete_battle**](BattleApi.md#delete_battle)                       | **DELETE** /battles/{battleId}                 | Delete a battle            |
-| [**get_battle**](BattleApi.md#get_battle)                             | **GET** /battles/{battleId}                    | Get a battle by ID         |
-| [**list_battles**](BattleApi.md#list_battles)                         | **GET** /battles                               | List battles               |
-| [**update_battle**](BattleApi.md#update_battle)                       | **PATCH** /battles/{battleId}                  | Update a battle            |
-| [**update_battle_round**](BattleApi.md#update_battle_round)           | **PATCH** /battles/{battleId}/rounds/{roundId} | Update a battle round      |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**create_battle**](BattleApi.md#create_battle) | **POST** /battles | Create a battle
+[**create_battle_evaluation**](BattleApi.md#create_battle_evaluation) | **POST** /battles/{battleId}/evaluations | Create a battle evaluation
+[**create_battle_round**](BattleApi.md#create_battle_round) | **POST** /battles/{battleId}/rounds | Create a battle round
+[**delete_battle**](BattleApi.md#delete_battle) | **DELETE** /battles/{battleId} | Delete a battle
+[**get_battle**](BattleApi.md#get_battle) | **GET** /battles/{battleId} | Get a battle by ID
+[**list_battles**](BattleApi.md#list_battles) | **GET** /battles | List battles
+[**update_battle**](BattleApi.md#update_battle) | **PATCH** /battles/{battleId} | Update a battle
+[**update_battle_round**](BattleApi.md#update_battle_round) | **PATCH** /battles/{battleId}/rounds/{roundId} | Update a battle round
+
 
 # **create_battle**
-
 > BattleCreateResponse create_battle(battle_create_request)
 
 Create a battle
@@ -23,7 +23,7 @@ Create a new battle between two AI models.
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -52,7 +52,7 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.BattleApi(api_client)
-    battle_create_request = bixarena_api_client.BattleCreateRequest() # BattleCreateRequest |
+    battle_create_request = bixarena_api_client.BattleCreateRequest() # BattleCreateRequest | 
 
     try:
         # Create a battle
@@ -63,11 +63,14 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling BattleApi->create_battle: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                      | Type                                              | Description | Notes |
-| ------------------------- | ------------------------------------------------- | ----------- | ----- |
-| **battle_create_request** | [**BattleCreateRequest**](BattleCreateRequest.md) |             |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **battle_create_request** | [**BattleCreateRequest**](BattleCreateRequest.md)|  | 
 
 ### Return type
 
@@ -79,26 +82,25 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **201**     | Battle created successfully                                                                       | -                                                                                                                                                                                                                                                                     |
-| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
-| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
-| **409**     | The request conflicts with current state of the target resource                                   | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Battle created successfully |  -  |
+**400** | Invalid request |  -  |
+**401** | Unauthorized |  -  |
+**403** | The user does not have the permission to perform this action |  -  |
+**404** | The specified resource was not found |  -  |
+**409** | The request conflicts with current state of the target resource |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_battle_evaluation**
-
 > BattleEvaluation create_battle_evaluation(battle_id, battle_evaluation_create_request)
 
 Create a battle evaluation
@@ -107,7 +109,7 @@ Record the outcome of a battle.
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -137,7 +139,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.BattleApi(api_client)
     battle_id = 'battle_id_example' # str | The unique identifier of the battle
-    battle_evaluation_create_request = bixarena_api_client.BattleEvaluationCreateRequest() # BattleEvaluationCreateRequest |
+    battle_evaluation_create_request = bixarena_api_client.BattleEvaluationCreateRequest() # BattleEvaluationCreateRequest | 
 
     try:
         # Create a battle evaluation
@@ -148,12 +150,15 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling BattleApi->create_battle_evaluation: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                                 | Type                                                                  | Description                         | Notes |
-| ------------------------------------ | --------------------------------------------------------------------- | ----------------------------------- | ----- |
-| **battle_id**                        | **str**                                                               | The unique identifier of the battle |
-| **battle_evaluation_create_request** | [**BattleEvaluationCreateRequest**](BattleEvaluationCreateRequest.md) |                                     |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **battle_id** | **str**| The unique identifier of the battle | 
+ **battle_evaluation_create_request** | [**BattleEvaluationCreateRequest**](BattleEvaluationCreateRequest.md)|  | 
 
 ### Return type
 
@@ -165,25 +170,24 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **201**     | BattleEvaluation created successfully                                                             | -                                                                                                                                                                                                                                                                     |
-| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
-| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | BattleEvaluation created successfully |  -  |
+**400** | Invalid request |  -  |
+**401** | Unauthorized |  -  |
+**403** | The user does not have the permission to perform this action |  -  |
+**404** | The specified resource was not found |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_battle_round**
-
 > BattleRound create_battle_round(battle_id, battle_round_create_request)
 
 Create a battle round
@@ -192,7 +196,7 @@ Create a new round for a given battle.
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -222,7 +226,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.BattleApi(api_client)
     battle_id = 'battle_id_example' # str | The unique identifier of the battle
-    battle_round_create_request = bixarena_api_client.BattleRoundCreateRequest() # BattleRoundCreateRequest |
+    battle_round_create_request = bixarena_api_client.BattleRoundCreateRequest() # BattleRoundCreateRequest | 
 
     try:
         # Create a battle round
@@ -233,12 +237,15 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling BattleApi->create_battle_round: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                            | Type                                                        | Description                         | Notes |
-| ------------------------------- | ----------------------------------------------------------- | ----------------------------------- | ----- |
-| **battle_id**                   | **str**                                                     | The unique identifier of the battle |
-| **battle_round_create_request** | [**BattleRoundCreateRequest**](BattleRoundCreateRequest.md) |                                     |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **battle_id** | **str**| The unique identifier of the battle | 
+ **battle_round_create_request** | [**BattleRoundCreateRequest**](BattleRoundCreateRequest.md)|  | 
 
 ### Return type
 
@@ -250,25 +257,24 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **201**     | Battle round created successfully                                                                 | -                                                                                                                                                                                                                                                                     |
-| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
-| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Battle round created successfully |  -  |
+**400** | Invalid request |  -  |
+**401** | Unauthorized |  -  |
+**403** | The user does not have the permission to perform this action |  -  |
+**404** | The specified resource was not found |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_battle**
-
 > delete_battle(battle_id)
 
 Delete a battle
@@ -277,7 +283,7 @@ Delete a battle by its unique identifier
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -313,11 +319,14 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling BattleApi->delete_battle: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name          | Type    | Description                         | Notes |
-| ------------- | ------- | ----------------------------------- | ----- |
-| **battle_id** | **str** | The unique identifier of the battle |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **battle_id** | **str**| The unique identifier of the battle | 
 
 ### Return type
 
@@ -329,24 +338,23 @@ void (empty response body)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/problem+json, application/json
+ - **Content-Type**: Not defined
+ - **Accept**: application/problem+json, application/json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **204**     | Battle deleted successfully                                                                       | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
-| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Battle deleted successfully |  -  |
+**401** | Unauthorized |  -  |
+**403** | The user does not have the permission to perform this action |  -  |
+**404** | The specified resource was not found |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_battle**
-
 > Battle get_battle(battle_id)
 
 Get a battle by ID
@@ -355,7 +363,7 @@ Returns a single battle by its unique identifier
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -394,11 +402,14 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling BattleApi->get_battle: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name          | Type    | Description                         | Notes |
-| ------------- | ------- | ----------------------------------- | ----- |
-| **battle_id** | **str** | The unique identifier of the battle |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **battle_id** | **str**| The unique identifier of the battle | 
 
 ### Return type
 
@@ -410,23 +421,22 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **200**     | Success                                                                                           | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**401** | Unauthorized |  -  |
+**404** | The specified resource was not found |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_battles**
-
 > BattlePage list_battles(battle_search_query=battle_search_query)
 
 List battles
@@ -435,7 +445,7 @@ List battles with optional filtering and pagination
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -475,11 +485,14 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling BattleApi->list_battles: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                    | Type                         | Description                                       | Notes      |
-| ----------------------- | ---------------------------- | ------------------------------------------------- | ---------- |
-| **battle_search_query** | [**BattleSearchQuery**](.md) | The search query used to find and filter battles. | [optional] |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **battle_search_query** | [**BattleSearchQuery**](.md)| The search query used to find and filter battles. | [optional] 
 
 ### Return type
 
@@ -491,23 +504,22 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **200**     | Success                                                                                           | -                                                                                                                                                                                                                                                                     |
-| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Invalid request |  -  |
+**401** | Unauthorized |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_battle**
-
 > Battle update_battle(battle_id, battle_update_request)
 
 Update a battle
@@ -516,7 +528,7 @@ Update a battle's end time or other properties
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -546,7 +558,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.BattleApi(api_client)
     battle_id = 'battle_id_example' # str | The unique identifier of the battle
-    battle_update_request = bixarena_api_client.BattleUpdateRequest() # BattleUpdateRequest |
+    battle_update_request = bixarena_api_client.BattleUpdateRequest() # BattleUpdateRequest | 
 
     try:
         # Update a battle
@@ -557,12 +569,15 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling BattleApi->update_battle: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                      | Type                                              | Description                         | Notes |
-| ------------------------- | ------------------------------------------------- | ----------------------------------- | ----- |
-| **battle_id**             | **str**                                           | The unique identifier of the battle |
-| **battle_update_request** | [**BattleUpdateRequest**](BattleUpdateRequest.md) |                                     |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **battle_id** | **str**| The unique identifier of the battle | 
+ **battle_update_request** | [**BattleUpdateRequest**](BattleUpdateRequest.md)|  | 
 
 ### Return type
 
@@ -574,25 +589,24 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **200**     | Battle updated successfully                                                                       | -                                                                                                                                                                                                                                                                     |
-| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
-| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Battle updated successfully |  -  |
+**400** | Invalid request |  -  |
+**401** | Unauthorized |  -  |
+**403** | The user does not have the permission to perform this action |  -  |
+**404** | The specified resource was not found |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_battle_round**
-
 > BattleRound update_battle_round(battle_id, round_id, battle_round_update_request)
 
 Update a battle round
@@ -601,7 +615,7 @@ Update an existing battle round.
 
 ### Example
 
-- Bearer (JWT) Authentication (jwtBearer):
+* Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import bixarena_api_client
@@ -632,7 +646,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     api_instance = bixarena_api_client.BattleApi(api_client)
     battle_id = 'battle_id_example' # str | The unique identifier of the battle
     round_id = 'round_id_example' # str | The unique identifier of the battle round
-    battle_round_update_request = bixarena_api_client.BattleRoundUpdateRequest() # BattleRoundUpdateRequest |
+    battle_round_update_request = bixarena_api_client.BattleRoundUpdateRequest() # BattleRoundUpdateRequest | 
 
     try:
         # Update a battle round
@@ -643,13 +657,16 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
         print("Exception when calling BattleApi->update_battle_round: %s\n" % e)
 ```
 
+
+
 ### Parameters
 
-| Name                            | Type                                                        | Description                               | Notes |
-| ------------------------------- | ----------------------------------------------------------- | ----------------------------------------- | ----- |
-| **battle_id**                   | **str**                                                     | The unique identifier of the battle       |
-| **round_id**                    | **str**                                                     | The unique identifier of the battle round |
-| **battle_round_update_request** | [**BattleRoundUpdateRequest**](BattleRoundUpdateRequest.md) |                                           |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **battle_id** | **str**| The unique identifier of the battle | 
+ **round_id** | **str**| The unique identifier of the battle round | 
+ **battle_round_update_request** | [**BattleRoundUpdateRequest**](BattleRoundUpdateRequest.md)|  | 
 
 ### Return type
 
@@ -661,19 +678,20 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
-- **Accept**: application/json, application/problem+json
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description                                                                                       | Response headers                                                                                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **200**     | Battle round updated successfully                                                                 | -                                                                                                                                                                                                                                                                     |
-| **400**     | Invalid request                                                                                   | -                                                                                                                                                                                                                                                                     |
-| **401**     | Unauthorized                                                                                      | -                                                                                                                                                                                                                                                                     |
-| **403**     | The user does not have the permission to perform this action                                      | -                                                                                                                                                                                                                                                                     |
-| **404**     | The specified resource was not found                                                              | -                                                                                                                                                                                                                                                                     |
-| **429**     | Too many requests. Rate limit exceeded. The client should wait before making additional requests. | _ Retry-After - Seconds to wait before making a new request <br> _ X-RateLimit-Limit - Maximum requests allowed per minute <br> _ X-RateLimit-Remaining - Remaining requests in current window <br> _ X-RateLimit-Reset - Seconds until rate limit window resets <br> |
-| **500**     | The request cannot be fulfilled due to an unexpected server error                                 | -                                                                                                                                                                                                                                                                     |
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Battle round updated successfully |  -  |
+**400** | Invalid request |  -  |
+**401** | Unauthorized |  -  |
+**403** | The user does not have the permission to perform this action |  -  |
+**404** | The specified resource was not found |  -  |
+**429** | Too many requests. Rate limit exceeded. The client should wait before making additional requests. |  * Retry-After - Seconds to wait before making a new request <br>  * X-RateLimit-Limit - Maximum requests allowed per minute <br>  * X-RateLimit-Remaining - Remaining requests in current window <br>  * X-RateLimit-Reset - Seconds until rate limit window resets <br>  |
+**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+

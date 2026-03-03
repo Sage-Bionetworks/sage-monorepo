@@ -13,16 +13,18 @@ def test_validate_prompt(client: TestClient):
 
     Validate biomedical prompt
     """
-    prompt_validation_request = {"prompt": "prompt"}
+    prompt_validation_request = {"prompt":"prompt"}
 
-    headers = {}
+    headers = {
+    }
     # uncomment below to make a request
-    # response = client.request(
+    #response = client.request(
     #    "POST",
     #    "/validate-prompt",
     #    headers=headers,
     #    json=prompt_validation_request,
-    # )
+    #)
 
     # uncomment below to assert the status code of the HTTP response
-    # assert response.status_code == 200
+    #assert response.status_code == 200
+

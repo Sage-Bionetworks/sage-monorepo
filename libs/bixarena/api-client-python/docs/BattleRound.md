@@ -4,16 +4,16 @@ A battle round linking the prompt and model responses for a battle.
 
 ## Properties
 
-| Name                  | Type         | Description                                           | Notes      |
-| --------------------- | ------------ | ----------------------------------------------------- | ---------- |
-| **id**                | **str**      | Unique identifier (UUID) of the battle round.         |
-| **battle_id**         | **str**      | Unique identifier (UUID) of the battle.               |
-| **round_number**      | **int**      | Sequential round number within a battle. Starts at 1. |
-| **prompt_message_id** | **str**      | Unique identifier (UUID) of the message.              | [optional] |
-| **model1_message_id** | **str**      | Unique identifier (UUID) of the message.              | [optional] |
-| **model2_message_id** | **str**      | Unique identifier (UUID) of the message.              | [optional] |
-| **created_at**        | **datetime** | Timestamp when the entity was created.                |
-| **updated_at**        | **datetime** | Timestamp when the entity was last updated.           |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**id** | **str** | Unique identifier (UUID) of the battle round. | 
+**battle_id** | **str** | Unique identifier (UUID) of the battle. | 
+**round_number** | **int** | Sequential round number within a battle. Starts at 1. | 
+**prompt_message_id** | **str** | Unique identifier (UUID) of the message. | [optional] 
+**model1_message_id** | **str** | Unique identifier (UUID) of the message. | [optional] 
+**model2_message_id** | **str** | Unique identifier (UUID) of the message. | [optional] 
+**created_at** | **datetime** | Timestamp when the entity was created. | 
+**updated_at** | **datetime** | Timestamp when the entity was last updated. | 
 
 ## Example
 
@@ -32,5 +32,6 @@ battle_round_dict = battle_round_instance.to_dict()
 # create an instance of BattleRound from a dict
 battle_round_from_dict = BattleRound.from_dict(battle_round_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

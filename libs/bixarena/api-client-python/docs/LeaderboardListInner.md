@@ -1,13 +1,14 @@
 # LeaderboardListInner
 
+
 ## Properties
 
-| Name            | Type         | Description                                   | Notes |
-| --------------- | ------------ | --------------------------------------------- | ----- |
-| **id**          | **str**      | Unique identifier for the leaderboard         |
-| **name**        | **str**      | Display name for the leaderboard              |
-| **description** | **str**      | Description of what this leaderboard measures |
-| **updated_at**  | **datetime** | When this leaderboard was last updated        |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**id** | **str** | Unique identifier for the leaderboard | 
+**name** | **str** | Display name for the leaderboard | 
+**description** | **str** | Description of what this leaderboard measures | 
+**updated_at** | **datetime** | When this leaderboard was last updated | 
 
 ## Example
 
@@ -26,5 +27,6 @@ leaderboard_list_inner_dict = leaderboard_list_inner_instance.to_dict()
 # create an instance of LeaderboardListInner from a dict
 leaderboard_list_inner_from_dict = LeaderboardListInner.from_dict(leaderboard_list_inner_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

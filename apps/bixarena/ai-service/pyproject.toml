@@ -39,7 +39,9 @@ dependencies = [
   # Needed by models (Self) until Python stdlib covers all
   "typing-extensions>=4.15.0",
   # OpenRouter LLM client (OpenAI-compatible SDK)
-  "openai>=1.0"
+  "openai>=1.0",
+  # Valkey/Redis async client for caching
+  "valkey[libvalkey]>=6.0.0"
 ]
 
 # Transitional console script now points to wrapper package
