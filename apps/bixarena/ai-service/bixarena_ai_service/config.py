@@ -29,6 +29,17 @@ class Settings(BaseSettings):
     prompt_validation_confidence_threshold: float = 0.5
     prompt_max_length: int = 10000
 
+    # OpenRouter / LLM configuration
+    openrouter_api_key: str = ""
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    openrouter_model: str = "anthropic/claude-haiku-4.5"
+    openrouter_timeout: float = 30.0
+    openrouter_max_retries: int = 2
+
+    # Validation method ID — used as part of the cache key.
+    # Bump when changing the classification prompt or model.
+    prompt_validation_method: str = "openrouter-haiku-v1"
+
     class Config:
         env_prefix = "BIXARENA_AI_"
         case_sensitive = False

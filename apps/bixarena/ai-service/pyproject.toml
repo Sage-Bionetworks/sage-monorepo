@@ -37,7 +37,9 @@ dependencies = [
   "websockets>=15.0.1",
   "watchgod>=0.8.2",
   # Needed by models (Self) until Python stdlib covers all
-  "typing-extensions>=4.15.0"
+  "typing-extensions>=4.15.0",
+  # OpenRouter LLM client (OpenAI-compatible SDK)
+  "openai>=1.0"
 ]
 
 # Transitional console script now points to wrapper package
