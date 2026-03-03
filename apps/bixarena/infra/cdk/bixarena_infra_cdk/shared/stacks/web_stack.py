@@ -96,6 +96,7 @@ class WebStack(cdk.Stack):
             "BATTLE_ROUND_LIMIT": "5",
             "MAX_RESPONSE_TOKENS": "4096",
             "PROMPT_LEN_LIMIT": "5000",
+            "PROMPT_USE_LIMIT": "5",
             "APP_COMMUNITY_QUEST_ENABLED": "true",
         }
 
