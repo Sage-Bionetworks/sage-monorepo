@@ -34,6 +34,13 @@
         "cwd": "{projectRoot}"
       }
     },
+    "export-image-tarball": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker save ghcr.io/sage-bionetworks/bixarena-lambda:local -o /tmp/bixarena-lambda.tar"
+      },
+      "dependsOn": ["build-image"]
+    },
     "invoke": {
       "executor": "nx:run-commands",
       "options": {
