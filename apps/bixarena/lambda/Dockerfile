@@ -10,7 +10,7 @@ WORKDIR /build
 
 # Install the pre-built shared library and its dependencies into /deps.
 # boto3 is pre-installed in the base image.
-COPY apps/bixarena/lambda/dist/*.tar.gz /tmp/
+COPY dist/*.tar.gz /tmp/
 RUN uv pip install /tmp/*.tar.gz --target /deps --system --no-cache-dir
 
 # ---- final image ----
@@ -22,7 +22,7 @@ ENV PYTHONPATH="${LAMBDA_TASK_ROOT}:/deps"
 COPY --from=builder /deps /deps
 
 # Copy all handler modules
-COPY apps/bixarena/lambda/leaderboard_snapshot/ ${LAMBDA_TASK_ROOT}/leaderboard_snapshot/
+COPY leaderboard_snapshot/ ${LAMBDA_TASK_ROOT}/leaderboard_snapshot/
 
 # Default handler (overridden per Lambda function in CDK)
 CMD ["leaderboard_snapshot.handler.lambda_handler"]
