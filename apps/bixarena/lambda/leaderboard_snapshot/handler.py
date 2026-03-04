@@ -7,14 +7,14 @@ Triggered by:
 
 Environment variables (all required, injected by CDK from Secrets Manager):
   POSTGRES_HOST     - RDS instance hostname
-  POSTGRES_PORT     - RDS port (default: 5432)
+  POSTGRES_PORT     - RDS port
   POSTGRES_DB       - Database name
   POSTGRES_USER     - Database username
   POSTGRES_PASSWORD - Database password
 
 Optional environment variables:
-  LEADERBOARD_SLUG  - Leaderboard to generate (default: 'overall')
-  NUM_BOOTSTRAP       - Bootstrap iterations for BT ranking (default: 1000)
+  LEADERBOARD_SLUG  - Leaderboard to generate
+  NUM_BOOTSTRAP     - Bootstrap iterations for BT ranking
 """
 
 import json
