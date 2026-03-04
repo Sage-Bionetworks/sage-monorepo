@@ -13,7 +13,7 @@ import { HelpLinksComponent } from '../help-links/help-links.component';
 export class ComparisonToolFooterComponent {
   private readonly comparisonToolService = inject(ComparisonToolService);
 
-  shouldPaginate = computed(() => this.comparisonToolService.totalResultsCount() > 0);
+  shouldPaginate = computed(() => this.comparisonToolService.isInitialized());
   pageSize = this.comparisonToolService.pageSize;
   totalResultsCount = this.comparisonToolService.totalResultsCount;
   first = this.comparisonToolService.first;

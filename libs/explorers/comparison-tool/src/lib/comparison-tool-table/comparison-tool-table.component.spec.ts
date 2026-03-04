@@ -14,6 +14,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolTableComponent } from './comparison-tool-table.component';
 
 async function setup(
@@ -37,6 +38,7 @@ async function setup(
     providers: [
       provideHttpClient(),
       provideRouter([]),
+      MessageService,
       ...provideComparisonToolService({
         ...defaultCtOptions,
         ...ctServiceOptions,

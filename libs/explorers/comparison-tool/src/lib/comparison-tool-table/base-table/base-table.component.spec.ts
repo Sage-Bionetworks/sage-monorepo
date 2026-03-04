@@ -15,6 +15,7 @@ import {
   mockComparisonToolDataConfig,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
+import { MessageService } from 'primeng/api';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { BaseTableComponent } from './base-table.component';
@@ -26,6 +27,7 @@ async function setup() {
     providers: [
       provideRouter([]),
       provideHttpClient(withInterceptorsFromDi()),
+      MessageService,
       ...provideComparisonToolService({ configs: mockComparisonToolDataConfig }),
       ...provideComparisonToolFilterService({ significanceThresholdActive: false }),
       { provide: SvgIconService, useClass: SvgIconServiceStub },

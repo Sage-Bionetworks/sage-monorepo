@@ -4,7 +4,7 @@ import { ComparisonToolService, provideExplorersConfig } from '@sagebionetworks/
 import { render } from '@testing-library/angular';
 import { ComparisonToolFooterComponent } from './comparison-tool-footer.component';
 
-function getMockService(totalResults = 0, pageSize = 10, pageNumber = 0) {
+function getMockService(totalResults = 0, pageSize = 10, pageNumber = 0, isInitialized = true) {
   return {
     totalResultsCount: signal(totalResults),
     pageSize: signal(pageSize),
@@ -27,11 +27,12 @@ function getMockService(totalResults = 0, pageSize = 10, pageNumber = 0) {
       },
     }),
     unpinnedData: signal([]),
+    isInitialized: signal(isInitialized),
   };
 }
 
-async function setup(totalResults = 0, pageSize = 10, pageNumber = 0) {
-  const mockService = getMockService(totalResults, pageSize, pageNumber);
+async function setup(totalResults = 0, pageSize = 10, pageNumber = 0, isInitialized = true) {
+  const mockService = getMockService(totalResults, pageSize, pageNumber, isInitialized);
   const { fixture } = await render(ComparisonToolFooterComponent, {
     providers: [
       provideNoopAnimations(),
@@ -49,20 +50,25 @@ describe('ComparisonToolFooterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not show paginator when totalResultsCount is 0', async () => {
-    const { fixture } = await setup(0);
+  it('should not show paginator when not initialized', async () => {
+    const { fixture } = await setup(0, 10, 0, false);
     expect(fixture.nativeElement.querySelector('p-paginator')).toBeNull();
   });
 
-  it('should show paginator when totalResultsCount is greater than 0', async () => {
+  it('should show paginator when initialized even with 0 results', async () => {
+    const { fixture } = await setup(0);
+    expect(fixture.nativeElement.querySelector('p-paginator')).toBeTruthy();
+  });
+
+  it('should show paginator when initialized with results', async () => {
     const { fixture } = await setup(25);
     expect(fixture.nativeElement.querySelector('p-paginator')).toBeTruthy();
   });
 
-  it('should compute shouldPaginate based on totalResultsCount', async () => {
-    const { component, mockService } = await setup(0);
+  it('should compute shouldPaginate based on isInitialized', async () => {
+    const { component, mockService } = await setup(0, 10, 0, false);
     expect(component.shouldPaginate()).toBe(false);
-    mockService.totalResultsCount.set(10);
+    mockService.isInitialized.set(true);
     expect(component.shouldPaginate()).toBe(true);
   });
 
