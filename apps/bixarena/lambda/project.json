@@ -1,0 +1,47 @@
+{
+  "name": "bixarena-lambda",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/bixarena/serve-detach.sh {projectName}"
+      },
+      "dependsOn": ["^build"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run ruff check leaderboard_snapshot/",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "invoke": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "curl -s -X POST 'http://localhost:8117/2015-03-31/functions/function/invocations' --data @{args.event}",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["language:python", "type:lambda", "package-manager:uv"],
+  "implicitDependencies": ["bixarena-leaderboard"]
+}

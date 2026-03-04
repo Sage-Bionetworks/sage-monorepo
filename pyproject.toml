@@ -77,6 +77,7 @@ members = [
   "apps/bixarena/ai-service",
   "apps/bixarena/app",
   "apps/bixarena/infra/cdk",
+  "apps/bixarena/lambda",
   "apps/bixarena/tools",
   "apps/openchallenges/infra/cdk",
   "apps/openchallenges/tools",

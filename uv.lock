@@ -8,6 +8,7 @@ members = [
     "bixarena-api-client",
     "bixarena-app",
     "bixarena-infra-cdk",
+    "bixarena-lambda",
     "bixarena-leaderboard",
     "bixarena-tools",
     "openchallenges-api-client",
@@ -306,6 +307,17 @@ requires-dist = [
     { name = "boto3", specifier = ">=1.40.51" },
     { name = "platform-infra-cdk-common", editable = "libs/platform/infra/cdk/common" },
 ]
+
+[[package]]
+name = "bixarena-lambda"
+version = "1.0.0"
+source = { editable = "apps/bixarena/lambda" }
+dependencies = [
+    { name = "bixarena-leaderboard" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "bixarena-leaderboard", editable = "libs/bixarena/leaderboard/python" }]
 
 [[package]]
 name = "bixarena-leaderboard"
