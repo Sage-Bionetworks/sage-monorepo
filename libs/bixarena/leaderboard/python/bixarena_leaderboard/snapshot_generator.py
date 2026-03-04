@@ -57,8 +57,14 @@ def generate_snapshot(
           - leaderboard_name: display name of the leaderboard
 
     Raises:
-        ValueError: If the leaderboard slug is not found or no evaluations exist.
+        ValueError: If num_bootstrap is out of range, the leaderboard slug is not
+                    found, or no evaluations exist.
     """
+    if not (1 <= num_bootstrap <= 5000):
+        raise ValueError(
+            f"num_bootstrap must be between 1 and 5000, got {num_bootstrap}"
+        )
+
     with get_db_connection() as conn:
         # Validate leaderboard slug
         available_slugs = fetch_leaderboard_ids(conn)

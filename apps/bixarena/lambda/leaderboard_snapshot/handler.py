@@ -3,7 +3,6 @@ Lambda handler for automated leaderboard snapshot generation.
 
 Triggered by:
   - EventBridge scheduled rule (daily at 2 AM UTC)
-  - Manual invocation via the admin API endpoint (async)
 
 Environment variables (all required, injected by CDK from Secrets Manager):
   POSTGRES_HOST     - RDS instance hostname
@@ -35,46 +34,32 @@ def lambda_handler(event: dict, context) -> dict:
 
     Accepts an optional event payload:
       {
-        "source": "manual",           # or "scheduled" (default)
         "leaderboard_slug": "overall",
         "num_bootstrap": 1000
       }
 
-    Returns:
+    Returns the result from generate_snapshot():
       {
-        "statusCode": 200,
-        "body": { snapshot_id, snapshot_identifier, entry_count,
-                  evaluation_count, leaderboard_name, correlation_id,
-                  duration_s }
+        "snapshot_id": "a1b2c3d4-...",
+        "snapshot_identifier": "snapshot_2026-03-04_02-00",
+        "entry_count": 42,
+        "evaluation_count": 1500,
+        "leaderboard_name": "Overall"
       }
     """
     correlation_id = str(uuid.uuid4())
     start = time.monotonic()
 
-    source = event.get("source", "scheduled")
     leaderboard_slug = event.get(
         "leaderboard_slug", os.getenv("LEADERBOARD_SLUG", "overall")
     )
     num_bootstrap = int(event.get("num_bootstrap", os.getenv("NUM_BOOTSTRAP", "1000")))
-
-    # Validate inputs
-    allowed_slugs = {"overall"}
-    if leaderboard_slug not in allowed_slugs:
-        raise ValueError(
-            f"Invalid leaderboard_slug '{leaderboard_slug}'. "
-            f"Allowed: {', '.join(sorted(allowed_slugs))}"
-        )
-    if not (100 <= num_bootstrap <= 5000):
-        raise ValueError(
-            f"num_bootstrap must be between 100 and 5000, got {num_bootstrap}"
-        )
 
     logger.info(
         json.dumps(
             {
                 "event": "start",
                 "correlation_id": correlation_id,
-                "source": source,
                 "leaderboard_slug": leaderboard_slug,
                 "num_bootstrap": num_bootstrap,
             }
@@ -117,5 +102,4 @@ def lambda_handler(event: dict, context) -> dict:
         )
     )
 
-    body = {**result, "correlation_id": correlation_id, "duration_s": duration_s}
-    return {"statusCode": 200, "body": body}
+    return result
