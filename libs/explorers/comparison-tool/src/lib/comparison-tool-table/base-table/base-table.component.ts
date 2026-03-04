@@ -7,14 +7,6 @@ import { ComparisonToolTableLinkComponent } from '../comparison-tool-table-link/
 import { HeatmapCircleComponent } from '../heatmap-circle/heatmap-circle.component';
 import { PrimaryIdentifierControlsComponent } from '../primary-identifier-controls/primary-identifier-controls.component';
 
-interface PaginationOptions {
-  rows: number;
-  showCurrentPageReport: boolean;
-  currentPageReportTemplate: string;
-  showPageLinks: boolean;
-  paginatorStyleClass: string;
-}
-
 @Component({
   selector: 'explorers-base-table',
   imports: [
@@ -41,17 +33,8 @@ export class BaseTableComponent {
   );
 
   data = input.required<Record<string, any>[]>();
-  shouldPaginate = input<boolean>(true);
   shouldShowNoDataMessage = input<boolean>(true);
   columnWidth = input<string>('auto');
-
-  paginationConfig: PaginationOptions = {
-    rows: 10,
-    showCurrentPageReport: true,
-    currentPageReportTemplate: '{first}-{last} of {totalRecords}',
-    showPageLinks: true,
-    paginatorStyleClass: 'comparison-tool-paginator',
-  };
 
   onLazyLoad(event: TableLazyLoadEvent) {
     this.comparisonToolService.handleLazyLoad(event);

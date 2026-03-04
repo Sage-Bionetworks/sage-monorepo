@@ -15,6 +15,13 @@
 
   .p-dialog-content {
     padding: 0 40px;
+
+    img,
+    svg,
+    video {
+      width: 100%;
+      height: auto;
+    }
   }
 
   .p-dialog-footer {
@@ -49,13 +56,6 @@
     .visualization-overview-panel-previous {
       margin-right: 12px;
     }
-  }
-
-  img,
-  svg,
-  video {
-    width: 100%;
-    height: auto;
   }
 
   .image-container,

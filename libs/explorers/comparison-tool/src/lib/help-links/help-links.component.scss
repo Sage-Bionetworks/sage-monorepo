@@ -1,13 +1,4 @@
 .help-links {
-  display: flex;
-  align-items: center;
-  padding: 10px 0 10px calc(var(--comparison-tool-primary-column-width));
-  z-index: 100;
-  pointer-events: none;
-  position: relative;
-  margin-top: -63px;
-  margin-bottom: 24px;
-
   .help-links-inner {
     display: flex;
 

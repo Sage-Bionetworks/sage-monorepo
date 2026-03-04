@@ -25,7 +25,6 @@
     }
     <explorers-base-table
       [data]="pinnedData()"
-      [shouldPaginate]="false"
       [shouldShowNoDataMessage]="false"
       [columnWidth]="columnWidth"
     />
@@ -64,7 +63,6 @@
 
   <explorers-base-table
     [data]="unpinnedData()"
-    [shouldPaginate]="true"
     [shouldShowNoDataMessage]="true"
     [columnWidth]="columnWidth"
   />

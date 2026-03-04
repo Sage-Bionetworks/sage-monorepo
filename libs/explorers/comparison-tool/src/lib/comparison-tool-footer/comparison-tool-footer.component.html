@@ -1,0 +1,12 @@
+<div class="comparison-tool-footer">
+  <explorers-help-links />
+  @if (shouldPaginate()) {
+    <p-paginator
+      [rows]="pageSize()"
+      [totalRecords]="totalResultsCount()"
+      [first]="first()"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      (onPageChange)="onPageChange($event)"
+    />
+  }
+</div>
