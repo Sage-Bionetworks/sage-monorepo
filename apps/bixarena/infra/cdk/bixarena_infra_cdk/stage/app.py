@@ -134,6 +134,9 @@ from bixarena_infra_cdk.shared.stacks.bastion_stack import BastionStack
 from bixarena_infra_cdk.shared.stacks.bucket_stack import BucketStack
 from bixarena_infra_cdk.shared.stacks.database_stack import DatabaseStack
 from bixarena_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
+from bixarena_infra_cdk.shared.stacks.leaderboard_lambda_stack import (
+    LeaderboardLambdaStack,
+)
 from bixarena_infra_cdk.shared.stacks.valkey_stack import ValkeyStack
 from bixarena_infra_cdk.shared.stacks.vpc_stack import VpcStack
 from bixarena_infra_cdk.shared.stacks.web_stack import WebStack
@@ -347,6 +350,22 @@ def main() -> None:
 
     # Note: Security group rules are configured within the constructs to allow
     # connections from the VPC CIDR range, avoiding cyclic dependencies
+
+    # Create leaderboard snapshot Lambda stack (depends on VPC and database)
+    LeaderboardLambdaStack(
+        app,
+        f"{stack_prefix}-leaderboard-lambda",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc_construct.vpc,
+        database=database_stack.database_construct.database,
+        database_secret_arn=database_secret.secret_arn,
+        app_version=app_version,
+        description=(
+            f"Leaderboard snapshot Lambda for BixArena {environment} environment"
+        ),
+    )
 
     # Create bucket stack
     BucketStack(
