@@ -37,7 +37,7 @@
     "invoke": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "curl -s -X POST 'http://localhost:8117/2015-03-31/functions/function/invocations' --data @{args.event}",
+        "command": "curl -s -X POST 'http://localhost:8117/2015-03-31/functions/function/invocations' --data '{}'",
         "cwd": "{projectRoot}"
       }
     }
