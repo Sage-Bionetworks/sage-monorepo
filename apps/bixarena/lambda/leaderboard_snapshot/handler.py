@@ -14,6 +14,8 @@ Environment variables (all required, injected by CDK from Secrets Manager):
 Optional environment variables:
   LEADERBOARD_SLUG  - Leaderboard to generate
   NUM_BOOTSTRAP     - Bootstrap iterations for BT ranking
+  MIN_EVALS         - Minimum evaluations per model to include
+  SIGNIFICANT       - Rank by statistical significance if "true"
 """
 
 import json
@@ -35,16 +37,24 @@ def lambda_handler(event: dict, context) -> dict:
     Accepts an optional event payload:
       {
         "leaderboard_slug": "overall",
-        "num_bootstrap": 1000
+        "num_bootstrap": 1000,
+        "min_evals": 10,
+        "significant": false
       }
 
-    Returns the result from generate_snapshot():
+    Returns the result from generate_snapshot() plus params used:
       {
         "snapshot_id": "a1b2c3d4-...",
         "snapshot_identifier": "snapshot_2026-03-04_02-00",
         "entry_count": 42,
         "evaluation_count": 1500,
-        "leaderboard_name": "Overall"
+        "leaderboard_name": "Overall",
+        "params": {
+          "leaderboard_slug": "overall",
+          "num_bootstrap": 1000,
+          "min_evals": 10,
+          "significant": false
+        }
       }
     """
     correlation_id = str(uuid.uuid4())
@@ -54,6 +64,11 @@ def lambda_handler(event: dict, context) -> dict:
         "leaderboard_slug", os.getenv("LEADERBOARD_SLUG", "overall")
     )
     num_bootstrap = int(event.get("num_bootstrap", os.getenv("NUM_BOOTSTRAP", "1000")))
+    min_evals = int(event.get("min_evals", os.getenv("MIN_EVALS", "10")))
+    significant = (
+        str(event.get("significant", os.getenv("SIGNIFICANT", "false"))).lower()
+        == "true"
+    )
 
     logger.info(
         json.dumps(
@@ -62,6 +77,8 @@ def lambda_handler(event: dict, context) -> dict:
                 "correlation_id": correlation_id,
                 "leaderboard_slug": leaderboard_slug,
                 "num_bootstrap": num_bootstrap,
+                "min_evals": min_evals,
+                "significant": significant,
             }
         )
     )
@@ -70,7 +87,8 @@ def lambda_handler(event: dict, context) -> dict:
         result = generate_snapshot(
             leaderboard_slug=leaderboard_slug,
             num_bootstrap=num_bootstrap,
-            min_evals=10,
+            min_evals=min_evals,
+            significant=significant,
         )
     except Exception as exc:
         duration_s = round(time.monotonic() - start, 2)
@@ -102,4 +120,10 @@ def lambda_handler(event: dict, context) -> dict:
         )
     )
 
+    result["params"] = {
+        "leaderboard_slug": leaderboard_slug,
+        "num_bootstrap": num_bootstrap,
+        "min_evals": min_evals,
+        "significant": significant,
+    }
     return result
