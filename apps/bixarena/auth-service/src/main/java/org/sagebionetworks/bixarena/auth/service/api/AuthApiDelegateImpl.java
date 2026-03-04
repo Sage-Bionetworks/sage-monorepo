@@ -85,6 +85,69 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
   }
 
   @Override
+  public ResponseEntity<Token200ResponseDto> serviceToken(String audience) {
+    HttpServletRequest req =
+      ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+
+    // Validate HTTP Basic credentials
+    String authHeader = req.getHeader("Authorization");
+    if (authHeader == null || !authHeader.startsWith("Basic ")) {
+      log.debug("Service token request missing Basic auth header");
+      return ResponseEntity.status(401).build();
+    }
+
+    String decoded;
+    try {
+      decoded = new String(
+        Base64.getDecoder().decode(authHeader.substring(6)),
+        StandardCharsets.UTF_8
+      );
+    } catch (IllegalArgumentException e) {
+      log.debug("Service token request has invalid Base64 in auth header");
+      return ResponseEntity.status(401).build();
+    }
+
+    String[] parts = decoded.split(":", 2);
+    if (parts.length != 2) {
+      log.debug("Service token request has malformed credentials");
+      return ResponseEntity.status(401).build();
+    }
+
+    String clientId = parts[0];
+    String clientSecret = parts[1];
+
+    // Validate against configured service credentials
+    if (!appProperties.auth().serviceClientId().equals(clientId)
+        || !appProperties.auth().serviceClientSecret().equals(clientSecret)) {
+      log.warn("Service token request with invalid credentials, clientId={}", clientId);
+      return ResponseEntity.status(401).build();
+    }
+
+    if (audience == null || audience.isBlank()) {
+      log.debug("Service token request missing required audience parameter");
+      return ResponseEntity.status(400).build();
+    }
+
+    // Mint a service token with a fixed service identity
+    var minted = jwtService.mint(
+      "bixarena-api-service",
+      List.of("service"),
+      audience,
+      appProperties.auth().serviceTokenTtlSeconds()
+    );
+    long expiresIn = Duration.between(Instant.now(), minted.expiresAt()).getSeconds();
+
+    var body = Token200ResponseDto.builder()
+      .accessToken(minted.token())
+      .tokenType(Token200ResponseDto.TokenTypeEnum.BEARER)
+      .expiresIn((int) expiresIn)
+      .build();
+
+    log.info("Service token minted for audience={}", audience);
+    return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);
+  }
+
+  @Override
   public ResponseEntity<UserInfoDto> getUserInfo() {
     HttpServletRequest req =
       ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();

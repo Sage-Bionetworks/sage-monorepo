@@ -2,11 +2,11 @@
 
 ## Properties
 
-| Name             | Type    | Description | Notes |
-| ---------------- | ------- | ----------- | ----- |
-| **access_token** | **str** |             |
-| **token_type**   | **str** |             |
-| **expires_in**   | **int** |             |
+| Name             | Type    | Description               | Notes |
+| ---------------- | ------- | ------------------------- | ----- |
+| **access_token** | **str** |                           |
+| **token_type**   | **str** |                           |
+| **expires_in**   | **int** | Token lifetime in seconds |
 
 ## Example
 

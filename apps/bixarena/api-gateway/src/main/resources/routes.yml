@@ -115,7 +115,8 @@ app:
       audience: 'urn:bixarena:auth'
       rateLimitRequestsPerMinute: 60
     - method: 'POST'
+      path: '/oauth2/service-token'
+      audience: 'urn:bixarena:auth'
+    - method: 'POST'
       path: '/oauth2/token'
       audience: 'urn:bixarena:auth'
-      anonymousAccess: true
-      rateLimitRequestsPerMinute: 60

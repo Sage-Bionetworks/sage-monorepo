@@ -227,8 +227,42 @@ public interface AuthApiDelegate {
     }
 
     /**
+     * POST /oauth2/service-token : Mint a service-to-service JWT (client credentials)
+     * Issues a JWT for service-to-service authentication using the OAuth2 Client Credentials grant. The caller authenticates with HTTP Basic (service client ID and secret). Returns a short-lived JWT with the requested audience. 
+     *
+     * @param audience Target audience for the JWT (e.g. &#39;urn:bixarena:ai&#39;) (required)
+     * @return Access token response (status code 200)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see AuthApi#serviceToken
+     */
+    default ResponseEntity<Token200ResponseDto> serviceToken(String audience) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"access_token\" : \"access_token\", \"token_type\" : \"Bearer\", \"expires_in\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * POST /oauth2/token : Mint short-lived internal JWT
-     * Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).  The optional audience parameter specifies the target service for the JWT. 
+     * Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint). The optional audience parameter specifies the target service for the JWT. 
      *
      * @param audience Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.  (optional)
      * @return Access token response (status code 200)
@@ -239,7 +273,7 @@ public interface AuthApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"access_token\" : \"access_token\", \"token_type\" : \"Bearer\", \"expires_in\" : 600 }";
+                    String exampleString = "{ \"access_token\" : \"access_token\", \"token_type\" : \"Bearer\", \"expires_in\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
