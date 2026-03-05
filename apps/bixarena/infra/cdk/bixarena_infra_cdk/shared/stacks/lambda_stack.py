@@ -1,4 +1,4 @@
-"""Leaderboard snapshot Lambda stack for BixArena infrastructure."""
+"""Lambda stack for BixArena infrastructure."""
 
 import aws_cdk as cdk
 from aws_cdk import aws_ec2 as ec2
@@ -12,8 +12,8 @@ from constructs import Construct
 from bixarena_infra_cdk.shared.image_loader import load_container_image
 
 
-class LeaderboardLambdaStack(cdk.Stack):
-    """Stack for the leaderboard snapshot Lambda function."""
+class LambdaStack(cdk.Stack):
+    """Stack for the BixArena Lambda functions."""
 
     def __init__(
         self,
@@ -29,7 +29,7 @@ class LeaderboardLambdaStack(cdk.Stack):
         **kwargs,
     ) -> None:
         """
-        Create the leaderboard snapshot Lambda stack.
+        Create the Lambda stack.
 
         Args:
             scope: CDK app scope
@@ -63,7 +63,7 @@ class LeaderboardLambdaStack(cdk.Stack):
             self,
             "LambdaSecurityGroup",
             vpc=vpc,
-            description="Security group for leaderboard snapshot Lambda",
+            description="Security group for BixArena Lambda",
             allow_all_outbound=True,
         )
 
@@ -71,7 +71,7 @@ class LeaderboardLambdaStack(cdk.Stack):
         database.connections.allow_from(
             security_group,
             ec2.Port.tcp(5432),
-            description="Allow leaderboard Lambda to connect to RDS",
+            description="Allow BixArena Lambda to connect to RDS",
         )
 
         container_env = {
@@ -133,11 +133,11 @@ class LeaderboardLambdaStack(cdk.Stack):
             self,
             "FunctionName",
             value=fn.function_name,
-            description="Leaderboard snapshot Lambda function name",
+            description="Lambda function name",
         )
         cdk.CfnOutput(
             self,
             "FunctionArn",
             value=fn.function_arn,
-            description="Leaderboard snapshot Lambda function ARN",
+            description="Lambda function ARN",
         )
