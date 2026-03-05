@@ -7,6 +7,7 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { mockComparisonToolConfigs } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolCategorySelectorsComponent } from './comparison-tool-category-selectors.component';
 
 async function setup(
@@ -17,6 +18,7 @@ async function setup(
     providers: [
       provideHttpClient(),
       provideRouter([]),
+      MessageService,
       ...provideComparisonToolService({
         configs: pageConfigs,
         selection: initialSelection,

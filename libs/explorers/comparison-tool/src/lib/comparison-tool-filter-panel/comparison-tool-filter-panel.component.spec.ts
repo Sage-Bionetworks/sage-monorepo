@@ -15,6 +15,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolFilterPanelComponent } from './comparison-tool-filter-panel.component';
 
 async function setup(isOpen = false) {
@@ -24,6 +25,7 @@ async function setup(isOpen = false) {
       provideRouter([]),
       HelperService,
       provideHttpClient(),
+      MessageService,
       ...provideComparisonToolService(),
       ...provideComparisonToolFilterService(),
       { provide: SvgIconService, useClass: SvgIconServiceStub },

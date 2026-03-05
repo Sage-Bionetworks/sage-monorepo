@@ -93,11 +93,6 @@ export const BasePreset = definePreset(Lara, {
         },
       },
     },
-    dialog: {
-      header: {
-        padding: '40px 40px 0 40px',
-      },
-    },
     multiselect: {
       overlay: {
         borderRadius: '0',

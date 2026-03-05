@@ -1,5 +1,4 @@
 <div class="base-table-container">
-  @let pagination = shouldPaginate() ? paginationConfig : null;
   <p-table
     ngSkipHydration
     #table
@@ -15,14 +14,6 @@
     breakpoint="0"
     stripedRows
     showGridlines
-    [paginator]="!!pagination"
-    [paginatorStyleClass]="pagination?.paginatorStyleClass ?? ''"
-    [rows]="pagination?.rows"
-    [rowsPerPageOptions]="[10, 25, 50]"
-    paginatorDropdownAppendTo="body"
-    [showCurrentPageReport]="!!pagination?.showCurrentPageReport"
-    [currentPageReportTemplate]="pagination?.currentPageReportTemplate ?? ''"
-    [showPageLinks]="pagination?.showPageLinks ?? null"
   >
     <ng-template pTemplate="emptymessage">
       @if (shouldShowNoDataMessage()) {

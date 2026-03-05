@@ -28,12 +28,16 @@ import {
 import { DEFAULT_SYNAPSE_WIKI_OWNER_ID } from '@sagebionetworks/agora/config';
 import { HelperService } from '@sagebionetworks/agora/services';
 import {
+  ComparisonToolService,
   HelperService as ExplorersHelperService,
   LoggerService,
+  provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
+import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tool';
 import { cloneDeep } from 'lodash';
 import { FilterService, MessageService, SortEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { Paginator, PaginatorState } from 'primeng/paginator';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { combineLatest, Subscription } from 'rxjs';
@@ -56,8 +60,6 @@ import { PopoverModule } from 'primeng/popover';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { GeneComparisonToolFilterListComponent } from './components/gene-comparison-tool-filter-list/gene-comparison-tool-filter-list.component';
-import { GeneComparisonToolHowToPanelComponent } from './components/gene-comparison-tool-how-to-panel/gene-comparison-tool-how-to-panel.component';
-import { GeneComparisonToolLegendPanelComponent } from './components/gene-comparison-tool-legend-panel/gene-comparison-tool-legend-panel.component';
 
 @Component({
   selector: 'agora-gene-comparison-tool',
@@ -74,8 +76,8 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
     PopoverLinkComponent,
     PopoverModule,
     SvgIconComponent,
-    GeneComparisonToolHowToPanelComponent,
-    GeneComparisonToolLegendPanelComponent,
+    HelpLinksComponent,
+    Paginator,
     GeneComparisonToolFilterListComponent,
     GeneComparisonToolScorePanelComponent,
     GeneComparisonToolDetailsPanelComponent,
@@ -83,6 +85,7 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
     GeneComparisonToolPinnedGenesModalComponent,
     LoadingIconComponent,
   ],
+  providers: [...provideComparisonToolService()],
   templateUrl: './gene-comparison-tool.component.html',
   styleUrls: ['./gene-comparison-tool.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -90,6 +93,7 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
 export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
+  comparisonToolService = inject(ComparisonToolService);
 
   router = inject(Router);
   route = inject(ActivatedRoute);
@@ -103,6 +107,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   readonly defaultSynapseWikiOwnerId = DEFAULT_SYNAPSE_WIKI_OWNER_ID;
 
   isLoading = true;
+  paginatorFirst = 0;
 
   /* Genes ----------------------------------------------------------------- */
   genes: GCTGene[] = [];
@@ -270,6 +275,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     // this.genesTable.showLoader = true;
     this.genes = [];
     this.pinnedItems = [];
+    this.paginatorFirst = 0;
 
     this.logger.log(
       `GeneComparisonToolComponent: Loading genes for ${this.category} / ${this.subCategory}`,
@@ -636,6 +642,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     if (!filterChanged) {
       this.genesTable._first = currentPage;
     }
+
+    this.paginatorFirst = this.genesTable._first ?? 0;
   }
 
   /* ----------------------------------------------------------------------- */
@@ -1323,6 +1331,11 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   onResize() {
     this.updateColumnWidth();
+  }
+
+  onPageChange(event: PaginatorState) {
+    this.paginatorFirst = event.first ?? 0;
+    this.genesTable.first = this.paginatorFirst;
   }
 
   getRoundedGeneData(gene: GCTDetailsPanelData) {

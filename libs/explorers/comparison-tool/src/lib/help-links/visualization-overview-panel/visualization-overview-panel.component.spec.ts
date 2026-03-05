@@ -12,6 +12,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { MessageService } from 'primeng/api';
 import { VisualizationOverviewPanelComponent } from './visualization-overview-panel.component';
 
 describe('VisualizationOverviewPanelComponent', () => {
@@ -32,6 +33,7 @@ describe('VisualizationOverviewPanelComponent', () => {
     const { fixture } = await render(VisualizationOverviewPanelComponent, {
       providers: [
         provideNoopAnimations(),
+        MessageService,
         { provide: AppCookieService, useValue: mockCookieService },
         provideExplorersConfig({ visualizationOverviewPanes: panes }),
         ...provideComparisonToolService({

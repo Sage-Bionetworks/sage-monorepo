@@ -40,14 +40,12 @@ type Story = StoryObj<BaseTableComponent>;
 export const Demo: Story = {
   args: {
     data: mockComparisonToolData,
-    shouldPaginate: true,
   },
 };
 
 export const NoData: Story = {
   args: {
     data: [],
-    shouldPaginate: true,
     shouldShowNoDataMessage: true,
   },
 };

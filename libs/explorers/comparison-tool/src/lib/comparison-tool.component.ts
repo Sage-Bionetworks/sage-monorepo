@@ -4,10 +4,10 @@ import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { ComparisonToolControlsComponent } from './comparison-tool-controls/comparison-tool-controls.component';
 import { ComparisonToolFilterListComponent } from './comparison-tool-filter-list/comparison-tool-filter-list.component';
 import { ComparisonToolFilterPanelComponent } from './comparison-tool-filter-panel/comparison-tool-filter-panel.component';
+import { ComparisonToolFooterComponent } from './comparison-tool-footer/comparison-tool-footer.component';
 import { ComparisonToolHeaderComponent } from './comparison-tool-header/comparison-tool-header.component';
 import { ComparisonToolTableComponent } from './comparison-tool-table/comparison-tool-table.component';
 import { HeatmapDetailsPanelComponent } from './comparison-tool-table/heatmap-details-panel/heatmap-details-panel.component';
-import { HelpLinksComponent } from './help-links/help-links.component';
 
 @Component({
   selector: 'explorers-comparison-tool',
@@ -18,7 +18,7 @@ import { HelpLinksComponent } from './help-links/help-links.component';
     ComparisonToolControlsComponent,
     ComparisonToolFilterListComponent,
     ComparisonToolTableComponent,
-    HelpLinksComponent,
+    ComparisonToolFooterComponent,
     HeatmapDetailsPanelComponent,
   ],
   templateUrl: './comparison-tool.component.html',

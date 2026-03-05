@@ -8,6 +8,7 @@ import {
 import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { MessageService } from 'primeng/api';
 import { PrimaryIdentifierControlsComponent } from './primary-identifier-controls.component';
 
 async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number }) {
@@ -19,6 +20,7 @@ async function setup(options?: { pinnedItems?: string[]; maxPinnedItems?: number
     providers: [
       provideHttpClient(),
       provideRouter([]),
+      MessageService,
       ...provideComparisonToolService({
         pinnedItems: options?.pinnedItems,
         maxPinnedItems: options?.maxPinnedItems,
