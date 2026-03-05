@@ -12,12 +12,21 @@ export const headerLinks: NavigationLink[] = [
     routerLink: [ROUTE_PATHS.GENE_COMPARISON],
   },
   {
-    label: 'Nominated Targets',
-    routerLink: [ROUTE_PATHS.NOMINATED_TARGETS],
-  },
-  {
-    label: 'Nominated Drugs',
-    routerLink: [ROUTE_PATHS.NOMINATED_DRUGS],
+    label: 'Nominations',
+    children: [
+      {
+        label: 'Nominated Targets',
+        routerLink: [ROUTE_PATHS.NOMINATED_TARGETS],
+      },
+      {
+        label: 'Nominated Drugs',
+        routerLink: [ROUTE_PATHS.NOMINATED_DRUGS],
+      },
+      {
+        label: 'Making Nominations',
+        routerLink: [ROUTE_PATHS.NOMINATION_FORM],
+      },
+    ],
   },
   {
     label: 'Teams',

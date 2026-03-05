@@ -34,6 +34,8 @@ async function setup() {
       provideRouter([
         { path: 'header-link-1', component: DummyComponent },
         { path: 'header-link-2', component: DummyComponent },
+        { path: 'child-link-1', component: DummyComponent },
+        { path: 'child-link-2', component: DummyComponent },
         { path: 'footer-link-internal-1', component: DummyComponent },
         { path: 'footer-link-internal-2', component: DummyComponent },
       ]),
@@ -41,7 +43,7 @@ async function setup() {
   });
 
   const component = fixture.componentInstance;
-  return { user, component };
+  return { user, component, fixture };
 }
 
 describe('HeaderComponent', () => {
@@ -62,8 +64,11 @@ describe('HeaderComponent', () => {
 
     await user.click(toggleButton);
 
-    // Verify header links are present in the popup menu
+    // Verify header links are present
     verifyHeaderLinks();
+
+    // Verify dropdown parent is shown
+    expect(screen.getByText('DropdownLink')).toBeInTheDocument();
 
     // Verify footer links are present in the popup menu
     verifyFooterLinks();
@@ -84,6 +89,29 @@ describe('HeaderComponent', () => {
     expect(screen.queryByRole('link', { name: 'FooterLinkInternal1' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'FooterLinkExternal' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'FooterLinkInternal2' })).not.toBeInTheDocument();
+  });
+
+  it('should show dropdown trigger for link with children in desktop mode', async () => {
+    changeWindowSize(DESKTOP_WIDTH);
+    await setup();
+
+    // The dropdown trigger should be visible with the parent label
+    expect(screen.getByText('DropdownLink')).toBeInTheDocument();
+  });
+
+  it('should show dropdown label and children in mobile mode', async () => {
+    changeWindowSize(MOBILE_WIDTH);
+    const { user } = await setup();
+    const toggleButton = screen.getByRole('button', { name: 'Toggle navigation' });
+
+    await user.click(toggleButton);
+
+    // Parent label should be visible
+    expect(screen.getByText('DropdownLink')).toBeInTheDocument();
+
+    // Children should be visible by default
+    expect(screen.getByRole('link', { name: 'ChildLink1' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'ChildLink2' })).toBeInTheDocument();
   });
 
   it('should toggle navigation visibility', async () => {

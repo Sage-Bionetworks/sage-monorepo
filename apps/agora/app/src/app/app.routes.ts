@@ -135,7 +135,7 @@ export const routes: Route[] = [
     pathMatch: 'full',
   },
   {
-    path: 'nomination-form',
+    path: ROUTE_PATHS.NOMINATION_FORM,
     loadChildren: () =>
       import('@sagebionetworks/agora/nomination-form').then((routes) => routes.nominationFormRoute),
     data: {

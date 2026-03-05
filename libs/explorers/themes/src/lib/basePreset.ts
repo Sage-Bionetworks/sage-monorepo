@@ -98,6 +98,20 @@ export const BasePreset = definePreset(Lara, {
         padding: '40px 40px 0 40px',
       },
     },
+    menu: {
+      root: {
+        borderRadius: '0',
+      },
+      item: {
+        borderRadius: '0',
+        focusBackground: '#DAE9E7',
+        focusColor: '#000',
+        padding: '1rem 1.25rem',
+      },
+      list: {
+        padding: '0.75rem 0',
+      },
+    },
     multiselect: {
       overlay: {
         borderRadius: '0',

@@ -20,8 +20,38 @@
           <div class="header-nav-inner">
             <ul>
               @for (link of links; track link.label) {
-                <li>
-                  @if (link.routerLink) {
+                <li [class.mobile-dropdown-item]="link.children && isMobile">
+                  @if (link.children && !isMobile) {
+                    <a
+                      class="dropdown-trigger"
+                      [class.active]="isDropdownActive(link)"
+                      (click)="menu.toggle($event)"
+                    >
+                      <span>{{ link.label }}</span>
+                    </a>
+                    <p-menu
+                      #menu
+                      [model]="getDropdownItems(link)"
+                      [popup]="true"
+                      styleClass="header-dropdown-menu"
+                      [pt]="{ root: { style: 'transform: translateY(1.25rem)' } }"
+                    />
+                  } @else if (link.children && isMobile) {
+                    <span class="mobile-dropdown-label">{{ link.label }}</span>
+                    <ul class="mobile-submenu">
+                      @for (child of link.children; track child.label) {
+                        <li>
+                          <a
+                            [routerLink]="child.routerLink"
+                            routerLinkActive="active"
+                            (click)="toggleNav()"
+                          >
+                            <span>{{ child.label }}</span>
+                          </a>
+                        </li>
+                      }
+                    </ul>
+                  } @else if (link.routerLink) {
                     <a
                       [routerLink]="link.routerLink"
                       routerLinkActive="active"
