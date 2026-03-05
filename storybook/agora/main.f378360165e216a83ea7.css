@@ -703,13 +703,6 @@ gene-evidence-metabolomics .box-plot-chart .y-axis-label {
   border-top-color: var(--color-tooltip);
 }
 
-.p-dialog-header .p-dialog-close-button {
-  color: var(--color-gray-600) !important;
-}
-.p-dialog-header .p-dialog-close-button:hover {
-  color: var(--color-action-primary) !important;
-}
-
 div.p-select {
   display: flex;
   padding: 12px 20px 12px 30px;
