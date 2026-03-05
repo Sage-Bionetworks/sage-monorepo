@@ -36,9 +36,10 @@ class Settings(BaseSettings):
     openrouter_timeout: float = 30.0
     openrouter_max_retries: int = 2
 
-    # Validation method ID — used as part of the cache key.
+    # Validation method IDs — used as part of the cache key.
     # Bump when changing the classification prompt or model.
     prompt_validation_method: str = "openrouter-haiku-v1"
+    battle_validation_method: str = "openrouter-haiku-v1"
 
     # Valkey configuration (DB 3 — DB 0/1/2 used by api/gateway/auth)
     valkey_host: str = "bixarena-valkey"

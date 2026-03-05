@@ -1,0 +1,33 @@
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+  battleId:
+    type: string
+    format: uuid
+  method:
+    type: string
+    maxLength: 100
+  confidence:
+    type: number
+    format: float
+    minimum: 0.0
+    maximum: 1.0
+  isBiomedical:
+    type: boolean
+  validatedBy:
+    type: string
+    format: uuid
+    nullable: true
+    description: User ID of the validator (null for automated validations)
+  createdAt:
+    type: string
+    format: date-time
+required:
+  - id
+  - battleId
+  - method
+  - confidence
+  - isBiomedical
+  - createdAt

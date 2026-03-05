@@ -4,6 +4,7 @@ bixarena_api_client/api/__init__.py
 bixarena_api_client/api/admin_api.py
 bixarena_api_client/api/auth_api.py
 bixarena_api_client/api/battle_api.py
+bixarena_api_client/api/battle_validation_api.py
 bixarena_api_client/api/example_prompt_api.py
 bixarena_api_client/api/leaderboard_api.py
 bixarena_api_client/api/model_api.py
@@ -31,6 +32,10 @@ bixarena_api_client/models/battle_round_update_request.py
 bixarena_api_client/models/battle_search_query.py
 bixarena_api_client/models/battle_sort.py
 bixarena_api_client/models/battle_update_request.py
+bixarena_api_client/models/battle_validation.py
+bixarena_api_client/models/battle_validation_create_request.py
+bixarena_api_client/models/battle_validation_request.py
+bixarena_api_client/models/battle_validation_response.py
 bixarena_api_client/models/callback200_response.py
 bixarena_api_client/models/example_prompt.py
 bixarena_api_client/models/example_prompt_page.py
@@ -92,6 +97,11 @@ docs/BattleRoundUpdateRequest.md
 docs/BattleSearchQuery.md
 docs/BattleSort.md
 docs/BattleUpdateRequest.md
+docs/BattleValidation.md
+docs/BattleValidationApi.md
+docs/BattleValidationCreateRequest.md
+docs/BattleValidationRequest.md
+docs/BattleValidationResponse.md
 docs/Callback200Response.md
 docs/ExamplePrompt.md
 docs/ExamplePromptApi.md
@@ -159,6 +169,11 @@ test/test_battle_round_update_request.py
 test/test_battle_search_query.py
 test/test_battle_sort.py
 test/test_battle_update_request.py
+test/test_battle_validation.py
+test/test_battle_validation_api.py
+test/test_battle_validation_create_request.py
+test/test_battle_validation_request.py
+test/test_battle_validation_response.py
 test/test_callback200_response.py
 test/test_example_prompt.py
 test/test_example_prompt_api.py

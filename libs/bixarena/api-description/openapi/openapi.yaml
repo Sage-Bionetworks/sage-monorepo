@@ -16,6 +16,9 @@ tags:
   - name: Prompt Validation
     description: Operations for validating biomedical prompts
     x-displayName: Prompt Validation
+  - name: Battle Validation
+    description: Operations for validating biomedical battles
+    x-displayName: Battle Validation
   - name: Admin
     description: Administrative endpoints requiring elevated roles.
     x-displayName: Admin
@@ -64,6 +67,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PromptValidation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /validate-battle:
+    post:
+      tags:
+        - Battle Validation
+      summary: Validate biomedical battle
+      description: Validates whether a battle's conversation (all user prompts) is biomedically related. Returns a confidence score. Requires authentication.
+      operationId: validateBattle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleValidationRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidation'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -579,6 +610,69 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
+  /battles/{battleId}/validations:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Battle
+      summary: Create a battle validation
+      description: Manually validate or invalidate a battle (admin only).
+      operationId: createBattleValidation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleValidationCreateRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidationResponse'
+          description: Battle validation created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+    get:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Battle
+      summary: List battle validations
+      description: Get all validations for a battle (admin only).
+      operationId: listBattleValidations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BattleValidationResponse'
+          description: List of battle validations
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /quests/{questId}/contributors:
     parameters:
       - $ref: '#/components/parameters/questId'
@@ -950,6 +1044,41 @@ components:
       required:
         - title
         - status
+    BattleValidationRequest:
+      type: object
+      description: The prompts from a battle to validate for biomedical relevance.
+      properties:
+        prompts:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 10000
+          minItems: 1
+          maxItems: 20
+          description: List of user prompts from all rounds of the battle
+      required:
+        - prompts
+    BattleValidation:
+      type: object
+      properties:
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)
+        isBiomedical:
+          type: boolean
+          description: Whether the battle conversation is considered biomedically related (confidence >= 0.5)
+        method:
+          type: string
+          maxLength: 100
+          description: The validation method used (e.g. 'openrouter-haiku-v1')
+      required:
+        - confidence
+        - isBiomedical
+        - method
     RateLimitError:
       allOf:
         - $ref: '#/components/schemas/BasicError'
@@ -1964,6 +2093,54 @@ components:
         - battleId
         - outcome
         - createdAt
+    BattleValidationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        battleId:
+          type: string
+          format: uuid
+        method:
+          type: string
+          maxLength: 100
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        isBiomedical:
+          type: boolean
+        validatedBy:
+          type: string
+          format: uuid
+          nullable: true
+          description: User ID of the validator (null for automated validations)
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - battleId
+        - method
+        - confidence
+        - isBiomedical
+        - createdAt
+    BattleValidationCreateRequest:
+      type: object
+      description: Request to manually validate or invalidate a battle.
+      properties:
+        isBiomedical:
+          type: boolean
+          description: Whether the admin considers this battle biomedically related
+        method:
+          type: string
+          maxLength: 100
+          description: Validation method identifier (e.g. 'human-review')
+          default: human-review
+      required:
+        - isBiomedical
     QuestContributor:
       type: object
       description: A user who contributed to the quest
@@ -2287,6 +2464,7 @@ x-tagGroups:
   - name: BixArena AI Service
     tags:
       - Prompt Validation
+      - Battle Validation
   - name: BixArena API Service
     tags:
       - Admin

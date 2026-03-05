@@ -29,7 +29,9 @@ logger = logging.getLogger(__name__)
 
 # Load the classification system prompt once at module level.
 _PROMPT_PATH = (
-    Path(__file__).resolve().parent.parent / "prompts" / "biomedical_classifier.md"
+    Path(__file__).resolve().parent.parent
+    / "prompts"
+    / "biomedical_prompt_classifier.md"
 )
 _SYSTEM_PROMPT: str = _PROMPT_PATH.read_text(encoding="utf-8").strip()
 

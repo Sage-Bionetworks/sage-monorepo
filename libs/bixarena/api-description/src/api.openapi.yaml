@@ -65,6 +65,8 @@ paths:
     $ref: paths/models/{modelId}/errors.yaml
   /battles/{battleId}/evaluations:
     $ref: paths/battles/{battleId}/evaluations.yaml
+  /battles/{battleId}/validations:
+    $ref: paths/battles/{battleId}/validations.yaml
   /quests/{questId}/contributors:
     $ref: paths/quests/{questId}/contributors.yaml
   /stats:

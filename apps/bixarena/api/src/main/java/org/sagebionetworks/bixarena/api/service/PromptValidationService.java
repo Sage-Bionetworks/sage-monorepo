@@ -4,12 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -26,27 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class PromptValidationService {
 
-  /** Refresh the token 30 seconds before it actually expires. */
-  private static final long TOKEN_REFRESH_MARGIN_SECONDS = 30;
-
   private final PromptValidationRepository promptValidationRepository;
+  private final ServiceTokenProvider serviceTokenProvider;
   private final AppProperties appProperties;
   private final ObjectMapper objectMapper;
-
-  private final HttpClient httpClient = HttpClient.newBuilder()
-    .version(HttpClient.Version.HTTP_1_1)
-    .build();
-
-  /** Cached service token and its expiration time. */
-  private volatile String cachedToken;
-  private volatile Instant tokenExpiresAt = Instant.EPOCH;
-
-  /** Response from the auth service /oauth2/service-token endpoint. */
-  private record ServiceTokenResponse(
-    @JsonProperty("access_token") String accessToken,
-    @JsonProperty("token_type") String tokenType,
-    @JsonProperty("expires_in") int expiresIn
-  ) {}
 
   /** Response from the AI service /validate-prompt endpoint. */
   private record AiValidationResponse(
@@ -64,11 +44,11 @@ public class PromptValidationService {
    * fails for any reason (network error, auth failure, etc.), the error is logged
    * but does NOT block round creation.
    */
-  @Async("promptValidationExecutor")
+  @Async("validationExecutor")
   @Transactional
   public void validateAndPersist(UUID battleId, UUID messageId, String promptText) {
     try {
-      String serviceToken = obtainServiceToken();
+      String serviceToken = serviceTokenProvider.obtainServiceToken();
       AiValidationResponse validation = callAiService(serviceToken, promptText);
       persistValidation(battleId, messageId, validation);
       log.info(
@@ -83,50 +63,6 @@ public class PromptValidationService {
     }
   }
 
-  private synchronized String obtainServiceToken() throws Exception {
-    // Return cached token if still valid
-    if (cachedToken != null && Instant.now().isBefore(tokenExpiresAt)) {
-      return cachedToken;
-    }
-
-    String clientId = appProperties.authService().serviceClientId();
-    String clientSecret = appProperties.authService().serviceClientSecret();
-    String credentials = clientId + ":" + clientSecret;
-    String encoded = Base64.getEncoder()
-      .encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
-
-    String url = appProperties.authService().baseUrl()
-      + "/oauth2/service-token?audience=urn:bixarena:ai";
-
-    HttpRequest request = HttpRequest.newBuilder(URI.create(url))
-      .header("Authorization", "Basic " + encoded)
-      .POST(HttpRequest.BodyPublishers.noBody())
-      .build();
-
-    HttpResponse<String> httpResponse = httpClient.send(
-      request,
-      HttpResponse.BodyHandlers.ofString()
-    );
-
-    if (httpResponse.statusCode() != 200) {
-      throw new IllegalStateException(
-        "Auth service returned " + httpResponse.statusCode() + ": " + httpResponse.body()
-      );
-    }
-
-    ServiceTokenResponse response = objectMapper.readValue(
-      httpResponse.body(),
-      ServiceTokenResponse.class
-    );
-
-    cachedToken = response.accessToken();
-    tokenExpiresAt = Instant.now()
-      .plusSeconds(response.expiresIn() - TOKEN_REFRESH_MARGIN_SECONDS);
-    log.debug("Cached service token, expires at {}", tokenExpiresAt);
-
-    return cachedToken;
-  }
-
   private AiValidationResponse callAiService(String token, String promptText) throws Exception {
     String jsonBody = objectMapper.writeValueAsString(Map.of("prompt", promptText));
     String url = appProperties.aiService().baseUrl() + "/validate-prompt";
@@ -139,7 +75,7 @@ public class PromptValidationService {
       .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
       .build();
 
-    HttpResponse<String> httpResponse = httpClient.send(
+    HttpResponse<String> httpResponse = serviceTokenProvider.getHttpClient().send(
       request,
       HttpResponse.BodyHandlers.ofString()
     );

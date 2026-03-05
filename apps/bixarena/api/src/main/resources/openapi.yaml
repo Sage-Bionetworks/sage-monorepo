@@ -722,6 +722,92 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Battle
+  /battles/{battleId}/validations:
+    get:
+      description: Get all validations for a battle (admin only).
+      operationId: listBattleValidations
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BattleValidationResponse'
+                type: array
+          description: List of battle validations
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: List battle validations
+      tags:
+        - Battle
+      x-rate-limit-requests-per-minute: 60
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
+    post:
+      description: Manually validate or invalidate a battle (admin only).
+      operationId: createBattleValidation
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleValidationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidationResponse'
+          description: Battle validation created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Create a battle validation
+      tags:
+        - Battle
+      x-rate-limit-requests-per-minute: 60
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
   /quests/{questId}/contributors:
     get:
       description: |
@@ -2422,6 +2508,62 @@ components:
         - createdAt
         - id
         - outcome
+      type: object
+    BattleValidationResponse:
+      example:
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        battleId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        method: method
+        confidence: 0.08008282
+        validatedBy: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        isBiomedical: true
+      properties:
+        id:
+          format: uuid
+          type: string
+        battleId:
+          format: uuid
+          type: string
+        method:
+          maxLength: 100
+          type: string
+        confidence:
+          format: float
+          maximum: 1
+          minimum: 0
+          type: number
+        isBiomedical:
+          type: boolean
+        validatedBy:
+          description: User ID of the validator (null for automated validations)
+          format: uuid
+          nullable: true
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - battleId
+        - confidence
+        - createdAt
+        - id
+        - isBiomedical
+        - method
+      type: object
+    BattleValidationCreateRequest:
+      description: Request to manually validate or invalidate a battle.
+      properties:
+        isBiomedical:
+          description: Whether the admin considers this battle biomedically related
+          type: boolean
+        method:
+          default: human-review
+          description: Validation method identifier (e.g. 'human-review')
+          maxLength: 100
+          type: string
+      required:
+        - isBiomedical
       type: object
     QuestContributor:
       description: A user who contributed to the quest

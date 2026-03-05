@@ -1,5 +1,7 @@
 package org.sagebionetworks.bixarena.api.api;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,10 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
+import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
+import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
 import org.sagebionetworks.bixarena.api.service.BattleService;
@@ -34,6 +40,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   private final BattleService battleService;
   private final BattleRoundService battleRoundService;
   private final BattleEvaluationService battleEvaluationService;
+  private final BattleValidationRepository battleValidationRepository;
   private final NativeWebRequest request;
 
   @Override
@@ -132,6 +139,59 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
       battleRoundUpdateRequestDto
     );
     return ResponseEntity.ok(updated);
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<BattleValidationResponseDto> createBattleValidation(
+    UUID battleId,
+    BattleValidationCreateRequestDto battleValidationCreateRequestDto
+  ) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UUID validatorId = UUID.fromString(authentication.getName());
+    log.info("Admin {} creating battle validation for battle {}", validatorId, battleId);
+
+    String method = battleValidationCreateRequestDto.getMethod() != null
+      ? battleValidationCreateRequestDto.getMethod()
+      : "human-review";
+
+    BattleValidationEntity entity = BattleValidationEntity.builder()
+      .battleId(battleId)
+      .method(method)
+      .confidence(battleValidationCreateRequestDto.getIsBiomedical()
+        ? BigDecimal.ONE : BigDecimal.ZERO)
+      .isBiomedical(battleValidationCreateRequestDto.getIsBiomedical())
+      .validatedBy(validatorId)
+      .build();
+
+    BattleValidationEntity saved = battleValidationRepository.save(entity);
+    battleValidationRepository.flush();
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(toDto(saved));
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<List<BattleValidationResponseDto>> listBattleValidations(UUID battleId) {
+    log.info("Listing battle validations for battle {}", battleId);
+    List<BattleValidationResponseDto> validations = battleValidationRepository
+      .findByBattleIdOrderByCreatedAtDesc(battleId)
+      .stream()
+      .map(this::toDto)
+      .toList();
+    return ResponseEntity.ok(validations);
+  }
+
+  private BattleValidationResponseDto toDto(BattleValidationEntity entity) {
+    BattleValidationResponseDto dto = new BattleValidationResponseDto();
+    dto.setId(entity.getId());
+    dto.setBattleId(entity.getBattleId());
+    dto.setMethod(entity.getMethod());
+    dto.setConfidence(entity.getConfidence().floatValue());
+    dto.setIsBiomedical(entity.getIsBiomedical());
+    dto.setValidatedBy(entity.getValidatedBy());
+    dto.setCreatedAt(entity.getCreatedAt());
+    return dto;
   }
 
   @Override

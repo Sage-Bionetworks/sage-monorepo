@@ -16,6 +16,8 @@ security:
 tags:
   - name: Prompt Validation
     description: Operations for validating biomedical prompts
+  - name: Battle Validation
+    description: Operations for validating biomedical battles
 paths:
   /validate-prompt:
     post:
@@ -37,6 +39,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PromptValidation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /validate-battle:
+    post:
+      tags:
+        - Battle Validation
+      summary: Validate biomedical battle
+      description: Validates whether a battle's conversation (all user prompts) is biomedically related. Returns a confidence score. Requires authentication.
+      operationId: validateBattle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleValidationRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidation'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -102,6 +130,41 @@ components:
       required:
         - title
         - status
+    BattleValidationRequest:
+      type: object
+      description: The prompts from a battle to validate for biomedical relevance.
+      properties:
+        prompts:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 10000
+          minItems: 1
+          maxItems: 20
+          description: List of user prompts from all rounds of the battle
+      required:
+        - prompts
+    BattleValidation:
+      type: object
+      properties:
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)
+        isBiomedical:
+          type: boolean
+          description: Whether the battle conversation is considered biomedically related (confidence >= 0.5)
+        method:
+          type: string
+          maxLength: 100
+          description: The validation method used (e.g. 'openrouter-haiku-v1')
+      required:
+        - confidence
+        - isBiomedical
+        - method
   responses:
     BadRequest:
       description: Invalid request

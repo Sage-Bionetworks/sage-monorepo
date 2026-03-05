@@ -506,6 +506,65 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /battles/{battleId}/validations:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Battle
+      summary: Create a battle validation
+      description: Manually validate or invalidate a battle (admin only).
+      operationId: createBattleValidation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleValidationCreateRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidationResponse'
+          description: Battle validation created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Battle
+      summary: List battle validations
+      description: Get all validations for a battle (admin only).
+      operationId: listBattleValidations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BattleValidationResponse'
+          description: List of battle validations
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /quests/{questId}/contributors:
     parameters:
       - $ref: '#/components/parameters/questId'
@@ -1643,6 +1702,54 @@ components:
         - battleId
         - outcome
         - createdAt
+    BattleValidationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        battleId:
+          type: string
+          format: uuid
+        method:
+          type: string
+          maxLength: 100
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        isBiomedical:
+          type: boolean
+        validatedBy:
+          type: string
+          format: uuid
+          nullable: true
+          description: User ID of the validator (null for automated validations)
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - battleId
+        - method
+        - confidence
+        - isBiomedical
+        - createdAt
+    BattleValidationCreateRequest:
+      type: object
+      description: Request to manually validate or invalidate a battle.
+      properties:
+        isBiomedical:
+          type: boolean
+          description: Whether the admin considers this battle biomedically related
+        method:
+          type: string
+          maxLength: 100
+          description: Validation method identifier (e.g. 'human-review')
+          default: human-review
+      required:
+        - isBiomedical
     QuestContributor:
       type: object
       description: A user who contributed to the quest

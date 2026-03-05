@@ -20,6 +20,7 @@ __all__ = [
     "AdminApi",
     "AuthApi",
     "BattleApi",
+    "BattleValidationApi",
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
@@ -51,6 +52,10 @@ __all__ = [
     "BattleSearchQuery",
     "BattleSort",
     "BattleUpdateRequest",
+    "BattleValidation",
+    "BattleValidationCreateRequest",
+    "BattleValidationRequest",
+    "BattleValidationResponse",
     "Callback200Response",
     "ExamplePrompt",
     "ExamplePromptPage",
@@ -98,6 +103,9 @@ __all__ = [
 from bixarena_api_client.api.admin_api import AdminApi as AdminApi
 from bixarena_api_client.api.auth_api import AuthApi as AuthApi
 from bixarena_api_client.api.battle_api import BattleApi as BattleApi
+from bixarena_api_client.api.battle_validation_api import (
+    BattleValidationApi as BattleValidationApi,
+)
 from bixarena_api_client.api.example_prompt_api import (
     ExamplePromptApi as ExamplePromptApi,
 )
@@ -156,6 +164,18 @@ from bixarena_api_client.models.battle_search_query import (
 from bixarena_api_client.models.battle_sort import BattleSort as BattleSort
 from bixarena_api_client.models.battle_update_request import (
     BattleUpdateRequest as BattleUpdateRequest,
+)
+from bixarena_api_client.models.battle_validation import (
+    BattleValidation as BattleValidation,
+)
+from bixarena_api_client.models.battle_validation_create_request import (
+    BattleValidationCreateRequest as BattleValidationCreateRequest,
+)
+from bixarena_api_client.models.battle_validation_request import (
+    BattleValidationRequest as BattleValidationRequest,
+)
+from bixarena_api_client.models.battle_validation_response import (
+    BattleValidationResponse as BattleValidationResponse,
 )
 from bixarena_api_client.models.callback200_response import (
     Callback200Response as Callback200Response,

@@ -1,0 +1,14 @@
+type: object
+description: The prompts from a battle to validate for biomedical relevance.
+properties:
+  prompts:
+    type: array
+    items:
+      type: string
+      minLength: 1
+      maxLength: 10000
+    minItems: 1
+    maxItems: 20
+    description: List of user prompts from all rounds of the battle
+required:
+  - prompts

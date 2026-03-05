@@ -111,11 +111,14 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _BattleApi_           | [**create_battle**](docs/BattleApi.md#create_battle)                              | **POST** /battles                                       | Create a battle                                    |
 | _BattleApi_           | [**create_battle_evaluation**](docs/BattleApi.md#create_battle_evaluation)        | **POST** /battles/{battleId}/evaluations                | Create a battle evaluation                         |
 | _BattleApi_           | [**create_battle_round**](docs/BattleApi.md#create_battle_round)                  | **POST** /battles/{battleId}/rounds                     | Create a battle round                              |
+| _BattleApi_           | [**create_battle_validation**](docs/BattleApi.md#create_battle_validation)        | **POST** /battles/{battleId}/validations                | Create a battle validation                         |
 | _BattleApi_           | [**delete_battle**](docs/BattleApi.md#delete_battle)                              | **DELETE** /battles/{battleId}                          | Delete a battle                                    |
 | _BattleApi_           | [**get_battle**](docs/BattleApi.md#get_battle)                                    | **GET** /battles/{battleId}                             | Get a battle by ID                                 |
+| _BattleApi_           | [**list_battle_validations**](docs/BattleApi.md#list_battle_validations)          | **GET** /battles/{battleId}/validations                 | List battle validations                            |
 | _BattleApi_           | [**list_battles**](docs/BattleApi.md#list_battles)                                | **GET** /battles                                        | List battles                                       |
 | _BattleApi_           | [**update_battle**](docs/BattleApi.md#update_battle)                              | **PATCH** /battles/{battleId}                           | Update a battle                                    |
 | _BattleApi_           | [**update_battle_round**](docs/BattleApi.md#update_battle_round)                  | **PATCH** /battles/{battleId}/rounds/{roundId}          | Update a battle round                              |
+| _BattleValidationApi_ | [**validate_battle**](docs/BattleValidationApi.md#validate_battle)                | **POST** /validate-battle                               | Validate biomedical battle                         |
 | _ExamplePromptApi_    | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts                               |
 | _LeaderboardApi_      | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                            |
 | _LeaderboardApi_      | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get public leaderboard snapshots                   |
@@ -145,6 +148,10 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [BattleSearchQuery](docs/BattleSearchQuery.md)
 - [BattleSort](docs/BattleSort.md)
 - [BattleUpdateRequest](docs/BattleUpdateRequest.md)
+- [BattleValidation](docs/BattleValidation.md)
+- [BattleValidationCreateRequest](docs/BattleValidationCreateRequest.md)
+- [BattleValidationRequest](docs/BattleValidationRequest.md)
+- [BattleValidationResponse](docs/BattleValidationResponse.md)
 - [Callback200Response](docs/Callback200Response.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
 - [ExamplePromptPage](docs/ExamplePromptPage.md)

@@ -46,6 +46,13 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_create_battle_validation(self) -> None:
+        """Test case for create_battle_validation
+
+        Create a battle validation
+        """
+        pass
+
     def test_delete_battle(self) -> None:
         """Test case for delete_battle
 
@@ -57,6 +64,13 @@ class TestBattleApi(unittest.TestCase):
         """Test case for get_battle
 
         Get a battle by ID
+        """
+        pass
+
+    def test_list_battle_validations(self) -> None:
+        """Test case for list_battle_validations
+
+        List battle validations
         """
         pass
 
