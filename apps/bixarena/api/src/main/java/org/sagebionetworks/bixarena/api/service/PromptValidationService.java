@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
 import org.sagebionetworks.bixarena.api.model.entity.PromptValidationEntity;
 import org.sagebionetworks.bixarena.api.model.repository.PromptValidationRepository;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,7 @@ public class PromptValidationService {
    * fails for any reason (network error, auth failure, etc.), the error is logged
    * but does NOT block round creation.
    */
+  @Async("promptValidationExecutor")
   @Transactional
   public void validateAndPersist(UUID battleId, UUID messageId, String promptText) {
     try {
