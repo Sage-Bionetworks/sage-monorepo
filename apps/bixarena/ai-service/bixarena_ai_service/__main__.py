@@ -26,7 +26,7 @@ import sys
 
 import uvicorn
 
-DEFAULT_APP = "bixarena_ai_service.main:app"
+DEFAULT_APP = "bixarena_ai_service.app:app"
 
 
 def _inject_defaults(argv: list[str]) -> list[str]:
