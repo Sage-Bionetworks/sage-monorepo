@@ -82,16 +82,7 @@ class LambdaStack(cdk.Stack):
             "POSTGRES_HOST": database.db_instance_endpoint_address,
             "POSTGRES_PORT": database.db_instance_endpoint_port,
             "POSTGRES_DB": "bixarena",
-        }
-
-        # Secrets from AWS Secrets Manager (injected securely at runtime)
-        container_secrets = {
-            "POSTGRES_USER": lambda_.Secret.from_secrets_manager(
-                db_secret, field="username"
-            ),
-            "POSTGRES_PASSWORD": lambda_.Secret.from_secrets_manager(
-                db_secret, field="password"
-            ),
+            "DATABASE_SECRET_ARN": database_secret_arn,
         }
 
         # Lambda function
@@ -108,8 +99,10 @@ class LambdaStack(cdk.Stack):
             memory_size=2048,
             timeout=cdk.Duration.minutes(15),
             environment=container_env,
-            secrets=container_secrets,
         )
+
+        # Grant Lambda IAM permission to read DB credentials at runtime
+        db_secret.grant_read(fn)
 
         # TODO: restore to daily cron(hour="10", minute="0") before merging to prod
         # Temporary: every 5 minutes for dev testing

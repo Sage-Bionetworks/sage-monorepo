@@ -4,12 +4,14 @@ Lambda handler for automated leaderboard snapshot generation.
 Triggered by:
   - EventBridge scheduled rule (daily at 2 AM UTC)
 
-Environment variables (all required, injected by CDK from Secrets Manager):
-  POSTGRES_HOST     - RDS instance hostname
-  POSTGRES_PORT     - RDS port
-  POSTGRES_DB       - Database name
-  POSTGRES_USER     - Database username
-  POSTGRES_PASSWORD - Database password
+Environment variables (injected by CDK in AWS):
+  POSTGRES_HOST        - RDS instance hostname
+  POSTGRES_PORT        - RDS port
+  POSTGRES_DB          - Database name
+  DATABASE_SECRET_ARN  - ARN of Secrets Manager secret with 'username'/'password'
+
+Local dev (.env): set POSTGRES_USER and POSTGRES_PASSWORD directly.
+  DATABASE_SECRET_ARN is not set locally; credentials are read from env vars.
 
 Optional environment variables:
   LEADERBOARD_SLUG  - Leaderboard to generate
@@ -24,10 +26,31 @@ import os
 import time
 import uuid
 
+import boto3
 from bixarena_leaderboard.snapshot_generator import generate_snapshot
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+_secrets_client = boto3.client("secretsmanager")
+
+
+def _load_db_credentials() -> None:
+    """Fetch DB credentials from Secrets Manager and set as env vars.
+
+    Only runs when DATABASE_SECRET_ARN is set (i.e. in AWS).
+    Local dev uses POSTGRES_USER/POSTGRES_PASSWORD from .env directly.
+    """
+    secret_arn = os.getenv("DATABASE_SECRET_ARN")
+    if not secret_arn:
+        return
+    response = _secrets_client.get_secret_value(SecretId=secret_arn)
+    secret = json.loads(response["SecretString"])
+    os.environ["POSTGRES_USER"] = secret["username"]
+    os.environ["POSTGRES_PASSWORD"] = secret["password"]
+
+
+_load_db_credentials()
 
 
 def lambda_handler(event: dict, context) -> dict:
