@@ -111,13 +111,14 @@ class LeaderboardLambdaStack(cdk.Stack):
             secrets=container_secrets,
         )
 
-        # EventBridge rule: daily at 10:00 UTC (2 AM PST)
+        # TODO: restore to daily cron(hour="10", minute="0") before merging to prod
+        # Temporary: every 5 minutes for dev testing
         rule = events.Rule(
             self,
             "DailyScheduleRule",
             rule_name=f"{stack_prefix}-leaderboard-snapshot-schedule",
             description="Trigger leaderboard snapshot daily at 10:00 UTC (2 AM PST)",
-            schedule=events.Schedule.cron(hour="10", minute="0"),
+            schedule=events.Schedule.rate(cdk.Duration.minutes(5)),
         )
         rule.add_target(
             targets.LambdaFunction(
