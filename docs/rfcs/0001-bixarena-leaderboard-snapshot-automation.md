@@ -1,19 +1,20 @@
 ---
 title: BixArena Leaderboard Snapshot Automation
 date: 2026-01-09
-status: proposed
-author: Thomas Schaffter
-reviewers: []
+status: approved
+author: tschaffter
+reviewers: [rrchai]
 ---
 
 # BixArena Leaderboard Snapshot Automation
 
 ## Metadata
 
-- **Status**: Proposed
-- **Author**: Thomas Schaffter
+- **Status**: Approved
+- **Author**: [tschaffter](https://github.com/tschaffter)
+- **Reviewers**: [rrchai](https://github.com/rrchai)
 - **Created**: 2026-01-09
-- **Last Updated**: 2026-01-12
+- **Last Updated**: 2026-03-06
 
 ## Summary
 

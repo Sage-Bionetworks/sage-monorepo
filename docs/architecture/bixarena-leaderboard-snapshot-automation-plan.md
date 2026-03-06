@@ -1,58 +1,102 @@
+---
+title: BixArena Leaderboard Snapshot Automation
+date: 2026-01-09
+status: active
+author: tschaffter, rrchai
+related_rfc: docs/rfcs/0001-bixarena-leaderboard-snapshot-automation.md
+---
+
 # BixArena Leaderboard Snapshot Automation Implementation Plan
+
+**Authors**: [tschaffter](https://github.com/tschaffter), [rrchai](https://github.com/rrchai)
+
+## Implementation Status
+
+| Phase   | Description                                     | Status                    |
+| ------- | ----------------------------------------------- | ------------------------- |
+| Phase 1 | Extract shared library (`bixarena-leaderboard`) | ✅ Implemented (PR #3908) |
+| Phase 2 | Container image + handler (`bixarena-lambda`)   | ✅ Implemented (PR #3908) |
+| Phase 3 | CDK infrastructure (`LambdaStack`)              | ✅ Implemented (PR #3908) |
+
+## Implementation Divergences from RFC
+
+The RFC proposed AWS Lambda (`DockerImageFunction`) triggered by EventBridge. The actual implementation uses **ECS Scheduled Fargate Task** (`ScheduledFargateTask`). See [ADR-0001](../adr/0001-use-ecs-fargate-for-leaderboard-snapshot.md) for the full rationale.
+
+Other divergences:
+
+| Item                      | RFC / Plan                              | Implemented                                                           |
+| ------------------------- | --------------------------------------- | --------------------------------------------------------------------- |
+| Compute                   | AWS Lambda (`DockerImageFunction`)      | ECS Scheduled Fargate Task (`ScheduledFargateTask`)                   |
+| Image registry            | ECR (Lambda requirement)                | GHCR (consistent with all other bixarena services)                    |
+| Secret injection          | `boto3` Secrets Manager call in handler | `ecs.Secret.from_secrets_manager()` — ECS agent injects at task start |
+| Schedule time             | 2:00 AM UTC                             | 10:00 AM UTC (2:00 AM PST)                                            |
+| Schedule source           | `aws_events.Schedule.cron()` (Lambda)   | `aws_applicationautoscaling.Schedule.cron()` (Fargate)                |
+| Handler entrypoint        | `lambda_handler(event, context)`        | `run()` + `if __name__ == "__main__"`                                 |
+| RDS Proxy                 | Planned                                 | Not implemented (not needed at current scale)                         |
+| SNS / Slack notifications | Planned                                 | Deferred — future admin dashboard (ADR-0002)                          |
+| Admin API endpoint        | Planned (Phase 3)                       | Deferred — future admin dashboard (ADR-0002)                          |
 
 ## Overview
 
-Implement automated daily leaderboard snapshot generation using a hybrid approach:
+Automated daily leaderboard snapshot generation using:
 
-- **Primary**: AWS Lambda function triggered by EventBridge (scheduled)
-- **Secondary**: Protected API endpoint in AI service (on-demand)
-- **Shared**: Core snapshot generation logic extracted from `bixarena-tools`
+- **Primary**: ECS Scheduled Fargate Task triggered by EventBridge (daily 10:00 AM UTC)
+- **Secondary** _(planned)_: Protected admin API endpoint in AI service (on-demand)
+- **Shared**: Core snapshot generation logic in `libs/bixarena/leaderboard/python/` (`bixarena-leaderboard`)
 
 ## Architecture Diagram
+
+**Implemented (Phase 1–3):**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         Scheduled Execution                              │
 │                                                                          │
-│  EventBridge Rule ──> Lambda Function ──> RDS Proxy ──> PostgreSQL      │
-│  (cron: daily 2 AM)   (leaderboard-      (connection   (bixarena DB)   │
-│                        snapshot-gen)      pooling)                       │
+│  EventBridge Rule ──> Fargate Task ──────────────────> PostgreSQL       │
+│  (cron: daily         (bixarena-lambda                 (bixarena DB,   │
+│   10:00 AM UTC)        container image                  private subnet) │
+│                        from GHCR)                                        │
 │                            │                                             │
-│                            └──> SNS Topic ──> Slack Lambda ──> Slack    │
-│                                 (success/failure notifications)          │
-└─────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        On-Demand Execution                               │
-│                                                                          │
-│  API Gateway ──> AI Service ──> Lambda (async) ──> Returns 202          │
-│  (authenticated)  POST /admin/        │              with correlation_id│
-│                   generate-           │                                  │
-│                   snapshot            └──> RDS Proxy ──> PostgreSQL     │
-│                                       └──> SNS ──> Slack notification    │
-│                                                                          │
-│  Response: {"correlation_id": "...", "status": "initiated"}             │
+│                            └── structured JSON logs ──> CloudWatch      │
 └─────────────────────────────────────────────────────────────────────────┘
 
                               ┌──────────────────────────────┐
-                              │  Shared Logic                │
+                              │  Shared Library              │
                               │  (bixarena-leaderboard)      │
+                              │  libs/bixarena/leaderboard/  │
+                              │  python/                     │
                               │                              │
-                              │ - fetch_data()               │
-                              │ - compute_bradley_terry()    │
-                              │ - save_snapshot()            │
-                              │ - auto_publish=True          │
+                              │ - get_db_connection()        │
+                              │ - compute_leaderboard_bt()   │
+                              │ - generate_snapshot()        │
+                              │   (auto-publish enabled)     │
                               └──────────────────────────────┘
+```
+
+**Planned (Phase 4 / Monitoring):**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        On-Demand Execution (planned)                     │
+│                                                                          │
+│  AI Service ──> POST /admin/generate-snapshot ──> ECS run-task (async)  │
+│  (JWT admin)      returns 202 + correlation_id                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                   Monitoring (planned)                                   │
+│                                                                          │
+│  CloudWatch ──> SNS Topic ──> Slack notification                        │
+│  (task exit)    (success/failure)                                       │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 **Design Notes:**
 
-- Lambda currently generates **"overall"** leaderboard daily
-- Extensible design: pass `leaderboard_id` parameter for future leaderboards
-- Auto-publish enabled by default (sets `visible=true`)
-- Slack notifications sent on both success and failure
-- **On-demand execution**: Async Lambda invocation (returns immediately, no timeout issues)
-- **Metadata tracking**: `trigger_source` (scheduled/api), `triggered_by` (user email), `correlation_id`
+- Generates **"overall"** leaderboard daily; extensible to additional leaderboards
+- Auto-publish enabled: snapshot `visibility` set to `public` immediately after generation
+- Correlation ID (UUID) in structured JSON logs enables CloudWatch tracing
+- **Metadata tracking**: `correlation_id`, `leaderboard_slug`, `num_bootstrap`, `duration_s`
 
 ---
 
