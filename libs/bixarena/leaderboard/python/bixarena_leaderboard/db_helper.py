@@ -302,7 +302,6 @@ def insert_leaderboard_snapshot(
             },
         )
         snapshot_id = cur.fetchone()["id"]
-        conn.commit()
         return str(snapshot_id)
 
 
@@ -368,7 +367,6 @@ def update_leaderboard_snapshot(
             {"id": result["id"]},
         )
         snapshot = cur.fetchone()
-        conn.commit()
         return snapshot
 
 
@@ -434,7 +432,6 @@ def update_leaderboard_snapshot_by_id(conn, snapshot_id: str, **updates) -> dict
             {"id": result["id"]},
         )
         snapshot = cur.fetchone()
-        conn.commit()
         return snapshot
 
 
@@ -487,5 +484,4 @@ def insert_leaderboard_entries(
         )
 
         row_count = cur.rowcount
-        conn.commit()
         return row_count
