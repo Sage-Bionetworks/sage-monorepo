@@ -40,15 +40,14 @@ We will defer both features indefinitely and revisit them only when a concrete n
 
 ## Manual Trigger
 
-Developers can generate a prod snapshot on demand by opening an SSH tunnel to the prod RDS
+Developers can generate a snapshot on demand by opening an SSH tunnel to the target RDS
 instance and invoking the handler locally:
 
 ```bash
-# 1. Open SSH tunnel to prod RDS
-nx run bixarena-infra-cdk:start-db-tunnel prod
+# 1. Open SSH tunnel to RDS
+nx run bixarena-infra-cdk:start-db-tunnel [dev|stage|prod]
 
-# 2. Configure prod DB credentials in apps/bixarena/worker/.env
-#    (copy from .env.example and fill in POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, etc.)
+# 2. Configure DB credentials in apps/bixarena/worker/.env
 
 # 3. Run the handler locally
 nx run bixarena-worker:invoke
@@ -97,5 +96,5 @@ will be better surfaced through the future admin dashboard UI rather than a stan
 ## Related Decisions
 
 - [ADR-0001](./0001-scheduled-fargate-over-lambda.md): Fargate vs Lambda decision
-- [RFC-0001](../rfcs/0001-bixarena-leaderboard-snapshot-automation.md): Source RFC
+- [RFC-0001](../rfcs/0001-bixarena-leaderboard-snapshot-automation-plan.md): Source RFC
 - [Architecture Plan](../architecture/bixarena-leaderboard-snapshot-automation-plan.md): Full implementation details

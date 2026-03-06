@@ -2,14 +2,14 @@
 
 - **Status**: accepted
 - **Date**: 2026-03-06
-- **Decision Makers**: tschaffter, rrchai
+- **Decision Makers**: [rrchai](https://github.com/rrchai)
 - **Tags**: infrastructure, bixarena, leaderboard
 
 ## Context
 
 RFC-0001 proposed using AWS Lambda (`DockerImageFunction`) triggered by EventBridge to run the leaderboard snapshot container daily. During implementation, a blocking constraint was discovered: **AWS Lambda only supports container images stored in Amazon ECR**. It cannot pull images from external registries such as GHCR (GitHub Container Registry).
 
-All bixarena services publish container images exclusively to GHCR. Adding an ECR push step to CI would require maintaining a second registry, additional CI complexity, and diverge from the established monorepo pattern used by every other service (`api-service`, `auth-service`, `web`, `app`, `ai-service`).
+For dev, this is not an issue — `image_loader.py` uploads a local tarball to ECR as a CDK asset, which Lambda can pull. For stage and prod, all bixarena services publish to GHCR only, so Lambda has no compatible image source without an additional sync step.
 
 ## Decision
 
@@ -56,5 +56,5 @@ Sync the GHCR image to ECR as part of the CDK deployment pipeline so Lambda's `D
 
 ## Related Decisions
 
-- [RFC-0001](../rfcs/0001-bixarena-leaderboard-snapshot-automation.md): Source RFC proposing Lambda-based automation
+- [RFC-0001](../rfcs/0001-bixarena-leaderboard-snapshot-automation-plan.md): Source RFC proposing Lambda-based automation
 - [Architecture Plan](../architecture/bixarena-leaderboard-snapshot-automation-plan.md): Full implementation details including divergence table
