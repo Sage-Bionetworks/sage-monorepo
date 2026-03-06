@@ -46,32 +46,41 @@ public class BattleValidationService {
 
   /**
    * Validates all user prompts in a battle by calling the AI service
-   * and persisting the result.
-   *
-   * <p>This method is fire-and-forget: errors are logged but do NOT block voting.
+   * and persisting the result. Fire-and-forget: errors are logged but do NOT block voting.
    */
   @Async("validationExecutor")
   @Transactional
-  public void validateAndPersistBattle(UUID battleId) {
+  public void validateAndPersistBattleAsync(UUID battleId) {
     try {
-      // Collect all user prompts from the battle's rounds
-      List<BattleRoundEntity> rounds = battleRoundRepository
-        .findByBattleIdOrderByRoundNumberAsc(battleId);
+      validateAndPersistBattle(battleId);
+    } catch (Exception e) {
+      log.warn(
+        "Battle validation failed for battle {} — skipping: {}",
+        battleId, e.getMessage()
+      );
+    }
+  }
 
-      List<String> prompts = rounds.stream()
-        .map(round -> messageRepository.findById(round.getPromptMessageId()))
-        .filter(java.util.Optional::isPresent)
-        .map(opt -> opt.get().getContent())
-        .toList();
+  /**
+   * Validates all user prompts in a battle by calling the AI service
+   * and persisting the result. Returns the persisted entity.
+   *
+   * @throws IllegalStateException if no prompts found or AI service call fails
+   */
+  @Transactional
+  public BattleValidationEntity validateAndPersistBattle(UUID battleId) {
+    List<String> prompts = collectPrompts(battleId);
 
-      if (prompts.isEmpty()) {
-        log.warn("No prompts found for battle {} — skipping battle validation", battleId);
-        return;
-      }
+    if (prompts.isEmpty()) {
+      throw new IllegalStateException(
+        "No prompts found for battle " + battleId
+      );
+    }
 
+    try {
       String serviceToken = serviceTokenProvider.obtainServiceToken();
       AiBattleValidationResponse validation = callAiService(serviceToken, prompts);
-      persistValidation(battleId, validation);
+      BattleValidationEntity entity = persistValidation(battleId, validation);
       log.info(
         "Battle validation persisted for battle {}: method={}, confidence={}, isBiomedical={}",
         battleId,
@@ -79,9 +88,23 @@ public class BattleValidationService {
         validation.confidence(),
         validation.isBiomedical()
       );
+      return entity;
     } catch (Exception e) {
-      log.warn("Battle validation failed for battle {} — skipping: {}", battleId, e.getMessage());
+      throw new IllegalStateException(
+        "Battle validation failed for battle " + battleId + ": " + e.getMessage(), e
+      );
     }
+  }
+
+  private List<String> collectPrompts(UUID battleId) {
+    List<BattleRoundEntity> rounds = battleRoundRepository
+      .findByBattleIdOrderByRoundNumberAsc(battleId);
+
+    return rounds.stream()
+      .map(round -> messageRepository.findById(round.getPromptMessageId()))
+      .filter(java.util.Optional::isPresent)
+      .map(opt -> opt.get().getContent())
+      .toList();
   }
 
   private AiBattleValidationResponse callAiService(String token, List<String> prompts)
@@ -111,7 +134,8 @@ public class BattleValidationService {
     return objectMapper.readValue(httpResponse.body(), AiBattleValidationResponse.class);
   }
 
-  private void persistValidation(UUID battleId, AiBattleValidationResponse validation) {
+  private BattleValidationEntity persistValidation(
+      UUID battleId, AiBattleValidationResponse validation) {
     BattleValidationEntity entity = BattleValidationEntity.builder()
       .battleId(battleId)
       .method(validation.method())
@@ -128,5 +152,7 @@ public class BattleValidationService {
       battle.setEffectiveValidationId(entity.getId());
       battleRepository.save(battle);
     }
+
+    return entity;
   }
 }

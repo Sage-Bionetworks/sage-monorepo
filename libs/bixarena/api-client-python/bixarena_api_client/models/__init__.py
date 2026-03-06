@@ -42,6 +42,9 @@ from bixarena_api_client.models.battle_validation_request import BattleValidatio
 from bixarena_api_client.models.battle_validation_response import (
     BattleValidationResponse,
 )
+from bixarena_api_client.models.battle_validation_run_request import (
+    BattleValidationRunRequest,
+)
 from bixarena_api_client.models.callback200_response import Callback200Response
 from bixarena_api_client.models.example_prompt import ExamplePrompt
 from bixarena_api_client.models.example_prompt_page import ExamplePromptPage

@@ -19,11 +19,13 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationRunRequestDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
 import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
 import org.sagebionetworks.bixarena.api.service.BattleService;
+import org.sagebionetworks.bixarena.api.service.BattleValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +42,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   private final BattleService battleService;
   private final BattleRoundService battleRoundService;
   private final BattleEvaluationService battleEvaluationService;
+  private final BattleValidationService battleValidationService;
   private final BattleValidationRepository battleValidationRepository;
   private final NativeWebRequest request;
 
@@ -151,23 +154,29 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
     UUID validatorId = UUID.fromString(authentication.getName());
     log.info("Admin {} creating battle validation for battle {}", validatorId, battleId);
 
-    String method = battleValidationCreateRequestDto.getMethod() != null
-      ? battleValidationCreateRequestDto.getMethod()
-      : "human-review";
-
     BattleValidationEntity entity = BattleValidationEntity.builder()
       .battleId(battleId)
-      .method(method)
+      .method("human-review")
       .confidence(battleValidationCreateRequestDto.getIsBiomedical()
         ? BigDecimal.ONE : BigDecimal.ZERO)
       .isBiomedical(battleValidationCreateRequestDto.getIsBiomedical())
       .validatedBy(validatorId)
+      .reason(battleValidationCreateRequestDto.getReason())
       .build();
 
-    BattleValidationEntity saved = battleValidationRepository.save(entity);
-    battleValidationRepository.flush();
-
-    return ResponseEntity.status(HttpStatus.CREATED).body(toDto(saved));
+    try {
+      BattleValidationEntity saved = battleValidationRepository.save(entity);
+      battleValidationRepository.flush();
+      return ResponseEntity.status(HttpStatus.CREATED).body(toDto(saved));
+    } catch (org.springframework.dao.DataIntegrityViolationException e) {
+      if (e.getMessage() != null
+          && e.getMessage().contains(
+            "idx_battle_validation_battle_method_validator")) {
+        throw new org.sagebionetworks.bixarena.api.exception
+          .DuplicateBattleValidationException(battleId);
+      }
+      throw e;
+    }
   }
 
   @Override
@@ -190,8 +199,20 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
     dto.setConfidence(entity.getConfidence().floatValue());
     dto.setIsBiomedical(entity.getIsBiomedical());
     dto.setValidatedBy(entity.getValidatedBy());
+    dto.setReason(entity.getReason());
     dto.setCreatedAt(entity.getCreatedAt());
     return dto;
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<BattleValidationResponseDto> runBattleValidation(
+    UUID battleId,
+    BattleValidationRunRequestDto battleValidationRunRequestDto
+  ) {
+    log.info("Admin triggering automated validation for battle {}", battleId);
+    BattleValidationEntity entity = battleValidationService.validateAndPersistBattle(battleId);
+    return ResponseEntity.status(HttpStatus.CREATED).body(toDto(entity));
   }
 
   @Override

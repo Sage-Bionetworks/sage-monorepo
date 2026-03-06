@@ -4,10 +4,10 @@ Request to manually validate or invalidate a battle.
 
 ## Properties
 
-| Name              | Type     | Description                                                  | Notes                                  |
-| ----------------- | -------- | ------------------------------------------------------------ | -------------------------------------- |
+| Name              | Type     | Description                                                  | Notes      |
+| ----------------- | -------- | ------------------------------------------------------------ | ---------- |
 | **is_biomedical** | **bool** | Whether the admin considers this battle biomedically related |
-| **method**        | **str**  | Validation method identifier (e.g. &#39;human-review&#39;)   | [optional] [default to 'human-review'] |
+| **reason**        | **str**  | Optional reason for the validation decision                  | [optional] |
 
 ## Example
 

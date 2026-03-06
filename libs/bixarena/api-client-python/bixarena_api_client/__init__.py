@@ -56,6 +56,7 @@ __all__ = [
     "BattleValidationCreateRequest",
     "BattleValidationRequest",
     "BattleValidationResponse",
+    "BattleValidationRunRequest",
     "Callback200Response",
     "ExamplePrompt",
     "ExamplePromptPage",
@@ -176,6 +177,9 @@ from bixarena_api_client.models.battle_validation_request import (
 )
 from bixarena_api_client.models.battle_validation_response import (
     BattleValidationResponse as BattleValidationResponse,
+)
+from bixarena_api_client.models.battle_validation_run_request import (
+    BattleValidationRunRequest as BattleValidationRunRequest,
 )
 from bixarena_api_client.models.callback200_response import (
     Callback200Response as Callback200Response,

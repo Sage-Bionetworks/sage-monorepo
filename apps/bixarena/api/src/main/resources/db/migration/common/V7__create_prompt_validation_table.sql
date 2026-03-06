@@ -47,6 +47,7 @@ CREATE TABLE api.battle_validation (
   confidence DECIMAL(4,3) NOT NULL CHECK (confidence >= 0 AND confidence <= 1),
   is_biomedical BOOLEAN NOT NULL,
   validated_by UUID,  -- NULL for automated validations, user_id for human reviews
+  reason VARCHAR(1000),  -- Optional reason for the validation decision
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

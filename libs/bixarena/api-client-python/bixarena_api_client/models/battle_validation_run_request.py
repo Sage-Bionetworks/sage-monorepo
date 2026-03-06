@@ -16,26 +16,23 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class BattleValidationCreateRequest(BaseModel):
+class BattleValidationRunRequest(BaseModel):
     """
-    Request to manually validate or invalidate a battle.
+    Request to run an automated validation method against a battle.
     """  # noqa: E501
 
-    is_biomedical: StrictBool = Field(
-        description="Whether the admin considers this battle biomedically related",
-        alias="isBiomedical",
+    method: Optional[Annotated[str, Field(strict=True, max_length=100)]] = Field(
+        default=None,
+        description="Validation method to run (e.g. 'openrouter-haiku-v1'). If not specified, the default configured method is used.",
     )
-    reason: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = Field(
-        default=None, description="Optional reason for the validation decision"
-    )
-    __properties: ClassVar[List[str]] = ["isBiomedical", "reason"]
+    __properties: ClassVar[List[str]] = ["method"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -54,7 +51,7 @@ class BattleValidationCreateRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of BattleValidationCreateRequest from a JSON string"""
+        """Create an instance of BattleValidationRunRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,23 +71,16 @@ class BattleValidationCreateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if reason (nullable) is None
-        # and model_fields_set contains the field
-        if self.reason is None and "reason" in self.model_fields_set:
-            _dict["reason"] = None
-
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of BattleValidationCreateRequest from a dict"""
+        """Create an instance of BattleValidationRunRequest from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {"isBiomedical": obj.get("isBiomedical"), "reason": obj.get("reason")}
-        )
+        _obj = cls.model_validate({"method": obj.get("method")})
         return _obj

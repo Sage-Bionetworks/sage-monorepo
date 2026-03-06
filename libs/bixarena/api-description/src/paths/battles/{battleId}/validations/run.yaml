@@ -1,0 +1,38 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/battleId.yaml
+
+post:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Battle
+  summary: Run an automated validation method
+  description: >-
+    Run an automated validation method against a battle and return the result.
+    Useful for backfilling validations on battles created before automated
+    validation was implemented, or for running a different method. Admin only.
+  operationId: runBattleValidation
+  requestBody:
+    required: false
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../components/schemas/BattleValidationRunRequest.yaml
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/BattleValidationResponse.yaml
+      description: Validation completed and persisted successfully
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

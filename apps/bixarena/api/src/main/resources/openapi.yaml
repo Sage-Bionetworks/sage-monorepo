@@ -808,6 +808,57 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Battle
+  /battles/{battleId}/validations/run:
+    post:
+      description: "Run an automated validation method against a battle and return\
+        \ the result. Useful for backfilling validations on battles created before\
+        \ automated validation was implemented, or for running a different method.\
+        \ Admin only."
+      operationId: runBattleValidation
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleValidationRunRequest'
+        required: false
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidationResponse'
+          description: Validation completed and persisted successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Run an automated validation method
+      tags:
+        - Battle
+      x-rate-limit-requests-per-minute: 30
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
   /quests/{questId}/contributors:
     get:
       description: |
@@ -2531,6 +2582,7 @@ components:
       type: object
     BattleValidationResponse:
       example:
+        reason: reason
         createdAt: 2000-01-23T04:56:07.000+00:00
         battleId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         method: method
@@ -2560,6 +2612,11 @@ components:
           format: uuid
           nullable: true
           type: string
+        reason:
+          description: Optional reason for the validation decision
+          maxLength: 1000
+          nullable: true
+          type: string
         createdAt:
           format: date-time
           type: string
@@ -2577,13 +2634,22 @@ components:
         isBiomedical:
           description: Whether the admin considers this battle biomedically related
           type: boolean
-        method:
-          default: human-review
-          description: Validation method identifier (e.g. 'human-review')
-          maxLength: 100
+        reason:
+          description: Optional reason for the validation decision
+          maxLength: 1000
+          nullable: true
           type: string
       required:
         - isBiomedical
+      type: object
+    BattleValidationRunRequest:
+      description: Request to run an automated validation method against a battle.
+      properties:
+        method:
+          description: "Validation method to run (e.g. 'openrouter-haiku-v1'). If\
+            \ not specified, the default configured method is used."
+          maxLength: 100
+          type: string
       type: object
     QuestContributor:
       description: A user who contributed to the quest

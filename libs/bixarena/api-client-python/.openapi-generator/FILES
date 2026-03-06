@@ -36,6 +36,7 @@ bixarena_api_client/models/battle_validation.py
 bixarena_api_client/models/battle_validation_create_request.py
 bixarena_api_client/models/battle_validation_request.py
 bixarena_api_client/models/battle_validation_response.py
+bixarena_api_client/models/battle_validation_run_request.py
 bixarena_api_client/models/callback200_response.py
 bixarena_api_client/models/example_prompt.py
 bixarena_api_client/models/example_prompt_page.py
@@ -102,6 +103,7 @@ docs/BattleValidationApi.md
 docs/BattleValidationCreateRequest.md
 docs/BattleValidationRequest.md
 docs/BattleValidationResponse.md
+docs/BattleValidationRunRequest.md
 docs/Callback200Response.md
 docs/ExamplePrompt.md
 docs/ExamplePromptApi.md
@@ -174,6 +176,7 @@ test/test_battle_validation_api.py
 test/test_battle_validation_create_request.py
 test/test_battle_validation_request.py
 test/test_battle_validation_response.py
+test/test_battle_validation_run_request.py
 test/test_callback200_response.py
 test/test_example_prompt.py
 test/test_example_prompt_api.py

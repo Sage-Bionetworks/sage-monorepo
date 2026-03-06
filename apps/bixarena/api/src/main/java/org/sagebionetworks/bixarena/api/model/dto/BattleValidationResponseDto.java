@@ -38,6 +38,8 @@ public class BattleValidationResponseDto {
 
   private @Nullable UUID validatedBy = null;
 
+  private @Nullable String reason = null;
+
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
@@ -179,6 +181,26 @@ public class BattleValidationResponseDto {
     this.validatedBy = validatedBy;
   }
 
+  public BattleValidationResponseDto reason(@Nullable String reason) {
+    this.reason = reason;
+    return this;
+  }
+
+  /**
+   * Optional reason for the validation decision
+   * @return reason
+   */
+  @Size(max = 1000) 
+  @Schema(name = "reason", description = "Optional reason for the validation decision", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("reason")
+  public @Nullable String getReason() {
+    return reason;
+  }
+
+  public void setReason(@Nullable String reason) {
+    this.reason = reason;
+  }
+
   public BattleValidationResponseDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -214,12 +236,13 @@ public class BattleValidationResponseDto {
         Objects.equals(this.confidence, battleValidationResponse.confidence) &&
         Objects.equals(this.isBiomedical, battleValidationResponse.isBiomedical) &&
         Objects.equals(this.validatedBy, battleValidationResponse.validatedBy) &&
+        Objects.equals(this.reason, battleValidationResponse.reason) &&
         Objects.equals(this.createdAt, battleValidationResponse.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, battleId, method, confidence, isBiomedical, validatedBy, createdAt);
+    return Objects.hash(id, battleId, method, confidence, isBiomedical, validatedBy, reason, createdAt);
   }
 
   @Override
@@ -232,6 +255,7 @@ public class BattleValidationResponseDto {
     sb.append("    confidence: ").append(toIndentedString(confidence)).append("\n");
     sb.append("    isBiomedical: ").append(toIndentedString(isBiomedical)).append("\n");
     sb.append("    validatedBy: ").append(toIndentedString(validatedBy)).append("\n");
+    sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -267,6 +291,7 @@ public class BattleValidationResponseDto {
       this.instance.setConfidence(value.confidence);
       this.instance.setIsBiomedical(value.isBiomedical);
       this.instance.setValidatedBy(value.validatedBy);
+      this.instance.setReason(value.reason);
       this.instance.setCreatedAt(value.createdAt);
       return this;
     }
@@ -298,6 +323,11 @@ public class BattleValidationResponseDto {
     
     public BattleValidationResponseDto.Builder validatedBy(UUID validatedBy) {
       this.instance.validatedBy(validatedBy);
+      return this;
+    }
+    
+    public BattleValidationResponseDto.Builder reason(String reason) {
+      this.instance.reason(reason);
       return this;
     }
     

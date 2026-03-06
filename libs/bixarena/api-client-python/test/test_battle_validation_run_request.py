@@ -13,13 +13,13 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.battle_validation_create_request import (
-    BattleValidationCreateRequest,
+from bixarena_api_client.models.battle_validation_run_request import (
+    BattleValidationRunRequest,
 )
 
 
-class TestBattleValidationCreateRequest(unittest.TestCase):
-    """BattleValidationCreateRequest unit test stubs"""
+class TestBattleValidationRunRequest(unittest.TestCase):
+    """BattleValidationRunRequest unit test stubs"""
 
     def setUp(self):
         pass
@@ -27,27 +27,25 @@ class TestBattleValidationCreateRequest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> BattleValidationCreateRequest:
-        """Test BattleValidationCreateRequest
+    def make_instance(self, include_optional) -> BattleValidationRunRequest:
+        """Test BattleValidationRunRequest
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `BattleValidationCreateRequest`
+        # uncomment below to create an instance of `BattleValidationRunRequest`
         """
-        model = BattleValidationCreateRequest()
+        model = BattleValidationRunRequest()
         if include_optional:
-            return BattleValidationCreateRequest(
-                is_biomedical = True,
-                reason = ''
+            return BattleValidationRunRequest(
+                method = ''
             )
         else:
-            return BattleValidationCreateRequest(
-                is_biomedical = True,
+            return BattleValidationRunRequest(
         )
         """
 
-    def testBattleValidationCreateRequest(self):
-        """Test BattleValidationCreateRequest"""
+    def testBattleValidationRunRequest(self):
+        """Test BattleValidationRunRequest"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

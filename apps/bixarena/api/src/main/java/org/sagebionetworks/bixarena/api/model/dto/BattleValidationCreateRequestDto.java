@@ -26,7 +26,7 @@ public class BattleValidationCreateRequestDto {
 
   private Boolean isBiomedical;
 
-  private String method = "human-review";
+  private @Nullable String reason = null;
 
   public BattleValidationCreateRequestDto() {
     super();
@@ -59,24 +59,24 @@ public class BattleValidationCreateRequestDto {
     this.isBiomedical = isBiomedical;
   }
 
-  public BattleValidationCreateRequestDto method(String method) {
-    this.method = method;
+  public BattleValidationCreateRequestDto reason(@Nullable String reason) {
+    this.reason = reason;
     return this;
   }
 
   /**
-   * Validation method identifier (e.g. 'human-review')
-   * @return method
+   * Optional reason for the validation decision
+   * @return reason
    */
-  @Size(max = 100) 
-  @Schema(name = "method", description = "Validation method identifier (e.g. 'human-review')", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("method")
-  public String getMethod() {
-    return method;
+  @Size(max = 1000) 
+  @Schema(name = "reason", description = "Optional reason for the validation decision", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("reason")
+  public @Nullable String getReason() {
+    return reason;
   }
 
-  public void setMethod(String method) {
-    this.method = method;
+  public void setReason(@Nullable String reason) {
+    this.reason = reason;
   }
 
   @Override
@@ -89,12 +89,12 @@ public class BattleValidationCreateRequestDto {
     }
     BattleValidationCreateRequestDto battleValidationCreateRequest = (BattleValidationCreateRequestDto) o;
     return Objects.equals(this.isBiomedical, battleValidationCreateRequest.isBiomedical) &&
-        Objects.equals(this.method, battleValidationCreateRequest.method);
+        Objects.equals(this.reason, battleValidationCreateRequest.reason);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(isBiomedical, method);
+    return Objects.hash(isBiomedical, reason);
   }
 
   @Override
@@ -102,7 +102,7 @@ public class BattleValidationCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class BattleValidationCreateRequestDto {\n");
     sb.append("    isBiomedical: ").append(toIndentedString(isBiomedical)).append("\n");
-    sb.append("    method: ").append(toIndentedString(method)).append("\n");
+    sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -132,7 +132,7 @@ public class BattleValidationCreateRequestDto {
 
     protected Builder copyOf(BattleValidationCreateRequestDto value) { 
       this.instance.setIsBiomedical(value.isBiomedical);
-      this.instance.setMethod(value.method);
+      this.instance.setReason(value.reason);
       return this;
     }
 
@@ -141,8 +141,8 @@ public class BattleValidationCreateRequestDto {
       return this;
     }
     
-    public BattleValidationCreateRequestDto.Builder method(String method) {
-      this.instance.method(method);
+    public BattleValidationCreateRequestDto.Builder reason(String reason) {
+      this.instance.reason(reason);
       return this;
     }
     

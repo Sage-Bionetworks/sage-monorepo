@@ -10,6 +10,7 @@
 | **confidence**    | **float**    |                                                           |
 | **is_biomedical** | **bool**     |                                                           |
 | **validated_by**  | **str**      | User ID of the validator (null for automated validations) | [optional] |
+| **reason**        | **str**      | Optional reason for the validation decision               | [optional] |
 | **created_at**    | **datetime** |                                                           |
 
 ## Example

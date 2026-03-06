@@ -21,6 +21,11 @@ properties:
     format: uuid
     nullable: true
     description: User ID of the validator (null for automated validations)
+  reason:
+    type: string
+    maxLength: 1000
+    nullable: true
+    description: Optional reason for the validation decision
   createdAt:
     type: string
     format: date-time

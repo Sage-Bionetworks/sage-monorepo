@@ -50,7 +50,7 @@ public class BattleEvaluationService {
       battleEvaluationRepository.flush();
 
       // Trigger async battle validation (fire-and-forget)
-      battleValidationService.validateAndPersistBattle(battleId);
+      battleValidationService.validateAndPersistBattleAsync(battleId);
 
       return battleEvaluationMapper.convertToDto(saved);
     } catch (DataIntegrityViolationException e) {

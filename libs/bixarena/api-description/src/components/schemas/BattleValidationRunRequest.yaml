@@ -1,0 +1,9 @@
+type: object
+description: Request to run an automated validation method against a battle.
+properties:
+  method:
+    type: string
+    maxLength: 100
+    description: >-
+      Validation method to run (e.g. 'openrouter-haiku-v1').
+      If not specified, the default configured method is used.

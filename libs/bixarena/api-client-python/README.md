@@ -116,6 +116,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _BattleApi_           | [**get_battle**](docs/BattleApi.md#get_battle)                                    | **GET** /battles/{battleId}                             | Get a battle by ID                                 |
 | _BattleApi_           | [**list_battle_validations**](docs/BattleApi.md#list_battle_validations)          | **GET** /battles/{battleId}/validations                 | List battle validations                            |
 | _BattleApi_           | [**list_battles**](docs/BattleApi.md#list_battles)                                | **GET** /battles                                        | List battles                                       |
+| _BattleApi_           | [**run_battle_validation**](docs/BattleApi.md#run_battle_validation)              | **POST** /battles/{battleId}/validations/run            | Run an automated validation method                 |
 | _BattleApi_           | [**update_battle**](docs/BattleApi.md#update_battle)                              | **PATCH** /battles/{battleId}                           | Update a battle                                    |
 | _BattleApi_           | [**update_battle_round**](docs/BattleApi.md#update_battle_round)                  | **PATCH** /battles/{battleId}/rounds/{roundId}          | Update a battle round                              |
 | _BattleValidationApi_ | [**validate_battle**](docs/BattleValidationApi.md#validate_battle)                | **POST** /validate-battle                               | Validate biomedical battle                         |
@@ -152,6 +153,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [BattleValidationCreateRequest](docs/BattleValidationCreateRequest.md)
 - [BattleValidationRequest](docs/BattleValidationRequest.md)
 - [BattleValidationResponse](docs/BattleValidationResponse.md)
+- [BattleValidationRunRequest](docs/BattleValidationRunRequest.md)
 - [Callback200Response](docs/Callback200Response.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
 - [ExamplePromptPage](docs/ExamplePromptPage.md)

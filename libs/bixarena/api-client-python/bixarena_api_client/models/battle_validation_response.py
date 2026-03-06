@@ -43,6 +43,9 @@ class BattleValidationResponse(BaseModel):
         description="User ID of the validator (null for automated validations)",
         alias="validatedBy",
     )
+    reason: Optional[Annotated[str, Field(strict=True, max_length=1000)]] = Field(
+        default=None, description="Optional reason for the validation decision"
+    )
     created_at: datetime = Field(alias="createdAt")
     __properties: ClassVar[List[str]] = [
         "id",
@@ -51,6 +54,7 @@ class BattleValidationResponse(BaseModel):
         "confidence",
         "isBiomedical",
         "validatedBy",
+        "reason",
         "createdAt",
     ]
 
@@ -96,6 +100,11 @@ class BattleValidationResponse(BaseModel):
         if self.validated_by is None and "validated_by" in self.model_fields_set:
             _dict["validatedBy"] = None
 
+        # set to None if reason (nullable) is None
+        # and model_fields_set contains the field
+        if self.reason is None and "reason" in self.model_fields_set:
+            _dict["reason"] = None
+
         return _dict
 
     @classmethod
@@ -115,6 +124,7 @@ class BattleValidationResponse(BaseModel):
                 "confidence": obj.get("confidence"),
                 "isBiomedical": obj.get("isBiomedical"),
                 "validatedBy": obj.get("validatedBy"),
+                "reason": obj.get("reason"),
                 "createdAt": obj.get("createdAt"),
             }
         )

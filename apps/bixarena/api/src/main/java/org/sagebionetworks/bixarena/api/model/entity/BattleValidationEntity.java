@@ -43,6 +43,9 @@ public class BattleValidationEntity {
   @Column(name = "validated_by")
   private UUID validatedBy;
 
+  @Column(name = "reason", length = 1000)
+  private String reason;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;

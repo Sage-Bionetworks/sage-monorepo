@@ -81,6 +81,13 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_run_battle_validation(self) -> None:
+        """Test case for run_battle_validation
+
+        Run an automated validation method
+        """
+        pass
+
     def test_update_battle(self) -> None:
         """Test case for update_battle
 
