@@ -94,18 +94,6 @@
   .header-search {
     height: fit-content;
   }
-
-  .dropdown-trigger {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    .dropdown-icon {
-      font-size: 0.7rem;
-      margin-top: 2px;
-    }
-  }
 }
 
 #header:not(.is-mobile) {
