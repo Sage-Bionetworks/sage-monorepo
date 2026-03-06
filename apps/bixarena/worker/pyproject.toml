@@ -1,7 +1,7 @@
 [project]
-name = "bixarena-fargate"
+name = "bixarena-worker"
 version = "1.0.0"
-description = "BixArena Fargate tasks for automation"
+description = "BixArena worker tasks for automation"
 requires-python = "==3.13.3"
 readme = "README.md"
 license = { text = "Apache-2.0" }

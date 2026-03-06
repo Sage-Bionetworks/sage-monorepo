@@ -134,7 +134,7 @@
       "onAutoForward": "silent"
     },
     "8117": {
-      "label": "bixarena-fargate",
+      "label": "bixarena-worker",
       "onAutoForward": "silent"
     },
     "8500": {

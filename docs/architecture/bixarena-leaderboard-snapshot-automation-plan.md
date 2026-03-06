@@ -14,12 +14,12 @@ therelated_rfc: docs/rfcs/0001-bixarena-leaderboard-snapshot-automation.md
 | Phase   | Description                                     | Status                    |
 | ------- | ----------------------------------------------- | ------------------------- |
 | Phase 1 | Extract shared library (`bixarena-leaderboard`) | ✅ Implemented (PR #3908) |
-| Phase 2 | Container image + handler (`bixarena-fargate`)  | ✅ Implemented (PR #3908) |
-| Phase 3 | CDK infrastructure (`ScheduledFargateStack`)    | ✅ Implemented (PR #3908) |
+| Phase 2 | Container image + handler (`bixarena-worker`)   | ✅ Implemented (PR #3908) |
+| Phase 3 | CDK infrastructure (`WorkerStack`)              | ✅ Implemented (PR #3908) |
 
 ## Implementation Divergences from RFC
 
-The RFC proposed AWS Lambda (`DockerImageFunction`) triggered by EventBridge. The actual implementation uses **ECS Scheduled Fargate Task** (`ScheduledFargateTask`). See [ADR-0001](../adr/0001-use-ecs-fargate-for-leaderboard-snapshot.md) for the full rationale.
+The RFC proposed AWS Lambda (`DockerImageFunction`) triggered by EventBridge. The actual implementation uses **ECS Scheduled Fargate Task** (`ScheduledFargateTask`). See [ADR-0001](../adr/0001-scheduled-fargate-over-lambda.md) for the full rationale.
 
 Other divergences:
 
@@ -52,7 +52,7 @@ Automated daily leaderboard snapshot generation using:
 │                         Scheduled Execution                              │
 │                                                                          │
 │  EventBridge Rule ──> Fargate Task ──────────────────> PostgreSQL       │
-│  (cron: daily         (bixarena-fargate                 (bixarena DB,   │
+│  (cron: daily         (bixarena-worker                 (bixarena DB,   │
 │   10:00 AM UTC)        container image                  private subnet) │
 │                        from GHCR)                                        │
 │                            │                                             │
@@ -694,581 +694,81 @@ bixarena-leaderboard = { workspace = true }
 
 ---
 
-### Phase 2: Lambda Function Implementation
+### Phase 2: Worker Container Implementation
 
-#### 2.1 Lambda Handler Code
+#### 2.1 Project Structure
 
 ```
-apps/bixarena/functions/leaderboard-snapshot/
+apps/bixarena/worker/
 ├── Dockerfile
-├── lambda_function.py
-├── requirements.txt
+├── leaderboard_snapshot/
+│   └── handler.py
+├── project.json
+├── pyproject.toml
 └── README.md
 ```
 
-**lambda_function.py:**
+#### 2.2 Handler
+
+**File**: `apps/bixarena/worker/leaderboard_snapshot/handler.py`
 
 ```python
-"""Lambda handler for scheduled leaderboard snapshot generation."""
-import boto3
-import json
-import logging
-import os
-import time
-import uuid
-from datetime import UTC, datetime
-from typing import Any
+"""Handler for automated leaderboard snapshot generation."""
 
-from bixarena_leaderboard import SnapshotConfig, SnapshotGenerator
+def run() -> None:
+    """Generate and publish a leaderboard snapshot."""
+    ...
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-sns_client = boto3.client("sns")
-
-
-def validate_inputs(event: dict) -> None:
-    """Validate and sanitize Lambda event inputs."""
-    # Whitelist allowed leaderboards
-    allowed_leaderboards = ["overall", "open-source", "multimodal"]
-    leaderboard_id = event.get("leaderboard_id", "overall")
-    if leaderboard_id not in allowed_leaderboards:
-        raise ValueError(f"Invalid leaderboard_id: {leaderboard_id}")
-
-    # Validate bootstrap iterations (reasonable range)
-    num_bootstrap = event.get("num_bootstrap", 100)
-    if not isinstance(num_bootstrap, int) or num_bootstrap < 10 or num_bootstrap > 10000:
-        raise ValueError(f"Invalid num_bootstrap: {num_bootstrap}")
-
-    # Validate trigger source
-    trigger_source = event.get("trigger_source", "scheduled")
-    if trigger_source not in ["scheduled", "api"]:
-        raise ValueError(f"Invalid trigger_source: {trigger_source}")
-
-
-def get_database_url() -> str:
-    """Retrieve database credentials from Secrets Manager."""
-    secret_arn = os.environ["DB_SECRET_ARN"]
-
-    client = boto3.client("secretsmanager")
-    response = client.get_secret_value(SecretId=secret_arn)
-    secret = json.loads(response["SecretString"])
-
-    return (
-        f"postgresql://{secret['username']}:{secret['password']}"
-        f"@{secret['host']}:{secret['port']}/{secret['dbname']}"
-    )
-
-
-def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
-    """Lambda entry point for snapshot generation.
-
-    Args:
-        event: Event payload with metadata
-            - trigger_source: "scheduled" or "api"
-            - triggered_by: User email (for API) or "system" (for scheduled)
-            - correlation_id: Unique trace ID
-            - leaderboard_id: Leaderboard to generate
-            - num_bootstrap: Bootstrap iterations
-        context: Lambda context object
-
-    Returns:
-        Response with snapshot metadata
-    """
-    start_time = time.time()
-
-    # Extract metadata
-    trigger_source = event.get("trigger_source", "scheduled")
-    triggered_by = event.get("triggered_by", "system")
-    correlation_id = event.get("correlation_id", str(uuid.uuid4()))
-    leaderboard_id = event.get("leaderboard_id", "overall")
-    num_bootstrap = event.get("num_bootstrap", 100)
-
-    # Validate inputs
-    try:
-        validate_inputs(event)
-    except ValueError as e:
-        logger.error(f"Input validation failed: {str(e)}")
-        return {
-            "statusCode": 400,
-            "body": json.dumps({"error": str(e)}),
-        }
-
-    logger.info(
-        "Snapshot generation started",
-        extra={
-            "trigger_source": trigger_source,
-            "triggered_by": triggered_by,
-            "correlation_id": correlation_id,
-            "leaderboard_id": leaderboard_id,
-        }
-    )
-
-    # Get database URL from Secrets Manager
-    database_url = get_database_url()
-
-    # Configuration
-    config = SnapshotConfig(
-        database_url=database_url,
-        leaderboard_id=leaderboard_id,
-        num_bootstrap=num_bootstrap,
-        min_evaluations=int(os.getenv("MIN_EVALUATIONS", "0")),
-        rank_by_significance=os.getenv("RANK_BY_SIGNIFICANCE", "false").lower() == "true",
-    )
-
-    try:
-        generator = SnapshotGenerator(config)
-        result = generator.generate_snapshot(auto_publish=True)
-
-        duration_seconds = int(time.time() - start_time)
-
-        # Publish success notification to SNS
-        topic_arn = os.environ.get("NOTIFICATION_TOPIC_ARN")
-        if topic_arn:
-            sns_client.publish(
-                TopicArn=topic_arn,
-                Subject="Leaderboard Snapshot Generated",
-                Message=json.dumps({
-                    "status": "success",
-                    "trigger_source": trigger_source,
-                    "triggered_by": triggered_by,
-                    "correlation_id": correlation_id,
-                    "leaderboard_id": leaderboard_id,
-                    "snapshot_id": result["snapshot_id"],
-                    "entry_count": result["entry_count"],
-                    "evaluation_count": result["evaluation_count"],
-                    "duration_seconds": duration_seconds,
-                    "timestamp": datetime.now(UTC).isoformat(),
-                }),
-            )
-
-        logger.info(
-            f"Snapshot created successfully: {result}",
-            extra={
-                "correlation_id": correlation_id,
-                "snapshot_id": result["snapshot_id"],
-            }
-        )
-
-        return {
-            "statusCode": 200,
-            "body": json.dumps({
-                "message": "Snapshot generated successfully",
-                "correlation_id": correlation_id,
-                "snapshot_id": result["snapshot_id"],
-                "entry_count": result["entry_count"],
-                "evaluation_count": result["evaluation_count"],
-                "duration_seconds": duration_seconds,
-            }),
-        }
-
-    except Exception as e:
-        duration_seconds = int(time.time() - start_time)
-
-        # Publish failure notification to SNS
-        topic_arn = os.environ.get("NOTIFICATION_TOPIC_ARN")
-        if topic_arn:
-            sns_client.publish(
-                TopicArn=topic_arn,
-                Subject="Leaderboard Snapshot Failed",
-                Message=json.dumps({
-                    "status": "failure",
-                    "trigger_source": trigger_source,
-                    "triggered_by": triggered_by,
-                    "correlation_id": correlation_id,
-                    "leaderboard_id": leaderboard_id,
-                    "error": str(e),
-                    "duration_seconds": duration_seconds,
-                    "timestamp": datetime.now(UTC).isoformat(),
-                }),
-            )
-
-        logger.error(
-            f"Failed to generate snapshot: {str(e)}",
-            extra={
-                "correlation_id": correlation_id,
-                "trigger_source": trigger_source,
-            },
-            exc_info=True
-        )
-
-        return {
-            "statusCode": 500,
-            "body": json.dumps({
-                "message": "Snapshot generation failed",
-                "correlation_id": correlation_id,
-                "error": str(e),
-            }),
-        }
+if __name__ == "__main__":
+    run()
 ```
 
-**Dockerfile:**
+Reads configuration from environment variables (`LEADERBOARD_SLUG`, `NUM_BOOTSTRAP`, `MIN_EVALS`, `SIGNIFICANT`) and DB credentials (`POSTGRES_*`) injected by ECS at runtime from Secrets Manager.
 
-```dockerfile
-FROM public.ecr.aws/lambda/python:3.13
+#### 2.3 Nx Targets
 
-# Install system dependencies (if needed for psycopg)
-RUN microdnf install -y \
-    gcc \
-    postgresql-devel \
-    && microdnf clean all
-
-# Copy leaderboard library from workspace
-COPY ../../../libs/bixarena/leaderboard/python /tmp/bixarena-leaderboard
-RUN pip install /tmp/bixarena-leaderboard && rm -rf /tmp/bixarena-leaderboard
-
-# Copy Lambda function
-COPY lambda_function.py ${LAMBDA_TASK_ROOT}/
-COPY requirements.txt ${LAMBDA_TASK_ROOT}/
-
-# Install Lambda-specific dependencies
-RUN pip install -r ${LAMBDA_TASK_ROOT}/requirements.txt --target ${LAMBDA_TASK_ROOT}
-
-CMD ["lambda_function.handler"]
-```
-
-**requirements.txt:**
-
-```
-# Leaderboard library will be installed separately (from workspace)
-# Add any Lambda-specific dependencies here
-boto3>=1.40.0  # AWS SDK (included in Lambda runtime, but pin version)
-```
-
-#### 2.2 CDK Stack Implementation
-
-**File**: `apps/bixarena/infra/cdk/bixarena_infra_cdk/shared/stacks/leaderboard_snapshot_stack.py`
-
-```python
-"""CDK stack for leaderboard snapshot automation."""
-from aws_cdk import (
-    Duration,
-    Stack,
-    aws_ec2 as ec2,
-    aws_ecr_assets as ecr_assets,
-    aws_events as events,
-    aws_events_targets as targets,
-    aws_iam as iam,
-    aws_lambda as lambda_,
-    aws_logs as logs,
-    aws_rds as rds,
-)
-from constructs import Construct
-
-
-class LeaderboardSnapshotStack(Stack):
-    """Stack for automated leaderboard snapshot generation."""
-
-    def __init__(
-        self,
-        scope: Construct,
-        construct_id: str,
-        vpc: ec2.IVpc,
-        database_instance: rds.IDatabaseInstance,
-        database_secret_arn: str,
-        environment_name: str,
-        **kwargs,
-    ) -> None:
-        super().__init__(scope, construct_id, **kwargs)
-
-        # Build and push Docker image to ECR
-        lambda_image = ecr_assets.DockerImageAsset(
-            self,
-            "LeaderboardSnapshotImage",
-            directory="../../functions/leaderboard-snapshot",
-            platform=ecr_assets.Platform.LINUX_AMD64,
-        )
-
-        # Lambda function
-        snapshot_function = lambda_.DockerImageFunction(
-            self,
-            "LeaderboardSnapshotFunction",
-            code=lambda_.DockerImageCode.from_ecr(
-                repository=lambda_image.repository,
-                tag=lambda_image.asset_hash,
-            ),
-            timeout=Duration.minutes(15),  # Max Lambda timeout
-            memory_size=2048,  # 2GB for NumPy/SciPy
-            vpc=vpc,
-            vpc_subnets=ec2.SubnetSelection(
-                subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
-            ),
-            environment={
-                "DATABASE_URL": f"postgresql://{{username}}:{{password}}@{database_instance.db_instance_endpoint_address}:{database_instance.db_instance_endpoint_port}/bixarena",
-                "LEADERBOARD_ID": "overall",
-                "NUM_BOOTSTRAP": "1000",  # Production uses more iterations
-                "MIN_EVALUATIONS": "0",
-                "RANK_BY_SIGNIFICANCE": "false",
-                "LOG_LEVEL": "INFO",
-            },
-            log_retention=logs.RetentionDays.ONE_MONTH,
-            description=f"Generate daily leaderboard snapshots for {environment_name}",
-        )
-
-        # Grant database access
-        database_instance.grant_connect(snapshot_function)
-
-        # Grant access to read database credentials from Secrets Manager
-        snapshot_function.add_to_role_policy(
-            iam.PolicyStatement(
-                actions=["secretsmanager:GetSecretValue"],
-                resources=[database_secret_arn],
-            )
-        )
-
-        # EventBridge rule - daily at 2 AM UTC
-        schedule_rule = events.Rule(
-            self,
-            "LeaderboardSnapshotSchedule",
-            schedule=events.Schedule.cron(
-                minute="0",
-                hour="2",
-                month="*",
-                week_day="*",
-                year="*",
-            ),
-            description="Trigger daily leaderboard snapshot generation",
-        )
-
-        # Add Lambda as target
-        schedule_rule.add_target(
-            targets.LambdaFunction(
-                snapshot_function,
-                retry_attempts=2,
-            )
-        )
-
-        # CloudWatch Dashboard (optional)
-        # TODO: Add metrics for snapshot generation success/failure
-
-        # Outputs
-        self.snapshot_function = snapshot_function
-        self.schedule_rule = schedule_rule
-```
-
-**Integration in `dev/app.py`:**
-
-```python
-from bixarena_infra_cdk.shared.stacks.leaderboard_snapshot_stack import (
-    LeaderboardSnapshotStack,
-)
-
-# After database_stack is created...
-snapshot_stack = LeaderboardSnapshotStack(
-    app,
-    f"BixarenaSnapshotStack-{env_name}",
-    vpc=vpc_stack.vpc,
-    database_instance=database_stack.database_instance,
-    database_secret_arn=database_stack.database_secret.secret_arn,
-    environment_name=env_name,
-    env=env,
-)
-snapshot_stack.add_dependency(database_stack)
-snapshot_stack.add_dependency(vpc_stack)
-```
+- `nx run bixarena-worker:lint` — ruff check
+- `nx run bixarena-worker:build-image` — build Docker image
+- `nx run bixarena-worker:invoke` — run handler locally (for manual prod trigger via SSH tunnel)
 
 ---
 
-### Phase 3: AI Service Endpoint Implementation
+### Phase 3: CDK Infrastructure Implementation
 
-#### 3.1 Add Admin Endpoint
+#### 3.1 WorkerStack
 
-**File**: `apps/bixarena/ai-service/bixarena_ai_service/jobs/__init__.py`
+**File**: `apps/bixarena/infra/cdk/bixarena_infra_cdk/shared/stacks/worker_stack.py`
 
 ```python
-"""Background jobs and admin operations."""
+class WorkerStack(cdk.Stack):
+    """Stack for BixArena scheduled worker tasks."""
+    ...
 ```
 
-**File**: `apps/bixarena/ai-service/bixarena_ai_service/routers/admin.py`
+Uses `ecs_patterns.ScheduledFargateTask` triggered by EventBridge cron (`hour="10", minute="0"` UTC daily).
+
+Key resources created:
+
+- ECS task definition with `bixarena-worker` container image from GHCR (or local tarball in dev)
+- EventBridge rule: `{stack_prefix}-leaderboard-snapshot-schedule`
+- IAM execution role with Secrets Manager read + ECR pull permissions (for GuardDuty sidecar)
+
+#### 3.2 Integration in app.py (dev/stage/prod)
 
 ```python
-"""Admin operations router."""
-import boto3
-import json
-import logging
-import os
-import uuid
-from typing import Annotated
+from bixarena_infra_cdk.shared.stacks.worker_stack import WorkerStack
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-
-from bixarena_ai_service.security.jwt_validator import validate_jwt
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/admin", tags=["Admin Operations"])
-lambda_client = boto3.client("lambda")
-
-
-class SnapshotRequest(BaseModel):
-    """Request to generate a leaderboard snapshot."""
-
-    leaderboard_id: str = Field(
-        default="overall", description="Leaderboard ID to generate snapshot for"
-    )
-    num_bootstrap: int = Field(
-        default=100, ge=10, le=10000, description="Bootstrap iterations"
-    )
-
-
-class SnapshotResponse(BaseModel):
-    """Response for async snapshot generation."""
-
-    message: str
-    correlation_id: str
-    leaderboard_id: str
-    status: str = "initiated"
-
-
-async def validate_jwt_admin(
-    jwt_claims: Annotated[dict, Depends(validate_jwt)],
-) -> str:
-    """Validate JWT and ensure user has admin role.
-
-    Returns:
-        User email for audit logging
-
-    Raises:
-        HTTPException: If user does not have admin role
-    """
-    roles = jwt_claims.get("cognito:groups", [])
-    email = jwt_claims.get("email", jwt_claims.get("sub"))
-
-    if "admin" not in roles:
-        logger.warning(
-            f"User {email} attempted snapshot generation without admin role",
-            extra={"user_email": email, "roles": roles}
-        )
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin role required for snapshot generation",
-        )
-
-    return email
-
-
-@router.post(
-    "/generate-snapshot",
-    response_model=SnapshotResponse,
-    status_code=status.HTTP_202_ACCEPTED,
-    summary="Trigger leaderboard snapshot generation",
-    description="""
-    Asynchronously trigger leaderboard snapshot generation.
-
-    This endpoint invokes a Lambda function and returns immediately with a correlation ID.
-    The snapshot generation runs in the background (takes 2-5 minutes).
-    You will receive a Slack notification when complete.
-
-    Requires authentication with admin role.
-    """,
+WorkerStack(
+    app,
+    f"{stack_prefix}-worker",
+    stack_prefix=stack_prefix,
+    environment=environment,
+    vpc=vpc_stack.vpc,
+    cluster=ecs_cluster_stack.cluster,
+    database=database_stack.database_construct.database,
+    database_secret_arn=database_secret.secret_arn,
+    app_version=app_version,
 )
-async def generate_snapshot(
-    request: SnapshotRequest,
-    user_email: Annotated[str, Depends(validate_jwt_admin)],
-) -> SnapshotResponse:
-    """Trigger asynchronous leaderboard snapshot generation.
-
-    Args:
-        request: Snapshot generation parameters
-        user_email: Email of authenticated admin user
-
-    Returns:
-        Response with correlation ID for tracking
-    """
-    correlation_id = str(uuid.uuid4())
-    lambda_function_name = os.getenv("SNAPSHOT_LAMBDA_NAME")
-
-    if not lambda_function_name:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Snapshot Lambda function not configured",
-        )
-
-    logger.info(
-        f"Snapshot generation triggered by {user_email}",
-        extra={
-            "user_email": user_email,
-            "correlation_id": correlation_id,
-            "leaderboard_id": request.leaderboard_id,
-        }
-    )
-
-    try:
-        # Invoke Lambda asynchronously
-        lambda_client.invoke(
-            FunctionName=lambda_function_name,
-            InvocationType="Event",  # Async invocation (fire-and-forget)
-            Payload=json.dumps({
-                "trigger_source": "api",
-                "triggered_by": user_email,
-                "correlation_id": correlation_id,
-                "leaderboard_id": request.leaderboard_id,
-                "num_bootstrap": request.num_bootstrap,
-            }),
-        )
-
-        logger.info(
-            f"Lambda invoked successfully for correlation_id {correlation_id}",
-            extra={"correlation_id": correlation_id}
-        )
-
-        return SnapshotResponse(
-            message=(
-                "Snapshot generation initiated. "
-                "You will receive a Slack notification when complete."
-            ),
-            correlation_id=correlation_id,
-            leaderboard_id=request.leaderboard_id,
-            status="initiated",
-        )
-
-    except lambda_client.exceptions.ServiceException as e:
-        logger.error(
-            f"Failed to invoke Lambda: {str(e)}",
-            extra={"correlation_id": correlation_id},
-            exc_info=True
-        )
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to trigger snapshot generation: {str(e)}",
-        )
-```
-
-**Register router in `app.py`:**
-
-```python
-from bixarena_ai_service.routers.admin import router as admin_router
-
-# After middleware setup
-app.include_router(admin_router)
-```
-
-#### 3.2 Update AI Service Dependencies
-
-**Add boto3 to `pyproject.toml`:**
-
-```toml
-dependencies = [
-    # ... existing deps ...
-    "boto3>=1.40.0",  # AWS SDK for Lambda invocation
-]
-```
-
-**Add environment variable to AI service:**
-
-```python
-# In CDK stack for AI service ECS task definition
-task_definition.add_container(
-    "AIServiceContainer",
-    environment={
-        # ... existing env vars ...
-        "SNAPSHOT_LAMBDA_NAME": snapshot_lambda.function_name,
-    },
-)
-
-# Grant ECS task role permission to invoke Lambda
-snapshot_lambda.grant_invoke(ai_service_task_role)
 ```
 
 ---

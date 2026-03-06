@@ -1,5 +1,5 @@
 {
-  "name": "bixarena-fargate",
+  "name": "bixarena-worker",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "targets": {
@@ -37,7 +37,7 @@
     "export-image-tarball": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker save ghcr.io/sage-bionetworks/bixarena-fargate:local -o /tmp/bixarena-fargate.tar"
+        "command": "docker save ghcr.io/sage-bionetworks/bixarena-worker:local -o /tmp/bixarena-worker.tar"
       },
       "dependsOn": ["build-image"]
     },
@@ -49,6 +49,6 @@
       }
     }
   },
-  "tags": ["language:python", "type:fargate", "package-manager:uv"],
+  "tags": ["language:python", "type:worker", "package-manager:uv"],
   "implicitDependencies": ["bixarena-leaderboard"]
 }

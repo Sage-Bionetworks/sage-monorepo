@@ -7,10 +7,10 @@ members = [
     "bixarena-ai-service",
     "bixarena-api-client",
     "bixarena-app",
-    "bixarena-fargate",
     "bixarena-infra-cdk",
     "bixarena-leaderboard",
     "bixarena-tools",
+    "bixarena-worker",
     "openchallenges-api-client",
     "openchallenges-client",
     "openchallenges-infra-cdk",
@@ -292,17 +292,6 @@ requires-dist = [
 ]
 
 [[package]]
-name = "bixarena-fargate"
-version = "1.0.0"
-source = { editable = "apps/bixarena/fargate" }
-dependencies = [
-    { name = "bixarena-leaderboard" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "bixarena-leaderboard", editable = "libs/bixarena/leaderboard/python" }]
-
-[[package]]
 name = "bixarena-infra-cdk"
 version = "1.0.0"
 source = { editable = "apps/bixarena/infra/cdk" }
@@ -364,6 +353,17 @@ requires-dist = [
     { name = "tqdm", specifier = ">=4.60.0" },
     { name = "typer", specifier = ">=0.12.3" },
 ]
+
+[[package]]
+name = "bixarena-worker"
+version = "1.0.0"
+source = { editable = "apps/bixarena/worker" }
+dependencies = [
+    { name = "bixarena-leaderboard" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "bixarena-leaderboard", editable = "libs/bixarena/leaderboard/python" }]
 
 [[package]]
 name = "bleach"

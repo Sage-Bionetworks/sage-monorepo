@@ -1,4 +1,4 @@
-"""Fargate stack for BixArena infrastructure."""
+"""Worker stack for BixArena infrastructure."""
 
 import aws_cdk as cdk
 from aws_cdk import aws_applicationautoscaling as appscaling
@@ -13,8 +13,8 @@ from constructs import Construct
 from bixarena_infra_cdk.shared.image_loader import load_container_image
 
 
-class FargateStack(cdk.Stack):
-    """Stack for BixArena scheduled Fargate tasks."""
+class WorkerStack(cdk.Stack):
+    """Stack for BixArena scheduled worker tasks."""
 
     def __init__(
         self,
@@ -31,7 +31,7 @@ class FargateStack(cdk.Stack):
         **kwargs,
     ) -> None:
         """
-        Create the scheduled Fargate stack.
+        Create the worker stack.
 
         Args:
             scope: CDK app scope
@@ -56,9 +56,9 @@ class FargateStack(cdk.Stack):
         # Container image - support local or remote images
         image = load_container_image(
             self,
-            "FargateImage",
-            "bixarena-fargate",
-            f"ghcr.io/sage-bionetworks/bixarena-fargate:{app_version}",
+            "WorkerImage",
+            "bixarena-worker",
+            f"ghcr.io/sage-bionetworks/bixarena-worker:{app_version}",
         )
 
         # Environment variables for the leaderboard snapshot container

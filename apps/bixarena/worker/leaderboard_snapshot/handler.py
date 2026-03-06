@@ -2,7 +2,7 @@
 Handler for automated leaderboard snapshot generation.
 
 Triggered by:
-  - EventBridge scheduled Fargate task (daily at 10:00 UTC)
+  - EventBridge scheduled task (daily at 10:00 UTC)
 
 Environment variables (injected by CDK in AWS via Secrets Manager):
   POSTGRES_HOST        - RDS instance hostname

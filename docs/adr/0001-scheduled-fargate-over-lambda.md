@@ -43,21 +43,16 @@ We will use `ScheduledFargateTask` (ECS Fargate) instead of `DockerImageFunction
 
 - Handler entrypoint changed from `lambda_handler(event, context)` to `run()` + `if __name__ == "__main__"` — standard Python script pattern.
 - Schedule source changed from `aws_events.Schedule.cron()` to `aws_applicationautoscaling.Schedule.cron()`.
-- The project and container are named `bixarena-fargate`, reflecting the compute primitive used.
+- The project and container are named `bixarena-worker`, reflecting the compute primitive used.
+- Fargate bills per-second while the task runs; Lambda bills per-100ms. For a once-daily short-lived job, the cost difference between the two is negligible.
 
 ## Alternatives Considered
 
-### Option 1: AWS Lambda with ECR push in CI
+### Option 1: AWS Lambda with GHCR→ECR image sync at deploy time
 
-Push the `bixarena-fargate` image to ECR in addition to GHCR on every CI build.
+Sync the GHCR image to ECR as part of the CDK deployment pipeline so Lambda's `DockerImageFunction` can pull from ECR while CI continues publishing to GHCR only.
 
-**Rejected because**: Introduces a second registry to maintain, adds CI complexity, and diverges from the single-registry pattern used by all other bixarena services.
-
-### Option 2: AWS Lambda with zip packaging
-
-Package the handler and dependencies as a zip file instead of a container image, avoiding the ECR requirement.
-
-**Rejected because**: NumPy and SciPy require native binaries compiled for the Lambda execution environment. Zip packaging with native deps requires cross-compilation tooling and is significantly more complex than the container workflow already used by the rest of the stack.
+**Rejected because**: Adds deployment complexity — `image_loader.py` would need a third code path to sync and resolve the ECR URI for Lambda while other services continue using GHCR directly. `ScheduledFargateTask` avoids this entirely by accepting GHCR URIs natively, reusing the existing VPC, cluster, and CDK secrets patterns without any additional infrastructure or registry management.
 
 ## Related Decisions
 
