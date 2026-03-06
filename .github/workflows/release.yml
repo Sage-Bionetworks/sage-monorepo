@@ -50,6 +50,13 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install-affected"
 
+      - name: Upload Sentry sourcemaps for the specified product
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx run-many --target=sentry-sourcemaps --projects=${{ env.PRODUCT }}-*"
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
       - name: Build the Docker images for the specified product
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \

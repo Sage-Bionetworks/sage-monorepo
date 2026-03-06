@@ -68,6 +68,7 @@
       },
       "configurations": {
         "production": {
+          "sourceMap": true,
           "budgets": [
             {
               "type": "initial",
@@ -144,6 +145,18 @@
         "command": "docker/model-ad/serve-detach.sh model-ad-app"
       },
       "dependsOn": []
+    },
+    "sentry-sourcemaps": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "sentry-cli sourcemaps inject dist/apps/model-ad/app",
+          "sentry-cli sourcemaps upload --org sage-bionetworks --project model-ad dist/apps/model-ad/app",
+          "find dist/apps/model-ad/app -name '*.map' -delete"
+        ],
+        "parallel": false
+      },
+      "dependsOn": ["build"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
