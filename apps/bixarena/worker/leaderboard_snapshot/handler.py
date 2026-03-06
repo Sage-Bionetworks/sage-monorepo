@@ -54,26 +54,47 @@ def run() -> None:
         )
     )
 
-    try:
-        result = generate_snapshot(
-            leaderboard_slug=leaderboard_slug,
-            num_bootstrap=num_bootstrap,
-            min_evals=min_evals,
-            significant=significant,
-        )
-    except Exception as exc:
+    max_attempts = 2
+    last_exc: Exception | None = None
+
+    for attempt in range(1, max_attempts + 1):
+        try:
+            result = generate_snapshot(
+                leaderboard_slug=leaderboard_slug,
+                num_bootstrap=num_bootstrap,
+                min_evals=min_evals,
+                significant=significant,
+            )
+            break
+        except Exception as exc:
+            last_exc = exc
+            if attempt < max_attempts:
+                retry_delay_s = 10 * (2 ** (attempt - 1))
+                logger.warning(
+                    json.dumps(
+                        {
+                            "event": "retry",
+                            "correlation_id": correlation_id,
+                            "attempt": attempt,
+                            "error": str(exc),
+                            "retry_in_s": retry_delay_s,
+                        }
+                    )
+                )
+                time.sleep(retry_delay_s)
+    else:
         duration_s = round(time.monotonic() - start, 2)
         logger.error(
             json.dumps(
                 {
                     "event": "error",
                     "correlation_id": correlation_id,
-                    "error": str(exc),
+                    "error": str(last_exc),
                     "duration_s": duration_s,
                 }
             )
         )
-        raise
+        raise last_exc
 
     duration_s = round(time.monotonic() - start, 2)
 
