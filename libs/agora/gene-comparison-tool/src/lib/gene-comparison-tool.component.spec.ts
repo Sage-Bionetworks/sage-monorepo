@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { AGORA_LOADING_ICON_COLORS } from '@sagebionetworks/agora/config';
-import { SvgIconService } from '@sagebionetworks/explorers/services';
+import { provideExplorersConfig, SvgIconService } from '@sagebionetworks/explorers/services';
 import { SvgIconServiceStub, provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { MessageService } from 'primeng/api';
 import { GeneComparisonToolComponent } from './gene-comparison-tool.component';
@@ -21,6 +21,7 @@ describe('GeneComparisonToolComponent', () => {
         MessageService,
         { provide: SvgIconService, useClass: SvgIconServiceStub },
         ...provideLoadingIconColors(AGORA_LOADING_ICON_COLORS),
+        provideExplorersConfig({ visualizationOverviewPanes: [] }),
       ],
     }).compileComponents();
 

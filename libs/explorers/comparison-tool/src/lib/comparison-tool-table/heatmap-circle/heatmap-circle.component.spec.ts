@@ -6,12 +6,17 @@ import {
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import { render } from '@testing-library/angular';
+import { MessageService } from 'primeng/api';
 import { HeatmapCircleComponent } from './heatmap-circle.component';
 
 async function setup<T extends HeatmapCircleData>(data: T) {
   const component = await render(HeatmapCircleComponent, {
     imports: [RouterModule],
-    providers: [...provideComparisonToolService(), ...provideComparisonToolFilterService()],
+    providers: [
+      MessageService,
+      ...provideComparisonToolService(),
+      ...provideComparisonToolFilterService(),
+    ],
     componentInputs: {
       data,
     },

@@ -10,6 +10,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolFilterListComponent } from './comparison-tool-filter-list.component';
 
 async function setup() {
@@ -17,6 +18,7 @@ async function setup() {
   const component = await render(ComparisonToolFilterListComponent, {
     providers: [
       provideHttpClient(),
+      MessageService,
       { provide: SvgIconService, useClass: SvgIconServiceStub },
       ...provideComparisonToolService(),
       ...provideComparisonToolFilterService({

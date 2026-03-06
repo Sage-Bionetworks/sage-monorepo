@@ -10,6 +10,7 @@ import {
 import { mockComparisonToolConfigs, SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolColumnSelectorComponent } from './comparison-tool-column-selector.component';
 
 async function setup(
@@ -22,6 +23,7 @@ async function setup(
       provideRouter([]),
       provideNoopAnimations(),
       { provide: SvgIconService, useClass: SvgIconServiceStub },
+      MessageService,
       ...provideComparisonToolService({
         configs: pageConfigs,
         selection: initialSelection,

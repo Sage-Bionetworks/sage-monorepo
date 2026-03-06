@@ -10,7 +10,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { SortMeta } from 'primeng/api';
+import { MessageService, SortMeta } from 'primeng/api';
 import { ComparisonToolColumnsComponent } from './comparison-tool-columns.component';
 
 async function setup(options?: Partial<ComparisonToolServiceOptions>) {
@@ -18,6 +18,7 @@ async function setup(options?: Partial<ComparisonToolServiceOptions>) {
   const component = await render(ComparisonToolColumnsComponent, {
     imports: [RouterModule],
     providers: [
+      MessageService,
       ...provideComparisonToolService({ configs: mockComparisonToolConfigs, ...options }),
     ],
     componentInputs: {},

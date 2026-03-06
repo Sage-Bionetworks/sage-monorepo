@@ -7,12 +7,18 @@ import {
 } from '@sagebionetworks/explorers/services';
 import { heatmapDetailsPanelDataMock } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
+import { MessageService } from 'primeng/api';
 import { HeatmapDetailsPanelComponent } from './heatmap-details-panel.component';
 
 async function setup(showPanel = true) {
   const renderResult = await render(HeatmapDetailsPanelComponent, {
     imports: [NoopAnimationsModule],
-    providers: [provideRouter([]), HelperService, ...provideComparisonToolService()],
+    providers: [
+      provideRouter([]),
+      HelperService,
+      MessageService,
+      ...provideComparisonToolService(),
+    ],
   });
 
   const fixture = renderResult.fixture;

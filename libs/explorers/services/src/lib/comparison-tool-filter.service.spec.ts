@@ -4,6 +4,7 @@ import { ComparisonToolFilterService } from './comparison-tool-filter.service';
 import { provideComparisonToolFilterService } from './comparison-tool-filter.service.providers';
 import { ComparisonToolService } from './comparison-tool.service';
 import { provideComparisonToolService } from './comparison-tool.service.providers';
+import { MessageService } from 'primeng/api';
 
 describe('ComparisonToolFilterService', () => {
   let service: ComparisonToolFilterService;
@@ -11,7 +12,11 @@ describe('ComparisonToolFilterService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [...provideComparisonToolService(), ...provideComparisonToolFilterService()],
+      providers: [
+        MessageService,
+        ...provideComparisonToolService(),
+        ...provideComparisonToolFilterService(),
+      ],
     });
     service = TestBed.inject(ComparisonToolFilterService);
     comparisonToolService = TestBed.inject(ComparisonToolService);

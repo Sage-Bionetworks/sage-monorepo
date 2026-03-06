@@ -15,6 +15,12 @@
 
   .p-dialog-content {
     padding: 0 40px;
+
+    img,
+    svg {
+      width: 100%;
+      height: auto;
+    }
   }
 
   .p-dialog-footer {
@@ -31,11 +37,5 @@
         text-decoration: underline;
       }
     }
-  }
-
-  img,
-  svg {
-    width: 100%;
-    height: auto;
   }
 }

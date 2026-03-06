@@ -5,7 +5,7 @@ import {
   ComparisonToolUrlParams,
   ComparisonToolViewConfig,
 } from '@sagebionetworks/explorers/models';
-import { MessageService, SortMeta } from 'primeng/api';
+import { SortMeta } from 'primeng/api';
 import { BehaviorSubject, of } from 'rxjs';
 import { ComparisonToolUrlService } from './comparison-tool-url.service';
 import { ComparisonToolService } from './comparison-tool.service';
@@ -43,7 +43,7 @@ export const provideComparisonToolService = (
 ): Provider[] => {
   const useUrlSync = options?.urlSync ?? false;
 
-  const providers: Provider[] = [MessageService, ToastNotificationService];
+  const providers: Provider[] = [ToastNotificationService];
 
   if (useUrlSync) {
     providers.push(ComparisonToolUrlService);

@@ -13,6 +13,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { render } from '@testing-library/angular';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolComponent } from './comparison-tool.component';
 
 async function setup() {
@@ -22,6 +23,7 @@ async function setup() {
       provideHttpClient(),
       provideNoopAnimations(),
       provideLoadingIconColors(),
+      MessageService,
       provideExplorersConfig({ visualizationOverviewPanes: [] }),
       ...provideComparisonToolService({
         configs: mockComparisonToolConfigs,
