@@ -7,6 +7,13 @@ export const headerLinks: NavigationLink[] = [
     activeOptions: { exact: true },
   },
   {
+    label: 'DropdownLink',
+    children: [
+      { label: 'ChildLink1', routerLink: ['/child-link-1'] },
+      { label: 'ChildLink2', routerLink: ['/child-link-2'] },
+    ],
+  },
+  {
     label: 'HeaderLink2',
     routerLink: ['/header-link-2'],
   },

@@ -13,6 +13,7 @@ export const ROUTE_PATHS = {
   GENE_COMPARISON: 'genes/comparison',
   NOMINATED_DRUGS: 'comparison/drugs',
   NOMINATED_TARGETS: 'comparison/targets',
+  NOMINATION_FORM: 'nomination-form',
   TEAMS: 'teams',
   NEWS: 'news',
   ABOUT: 'about',
