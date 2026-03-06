@@ -353,7 +353,7 @@ def main() -> None:
     # Note: Security group rules are configured within the constructs to allow
     # connections from the VPC CIDR range, avoiding cyclic dependencies
 
-    # Create Lambda stack (depends on VPC and database)
+    # Create Lambda stack (depends on VPC, ECS cluster, and database)
     LambdaStack(
         app,
         f"{stack_prefix}-lambda",
@@ -361,6 +361,7 @@ def main() -> None:
         environment=environment,
         developer_name=developer_name,
         vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
         database=database_stack.database_construct.database,
         database_secret_arn=database_secret.secret_arn,
         app_version=app_version,
