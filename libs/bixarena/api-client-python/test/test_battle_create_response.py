@@ -67,7 +67,8 @@ class TestBattleCreateResponse(unittest.TestCase):
                     created_at = '2025-09-15T12:00Z', 
                     updated_at = '2025-09-20T08:30Z', ),
                 created_at = '2024-01-15T10:30Z',
-                ended_at = '2024-01-15T11:45Z'
+                ended_at = '2024-01-15T11:45Z',
+                effective_validation_id = ''
             )
         else:
             return BattleCreateResponse(

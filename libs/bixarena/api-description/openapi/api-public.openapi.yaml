@@ -806,6 +806,11 @@ components:
         endedAt:
           $ref: '#/components/schemas/EndedAt'
           nullable: true
+        effectiveValidationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the effective battle validation (null = not yet validated)
       required:
         - id
         - userId
@@ -971,6 +976,11 @@ components:
         endedAt:
           $ref: '#/components/schemas/EndedAt'
           nullable: true
+        effectiveValidationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the effective battle validation (null = not yet validated)
       required:
         - id
         - userId
@@ -987,6 +997,11 @@ components:
         endedAt:
           $ref: '#/components/schemas/EndedAt'
           nullable: true
+        effectiveValidationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: Set the effective validation for this battle (admin only, nullable to clear)
     MessageRole:
       type: string
       description: The role of a message.

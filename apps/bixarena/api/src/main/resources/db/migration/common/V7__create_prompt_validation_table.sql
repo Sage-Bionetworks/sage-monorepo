@@ -58,3 +58,18 @@ CREATE UNIQUE INDEX idx_battle_validation_battle_method_validator
 -- Index for finding all validations for a battle
 CREATE INDEX idx_battle_validation_battle_id
   ON api.battle_validation(battle_id);
+
+
+-- ============================================================================
+-- Effective Validation FK on Battle
+-- ============================================================================
+-- Points to the single battle_validation row that determines whether a battle
+-- counts in stats. AI validation is auto-set as effective; admins can override.
+-- Battles without an effective validation are excluded from stats.
+-- ============================================================================
+
+ALTER TABLE api.battle
+  ADD COLUMN effective_validation_id UUID REFERENCES api.battle_validation(id) ON DELETE SET NULL;
+
+CREATE INDEX idx_battle_effective_validation
+  ON api.battle(effective_validation_id);

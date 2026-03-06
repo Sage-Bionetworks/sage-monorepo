@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.CacheNames;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
+import org.sagebionetworks.bixarena.api.exception.BattleValidationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ModelNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateResponseDto;
@@ -19,6 +20,7 @@ import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.BattleMapper;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
+import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BattleService {
 
   private final BattleRepository battleRepository;
+  private final BattleValidationRepository battleValidationRepository;
   private final ModelRepository modelRepository;
   private final BattleMapper battleMapper = new BattleMapper();
 
@@ -139,6 +142,18 @@ public class BattleService {
     } else if (existingBattle.getEndedAt() == null) {
       existingBattle.setEndedAt(java.time.OffsetDateTime.now());
       log.info("Auto-setting endedAt for battle {}", battleId);
+    }
+
+    // Handle effectiveValidationId if provided
+    if (request.getEffectiveValidationId() != null) {
+      UUID validationId = request.getEffectiveValidationId();
+      // Verify the validation exists and belongs to this battle
+      battleValidationRepository.findById(validationId)
+        .filter(v -> v.getBattleId().equals(battleId))
+        .orElseThrow(() -> new BattleValidationNotFoundException(
+          String.format("Battle validation %s not found for battle %s", validationId, battleId)
+        ));
+      existingBattle.setEffectiveValidationId(validationId);
     }
 
     // Save the updated battle

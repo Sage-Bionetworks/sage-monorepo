@@ -1243,6 +1243,7 @@ components:
       example:
         createdAt: 2024-01-15T10:30:00Z
         endedAt: 2024-01-15T11:45:00Z
+        effectiveValidationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         title: Gene Expression Analysis Comparison
@@ -1282,6 +1283,11 @@ components:
           description: Timestamp when the entity ended.
           example: 2024-01-15T11:45:00Z
           format: date-time
+          type: string
+        effectiveValidationId:
+          description: ID of the effective battle validation (null = not yet validated)
+          format: uuid
+          nullable: true
           type: string
       required:
         - createdAt
@@ -1342,6 +1348,7 @@ components:
         battles:
           - createdAt: 2024-01-15T10:30:00Z
             endedAt: 2024-01-15T11:45:00Z
+            effectiveValidationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             title: Gene Expression Analysis Comparison
@@ -1349,6 +1356,7 @@ components:
             model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           - createdAt: 2024-01-15T10:30:00Z
             endedAt: 2024-01-15T11:45:00Z
+            effectiveValidationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             title: Gene Expression Analysis Comparison
@@ -1507,6 +1515,7 @@ components:
           slug: my-awesome-model
           updatedAt: 2025-09-20T08:30:00Z
         endedAt: 2024-01-15T11:45:00Z
+        effectiveValidationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         title: Gene Expression Analysis Comparison
         userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
@@ -1539,6 +1548,11 @@ components:
           example: 2024-01-15T11:45:00Z
           format: date-time
           type: string
+        effectiveValidationId:
+          description: ID of the effective battle validation (null = not yet validated)
+          format: uuid
+          nullable: true
+          type: string
       required:
         - createdAt
         - id
@@ -1557,6 +1571,12 @@ components:
           description: Timestamp when the entity ended.
           example: 2024-01-15T11:45:00Z
           format: date-time
+          type: string
+        effectiveValidationId:
+          description: "Set the effective validation for this battle (admin only,\
+            \ nullable to clear)"
+          format: uuid
+          nullable: true
           type: string
       type: object
     MessageRole:

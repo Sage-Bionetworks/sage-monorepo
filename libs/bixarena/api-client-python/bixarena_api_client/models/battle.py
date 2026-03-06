@@ -40,6 +40,11 @@ class Battle(BaseModel):
     ended_at: Optional[datetime] = Field(
         default=None, description="Timestamp when the entity ended.", alias="endedAt"
     )
+    effective_validation_id: Optional[UUID] = Field(
+        default=None,
+        description="ID of the effective battle validation (null = not yet validated)",
+        alias="effectiveValidationId",
+    )
     __properties: ClassVar[List[str]] = [
         "id",
         "title",
@@ -48,6 +53,7 @@ class Battle(BaseModel):
         "model2Id",
         "createdAt",
         "endedAt",
+        "effectiveValidationId",
     ]
 
     model_config = ConfigDict(
@@ -87,6 +93,14 @@ class Battle(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if effective_validation_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.effective_validation_id is None
+            and "effective_validation_id" in self.model_fields_set
+        ):
+            _dict["effectiveValidationId"] = None
+
         return _dict
 
     @classmethod
@@ -107,6 +121,7 @@ class Battle(BaseModel):
                 "model2Id": obj.get("model2Id"),
                 "createdAt": obj.get("createdAt"),
                 "endedAt": obj.get("endedAt"),
+                "effectiveValidationId": obj.get("effectiveValidationId"),
             }
         )
         return _obj

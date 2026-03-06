@@ -4,10 +4,11 @@ The information used to update a battle.
 
 ## Properties
 
-| Name         | Type         | Description                      | Notes      |
-| ------------ | ------------ | -------------------------------- | ---------- |
-| **title**    | **str**      | Title of the battle.             | [optional] |
-| **ended_at** | **datetime** | Timestamp when the entity ended. | [optional] |
+| Name                        | Type         | Description                                                                  | Notes      |
+| --------------------------- | ------------ | ---------------------------------------------------------------------------- | ---------- |
+| **title**                   | **str**      | Title of the battle.                                                         | [optional] |
+| **ended_at**                | **datetime** | Timestamp when the entity ended.                                             | [optional] |
+| **effective_validation_id** | **str**      | Set the effective validation for this battle (admin only, nullable to clear) | [optional] |
 
 ## Example
 

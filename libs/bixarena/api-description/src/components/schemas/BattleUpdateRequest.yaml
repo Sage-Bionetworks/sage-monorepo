@@ -7,3 +7,8 @@ properties:
   endedAt:
     $ref: EndedAt.yaml
     nullable: true
+  effectiveValidationId:
+    type: string
+    format: uuid
+    nullable: true
+    description: Set the effective validation for this battle (admin only, nullable to clear)

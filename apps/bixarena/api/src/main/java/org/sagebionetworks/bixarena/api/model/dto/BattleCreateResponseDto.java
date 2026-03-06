@@ -44,6 +44,8 @@ public class BattleCreateResponseDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private @Nullable OffsetDateTime endedAt;
 
+  private @Nullable UUID effectiveValidationId = null;
+
   public BattleCreateResponseDto() {
     super();
   }
@@ -199,6 +201,26 @@ public class BattleCreateResponseDto {
     this.endedAt = endedAt;
   }
 
+  public BattleCreateResponseDto effectiveValidationId(@Nullable UUID effectiveValidationId) {
+    this.effectiveValidationId = effectiveValidationId;
+    return this;
+  }
+
+  /**
+   * ID of the effective battle validation (null = not yet validated)
+   * @return effectiveValidationId
+   */
+  @Valid 
+  @Schema(name = "effectiveValidationId", description = "ID of the effective battle validation (null = not yet validated)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("effectiveValidationId")
+  public @Nullable UUID getEffectiveValidationId() {
+    return effectiveValidationId;
+  }
+
+  public void setEffectiveValidationId(@Nullable UUID effectiveValidationId) {
+    this.effectiveValidationId = effectiveValidationId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -214,12 +236,13 @@ public class BattleCreateResponseDto {
         Objects.equals(this.model1, battleCreateResponse.model1) &&
         Objects.equals(this.model2, battleCreateResponse.model2) &&
         Objects.equals(this.createdAt, battleCreateResponse.createdAt) &&
-        Objects.equals(this.endedAt, battleCreateResponse.endedAt);
+        Objects.equals(this.endedAt, battleCreateResponse.endedAt) &&
+        Objects.equals(this.effectiveValidationId, battleCreateResponse.effectiveValidationId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, userId, model1, model2, createdAt, endedAt);
+    return Objects.hash(id, title, userId, model1, model2, createdAt, endedAt, effectiveValidationId);
   }
 
   @Override
@@ -233,6 +256,7 @@ public class BattleCreateResponseDto {
     sb.append("    model2: ").append(toIndentedString(model2)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    endedAt: ").append(toIndentedString(endedAt)).append("\n");
+    sb.append("    effectiveValidationId: ").append(toIndentedString(effectiveValidationId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -268,6 +292,7 @@ public class BattleCreateResponseDto {
       this.instance.setModel2(value.model2);
       this.instance.setCreatedAt(value.createdAt);
       this.instance.setEndedAt(value.endedAt);
+      this.instance.setEffectiveValidationId(value.effectiveValidationId);
       return this;
     }
 
@@ -303,6 +328,11 @@ public class BattleCreateResponseDto {
     
     public BattleCreateResponseDto.Builder endedAt(OffsetDateTime endedAt) {
       this.instance.endedAt(endedAt);
+      return this;
+    }
+    
+    public BattleCreateResponseDto.Builder effectiveValidationId(UUID effectiveValidationId) {
+      this.instance.effectiveValidationId(effectiveValidationId);
       return this;
     }
     

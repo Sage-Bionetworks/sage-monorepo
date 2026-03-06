@@ -13,8 +13,10 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
+import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.BattleRoundEntity;
 import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
+import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRoundRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.MessageRepository;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class BattleValidationService {
 
+  private final BattleRepository battleRepository;
   private final BattleValidationRepository battleValidationRepository;
   private final BattleRoundRepository battleRoundRepository;
   private final MessageRepository messageRepository;
@@ -118,5 +121,12 @@ public class BattleValidationService {
 
     battleValidationRepository.save(entity);
     battleValidationRepository.flush();
+
+    // Auto-set as effective if no effective validation exists yet (preserves admin overrides)
+    BattleEntity battle = battleRepository.findById(battleId).orElseThrow();
+    if (battle.getEffectiveValidationId() == null) {
+      battle.setEffectiveValidationId(entity.getId());
+      battleRepository.save(battle);
+    }
   }
 }

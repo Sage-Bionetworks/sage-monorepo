@@ -45,4 +45,7 @@ public class BattleEntity {
 
   @Column(name = "ended_at")
   private OffsetDateTime endedAt;
+
+  @Column(name = "effective_validation_id")
+  private UUID effectiveValidationId;
 }

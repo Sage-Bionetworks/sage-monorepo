@@ -36,7 +36,8 @@ class TestBattleUpdateRequest(unittest.TestCase):
         if include_optional:
             return BattleUpdateRequest(
                 title = 'Gene Expression Analysis Comparison',
-                ended_at = '2024-01-15T11:45Z'
+                ended_at = '2024-01-15T11:45Z',
+                effective_validation_id = ''
             )
         else:
             return BattleUpdateRequest(
