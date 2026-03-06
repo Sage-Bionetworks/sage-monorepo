@@ -42,10 +42,7 @@ def create_subtitle_row_html(updated_at: datetime | None) -> str:
     """
     time_badge_html = ""
     if updated_at is not None:
-        # TODO: restore to date-only format before merging to prod
-        # Temporary: show time for dev testing to verify Lambda automation
-        # formatted_date = updated_at.strftime("%b %-d, %Y")
-        formatted_date = updated_at.strftime("%b %-d, %Y %H:%M UTC")
+        formatted_date = updated_at.strftime("%b %-d, %Y")
 
         time_badge_html = f"""
         <div style="
