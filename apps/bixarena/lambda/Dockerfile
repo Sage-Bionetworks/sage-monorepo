@@ -1,28 +1,30 @@
-# AWS provides the following base images for Python:
-# https://docs.aws.amazon.com/lambda/latest/dg/python-image.html#python-image-base
+# Allow overriding the Python patch version at build time:
+#   docker build --build-arg PYTHON_VERSION=3.13.4 -t bixarena-lambda .
+ARG PYTHON_VERSION=3.13.3
+
 FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
 
-FROM public.ecr.aws/lambda/python:3.13 AS builder
+FROM mirror.gcr.io/python:${PYTHON_VERSION}-slim AS builder
 
 COPY --from=uv /uv /bin/uv
 
 WORKDIR /build
 
 # Install the pre-built shared library and its dependencies into /deps.
-# boto3 is pre-installed in the base image.
 COPY dist/*.tar.gz /tmp/
 RUN uv pip install /tmp/*.tar.gz --target /deps --system --no-cache-dir
 
 # ---- final image ----
-FROM public.ecr.aws/lambda/python:3.13
+FROM mirror.gcr.io/python:${PYTHON_VERSION}-slim
+
+WORKDIR /app
 
 # Add installed packages to the module search path
-ENV PYTHONPATH="${LAMBDA_TASK_ROOT}:/deps"
+ENV PYTHONPATH="/app:/deps"
 
 COPY --from=builder /deps /deps
 
 # Copy all handler modules
-COPY leaderboard_snapshot/ ${LAMBDA_TASK_ROOT}/leaderboard_snapshot/
+COPY leaderboard_snapshot/ /app/leaderboard_snapshot/
 
-# Default handler (overridden per Lambda function in CDK)
-CMD ["leaderboard_snapshot.handler.lambda_handler"]
+CMD ["python", "-m", "leaderboard_snapshot.handler"]

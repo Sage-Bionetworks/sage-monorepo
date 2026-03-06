@@ -1,17 +1,18 @@
 """
-Lambda handler for automated leaderboard snapshot generation.
+Handler for automated leaderboard snapshot generation.
 
 Triggered by:
-  - EventBridge scheduled rule (daily at 2 AM UTC)
+  - EventBridge scheduled Fargate task (daily at 10:00 UTC)
+  - Manual: docker exec or aws ecs run-task
 
-Environment variables (injected by CDK in AWS):
+Environment variables (injected by CDK in AWS via Secrets Manager):
   POSTGRES_HOST        - RDS instance hostname
   POSTGRES_PORT        - RDS port
   POSTGRES_DB          - Database name
-  DATABASE_SECRET_ARN  - ARN of Secrets Manager secret with 'username'/'password'
+  POSTGRES_USER        - Database username (from Secrets Manager via ecs.Secret)
+  POSTGRES_PASSWORD    - Database password (from Secrets Manager via ecs.Secret)
 
-Local dev (.env): set POSTGRES_USER and POSTGRES_PASSWORD directly.
-  DATABASE_SECRET_ARN is not set locally; credentials are read from env vars.
+Local dev (.env): all POSTGRES_* vars set directly.
 
 Optional environment variables:
   LEADERBOARD_SLUG  - Leaderboard to generate
@@ -23,75 +24,25 @@ Optional environment variables:
 import json
 import logging
 import os
+import sys
 import time
 import uuid
 
-import boto3
 from bixarena_leaderboard.snapshot_generator import generate_snapshot
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-_secrets_client = boto3.client("secretsmanager")
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+logger = logging.getLogger(__name__)
 
 
-def _load_db_credentials() -> None:
-    """Fetch DB credentials from Secrets Manager and set as env vars.
-
-    Only runs when DATABASE_SECRET_ARN is set (i.e. in AWS).
-    Local dev uses POSTGRES_USER/POSTGRES_PASSWORD from .env directly.
-    """
-    secret_arn = os.getenv("DATABASE_SECRET_ARN")
-    if not secret_arn:
-        return
-    response = _secrets_client.get_secret_value(SecretId=secret_arn)
-    secret = json.loads(response["SecretString"])
-    os.environ["POSTGRES_USER"] = secret["username"]
-    os.environ["POSTGRES_PASSWORD"] = secret["password"]
-
-
-_load_db_credentials()
-
-
-def lambda_handler(event: dict, context) -> dict:
-    """
-    Generate and publish a leaderboard snapshot.
-
-    Accepts an optional event payload:
-      {
-        "leaderboard_slug": "overall",
-        "num_bootstrap": 1000,
-        "min_evals": 10,
-        "significant": false
-      }
-
-    Returns the result from generate_snapshot() plus params used:
-      {
-        "snapshot_id": "a1b2c3d4-...",
-        "snapshot_identifier": "snapshot_2026-03-04_02-00",
-        "entry_count": 42,
-        "evaluation_count": 1500,
-        "leaderboard_name": "Overall",
-        "params": {
-          "leaderboard_slug": "overall",
-          "num_bootstrap": 1000,
-          "min_evals": 10,
-          "significant": false
-        }
-      }
-    """
+def run() -> None:
+    """Generate and publish a leaderboard snapshot."""
     correlation_id = str(uuid.uuid4())
     start = time.monotonic()
 
-    leaderboard_slug = event.get(
-        "leaderboard_slug", os.getenv("LEADERBOARD_SLUG", "overall")
-    )
-    num_bootstrap = int(event.get("num_bootstrap", os.getenv("NUM_BOOTSTRAP", "1000")))
-    min_evals = int(event.get("min_evals", os.getenv("MIN_EVALS", "10")))
-    significant = (
-        str(event.get("significant", os.getenv("SIGNIFICANT", "false"))).lower()
-        == "true"
-    )
+    leaderboard_slug = os.getenv("LEADERBOARD_SLUG", "overall")
+    num_bootstrap = int(os.getenv("NUM_BOOTSTRAP", "1000"))
+    min_evals = int(os.getenv("MIN_EVALS", "10"))
+    significant = os.getenv("SIGNIFICANT", "false").lower() == "true"
 
     logger.info(
         json.dumps(
@@ -143,10 +94,6 @@ def lambda_handler(event: dict, context) -> dict:
         )
     )
 
-    result["params"] = {
-        "leaderboard_slug": leaderboard_slug,
-        "num_bootstrap": num_bootstrap,
-        "min_evals": min_evals,
-        "significant": significant,
-    }
-    return result
+
+if __name__ == "__main__":
+    run()
