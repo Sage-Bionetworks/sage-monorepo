@@ -164,19 +164,9 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
       .reason(battleValidationCreateRequestDto.getReason())
       .build();
 
-    try {
-      BattleValidationEntity saved = battleValidationRepository.save(entity);
-      battleValidationRepository.flush();
-      return ResponseEntity.status(HttpStatus.CREATED).body(toDto(saved));
-    } catch (org.springframework.dao.DataIntegrityViolationException e) {
-      if (e.getMessage() != null
-          && e.getMessage().contains(
-            "idx_battle_validation_battle_method_validator")) {
-        throw new org.sagebionetworks.bixarena.api.exception
-          .DuplicateBattleValidationException(battleId);
-      }
-      throw e;
-    }
+    BattleValidationEntity saved = battleValidationRepository.save(entity);
+    battleValidationRepository.flush();
+    return ResponseEntity.status(HttpStatus.CREATED).body(toDto(saved));
   }
 
   @Override

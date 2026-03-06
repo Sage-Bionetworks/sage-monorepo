@@ -110,20 +110,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
-  @ExceptionHandler(DuplicateBattleValidationException.class)
-  protected ResponseEntity<BasicErrorDto> handleDuplicateBattleValidation(
-    DuplicateBattleValidationException ex,
-    Locale locale
-  ) {
-    return ResponseEntity.status(HttpStatus.CONFLICT).body(
-      BasicErrorDto.builder()
-        .title("Duplicate Battle Validation")
-        .status(HttpStatus.CONFLICT.value())
-        .detail(ex.getMessage())
-        .build()
-    );
-  }
-
   @ExceptionHandler(DuplicateBattleEvaluationException.class)
   protected ResponseEntity<BasicErrorDto> handleDuplicateBattleEvaluation(
     DuplicateBattleEvaluationException ex,

@@ -51,11 +51,6 @@ CREATE TABLE api.battle_validation (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Prevent duplicate validations for the same battle + method + validator.
--- COALESCE handles NULL validated_by so automated validations (NULL) are unique per method.
-CREATE UNIQUE INDEX idx_battle_validation_battle_method_validator
-  ON api.battle_validation(battle_id, method, COALESCE(validated_by, '00000000-0000-0000-0000-000000000000'));
-
 -- Index for finding all validations for a battle
 CREATE INDEX idx_battle_validation_battle_id
   ON api.battle_validation(battle_id);
