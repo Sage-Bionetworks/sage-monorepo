@@ -13,6 +13,18 @@ Bradley-Terry algorithm, and publishes the results as a new public leaderboard s
 3. The handler generates a leaderboard snapshot and auto-publishes it
 4. Structured JSON logs are emitted to CloudWatch for observability
 
+```mermaid
+flowchart LR
+  eventbridge["EventBridge<br>(cron: daily 10 AM UTC)"]
+  worker["bixarena-worker<br>(Fargate Task)"]
+  rds["PostgreSQL<br>(RDS)"]
+  cloudwatch["CloudWatch Logs"]
+
+  eventbridge -->|triggers| worker
+  worker -->|reads/writes| rds
+  worker -->|structured JSON logs| cloudwatch
+```
+
 ## Components
 
 ### Shared Library (`bixarena-leaderboard`)
