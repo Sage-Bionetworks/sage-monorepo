@@ -5,6 +5,7 @@ from aws_cdk import aws_applicationautoscaling as appscaling
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_ecs as ecs
 from aws_cdk import aws_ecs_patterns as ecs_patterns
+from aws_cdk import aws_iam as iam
 from aws_cdk import aws_rds as rds
 from aws_cdk import aws_secretsmanager as sm
 from constructs import Construct
@@ -81,14 +82,13 @@ class LambdaStack(cdk.Stack):
             ),
         }
 
-        # TODO: restore to daily cron(hour="10", minute="0") before merging to prod
-        # Temporary: every 5 minutes for dev testing
-        ecs_patterns.ScheduledFargateTask(
+        # Daily at 10:00 AM UTC
+        scheduled_task = ecs_patterns.ScheduledFargateTask(
             self,
             "LeaderboardSnapshotFunction",
             cluster=cluster,
             rule_name=f"{stack_prefix}-leaderboard-snapshot-schedule",
-            schedule=appscaling.Schedule.rate(cdk.Duration.minutes(5)),
+            schedule=appscaling.Schedule.cron(hour="10", minute="0"),
             subnet_selection=ec2.SubnetSelection(
                 subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
             ),
@@ -99,6 +99,22 @@ class LambdaStack(cdk.Stack):
                 environment=container_env,
                 secrets=container_secrets,
             ),
+        )
+
+        # Add IAM permissions for GuardDuty agent sidecar container
+        # GuardDuty automatically injects a sidecar container for runtime monitoring
+        # This requires permission to pull the agent image from AWS ECR
+        scheduled_task.task_definition.add_to_execution_role_policy(
+            iam.PolicyStatement(
+                effect=iam.Effect.ALLOW,
+                actions=[
+                    "ecr:GetAuthorizationToken",
+                    "ecr:BatchCheckLayerAvailability",
+                    "ecr:GetDownloadUrlForLayer",
+                    "ecr:BatchGetImage",
+                ],
+                resources=["*"],  # GuardDuty agent is in AWS-managed ECR
+            )
         )
         # Note: no explicit allow_from needed — RDS security group already allows
         # all inbound on port 5432 from the VPC CIDR (set in rds_construct.py)
