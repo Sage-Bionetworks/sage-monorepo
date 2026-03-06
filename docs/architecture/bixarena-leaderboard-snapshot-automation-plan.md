@@ -2,8 +2,7 @@
 title: BixArena Leaderboard Snapshot Automation
 date: 2026-01-09
 status: active
-author: tschaffter, rrchai
-related_rfc: docs/rfcs/0001-bixarena-leaderboard-snapshot-automation.md
+therelated_rfc: docs/rfcs/0001-bixarena-leaderboard-snapshot-automation.md
 ---
 
 # BixArena Leaderboard Snapshot Automation Implementation Plan
@@ -15,8 +14,8 @@ related_rfc: docs/rfcs/0001-bixarena-leaderboard-snapshot-automation.md
 | Phase   | Description                                     | Status                    |
 | ------- | ----------------------------------------------- | ------------------------- |
 | Phase 1 | Extract shared library (`bixarena-leaderboard`) | ✅ Implemented (PR #3908) |
-| Phase 2 | Container image + handler (`bixarena-lambda`)   | ✅ Implemented (PR #3908) |
-| Phase 3 | CDK infrastructure (`LambdaStack`)              | ✅ Implemented (PR #3908) |
+| Phase 2 | Container image + handler (`bixarena-fargate`)  | ✅ Implemented (PR #3908) |
+| Phase 3 | CDK infrastructure (`ScheduledFargateStack`)    | ✅ Implemented (PR #3908) |
 
 ## Implementation Divergences from RFC
 
@@ -53,7 +52,7 @@ Automated daily leaderboard snapshot generation using:
 │                         Scheduled Execution                              │
 │                                                                          │
 │  EventBridge Rule ──> Fargate Task ──────────────────> PostgreSQL       │
-│  (cron: daily         (bixarena-lambda                 (bixarena DB,   │
+│  (cron: daily         (bixarena-fargate                 (bixarena DB,   │
 │   10:00 AM UTC)        container image                  private subnet) │
 │                        from GHCR)                                        │
 │                            │                                             │

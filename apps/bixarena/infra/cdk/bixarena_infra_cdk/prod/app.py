@@ -136,8 +136,8 @@ from bixarena_infra_cdk.shared.stacks.bastion_stack import BastionStack
 from bixarena_infra_cdk.shared.stacks.bucket_stack import BucketStack
 from bixarena_infra_cdk.shared.stacks.database_stack import DatabaseStack
 from bixarena_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
-from bixarena_infra_cdk.shared.stacks.lambda_stack import (
-    LambdaStack,
+from bixarena_infra_cdk.shared.stacks.fargate_stack import (
+    FargateStack,
 )
 from bixarena_infra_cdk.shared.stacks.valkey_stack import ValkeyStack
 from bixarena_infra_cdk.shared.stacks.vpc_stack import VpcStack
@@ -353,10 +353,10 @@ def main() -> None:
     # Note: Security group rules are configured within the constructs to allow
     # connections from the VPC CIDR range, avoiding cyclic dependencies
 
-    # Create Lambda stack (depends on VPC, ECS cluster, and database)
-    LambdaStack(
+    # Create scheduled Fargate stack (depends on VPC, ECS cluster, and database)
+    FargateStack(
         app,
-        f"{stack_prefix}-lambda",
+        f"{stack_prefix}-fargate",
         stack_prefix=stack_prefix,
         environment=environment,
         developer_name=developer_name,
@@ -365,7 +365,7 @@ def main() -> None:
         database=database_stack.database_construct.database,
         database_secret_arn=database_secret.secret_arn,
         app_version=app_version,
-        description=(f"Lambda stack for BixArena {environment} environment"),
+        description=(f"Fargate stack for BixArena {environment} environment"),
     )
 
     # Create bucket stack

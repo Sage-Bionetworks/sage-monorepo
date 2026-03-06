@@ -24,7 +24,7 @@ We will defer both features indefinitely and revisit them only when a concrete n
 - **SNS/Slack notifications**: Deferred. A future admin dashboard will surface task status and
   history, making push notifications to Slack redundant.
 - **Admin API endpoint**: Deferred. Developers can manually trigger a snapshot using
-  `nx run bixarena-lambda:invoke`. A future admin dashboard UI will expose on-demand triggering
+  `nx run bixarena-fargate:invoke`. A future admin dashboard UI will expose on-demand triggering
   for non-developer admins.
 
 ## Rationale
@@ -35,7 +35,7 @@ We will defer both features indefinitely and revisit them only when a concrete n
   (task run history, success/failure) and manual triggering. Building a separate API endpoint
   now creates parallel surfaces that will need to be consolidated later.
 - **Nx invoke sufficient for now**: Developers can trigger snapshot generation locally via
-  `nx run bixarena-lambda:invoke` without any additional infrastructure.
+  `nx run bixarena-fargate:invoke` without any additional infrastructure.
 - **Scope control**: Keeping v1 focused on the scheduled job reduces CDK complexity, avoids
   new IAM primitives (SNS publish, Lambda invoke from AI service), and removes the need for
   `boto3` in the AI service.
@@ -49,14 +49,14 @@ instance and invoking the Lambda handler locally:
 # 1. Open SSH tunnel to prod RDS
 nx run bixarena-infra-cdk:start-db-tunnel prod
 
-# 2. Configure prod DB credentials in apps/bixarena/lambda/.env
+# 2. Configure prod DB credentials in apps/bixarena/fargate/.env
 #    (copy from .env.example and fill in POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, etc.)
 
 # 3. Run the handler locally
-nx run bixarena-lambda:invoke
+nx run bixarena-fargate:invoke
 ```
 
-This runs `uv run python -m leaderboard_snapshot.handler` in the Lambda project directory,
+This runs `uv run python -m leaderboard_snapshot.handler` in the Fargate project directory,
 executing the same snapshot generation and publish logic used by the scheduled task.
 
 ## Consequences
@@ -71,7 +71,7 @@ executing the same snapshot generation and publish logic used by the scheduled t
 
 - No automated alerting if the daily scheduled task fails silently. Failures must be discovered
   by actively checking CloudWatch logs or the leaderboard UI.
-- Manual trigger via `nx run bixarena-lambda:invoke` requires developer access (local environment
+- Manual trigger via `nx run bixarena-fargate:invoke` requires developer access (local environment
   with DB connectivity) — not accessible to non-developer admins.
 
 ### Neutral
@@ -93,7 +93,7 @@ surface for operational status.
 Add `POST /admin/generate-snapshot` to the AI service with JWT auth, invoking `ecs run-task`
 via `boto3`.
 
-**Deferred because**: Developers can use `nx run bixarena-lambda:invoke` directly; the endpoint
+**Deferred because**: Developers can use `nx run bixarena-fargate:invoke` directly; the endpoint
 will be better surfaced through the future admin dashboard UI rather than a standalone API.
 
 ## Related Decisions

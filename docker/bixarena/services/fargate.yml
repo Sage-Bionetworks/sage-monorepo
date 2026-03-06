@@ -1,0 +1,12 @@
+services:
+  bixarena-fargate:
+    image: ghcr.io/sage-bionetworks/bixarena-fargate:${BIXARENA_VERSION:-local}
+    container_name: bixarena-fargate
+    env_file:
+      - ../../../apps/bixarena/fargate/.env
+    networks:
+      - bixarena
+    ports:
+      - '8117:8080'
+    depends_on:
+      - bixarena-postgres

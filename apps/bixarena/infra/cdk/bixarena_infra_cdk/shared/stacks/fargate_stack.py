@@ -1,4 +1,4 @@
-"""Lambda stack for BixArena infrastructure."""
+"""Fargate stack for BixArena infrastructure."""
 
 import aws_cdk as cdk
 from aws_cdk import aws_applicationautoscaling as appscaling
@@ -13,7 +13,7 @@ from constructs import Construct
 from bixarena_infra_cdk.shared.image_loader import load_container_image
 
 
-class LambdaStack(cdk.Stack):
+class FargateStack(cdk.Stack):
     """Stack for BixArena scheduled Fargate tasks."""
 
     def __init__(
@@ -31,7 +31,7 @@ class LambdaStack(cdk.Stack):
         **kwargs,
     ) -> None:
         """
-        Create the lambda stack.
+        Create the scheduled Fargate stack.
 
         Args:
             scope: CDK app scope
@@ -56,9 +56,9 @@ class LambdaStack(cdk.Stack):
         # Container image - support local or remote images
         image = load_container_image(
             self,
-            "LambdaImage",
-            "bixarena-lambda",
-            f"ghcr.io/sage-bionetworks/bixarena-lambda:{app_version}",
+            "FargateImage",
+            "bixarena-fargate",
+            f"ghcr.io/sage-bionetworks/bixarena-fargate:{app_version}",
         )
 
         # Environment variables for the leaderboard snapshot container
@@ -85,7 +85,7 @@ class LambdaStack(cdk.Stack):
         # Daily at 10:00 AM UTC
         scheduled_task = ecs_patterns.ScheduledFargateTask(
             self,
-            "LeaderboardSnapshotFunction",
+            "LeaderboardSnapshotTask",
             cluster=cluster,
             rule_name=f"{stack_prefix}-leaderboard-snapshot-schedule",
             schedule=appscaling.Schedule.cron(hour="10", minute="0"),

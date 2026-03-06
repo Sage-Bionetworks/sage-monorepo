@@ -1,7 +1,7 @@
 [project]
-name = "bixarena-lambda"
+name = "bixarena-fargate"
 version = "1.0.0"
-description = "BixArena Lambda functions for scheduled automation tasks"
+description = "BixArena Fargate tasks for automation"
 requires-python = "==3.13.3"
 readme = "README.md"
 license = { text = "Apache-2.0" }

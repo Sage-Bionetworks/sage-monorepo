@@ -2,14 +2,14 @@
 
 - **Status**: accepted
 - **Date**: 2026-03-06
-- **Decision Makers**: [tschaffter](https://github.com/tschaffter), [rrchai](https://github.com/rrchai)
+- **Decision Makers**: tschaffter, rrchai
 - **Tags**: infrastructure, bixarena, leaderboard
 
 ## Context
 
 RFC-0001 proposed using AWS Lambda (`DockerImageFunction`) triggered by EventBridge to run the leaderboard snapshot container daily. During implementation, a blocking constraint was discovered: **AWS Lambda only supports container images stored in Amazon ECR**. It cannot pull images from external registries such as GHCR (GitHub Container Registry).
 
-All bixarena services publish container images exclusively to GHCR for stage and prod deployments. Adding an ECR push step to CI would require maintaining a second registry, additional CI complexity, and diverge from the established monorepo pattern used by every other service (`api-service`, `auth-service`, `web`, `app`, `ai-service`). While Lambda could be used in dev with a locally built image pushed to ECR, this would create an inconsistency where dev and stage/prod use different compute primitives.
+All bixarena services publish container images exclusively to GHCR. Adding an ECR push step to CI would require maintaining a second registry, additional CI complexity, and diverge from the established monorepo pattern used by every other service (`api-service`, `auth-service`, `web`, `app`, `ai-service`).
 
 ## Decision
 
@@ -43,13 +43,13 @@ We will use `ScheduledFargateTask` (ECS Fargate) instead of `DockerImageFunction
 
 - Handler entrypoint changed from `lambda_handler(event, context)` to `run()` + `if __name__ == "__main__"` — standard Python script pattern.
 - Schedule source changed from `aws_events.Schedule.cron()` to `aws_applicationautoscaling.Schedule.cron()`.
-- The project and container remain named `bixarena-lambda` — the name reflects the workload's nature (short-lived task, not a long-running service), not the AWS compute service used.
+- The project and container are named `bixarena-fargate`, reflecting the compute primitive used.
 
 ## Alternatives Considered
 
 ### Option 1: AWS Lambda with ECR push in CI
 
-Push the `bixarena-lambda` image to ECR in addition to GHCR on every CI build.
+Push the `bixarena-fargate` image to ECR in addition to GHCR on every CI build.
 
 **Rejected because**: Introduces a second registry to maintain, adds CI complexity, and diverges from the single-registry pattern used by all other bixarena services.
 
