@@ -3,16 +3,13 @@ Handler for automated leaderboard snapshot generation.
 
 Triggered by:
   - EventBridge scheduled Fargate task (daily at 10:00 UTC)
-  - Manual: docker exec or aws ecs run-task
 
 Environment variables (injected by CDK in AWS via Secrets Manager):
   POSTGRES_HOST        - RDS instance hostname
   POSTGRES_PORT        - RDS port
   POSTGRES_DB          - Database name
-  POSTGRES_USER        - Database username (from Secrets Manager via ecs.Secret)
-  POSTGRES_PASSWORD    - Database password (from Secrets Manager via ecs.Secret)
-
-Local dev (.env): all POSTGRES_* vars set directly.
+  POSTGRES_USER        - Database username
+  POSTGRES_PASSWORD    - Database password
 
 Optional environment variables:
   LEADERBOARD_SLUG  - Leaderboard to generate
