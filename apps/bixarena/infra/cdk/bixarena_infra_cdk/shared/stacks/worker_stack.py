@@ -6,6 +6,7 @@ from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_ecs as ecs
 from aws_cdk import aws_ecs_patterns as ecs_patterns
 from aws_cdk import aws_iam as iam
+from aws_cdk import aws_logs as logs
 from aws_cdk import aws_rds as rds
 from aws_cdk import aws_secretsmanager as sm
 from constructs import Construct
@@ -82,6 +83,14 @@ class WorkerStack(cdk.Stack):
             ),
         }
 
+        log_group = logs.LogGroup(
+            self,
+            "WorkerLogGroup",
+            log_group_name=f"/aws/ecs/{stack_prefix}-worker",
+            retention=logs.RetentionDays.THREE_MONTHS,
+            removal_policy=cdk.RemovalPolicy.RETAIN,
+        )
+
         # Daily at 10:00 AM UTC
         scheduled_task = ecs_patterns.ScheduledFargateTask(
             self,
@@ -98,6 +107,10 @@ class WorkerStack(cdk.Stack):
                 memory_limit_mib=2048,
                 environment=container_env,
                 secrets=container_secrets,
+                log_driver=ecs.LogDrivers.aws_logs(
+                    stream_prefix="worker",
+                    log_group=log_group,
+                ),
             ),
         )
 

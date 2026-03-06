@@ -53,6 +53,29 @@ An ECS Scheduled Fargate Task deployed via AWS CDK. Key resources:
 - **Fargate task** — 1 vCPU, 2 GB memory, runs the `bixarena-worker` container image
 - **Secrets Manager** — database credentials are injected securely at task start by the ECS agent
 
+## Configuration
+
+The following environment variables control snapshot generation. They are set in CDK and require a
+redeployment to change.
+
+| Variable            | Default             | Description                                                                                                |
+| ------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `LEADERBOARD_SLUG`  | `overall`           | Slug of the leaderboard to snapshot. Must match a slug that exists in the database — validated at runtime. |
+| `NUM_BOOTSTRAP`     | `1000`              | Number of bootstrap iterations for Bradley-Terry confidence interval computation.                          |
+| `MIN_EVALS`         | `10`                | Minimum number of battle evaluations a model must have to be included in the snapshot.                     |
+| `SIGNIFICANT`       | `false`             | If `true`, only include models with statistically significant rankings.                                    |
+| `POSTGRES_HOST`     | _(from RDS)_        | Injected automatically by CDK from the RDS endpoint.                                                       |
+| `POSTGRES_PORT`     | _(from RDS)_        | Injected automatically by CDK from the RDS endpoint.                                                       |
+| `POSTGRES_DB`       | `bixarena`          | Database name.                                                                                             |
+| `POSTGRES_USER`     | _(Secrets Manager)_ | Injected securely at task start by the ECS agent.                                                          |
+| `POSTGRES_PASSWORD` | _(Secrets Manager)_ | Injected securely at task start by the ECS agent.                                                          |
+
+To change a value: update the relevant `app.py` for the target environment and redeploy:
+
+```bash
+nx run bixarena-infra-cdk:deploy:[dev|stage|prod]
+```
+
 ## Manual Trigger
 
 Developers can generate a snapshot on demand by opening an SSH tunnel to the target RDS instance
