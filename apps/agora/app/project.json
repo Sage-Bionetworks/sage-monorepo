@@ -63,6 +63,7 @@
       },
       "configurations": {
         "production": {
+          "sourceMap": true,
           "budgets": [
             {
               "type": "initial",
@@ -139,6 +140,18 @@
         "command": "docker/agora/serve-detach.sh agora-app"
       },
       "dependsOn": []
+    },
+    "sentry-sourcemaps": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "sentry-cli sourcemaps inject dist/apps/agora/app",
+          "sentry-cli sourcemaps upload --org sage-bionetworks --project agora dist/apps/agora/app",
+          "find dist/apps/agora/app -name '*.map' -delete"
+        ],
+        "parallel": false
+      },
+      "dependsOn": ["build"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
