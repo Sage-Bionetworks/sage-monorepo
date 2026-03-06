@@ -115,7 +115,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
   public ResponseEntity<BattleDto> updateBattle(
     UUID battleId,
     BattleUpdateRequestDto battleUpdateRequestDto
