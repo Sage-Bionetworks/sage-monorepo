@@ -139,6 +139,7 @@ from bixarena_infra_cdk.shared.stacks.ecs_cluster_stack import EcsClusterStack
 from bixarena_infra_cdk.shared.stacks.valkey_stack import ValkeyStack
 from bixarena_infra_cdk.shared.stacks.vpc_stack import VpcStack
 from bixarena_infra_cdk.shared.stacks.web_stack import WebStack
+from bixarena_infra_cdk.shared.stacks.worker_stack import WorkerStack
 
 
 def main() -> None:
@@ -349,6 +350,21 @@ def main() -> None:
 
     # Note: Security group rules are configured within the constructs to allow
     # connections from the VPC CIDR range, avoiding cyclic dependencies
+
+    # Create worker stack (depends on VPC, ECS cluster, and database)
+    WorkerStack(
+        app,
+        f"{stack_prefix}-worker",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
+        database=database_stack.database_construct.database,
+        database_secret_arn=database_secret.secret_arn,
+        app_version=app_version,
+        description=(f"Worker stack for BixArena {environment} environment"),
+    )
 
     # Create bucket stack
     BucketStack(

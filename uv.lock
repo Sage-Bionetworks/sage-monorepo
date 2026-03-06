@@ -8,7 +8,9 @@ members = [
     "bixarena-api-client",
     "bixarena-app",
     "bixarena-infra-cdk",
+    "bixarena-leaderboard",
     "bixarena-tools",
+    "bixarena-worker",
     "openchallenges-api-client",
     "openchallenges-client",
     "openchallenges-infra-cdk",
@@ -307,31 +309,57 @@ requires-dist = [
 ]
 
 [[package]]
+name = "bixarena-leaderboard"
+version = "1.0.0"
+source = { editable = "libs/bixarena/leaderboard/python" }
+dependencies = [
+    { name = "numpy" },
+    { name = "psycopg", extra = ["binary"] },
+    { name = "scipy" },
+    { name = "tqdm" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "numpy", specifier = ">=1.26.0" },
+    { name = "psycopg", extras = ["binary"], specifier = ">=3.0.0" },
+    { name = "scipy", specifier = ">=1.11.0" },
+    { name = "tqdm", specifier = ">=4.60.0" },
+]
+
+[[package]]
 name = "bixarena-tools"
 version = "1.0.0"
 source = { editable = "apps/bixarena/tools" }
 dependencies = [
+    { name = "bixarena-leaderboard" },
     { name = "locust" },
-    { name = "numpy" },
     { name = "psycopg", extra = ["binary"] },
     { name = "python-dotenv" },
     { name = "rich" },
-    { name = "scipy" },
-    { name = "tqdm" },
     { name = "typer" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "bixarena-leaderboard", editable = "libs/bixarena/leaderboard/python" },
     { name = "locust", specifier = ">=2.35.0" },
-    { name = "numpy", specifier = ">=1.26.0" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.0.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "rich", specifier = ">=13.7.0" },
-    { name = "scipy", specifier = ">=1.11.0" },
-    { name = "tqdm", specifier = ">=4.60.0" },
     { name = "typer", specifier = ">=0.12.3" },
 ]
+
+[[package]]
+name = "bixarena-worker"
+version = "1.0.0"
+source = { editable = "apps/bixarena/worker" }
+dependencies = [
+    { name = "bixarena-leaderboard" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "bixarena-leaderboard", editable = "libs/bixarena/leaderboard/python" }]
 
 [[package]]
 name = "bleach"

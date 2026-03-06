@@ -7,15 +7,14 @@ from datetime import UTC, datetime
 from typing import Any
 
 import typer
-from rich.console import Console
-from rich.table import Table
-
-from .db_helper import (
+from bixarena_leaderboard.db_helper import (
     fetch_active_models,
     get_db_connection,
     insert_battle_evaluations_batch,
     insert_battles_batch,
 )
+from rich.console import Console
+from rich.table import Table
 
 evaluation_app = typer.Typer(
     help="Manage battle evaluations (simulate, clean, etc.)",
