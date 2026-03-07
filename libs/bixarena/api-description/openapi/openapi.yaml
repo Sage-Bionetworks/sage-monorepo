@@ -2237,8 +2237,6 @@ components:
           format: uuid
           nullable: true
           description: ID of the battle validation to set as effective. Set to null to clear the effective validation.
-      required:
-        - validationId
     BattleValidationRunRequest:
       type: object
       description: Request to run an automated validation method against a battle.

@@ -4,9 +4,9 @@ Request to set or clear the effective validation for a battle.
 
 ## Properties
 
-| Name              | Type    | Description                                                                                     | Notes |
-| ----------------- | ------- | ----------------------------------------------------------------------------------------------- | ----- |
-| **validation_id** | **str** | ID of the battle validation to set as effective. Set to null to clear the effective validation. |
+| Name              | Type    | Description                                                                                     | Notes      |
+| ----------------- | ------- | ----------------------------------------------------------------------------------------------- | ---------- |
+| **validation_id** | **str** | ID of the battle validation to set as effective. Set to null to clear the effective validation. | [optional] |
 
 ## Example
 

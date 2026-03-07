@@ -2693,8 +2693,6 @@ components:
           format: uuid
           nullable: true
           type: string
-      required:
-        - validationId
       type: object
     BattleValidationRunRequest:
       description: Request to run an automated validation method against a battle.

@@ -25,20 +25,9 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class SetEffectiveValidationRequestDto {
 
-  private UUID validationId = null;
+  private @Nullable UUID validationId = null;
 
-  public SetEffectiveValidationRequestDto() {
-    super();
-  }
-
-  /**
-   * Constructor with only required parameters
-   */
-  public SetEffectiveValidationRequestDto(UUID validationId) {
-    this.validationId = validationId;
-  }
-
-  public SetEffectiveValidationRequestDto validationId(UUID validationId) {
+  public SetEffectiveValidationRequestDto validationId(@Nullable UUID validationId) {
     this.validationId = validationId;
     return this;
   }
@@ -47,14 +36,14 @@ public class SetEffectiveValidationRequestDto {
    * ID of the battle validation to set as effective. Set to null to clear the effective validation.
    * @return validationId
    */
-  @NotNull @Valid 
-  @Schema(name = "validationId", description = "ID of the battle validation to set as effective. Set to null to clear the effective validation.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Valid 
+  @Schema(name = "validationId", description = "ID of the battle validation to set as effective. Set to null to clear the effective validation.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("validationId")
-  public UUID getValidationId() {
+  public @Nullable UUID getValidationId() {
     return validationId;
   }
 
-  public void setValidationId(UUID validationId) {
+  public void setValidationId(@Nullable UUID validationId) {
     this.validationId = validationId;
   }
 

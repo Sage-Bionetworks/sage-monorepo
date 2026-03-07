@@ -41,7 +41,6 @@ class TestSetEffectiveValidationRequest(unittest.TestCase):
             )
         else:
             return SetEffectiveValidationRequest(
-                validation_id = '',
         )
         """
 

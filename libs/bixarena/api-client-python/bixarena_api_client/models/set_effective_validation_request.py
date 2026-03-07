@@ -29,6 +29,7 @@ class SetEffectiveValidationRequest(BaseModel):
     """  # noqa: E501
 
     validation_id: Optional[UUID] = Field(
+        default=None,
         description="ID of the battle validation to set as effective. Set to null to clear the effective validation.",
         alias="validationId",
     )

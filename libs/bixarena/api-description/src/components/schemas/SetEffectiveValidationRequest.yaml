@@ -8,5 +8,3 @@ properties:
     description: >-
       ID of the battle validation to set as effective.
       Set to null to clear the effective validation.
-required:
-  - validationId
