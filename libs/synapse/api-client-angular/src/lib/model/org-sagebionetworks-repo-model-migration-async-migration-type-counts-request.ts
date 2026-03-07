@@ -28,6 +28,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     | 'PRINCIPAL'
     | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
+    | 'CERTIFIED_USERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
     | 'PRINCIPAL_ALIAS'
@@ -160,6 +161,7 @@ export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountsReq
     Principal: 'PRINCIPAL' as TypesEnum,
     RealmPrincipal: 'REALM_PRINCIPAL' as TypesEnum,
     GroupMembers: 'GROUP_MEMBERS' as TypesEnum,
+    CertifiedUsers: 'CERTIFIED_USERS' as TypesEnum,
     Credential: 'CREDENTIAL' as TypesEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as TypesEnum,
     PrincipalAlias: 'PRINCIPAL_ALIAS' as TypesEnum,

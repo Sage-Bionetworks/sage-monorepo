@@ -14,6 +14,7 @@ export type OrgSagebionetworksRepoModelMigrationMigrationType =
   | 'PRINCIPAL'
   | 'REALM_PRINCIPAL'
   | 'GROUP_MEMBERS'
+  | 'CERTIFIED_USERS'
   | 'CREDENTIAL'
   | 'AUTHENTICATED_ON'
   | 'PRINCIPAL_ALIAS'
@@ -147,6 +148,7 @@ export const OrgSagebionetworksRepoModelMigrationMigrationType = {
   Principal: 'PRINCIPAL' as OrgSagebionetworksRepoModelMigrationMigrationType,
   RealmPrincipal: 'REALM_PRINCIPAL' as OrgSagebionetworksRepoModelMigrationMigrationType,
   GroupMembers: 'GROUP_MEMBERS' as OrgSagebionetworksRepoModelMigrationMigrationType,
+  CertifiedUsers: 'CERTIFIED_USERS' as OrgSagebionetworksRepoModelMigrationMigrationType,
   Credential: 'CREDENTIAL' as OrgSagebionetworksRepoModelMigrationMigrationType,
   AuthenticatedOn: 'AUTHENTICATED_ON' as OrgSagebionetworksRepoModelMigrationMigrationType,
   PrincipalAlias: 'PRINCIPAL_ALIAS' as OrgSagebionetworksRepoModelMigrationMigrationType,

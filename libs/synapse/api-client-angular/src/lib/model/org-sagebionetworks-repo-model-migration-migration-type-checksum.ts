@@ -35,6 +35,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     | 'PRINCIPAL'
     | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
+    | 'CERTIFIED_USERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
     | 'PRINCIPAL_ALIAS'
@@ -167,6 +168,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     Principal: 'PRINCIPAL' as MigrationTypeEnum,
     RealmPrincipal: 'REALM_PRINCIPAL' as MigrationTypeEnum,
     GroupMembers: 'GROUP_MEMBERS' as MigrationTypeEnum,
+    CertifiedUsers: 'CERTIFIED_USERS' as MigrationTypeEnum,
     Credential: 'CREDENTIAL' as MigrationTypeEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as MigrationTypeEnum,
     PrincipalAlias: 'PRINCIPAL_ALIAS' as MigrationTypeEnum,
@@ -301,6 +303,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     | 'PRINCIPAL'
     | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
+    | 'CERTIFIED_USERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
     | 'PRINCIPAL_ALIAS'
@@ -433,6 +436,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeChecksum {
     Principal: 'PRINCIPAL' as TypeEnum,
     RealmPrincipal: 'REALM_PRINCIPAL' as TypeEnum,
     GroupMembers: 'GROUP_MEMBERS' as TypeEnum,
+    CertifiedUsers: 'CERTIFIED_USERS' as TypeEnum,
     Credential: 'CREDENTIAL' as TypeEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as TypeEnum,
     PrincipalAlias: 'PRINCIPAL_ALIAS' as TypeEnum,
