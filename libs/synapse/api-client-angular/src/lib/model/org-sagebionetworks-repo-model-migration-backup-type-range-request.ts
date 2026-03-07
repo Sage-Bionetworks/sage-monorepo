@@ -46,6 +46,7 @@ export namespace OrgSagebionetworksRepoModelMigrationBackupTypeRangeRequest {
     | 'PRINCIPAL'
     | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
+    | 'CERTIFIED_USERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
     | 'PRINCIPAL_ALIAS'
@@ -178,6 +179,7 @@ export namespace OrgSagebionetworksRepoModelMigrationBackupTypeRangeRequest {
     Principal: 'PRINCIPAL' as MigrationTypeEnum,
     RealmPrincipal: 'REALM_PRINCIPAL' as MigrationTypeEnum,
     GroupMembers: 'GROUP_MEMBERS' as MigrationTypeEnum,
+    CertifiedUsers: 'CERTIFIED_USERS' as MigrationTypeEnum,
     Credential: 'CREDENTIAL' as MigrationTypeEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as MigrationTypeEnum,
     PrincipalAlias: 'PRINCIPAL_ALIAS' as MigrationTypeEnum,

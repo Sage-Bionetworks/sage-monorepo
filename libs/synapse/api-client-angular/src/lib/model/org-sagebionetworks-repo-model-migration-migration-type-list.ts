@@ -21,6 +21,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     | 'PRINCIPAL'
     | 'REALM_PRINCIPAL'
     | 'GROUP_MEMBERS'
+    | 'CERTIFIED_USERS'
     | 'CREDENTIAL'
     | 'AUTHENTICATED_ON'
     | 'PRINCIPAL_ALIAS'
@@ -153,6 +154,7 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
     Principal: 'PRINCIPAL' as ListEnum,
     RealmPrincipal: 'REALM_PRINCIPAL' as ListEnum,
     GroupMembers: 'GROUP_MEMBERS' as ListEnum,
+    CertifiedUsers: 'CERTIFIED_USERS' as ListEnum,
     Credential: 'CREDENTIAL' as ListEnum,
     AuthenticatedOn: 'AUTHENTICATED_ON' as ListEnum,
     PrincipalAlias: 'PRINCIPAL_ALIAS' as ListEnum,
