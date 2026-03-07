@@ -110,6 +110,10 @@ app:
     # Default audience (will be overridden by audience parameter in /oauth2/token)
     audience: urn:bixarena:auth
     token-ttl-seconds: 600
+    # Service-to-service client credentials (for OAuth2 client_credentials grant)
+    service-client-id: bixarena-service
+    service-client-secret: changeme
+    service-token-ttl-seconds: 300
   cors:
     # CORS configuration for browser requests (localhost defaults)
     allowed-origins:

@@ -17,13 +17,9 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from jose.exceptions import JWKError
 
-logger = logging.getLogger(__name__)
+from bixarena_ai_service.config import get_settings
 
-# Configuration (should come from env vars in production)
-AUTH_SERVICE_URL = "http://bixarena-auth-service:8115"
-JWKS_URL = f"{AUTH_SERVICE_URL}/.well-known/jwks.json"
-EXPECTED_ISSUER = "urn:bixarena:auth"
-EXPECTED_AUDIENCE = "urn:bixarena:ai"
+logger = logging.getLogger(__name__)
 
 # HTTP Bearer security scheme with auto_error=False to handle missing auth ourselves
 security = HTTPBearer(auto_error=False)
@@ -43,13 +39,15 @@ def get_jwks() -> dict:
     Raises:
         HTTPException: If JWKS cannot be fetched (503 Service Unavailable)
     """
+    settings = get_settings()
+    jwks_url = f"{settings.auth_service_url}/.well-known/jwks.json"
     try:
-        response = httpx.get(JWKS_URL, timeout=5.0)
+        response = httpx.get(jwks_url, timeout=5.0)
         response.raise_for_status()
         logger.info("Successfully fetched JWKS from auth service")
         return response.json()
     except httpx.HTTPError as e:
-        logger.error(f"Failed to fetch JWKS from {JWKS_URL}: {e}")
+        logger.error("Failed to fetch JWKS from %s: %s", jwks_url, e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Cannot validate token - auth service unavailable",
@@ -77,8 +75,6 @@ def validate_jwt(
     Raises:
         HTTPException: If token is invalid, expired, or has wrong audience (401)
     """
-    logger.info("validate_jwt called")
-
     # Check if Authorization header was provided
     if credentials is None:
         logger.warning("No Authorization header provided")
@@ -89,7 +85,6 @@ def validate_jwt(
         )
 
     token = credentials.credentials
-    logger.info(f"JWT token received (first 50 chars): {token[:50]}...")
 
     try:
         # Fetch JWKS
@@ -100,7 +95,6 @@ def validate_jwt(
         kid = unverified_header.get("kid")
 
         if not kid:
-            logger.warning("JWT token missing key ID (kid)")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token missing key ID",
@@ -115,7 +109,7 @@ def validate_jwt(
                 break
 
         if not key:
-            logger.warning(f"Token key ID {kid} not found in JWKS")
+            logger.warning("Token key ID %s not found in JWKS", kid)
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token key not found in JWKS",
@@ -123,12 +117,13 @@ def validate_jwt(
             )
 
         # Validate and decode JWT
+        settings = get_settings()
         claims = jwt.decode(
             token,
             key,
             algorithms=["RS256"],
-            issuer=EXPECTED_ISSUER,
-            audience=EXPECTED_AUDIENCE,
+            issuer=settings.jwt_expected_issuer,
+            audience=settings.jwt_expected_audience,
             options={
                 "verify_signature": True,
                 "verify_exp": True,
@@ -138,11 +133,11 @@ def validate_jwt(
             },
         )
 
-        logger.debug(f"Successfully validated JWT for subject: {claims.get('sub')}")
+        logger.debug("Successfully validated JWT for subject: %s", claims.get("sub"))
         return claims
 
     except JWTError as e:
-        logger.warning(f"JWT validation failed: {e}")
+        logger.warning("JWT validation failed: %s", e)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired token",

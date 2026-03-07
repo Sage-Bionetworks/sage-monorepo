@@ -45,21 +45,18 @@ tags:
     x-displayName: Auth
 paths:
   /validate-prompt:
-    get:
+    post:
       tags:
         - Prompt Validation
       summary: Validate biomedical prompt
       description: Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
       operationId: validatePrompt
-      parameters:
-        - name: prompt
-          in: query
-          required: true
-          description: The prompt text to validate
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 10000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptValidationRequest'
+        required: true
       responses:
         '200':
           description: Success
@@ -759,29 +756,22 @@ paths:
         - jwtBearer: []
   /oauth2/token:
     post:
-      x-anonymous-access: true
-      x-rate-limit-requests-per-minute: 60
       tags:
         - Auth
       summary: Mint short-lived internal JWT
       description: |
         Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
-
         The optional audience parameter specifies the target service for the JWT.
       operationId: token
       security: []
       parameters:
-        - in: query
-          name: audience
+        - name: audience
+          in: query
           required: false
-          schema:
-            type: string
-            enum:
-              - urn:bixarena:auth
-              - urn:bixarena:api
-              - urn:bixarena:ai
           description: |
             Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
+          schema:
+            type: string
       responses:
         '200':
           description: Access token response
@@ -789,10 +779,6 @@ paths:
             application/json:
               schema:
                 type: object
-                required:
-                  - access_token
-                  - token_type
-                  - expires_in
                 properties:
                   access_token:
                     type: string
@@ -802,9 +788,54 @@ paths:
                       - Bearer
                   expires_in:
                     type: integer
-                    example: 600
+                    description: Token lifetime in seconds
+                required:
+                  - access_token
+                  - token_type
+                  - expires_in
         '401':
           $ref: '#/components/responses/Unauthorized'
+  /oauth2/service-token:
+    post:
+      tags:
+        - Auth
+      summary: Mint a service-to-service JWT (client credentials)
+      description: |
+        Issues a JWT for service-to-service authentication using the OAuth2 Client Credentials grant. The caller authenticates with HTTP Basic (service client ID and secret). Returns a short-lived JWT with the requested audience.
+      operationId: serviceToken
+      security: []
+      parameters:
+        - name: audience
+          in: query
+          required: true
+          description: Target audience for the JWT (e.g. 'urn:bixarena:ai')
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Access token response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    enum:
+                      - Bearer
+                  expires_in:
+                    type: integer
+                    description: Token lifetime in seconds
+                required:
+                  - access_token
+                  - token_type
+                  - expires_in
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /userinfo:
     get:
       x-rate-limit-requests-per-minute: 60
@@ -862,6 +893,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    PromptValidationRequest:
+      type: object
+      description: The prompt text to validate for biomedical relevance.
+      properties:
+        prompt:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: The prompt text to validate
+      required:
+        - prompt
     PromptValidation:
       type: object
       properties:
@@ -877,10 +919,15 @@ components:
         isBiomedical:
           type: boolean
           description: Whether the prompt is considered biomedically related (confidence >= 0.5)
+        method:
+          type: string
+          maxLength: 100
+          description: The validation method used (e.g. 'openrouter-haiku-v1')
       required:
         - prompt
         - confidence
         - isBiomedical
+        - method
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)

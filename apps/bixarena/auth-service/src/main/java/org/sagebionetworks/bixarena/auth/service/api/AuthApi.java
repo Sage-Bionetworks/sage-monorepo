@@ -285,8 +285,50 @@ public interface AuthApi {
 
 
     /**
+     * POST /oauth2/service-token : Mint a service-to-service JWT (client credentials)
+     * Issues a JWT for service-to-service authentication using the OAuth2 Client Credentials grant. The caller authenticates with HTTP Basic (service client ID and secret). Returns a short-lived JWT with the requested audience. 
+     *
+     * @param audience Target audience for the JWT (e.g. &#39;urn:bixarena:ai&#39;) (required)
+     * @return Access token response (status code 200)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "serviceToken",
+        summary = "Mint a service-to-service JWT (client credentials)",
+        description = "Issues a JWT for service-to-service authentication using the OAuth2 Client Credentials grant. The caller authenticates with HTTP Basic (service client ID and secret). Returns a short-lived JWT with the requested audience. ",
+        tags = { "Auth" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Access token response", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Token200ResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = Token200ResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/oauth2/service-token",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<Token200ResponseDto> serviceToken(
+        @NotNull @Parameter(name = "audience", description = "Target audience for the JWT (e.g. 'urn:bixarena:ai')", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "audience", required = true) String audience
+    ) {
+        return getDelegate().serviceToken(audience);
+    }
+
+
+    /**
      * POST /oauth2/token : Mint short-lived internal JWT
-     * Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).  The optional audience parameter specifies the target service for the JWT. 
+     * Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint). The optional audience parameter specifies the target service for the JWT. 
      *
      * @param audience Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.  (optional)
      * @return Access token response (status code 200)
@@ -295,7 +337,7 @@ public interface AuthApi {
     @Operation(
         operationId = "token",
         summary = "Mint short-lived internal JWT",
-        description = "Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).  The optional audience parameter specifies the target service for the JWT. ",
+        description = "Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint). The optional audience parameter specifies the target service for the JWT. ",
         tags = { "Auth" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Access token response", content = {

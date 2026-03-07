@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena API
+BixArena AI Service
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -16,34 +16,32 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
+
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List
-from typing import Optional, Set
-from typing_extensions import Self
+from typing_extensions import Annotated
+
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 
-class Token200Response(BaseModel):
+class PromptValidationRequest(BaseModel):
     """
-    Token200Response
+    The prompt text to validate for biomedical relevance.
     """  # noqa: E501
 
-    access_token: StrictStr
-    token_type: StrictStr
-    expires_in: StrictInt = Field(description="Token lifetime in seconds")
-    __properties: ClassVar[List[str]] = ["access_token", "token_type", "expires_in"]
-
-    @field_validator("token_type")
-    def token_type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(["Bearer"]):
-            raise ValueError("must be one of enum values ('Bearer')")
-        return value
-
-    model_config = ConfigDict(
-        populate_by_name=True,
-        validate_assignment=True,
-        protected_namespaces=(),
+    prompt: Annotated[str, Field(min_length=1, strict=True, max_length=10000)] = Field(
+        description="The prompt text to validate"
     )
+    __properties: ClassVar[List[str]] = ["prompt"]
+
+    model_config = {
+        "populate_by_name": True,
+        "validate_assignment": True,
+        "protected_namespaces": (),
+    }
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -55,8 +53,8 @@ class Token200Response(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Token200Response from a JSON string"""
+    def from_json(cls, json_str: str) -> Self:
+        """Create an instance of PromptValidationRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,29 +67,21 @@ class Token200Response(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
-
         _dict = self.model_dump(
             by_alias=True,
-            exclude=excluded_fields,
+            exclude={},
             exclude_none=True,
         )
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Token200Response from a dict"""
+    def from_dict(cls, obj: Dict) -> Self:
+        """Create an instance of PromptValidationRequest from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "access_token": obj.get("access_token"),
-                "token_type": obj.get("token_type"),
-                "expires_in": obj.get("expires_in"),
-            }
-        )
+        _obj = cls.model_validate({"prompt": obj.get("prompt")})
         return _obj

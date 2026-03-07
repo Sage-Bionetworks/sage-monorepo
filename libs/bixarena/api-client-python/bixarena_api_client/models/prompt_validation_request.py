@@ -16,38 +16,22 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
-from typing import Any, ClassVar, Dict, List, Union
+from pydantic import BaseModel, ConfigDict, Field
+from typing import Any, ClassVar, Dict, List
 from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class PromptValidation(BaseModel):
+class PromptValidationRequest(BaseModel):
     """
-    PromptValidation
+    The prompt text to validate for biomedical relevance.
     """  # noqa: E501
 
-    prompt: StrictStr = Field(description="The original prompt that was validated")
-    confidence: Union[
-        Annotated[float, Field(le=1, strict=True, ge=0)],
-        Annotated[int, Field(le=1, strict=True, ge=0)],
-    ] = Field(
-        description="Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)"
+    prompt: Annotated[str, Field(min_length=1, strict=True, max_length=10000)] = Field(
+        description="The prompt text to validate"
     )
-    is_biomedical: StrictBool = Field(
-        description="Whether the prompt is considered biomedically related (confidence >= 0.5)",
-        alias="isBiomedical",
-    )
-    method: Annotated[str, Field(strict=True, max_length=100)] = Field(
-        description="The validation method used (e.g. 'openrouter-haiku-v1')"
-    )
-    __properties: ClassVar[List[str]] = [
-        "prompt",
-        "confidence",
-        "isBiomedical",
-        "method",
-    ]
+    __properties: ClassVar[List[str]] = ["prompt"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -66,7 +50,7 @@ class PromptValidation(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of PromptValidation from a JSON string"""
+        """Create an instance of PromptValidationRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -90,19 +74,12 @@ class PromptValidation(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of PromptValidation from a dict"""
+        """Create an instance of PromptValidationRequest from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "prompt": obj.get("prompt"),
-                "confidence": obj.get("confidence"),
-                "isBiomedical": obj.get("isBiomedical"),
-                "method": obj.get("method"),
-            }
-        )
+        _obj = cls.model_validate({"prompt": obj.get("prompt")})
         return _obj

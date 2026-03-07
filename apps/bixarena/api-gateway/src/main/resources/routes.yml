@@ -70,9 +70,6 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 300
     - method: 'GET'
-      path: '/api/v1/validate-prompt'
-      audience: 'urn:bixarena:ai'
-    - method: 'GET'
       path: '/auth/callback'
       audience: 'urn:bixarena:auth'
       anonymousAccess: true
@@ -111,11 +108,15 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
     - method: 'POST'
+      path: '/api/v1/validate-prompt'
+      audience: 'urn:bixarena:ai'
+    - method: 'POST'
       path: '/auth/logout'
       audience: 'urn:bixarena:auth'
       rateLimitRequestsPerMinute: 60
     - method: 'POST'
+      path: '/oauth2/service-token'
+      audience: 'urn:bixarena:auth'
+    - method: 'POST'
       path: '/oauth2/token'
       audience: 'urn:bixarena:auth'
-      anonymousAccess: true
-      rateLimitRequestsPerMinute: 60

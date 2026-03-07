@@ -13,11 +13,11 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.prompt_validation import PromptValidation
+from bixarena_api_client.models.prompt_validation_request import PromptValidationRequest
 
 
-class TestPromptValidation(unittest.TestCase):
-    """PromptValidation unit test stubs"""
+class TestPromptValidationRequest(unittest.TestCase):
+    """PromptValidationRequest unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,32 +25,26 @@ class TestPromptValidation(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> PromptValidation:
-        """Test PromptValidation
+    def make_instance(self, include_optional) -> PromptValidationRequest:
+        """Test PromptValidationRequest
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `PromptValidation`
+        # uncomment below to create an instance of `PromptValidationRequest`
         """
-        model = PromptValidation()
+        model = PromptValidationRequest()
         if include_optional:
-            return PromptValidation(
-                prompt = '',
-                confidence = 0,
-                is_biomedical = True,
-                method = ''
+            return PromptValidationRequest(
+                prompt = '0'
             )
         else:
-            return PromptValidation(
-                prompt = '',
-                confidence = 0,
-                is_biomedical = True,
-                method = '',
+            return PromptValidationRequest(
+                prompt = '0',
         )
         """
 
-    def testPromptValidation(self):
-        """Test PromptValidation"""
+    def testPromptValidationRequest(self):
+        """Test PromptValidationRequest"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

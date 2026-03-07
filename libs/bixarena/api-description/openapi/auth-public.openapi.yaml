@@ -98,29 +98,22 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /oauth2/token:
     post:
-      x-anonymous-access: true
-      x-rate-limit-requests-per-minute: 60
       tags:
         - Auth
       summary: Mint short-lived internal JWT
       description: |
         Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
-
         The optional audience parameter specifies the target service for the JWT.
       operationId: token
       security: []
       parameters:
-        - in: query
-          name: audience
+        - name: audience
+          in: query
           required: false
-          schema:
-            type: string
-            enum:
-              - urn:bixarena:auth
-              - urn:bixarena:api
-              - urn:bixarena:ai
           description: |
             Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
+          schema:
+            type: string
       responses:
         '200':
           description: Access token response
@@ -128,10 +121,6 @@ paths:
             application/json:
               schema:
                 type: object
-                required:
-                  - access_token
-                  - token_type
-                  - expires_in
                 properties:
                   access_token:
                     type: string
@@ -141,9 +130,54 @@ paths:
                       - Bearer
                   expires_in:
                     type: integer
-                    example: 600
+                    description: Token lifetime in seconds
+                required:
+                  - access_token
+                  - token_type
+                  - expires_in
         '401':
           $ref: '#/components/responses/Unauthorized'
+  /oauth2/service-token:
+    post:
+      tags:
+        - Auth
+      summary: Mint a service-to-service JWT (client credentials)
+      description: |
+        Issues a JWT for service-to-service authentication using the OAuth2 Client Credentials grant. The caller authenticates with HTTP Basic (service client ID and secret). Returns a short-lived JWT with the requested audience.
+      operationId: serviceToken
+      security: []
+      parameters:
+        - name: audience
+          in: query
+          required: true
+          description: Target audience for the JWT (e.g. 'urn:bixarena:ai')
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Access token response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    enum:
+                      - Bearer
+                  expires_in:
+                    type: integer
+                    description: Token lifetime in seconds
+                required:
+                  - access_token
+                  - token_type
+                  - expires_in
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /userinfo:
     get:
       x-rate-limit-requests-per-minute: 60
