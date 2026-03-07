@@ -117,6 +117,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _BattleApi_           | [**list_battle_validations**](docs/BattleApi.md#list_battle_validations)          | **GET** /battles/{battleId}/validations                 | List battle validations                            |
 | _BattleApi_           | [**list_battles**](docs/BattleApi.md#list_battles)                                | **GET** /battles                                        | List battles                                       |
 | _BattleApi_           | [**run_battle_validation**](docs/BattleApi.md#run_battle_validation)              | **POST** /battles/{battleId}/validations/run            | Run an automated validation method                 |
+| _BattleApi_           | [**set_effective_validation**](docs/BattleApi.md#set_effective_validation)        | **PATCH** /battles/{battleId}/validations/effective     | Set effective validation                           |
 | _BattleApi_           | [**update_battle**](docs/BattleApi.md#update_battle)                              | **PATCH** /battles/{battleId}                           | Update a battle                                    |
 | _BattleApi_           | [**update_battle_round**](docs/BattleApi.md#update_battle_round)                  | **PATCH** /battles/{battleId}/rounds/{roundId}          | Update a battle round                              |
 | _BattleValidationApi_ | [**validate_battle**](docs/BattleValidationApi.md#validate_battle)                | **POST** /validate-battle                               | Validate biomedical battle                         |
@@ -190,6 +191,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [QuestContributor](docs/QuestContributor.md)
 - [QuestContributors](docs/QuestContributors.md)
 - [RateLimitError](docs/RateLimitError.md)
+- [SetEffectiveValidationRequest](docs/SetEffectiveValidationRequest.md)
 - [SortDirection](docs/SortDirection.md)
 - [Token200Response](docs/Token200Response.md)
 - [UserInfo](docs/UserInfo.md)

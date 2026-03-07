@@ -88,6 +88,13 @@ class TestBattleApi(unittest.TestCase):
         """
         pass
 
+    def test_set_effective_validation(self) -> None:
+        """Test case for set_effective_validation
+
+        Set effective validation
+        """
+        pass
+
     def test_update_battle(self) -> None:
         """Test case for update_battle
 

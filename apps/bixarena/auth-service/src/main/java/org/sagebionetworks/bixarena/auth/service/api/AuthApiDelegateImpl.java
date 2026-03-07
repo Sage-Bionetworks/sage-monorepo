@@ -345,7 +345,11 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       session.setAttribute("AUTH_PREFERRED_USERNAME", persistedUser.getUsername());
       session.setAttribute("AUTH_EMAIL", persistedUser.getEmail());
       session.setAttribute("AUTH_EMAIL_VERIFIED", persistedUser.getEmailVerified());
-      session.setAttribute("AUTH_ROLES", List.of(persistedUser.getRole().name()));
+      // Admins inherit the user role (RBAC hierarchy: admin ⊃ user)
+      List<String> roles = persistedUser.isAdmin()
+        ? List.of("admin", "user")
+        : List.of(persistedUser.getRole().name());
+      session.setAttribute("AUTH_ROLES", roles);
       session.removeAttribute("OIDC_STATE");
       session.removeAttribute("OIDC_NONCE");
       // If browser navigation (prefers HTML) redirect to root instead of showing JSON

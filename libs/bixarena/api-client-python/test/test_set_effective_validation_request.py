@@ -13,11 +13,13 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client.models.battle_update_request import BattleUpdateRequest
+from bixarena_api_client.models.set_effective_validation_request import (
+    SetEffectiveValidationRequest,
+)
 
 
-class TestBattleUpdateRequest(unittest.TestCase):
-    """BattleUpdateRequest unit test stubs"""
+class TestSetEffectiveValidationRequest(unittest.TestCase):
+    """SetEffectiveValidationRequest unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,26 +27,26 @@ class TestBattleUpdateRequest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> BattleUpdateRequest:
-        """Test BattleUpdateRequest
+    def make_instance(self, include_optional) -> SetEffectiveValidationRequest:
+        """Test SetEffectiveValidationRequest
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `BattleUpdateRequest`
+        # uncomment below to create an instance of `SetEffectiveValidationRequest`
         """
-        model = BattleUpdateRequest()
+        model = SetEffectiveValidationRequest()
         if include_optional:
-            return BattleUpdateRequest(
-                title = 'Gene Expression Analysis Comparison',
-                ended_at = '2024-01-15T11:45Z'
+            return SetEffectiveValidationRequest(
+                validation_id = ''
             )
         else:
-            return BattleUpdateRequest(
+            return SetEffectiveValidationRequest(
+                validation_id = '',
         )
         """
 
-    def testBattleUpdateRequest(self):
-        """Test BattleUpdateRequest"""
+    def testSetEffectiveValidationRequest(self):
+        """Test SetEffectiveValidationRequest"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

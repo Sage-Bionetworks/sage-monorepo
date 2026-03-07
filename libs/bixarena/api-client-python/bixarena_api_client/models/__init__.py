@@ -93,6 +93,9 @@ from bixarena_api_client.models.public_stats import PublicStats
 from bixarena_api_client.models.quest_contributor import QuestContributor
 from bixarena_api_client.models.quest_contributors import QuestContributors
 from bixarena_api_client.models.rate_limit_error import RateLimitError
+from bixarena_api_client.models.set_effective_validation_request import (
+    SetEffectiveValidationRequest,
+)
 from bixarena_api_client.models.sort_direction import SortDirection
 from bixarena_api_client.models.token200_response import Token200Response
 from bixarena_api_client.models.user_info import UserInfo

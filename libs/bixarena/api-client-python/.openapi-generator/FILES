@@ -73,6 +73,7 @@ bixarena_api_client/models/public_stats.py
 bixarena_api_client/models/quest_contributor.py
 bixarena_api_client/models/quest_contributors.py
 bixarena_api_client/models/rate_limit_error.py
+bixarena_api_client/models/set_effective_validation_request.py
 bixarena_api_client/models/sort_direction.py
 bixarena_api_client/models/token200_response.py
 bixarena_api_client/models/user_info.py
@@ -145,6 +146,7 @@ docs/QuestApi.md
 docs/QuestContributor.md
 docs/QuestContributors.md
 docs/RateLimitError.md
+docs/SetEffectiveValidationRequest.md
 docs/SortDirection.md
 docs/StatsApi.md
 docs/Token200Response.md
@@ -218,6 +220,7 @@ test/test_quest_api.py
 test/test_quest_contributor.py
 test/test_quest_contributors.py
 test/test_rate_limit_error.py
+test/test_set_effective_validation_request.py
 test/test_sort_direction.py
 test/test_stats_api.py
 test/test_token200_response.py

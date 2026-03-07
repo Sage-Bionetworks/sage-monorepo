@@ -93,6 +93,7 @@ __all__ = [
     "QuestContributor",
     "QuestContributors",
     "RateLimitError",
+    "SetEffectiveValidationRequest",
     "SortDirection",
     "Token200Response",
     "UserInfo",
@@ -267,6 +268,9 @@ from bixarena_api_client.models.quest_contributors import (
     QuestContributors as QuestContributors,
 )
 from bixarena_api_client.models.rate_limit_error import RateLimitError as RateLimitError
+from bixarena_api_client.models.set_effective_validation_request import (
+    SetEffectiveValidationRequest as SetEffectiveValidationRequest,
+)
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection
 from bixarena_api_client.models.token200_response import (
     Token200Response as Token200Response,

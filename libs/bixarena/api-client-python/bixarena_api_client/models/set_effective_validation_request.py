@@ -16,23 +16,23 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
+from uuid import UUID
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class BattleUpdateRequest(BaseModel):
+class SetEffectiveValidationRequest(BaseModel):
     """
-    The information used to update a battle.
+    Request to set or clear the effective validation for a battle.
     """  # noqa: E501
 
-    title: Optional[StrictStr] = Field(default=None, description="Title of the battle.")
-    ended_at: Optional[datetime] = Field(
-        default=None, description="Timestamp when the entity ended.", alias="endedAt"
+    validation_id: Optional[UUID] = Field(
+        description="ID of the battle validation to set as effective. Set to null to clear the effective validation.",
+        alias="validationId",
     )
-    __properties: ClassVar[List[str]] = ["title", "endedAt"]
+    __properties: ClassVar[List[str]] = ["validationId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -51,7 +51,7 @@ class BattleUpdateRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of BattleUpdateRequest from a JSON string"""
+        """Create an instance of SetEffectiveValidationRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,18 +71,21 @@ class BattleUpdateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if validation_id (nullable) is None
+        # and model_fields_set contains the field
+        if self.validation_id is None and "validation_id" in self.model_fields_set:
+            _dict["validationId"] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of BattleUpdateRequest from a dict"""
+        """Create an instance of SetEffectiveValidationRequest from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {"title": obj.get("title"), "endedAt": obj.get("endedAt")}
-        )
+        _obj = cls.model_validate({"validationId": obj.get("validationId")})
         return _obj

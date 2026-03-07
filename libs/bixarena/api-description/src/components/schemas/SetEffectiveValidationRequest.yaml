@@ -1,0 +1,12 @@
+type: object
+description: Request to set or clear the effective validation for a battle.
+properties:
+  validationId:
+    type: string
+    format: uuid
+    nullable: true
+    description: >-
+      ID of the battle validation to set as effective.
+      Set to null to clear the effective validation.
+required:
+  - validationId

@@ -125,10 +125,19 @@ public class BattleService {
   }
 
   @Transactional
-  public BattleDto updateBattle(UUID battleId, BattleUpdateRequestDto request) {
+  public BattleDto updateBattle(
+      UUID battleId, BattleUpdateRequestDto request, UUID callerId) {
     log.info("Updating battle with ID: {}", battleId);
 
     BattleEntity existingBattle = getBattleEntity(battleId);
+
+    // Ownership check: users can only update their own battles
+    if (!existingBattle.getUserId().equals(callerId)) {
+      throw new org.springframework.security.access.AccessDeniedException(
+        "You can only update your own battles"
+      );
+    }
+
     boolean wasIncomplete = existingBattle.getEndedAt() == null;
 
     // Update title if provided
@@ -136,24 +145,12 @@ public class BattleService {
       existingBattle.setTitle(request.getTitle());
     }
 
-    // Handle endedAt: use provided value, or auto-set to now if no ended time provided
+    // Handle endedAt: use provided value, or auto-set to now
     if (request.getEndedAt() != null) {
       existingBattle.setEndedAt(request.getEndedAt());
     } else if (existingBattle.getEndedAt() == null) {
       existingBattle.setEndedAt(java.time.OffsetDateTime.now());
       log.info("Auto-setting endedAt for battle {}", battleId);
-    }
-
-    // Handle effectiveValidationId if provided
-    if (request.getEffectiveValidationId() != null) {
-      UUID validationId = request.getEffectiveValidationId();
-      // Verify the validation exists and belongs to this battle
-      battleValidationRepository.findById(validationId)
-        .filter(v -> v.getBattleId().equals(battleId))
-        .orElseThrow(() -> new BattleValidationNotFoundException(
-          String.format("Battle validation %s not found for battle %s", validationId, battleId)
-        ));
-      existingBattle.setEffectiveValidationId(validationId);
     }
 
     // Save the updated battle
@@ -168,6 +165,34 @@ public class BattleService {
     log.info("Successfully updated battle with ID: {}", battleId);
 
     return battleMapper.convertToDto(updatedBattle);
+  }
+
+  @Transactional
+  public BattleDto setEffectiveValidation(
+      UUID battleId, UUID validationId) {
+    log.info(
+      "Setting effective validation for battle {}: {}",
+      battleId, validationId
+    );
+
+    BattleEntity battle = getBattleEntity(battleId);
+
+    if (validationId != null) {
+      // Verify the validation exists and belongs to this battle
+      battleValidationRepository.findById(validationId)
+        .filter(v -> v.getBattleId().equals(battleId))
+        .orElseThrow(() -> new BattleValidationNotFoundException(
+          String.format(
+            "Battle validation %s not found for battle %s",
+            validationId, battleId
+          )
+        ));
+    }
+
+    battle.setEffectiveValidationId(validationId);
+    BattleEntity updated = battleRepository.save(battle);
+
+    return battleMapper.convertToDto(updated);
   }
 
   /**

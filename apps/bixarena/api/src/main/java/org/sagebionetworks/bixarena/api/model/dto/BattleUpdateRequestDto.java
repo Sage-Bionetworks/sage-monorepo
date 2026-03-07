@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -31,8 +30,6 @@ public class BattleUpdateRequestDto {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private @Nullable OffsetDateTime endedAt;
-
-  private @Nullable UUID effectiveValidationId = null;
 
   public BattleUpdateRequestDto title(@Nullable String title) {
     this.title = title;
@@ -74,26 +71,6 @@ public class BattleUpdateRequestDto {
     this.endedAt = endedAt;
   }
 
-  public BattleUpdateRequestDto effectiveValidationId(@Nullable UUID effectiveValidationId) {
-    this.effectiveValidationId = effectiveValidationId;
-    return this;
-  }
-
-  /**
-   * Set the effective validation for this battle (admin only, nullable to clear)
-   * @return effectiveValidationId
-   */
-  @Valid 
-  @Schema(name = "effectiveValidationId", description = "Set the effective validation for this battle (admin only, nullable to clear)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("effectiveValidationId")
-  public @Nullable UUID getEffectiveValidationId() {
-    return effectiveValidationId;
-  }
-
-  public void setEffectiveValidationId(@Nullable UUID effectiveValidationId) {
-    this.effectiveValidationId = effectiveValidationId;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -104,13 +81,12 @@ public class BattleUpdateRequestDto {
     }
     BattleUpdateRequestDto battleUpdateRequest = (BattleUpdateRequestDto) o;
     return Objects.equals(this.title, battleUpdateRequest.title) &&
-        Objects.equals(this.endedAt, battleUpdateRequest.endedAt) &&
-        Objects.equals(this.effectiveValidationId, battleUpdateRequest.effectiveValidationId);
+        Objects.equals(this.endedAt, battleUpdateRequest.endedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, endedAt, effectiveValidationId);
+    return Objects.hash(title, endedAt);
   }
 
   @Override
@@ -119,7 +95,6 @@ public class BattleUpdateRequestDto {
     sb.append("class BattleUpdateRequestDto {\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    endedAt: ").append(toIndentedString(endedAt)).append("\n");
-    sb.append("    effectiveValidationId: ").append(toIndentedString(effectiveValidationId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -150,7 +125,6 @@ public class BattleUpdateRequestDto {
     protected Builder copyOf(BattleUpdateRequestDto value) { 
       this.instance.setTitle(value.title);
       this.instance.setEndedAt(value.endedAt);
-      this.instance.setEffectiveValidationId(value.effectiveValidationId);
       return this;
     }
 
@@ -161,11 +135,6 @@ public class BattleUpdateRequestDto {
     
     public BattleUpdateRequestDto.Builder endedAt(OffsetDateTime endedAt) {
       this.instance.endedAt(endedAt);
-      return this;
-    }
-    
-    public BattleUpdateRequestDto.Builder effectiveValidationId(UUID effectiveValidationId) {
-      this.instance.effectiveValidationId(effectiveValidationId);
       return this;
     }
     

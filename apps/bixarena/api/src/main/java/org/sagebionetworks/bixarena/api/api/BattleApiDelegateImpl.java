@@ -18,6 +18,7 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationRunRequestDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
@@ -115,16 +116,18 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   }
 
   @Override
-  @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<BattleDto> updateBattle(
     UUID battleId,
     BattleUpdateRequestDto battleUpdateRequestDto
   ) {
-    // Log the authenticated user for audit purposes
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    log.info("User {} is updating battle {}", authentication.getName(), battleId);
+    UUID callerId = UUID.fromString(authentication.getName());
+    log.info("User {} is updating battle {}", callerId, battleId);
 
-    BattleDto updatedBattle = battleService.updateBattle(battleId, battleUpdateRequestDto);
+    BattleDto updatedBattle = battleService.updateBattle(
+      battleId, battleUpdateRequestDto, callerId
+    );
     return ResponseEntity.ok(updatedBattle);
   }
 
@@ -203,6 +206,22 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
     log.info("Admin triggering automated validation for battle {}", battleId);
     BattleValidationEntity entity = battleValidationService.validateAndPersistBattle(battleId);
     return ResponseEntity.status(HttpStatus.CREATED).body(toDto(entity));
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<BattleDto> setEffectiveValidation(
+    UUID battleId,
+    SetEffectiveValidationRequestDto request
+  ) {
+    log.info(
+      "Admin setting effective validation for battle {}: {}",
+      battleId, request.getValidationId()
+    );
+    BattleDto updated = battleService.setEffectiveValidation(
+      battleId, request.getValidationId()
+    );
+    return ResponseEntity.ok(updated);
   }
 
   @Override

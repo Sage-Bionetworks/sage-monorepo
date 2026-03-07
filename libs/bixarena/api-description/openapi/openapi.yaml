@@ -673,6 +673,41 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
+  /battles/{battleId}/validations/effective:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    patch:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Battle
+      summary: Set effective validation
+      description: Set or clear the effective validation for a battle. The effective validation determines whether a battle counts in stats (only battles with a positive effective validation are included). Admin only.
+      operationId: setEffectiveValidation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetEffectiveValidationRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Battle'
+          description: Effective validation updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /battles/{battleId}/validations/run:
     parameters:
       - $ref: '#/components/parameters/battleId'
@@ -1425,11 +1460,6 @@ components:
         endedAt:
           $ref: '#/components/schemas/EndedAt'
           nullable: true
-        effectiveValidationId:
-          type: string
-          format: uuid
-          nullable: true
-          description: Set the effective validation for this battle (admin only, nullable to clear)
     MessageRole:
       type: string
       description: The role of a message.
@@ -2198,6 +2228,17 @@ components:
           description: Optional reason for the validation decision
       required:
         - isBiomedical
+    SetEffectiveValidationRequest:
+      type: object
+      description: Request to set or clear the effective validation for a battle.
+      properties:
+        validationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the battle validation to set as effective. Set to null to clear the effective validation.
+      required:
+        - validationId
     BattleValidationRunRequest:
       type: object
       description: Request to run an automated validation method against a battle.

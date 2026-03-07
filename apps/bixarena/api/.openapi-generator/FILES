@@ -77,6 +77,7 @@ src/main/java/org/sagebionetworks/bixarena/api/model/dto/PublicStatsDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/QuestContributorDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/QuestContributorsDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/RateLimitErrorDto.java
+src/main/java/org/sagebionetworks/bixarena/api/model/dto/SetEffectiveValidationRequestDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/SortDirectionDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/UserStatsDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/VisibilityDto.java
