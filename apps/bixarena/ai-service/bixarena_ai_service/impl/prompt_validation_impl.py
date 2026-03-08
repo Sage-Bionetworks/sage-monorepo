@@ -41,12 +41,25 @@ _FALLBACK_CONFIDENCE = 0.0
 
 
 def _build_user_message(prompt: str) -> str:
-    """Wrap the user-supplied text in delimiters for the classifier.
+    """Wrap the user-supplied text in a labeled block for the classifier."""
+    return f"TEXT:\n{prompt}"
 
-    The triple-quote fence clearly separates the opaque text from the
-    system instructions, making prompt-injection harder.
-    """
-    return f'TEXT:\n"""\n{prompt}\n"""'
+
+_CONFIDENCE_SCHEMA = {
+    "name": "classification",
+    "strict": True,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "confidence": {
+                "type": "number",
+                "description": "0.0 = not biomedical, 1.0 = clearly biomedical",
+            }
+        },
+        "required": ["confidence"],
+        "additionalProperties": False,
+    },
+}
 
 
 def _parse_confidence(raw: str) -> float:
@@ -55,12 +68,7 @@ def _parse_confidence(raw: str) -> float:
     Returns _FALLBACK_CONFIDENCE if parsing fails.
     """
     try:
-        # Strip markdown code fences if the model wraps its response.
-        cleaned = raw.strip()
-        if cleaned.startswith("```"):
-            cleaned = cleaned.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
-
-        data = json.loads(cleaned)
+        data = json.loads(raw)
         confidence = float(data["confidence"])
         return max(0.0, min(1.0, confidence))
     except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
@@ -167,6 +175,10 @@ class PromptValidationApiImpl(BasePromptValidationApi):
                 ],
                 temperature=0.0,
                 max_tokens=50,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": _CONFIDENCE_SCHEMA,
+                },
             )
 
             raw = response.choices[0].message.content or ""

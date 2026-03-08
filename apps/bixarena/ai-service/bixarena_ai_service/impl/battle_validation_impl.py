@@ -43,21 +43,34 @@ _FALLBACK_CONFIDENCE = 0.0
 
 
 def _build_user_message(prompts: list[str]) -> str:
-    """Wrap the user-supplied prompts in numbered delimiters for the classifier."""
+    """Wrap the user-supplied prompts in numbered labels for the classifier."""
     parts = []
     for i, prompt in enumerate(prompts, 1):
-        parts.append(f'PROMPT {i}:\n"""\n{prompt}\n"""')
+        parts.append(f"PROMPT {i}:\n{prompt}")
     return "\n\n".join(parts)
+
+
+_CONFIDENCE_SCHEMA = {
+    "name": "classification",
+    "strict": True,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "confidence": {
+                "type": "number",
+                "description": "0.0 = not biomedical, 1.0 = clearly biomedical",
+            }
+        },
+        "required": ["confidence"],
+        "additionalProperties": False,
+    },
+}
 
 
 def _parse_confidence(raw: str) -> float:
     """Extract and clamp the confidence value from the LLM response."""
     try:
-        cleaned = raw.strip()
-        if cleaned.startswith("```"):
-            cleaned = cleaned.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
-
-        data = json.loads(cleaned)
+        data = json.loads(raw)
         confidence = float(data["confidence"])
         return max(0.0, min(1.0, confidence))
     except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
@@ -146,6 +159,10 @@ class BattleValidationApiImpl(BaseBattleValidationApi):
                 ],
                 temperature=0.0,
                 max_tokens=50,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": _CONFIDENCE_SCHEMA,
+                },
             )
 
             raw = response.choices[0].message.content or ""
