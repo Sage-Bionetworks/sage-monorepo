@@ -9,7 +9,6 @@ code that would be overwritten on regeneration.
 
 from __future__ import annotations
 
-import json
 import logging
 from pathlib import Path
 
@@ -20,7 +19,8 @@ from bixarena_ai_service.cache import (
     get_cached_battle_validation,
     set_cached_battle_validation,
 )
-from bixarena_ai_service.config import get_openai_client, get_settings
+from bixarena_ai_service.classifier import classify
+from bixarena_ai_service.config import get_settings
 from bixarena_ai_service.models.battle_validation import BattleValidation
 from bixarena_ai_service.models.battle_validation_request import (
     BattleValidationRequest,
@@ -36,9 +36,6 @@ _PROMPT_PATH = (
 )
 _SYSTEM_PROMPT: str = _PROMPT_PATH.read_text(encoding="utf-8").strip()
 
-# Sentinel value used for the inconclusive / fallback case.
-_FALLBACK_CONFIDENCE = 0.0
-
 
 def _build_user_message(prompts: list[str]) -> str:
     """Wrap the user-supplied prompts in numbered labels for the classifier."""
@@ -46,38 +43,6 @@ def _build_user_message(prompts: list[str]) -> str:
     for i, prompt in enumerate(prompts, 1):
         parts.append(f"PROMPT {i}:\n{prompt}")
     return "\n\n".join(parts)
-
-
-_CONFIDENCE_SCHEMA = {
-    "name": "classification",
-    "strict": True,
-    "schema": {
-        "type": "object",
-        "properties": {
-            "confidence": {
-                "type": "number",
-                "description": "0.0 = not biomedical, 1.0 = clearly biomedical",
-            }
-        },
-        "required": ["confidence"],
-        "additionalProperties": False,
-    },
-}
-
-
-def _parse_confidence(raw: str) -> float:
-    """Extract and clamp the confidence value from the LLM response."""
-    try:
-        data = json.loads(raw)
-        confidence = float(data["confidence"])
-        return max(0.0, min(1.0, confidence))
-    except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
-        logger.warning(
-            "Failed to parse LLM confidence response: %s — raw: %s",
-            exc,
-            raw[:200],
-        )
-        return _FALLBACK_CONFIDENCE
 
 
 class BattleValidationApiImpl(BaseBattleValidationApi):
@@ -107,7 +72,8 @@ class BattleValidationApiImpl(BaseBattleValidationApi):
             )
 
         # Cache miss — classify via LLM.
-        confidence = await self._classify(sanitized, settings)
+        user_message = _build_user_message(sanitized)
+        confidence = await classify(_SYSTEM_PROMPT, user_message)
         is_biomedical = confidence >= settings.prompt_validation_confidence_threshold
 
         # Store in cache (fire-and-forget on failure).
@@ -128,42 +94,3 @@ class BattleValidationApiImpl(BaseBattleValidationApi):
         )
 
         return result
-
-    async def _classify(self, prompts: list[str], settings) -> float:
-        """Call the OpenRouter LLM and return a confidence score."""
-        if not settings.openrouter_api_key:
-            logger.warning(
-                "BIXARENA_AI_OPENROUTER_API_KEY is not set "
-                "— returning inconclusive fallback"
-            )
-            return _FALLBACK_CONFIDENCE
-
-        try:
-            client = get_openai_client()
-
-            response = await client.chat.completions.create(
-                model=settings.openrouter_model,
-                messages=[
-                    {"role": "system", "content": _SYSTEM_PROMPT},
-                    {
-                        "role": "user",
-                        "content": _build_user_message(prompts),
-                    },
-                ],
-                temperature=0.0,
-                max_tokens=50,
-                response_format={
-                    "type": "json_schema",
-                    "json_schema": _CONFIDENCE_SCHEMA,
-                },
-            )
-
-            raw = response.choices[0].message.content or ""
-            logger.debug("LLM raw response: %s", raw[:200])
-            return _parse_confidence(raw)
-
-        except Exception:
-            logger.exception(
-                "OpenRouter API call failed — returning inconclusive fallback"
-            )
-            return _FALLBACK_CONFIDENCE
