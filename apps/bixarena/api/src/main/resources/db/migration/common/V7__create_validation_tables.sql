@@ -1,4 +1,12 @@
 -- ============================================================================
+-- Validation Tables
+-- ============================================================================
+-- This migration creates the prompt_validation and battle_validation tables,
+-- and adds the effective_validation_id FK on the battle table.
+-- ============================================================================
+
+
+-- ============================================================================
 -- Prompt Validation Table
 -- ============================================================================
 -- Stores individual validation results for battle prompts.
