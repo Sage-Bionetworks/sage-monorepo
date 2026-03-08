@@ -49,6 +49,7 @@ tags:
 paths:
   /validate-prompt:
     post:
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Prompt Validation
       summary: Validate biomedical prompt
@@ -77,6 +78,7 @@ paths:
         - jwtBearer: []
   /validate-battle:
     post:
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Battle Validation
       summary: Validate biomedical battle
@@ -922,6 +924,8 @@ paths:
         - jwtBearer: []
   /oauth2/token:
     post:
+      x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Auth
       summary: Mint short-lived internal JWT
@@ -963,6 +967,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /oauth2/service-token:
     post:
+      x-rate-limit-requests-per-minute: 30
       tags:
         - Auth
       summary: Mint a service-to-service JWT (client credentials)

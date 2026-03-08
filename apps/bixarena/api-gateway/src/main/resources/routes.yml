@@ -126,9 +126,11 @@ app:
     - method: 'POST'
       path: '/api/v1/validate-battle'
       audience: 'urn:bixarena:ai'
+      rateLimitRequestsPerMinute: 60
     - method: 'POST'
       path: '/api/v1/validate-prompt'
       audience: 'urn:bixarena:ai'
+      rateLimitRequestsPerMinute: 60
     - method: 'POST'
       path: '/auth/logout'
       audience: 'urn:bixarena:auth'
@@ -136,6 +138,9 @@ app:
     - method: 'POST'
       path: '/oauth2/service-token'
       audience: 'urn:bixarena:auth'
+      rateLimitRequestsPerMinute: 30
     - method: 'POST'
       path: '/oauth2/token'
       audience: 'urn:bixarena:auth'
+      anonymousAccess: true
+      rateLimitRequestsPerMinute: 60

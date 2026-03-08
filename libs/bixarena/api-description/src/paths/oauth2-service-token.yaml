@@ -1,4 +1,5 @@
 post:
+  x-rate-limit-requests-per-minute: 30
   tags:
     - Auth
   summary: Mint a service-to-service JWT (client credentials)

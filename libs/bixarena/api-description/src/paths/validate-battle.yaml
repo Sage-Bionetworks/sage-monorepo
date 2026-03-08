@@ -1,4 +1,5 @@
 post:
+  x-rate-limit-requests-per-minute: 60
   tags:
     - Battle Validation
   summary: Validate biomedical battle

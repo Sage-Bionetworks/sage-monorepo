@@ -98,6 +98,8 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /oauth2/token:
     post:
+      x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 60
       tags:
         - Auth
       summary: Mint short-lived internal JWT
@@ -139,6 +141,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /oauth2/service-token:
     post:
+      x-rate-limit-requests-per-minute: 30
       tags:
         - Auth
       summary: Mint a service-to-service JWT (client credentials)

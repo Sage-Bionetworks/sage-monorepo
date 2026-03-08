@@ -143,6 +143,8 @@ paths:
       summary: Mint short-lived internal JWT
       tags:
         - Auth
+      x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 60
       x-accepts:
         - application/json
         - application/problem+json
@@ -177,6 +179,7 @@ paths:
       summary: Mint a service-to-service JWT (client credentials)
       tags:
         - Auth
+      x-rate-limit-requests-per-minute: 30
       x-accepts:
         - application/json
         - application/problem+json
