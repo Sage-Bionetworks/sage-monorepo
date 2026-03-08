@@ -146,11 +146,11 @@ public class BattleValidationService {
     battleValidationRepository.save(entity);
     battleValidationRepository.flush();
 
-    // Auto-set as effective if no effective validation exists yet (preserves admin overrides)
-    BattleEntity battle = battleRepository.findById(battleId).orElseThrow();
-    if (battle.getEffectiveValidationId() == null) {
-      battle.setEffectiveValidationId(entity.getId());
-      battleRepository.save(battle);
+    // Atomically set as effective only if no effective validation exists yet.
+    // This is a compare-and-set at the database level, safe under concurrency.
+    int updated = battleRepository.setEffectiveValidationIfNull(battleId, entity.getId());
+    if (updated > 0) {
+      log.info("Auto-set effective validation {} for battle {}", entity.getId(), battleId);
     }
 
     return entity;

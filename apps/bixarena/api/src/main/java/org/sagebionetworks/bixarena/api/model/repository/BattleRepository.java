@@ -8,6 +8,7 @@ import org.sagebionetworks.bixarena.api.model.projection.ContributorProjection;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -177,4 +178,18 @@ public interface BattleRepository
       @Param("endDate") OffsetDateTime endDate,
       @Param("minBattles") int minBattles,
       Pageable pageable);
+
+  /**
+   * Atomically set effective_validation_id only if it is currently NULL.
+   * Returns 1 if the update was applied, 0 if a validation was already set.
+   */
+  @Modifying
+  @Query(
+      value =
+          "UPDATE api.battle SET effective_validation_id = :validationId "
+              + "WHERE id = :battleId AND effective_validation_id IS NULL",
+      nativeQuery = true)
+  int setEffectiveValidationIfNull(
+      @Param("battleId") UUID battleId,
+      @Param("validationId") UUID validationId);
 }
