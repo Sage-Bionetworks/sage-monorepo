@@ -74,7 +74,7 @@ class BattleValidationApiImpl(BaseBattleValidationApi):
         # Cache miss — classify via LLM.
         user_message = _build_user_message(sanitized)
         confidence = await classify(_SYSTEM_PROMPT, user_message)
-        is_biomedical = confidence >= settings.prompt_validation_confidence_threshold
+        is_biomedical = confidence >= settings.battle_validation_confidence_threshold
 
         # Store in cache (fire-and-forget on failure).
         await set_cached_battle_validation(

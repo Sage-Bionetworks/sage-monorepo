@@ -26,8 +26,9 @@ class Settings(BaseSettings):
     jwt_expected_issuer: str = "urn:bixarena:auth"
     jwt_expected_audience: str = "urn:bixarena:ai"
 
-    # Prompt validation configuration
+    # Validation confidence thresholds
     prompt_validation_confidence_threshold: float = 0.5
+    battle_validation_confidence_threshold: float = 0.5
     prompt_max_length: int = 10000
 
     # OpenRouter / LLM configuration
