@@ -6,6 +6,7 @@ that can be loaded from environment variables.
 
 from functools import lru_cache
 
+from openai import AsyncOpenAI
 from pydantic_settings import BaseSettings
 
 
@@ -60,3 +61,18 @@ def get_settings() -> Settings:
         Settings: Application settings singleton
     """
     return Settings()
+
+
+@lru_cache
+def get_openai_client() -> AsyncOpenAI:
+    """Get a cached AsyncOpenAI client for OpenRouter.
+
+    Reuses the same HTTP connection pool across requests.
+    """
+    settings = get_settings()
+    return AsyncOpenAI(
+        api_key=settings.openrouter_api_key,
+        base_url=settings.openrouter_base_url,
+        timeout=settings.openrouter_timeout,
+        max_retries=settings.openrouter_max_retries,
+    )

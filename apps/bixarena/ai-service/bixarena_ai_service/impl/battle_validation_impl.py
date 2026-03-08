@@ -13,8 +13,6 @@ import json
 import logging
 from pathlib import Path
 
-from openai import AsyncOpenAI
-
 from bixarena_ai_service.apis.battle_validation_api_base import (
     BaseBattleValidationApi,
 )
@@ -22,7 +20,7 @@ from bixarena_ai_service.cache import (
     get_cached_battle_validation,
     set_cached_battle_validation,
 )
-from bixarena_ai_service.config import get_settings
+from bixarena_ai_service.config import get_openai_client, get_settings
 from bixarena_ai_service.models.battle_validation import BattleValidation
 from bixarena_ai_service.models.battle_validation_request import (
     BattleValidationRequest,
@@ -141,12 +139,7 @@ class BattleValidationApiImpl(BaseBattleValidationApi):
             return _FALLBACK_CONFIDENCE
 
         try:
-            client = AsyncOpenAI(
-                api_key=settings.openrouter_api_key,
-                base_url=settings.openrouter_base_url,
-                timeout=settings.openrouter_timeout,
-                max_retries=settings.openrouter_max_retries,
-            )
+            client = get_openai_client()
 
             response = await client.chat.completions.create(
                 model=settings.openrouter_model,
