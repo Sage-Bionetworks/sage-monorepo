@@ -55,7 +55,9 @@ export async function buildImageTarget(
   // Use custom buildx builder for local builds when NX_CONTAINER_BUILDER is set (e.g. a
   // `docker-container` driver builder to work around Rosetta + docker-in-docker issues on Apple
   // Silicon). Gradle projects are excluded because their Dockerfiles reference locally-built base
-  // images that aren't accessible from non-default buildx drivers.
+  // images that aren't accessible from non-default buildx drivers. This assumes Gradle Dockerfiles
+  // contain no RUN commands — if a RUN command is added to a Gradle Dockerfile, it will fail on
+  // Apple Silicon due to the Rosetta + docker-in-docker incompatibility.
   const envBuilder = projectBuilder !== 'gradle' ? process.env['NX_CONTAINER_BUILDER'] : undefined;
 
   return {

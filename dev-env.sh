@@ -250,7 +250,10 @@ function workspace-setup-docker-builder {
   local builder_name="container-builder"
   if ! docker buildx inspect "$builder_name" &> /dev/null; then
     echo "Creating Docker buildx builder '$builder_name' (docker-container driver)..."
-    docker buildx create --name "$builder_name" --driver docker-container
+    if ! docker buildx create --name "$builder_name" --driver docker-container; then
+      echo "Warning: Failed to create Docker buildx builder '$builder_name'."
+      return 1
+    fi
   fi
   export NX_CONTAINER_BUILDER="$builder_name"
 }
@@ -278,7 +281,9 @@ function workspace-initialize-env {
   # Docker Desktop (Mac/Windows), where Rosetta + docker-in-docker causes buildx failures. Native
   # Linux (CI, Linux dev machines) does not need this.
   if uname -r | grep -q linuxkit && command -v docker &> /dev/null && docker info &> /dev/null; then
-    workspace-setup-docker-builder
+    if ! workspace-setup-docker-builder; then
+      echo "Warning: Docker buildx builder setup failed. Docker image builds may fail on Apple Silicon."
+    fi
   fi
 }
 
