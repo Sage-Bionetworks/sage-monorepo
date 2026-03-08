@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.DuplicateBattleValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestD
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationRunRequestDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
+import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
@@ -45,6 +47,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   private final BattleRoundService battleRoundService;
   private final BattleEvaluationService battleEvaluationService;
   private final BattleValidationService battleValidationService;
+  private final BattleRepository battleRepository;
   private final BattleValidationRepository battleValidationRepository;
   private final NativeWebRequest request;
 
@@ -157,6 +160,10 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UUID validatorId = UUID.fromString(authentication.getName());
     log.info("Admin {} creating battle validation for battle {}", validatorId, battleId);
+
+    if (!battleRepository.existsById(battleId)) {
+      throw new BattleNotFoundException("Battle not found: " + battleId);
+    }
 
     BattleValidationEntity entity = BattleValidationEntity.builder()
       .battleId(battleId)
