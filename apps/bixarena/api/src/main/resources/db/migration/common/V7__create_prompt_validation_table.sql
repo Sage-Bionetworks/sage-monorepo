@@ -51,6 +51,14 @@ CREATE TABLE api.battle_validation (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Prevent duplicate automated validations for the same battle + method
+CREATE UNIQUE INDEX idx_battle_validation_battle_method
+  ON api.battle_validation(battle_id, method) WHERE validated_by IS NULL;
+
+-- Prevent duplicate human validations for the same battle + method + reviewer
+CREATE UNIQUE INDEX idx_battle_validation_battle_method_reviewer
+  ON api.battle_validation(battle_id, method, validated_by) WHERE validated_by IS NOT NULL;
+
 -- Index for finding all validations for a battle
 CREATE INDEX idx_battle_validation_battle_id
   ON api.battle_validation(battle_id);

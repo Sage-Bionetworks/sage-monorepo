@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.sagebionetworks.bixarena.api.exception.DuplicateBattleValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
@@ -167,9 +168,13 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
       .reason(battleValidationCreateRequestDto.getReason())
       .build();
 
-    BattleValidationEntity saved = battleValidationRepository.save(entity);
-    battleValidationRepository.flush();
-    return ResponseEntity.status(HttpStatus.CREATED).body(toDto(saved));
+    try {
+      BattleValidationEntity saved = battleValidationRepository.save(entity);
+      battleValidationRepository.flush();
+      return ResponseEntity.status(HttpStatus.CREATED).body(toDto(saved));
+    } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+      throw new DuplicateBattleValidationException(battleId, "human-review");
+    }
   }
 
   @Override
