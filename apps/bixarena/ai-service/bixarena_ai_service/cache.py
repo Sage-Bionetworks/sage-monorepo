@@ -91,9 +91,17 @@ async def set_cached_validation(
         )
 
 
-def _make_battle_cache_text(prompts: list[str]) -> str:
-    """Concatenate prompts into a single string for cache key generation."""
-    return "\n---\n".join(prompts)
+def _make_battle_key(prefix: str, method: str, prompts: list[str]) -> str:
+    """Build a collision-resistant cache key for a list of prompts.
+
+    Each prompt is hashed individually and the hashes are combined,
+    avoiding collisions from separator strings appearing in prompt text.
+    """
+    h = hashlib.sha256()
+    for prompt in prompts:
+        h.update(prompt.strip().lower().encode("utf-8"))
+        h.update(b"\x00")  # null byte as unambiguous delimiter
+    return f"{prefix}:{method}:{h.hexdigest()}"
 
 
 async def get_cached_battle_validation(
@@ -102,8 +110,9 @@ async def get_cached_battle_validation(
     """Look up a cached battle validation result."""
     try:
         client = await _get_client(settings)
-        text = _make_battle_cache_text(prompts)
-        key = _make_key(_BATTLE_KEY_PREFIX, settings.battle_validation_method, text)
+        key = _make_battle_key(
+            _BATTLE_KEY_PREFIX, settings.battle_validation_method, prompts
+        )
         raw = await client.get(key)
         if raw is not None:
             logger.info("Cache hit for battle validation")
@@ -125,8 +134,9 @@ async def set_cached_battle_validation(
     """Store a battle validation result in the cache."""
     try:
         client = await _get_client(settings)
-        text = _make_battle_cache_text(prompts)
-        key = _make_key(_BATTLE_KEY_PREFIX, settings.battle_validation_method, text)
+        key = _make_battle_key(
+            _BATTLE_KEY_PREFIX, settings.battle_validation_method, prompts
+        )
         value = json.dumps({"confidence": confidence, "is_biomedical": is_biomedical})
         await client.set(key, value, ex=settings.valkey_cache_ttl)
         logger.debug("Cached battle validation result")
