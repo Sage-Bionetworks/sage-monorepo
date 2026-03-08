@@ -13,6 +13,10 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
+import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
+import org.sagebionetworks.bixarena.api.exception.DuplicateBattleValidationException;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.BattleRoundEntity;
 import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
@@ -20,6 +24,7 @@ import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRoundRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.MessageRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,6 +99,59 @@ public class BattleValidationService {
         "Battle validation failed for battle " + battleId + ": " + e.getMessage(), e
       );
     }
+  }
+
+  /**
+   * Creates a human review validation for a battle.
+   */
+  @Transactional
+  public BattleValidationResponseDto createHumanValidation(
+      UUID battleId, BattleValidationCreateRequestDto request, UUID validatorId) {
+    if (!battleRepository.existsById(battleId)) {
+      throw new BattleNotFoundException("Battle not found: " + battleId);
+    }
+
+    BattleValidationEntity entity = BattleValidationEntity.builder()
+      .battleId(battleId)
+      .method("human-review")
+      .confidence(request.getIsBiomedical() ? BigDecimal.ONE : BigDecimal.ZERO)
+      .isBiomedical(request.getIsBiomedical())
+      .validatedBy(validatorId)
+      .reason(request.getReason())
+      .build();
+
+    try {
+      BattleValidationEntity saved = battleValidationRepository.save(entity);
+      battleValidationRepository.flush();
+      return toDto(saved);
+    } catch (DataIntegrityViolationException ex) {
+      throw new DuplicateBattleValidationException(battleId, "human-review");
+    }
+  }
+
+  /**
+   * Lists all validations for a battle, most recent first.
+   */
+  public List<BattleValidationResponseDto> listValidations(UUID battleId) {
+    return battleValidationRepository
+      .findByBattleIdOrderByCreatedAtDesc(battleId)
+      .stream()
+      .map(this::toDto)
+      .toList();
+  }
+
+  /** Maps a validation entity to its response DTO. */
+  public BattleValidationResponseDto toDto(BattleValidationEntity entity) {
+    BattleValidationResponseDto dto = new BattleValidationResponseDto();
+    dto.setId(entity.getId());
+    dto.setBattleId(entity.getBattleId());
+    dto.setMethod(entity.getMethod());
+    dto.setConfidence(entity.getConfidence().floatValue());
+    dto.setIsBiomedical(entity.getIsBiomedical());
+    dto.setValidatedBy(entity.getValidatedBy());
+    dto.setReason(entity.getReason());
+    dto.setCreatedAt(entity.getCreatedAt());
+    return dto;
   }
 
   private List<String> collectPrompts(UUID battleId) {

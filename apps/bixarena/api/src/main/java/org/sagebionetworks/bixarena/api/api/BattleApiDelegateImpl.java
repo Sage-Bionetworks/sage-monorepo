@@ -1,11 +1,8 @@
 package org.sagebionetworks.bixarena.api.api;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
-import org.sagebionetworks.bixarena.api.exception.DuplicateBattleValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
@@ -24,8 +21,6 @@ import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestD
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationRunRequestDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
-import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
-import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
 import org.sagebionetworks.bixarena.api.service.BattleService;
@@ -47,8 +42,6 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   private final BattleRoundService battleRoundService;
   private final BattleEvaluationService battleEvaluationService;
   private final BattleValidationService battleValidationService;
-  private final BattleRepository battleRepository;
-  private final BattleValidationRepository battleValidationRepository;
   private final NativeWebRequest request;
 
   @Override
@@ -161,52 +154,17 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
     UUID validatorId = UUID.fromString(authentication.getName());
     log.info("Admin {} creating battle validation for battle {}", validatorId, battleId);
 
-    if (!battleRepository.existsById(battleId)) {
-      throw new BattleNotFoundException("Battle not found: " + battleId);
-    }
-
-    BattleValidationEntity entity = BattleValidationEntity.builder()
-      .battleId(battleId)
-      .method("human-review")
-      .confidence(battleValidationCreateRequestDto.getIsBiomedical()
-        ? BigDecimal.ONE : BigDecimal.ZERO)
-      .isBiomedical(battleValidationCreateRequestDto.getIsBiomedical())
-      .validatedBy(validatorId)
-      .reason(battleValidationCreateRequestDto.getReason())
-      .build();
-
-    try {
-      BattleValidationEntity saved = battleValidationRepository.save(entity);
-      battleValidationRepository.flush();
-      return ResponseEntity.status(HttpStatus.CREATED).body(toDto(saved));
-    } catch (org.springframework.dao.DataIntegrityViolationException ex) {
-      throw new DuplicateBattleValidationException(battleId, "human-review");
-    }
+    BattleValidationResponseDto dto = battleValidationService.createHumanValidation(
+      battleId, battleValidationCreateRequestDto, validatorId
+    );
+    return ResponseEntity.status(HttpStatus.CREATED).body(dto);
   }
 
   @Override
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<List<BattleValidationResponseDto>> listBattleValidations(UUID battleId) {
     log.info("Listing battle validations for battle {}", battleId);
-    List<BattleValidationResponseDto> validations = battleValidationRepository
-      .findByBattleIdOrderByCreatedAtDesc(battleId)
-      .stream()
-      .map(this::toDto)
-      .toList();
-    return ResponseEntity.ok(validations);
-  }
-
-  private BattleValidationResponseDto toDto(BattleValidationEntity entity) {
-    BattleValidationResponseDto dto = new BattleValidationResponseDto();
-    dto.setId(entity.getId());
-    dto.setBattleId(entity.getBattleId());
-    dto.setMethod(entity.getMethod());
-    dto.setConfidence(entity.getConfidence().floatValue());
-    dto.setIsBiomedical(entity.getIsBiomedical());
-    dto.setValidatedBy(entity.getValidatedBy());
-    dto.setReason(entity.getReason());
-    dto.setCreatedAt(entity.getCreatedAt());
-    return dto;
+    return ResponseEntity.ok(battleValidationService.listValidations(battleId));
   }
 
   @Override
@@ -217,7 +175,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   ) {
     log.info("Admin triggering automated validation for battle {}", battleId);
     BattleValidationEntity entity = battleValidationService.validateAndPersistBattle(battleId);
-    return ResponseEntity.status(HttpStatus.CREATED).body(toDto(entity));
+    return ResponseEntity.status(HttpStatus.CREATED).body(battleValidationService.toDto(entity));
   }
 
   @Override
