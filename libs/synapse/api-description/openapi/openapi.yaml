@@ -15327,6 +15327,7 @@ components:
               - PRINCIPAL
               - REALM_PRINCIPAL
               - GROUP_MEMBERS
+              - CERTIFIED_USERS
               - CREDENTIAL
               - AUTHENTICATED_ON
               - PRINCIPAL_ALIAS
@@ -15726,6 +15727,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -15861,6 +15863,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -17089,6 +17092,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -17956,6 +17960,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -18423,6 +18428,7 @@ components:
         - PRINCIPAL
         - REALM_PRINCIPAL
         - GROUP_MEMBERS
+        - CERTIFIED_USERS
         - CREDENTIAL
         - AUTHENTICATED_ON
         - PRINCIPAL_ALIAS
@@ -23660,6 +23666,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -26127,6 +26134,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -27564,6 +27572,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -29429,6 +29438,7 @@ components:
               - PRINCIPAL
               - REALM_PRINCIPAL
               - GROUP_MEMBERS
+              - CERTIFIED_USERS
               - CREDENTIAL
               - AUTHENTICATED_ON
               - PRINCIPAL_ALIAS
@@ -31901,6 +31911,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -32470,6 +32481,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -32620,6 +32632,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -33283,6 +33296,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -34565,6 +34579,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -35103,6 +35118,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
@@ -36140,6 +36156,7 @@ components:
             - PRINCIPAL
             - REALM_PRINCIPAL
             - GROUP_MEMBERS
+            - CERTIFIED_USERS
             - CREDENTIAL
             - AUTHENTICATED_ON
             - PRINCIPAL_ALIAS
