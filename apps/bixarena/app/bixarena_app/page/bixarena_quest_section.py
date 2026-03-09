@@ -92,7 +92,16 @@ QUEST_CONFIG = {
                 "Othocar said nothing when he saw where my eyes had landed. He had explored the Nether with me before, and he knew what I was already thinking."
             ),
             "images": [
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-1.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-1.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-2.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-3.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-4.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-5.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-6.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-7.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-8.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-9.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-10.jpg",
             ],
         },
         {
@@ -818,15 +827,19 @@ def _build_carousel_html(carousel_id: str) -> str:
 
         .carousel-indicators {{
             display: flex;
-            gap: 12px;
+            gap: 8px;
             padding: 8px 12px;
             background: var(--background-fill-secondary);
             border-radius: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }}
 
         .indicator {{
             width: 24px;
+            min-width: 12px;
             height: 8px;
+            flex-shrink: 1;
             border-radius: 4px;
             background: var(--body-text-color-subdued);
             opacity: 0.5;
