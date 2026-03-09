@@ -77,6 +77,25 @@ QUEST_CONFIG = {
             "images": [],
         },
         {
+            "date": "2026-03-09",
+            "title": "Chapter 4: The Shape of Things",
+            "description": (
+                "Othocar arrived without fanfare, as old friends tend to do.\n\n"
+                "I had known him for years, a man who had spent his life studying the shape of the world before finding his calling among books and shelves. He brought with him something I had not thought to gather: paper. Enough of it to be useful, and a cartographer\u2019s instinct for what to do with it.\n\n"
+                "We began at the arena, mid-morning, when the sun had climbed just high enough to fill the site with clean, flat light. Birds called from the trees beyond the wall as we set block after block into place. The inner wall completed its second layer and began its third. At some point I slowed without quite meaning to. The outline of a door frame had appeared at the arena\u2019s edge, rough and undecorated, but unmistakably there. A wall tells you where something ends. A door tells you where something begins. Othocar kept laying blocks without breaking his rhythm, and I reached for another stone.\n\n"
+                "With the wall work done for the morning, Othocar spread his paper on the crafting table. Compass met paper, and the first empty maps took shape in our hands. He explained how each one would fill itself in as we walked, revealing the land within a hundred and twenty-eight blocks in each direction. To chart the full area around the arena, we would need to move through it section by section, letting the world write itself onto the page.\n\n"
+                "We checked our packs before setting out. Empty maps, tools, a stack of wooden planks for bridging water too wide to cross on foot. Othocar tested the weight of his pack and nodded. We left as the morning was still warm.\n\n"
+                "The world unfolded as we walked. We traced the water\u2019s edge, moved through the trees, and crossed the western slope where a pillager outpost rose against the snowy mountain, cold and watchful beneath the bright sky. The contrast was sharp: warm sun on our backs, and that grey tower ahead, indifferent to the weather. To the south, the Sunpetal Expanse shimmered in the midday light, its cherry blossoms catching the sun like scattered embers.\n\n"
+                "Back at the arena, we mounted the finished tiles inside frames along the wall, arranging them into a single large piece. We looked at it for a moment before Othocar suggested a name and I agreed immediately. The Grand Map. For the first time, this place had a shape beyond what the eye could see from any single point.\n\n"
+                "It was while studying the Grand Map that something caught my eye.\n\n"
+                "To the north, half-hidden among cherry trees, sat a structure I had walked past without noticing. The map had seen it when we had not. Broken obsidian frames with scattered puddles of lava, the edges rimmed with the deep violet glow of crying obsidian. A ruined portal, the remnant of a gateway to the Nether, a dimension of fire and ash that holds things the Overworld cannot offer. Glowstone, which burns with a warm and ornate light we have sorely lacked. Nether quartz, useful for the mechanisms and comforts we have yet to build. And other things still, whose value will become clear in time.\n\n"
+                "Othocar said nothing when he saw where my eyes had landed. He had explored the Nether with me before, and he knew what I was already thinking."
+            ),
+            "images": [
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-1.jpg",
+            ],
+        },
+        {
             "date": "2026-03-02",
             "title": "Chapter 3: Embers and Earth",
             "description": (
