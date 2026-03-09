@@ -68,18 +68,18 @@ jobs:
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
       #       && nx affected --target=sonar"
 
+      - name: Build and publish the images of the affected projects
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin \
+            && nx affected --target=build-image --configuration=edge"
+
       - name: Upload Sentry sourcemaps for the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=sentry-sourcemaps"
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-
-      - name: Build and publish the images of the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin \
-            && nx affected --target=build-image --configuration=edge"
 
       - name: Remove the dev container
         run: docker rm -f sage_devcontainer
