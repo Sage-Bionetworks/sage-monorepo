@@ -77,6 +77,34 @@ QUEST_CONFIG = {
             "images": [],
         },
         {
+            "date": "2026-03-09",
+            "title": "Chapter 4: The Shape of Things",
+            "description": (
+                "Othocar arrived without fanfare, as old friends tend to do.\n\n"
+                "I had known him for years, a man who had spent his life studying the shape of the world before finding his calling among books and shelves. He brought with him something I had not thought to gather: paper. Enough of it to be useful, and a cartographer\u2019s instinct for what to do with it.\n\n"
+                "We began at the arena, mid-morning, when the sun had climbed just high enough to fill the site with clean, flat light. Birds called from the trees beyond the wall as we set block after block into place. The inner wall completed its second layer and began its third. At some point I slowed without quite meaning to. The outline of a door frame had appeared at the arena\u2019s edge, rough and undecorated, but unmistakably there. A wall tells you where something ends. A door tells you where something begins. Othocar kept laying blocks without breaking his rhythm, and I reached for another stone.\n\n"
+                "With the wall work done for the morning, Othocar spread his paper on the crafting table. Compass met paper, and the first empty maps took shape in our hands. He explained how each one would fill itself in as we walked, revealing the land within a hundred and twenty-eight blocks in each direction. To chart the full area around the arena, we would need to move through it section by section, letting the world write itself onto the page.\n\n"
+                "We checked our packs before setting out. Empty maps, tools, a stack of wooden planks for bridging water too wide to cross on foot. Othocar tested the weight of his pack and nodded. We left as the morning was still warm.\n\n"
+                "The world unfolded as we walked. We traced the water\u2019s edge, moved through the trees, and crossed the western slope where a pillager outpost rose against the snowy mountain, cold and watchful beneath the bright sky. The contrast was sharp: warm sun on our backs, and that grey tower ahead, indifferent to the weather. To the south, the Sunpetal Expanse shimmered in the midday light, its cherry blossoms catching the sun like scattered embers.\n\n"
+                "Back at the arena, we mounted the finished tiles inside frames along the wall, arranging them into a single large piece. We looked at it for a moment before Othocar suggested a name and I agreed immediately. The Grand Map. For the first time, this place had a shape beyond what the eye could see from any single point.\n\n"
+                "It was while studying the Grand Map that something caught my eye.\n\n"
+                "To the north, half-hidden among cherry trees, sat a structure I had walked past without noticing. The map had seen it when we had not. Broken obsidian frames with scattered puddles of lava, the edges rimmed with the deep violet glow of crying obsidian. A ruined portal, the remnant of a gateway to the Nether, a dimension of fire and ash that holds things the Overworld cannot offer. Glowstone, which burns with a warm and ornate light we have sorely lacked. Nether quartz, useful for the mechanisms and comforts we have yet to build. And other things still, whose value will become clear in time.\n\n"
+                "Othocar said nothing when he saw where my eyes had landed. He had explored the Nether with me before, and he knew what I was already thinking."
+            ),
+            "images": [
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-1.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-2.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-3.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-4.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-5.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-6.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-7.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-8.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-9.jpg",
+                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-10.jpg",
+            ],
+        },
+        {
             "date": "2026-03-02",
             "title": "Chapter 3: Embers and Earth",
             "description": (
@@ -533,6 +561,12 @@ def _build_builders_credits_html(
                     </a>
                 </div>
             </div>
+
+            <!-- Copyright -->
+            <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
+                        margin-top: 0.75rem;">
+                &copy; 2026 Thomas Schaffter. Quest content and illustrations.
+            </div>
         </div>
     </div>
     """
@@ -626,6 +660,11 @@ def _build_builders_credits_html(
                           text-decoration: none; font-weight: 500;">
                     {QUEST_CONFIG["quest_architect"]["name"]}
                 </a>
+            </div>
+            <!-- Copyright -->
+            <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
+                        margin-top: 0.25rem;">
+                &copy; 2026 Thomas Schaffter. Quest content and illustrations.
             </div>
         </div>
     </div>
@@ -799,15 +838,19 @@ def _build_carousel_html(carousel_id: str) -> str:
 
         .carousel-indicators {{
             display: flex;
-            gap: 12px;
+            gap: 8px;
             padding: 8px 12px;
             background: var(--background-fill-secondary);
             border-radius: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }}
 
         .indicator {{
             width: 24px;
+            min-width: 12px;
             height: 8px;
+            flex-shrink: 1;
             border-radius: 4px;
             background: var(--body-text-color-subdued);
             opacity: 0.5;
