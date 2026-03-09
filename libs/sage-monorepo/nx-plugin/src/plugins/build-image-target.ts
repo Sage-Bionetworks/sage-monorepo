@@ -52,6 +52,14 @@ export async function buildImageTarget(
     dockerfile = 'Dockerfile.generated';
   }
 
+  // Use custom buildx builder for local builds when NX_CONTAINER_BUILDER is set (e.g. a
+  // `docker-container` driver builder to work around Rosetta + docker-in-docker issues on Apple
+  // Silicon). Gradle projects are excluded because their Dockerfiles reference locally-built base
+  // images that aren't accessible from non-default buildx drivers. This assumes Gradle Dockerfiles
+  // contain no RUN commands — if a RUN command is added to a Gradle Dockerfile, it will fail on
+  // Apple Silicon due to the Rosetta + docker-in-docker incompatibility.
+  const envBuilder = projectBuilder !== 'gradle' ? process.env['NX_CONTAINER_BUILDER'] : undefined;
+
   return {
     executor: '@nx-tools/nx-container:build',
     outputs: [],
@@ -62,6 +70,8 @@ export async function buildImageTarget(
     cache: false,
     configurations: {
       local: {
+        load: true,
+        ...(envBuilder ? { builder: envBuilder } : {}),
         metadata: {
           images: [`ghcr.io/sage-bionetworks/${projectName}`],
           tags: ['type=raw,value=local', 'type=sha'],
