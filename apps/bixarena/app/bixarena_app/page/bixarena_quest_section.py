@@ -561,6 +561,12 @@ def _build_builders_credits_html(
                     </a>
                 </div>
             </div>
+
+            <!-- Copyright -->
+            <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
+                        margin-top: 0.75rem;">
+                &copy; 2026 Thomas Schaffter. Quest content and illustrations.
+            </div>
         </div>
     </div>
     """
@@ -654,6 +660,11 @@ def _build_builders_credits_html(
                           text-decoration: none; font-weight: 500;">
                     {QUEST_CONFIG["quest_architect"]["name"]}
                 </a>
+            </div>
+            <!-- Copyright -->
+            <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
+                        margin-top: 0.25rem;">
+                &copy; 2026 Thomas Schaffter. Quest content and illustrations.
             </div>
         </div>
     </div>
