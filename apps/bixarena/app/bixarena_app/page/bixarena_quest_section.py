@@ -892,7 +892,7 @@ def _build_carousel_html(carousel_id: str) -> str:
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.875rem 1rem;
+            padding: 0.8rem 1rem;
             cursor: pointer;
             gap: 1rem;
             transition: background 0.2s ease;
@@ -917,7 +917,7 @@ def _build_carousel_html(carousel_id: str) -> str:
         .accordion-title-wrapper h4 {{
             color: var(--body-text-color);
             font-weight: 600;
-            margin: 0;
+            margin: 0 !important;
             font-size: 1rem;
             flex: 1;
         }}
