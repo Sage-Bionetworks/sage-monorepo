@@ -807,12 +807,20 @@ def build_app():
             header.addEventListener('click', function(e) {{
                 e.preventDefault();
                 e.stopPropagation();
-                loadUpdateImages(accordion);
+                if (accordion.classList.contains('expanded')) {{
+                    accordion.classList.remove('active', 'expanded');
+                }} else {{
+                    loadUpdateImages(accordion);
+                }}
             }});
             header.addEventListener('keypress', function(e) {{
                 if (e.key === 'Enter' || e.key === ' ') {{
                     e.preventDefault();
-                    loadUpdateImages(accordion);
+                    if (accordion.classList.contains('expanded')) {{
+                        accordion.classList.remove('active', 'expanded');
+                    }} else {{
+                        loadUpdateImages(accordion);
+                    }}
                 }}
             }});
         }});
