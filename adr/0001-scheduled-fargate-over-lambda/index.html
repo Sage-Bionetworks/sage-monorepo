@@ -18,7 +18,7 @@
     
     
       
-        <title>BixArena Leaderboard Snapshot Automation - Sage Monorepo</title>
+        <title>0001: Use ECS Scheduled Fargate Task for Leaderboard Snapshot Generation - Sage Monorepo</title>
       
     
     
@@ -85,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#bixarena-leaderboard-snapshot-automation" class="md-skip">
+        <a href="#0001-use-ecs-scheduled-fargate-task-for-leaderboard-snapshot-generation" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              BixArena Leaderboard Snapshot Automation
+              0001: Use ECS Scheduled Fargate Task for Leaderboard Snapshot Generation
             
           </span>
         </div>
@@ -2551,7 +2551,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../architecture/" class="md-nav__link">
         
   
   
@@ -2574,7 +2574,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../adr/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -2624,55 +2624,64 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#context" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      Context
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#architecture" class="md-nav__link">
+  <a href="#decision" class="md-nav__link">
     <span class="md-ellipsis">
-      Architecture
+      Decision
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#components" class="md-nav__link">
+  <a href="#rationale" class="md-nav__link">
     <span class="md-ellipsis">
-      Components
+      Rationale
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Components">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consequences
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consequences">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#shared-library-bixarena-leaderboard" class="md-nav__link">
+  <a href="#positive" class="md-nav__link">
     <span class="md-ellipsis">
-      Shared Library (bixarena-leaderboard)
+      Positive
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#worker-container-bixarena-worker" class="md-nav__link">
+  <a href="#negative" class="md-nav__link">
     <span class="md-ellipsis">
-      Worker Container (bixarena-worker)
+      Negative
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cdk-infrastructure-workerstack" class="md-nav__link">
+  <a href="#neutral" class="md-nav__link">
     <span class="md-ellipsis">
-      CDK Infrastructure (WorkerStack)
+      Neutral
     </span>
   </a>
   
@@ -2684,36 +2693,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
+  <a href="#alternatives-considered" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuration
+      Alternatives Considered
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternatives Considered">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-1-aws-lambda-with-ghcrecr-image-sync-at-deploy-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option 1: AWS Lambda with GHCR→ECR image sync at deploy time
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#manual-trigger" class="md-nav__link">
-    <span class="md-ellipsis">
-      Manual Trigger
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#deferred-features" class="md-nav__link">
+  <a href="#related-decisions" class="md-nav__link">
     <span class="md-ellipsis">
-      Deferred Features
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-documents" class="md-nav__link">
-    <span class="md-ellipsis">
-      Related Documents
+      Related Decisions
     </span>
   </a>
   
@@ -2738,135 +2744,56 @@
   
 
 
-<h1 id="bixarena-leaderboard-snapshot-automation">BixArena Leaderboard Snapshot Automation<a class="headerlink" href="#bixarena-leaderboard-snapshot-automation" title="Permanent link">&para;</a></h1>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>The BixArena leaderboard is updated daily through an automated snapshot generation pipeline. Each
-day, a scheduled task fetches battle evaluation data, computes model rankings using the
-Bradley-Terry algorithm, and publishes the results as a new public leaderboard snapshot.</p>
-<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
-<ol>
-<li>EventBridge triggers the <code>bixarena-worker</code> Fargate task daily at 10:00 AM UTC</li>
-<li>The task runs in a private VPC subnet with direct access to the PostgreSQL database</li>
-<li>The handler generates a leaderboard snapshot and auto-publishes it</li>
-<li>Structured JSON logs are emitted to CloudWatch for observability</li>
-</ol>
-<pre class="mermaid"><code>flowchart LR
-  eventbridge["EventBridge&lt;br&gt;(cron: daily 10 AM UTC)"]
-  worker["bixarena-worker&lt;br&gt;(Fargate Task)"]
-  rds["PostgreSQL&lt;br&gt;(RDS)"]
-  cloudwatch["CloudWatch Logs"]
-
-  eventbridge --&gt;|triggers| worker
-  worker --&gt;|reads/writes| rds
-  worker --&gt;|structured JSON logs| cloudwatch</code></pre>
-<h2 id="components">Components<a class="headerlink" href="#components" title="Permanent link">&para;</a></h2>
-<h3 id="shared-library-bixarena-leaderboard">Shared Library (<code>bixarena-leaderboard</code>)<a class="headerlink" href="#shared-library-bixarena-leaderboard" title="Permanent link">&para;</a></h3>
-<p>The core ranking and snapshot generation logic lives in a standalone Python library at
-<code>libs/bixarena/leaderboard/python/</code>. It provides:</p>
+<h1 id="0001-use-ecs-scheduled-fargate-task-for-leaderboard-snapshot-generation">0001: Use ECS Scheduled Fargate Task for Leaderboard Snapshot Generation<a class="headerlink" href="#0001-use-ecs-scheduled-fargate-task-for-leaderboard-snapshot-generation" title="Permanent link">&para;</a></h1>
 <ul>
-<li><strong>Bradley-Terry ranking</strong> — computes model win rates with bootstrap confidence intervals</li>
-<li><strong>Snapshot generation</strong> — fetches battle evaluations, ranks models, inserts snapshot and entries,
-  and sets visibility to <code>public</code></li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Date</strong>: 2026-03-06</li>
+<li><strong>Decision Makers</strong>: <a href="https://github.com/rrchai">rrchai</a></li>
+<li><strong>Tags</strong>: infrastructure, bixarena, leaderboard</li>
 </ul>
-<h3 id="worker-container-bixarena-worker">Worker Container (<code>bixarena-worker</code>)<a class="headerlink" href="#worker-container-bixarena-worker" title="Permanent link">&para;</a></h3>
-<p>A Python application at <code>apps/bixarena/worker/</code> that runs as a one-shot container task. On each
-invocation, the handler:</p>
-<ol>
-<li>Reads configuration from environment variables</li>
-<li>Calls <code>generate_snapshot()</code> from the shared library</li>
-<li>Emits structured JSON logs with a <code>correlation_id</code> for CloudWatch tracing</li>
-</ol>
-<h3 id="cdk-infrastructure-workerstack">CDK Infrastructure (<code>WorkerStack</code>)<a class="headerlink" href="#cdk-infrastructure-workerstack" title="Permanent link">&para;</a></h3>
-<p>An ECS Scheduled Fargate Task deployed via AWS CDK. Key resources:</p>
+<h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
+<p>RFC-0001 proposed using AWS Lambda (<code>DockerImageFunction</code>) triggered by EventBridge to run the leaderboard snapshot container daily. During implementation, a blocking constraint was discovered: <strong>AWS Lambda only supports container images stored in Amazon ECR</strong>. It cannot pull images from external registries such as GHCR (GitHub Container Registry).</p>
+<p>For dev, this is not an issue — <code>image_loader.py</code> uploads a local tarball to ECR as a CDK asset, which Lambda can pull. For stage and prod, all bixarena services publish to GHCR only, so Lambda has no compatible image source without an additional sync step.</p>
+<h2 id="decision">Decision<a class="headerlink" href="#decision" title="Permanent link">&para;</a></h2>
+<p>We will use <code>ScheduledFargateTask</code> (ECS Fargate) instead of <code>DockerImageFunction</code> (AWS Lambda) for the leaderboard snapshot scheduled execution.</p>
+<h2 id="rationale">Rationale<a class="headerlink" href="#rationale" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>EventBridge rule</strong> — triggers the task daily at 10:00 AM UTC</li>
-<li><strong>Fargate task</strong> — 1 vCPU, 2 GB memory, runs the <code>bixarena-worker</code> container image</li>
-<li><strong>Secrets Manager</strong> — database credentials are injected securely at task start by the ECS agent</li>
+<li><strong>Registry compatibility</strong>: Fargate accepts any OCI-compliant registry via <code>ecs.ContainerImage.from_registry()</code>, including GHCR. No registry migration or duplication needed.</li>
+<li><strong>Consistency</strong>: All other bixarena services run on ECS Fargate using the same cluster, VPC, and CDK patterns. Reusing <code>ScheduledFargateTask</code> keeps the stack uniform and avoids introducing a new compute primitive.</li>
+<li><strong>Simpler credential injection</strong>: ECS injects secrets from Secrets Manager at task start via <code>ecs.Secret.from_secrets_manager()</code> — the same mechanism used by <code>api-service</code> and <code>auth-service</code>. No boto3 call needed in the handler.</li>
+<li><strong>No execution time limit</strong>: Lambda has a 15-minute hard cap. Fargate has no equivalent constraint, providing headroom if bootstrap iterations or data volume grow.</li>
+<li><strong>Acceptable trade-offs</strong>: The main costs of Fargate vs Lambda for this workload — longer cold start (~30–60s vs ~1–3s) and per-second billing — are negligible for a once-daily background job where nobody is waiting on the result.</li>
 </ul>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>The following environment variables control snapshot generation. They are set in CDK and require a
-redeployment to change.</p>
-<table>
-<thead>
-<tr>
-<th>Variable</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>LEADERBOARD_SLUG</code></td>
-<td><code>overall</code></td>
-<td>Slug of the leaderboard to snapshot. Must match a slug that exists in the database — validated at runtime.</td>
-</tr>
-<tr>
-<td><code>NUM_BOOTSTRAP</code></td>
-<td><code>1000</code></td>
-<td>Number of bootstrap iterations for Bradley-Terry confidence interval computation.</td>
-</tr>
-<tr>
-<td><code>MIN_EVALS</code></td>
-<td><code>10</code></td>
-<td>Minimum number of battle evaluations a model must have to be included in the snapshot.</td>
-</tr>
-<tr>
-<td><code>SIGNIFICANT</code></td>
-<td><code>false</code></td>
-<td>If <code>true</code>, only include models with statistically significant rankings.</td>
-</tr>
-<tr>
-<td><code>POSTGRES_HOST</code></td>
-<td><em>(from RDS)</em></td>
-<td>Injected automatically by CDK from the RDS endpoint.</td>
-</tr>
-<tr>
-<td><code>POSTGRES_PORT</code></td>
-<td><em>(from RDS)</em></td>
-<td>Injected automatically by CDK from the RDS endpoint.</td>
-</tr>
-<tr>
-<td><code>POSTGRES_DB</code></td>
-<td><code>bixarena</code></td>
-<td>Database name.</td>
-</tr>
-<tr>
-<td><code>POSTGRES_USER</code></td>
-<td><em>(Secrets Manager)</em></td>
-<td>Injected securely at task start by the ECS agent.</td>
-</tr>
-<tr>
-<td><code>POSTGRES_PASSWORD</code></td>
-<td><em>(Secrets Manager)</em></td>
-<td>Injected securely at task start by the ECS agent.</td>
-</tr>
-</tbody>
-</table>
-<p>To change a value: update the relevant <code>app.py</code> for the target environment and redeploy:</p>
-<div class="highlight"><pre><span></span><code>nx<span class="w"> </span>run<span class="w"> </span>bixarena-infra-cdk:deploy:<span class="o">[</span>dev<span class="p">|</span>stage<span class="p">|</span>prod<span class="o">]</span>
-</code></pre></div>
-<h2 id="manual-trigger">Manual Trigger<a class="headerlink" href="#manual-trigger" title="Permanent link">&para;</a></h2>
-<p>Developers can generate a snapshot on demand by opening an SSH tunnel to the target RDS instance
-and invoking the handler locally:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># 1. Open SSH tunnel to RDS</span>
-nx<span class="w"> </span>run<span class="w"> </span>bixarena-infra-cdk:start-db-tunnel<span class="w"> </span><span class="o">[</span>dev<span class="p">|</span>stage<span class="p">|</span>prod<span class="o">]</span>
-
-<span class="c1"># 2. Configure DB credentials in apps/bixarena/worker/.env</span>
-
-<span class="c1"># 3. Run the handler locally</span>
-nx<span class="w"> </span>run<span class="w"> </span>bixarena-worker:invoke
-</code></pre></div>
-<h2 id="deferred-features">Deferred Features<a class="headerlink" href="#deferred-features" title="Permanent link">&para;</a></h2>
-<p>The following features were planned in <a href="../../rfcs/0001-bixarena-leaderboard-snapshot-automation-plan/">RFC-0001</a> but deferred to a future admin dashboard release:</p>
+<h2 id="consequences">Consequences<a class="headerlink" href="#consequences" title="Permanent link">&para;</a></h2>
+<h3 id="positive">Positive<a class="headerlink" href="#positive" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>On-demand trigger</strong> — API endpoint to manually trigger snapshot generation (<a href="../../adr/0002-defer-notifications-and-admin-api/">ADR-0002</a>)</li>
-<li><strong>Notifications</strong> — SNS/Slack alerts on task success or failure (<a href="../../adr/0002-defer-notifications-and-admin-api/">ADR-0002</a>)</li>
+<li>GHCR image publishing works without any registry changes.</li>
+<li>CDK stack follows the same patterns as all other bixarena stacks (no new IAM primitives, no Lambda-specific packaging).</li>
+<li>Credential injection is handled by the ECS agent — handler code has no AWS SDK dependency.</li>
+<li>No 15-minute execution limit.</li>
 </ul>
-<h2 id="related-documents">Related Documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
+<h3 id="negative">Negative<a class="headerlink" href="#negative" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="../../rfcs/0001-bixarena-leaderboard-snapshot-automation-plan/">RFC-0001</a>: Original proposal</li>
-<li><a href="../../adr/0001-scheduled-fargate-over-lambda/">ADR-0001</a>: Fargate vs Lambda decision</li>
-<li><a href="../../adr/0002-defer-notifications-and-admin-api/">ADR-0002</a>: Deferred features</li>
+<li>Cold start is ~30–60 seconds (Fargate task spin-up) vs ~1–3 seconds for Lambda.</li>
+<li>Manual invocation uses <code>aws ecs run-task</code> (async, no return value) rather than <code>aws lambda invoke</code> (synchronous, returns response).</li>
+<li><code>ScheduledFargateTask</code> does not expose a <code>.service</code> property, so CloudFormation outputs for the task are not straightforward to add.</li>
+<li>GuardDuty automatically injects a sidecar container into Fargate tasks; its ECR pull requires explicit <code>ecr:GetAuthorizationToken</code> permissions on the task execution role (not needed for Lambda).</li>
+</ul>
+<h3 id="neutral">Neutral<a class="headerlink" href="#neutral" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Handler entrypoint changed from <code>lambda_handler(event, context)</code> to <code>run()</code> + <code>if __name__ == "__main__"</code> — standard Python script pattern.</li>
+<li>Schedule source changed from <code>aws_events.Schedule.cron()</code> to <code>aws_applicationautoscaling.Schedule.cron()</code>.</li>
+<li>The project and container are named <code>bixarena-worker</code>, reflecting the compute primitive used.</li>
+<li>Fargate bills per-second while the task runs; Lambda bills per-100ms. For a once-daily short-lived job, the cost difference between the two is negligible.</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered<a class="headerlink" href="#alternatives-considered" title="Permanent link">&para;</a></h2>
+<h3 id="option-1-aws-lambda-with-ghcrecr-image-sync-at-deploy-time">Option 1: AWS Lambda with GHCR→ECR image sync at deploy time<a class="headerlink" href="#option-1-aws-lambda-with-ghcrecr-image-sync-at-deploy-time" title="Permanent link">&para;</a></h3>
+<p>Sync the GHCR image to ECR as part of the CDK deployment pipeline so Lambda's <code>DockerImageFunction</code> can pull from ECR while CI continues publishing to GHCR only.</p>
+<p><strong>Rejected because</strong>: Adds deployment complexity — <code>image_loader.py</code> would need a third code path to sync and resolve the ECR URI for Lambda while other services continue using GHCR directly. <code>ScheduledFargateTask</code> avoids this entirely by accepting GHCR URIs natively, reusing the existing VPC, cluster, and CDK secrets patterns without any additional infrastructure or registry management.</p>
+<h2 id="related-decisions">Related Decisions<a class="headerlink" href="#related-decisions" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../rfcs/0001-bixarena-leaderboard-snapshot-automation-plan/">RFC-0001</a>: Source RFC proposing Lambda-based automation</li>
+<li><a href="../../architecture/bixarena-leaderboard-snapshot-automation-plan/">Architecture Plan</a>: Full implementation details including divergence table</li>
 </ul>
 
 

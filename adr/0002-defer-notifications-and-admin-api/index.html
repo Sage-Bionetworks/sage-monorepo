@@ -9,8 +9,6 @@
         <meta name="description" content="A development environment for building robust apps faster.">
       
       
-        <meta name="author" content="Thomas Schaffter">
-      
       
       
       
@@ -20,7 +18,7 @@
     
     
       
-        <title>BixArena Leaderboard Snapshot Automation - Sage Monorepo</title>
+        <title>0002: Defer SNS/Slack Notifications and Admin API Endpoint for Leaderboard Automation - Sage Monorepo</title>
       
     
     
@@ -87,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#bixarena-leaderboard-snapshot-automation" class="md-skip">
+        <a href="#0002-defer-snsslack-notifications-and-admin-api-endpoint-for-leaderboard-automation" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              BixArena Leaderboard Snapshot Automation
+              0002: Defer SNS/Slack Notifications and Admin API Endpoint for Leaderboard Automation
             
           </span>
         </div>
@@ -2530,7 +2528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../rfcs/" class="md-nav__link">
         
   
   
@@ -2576,7 +2574,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../adr/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -2626,124 +2624,73 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#metadata" class="md-nav__link">
+  <a href="#context" class="md-nav__link">
     <span class="md-ellipsis">
-      Metadata
+      Context
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#decision" class="md-nav__link">
     <span class="md-ellipsis">
-      Summary
+      Decision
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#motivation" class="md-nav__link">
+  <a href="#rationale" class="md-nav__link">
     <span class="md-ellipsis">
-      Motivation
+      Rationale
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Motivation">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manual-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual Trigger
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consequences
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consequences">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#problem-statement" class="md-nav__link">
+  <a href="#positive" class="md-nav__link">
     <span class="md-ellipsis">
-      Problem Statement
+      Positive
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#current-state" class="md-nav__link">
+  <a href="#negative" class="md-nav__link">
     <span class="md-ellipsis">
-      Current State
+      Negative
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#desired-state" class="md-nav__link">
+  <a href="#neutral" class="md-nav__link">
     <span class="md-ellipsis">
-      Desired State
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#business-impact" class="md-nav__link">
-    <span class="md-ellipsis">
-      Business Impact
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#proposal" class="md-nav__link">
-    <span class="md-ellipsis">
-      Proposal
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Proposal">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      Overview
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#high-level-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      High-Level Architecture
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#key-components" class="md-nav__link">
-    <span class="md-ellipsis">
-      Key Components
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#key-design-decisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Key Design Decisions
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#security-improvements" class="md-nav__link">
-    <span class="md-ellipsis">
-      Security Improvements
+      Neutral
     </span>
   </a>
   
@@ -2765,36 +2712,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#alternative-1-ecs-scheduled-tasks" class="md-nav__link">
+  <a href="#option-1-implement-sns-slack-now" class="md-nav__link">
     <span class="md-ellipsis">
-      Alternative 1: ECS Scheduled Tasks
+      Option 1: Implement SNS + Slack now
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#alternative-2-step-functions-for-orchestration" class="md-nav__link">
+  <a href="#option-2-implement-admin-api-endpoint-now-phase-4" class="md-nav__link">
     <span class="md-ellipsis">
-      Alternative 2: Step Functions for Orchestration
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#alternative-3-keep-manual-process" class="md-nav__link">
-    <span class="md-ellipsis">
-      Alternative 3: Keep Manual Process
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#alternative-4-aws-batch" class="md-nav__link">
-    <span class="md-ellipsis">
-      Alternative 4: AWS Batch
+      Option 2: Implement admin API endpoint now (Phase 4)
     </span>
   </a>
   
@@ -2806,240 +2735,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#performance-implications" class="md-nav__link">
+  <a href="#related-decisions" class="md-nav__link">
     <span class="md-ellipsis">
-      Performance Implications
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#security-considerations" class="md-nav__link">
-    <span class="md-ellipsis">
-      Security Considerations
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Security Considerations">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#current-security-concerns" class="md-nav__link">
-    <span class="md-ellipsis">
-      Current Security Concerns
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#proposed-security-improvements" class="md-nav__link">
-    <span class="md-ellipsis">
-      Proposed Security Improvements
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#timeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      Timeline
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Timeline">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#phase-1-foundation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Phase 1: Foundation
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#phase-2-lambda-function" class="md-nav__link">
-    <span class="md-ellipsis">
-      Phase 2: Lambda Function
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#phase-3-admin-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      Phase 3: Admin API
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#phase-4-testing-deployment" class="md-nav__link">
-    <span class="md-ellipsis">
-      Phase 4: Testing &amp; Deployment
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#success-criteria" class="md-nav__link">
-    <span class="md-ellipsis">
-      Success Criteria
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Success Criteria">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#immediate-success-criteria-week-1-2" class="md-nav__link">
-    <span class="md-ellipsis">
-      Immediate Success Criteria (Week 1-2)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#short-term-success-criteria-30-days" class="md-nav__link">
-    <span class="md-ellipsis">
-      Short-Term Success Criteria (30 Days)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#long-term-success-criteria-90-days" class="md-nav__link">
-    <span class="md-ellipsis">
-      Long-Term Success Criteria (90 Days)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#measurable-kpis" class="md-nav__link">
-    <span class="md-ellipsis">
-      Measurable KPIs
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#open-questions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Open Questions
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Open Questions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#scheduling-frequency" class="md-nav__link">
-    <span class="md-ellipsis">
-      Scheduling &amp; Frequency
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#failure-handling" class="md-nav__link">
-    <span class="md-ellipsis">
-      Failure Handling
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#notification-preferences" class="md-nav__link">
-    <span class="md-ellipsis">
-      Notification Preferences
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#leaderboard-scope" class="md-nav__link">
-    <span class="md-ellipsis">
-      Leaderboard Scope
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#database-optimization" class="md-nav__link">
-    <span class="md-ellipsis">
-      Database Optimization
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#monitoring-observability" class="md-nav__link">
-    <span class="md-ellipsis">
-      Monitoring &amp; Observability
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#security-compliance" class="md-nav__link">
-    <span class="md-ellipsis">
-      Security &amp; Compliance
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#future-enhancements" class="md-nav__link">
-    <span class="md-ellipsis">
-      Future Enhancements
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#references" class="md-nav__link">
-    <span class="md-ellipsis">
-      References
+      Related Decisions
     </span>
   </a>
   
@@ -3064,414 +2762,90 @@
   
 
 
-<h1 id="bixarena-leaderboard-snapshot-automation">BixArena Leaderboard Snapshot Automation<a class="headerlink" href="#bixarena-leaderboard-snapshot-automation" title="Permanent link">&para;</a></h1>
-<h2 id="metadata">Metadata<a class="headerlink" href="#metadata" title="Permanent link">&para;</a></h2>
+<h1 id="0002-defer-snsslack-notifications-and-admin-api-endpoint-for-leaderboard-automation">0002: Defer SNS/Slack Notifications and Admin API Endpoint for Leaderboard Automation<a class="headerlink" href="#0002-defer-snsslack-notifications-and-admin-api-endpoint-for-leaderboard-automation" title="Permanent link">&para;</a></h1>
 <ul>
-<li><strong>Status</strong>: Proposed</li>
-<li><strong>Author</strong>: Thomas Schaffter</li>
-<li><strong>Created</strong>: 2026-01-09</li>
-<li><strong>Last Updated</strong>: 2026-01-12</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Date</strong>: 2026-03-06</li>
+<li><strong>Decision Makers</strong>: <a href="https://github.com/rrchai">rrchai</a></li>
+<li><strong>Tags</strong>: infrastructure, bixarena, leaderboard, monitoring</li>
 </ul>
-<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
-<p>Automate the daily generation of BixArena leaderboard snapshots using AWS Lambda and EventBridge scheduling, eliminating the manual process and improving system security by removing the need for external database access via SSH tunneling.</p>
-<h2 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">&para;</a></h2>
-<h3 id="problem-statement">Problem Statement<a class="headerlink" href="#problem-statement" title="Permanent link">&para;</a></h3>
-<p>The BixArena leaderboard snapshot generation currently requires manual intervention by engineering team members. This manual process involves:</p>
+<h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
+<p>RFC-0001 and the architecture plan included two operational features beyond the core scheduled job:</p>
 <ol>
-<li>Setting up SSH port forwarding via AWS SSM to a bastion host</li>
-<li>Running a Python script from <code>bixarena-tools</code> that connects directly to the production database</li>
-<li>Generating the leaderboard snapshot from battle evaluation data</li>
-<li>Publishing the snapshot to make it visible to users</li>
+<li><strong>SNS + Slack notifications</strong> — alert on task success/failure via CloudWatch → SNS → Slack.</li>
+<li><strong>Admin API endpoint</strong> — <code>POST /admin/generate-snapshot</code> in the AI service, allowing on-demand
+   snapshot generation via a protected HTTP endpoint (JWT-gated, returns 202 + correlation ID).</li>
 </ol>
-<p>This process must be repeated each time a leaderboard update is needed, consuming engineering resources and limiting how frequently leaderboards can be updated.</p>
-<h3 id="current-state">Current State<a class="headerlink" href="#current-state" title="Permanent link">&para;</a></h3>
+<p>The core automation (Phases 1–3: shared library, container, scheduled Fargate task) is implemented
+and running successfully. The question is whether to implement these two supporting features now or
+defer them.</p>
+<h2 id="decision">Decision<a class="headerlink" href="#decision" title="Permanent link">&para;</a></h2>
+<p>We will defer both features indefinitely and revisit them only when a concrete need arises:</p>
 <ul>
-<li><strong>Process</strong>: Manual execution of Python script from <code>bixarena-tools</code></li>
-<li><strong>Frequency</strong>: Ad-hoc, dependent on engineer availability (typically Rong)</li>
-<li><strong>Database Access</strong>: Direct connection from development environment via AWS SSM port forwarding through bastion host</li>
-<li><strong>Security</strong>: Database accessible from outside the private network (via tunneling)</li>
-<li><strong>Reliability</strong>: Dependent on manual execution, prone to being forgotten or delayed</li>
+<li><strong>SNS/Slack notifications</strong>: Deferred. A future admin dashboard will surface task status and
+  history, making push notifications to Slack redundant.</li>
+<li><strong>Admin API endpoint</strong>: Deferred. Developers can manually trigger a snapshot using
+  <code>nx run bixarena-worker:invoke</code>. A future admin dashboard UI will expose on-demand triggering
+  for non-developer admins.</li>
 </ul>
-<h3 id="desired-state">Desired State<a class="headerlink" href="#desired-state" title="Permanent link">&para;</a></h3>
+<h2 id="rationale">Rationale<a class="headerlink" href="#rationale" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Process</strong>: Fully automated, scheduled execution</li>
-<li><strong>Frequency</strong>: Predictable daily updates at consistent times</li>
-<li><strong>Database Access</strong>: Lambda functions running within VPC private subnets</li>
-<li><strong>Security</strong>: Database connections confined to private network, no external access required</li>
-<li><strong>Reliability</strong>: Guaranteed daily execution with monitoring and alerting</li>
+<li><strong>Notification fatigue</strong>: Daily Slack pings for a background job add noise without actionable
+  value. Failures are visible in CloudWatch logs; a dashboard is a better long-term surface.</li>
+<li><strong>Admin dashboard planned</strong>: The admin dashboard (future work) will cover both monitoring
+  (task run history, success/failure) and manual triggering. Building a separate API endpoint
+  now creates parallel surfaces that will need to be consolidated later.</li>
+<li><strong>Scope control</strong>: Keeping v1 focused on the scheduled job reduces CDK complexity, avoids
+  new IAM primitives (SNS publish, Lambda invoke from AI service), and removes the need for
+  <code>boto3</code> in the AI service.</li>
 </ul>
-<h3 id="business-impact">Business Impact<a class="headerlink" href="#business-impact" title="Permanent link">&para;</a></h3>
-<p><strong>Credibility Risk</strong>: Infrequent or irregular leaderboard updates can negatively impact BixArena's credibility with users who expect to see current rankings reflecting recent battles and evaluations.</p>
-<p><strong>User Engagement</strong>: Stale leaderboards reduce user engagement and confidence in the platform's activity level.</p>
-<p><strong>Engineering Efficiency</strong>: Manual process consumes engineering time that could be better spent on feature development.</p>
-<h2 id="proposal">Proposal<a class="headerlink" href="#proposal" title="Permanent link">&para;</a></h2>
-<h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h3>
-<p>Implement automated daily leaderboard snapshot generation using a hybrid approach:</p>
-<ol>
-<li><strong>Primary Execution Path</strong>: AWS Lambda function triggered by EventBridge (CloudWatch Events) on a daily schedule</li>
-<li><strong>Secondary Execution Path</strong>: Protected admin API endpoint in AI service for on-demand generation</li>
-<li><strong>Shared Logic</strong>: Reusable leaderboard library extracted from <code>bixarena-tools</code></li>
-</ol>
-<h3 id="high-level-architecture">High-Level Architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link">&para;</a></h3>
-<pre class="mermaid"><code>graph TD
-    A[EventBridge Rule&lt;br/&gt;Daily 2 AM UTC] --&gt;|Triggers| B[Lambda Function&lt;br/&gt;leaderboard-snapshot-gen]
-    C[AI Service&lt;br/&gt;Admin Endpoint] --&gt;|Async Invoke| B
-    B --&gt;|Reads| D[RDS PostgreSQL&lt;br/&gt;Battle Evaluations]
-    B --&gt;|Writes| E[RDS PostgreSQL&lt;br/&gt;Leaderboard Snapshots]
-    B --&gt;|Notifies| F[SNS Topic]
-    F --&gt;|Triggers| G[Slack Notification]
+<h2 id="manual-trigger">Manual Trigger<a class="headerlink" href="#manual-trigger" title="Permanent link">&para;</a></h2>
+<p>Developers can generate a snapshot on demand by opening an SSH tunnel to the target RDS
+instance and invoking the handler locally:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Open SSH tunnel to RDS</span>
+nx<span class="w"> </span>run<span class="w"> </span>bixarena-infra-cdk:start-db-tunnel<span class="w"> </span><span class="o">[</span>dev<span class="p">|</span>stage<span class="p">|</span>prod<span class="o">]</span>
 
-    H[Admin User] --&gt;|Authenticated Request| C
+<span class="c1"># 2. Configure DB credentials in apps/bixarena/worker/.env</span>
 
-    style B fill:#f9f,stroke:#333,stroke-width:2px
-    style D fill:#bbf,stroke:#333,stroke-width:2px
-    style E fill:#bbf,stroke:#333,stroke-width:2px</code></pre>
-<h3 id="key-components">Key Components<a class="headerlink" href="#key-components" title="Permanent link">&para;</a></h3>
-<ol>
-<li>
-<p><strong>Shared Library</strong> (<code>libs/bixarena/leaderboard/python/</code>)</p>
+<span class="c1"># 3. Run the handler locally</span>
+nx<span class="w"> </span>run<span class="w"> </span>bixarena-worker:invoke
+</code></pre></div>
+<p>This runs <code>uv run python -m leaderboard_snapshot.handler</code> in the worker project directory,
+executing the same snapshot generation and publish logic used by the scheduled task.</p>
+<h2 id="consequences">Consequences<a class="headerlink" href="#consequences" title="Permanent link">&para;</a></h2>
+<h3 id="positive">Positive<a class="headerlink" href="#positive" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Extract snapshot generation logic from <code>bixarena-tools</code></li>
-<li>Reusable by both Lambda function and CLI tool</li>
-<li>Contains Bradley-Terry ranking algorithm, database queries, snapshot generation</li>
+<li>No additional CDK resources (SNS topic, IAM policies, AI service <code>boto3</code> dependency).</li>
+<li>Simpler operational surface — one scheduler, one log group, one task family.</li>
+<li>Admin dashboard will be a better, unified interface for both monitoring and triggering.</li>
 </ul>
-</li>
-<li>
-<p><strong>Lambda Function</strong> (Container Image)</p>
+<h3 id="negative">Negative<a class="headerlink" href="#negative" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Scheduled daily execution via EventBridge</li>
-<li>Runs in VPC private subnet with access to RDS</li>
-<li>Retrieves credentials from AWS Secrets Manager</li>
-<li>Publishes notifications to SNS on success/failure</li>
+<li>No automated alerting if the daily scheduled task fails silently. Failures must be discovered
+  by actively checking CloudWatch logs or the leaderboard UI.</li>
+<li>Manual trigger via <code>nx run bixarena-worker:invoke</code> requires developer access (local environment
+  with DB connectivity) — not accessible to non-developer admins.</li>
 </ul>
-</li>
-<li>
-<p><strong>Admin API Endpoint</strong></p>
+<h3 id="neutral">Neutral<a class="headerlink" href="#neutral" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Protected endpoint in AI service (<code>/admin/generate-snapshot</code>)</li>
-<li>Requires JWT authentication with admin role</li>
-<li>Async Lambda invocation (returns immediately with correlation ID)</li>
-<li>Enables on-demand snapshot generation when needed</li>
+<li>CloudWatch Logs remain the primary observability surface for task execution.</li>
+<li>The architecture plan is updated to mark these items as "Deferred (future admin dashboard)".</li>
 </ul>
-</li>
-<li>
-<p><strong>Monitoring &amp; Notifications</strong></p>
-<ul>
-<li>CloudWatch logs with structured logging</li>
-<li>SNS notifications to Slack on success/failure</li>
-<li>CloudWatch alarms for Lambda errors</li>
-<li>Correlation IDs for tracing requests</li>
-</ul>
-</li>
-</ol>
-<h3 id="key-design-decisions">Key Design Decisions<a class="headerlink" href="#key-design-decisions" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Lambda vs ECS Scheduled Task</strong>: Lambda chosen for simplicity, cost-effectiveness, and built-in retry logic</li>
-<li><strong>Container Image vs Zip</strong>: Container image chosen to support NumPy/SciPy dependencies without size constraints</li>
-<li><strong>RDS Proxy</strong>: Optional connection pooling for Lambda (to be evaluated)</li>
-<li><strong>Auto-publish</strong>: Snapshots automatically set to <code>visible=true</code> after generation</li>
-<li><strong>Async API Invocation</strong>: Admin endpoint returns immediately (HTTP 202) to avoid timeout issues</li>
-</ul>
-<h3 id="security-improvements">Security Improvements<a class="headerlink" href="#security-improvements" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>Network Isolation</strong>: Lambda functions run in VPC private subnets, no external database access</li>
-<li><strong>Least Privilege IAM</strong>: Scoped permissions for Lambda execution and ECS task roles</li>
-<li><strong>Secrets Management</strong>: Database credentials stored in AWS Secrets Manager</li>
-<li><strong>Authentication</strong>: Admin API requires JWT with admin role validation</li>
-<li><strong>Input Validation</strong>: Whitelist-based validation of all Lambda inputs</li>
-<li><strong>Audit Logging</strong>: Track trigger source (scheduled/manual), user email, correlation IDs</li>
-</ol>
 <h2 id="alternatives-considered">Alternatives Considered<a class="headerlink" href="#alternatives-considered" title="Permanent link">&para;</a></h2>
-<h3 id="alternative-1-ecs-scheduled-tasks">Alternative 1: ECS Scheduled Tasks<a class="headerlink" href="#alternative-1-ecs-scheduled-tasks" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>: Use ECS scheduled tasks instead of Lambda functions.</p>
-<p><strong>Pros</strong>:</p>
+<h3 id="option-1-implement-sns-slack-now">Option 1: Implement SNS + Slack now<a class="headerlink" href="#option-1-implement-sns-slack-now" title="Permanent link">&para;</a></h3>
+<p>Add a CloudWatch alarm on task failure → SNS topic → Slack webhook subscription.</p>
+<p><strong>Deferred because</strong>: Daily noise for a background job; admin dashboard is the better long-term
+surface for operational status.</p>
+<h3 id="option-2-implement-admin-api-endpoint-now-phase-4">Option 2: Implement admin API endpoint now (Phase 4)<a class="headerlink" href="#option-2-implement-admin-api-endpoint-now-phase-4" title="Permanent link">&para;</a></h3>
+<p>Add <code>POST /admin/generate-snapshot</code> to the AI service with JWT auth, invoking <code>ecs run-task</code>
+via <code>boto3</code>.</p>
+<p><strong>Deferred because</strong>: Developers can use <code>nx run bixarena-worker:invoke</code> directly; the endpoint
+will be better surfaced through the future admin dashboard UI rather than a standalone API.</p>
+<h2 id="related-decisions">Related Decisions<a class="headerlink" href="#related-decisions" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Familiar deployment model (already using ECS for AI service)</li>
-<li>No execution time limits (Lambda has 15-minute max)</li>
-<li>Can reuse existing Docker images and infrastructure</li>
-</ul>
-<p><strong>Cons</strong>:</p>
-<ul>
-<li>Higher cost (ECS task runs for full duration, Lambda charges per 100ms)</li>
-<li>More complex infrastructure (task definitions, scheduling, networking)</li>
-<li>Requires VPC and load balancer configuration</li>
-<li>Overkill for a simple scheduled job</li>
-</ul>
-<p><strong>Decision</strong>: Rejected. Lambda is more appropriate for scheduled batch jobs with predictable execution times under 15 minutes.</p>
-<h3 id="alternative-2-step-functions-for-orchestration">Alternative 2: Step Functions for Orchestration<a class="headerlink" href="#alternative-2-step-functions-for-orchestration" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>: Use AWS Step Functions to orchestrate a multi-step workflow (fetch data → compute rankings → save snapshot → notify).</p>
-<p><strong>Pros</strong>:</p>
-<ul>
-<li>Visual workflow representation</li>
-<li>Built-in error handling and retries</li>
-<li>State persistence across steps</li>
-<li>Can handle complex multi-step workflows</li>
-</ul>
-<p><strong>Cons</strong>:</p>
-<ul>
-<li>Added complexity for a simple single-step process</li>
-<li>Additional cost for Step Functions executions</li>
-<li>Current snapshot generation is a single atomic operation</li>
-<li>Unnecessary for initial implementation</li>
-</ul>
-<p><strong>Decision</strong>: Rejected for v1. Consider if future requirements introduce multi-step workflows (e.g., data validation → generation → approval → publishing).</p>
-<h3 id="alternative-3-keep-manual-process">Alternative 3: Keep Manual Process<a class="headerlink" href="#alternative-3-keep-manual-process" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>: Continue with manual CLI execution via SSH tunneling.</p>
-<p><strong>Pros</strong>:</p>
-<ul>
-<li>No infrastructure changes required</li>
-<li>Engineers maintain direct control</li>
-<li>Simple debugging and troubleshooting</li>
-</ul>
-<p><strong>Cons</strong>:</p>
-<ul>
-<li>Does not address core problems (reliability, frequency, security)</li>
-<li>Continues to consume engineering resources</li>
-<li>Scales poorly as more leaderboards are added</li>
-<li>Security risk from external database access</li>
-</ul>
-<p><strong>Decision</strong>: Rejected. Automation is necessary to improve reliability, security, and engineering efficiency.</p>
-<h3 id="alternative-4-aws-batch">Alternative 4: AWS Batch<a class="headerlink" href="#alternative-4-aws-batch" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>: Use AWS Batch for scheduled job execution.</p>
-<p><strong>Pros</strong>:</p>
-<ul>
-<li>Designed for batch compute workloads</li>
-<li>Can handle long-running jobs (hours)</li>
-<li>Built-in retry and failure handling</li>
-</ul>
-<p><strong>Cons</strong>:</p>
-<ul>
-<li>More complex than Lambda for simple jobs</li>
-<li>Requires compute environment configuration</li>
-<li>Higher cost for our use case</li>
-<li>Slower cold starts compared to Lambda</li>
-</ul>
-<p><strong>Decision</strong>: Rejected. AWS Batch is better suited for large-scale batch processing. Lambda is sufficient for our needs.</p>
-<h2 id="performance-implications">Performance Implications<a class="headerlink" href="#performance-implications" title="Permanent link">&para;</a></h2>
-<p><strong>Current Performance</strong>:</p>
-<ul>
-<li>Manual execution time: ~2-5 minutes (depending on data volume)</li>
-<li>Database query time: ~30 seconds for battle evaluations</li>
-<li>Bradley-Terry computation: ~1-2 minutes (1000 bootstrap iterations)</li>
-</ul>
-<p><strong>Expected Performance with Lambda</strong>:</p>
-<ul>
-<li>Execution time: 2-5 minutes (same as manual)</li>
-<li>Cold start: ~2-3 seconds (container image)</li>
-<li>Memory: 2GB (sufficient for NumPy/SciPy)</li>
-<li>Timeout: 15 minutes (3x buffer)</li>
-</ul>
-<p><strong>Database Impact</strong>:</p>
-<ul>
-<li>Read queries: Same as manual process (fetch battle evaluations)</li>
-<li>Write queries: Same as manual process (insert snapshot + entries)</li>
-<li>Connection pooling: RDS Proxy can be added if connection limits become an issue</li>
-</ul>
-<p><strong>Network Performance</strong>:</p>
-<ul>
-<li>Lambda in same VPC as RDS: Low latency, no data transfer costs</li>
-<li>No external network hops (unlike current SSH tunneling approach)</li>
-</ul>
-<h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
-<h3 id="current-security-concerns">Current Security Concerns<a class="headerlink" href="#current-security-concerns" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>External Database Access</strong>: SSH tunneling exposes database to connections from development environments</li>
-<li><strong>Credential Management</strong>: Engineers need database credentials to run manual script</li>
-<li><strong>Audit Trail</strong>: Limited visibility into who generated snapshots and when</li>
-<li><strong>Network Exposure</strong>: Bastion host and SSM session manager create additional attack surface</li>
-</ol>
-<h3 id="proposed-security-improvements">Proposed Security Improvements<a class="headerlink" href="#proposed-security-improvements" title="Permanent link">&para;</a></h3>
-<ol>
-<li>
-<p><strong>Network Isolation</strong>:</p>
-<ul>
-<li>Lambda runs in VPC private subnets</li>
-<li>No ingress from external networks</li>
-<li>Database never exposed outside VPC</li>
-</ul>
-</li>
-<li>
-<p><strong>IAM-Based Access Control</strong>:</p>
-<ul>
-<li>Lambda execution role with least-privilege permissions</li>
-<li>Scoped access to Secrets Manager, RDS, SNS</li>
-<li>No long-lived credentials in environment variables</li>
-</ul>
-</li>
-<li>
-<p><strong>Secrets Management</strong>:</p>
-<ul>
-<li>Database credentials stored in AWS Secrets Manager</li>
-<li>Automatic rotation supported</li>
-<li>Encrypted at rest and in transit</li>
-</ul>
-</li>
-<li>
-<p><strong>Authentication &amp; Authorization</strong>:</p>
-<ul>
-<li>Admin API requires valid JWT token</li>
-<li>Admin role validation (Cognito groups)</li>
-<li>User email tracked for audit logging</li>
-</ul>
-</li>
-<li>
-<p><strong>Audit Logging</strong>:</p>
-<ul>
-<li>CloudWatch logs capture all executions</li>
-<li>Structured logging with correlation IDs</li>
-<li>Track trigger source (scheduled vs manual) and user identity</li>
-</ul>
-</li>
-<li>
-<p><strong>Input Validation</strong>:</p>
-<ul>
-<li>Whitelist allowed leaderboard IDs</li>
-<li>Validate bootstrap iteration ranges</li>
-<li>Sanitize all inputs before database queries</li>
-</ul>
-</li>
-</ol>
-<h2 id="timeline">Timeline<a class="headerlink" href="#timeline" title="Permanent link">&para;</a></h2>
-<h3 id="phase-1-foundation">Phase 1: Foundation<a class="headerlink" href="#phase-1-foundation" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Extract <code>bixarena-leaderboard</code> library from <code>bixarena-tools</code></li>
-<li>Write unit tests for snapshot generation logic</li>
-<li>Update CLI tool to use library (Optional, no longer needed when calling the API server)</li>
-</ul>
-<h3 id="phase-2-lambda-function">Phase 2: Lambda Function<a class="headerlink" href="#phase-2-lambda-function" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Implement Lambda handler with Docker container</li>
-<li>Create CDK infrastructure (Lambda, EventBridge, SNS)</li>
-<li>Add Slack notifications</li>
-<li>Deploy to dev environment</li>
-</ul>
-<h3 id="phase-3-admin-api">Phase 3: Admin API<a class="headerlink" href="#phase-3-admin-api" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Add protected endpoint to AI service</li>
-<li>Implement JWT authentication with admin role check</li>
-<li>Grant IAM permissions for Lambda invocation</li>
-<li>Test end-to-end flow</li>
-</ul>
-<h3 id="phase-4-testing-deployment">Phase 4: Testing &amp; Deployment<a class="headerlink" href="#phase-4-testing-deployment" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Integration testing in dev environment</li>
-<li>Verify daily scheduled executions</li>
-<li>Test manual triggering via API</li>
-<li>Deploy to staging and production</li>
-</ul>
-<p><strong>Total Estimated Timeline</strong>: 2-3 weeks</p>
-<h2 id="success-criteria">Success Criteria<a class="headerlink" href="#success-criteria" title="Permanent link">&para;</a></h2>
-<h3 id="immediate-success-criteria-week-1-2">Immediate Success Criteria (Week 1-2)<a class="headerlink" href="#immediate-success-criteria-week-1-2" title="Permanent link">&para;</a></h3>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> First successful automated snapshot generated in dev environment</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Slack notification received for success and failure scenarios</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Snapshot correctly marked as visible (auto-publish works)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> Lambda execution time &lt; 5 minutes (within performance targets)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> No database connection errors or timeouts</li>
-</ul>
-<h3 id="short-term-success-criteria-30-days">Short-Term Success Criteria (30 Days)<a class="headerlink" href="#short-term-success-criteria-30-days" title="Permanent link">&para;</a></h3>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Operational Reliability</strong>: 95% success rate over 30 consecutive days (≤2 failures/month)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Scheduled Execution</strong>: Daily snapshots generated at consistent time (2 AM UTC ±5 minutes)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Zero Manual Interventions</strong>: No engineer involvement required for routine updates</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Alert Response Time</strong>: All failures detected and notified to Slack within 5 minutes</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Security Compliance</strong>: Zero external database connections (SSH tunneling eliminated)</li>
-</ul>
-<h3 id="long-term-success-criteria-90-days">Long-Term Success Criteria (90 Days)<a class="headerlink" href="#long-term-success-criteria-90-days" title="Permanent link">&para;</a></h3>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Update Frequency</strong>: Leaderboard updated daily without interruption for 90 days</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>User Engagement</strong>: Increase in user visits to leaderboard page (baseline TBD)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Engineering Time Saved</strong>: 4-8 hours/month of engineering time freed (estimated)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>System Scalability</strong>: Successfully extended to support multiple leaderboard types (open-source, multimodal)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Monitoring Coverage</strong>: CloudWatch dashboard with key metrics (success rate, duration, entry counts)</li>
-</ul>
-<h3 id="measurable-kpis">Measurable KPIs<a class="headerlink" href="#measurable-kpis" title="Permanent link">&para;</a></h3>
-<ol>
-<li>
-<p><strong>Success Rate</strong>: <code>(successful_executions / total_executions) × 100</code></p>
-<ul>
-<li>Target: ≥95%</li>
-</ul>
-</li>
-<li>
-<p><strong>Execution Consistency</strong>: Standard deviation of execution times</p>
-<ul>
-<li>Target: Within ±10% of mean execution time</li>
-</ul>
-</li>
-<li>
-<p><strong>Notification Delivery</strong>: Time from execution completion to Slack notification</p>
-<ul>
-<li>Target: &lt;1 minute</li>
-</ul>
-</li>
-<li>
-<p><strong>Security Incidents</strong>: External database access attempts</p>
-<ul>
-<li>Target: 0 (after cutover from manual process)</li>
-</ul>
-</li>
-<li>
-<p><strong>Engineering Efficiency</strong>: Hours saved per month</p>
-<ul>
-<li>Baseline: ~6-8 hours/month (manual execution + troubleshooting)</li>
-<li>Target: Reduced to ~1 hour/month (monitoring only)</li>
-</ul>
-</li>
-</ol>
-<h2 id="open-questions">Open Questions<a class="headerlink" href="#open-questions" title="Permanent link">&para;</a></h2>
-<h3 id="scheduling-frequency">Scheduling &amp; Frequency<a class="headerlink" href="#scheduling-frequency" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>Daily Schedule</strong>: Is 2 AM UTC the optimal time? Should we consider user timezone distributions?</li>
-<li><strong>Multiple Executions</strong>: Should we support multiple daily snapshots (e.g., morning and evening updates)?</li>
-<li><strong>Holiday Handling</strong>: Should execution be paused during holidays or maintenance windows?</li>
-</ol>
-<h3 id="failure-handling">Failure Handling<a class="headerlink" href="#failure-handling" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>Retry Policy</strong>: How many automatic retries before alerting engineers? (Current: 2 retries)</li>
-<li><strong>Failure Escalation</strong>: Should failures page on-call engineer or just notify Slack?</li>
-<li><strong>Partial Failures</strong>: How to handle cases where snapshot generates but notification fails?</li>
-</ol>
-<h3 id="notification-preferences">Notification Preferences<a class="headerlink" href="#notification-preferences" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>Slack Channel</strong>: Which channel should receive notifications? (#bixarena-alerts, #bixarena-leaderboard, or both?)</li>
-<li><strong>Notification Content</strong>: Should success notifications include full details or just a summary?</li>
-<li><strong>Quiet Hours</strong>: Should notifications be suppressed during certain hours to avoid noise?</li>
-</ol>
-<h3 id="leaderboard-scope">Leaderboard Scope<a class="headerlink" href="#leaderboard-scope" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>Multiple Leaderboards</strong>: When will we add support for other leaderboards (open-source, multimodal)?</li>
-<li><strong>Leaderboard Priority</strong>: If multiple leaderboards exist, should they run sequentially or in parallel?</li>
-<li><strong>Bootstrap Iterations</strong>: Is 1000 iterations appropriate for production, or should it be configurable per leaderboard?</li>
-</ol>
-<h3 id="database-optimization">Database Optimization<a class="headerlink" href="#database-optimization" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>RDS Proxy</strong>: Should we implement RDS Proxy immediately or wait until we see connection pooling needs?</li>
-<li><strong>Read Replicas</strong>: Should snapshot generation read from a replica to reduce load on primary database?</li>
-<li><strong>Query Optimization</strong>: Are current database queries optimized for production data volumes?</li>
-</ol>
-<h3 id="monitoring-observability">Monitoring &amp; Observability<a class="headerlink" href="#monitoring-observability" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>CloudWatch Dashboard</strong>: What metrics are most valuable to track? (Duration, entry counts, success rate?)</li>
-<li><strong>Custom Metrics</strong>: Should we publish custom metrics to CloudWatch for leaderboard-specific KPIs?</li>
-<li><strong>Log Retention</strong>: Is 30 days sufficient for CloudWatch logs, or should we archive to S3?</li>
-</ol>
-<h3 id="security-compliance">Security &amp; Compliance<a class="headerlink" href="#security-compliance" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>Audit Requirements</strong>: Do we need to track snapshot generation in a compliance log beyond CloudWatch?</li>
-<li><strong>Access Control</strong>: Should multiple admin roles exist (e.g., admin-read-only vs admin-write)?</li>
-<li><strong>Rate Limiting</strong>: Is 100 API requests/day sufficient rate limit for manual triggering?</li>
-</ol>
-<h3 id="future-enhancements">Future Enhancements<a class="headerlink" href="#future-enhancements" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>Snapshot Retention</strong>: Should old snapshots be automatically archived or deleted after a certain period?</li>
-<li><strong>Snapshot Comparison</strong>: Should the system detect and alert on significant ranking changes between snapshots?</li>
-<li><strong>User Notifications</strong>: Should users be notified when new snapshots are published (e.g., email, in-app)?</li>
-</ol>
-<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html">AWS Lambda Limits</a></li>
-<li><a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html">EventBridge Scheduling</a></li>
+<li><a href="../0001-scheduled-fargate-over-lambda/">ADR-0001</a>: Fargate vs Lambda decision</li>
+<li><a href="../../rfcs/0001-bixarena-leaderboard-snapshot-automation-plan/">RFC-0001</a>: Source RFC</li>
+<li><a href="../../architecture/bixarena-leaderboard-snapshot-automation-plan/">Architecture Plan</a>: Full implementation details</li>
 </ul>
 
 
@@ -3479,9 +2853,6 @@
 
 
 
-
-  
-  
 
 
 
