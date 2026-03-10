@@ -1,13 +1,12 @@
 import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
-import { catchError, EMPTY, map, Observable, of } from 'rxjs';
-import { GitHubService } from './github.service';
+import { EMPTY, map, Observable, of } from 'rxjs';
 import { PlatformService } from './platform.service';
 
 export interface VersionConfig {
   appVersion: string;
-  tagName: string;
+  commitSha: string;
 }
 
 export interface DataVersion {
@@ -29,7 +28,6 @@ export interface DataVersionService {
 })
 export class VersionService {
   private readonly platformService = inject(PlatformService);
-  private readonly gitHubService = inject(GitHubService);
 
   getDataVersion$(dataVersionService: DataVersionService): Observable<string> {
     if (this.platformService.isServer) {
@@ -45,12 +43,7 @@ export class VersionService {
     if (this.platformService.isServer) {
       return EMPTY;
     }
-    return this.gitHubService.getCommitSHA(config.tagName).pipe(
-      map((sha) => this.formatSiteVersion(sha, config)),
-      catchError(() => {
-        return of(this.formatSiteVersion('', config));
-      }),
-    );
+    return of(this.formatSiteVersion(config.commitSha, config));
   }
 
   formatDataVersion(dataVersion: DataVersion): string {
