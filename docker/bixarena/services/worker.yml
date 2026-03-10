@@ -1,0 +1,12 @@
+services:
+  bixarena-worker:
+    image: ghcr.io/sage-bionetworks/bixarena-worker:${BIXARENA_VERSION:-local}
+    container_name: bixarena-worker
+    restart: no
+    env_file:
+      - ../../../apps/bixarena/worker/.env
+    networks:
+      - bixarena
+    depends_on:
+      bixarena-api:
+        condition: service_started

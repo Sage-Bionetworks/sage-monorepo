@@ -1,22 +1,13 @@
 """Leaderboard management commands."""
 
-from datetime import UTC, datetime
-
 import typer
-from rich.console import Console
-from rich.table import Table
-
-from bixarena_tools.leaderboard.db_helper import (
-    fetch_active_models,
-    fetch_battle_evaluations,
-    fetch_leaderboard_ids,
-    fetch_leaderboards,
+from bixarena_leaderboard.db_helper import (
     get_db_connection,
-    insert_leaderboard_entries,
-    insert_leaderboard_snapshot,
     update_leaderboard_snapshot,
 )
-from bixarena_tools.leaderboard.rank_battle import compute_leaderboard_bt
+from bixarena_leaderboard.snapshot_generator import generate_snapshot
+from rich.console import Console
+from rich.table import Table
 
 leaderboard_app = typer.Typer(
     help="Leaderboard operations",
@@ -30,62 +21,6 @@ snapshot_app = typer.Typer(
     no_args_is_help=True,
 )
 leaderboard_app.add_typer(snapshot_app, name="snapshot")
-
-SNAPSHOT_IDENTIFIER_FORMAT = "snapshot_%Y-%m-%d_%H-%M"
-
-
-def display_leaderboard_summary(
-    leaderboard_name: str,
-    entries: list[dict],
-    evaluation_count: int,
-    limit: int = 20,
-) -> None:
-    """Display leaderboard results in a formatted table."""
-    console.print(f"\n[bold cyan]═══ {leaderboard_name} ═══[/bold cyan]")
-    console.print(f"Total evaluations: {evaluation_count}")
-    console.print(f"Models ranked: {len(entries)}\n")
-
-    if not entries:
-        console.print("[yellow]No entries to display[/yellow]")
-        return
-
-    # Sort by rank, then BT score (original ordering)
-    sorted_entries = sorted(entries, key=lambda x: (x["rank"], -x["btScore"]))
-
-    table = Table(title=f"{leaderboard_name} Rankings")
-    table.add_column("Rank", justify="center", style="bold")
-    table.add_column("Model", style="cyan")
-    table.add_column("BT Score", justify="right", style="green")
-    table.add_column("95% CI", justify="center", style="yellow")
-    table.add_column("Evals", justify="center", style="blue")
-    table.add_column("Org", style="magenta")
-    table.add_column("License", style="magenta")
-    table.add_column("URL", style="blue")
-
-    for entry in sorted_entries[:limit]:
-        model_label = entry.get("modelSlug") or entry.get("modelName", "")
-        ci_str = f"[{entry['bootstrapQ025']:.1f}, {entry['bootstrapQ975']:.1f}]"
-        table.add_row(
-            str(entry["rank"]),
-            model_label,
-            f"{entry['btScore']:.2f}",
-            ci_str,
-            str(entry["voteCount"]),
-            entry.get("modelOrganization") or "",
-            entry.get("license") or "",
-            entry.get("modelUrl") or "",
-        )
-
-    if len(sorted_entries) > limit:
-        console.print(f"\n[dim]... and {len(sorted_entries) - limit} more[/dim]")
-
-    console.print(table)
-
-
-def _generate_snapshot_identifier(now: datetime | None = None) -> str:
-    """Return a snapshot identifier consistent with seeded reference data."""
-    now = now or datetime.now(UTC)
-    return now.strftime(SNAPSHOT_IDENTIFIER_FORMAT)
 
 
 @snapshot_app.command("add")
@@ -132,149 +67,29 @@ def snapshot_add(
     console.print("=" * 60)
 
     try:
-        with get_db_connection() as conn:
-            # Fetch data
-            console.print("\n[cyan]Fetching data from database...[/cyan]")
+        result = generate_snapshot(
+            leaderboard_slug=id,
+            num_bootstrap=num_bootstrap,
+            min_evals=min_evals,
+            significant=significant,
+            dry_run=dry_run,
+        )
 
-            leaderboards = fetch_leaderboards(conn)
-            console.print(f"  ✓ Found {len(leaderboards)} leaderboards")
-
-            # Validate leaderboard ID
-            available_ids = fetch_leaderboard_ids(conn)
-            if id not in available_ids:
-                console.print(
-                    f"[bold red]Error: Leaderboard '{id}' not found.[/bold red]"
-                )
-                console.print(f"Available leaderboards: {', '.join(available_ids)}")
-                raise typer.Exit(1)
-
-            all_models = fetch_active_models(conn)
-            console.print(f"  ✓ Found {len(all_models)} active models")
-
-            all_evaluations = fetch_battle_evaluations(conn)
-            console.print(f"  ✓ Found {len(all_evaluations)} battle evaluations")
-
-            if len(all_evaluations) == 0:
-                console.print(
-                    "[bold red]Error: No evaluations found in database.[/bold red]"
-                )
-                raise typer.Exit(1)
-
-            # Create model lookup by name
-            models_by_name = {model["name"]: model for model in all_models}
-
-            # Find target leaderboard
-            target_leaderboard = None
-            for leaderboard in leaderboards:
-                if leaderboard["slug"] == id:
-                    target_leaderboard = leaderboard
-                    break
-
-            if not target_leaderboard:
-                console.print(
-                    f"[bold red]Error: Leaderboard '{id}' not found.[/bold red]"
-                )
-                raise typer.Exit(1)
-
+        if dry_run:
             console.print(
-                f"\n[bold]Processing leaderboard: {target_leaderboard['name']}[/bold]"
+                "\n[yellow]DRY RUN: Results computed only. "
+                "Database not updated.[/yellow]"
             )
-            console.print(f"  • Using {len(all_evaluations)} total evaluations")
+        else:
+            console.print("\n[bold green]✓ Database updated successfully![/bold green]")
+            console.print(f"  • Snapshot ID: {result['snapshot_id']}")
+            console.print(f"  • Snapshot identifier: {result['snapshot_identifier']}")
 
-            # Compute rankings
-            ranking_method = "statistical significance" if significant else "BT score"
-            console.print(
-                f"  • Computing rankings with {num_bootstrap} bootstrap iterations..."
-            )
-            console.print(f"  • Ranking method: {ranking_method}")
-            leaderboard_entries = compute_leaderboard_bt(
-                evaluations=all_evaluations,
-                models=models_by_name,
-                num_bootstrap=num_bootstrap,
-                significant=significant,
-            )
-
-            # Filter by minimum evaluations if threshold is set
-            if min_evals > 0:
-                skipped_models = []
-                filtered_entries = []
-
-                for entry in leaderboard_entries:
-                    if entry["voteCount"] >= min_evals:
-                        filtered_entries.append(entry)
-                    else:
-                        label = entry.get("modelSlug") or entry["modelName"]
-                        skipped_models.append((label, entry["voteCount"]))
-
-                leaderboard_entries = filtered_entries
-
-                # Reassign ranks sequentially after filtering
-                if not significant:
-                    for new_rank, entry in enumerate(leaderboard_entries, start=1):
-                        entry["rank"] = new_rank
-
-                if skipped_models:
-                    console.print(
-                        f"\n[yellow]⚠ Warning: Skipped {len(skipped_models)} "
-                        f"model(s) with < {min_evals} evaluations:[/yellow]"
-                    )
-                    for model_name, count in skipped_models[:5]:
-                        console.print(f"  • {model_name}: {count} evaluations")
-                    if len(skipped_models) > 5:
-                        console.print(f"  • ... and {len(skipped_models) - 5} more")
-
-            # Display results
-            display_leaderboard_summary(
-                target_leaderboard["name"],
-                leaderboard_entries,
-                len(all_evaluations),
-            )
-
-            console.print(
-                "\n[bold green]✓ Leaderboard computation completed![/bold green]"
-            )
-
-            # Insert into database if not dry run
-            if not dry_run:
-                snapshot_identifier = _generate_snapshot_identifier()
-                description = (
-                    f"Leaderboard snapshot with {len(all_evaluations)} "
-                    f"evaluations and {len(leaderboard_entries)} ranked models"
-                )
-
-                # Insert snapshot
-                snapshot_id = insert_leaderboard_snapshot(
-                    conn,
-                    target_leaderboard["id"],
-                    snapshot_identifier,
-                    description,
-                )
-
-                # Insert entries
-                entry_count = insert_leaderboard_entries(
-                    conn,
-                    target_leaderboard["id"],
-                    snapshot_id,
-                    leaderboard_entries,
-                )
-
-                console.print(
-                    "\n[bold green]✓ Database updated successfully![/bold green]"
-                )
-                console.print(f"  • Snapshot ID: {snapshot_id}")
-                console.print(f"  • Snapshot identifier: {snapshot_identifier}")
-                console.print(f"  • Entries inserted: {entry_count}")
-            else:
-                console.print(
-                    "\n[yellow]DRY RUN: Results displayed only. "
-                    "Database not updated.[/yellow]"
-                )
+        console.print(f"  • Entries: {result['entry_count']}")
+        console.print(f"  • Evaluations used: {result['evaluation_count']}")
 
     except Exception as e:
         console.print(f"[bold red]Error: {e}[/bold red]")
-        import traceback
-
-        console.print(traceback.format_exc())
         raise typer.Exit(1) from e
 
 
