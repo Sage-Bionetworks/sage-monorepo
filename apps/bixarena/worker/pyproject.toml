@@ -1,0 +1,56 @@
+[project]
+name = "bixarena-worker"
+version = "1.0.0"
+description = "BixArena worker tasks for automation"
+requires-python = "==3.13.3"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [ { name = "Sage Bionetworks" } ]
+dependencies = [
+  "bixarena-leaderboard",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["leaderboard_snapshot"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
+]
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []
+
+[tool.uv.sources]
+bixarena-leaderboard = { workspace = true }

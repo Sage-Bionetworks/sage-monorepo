@@ -1,0 +1,71 @@
+[tool.coverage.run]
+branch = true
+source = [ "bixarena_leaderboard" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = """
+ --cov
+ --cov-report html:'../../../../coverage/libs/bixarena/leaderboard/python/html'
+ --cov-report xml:'../../../../coverage/libs/bixarena/leaderboard/python/coverage.xml'
+ --html='../../../../reports/libs/bixarena/leaderboard/python/unittests/html/index.html'
+ --junitxml='../../../../reports/libs/bixarena/leaderboard/python/unittests/junit.xml'
+"""
+
+[project]
+name = "bixarena-leaderboard"
+version = "1.0.0"
+description = "BixArena leaderboard snapshot generation library"
+requires-python = "==3.13.3"
+readme = 'README.md'
+dependencies = [
+    "numpy>=1.26.0",
+    "psycopg[binary]>=3.0.0",
+    "scipy>=1.11.0",
+    "tqdm>=4.60.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["bixarena_leaderboard"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
+]
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []

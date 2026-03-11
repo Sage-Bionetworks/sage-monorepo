@@ -27,9 +27,10 @@ ADRs use the format:
 
 ## ADRs
 
-| ADR | Title | Status | Date |
-| --- | ----- | ------ | ---- |
-| -   | -     | -      | -    |
+| ADR                                                 | Title                                                                           | Status   | Date       |
+| --------------------------------------------------- | ------------------------------------------------------------------------------- | -------- | ---------- |
+| [0001](./0001-scheduled-fargate-over-lambda.md)     | Use ECS Scheduled Fargate Task for Leaderboard Snapshot Generation              | Accepted | 2026-03-06 |
+| [0002](./0002-defer-notifications-and-admin-api.md) | Defer SNS/Slack Notifications and Admin API Endpoint for Leaderboard Automation | Accepted | 2026-03-06 |
 
 ## Template
 

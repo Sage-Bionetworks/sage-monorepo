@@ -63,7 +63,7 @@
     "deploy": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cdk deploy --all",
+        "command": "cdk deploy --all --require-approval never",
         "cwd": "{projectRoot}"
       },
       "configurations": {

@@ -302,7 +302,6 @@ def insert_leaderboard_snapshot(
             },
         )
         snapshot_id = cur.fetchone()["id"]
-        conn.commit()
         return str(snapshot_id)
 
 
@@ -368,7 +367,71 @@ def update_leaderboard_snapshot(
             {"id": result["id"]},
         )
         snapshot = cur.fetchone()
-        conn.commit()
+        return snapshot
+
+
+def update_leaderboard_snapshot_by_id(conn, snapshot_id: str, **updates) -> dict | None:
+    """
+    Update properties of a leaderboard snapshot by its UUID.
+
+    Preferred over update_leaderboard_snapshot when the snapshot UUID is already
+    known (e.g. immediately after insert_leaderboard_snapshot), as it avoids a
+    redundant lookup by identifier.
+
+    Args:
+        conn: Database connection
+        snapshot_id: UUID string of the snapshot to update
+        **updates: Fields to update (e.g., visibility='public', description='...')
+
+    Returns:
+        Updated snapshot dict if found, None otherwise
+    """
+    if not updates:
+        raise ValueError("No fields provided to update")
+
+    set_clauses = [f"{field} = %({field})s" for field in updates]
+    set_clauses.append("updated_at = now()")
+    set_clause = ", ".join(set_clauses)
+
+    with conn.cursor() as cur:
+        cur.execute(
+            f"""
+            UPDATE api.leaderboard_snapshot
+            SET {set_clause}
+            WHERE id = %(snapshot_id)s
+            RETURNING id
+            """,
+            {"snapshot_id": snapshot_id, **updates},
+        )
+        result = cur.fetchone()
+
+        if not result:
+            return None
+
+        cur.execute(
+            """
+            SELECT
+                s.id,
+                s.leaderboard_id,
+                s.snapshot_identifier,
+                s.description,
+                s.visibility,
+                s.created_at,
+                s.updated_at,
+                l.name as leaderboard_name,
+                l.slug as leaderboard_slug,
+                COUNT(e.id) as entry_count
+            FROM api.leaderboard_snapshot s
+            JOIN api.leaderboard l ON s.leaderboard_id = l.id
+            LEFT JOIN api.leaderboard_entry e ON s.id = e.snapshot_id
+            WHERE s.id = %(id)s
+            GROUP BY s.id, s.leaderboard_id, s.snapshot_identifier,
+                     s.description, s.visibility, s.created_at, s.updated_at,
+                     l.name, l.slug
+            """,
+            {"id": result["id"]},
+        )
+        snapshot = cur.fetchone()
         return snapshot
 
 
@@ -421,5 +484,4 @@ def insert_leaderboard_entries(
         )
 
         row_count = cur.rowcount
-        conn.commit()
         return row_count
