@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import domtoimage from 'dom-to-image-more';
+import { toBlob } from 'html-to-image';
 import { saveAs } from 'file-saver';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
 
@@ -33,18 +33,21 @@ export class DownloadDomImageComponent {
     // known issue: https://github.com/1904labs/dom-to-image-more/issues/198
     const paddingPx = this.downloadImagePaddingPx() ?? 0;
     const t0 = performance.now();
-    const blob = await domtoimage.toBlob(this.target(), {
-      bgcolor: '#fff',
+    const blob = await toBlob(this.target(), {
+      backgroundColor: '#fff',
       width: this.target().offsetWidth + paddingPx * 2,
       height: this.target().offsetHeight + paddingPx * 2,
+      skipFonts: true,
       ...(this.downloadImagePaddingPx() !== undefined && {
         style: {
           padding: `${paddingPx}px`,
         },
       }),
     });
-    console.log(`[benchmark] image rendered in ${(performance.now() - t0).toFixed(0)}ms`);
-    saveAs(blob, this.filename() + fileType);
+    console.log(
+      `[benchmark][html-to-image] image rendered in ${(performance.now() - t0).toFixed(0)}ms`,
+    );
+    if (blob) saveAs(blob, this.filename() + fileType);
   };
 
   downloadCsvData = async (fileType: string): Promise<void> => {
