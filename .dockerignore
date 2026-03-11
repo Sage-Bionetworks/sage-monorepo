@@ -1,0 +1,2 @@
+# Prevent sourcemaps from being included in Docker images.
+**/*.map
