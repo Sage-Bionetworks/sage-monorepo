@@ -32,6 +32,7 @@ export class DownloadDomImageComponent {
     // width and height need to be specified
     // known issue: https://github.com/1904labs/dom-to-image-more/issues/198
     const paddingPx = this.downloadImagePaddingPx() ?? 0;
+    const t0 = performance.now();
     const blob = await domtoimage.toBlob(this.target(), {
       bgcolor: '#fff',
       width: this.target().offsetWidth + paddingPx * 2,
@@ -42,6 +43,7 @@ export class DownloadDomImageComponent {
         },
       }),
     });
+    console.log(`[benchmark] image rendered in ${(performance.now() - t0).toFixed(0)}ms`);
     saveAs(blob, this.filename() + fileType);
   };
 
