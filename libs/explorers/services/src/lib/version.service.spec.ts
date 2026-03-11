@@ -19,6 +19,7 @@ describe('VersionService', () => {
   beforeEach(() => {
     mockPlatformService = {
       isBrowser: true,
+      isServer: false,
     };
 
     TestBed.configureTestingModule({
@@ -59,16 +60,16 @@ describe('VersionService', () => {
     });
   });
 
-  describe('formatSiteVersion', () => {
+  describe('getSiteVersion', () => {
     it('should format site version with commit SHA', () => {
       const config = { appVersion: '1.2.3-rc1', commitSha: 'abc1234' };
-      const result = service.formatSiteVersion('abc1234', config);
+      const result = service.getSiteVersion(config);
       expect(result).toBe('1.2.3-abc1234');
     });
 
     it('should format site version without commit SHA', () => {
       const config = { appVersion: '1.2.3-rc1', commitSha: '' };
-      const result = service.formatSiteVersion('', config);
+      const result = service.getSiteVersion(config);
       expect(result).toBe('1.2.3');
     });
 
@@ -77,47 +78,8 @@ describe('VersionService', () => {
         appVersion: '',
         commitSha: 'abc1234',
       };
-      const result = service.formatSiteVersion('abc1234', config);
+      const result = service.getSiteVersion(config);
       expect(result).toBe('abc1234');
-    });
-  });
-
-  describe('getSiteVersion$', () => {
-    it('should get site version with commit SHA from config', () => {
-      let result = '';
-      service.getSiteVersion$(mockVersionConfig).subscribe((siteVersion: string) => {
-        result = siteVersion;
-      });
-
-      expect(result).toBe('1.2.3-abc1234');
-    });
-
-    it('should return app version when commit SHA is empty', () => {
-      const config: VersionConfig = {
-        appVersion: '1.2.3-rc1',
-        commitSha: '',
-      };
-
-      let result = '';
-      service.getSiteVersion$(config).subscribe((siteVersion: string) => {
-        result = siteVersion;
-      });
-
-      expect(result).toBe('1.2.3');
-    });
-
-    it('should return empty string when SHA is empty and appVersion is empty', () => {
-      const config: VersionConfig = {
-        appVersion: '',
-        commitSha: '',
-      };
-
-      let result = '';
-      service.getSiteVersion$(config).subscribe((siteVersion: string) => {
-        result = siteVersion;
-      });
-
-      expect(result).toBe('');
     });
   });
 });

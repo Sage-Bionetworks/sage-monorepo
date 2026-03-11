@@ -1,16 +1,13 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
+import { catchError, of } from 'rxjs';
 import { DataVersionService } from '@sagebionetworks/agora/api-client';
 import { AGORA_LOADING_ICON_COLORS, ConfigService } from '@sagebionetworks/agora/config';
 import { SearchInputComponent } from '@sagebionetworks/agora/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/agora/util';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
-import {
-  MetaTagService,
-  PlatformService,
-  VersionService,
-} from '@sagebionetworks/explorers/services';
+import { MetaTagService, VersionService } from '@sagebionetworks/explorers/services';
 import {
   ErrorOverlayComponent,
   FooterComponent,
@@ -49,59 +46,30 @@ import { ToastModule } from 'primeng/toast';
     createGoogleTagManagerIdProvider(),
   ],
 })
-export class AppComponent implements OnInit {
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly platformService = inject(PlatformService);
+export class AppComponent {
+  private readonly configService = inject(ConfigService);
+  private readonly dataVersionService = inject(DataVersionService);
+  private readonly metaTagService = inject(MetaTagService);
+  private readonly versionService = inject(VersionService);
 
-  configService = inject(ConfigService);
-  dataVersionService = inject(DataVersionService);
-  metaTagService = inject(MetaTagService);
-  versionService = inject(VersionService);
+  readonly useGoogleTagManager = isGoogleTagManagerIdSet(
+    this.configService.config.googleTagManagerId,
+  );
 
-  readonly useGoogleTagManager: boolean;
+  dataVersion = rxResource({
+    stream: () =>
+      this.versionService
+        .getDataVersion$(this.dataVersionService)
+        .pipe(catchError(() => of('unknown'))),
+    defaultValue: 'loading...',
+  });
 
-  siteVersion = '';
-  dataVersion = '';
+  siteVersion = this.versionService.getSiteVersion(this.configService.config);
 
   headerLinks = headerLinks;
   footerLinks = footerLinks;
 
   constructor() {
     this.metaTagService.initialize('Agora');
-
-    this.useGoogleTagManager = isGoogleTagManagerIdSet(
-      this.configService.config.googleTagManagerId,
-    );
-  }
-
-  ngOnInit() {
-    if (this.platformService.isBrowser) {
-      this.getDataVersion();
-      this.getSiteVersion();
-    }
-  }
-
-  getDataVersion() {
-    this.versionService
-      .getDataVersion$(this.dataVersionService)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (v) => (this.dataVersion = v),
-        error: () => {
-          this.dataVersion = 'unknown';
-        },
-      });
-  }
-
-  getSiteVersion() {
-    this.versionService
-      .getSiteVersion$(this.configService.config)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (v) => (this.siteVersion = v),
-        error: () => {
-          this.siteVersion = 'unknown';
-        },
-      });
   }
 }

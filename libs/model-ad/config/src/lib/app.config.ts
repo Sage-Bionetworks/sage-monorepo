@@ -2,8 +2,6 @@ import { InjectionToken } from '@angular/core';
 
 export interface AppConfig {
   appVersion: string;
-  // Short commit SHA for the tagged release (e.g., "abc1234")
-  // Passed in via infrastructure configuration at deployment time
   commitSha: string;
   csrApiUrl: string;
   googleTagManagerId: string;

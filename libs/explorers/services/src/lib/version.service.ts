@@ -1,7 +1,7 @@
 import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
-import { EMPTY, map, Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { PlatformService } from './platform.service';
 
 export interface VersionConfig {
@@ -31,7 +31,7 @@ export class VersionService {
 
   getDataVersion$(dataVersionService: DataVersionService): Observable<string> {
     if (this.platformService.isServer) {
-      return EMPTY;
+      return of('loading...');
     }
     const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
     return dataVersionService
@@ -39,23 +39,16 @@ export class VersionService {
       .pipe(map((data) => this.formatDataVersion(data)));
   }
 
-  getSiteVersion$(config: VersionConfig): Observable<string> {
-    if (this.platformService.isServer) {
-      return EMPTY;
-    }
-    return of(this.formatSiteVersion(config.commitSha, config));
-  }
-
   formatDataVersion(dataVersion: DataVersion): string {
     return `${dataVersion.data_file}-v${dataVersion.data_version}`;
   }
 
-  formatSiteVersion(sha: string, config: VersionConfig): string {
+  getSiteVersion(config: VersionConfig): string {
     const appVersion = this.formatAppVersion(config.appVersion);
     if (!appVersion) {
-      return sha;
+      return config.commitSha;
     }
-    return sha ? `${appVersion}-${sha}` : appVersion;
+    return config.commitSha ? `${appVersion}-${config.commitSha}` : appVersion;
   }
 
   formatAppVersion(appVersion: string): string {
