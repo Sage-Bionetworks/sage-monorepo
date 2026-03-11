@@ -37,6 +37,9 @@ The Community Quest content is defined in a `QUEST_CONFIG` dictionary in the Gra
    contributor tiers. All content is either visible to everyone or not present at all. This prevents
    us from rewarding active contributors with exclusive content (e.g., lore, behind-the-scenes
    material) or creating community-wide milestones that unlock new posts as the quest progresses.
+3. **No content exclusivity**: Post content is committed to the public GitHub repository and
+   visible to anyone browsing the source code or PR diffs. This makes it impossible to offer
+   truly exclusive content, even with client-side gating.
 
 ### Current State
 
@@ -47,9 +50,7 @@ The Community Quest content is defined in a `QUEST_CONFIG` dictionary in the Gra
 - **Credits** (designer, architect attribution) are hardcoded in `QUEST_CONFIG`.
 - **The only API-backed data** is quest contributor stats via `GET /quests/{questId}/contributors`.
 - Publishing a new post requires a code change, PR review, merge, and deployment.
-- **Post content is publicly visible on GitHub** because it is committed to the repository. This
-  makes it impossible to offer exclusive content (e.g., tier-restricted lore or rewards) since
-  anyone can read the source code or PR diff.
+- **Post content is publicly visible on GitHub** because it is committed to the repository.
 
 ### Desired State
 
@@ -127,7 +128,7 @@ logic with no duplication.
 
 **Admin endpoints** (authenticated, requires admin role):
 
-- Update quest metadata (title, description, goal, dates, active post index)
+- Create, update, and delete quests
 - Create, update, and delete individual posts
 - Reorder all posts via a bulk operation that accepts the complete ordered list of post indexes,
   avoiding the index-shifting problems of single-move operations
@@ -183,8 +184,9 @@ These items remain hardcoded in the Gradio application as they are stable UI con
 - Implement admin CRUD endpoints for quest metadata and posts
 - Implement the reorder endpoint
 
-#### Phase 3: Gradio Integration
+#### Phase 3: Content Migration and Gradio Integration
 
+- Manually migrate existing posts from `QUEST_CONFIG` to the database using admin `curl` commands
 - Replace `QUEST_CONFIG` with a fetch to the new quest endpoint
 - Update the quest section UI to handle locked post states using API response fields
 - Remove hardcoded post data from the codebase
@@ -205,8 +207,10 @@ These items remain hardcoded in the Gradio application as they are stable UI con
 - Requires integration with the existing auth system for tier-based access control
 - Overkill for the current content volume and team size
 
-**Decision**: Rejected. The team is small and technical; `curl` commands are sufficient. A CMS adds
-complexity without proportional value.
+**Decision**: Rejected. Neither CMS has knowledge of BixArena users, tiers, or battle counts, so
+the Java API would still need to proxy requests and apply content filtering — making the CMS a
+glorified content store behind the API. The team is small and technical; `curl` commands are
+sufficient. A CMS adds complexity without proportional value.
 
 ### Alternative 2: Store posts as static JSON in S3
 
