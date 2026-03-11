@@ -21,9 +21,10 @@ Once approved, the RFC remains in `docs/rfcs/` as an immutable historical record
 
 ## RFCs
 
-| RFC                                                             | Title                                    | Status   | Author                                      | Date       |
-| --------------------------------------------------------------- | ---------------------------------------- | -------- | ------------------------------------------- | ---------- |
-| [0001](./0001-bixarena-leaderboard-snapshot-automation-plan.md) | BixArena Leaderboard Snapshot Automation | Approved | [tschaffter](https://github.com/tschaffter) | 2026-01-09 |
+| RFC                                                             | Title                                    | Status          | Author                                      | Date       |
+| --------------------------------------------------------------- | ---------------------------------------- | --------------- | ------------------------------------------- | ---------- |
+| [0001](./0001-bixarena-leaderboard-snapshot-automation-plan.md) | BixArena Leaderboard Snapshot Automation | Approved        | [tschaffter](https://github.com/tschaffter) | 2026-01-09 |
+| [0002](./0002-bixarena-quest-post-management-api.md)            | BixArena Quest Post Management API       | Open for Review | [tschaffter](https://github.com/tschaffter) | 2026-03-11 |
 
 ## Template
 
