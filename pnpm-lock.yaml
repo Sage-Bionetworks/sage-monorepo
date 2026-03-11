@@ -134,6 +134,9 @@ importers:
       glob:
         specifier: 11.0.0
         version: 11.0.0
+      html-to-image:
+        specifier: ^1.11.13
+        version: 1.11.13
       js-yaml:
         specifier: 4.1.0
         version: 4.1.0
@@ -176,6 +179,9 @@ importers:
       normalize.css:
         specifier: 8.0.1
         version: 8.0.1
+      p-limit:
+        specifier: ^3.1.0
+        version: 3.1.0
       primeng:
         specifier: 20.4.0
         version: 20.4.0(18bfed6a870968de8d6d53a87eef0e78)
@@ -8289,6 +8295,9 @@ packages:
   html-tags@3.3.1:
     resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
     engines: {node: '>=8'}
+
+  html-to-image@1.11.13:
+    resolution: {integrity: sha512-cuOPoI7WApyhBElTTb9oqsawRvZ0rHhaHwghRLlTuffoD1B2aDemlCruLeZrUIIdvG7gs9xeELEPm6PhuASqrg==}
 
   html-webpack-plugin@5.6.4:
     resolution: {integrity: sha512-V/PZeWsqhfpE27nKeX9EO2sbR+D17A+tLf6qU+ht66jdUsN0QLKJN27Z+1+gHrVMKgndBahes0PU6rRihDgHTw==}
@@ -22795,6 +22804,8 @@ snapshots:
       terser: 5.43.1
 
   html-tags@3.3.1: {}
+
+  html-to-image@1.11.13: {}
 
   html-webpack-plugin@5.6.4(@rspack/core@1.5.0(@swc/helpers@0.5.17))(webpack@5.101.3(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.9)):
     dependencies:
