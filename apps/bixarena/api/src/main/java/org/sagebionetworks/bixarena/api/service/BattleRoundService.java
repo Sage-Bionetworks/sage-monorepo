@@ -61,16 +61,16 @@ public class BattleRoundService {
 
     log.info("Created battle round {} for battle {}", saved.getId(), battleId);
 
-    // Validate the prompt for the first round (fire-and-forget)
-    if (nextRoundNumber == 1) {
-      String promptText = messageRepository
-        .findById(promptId)
-        .map(msg -> msg.getContent())
-        .orElse(null);
-      if (promptText != null) {
-        promptValidationService.validateAndPersist(battleId, promptId, promptText);
-      }
-    }
+    // TODO: Re-enable prompt validation when the UI supports displaying results
+    // if (nextRoundNumber == 1) {
+    //   String promptText = messageRepository
+    //     .findById(promptId)
+    //     .map(msg -> msg.getContent())
+    //     .orElse(null);
+    //   if (promptText != null) {
+    //     promptValidationService.validateAndPersist(battleId, promptId, promptText);
+    //   }
+    // }
 
     return battleRoundMapper.convertToDto(saved);
   }
