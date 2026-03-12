@@ -1,0 +1,41 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/questId.yaml
+
+put:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Quest
+    - Admin
+  summary: Reorder quest posts
+  description: |
+    Reorder all posts in a quest. The request body must contain the complete
+    list of existing post indexes in the desired new order. The backend
+    validates that the array contains exactly all existing post indexes
+    (no duplicates, no missing), then reassigns post_index values 0, 1, 2, ...
+    based on array order. Requires admin role.
+  operationId: reorderQuestPosts
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../components/schemas/QuestPostReorder.yaml
+    required: true
+  responses:
+    '200':
+      description: Posts reordered successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/Quest.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

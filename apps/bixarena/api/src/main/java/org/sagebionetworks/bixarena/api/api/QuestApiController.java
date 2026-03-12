@@ -2,6 +2,11 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.QuestContributorsDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestCreateOrUpdateDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestPostCreateOrUpdateDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestPostDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestPostReorderDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 
 

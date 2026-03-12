@@ -1,0 +1,33 @@
+post:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Quest
+    - Admin
+  summary: Create a quest
+  description: Create a new community quest. Requires admin role.
+  operationId: createQuest
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/QuestCreateOrUpdate.yaml
+    required: true
+  responses:
+    '201':
+      description: Quest created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Quest.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

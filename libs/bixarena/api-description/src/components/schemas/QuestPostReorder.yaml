@@ -1,0 +1,11 @@
+type: object
+description: Request body for reordering all posts in a quest
+properties:
+  postIndexes:
+    type: array
+    description: Complete ordered list of existing post indexes. The backend reassigns post_index values 0, 1, 2, ... based on array order.
+    items:
+      type: integer
+    example: [3, 0, 1, 2, 4]
+required:
+  - postIndexes

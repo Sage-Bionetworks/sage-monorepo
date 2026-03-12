@@ -65,8 +65,18 @@ paths:
     $ref: paths/models/{modelId}/errors.yaml
   /battles/{battleId}/evaluations:
     $ref: paths/battles/{battleId}/evaluations.yaml
+  /quests:
+    $ref: paths/quests.yaml
+  /quests/{questId}:
+    $ref: paths/quests/{questId}.yaml
   /quests/{questId}/contributors:
     $ref: paths/quests/{questId}/contributors.yaml
+  /quests/{questId}/posts:
+    $ref: paths/quests/{questId}/posts.yaml
+  /quests/{questId}/posts/{postIndex}:
+    $ref: paths/quests/{questId}/posts/{postIndex}.yaml
+  /quests/{questId}/posts/reorder:
+    $ref: paths/quests/{questId}/posts/reorder.yaml
   /stats:
     $ref: paths/stats.yaml
   /users/me/stats:

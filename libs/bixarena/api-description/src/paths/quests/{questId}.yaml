@@ -1,0 +1,89 @@
+parameters:
+  - $ref: ../../components/parameters/path/questId.yaml
+
+get:
+  x-anonymous-access: true
+  x-rate-limit-requests-per-minute: 100
+  tags:
+    - Quest
+  summary: Get a quest
+  description: |
+    Get the full quest configuration including metadata and published posts.
+    Post content (description, images) is filtered based on unlock gates:
+    - Posts before their publish date are excluded entirely.
+    - Posts whose progress or tier gate is not met return metadata only
+      (title, date, requiredTier, requiredProgress) with null description
+      and empty images.
+    When authenticated, the caller's contributor tier is resolved from their
+    battle count during the quest period.
+  operationId: getQuest
+  security: [] # Override global security to allow anonymous access
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Quest.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
+
+put:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Quest
+    - Admin
+  summary: Update a quest
+  description: Update quest metadata. Requires admin role.
+  operationId: updateQuest
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/QuestCreateOrUpdate.yaml
+    required: true
+  responses:
+    '200':
+      description: Quest updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Quest.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
+
+delete:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Quest
+    - Admin
+  summary: Delete a quest
+  description: Delete a quest and all its posts. Requires admin role.
+  operationId: deleteQuest
+  responses:
+    '204':
+      description: Quest deleted successfully
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

@@ -1,0 +1,52 @@
+type: object
+description: A community quest with its metadata and posts
+properties:
+  questId:
+    type: string
+    description: Unique identifier for the quest
+    example: 'build-bioarena-together'
+  title:
+    type: string
+    description: Quest display title
+    example: 'Build BioArena Together'
+  description:
+    type: string
+    description: Quest narrative description
+    example: 'Join forces to build an arena together...'
+  goal:
+    type: integer
+    description: Target total battle count for the quest
+    example: 2850
+  startDate:
+    type: string
+    format: date-time
+    description: Quest start date
+    example: '2026-02-01T00:00:00Z'
+  endDate:
+    type: string
+    format: date-time
+    description: Quest end date
+    example: '2026-04-30T23:59:59Z'
+  activePostIndex:
+    type: integer
+    description: Index of the post to expand by default in the UI
+    example: 4
+  totalBlocks:
+    type: integer
+    description: Current total number of completed battles during the quest period
+    example: 150
+  posts:
+    type: array
+    description: Quest posts ordered by post index
+    items:
+      $ref: QuestPost.yaml
+required:
+  - questId
+  - title
+  - description
+  - goal
+  - startDate
+  - endDate
+  - activePostIndex
+  - totalBlocks
+  - posts

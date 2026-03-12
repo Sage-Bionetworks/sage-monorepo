@@ -4,6 +4,14 @@ app:
       path: '/api/v1/battles/{battleId}'
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 30
+    - method: 'DELETE'
+      path: '/api/v1/quests/{questId}'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'DELETE'
+      path: '/api/v1/quests/{questId}/posts/{postIndex}'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
     - method: 'GET'
       path: '/.well-known/jwks.json'
       audience: 'urn:bixarena:auth'
@@ -52,6 +60,11 @@ app:
       rateLimitRequestsPerMinute: 100
     - method: 'GET'
       path: '/api/v1/models'
+      audience: 'urn:bixarena:api'
+      anonymousAccess: true
+      rateLimitRequestsPerMinute: 100
+    - method: 'GET'
+      path: '/api/v1/quests/{questId}'
       audience: 'urn:bixarena:api'
       anonymousAccess: true
       rateLimitRequestsPerMinute: 100
@@ -111,6 +124,14 @@ app:
       audience: 'urn:bixarena:api'
       rateLimitRequestsPerMinute: 60
     - method: 'POST'
+      path: '/api/v1/quests'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'POST'
+      path: '/api/v1/quests/{questId}/posts'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'POST'
       path: '/auth/logout'
       audience: 'urn:bixarena:auth'
       rateLimitRequestsPerMinute: 60
@@ -119,3 +140,15 @@ app:
       audience: 'urn:bixarena:auth'
       anonymousAccess: true
       rateLimitRequestsPerMinute: 60
+    - method: 'PUT'
+      path: '/api/v1/quests/{questId}'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'PUT'
+      path: '/api/v1/quests/{questId}/posts/reorder'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30
+    - method: 'PUT'
+      path: '/api/v1/quests/{questId}/posts/{postIndex}'
+      audience: 'urn:bixarena:api'
+      rateLimitRequestsPerMinute: 30

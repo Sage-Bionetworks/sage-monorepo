@@ -83,8 +83,13 @@ __all__ = [
     "PageMetadata",
     "PromptValidation",
     "PublicStats",
+    "Quest",
     "QuestContributor",
     "QuestContributors",
+    "QuestCreateOrUpdate",
+    "QuestPost",
+    "QuestPostCreateOrUpdate",
+    "QuestPostReorder",
     "RateLimitError",
     "SortDirection",
     "Token200Response",
@@ -232,11 +237,22 @@ from bixarena_api_client.models.prompt_validation import (
     PromptValidation as PromptValidation,
 )
 from bixarena_api_client.models.public_stats import PublicStats as PublicStats
+from bixarena_api_client.models.quest import Quest as Quest
 from bixarena_api_client.models.quest_contributor import (
     QuestContributor as QuestContributor,
 )
 from bixarena_api_client.models.quest_contributors import (
     QuestContributors as QuestContributors,
+)
+from bixarena_api_client.models.quest_create_or_update import (
+    QuestCreateOrUpdate as QuestCreateOrUpdate,
+)
+from bixarena_api_client.models.quest_post import QuestPost as QuestPost
+from bixarena_api_client.models.quest_post_create_or_update import (
+    QuestPostCreateOrUpdate as QuestPostCreateOrUpdate,
+)
+from bixarena_api_client.models.quest_post_reorder import (
+    QuestPostReorder as QuestPostReorder,
 )
 from bixarena_api_client.models.rate_limit_error import RateLimitError as RateLimitError
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection
