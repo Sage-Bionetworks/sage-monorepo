@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
@@ -56,13 +56,12 @@ export class AppComponent {
     this.configService.config.googleTagManagerId,
   );
 
-  dataVersion = rxResource({
-    stream: () =>
-      this.versionService
-        .getDataVersion$(this.dataVersionService)
-        .pipe(catchError(() => of('unknown'))),
-    defaultValue: 'loading...',
-  });
+  dataVersion = toSignal(
+    this.versionService
+      .getDataVersion$(this.dataVersionService)
+      .pipe(catchError(() => of('unknown'))),
+    { initialValue: 'loading...' },
+  );
 
   siteVersion = this.versionService.getSiteVersion(this.configService.config);
 
