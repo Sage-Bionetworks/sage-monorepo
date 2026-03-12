@@ -125,14 +125,18 @@ echo ""
 echo "This script will walk you through every quest API operation:"
 echo "  1.  Create a quest"
 echo "  2.  Update quest metadata"
-echo "  3.  Create three posts (public, progress-gated, tier-gated)"
-echo "  4.  Get the quest (anonymous — shows content gating)"
-echo "  5.  Get the quest (admin — shows gate bypass)"
-echo "  6.  Update a post"
-echo "  7.  Reorder posts"
-echo "  8.  Delete a post"
-echo "  9.  Get contributors (empty list expected)"
-echo "  10. Delete the quest (cleanup)"
+echo "  3.  Create Post 0 — public (no gates)"
+echo "  4.  Create Post 1 — progress-gated (requires 100 battles)"
+echo "  5.  Create Post 2 — tier-gated (requires knight tier)"
+echo "  6.  Get the quest (anonymous — shows content gating)"
+echo "  7.  Lower progress gate on Post 1 (requiredProgress 100 → 0)"
+echo "  8.  Re-fetch as anonymous (Post 1 now unlocked)"
+echo "  9.  Restore Post 1 gate (requiredProgress 0 → 100)"
+echo "  10. Get the quest (admin — shows gate bypass)"
+echo "  11. Reorder posts"
+echo "  12. Delete a post"
+echo "  13. Get contributors (empty list expected)"
+echo "  14. Delete the quest (cleanup)"
 echo ""
 pause
 
@@ -234,7 +238,52 @@ api_anon GET "/quests/${QUEST_ID}"
 
 pause
 
-# ── Step 5: Get the quest (admin — gate bypass) ─────────────────────────────
+# ── Unlock progress-gated post (3 sub-steps) ──────────────────────────────
+header "Lower the progress gate on Post 1 (requiredProgress 100 → 0)"
+echo "Post 1 requires 100 battles (totalBlocks) to unlock."
+echo "In production, totalBlocks increases as users complete battles."
+echo "Since we cannot simulate real battles in this demo, we lower the"
+echo "requiredProgress threshold to 0 to illustrate the unlock effect."
+echo ""
+
+api_admin PUT "/quests/${QUEST_ID}/posts/1" '{
+  "title": "Week 2: Walls Rising",
+  "description": "The outer walls are taking shape. Stone brick walls rise 10 blocks high around the perimeter.",
+  "date": "2026-03-14",
+  "images": [
+    "https://picsum.photos/seed/arena3/800/450"
+  ],
+  "requiredProgress": 0
+}'
+
+pause
+
+header "Re-fetch as anonymous — Post 1 should now show full content"
+echo "The progress gate has been lowered to 0, so Post 1 is now unlocked"
+echo "for everyone. Post 2 (tier-gated) remains locked."
+echo ""
+
+api_anon GET "/quests/${QUEST_ID}"
+
+pause
+
+header "Restore Post 1 gate (requiredProgress 0 → 100)"
+echo "Restoring the original gate for the remaining demo steps."
+echo ""
+
+api_admin PUT "/quests/${QUEST_ID}/posts/1" '{
+  "title": "Week 2: Walls Rising",
+  "description": "The outer walls are taking shape. Stone brick walls rise 10 blocks high around the perimeter.",
+  "date": "2026-03-14",
+  "images": [
+    "https://picsum.photos/seed/arena3/800/450"
+  ],
+  "requiredProgress": 100
+}'
+
+pause
+
+# ── Step 6: Get the quest (admin — gate bypass) ─────────────────────────────
 header "Get the quest (admin view — all gates bypassed)"
 echo "Fetching the same quest as an admin. All three posts should now have"
 echo "full content (description and images) regardless of unlock requirements."
@@ -244,24 +293,7 @@ api_admin GET "/quests/${QUEST_ID}"
 
 pause
 
-# ── Step 6: Update a post ────────────────────────────────────────────────────
-header "Update Post 1 — Change title and lower the progress gate"
-echo "Updating post at index 1: new title and lowering requiredProgress from 100 to 50."
-echo ""
-
-api_admin PUT "/quests/${QUEST_ID}/posts/1" '{
-  "title": "Week 2: Walls Rising (Updated)",
-  "description": "The outer walls are taking shape. Stone brick walls rise 10 blocks high around the perimeter.",
-  "date": "2026-03-14",
-  "images": [
-    "https://picsum.photos/seed/arena3/800/450"
-  ],
-  "requiredProgress": 50
-}'
-
-pause
-
-# ── Step 7: Reorder posts ────────────────────────────────────────────────────
+# ── Reorder posts ────────────────────────────────────────────────────
 header "Reorder posts — Reverse the order"
 echo "Current order: [0, 1, 2] → New order: [2, 1, 0]"
 echo "Post 2 (Secret Chamber) becomes index 0, Post 0 (Foundation) becomes index 2."
@@ -279,7 +311,7 @@ api_admin GET "/quests/${QUEST_ID}"
 
 pause
 
-# ── Step 8: Delete a post ────────────────────────────────────────────────────
+# ── Step 9: Delete a post ────────────────────────────────────────────────────
 header "Delete Post at index 1"
 echo "Removing the middle post (originally 'Walls Rising')."
 echo "Note: Remaining post indexes are NOT automatically reindexed."
@@ -294,7 +326,7 @@ api_admin GET "/quests/${QUEST_ID}"
 
 pause
 
-# ── Step 9: Get contributors ─────────────────────────────────────────────────
+# ── Step 10: Get contributors ────────────────────────────────────────────────
 header "List quest contributors"
 echo "Fetching contributors for this demo quest."
 echo "Expected: empty list (no battles have been completed for this quest)."
@@ -304,7 +336,7 @@ api_anon GET "/quests/${QUEST_ID}/contributors?minBattles=1&limit=10"
 
 pause
 
-# ── Step 10: Cleanup — Delete the quest ──────────────────────────────────────
+# ── Step 11: Cleanup — Delete the quest ──────────────────────────────────────
 header "Delete the quest (cleanup)"
 echo "Removing the demo quest and all its posts from the database."
 echo ""
