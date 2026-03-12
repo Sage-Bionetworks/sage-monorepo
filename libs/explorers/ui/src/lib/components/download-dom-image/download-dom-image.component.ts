@@ -61,13 +61,14 @@ export class DownloadDomImageComponent {
 
     window.getComputedStyle = (elt: Element, pseudo?: string | null): CSSStyleDeclaration => {
       const style = original(elt, pseudo);
-      // Wrap the result in a Proxy so that when html-to-image reads style.length
-      // or style[0], style[1], ... to enumerate property names, --vars are invisible.
+      // Wrap in a Proxy to make --vars invisible to html-to-image:
+      // - style.length returns only the count of non-custom properties
+      // - style[0], style[1], ... skip over --vars so html-to-image never sees them
       return new Proxy(style, {
         get(target, prop) {
           const allProps = target as CSSStyleDeclaration;
 
-          // style.length: return count of non-custom properties only
+          // style.length — return how many non-custom properties there are
           if (prop === 'length') {
             let count = 0;
             for (let i = 0; i < allProps.length; i++) {
