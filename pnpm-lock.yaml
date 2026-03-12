@@ -179,9 +179,6 @@ importers:
       normalize.css:
         specifier: 8.0.1
         version: 8.0.1
-      p-limit:
-        specifier: ^3.1.0
-        version: 3.1.0
       primeng:
         specifier: 20.4.0
         version: 20.4.0(18bfed6a870968de8d6d53a87eef0e78)
