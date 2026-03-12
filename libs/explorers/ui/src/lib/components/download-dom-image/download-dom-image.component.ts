@@ -33,53 +33,71 @@ export class DownloadDomImageComponent {
     const paddingPx = this.downloadImagePaddingPx() ?? 0;
     const t0 = performance.now();
 
-    // Monkey-patch getComputedStyle to skip CSS custom properties (--foo vars).
-    // Chrome 138+ started enumerating all custom properties in getComputedStyle,
-    // causing O(nodes × variables) overhead that makes html-to-image very slow.
-    const originalGetComputedStyle = window.getComputedStyle.bind(window);
+    const restore = this.patchGetComputedStyleToSkipCSSVars();
+
+    const blob = await toBlob(target, {
+      backgroundColor: '#fff',
+      width: target.offsetWidth + paddingPx * 2,
+      height: target.offsetHeight + paddingPx * 2,
+      skipFonts: true, // skip fetching/embedding @font-face files
+      ...(paddingPx > 0 && { style: { padding: `${paddingPx}px` } }),
+    });
+
+    restore();
+
+    console.log(
+      `[benchmark][skipCSSVars] image rendered in ${(performance.now() - t0).toFixed(0)}ms`,
+    );
+    if (blob) saveAs(blob, this.filename() + fileType);
+  };
+
+  /**
+   * Patches getComputedStyle to hide CSS custom properties (--vars) from html-to-image,
+   * reducing the number of properties copied per node during serialization.
+   * Returns a restore function to undo the patch after capture.
+   */
+  private readonly patchGetComputedStyleToSkipCSSVars = (): (() => void) => {
+    const original = window.getComputedStyle.bind(window);
+
     window.getComputedStyle = (elt: Element, pseudo?: string | null): CSSStyleDeclaration => {
-      const style = originalGetComputedStyle(elt, pseudo);
+      const style = original(elt, pseudo);
+      // Wrap the result in a Proxy so that when html-to-image reads style.length
+      // or style[0], style[1], ... to enumerate property names, --vars are invisible.
       return new Proxy(style, {
         get(target, prop) {
+          const allProps = target as CSSStyleDeclaration;
+
+          // style.length: return count of non-custom properties only
           if (prop === 'length') {
             let count = 0;
-            for (let i = 0; i < (target as CSSStyleDeclaration).length; i++) {
-              if (!(target as CSSStyleDeclaration)[i].startsWith('--')) count++;
+            for (let i = 0; i < allProps.length; i++) {
+              if (!allProps[i].startsWith('--')) count++;
             }
             return count;
           }
+
+          // style[0], style[1], ...: remap indices to skip --vars
           if (typeof prop === 'string' && !isNaN(Number(prop))) {
-            // Remap numeric index to skip -- properties
             let count = 0;
-            for (let i = 0; i < (target as CSSStyleDeclaration).length; i++) {
-              const name = (target as CSSStyleDeclaration)[i];
-              if (!name.startsWith('--')) {
-                if (count === Number(prop)) return name;
+            for (let i = 0; i < allProps.length; i++) {
+              if (!allProps[i].startsWith('--')) {
+                if (count === Number(prop)) return allProps[i];
                 count++;
               }
             }
             return undefined;
           }
+
+          // All other accesses (e.g. style.color, style.getPropertyValue) pass through
           const value = (target as unknown as Record<string | symbol, unknown>)[prop];
           return typeof value === 'function' ? value.bind(target) : value;
         },
       });
     };
 
-    const blob = await toBlob(target, {
-      backgroundColor: '#fff',
-      width: target.offsetWidth + paddingPx * 2,
-      height: target.offsetHeight + paddingPx * 2,
-      skipFonts: true,
-      ...(paddingPx > 0 && { style: { padding: `${paddingPx}px` } }),
-    });
-
-    window.getComputedStyle = originalGetComputedStyle;
-
-    console.log(
-      `[benchmark][skipCSSVars] image rendered in ${(performance.now() - t0).toFixed(0)}ms`,
-    );
-    if (blob) saveAs(blob, this.filename() + fileType);
+    return () => {
+      window.getComputedStyle = original;
+    };
   };
 
   downloadCsvData = async (fileType: string): Promise<void> => {
