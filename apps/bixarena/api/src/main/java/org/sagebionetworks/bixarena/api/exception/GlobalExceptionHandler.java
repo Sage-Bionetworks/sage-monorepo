@@ -96,6 +96,34 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
+  @ExceptionHandler(QuestPostNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleQuestPostNotFoundException(
+    QuestPostNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Quest Post Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(DuplicateQuestException.class)
+  protected ResponseEntity<BasicErrorDto> handleDuplicateQuestException(
+    DuplicateQuestException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(
+      BasicErrorDto.builder()
+        .title("Duplicate Quest")
+        .status(HttpStatus.CONFLICT.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
   @ExceptionHandler(DuplicateBattleEvaluationException.class)
   protected ResponseEntity<BasicErrorDto> handleDuplicateBattleEvaluation(
     DuplicateBattleEvaluationException ex,
@@ -105,6 +133,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       BasicErrorDto.builder()
         .title("Duplicate Battle Evaluation")
         .status(HttpStatus.CONFLICT.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  protected ResponseEntity<BasicErrorDto> handleIllegalArgumentException(
+    IllegalArgumentException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+      BasicErrorDto.builder()
+        .title("Bad Request")
+        .status(HttpStatus.BAD_REQUEST.value())
         .detail(ex.getMessage())
         .build()
     );

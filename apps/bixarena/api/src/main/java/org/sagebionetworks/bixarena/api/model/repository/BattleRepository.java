@@ -126,6 +126,47 @@ public interface BattleRepository
   Long findUserRankByCompletedBattles(@Param("userId") UUID userId);
 
   /**
+   * Count completed battles within a date range.
+   *
+   * @param startDate range start (inclusive)
+   * @param endDate range end (exclusive)
+   * @return total completed battles in the range
+   */
+  @Query(
+    value =
+      "SELECT COUNT(b.id) FROM api.battle b " +
+      "WHERE b.ended_at IS NOT NULL " +
+      "AND b.ended_at >= :startDate " +
+      "AND b.ended_at < :endDate",
+    nativeQuery = true
+  )
+  Long countCompletedByDateRange(
+      @Param("startDate") OffsetDateTime startDate,
+      @Param("endDate") OffsetDateTime endDate);
+
+  /**
+   * Count completed battles by a specific user within a date range.
+   *
+   * @param userId the user's UUID
+   * @param startDate range start (inclusive)
+   * @param endDate range end (exclusive)
+   * @return completed battles by the user in the range
+   */
+  @Query(
+    value =
+      "SELECT COUNT(b.id) FROM api.battle b " +
+      "WHERE b.user_id = :userId " +
+      "AND b.ended_at IS NOT NULL " +
+      "AND b.ended_at >= :startDate " +
+      "AND b.ended_at < :endDate",
+    nativeQuery = true
+  )
+  Long countCompletedByUserIdAndDateRange(
+      @Param("userId") UUID userId,
+      @Param("startDate") OffsetDateTime startDate,
+      @Param("endDate") OffsetDateTime endDate);
+
+  /**
    * Find contributors to a quest by counting their completed battles within a date range.
    * Returns username and battle count, ordered by battle count descending, then username ascending.
    * Uses native query for better performance with GROUP BY and JOIN to auth.user.

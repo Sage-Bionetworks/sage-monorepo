@@ -23,8 +23,11 @@
 -- ============================================================================
 -- Insert Mock Quest
 -- ============================================================================
-INSERT INTO api.quest (id, quest_id, start_date, end_date, created_at, updated_at) VALUES
-  (1, 'build-bioarena-together', '2026-02-01 00:00:00+00', '2026-04-30 23:59:59+00', now(), now());
+INSERT INTO api.quest (id, quest_id, start_date, end_date, title, description, goal, active_post_index, created_at, updated_at) VALUES
+  (1, 'build-bioarena-together', '2026-02-01 00:00:00+00', '2026-04-30 23:59:59+00',
+   'Build BioArena Together',
+   'Join forces with fellow scientists to build the ultimate biomedical AI arena. Every battle you complete adds a block to our shared quest!',
+   2850, 0, now(), now());
 
 
 -- ============================================================================
