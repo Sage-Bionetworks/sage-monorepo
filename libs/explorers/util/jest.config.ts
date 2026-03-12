@@ -15,9 +15,7 @@ export default {
     ],
   },
   testEnvironment: 'jest-fixed-jsdom',
-  transformIgnorePatterns: [
-    'node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|until-async|@octokit/.*|universal-user-agent|before-after-hook))',
-  ],
+  transformIgnorePatterns: ['node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|until-async))'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',
