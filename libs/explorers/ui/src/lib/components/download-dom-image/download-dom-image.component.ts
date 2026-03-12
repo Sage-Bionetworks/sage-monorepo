@@ -31,21 +31,22 @@ export class DownloadDomImageComponent {
   downloadImage = async (fileType: string): Promise<void> => {
     const target = this.target();
     const paddingPx = this.downloadImagePaddingPx() ?? 0;
-    const t0 = performance.now();
 
     const restore = this.patchGetComputedStyleToSkipCSSVars();
 
-    const blob = await toBlob(target, {
-      backgroundColor: '#fff',
-      width: target.offsetWidth + paddingPx * 2,
-      height: target.offsetHeight + paddingPx * 2,
-      skipFonts: true, // skip fetching/embedding @font-face files
-      ...(paddingPx > 0 && { style: { padding: `${paddingPx}px` } }),
-    });
+    let blob: Blob | null;
+    try {
+      blob = await toBlob(target, {
+        backgroundColor: '#fff',
+        width: target.offsetWidth + paddingPx * 2,
+        height: target.offsetHeight + paddingPx * 2,
+        skipFonts: true, // skip fetching/embedding @font-face files
+        ...(paddingPx > 0 && { style: { padding: `${paddingPx}px` } }),
+      });
+    } finally {
+      restore();
+    }
 
-    restore();
-
-    console.log(`Image download took ${(performance.now() - t0).toFixed(0)}ms`);
     if (blob) saveAs(blob, this.filename() + fileType);
   };
 
