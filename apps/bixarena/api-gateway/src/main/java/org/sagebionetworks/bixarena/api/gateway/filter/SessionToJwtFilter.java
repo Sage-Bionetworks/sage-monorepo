@@ -51,17 +51,9 @@ public class SessionToJwtFilter implements WebFilter {
 
     log.debug("Processing request: {} {}", method, path);
 
-    // Step 1: Check if route allows anonymous access
-    if (routeConfigRegistry.isAnonymousAccessAllowed(method, path)) {
-      log.debug("Anonymous access allowed for: {} {}", method, path);
-      var anonymousAuth = new UsernamePasswordAuthenticationToken(
-        "anonymous", null, List.of()
-      );
-      return chain.filter(exchange)
-        .contextWrite(ReactiveSecurityContextHolder.withAuthentication(anonymousAuth));
-    }
+    boolean anonymousAllowed = routeConfigRegistry.isAnonymousAccessAllowed(method, path);
 
-    // Step 2: Check if request already has a Bearer token
+    // Step 1: Check if request already has a Bearer token
     // (e.g., from server-side clients like Gradio app)
     String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -69,9 +61,18 @@ public class SessionToJwtFilter implements WebFilter {
       return chain.filter(exchange);
     }
 
-    // Step 3: Extract session cookie for browser requests
+    // Step 2: Extract session cookie for browser requests
     String sessionId = extractSessionCookie(exchange);
     if (sessionId == null) {
+      if (anonymousAllowed) {
+        // No credentials but route allows anonymous access — proceed without identity
+        log.debug("Anonymous access (no credentials) for: {} {}", method, path);
+        var anonymousAuth = new UsernamePasswordAuthenticationToken(
+          "anonymous", null, List.of()
+        );
+        return chain.filter(exchange)
+          .contextWrite(ReactiveSecurityContextHolder.withAuthentication(anonymousAuth));
+      }
       log.debug("No Bearer token or session cookie found for: {} {}", method, path);
       return unauthorized(exchange, "Authentication required");
     }
@@ -115,7 +116,20 @@ public class SessionToJwtFilter implements WebFilter {
           return chain.filter(exchange.mutate().request(mutated).build())
             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(userAuth));
         }))
-      .onErrorResume(e -> handleAuthError(exchange, e, method, path));
+      .onErrorResume(e -> {
+        // If the route allows anonymous access and auth failed (e.g., expired session),
+        // fall back to anonymous instead of returning 401
+        if (anonymousAllowed) {
+          log.debug("Auth failed for anonymous-allowed route {} {}, falling back to anonymous: {}",
+            method, path, e.getMessage());
+          var anonymousAuth = new UsernamePasswordAuthenticationToken(
+            "anonymous", null, List.of()
+          );
+          return chain.filter(exchange)
+            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(anonymousAuth));
+        }
+        return handleAuthError(exchange, e, method, path);
+      });
   }
 
   /**
