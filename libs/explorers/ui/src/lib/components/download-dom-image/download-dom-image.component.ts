@@ -45,9 +45,7 @@ export class DownloadDomImageComponent {
 
     restore();
 
-    console.log(
-      `[benchmark][skipCSSVars] image rendered in ${(performance.now() - t0).toFixed(0)}ms`,
-    );
+    console.log(`Image download took ${(performance.now() - t0).toFixed(0)}ms`);
     if (blob) saveAs(blob, this.filename() + fileType);
   };
 
