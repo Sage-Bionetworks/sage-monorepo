@@ -135,7 +135,7 @@ importers:
         specifier: 11.0.0
         version: 11.0.0
       html-to-image:
-        specifier: ^1.11.13
+        specifier: 1.11.13
         version: 1.11.13
       js-yaml:
         specifier: 4.1.0
