@@ -34,29 +34,20 @@ def _get_default_progress_data() -> dict:
     Returns:
         Dictionary with current_blocks, goal_blocks, percentage, days_remaining
     """
-    end_date = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
-    days_remaining = max(0, (end_date - datetime.now()).days)
     return {
         "current_blocks": 0,
-        "goal_blocks": QUEST_CONFIG["goal"],
+        "goal_blocks": 0,
         "percentage": 0.0,
-        "days_remaining": days_remaining,
+        "days_remaining": 0,
     }
 
 
-# Quest configuration - hardcoded for Season 1
-QUEST_CONFIG = {
-    "quest_id": "build-bioarena-together",  # Quest ID for API calls
-    "title": "Build BioArena Together",
-    "description": "We are constructing a medieval arena in Minecraft to symbolize our collective effort. Every battle counts towards the build.",
-    "goal": 2850,
-    "start_date": "2026-02-01",
-    "end_date": "2026-04-30",
+# Local UI configuration — fields not managed by the API
+QUEST_UI_CONFIG = {
+    "quest_id": "build-bioarena-together",
     "conversion_text": "1 Battle = 1 Block",
     "conversion_description": "Every time you evaluate a model, you earn a block that will be placed by the BioArena team in Minecraft.",
     "carousel_rotation_interval": 6000,  # Duration in milliseconds for each image
-    # Index of update to show expanded by default (0 = newest, -1 or None = latest)
-    "active_update_index": 1,
     "minecraft_arena_designer": {
         "name": "NeatCraft",
         "url": "https://www.youtube.com/@Neatcraft",
@@ -65,162 +56,6 @@ QUEST_CONFIG = {
         "name": "Thomas Schaffter",
         "url": "https://www.linkedin.com/in/tschaffter",
     },
-    "updates": [
-        # Updates are displayed in chronological order (newest first)
-        {
-            "date": "",
-            "title": "\u2694\ufe0f The Knight\u2019s Codex \u2014 Folio 1: The Gate Between Worlds",
-            "description": (
-                "This chapter of the Knight\u2019s Codex is reserved for those who have earned the Knight contribution tier. It will be unveiled soon.\n\n"
-                "Beneath the hill, something stirs. There is more to this world than the arena walls let on. While the arena rises stone by stone, quieter preparations are underway. Preparations that will take us somewhere far beyond these familiar grounds. Not all discoveries made in the deep were meant for open daylight. The Nether does not welcome the unprepared."
-            ),
-            "images": [],
-        },
-        {
-            "date": "2026-03-09",
-            "title": "Chapter 4: The Shape of Things",
-            "description": (
-                "Othocar arrived without fanfare, as old friends tend to do.\n\n"
-                "I had known him for years, a man who had spent his life studying the shape of the world before finding his calling among books and shelves. He brought with him something I had not thought to gather: paper. Enough of it to be useful, and a cartographer\u2019s instinct for what to do with it.\n\n"
-                "We began at the arena, mid-morning, when the sun had climbed just high enough to fill the site with clean, flat light. Birds called from the trees beyond the wall as we set block after block into place. The inner wall completed its second layer and began its third. At some point I slowed without quite meaning to. The outline of a door frame had appeared at the arena\u2019s edge, rough and undecorated, but unmistakably there. A wall tells you where something ends. A door tells you where something begins. Othocar kept laying blocks without breaking his rhythm, and I reached for another stone.\n\n"
-                "With the wall work done for the morning, Othocar spread his paper on the crafting table. Compass met paper, and the first empty maps took shape in our hands. He explained how each one would fill itself in as we walked, revealing the land within a hundred and twenty-eight blocks in each direction. To chart the full area around the arena, we would need to move through it section by section, letting the world write itself onto the page.\n\n"
-                "We checked our packs before setting out. Empty maps, tools, a stack of wooden planks for bridging water too wide to cross on foot. Othocar tested the weight of his pack and nodded. We left as the morning was still warm.\n\n"
-                "The world unfolded as we walked. We traced the water\u2019s edge, moved through the trees, and crossed the western slope where a pillager outpost rose against the snowy mountain, cold and watchful beneath the bright sky. The contrast was sharp: warm sun on our backs, and that grey tower ahead, indifferent to the weather. To the south, the Sunpetal Expanse shimmered in the midday light, its cherry blossoms catching the sun like scattered embers.\n\n"
-                "Back at the arena, we mounted the finished tiles inside frames along the wall, arranging them into a single large piece. We looked at it for a moment before Othocar suggested a name and I agreed immediately. The Grand Map. For the first time, this place had a shape beyond what the eye could see from any single point.\n\n"
-                "It was while studying the Grand Map that something caught my eye.\n\n"
-                "To the north, half-hidden among cherry trees, sat a structure I had walked past without noticing. The map had seen it when we had not. Broken obsidian frames with scattered puddles of lava, the edges rimmed with the deep violet glow of crying obsidian. A ruined portal, the remnant of a gateway to the Nether, a dimension of fire and ash that holds things the Overworld cannot offer. Glowstone, which burns with a warm and ornate light we have sorely lacked. Nether quartz, useful for the mechanisms and comforts we have yet to build. And other things still, whose value will become clear in time.\n\n"
-                "Othocar said nothing when he saw where my eyes had landed. He had explored the Nether with me before, and he knew what I was already thinking."
-            ),
-            "images": [
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-1.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-2.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-3.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-4.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-5.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-6.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-7.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-8.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-9.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-4/minecraft-arena-chapter-4-10.jpg",
-            ],
-        },
-        {
-            "date": "2026-03-02",
-            "title": "Chapter 3: Embers and Earth",
-            "description": (
-                "Twenty-four new blocks had arrived, carried here by the same quiet dedication that has driven this work from the start. I set them into the inner wall one by one, and watched the structure climb a little higher. More imposing now. More like something that meant it.\n\n"
-                "The arena would need more than stone to become what I imagined.\n\n"
-                "I descended into the earth.\n\n"
-                "The caves beneath the hill opened generously. Coal ran through the rock in dark veins, copper glinted green, iron jutted from the walls in steady clusters. Further in, gold burned warm against the cold stone. Deep red veins of redstone threaded through the rock too, a vital find for the machines and mechanisms the arena would one day require. And deeper still, the unmistakable pale glint of diamonds.\n\n"
-                "I climbed back toward the light with full pockets and a good feeling about the days ahead.\n\n"
-                "On the south side of the arena, I cleared a patch of ground, releasing a bucket of water across the surface to sweep away the grass and wildflowers in one clean pass. In the open space that remained, I built a small automatic smelting station: a blast furnace at its heart, a chest on the side holding coal for fuel, a hopper feeding raw ore down from above, and another below carrying finished metals into a waiting chest. Once loaded, it ran on its own. There is something quietly satisfying about a machine that works without being watched.\n\n"
-                "As the afternoon light softened over the hill, I took the boat out onto the surrounding water. The fishing was unhurried and peaceful. Salmon came easily, and among the catch surfaced a name tag, still perfectly intact.\n\n"
-                "I did not yet know who it was for.\n\n"
-                "That answer came later, when a black cat appeared at the edge of the cleared ground, drawn by the scent of fish at my belt. I set a piece down. The cat ate, then sat and regarded me with the calm of a creature that had already made up its mind. I took the name tag to the anvil and inscribed it: Dvoelkl. It had the feeling of someone who shows up, does the work, and asks for nothing in return. I fastened the tag, and a red collar appeared around its neck, as though the world itself had decided to make it official.\n\n"
-                "The wall is rising. The furnace is running. And it seems I have company now.\n\n"
-                "Before long, I expect a visitor. Someone who reads landscapes the way I read stone. For the first time, this place may find itself on a map."
-            ),
-            "images": [
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-1.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-2.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-3.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-4.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-5.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-6.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/chapter-3/minecraft-arena-chapter-3-7.jpg",
-            ],
-        },
-        {
-            "date": "2026-02-20",
-            "title": "Chapter 2: Shadows Over Stone",
-            "description": (
-                "At first light, I stood above the village, standing atop the old church tower as the wind rolled in from the surrounding waters. Our hill rose like a crown from the sea, protected on all sides by water save for the western stretch where the land sloped down to meet the greater continent beyond. It was a natural fortress, a fitting cradle for an arena meant to test champions.\n\n"
-                "Below me, the village stirred to life.\n\n"
-                "Earlier, I had wandered its narrow paths, stepping into quiet houses still scented with wood and bread. In one corner, I discovered a brewing stand, its glass bottles empty but full of promise. With the right ingredients, it could yield draughts of strength, swiftness, even potions to breathe beneath the waves that encircle our hill.\n\n"
-                "Beyond the village, to the south, stretched something extraordinary.\n\n"
-                "In the distance shimmered a forest of cherry trees, their pale blossoms glowing whenever the sun brushed their crowns. Even from the tower, I could almost see petals drifting like slow-falling embers of light. I have decided to call it the Sunpetal Expanse, a place I will explore once the arena's inner wall stands complete.\n\n"
-                "As I stood there, watching the Sunpetal Expanse blaze softly in the morning light, I felt it. The faint but undeniable sense that I was not alone in my vigil.\n\n"
-                "The feeling passed as quickly as it came.\n\n"
-                "New blocks had arrived since the last count, forty contributions carried into this world through shared effort. I descended from the tower and made my way to the site.\n\n"
-                "Stone met stone in steady rhythm. With these additions, the full perimeter of the inner wall now stood one block high, complete. It felt significant, seeing the arena's heart fully outlined at last. Without pause, I began raising sections to a second block. Already, the difference was tangible. Two blocks high, and most wandering creatures would think twice before crossing into the arena's bounds.\n\n"
-                "Progress is a powerful thing. It makes one bold.\n\n"
-                "Too bold, perhaps.\n\n"
-                "I worked longer than I intended. By the time I stepped back to admire the rising wall, dusk had crept across the sky and drained the color from the world. Shadows pooled in the spaces I had neglected, the unwatched corners, the unlit stretches of ground.\n\n"
-                "In my eagerness to build, I had failed to secure the site with proper lighting.\n\n"
-                "Night answered swiftly.\n\n"
-                "A groan echoed between the houses. Then another. Shapes emerged at the village's edge, shambling figures and the sharp silhouettes of archers drawing unseen bows. I ran to the square, sword in hand, where the iron golem already stood braced for impact.\n\n"
-                "Steel flashed. The first zombie fell beneath my blade. I struck the village bell beside the fountain, its urgent toll rolling through the streets, a warning for every villager to seek shelter indoors.\n\n"
-                "Arrows hissed through the dark. The golem moved with heavy, resolute force, sending skeletons scattering into bone and silence. Together we pressed outward, driving back the intruders before they could reach the livestock pens or batter down wooden doors.\n\n"
-                "Only when the square fell quiet did I notice movement near the arena.\n\n"
-                "A lone creeper had slipped inside the unfinished wall.\n\n"
-                "The golem and I rushed toward it as the creature advanced with dreadful intent. Its body began to tremble, swelling with volatile energy, a rising hiss escaping from within as though the very air around it were being devoured. It was not rage that drove it, but inevitability, a creature built for a single catastrophic purpose.\n\n"
-                "The golem lunged.\n\n"
-                "The impact came at the same instant as the detonation. A violent burst of force rippled across the arena floor, scattering fragments of stone and earth. When the smoke cleared, the creeper was gone, replaced by a shallow crater torn into the very center of our work.\n\n"
-                "The wall still stood.\n\n"
-                "By the time the last shadows retreated, dawn had broken across the hilltop. The rising sun burned away any lingering threats beyond the village, leaving only drifting ash where night's creatures once stood.\n\n"
-                "Only then did I kneel at the heart of the arena and fill the wound with fresh dirt. In time, grass would reclaim it, and little evidence of the blast would remain. But I would remember. Even the strongest walls demand foresight. Light will come, in its proper time. For now, the stones must continue to rise.\n\n"
-                "I stood once more in the center of the arena, the inner wall catching the morning light. Two blocks high in places. One block elsewhere. Incomplete but rising.\n\n"
-                "Again, that feeling returned. A quiet awareness at the edge of perception. As though unseen eyes measured each stone, each decision.\n\n"
-                "I shook it off and turned toward the village.\n\n"
-                "There will be time to wonder later. For now, there is breakfast to share, walls to raise, and many days still ahead.\n\n"
-                "The arena grows."
-            ),
-            "images": [
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-1.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-2.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-3.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-4.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-5.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-6.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-7.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-2/minecraft-arena-update-2-final-8.jpg",
-            ],
-        },
-        {
-            "date": "2026-02-13",
-            "title": "Chapter 1: Laying the First Stones",
-            "description": (
-                "I arrived at the edge of the village just as the morning light touched the snowy mountain and the waterfall beyond it. A quiet stretch of land lay waiting beside the houses. Even the bees seemed curious, circling lazily over the grass where something new was about to rise.\n\n"
-                "An iron golem stood nearby, steady and watchful. One by one, the first contributions had made their way here, carried from afar by unseen hands and tireless golems. Soon, a small stack of cobblestone rested between the village houses. Thirty-eight blocks in total, each one sent by someone who believed this arena should exist.\n\n"
-                "I stepped forward and set the first stone into the ground. Then another. The outline of the inner wall began to take shape. One day it will stand three blocks high, enclosing the heart of the arena. For now, it rises only a single block in most places, incomplete and waiting for more stone to continue its climb.\n\n"
-                "When I stepped back, the foundation was modest but real. What began as a shared effort had taken solid form in stone, now part of the world itself.\n\n"
-                "And this is only the beginning."
-            ),
-            "images": [
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-1.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-2.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-3.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-4.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-5.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/update-1/minecraft-arena-update-1-6.jpg",
-            ],
-        },
-        {
-            "date": "2026-02-03",
-            "title": "Launch: Build BioArena Together",
-            "description": (
-                "Welcome to our Community Quest! AI is evolving fast. The best "
-                "model today might be overtaken tomorrow. That's why we're "
-                "building BioArena: a living leaderboard powered by researchers "
-                "like you, continuously identifying the top AI models across "
-                "biomedical topics. To celebrate this launch and the community "
-                "we're building together, we're constructing a medieval arena in "
-                "Minecraft, block by block, battle by battle. Starting today from "
-                "0 blocks, every evaluation you complete adds another stone to our "
-                "foundation. The screenshots above offer a glimpse into the future "
-                "arena we'll build together. We'll share progress updates every "
-                "week with new screenshots showing how far we've come. "
-                "Let's build something legendary!"
-            ),
-            "images": [
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-1.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-2.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-3.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-4.jpg",
-                "https://raw.githubusercontent.com/tschaffter/sage-monorepo/refs/heads/feat/bixarena/arena-demo-screenshots/apps/bixarena/images/minecraft-arena-demo-5.jpg",
-            ],
-        },
-    ],
 }
 
 
@@ -258,7 +93,7 @@ def build_quest_not_found_section() -> tuple[
                 </h2>
                 <p style="color: var(--body-text-color-subdued); font-size: 1rem;
                          margin: 0; line-height: 1.6;">
-                    The configured quest "<strong>{QUEST_CONFIG["quest_id"]}</strong>" doesn't exist in the database.
+                    The configured quest "<strong>{QUEST_UI_CONFIG["quest_id"]}</strong>" doesn't exist in the database.
                 </p>
             </div>
         </div>
@@ -472,10 +307,10 @@ def _build_progress_html(
                 </div>
                 <div style="flex: 1;">
                     <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
-                        {QUEST_CONFIG["conversion_text"]}
+                        {QUEST_UI_CONFIG["conversion_text"]}
                     </h4>
                     <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
-                        {QUEST_CONFIG["conversion_description"]}
+                        {QUEST_UI_CONFIG["conversion_description"]}
                     </p>
                 </div>
             </div>
@@ -548,16 +383,16 @@ def _build_builders_credits_html(
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
                     <span style="color: var(--body-text-color-subdued);">Minecraft Arena Designer:</span>
-                    <a href="{QUEST_CONFIG["minecraft_arena_designer"]["url"]}"
+                    <a href="{QUEST_UI_CONFIG["minecraft_arena_designer"]["url"]}"
                        style="color: #3b82f6; text-decoration: none;">
-                       {QUEST_CONFIG["minecraft_arena_designer"]["name"]}
+                       {QUEST_UI_CONFIG["minecraft_arena_designer"]["name"]}
                     </a>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
                     <span style="color: var(--body-text-color-subdued);">Quest Architect:</span>
-                    <a href="{QUEST_CONFIG["quest_architect"]["url"]}"
+                    <a href="{QUEST_UI_CONFIG["quest_architect"]["url"]}"
                        style="color: #3b82f6; text-decoration: none;">
-                       {QUEST_CONFIG["quest_architect"]["name"]}
+                       {QUEST_UI_CONFIG["quest_architect"]["name"]}
                     </a>
                 </div>
             </div>
@@ -640,25 +475,25 @@ def _build_builders_credits_html(
             <div style="font-size: 0.875rem;
                         color: var(--body-text-color-subdued);">
                 <span>Minecraft Arena Designer: </span>
-                <a href="{QUEST_CONFIG["minecraft_arena_designer"]["url"]}"
+                <a href="{QUEST_UI_CONFIG["minecraft_arena_designer"]["url"]}"
                    target="_blank"
                    rel="noopener noreferrer"
                    class="credit-link"
                    style="color: var(--color-accent);
                           text-decoration: none; font-weight: 500;">
-                    {QUEST_CONFIG["minecraft_arena_designer"]["name"]}
+                    {QUEST_UI_CONFIG["minecraft_arena_designer"]["name"]}
                 </a>
             </div>
             <div style="font-size: 0.875rem;
                         color: var(--body-text-color-subdued);">
                 <span>Quest Architect: </span>
-                <a href="{QUEST_CONFIG["quest_architect"]["url"]}"
+                <a href="{QUEST_UI_CONFIG["quest_architect"]["url"]}"
                    target="_blank"
                    rel="noopener noreferrer"
                    class="credit-link"
                    style="color: var(--color-accent);
                           text-decoration: none; font-weight: 500;">
-                    {QUEST_CONFIG["quest_architect"]["name"]}
+                    {QUEST_UI_CONFIG["quest_architect"]["name"]}
                 </a>
             </div>
             <!-- Copyright -->
@@ -671,19 +506,30 @@ def _build_builders_credits_html(
     """
 
 
-def _build_carousel_html(carousel_id: str) -> str:
+def _build_carousel_html(
+    carousel_id: str,
+    posts: list[dict] | None = None,
+    active_post_index: int | None = None,
+) -> str:
     """Build the carousel HTML for quest images.
 
     Args:
         carousel_id: Unique ID for this carousel instance
+        posts: List of post dicts from the API (each with title, date, description, images, locked)
+        active_post_index: Index of the currently active post (expanded by default)
 
     Returns:
         HTML string for the carousel with images and controls
     """
-    # Get the updates and determine which one should be active by default
-    updates = QUEST_CONFIG.get("updates", [])
+    # Filter to unlocked posts only (locked posts have no content to show)
+    updates = []
+    if posts:
+        for post in posts:
+            if not post.get("locked", False):
+                updates.append(post)
+
     if not updates:
-        # Fallback if no updates configured
+        # Fallback if no unlocked posts
         updates = [
             {
                 "date": "",
@@ -693,12 +539,16 @@ def _build_carousel_html(carousel_id: str) -> str:
             }
         ]
 
-    # Get the active update index (defaults to 0 if not specified)
-    active_index = QUEST_CONFIG.get("active_update_index", 0)
-    if active_index is None or active_index < 0:
-        active_index = 0
+    # Determine which post should be active/expanded
+    # Find the active_post_index in the filtered list, or default to last
+    active_index = len(updates) - 1  # default to last unlocked post
+    if active_post_index is not None:
+        for i, post in enumerate(updates):
+            if post.get("post_index") == active_post_index:
+                active_index = i
+                break
     # Ensure index is within bounds
-    active_index = min(active_index, len(updates) - 1)
+    active_index = min(max(0, active_index), len(updates) - 1)
 
     # Get the active update to display initially in the carousel
     active_update = updates[active_index]
@@ -992,6 +842,7 @@ def _build_carousel_html(carousel_id: str) -> str:
 
 
 def build_quest_section(
+    quest_data: dict,
     progress_data: dict | None = None,
     contributors_data: dict | None = None,
 ) -> tuple[
@@ -1000,6 +851,7 @@ def build_quest_section(
     """Build the Community Quest section for home page.
 
     Args:
+        quest_data: Dict from fetch_quest() with quest metadata (title, description, posts, active_post_index)
         progress_data: Optional dict with quest progress info (current_blocks, goal_blocks, percentage, days_remaining)
         contributors_data: Optional dict with contributors info (contributors_by_tier, total_contributors, error)
 
@@ -1020,8 +872,12 @@ def build_quest_section(
     # Generate unique ID for this carousel instance
     carousel_id = "quest-carousel"
 
-    # Build carousel HTML
-    carousel_html = _build_carousel_html(carousel_id)
+    # Build carousel HTML using posts from API
+    carousel_html = _build_carousel_html(
+        carousel_id,
+        posts=quest_data.get("posts", []),
+        active_post_index=quest_data.get("active_post_index"),
+    )
 
     # Build progress and info HTML (right column - without button)
     progress_html = _build_progress_html(
@@ -1043,11 +899,11 @@ def build_quest_section(
                 </div>
 
                 <h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.75rem; font-weight: 600;">
-                    {QUEST_CONFIG["title"]}
+                    {quest_data["title"]}
                 </h1>
 
                 <p style="color: var(--body-text-color-subdued); font-size: var(--text-xl); max-width: 48rem; margin: 0 auto;">
-                    {QUEST_CONFIG["description"]}
+                    {quest_data["description"]}
                 </p>
             </div>
         </div>
@@ -1162,7 +1018,7 @@ def build_quest_section(
         )
 
     # Get rotation interval from config
-    rotation_interval = QUEST_CONFIG.get("carousel_rotation_interval", 6000)
+    rotation_interval = QUEST_UI_CONFIG.get("carousel_rotation_interval", 6000)
 
     return (
         quest_container,
