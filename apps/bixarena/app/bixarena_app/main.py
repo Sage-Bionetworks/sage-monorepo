@@ -657,14 +657,8 @@ def build_app():
         const carouselParent = carousel.parentElement;
         let indicators = carouselParent.querySelectorAll('.indicator');
 
-        if (images.length === 0) {{
-            if (retryCount < MAX_RETRIES) {{
-                setTimeout(initCarousel, 50);
-            }} else {{
-                console.error('Carousel images not found');
-            }}
-            return;
-        }}
+        // images may be empty if the active post has no images yet — proceed anyway
+        // so accordion click listeners still get attached
 
         let currentIndex = 0;
         let autoRotateInterval;
@@ -740,7 +734,7 @@ def build_app():
         }}
 
         // Handle accordion clicks to expand/collapse and switch carousel images
-        const accordionItems = carouselParent.querySelectorAll('.quest-update-accordion');
+        const accordionItems = carouselParent.querySelectorAll('.quest-update-accordion:not(.locked)');
 
         function loadUpdateImages(accordion) {{
             const newImagesJson = accordion.getAttribute('data-images');

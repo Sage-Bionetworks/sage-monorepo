@@ -4,14 +4,21 @@ properties:
   questId:
     type: string
     description: Unique identifier for the quest
+    minLength: 1
+    maxLength: 100
+    pattern: '^[a-z0-9-]+$'
     example: 'build-bioarena-together'
   title:
     type: string
     description: Quest display title
+    minLength: 1
+    maxLength: 200
     example: 'Build BioArena Together'
   description:
     type: string
     description: Quest narrative description
+    minLength: 1
+    maxLength: 5000
     example: 'Join forces to build an arena together...'
   goal:
     type: integer

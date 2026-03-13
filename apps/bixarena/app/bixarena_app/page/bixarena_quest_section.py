@@ -521,16 +521,10 @@ def _build_carousel_html(
     Returns:
         HTML string for the carousel with images and controls
     """
-    # Filter to unlocked posts only (locked posts have no content to show)
-    updates = []
-    if posts:
-        for post in posts:
-            if not post.get("locked", False):
-                updates.append(post)
-
-    if not updates:
-        # Fallback if no unlocked posts
-        updates = [
+    # Use all posts in backend order; fallback if empty
+    all_posts = posts or []
+    if not all_posts:
+        all_posts = [
             {
                 "date": "",
                 "title": "No updates yet",
@@ -539,37 +533,37 @@ def _build_carousel_html(
             }
         ]
 
-    # Determine which post should be active/expanded
-    # Find the active_post_index in the filtered list, or default to last
-    active_index = len(updates) - 1  # default to last unlocked post
-    if active_post_index is not None:
-        for i, post in enumerate(updates):
-            if post.get("post_index") == active_post_index:
-                active_index = i
-                break
-    # Ensure index is within bounds
-    active_index = min(max(0, active_index), len(updates) - 1)
+    # Find the unlocked post to show in the image carousel
+    unlocked_posts = [p for p in all_posts if not p.get("locked", False)]
 
-    # Get the active update to display initially in the carousel
-    active_update = updates[active_index]
+    # Determine which unlocked post should be active/expanded
+    active_post = None
+    if unlocked_posts:
+        active_post = unlocked_posts[-1]  # default to last unlocked post
+        if active_post_index is not None:
+            for post in unlocked_posts:
+                if post.get("post_index") == active_post_index:
+                    active_post = post
+                    break
 
-    # Generate carousel images HTML from active update
+    # Generate carousel images HTML from active post (or empty if all locked)
+    active_images = active_post["images"] if active_post else []
     images_html = "".join(
         f'<img src="{image_url}" class="carousel-image {"active" if i == 0 else ""}" alt="Minecraft arena progress" />\n'
-        for i, image_url in enumerate(active_update["images"])
+        for i, image_url in enumerate(active_images)
     )
     indicators_html = "".join(
         f'<span class="indicator {"active" if i == 0 else ""}" data-index="{i}" role="button" tabindex="0" aria-label="View image {i + 1}"></span>\n'
-        for i, _ in enumerate(active_update["images"])
+        for i, _ in enumerate(active_images)
     )
 
     # Only show indicators if more than one image
-    indicators_display = "" if len(active_update["images"]) > 1 else "display: none;"
+    indicators_display = "" if len(active_images) > 1 else "display: none;"
 
     # Generate update cards HTML (accordion style)
-    def format_update_card(i: int, update: dict) -> str:
+    def format_update_card(update: dict) -> str:
         """Format a single update accordion item HTML."""
-        is_expanded = i == active_index  # Active update expanded by default
+        is_expanded = active_post is not None and update is active_post
         active_class = "active" if is_expanded else ""
         expanded_class = "expanded" if is_expanded else ""
         images_json = json.dumps(update["images"]).replace('"', "&quot;")
@@ -615,9 +609,40 @@ def _build_carousel_html(
         </div>
         '''
 
-    update_cards_html = "".join(
-        format_update_card(i, update) for i, update in enumerate(updates)
-    )
+    def format_locked_card(post: dict) -> str:
+        """Format a locked post as a non-interactive teaser card."""
+        # Build unlock hint from gate metadata
+        hints = []
+        req_progress = post.get("required_progress")
+        req_tier = post.get("required_tier")
+        if req_progress is not None:
+            hints.append(f"Reach {req_progress:,} blocks to unlock")
+        if req_tier:
+            tier_label = req_tier.capitalize()
+            hints.append(f"Become a {tier_label} to access this post")
+        hint_text = " &middot; ".join(hints) if hints else "Keep contributing to unlock"
+
+        return f"""
+        <div class="quest-update-accordion locked">
+            <div class="accordion-header locked-header">
+                <div class="accordion-title-wrapper">
+                    <h4>{post["title"]}</h4>
+                    <span class="locked-badge">🔒 Locked</span>
+                </div>
+            </div>
+            <div class="locked-hint">
+                <p>{hint_text}</p>
+            </div>
+        </div>
+        """
+
+    def format_card(post: dict) -> str:
+        """Format a post card — locked or unlocked — in backend order."""
+        if post.get("locked", False):
+            return format_locked_card(post)
+        return format_update_card(post)
+
+    all_cards_html = "".join(format_card(post) for post in all_posts)
 
     # Build the carousel HTML (left column) - vertical stack
     carousel_html = f"""
@@ -638,7 +663,7 @@ def _build_carousel_html(
 
         <!-- Update cards below indicators -->
         <div class="quest-updates-container">
-            {update_cards_html}
+            {all_cards_html}
         </div>
     </div>
 
@@ -813,6 +838,37 @@ def _build_carousel_html(
 
         .update-description:last-child {{
             margin-bottom: 0;
+        }}
+
+        /* Locked post cards */
+        .quest-update-accordion.locked {{
+            opacity: 0.6;
+            border-style: dashed;
+        }}
+
+        .quest-update-accordion.locked .locked-header {{
+            cursor: default;
+        }}
+
+        .quest-update-accordion.locked .accordion-title-wrapper h4 {{
+            color: var(--body-text-color-subdued);
+        }}
+
+        .locked-badge {{
+            font-size: 0.75rem;
+            color: var(--body-text-color-subdued);
+            white-space: nowrap;
+        }}
+
+        .locked-hint {{
+            padding: 0 1rem 0.8rem 1rem;
+        }}
+
+        .locked-hint p {{
+            margin: 0;
+            font-size: 0.8rem;
+            color: var(--body-text-color-subdued);
+            font-style: italic;
         }}
 
         /* Credit links */

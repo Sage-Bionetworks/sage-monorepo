@@ -10,14 +10,19 @@ properties:
   title:
     type: string
     description: Post heading
+    minLength: 1
+    maxLength: 200
     example: 'Chapter 1: Laying the First Stones'
   description:
     type: string
     description: Post content text
+    minLength: 1
+    maxLength: 10000
     example: 'The arena walls began to rise...'
   images:
     type: array
     description: List of image URLs for the post
+    maxItems: 50
     items:
       type: string
       format: uri
