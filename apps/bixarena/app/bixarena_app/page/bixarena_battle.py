@@ -870,20 +870,36 @@ def build_side_by_side_ui_anony():
             js=enable_enter_js,
         )
 
+    # Components needed to reset the battle from outside (e.g. nav button)
+    reset_outputs = (
+        states
+        + [battle_session]
+        + chatbots
+        + model_selectors
+        + [textbox]
+        + [left_vote_btn, tie_btn, right_vote_btn]
+        + [battle_interface, voting_row, next_battle_row]
+        + [page_header, textbox_row]
+        + [disclaimer]
+    )
+
     return (
         states + model_selectors,
         example_prompt_ui,
         [example_prompts_group, prev_btn, next_btn] + prompt_cards,
         prevent_empty_prompt_js,
         disclaimer,
+        battle_session,
+        reset_outputs,
     )
 
 
 def build_battle_page():
-    """Build the battle page
+    """Build the battle page.
 
     Returns:
-        tuple: (battle_page, example_prompt_ui, prompt_outputs) for hooking up navigation refresh
+        tuple: (battle_page, example_prompt_ui, prompt_outputs,
+                battle_session, reset_outputs) for navigation and reset
     """
     # Initialize the demo with empty states
     load_demo_side_by_side_anony()
@@ -897,6 +913,8 @@ def build_battle_page():
             prompt_outputs,
             empty_prompt_js,
             _,  # disclaimer (not needed)
+            battle_session,
+            reset_outputs,
         ) = build_side_by_side_ui_anony()
 
         # Refresh example prompts when page loads to ensure each user sees different prompts
@@ -913,4 +931,4 @@ def build_battle_page():
         # Load JavaScript for prompt card click handlers
         battle_page.load(lambda: None, None, None, js=PROMPT_CARD_CLICK_JS)
 
-    return battle_page, example_prompt_ui, prompt_outputs
+    return battle_page, example_prompt_ui, prompt_outputs, battle_session, reset_outputs

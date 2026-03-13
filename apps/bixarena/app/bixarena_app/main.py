@@ -11,7 +11,7 @@ from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.constants import GTM_CONTAINER_ID
 from bixarena_app.config.utils import setup_logging
 from bixarena_app.opengraph import OpenGraphFixMiddleware, build_opengraph_meta_tags
-from bixarena_app.page.bixarena_battle import build_battle_page
+from bixarena_app.page.bixarena_battle import build_battle_page, clear_history
 
 # Configure logging first
 setup_logging()
@@ -411,7 +411,13 @@ def build_app():
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
-            _, example_prompt_ui, prompt_outputs = build_battle_page()
+            (
+                _,
+                example_prompt_ui,
+                prompt_outputs,
+                battle_session,
+                battle_reset_outputs,
+            ) = build_battle_page()
 
         with gr.Column(
             visible=False, elem_classes=["page-content"]
@@ -473,10 +479,16 @@ def build_app():
 }}
 """
 
-        # Navigation - battle page will refresh prompts via its own load handler
+        # Navigation - battle button resets battle to initial state
+        def navigate_to_battle(bs, request: gr.Request = None):
+            nav = navigate_to(1)
+            reset = clear_history(bs, request, example_prompt_ui)
+            return nav + reset
+
         battle_btn.click(
-            lambda: navigate_to(1),
-            outputs=nav_outputs,
+            navigate_to_battle,
+            inputs=[battle_session],
+            outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
             js=_GA4_NAV_JS.format(page="battle"),
         )
         # Leaderboard button - show page and refresh data
@@ -487,14 +499,16 @@ def build_app():
         )
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(
-            lambda: navigate_to(1),
-            outputs=nav_outputs,
+            navigate_to_battle,
+            inputs=[battle_session],
+            outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
             js=_GA4_NAV_JS.format(page="battle"),
         )
         # Quest authenticated button - navigates to battle page
         quest_btn_authenticated.click(
-            lambda: navigate_to(1),
-            outputs=nav_outputs,
+            navigate_to_battle,
+            inputs=[battle_session],
+            outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
             js=_GA4_NAV_JS.format(page="battle"),
         )
         # Quest login button - redirects to login page
