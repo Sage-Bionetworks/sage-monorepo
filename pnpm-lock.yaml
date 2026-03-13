@@ -116,9 +116,6 @@ importers:
       debug:
         specifier: 4.3.7
         version: 4.3.7
-      dom-to-image-more:
-        specifier: 3.5.0
-        version: 3.5.0
       dotenv:
         specifier: 17.2.3
         version: 17.2.3
@@ -363,12 +360,6 @@ importers:
       '@types/debug':
         specifier: 4.1.12
         version: 4.1.12
-      '@types/dom-to-image':
-        specifier: 2.6.7
-        version: 2.6.7
-      '@types/dom-to-image-more':
-        specifier: npm:@types/dom-to-image@2.6.7
-        version: '@types/dom-to-image@2.6.7'
       '@types/express':
         specifier: 4.17.21
         version: 4.17.21
@@ -5093,9 +5084,6 @@ packages:
   '@types/deep-eql@4.0.2':
     resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
 
-  '@types/dom-to-image@2.6.7':
-    resolution: {integrity: sha512-me5VbCv+fcXozblWwG13krNBvuEOm6kA5xoa4RrjDJCNFOZSWR3/QLtOXimBHk1Fisq69Gx3JtOoXtg1N1tijg==}
-
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
 
@@ -7264,9 +7252,6 @@ packages:
 
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
-
-  dom-to-image-more@3.5.0:
-    resolution: {integrity: sha512-VF/vwfHsPNMHJb5W/5sAmco3UIlEWSEFLppInQwqwN4joUvBULDwE3CqVcUDkUWleke/nZ5KwIVSrrFlGw7WPA==}
 
   domelementtype@2.3.0:
     resolution: {integrity: sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==}
@@ -19069,8 +19054,6 @@ snapshots:
 
   '@types/deep-eql@4.0.2': {}
 
-  '@types/dom-to-image@2.6.7': {}
-
   '@types/eslint-scope@3.7.7':
     dependencies:
       '@types/eslint': 9.6.1
@@ -21491,8 +21474,6 @@ snapshots:
       domelementtype: 2.3.0
       domhandler: 5.0.3
       entities: 4.5.0
-
-  dom-to-image-more@3.5.0: {}
 
   domelementtype@2.3.0: {}
 
