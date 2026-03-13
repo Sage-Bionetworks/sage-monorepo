@@ -608,10 +608,20 @@ def build_app():
             ],
         )
 
-        # Load quest content on page load, then initialize carousel JS.
-        # The js= callback runs after the Python fn output is applied to the DOM,
-        # ensuring the carousel HTML exists before we attach event listeners.
-        carousel_init_js = ""
+        # Load quest content on page load (includes personalized progress card
+        # for authenticated users)
+        demo.load(
+            fn=load_quest_content_on_page_load,
+            inputs=None,
+            outputs=[
+                quest_container,
+                quest_progress_container,
+                quest_contributors_container,
+                quest_carousel_container,
+            ],
+        )
+
+        # Initialize carousel on page load (only if community quest is enabled)
         if carousel_id:
             carousel_init_js = f"""
 () => {{
