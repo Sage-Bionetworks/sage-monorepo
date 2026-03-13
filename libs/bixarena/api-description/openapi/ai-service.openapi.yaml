@@ -19,8 +19,10 @@ tags:
     x-sage-internal: true
   - name: Prompt Validation
     description: Operations for validating biomedical prompts
+    x-sage-internal: true
   - name: Battle Validation
     description: Operations for validating biomedical battles
+    x-sage-internal: true
 paths:
   /health-check:
     get:
@@ -45,6 +47,7 @@ paths:
   /validate-prompt:
     post:
       x-rate-limit-requests-per-minute: 60
+      x-sage-internal: true
       tags:
         - Prompt Validation
       summary: Validate biomedical prompt
@@ -72,6 +75,7 @@ paths:
   /validate-battle:
     post:
       x-rate-limit-requests-per-minute: 60
+      x-sage-internal: true
       tags:
         - Battle Validation
       summary: Validate biomedical battle

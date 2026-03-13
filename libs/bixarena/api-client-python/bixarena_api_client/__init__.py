@@ -20,11 +20,9 @@ __all__ = [
     "AdminApi",
     "AuthApi",
     "BattleApi",
-    "BattleValidationApi",
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
-    "PromptValidationApi",
     "QuestApi",
     "StatsApi",
     "UserApi",
@@ -52,9 +50,7 @@ __all__ = [
     "BattleSearchQuery",
     "BattleSort",
     "BattleUpdateRequest",
-    "BattleValidation",
     "BattleValidationCreateRequest",
-    "BattleValidationRequest",
     "BattleValidationResponse",
     "BattleValidationRunRequest",
     "Callback200Response",
@@ -87,8 +83,6 @@ __all__ = [
     "ModelSearchQuery",
     "ModelSort",
     "PageMetadata",
-    "PromptValidation",
-    "PromptValidationRequest",
     "PublicStats",
     "QuestContributor",
     "QuestContributors",
@@ -105,17 +99,11 @@ __all__ = [
 from bixarena_api_client.api.admin_api import AdminApi as AdminApi
 from bixarena_api_client.api.auth_api import AuthApi as AuthApi
 from bixarena_api_client.api.battle_api import BattleApi as BattleApi
-from bixarena_api_client.api.battle_validation_api import (
-    BattleValidationApi as BattleValidationApi,
-)
 from bixarena_api_client.api.example_prompt_api import (
     ExamplePromptApi as ExamplePromptApi,
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
-from bixarena_api_client.api.prompt_validation_api import (
-    PromptValidationApi as PromptValidationApi,
-)
 from bixarena_api_client.api.quest_api import QuestApi as QuestApi
 from bixarena_api_client.api.stats_api import StatsApi as StatsApi
 from bixarena_api_client.api.user_api import UserApi as UserApi
@@ -167,14 +155,8 @@ from bixarena_api_client.models.battle_sort import BattleSort as BattleSort
 from bixarena_api_client.models.battle_update_request import (
     BattleUpdateRequest as BattleUpdateRequest,
 )
-from bixarena_api_client.models.battle_validation import (
-    BattleValidation as BattleValidation,
-)
 from bixarena_api_client.models.battle_validation_create_request import (
     BattleValidationCreateRequest as BattleValidationCreateRequest,
-)
-from bixarena_api_client.models.battle_validation_request import (
-    BattleValidationRequest as BattleValidationRequest,
 )
 from bixarena_api_client.models.battle_validation_response import (
     BattleValidationResponse as BattleValidationResponse,
@@ -254,12 +236,6 @@ from bixarena_api_client.models.model_search_query import (
 )
 from bixarena_api_client.models.model_sort import ModelSort as ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
-from bixarena_api_client.models.prompt_validation import (
-    PromptValidation as PromptValidation,
-)
-from bixarena_api_client.models.prompt_validation_request import (
-    PromptValidationRequest as PromptValidationRequest,
-)
 from bixarena_api_client.models.public_stats import PublicStats as PublicStats
 from bixarena_api_client.models.quest_contributor import (
     QuestContributor as QuestContributor,

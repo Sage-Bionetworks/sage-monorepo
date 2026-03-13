@@ -4,11 +4,9 @@ bixarena_api_client/api/__init__.py
 bixarena_api_client/api/admin_api.py
 bixarena_api_client/api/auth_api.py
 bixarena_api_client/api/battle_api.py
-bixarena_api_client/api/battle_validation_api.py
 bixarena_api_client/api/example_prompt_api.py
 bixarena_api_client/api/leaderboard_api.py
 bixarena_api_client/api/model_api.py
-bixarena_api_client/api/prompt_validation_api.py
 bixarena_api_client/api/quest_api.py
 bixarena_api_client/api/stats_api.py
 bixarena_api_client/api/user_api.py
@@ -32,9 +30,7 @@ bixarena_api_client/models/battle_round_update_request.py
 bixarena_api_client/models/battle_search_query.py
 bixarena_api_client/models/battle_sort.py
 bixarena_api_client/models/battle_update_request.py
-bixarena_api_client/models/battle_validation.py
 bixarena_api_client/models/battle_validation_create_request.py
-bixarena_api_client/models/battle_validation_request.py
 bixarena_api_client/models/battle_validation_response.py
 bixarena_api_client/models/battle_validation_run_request.py
 bixarena_api_client/models/callback200_response.py
@@ -67,8 +63,6 @@ bixarena_api_client/models/model_page.py
 bixarena_api_client/models/model_search_query.py
 bixarena_api_client/models/model_sort.py
 bixarena_api_client/models/page_metadata.py
-bixarena_api_client/models/prompt_validation.py
-bixarena_api_client/models/prompt_validation_request.py
 bixarena_api_client/models/public_stats.py
 bixarena_api_client/models/quest_contributor.py
 bixarena_api_client/models/quest_contributors.py
@@ -99,10 +93,7 @@ docs/BattleRoundUpdateRequest.md
 docs/BattleSearchQuery.md
 docs/BattleSort.md
 docs/BattleUpdateRequest.md
-docs/BattleValidation.md
-docs/BattleValidationApi.md
 docs/BattleValidationCreateRequest.md
-docs/BattleValidationRequest.md
 docs/BattleValidationResponse.md
 docs/BattleValidationRunRequest.md
 docs/Callback200Response.md
@@ -138,9 +129,6 @@ docs/ModelPage.md
 docs/ModelSearchQuery.md
 docs/ModelSort.md
 docs/PageMetadata.md
-docs/PromptValidation.md
-docs/PromptValidationApi.md
-docs/PromptValidationRequest.md
 docs/PublicStats.md
 docs/QuestApi.md
 docs/QuestContributor.md
@@ -173,10 +161,7 @@ test/test_battle_round_update_request.py
 test/test_battle_search_query.py
 test/test_battle_sort.py
 test/test_battle_update_request.py
-test/test_battle_validation.py
-test/test_battle_validation_api.py
 test/test_battle_validation_create_request.py
-test/test_battle_validation_request.py
 test/test_battle_validation_response.py
 test/test_battle_validation_run_request.py
 test/test_callback200_response.py
@@ -212,9 +197,6 @@ test/test_model_page.py
 test/test_model_search_query.py
 test/test_model_sort.py
 test/test_page_metadata.py
-test/test_prompt_validation.py
-test/test_prompt_validation_api.py
-test/test_prompt_validation_request.py
 test/test_public_stats.py
 test/test_quest_api.py
 test/test_quest_contributor.py

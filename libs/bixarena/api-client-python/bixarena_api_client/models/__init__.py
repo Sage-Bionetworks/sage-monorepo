@@ -34,11 +34,9 @@ from bixarena_api_client.models.battle_round_update_request import (
 from bixarena_api_client.models.battle_search_query import BattleSearchQuery
 from bixarena_api_client.models.battle_sort import BattleSort
 from bixarena_api_client.models.battle_update_request import BattleUpdateRequest
-from bixarena_api_client.models.battle_validation import BattleValidation
 from bixarena_api_client.models.battle_validation_create_request import (
     BattleValidationCreateRequest,
 )
-from bixarena_api_client.models.battle_validation_request import BattleValidationRequest
 from bixarena_api_client.models.battle_validation_response import (
     BattleValidationResponse,
 )
@@ -87,8 +85,6 @@ from bixarena_api_client.models.model_page import ModelPage
 from bixarena_api_client.models.model_search_query import ModelSearchQuery
 from bixarena_api_client.models.model_sort import ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata
-from bixarena_api_client.models.prompt_validation import PromptValidation
-from bixarena_api_client.models.prompt_validation_request import PromptValidationRequest
 from bixarena_api_client.models.public_stats import PublicStats
 from bixarena_api_client.models.quest_contributor import QuestContributor
 from bixarena_api_client.models.quest_contributors import QuestContributors
