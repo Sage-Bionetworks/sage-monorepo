@@ -123,6 +123,13 @@ public class BattleValidationService {
     try {
       BattleValidationEntity saved = battleValidationRepository.save(entity);
       battleValidationRepository.flush();
+
+      // Human reviews are always intentional, so auto-set as effective validation.
+      BattleEntity battle = battleRepository.findById(battleId).orElseThrow();
+      battle.setEffectiveValidationId(saved.getId());
+      battleRepository.save(battle);
+
+      log.info("Human validation {} set as effective for battle {}", saved.getId(), battleId);
       return toDto(saved);
     } catch (DataIntegrityViolationException ex) {
       throw new DuplicateBattleValidationException(battleId, "human-review");

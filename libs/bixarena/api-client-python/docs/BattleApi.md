@@ -277,7 +277,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 Create a battle validation
 
-Manually validate or invalidate a battle (admin only).
+Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
 
 ### Example
 

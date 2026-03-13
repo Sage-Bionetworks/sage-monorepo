@@ -762,7 +762,8 @@ paths:
       x-tags:
         - tag: Battle
     post:
-      description: Manually validate or invalidate a battle (admin only).
+      description: Manually validate or invalidate a battle (admin only). The created
+        validation is automatically set as the effective validation for the battle.
       operationId: createBattleValidation
       parameters:
         - description: The unique identifier of the battle

@@ -940,7 +940,7 @@ class BattleApi:
     ) -> BattleValidationResponse:
         """Create a battle validation
 
-        Manually validate or invalidate a battle (admin only).
+        Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
@@ -1016,7 +1016,7 @@ class BattleApi:
     ) -> ApiResponse[BattleValidationResponse]:
         """Create a battle validation
 
-        Manually validate or invalidate a battle (admin only).
+        Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
@@ -1092,7 +1092,7 @@ class BattleApi:
     ) -> RESTResponseType:
         """Create a battle validation
 
-        Manually validate or invalidate a battle (admin only).
+        Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str

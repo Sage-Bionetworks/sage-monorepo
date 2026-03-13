@@ -556,7 +556,7 @@ paths:
       tags:
         - Battle
       summary: Create a battle validation
-      description: Manually validate or invalidate a battle (admin only).
+      description: Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
       operationId: createBattleValidation
       requestBody:
         required: true

@@ -265,7 +265,7 @@ public interface BattleApi {
 
     /**
      * POST /battles/{battleId}/validations : Create a battle validation
-     * Manually validate or invalidate a battle (admin only).
+     * Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
      *
      * @param battleId The unique identifier of the battle (required)
      * @param battleValidationCreateRequestDto  (required)
@@ -280,7 +280,7 @@ public interface BattleApi {
     @Operation(
         operationId = "createBattleValidation",
         summary = "Create a battle validation",
-        description = "Manually validate or invalidate a battle (admin only).",
+        description = "Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.",
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Battle validation created successfully", content = {
