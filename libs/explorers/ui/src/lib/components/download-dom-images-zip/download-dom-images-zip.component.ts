@@ -1,8 +1,8 @@
 import { Component, input } from '@angular/core';
-import domtoimage from 'dom-to-image-more';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
+import { captureDomToBlob } from '@sagebionetworks/explorers/util';
 
 type DomFile = {
   filename: string;
@@ -21,26 +21,29 @@ export class DownloadDomImagesZipComponent {
   downloadImagePaddingPx = input<number>();
 
   performDownload = async (fileType: string): Promise<void> => {
+    const totalStart = performance.now();
     const zip = new JSZip();
+    const paddingPx = this.downloadImagePaddingPx() ?? 0;
 
     for (const domFile of this.domFiles()) {
-      // width and height need to be specified
-      // known issue: https://github.com/1904labs/dom-to-image-more/issues/198
-      const paddingPx = this.downloadImagePaddingPx() ?? 0;
-      const blob = await domtoimage.toBlob(domFile.target, {
-        bgcolor: '#fff',
-        width: domFile.target.offsetWidth + paddingPx * 2,
-        height: domFile.target.offsetHeight + paddingPx * 2,
-        ...(this.downloadImagePaddingPx() !== undefined && {
-          style: {
-            padding: `${paddingPx}px`,
-          },
-        }),
-      });
-      zip.file(domFile.filename + fileType, blob);
+      const imageStart = performance.now();
+      const blob = await captureDomToBlob(domFile.target, paddingPx);
+      console.log(
+        `[DownloadDomImagesZip] Image "${domFile.filename}" captured in ${(performance.now() - imageStart).toFixed(0)}ms`,
+      );
+      if (blob) {
+        zip.file(domFile.filename + fileType, blob);
+      }
     }
 
+    const zipStart = performance.now();
     const zipBlob = await zip.generateAsync({ type: 'blob' });
+    console.log(
+      `[DownloadDomImagesZip] ZIP generated in ${(performance.now() - zipStart).toFixed(0)}ms`,
+    );
     saveAs(zipBlob, this.filename() + '.zip');
+    console.log(
+      `[DownloadDomImagesZip] Total download completed in ${(performance.now() - totalStart).toFixed(0)}ms`,
+    );
   };
 }
