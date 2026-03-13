@@ -13,7 +13,7 @@ ARG rVersion="4.5.1"
 # https://github.com/gruntwork-io/terragrunt
 ARG terragruntVersion="0.87.5"
 # https://aquasecurity.github.io/trivy
-ARG trivyVersion="0.66.0"
+ARG trivyVersion="0.69.3"
 # https://github.com/rstudio/renv
 ARG renvVersion="1.1.5"
 # https://nodejs.org/en/about/previous-releases
