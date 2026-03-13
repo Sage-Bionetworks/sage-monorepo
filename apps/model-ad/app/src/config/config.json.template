@@ -1,8 +1,8 @@
 {
   "apiDocsUrl": "${API_DOCS_URL}",
   "appVersion": "${APP_VERSION}",
+  "commitSha": "${COMMIT_SHA}",
   "csrApiUrl": "${CSR_API_URL}",
   "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID}",
-  "ssrApiUrl": "${SSR_API_URL}",
-  "tagName": "${TAG_NAME}"
+  "ssrApiUrl": "${SSR_API_URL}"
 }

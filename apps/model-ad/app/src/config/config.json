@@ -1,8 +1,8 @@
 {
   "apiDocsUrl": "http://localhost:8000/api-docs",
   "appVersion": "local",
+  "commitSha": "",
   "csrApiUrl": "http://localhost:8000/api/v1",
   "googleTagManagerId": "",
-  "ssrApiUrl": "http://model-ad-api:3333/v1",
-  "tagName": "local"
+  "ssrApiUrl": "http://model-ad-api:3333/v1"
 }

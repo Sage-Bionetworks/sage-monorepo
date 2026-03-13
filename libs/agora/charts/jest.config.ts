@@ -16,9 +16,7 @@ export default {
   },
   maxWorkers: '50%',
   testEnvironment: 'jest-fixed-jsdom',
-  transformIgnorePatterns: [
-    'node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|until-async|@octokit/.*|universal-user-agent|before-after-hook))',
-  ],
+  transformIgnorePatterns: ['node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|until-async))'],
   moduleNameMapper: {
     d3: '<rootDir>/../../../node_modules/d3/dist/d3.min.js',
     '^d3-(.*)$': '<rootDir>/../../../node_modules/d3-$1/dist/d3-$1.min.js',

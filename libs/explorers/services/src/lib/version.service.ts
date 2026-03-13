@@ -1,13 +1,12 @@
 import { HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { SUPPRESS_ERROR_OVERLAY } from './http-context-tokens';
-import { catchError, EMPTY, map, Observable, of } from 'rxjs';
-import { GitHubService } from './github.service';
+import { map, Observable, of } from 'rxjs';
 import { PlatformService } from './platform.service';
 
 export interface VersionConfig {
   appVersion: string;
-  tagName: string;
+  commitSha: string;
 }
 
 export interface DataVersion {
@@ -29,11 +28,10 @@ export interface DataVersionService {
 })
 export class VersionService {
   private readonly platformService = inject(PlatformService);
-  private readonly gitHubService = inject(GitHubService);
 
   getDataVersion$(dataVersionService: DataVersionService): Observable<string> {
     if (this.platformService.isServer) {
-      return EMPTY;
+      return of('loading...');
     }
     const context = new HttpContext().set(SUPPRESS_ERROR_OVERLAY, true);
     return dataVersionService
@@ -41,28 +39,16 @@ export class VersionService {
       .pipe(map((data) => this.formatDataVersion(data)));
   }
 
-  getSiteVersion$(config: VersionConfig): Observable<string> {
-    if (this.platformService.isServer) {
-      return EMPTY;
-    }
-    return this.gitHubService.getCommitSHA(config.tagName).pipe(
-      map((sha) => this.formatSiteVersion(sha, config)),
-      catchError(() => {
-        return of(this.formatSiteVersion('', config));
-      }),
-    );
-  }
-
   formatDataVersion(dataVersion: DataVersion): string {
     return `${dataVersion.data_file}-v${dataVersion.data_version}`;
   }
 
-  formatSiteVersion(sha: string, config: VersionConfig): string {
+  getSiteVersion(config: VersionConfig): string {
     const appVersion = this.formatAppVersion(config.appVersion);
     if (!appVersion) {
-      return sha;
+      return config.commitSha;
     }
-    return sha ? `${appVersion}-${sha}` : appVersion;
+    return config.commitSha ? `${appVersion}-${config.commitSha}` : appVersion;
   }
 
   formatAppVersion(appVersion: string): string {

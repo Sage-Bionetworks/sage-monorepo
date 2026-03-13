@@ -2,13 +2,11 @@ import { InjectionToken } from '@angular/core';
 
 export interface AppConfig {
   appVersion: string;
+  commitSha: string;
   csrApiUrl: string;
   isPlatformServer: boolean;
   ssrApiUrl: string;
   apiDocsUrl: string;
-  // Git tag name used to fetch the corresponding commit SHA from GitHub API for site version display
-  // Example: "agora/v1.2.3" or "local" for development
-  tagName: string;
   googleTagManagerId: string;
 }
 
