@@ -488,18 +488,6 @@ def build_app():
 
         nav_outputs = pages + nav_buttons + [current_page]
 
-        # GA4 virtual pageview tracking via dataLayer
-        _GA4_PAGE_VIEW_JS = """
-() => {{
-    if (window.bixTrack) {{
-        window.bixTrack('virtual_page_view', {{
-            page_path: '/{path}',
-            page_title: '{title}'
-        }});
-    }}
-}}
-"""
-
         # Navigation - battle button resets battle to initial state
         def navigate_to_battle(bs, request: gr.Request = None):
             nav = navigate_to(1)
@@ -510,27 +498,23 @@ def build_app():
             navigate_to_battle,
             inputs=[battle_session],
             outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
-            js=_GA4_PAGE_VIEW_JS.format(path="battle", title="Battle"),
         )
         # Leaderboard button - show page and refresh data
         leaderboard_btn.click(
             lambda: navigate_to(2) + list(refresh_leaderboard()),
             outputs=nav_outputs + leaderboard_view.outputs,
-            js=_GA4_PAGE_VIEW_JS.format(path="leaderboard", title="Leaderboard"),
         )
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(
             navigate_to_battle,
             inputs=[battle_session],
             outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
-            js=_GA4_PAGE_VIEW_JS.format(path="battle", title="Battle"),
         )
         # Quest authenticated button - navigates to battle page
         quest_btn_authenticated.click(
             navigate_to_battle,
             inputs=[battle_session],
             outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
-            js=_GA4_PAGE_VIEW_JS.format(path="battle", title="Battle"),
         )
         # Quest login button - redirects to login page
         quest_btn_login.click(
