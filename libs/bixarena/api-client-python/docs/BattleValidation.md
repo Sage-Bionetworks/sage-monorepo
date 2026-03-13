@@ -5,7 +5,7 @@
 | Name              | Type      | Description                                                                                                    | Notes |
 | ----------------- | --------- | -------------------------------------------------------------------------------------------------------------- | ----- |
 | **confidence**    | **float** | Confidence score indicating biomedical relevance (0.0 &#x3D; not biomedical, 1.0 &#x3D; definitely biomedical) |
-| **is_biomedical** | **bool**  | Whether the battle conversation is considered biomedically related (confidence &gt;&#x3D; 0.5)                 |
+| **is_biomedical** | **bool**  | Whether the battle conversation is considered biomedically related based on the confidence score               |
 | **method**        | **str**   | The validation method used (e.g. &#39;openrouter-haiku-v1&#39;)                                                |
 
 ## Example

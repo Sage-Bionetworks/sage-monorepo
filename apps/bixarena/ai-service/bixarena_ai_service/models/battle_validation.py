@@ -39,7 +39,7 @@ class BattleValidation(BaseModel):
         description="Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)"
     )
     is_biomedical: StrictBool = Field(
-        description="Whether the battle conversation is considered biomedically related (confidence >= 0.5)",
+        description="Whether the battle conversation is considered biomedically related based on the confidence score",
         alias="isBiomedical",
     )
     method: Annotated[str, Field(strict=True, max_length=100)] = Field(
