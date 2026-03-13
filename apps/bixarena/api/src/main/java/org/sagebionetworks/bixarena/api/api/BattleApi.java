@@ -19,7 +19,6 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
-import org.sagebionetworks.bixarena.api.model.dto.BattleValidationRunRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
 import java.util.UUID;
@@ -555,10 +554,9 @@ public interface BattleApi {
 
     /**
      * POST /battles/{battleId}/validations/run : Run an automated validation method
-     * Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented, or for running a different method. Admin only.
+     * Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
      *
      * @param battleId The unique identifier of the battle (required)
-     * @param battleValidationRunRequestDto  (optional)
      * @return Validation completed and persisted successfully (status code 201)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
@@ -570,7 +568,7 @@ public interface BattleApi {
     @Operation(
         operationId = "runBattleValidation",
         summary = "Run an automated validation method",
-        description = "Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented, or for running a different method. Admin only.",
+        description = "Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.",
         tags = { "Battle" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Validation completed and persisted successfully", content = {
@@ -609,15 +607,13 @@ public interface BattleApi {
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/battles/{battleId}/validations/run",
-        produces = { "application/json", "application/problem+json" },
-        consumes = { "application/json" }
+        produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<BattleValidationResponseDto> runBattleValidation(
-        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
-        @Parameter(name = "BattleValidationRunRequestDto", description = "") @Valid @RequestBody(required = false) @Nullable BattleValidationRunRequestDto battleValidationRunRequestDto
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId
     ) {
-        return getDelegate().runBattleValidation(battleId, battleValidationRunRequestDto);
+        return getDelegate().runBattleValidation(battleId);
     }
 
 

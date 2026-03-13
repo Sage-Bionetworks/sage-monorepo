@@ -677,11 +677,11 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 # **run_battle_validation**
 
-> BattleValidationResponse run_battle_validation(battle_id, battle_validation_run_request=battle_validation_run_request)
+> BattleValidationResponse run_battle_validation(battle_id)
 
 Run an automated validation method
 
-Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented, or for running a different method. Admin only.
+Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
 
 ### Example
 
@@ -690,7 +690,6 @@ Run an automated validation method against a battle and return the result. Usefu
 ```python
 import bixarena_api_client
 from bixarena_api_client.models.battle_validation_response import BattleValidationResponse
-from bixarena_api_client.models.battle_validation_run_request import BattleValidationRunRequest
 from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
@@ -715,11 +714,10 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.BattleApi(api_client)
     battle_id = 'battle_id_example' # str | The unique identifier of the battle
-    battle_validation_run_request = bixarena_api_client.BattleValidationRunRequest() # BattleValidationRunRequest |  (optional)
 
     try:
         # Run an automated validation method
-        api_response = api_instance.run_battle_validation(battle_id, battle_validation_run_request=battle_validation_run_request)
+        api_response = api_instance.run_battle_validation(battle_id)
         print("The response of BattleApi->run_battle_validation:\n")
         pprint(api_response)
     except Exception as e:
@@ -728,10 +726,9 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-| Name                              | Type                                                            | Description                         | Notes      |
-| --------------------------------- | --------------------------------------------------------------- | ----------------------------------- | ---------- |
-| **battle_id**                     | **str**                                                         | The unique identifier of the battle |
-| **battle_validation_run_request** | [**BattleValidationRunRequest**](BattleValidationRunRequest.md) |                                     | [optional] |
+| Name          | Type    | Description                         | Notes |
+| ------------- | ------- | ----------------------------------- | ----- |
+| **battle_id** | **str** | The unique identifier of the battle |
 
 ### Return type
 
@@ -743,7 +740,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json, application/problem+json
 
 ### HTTP response details

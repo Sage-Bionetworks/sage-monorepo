@@ -9,14 +9,8 @@ post:
   description: >-
     Run an automated validation method against a battle and return the result.
     Useful for backfilling validations on battles created before automated
-    validation was implemented, or for running a different method. Admin only.
+    validation was implemented. Admin only.
   operationId: runBattleValidation
-  requestBody:
-    required: false
-    content:
-      application/json:
-        schema:
-          $ref: ../../../../components/schemas/BattleValidationRunRequest.yaml
   responses:
     '201':
       content:

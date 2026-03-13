@@ -150,7 +150,6 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [BattleUpdateRequest](docs/BattleUpdateRequest.md)
 - [BattleValidationCreateRequest](docs/BattleValidationCreateRequest.md)
 - [BattleValidationResponse](docs/BattleValidationResponse.md)
-- [BattleValidationRunRequest](docs/BattleValidationRunRequest.md)
 - [Callback200Response](docs/Callback200Response.md)
 - [ExamplePrompt](docs/ExamplePrompt.md)
 - [ExamplePromptPage](docs/ExamplePromptPage.md)

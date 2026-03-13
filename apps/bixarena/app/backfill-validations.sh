@@ -87,9 +87,7 @@ for page in $(seq 0 $((TOTAL_PAGES - 1))); do
 
         RESPONSE=$(curl -s -w "\n%{http_code}" \
             -X POST "${GATEWAY_BASE_URL}/api/v1/battles/${BATTLE_ID}/validations/run" \
-            -H "Cookie: JSESSIONID=${SESSION_ID}" \
-            -H "Content-Type: application/json" \
-            -d '{}')
+            -H "Cookie: JSESSIONID=${SESSION_ID}")
 
         HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
         BODY=$(echo "$RESPONSE" | head -n-1)

@@ -654,14 +654,8 @@ paths:
       tags:
         - Battle
       summary: Run an automated validation method
-      description: Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented, or for running a different method. Admin only.
+      description: Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
       operationId: runBattleValidation
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BattleValidationRunRequest'
       responses:
         '201':
           content:
@@ -2115,14 +2109,6 @@ components:
           format: uuid
           nullable: true
           description: ID of the battle validation to set as effective. Set to null to clear the effective validation.
-    BattleValidationRunRequest:
-      type: object
-      description: Request to run an automated validation method against a battle.
-      properties:
-        method:
-          type: string
-          maxLength: 100
-          description: Validation method to run (e.g. 'openrouter-haiku-v1'). If not specified, the default configured method is used.
     QuestContributor:
       type: object
       description: A user who contributed to the quest

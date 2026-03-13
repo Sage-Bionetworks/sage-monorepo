@@ -14,7 +14,6 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
-import org.sagebionetworks.bixarena.api.model.dto.BattleValidationRunRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
 import java.util.UUID;
@@ -474,10 +473,9 @@ public interface BattleApiDelegate {
 
     /**
      * POST /battles/{battleId}/validations/run : Run an automated validation method
-     * Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented, or for running a different method. Admin only.
+     * Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
      *
      * @param battleId The unique identifier of the battle (required)
-     * @param battleValidationRunRequestDto  (optional)
      * @return Validation completed and persisted successfully (status code 201)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
@@ -487,8 +485,7 @@ public interface BattleApiDelegate {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see BattleApi#runBattleValidation
      */
-    default ResponseEntity<BattleValidationResponseDto> runBattleValidation(UUID battleId,
-        BattleValidationRunRequestDto battleValidationRunRequestDto) {
+    default ResponseEntity<BattleValidationResponseDto> runBattleValidation(UUID battleId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

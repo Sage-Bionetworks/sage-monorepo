@@ -43,9 +43,6 @@ from bixarena_api_client.models.battle_validation_create_request import (
 from bixarena_api_client.models.battle_validation_response import (
     BattleValidationResponse,
 )
-from bixarena_api_client.models.battle_validation_run_request import (
-    BattleValidationRunRequest,
-)
 from bixarena_api_client.models.set_effective_validation_request import (
     SetEffectiveValidationRequest,
 )
@@ -2261,7 +2258,6 @@ class BattleApi:
         battle_id: Annotated[
             UUID, Field(description="The unique identifier of the battle")
         ],
-        battle_validation_run_request: Optional[BattleValidationRunRequest] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2276,12 +2272,10 @@ class BattleApi:
     ) -> BattleValidationResponse:
         """Run an automated validation method
 
-        Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented, or for running a different method. Admin only.
+        Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
-        :param battle_validation_run_request:
-        :type battle_validation_run_request: BattleValidationRunRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2306,7 +2300,6 @@ class BattleApi:
 
         _param = self._run_battle_validation_serialize(
             battle_id=battle_id,
-            battle_validation_run_request=battle_validation_run_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2337,7 +2330,6 @@ class BattleApi:
         battle_id: Annotated[
             UUID, Field(description="The unique identifier of the battle")
         ],
-        battle_validation_run_request: Optional[BattleValidationRunRequest] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2352,12 +2344,10 @@ class BattleApi:
     ) -> ApiResponse[BattleValidationResponse]:
         """Run an automated validation method
 
-        Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented, or for running a different method. Admin only.
+        Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
-        :param battle_validation_run_request:
-        :type battle_validation_run_request: BattleValidationRunRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2382,7 +2372,6 @@ class BattleApi:
 
         _param = self._run_battle_validation_serialize(
             battle_id=battle_id,
-            battle_validation_run_request=battle_validation_run_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2413,7 +2402,6 @@ class BattleApi:
         battle_id: Annotated[
             UUID, Field(description="The unique identifier of the battle")
         ],
-        battle_validation_run_request: Optional[BattleValidationRunRequest] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2428,12 +2416,10 @@ class BattleApi:
     ) -> RESTResponseType:
         """Run an automated validation method
 
-        Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented, or for running a different method. Admin only.
+        Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
 
         :param battle_id: The unique identifier of the battle (required)
         :type battle_id: str
-        :param battle_validation_run_request:
-        :type battle_validation_run_request: BattleValidationRunRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2458,7 +2444,6 @@ class BattleApi:
 
         _param = self._run_battle_validation_serialize(
             battle_id=battle_id,
-            battle_validation_run_request=battle_validation_run_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2482,7 +2467,6 @@ class BattleApi:
     def _run_battle_validation_serialize(
         self,
         battle_id,
-        battle_validation_run_request,
         _request_auth,
         _content_type,
         _headers,
@@ -2508,24 +2492,12 @@ class BattleApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if battle_validation_run_request is not None:
-            _body_params = battle_validation_run_request
 
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
             _header_params["Accept"] = self.api_client.select_header_accept(
                 ["application/json", "application/problem+json"]
             )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params["Content-Type"] = _content_type
-        else:
-            _default_content_type = self.api_client.select_header_content_type(
-                ["application/json"]
-            )
-            if _default_content_type is not None:
-                _header_params["Content-Type"] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = ["jwtBearer"]
