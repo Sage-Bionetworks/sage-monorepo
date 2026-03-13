@@ -642,7 +642,7 @@ def _build_carousel_html(
             return format_locked_card(post)
         return format_update_card(post)
 
-    all_cards_html = "".join(format_card(post) for post in all_posts)
+    all_cards_html = "".join(format_card(post) for post in reversed(all_posts))
 
     # Build the carousel HTML (left column) - vertical stack
     carousel_html = f"""
