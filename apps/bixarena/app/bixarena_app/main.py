@@ -1,5 +1,4 @@
 import argparse
-import functools
 import logging
 import os
 
@@ -20,7 +19,6 @@ logger = logging.getLogger(__name__)
 from bixarena_app.page.bixarena_footer import build_footer
 from bixarena_app.page.bixarena_header import (
     build_header,
-    handle_login_click,
     update_battle_column,
     update_login_button,
 )
@@ -34,11 +32,6 @@ from bixarena_app.page.bixarena_home import (
 from bixarena_app.page.bixarena_leaderboard import (
     build_leaderboard_page,
     refresh_leaderboard,
-)
-from bixarena_app.page.bixarena_user import (
-    build_user_page,
-    handle_logout_click,
-    update_user_page,
 )
 
 
@@ -138,7 +131,6 @@ def sync_backend_session_on_load(request: gr.Request):
                             return (
                                 update_battle_column(request),
                                 update_login_button(request),
-                                *update_user_page(request),
                                 gr.HTML(""),
                             )
                         else:
@@ -163,7 +155,6 @@ def sync_backend_session_on_load(request: gr.Request):
     return (
         update_battle_column(request),
         update_login_button(request),
-        *update_user_page(request),
         gr.HTML(""),
     )
 
@@ -427,9 +418,6 @@ def build_app():
         ) as leaderboard_page:
             leaderboard_view = build_leaderboard_page()
 
-        with gr.Column(visible=False, elem_classes=["page-content"]) as user_page:
-            _, welcome_display, logout_btn = build_user_page()
-
         # Footer
         build_footer()
 
@@ -453,7 +441,7 @@ def build_app():
             + "</span>",
         )
 
-        pages = [home_page, battle_page, leaderboard_page, user_page]
+        pages = [home_page, battle_page, leaderboard_page]
         navigator = PageNavigator(pages)
         current_page = gr.State(value=0)
 
@@ -509,27 +497,6 @@ def build_app():
             """,
         )
 
-        # Nav highlight updates for Home page (used after login/logout)
-        home_nav_highlights = [
-            gr.update(variant="secondary"),  # battle_btn
-            gr.update(variant="secondary"),  # leaderboard_btn
-            0,  # current_page state
-        ]
-
-        # Bind static args so Gradio can still inject request without warnings.
-        _login_handler = functools.partial(
-            handle_login_click, navigator, update_login_button, update_user_page
-        )
-        _logout_handler = functools.partial(
-            handle_logout_click, navigator, update_login_button, update_user_page
-        )
-
-        def login_handler(request: gr.Request | None = None):
-            return (*_login_handler(request), *home_nav_highlights)
-
-        def logout_handler(request: gr.Request | None = None):
-            return (*_logout_handler(request), *home_nav_highlights)
-
         # Login CTA button - redirects to login page
         cta_btn_login.click(
             None,
@@ -542,13 +509,9 @@ def build_app():
             """,
         )
 
-        # Login
+        # Login/Logout (JS-only; page reload resets Gradio session)
         login_btn.click(
-            login_handler,
-            outputs=pages
-            + [login_btn, welcome_display, logout_btn, cookie_html]
-            + nav_buttons
-            + [current_page],
+            None,
             js="""
 () => {
   const btn = document.querySelector('#login-btn button,#login-btn');
@@ -572,22 +535,13 @@ def build_app():
       }
   }
 }
-                """,
+            """,
         )
 
-        # Logout
-        logout_btn.click(
-            logout_handler,
-            outputs=pages
-            + [login_btn, welcome_display, logout_btn, cookie_html]
-            + nav_buttons
-            + [current_page],
-        )
-
-        # Initial identity sync (not an OAuth callback—just a passive identity fetch)
+        # Initial identity sync
         demo.load(
             sync_backend_session_on_load,
-            outputs=[battle_col, login_btn, welcome_display, logout_btn, cookie_html],
+            outputs=[battle_col, login_btn, cookie_html],
             js=cleanup_js,
         )
 
@@ -844,8 +798,6 @@ def build_app():
 }}
         """,
             )
-
-        # (Removed MutationObserver; direct JS click handles login redirect.)
 
     return demo
 
