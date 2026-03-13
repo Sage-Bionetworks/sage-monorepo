@@ -46,6 +46,7 @@
       "@sagebionetworks/explorers/comparison-tool": ["libs/explorers/comparison-tool/src/index.ts"],
       "@sagebionetworks/explorers/constants": ["libs/explorers/constants/src/index.ts"],
       "@sagebionetworks/explorers/models": ["libs/explorers/models/src/index.ts"],
+      "@sagebionetworks/explorers/sentry": ["libs/explorers/sentry/src/index.ts"],
       "@sagebionetworks/explorers/services": ["libs/explorers/services/src/index.ts"],
       "@sagebionetworks/explorers/shared": ["libs/explorers/shared/src/index.ts"],
       "@sagebionetworks/explorers/storybook": ["libs/explorers/storybook/src/index.ts"],

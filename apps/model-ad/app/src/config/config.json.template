@@ -4,5 +4,6 @@
   "commitSha": "${COMMIT_SHA}",
   "csrApiUrl": "${CSR_API_URL}",
   "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID}",
+  "sentryRelease": "${SENTRY_RELEASE}",
   "ssrApiUrl": "${SSR_API_URL}"
 }

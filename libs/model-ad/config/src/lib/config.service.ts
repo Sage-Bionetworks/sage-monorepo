@@ -2,6 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
+import { getCachedConfig } from '@sagebionetworks/explorers/util';
 import { APP_PORT, AppConfig, EMPTY_APP_CONFIG } from './app.config';
 
 @Injectable({
@@ -15,6 +16,17 @@ export class ConfigService {
   config: AppConfig = EMPTY_APP_CONFIG;
 
   async loadConfig(): Promise<void> {
+    const cached = getCachedConfig<AppConfig>();
+    if (cached) {
+      this.config = cached;
+      this.config.isPlatformServer = isPlatformServer(this.platformId);
+      this.config.privacyPolicyUrl =
+        'https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948530178/OpenChallenges+Privacy+Policy';
+      this.config.termsOfUseUrl =
+        'https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948333575/OpenChallenges+Terms+of+Use';
+      return;
+    }
+
     const browserRoot = isPlatformServer(this.platformId) ? `http://localhost:${this.port}` : '.';
 
     const appConfig$ = this.http.get<AppConfig>(`${browserRoot}/config/config.json`);
