@@ -589,6 +589,7 @@ def build_app():
             fn=load_quest_content_on_page_load,
             inputs=None,
             outputs=[
+                quest_container,
                 quest_progress_container,
                 quest_contributors_container,
                 quest_carousel_container,
