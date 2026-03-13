@@ -829,21 +829,23 @@ def build_app():
 }}
             """
 
-        quest_load_event = demo.load(
-            fn=load_quest_content_on_page_load,
-            inputs=None,
-            outputs=[
-                quest_progress_container,
-                quest_contributors_container,
-                quest_carousel_container,
-            ],
-        )
-        if carousel_init_js:
-            quest_load_event.then(
-                fn=None,
-                inputs=None,
-                outputs=None,
-                js=carousel_init_js,
+            # Trigger carousel initialization on page load
+            demo.load(
+                None,
+                None,
+                None,
+                js="""
+() => {
+    setTimeout(() => {
+        const btn = document.getElementById('carousel-init-trigger');
+        if (btn) {
+            btn.click();
+        } else {
+            console.error('Carousel init button not found');
+        }
+    }, 500);
+}
+        """,
             )
 
     return demo
