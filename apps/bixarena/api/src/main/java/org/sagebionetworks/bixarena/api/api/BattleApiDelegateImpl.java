@@ -19,7 +19,7 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
-import org.sagebionetworks.bixarena.api.model.dto.BattleValidationRunRequestDto;
+
 import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
 import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
@@ -170,8 +170,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   @Override
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<BattleValidationResponseDto> runBattleValidation(
-    UUID battleId,
-    BattleValidationRunRequestDto battleValidationRunRequestDto
+    UUID battleId
   ) {
     log.info("Admin triggering automated validation for battle {}", battleId);
     BattleValidationEntity entity = battleValidationService.validateAndPersistBattle(battleId);
