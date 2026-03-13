@@ -465,25 +465,37 @@ def build_app():
 
         nav_outputs = pages + nav_buttons + [current_page]
 
+        # GA4 virtual pageview tracking
+        _GA4_NAV_JS = """
+() => {{
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({{event: 'page_view', page_path: '/{page}'}});
+}}
+"""
+
         # Navigation - battle page will refresh prompts via its own load handler
         battle_btn.click(
             lambda: navigate_to(1),
             outputs=nav_outputs,
+            js=_GA4_NAV_JS.format(page="battle"),
         )
         # Leaderboard button - show page and refresh data
         leaderboard_btn.click(
             lambda: navigate_to(2) + list(refresh_leaderboard()),
             outputs=nav_outputs + leaderboard_view.outputs,
+            js=_GA4_NAV_JS.format(page="leaderboard"),
         )
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(
             lambda: navigate_to(1),
             outputs=nav_outputs,
+            js=_GA4_NAV_JS.format(page="battle"),
         )
         # Quest authenticated button - navigates to battle page
         quest_btn_authenticated.click(
             lambda: navigate_to(1),
             outputs=nav_outputs,
+            js=_GA4_NAV_JS.format(page="battle"),
         )
         # Quest login button - redirects to login page
         quest_btn_login.click(
@@ -785,17 +797,17 @@ def build_app():
                 None,
                 None,
                 None,
-                js=f"""
-() => {{
-    setTimeout(() => {{
+                js="""
+() => {
+    setTimeout(() => {
         const btn = document.getElementById('carousel-init-trigger');
-        if (btn) {{
+        if (btn) {
             btn.click();
-        }} else {{
+        } else {
             console.error('Carousel init button not found');
-        }}
-    }}, 500);
-}}
+        }
+    }, 500);
+}
         """,
             )
 
