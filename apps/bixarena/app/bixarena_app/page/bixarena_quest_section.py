@@ -1029,7 +1029,7 @@ def build_quest_section(
     )
 
     # Build the complete quest section using Gradio layout components
-    with gr.Column(elem_id="quest-section-wrapper") as quest_container:
+    with gr.Column(elem_id="quest-section-wrapper", visible=False) as quest_container:
         # Header section (outside bordered box, matching Arena Rules style)
         gr.HTML(f"""
         <div style="padding: 2.5rem 1.5rem;">

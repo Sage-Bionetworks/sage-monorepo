@@ -1,5 +1,4 @@
 import argparse
-import functools
 import logging
 import os
 
@@ -12,7 +11,7 @@ from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.config.constants import GTM_CONTAINER_ID
 from bixarena_app.config.utils import setup_logging
 from bixarena_app.opengraph import OpenGraphFixMiddleware, build_opengraph_meta_tags
-from bixarena_app.page.bixarena_battle import build_battle_page
+from bixarena_app.page.bixarena_battle import build_battle_page, clear_history
 
 # Configure logging first
 setup_logging()
@@ -20,7 +19,6 @@ logger = logging.getLogger(__name__)
 from bixarena_app.page.bixarena_footer import build_footer
 from bixarena_app.page.bixarena_header import (
     build_header,
-    handle_login_click,
     update_battle_column,
     update_login_button,
 )
@@ -34,11 +32,6 @@ from bixarena_app.page.bixarena_home import (
 from bixarena_app.page.bixarena_leaderboard import (
     build_leaderboard_page,
     refresh_leaderboard,
-)
-from bixarena_app.page.bixarena_user import (
-    build_user_page,
-    handle_logout_click,
-    update_user_page,
 )
 
 
@@ -138,7 +131,6 @@ def sync_backend_session_on_load(request: gr.Request):
                             return (
                                 update_battle_column(request),
                                 update_login_button(request),
-                                *update_user_page(request),
                                 gr.HTML(""),
                             )
                         else:
@@ -163,7 +155,6 @@ def sync_backend_session_on_load(request: gr.Request):
     return (
         update_battle_column(request),
         update_login_button(request),
-        *update_user_page(request),
         gr.HTML(""),
     )
 
@@ -420,15 +411,18 @@ def build_app():
             ) = build_home_page()
 
         with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
-            _, example_prompt_ui, prompt_outputs = build_battle_page()
+            (
+                _,
+                example_prompt_ui,
+                prompt_outputs,
+                battle_session,
+                battle_reset_outputs,
+            ) = build_battle_page()
 
         with gr.Column(
             visible=False, elem_classes=["page-content"]
         ) as leaderboard_page:
             leaderboard_view = build_leaderboard_page()
-
-        with gr.Column(visible=False, elem_classes=["page-content"]) as user_page:
-            _, welcome_display, logout_btn = build_user_page()
 
         # Footer
         build_footer()
@@ -453,7 +447,7 @@ def build_app():
             + "</span>",
         )
 
-        pages = [home_page, battle_page, leaderboard_page, user_page]
+        pages = [home_page, battle_page, leaderboard_page]
         navigator = PageNavigator(pages)
         current_page = gr.State(value=0)
 
@@ -477,10 +471,16 @@ def build_app():
 
         nav_outputs = pages + nav_buttons + [current_page]
 
-        # Navigation - battle page will refresh prompts via its own load handler
+        # Navigation - battle button resets battle to initial state
+        def navigate_to_battle(bs, request: gr.Request = None):
+            nav = navigate_to(1)
+            reset = clear_history(bs, request, example_prompt_ui)
+            return nav + reset
+
         battle_btn.click(
-            lambda: navigate_to(1),
-            outputs=nav_outputs,
+            navigate_to_battle,
+            inputs=[battle_session],
+            outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
         )
         # Leaderboard button - show page and refresh data
         leaderboard_btn.click(
@@ -489,13 +489,15 @@ def build_app():
         )
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(
-            lambda: navigate_to(1),
-            outputs=nav_outputs,
+            navigate_to_battle,
+            inputs=[battle_session],
+            outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
         )
         # Quest authenticated button - navigates to battle page
         quest_btn_authenticated.click(
-            lambda: navigate_to(1),
-            outputs=nav_outputs,
+            navigate_to_battle,
+            inputs=[battle_session],
+            outputs=nav_outputs + battle_reset_outputs + prompt_outputs,
         )
         # Quest login button - redirects to login page
         quest_btn_login.click(
@@ -509,27 +511,6 @@ def build_app():
             """,
         )
 
-        # Nav highlight updates for Home page (used after login/logout)
-        home_nav_highlights = [
-            gr.update(variant="secondary"),  # battle_btn
-            gr.update(variant="secondary"),  # leaderboard_btn
-            0,  # current_page state
-        ]
-
-        # Bind static args so Gradio can still inject request without warnings.
-        _login_handler = functools.partial(
-            handle_login_click, navigator, update_login_button, update_user_page
-        )
-        _logout_handler = functools.partial(
-            handle_logout_click, navigator, update_login_button, update_user_page
-        )
-
-        def login_handler(request: gr.Request | None = None):
-            return (*_login_handler(request), *home_nav_highlights)
-
-        def logout_handler(request: gr.Request | None = None):
-            return (*_logout_handler(request), *home_nav_highlights)
-
         # Login CTA button - redirects to login page
         cta_btn_login.click(
             None,
@@ -542,13 +523,9 @@ def build_app():
             """,
         )
 
-        # Login
+        # Login/Logout (JS-only; page reload resets Gradio session)
         login_btn.click(
-            login_handler,
-            outputs=pages
-            + [login_btn, welcome_display, logout_btn, cookie_html]
-            + nav_buttons
-            + [current_page],
+            None,
             js="""
 () => {
   const btn = document.querySelector('#login-btn button,#login-btn');
@@ -572,22 +549,13 @@ def build_app():
       }
   }
 }
-                """,
+            """,
         )
 
-        # Logout
-        logout_btn.click(
-            logout_handler,
-            outputs=pages
-            + [login_btn, welcome_display, logout_btn, cookie_html]
-            + nav_buttons
-            + [current_page],
-        )
-
-        # Initial identity sync (not an OAuth callback—just a passive identity fetch)
+        # Initial identity sync
         demo.load(
             sync_backend_session_on_load,
-            outputs=[battle_col, login_btn, welcome_display, logout_btn, cookie_html],
+            outputs=[battle_col, login_btn, cookie_html],
             js=cleanup_js,
         )
 
@@ -623,6 +591,7 @@ def build_app():
             fn=load_quest_content_on_page_load,
             inputs=None,
             outputs=[
+                quest_container,
                 quest_progress_container,
                 quest_contributors_container,
                 quest_carousel_container,
@@ -845,21 +814,19 @@ def build_app():
                 None,
                 None,
                 None,
-                js=f"""
-() => {{
-    setTimeout(() => {{
+                js="""
+() => {
+    setTimeout(() => {
         const btn = document.getElementById('carousel-init-trigger');
-        if (btn) {{
+        if (btn) {
             btn.click();
-        }} else {{
+        } else {
             console.error('Carousel init button not found');
-        }}
-    }}, 500);
-}}
+        }
+    }, 500);
+}
         """,
             )
-
-        # (Removed MutationObserver; direct JS click handles login redirect.)
 
     return demo
 

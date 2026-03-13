@@ -20,7 +20,6 @@ from bixarena_app.page.bixarena_quest_section import (
     _build_builders_credits_html,
     _build_carousel_html,
     _build_progress_html,
-    build_quest_not_found_section,
     build_quest_section,
 )
 
@@ -267,7 +266,7 @@ def build_stats_section():
 
 def load_quest_content_on_page_load(
     request: gr.Request,
-) -> tuple[dict, dict, dict]:
+) -> tuple[dict, dict, dict, dict]:
     """Load all dynamic quest content on page load (progress, contributors, carousel).
 
     If the user is authenticated and found in the contributors list, a personal
@@ -277,15 +276,16 @@ def load_quest_content_on_page_load(
         request: Gradio request object
 
     Returns:
-        Tuple of (progress_html_update, contributors_html_update, carousel_html_update)
+        Tuple of (quest_container_update, progress_html_update,
+                  contributors_html_update, carousel_html_update)
     """
     try:
         # Fetch contributors (single API call for all data)
         contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
 
-        # If quest doesn't exist, skip building content HTML
+        # If quest doesn't exist, keep section hidden
         if contributors_data.get("error", False):
-            return (gr.update(), gr.update(), gr.update())
+            return (gr.update(visible=False), gr.update(), gr.update(), gr.update())
 
         # Calculate progress using contributors data
         progress_data = calculate_quest_progress(contributors_data)
@@ -328,6 +328,7 @@ def load_quest_content_on_page_load(
         carousel_html = _build_carousel_html("quest-carousel")
 
         return (
+            gr.update(visible=True),
             gr.update(value=progress_html),
             gr.update(value=contributors_html),
             gr.update(value=carousel_html),
@@ -335,8 +336,9 @@ def load_quest_content_on_page_load(
 
     except Exception as e:
         logger.error(f"Error refreshing quest content: {e}")
-        # Return empty updates on error (keep existing content)
+        # Keep section hidden on error
         return (
+            gr.update(visible=False),
             gr.update(),
             gr.update(),
             gr.update(),
@@ -344,10 +346,8 @@ def load_quest_content_on_page_load(
 
 
 def build_quest_section_wrapper():
-    """Create the Community Quest section for the home page"""
-    # Check if community quest feature is enabled
+    """Create the Community Quest section for the home page."""
     if not COMMUNITY_QUEST_ENABLED:
-        # Return None values if feature is disabled
         with gr.Column(visible=False) as quest_container:
             progress_html_container = gr.HTML("")
             contributors_html_container = gr.HTML("")
@@ -367,64 +367,7 @@ def build_quest_section_wrapper():
             0,  # rotation_interval
         )
 
-    # Try to fetch quest data and build section
-    # If quest doesn't exist or any error occurs, show error section
-    contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
-
-    # Check if quest was not found (error from API)
-    # Note: Warning already logged in api_client_helper, no need to log again
-    if contributors_data.get("error", False):
-        (
-            quest_container,
-            progress_html_container,
-            contributors_html_container,
-            carousel_html_container,
-            quest_btn_authenticated,
-            quest_btn_login,
-            carousel_init_trigger,
-            carousel_id,
-            rotation_interval,
-        ) = build_quest_not_found_section()
-    else:
-        # Quest exists, fetch progress data and build normal section
-        try:
-            progress_data = calculate_quest_progress(contributors_data)
-            (
-                quest_container,
-                progress_html_container,
-                contributors_html_container,
-                carousel_html_container,
-                quest_btn_authenticated,
-                quest_btn_login,
-                carousel_init_trigger,
-                carousel_id,
-                rotation_interval,
-            ) = build_quest_section(progress_data, contributors_data)
-        except Exception as e:
-            logger.error(f"Error building quest section: {e}")
-            # Fall back to quest not found section if build fails
-            (
-                quest_container,
-                progress_html_container,
-                contributors_html_container,
-                carousel_html_container,
-                quest_btn_authenticated,
-                quest_btn_login,
-                carousel_init_trigger,
-                carousel_id,
-                rotation_interval,
-            ) = build_quest_not_found_section()
-    return (
-        quest_container,
-        progress_html_container,
-        contributors_html_container,
-        carousel_html_container,
-        quest_btn_authenticated,
-        quest_btn_login,
-        carousel_init_trigger,
-        carousel_id,
-        rotation_interval,
-    )
+    return build_quest_section()
 
 
 def build_how_it_works_section():
