@@ -21,29 +21,17 @@ export class DownloadDomImagesZipComponent {
   downloadImagePaddingPx = input<number>();
 
   performDownload = async (fileType: string): Promise<void> => {
-    const totalStart = performance.now();
     const zip = new JSZip();
     const paddingPx = this.downloadImagePaddingPx() ?? 0;
 
     for (const domFile of this.domFiles()) {
-      const imageStart = performance.now();
       const blob = await captureDomToBlob(domFile.target, paddingPx);
-      console.log(
-        `[DownloadDomImagesZip] Image "${domFile.filename}" captured in ${(performance.now() - imageStart).toFixed(0)}ms`,
-      );
       if (blob) {
         zip.file(domFile.filename + fileType, blob);
       }
     }
 
-    const zipStart = performance.now();
     const zipBlob = await zip.generateAsync({ type: 'blob' });
-    console.log(
-      `[DownloadDomImagesZip] ZIP generated in ${(performance.now() - zipStart).toFixed(0)}ms`,
-    );
     saveAs(zipBlob, this.filename() + '.zip');
-    console.log(
-      `[DownloadDomImagesZip] Total download completed in ${(performance.now() - totalStart).toFixed(0)}ms`,
-    );
   };
 }
