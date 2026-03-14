@@ -3,11 +3,12 @@ import { InjectionToken } from '@angular/core';
 export interface AppConfig {
   appVersion: string;
   commitSha: string;
-  csrApiUrl: string;
-  isPlatformServer: boolean;
-  ssrApiUrl: string;
   apiDocsUrl: string;
+  csrApiUrl: string;
+  ssrApiUrl: string;
   googleTagManagerId: string;
+  isPlatformServer: boolean;
+  sentryRelease: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;

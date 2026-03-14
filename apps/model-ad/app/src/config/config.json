@@ -4,5 +4,6 @@
   "commitSha": "",
   "csrApiUrl": "http://localhost:8000/api/v1",
   "googleTagManagerId": "",
+  "sentryRelease": "",
   "ssrApiUrl": "http://model-ad-api:3333/v1"
 }

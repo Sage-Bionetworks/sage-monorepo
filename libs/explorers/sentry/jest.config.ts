@@ -1,10 +1,11 @@
 /* eslint-disable */
 export default {
-  displayName: 'web-util',
+  displayName: 'explorers-sentry',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../coverage/libs/model-ad/util',
+  coverageDirectory: '../../../coverage/libs/explorers/sentry',
+  testEnvironment: 'jest-fixed-jsdom',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -14,6 +15,7 @@ export default {
       },
     ],
   },
+  maxWorkers: '50%',
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',

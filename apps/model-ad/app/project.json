@@ -155,7 +155,7 @@
       "options": {
         "commands": [
           "sentry-cli sourcemaps inject dist/apps/model-ad/app",
-          "sentry-cli sourcemaps upload --org sage-bionetworks --project model-ad dist/apps/model-ad/app",
+          "sentry-cli sourcemaps upload --org sage-bionetworks --project model-ad --release $SENTRY_RELEASE dist/apps/model-ad/app",
           "find dist/apps/model-ad/app -name '*.map' -delete"
         ],
         "parallel": false
