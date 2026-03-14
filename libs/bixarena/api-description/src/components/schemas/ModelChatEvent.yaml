@@ -1,0 +1,29 @@
+type: object
+description: A streaming event chunk from the model chat completion
+properties:
+  delta:
+    $ref: ModelChatDelta.yaml
+  status:
+    type: string
+    enum:
+      - streaming
+      - complete
+      - error
+    description: Current state of the streaming response
+  finishReason:
+    type: string
+    nullable: true
+    enum:
+      - stop
+      - length
+      - content_filter
+      - error
+    description: Reason the model stopped generating
+  errorMessage:
+    type: string
+    nullable: true
+    description: User-friendly error message when status is error
+  usage:
+    $ref: ModelChatUsage.yaml
+required:
+  - status

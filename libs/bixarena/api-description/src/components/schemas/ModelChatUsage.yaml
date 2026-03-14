@@ -1,0 +1,30 @@
+type: object
+description: Token usage and generation parameters for the chat completion
+properties:
+  model:
+    type: string
+    description: The model identifier that was used
+  temperature:
+    type: number
+    format: float
+    description: The sampling temperature that was used
+  topP:
+    type: number
+    format: float
+    description: The nucleus sampling parameter that was used
+  maxTokens:
+    type: integer
+    description: The maximum token limit that was set
+  promptTokens:
+    type: integer
+    description: Number of tokens in the prompt
+  completionTokens:
+    type: integer
+    description: Number of tokens in the completion
+  totalTokens:
+    type: integer
+    description: Total number of tokens used
+required:
+  - promptTokens
+  - completionTokens
+  - totalTokens

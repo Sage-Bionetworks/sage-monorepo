@@ -1,0 +1,28 @@
+post:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Chat
+  summary: Create a chat completion
+  description: Sends messages to an LLM model via OpenRouter and returns a streaming HTTP response (text/event-stream)
+  operationId: createChatCompletion
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/ModelChatRequest.yaml
+  responses:
+    '200':
+      description: Streaming HTTP response with chat completion chunks
+      content:
+        text/event-stream:
+          schema:
+            $ref: ../../components/schemas/ModelChatEvent.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

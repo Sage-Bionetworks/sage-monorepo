@@ -1,0 +1,13 @@
+type: object
+description: Request payload for creating a chat completion
+properties:
+  modelId:
+    $ref: ModelId.yaml
+  messages:
+    type: array
+    items:
+      $ref: ModelChatMessage.yaml
+    description: The conversation messages to send to the model
+required:
+  - modelId
+  - messages
