@@ -28,6 +28,7 @@ from bixarena_app.config.constants import (
     PROMPT_USE_LIMIT,
 )
 from bixarena_app.config.conversation import create_system_message_html
+from bixarena_app.config.utils import _ga4_event_js
 from bixarena_app.model import model_response
 from bixarena_app.model.error_handler import get_battle_round_limit_message
 from bixarena_app.model.model_response import (
@@ -672,28 +673,19 @@ def build_side_by_side_ui_anony():
         left_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
-        js=(
-            "() => { if (window.bixTrack) window.bixTrack("
-            "'vote_clicked', {vote_choice: 'model_1'}); }"
-        ),
+        js=_ga4_event_js("vote_clicked", {"vote_choice": "model_1"}),
     )
     right_vote_btn.click(
         right_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
-        js=(
-            "() => { if (window.bixTrack) window.bixTrack("
-            "'vote_clicked', {vote_choice: 'model_2'}); }"
-        ),
+        js=_ga4_event_js("vote_clicked", {"vote_choice": "model_2"}),
     )
     tie_btn.click(
         tie_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
-        js=(
-            "() => { if (window.bixTrack) window.bixTrack("
-            "'vote_clicked', {vote_choice: 'tie'}); }"
-        ),
+        js=_ga4_event_js("vote_clicked", {"vote_choice": "tie"}),
     )
     new_battle_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
@@ -709,10 +701,7 @@ def build_side_by_side_ui_anony():
         + [disclaimer]
         + [example_prompts_group, prev_btn, next_btn]
         + prompt_cards,
-        js=(
-            "() => { if (window.bixTrack) window.bixTrack("
-            "'new_battle_clicked', {trigger: 'new_battle'}); }"
-        ),
+        js=_ga4_event_js("new_battle_clicked", {"trigger": "new_battle"}),
     )
 
     # Direct JavaScript functions for enter key control
@@ -793,10 +782,7 @@ def build_side_by_side_ui_anony():
         + [example_prompts_group]
         + [new_battle_same_prompt_btn]
         + [new_battle_btn],
-        js=(
-            "() => { if (window.bixTrack) window.bixTrack("
-            "'new_battle_clicked', {trigger: 'new_battle_same_prompt'}); }"
-        ),
+        js=_ga4_event_js("new_battle_clicked", {"trigger": "new_battle_same_prompt"}),
     ).then(
         add_text,
         states + [battle_session] + model_selectors + [textbox],
