@@ -6,7 +6,7 @@ properties:
   messages:
     type: array
     items:
-      $ref: ModelChatMessage.yaml
+      $ref: MessageCreate.yaml
     description: The conversation messages to send to the model
 required:
   - modelId

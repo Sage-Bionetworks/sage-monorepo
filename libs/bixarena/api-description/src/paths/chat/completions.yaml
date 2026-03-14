@@ -17,7 +17,7 @@ post:
       content:
         text/event-stream:
           schema:
-            $ref: ../../components/schemas/ModelChatEvent.yaml
+            $ref: ../../components/schemas/ModelChatCompletionChunk.yaml
     '400':
       $ref: ../../components/responses/BadRequest.yaml
     '401':
