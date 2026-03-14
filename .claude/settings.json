@@ -1,5 +1,11 @@
 {
   "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import yaml; yaml.safe_load\\(open\\(''libs/bixarena/api-description/openapi/openapi.yaml''\\)\\); print\\(''Valid YAML''\\)\")",
+      "Bash(git add:*)",
+      "Bash(git rebase:*)",
+      "Bash(GIT_EDITOR=true git rebase --continue)"
+    ],
     "deny": [
       "Read(./.env)",
       "Read(./.env.*)",

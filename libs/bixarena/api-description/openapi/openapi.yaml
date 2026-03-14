@@ -13,6 +13,8 @@ servers:
   - url: https://bixarena.ai/api/v1
   - url: https://bixarena.ai/api/v1
 tags:
+  - name: Chat
+    x-displayName: Chat
   - name: Admin
     description: Administrative endpoints requiring elevated roles.
     x-displayName: Admin
@@ -1524,6 +1526,115 @@ components:
         - activePostIndex
         - totalBlocks
         - posts
+    ModelId:
+      description: UUID of an AI model.
+      type: string
+      format: uuid
+      example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+    MessageRole:
+      type: string
+      description: The role of a message.
+      maxLength: 20
+      enum:
+        - system
+        - user
+        - assistant
+      example: user
+    MessageContent:
+      type: string
+      description: The content of a message.
+      maxLength: 10000
+      example: What is the capital of France?
+    MessageCreate:
+      type: object
+      description: Payload used to create a message.
+      properties:
+        role:
+          $ref: '#/components/schemas/MessageRole'
+        content:
+          $ref: '#/components/schemas/MessageContent'
+      required:
+        - role
+        - content
+    ModelChatRequest:
+      type: object
+      description: Request payload for creating a chat completion
+      properties:
+        modelId:
+          $ref: '#/components/schemas/ModelId'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageCreate'
+          description: The conversation messages to send to the model
+      required:
+        - modelId
+        - messages
+    ModelErrorMessage:
+      type: string
+      description: Error message describing what went wrong.
+      minLength: 1
+      maxLength: 1000
+      example: Rate limit exceeded
+    ModelChatUsage:
+      type: object
+      description: Token usage and generation parameters for the chat completion
+      properties:
+        model:
+          type: string
+          description: The model identifier that was used
+        temperature:
+          type: number
+          format: float
+          description: The sampling temperature that was used
+        topP:
+          type: number
+          format: float
+          description: The nucleus sampling parameter that was used
+        maxTokens:
+          type: integer
+          description: The maximum token limit that was set
+        promptTokens:
+          type: integer
+          description: Number of tokens in the prompt
+        completionTokens:
+          type: integer
+          description: Number of tokens in the completion
+        totalTokens:
+          type: integer
+          description: Total number of tokens used
+      required:
+        - promptTokens
+        - completionTokens
+        - totalTokens
+    ModelChatCompletionChunk:
+      type: object
+      description: A streaming event chunk from the model chat completion
+      properties:
+        content:
+          $ref: '#/components/schemas/MessageContent'
+        status:
+          type: string
+          enum:
+            - streaming
+            - complete
+            - error
+          description: Current state of the streaming response
+        finishReason:
+          type: string
+          nullable: true
+          enum:
+            - stop
+            - length
+            - content_filter
+            - error
+          description: Reason the model stopped generating
+        errorMessage:
+          $ref: '#/components/schemas/ModelErrorMessage'
+        usage:
+          $ref: '#/components/schemas/ModelChatUsage'
+      required:
+        - status
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -1629,11 +1740,6 @@ components:
       type: string
       format: uuid
       example: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
-    ModelId:
-      description: UUID of an AI model.
-      type: string
-      format: uuid
-      example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
     CreatedAt:
       description: Timestamp when the entity was created.
       type: string
@@ -1855,31 +1961,6 @@ components:
         endedAt:
           $ref: '#/components/schemas/EndedAt'
           nullable: true
-    MessageRole:
-      type: string
-      description: The role of a message.
-      maxLength: 20
-      enum:
-        - system
-        - user
-        - assistant
-      example: user
-    MessageContent:
-      type: string
-      description: The content of a message.
-      maxLength: 10000
-      example: What is the capital of France?
-    MessageCreate:
-      type: object
-      description: Payload used to create a message.
-      properties:
-        role:
-          $ref: '#/components/schemas/MessageRole'
-        content:
-          $ref: '#/components/schemas/MessageContent'
-      required:
-        - role
-        - content
     BattleRoundCreateRequest:
       type: object
       description: Payload to create a new battle round with the user prompt.
@@ -2481,12 +2562,6 @@ components:
       nullable: true
       description: HTTP status code from the error response.
       example: 429
-    ModelErrorMessage:
-      type: string
-      description: Error message describing what went wrong.
-      minLength: 1
-      maxLength: 1000
-      example: Rate limit exceeded
     ModelErrorCreateRequest:
       type: object
       description: Request to report a model error.
@@ -2916,14 +2991,14 @@ components:
       required:
         - sub
   responses:
-    Unauthorized:
-      description: Unauthorized
+    BadRequest:
+      description: Invalid request
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    Forbidden:
-      description: The user does not have the permission to perform this action
+    Unauthorized:
+      description: Unauthorized
       content:
         application/problem+json:
           schema:
@@ -2967,8 +3042,8 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    BadRequest:
-      description: Invalid request
+    Forbidden:
+      description: The user does not have the permission to perform this action
       content:
         application/problem+json:
           schema:
@@ -2980,6 +3055,9 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
 x-tagGroups:
+  - name: BixArena AI Service
+    tags:
+      - Chat
   - name: BixArena API Service
     tags:
       - Admin

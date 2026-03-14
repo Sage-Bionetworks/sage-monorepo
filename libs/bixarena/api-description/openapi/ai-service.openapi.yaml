@@ -23,6 +23,9 @@ tags:
   - name: Battle Validation
     description: Operations for validating biomedical battles
     x-sage-internal: true
+  - name: Chat
+    description: Operations for streaming chat completions from LLM models
+    x-sage-internal: true
 paths:
   /health-check:
     get:
@@ -98,6 +101,35 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /chat/completions:
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Chat
+      summary: Create a chat completion
+      description: Sends messages to an LLM model via OpenRouter and returns a streaming HTTP response (text/event-stream)
+      operationId: createChatCompletion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelChatRequest'
+      responses:
+        '200':
+          description: Streaming HTTP response with chat completion chunks
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/ModelChatCompletionChunk'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -207,6 +239,136 @@ components:
         - confidence
         - isBiomedical
         - method
+    ModelId:
+      description: UUID of an AI model.
+      type: string
+      format: uuid
+      example: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+    MessageRole:
+      type: string
+      description: The role of a message.
+      maxLength: 20
+      enum:
+        - system
+        - user
+        - assistant
+      example: user
+    MessageContent:
+      type: string
+      description: The content of a message.
+      maxLength: 10000
+      example: What is the capital of France?
+    MessageCreate:
+      type: object
+      description: Payload used to create a message.
+      properties:
+        role:
+          $ref: '#/components/schemas/MessageRole'
+        content:
+          $ref: '#/components/schemas/MessageContent'
+      required:
+        - role
+        - content
+    ModelChatRequest:
+      type: object
+      description: Request payload for creating a chat completion
+      properties:
+        modelId:
+          $ref: '#/components/schemas/ModelId'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageCreate'
+          description: The conversation messages to send to the model
+      required:
+        - modelId
+        - messages
+    ModelErrorMessage:
+      type: string
+      description: Error message describing what went wrong.
+      minLength: 1
+      maxLength: 1000
+      example: Rate limit exceeded
+    ModelChatUsage:
+      type: object
+      description: Token usage and generation parameters for the chat completion
+      properties:
+        model:
+          type: string
+          description: The model identifier that was used
+        temperature:
+          type: number
+          format: float
+          description: The sampling temperature that was used
+        topP:
+          type: number
+          format: float
+          description: The nucleus sampling parameter that was used
+        maxTokens:
+          type: integer
+          description: The maximum token limit that was set
+        promptTokens:
+          type: integer
+          description: Number of tokens in the prompt
+        completionTokens:
+          type: integer
+          description: Number of tokens in the completion
+        totalTokens:
+          type: integer
+          description: Total number of tokens used
+      required:
+        - promptTokens
+        - completionTokens
+        - totalTokens
+    ModelChatCompletionChunk:
+      type: object
+      description: A streaming event chunk from the model chat completion
+      properties:
+        content:
+          $ref: '#/components/schemas/MessageContent'
+        status:
+          type: string
+          enum:
+            - streaming
+            - complete
+            - error
+          description: Current state of the streaming response
+        finishReason:
+          type: string
+          nullable: true
+          enum:
+            - stop
+            - length
+            - content_filter
+            - error
+          description: Reason the model stopped generating
+        errorMessage:
+          $ref: '#/components/schemas/ModelErrorMessage'
+        usage:
+          $ref: '#/components/schemas/ModelChatUsage'
+      required:
+        - status
+    RateLimitError:
+      allOf:
+        - $ref: '#/components/schemas/BasicError'
+        - type: object
+          properties:
+            limit:
+              type: integer
+              description: Maximum requests allowed per window
+              example: 100
+            window:
+              type: string
+              description: Time window for rate limiting
+              example: 1 minute
+            retryAfterSeconds:
+              type: integer
+              description: Seconds to wait before retrying
+              example: 18
+          required:
+            - limit
+            - window
+            - retryAfterSeconds
   responses:
     NotFound:
       description: The specified resource was not found
@@ -232,4 +394,31 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+    TooManyRequests:
+      description: Too many requests. Rate limit exceeded. The client should wait before making additional requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RateLimitError'
+      headers:
+        Retry-After:
+          description: Seconds to wait before making a new request
+          schema:
+            type: integer
+            example: 18
+        X-RateLimit-Limit:
+          description: Maximum requests allowed per minute
+          schema:
+            type: integer
+            example: 100
+        X-RateLimit-Remaining:
+          description: Remaining requests in current window
+          schema:
+            type: integer
+            example: 0
+        X-RateLimit-Reset:
+          description: Seconds until rate limit window resets
+          schema:
+            type: integer
+            example: 18
 x-oauth2-audience: urn:bixarena:ai
