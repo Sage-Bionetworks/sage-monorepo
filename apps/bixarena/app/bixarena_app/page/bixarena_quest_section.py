@@ -616,9 +616,17 @@ def _build_carousel_html(
         req_progress = post.get("required_progress")
         req_tier = post.get("required_tier")
         if req_progress is not None:
+            block_icon = (
+                '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"'
+                ' viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+                ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+                '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4'
+                "A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4"
+                'A2 2 0 0 0 21 16z"></path></svg>'
+            )
             req_badges.append(
                 f'<span class="locked-req-badge">'
-                f'<span class="locked-req-icon">&#x1f3d7;&#xfe0f;</span>'
+                f'<span class="locked-req-icon">{block_icon}</span>'
                 f"{req_progress:,} blocks</span>"
             )
             hint_parts.append(f"Reach {req_progress:,} blocks to unlock this post.")
