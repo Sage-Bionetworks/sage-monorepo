@@ -8,9 +8,10 @@
 -- - Post 0: Public, no gates
 -- - Post 1: Public, no gates
 -- - Post 2: Public, no gates
--- - Post 3: Progress-gated (requires 100 battles)
--- - Post 4: Tier-gated (requires knight tier)
--- - Post 5: Scheduled for future publication
+-- - Post 3: Progress-gated (requires 10 battles — unlocked, quest has 35 blocks)
+-- - Post 4: Progress-gated (requires 100 battles)
+-- - Post 5: Tier-gated (requires knight tier)
+-- - Post 6: Scheduled for future publication
 -- ============================================================================
 
 UPDATE api.quest
@@ -41,26 +42,34 @@ SELECT id, 2, '2026-02-20', 'Mock Post 2',
     NULL, NULL, NULL
 FROM api.quest WHERE quest_id = 'build-bioarena-together';
 
--- Post 3: Progress-gated (requires 100 total battles)
+-- Post 3: Progress-gated (requires 10 total battles — already unlocked since quest has 35 blocks)
 INSERT INTO api.quest_post (quest_id, post_index, date, title, description, images, publish_date, required_progress, required_tier)
-SELECT id, 3, '2026-03-02', 'Mock Post 3 (Progress-Gated)',
-    'This post is only unlocked when 100 battles have been completed.',
+SELECT id, 3, '2026-02-27', 'Mock Post 3 (Unlocked Reward)',
+    'This progress-gated post is now unlocked because the community reached 10 blocks.',
     '["https://example.com/img/post3.jpg"]'::jsonb,
+    NULL, 10, NULL
+FROM api.quest WHERE quest_id = 'build-bioarena-together';
+
+-- Post 4: Progress-gated (requires 100 total battles)
+INSERT INTO api.quest_post (quest_id, post_index, date, title, description, images, publish_date, required_progress, required_tier)
+SELECT id, 4, '2026-03-02', 'Mock Post 4 (Progress-Gated)',
+    'This post is only unlocked when 100 battles have been completed.',
+    '["https://example.com/img/post4.jpg"]'::jsonb,
     NULL, 100, NULL
 FROM api.quest WHERE quest_id = 'build-bioarena-together';
 
--- Post 4: Tier-gated (requires knight tier)
+-- Post 5: Tier-gated (requires knight tier)
 INSERT INTO api.quest_post (quest_id, post_index, date, title, description, images, publish_date, required_progress, required_tier)
-SELECT id, 4, NULL, 'Mock Post 4 (Knight-Gated)',
+SELECT id, 5, NULL, 'Mock Post 5 (Knight-Gated)',
     'This post is only unlocked for knights and champions.',
-    '["https://example.com/img/post4.jpg"]'::jsonb,
+    '["https://example.com/img/post5.jpg"]'::jsonb,
     NULL, NULL, 'knight'
 FROM api.quest WHERE quest_id = 'build-bioarena-together';
 
--- Post 5: Scheduled for future publication
+-- Post 6: Scheduled for future publication
 INSERT INTO api.quest_post (quest_id, post_index, date, title, description, images, publish_date, required_progress, required_tier)
-SELECT id, 5, '2026-12-01', 'Mock Post 5 (Future-Scheduled)',
+SELECT id, 6, '2026-12-01', 'Mock Post 6 (Future-Scheduled)',
     'This post should not appear until its publish date.',
-    '["https://example.com/img/post5.jpg"]'::jsonb,
+    '["https://example.com/img/post6.jpg"]'::jsonb,
     '2026-12-01 09:00:00+00', NULL, NULL
 FROM api.quest WHERE quest_id = 'build-bioarena-together';

@@ -617,27 +617,16 @@ def build_app():
             ],
         )
 
-        # Load quest content on page load (includes personalized progress card
-        # for authenticated users)
-        demo.load(
-            fn=load_quest_content_on_page_load,
-            inputs=None,
-            outputs=[
-                quest_progress_container,
-                quest_contributors_container,
-                quest_carousel_container,
-            ],
-        )
-
-        # Initialize carousel on page load (only if community quest is enabled)
+        # Load quest content on page load, then initialize carousel JS.
+        # The js= callback runs after the Python fn output is applied to the DOM,
+        # ensuring the carousel HTML exists before we attach event listeners.
+        carousel_init_js = ""
         if carousel_id:
-            carousel_init_trigger.click(
-                None,
-                js=f"""
+            carousel_init_js = f"""
 () => {{
     const carouselId = '{carousel_id}';
     let retryCount = 0;
-    const MAX_RETRIES = 100;
+    const MAX_RETRIES = 50;
 
     function initCarousel() {{
         retryCount++;
@@ -835,27 +824,18 @@ def build_app():
 
     initCarousel();
 }}
-            """,
-            )
+            """
 
-            # Trigger carousel initialization on page load
-            demo.load(
-                None,
-                None,
-                None,
-                js=f"""
-() => {{
-    setTimeout(() => {{
-        const btn = document.getElementById('carousel-init-trigger');
-        if (btn) {{
-            btn.click();
-        }} else {{
-            console.error('Carousel init button not found');
-        }}
-    }}, 500);
-}}
-        """,
-            )
+        demo.load(
+            fn=load_quest_content_on_page_load,
+            inputs=None,
+            outputs=[
+                quest_progress_container,
+                quest_contributors_container,
+                quest_carousel_container,
+            ],
+            js=carousel_init_js if carousel_init_js else None,
+        )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
 

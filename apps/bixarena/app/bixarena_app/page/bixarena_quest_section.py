@@ -629,7 +629,9 @@ def _build_carousel_html(
                 f'<span class="locked-req-icon">{block_icon}</span>'
                 f"{req_progress:,} blocks</span>"
             )
-            hint_parts.append(f"Reach {req_progress:,} blocks to unlock this post.")
+            hint_parts.append(
+                f"The community must reach {req_progress:,} blocks to unlock this post."
+            )
         if req_tier:
             tier_label = req_tier.capitalize()
             tier_emoji = TIER_CONFIG.get(req_tier, {}).get("emoji", "")
