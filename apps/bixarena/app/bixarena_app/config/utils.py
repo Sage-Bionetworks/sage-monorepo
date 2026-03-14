@@ -30,6 +30,17 @@ def setup_logging():
     logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
+def _ga4_event_js(event_name: str, params: dict[str, str] | None = None) -> str:
+    """Generate a JS snippet that pushes a GA4 event via dataLayer."""
+    if params:
+        pairs = ", ".join(f"{k}: '{v}'" for k, v in params.items())
+        return (
+            f"() => {{ if (window.bixTrack) window.bixTrack("
+            f"'{event_name}', {{{pairs}}}); }}"
+        )
+    return f"() => {{ if (window.bixTrack) window.bixTrack('{event_name}'); }}"
+
+
 def _get_api_base_url() -> str | None:
     """Resolve the BixArena API base URL from environment.
 
