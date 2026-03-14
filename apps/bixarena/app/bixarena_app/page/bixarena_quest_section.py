@@ -594,6 +594,22 @@ def _build_carousel_html(
             f'<p class="update-description">{p}</p>' for p in paragraphs
         )
 
+        # Build unlocked reward hint
+        reward_hint_html = ""
+        if _is_unlocked_reward(update):
+            reward_parts = []
+            req_progress = update.get("required_progress")
+            req_tier = update.get("required_tier")
+            if req_progress is not None:
+                reward_parts.append(f"{req_progress:,} community blocks")
+            if req_tier:
+                reward_parts.append(f"{req_tier.capitalize()} tier")
+            if reward_parts:
+                reward_hint_html = (
+                    f'<p class="reward-hint">Unlocked by reaching '
+                    f"{' and '.join(reward_parts)}</p>"
+                )
+
         return f'''
         <div class="quest-update-accordion {active_class} {expanded_class} {
             reward_class
@@ -614,6 +630,7 @@ def _build_carousel_html(
                 </svg>
             </div>
             <div class="accordion-content">
+                {reward_hint_html}
                 {description_html}
             </div>
         </div>
@@ -923,6 +940,14 @@ def _build_carousel_html(
 
         .update-description:last-child {{
             margin-bottom: 0;
+        }}
+
+        /* Reward hint in unlocked posts */
+        .reward-hint {{
+            color: var(--body-text-color-subdued);
+            font-size: 0.875rem;
+            font-style: italic;
+            margin: 0 0 0.75rem 0;
         }}
 
         /* Locked post styling */
