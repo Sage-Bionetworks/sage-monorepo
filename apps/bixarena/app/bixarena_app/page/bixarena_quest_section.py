@@ -792,7 +792,6 @@ def _build_carousel_html(
             background: var(--panel-background-fill);
             border: 2px solid var(--border-color-primary);
             border-radius: 8px;
-            overflow: hidden;
             transition: all 0.2s ease;
         }}
 
@@ -801,12 +800,51 @@ def _build_carousel_html(
         }}
 
         .quest-update-accordion.reward {{
+            position: relative;
             border-color: #d4a853;
         }}
 
         .quest-update-accordion.reward.active {{
-            border-color: #d4a853;
-            box-shadow: 0 0 8px color-mix(in srgb, #d4a853 30%, transparent);
+            border-color: transparent;
+        }}
+
+        .quest-update-accordion.reward.active::before {{
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 10px;
+            background: conic-gradient(
+                from var(--reward-angle, 0deg),
+                #d4a853 0deg,
+                #f5d78e 40deg,
+                #d4a853 80deg,
+                #b8943e 180deg,
+                #d4a853 280deg,
+                #f5d78e 320deg,
+                #d4a853 360deg
+            );
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 2px;
+            animation: reward-trace 3s linear infinite;
+        }}
+
+        @keyframes reward-trace {{
+            to {{
+                --reward-angle: 360deg;
+            }}
+        }}
+
+        @property --reward-angle {{
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
         }}
 
         /* Accordion header (always visible) */
