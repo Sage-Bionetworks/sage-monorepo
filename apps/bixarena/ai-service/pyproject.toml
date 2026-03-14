@@ -24,7 +24,7 @@ readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [ { name = "Sage Bionetworks" } ]
 dependencies = [
-  "fastapi>=0.119.0",
+  "fastapi>=0.135.0",
   "httpx>=0.28.1",
   "pydantic>=2",
   "pydantic-settings>=2.0.0",
