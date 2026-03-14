@@ -13,9 +13,6 @@ servers:
   - url: https://bixarena.ai/api/v1
   - url: https://bixarena.ai/api/v1
 tags:
-  - name: Prompt Validation
-    description: Operations for validating biomedical prompts
-    x-displayName: Prompt Validation
   - name: Admin
     description: Administrative endpoints requiring elevated roles.
     x-displayName: Admin
@@ -44,37 +41,6 @@ tags:
     description: Authentication and token minting operations.
     x-displayName: Auth
 paths:
-  /validate-prompt:
-    get:
-      tags:
-        - Prompt Validation
-      summary: Validate biomedical prompt
-      description: Validates whether a prompt is biomedically related and returns a confidence score (requires authentication)
-      operationId: validatePrompt
-      parameters:
-        - name: prompt
-          in: query
-          required: true
-          description: The prompt text to validate
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 10000
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PromptValidation'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      security:
-        - jwtBearer: []
   /admin/stats:
     get:
       x-rate-limit-requests-per-minute: 60
@@ -582,6 +548,135 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
+  /battles/{battleId}/validations:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    post:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Battle
+      summary: Create a battle validation
+      description: Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
+      operationId: createBattleValidation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleValidationCreateRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidationResponse'
+          description: Battle validation created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+    get:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Battle
+      summary: List battle validations
+      description: Get all validations for a battle (admin only).
+      operationId: listBattleValidations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BattleValidationResponse'
+          description: List of battle validations
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /battles/{battleId}/validations/effective:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    patch:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Battle
+      summary: Set effective validation
+      description: Set or clear the effective validation for a battle. The effective validation determines whether a battle counts in stats (only battles with a positive effective validation are included). Admin only.
+      operationId: setEffectiveValidation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetEffectiveValidationRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Battle'
+          description: Effective validation updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /battles/{battleId}/validations/run:
+    parameters:
+      - $ref: '#/components/parameters/battleId'
+    post:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Battle
+      summary: Run an automated validation method
+      description: Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
+      operationId: runBattleValidation
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidationResponse'
+          description: Validation completed and persisted successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /quests/{questId}/contributors:
     parameters:
       - $ref: '#/components/parameters/questId'
@@ -766,22 +861,17 @@ paths:
       summary: Mint short-lived internal JWT
       description: |
         Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
-
         The optional audience parameter specifies the target service for the JWT.
       operationId: token
       security: []
       parameters:
-        - in: query
-          name: audience
+        - name: audience
+          in: query
           required: false
-          schema:
-            type: string
-            enum:
-              - urn:bixarena:auth
-              - urn:bixarena:api
-              - urn:bixarena:ai
           description: |
             Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
+          schema:
+            type: string
       responses:
         '200':
           description: Access token response
@@ -789,10 +879,6 @@ paths:
             application/json:
               schema:
                 type: object
-                required:
-                  - access_token
-                  - token_type
-                  - expires_in
                 properties:
                   access_token:
                     type: string
@@ -802,9 +888,55 @@ paths:
                       - Bearer
                   expires_in:
                     type: integer
-                    example: 600
+                    description: Token lifetime in seconds
+                required:
+                  - access_token
+                  - token_type
+                  - expires_in
         '401':
           $ref: '#/components/responses/Unauthorized'
+  /oauth2/service-token:
+    post:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Auth
+      summary: Mint a service-to-service JWT (client credentials)
+      description: |
+        Issues a JWT for service-to-service authentication using the OAuth2 Client Credentials grant. The caller authenticates with HTTP Basic (service client ID and secret). Returns a short-lived JWT with the requested audience.
+      operationId: serviceToken
+      security: []
+      parameters:
+        - name: audience
+          in: query
+          required: true
+          description: Target audience for the JWT (e.g. 'urn:bixarena:ai')
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Access token response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    enum:
+                      - Bearer
+                  expires_in:
+                    type: integer
+                    description: Token lifetime in seconds
+                required:
+                  - access_token
+                  - token_type
+                  - expires_in
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /userinfo:
     get:
       x-rate-limit-requests-per-minute: 60
@@ -861,26 +993,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  securitySchemes:
+    jwtBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
   schemas:
-    PromptValidation:
-      type: object
-      properties:
-        prompt:
-          type: string
-          description: The original prompt that was validated
-        confidence:
-          type: number
-          format: float
-          minimum: 0
-          maximum: 1
-          description: Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)
-        isBiomedical:
-          type: boolean
-          description: Whether the prompt is considered biomedically related (confidence >= 0.5)
-      required:
-        - prompt
-        - confidence
-        - isBiomedical
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -1021,6 +1141,11 @@ components:
         endedAt:
           $ref: '#/components/schemas/EndedAt'
           nullable: true
+        effectiveValidationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the effective battle validation (null = not yet validated)
       required:
         - id
         - userId
@@ -1186,6 +1311,11 @@ components:
         endedAt:
           $ref: '#/components/schemas/EndedAt'
           nullable: true
+        effectiveValidationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the effective battle validation (null = not yet validated)
       required:
         - id
         - userId
@@ -1917,6 +2047,68 @@ components:
         - battleId
         - outcome
         - createdAt
+    BattleValidationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        battleId:
+          type: string
+          format: uuid
+        method:
+          type: string
+          maxLength: 100
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        isBiomedical:
+          type: boolean
+        validatedBy:
+          type: string
+          format: uuid
+          nullable: true
+          description: User ID of the validator (null for automated validations)
+        reason:
+          type: string
+          maxLength: 1000
+          nullable: true
+          description: Optional reason for the validation decision
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - battleId
+        - method
+        - confidence
+        - isBiomedical
+        - createdAt
+    BattleValidationCreateRequest:
+      type: object
+      description: Request to manually validate or invalidate a battle.
+      properties:
+        isBiomedical:
+          type: boolean
+          description: Whether the admin considers this battle biomedically related
+        reason:
+          type: string
+          maxLength: 1000
+          nullable: true
+          description: Optional reason for the validation decision
+      required:
+        - isBiomedical
+    SetEffectiveValidationRequest:
+      type: object
+      description: Request to set or clear the effective validation for a battle.
+      properties:
+        validationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the battle validation to set as effective. Set to null to clear the effective validation.
     QuestContributor:
       type: object
       description: A user who contributed to the quest
@@ -2079,20 +2271,8 @@ components:
       required:
         - sub
   responses:
-    BadRequest:
-      description: Invalid request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
     Unauthorized:
       description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:
@@ -2130,6 +2310,18 @@ components:
           schema:
             type: integer
             example: 18
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
     NotFound:
       description: The specified resource was not found
       content:
@@ -2142,13 +2334,6 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-  securitySchemes:
-    jwtBearer:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: |
-        Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
   parameters:
     battleSearchQuery:
       name: battleSearchQuery
@@ -2237,9 +2422,6 @@ components:
       description: Unique identifier for a quest
       example: build-bioarena-together
 x-tagGroups:
-  - name: BixArena AI Service
-    tags:
-      - Prompt Validation
   - name: BixArena API Service
     tags:
       - Admin

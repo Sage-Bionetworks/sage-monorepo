@@ -25,9 +25,15 @@ tags:
     x-sage-internal: true
   - name: Prompt Validation
     description: Operations for validating biomedical prompts
+    x-sage-internal: true
+  - name: Battle Validation
+    description: Operations for validating biomedical battles
+    x-sage-internal: true
 
 paths:
   /health-check:
     $ref: paths/health-check.yaml
   /validate-prompt:
     $ref: paths/validate-prompt.yaml
+  /validate-battle:
+    $ref: paths/validate-battle.yaml

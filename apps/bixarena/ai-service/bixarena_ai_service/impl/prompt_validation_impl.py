@@ -10,54 +10,86 @@ code that would be overwritten on regeneration.
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
-from bixarena_ai_service.apis.prompt_validation_api_base import BasePromptValidationApi
+from bixarena_ai_service.apis.prompt_validation_api_base import (
+    BasePromptValidationApi,
+)
+from bixarena_ai_service.cache import get_cached_validation, set_cached_validation
+from bixarena_ai_service.classifier import classify
 from bixarena_ai_service.config import get_settings
 from bixarena_ai_service.models.prompt_validation import PromptValidation
+from bixarena_ai_service.models.prompt_validation_request import (
+    PromptValidationRequest,
+)
 
 logger = logging.getLogger(__name__)
 
+# Load the classification system prompt once at module level.
+_PROMPT_PATH = (
+    Path(__file__).resolve().parent.parent
+    / "prompts"
+    / "biomedical_prompt_classifier.md"
+)
+_SYSTEM_PROMPT: str = _PROMPT_PATH.read_text(encoding="utf-8").strip()
+
 
 class PromptValidationApiImpl(BasePromptValidationApi):
-    """Concrete prompt validation implementation.
-
-    This implementation provides a placeholder that returns a static confidence
-    value. In the future, this will be replaced with actual ML-based validation
-    using biomedical NLP models.
-    """
+    """Concrete prompt validation using an LLM via OpenRouter."""
 
     async def validate_prompt(
         self,
-        prompt: str,
+        prompt_validation_request: PromptValidationRequest,
     ) -> PromptValidation:
         """Validate whether a prompt is biomedically related.
 
-        Args:
-            prompt: The prompt text to validate
-
-        Returns:
-            PromptValidation: Validation result with confidence score
+        The prompt text is sent to an LLM classifier via OpenRouter.
+        The LLM is instructed to treat the text as opaque data (not as
+        instructions) and return a confidence score.  On any failure
+        the endpoint returns an *inconclusive* result
+        (confidence=0.0, is_biomedical=False) so callers can decide
+        how to proceed.
         """
-        # Get settings
         settings = get_settings()
+        prompt = prompt_validation_request.prompt
 
         logger.info("Prompt validation requested")
-        logger.debug(f"Prompt text (length={len(prompt)}): {prompt[:100]}...")
 
-        # TODO: Replace with actual ML-based validation
-        # For now, return a static confidence value
-        static_confidence = 0.75
+        # Sanitize: strip whitespace and enforce max length
+        # (defense-in-depth; the API layer already validates length).
+        sanitized = prompt.strip()[: settings.prompt_max_length]
 
-        validation_result = PromptValidation(
+        method = settings.prompt_validation_method
+
+        # Check Valkey cache first.
+        cached = await get_cached_validation(sanitized, settings)
+        if cached is not None:
+            return PromptValidation(
+                prompt=prompt,
+                confidence=cached["confidence"],
+                is_biomedical=cached["is_biomedical"],
+                method=method,
+            )
+
+        # Cache miss — classify via LLM.
+        user_message = f"TEXT:\n{sanitized}"
+        confidence = await classify(_SYSTEM_PROMPT, user_message)
+        is_biomedical = confidence >= settings.prompt_validation_confidence_threshold
+
+        # Store in cache (fire-and-forget on failure).
+        await set_cached_validation(sanitized, confidence, is_biomedical, settings)
+
+        result = PromptValidation(
             prompt=prompt,
-            confidence=static_confidence,
-            is_biomedical=static_confidence
-            >= settings.prompt_validation_confidence_threshold,
+            confidence=confidence,
+            is_biomedical=is_biomedical,
+            method=method,
         )
 
         logger.info(
-            f"Validation result: confidence={validation_result.confidence}, "
-            f"isBiomedical={validation_result.is_biomedical}"
+            "Validation result: confidence=%s, isBiomedical=%s",
+            result.confidence,
+            result.is_biomedical,
         )
 
-        return validation_result
+        return result

@@ -87,6 +87,10 @@ app:
   welcome-message: 'Welcome to BixArena API'
   auth-service:
     base-url: ${AUTH_SERVICE_BASE_URL:http://bixarena-auth-service:8115}
+    service-client-id: ${AUTH_SERVICE_CLIENT_ID:bixarena-service}
+    service-client-secret: ${AUTH_SERVICE_CLIENT_SECRET:changeme}
+  ai-service:
+    base-url: ${AI_SERVICE_BASE_URL:http://bixarena-ai-service:8114}
   jwt:
     # Expected issuer claim value (URN format)
     expected-issuer: urn:bixarena:auth

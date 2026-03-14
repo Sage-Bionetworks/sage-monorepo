@@ -1,0 +1,60 @@
+parameters:
+  - $ref: ../../../components/parameters/path/battleId.yaml
+
+post:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Battle
+  summary: Create a battle validation
+  description: Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
+  operationId: createBattleValidation
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/BattleValidationCreateRequest.yaml
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/BattleValidationResponse.yaml
+      description: Battle validation created successfully
+    '400':
+      $ref: ../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml
+
+get:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Battle
+  summary: List battle validations
+  description: Get all validations for a battle (admin only).
+  operationId: listBattleValidations
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../../components/schemas/BattleValidationResponse.yaml
+      description: List of battle validations
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

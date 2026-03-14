@@ -17,12 +17,22 @@ import org.springframework.validation.annotation.Validated;
 public record AppProperties(
   @NotBlank(message = "Welcome message must not be blank") String welcomeMessage,
   @Valid @NotNull AuthService authService,
+  @Valid @NotNull AiService aiService,
   @Valid @NotNull Jwt jwt,
   @Valid @NotNull Cors cors
 ) {
   @Validated
   public record AuthService(
-    @NotBlank(message = "Auth service base URL must not be blank") String baseUrl
+    @NotBlank(message = "Auth service base URL must not be blank") String baseUrl,
+    /** Client ID for obtaining service tokens */
+    @NotBlank(message = "Service client ID must not be blank") String serviceClientId,
+    /** Client secret for obtaining service tokens */
+    @NotBlank(message = "Service client secret must not be blank") String serviceClientSecret
+  ) {}
+
+  @Validated
+  public record AiService(
+    @NotBlank(message = "AI service base URL must not be blank") String baseUrl
   ) {}
 
   @Validated

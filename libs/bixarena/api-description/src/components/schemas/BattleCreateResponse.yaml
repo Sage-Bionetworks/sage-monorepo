@@ -17,6 +17,11 @@ properties:
   endedAt:
     $ref: EndedAt.yaml
     nullable: true
+  effectiveValidationId:
+    type: string
+    format: uuid
+    nullable: true
+    description: ID of the effective battle validation (null = not yet validated)
 required:
   - id
   - userId

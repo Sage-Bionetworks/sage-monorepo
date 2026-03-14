@@ -34,6 +34,8 @@ paths:
     $ref: paths/auth-logout.yaml
   /oauth2/token:
     $ref: paths/oauth2-token.yaml
+  /oauth2/service-token:
+    $ref: paths/oauth2-service-token.yaml
   /userinfo:
     $ref: paths/userinfo.yaml
   /.well-known/jwks.json:

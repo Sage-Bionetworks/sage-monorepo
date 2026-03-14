@@ -4,15 +4,16 @@ A battle between two AI models.
 
 ## Properties
 
-| Name           | Type                  | Description                             | Notes      |
-| -------------- | --------------------- | --------------------------------------- | ---------- |
-| **id**         | **str**               | Unique identifier (UUID) of the battle. |
-| **title**      | **str**               | Title of the battle.                    | [optional] |
-| **user_id**    | **str**               | UUID of a user.                         |
-| **model1**     | [**Model**](Model.md) |                                         |
-| **model2**     | [**Model**](Model.md) |                                         |
-| **created_at** | **datetime**          | Timestamp when the entity was created.  |
-| **ended_at**   | **datetime**          | Timestamp when the entity ended.        | [optional] |
+| Name                        | Type                  | Description                                                           | Notes      |
+| --------------------------- | --------------------- | --------------------------------------------------------------------- | ---------- |
+| **id**                      | **str**               | Unique identifier (UUID) of the battle.                               |
+| **title**                   | **str**               | Title of the battle.                                                  | [optional] |
+| **user_id**                 | **str**               | UUID of a user.                                                       |
+| **model1**                  | [**Model**](Model.md) |                                                                       |
+| **model2**                  | [**Model**](Model.md) |                                                                       |
+| **created_at**              | **datetime**          | Timestamp when the entity was created.                                |
+| **ended_at**                | **datetime**          | Timestamp when the entity ended.                                      | [optional] |
+| **effective_validation_id** | **str**               | ID of the effective battle validation (null &#x3D; not yet validated) | [optional] |
 
 ## Example
 

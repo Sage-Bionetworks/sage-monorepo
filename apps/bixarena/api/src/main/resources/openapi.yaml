@@ -722,6 +722,184 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Battle
+  /battles/{battleId}/validations:
+    get:
+      description: Get all validations for a battle (admin only).
+      operationId: listBattleValidations
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BattleValidationResponse'
+                type: array
+          description: List of battle validations
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: List battle validations
+      tags:
+        - Battle
+      x-rate-limit-requests-per-minute: 60
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
+    post:
+      description: Manually validate or invalidate a battle (admin only). The created
+        validation is automatically set as the effective validation for the battle.
+      operationId: createBattleValidation
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BattleValidationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidationResponse'
+          description: Battle validation created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Create a battle validation
+      tags:
+        - Battle
+      x-rate-limit-requests-per-minute: 60
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
+  /battles/{battleId}/validations/effective:
+    patch:
+      description: Set or clear the effective validation for a battle. The effective
+        validation determines whether a battle counts in stats (only battles with
+        a positive effective validation are included). Admin only.
+      operationId: setEffectiveValidation
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetEffectiveValidationRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Battle'
+          description: Effective validation updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Set effective validation
+      tags:
+        - Battle
+      x-rate-limit-requests-per-minute: 30
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
+  /battles/{battleId}/validations/run:
+    post:
+      description: Run an automated validation method against a battle and return
+        the result. Useful for backfilling validations on battles created before automated
+        validation was implemented. Admin only.
+      operationId: runBattleValidation
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleValidationResponse'
+          description: Validation completed and persisted successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Run an automated validation method
+      tags:
+        - Battle
+      x-rate-limit-requests-per-minute: 30
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Battle
   /quests/{questId}/contributors:
     get:
       description: |
@@ -1157,6 +1335,7 @@ components:
       example:
         createdAt: 2024-01-15T10:30:00Z
         endedAt: 2024-01-15T11:45:00Z
+        effectiveValidationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
         id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         title: Gene Expression Analysis Comparison
@@ -1196,6 +1375,11 @@ components:
           description: Timestamp when the entity ended.
           example: 2024-01-15T11:45:00Z
           format: date-time
+          type: string
+        effectiveValidationId:
+          description: ID of the effective battle validation (null = not yet validated)
+          format: uuid
+          nullable: true
           type: string
       required:
         - createdAt
@@ -1256,6 +1440,7 @@ components:
         battles:
           - createdAt: 2024-01-15T10:30:00Z
             endedAt: 2024-01-15T11:45:00Z
+            effectiveValidationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             title: Gene Expression Analysis Comparison
@@ -1263,6 +1448,7 @@ components:
             model2Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
           - createdAt: 2024-01-15T10:30:00Z
             endedAt: 2024-01-15T11:45:00Z
+            effectiveValidationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             model1Id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             title: Gene Expression Analysis Comparison
@@ -1421,6 +1607,7 @@ components:
           slug: my-awesome-model
           updatedAt: 2025-09-20T08:30:00Z
         endedAt: 2024-01-15T11:45:00Z
+        effectiveValidationId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         title: Gene Expression Analysis Comparison
         userId: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
@@ -1452,6 +1639,11 @@ components:
           description: Timestamp when the entity ended.
           example: 2024-01-15T11:45:00Z
           format: date-time
+          type: string
+        effectiveValidationId:
+          description: ID of the effective battle validation (null = not yet validated)
+          format: uuid
+          nullable: true
           type: string
       required:
         - createdAt
@@ -2422,6 +2614,78 @@ components:
         - createdAt
         - id
         - outcome
+      type: object
+    BattleValidationResponse:
+      example:
+        reason: reason
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        battleId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        method: method
+        confidence: 0.08008282
+        validatedBy: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        isBiomedical: true
+      properties:
+        id:
+          format: uuid
+          type: string
+        battleId:
+          format: uuid
+          type: string
+        method:
+          maxLength: 100
+          type: string
+        confidence:
+          format: float
+          maximum: 1
+          minimum: 0
+          type: number
+        isBiomedical:
+          type: boolean
+        validatedBy:
+          description: User ID of the validator (null for automated validations)
+          format: uuid
+          nullable: true
+          type: string
+        reason:
+          description: Optional reason for the validation decision
+          maxLength: 1000
+          nullable: true
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - battleId
+        - confidence
+        - createdAt
+        - id
+        - isBiomedical
+        - method
+      type: object
+    BattleValidationCreateRequest:
+      description: Request to manually validate or invalidate a battle.
+      properties:
+        isBiomedical:
+          description: Whether the admin considers this battle biomedically related
+          type: boolean
+        reason:
+          description: Optional reason for the validation decision
+          maxLength: 1000
+          nullable: true
+          type: string
+      required:
+        - isBiomedical
+      type: object
+    SetEffectiveValidationRequest:
+      description: Request to set or clear the effective validation for a battle.
+      properties:
+        validationId:
+          description: ID of the battle validation to set as effective. Set to null
+            to clear the effective validation.
+          format: uuid
+          nullable: true
+          type: string
       type: object
     QuestContributor:
       description: A user who contributed to the quest

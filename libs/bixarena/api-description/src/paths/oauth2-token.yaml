@@ -4,24 +4,20 @@ post:
   tags:
     - Auth
   summary: Mint short-lived internal JWT
-  description: |
+  description: >
     Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
 
     The optional audience parameter specifies the target service for the JWT.
   operationId: token
   security: []
   parameters:
-    - in: query
-      name: audience
+    - name: audience
+      in: query
       required: false
+      description: >
+        Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
       schema:
         type: string
-        enum:
-          - urn:bixarena:auth
-          - urn:bixarena:api
-          - urn:bixarena:ai
-      description: |
-        Target audience for the JWT. If not specified, defaults to urn:bixarena:auth.
   responses:
     '200':
       description: Access token response
@@ -29,15 +25,19 @@ post:
         application/json:
           schema:
             type: object
-            required: [access_token, token_type, expires_in]
             properties:
               access_token:
                 type: string
               token_type:
                 type: string
-                enum: [Bearer]
+                enum:
+                  - Bearer
               expires_in:
                 type: integer
-                example: 600
+                description: Token lifetime in seconds
+            required:
+              - access_token
+              - token_type
+              - expires_in
     '401':
       $ref: ../components/responses/Unauthorized.yaml

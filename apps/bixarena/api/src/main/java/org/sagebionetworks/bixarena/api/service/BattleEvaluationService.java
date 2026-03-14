@@ -27,6 +27,7 @@ public class BattleEvaluationService {
 
   private final BattleEvaluationRepository battleEvaluationRepository;
   private final BattleRepository battleRepository;
+  private final BattleValidationService battleValidationService;
   private final BattleEvaluationMapper battleEvaluationMapper = new BattleEvaluationMapper();
 
   @Transactional
@@ -47,6 +48,9 @@ public class BattleEvaluationService {
     try {
       BattleEvaluationEntity saved = battleEvaluationRepository.save(entity);
       battleEvaluationRepository.flush();
+
+      // Trigger async battle validation (fire-and-forget)
+      battleValidationService.validateAndPersistBattleAsync(battleId);
 
       return battleEvaluationMapper.convertToDto(saved);
     } catch (DataIntegrityViolationException e) {

@@ -1,0 +1,43 @@
+post:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Auth
+  summary: Mint a service-to-service JWT (client credentials)
+  description: >
+    Issues a JWT for service-to-service authentication using the OAuth2 Client Credentials grant.
+    The caller authenticates with HTTP Basic (service client ID and secret).
+    Returns a short-lived JWT with the requested audience.
+  operationId: serviceToken
+  security: []
+  parameters:
+    - name: audience
+      in: query
+      required: true
+      description: Target audience for the JWT (e.g. 'urn:bixarena:ai')
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Access token response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+              token_type:
+                type: string
+                enum:
+                  - Bearer
+              expires_in:
+                type: integer
+                description: Token lifetime in seconds
+            required:
+              - access_token
+              - token_type
+              - expires_in
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

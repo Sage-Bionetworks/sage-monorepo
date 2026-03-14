@@ -1,0 +1,36 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/battleId.yaml
+
+patch:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Battle
+  summary: Set effective validation
+  description: >-
+    Set or clear the effective validation for a battle. The effective validation
+    determines whether a battle counts in stats (only battles with a positive
+    effective validation are included). Admin only.
+  operationId: setEffectiveValidation
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../components/schemas/SetEffectiveValidationRequest.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/Battle.yaml
+      description: Effective validation updated successfully
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

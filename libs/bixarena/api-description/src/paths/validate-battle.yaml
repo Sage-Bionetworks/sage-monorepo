@@ -1,0 +1,29 @@
+post:
+  x-rate-limit-requests-per-minute: 60
+  x-sage-internal: true
+  tags:
+    - Battle Validation
+  summary: Validate biomedical battle
+  description: >-
+    Validates whether a battle's conversation (all user prompts) is biomedically related.
+    Returns a confidence score. Requires authentication.
+  operationId: validateBattle
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/BattleValidationRequest.yaml
+    required: true
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BattleValidation.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

@@ -1,5 +1,6 @@
 package org.sagebionetworks.bixarena.api.api;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,15 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
+
+import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
 import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
 import org.sagebionetworks.bixarena.api.service.BattleService;
+import org.sagebionetworks.bixarena.api.service.BattleValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +41,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   private final BattleService battleService;
   private final BattleRoundService battleRoundService;
   private final BattleEvaluationService battleEvaluationService;
+  private final BattleValidationService battleValidationService;
   private final NativeWebRequest request;
 
   @Override
@@ -110,11 +118,13 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
     UUID battleId,
     BattleUpdateRequestDto battleUpdateRequestDto
   ) {
-    // Log the authenticated user for audit purposes
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    log.info("User {} is updating battle {}", authentication.getName(), battleId);
+    UUID callerId = UUID.fromString(authentication.getName());
+    log.info("User {} is updating battle {}", callerId, battleId);
 
-    BattleDto updatedBattle = battleService.updateBattle(battleId, battleUpdateRequestDto);
+    BattleDto updatedBattle = battleService.updateBattle(
+      battleId, battleUpdateRequestDto, callerId
+    );
     return ResponseEntity.ok(updatedBattle);
   }
 
@@ -130,6 +140,55 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
       battleId,
       roundId,
       battleRoundUpdateRequestDto
+    );
+    return ResponseEntity.ok(updated);
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<BattleValidationResponseDto> createBattleValidation(
+    UUID battleId,
+    BattleValidationCreateRequestDto battleValidationCreateRequestDto
+  ) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UUID validatorId = UUID.fromString(authentication.getName());
+    log.info("Admin {} creating battle validation for battle {}", validatorId, battleId);
+
+    BattleValidationResponseDto dto = battleValidationService.createHumanValidation(
+      battleId, battleValidationCreateRequestDto, validatorId
+    );
+    return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<List<BattleValidationResponseDto>> listBattleValidations(UUID battleId) {
+    log.info("Listing battle validations for battle {}", battleId);
+    return ResponseEntity.ok(battleValidationService.listValidations(battleId));
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<BattleValidationResponseDto> runBattleValidation(
+    UUID battleId
+  ) {
+    log.info("Admin triggering automated validation for battle {}", battleId);
+    BattleValidationEntity entity = battleValidationService.validateAndPersistBattle(battleId);
+    return ResponseEntity.status(HttpStatus.CREATED).body(battleValidationService.toDto(entity));
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<BattleDto> setEffectiveValidation(
+    UUID battleId,
+    SetEffectiveValidationRequestDto request
+  ) {
+    log.info(
+      "Admin setting effective validation for battle {}: {}",
+      battleId, request.getValidationId()
+    );
+    BattleDto updated = battleService.setEffectiveValidation(
+      battleId, request.getValidationId()
     );
     return ResponseEntity.ok(updated);
   }

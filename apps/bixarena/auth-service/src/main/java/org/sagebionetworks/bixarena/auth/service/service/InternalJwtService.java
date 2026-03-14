@@ -32,10 +32,23 @@ public class InternalJwtService {
    * @return Minted JWT token and expiration time
    */
   public Minted mint(String sub, List<String> roles, String audience) {
+    return mint(sub, roles, audience, appProperties.auth().tokenTtlSeconds());
+  }
+
+  /**
+   * Mints a JWT with the specified subject, roles, audience, and TTL.
+   *
+   * @param sub Subject identifier
+   * @param roles Roles to include in the token
+   * @param audience Target audience for the JWT
+   * @param ttlSeconds Token lifetime in seconds
+   * @return Minted JWT token and expiration time
+   */
+  public Minted mint(String sub, List<String> roles, String audience, long ttlSeconds) {
     try {
       var key = keyStore.current();
       Instant now = Instant.now();
-      Instant exp = now.plusSeconds(appProperties.auth().tokenTtlSeconds());
+      Instant exp = now.plusSeconds(ttlSeconds);
       JWTClaimsSet claims = new JWTClaimsSet.Builder()
         .issuer(appProperties.auth().internalIssuer())
         .audience(audience != null ? audience : appProperties.auth().audience())

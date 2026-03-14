@@ -37,13 +37,13 @@ class TestToken200Response(unittest.TestCase):
             return Token200Response(
                 access_token = '',
                 token_type = 'Bearer',
-                expires_in = 600
+                expires_in = 56
             )
         else:
             return Token200Response(
                 access_token = '',
                 token_type = 'Bearer',
-                expires_in = 600,
+                expires_in = 56,
         )
         """
 
