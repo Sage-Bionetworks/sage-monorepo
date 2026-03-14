@@ -8,6 +8,7 @@ export interface AppConfig {
   ssrApiUrl: string;
   googleTagManagerId: string;
   isPlatformServer: boolean;
+  sentryRelease: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;

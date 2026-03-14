@@ -25,14 +25,14 @@ export class ConfigService {
 
     const browserRoot = isPlatformServer(this.platformId) ? `http://localhost:${this.port}` : '.';
 
-    const appConfig$ = this.http.get<AppConfig>(`${browserRoot}/config/config.json`);
     try {
-      const config = await lastValueFrom(appConfig$);
+      const config = await lastValueFrom(
+        this.http.get<AppConfig>(`${browserRoot}/config/config.json`),
+      );
       this.config = config;
       this.config.isPlatformServer = isPlatformServer(this.platformId);
     } catch (err) {
       console.error('Unable to load the config file: ', err);
-      return await Promise.resolve();
     }
   }
 }
