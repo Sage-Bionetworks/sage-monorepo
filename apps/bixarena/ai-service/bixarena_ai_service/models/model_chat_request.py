@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List
 from uuid import UUID
 from bixarena_ai_service.models.message_create import MessageCreate
@@ -34,10 +34,21 @@ class ModelChatRequest(BaseModel):
     """  # noqa: E501
 
     model_id: UUID = Field(description="UUID of an AI model.", alias="modelId")
+    api_model_name: StrictStr = Field(
+        description="The model name used for API calls.", alias="apiModelName"
+    )
+    api_base: StrictStr = Field(
+        description="Base URL for the model API.", alias="apiBase"
+    )
     messages: List[MessageCreate] = Field(
         description="The conversation messages to send to the model"
     )
-    __properties: ClassVar[List[str]] = ["modelId", "messages"]
+    __properties: ClassVar[List[str]] = [
+        "modelId",
+        "apiModelName",
+        "apiBase",
+        "messages",
+    ]
 
     model_config = {
         "populate_by_name": True,
@@ -95,6 +106,8 @@ class ModelChatRequest(BaseModel):
         _obj = cls.model_validate(
             {
                 "modelId": obj.get("modelId"),
+                "apiModelName": obj.get("apiModelName"),
+                "apiBase": obj.get("apiBase"),
                 "messages": [
                     MessageCreate.from_dict(_item) for _item in obj.get("messages")
                 ]

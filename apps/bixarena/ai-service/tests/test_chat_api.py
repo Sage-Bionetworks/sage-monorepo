@@ -18,10 +18,12 @@ def test_create_chat_completion(client: TestClient):
     """
     model_chat_request = {
         "model_id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+        "api_base": "https://openrouter.ai/api/v1",
         "messages": [
             {"role": "user", "content": "What is the capital of France?"},
             {"role": "user", "content": "What is the capital of France?"},
         ],
+        "api_model_name": "anthropic/claude-sonnet-4.5",
     }
 
     headers = {}

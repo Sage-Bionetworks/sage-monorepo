@@ -1562,6 +1562,14 @@ components:
       properties:
         modelId:
           $ref: '#/components/schemas/ModelId'
+        apiModelName:
+          type: string
+          description: The model name used for API calls.
+          example: anthropic/claude-sonnet-4.5
+        apiBase:
+          type: string
+          description: Base URL for the model API.
+          example: https://openrouter.ai/api/v1
         messages:
           type: array
           items:
@@ -1569,6 +1577,8 @@ components:
           description: The conversation messages to send to the model
       required:
         - modelId
+        - apiModelName
+        - apiBase
         - messages
     ModelErrorMessage:
       type: string
