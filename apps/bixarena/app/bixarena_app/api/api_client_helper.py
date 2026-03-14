@@ -141,7 +141,7 @@ def fetch_quest(quest_id: str, cookies: dict[str, str] | None = None) -> dict | 
                         "title": post.title,
                         "description": post.description or "",
                         "images": post.images or [],
-                        "locked": post.description is None,
+                        "locked": post.locked,
                         "required_progress": post.required_progress,
                         "required_tier": post.required_tier,
                     }

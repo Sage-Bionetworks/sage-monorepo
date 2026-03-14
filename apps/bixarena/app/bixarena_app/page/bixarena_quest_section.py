@@ -561,11 +561,19 @@ def _build_carousel_html(
     indicators_display = "" if len(active_images) > 1 else "display: none;"
 
     # Generate update cards HTML (accordion style)
+    def _is_unlocked_reward(post: dict) -> bool:
+        """Check if a post is an unlocked reward (has gates but is not locked)."""
+        return not post.get("locked", False) and (
+            post.get("required_progress") is not None
+            or post.get("required_tier") is not None
+        )
+
     def format_update_card(update: dict) -> str:
         """Format a single update accordion item HTML."""
         is_expanded = active_post is not None and update is active_post
         active_class = "active" if is_expanded else ""
         expanded_class = "expanded" if is_expanded else ""
+        reward_class = "reward" if _is_unlocked_reward(update) else ""
         images_json = json.dumps(update["images"]).replace('"', "&quot;")
 
         # Format date if available
@@ -587,7 +595,9 @@ def _build_carousel_html(
         )
 
         return f'''
-        <div class="quest-update-accordion {active_class} {expanded_class}"
+        <div class="quest-update-accordion {active_class} {expanded_class} {
+            reward_class
+        }"
              data-images="{images_json}">
             <div class="accordion-header" role="button" tabindex="0">
                 <div class="accordion-title-wrapper">
@@ -788,6 +798,15 @@ def _build_carousel_html(
 
         .quest-update-accordion.active {{
             border-color: var(--color-accent);
+        }}
+
+        .quest-update-accordion.reward {{
+            border-color: #d4a853;
+        }}
+
+        .quest-update-accordion.reward.active {{
+            border-color: #d4a853;
+            box-shadow: 0 0 8px color-mix(in srgb, #d4a853 30%, transparent);
         }}
 
         /* Accordion header (always visible) */
