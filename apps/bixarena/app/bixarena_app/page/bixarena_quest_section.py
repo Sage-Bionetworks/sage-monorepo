@@ -91,7 +91,7 @@ def build_quest_not_found_section() -> tuple[
                            margin: 0 0 0.75rem 0; font-size: 1.5rem;">
                     Quest Not Found
                 </h2>
-                <p style="color: var(--body-text-color-subdued); font-size: 1rem;
+                <p style="color: var(--color-accent); font-size: 1rem;
                          margin: 0; line-height: 1.6;">
                     The configured quest "<strong>{QUEST_UI_CONFIG["quest_id"]}</strong>" doesn't exist in the database.
                 </p>
@@ -169,7 +169,7 @@ def _build_user_progress_card_html(
                        margin: 0 0 0.75rem 0; font-size: 1rem;">
                 {emoji} Welcome back, Champion {username}
             </h4>
-            <div style="color: var(--body-text-color-subdued); font-size: 0.875rem; line-height: 1.4;">
+            <div style="color: var(--color-accent); font-size: 0.875rem; line-height: 1.4;">
                 {battles_per_week:.1f} battles/week &mdash; Keep battling to hold your title!
             </div>
         </div>
@@ -217,11 +217,11 @@ def _build_user_progress_card_html(
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
             <div>
                 <p style="font-size: 1.25rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{battles_per_week:.1f}</p>
-                <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Battles/Week</p>
+                <p style="font-size: 0.75rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Battles/Week</p>
             </div>
             <div style="text-align: right;">
                 <p style="font-size: 1.25rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{next_emoji} {next_name}</p>
-                <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
+                <p style="font-size: 0.75rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
             </div>
         </div>
     </div>
@@ -242,12 +242,12 @@ def _build_tier_legend_html() -> str:
                     Contributor Tiers
                 </h4>
                 <div style="display: flex; flex-direction: column; gap: 0.375rem;
-                            color: var(--body-text-color-subdued); font-size: 0.875rem;">
+                            color: var(--color-accent); font-size: 0.875rem;">
                     <div>{TIER_CONFIG["champion"]["emoji"]} Champion ({TIER_CONFIG["champion"]["description"]})</div>
                     <div>{TIER_CONFIG["knight"]["emoji"]} Knight ({TIER_CONFIG["knight"]["description"]})</div>
                     <div>{TIER_CONFIG["apprentice"]["emoji"]} Apprentice ({TIER_CONFIG["apprentice"]["description"]})</div>
                 </div>
-                <div style="margin-top: 0.75rem; color: var(--body-text-color-subdued); font-size: 0.8125rem; font-style: italic; line-height: 1.5;">
+                <div style="margin-top: 0.75rem; color: var(--color-accent); font-size: 0.8125rem; font-style: italic; line-height: 1.5;">
                     Note: Tiers are calculated based on your average battle completion rate. As more days of the quest pass, tier assignments become increasingly accurate.
                 </div>
             </div>
@@ -284,11 +284,11 @@ def _build_progress_html(
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
                 <div>
                     <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{current_blocks:,}</p>
-                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Blocks Placed</p>
+                    <p style="font-size: 0.75rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Blocks Placed</p>
                 </div>
                 <div style="text-align: right;">
                     <p style="font-size: 2rem; font-weight: 700; color: var(--body-text-color); margin: 0; line-height: 1;">{goal_blocks:,}</p>
-                    <p style="font-size: 0.75rem; color: var(--body-text-color-subdued); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
+                    <p style="font-size: 0.75rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em; margin: 0.25rem 0 0 0;">Goal</p>
                 </div>
             </div>
         </div>
@@ -309,7 +309,7 @@ def _build_progress_html(
                     <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
                         {QUEST_UI_CONFIG["conversion_text"]}
                     </h4>
-                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
+                    <p style="color: var(--color-accent); font-size: 0.875rem; margin: 0; line-height: 1.5;">
                         {QUEST_UI_CONFIG["conversion_description"]}
                     </p>
                 </div>
@@ -327,7 +327,7 @@ def _build_progress_html(
                     <h4 style="color: var(--body-text-color); font-weight: 600; margin: 0 0 0.25rem 0; font-size: 1rem;">
                         {days_remaining} Days Left
                     </h4>
-                    <p style="color: var(--body-text-color-subdued); font-size: 0.875rem; margin: 0; line-height: 1.5;">
+                    <p style="color: var(--color-accent); font-size: 0.875rem; margin: 0; line-height: 1.5;">
                         We have {days_remaining} days to complete the arena structure before the season ends.
                     </p>
                 </div>
@@ -366,7 +366,7 @@ def _build_builders_credits_html(
                 Builders (0)
             </h4>
             <div style="padding: 2rem; text-align: center;
-                        color: var(--body-text-color-subdued); font-size: 0.875rem;">
+                        color: var(--color-accent); font-size: 0.875rem;">
                 No builders yet. Be the first to contribute!
             </div>
 
@@ -382,14 +382,14 @@ def _build_builders_credits_html(
             </h4>
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
-                    <span style="color: var(--body-text-color-subdued);">Minecraft Arena Designer:</span>
+                    <span style="color: var(--color-accent);">Minecraft Arena Designer:</span>
                     <a href="{QUEST_UI_CONFIG["minecraft_arena_designer"]["url"]}"
                        style="color: #3b82f6; text-decoration: none;">
                        {QUEST_UI_CONFIG["minecraft_arena_designer"]["name"]}
                     </a>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
-                    <span style="color: var(--body-text-color-subdued);">Quest Architect:</span>
+                    <span style="color: var(--color-accent);">Quest Architect:</span>
                     <a href="{QUEST_UI_CONFIG["quest_architect"]["url"]}"
                        style="color: #3b82f6; text-decoration: none;">
                        {QUEST_UI_CONFIG["quest_architect"]["name"]}
@@ -398,7 +398,7 @@ def _build_builders_credits_html(
             </div>
 
             <!-- Copyright -->
-            <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
+            <div style="font-size: 0.75rem; color: var(--color-accent);
                         margin-top: 0.75rem;">
                 &copy; 2026 Thomas Schaffter. Quest content and illustrations.
             </div>
@@ -424,7 +424,7 @@ def _build_builders_credits_html(
                 )
 
         # Join with separators
-        builders_html = '<span style="color: var(--body-text-color-subdued); font-size: 0.75rem;">•</span>'.join(
+        builders_html = '<span style="color: var(--color-accent); font-size: 0.75rem;">•</span>'.join(
             builders_parts
         )
 
@@ -473,7 +473,7 @@ def _build_builders_credits_html(
         <!-- Credits Section (no title) -->
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
             <div style="font-size: 0.875rem;
-                        color: var(--body-text-color-subdued);">
+                        color: var(--color-accent);">
                 <span>Minecraft Arena Designer: </span>
                 <a href="{QUEST_UI_CONFIG["minecraft_arena_designer"]["url"]}"
                    target="_blank"
@@ -485,7 +485,7 @@ def _build_builders_credits_html(
                 </a>
             </div>
             <div style="font-size: 0.875rem;
-                        color: var(--body-text-color-subdued);">
+                        color: var(--color-accent);">
                 <span>Quest Architect: </span>
                 <a href="{QUEST_UI_CONFIG["quest_architect"]["url"]}"
                    target="_blank"
@@ -497,7 +497,7 @@ def _build_builders_credits_html(
                 </a>
             </div>
             <!-- Copyright -->
-            <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
+            <div style="font-size: 0.75rem; color: var(--color-accent);
                         margin-top: 0.25rem;">
                 &copy; 2026 Thomas Schaffter. Quest content and illustrations.
             </div>
@@ -610,30 +610,51 @@ def _build_carousel_html(
         '''
 
     def format_locked_card(post: dict) -> str:
-        """Format a locked post as a collapsible accordion card."""
-        # Build unlock hint from gate metadata
-        hints = []
+        """Format a locked post as a collapsible golden-sealed accordion card."""
+        # Build requirement badges and expanded hint text
+        req_badges = []
+        hint_parts = []
         req_progress = post.get("required_progress")
         req_tier = post.get("required_tier")
         if req_progress is not None:
-            hints.append(f"Reach {req_progress:,} blocks to unlock")
+            req_badges.append(
+                f'<span class="locked-req-badge">'
+                f'<span class="locked-req-icon">&#x1f3d7;&#xfe0f;</span>'
+                f"{req_progress:,} blocks</span>"
+            )
+            hint_parts.append(f"Reach {req_progress:,} blocks to reveal this chapter.")
         if req_tier:
             tier_label = req_tier.capitalize()
-            hints.append(f"Become a {tier_label} to access this post")
-        hint_text = " &middot; ".join(hints) if hints else "Keep contributing to unlock"
+            tier_emoji = TIER_CONFIG.get(req_tier, {}).get("emoji", "")
+            req_badges.append(
+                f'<span class="locked-req-badge">'
+                f'<span class="locked-req-icon">{tier_emoji}</span>'
+                f"{tier_label}</span>"
+            )
+            hint_parts.append(f"Become a {tier_label} to access this post.")
+        if not req_badges:
+            req_badges.append(
+                '<span class="locked-req-badge">'
+                '<span class="locked-req-icon">&#x1f512;</span>'
+                "Locked</span>"
+            )
+            hint_parts.append("Keep contributing to unlock this content.")
+        badges_html = " ".join(req_badges)
+        hint_text = " ".join(hint_parts)
 
         return f"""
         <div class="quest-update-accordion locked">
             <div class="accordion-header" role="button" tabindex="0">
                 <div class="accordion-title-wrapper">
                     <h4>{post["title"]}</h4>
-                    <span class="locked-badge">🔒 Locked</span>
+                    <div class="locked-badges">{badges_html}</div>
                 </div>
-                <svg class="accordion-chevron" xmlns="http://www.w3.org/2000/svg"
-                     width="20" height="20" viewBox="0 0 24 24" fill="none"
+                <svg class="locked-lock-icon" xmlns="http://www.w3.org/2000/svg"
+                     width="18" height="18" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
             </div>
             <div class="accordion-content">
@@ -733,7 +754,7 @@ def _build_carousel_html(
             height: 8px;
             flex-shrink: 1;
             border-radius: 4px;
-            background: var(--body-text-color-subdued);
+            background: var(--color-accent);
             opacity: 0.5;
             cursor: pointer;
             transition: background 0.3s, opacity 0.3s;
@@ -846,11 +867,35 @@ def _build_carousel_html(
             margin-bottom: 0;
         }}
 
-        /* Locked post badge */
-        .locked-badge {{
-            font-size: 0.75rem;
-            color: var(--body-text-color-subdued);
+        /* Locked post styling */
+        .locked-lock-icon {{
+            color: var(--color-accent);
+            flex-shrink: 0;
+        }}
+
+        .locked-badges {{
+            display: flex;
+            gap: 0.375rem;
+            flex-shrink: 0;
+        }}
+
+        .locked-req-badge {{
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
             white-space: nowrap;
+            background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+            color: var(--color-accent);
+            border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+        }}
+
+        .locked-req-icon {{
+            font-size: 0.75rem;
+            line-height: 1;
         }}
 
         /* Credit links */
@@ -940,7 +985,7 @@ def build_quest_section(
                     {quest_data["title"]}
                 </h1>
 
-                <p style="color: var(--body-text-color-subdued); font-size: var(--text-xl); max-width: 48rem; margin: 0 auto;">
+                <p style="color: var(--color-accent); font-size: var(--text-xl); max-width: 48rem; margin: 0 auto;">
                     {quest_data["description"]}
                 </p>
             </div>
