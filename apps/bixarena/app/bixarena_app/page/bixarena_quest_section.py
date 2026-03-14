@@ -850,6 +850,7 @@ def _build_carousel_html(
             mask-composite: exclude;
             padding: 2px;
             animation: reward-trace 3s linear infinite;
+            pointer-events: none;
         }}
 
         @keyframes reward-trace {{
