@@ -672,16 +672,28 @@ def build_side_by_side_ui_anony():
         left_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
+        js=(
+            "() => { if (window.bixTrack) window.bixTrack("
+            "'vote_clicked', {vote_choice: 'model_1'}); }"
+        ),
     )
     right_vote_btn.click(
         right_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
+        js=(
+            "() => { if (window.bixTrack) window.bixTrack("
+            "'vote_clicked', {vote_choice: 'model_2'}); }"
+        ),
     )
     tie_btn.click(
         tie_vote_last_response,
         states + [battle_session] + model_selectors,
         vote_outputs,
+        js=(
+            "() => { if (window.bixTrack) window.bixTrack("
+            "'vote_clicked', {vote_choice: 'tie'}); }"
+        ),
     )
     new_battle_btn.click(
         lambda battle_session: clear_history(battle_session, None, example_prompt_ui),
@@ -697,6 +709,10 @@ def build_side_by_side_ui_anony():
         + [disclaimer]
         + [example_prompts_group, prev_btn, next_btn]
         + prompt_cards,
+        js=(
+            "() => { if (window.bixTrack) window.bixTrack("
+            "'new_battle_clicked', {trigger: 'new_battle'}); }"
+        ),
     )
 
     # Direct JavaScript functions for enter key control
@@ -777,6 +793,10 @@ def build_side_by_side_ui_anony():
         + [example_prompts_group]
         + [new_battle_same_prompt_btn]
         + [new_battle_btn],
+        js=(
+            "() => { if (window.bixTrack) window.bixTrack("
+            "'new_battle_clicked', {trigger: 'new_battle_same_prompt'}); }"
+        ),
     ).then(
         add_text,
         states + [battle_session] + model_selectors + [textbox],
