@@ -838,7 +838,7 @@ def build_app():
 }}
             """
 
-        demo.load(
+        quest_load_event = demo.load(
             fn=load_quest_content_on_page_load,
             inputs=None,
             outputs=[
@@ -846,8 +846,14 @@ def build_app():
                 quest_contributors_container,
                 quest_carousel_container,
             ],
-            js=carousel_init_js if carousel_init_js else None,
         )
+        if carousel_init_js:
+            quest_load_event.then(
+                fn=None,
+                inputs=None,
+                outputs=None,
+                js=carousel_init_js,
+            )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)
 
