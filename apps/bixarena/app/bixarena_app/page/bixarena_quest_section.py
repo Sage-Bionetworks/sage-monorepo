@@ -621,7 +621,7 @@ def _build_carousel_html(
                 f'<span class="locked-req-icon">&#x1f3d7;&#xfe0f;</span>'
                 f"{req_progress:,} blocks</span>"
             )
-            hint_parts.append(f"Reach {req_progress:,} blocks to reveal this chapter.")
+            hint_parts.append(f"Reach {req_progress:,} blocks to unlock this post.")
         if req_tier:
             tier_label = req_tier.capitalize()
             tier_emoji = TIER_CONFIG.get(req_tier, {}).get("emoji", "")
@@ -631,15 +631,8 @@ def _build_carousel_html(
                 f"{tier_label}</span>"
             )
             hint_parts.append(f"Become a {tier_label} to access this post.")
-        if not req_badges:
-            req_badges.append(
-                '<span class="locked-req-badge">'
-                '<span class="locked-req-icon">&#x1f512;</span>'
-                "Locked</span>"
-            )
-            hint_parts.append("Keep contributing to unlock this content.")
         badges_html = " ".join(req_badges)
-        hint_text = " ".join(hint_parts)
+        hint_text = "<br>".join(hint_parts)
         return f"""
         <div class="quest-update-accordion locked">
             <div class="accordion-header" role="button" tabindex="0">
