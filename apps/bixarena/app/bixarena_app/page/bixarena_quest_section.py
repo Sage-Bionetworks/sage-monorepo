@@ -610,7 +610,7 @@ def _build_carousel_html(
         '''
 
     def format_locked_card(post: dict) -> str:
-        """Format a locked post as a non-interactive teaser card."""
+        """Format a locked post as a collapsible accordion card."""
         # Build unlock hint from gate metadata
         hints = []
         req_progress = post.get("required_progress")
@@ -624,14 +624,20 @@ def _build_carousel_html(
 
         return f"""
         <div class="quest-update-accordion locked">
-            <div class="accordion-header locked-header">
+            <div class="accordion-header" role="button" tabindex="0">
                 <div class="accordion-title-wrapper">
                     <h4>{post["title"]}</h4>
                     <span class="locked-badge">🔒 Locked</span>
                 </div>
+                <svg class="accordion-chevron" xmlns="http://www.w3.org/2000/svg"
+                     width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </div>
-            <div class="locked-hint">
-                <p>{hint_text}</p>
+            <div class="accordion-content">
+                <p class="update-description" style="font-style: italic;">{hint_text}</p>
             </div>
         </div>
         """
@@ -840,35 +846,11 @@ def _build_carousel_html(
             margin-bottom: 0;
         }}
 
-        /* Locked post cards */
-        .quest-update-accordion.locked {{
-            opacity: 0.6;
-            border-style: dashed;
-        }}
-
-        .quest-update-accordion.locked .locked-header {{
-            cursor: default;
-        }}
-
-        .quest-update-accordion.locked .accordion-title-wrapper h4 {{
-            color: var(--body-text-color-subdued);
-        }}
-
+        /* Locked post badge */
         .locked-badge {{
             font-size: 0.75rem;
             color: var(--body-text-color-subdued);
             white-space: nowrap;
-        }}
-
-        .locked-hint {{
-            padding: 0 1rem 0.8rem 1rem;
-        }}
-
-        .locked-hint p {{
-            margin: 0;
-            font-size: 0.8rem;
-            color: var(--body-text-color-subdued);
-            font-style: italic;
         }}
 
         /* Credit links */

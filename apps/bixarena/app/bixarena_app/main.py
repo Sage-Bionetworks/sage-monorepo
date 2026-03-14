@@ -734,7 +734,13 @@ def build_app():
         }}
 
         // Handle accordion clicks to expand/collapse and switch carousel images
-        const accordionItems = carouselParent.querySelectorAll('.quest-update-accordion:not(.locked)');
+        const allAccordionItems = carouselParent.querySelectorAll('.quest-update-accordion');
+
+        function collapseAll() {{
+            allAccordionItems.forEach(item => {{
+                item.classList.remove('active', 'expanded');
+            }});
+        }}
 
         function loadUpdateImages(accordion) {{
             const newImagesJson = accordion.getAttribute('data-images');
@@ -747,12 +753,6 @@ def build_app():
 
             // Stop auto-rotation
             stopAutoRotate();
-
-            // Collapse all accordions, then expand clicked one
-            accordionItems.forEach(item => {{
-                item.classList.remove('active', 'expanded');
-            }});
-            accordion.classList.add('active', 'expanded');
 
             // Rebuild carousel images
             const container = carousel.querySelector('.carousel-container');
@@ -802,25 +802,29 @@ def build_app():
             startAutoRotate();
         }}
 
-        accordionItems.forEach(accordion => {{
-            const header = accordion.querySelector('.accordion-header');
-            header.addEventListener('click', function(e) {{
-                e.preventDefault();
-                e.stopPropagation();
-                if (accordion.classList.contains('expanded')) {{
-                    accordion.classList.remove('active', 'expanded');
-                }} else {{
+        function handleAccordionToggle(accordion, e) {{
+            e.preventDefault();
+            e.stopPropagation();
+            if (accordion.classList.contains('expanded')) {{
+                accordion.classList.remove('active', 'expanded');
+            }} else {{
+                collapseAll();
+                accordion.classList.add('active', 'expanded');
+                // Update carousel images only for unlocked posts
+                if (!accordion.classList.contains('locked')) {{
                     loadUpdateImages(accordion);
                 }}
+            }}
+        }}
+
+        allAccordionItems.forEach(accordion => {{
+            const header = accordion.querySelector('.accordion-header');
+            header.addEventListener('click', function(e) {{
+                handleAccordionToggle(accordion, e);
             }});
             header.addEventListener('keypress', function(e) {{
                 if (e.key === 'Enter' || e.key === ' ') {{
-                    e.preventDefault();
-                    if (accordion.classList.contains('expanded')) {{
-                        accordion.classList.remove('active', 'expanded');
-                    }} else {{
-                        loadUpdateImages(accordion);
-                    }}
+                    handleAccordionToggle(accordion, e);
                 }}
             }});
         }});
