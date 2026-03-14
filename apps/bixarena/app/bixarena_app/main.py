@@ -802,6 +802,18 @@ def build_app():
                 // Update carousel images only for unlocked posts
                 if (!accordion.classList.contains('locked')) {{
                     loadUpdateImages(accordion);
+                }} else {{
+                    // Hide indicators when a locked post (no images) is opened
+                    const indicatorsWrapper = carouselParent.querySelector('.carousel-indicators-wrapper');
+                    if (indicatorsWrapper) {{
+                        indicatorsWrapper.style.display = 'none';
+                    }}
+                    stopAutoRotate();
+                    // Clear carousel images
+                    const container = carousel.querySelector('.carousel-container');
+                    container.innerHTML = '';
+                    images = [];
+                    indicators = [];
                 }}
             }}
         }}
