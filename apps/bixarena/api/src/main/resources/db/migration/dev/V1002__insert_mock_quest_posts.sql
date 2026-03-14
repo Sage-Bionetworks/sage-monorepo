@@ -60,7 +60,7 @@ FROM api.quest WHERE quest_id = 'build-bioarena-together';
 
 -- Post 5: Tier-gated (requires knight tier)
 INSERT INTO api.quest_post (quest_id, post_index, date, title, description, images, publish_date, required_progress, required_tier)
-SELECT id, 5, NULL, 'Mock Post 5 (Knight-Gated)',
+SELECT id, 5, '2026-03-06', 'Mock Post 5 (Knight-Gated)',
     'This post is only unlocked for knights and champions.',
     '["https://example.com/img/post5.jpg"]'::jsonb,
     NULL, NULL, 'knight'
