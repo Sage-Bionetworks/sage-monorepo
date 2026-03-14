@@ -86,6 +86,8 @@ public class QuestPostDto {
 
   private @Nullable RequiredTierEnum requiredTier = null;
 
+  private Boolean locked;
+
   public QuestPostDto() {
     super();
   }
@@ -93,10 +95,11 @@ public class QuestPostDto {
   /**
    * Constructor with only required parameters
    */
-  public QuestPostDto(Integer postIndex, String title, List<URI> images) {
+  public QuestPostDto(Integer postIndex, String title, List<URI> images, Boolean locked) {
     this.postIndex = postIndex;
     this.title = title;
     this.images = images;
+    this.locked = locked;
   }
 
   public QuestPostDto postIndex(Integer postIndex) {
@@ -267,6 +270,26 @@ public class QuestPostDto {
     this.requiredTier = requiredTier;
   }
 
+  public QuestPostDto locked(Boolean locked) {
+    this.locked = locked;
+    return this;
+  }
+
+  /**
+   * Whether the post content is locked for the current caller. True when the caller does not meet the required progress or tier gates. Always false for posts with no gates.
+   * @return locked
+   */
+  @NotNull 
+  @Schema(name = "locked", example = "false", description = "Whether the post content is locked for the current caller. True when the caller does not meet the required progress or tier gates. Always false for posts with no gates.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("locked")
+  public Boolean getLocked() {
+    return locked;
+  }
+
+  public void setLocked(Boolean locked) {
+    this.locked = locked;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -283,12 +306,13 @@ public class QuestPostDto {
         Objects.equals(this.images, questPost.images) &&
         Objects.equals(this.publishDate, questPost.publishDate) &&
         Objects.equals(this.requiredProgress, questPost.requiredProgress) &&
-        Objects.equals(this.requiredTier, questPost.requiredTier);
+        Objects.equals(this.requiredTier, questPost.requiredTier) &&
+        Objects.equals(this.locked, questPost.locked);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(postIndex, date, title, description, images, publishDate, requiredProgress, requiredTier);
+    return Objects.hash(postIndex, date, title, description, images, publishDate, requiredProgress, requiredTier, locked);
   }
 
   @Override
@@ -303,6 +327,7 @@ public class QuestPostDto {
     sb.append("    publishDate: ").append(toIndentedString(publishDate)).append("\n");
     sb.append("    requiredProgress: ").append(toIndentedString(requiredProgress)).append("\n");
     sb.append("    requiredTier: ").append(toIndentedString(requiredTier)).append("\n");
+    sb.append("    locked: ").append(toIndentedString(locked)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -339,6 +364,7 @@ public class QuestPostDto {
       this.instance.setPublishDate(value.publishDate);
       this.instance.setRequiredProgress(value.requiredProgress);
       this.instance.setRequiredTier(value.requiredTier);
+      this.instance.setLocked(value.locked);
       return this;
     }
 
@@ -379,6 +405,11 @@ public class QuestPostDto {
     
     public QuestPostDto.Builder requiredTier(RequiredTierEnum requiredTier) {
       this.instance.requiredTier(requiredTier);
+      return this;
+    }
+    
+    public QuestPostDto.Builder locked(Boolean locked) {
+      this.instance.locked(locked);
       return this;
     }
     

@@ -68,7 +68,7 @@ public class QuestCreateOrUpdateDto {
    * Unique identifier for the quest
    * @return questId
    */
-  @NotNull 
+  @NotNull @Pattern(regexp = "^[a-z0-9-]+$") @Size(min = 1, max = 100) 
   @Schema(name = "questId", example = "build-bioarena-together", description = "Unique identifier for the quest", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("questId")
   public String getQuestId() {
@@ -88,7 +88,7 @@ public class QuestCreateOrUpdateDto {
    * Quest display title
    * @return title
    */
-  @NotNull 
+  @NotNull @Size(min = 1, max = 200) 
   @Schema(name = "title", example = "Build BioArena Together", description = "Quest display title", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("title")
   public String getTitle() {
@@ -108,7 +108,7 @@ public class QuestCreateOrUpdateDto {
    * Quest narrative description
    * @return description
    */
-  @NotNull 
+  @NotNull @Size(min = 1, max = 5000) 
   @Schema(name = "description", example = "Join forces to build an arena together...", description = "Quest narrative description", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("description")
   public String getDescription() {

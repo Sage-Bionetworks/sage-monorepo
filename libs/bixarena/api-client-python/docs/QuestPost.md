@@ -4,16 +4,17 @@ A single quest post. Content fields (description, images) are null/empty when th
 
 ## Properties
 
-| Name                  | Type          | Description                                                                              | Notes      |
-| --------------------- | ------------- | ---------------------------------------------------------------------------------------- | ---------- |
-| **post_index**        | **int**       | Display ordering index (0-based)                                                         |
-| **var_date**          | **date**      | Optional display date for the post                                                       | [optional] |
-| **title**             | **str**       | Post heading (always visible for published posts)                                        |
-| **description**       | **str**       | Post content text. Null when the caller does not meet unlock gates.                      | [optional] |
-| **images**            | **List[str]** | Image URLs for the post. Empty when the caller does not meet unlock gates.               |
-| **publish_date**      | **datetime**  | Post is hidden entirely before this timestamp. Null means immediately visible.           | [optional] |
-| **required_progress** | **int**       | Minimum quest-wide battle count required to unlock content. Null means no progress gate. | [optional] |
-| **required_tier**     | **str**       | Minimum contributor tier required to unlock content. Null means public access.           | [optional] |
+| Name                  | Type          | Description                                                                                                                                                              | Notes      |
+| --------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **post_index**        | **int**       | Display ordering index (0-based)                                                                                                                                         |
+| **var_date**          | **date**      | Optional display date for the post                                                                                                                                       | [optional] |
+| **title**             | **str**       | Post heading (always visible for published posts)                                                                                                                        |
+| **description**       | **str**       | Post content text. Null when the caller does not meet unlock gates.                                                                                                      | [optional] |
+| **images**            | **List[str]** | Image URLs for the post. Empty when the caller does not meet unlock gates.                                                                                               |
+| **publish_date**      | **datetime**  | Post is hidden entirely before this timestamp. Null means immediately visible.                                                                                           | [optional] |
+| **required_progress** | **int**       | Minimum quest-wide battle count required to unlock content. Null means no progress gate.                                                                                 | [optional] |
+| **required_tier**     | **str**       | Minimum contributor tier required to unlock content. Null means public access.                                                                                           | [optional] |
+| **locked**            | **bool**      | Whether the post content is locked for the current caller. True when the caller does not meet the required progress or tier gates. Always false for posts with no gates. |
 
 ## Example
 

@@ -44,7 +44,8 @@ class TestQuestPost(unittest.TestCase):
                     ],
                 publish_date = '2026-03-16T09:00Z',
                 required_progress = 500,
-                required_tier = 'knight'
+                required_tier = 'knight',
+                locked = False
             )
         else:
             return QuestPost(
@@ -53,6 +54,7 @@ class TestQuestPost(unittest.TestCase):
                 images = [
                     ''
                     ],
+                locked = False,
         )
         """
 

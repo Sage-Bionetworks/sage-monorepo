@@ -32,9 +32,15 @@ class QuestPostCreateOrUpdate(BaseModel):
     var_date: Optional[date] = Field(
         default=None, description="Optional display date for the post", alias="date"
     )
-    title: StrictStr = Field(description="Post heading")
-    description: StrictStr = Field(description="Post content text")
-    images: List[StrictStr] = Field(description="List of image URLs for the post")
+    title: Annotated[str, Field(min_length=1, strict=True, max_length=200)] = Field(
+        description="Post heading"
+    )
+    description: Annotated[str, Field(min_length=1, strict=True, max_length=10000)] = (
+        Field(description="Post content text")
+    )
+    images: Annotated[List[StrictStr], Field(max_length=50)] = Field(
+        description="List of image URLs for the post"
+    )
     publish_date: Optional[datetime] = Field(
         default=None,
         description="Post is hidden entirely before this timestamp. Null means immediately visible.",

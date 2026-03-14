@@ -1908,14 +1908,21 @@ components:
         questId:
           type: string
           description: Unique identifier for the quest
+          minLength: 1
+          maxLength: 100
+          pattern: ^[a-z0-9-]+$
           example: build-bioarena-together
         title:
           type: string
           description: Quest display title
+          minLength: 1
+          maxLength: 200
           example: Build BioArena Together
         description:
           type: string
           description: Quest narrative description
+          minLength: 1
+          maxLength: 5000
           example: Join forces to build an arena together...
         goal:
           type: integer
@@ -1993,10 +2000,15 @@ components:
           nullable: true
           description: Minimum contributor tier required to unlock content. Null means public access.
           example: knight
+        locked:
+          type: boolean
+          description: Whether the post content is locked for the current caller. True when the caller does not meet the required progress or tier gates. Always false for posts with no gates.
+          example: false
       required:
         - postIndex
         - title
         - images
+        - locked
     Quest:
       type: object
       description: A community quest with its metadata and posts
@@ -2126,14 +2138,19 @@ components:
         title:
           type: string
           description: Post heading
+          minLength: 1
+          maxLength: 200
           example: 'Chapter 1: Laying the First Stones'
         description:
           type: string
           description: Post content text
+          minLength: 1
+          maxLength: 10000
           example: The arena walls began to rise...
         images:
           type: array
           description: List of image URLs for the post
+          maxItems: 50
           items:
             type: string
             format: uri

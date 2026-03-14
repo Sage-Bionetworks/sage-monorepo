@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from typing import Any, ClassVar, Dict, List
 from typing_extensions import Annotated
 from typing import Optional, Set
@@ -29,11 +29,15 @@ class QuestCreateOrUpdate(BaseModel):
     Request body for creating or updating a quest
     """  # noqa: E501
 
-    quest_id: StrictStr = Field(
+    quest_id: Annotated[str, Field(min_length=1, strict=True, max_length=100)] = Field(
         description="Unique identifier for the quest", alias="questId"
     )
-    title: StrictStr = Field(description="Quest display title")
-    description: StrictStr = Field(description="Quest narrative description")
+    title: Annotated[str, Field(min_length=1, strict=True, max_length=200)] = Field(
+        description="Quest display title"
+    )
+    description: Annotated[str, Field(min_length=1, strict=True, max_length=5000)] = (
+        Field(description="Quest narrative description")
+    )
     goal: Annotated[int, Field(strict=True, ge=0)] = Field(
         description="Target total battle count for the quest"
     )
@@ -52,6 +56,13 @@ class QuestCreateOrUpdate(BaseModel):
         "endDate",
         "activePostIndex",
     ]
+
+    @field_validator("quest_id")
+    def quest_id_validate_regular_expression(cls, value):
+        """Validates the regular expression"""
+        if not re.match(r"^[a-z0-9-]+$", value):
+            raise ValueError(r"must validate the regular expression /^[a-z0-9-]+$/")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,

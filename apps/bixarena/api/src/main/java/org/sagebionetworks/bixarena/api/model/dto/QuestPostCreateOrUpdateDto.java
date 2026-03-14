@@ -126,7 +126,7 @@ public class QuestPostCreateOrUpdateDto {
    * Post heading
    * @return title
    */
-  @NotNull 
+  @NotNull @Size(min = 1, max = 200) 
   @Schema(name = "title", example = "Chapter 1: Laying the First Stones", description = "Post heading", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("title")
   public String getTitle() {
@@ -146,7 +146,7 @@ public class QuestPostCreateOrUpdateDto {
    * Post content text
    * @return description
    */
-  @NotNull 
+  @NotNull @Size(min = 1, max = 10000) 
   @Schema(name = "description", example = "The arena walls began to rise...", description = "Post content text", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("description")
   public String getDescription() {
@@ -174,7 +174,7 @@ public class QuestPostCreateOrUpdateDto {
    * List of image URLs for the post
    * @return images
    */
-  @NotNull @Valid 
+  @NotNull @Valid @Size(max = 50) 
   @Schema(name = "images", description = "List of image URLs for the post", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("images")
   public List<URI> getImages() {

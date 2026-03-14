@@ -54,7 +54,8 @@ class TestQuest(unittest.TestCase):
                             ], 
                         publish_date = '2026-03-16T09:00Z', 
                         required_progress = 500, 
-                        required_tier = 'knight', )
+                        required_tier = 'knight', 
+                        locked = False, )
                     ]
             )
         else:
@@ -78,7 +79,8 @@ class TestQuest(unittest.TestCase):
                             ], 
                         publish_date = '2026-03-16T09:00Z', 
                         required_progress = 500, 
-                        required_tier = 'knight', )
+                        required_tier = 'knight', 
+                        locked = False, )
                     ],
         )
         """

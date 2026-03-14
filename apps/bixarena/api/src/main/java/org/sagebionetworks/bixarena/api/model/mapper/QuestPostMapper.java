@@ -31,6 +31,7 @@ public class QuestPostMapper {
       .requiredTier(entity.getRequiredTier() != null
         ? QuestPostDto.RequiredTierEnum.fromValue(entity.getRequiredTier())
         : null)
+      .locked(false)
       .build();
   }
 
@@ -49,6 +50,7 @@ public class QuestPostMapper {
       .requiredTier(entity.getRequiredTier() != null
         ? QuestPostDto.RequiredTierEnum.fromValue(entity.getRequiredTier())
         : null)
+      .locked(true)
       .build();
   }
 

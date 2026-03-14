@@ -17,7 +17,15 @@ import re  # noqa: F401
 import json
 
 from datetime import date, datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    StrictBool,
+    StrictInt,
+    StrictStr,
+    field_validator,
+)
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -59,6 +67,9 @@ class QuestPost(BaseModel):
         description="Minimum contributor tier required to unlock content. Null means public access.",
         alias="requiredTier",
     )
+    locked: StrictBool = Field(
+        description="Whether the post content is locked for the current caller. True when the caller does not meet the required progress or tier gates. Always false for posts with no gates."
+    )
     __properties: ClassVar[List[str]] = [
         "postIndex",
         "date",
@@ -68,6 +79,7 @@ class QuestPost(BaseModel):
         "publishDate",
         "requiredProgress",
         "requiredTier",
+        "locked",
     ]
 
     @field_validator("required_tier")
@@ -166,6 +178,7 @@ class QuestPost(BaseModel):
                 "publishDate": obj.get("publishDate"),
                 "requiredProgress": obj.get("requiredProgress"),
                 "requiredTier": obj.get("requiredTier"),
+                "locked": obj.get("locked"),
             }
         )
         return _obj

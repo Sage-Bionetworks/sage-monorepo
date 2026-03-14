@@ -2825,14 +2825,21 @@ components:
         questId:
           description: Unique identifier for the quest
           example: build-bioarena-together
+          maxLength: 100
+          minLength: 1
+          pattern: '^[a-z0-9-]+$'
           type: string
         title:
           description: Quest display title
           example: Build BioArena Together
+          maxLength: 200
+          minLength: 1
           type: string
         description:
           description: Quest narrative description
           example: Join forces to build an arena together...
+          maxLength: 5000
+          minLength: 1
           type: string
         goal:
           description: Target total battle count for the quest
@@ -2876,6 +2883,7 @@ components:
         description: The arena walls began to rise...
         requiredProgress: 500
         title: 'Chapter 1: Laying the First Stones'
+        locked: false
         requiredTier: knight
       properties:
         postIndex:
@@ -2927,8 +2935,15 @@ components:
           example: knight
           nullable: true
           type: string
+        locked:
+          description: Whether the post content is locked for the current caller.
+            True when the caller does not meet the required progress or tier gates.
+            Always false for posts with no gates.
+          example: false
+          type: boolean
       required:
         - images
+        - locked
         - postIndex
         - title
       type: object
@@ -2951,6 +2966,7 @@ components:
             description: The arena walls began to rise...
             requiredProgress: 500
             title: 'Chapter 1: Laying the First Stones'
+            locked: false
             requiredTier: knight
           - date: 2026-02-03
             images:
@@ -2961,6 +2977,7 @@ components:
             description: The arena walls began to rise...
             requiredProgress: 500
             title: 'Chapter 1: Laying the First Stones'
+            locked: false
             requiredTier: knight
         startDate: 2026-02-01T00:00:00Z
         totalBlocks: 150
@@ -3110,16 +3127,21 @@ components:
         title:
           description: Post heading
           example: 'Chapter 1: Laying the First Stones'
+          maxLength: 200
+          minLength: 1
           type: string
         description:
           description: Post content text
           example: The arena walls began to rise...
+          maxLength: 10000
+          minLength: 1
           type: string
         images:
           description: List of image URLs for the post
           items:
             format: uri
             type: string
+          maxItems: 50
           type: array
         publishDate:
           description: Post is hidden entirely before this timestamp. Null means immediately
