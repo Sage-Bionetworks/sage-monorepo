@@ -86,6 +86,17 @@ public class SessionToJwtFilter implements WebFilter {
 
     // Step 5: Special handling for auth-service endpoints (skip JWT minting)
     if (AUTH_SERVICE_AUDIENCE.equals(audience.get())) {
+      // For anonymous auth-service endpoints (e.g., /auth/callback), pass through
+      // without session validation — the auth service handles the session directly.
+      // The session cookie may exist but not yet be authenticated (e.g., mid-login flow).
+      if (anonymousAllowed) {
+        log.debug("Anonymous auth service endpoint, passing through with cookie: {} {}", method, path);
+        var anonymousAuth = new UsernamePasswordAuthenticationToken(
+          "anonymous", null, List.of()
+        );
+        return chain.filter(exchange)
+          .contextWrite(ReactiveSecurityContextHolder.withAuthentication(anonymousAuth));
+      }
       log.debug("Auth service endpoint, validating session only: {} {}", method, path);
       return validateSession(sessionId)
         .flatMap(userInfo -> {
