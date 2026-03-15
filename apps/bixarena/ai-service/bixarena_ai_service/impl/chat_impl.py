@@ -154,10 +154,11 @@ async def _do_stream(
     )
 
     async for chunk in response:
+        # Capture usage from any chunk (may arrive with or without choices)
+        if chunk.usage:
+            usage_data = chunk.usage
+
         if not chunk.choices:
-            # Final chunk with usage only
-            if chunk.usage:
-                usage_data = chunk.usage
             continue
 
         choice = chunk.choices[0]
@@ -223,6 +224,12 @@ async def _do_stream(
         )
 
     # Final chunk
+    logger.info(
+        "Chat complete: model=%s, finish_reason=%s, usage=%s",
+        model_name,
+        finish_reason,
+        usage,
+    )
     yield ModelChatCompletionChunk(
         status="complete",
         finish_reason=finish_reason or "stop",
