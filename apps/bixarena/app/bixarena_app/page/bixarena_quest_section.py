@@ -2,6 +2,7 @@
 
 import json
 from datetime import datetime
+from html import escape
 
 import gradio as gr
 
@@ -583,10 +584,10 @@ def _build_carousel_html(
                 date_obj = datetime.strptime(update["date"], "%Y-%m-%d")
                 date_display = date_obj.strftime("%B %d, %Y")
             except (ValueError, TypeError):
-                date_display = update["date"]
+                date_display = escape(update["date"])
 
-        # Convert description to paragraphs (split on \n\n)
-        description: str = update["description"]
+        # Convert description to paragraphs (escape first, then split on \n\n)
+        description: str = escape(update["description"])
         paragraphs: list[str] = [
             p.strip() for p in description.split("\n\n") if p.strip()
         ]
@@ -617,7 +618,7 @@ def _build_carousel_html(
              data-images="{images_json}">
             <div class="accordion-header" role="button" tabindex="0">
                 <div class="accordion-title-wrapper">
-                    <h4>{update["title"]}</h4>
+                    <h4>{escape(update["title"])}</h4>
                     {
             f'<span class="update-date">{date_display}</span>' if date_display else ""
         }
@@ -674,7 +675,7 @@ def _build_carousel_html(
         <div class="quest-update-accordion locked">
             <div class="accordion-header" role="button" tabindex="0">
                 <div class="accordion-title-wrapper">
-                    <h4>{post["title"]}</h4>
+                    <h4>{escape(post["title"])}</h4>
                     <div class="locked-badges">{badges_html}</div>
                 </div>
                 <svg class="locked-lock-icon" xmlns="http://www.w3.org/2000/svg"
@@ -1067,11 +1068,11 @@ def build_quest_section(
                 </div>
 
                 <h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.75rem; font-weight: 600;">
-                    {quest_data["title"]}
+                    {escape(quest_data["title"])}
                 </h1>
 
                 <p style="color: var(--body-text-color-subdued); font-size: var(--text-xl); max-width: 48rem; margin: 0 auto;">
-                    {quest_data["description"]}
+                    {escape(quest_data["description"])}
                 </p>
             </div>
         </div>
