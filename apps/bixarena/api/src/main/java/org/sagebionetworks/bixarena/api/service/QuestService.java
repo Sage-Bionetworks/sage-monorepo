@@ -235,6 +235,13 @@ public class QuestService {
 
     questPostRepository.delete(post);
     log.info("Deleted post {} from quest {}", postIndex, questId);
+
+    if (quest.getActivePostIndex() != null && quest.getActivePostIndex().equals(postIndex)) {
+      Integer maxIndex = questPostRepository.findMaxPostIndex(quest.getId());
+      quest.setActivePostIndex(maxIndex != null && maxIndex >= 0 ? maxIndex : 0);
+      questRepository.save(quest);
+      log.info("Reset activePostIndex to {} for quest {}", quest.getActivePostIndex(), questId);
+    }
   }
 
   /**
