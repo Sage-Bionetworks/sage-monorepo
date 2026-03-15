@@ -7,6 +7,7 @@ buildscript {
 plugins {
   id("sage.spring-boot-application")
   id("sage.lombok")
+  id("sage.jacoco-coverage")
   alias(libs.plugins.flyway)
 }
 
@@ -32,7 +33,30 @@ dependencies {
   runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
+  testImplementation(libs.spring.security.test)
   testRuntimeOnly(libs.h2database.h2)
+}
+
+jacocoCoverage {
+  classExcludes =
+    listOf(
+      "org/sagebionetworks/bixarena/api/model/dto/**",
+      "org/sagebionetworks/bixarena/api/api/AdminApi.class",
+      "org/sagebionetworks/bixarena/api/api/AdminApiController.class",
+      "org/sagebionetworks/bixarena/api/api/AdminApiDelegate.class",
+      "org/sagebionetworks/bixarena/api/api/QuestApi.class",
+      "org/sagebionetworks/bixarena/api/api/QuestApiController.class",
+      "org/sagebionetworks/bixarena/api/api/QuestApiDelegate.class",
+      "org/sagebionetworks/bixarena/api/configuration/EnumConverterConfiguration*",
+      "org/sagebionetworks/bixarena/api/configuration/Flyway*",
+      "org/sagebionetworks/bixarena/api/configuration/SpringDocConfiguration*",
+      "org/sagebionetworks/bixarena/api/RFC3339DateFormat*",
+    )
+
+  forceClassIncludes =
+    listOf(
+      "org/sagebionetworks/bixarena/api/api/*Impl.class",
+    )
 }
 
 flyway {
