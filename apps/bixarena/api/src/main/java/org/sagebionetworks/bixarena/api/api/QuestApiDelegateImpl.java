@@ -42,9 +42,8 @@ public class QuestApiDelegateImpl implements QuestApiDelegate {
 
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     UUID userId = extractUserId(auth);
-    boolean isAdmin = isAdmin(auth);
 
-    QuestDto quest = questService.getQuest(questId, userId, isAdmin);
+    QuestDto quest = questService.getQuest(questId, userId);
     return ResponseEntity.ok(quest);
   }
 

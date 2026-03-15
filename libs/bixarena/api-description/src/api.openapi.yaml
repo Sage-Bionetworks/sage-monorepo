@@ -39,6 +39,8 @@ tags:
     description: Operations about the authenticated user.
 
 paths:
+  /admin/quests/{questId}:
+    $ref: paths/admin/quests/{questId}.yaml
   /admin/stats:
     $ref: paths/admin-stats.yaml
   /battles:

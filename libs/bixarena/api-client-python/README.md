@@ -83,14 +83,15 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.AdminApi(api_client)
+    quest_id = 'build-bioarena-together' # str | Unique identifier for a quest
 
     try:
-        # Admin statistics
-        api_response = api_instance.admin_stats()
-        print("The response of AdminApi->admin_stats:\n")
+        # Get a quest (admin, ungated)
+        api_response = api_instance.admin_get_quest(quest_id)
+        print("The response of AdminApi->admin_get_quest:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling AdminApi->admin_stats: %s\n" % e)
+        print("Exception when calling AdminApi->admin_get_quest: %s\n" % e)
 
 ```
 
@@ -100,6 +101,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 
 | Class                 | Method                                                                            | HTTP request                                            | Description                                |
 | --------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------ |
+| _AdminApi_            | [**admin_get_quest**](docs/AdminApi.md#admin_get_quest)                           | **GET** /admin/quests/{questId}                         | Get a quest (admin, ungated)               |
 | _AdminApi_            | [**admin_stats**](docs/AdminApi.md#admin_stats)                                   | **GET** /admin/stats                                    | Admin statistics                           |
 | _AdminApi_            | [**create_quest**](docs/AdminApi.md#create_quest)                                 | **POST** /quests                                        | Create a quest                             |
 | _AdminApi_            | [**create_quest_post**](docs/AdminApi.md#create_quest_post)                       | **POST** /quests/{questId}/posts                        | Create a quest post                        |

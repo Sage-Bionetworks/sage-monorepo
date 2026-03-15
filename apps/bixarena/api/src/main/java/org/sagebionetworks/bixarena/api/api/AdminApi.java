@@ -7,6 +7,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.AdminStats200ResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +41,66 @@ public interface AdminApi {
     default AdminApiDelegate getDelegate() {
         return new AdminApiDelegate() {};
     }
+
+    /**
+     * GET /admin/quests/{questId} : Get a quest (admin, ungated)
+     * Get the full quest with ALL posts and full content. No publish date filtering, no progress or tier gating. Requires admin role. Use this endpoint for content management; use GET /quests/{questId} to experience the quest as a user. 
+     *
+     * @param questId Unique identifier for a quest (required)
+     * @return Success (status code 200)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "adminGetQuest",
+        summary = "Get a quest (admin, ungated)",
+        description = "Get the full quest with ALL posts and full content. No publish date filtering, no progress or tier gating. Requires admin role. Use this endpoint for content management; use GET /quests/{questId} to experience the quest as a user. ",
+        tags = { "Admin" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = QuestDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = QuestDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/admin/quests/{questId}",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<QuestDto> adminGetQuest(
+        @Parameter(name = "questId", description = "Unique identifier for a quest", required = true, in = ParameterIn.PATH) @PathVariable("questId") String questId
+    ) {
+        return getDelegate().adminGetQuest(questId);
+    }
+
 
     /**
      * GET /admin/stats : Admin statistics

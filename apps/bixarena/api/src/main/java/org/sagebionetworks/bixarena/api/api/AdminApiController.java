@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.AdminStats200ResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 
 

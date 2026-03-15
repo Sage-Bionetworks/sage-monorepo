@@ -1,0 +1,31 @@
+parameters:
+  - $ref: ../../../components/parameters/path/questId.yaml
+
+get:
+  x-rate-limit-requests-per-minute: 60
+  tags:
+    - Admin
+  summary: Get a quest (admin, ungated)
+  description: |
+    Get the full quest with ALL posts and full content. No publish date
+    filtering, no progress or tier gating. Requires admin role.
+    Use this endpoint for content management; use GET /quests/{questId}
+    to experience the quest as a user.
+  operationId: adminGetQuest
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/Quest.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

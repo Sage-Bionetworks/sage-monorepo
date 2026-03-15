@@ -283,13 +283,13 @@ api_admin PUT "/quests/${QUEST_ID}/posts/1" '{
 
 pause
 
-# ── Step 6: Get the quest (admin — gate bypass) ─────────────────────────────
-header "Get the quest (admin view — all gates bypassed)"
-echo "Fetching the same quest as an admin. All three posts should now have"
+# ── Step 6: Get the quest (admin — ungated) ──────────────────────────────────
+header "Get the quest (admin view — ungated content)"
+echo "Fetching the quest via the admin endpoint. All posts are returned with"
 echo "full content (description and images) regardless of unlock requirements."
 echo ""
 
-api_admin GET "/quests/${QUEST_ID}"
+api_admin GET "/admin/quests/${QUEST_ID}"
 
 pause
 
@@ -307,7 +307,7 @@ api_admin PUT "/quests/${QUEST_ID}/posts/reorder" '{
 echo "Verifying the new order by fetching the quest..."
 echo ""
 
-api_admin GET "/quests/${QUEST_ID}"
+api_admin GET "/admin/quests/${QUEST_ID}"
 
 pause
 
@@ -322,7 +322,7 @@ api_admin DELETE "/quests/${QUEST_ID}/posts/1"
 echo "Fetching the quest to confirm the post was removed..."
 echo ""
 
-api_admin GET "/quests/${QUEST_ID}"
+api_admin GET "/admin/quests/${QUEST_ID}"
 
 pause
 

@@ -84,28 +84,20 @@ public class QuestService {
 
   /**
    * Get a quest with posts filtered by unlock gates.
-   * Admin users see all posts with full content.
+   * Gating is always applied, regardless of the caller's role.
    *
    * @param questId the quest identifier
    * @param userId authenticated user's UUID, or null for anonymous
-   * @param isAdmin whether the caller has admin role
    * @return quest with filtered posts
    */
   @Transactional(readOnly = true)
-  public QuestDto getQuest(String questId, UUID userId, boolean isAdmin) {
+  public QuestDto getQuest(String questId, UUID userId) {
     QuestEntity quest = findQuestByQuestId(questId);
 
     List<QuestPostEntity> allPosts =
         questPostRepository.findByQuestIdOrderByPostIndexAsc(quest.getId());
 
     Integer totalBlocks = countTotalBlocks(quest);
-
-    if (isAdmin) {
-      List<QuestPostDto> postDtos = allPosts.stream()
-          .map(questPostMapper::convertToDto)
-          .toList();
-      return questMapper.convertToDto(quest, postDtos, totalBlocks);
-    }
 
     // Resolve caller's tier
     String callerTier = resolveTier(userId, quest);
@@ -121,6 +113,28 @@ public class QuestService {
             return questPostMapper.convertToLockedDto(post);
           }
         })
+        .toList();
+
+    return questMapper.convertToDto(quest, postDtos, totalBlocks);
+  }
+
+  /**
+   * Get a quest with ALL posts ungated. For admin content management only.
+   *
+   * @param questId the quest identifier
+   * @return quest with all posts and full content
+   */
+  @Transactional(readOnly = true)
+  public QuestDto getQuestUngated(String questId) {
+    QuestEntity quest = findQuestByQuestId(questId);
+
+    List<QuestPostEntity> allPosts =
+        questPostRepository.findByQuestIdOrderByPostIndexAsc(quest.getId());
+
+    Integer totalBlocks = countTotalBlocks(quest);
+
+    List<QuestPostDto> postDtos = allPosts.stream()
+        .map(questPostMapper::convertToDto)
         .toList();
 
     return questMapper.convertToDto(quest, postDtos, totalBlocks);
