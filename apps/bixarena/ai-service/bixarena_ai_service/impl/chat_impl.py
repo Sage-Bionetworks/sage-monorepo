@@ -23,7 +23,7 @@ from fastapi.sse import EventSourceResponse
 from openai import APIError, AsyncOpenAI
 
 from bixarena_ai_service.apis.chat_api_base import BaseChatApi
-from bixarena_ai_service.config import get_settings
+from bixarena_ai_service.config import Settings, get_settings
 from bixarena_ai_service.models.message_role import MessageRole
 from bixarena_ai_service.models.model_chat_completion_chunk import (
     ModelChatCompletionChunk,
@@ -95,6 +95,7 @@ async def _stream_completion(
     client: AsyncOpenAI,
     model_name: str,
     messages: list[dict[str, str]],
+    settings: Settings,
 ) -> AsyncGenerator[ModelChatCompletionChunk]:
     """Stream chat completion chunks from the LLM provider.
 
@@ -102,7 +103,7 @@ async def _stream_completion(
     the first user message.
     """
     try:
-        async for chunk in _do_stream(client, model_name, messages):
+        async for chunk in _do_stream(client, model_name, messages, settings):
             yield chunk
     except APIError as e:
         # Retry without system message if provider doesn't support it
@@ -115,7 +116,9 @@ async def _stream_completion(
             logger.warning("Retrying %s without system message", model_name)
             retry_messages = _merge_system_into_user(messages)
             try:
-                async for chunk in _do_stream(client, model_name, retry_messages):
+                async for chunk in _do_stream(
+                    client, model_name, retry_messages, settings
+                ):
                     yield chunk
                 return
             except Exception as retry_e:
@@ -133,6 +136,7 @@ async def _do_stream(
     client: AsyncOpenAI,
     model_name: str,
     messages: list[dict[str, str]],
+    settings: Settings,
 ) -> AsyncGenerator[ModelChatCompletionChunk]:
     """Execute the OpenAI streaming call and yield chunks."""
     text = ""
@@ -142,6 +146,9 @@ async def _do_stream(
     response = await client.chat.completions.create(
         model=model_name,
         messages=messages,
+        temperature=settings.chat_default_temperature,
+        top_p=settings.chat_default_top_p,
+        max_tokens=settings.chat_max_response_tokens,
         stream=True,
         stream_options={"include_usage": True},
     )
@@ -243,8 +250,8 @@ class ChatApiImpl(BaseChatApi):
         client = AsyncOpenAI(
             api_key=settings.openrouter_api_key,
             base_url=model_chat_request.api_base,
-            timeout=settings.openrouter_timeout,
-            max_retries=settings.openrouter_max_retries,
+            timeout=settings.chat_timeout,
+            max_retries=settings.chat_max_retries,
         )
 
         messages = _build_openai_messages(model_chat_request)
@@ -260,6 +267,7 @@ class ChatApiImpl(BaseChatApi):
                 client=client,
                 model_name=model_chat_request.api_model_name,
                 messages=messages,
+                settings=settings,
             ):
                 yield chunk.to_dict()
 

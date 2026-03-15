@@ -38,6 +38,13 @@ class Settings(BaseSettings):
     openrouter_timeout: float = 30.0
     openrouter_max_retries: int = 2
 
+    # Chat completion configuration
+    chat_default_temperature: float = 0.7
+    chat_default_top_p: float = 1.0
+    chat_max_response_tokens: int = 4096
+    chat_timeout: float = 60.0
+    chat_max_retries: int = 2
+
     # Validation method IDs — used as part of the cache key.
     # Bump when changing the classification prompt or model.
     prompt_validation_method: str = "openrouter-haiku-v1"
