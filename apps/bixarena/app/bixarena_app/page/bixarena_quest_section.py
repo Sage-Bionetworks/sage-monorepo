@@ -833,11 +833,12 @@ def _build_carousel_html(
             background: conic-gradient(
                 from var(--reward-angle, 0deg),
                 #d4a853 0deg,
-                #f5d78e 40deg,
-                #d4a853 80deg,
+                #fff8e1 30deg,
+                #f5d78e 60deg,
+                #d4a853 90deg,
                 #b8943e 180deg,
-                #d4a853 280deg,
-                #f5d78e 320deg,
+                #d4a853 270deg,
+                #fff8e1 330deg,
                 #d4a853 360deg
             );
             -webkit-mask:
