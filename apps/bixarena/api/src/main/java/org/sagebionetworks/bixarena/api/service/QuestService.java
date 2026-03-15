@@ -234,13 +234,42 @@ public class QuestService {
             String.format("Post %d not found in quest '%s'", postIndex, questId)));
 
     questPostRepository.delete(post);
+    questPostRepository.flush();
     log.info("Deleted post {} from quest {}", postIndex, questId);
 
-    if (quest.getActivePostIndex() != null && quest.getActivePostIndex().equals(postIndex)) {
-      Integer maxIndex = questPostRepository.findMaxPostIndex(quest.getId());
-      quest.setActivePostIndex(maxIndex != null && maxIndex >= 0 ? maxIndex : 0);
+    // Re-index remaining posts to close the gap (two-pass to avoid unique constraint violations)
+    List<QuestPostEntity> remaining =
+        questPostRepository.findByQuestIdOrderByPostIndexAsc(quest.getId());
+
+    if (!remaining.isEmpty()) {
+      // Pass 1: assign negative temporary indexes
+      for (int i = 0; i < remaining.size(); i++) {
+        remaining.get(i).setPostIndex(-(i + 1));
+      }
+      questPostRepository.saveAll(remaining);
+      questPostRepository.flush();
+
+      // Pass 2: assign final contiguous indexes
+      for (int i = 0; i < remaining.size(); i++) {
+        remaining.get(i).setPostIndex(i);
+      }
+      questPostRepository.saveAll(remaining);
+      questPostRepository.flush();
+      log.info("Re-indexed {} remaining posts in quest {}", remaining.size(), questId);
+    }
+
+    // Update activePostIndex
+    Integer activeIndex = quest.getActivePostIndex();
+    if (activeIndex != null) {
+      if (activeIndex.equals(postIndex)) {
+        // Pointed to deleted post: move to the previous post (or 0 if first)
+        quest.setActivePostIndex(remaining.isEmpty() ? 0 : Math.max(0, postIndex - 1));
+      } else if (activeIndex > postIndex) {
+        // Pointed to a post after the deleted one: shift down by 1
+        quest.setActivePostIndex(activeIndex - 1);
+      }
       questRepository.save(quest);
-      log.info("Reset activePostIndex to {} for quest {}", quest.getActivePostIndex(), questId);
+      log.info("Updated activePostIndex to {} for quest {}", quest.getActivePostIndex(), questId);
     }
   }
 

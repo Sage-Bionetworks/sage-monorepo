@@ -314,7 +314,7 @@ pause
 # ── Step 9: Delete a post ────────────────────────────────────────────────────
 header "Delete Post at index 1"
 echo "Removing the middle post (originally 'Walls Rising')."
-echo "Note: Remaining post indexes are NOT automatically reindexed."
+echo "Remaining posts are automatically reindexed to close the gap."
 echo ""
 
 api_admin DELETE "/quests/${QUEST_ID}/posts/1"
