@@ -19,14 +19,14 @@ public class AdminApiDelegateImpl implements AdminApiDelegate {
   private final QuestService questService;
 
   @Override
-  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<AdminStats200ResponseDto> adminStats() {
     AdminStats200ResponseDto response = AdminStats200ResponseDto.builder().ok(true).build();
     return ResponseEntity.ok(response);
   }
 
   @Override
-  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<QuestDto> adminGetQuest(String questId) {
     QuestDto quest = questService.getQuestUngated(questId);
     return ResponseEntity.ok(quest);

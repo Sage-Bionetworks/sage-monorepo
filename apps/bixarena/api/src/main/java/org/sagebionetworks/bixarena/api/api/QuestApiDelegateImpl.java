@@ -151,11 +151,4 @@ public class QuestApiDelegateImpl implements QuestApiDelegate {
     }
   }
 
-  private boolean isAdmin(Authentication auth) {
-    if (auth == null || !auth.isAuthenticated()) {
-      return false;
-    }
-    return auth.getAuthorities().stream()
-        .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
-  }
 }
