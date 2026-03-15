@@ -277,6 +277,7 @@ class ChatApiImpl(BaseChatApi):
                 messages=messages,
                 settings=settings,
             ):
-                yield chunk.to_dict()
+                data = chunk.model_dump_json(exclude_none=True)
+                yield f"data:{data}\n\n"
 
         return EventSourceResponse(content=event_generator())
