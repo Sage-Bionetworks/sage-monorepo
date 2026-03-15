@@ -247,11 +247,19 @@ class ChatApiImpl(BaseChatApi):
 
         settings = get_settings()
 
+        # https://openrouter.ai/docs/app-attribution
+        default_headers = {}
+        if settings.app_url:
+            default_headers["HTTP-Referer"] = settings.app_url
+        if settings.app_title:
+            default_headers["X-OpenRouter-Title"] = settings.app_title
+
         client = AsyncOpenAI(
             api_key=settings.openrouter_api_key,
             base_url=model_chat_request.api_base,
             timeout=settings.chat_timeout,
             max_retries=settings.chat_max_retries,
+            default_headers=default_headers or None,
         )
 
         messages = _build_openai_messages(model_chat_request)

@@ -45,6 +45,10 @@ class Settings(BaseSettings):
     chat_timeout: float = 60.0
     chat_max_retries: int = 2
 
+    # OpenRouter app attribution configuration
+    app_url: str = ""
+    app_title: str = ""
+
     # Validation method IDs — used as part of the cache key.
     # Bump when changing the classification prompt or model.
     prompt_validation_method: str = "openrouter-haiku-v1"
