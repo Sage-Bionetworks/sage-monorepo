@@ -20,11 +20,14 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestD
 import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
 
+import org.sagebionetworks.bixarena.api.model.dto.ModelChatCompletionChunkDto;
 import org.sagebionetworks.bixarena.api.model.entity.BattleValidationEntity;
 import org.sagebionetworks.bixarena.api.service.BattleEvaluationService;
 import org.sagebionetworks.bixarena.api.service.BattleRoundService;
 import org.sagebionetworks.bixarena.api.service.BattleService;
 import org.sagebionetworks.bixarena.api.service.BattleValidationService;
+import org.sagebionetworks.bixarena.api.service.ChatCompletionStreamService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +45,7 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
   private final BattleRoundService battleRoundService;
   private final BattleEvaluationService battleEvaluationService;
   private final BattleValidationService battleValidationService;
+  private final ChatCompletionStreamService chatCompletionStreamService;
   private final NativeWebRequest request;
 
   @Override
@@ -191,6 +195,20 @@ public class BattleApiDelegateImpl implements BattleApiDelegate {
       battleId, request.getValidationId()
     );
     return ResponseEntity.ok(updated);
+  }
+
+  @Override
+  @PreAuthorize("hasRole('USER')")
+  public ResponseEntity<ModelChatCompletionChunkDto> streamBattleRoundCompletion(
+    UUID battleId,
+    UUID roundId,
+    UUID modelId
+  ) {
+    log.info("Stream requested: battle={}, round={}, model={}", battleId, roundId, modelId);
+    HttpServletResponse servletResponse = request.getNativeResponse(HttpServletResponse.class);
+    chatCompletionStreamService.streamCompletion(battleId, roundId, modelId, servletResponse);
+    // Response already written directly to HttpServletResponse
+    return null;
   }
 
   @Override

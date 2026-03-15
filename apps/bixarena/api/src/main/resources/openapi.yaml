@@ -402,6 +402,67 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Battle
+  /battles/{battleId}/rounds/{roundId}/stream:
+    post:
+      description: Sends the round's prompt and conversation history to the specified
+        model via ai-service and returns the response as a streaming HTTP response
+        (text/event-stream). The completed response is persisted as a message after
+        the stream ends.
+      operationId: streamBattleRoundCompletion
+      parameters:
+        - description: The unique identifier of the battle
+          explode: false
+          in: path
+          name: battleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleId'
+          style: simple
+        - description: The unique identifier of the battle round
+          explode: false
+          in: path
+          name: roundId
+          required: true
+          schema:
+            $ref: '#/components/schemas/BattleRoundId'
+          style: simple
+        - description: The model to stream
+          explode: true
+          in: query
+          name: modelId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ModelId'
+          style: form
+      responses:
+        '200':
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/ModelChatCompletionChunk'
+          description: Streaming HTTP response with chat completion chunks
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Stream a chat completion for a battle round
+      tags:
+        - Battle
+      x-rate-limit-requests-per-minute: 60
+      x-accepts:
+        - application/json
+        - application/problem+json
+        - text/event-stream
+      x-tags:
+        - tag: Battle
   /example-prompts:
     get:
       description: Get a list of example prompts with comprehensive filtering options
@@ -2415,6 +2476,78 @@ components:
         - model1Message
         - model2Message
       type: object
+    ModelErrorMessage:
+      description: Error message describing what went wrong.
+      example: Rate limit exceeded
+      maxLength: 1000
+      minLength: 1
+      type: string
+    ModelChatUsage:
+      description: Token usage and generation parameters for the chat completion
+      properties:
+        model:
+          description: The model identifier that was used
+          type: string
+        temperature:
+          description: The sampling temperature that was used
+          format: float
+          type: number
+        topP:
+          description: The nucleus sampling parameter that was used
+          format: float
+          type: number
+        maxTokens:
+          description: The maximum token limit that was set
+          type: integer
+        promptTokens:
+          description: Number of tokens in the prompt
+          type: integer
+        completionTokens:
+          description: Number of tokens in the completion
+          type: integer
+        totalTokens:
+          description: Total number of tokens used
+          type: integer
+      required:
+        - completionTokens
+        - promptTokens
+        - totalTokens
+      type: object
+    ModelChatCompletionChunk:
+      description: A streaming event chunk from the model chat completion
+      properties:
+        content:
+          description: The content of a message.
+          example: What is the capital of France?
+          maxLength: 10000
+          type: string
+        status:
+          description: Current state of the streaming response
+          enum:
+            - streaming
+            - complete
+            - error
+          type: string
+        finishReason:
+          description: Reason the model stopped generating
+          enum:
+            - stop
+            - length
+            - content_filter
+            - error
+          nullable: true
+          type: string
+        errorMessage:
+          description: Error message describing what went wrong.
+          example: Rate limit exceeded
+          maxLength: 1000
+          minLength: 1
+          type: string
+        usage:
+          $ref: '#/components/schemas/ModelChatUsage'
+      required:
+        - status
+      type: object
     ExamplePromptSort:
       default: created_at
       description: The field to sort example prompts by.
@@ -3094,12 +3227,6 @@ components:
       example: 429
       nullable: true
       type: integer
-    ModelErrorMessage:
-      description: Error message describing what went wrong.
-      example: Rate limit exceeded
-      maxLength: 1000
-      minLength: 1
-      type: string
     ModelErrorCreateRequest:
       description: Request to report a model error.
       properties:
