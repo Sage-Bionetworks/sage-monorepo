@@ -46,8 +46,8 @@ class Settings(BaseSettings):
     chat_max_retries: int = 2
 
     # OpenRouter app attribution configuration
-    app_url: str = ""
-    app_title: str = ""
+    app_url: str = "https://bioarena.io"
+    app_title: str = "BioArena"
 
     # Validation method IDs — used as part of the cache key.
     # Bump when changing the classification prompt or model.
