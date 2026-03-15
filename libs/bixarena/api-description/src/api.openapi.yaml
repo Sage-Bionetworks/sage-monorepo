@@ -67,6 +67,12 @@ paths:
     $ref: paths/models/{modelId}/errors.yaml
   /battles/{battleId}/evaluations:
     $ref: paths/battles/{battleId}/evaluations.yaml
+  /battles/{battleId}/validations:
+    $ref: paths/battles/{battleId}/validations.yaml
+  /battles/{battleId}/validations/effective:
+    $ref: paths/battles/{battleId}/validations/effective.yaml
+  /battles/{battleId}/validations/run:
+    $ref: paths/battles/{battleId}/validations/run.yaml
   /quests:
     $ref: paths/quests.yaml
   /quests/{questId}:

@@ -1,0 +1,19 @@
+type: object
+properties:
+  confidence:
+    type: number
+    format: float
+    minimum: 0.0
+    maximum: 1.0
+    description: Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)
+  isBiomedical:
+    type: boolean
+    description: Whether the battle conversation is considered biomedically related based on the confidence score
+  method:
+    type: string
+    maxLength: 100
+    description: The validation method used (e.g. 'openrouter-haiku-v1')
+required:
+  - confidence
+  - isBiomedical
+  - method

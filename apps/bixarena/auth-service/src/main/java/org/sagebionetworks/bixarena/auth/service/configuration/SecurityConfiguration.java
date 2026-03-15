@@ -43,6 +43,7 @@ public class SecurityConfiguration {
             "/auth/login",
             "/auth/callback",
             "/oauth2/token",
+            "/oauth2/service-token",
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**"

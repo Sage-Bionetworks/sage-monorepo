@@ -6,6 +6,7 @@ that can be loaded from environment variables.
 
 from functools import lru_cache
 
+from openai import AsyncOpenAI
 from pydantic_settings import BaseSettings
 
 
@@ -25,9 +26,28 @@ class Settings(BaseSettings):
     jwt_expected_issuer: str = "urn:bixarena:auth"
     jwt_expected_audience: str = "urn:bixarena:ai"
 
-    # Prompt validation configuration
+    # Validation confidence thresholds
     prompt_validation_confidence_threshold: float = 0.5
+    battle_validation_confidence_threshold: float = 0.5
     prompt_max_length: int = 10000
+
+    # OpenRouter / LLM configuration
+    openrouter_api_key: str = ""
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    openrouter_model: str = "anthropic/claude-haiku-4.5"
+    openrouter_timeout: float = 30.0
+    openrouter_max_retries: int = 2
+
+    # Validation method IDs — used as part of the cache key.
+    # Bump when changing the classification prompt or model.
+    prompt_validation_method: str = "openrouter-haiku-v1"
+    battle_validation_method: str = "openrouter-haiku-v1"
+
+    # Valkey configuration (DB 3 — DB 0/1/2 used by api/gateway/auth)
+    valkey_host: str = "bixarena-valkey"
+    valkey_port: int = 8116
+    valkey_db: int = 3
+    valkey_cache_ttl: int = 2592000  # 30 days in seconds
 
     class Config:
         env_prefix = "BIXARENA_AI_"
@@ -42,3 +62,18 @@ def get_settings() -> Settings:
         Settings: Application settings singleton
     """
     return Settings()
+
+
+@lru_cache
+def get_openai_client() -> AsyncOpenAI:
+    """Get a cached AsyncOpenAI client for OpenRouter.
+
+    Reuses the same HTTP connection pool across requests.
+    """
+    settings = get_settings()
+    return AsyncOpenAI(
+        api_key=settings.openrouter_api_key,
+        base_url=settings.openrouter_base_url,
+        timeout=settings.openrouter_timeout,
+        max_retries=settings.openrouter_max_retries,
+    )

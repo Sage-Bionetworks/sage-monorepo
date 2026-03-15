@@ -96,8 +96,8 @@ importers:
         specifier: 2.0.3
         version: 2.0.3
       '@sentry/angular':
-        specifier: 10.38.0
-        version: 10.38.0(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/router@20.3.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(rxjs@7.8.1))(rxjs@7.8.1)
+        specifier: 10.42.0
+        version: 10.42.0(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/router@20.3.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(rxjs@7.8.1))(rxjs@7.8.1)
       angular-google-tag-manager:
         specifier: 1.11.0
         version: 1.11.0(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/compiler@20.3.1)
@@ -318,6 +318,9 @@ importers:
       '@schematics/angular':
         specifier: 20.2.2
         version: 20.2.2(chokidar@4.0.3)
+      '@sentry/cli':
+        specifier: 3.3.0
+        version: 3.3.0
       '@storybook/addon-docs':
         specifier: 9.1.7
         version: 9.1.7(@types/react@19.2.14)(storybook@9.1.7(@testing-library/dom@10.4.1)(msw@2.11.3(@types/node@22.5.1)(typescript@5.9.2))(prettier@3.3.3)(vite@7.1.7(@types/node@22.5.1)(jiti@2.4.2)(less@4.4.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.43.1)(tsx@4.20.4)(yaml@2.8.1)))
@@ -4544,24 +4547,24 @@ packages:
     resolution: {integrity: sha512-bd23C6Map7Rfrryc8pZuyPPG8yQLCH863ISo32ARVwiAmBFgjfyNwqC5FsuqHWrYlTzZDzZUk5CjKp1SXxqqxg==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
 
-  '@sentry-internal/browser-utils@10.38.0':
-    resolution: {integrity: sha512-UOJtYmdcxHCcV0NPfXFff/a95iXl/E0EhuQ1y0uE0BuZDMupWSF5t2BgC4HaE5Aw3RTjDF3XkSHWoIF6ohy7eA==}
+  '@sentry-internal/browser-utils@10.42.0':
+    resolution: {integrity: sha512-HCEICKvepxN4/6NYfnMMMlppcSwIEwtS66X6d1/mwaHdi2ivw0uGl52p7Nfhda/lIJArbrkWprxl0WcjZajhQA==}
     engines: {node: '>=18'}
 
-  '@sentry-internal/feedback@10.38.0':
-    resolution: {integrity: sha512-JXneg9zRftyfy1Fyfc39bBlF/Qd8g4UDublFFkVvdc1S6JQPlK+P6q22DKz3Pc8w3ySby+xlIq/eTu9Pzqi4KA==}
+  '@sentry-internal/feedback@10.42.0':
+    resolution: {integrity: sha512-lpPcHsog10MVYFTWE0Pf8vQRqQWwZHJpkVl2FEb9/HDdHFyTBUhCVoWo1KyKaG7GJl9AVKMAg7bp9SSNArhFNQ==}
     engines: {node: '>=18'}
 
-  '@sentry-internal/replay-canvas@10.38.0':
-    resolution: {integrity: sha512-OXWM9jEqNYh4VTvrMu7v+z1anz+QKQ/fZXIZdsO7JTT2lGNZe58UUMeoq386M+Saxen8F9SUH7yTORy/8KI5qw==}
+  '@sentry-internal/replay-canvas@10.42.0':
+    resolution: {integrity: sha512-am3m1Fj8ihoPfoYo41Qq4KeCAAICn4bySso8Oepu9dMNe9Lcnsf+reMRS2qxTPg3pZDc4JEMOcLyNCcgnAfrHw==}
     engines: {node: '>=18'}
 
-  '@sentry-internal/replay@10.38.0':
-    resolution: {integrity: sha512-YWIkL6/dnaiQyFiZXJ/nN+NXGv/15z45ia86bE/TMq01CubX/DUOilgsFz0pk2v/pg3tp/U2MskLO9Hz0cnqeg==}
+  '@sentry-internal/replay@10.42.0':
+    resolution: {integrity: sha512-Zh3EoaH39x2lqVY1YyVB2vJEyCIrT+YLUQxYl1yvP0MJgLxaR6akVjkgxbSUJahan4cX5DxpZiEHfzdlWnYPyQ==}
     engines: {node: '>=18'}
 
-  '@sentry/angular@10.38.0':
-    resolution: {integrity: sha512-Ncr4dzE1QUqrf1yaKovUrtvsvOH+rhV8Gu0ZExJyhw8NnqlRLypV/p8XwKgJwged36gFzzbeuW+cGVRXwua+yg==}
+  '@sentry/angular@10.42.0':
+    resolution: {integrity: sha512-zHr0e+j09Ix4UPR3CEzbXQLG5rbVhHsLaksF6D8ywJz2tE6XcAK45h2e3jIaCICYB8qemZDn+Y7QPuy+AdAgRg==}
     engines: {node: '>=18'}
     peerDependencies:
       '@angular/common': '>= 14.x <= 21.x'
@@ -4569,12 +4572,64 @@ packages:
       '@angular/router': '>= 14.x <= 21.x'
       rxjs: ^6.5.5 || ^7.x
 
-  '@sentry/browser@10.38.0':
-    resolution: {integrity: sha512-3phzp1YX4wcQr9mocGWKbjv0jwtuoDBv7+Y6Yfrys/kwyaL84mDLjjQhRf4gL5SX7JdYkhBp4WaiNlR0UC4kTA==}
+  '@sentry/browser@10.42.0':
+    resolution: {integrity: sha512-iXxYjXNEBwY1MH4lDSDZZUNjzPJDK7/YLwVIJq/3iBYpIQVIhaJsoJnf3clx9+NfJ8QFKyKfcvgae61zm+hgTA==}
     engines: {node: '>=18'}
 
-  '@sentry/core@10.38.0':
-    resolution: {integrity: sha512-1pubWDZE5y5HZEPMAZERP4fVl2NH3Ihp1A+vMoVkb3Qc66Diqj1WierAnStlZP7tCx0TBa0dK85GTW/ZFYyB9g==}
+  '@sentry/cli-darwin@3.3.0':
+    resolution: {integrity: sha512-hifHfFP7Rv/5+RoMJcKy1EF1eLrWhmIBZ5O7mD3Y5wjvABosWF44lYJ7tfQ1Reu4yeYPr9UkXqnCf6ftPgeK9Q==}
+    engines: {node: '>=18'}
+    os: [darwin]
+
+  '@sentry/cli-linux-arm64@3.3.0':
+    resolution: {integrity: sha512-yNLmxu4mqep7YeJg29FQq9733EvWodZz9UillchtIzG3oX6DLGhf+ZGElSYNUMmNal4wEj30wOnXveMVLtNM0Q==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [linux, freebsd, android]
+
+  '@sentry/cli-linux-arm@3.3.0':
+    resolution: {integrity: sha512-HTr08OF3+UGCt1RjcU4h37gHLbthSUf7dZzz4SGVHB3hiFzywBtnz6VibFY/U9HCqJNU9nW+WpdLkOpqzer5TA==}
+    engines: {node: '>=18'}
+    cpu: [arm]
+    os: [linux, freebsd, android]
+
+  '@sentry/cli-linux-i686@3.3.0':
+    resolution: {integrity: sha512-xpYeO9lU7ua0ksToOibJpYvG3HFgwqH9VG9gt2fym8lgANpqM+Nxk2tdjiVsqddeD7R3tRLMhj6PjKFxUnI8KQ==}
+    engines: {node: '>=18'}
+    cpu: [x86, ia32]
+    os: [linux, freebsd, android]
+
+  '@sentry/cli-linux-x64@3.3.0':
+    resolution: {integrity: sha512-sWgX7/kzGFHQYfJFEE2/k8I8+XqumznPJ+nEUnowjQZPZNKcK0gfX4kToJQ7BbyVS5VmxS45F3iM46+p1L2law==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [linux, freebsd, android]
+
+  '@sentry/cli-win32-arm64@3.3.0':
+    resolution: {integrity: sha512-GDKp3agjI56xxgSPH2Ycvd0rkwM6SawvIUIlY1SXXFU+2ecMTz+RqRKKVvyAF0p1lsTRMKtHQ2TzHpCYDPryig==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@sentry/cli-win32-i686@3.3.0':
+    resolution: {integrity: sha512-5ZllXD0feaTWW7Va32HKx/j2TVnP2hQ6cfkrZP/cyst9Wz7YDq0Q44cbEQlMTpZREuSL0tAzG92omBR9wdca7A==}
+    engines: {node: '>=18'}
+    cpu: [x86, ia32]
+    os: [win32]
+
+  '@sentry/cli-win32-x64@3.3.0':
+    resolution: {integrity: sha512-kgycTi6S2Vj5ZK9lRtDR9HO7d5Ep/JopVkzcaNxhpI5TNwCd0odXb0fy5MA09PQgPQhkys+viLDPdnpem0AWEw==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [win32]
+
+  '@sentry/cli@3.3.0':
+    resolution: {integrity: sha512-E3a7LUkJLLOaxjbqdqnTiM5UUAgu/WmXKec6O9+mjh9p7N5znLMp8xZNokwQQKPqoPxwsInv2kvEAQdA/bhjzg==}
+    engines: {node: '>= 18'}
+    hasBin: true
+
+  '@sentry/core@10.42.0':
+    resolution: {integrity: sha512-L4rMrXMqUKBanpjpMT+TuAVk6xAijz6AWM6RiEYpohAr7SGcCEc1/T0+Ep1eLV8+pwWacfU27OvELIyNeOnGzA==}
     engines: {node: '>=18'}
 
   '@sigstore/bundle@3.1.0':
@@ -12741,6 +12796,10 @@ packages:
     resolution: {integrity: sha512-gBLkYIlEnSp8pFbT64yFgGE6UIB9tAkhukC23PmMDCe5Nd+cRqKxSjw5y54MK2AZMgZfJWMaNE4nYUHgi1XEOw==}
     engines: {node: '>=18.17'}
 
+  undici@6.23.0:
+    resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
+    engines: {node: '>=18.17'}
+
   unicode-canonical-property-names-ecmascript@2.0.1:
     resolution: {integrity: sha512-dA8WbNeb2a6oQzAQ55YlT5vQAWGV9WXOsi3SskE3bcCdM0P4SDd+24zS/OCacdRq5BkdsRj9q3Pg6YyQoxIGqg==}
     engines: {node: '>=4'}
@@ -18417,43 +18476,83 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  '@sentry-internal/browser-utils@10.38.0':
+  '@sentry-internal/browser-utils@10.42.0':
     dependencies:
-      '@sentry/core': 10.38.0
+      '@sentry/core': 10.42.0
 
-  '@sentry-internal/feedback@10.38.0':
+  '@sentry-internal/feedback@10.42.0':
     dependencies:
-      '@sentry/core': 10.38.0
+      '@sentry/core': 10.42.0
 
-  '@sentry-internal/replay-canvas@10.38.0':
+  '@sentry-internal/replay-canvas@10.42.0':
     dependencies:
-      '@sentry-internal/replay': 10.38.0
-      '@sentry/core': 10.38.0
+      '@sentry-internal/replay': 10.42.0
+      '@sentry/core': 10.42.0
 
-  '@sentry-internal/replay@10.38.0':
+  '@sentry-internal/replay@10.42.0':
     dependencies:
-      '@sentry-internal/browser-utils': 10.38.0
-      '@sentry/core': 10.38.0
+      '@sentry-internal/browser-utils': 10.42.0
+      '@sentry/core': 10.42.0
 
-  '@sentry/angular@10.38.0(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/router@20.3.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(rxjs@7.8.1))(rxjs@7.8.1)':
+  '@sentry/angular@10.42.0(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/router@20.3.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(rxjs@7.8.1))(rxjs@7.8.1)':
     dependencies:
       '@angular/common': 20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
       '@angular/core': 20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)
       '@angular/router': 20.3.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(rxjs@7.8.1)
-      '@sentry/browser': 10.38.0
-      '@sentry/core': 10.38.0
+      '@sentry/browser': 10.42.0
+      '@sentry/core': 10.42.0
       rxjs: 7.8.1
       tslib: 2.4.1
 
-  '@sentry/browser@10.38.0':
+  '@sentry/browser@10.42.0':
     dependencies:
-      '@sentry-internal/browser-utils': 10.38.0
-      '@sentry-internal/feedback': 10.38.0
-      '@sentry-internal/replay': 10.38.0
-      '@sentry-internal/replay-canvas': 10.38.0
-      '@sentry/core': 10.38.0
+      '@sentry-internal/browser-utils': 10.42.0
+      '@sentry-internal/feedback': 10.42.0
+      '@sentry-internal/replay': 10.42.0
+      '@sentry-internal/replay-canvas': 10.42.0
+      '@sentry/core': 10.42.0
 
-  '@sentry/core@10.38.0': {}
+  '@sentry/cli-darwin@3.3.0':
+    optional: true
+
+  '@sentry/cli-linux-arm64@3.3.0':
+    optional: true
+
+  '@sentry/cli-linux-arm@3.3.0':
+    optional: true
+
+  '@sentry/cli-linux-i686@3.3.0':
+    optional: true
+
+  '@sentry/cli-linux-x64@3.3.0':
+    optional: true
+
+  '@sentry/cli-win32-arm64@3.3.0':
+    optional: true
+
+  '@sentry/cli-win32-i686@3.3.0':
+    optional: true
+
+  '@sentry/cli-win32-x64@3.3.0':
+    optional: true
+
+  '@sentry/cli@3.3.0':
+    dependencies:
+      progress: 2.0.3
+      proxy-from-env: 1.1.0
+      undici: 6.23.0
+      which: 2.0.2
+    optionalDependencies:
+      '@sentry/cli-darwin': 3.3.0
+      '@sentry/cli-linux-arm': 3.3.0
+      '@sentry/cli-linux-arm64': 3.3.0
+      '@sentry/cli-linux-i686': 3.3.0
+      '@sentry/cli-linux-x64': 3.3.0
+      '@sentry/cli-win32-arm64': 3.3.0
+      '@sentry/cli-win32-i686': 3.3.0
+      '@sentry/cli-win32-x64': 3.3.0
+
+  '@sentry/core@10.42.0': {}
 
   '@sigstore/bundle@3.1.0':
     dependencies:
@@ -26214,8 +26313,7 @@ snapshots:
 
   process-nextick-args@2.0.1: {}
 
-  progress@2.0.3:
-    optional: true
+  progress@2.0.3: {}
 
   promise-retry@2.0.1:
     dependencies:
@@ -28205,6 +28303,8 @@ snapshots:
       '@fastify/busboy': 2.1.1
 
   undici@6.21.3: {}
+
+  undici@6.23.0: {}
 
   unicode-canonical-property-names-ecmascript@2.0.1: {}
 

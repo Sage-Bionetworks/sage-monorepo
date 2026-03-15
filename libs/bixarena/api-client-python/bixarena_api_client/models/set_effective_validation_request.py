@@ -16,30 +16,24 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
-from typing import Any, ClassVar, Dict, List, Union
-from typing_extensions import Annotated
+from pydantic import BaseModel, ConfigDict, Field
+from typing import Any, ClassVar, Dict, List, Optional
+from uuid import UUID
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class PromptValidation(BaseModel):
+class SetEffectiveValidationRequest(BaseModel):
     """
-    PromptValidation
+    Request to set or clear the effective validation for a battle.
     """  # noqa: E501
 
-    prompt: StrictStr = Field(description="The original prompt that was validated")
-    confidence: Union[
-        Annotated[float, Field(le=1, strict=True, ge=0)],
-        Annotated[int, Field(le=1, strict=True, ge=0)],
-    ] = Field(
-        description="Confidence score indicating biomedical relevance (0.0 = not biomedical, 1.0 = definitely biomedical)"
+    validation_id: Optional[UUID] = Field(
+        default=None,
+        description="ID of the battle validation to set as effective. Set to null to clear the effective validation.",
+        alias="validationId",
     )
-    is_biomedical: StrictBool = Field(
-        description="Whether the prompt is considered biomedically related (confidence >= 0.5)",
-        alias="isBiomedical",
-    )
-    __properties: ClassVar[List[str]] = ["prompt", "confidence", "isBiomedical"]
+    __properties: ClassVar[List[str]] = ["validationId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -58,7 +52,7 @@ class PromptValidation(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of PromptValidation from a JSON string"""
+        """Create an instance of SetEffectiveValidationRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -78,22 +72,21 @@ class PromptValidation(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if validation_id (nullable) is None
+        # and model_fields_set contains the field
+        if self.validation_id is None and "validation_id" in self.model_fields_set:
+            _dict["validationId"] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of PromptValidation from a dict"""
+        """Create an instance of SetEffectiveValidationRequest from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "prompt": obj.get("prompt"),
-                "confidence": obj.get("confidence"),
-                "isBiomedical": obj.get("isBiomedical"),
-            }
-        )
+        _obj = cls.model_validate({"validationId": obj.get("validationId")})
         return _obj

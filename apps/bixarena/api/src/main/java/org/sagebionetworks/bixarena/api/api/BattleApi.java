@@ -17,7 +17,10 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -260,6 +263,74 @@ public interface BattleApi {
 
 
     /**
+     * POST /battles/{battleId}/validations : Create a battle validation
+     * Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param battleValidationCreateRequestDto  (required)
+     * @return Battle validation created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createBattleValidation",
+        summary = "Create a battle validation",
+        description = "Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Battle validation created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleValidationResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleValidationResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/battles/{battleId}/validations",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<BattleValidationResponseDto> createBattleValidation(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
+        @Parameter(name = "BattleValidationCreateRequestDto", description = "", required = true) @Valid @RequestBody BattleValidationCreateRequestDto battleValidationCreateRequestDto
+    ) {
+        return getDelegate().createBattleValidation(battleId, battleValidationCreateRequestDto);
+    }
+
+
+    /**
      * DELETE /battles/{battleId} : Delete a battle
      * Delete a battle by its unique identifier
      *
@@ -372,6 +443,61 @@ public interface BattleApi {
 
 
     /**
+     * GET /battles/{battleId}/validations : List battle validations
+     * Get all validations for a battle (admin only).
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @return List of battle validations (status code 200)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "listBattleValidations",
+        summary = "List battle validations",
+        description = "Get all validations for a battle (admin only).",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "List of battle validations", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BattleValidationResponseDto.class))),
+                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = BattleValidationResponseDto.class)))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/battles/{battleId}/validations",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<List<BattleValidationResponseDto>> listBattleValidations(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId
+    ) {
+        return getDelegate().listBattleValidations(battleId);
+    }
+
+
+    /**
      * GET /battles : List battles
      * List battles with optional filtering and pagination
      *
@@ -423,6 +549,134 @@ public interface BattleApi {
         @Parameter(name = "battleSearchQuery", description = "The search query used to find and filter battles.", in = ParameterIn.QUERY) @Valid @Nullable BattleSearchQueryDto battleSearchQuery
     ) {
         return getDelegate().listBattles(battleSearchQuery);
+    }
+
+
+    /**
+     * POST /battles/{battleId}/validations/run : Run an automated validation method
+     * Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @return Validation completed and persisted successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "runBattleValidation",
+        summary = "Run an automated validation method",
+        description = "Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Validation completed and persisted successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleValidationResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleValidationResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/battles/{battleId}/validations/run",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<BattleValidationResponseDto> runBattleValidation(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId
+    ) {
+        return getDelegate().runBattleValidation(battleId);
+    }
+
+
+    /**
+     * PATCH /battles/{battleId}/validations/effective : Set effective validation
+     * Set or clear the effective validation for a battle. The effective validation determines whether a battle counts in stats (only battles with a positive effective validation are included). Admin only.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param setEffectiveValidationRequestDto  (required)
+     * @return Effective validation updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "setEffectiveValidation",
+        summary = "Set effective validation",
+        description = "Set or clear the effective validation for a battle. The effective validation determines whether a battle counts in stats (only battles with a positive effective validation are included). Admin only.",
+        tags = { "Battle" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Effective validation updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BattleDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BattleDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/battles/{battleId}/validations/effective",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<BattleDto> setEffectiveValidation(
+        @Parameter(name = "battleId", description = "The unique identifier of the battle", required = true, in = ParameterIn.PATH) @PathVariable("battleId") UUID battleId,
+        @Parameter(name = "SetEffectiveValidationRequestDto", description = "", required = true) @Valid @RequestBody SetEffectiveValidationRequestDto setEffectiveValidationRequestDto
+    ) {
+        return getDelegate().setEffectiveValidation(battleId, setEffectiveValidationRequestDto);
     }
 
 

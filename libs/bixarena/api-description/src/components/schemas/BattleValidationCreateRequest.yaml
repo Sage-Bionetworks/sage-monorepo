@@ -1,0 +1,13 @@
+type: object
+description: Request to manually validate or invalidate a battle.
+properties:
+  isBiomedical:
+    type: boolean
+    description: Whether the admin considers this battle biomedically related
+  reason:
+    type: string
+    maxLength: 1000
+    nullable: true
+    description: Optional reason for the validation decision
+required:
+  - isBiomedical

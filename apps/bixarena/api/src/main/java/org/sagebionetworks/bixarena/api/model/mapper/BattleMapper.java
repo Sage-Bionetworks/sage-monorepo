@@ -23,6 +23,7 @@ public class BattleMapper {
       .model2Id(entity.getModel2Id())
       .createdAt(entity.getCreatedAt())
       .endedAt(entity.getEndedAt())
+      .effectiveValidationId(entity.getEffectiveValidationId())
       .build();
   }
 
@@ -47,6 +48,7 @@ public class BattleMapper {
       .model2(modelMapper.convertToDto(model2Entity))
       .createdAt(battle.getCreatedAt())
       .endedAt(battle.getEndedAt())
+      .effectiveValidationId(battle.getEffectiveValidationId())
       .build();
   }
 }

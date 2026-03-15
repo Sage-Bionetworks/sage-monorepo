@@ -23,7 +23,6 @@ __all__ = [
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
-    "PromptValidationApi",
     "QuestApi",
     "StatsApi",
     "UserApi",
@@ -51,6 +50,8 @@ __all__ = [
     "BattleSearchQuery",
     "BattleSort",
     "BattleUpdateRequest",
+    "BattleValidationCreateRequest",
+    "BattleValidationResponse",
     "Callback200Response",
     "ExamplePrompt",
     "ExamplePromptPage",
@@ -81,7 +82,6 @@ __all__ = [
     "ModelSearchQuery",
     "ModelSort",
     "PageMetadata",
-    "PromptValidation",
     "PublicStats",
     "Quest",
     "QuestContributor",
@@ -91,6 +91,7 @@ __all__ = [
     "QuestPostCreateOrUpdate",
     "QuestPostReorder",
     "RateLimitError",
+    "SetEffectiveValidationRequest",
     "SortDirection",
     "Token200Response",
     "UserInfo",
@@ -107,9 +108,6 @@ from bixarena_api_client.api.example_prompt_api import (
 )
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
-from bixarena_api_client.api.prompt_validation_api import (
-    PromptValidationApi as PromptValidationApi,
-)
 from bixarena_api_client.api.quest_api import QuestApi as QuestApi
 from bixarena_api_client.api.stats_api import StatsApi as StatsApi
 from bixarena_api_client.api.user_api import UserApi as UserApi
@@ -160,6 +158,12 @@ from bixarena_api_client.models.battle_search_query import (
 from bixarena_api_client.models.battle_sort import BattleSort as BattleSort
 from bixarena_api_client.models.battle_update_request import (
     BattleUpdateRequest as BattleUpdateRequest,
+)
+from bixarena_api_client.models.battle_validation_create_request import (
+    BattleValidationCreateRequest as BattleValidationCreateRequest,
+)
+from bixarena_api_client.models.battle_validation_response import (
+    BattleValidationResponse as BattleValidationResponse,
 )
 from bixarena_api_client.models.callback200_response import (
     Callback200Response as Callback200Response,
@@ -233,9 +237,6 @@ from bixarena_api_client.models.model_search_query import (
 )
 from bixarena_api_client.models.model_sort import ModelSort as ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
-from bixarena_api_client.models.prompt_validation import (
-    PromptValidation as PromptValidation,
-)
 from bixarena_api_client.models.public_stats import PublicStats as PublicStats
 from bixarena_api_client.models.quest import Quest as Quest
 from bixarena_api_client.models.quest_contributor import (
@@ -255,6 +256,9 @@ from bixarena_api_client.models.quest_post_reorder import (
     QuestPostReorder as QuestPostReorder,
 )
 from bixarena_api_client.models.rate_limit_error import RateLimitError as RateLimitError
+from bixarena_api_client.models.set_effective_validation_request import (
+    SetEffectiveValidationRequest as SetEffectiveValidationRequest,
+)
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection
 from bixarena_api_client.models.token200_response import (
     Token200Response as Token200Response,

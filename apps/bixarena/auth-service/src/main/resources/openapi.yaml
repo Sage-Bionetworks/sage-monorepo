@@ -118,7 +118,6 @@ paths:
     post:
       description: |
         Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
-
         The optional audience parameter specifies the target service for the JWT.
       operationId: token
       parameters:
@@ -129,10 +128,6 @@ paths:
           name: audience
           required: false
           schema:
-            enum:
-              - urn:bixarena:auth
-              - urn:bixarena:api
-              - urn:bixarena:ai
             type: string
           style: form
       responses:
@@ -150,6 +145,41 @@ paths:
         - Auth
       x-anonymous-access: true
       x-rate-limit-requests-per-minute: 60
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Auth
+  /oauth2/service-token:
+    post:
+      description: |
+        Issues a JWT for service-to-service authentication using the OAuth2 Client Credentials grant. The caller authenticates with HTTP Basic (service client ID and secret). Returns a short-lived JWT with the requested audience.
+      operationId: serviceToken
+      parameters:
+        - description: Target audience for the JWT (e.g. 'urn:bixarena:ai')
+          explode: true
+          in: query
+          name: audience
+          required: true
+          schema:
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token_200_response'
+          description: Access token response
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
+      summary: Mint a service-to-service JWT (client credentials)
+      tags:
+        - Auth
+      x-rate-limit-requests-per-minute: 30
       x-accepts:
         - application/json
         - application/problem+json
@@ -376,7 +406,7 @@ components:
       example:
         access_token: access_token
         token_type: Bearer
-        expires_in: 600
+        expires_in: 0
       properties:
         access_token:
           type: string
@@ -385,7 +415,7 @@ components:
             - Bearer
           type: string
         expires_in:
-          example: 600
+          description: Token lifetime in seconds
           type: integer
       required:
         - access_token

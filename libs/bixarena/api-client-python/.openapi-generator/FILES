@@ -7,7 +7,6 @@ bixarena_api_client/api/battle_api.py
 bixarena_api_client/api/example_prompt_api.py
 bixarena_api_client/api/leaderboard_api.py
 bixarena_api_client/api/model_api.py
-bixarena_api_client/api/prompt_validation_api.py
 bixarena_api_client/api/quest_api.py
 bixarena_api_client/api/stats_api.py
 bixarena_api_client/api/user_api.py
@@ -31,6 +30,8 @@ bixarena_api_client/models/battle_round_update_request.py
 bixarena_api_client/models/battle_search_query.py
 bixarena_api_client/models/battle_sort.py
 bixarena_api_client/models/battle_update_request.py
+bixarena_api_client/models/battle_validation_create_request.py
+bixarena_api_client/models/battle_validation_response.py
 bixarena_api_client/models/callback200_response.py
 bixarena_api_client/models/example_prompt.py
 bixarena_api_client/models/example_prompt_page.py
@@ -61,7 +62,6 @@ bixarena_api_client/models/model_page.py
 bixarena_api_client/models/model_search_query.py
 bixarena_api_client/models/model_sort.py
 bixarena_api_client/models/page_metadata.py
-bixarena_api_client/models/prompt_validation.py
 bixarena_api_client/models/public_stats.py
 bixarena_api_client/models/quest.py
 bixarena_api_client/models/quest_contributor.py
@@ -71,6 +71,7 @@ bixarena_api_client/models/quest_post.py
 bixarena_api_client/models/quest_post_create_or_update.py
 bixarena_api_client/models/quest_post_reorder.py
 bixarena_api_client/models/rate_limit_error.py
+bixarena_api_client/models/set_effective_validation_request.py
 bixarena_api_client/models/sort_direction.py
 bixarena_api_client/models/token200_response.py
 bixarena_api_client/models/user_info.py
@@ -96,6 +97,8 @@ docs/BattleRoundUpdateRequest.md
 docs/BattleSearchQuery.md
 docs/BattleSort.md
 docs/BattleUpdateRequest.md
+docs/BattleValidationCreateRequest.md
+docs/BattleValidationResponse.md
 docs/Callback200Response.md
 docs/ExamplePrompt.md
 docs/ExamplePromptApi.md
@@ -129,8 +132,6 @@ docs/ModelPage.md
 docs/ModelSearchQuery.md
 docs/ModelSort.md
 docs/PageMetadata.md
-docs/PromptValidation.md
-docs/PromptValidationApi.md
 docs/PublicStats.md
 docs/Quest.md
 docs/QuestApi.md
@@ -141,6 +142,7 @@ docs/QuestPost.md
 docs/QuestPostCreateOrUpdate.md
 docs/QuestPostReorder.md
 docs/RateLimitError.md
+docs/SetEffectiveValidationRequest.md
 docs/SortDirection.md
 docs/StatsApi.md
 docs/Token200Response.md
@@ -167,6 +169,8 @@ test/test_battle_round_update_request.py
 test/test_battle_search_query.py
 test/test_battle_sort.py
 test/test_battle_update_request.py
+test/test_battle_validation_create_request.py
+test/test_battle_validation_response.py
 test/test_callback200_response.py
 test/test_example_prompt.py
 test/test_example_prompt_api.py
@@ -200,8 +204,6 @@ test/test_model_page.py
 test/test_model_search_query.py
 test/test_model_sort.py
 test/test_page_metadata.py
-test/test_prompt_validation.py
-test/test_prompt_validation_api.py
 test/test_public_stats.py
 test/test_quest.py
 test/test_quest_api.py
@@ -212,6 +214,7 @@ test/test_quest_post.py
 test/test_quest_post_create_or_update.py
 test/test_quest_post_reorder.py
 test/test_rate_limit_error.py
+test/test_set_effective_validation_request.py
 test/test_sort_direction.py
 test/test_stats_api.py
 test/test_token200_response.py

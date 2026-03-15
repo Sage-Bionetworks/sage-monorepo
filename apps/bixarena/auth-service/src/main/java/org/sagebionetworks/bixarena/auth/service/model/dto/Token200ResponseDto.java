@@ -122,11 +122,11 @@ public class Token200ResponseDto {
   }
 
   /**
-   * Get expiresIn
+   * Token lifetime in seconds
    * @return expiresIn
    */
   @NotNull 
-  @Schema(name = "expires_in", example = "600", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "expires_in", description = "Token lifetime in seconds", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("expires_in")
   public Integer getExpiresIn() {
     return expiresIn;

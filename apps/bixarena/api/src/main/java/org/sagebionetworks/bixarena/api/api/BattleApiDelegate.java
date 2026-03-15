@@ -12,7 +12,10 @@ import org.sagebionetworks.bixarena.api.model.dto.BattleRoundDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleRoundUpdateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleUpdateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationCreateRequestDto;
+import org.sagebionetworks.bixarena.api.model.dto.BattleValidationResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.SetEffectiveValidationRequestDto;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -58,7 +61,7 @@ public interface BattleApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"model2\" : { \"externalLink\" : \"https://openrouter.ai/models/openai/gpt-4\", \"active\" : true, \"description\" : \"A large multimodal model that can process text and images.\", \"apiBase\" : \"https://openrouter.ai/api/v1\", \"apiModelName\" : \"anthropic/claude-sonnet-4.5\", \"license\" : \"open-source\", \"createdAt\" : \"2025-09-15T12:00:00Z\", \"organization\" : \"OpenAI\", \"name\" : \"My Awesome Model\", \"alias\" : \"awesome-model-v2\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"slug\" : \"my-awesome-model\", \"updatedAt\" : \"2025-09-20T08:30:00Z\" }, \"model1\" : { \"externalLink\" : \"https://openrouter.ai/models/openai/gpt-4\", \"active\" : true, \"description\" : \"A large multimodal model that can process text and images.\", \"apiBase\" : \"https://openrouter.ai/api/v1\", \"apiModelName\" : \"anthropic/claude-sonnet-4.5\", \"license\" : \"open-source\", \"createdAt\" : \"2025-09-15T12:00:00Z\", \"organization\" : \"OpenAI\", \"name\" : \"My Awesome Model\", \"alias\" : \"awesome-model-v2\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"slug\" : \"my-awesome-model\", \"updatedAt\" : \"2025-09-20T08:30:00Z\" }, \"endedAt\" : \"2024-01-15T11:45:00Z\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\" }";
+                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"model2\" : { \"externalLink\" : \"https://openrouter.ai/models/openai/gpt-4\", \"active\" : true, \"description\" : \"A large multimodal model that can process text and images.\", \"apiBase\" : \"https://openrouter.ai/api/v1\", \"apiModelName\" : \"anthropic/claude-sonnet-4.5\", \"license\" : \"open-source\", \"createdAt\" : \"2025-09-15T12:00:00Z\", \"organization\" : \"OpenAI\", \"name\" : \"My Awesome Model\", \"alias\" : \"awesome-model-v2\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"slug\" : \"my-awesome-model\", \"updatedAt\" : \"2025-09-20T08:30:00Z\" }, \"model1\" : { \"externalLink\" : \"https://openrouter.ai/models/openai/gpt-4\", \"active\" : true, \"description\" : \"A large multimodal model that can process text and images.\", \"apiBase\" : \"https://openrouter.ai/api/v1\", \"apiModelName\" : \"anthropic/claude-sonnet-4.5\", \"license\" : \"open-source\", \"createdAt\" : \"2025-09-15T12:00:00Z\", \"organization\" : \"OpenAI\", \"name\" : \"My Awesome Model\", \"alias\" : \"awesome-model-v2\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"slug\" : \"my-awesome-model\", \"updatedAt\" : \"2025-09-20T08:30:00Z\" }, \"endedAt\" : \"2024-01-15T11:45:00Z\", \"effectiveValidationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -224,6 +227,66 @@ public interface BattleApiDelegate {
     }
 
     /**
+     * POST /battles/{battleId}/validations : Create a battle validation
+     * Manually validate or invalidate a battle (admin only). The created validation is automatically set as the effective validation for the battle.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param battleValidationCreateRequestDto  (required)
+     * @return Battle validation created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see BattleApi#createBattleValidation
+     */
+    default ResponseEntity<BattleValidationResponseDto> createBattleValidation(UUID battleId,
+        BattleValidationCreateRequestDto battleValidationCreateRequestDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"battleId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"method\" : \"method\", \"confidence\" : 0.08008282, \"validatedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"isBiomedical\" : true }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * DELETE /battles/{battleId} : Delete a battle
      * Delete a battle by its unique identifier
      *
@@ -286,7 +349,7 @@ public interface BattleApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"endedAt\" : \"2024-01-15T11:45:00Z\", \"model1Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\", \"model2Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\" }";
+                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"endedAt\" : \"2024-01-15T11:45:00Z\", \"effectiveValidationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"model1Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\", \"model2Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -317,6 +380,52 @@ public interface BattleApiDelegate {
     }
 
     /**
+     * GET /battles/{battleId}/validations : List battle validations
+     * Get all validations for a battle (admin only).
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @return List of battle validations (status code 200)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see BattleApi#listBattleValidations
+     */
+    default ResponseEntity<List<BattleValidationResponseDto>> listBattleValidations(UUID battleId) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"battleId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"method\" : \"method\", \"confidence\" : 0.08008282, \"validatedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"isBiomedical\" : true }, { \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"battleId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"method\" : \"method\", \"confidence\" : 0.08008282, \"validatedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"isBiomedical\" : true } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * GET /battles : List battles
      * List battles with optional filtering and pagination
      *
@@ -332,7 +441,7 @@ public interface BattleApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"battles\" : [ { \"createdAt\" : \"2024-01-15T10:30:00Z\", \"endedAt\" : \"2024-01-15T11:45:00Z\", \"model1Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\", \"model2Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\" }, { \"createdAt\" : \"2024-01-15T10:30:00Z\", \"endedAt\" : \"2024-01-15T11:45:00Z\", \"model1Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\", \"model2Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\" } ], \"page\" : { \"number\" : 99, \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 } }";
+                    String exampleString = "{ \"battles\" : [ { \"createdAt\" : \"2024-01-15T10:30:00Z\", \"endedAt\" : \"2024-01-15T11:45:00Z\", \"effectiveValidationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"model1Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\", \"model2Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\" }, { \"createdAt\" : \"2024-01-15T10:30:00Z\", \"endedAt\" : \"2024-01-15T11:45:00Z\", \"effectiveValidationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"model1Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\", \"model2Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\" } ], \"page\" : { \"number\" : 99, \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 } }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -349,6 +458,118 @@ public interface BattleApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"instance\" : \"instance\", \"retryAfterSeconds\" : 18, \"limit\" : 100, \"detail\" : \"detail\", \"window\" : \"1 minute\", \"title\" : \"title\", \"type\" : \"type\", \"status\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * POST /battles/{battleId}/validations/run : Run an automated validation method
+     * Run an automated validation method against a battle and return the result. Useful for backfilling validations on battles created before automated validation was implemented. Admin only.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @return Validation completed and persisted successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see BattleApi#runBattleValidation
+     */
+    default ResponseEntity<BattleValidationResponseDto> runBattleValidation(UUID battleId) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"reason\" : \"reason\", \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"battleId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"method\" : \"method\", \"confidence\" : 0.08008282, \"validatedBy\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"isBiomedical\" : true }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * PATCH /battles/{battleId}/validations/effective : Set effective validation
+     * Set or clear the effective validation for a battle. The effective validation determines whether a battle counts in stats (only battles with a positive effective validation are included). Admin only.
+     *
+     * @param battleId The unique identifier of the battle (required)
+     * @param setEffectiveValidationRequestDto  (required)
+     * @return Effective validation updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see BattleApi#setEffectiveValidation
+     */
+    default ResponseEntity<BattleDto> setEffectiveValidation(UUID battleId,
+        SetEffectiveValidationRequestDto setEffectiveValidationRequestDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"endedAt\" : \"2024-01-15T11:45:00Z\", \"effectiveValidationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"model1Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\", \"model2Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -382,7 +603,7 @@ public interface BattleApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"endedAt\" : \"2024-01-15T11:45:00Z\", \"model1Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\", \"model2Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\" }";
+                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"endedAt\" : \"2024-01-15T11:45:00Z\", \"effectiveValidationId\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"model1Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\", \"id\" : \"5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f\", \"title\" : \"Gene Expression Analysis Comparison\", \"userId\" : \"a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d\", \"model2Id\" : \"1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

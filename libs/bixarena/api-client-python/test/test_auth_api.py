@@ -60,6 +60,13 @@ class TestAuthApi(unittest.TestCase):
         """
         pass
 
+    def test_service_token(self) -> None:
+        """Test case for service_token
+
+        Mint a service-to-service JWT (client credentials)
+        """
+        pass
+
     def test_token(self) -> None:
         """Test case for token
 

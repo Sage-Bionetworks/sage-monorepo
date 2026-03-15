@@ -8,6 +8,7 @@ import org.sagebionetworks.bixarena.api.model.projection.ContributorProjection;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -28,10 +29,14 @@ public interface BattleRepository
               + "SELECT b.model1_id AS model_id "
               + "FROM api.battle b "
               + "INNER JOIN api.battle_evaluation be ON b.id = be.battle_id "
+              + "INNER JOIN api.battle_validation bv ON bv.id = b.effective_validation_id "
+              + "WHERE bv.is_biomedical = true "
               + "UNION "
               + "SELECT b.model2_id AS model_id "
               + "FROM api.battle b "
-              + "INNER JOIN api.battle_evaluation be ON b.id = be.battle_id"
+              + "INNER JOIN api.battle_evaluation be ON b.id = be.battle_id "
+              + "INNER JOIN api.battle_validation bv ON bv.id = b.effective_validation_id "
+              + "WHERE bv.is_biomedical = true"
               + ") AS evaluated_models",
       nativeQuery = true)
   Long countDistinctModelsEvaluated();
@@ -41,7 +46,12 @@ public interface BattleRepository
    *
    * @return Total number of completed battles
    */
-  @Query("SELECT COUNT(b) FROM BattleEntity b WHERE b.endedAt IS NOT NULL")
+  @Query(
+      value =
+          "SELECT COUNT(b.id) FROM api.battle b "
+              + "INNER JOIN api.battle_validation bv ON bv.id = b.effective_validation_id "
+              + "WHERE b.ended_at IS NOT NULL AND bv.is_biomedical = true",
+      nativeQuery = true)
   Long countCompleted();
 
   /**
@@ -59,7 +69,12 @@ public interface BattleRepository
    * @param userId The user's UUID
    * @return Number of completed battles
    */
-  @Query("SELECT COUNT(b) FROM BattleEntity b WHERE b.userId = :userId AND b.endedAt IS NOT NULL")
+  @Query(
+      value =
+          "SELECT COUNT(b.id) FROM api.battle b "
+              + "INNER JOIN api.battle_validation bv ON bv.id = b.effective_validation_id "
+              + "WHERE b.user_id = :userId AND b.ended_at IS NOT NULL AND bv.is_biomedical = true",
+      nativeQuery = true)
   Long countCompletedByUserId(@Param("userId") UUID userId);
 
   /**
@@ -102,27 +117,28 @@ public interface BattleRepository
    * @return The user's rank (never null for authenticated users)
    */
   @Query(
-    value =
-      "WITH user_battle_counts AS ( " +
-      "  SELECT " +
-      "    u.id as user_id, " +
-      "    COUNT(CASE WHEN b.ended_at IS NOT NULL THEN 1 END) as completed_battles " +
-      "  FROM auth.user u " +
-      "  LEFT JOIN api.battle b ON u.id = b.user_id " +
-      "  GROUP BY u.id " +
-      "), " +
-      "ranked_users AS ( " +
-      "  SELECT " +
-      "    user_id, " +
-      "    completed_battles, " +
-      "    RANK() OVER (ORDER BY completed_battles DESC) as rank " +
-      "  FROM user_battle_counts " +
-      ") " +
-      "SELECT rank " +
-      "FROM ranked_users " +
-      "WHERE user_id = :userId",
-    nativeQuery = true
-  )
+      value =
+          "WITH user_battle_counts AS ( "
+              + "  SELECT "
+              + "    u.id as user_id, "
+              + "    COUNT(CASE WHEN b.ended_at IS NOT NULL "
+              + "      AND bv.is_biomedical = true THEN 1 END) as completed_battles "
+              + "  FROM auth.user u "
+              + "  LEFT JOIN api.battle b ON u.id = b.user_id "
+              + "  LEFT JOIN api.battle_validation bv ON bv.id = b.effective_validation_id "
+              + "  GROUP BY u.id "
+              + "), "
+              + "ranked_users AS ( "
+              + "  SELECT "
+              + "    user_id, "
+              + "    completed_battles, "
+              + "    RANK() OVER (ORDER BY completed_battles DESC) as rank "
+              + "  FROM user_battle_counts "
+              + ") "
+              + "SELECT rank "
+              + "FROM ranked_users "
+              + "WHERE user_id = :userId",
+      nativeQuery = true)
   Long findUserRankByCompletedBattles(@Param("userId") UUID userId);
 
   /**
@@ -183,23 +199,38 @@ public interface BattleRepository
    * @return List of contributors with their battle counts
    */
   @Query(
-    value =
-      "SELECT " +
-      "  u.username AS username, " +
-      "  CAST(COUNT(b.id) AS INTEGER) AS battleCount " +
-      "FROM api.battle b " +
-      "INNER JOIN auth.user u ON b.user_id = u.id " +
-      "WHERE b.ended_at IS NOT NULL " +
-      "  AND b.ended_at >= :startDate " +
-      "  AND b.ended_at < :endDate " +
-      "GROUP BY u.id, u.username " +
-      "HAVING COUNT(b.id) >= :minBattles " +
-      "ORDER BY COUNT(b.id) DESC, u.username ASC",
-    nativeQuery = true
-  )
+      value =
+          "SELECT "
+              + "  u.username AS username, "
+              + "  CAST(COUNT(b.id) AS INTEGER) AS battleCount "
+              + "FROM api.battle b "
+              + "INNER JOIN auth.user u ON b.user_id = u.id "
+              + "INNER JOIN api.battle_validation bv ON bv.id = b.effective_validation_id "
+              + "WHERE b.ended_at IS NOT NULL "
+              + "  AND bv.is_biomedical = true "
+              + "  AND b.ended_at >= :startDate "
+              + "  AND b.ended_at < :endDate "
+              + "GROUP BY u.id, u.username "
+              + "HAVING COUNT(b.id) >= :minBattles "
+              + "ORDER BY COUNT(b.id) DESC, u.username ASC",
+      nativeQuery = true)
   List<ContributorProjection> findContributorsByDateRange(
       @Param("startDate") OffsetDateTime startDate,
       @Param("endDate") OffsetDateTime endDate,
       @Param("minBattles") int minBattles,
       Pageable pageable);
+
+  /**
+   * Atomically set effective_validation_id only if it is currently NULL.
+   * Returns 1 if the update was applied, 0 if a validation was already set.
+   */
+  @Modifying
+  @Query(
+      value =
+          "UPDATE api.battle SET effective_validation_id = :validationId "
+              + "WHERE id = :battleId AND effective_validation_id IS NULL",
+      nativeQuery = true)
+  int setEffectiveValidationIfNull(
+      @Param("battleId") UUID battleId,
+      @Param("validationId") UUID validationId);
 }

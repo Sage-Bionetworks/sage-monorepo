@@ -107,6 +107,10 @@ jobs:
           # devcontainer.json used to build the image.
           export DEVCONTAINER_VERSION="${GITHUB_SHA}"
 
+          # Disable BuildKit's default provenance attestations
+          # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/3904
+          export BUILDX_NO_DEFAULT_ATTESTATIONS=1
+
           # Convert the comma-separated list into the desired format
           images=""
           for image in ${IMAGES}; do

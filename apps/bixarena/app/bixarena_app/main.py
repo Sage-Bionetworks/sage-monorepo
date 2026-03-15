@@ -292,6 +292,17 @@ def build_app():
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     }})(window,document,'script','dataLayer','{GTM_CONTAINER_ID}');</script>
     <!-- End Google Tag Manager -->
+    <script>
+    window.bixTrack = function(eventName, params) {{
+        window.dataLayer = window.dataLayer || [];
+        var data = {{event: eventName}};
+        if (params) {{
+            Object.assign(data, params);
+            data.event = eventName;
+        }}
+        window.dataLayer.push(data);
+    }};
+    </script>
     """
 
     # Add favicon to head using the static assets path
@@ -477,31 +488,48 @@ def build_app():
 
         nav_outputs = pages + nav_buttons + [current_page]
 
+        # GA4 virtual pageview tracking via dataLayer
+        _GA4_PAGE_VIEW_JS = """
+() => {{
+    if (window.bixTrack) {{
+        window.bixTrack('virtual_page_view', {{
+            page_path: '/{path}',
+            page_title: '{title}'
+        }});
+    }}
+}}
+"""
+
         # Navigation - battle page will refresh prompts via its own load handler
         battle_btn.click(
             lambda: navigate_to(1),
             outputs=nav_outputs,
+            js=_GA4_PAGE_VIEW_JS.format(path="battle", title="Battle"),
         )
         # Leaderboard button - show page and refresh data
         leaderboard_btn.click(
             lambda: navigate_to(2) + list(refresh_leaderboard()),
             outputs=nav_outputs + leaderboard_view.outputs,
+            js=_GA4_PAGE_VIEW_JS.format(path="leaderboard", title="Leaderboard"),
         )
         # Authenticated CTA button - navigates to battle page
         cta_btn_authenticated.click(
             lambda: navigate_to(1),
             outputs=nav_outputs,
+            js=_GA4_PAGE_VIEW_JS.format(path="battle", title="Battle"),
         )
         # Quest authenticated button - navigates to battle page
         quest_btn_authenticated.click(
             lambda: navigate_to(1),
             outputs=nav_outputs,
+            js=_GA4_PAGE_VIEW_JS.format(path="battle", title="Battle"),
         )
         # Quest login button - redirects to login page
         quest_btn_login.click(
             None,
             js="""
 () => {
+  if (window.bixTrack) window.bixTrack('login_initiated', {trigger: 'quest_button'});
   const el = document.getElementById('login-start-endpoint');
   const url = el ? el.textContent.trim() : '';
   if (url) window.location.href = url;
@@ -535,6 +563,7 @@ def build_app():
             None,
             js="""
 () => {
+  if (window.bixTrack) window.bixTrack('login_initiated', {trigger: 'cta_button'});
   const el = document.getElementById('login-start-endpoint');
   const url = el ? el.textContent.trim() : '';
   if (url) window.location.href = url;
@@ -555,12 +584,14 @@ def build_app():
   if(!btn) return;
   const label = btn.innerText.trim();
   if(label === 'Login') {
+      if (window.bixTrack) window.bixTrack('login_initiated', {trigger: 'nav_button'});
       const el = document.getElementById('login-start-endpoint');
       const url = el ? el.textContent.trim() : '';
       if(url){ window.location.href = url; }
       return;
   }
   if(label === 'Logout') {
+      if (window.bixTrack) window.bixTrack('logout_initiated');
       const baseEl = document.getElementById('backend-base');
       const base = baseEl ? baseEl.textContent.trim() : '';
       if(base){
@@ -582,6 +613,23 @@ def build_app():
             + [login_btn, welcome_display, logout_btn, cookie_html]
             + nav_buttons
             + [current_page],
+        )
+
+        # GA4 virtual pageview for initial home page load
+        demo.load(
+            None,
+            None,
+            None,
+            js="""
+() => {
+    if (window.bixTrack) {
+        window.bixTrack('virtual_page_view', {
+            page_path: '/',
+            page_title: 'Home'
+        });
+    }
+}
+            """,
         )
 
         # Initial identity sync (not an OAuth callback—just a passive identity fetch)

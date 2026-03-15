@@ -16,7 +16,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
@@ -29,7 +29,7 @@ class Token200Response(BaseModel):
 
     access_token: StrictStr
     token_type: StrictStr
-    expires_in: StrictInt
+    expires_in: StrictInt = Field(description="Token lifetime in seconds")
     __properties: ClassVar[List[str]] = ["access_token", "token_type", "expires_in"]
 
     @field_validator("token_type")

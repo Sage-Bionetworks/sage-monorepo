@@ -2,14 +2,15 @@
 
 All URIs are relative to *https://bixarena.ai/api/v1*
 
-| Method                                        | HTTP request                   | Description                                |
-| --------------------------------------------- | ------------------------------ | ------------------------------------------ |
-| [**callback**](AuthApi.md#callback)           | **GET** /auth/callback         | OIDC redirect callback                     |
-| [**get_jwks**](AuthApi.md#get_jwks)           | **GET** /.well-known/jwks.json | JSON Web Key Set                           |
-| [**get_user_info**](AuthApi.md#get_user_info) | **GET** /userinfo              | Get current user profile                   |
-| [**login**](AuthApi.md#login)                 | **GET** /auth/login            | Start Synapse OIDC authorization code flow |
-| [**logout**](AuthApi.md#logout)               | **POST** /auth/logout          | Logout current session                     |
-| [**token**](AuthApi.md#token)                 | **POST** /oauth2/token         | Mint short-lived internal JWT              |
+| Method                                        | HTTP request                   | Description                                        |
+| --------------------------------------------- | ------------------------------ | -------------------------------------------------- |
+| [**callback**](AuthApi.md#callback)           | **GET** /auth/callback         | OIDC redirect callback                             |
+| [**get_jwks**](AuthApi.md#get_jwks)           | **GET** /.well-known/jwks.json | JSON Web Key Set                                   |
+| [**get_user_info**](AuthApi.md#get_user_info) | **GET** /userinfo              | Get current user profile                           |
+| [**login**](AuthApi.md#login)                 | **GET** /auth/login            | Start Synapse OIDC authorization code flow         |
+| [**logout**](AuthApi.md#logout)               | **POST** /auth/logout          | Logout current session                             |
+| [**service_token**](AuthApi.md#service_token) | **POST** /oauth2/service-token | Mint a service-to-service JWT (client credentials) |
+| [**token**](AuthApi.md#token)                 | **POST** /oauth2/token         | Mint short-lived internal JWT                      |
 
 # **callback**
 
@@ -362,6 +363,73 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **service_token**
+
+> Token200Response service_token(audience)
+
+Mint a service-to-service JWT (client credentials)
+
+Issues a JWT for service-to-service authentication using the OAuth2 Client Credentials grant. The caller authenticates with HTTP Basic (service client ID and secret). Returns a short-lived JWT with the requested audience.
+
+### Example
+
+```python
+import bixarena_api_client
+from bixarena_api_client.models.token200_response import Token200Response
+from bixarena_api_client.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://bixarena.ai/api/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client.Configuration(
+    host = "https://bixarena.ai/api/v1"
+)
+
+
+# Enter a context with an instance of the API client
+with bixarena_api_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client.AuthApi(api_client)
+    audience = 'audience_example' # str | Target audience for the JWT (e.g. 'urn:bixarena:ai')
+
+    try:
+        # Mint a service-to-service JWT (client credentials)
+        api_response = api_instance.service_token(audience)
+        print("The response of AuthApi->service_token:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling AuthApi->service_token: %s\n" % e)
+```
+
+### Parameters
+
+| Name         | Type    | Description                                                  | Notes |
+| ------------ | ------- | ------------------------------------------------------------ | ----- |
+| **audience** | **str** | Target audience for the JWT (e.g. &#39;urn:bixarena:ai&#39;) |
+
+### Return type
+
+[**Token200Response**](Token200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Access token response                                             | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **token**
 
 > Token200Response token(audience=audience)
@@ -369,7 +437,6 @@ void (empty response body)
 Mint short-lived internal JWT
 
 Exchanges an authenticated session (cookie) for an internal JWT (OAuth2-style endpoint).
-
 The optional audience parameter specifies the target service for the JWT.
 
 ### Example

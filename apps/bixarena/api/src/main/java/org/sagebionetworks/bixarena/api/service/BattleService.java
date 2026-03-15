@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.CacheNames;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
+import org.sagebionetworks.bixarena.api.exception.BattleValidationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ModelNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateRequestDto;
 import org.sagebionetworks.bixarena.api.model.dto.BattleCreateResponseDto;
@@ -19,6 +20,7 @@ import org.sagebionetworks.bixarena.api.model.entity.BattleEntity;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.BattleMapper;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
+import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BattleService {
 
   private final BattleRepository battleRepository;
+  private final BattleValidationRepository battleValidationRepository;
   private final ModelRepository modelRepository;
   private final BattleMapper battleMapper = new BattleMapper();
 
@@ -122,10 +125,19 @@ public class BattleService {
   }
 
   @Transactional
-  public BattleDto updateBattle(UUID battleId, BattleUpdateRequestDto request) {
+  public BattleDto updateBattle(
+      UUID battleId, BattleUpdateRequestDto request, UUID callerId) {
     log.info("Updating battle with ID: {}", battleId);
 
     BattleEntity existingBattle = getBattleEntity(battleId);
+
+    // Ownership check: users can only update their own battles
+    if (!existingBattle.getUserId().equals(callerId)) {
+      throw new org.springframework.security.access.AccessDeniedException(
+        "You can only update your own battles"
+      );
+    }
+
     boolean wasIncomplete = existingBattle.getEndedAt() == null;
 
     // Update title if provided
@@ -133,7 +145,7 @@ public class BattleService {
       existingBattle.setTitle(request.getTitle());
     }
 
-    // Handle endedAt: use provided value, or auto-set to now if no ended time provided
+    // Handle endedAt: use provided value, or auto-set to now
     if (request.getEndedAt() != null) {
       existingBattle.setEndedAt(request.getEndedAt());
     } else if (existingBattle.getEndedAt() == null) {
@@ -153,6 +165,34 @@ public class BattleService {
     log.info("Successfully updated battle with ID: {}", battleId);
 
     return battleMapper.convertToDto(updatedBattle);
+  }
+
+  @Transactional
+  public BattleDto setEffectiveValidation(
+      UUID battleId, UUID validationId) {
+    log.info(
+      "Setting effective validation for battle {}: {}",
+      battleId, validationId
+    );
+
+    BattleEntity battle = getBattleEntity(battleId);
+
+    if (validationId != null) {
+      // Verify the validation exists and belongs to this battle
+      battleValidationRepository.findById(validationId)
+        .filter(v -> v.getBattleId().equals(battleId))
+        .orElseThrow(() -> new BattleValidationNotFoundException(
+          String.format(
+            "Battle validation %s not found for battle %s",
+            validationId, battleId
+          )
+        ));
+    }
+
+    battle.setEffectiveValidationId(validationId);
+    BattleEntity updated = battleRepository.save(battle);
+
+    return battleMapper.convertToDto(updated);
   }
 
   /**

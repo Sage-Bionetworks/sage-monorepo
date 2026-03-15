@@ -33,7 +33,13 @@ public record AppProperties(
     @NotNull(message = "Redirect URI must not be null") URI redirectUri,
     @NotBlank(message = "Internal issuer must not be blank") String internalIssuer,
     @NotBlank(message = "Audience must not be blank") String audience,
-    @NotNull(message = "Token TTL seconds must not be null") Long tokenTtlSeconds
+    @NotNull(message = "Token TTL seconds must not be null") Long tokenTtlSeconds,
+    /** Client ID for service-to-service authentication */
+    @NotBlank(message = "Service client ID must not be blank") String serviceClientId,
+    /** Client secret for service-to-service authentication */
+    @NotBlank(message = "Service client secret must not be blank") String serviceClientSecret,
+    /** TTL in seconds for service tokens (default 300 = 5 minutes) */
+    @NotNull(message = "Service token TTL must not be null") Long serviceTokenTtlSeconds
   ) {}
 
   @Validated

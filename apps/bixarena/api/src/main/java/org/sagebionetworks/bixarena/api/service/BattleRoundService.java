@@ -13,6 +13,7 @@ import org.sagebionetworks.bixarena.api.model.entity.BattleRoundEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.BattleRoundMapper;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRoundRepository;
+import org.sagebionetworks.bixarena.api.model.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,8 @@ public class BattleRoundService {
   private final BattleRoundRepository battleRoundRepository;
   private final BattleRepository battleRepository;
   private final MessageService messageService;
+  private final MessageRepository messageRepository;
+  private final PromptValidationService promptValidationService;
   private final BattleRoundMapper battleRoundMapper = new BattleRoundMapper();
 
   @Transactional
@@ -57,6 +60,17 @@ public class BattleRoundService {
     battleRoundRepository.flush();
 
     log.info("Created battle round {} for battle {}", saved.getId(), battleId);
+
+    // TODO: Re-enable prompt validation when the UI supports displaying results
+    // if (nextRoundNumber == 1) {
+    //   String promptText = messageRepository
+    //     .findById(promptId)
+    //     .map(msg -> msg.getContent())
+    //     .orElse(null);
+    //   if (promptText != null) {
+    //     promptValidationService.validateAndPersist(battleId, promptId, promptText);
+    //   }
+    // }
 
     return battleRoundMapper.convertToDto(saved);
   }
