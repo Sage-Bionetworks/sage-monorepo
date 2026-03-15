@@ -16227,6 +16227,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         dataType:
           type: string
           description: Enumeration of data types the describe the contents of objects like Tables and Files.
@@ -22832,6 +22833,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.
@@ -22886,6 +22888,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         pathIds:
           type: array
           items:
@@ -24477,6 +24480,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         idList:
           type: array
           items:
@@ -24691,6 +24695,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.
@@ -25107,6 +25112,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.
@@ -26534,6 +26540,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.
@@ -26687,6 +26694,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.
@@ -27052,6 +27060,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.
@@ -27806,6 +27815,7 @@ components:
         - REPLICATED_EVENT
         - PORTAL
         - OAUTH_CLIENT
+        - GRID_SESSION
     org.sagebionetworks.repo.model.grid.query.function.CountStar:
       type: object
       properties:
@@ -28328,6 +28338,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.
@@ -28677,6 +28688,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         targetId:
           type: string
           description: The unique identifier of the target object
@@ -30822,6 +30834,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
       description: Reference to a WikiPage
     org.sagebionetworks.repo.model.audit.AclRecord:
       type: object
@@ -30877,6 +30890,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         id:
           type: string
           description: The entity id
@@ -30972,6 +30986,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         objectVersion:
           type: integer
           description: The version of the digital object. When null, the DOI is associated with the current version of the object.
@@ -32948,6 +32963,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.
@@ -33719,6 +33735,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.
@@ -34309,6 +34326,7 @@ components:
             - REPLICATED_EVENT
             - PORTAL
             - OAUTH_CLIENT
+            - GRID_SESSION
         timestamp:
           type: string
           description: The timestamp when this change was originally committed.

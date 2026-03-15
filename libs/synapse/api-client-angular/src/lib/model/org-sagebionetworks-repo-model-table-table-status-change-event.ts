@@ -87,7 +87,8 @@ export namespace OrgSagebionetworksRepoModelTableTableStatusChangeEvent {
     | 'PROJECT_STORAGE_EVENT'
     | 'REPLICATED_EVENT'
     | 'PORTAL'
-    | 'OAUTH_CLIENT';
+    | 'OAUTH_CLIENT'
+    | 'GRID_SESSION';
   export const ObjectTypeEnum = {
     Entity: 'ENTITY' as ObjectTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as ObjectTypeEnum,
@@ -136,6 +137,7 @@ export namespace OrgSagebionetworksRepoModelTableTableStatusChangeEvent {
     ReplicatedEvent: 'REPLICATED_EVENT' as ObjectTypeEnum,
     Portal: 'PORTAL' as ObjectTypeEnum,
     OauthClient: 'OAUTH_CLIENT' as ObjectTypeEnum,
+    GridSession: 'GRID_SESSION' as ObjectTypeEnum,
   };
   export type StateEnum = 'AVAILABLE' | 'PROCESSING' | 'PROCESSING_FAILED';
   export const StateEnum = {

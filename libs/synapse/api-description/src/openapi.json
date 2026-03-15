@@ -19114,7 +19114,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "dataType": {
@@ -27180,7 +27181,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
@@ -27237,7 +27239,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "pathIds": {
@@ -29169,7 +29172,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "idList": {
@@ -29427,7 +29431,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
@@ -29970,7 +29975,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
@@ -31668,7 +31674,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
@@ -31855,7 +31862,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
@@ -32309,7 +32317,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
@@ -33242,7 +33251,8 @@
           "PROJECT_STORAGE_EVENT",
           "REPLICATED_EVENT",
           "PORTAL",
-          "OAUTH_CLIENT"
+          "OAUTH_CLIENT",
+          "GRID_SESSION"
         ]
       },
       "org.sagebionetworks.repo.model.grid.query.function.CountStar": {
@@ -33868,7 +33878,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
@@ -34266,7 +34277,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "targetId": {
@@ -36825,7 +36837,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           }
         },
@@ -36884,7 +36897,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "id": {
@@ -36987,7 +37001,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "objectVersion": {
@@ -39317,7 +39332,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
@@ -40218,7 +40234,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
@@ -40953,7 +40970,8 @@
               "PROJECT_STORAGE_EVENT",
               "REPLICATED_EVENT",
               "PORTAL",
-              "OAUTH_CLIENT"
+              "OAUTH_CLIENT",
+              "GRID_SESSION"
             ]
           },
           "timestamp": {
