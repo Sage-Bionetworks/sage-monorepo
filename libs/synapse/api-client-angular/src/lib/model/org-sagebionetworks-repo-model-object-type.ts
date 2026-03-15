@@ -55,7 +55,8 @@ export type OrgSagebionetworksRepoModelObjectType =
   | 'PROJECT_STORAGE_EVENT'
   | 'REPLICATED_EVENT'
   | 'PORTAL'
-  | 'OAUTH_CLIENT';
+  | 'OAUTH_CLIENT'
+  | 'GRID_SESSION';
 
 export const OrgSagebionetworksRepoModelObjectType = {
   Entity: 'ENTITY' as OrgSagebionetworksRepoModelObjectType,
@@ -108,4 +109,5 @@ export const OrgSagebionetworksRepoModelObjectType = {
   ReplicatedEvent: 'REPLICATED_EVENT' as OrgSagebionetworksRepoModelObjectType,
   Portal: 'PORTAL' as OrgSagebionetworksRepoModelObjectType,
   OauthClient: 'OAUTH_CLIENT' as OrgSagebionetworksRepoModelObjectType,
+  GridSession: 'GRID_SESSION' as OrgSagebionetworksRepoModelObjectType,
 };
