@@ -43,6 +43,9 @@ from bixarena_api_client.models.battle_validation_create_request import (
 from bixarena_api_client.models.battle_validation_response import (
     BattleValidationResponse,
 )
+from bixarena_api_client.models.model_chat_completion_chunk import (
+    ModelChatCompletionChunk,
+)
 from bixarena_api_client.models.set_effective_validation_request import (
     SetEffectiveValidationRequest,
 )
@@ -2792,6 +2795,308 @@ class BattleApi:
         return self.api_client.param_serialize(
             method="PATCH",
             resource_path="/battles/{battleId}/validations/effective",
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth,
+        )
+
+    @validate_call
+    def stream_battle_round_completion(
+        self,
+        battle_id: Annotated[
+            UUID, Field(description="The unique identifier of the battle")
+        ],
+        round_id: Annotated[
+            UUID, Field(description="The unique identifier of the battle round")
+        ],
+        model_id: Annotated[UUID, Field(description="The model to stream")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ModelChatCompletionChunk:
+        """Stream a chat completion for a battle round
+
+        Sends the round's prompt and conversation history to the specified model via ai-service and returns the response as a streaming HTTP response (text/event-stream). The completed response is persisted as a message after the stream ends.
+
+        :param battle_id: The unique identifier of the battle (required)
+        :type battle_id: str
+        :param round_id: The unique identifier of the battle round (required)
+        :type round_id: str
+        :param model_id: The model to stream (required)
+        :type model_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._stream_battle_round_completion_serialize(
+            battle_id=battle_id,
+            round_id=round_id,
+            model_id=model_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "ModelChatCompletionChunk",
+            "400": "BasicError",
+            "401": "BasicError",
+            "403": "BasicError",
+            "404": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+    @validate_call
+    def stream_battle_round_completion_with_http_info(
+        self,
+        battle_id: Annotated[
+            UUID, Field(description="The unique identifier of the battle")
+        ],
+        round_id: Annotated[
+            UUID, Field(description="The unique identifier of the battle round")
+        ],
+        model_id: Annotated[UUID, Field(description="The model to stream")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[ModelChatCompletionChunk]:
+        """Stream a chat completion for a battle round
+
+        Sends the round's prompt and conversation history to the specified model via ai-service and returns the response as a streaming HTTP response (text/event-stream). The completed response is persisted as a message after the stream ends.
+
+        :param battle_id: The unique identifier of the battle (required)
+        :type battle_id: str
+        :param round_id: The unique identifier of the battle round (required)
+        :type round_id: str
+        :param model_id: The model to stream (required)
+        :type model_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._stream_battle_round_completion_serialize(
+            battle_id=battle_id,
+            round_id=round_id,
+            model_id=model_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "ModelChatCompletionChunk",
+            "400": "BasicError",
+            "401": "BasicError",
+            "403": "BasicError",
+            "404": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+    @validate_call
+    def stream_battle_round_completion_without_preload_content(
+        self,
+        battle_id: Annotated[
+            UUID, Field(description="The unique identifier of the battle")
+        ],
+        round_id: Annotated[
+            UUID, Field(description="The unique identifier of the battle round")
+        ],
+        model_id: Annotated[UUID, Field(description="The model to stream")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Stream a chat completion for a battle round
+
+        Sends the round's prompt and conversation history to the specified model via ai-service and returns the response as a streaming HTTP response (text/event-stream). The completed response is persisted as a message after the stream ends.
+
+        :param battle_id: The unique identifier of the battle (required)
+        :type battle_id: str
+        :param round_id: The unique identifier of the battle round (required)
+        :type round_id: str
+        :param model_id: The model to stream (required)
+        :type model_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._stream_battle_round_completion_serialize(
+            battle_id=battle_id,
+            round_id=round_id,
+            model_id=model_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "ModelChatCompletionChunk",
+            "400": "BasicError",
+            "401": "BasicError",
+            "403": "BasicError",
+            "404": "BasicError",
+            "429": "RateLimitError",
+            "500": "BasicError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+    def _stream_battle_round_completion_serialize(
+        self,
+        battle_id,
+        round_id,
+        model_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+        _host = None
+
+        _collection_formats: Dict[str, str] = {}
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if battle_id is not None:
+            _path_params["battleId"] = battle_id
+        if round_id is not None:
+            _path_params["roundId"] = round_id
+        # process the query parameters
+        if model_id is not None:
+            _query_params.append(("modelId", model_id))
+
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+        # set the HTTP header `Accept`
+        if "Accept" not in _header_params:
+            _header_params["Accept"] = self.api_client.select_header_accept(
+                ["text/event-stream", "application/problem+json", "application/json"]
+            )
+
+        # authentication setting
+        _auth_settings: List[str] = ["jwtBearer"]
+
+        return self.api_client.param_serialize(
+            method="POST",
+            resource_path="/battles/{battleId}/rounds/{roundId}/stream",
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

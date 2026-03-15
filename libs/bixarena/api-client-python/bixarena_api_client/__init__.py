@@ -20,6 +20,7 @@ __all__ = [
     "AdminApi",
     "AuthApi",
     "BattleApi",
+    "ChatApi",
     "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
@@ -76,6 +77,9 @@ __all__ = [
     "MessageCreate",
     "MessageRole",
     "Model",
+    "ModelChatCompletionChunk",
+    "ModelChatRequest",
+    "ModelChatUsage",
     "ModelError",
     "ModelErrorCreateRequest",
     "ModelPage",
@@ -103,6 +107,7 @@ __all__ = [
 from bixarena_api_client.api.admin_api import AdminApi as AdminApi
 from bixarena_api_client.api.auth_api import AuthApi as AuthApi
 from bixarena_api_client.api.battle_api import BattleApi as BattleApi
+from bixarena_api_client.api.chat_api import ChatApi as ChatApi
 from bixarena_api_client.api.example_prompt_api import (
     ExamplePromptApi as ExamplePromptApi,
 )
@@ -227,6 +232,13 @@ from bixarena_api_client.models.license import License as License
 from bixarena_api_client.models.message_create import MessageCreate as MessageCreate
 from bixarena_api_client.models.message_role import MessageRole as MessageRole
 from bixarena_api_client.models.model import Model as Model
+from bixarena_api_client.models.model_chat_completion_chunk import (
+    ModelChatCompletionChunk as ModelChatCompletionChunk,
+)
+from bixarena_api_client.models.model_chat_request import (
+    ModelChatRequest as ModelChatRequest,
+)
+from bixarena_api_client.models.model_chat_usage import ModelChatUsage as ModelChatUsage
 from bixarena_api_client.models.model_error import ModelError as ModelError
 from bixarena_api_client.models.model_error_create_request import (
     ModelErrorCreateRequest as ModelErrorCreateRequest,
