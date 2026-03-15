@@ -5,6 +5,9 @@ It imports the generated routers and adds JWT validation as a dependency
 on protected endpoints while leaving health-check endpoints public.
 """
 
+import logging
+import os
+
 from fastapi import Depends, FastAPI
 
 from bixarena_ai_service.apis.battle_validation_api import (
@@ -16,6 +19,16 @@ from bixarena_ai_service.apis.prompt_validation_api import (
     router as PromptValidationApiRouter,
 )
 from bixarena_ai_service.security.jwt_validator import validate_jwt
+
+# Configure application logging (LOG_LEVEL env var, default INFO)
+_log_level = getattr(logging, os.environ.get("LOG_LEVEL", "INFO").upper(), logging.INFO)
+logging.basicConfig(
+    level=_log_level,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    force=True,
+)
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 app = FastAPI(
     title="BixArena AI Service",
