@@ -10,6 +10,7 @@ from fastapi import Depends, FastAPI
 from bixarena_ai_service.apis.battle_validation_api import (
     router as BattleValidationApiRouter,
 )
+from bixarena_ai_service.apis.chat_api import router as ChatApiRouter
 from bixarena_ai_service.apis.health_check_api import router as HealthCheckApiRouter
 from bixarena_ai_service.apis.prompt_validation_api import (
     router as PromptValidationApiRouter,
@@ -28,3 +29,4 @@ app.include_router(HealthCheckApiRouter)
 # Validation endpoints require a valid JWT
 app.include_router(PromptValidationApiRouter, dependencies=[Depends(validate_jwt)])
 app.include_router(BattleValidationApiRouter, dependencies=[Depends(validate_jwt)])
+app.include_router(ChatApiRouter, dependencies=[Depends(validate_jwt)])
