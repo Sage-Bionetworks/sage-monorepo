@@ -1,7 +1,10 @@
 import { toBlob } from 'html-to-image';
 
 /** Captured at module load so concurrent calls always restore to the real native function. */
-const nativeGetComputedStyle = window.getComputedStyle.bind(window);
+let nativeGetComputedStyle: Window['getComputedStyle'];
+if (typeof window !== 'undefined') {
+  nativeGetComputedStyle = window.getComputedStyle.bind(window);
+}
 
 /**
  * Captures a DOM element as a Blob image using html-to-image,
