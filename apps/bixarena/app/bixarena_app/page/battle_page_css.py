@@ -4,6 +4,11 @@ CSS styles for the BixArena battle page.
 
 # CSS for chatbot battle interface
 CHATBOT_BATTLE_CSS = """
+/* Prevent battle page from stretching children to fill viewport */
+#battle-page-wrapper {
+    min-height: unset !important;
+}
+
 /* System message styling */
 .message.bot.panel-full-width.thought:has(.system-message) {
     border: none;
@@ -292,6 +297,13 @@ INPUT_PROMPT_CSS = """
 
 # CSS for disclaimer (starts hidden, revealed by JS on input focus/typing)
 DISCLAIMER_CSS = """
+/* Collapse the Gradio wrapper when disclaimer is hidden */
+:has(> #disclaimer:not(.show)) {
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
 #disclaimer {
     padding: 0 24px;
     max-width: 850px;

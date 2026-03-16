@@ -660,7 +660,7 @@ def build_side_by_side_ui_anony():
     example_prompt_ui = ExamplePromptUI()
 
     # Page content
-    with gr.Column():
+    with gr.Column(elem_id="battle-page-content"):
         page_header = gr.HTML(page_header_html, visible=True)
         # Example prompts (cards + arrows) now provided by helper (textbox bound later)
         # Start with empty prompts - will be loaded when page is navigated to
@@ -670,6 +670,36 @@ def build_side_by_side_ui_anony():
             prev_btn,
             next_btn,
         ) = example_prompt_ui.build(textbox=None)
+
+        # Prompt input - always visible, centered with 80% width via CSS
+        with gr.Row(visible=True) as textbox_row:
+            textbox = gr.Textbox(
+                show_label=False,
+                placeholder="Or ask anything biomedical...",
+                elem_id="input_box",
+                elem_classes=["prompt_input"],
+            )
+
+        # Disclaimer
+        disclaimer = gr.HTML(
+            """
+            <div id="disclaimer">
+                <div id="disclaimer-content">
+                    <h3 id="disclaimer-title">Data Processing & Privacy</h3>
+                    <p id="disclaimer-text">
+                        We process your prompts to ensure they are relevant to
+                        biomedical research. Your prompts are also sent to
+                        third-party LLM proxies and AI model providers who may
+                        store and use them for training and service improvement.
+                        <strong>Do not include private, sensitive, confidential,
+                        or personally identifiable information in your prompts.</strong>
+                        AI responses may contain errors. Verify all AI responses
+                        independently.
+                    </p>
+                </div>
+            </div>
+            """,
+        )
 
         # Battle interface - will appear once a prompt is submitted
         with gr.Group(elem_id="chatbot-container", visible=False) as battle_interface:
@@ -696,15 +726,6 @@ def build_side_by_side_ui_anony():
             tie_btn = gr.Button(value="🤝 Tie")
             right_vote_btn = gr.Button(value="👉 Right is Better")
 
-        # Prompt input - always visible, centered with 80% width via CSS
-        with gr.Row(visible=True) as textbox_row:
-            textbox = gr.Textbox(
-                show_label=False,
-                placeholder="Ask anything biomedical...",
-                elem_id="input_box",
-                elem_classes=["prompt_input"],
-            )
-
         # New Battle / Same Prompt buttons
         with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
             new_battle_same_prompt_btn = gr.Button(
@@ -718,28 +739,6 @@ def build_side_by_side_ui_anony():
                 variant="primary",
                 elem_id="next-battle-btn",
             )
-
-        # Disclaimer
-        disclaimer = gr.HTML(
-            """
-            <div id="disclaimer">
-                <div id="disclaimer-content">
-                    <h3 id="disclaimer-title">Data Processing & Privacy:</h3>
-                    <p id="disclaimer-text">
-                        We process your prompts to ensure they are relevant to
-                        biomedical research. Your prompts are also sent to
-                        third-party LLM proxies and AI model providers who may
-                        store and use them for training and service improvement.
-                        <strong>Do not include private, sensitive, confidential,
-                        or personally identifiable information in your prompts.</strong>
-                        AI responses may contain errors. Verify all AI responses
-                        independently.
-                    </p>
-                </div>
-            </div>
-            """,
-            visible=True,
-        )
 
     # Register listeners
     vote_outputs = (
