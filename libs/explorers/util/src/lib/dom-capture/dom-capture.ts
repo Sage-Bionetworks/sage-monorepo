@@ -5,6 +5,7 @@ import { toBlob } from 'html-to-image';
  * with optimizations to skip fonts and CSS custom properties.
  */
 export async function captureDomToBlob(target: HTMLElement, paddingPx = 0): Promise<Blob | null> {
+  paddingPx = Math.max(0, paddingPx);
   const restore = patchGetComputedStyleToSkipCSSVars();
 
   try {
