@@ -91,7 +91,8 @@ export namespace OrgSagebionetworksRepoModelTableReplicatedEvent {
     | 'PROJECT_STORAGE_EVENT'
     | 'REPLICATED_EVENT'
     | 'PORTAL'
-    | 'OAUTH_CLIENT';
+    | 'OAUTH_CLIENT'
+    | 'GRID_SESSION';
   export const ObjectTypeEnum = {
     Entity: 'ENTITY' as ObjectTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as ObjectTypeEnum,
@@ -140,6 +141,7 @@ export namespace OrgSagebionetworksRepoModelTableReplicatedEvent {
     ReplicatedEvent: 'REPLICATED_EVENT' as ObjectTypeEnum,
     Portal: 'PORTAL' as ObjectTypeEnum,
     OauthClient: 'OAUTH_CLIENT' as ObjectTypeEnum,
+    GridSession: 'GRID_SESSION' as ObjectTypeEnum,
   };
   export type ReplicatedObjectTypeEnum =
     | 'ENTITY'
@@ -188,7 +190,8 @@ export namespace OrgSagebionetworksRepoModelTableReplicatedEvent {
     | 'PROJECT_STORAGE_EVENT'
     | 'REPLICATED_EVENT'
     | 'PORTAL'
-    | 'OAUTH_CLIENT';
+    | 'OAUTH_CLIENT'
+    | 'GRID_SESSION';
   export const ReplicatedObjectTypeEnum = {
     Entity: 'ENTITY' as ReplicatedObjectTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as ReplicatedObjectTypeEnum,
@@ -237,5 +240,6 @@ export namespace OrgSagebionetworksRepoModelTableReplicatedEvent {
     ReplicatedEvent: 'REPLICATED_EVENT' as ReplicatedObjectTypeEnum,
     Portal: 'PORTAL' as ReplicatedObjectTypeEnum,
     OauthClient: 'OAUTH_CLIENT' as ReplicatedObjectTypeEnum,
+    GridSession: 'GRID_SESSION' as ReplicatedObjectTypeEnum,
   };
 }

@@ -77,7 +77,8 @@ export namespace OrgSagebionetworksRepoModelV2WikiV2WikiOrderHint {
     | 'PROJECT_STORAGE_EVENT'
     | 'REPLICATED_EVENT'
     | 'PORTAL'
-    | 'OAUTH_CLIENT';
+    | 'OAUTH_CLIENT'
+    | 'GRID_SESSION';
   export const OwnerObjectTypeEnum = {
     Entity: 'ENTITY' as OwnerObjectTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as OwnerObjectTypeEnum,
@@ -126,5 +127,6 @@ export namespace OrgSagebionetworksRepoModelV2WikiV2WikiOrderHint {
     ReplicatedEvent: 'REPLICATED_EVENT' as OwnerObjectTypeEnum,
     Portal: 'PORTAL' as OwnerObjectTypeEnum,
     OauthClient: 'OAUTH_CLIENT' as OwnerObjectTypeEnum,
+    GridSession: 'GRID_SESSION' as OwnerObjectTypeEnum,
   };
 }

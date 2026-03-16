@@ -119,7 +119,8 @@ export namespace OrgSagebionetworksRepoModelFileFileEvent {
     | 'PROJECT_STORAGE_EVENT'
     | 'REPLICATED_EVENT'
     | 'PORTAL'
-    | 'OAUTH_CLIENT';
+    | 'OAUTH_CLIENT'
+    | 'GRID_SESSION';
   export const ObjectTypeEnum = {
     Entity: 'ENTITY' as ObjectTypeEnum,
     EntityContainer: 'ENTITY_CONTAINER' as ObjectTypeEnum,
@@ -168,6 +169,7 @@ export namespace OrgSagebionetworksRepoModelFileFileEvent {
     ReplicatedEvent: 'REPLICATED_EVENT' as ObjectTypeEnum,
     Portal: 'PORTAL' as ObjectTypeEnum,
     OauthClient: 'OAUTH_CLIENT' as ObjectTypeEnum,
+    GridSession: 'GRID_SESSION' as ObjectTypeEnum,
   };
   export type FileEventTypeEnum = 'FILE_DOWNLOAD' | 'FILE_UPLOAD';
   export const FileEventTypeEnum = {
