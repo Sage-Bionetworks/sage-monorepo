@@ -493,7 +493,7 @@ def new_battle_same_prompt(battle_session: BattleSession, request: gr.Request = 
             gr.update(
                 value=last_prompt,
                 interactive=True,
-                placeholder="Ask anything biomedical...",
+                placeholder="Or ask anything biomedical...",
             )
         ]  # textbox: prefill with last prompt
         + [
