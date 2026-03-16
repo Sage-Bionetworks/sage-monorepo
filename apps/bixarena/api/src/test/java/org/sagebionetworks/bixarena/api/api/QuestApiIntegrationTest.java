@@ -95,17 +95,16 @@ class QuestApiIntegrationTest {
   }
 
   @Test
-  @DisplayName("should return 403 when creating quest anonymously")
-  void shouldReturn403WhenCreateQuestAnonymously() throws Exception {
+  @DisplayName("should return 401 when creating quest anonymously")
+  void shouldReturn401WhenCreateQuestAnonymously() throws Exception {
     // given
     QuestCreateOrUpdateDto dto = buildCreateDto("new-quest");
 
-    // when/then — /v1/quests is permitAll, so anonymous passes the filter chain
-    // but @PreAuthorize("hasRole('ADMIN')") denies access → 403
+    // when/then — only GET is permitAll, so anonymous POST hits .authenticated() → 401
     mockMvc.perform(post("/v1/quests")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(dto)))
-        .andExpect(status().isForbidden());
+        .andExpect(status().isUnauthorized());
   }
 
   @Test
@@ -150,13 +149,13 @@ class QuestApiIntegrationTest {
   }
 
   @Test
-  @DisplayName("should return 403 when deleting quest anonymously")
-  void shouldReturn403WhenDeleteQuestAnonymously() throws Exception {
+  @DisplayName("should return 401 when deleting quest anonymously")
+  void shouldReturn401WhenDeleteQuestAnonymously() throws Exception {
     // given
     seedQuest("protected-quest");
 
-    // when/then — same as create: permitAll path + @PreAuthorize → 403
+    // when/then — only GET is permitAll, so anonymous DELETE hits .authenticated() → 401
     mockMvc.perform(delete("/v1/quests/protected-quest"))
-        .andExpect(status().isForbidden());
+        .andExpect(status().isUnauthorized());
   }
 }
