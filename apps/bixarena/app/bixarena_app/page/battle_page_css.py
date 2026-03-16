@@ -271,6 +271,7 @@ INPUT_PROMPT_CSS = """
     overflow-y: auto !important;
     padding: 16px 48px 16px 20px;
     line-height: 1.5;
+    font-size: var(--text-md);
 }
 
 .form:has(.prompt_input) {
