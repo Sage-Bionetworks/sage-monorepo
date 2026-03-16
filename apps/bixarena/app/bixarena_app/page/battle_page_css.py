@@ -205,6 +205,7 @@ EXAMPLE_PROMPTS_CSS = """
     border-radius: 50%;
     background: transparent;
     border: 1px solid var(--border-color-primary);
+    opacity: 0.45;
     transition: all 0.2s ease;
 }
 
@@ -214,6 +215,7 @@ EXAMPLE_PROMPTS_CSS = """
 
 #prompt-card-section > .row > .nav-button:not(:disabled):hover {
     background: var(--panel-background-fill);
+    opacity: 0.75;
     transform: translateY(-1px);
 }
 

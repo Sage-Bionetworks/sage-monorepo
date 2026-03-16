@@ -81,13 +81,13 @@ SUBMIT_BUTTON_INJECT_JS = """
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        opacity: '0.5',
+        opacity: '0.7',
         transition: 'opacity 0.2s',
         zIndex: '10',
     });
 
-    btn.onmouseenter = () => { btn.style.opacity = '0.8'; };
-    btn.onmouseleave = () => { btn.style.opacity = '0.5'; };
+    btn.onmouseenter = () => { btn.style.opacity = '0.9'; };
+    btn.onmouseleave = () => { btn.style.opacity = '0.7'; };
 
     btn.onclick = () => {
         if (textarea.value.trim()) {
