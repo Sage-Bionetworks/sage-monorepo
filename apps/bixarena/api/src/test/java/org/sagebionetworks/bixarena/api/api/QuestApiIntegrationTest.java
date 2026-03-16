@@ -5,18 +5,26 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.bixarena.api.model.dto.QuestCreateOrUpdateDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestPostCreateOrUpdateDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestPostReorderDto;
 import org.sagebionetworks.bixarena.api.model.entity.QuestEntity;
+import org.sagebionetworks.bixarena.api.model.entity.QuestPostEntity;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
+import org.sagebionetworks.bixarena.api.model.repository.QuestPostRepository;
 import org.sagebionetworks.bixarena.api.model.repository.QuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -45,6 +53,9 @@ class QuestApiIntegrationTest {
   @Autowired
   private QuestRepository questRepository;
 
+  @Autowired
+  private QuestPostRepository questPostRepository;
+
   @MockitoBean
   private JwtDecoder jwtDecoder;
 
@@ -70,6 +81,18 @@ class QuestApiIntegrationTest {
     return questRepository.save(quest);
   }
 
+  private QuestPostEntity seedPost(QuestEntity quest, int postIndex, String title) {
+    QuestPostEntity post = QuestPostEntity.builder()
+        .questId(quest.getId())
+        .postIndex(postIndex)
+        .date(LocalDate.now())
+        .title(title)
+        .description("Description for " + title)
+        .images("[]")
+        .build();
+    return questPostRepository.save(post);
+  }
+
   private QuestCreateOrUpdateDto buildCreateDto(String questId) {
     return QuestCreateOrUpdateDto.builder()
         .questId(questId)
@@ -81,6 +104,17 @@ class QuestApiIntegrationTest {
         .activePostIndex(0)
         .build();
   }
+
+  private QuestPostCreateOrUpdateDto buildPostDto(String title) {
+    return QuestPostCreateOrUpdateDto.builder()
+        .title(title)
+        .description("Post description")
+        .date(LocalDate.now())
+        .images(List.of(URI.create("https://example.com/img.png")))
+        .build();
+  }
+
+  // --- Milestone 5: Security tests ---
 
   @Test
   @DisplayName("should return 200 when getting quest anonymously")
@@ -157,5 +191,168 @@ class QuestApiIntegrationTest {
     // when/then — only GET is permitAll, so anonymous DELETE hits .authenticated() → 401
     mockMvc.perform(delete("/v1/quests/protected-quest"))
         .andExpect(status().isUnauthorized());
+  }
+
+  // --- Milestone 6: CRUD flow tests ---
+
+  @Test
+  @DisplayName("should return quest when created and fetched")
+  @WithMockUser(roles = "ADMIN")
+  void shouldReturnQuestWhenCreatedAndFetched() throws Exception {
+    // given
+    QuestCreateOrUpdateDto dto = buildCreateDto("crud-quest");
+
+    // when — create
+    mockMvc.perform(post("/v1/quests")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isCreated());
+
+    // then — fetch and verify
+    mockMvc.perform(get("/v1/quests/crud-quest"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.questId").value("crud-quest"))
+        .andExpect(jsonPath("$.title").value("New Quest"))
+        .andExpect(jsonPath("$.goal").value(200));
+  }
+
+  @Test
+  @DisplayName("should return 409 when creating duplicate quest")
+  @WithMockUser(roles = "ADMIN")
+  void shouldReturn409WhenCreatingDuplicateQuest() throws Exception {
+    // given
+    seedQuest("duplicate-quest");
+    QuestCreateOrUpdateDto dto = buildCreateDto("duplicate-quest");
+
+    // when/then
+    mockMvc.perform(post("/v1/quests")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isConflict());
+  }
+
+  @Test
+  @DisplayName("should return 404 when quest not found")
+  void shouldReturn404WhenQuestNotFound() throws Exception {
+    // when/then
+    mockMvc.perform(get("/v1/quests/nonexistent"))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @DisplayName("should return post in quest when post created")
+  @WithMockUser(roles = "ADMIN")
+  void shouldReturnPostInQuestWhenPostCreated() throws Exception {
+    // given
+    seedQuest("post-quest");
+    QuestPostCreateOrUpdateDto postDto = buildPostDto("First Post");
+
+    // when — create post
+    mockMvc.perform(post("/v1/quests/post-quest/posts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(postDto)))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.title").value("First Post"));
+
+    // then — fetch quest and verify post is included
+    mockMvc.perform(get("/v1/quests/post-quest"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.posts.length()").value(1))
+        .andExpect(jsonPath("$.posts[0].title").value("First Post"));
+  }
+
+  @Test
+  @DisplayName("should update post content when put post")
+  @WithMockUser(roles = "ADMIN")
+  void shouldUpdatePostContentWhenPutPost() throws Exception {
+    // given
+    QuestEntity quest = seedQuest("update-quest");
+    seedPost(quest, 0, "Original Title");
+
+    QuestPostCreateOrUpdateDto updateDto = buildPostDto("Updated Title");
+
+    // when
+    mockMvc.perform(put("/v1/quests/update-quest/posts/0")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updateDto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.title").value("Updated Title"));
+
+    // then — verify via GET
+    mockMvc.perform(get("/v1/quests/update-quest"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.posts[0].title").value("Updated Title"));
+  }
+
+  @Test
+  @DisplayName("should remove post when delete post")
+  @WithMockUser(roles = "ADMIN")
+  void shouldRemovePostWhenDeletePost() throws Exception {
+    // given
+    QuestEntity quest = seedQuest("remove-quest");
+    seedPost(quest, 0, "Post to keep");
+    seedPost(quest, 1, "Post to delete");
+
+    // when
+    mockMvc.perform(delete("/v1/quests/remove-quest/posts/1"))
+        .andExpect(status().isNoContent());
+
+    // then
+    mockMvc.perform(get("/v1/quests/remove-quest"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.posts.length()").value(1))
+        .andExpect(jsonPath("$.posts[0].title").value("Post to keep"));
+  }
+
+  @Test
+  @DisplayName("should change order when reorder posts")
+  @WithMockUser(roles = "ADMIN")
+  void shouldChangeOrderWhenReorderPosts() throws Exception {
+    // given
+    QuestEntity quest = seedQuest("reorder-quest");
+    seedPost(quest, 0, "First");
+    seedPost(quest, 1, "Second");
+    seedPost(quest, 2, "Third");
+
+    QuestPostReorderDto reorderDto = new QuestPostReorderDto(List.of(2, 0, 1));
+
+    // when
+    mockMvc.perform(put("/v1/quests/reorder-quest/posts/reorder")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(reorderDto)))
+        .andExpect(status().isOk());
+
+    // then — new order: Third, First, Second
+    mockMvc.perform(get("/v1/quests/reorder-quest"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.posts[0].title").value("Third"))
+        .andExpect(jsonPath("$.posts[1].title").value("First"))
+        .andExpect(jsonPath("$.posts[2].title").value("Second"));
+  }
+
+  @Test
+  @DisplayName("should redact content when post is locked")
+  void shouldRedactContentWhenPostIsLocked() throws Exception {
+    // given — post requires 500 blocks, but totalBlocks is stubbed to 0
+    QuestEntity quest = seedQuest("gated-quest");
+    QuestPostEntity post = QuestPostEntity.builder()
+        .questId(quest.getId())
+        .postIndex(0)
+        .date(LocalDate.now())
+        .title("Locked Post")
+        .description("Secret content")
+        .images("[\"https://example.com/secret.png\"]")
+        .requiredProgress(500)
+        .build();
+    questPostRepository.save(post);
+
+    // when/then — anonymous user with 0 totalBlocks → locked
+    mockMvc.perform(get("/v1/quests/gated-quest"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.posts[0].title").value("Locked Post"))
+        .andExpect(jsonPath("$.posts[0].locked").value(true))
+        .andExpect(jsonPath("$.posts[0].description").doesNotExist())
+        .andExpect(jsonPath("$.posts[0].images").isEmpty())
+        .andExpect(jsonPath("$.posts[0].requiredProgress").value(500));
   }
 }
