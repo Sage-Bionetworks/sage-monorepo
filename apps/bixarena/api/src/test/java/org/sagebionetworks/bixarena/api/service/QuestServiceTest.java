@@ -654,6 +654,140 @@ class QuestServiceTest {
 
   // ── listQuestContributors ─────────────────────────────────────────────────
 
+  // ── deleteQuestPost — edge cases ──────────────────────────────────────────
+
+  @Test
+  @DisplayName("should set active to zero when deleting first post")
+  void shouldSetActiveToZeroWhenDeletingFirstPost() {
+    // given — activePostIndex=0, delete post at index 0
+    questEntity.setActivePostIndex(0);
+
+    QuestPostEntity post0 = QuestPostEntity.builder()
+        .id(10L).questId(1L).postIndex(0).title("First")
+        .description("X").images("[]").build();
+
+    when(questRepository.findByQuestId("test-quest")).thenReturn(Optional.of(questEntity));
+    when(questPostRepository.findByQuestIdAndPostIndex(1L, 0)).thenReturn(Optional.of(post0));
+    when(questPostRepository.findByQuestIdOrderByPostIndexAsc(1L))
+        .thenReturn(new ArrayList<>(List.of(
+            QuestPostEntity.builder().id(11L).questId(1L).postIndex(1).title("P1")
+                .description("B").images("[]").build()
+        )));
+    when(questPostRepository.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
+
+    // when
+    questService.deleteQuestPost("test-quest", 0);
+
+    // then — Math.max(0, 0 - 1) = 0
+    assertThat(questEntity.getActivePostIndex()).isEqualTo(0);
+    verify(questRepository).save(questEntity);
+  }
+
+  @Test
+  @DisplayName("should throw not found when deleting nonexistent post")
+  void shouldThrowNotFoundWhenDeletingNonexistentPost() {
+    // given
+    when(questRepository.findByQuestId("test-quest")).thenReturn(Optional.of(questEntity));
+    when(questPostRepository.findByQuestIdAndPostIndex(1L, 99)).thenReturn(Optional.empty());
+
+    // when/then
+    assertThatThrownBy(() -> questService.deleteQuestPost("test-quest", 99))
+        .isInstanceOf(QuestPostNotFoundException.class);
+  }
+
+  // ── reorderQuestPosts — edge cases ──────────────────────────────────────
+
+  @Test
+  @DisplayName("should succeed when reordering single post")
+  void shouldSucceedWhenReorderingSinglePost() {
+    // given — only one post
+    QuestPostEntity post0 = QuestPostEntity.builder()
+        .id(10L).questId(1L).postIndex(0).title("Only")
+        .description("A").images("[]").build();
+
+    QuestPostReorderDto dto = QuestPostReorderDto.builder()
+        .postIndexes(List.of(0))
+        .build();
+
+    when(questRepository.findByQuestId("test-quest")).thenReturn(Optional.of(questEntity));
+    when(questPostRepository.findByQuestIdOrderByPostIndexAsc(1L))
+        .thenReturn(new ArrayList<>(List.of(post0)))
+        .thenReturn(new ArrayList<>(List.of(post0)));
+    when(questPostRepository.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
+    when(battleRepository.countCompletedByDateRange(any(), any())).thenReturn(0L);
+
+    // when
+    QuestDto result = questService.reorderQuestPosts("test-quest", dto);
+
+    // then — no error, quest returned
+    assertThat(result).isNotNull();
+    assertThat(result.getPosts()).hasSize(1);
+  }
+
+  // ── listQuestContributors — tier boundary edge cases ────────────────────
+
+  @Test
+  @DisplayName("should return champion when battles per week is exactly ten")
+  void shouldReturnChampionWhenBattlesPerWeekIsExactlyTen() {
+    // given — quest runs exactly 1 week, user has 10 battles → 10.0/wk = champion
+    QuestEntity weekQuest = QuestEntity.builder()
+        .id(3L)
+        .questId("boundary-quest")
+        .title("Boundary")
+        .description("Tier boundary test")
+        .goal(100)
+        .startDate(OffsetDateTime.of(2026, 3, 1, 0, 0, 0, 0, ZoneOffset.UTC))
+        .endDate(OffsetDateTime.of(2026, 3, 8, 0, 0, 0, 0, ZoneOffset.UTC))
+        .activePostIndex(0)
+        .build();
+
+    ContributorProjection contributor = new ContributorProjection() {
+      @Override public String getUsername() { return "boundary-user"; }
+      @Override public Integer getBattleCount() { return 10; }
+    };
+
+    when(questRepository.findByQuestId("boundary-quest")).thenReturn(Optional.of(weekQuest));
+    when(battleRepository.findContributorsByDateRange(any(), any(), eq(1), any()))
+        .thenReturn(List.of(contributor));
+
+    // when
+    QuestContributorsDto result = questService.listQuestContributors("boundary-quest", 1, 100);
+
+    // then — exactly 10.0 battles/wk hits champion threshold
+    assertThat(result.getContributors().get(0).getTier().getValue()).isEqualTo("champion");
+  }
+
+  @Test
+  @DisplayName("should return knight when battles per week is just below ten")
+  void shouldReturnKnightWhenBattlesPerWeekIsJustBelowTen() {
+    // given — quest runs 10 days, user has 13 battles → 13/(10/7) ≈ 9.1/wk = knight (not champion)
+    QuestEntity tenDayQuest = QuestEntity.builder()
+        .id(4L)
+        .questId("below-ten-quest")
+        .title("Below Ten")
+        .description("Just under champion")
+        .goal(100)
+        .startDate(OffsetDateTime.of(2026, 3, 1, 0, 0, 0, 0, ZoneOffset.UTC))
+        .endDate(OffsetDateTime.of(2026, 3, 11, 0, 0, 0, 0, ZoneOffset.UTC))
+        .activePostIndex(0)
+        .build();
+
+    ContributorProjection contributor = new ContributorProjection() {
+      @Override public String getUsername() { return "almost-champ"; }
+      @Override public Integer getBattleCount() { return 13; }
+    };
+
+    when(questRepository.findByQuestId("below-ten-quest")).thenReturn(Optional.of(tenDayQuest));
+    when(battleRepository.findContributorsByDateRange(any(), any(), eq(1), any()))
+        .thenReturn(List.of(contributor));
+
+    // when
+    QuestContributorsDto result = questService.listQuestContributors("below-ten-quest", 1, 100);
+
+    // then — 13 / (10/7) = 9.1 < 10 → knight
+    assertThat(result.getContributors().get(0).getTier().getValue()).isEqualTo("knight");
+  }
+
   @Test
   @DisplayName("should calculate tiers correctly when listing contributors")
   void shouldCalculateTiersCorrectlyWhenListingContributors() {
