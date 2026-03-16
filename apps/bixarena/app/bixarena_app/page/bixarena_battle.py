@@ -112,17 +112,14 @@ DISCLAIMER_TOGGLE_JS = """
     disclaimer._disclaimerSetup = true;
 
     const update = () => {
-        const hasFocus = document.activeElement === textarea;
-        const hasContent = textarea.value.trim() !== '';
-        if (hasFocus || hasContent) {
+        const hasContent = textarea.value.length > 0;
+        if (hasContent) {
             disclaimer.classList.add('show');
         } else {
             disclaimer.classList.remove('show');
         }
     };
 
-    textarea.addEventListener('focus', update);
-    textarea.addEventListener('blur', () => setTimeout(update, 150));
     textarea.addEventListener('input', update);
     update();
 }
