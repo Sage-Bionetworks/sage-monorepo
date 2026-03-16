@@ -50,6 +50,84 @@ from bixarena_app.page.example_prompt_ui import (
 
 logger = logging.getLogger(__name__)
 
+# JavaScript to inject a submit arrow button inside the prompt textbox
+SUBMIT_BUTTON_INJECT_JS = """
+() => {
+    const wrapper = document.querySelector('#input_box');
+    if (!wrapper || wrapper.querySelector('.submit-arrow-injected')) return;
+    const textarea = wrapper.querySelector('textarea');
+    if (!textarea) return;
+
+    const container = textarea.parentElement;
+    container.style.position = 'relative';
+
+    const btn = document.createElement('button');
+    btn.className = 'submit-arrow-injected';
+    btn.innerHTML = '\\u2192';
+    btn.type = 'button';
+    Object.assign(btn.style, {
+        position: 'absolute',
+        right: '8px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        width: '32px',
+        height: '32px',
+        borderRadius: '6px',
+        background: 'var(--border-color-primary)',
+        color: 'var(--body-text-color)',
+        border: 'none',
+        fontSize: '18px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: '0.5',
+        transition: 'opacity 0.2s',
+        zIndex: '10',
+    });
+
+    btn.onmouseenter = () => { btn.style.opacity = '0.8'; };
+    btn.onmouseleave = () => { btn.style.opacity = '0.5'; };
+
+    btn.onclick = () => {
+        if (textarea.value.trim()) {
+            textarea.focus();
+            textarea.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'Enter', code: 'Enter', keyCode: 13,
+                which: 13, bubbles: true, cancelable: true,
+            }));
+        }
+    };
+
+    container.appendChild(btn);
+}
+"""
+
+# JavaScript to show/hide disclaimer based on textbox focus and content
+DISCLAIMER_TOGGLE_JS = """
+() => {
+    const textarea = document.querySelector('#input_box textarea');
+    const disclaimer = document.getElementById('disclaimer');
+    if (!textarea || !disclaimer || disclaimer._disclaimerSetup) return;
+    disclaimer._disclaimerSetup = true;
+
+    const update = () => {
+        const hasFocus = document.activeElement === textarea;
+        const hasContent = textarea.value.trim() !== '';
+        if (hasFocus || hasContent) {
+            disclaimer.classList.add('show');
+        } else {
+            disclaimer.classList.remove('show');
+        }
+    };
+
+    textarea.addEventListener('focus', update);
+    textarea.addEventListener('blur', () => setTimeout(update, 150));
+    textarea.addEventListener('input', update);
+    update();
+}
+"""
+
 num_sides = 2
 anony_names = ["", ""]
 
@@ -557,8 +635,11 @@ def build_side_by_side_ui_anony():
     page_header_html = f"""
     <div style="text-align: center; padding: 0px;">
         <h1 style="font-size: var(--text-hero-title); margin-bottom: 0.5rem; color: var(--body-text-color);">BioArena</h1>
+        <p style="font-size: var(--text-xl); color: var(--body-text-color); margin: 0 0 0.25rem 0;">
+            Discover how different AIs answer biomedical questions. Find out which ones you trust.
+        </p>
         <p style="font-size: var(--text-xl); color: var(--body-text-color-subdued); margin: 0;">
-            Benchmarking AI Models for Biomedical Breakthroughs
+            No expertise required. Just vote for the response you find most useful.
         </p>
     </div>
     <style>
@@ -918,5 +999,11 @@ def build_battle_page():
 
         # Load JavaScript for prompt card click handlers
         battle_page.load(lambda: None, None, None, js=PROMPT_CARD_CLICK_JS)
+
+        # Inject submit arrow button into the textbox
+        battle_page.load(lambda: None, None, None, js=SUBMIT_BUTTON_INJECT_JS)
+
+        # Setup disclaimer show/hide based on textbox focus
+        battle_page.load(lambda: None, None, None, js=DISCLAIMER_TOGGLE_JS)
 
     return battle_page, example_prompt_ui, prompt_outputs

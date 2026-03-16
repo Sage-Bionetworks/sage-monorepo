@@ -118,6 +118,17 @@ CHATBOT_BATTLE_CSS = """
 
 # CSS for example prompt cards and navigation
 EXAMPLE_PROMPTS_CSS = """
+/* Column wrapper for prompt section */
+#prompt-card-section {
+    gap: 0 !important;
+}
+
+#try-example-label {
+    padding: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+}
+
 /* Example prompt UI section */
 #prompt-card-section > .row {
     display: flex;
@@ -251,7 +262,7 @@ INPUT_PROMPT_CSS = """
 #input_box.prompt_input textarea {
     border-radius: 12px;
     overflow-y: auto !important;
-    padding: 16px 20px;
+    padding: 16px 48px 16px 20px;
     line-height: 1.5;
 }
 
@@ -273,18 +284,28 @@ INPUT_PROMPT_CSS = """
     }
 
     #input_box.prompt_input textarea {
-        padding: 12px 16px;
+        padding: 12px 44px 12px 16px;
         font-size: var(--text-md);
     }
 }
 """
 
-# CSS for disclaimer
+# CSS for disclaimer (starts hidden, revealed by JS on input focus/typing)
 DISCLAIMER_CSS = """
 #disclaimer {
-    padding: 16px 24px;
+    padding: 0 24px;
     max-width: 850px;
     margin: 0 auto;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+}
+
+#disclaimer.show {
+    max-height: 200px;
+    opacity: 1;
+    padding: 16px 24px;
 }
 
 #disclaimer-content {
