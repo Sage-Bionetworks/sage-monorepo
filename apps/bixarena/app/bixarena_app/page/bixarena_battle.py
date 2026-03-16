@@ -91,11 +91,9 @@ SUBMIT_BUTTON_INJECT_JS = """
 
     btn.onclick = () => {
         if (textarea.value.trim()) {
-            textarea.focus();
-            textarea.dispatchEvent(new KeyboardEvent('keydown', {
-                key: 'Enter', code: 'Enter', keyCode: 13,
-                which: 13, bubbles: true, cancelable: true,
-            }));
+            // Click the hidden Gradio button to trigger the submit chain
+            const hiddenBtn = document.querySelector('#arrow-submit-btn');
+            if (hiddenBtn) hiddenBtn.click();
         }
     };
 
@@ -679,6 +677,8 @@ def build_side_by_side_ui_anony():
                 elem_id="input_box",
                 elem_classes=["prompt_input"],
             )
+            # Hidden button for arrow submit — JS clicks this to trigger Gradio submit
+            arrow_submit_btn = gr.Button(visible=False, elem_id="arrow-submit-btn")
 
         # Disclaimer
         disclaimer = gr.HTML(
@@ -916,6 +916,36 @@ def build_side_by_side_ui_anony():
         + [new_battle_same_prompt_btn, new_battle_btn],
     ).then(
         lambda: None,  # Enable enter key
+        [],
+        [],
+        js=enable_enter_js,
+    )
+
+    # Arrow submit button — same chain as textbox.submit
+    arrow_submit_btn.click(
+        add_text,
+        states + [battle_session] + model_selectors + [textbox],
+        states
+        + [battle_session]
+        + chatbots
+        + [textbox]
+        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
+        + [page_header, textbox_row, disclaimer],
+    ).then(
+        lambda: None,
+        [],
+        [],
+        js=disable_enter_js,
+    ).then(
+        bot_response_multi,
+        states + [battle_session],
+        states
+        + [battle_session]
+        + chatbots
+        + [voting_row, next_battle_row, page_header, textbox_row]
+        + [new_battle_same_prompt_btn, new_battle_btn],
+    ).then(
+        lambda: None,
         [],
         [],
         js=enable_enter_js,
