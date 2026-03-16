@@ -1,5 +1,8 @@
 import { toBlob } from 'html-to-image';
 
+/** Captured at module load so concurrent calls always restore to the real native function. */
+const nativeGetComputedStyle = window.getComputedStyle.bind(window);
+
 /**
  * Captures a DOM element as a Blob image using html-to-image,
  * with optimizations to skip fonts and CSS custom properties.
@@ -14,7 +17,7 @@ export async function captureDomToBlob(target: HTMLElement, paddingPx = 0): Prom
       width: target.offsetWidth + paddingPx * 2,
       height: target.offsetHeight + paddingPx * 2,
       skipFonts: true,
-      ...(paddingPx > 0 && { style: { padding: `${paddingPx}px` } }),
+      style: paddingPx > 0 ? { padding: `${paddingPx}px` } : undefined,
     });
   } finally {
     restore();
@@ -27,10 +30,8 @@ export async function captureDomToBlob(target: HTMLElement, paddingPx = 0): Prom
  * Returns a restore function to undo the patch after capture.
  */
 function patchGetComputedStyleToSkipCSSVars(): () => void {
-  const original = window.getComputedStyle.bind(window);
-
   window.getComputedStyle = (elt: Element, pseudo?: string | null): CSSStyleDeclaration => {
-    const style = original(elt, pseudo);
+    const style = nativeGetComputedStyle(elt, pseudo);
     return new Proxy(style, {
       get(target, prop) {
         const allProps = target as CSSStyleDeclaration;
@@ -44,10 +45,11 @@ function patchGetComputedStyleToSkipCSSVars(): () => void {
         }
 
         if (typeof prop === 'string' && !isNaN(Number(prop))) {
+          const index = Number(prop);
           let count = 0;
           for (let i = 0; i < allProps.length; i++) {
             if (!allProps[i].startsWith('--')) {
-              if (count === Number(prop)) return allProps[i];
+              if (count === index) return allProps[i];
               count++;
             }
           }
@@ -61,6 +63,6 @@ function patchGetComputedStyleToSkipCSSVars(): () => void {
   };
 
   return () => {
-    window.getComputedStyle = original;
+    window.getComputedStyle = nativeGetComputedStyle;
   };
 }
