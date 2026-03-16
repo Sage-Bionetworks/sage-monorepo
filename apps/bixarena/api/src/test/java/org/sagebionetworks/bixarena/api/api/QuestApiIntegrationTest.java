@@ -1,7 +1,9 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -14,6 +16,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -23,6 +26,7 @@ import org.sagebionetworks.bixarena.api.model.dto.QuestPostCreateOrUpdateDto;
 import org.sagebionetworks.bixarena.api.model.dto.QuestPostReorderDto;
 import org.sagebionetworks.bixarena.api.model.entity.QuestEntity;
 import org.sagebionetworks.bixarena.api.model.entity.QuestPostEntity;
+import org.sagebionetworks.bixarena.api.model.projection.ContributorProjection;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.QuestPostRepository;
 import org.sagebionetworks.bixarena.api.model.repository.QuestRepository;
@@ -456,5 +460,75 @@ class QuestApiIntegrationTest {
     // when/then
     mockMvc.perform(delete("/v1/quests/no-such-quest/posts/0"))
         .andExpect(status().isNotFound());
+  }
+
+  // --- Coverage: listQuestContributors happy path & extractUserId ---
+
+  @Test
+  @DisplayName("should return contributors when listing with valid params")
+  void shouldReturnContributorsWhenListingWithValidParams() throws Exception {
+    // given
+    seedQuest("contrib-quest");
+
+    ContributorProjection contributor = new ContributorProjection() {
+      @Override public String getUsername() { return "test-user"; }
+      @Override public Integer getBattleCount() { return 10; }
+    };
+
+    when(battleRepository.findContributorsByDateRange(any(), any(), eq(1), any()))
+        .thenReturn(List.of(contributor));
+
+    // when/then — exercises the full listQuestContributors path (lines 107-131)
+    mockMvc.perform(get("/v1/quests/contrib-quest/contributors"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.questId").value("contrib-quest"))
+        .andExpect(jsonPath("$.totalContributors").value(1))
+        .andExpect(jsonPath("$.contributors[0].username").value("test-user"));
+  }
+
+  @Test
+  @DisplayName("should return contributors when listing with explicit params")
+  void shouldReturnContributorsWhenListingWithExplicitParams() throws Exception {
+    // given
+    seedQuest("param-quest");
+
+    when(battleRepository.findContributorsByDateRange(any(), any(), eq(5), any()))
+        .thenReturn(List.of());
+
+    // when/then — exercises null-check branches for minBattles and limit
+    mockMvc.perform(get("/v1/quests/param-quest/contributors")
+            .param("minBattles", "5")
+            .param("limit", "50"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.totalContributors").value(0));
+  }
+
+  @Test
+  @DisplayName("should resolve user id when authenticated with jwt")
+  void shouldResolveUserIdWhenAuthenticatedWithJwt() throws Exception {
+    // given — seed a quest with a progress-gated post
+    QuestEntity quest = seedQuest("jwt-quest");
+    QuestPostEntity post = QuestPostEntity.builder()
+        .questId(quest.getId())
+        .postIndex(0)
+        .date(LocalDate.now())
+        .title("Public Post")
+        .description("Visible")
+        .images("[]")
+        .build();
+    questPostRepository.save(post);
+
+    UUID userId = UUID.randomUUID();
+
+    // Stub user battle count for tier resolution
+    when(battleRepository.countCompletedByUserIdAndDateRange(eq(userId), any(), any()))
+        .thenReturn(0L);
+
+    // when/then — jwt with UUID sub exercises extractUserId line 140
+    mockMvc.perform(get("/v1/quests/jwt-quest")
+            .with(jwt().jwt(j -> j.subject(userId.toString())
+                .claim("roles", List.of("ROLE_USER")))))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.questId").value("jwt-quest"));
   }
 }
