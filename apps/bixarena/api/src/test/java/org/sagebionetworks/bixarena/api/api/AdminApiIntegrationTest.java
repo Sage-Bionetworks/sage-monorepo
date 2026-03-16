@@ -130,4 +130,31 @@ class AdminApiIntegrationTest {
     mockMvc.perform(get("/v1/admin/quests/admin-quest"))
         .andExpect(status().isForbidden());
   }
+
+  @Test
+  @DisplayName("should return admin stats when admin")
+  @WithMockUser(roles = "ADMIN")
+  void shouldReturnAdminStatsWhenAdmin() throws Exception {
+    // when/then
+    mockMvc.perform(get("/v1/admin/stats"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.ok").value(true));
+  }
+
+  @Test
+  @DisplayName("should return 401 when getting admin stats anonymously")
+  void shouldReturn401WhenGetAdminStatsAnonymously() throws Exception {
+    // when/then
+    mockMvc.perform(get("/v1/admin/stats"))
+        .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  @DisplayName("should return 404 when admin gets nonexistent quest")
+  @WithMockUser(roles = "ADMIN")
+  void shouldReturn404WhenAdminGetsNonexistentQuest() throws Exception {
+    // when/then
+    mockMvc.perform(get("/v1/admin/quests/nonexistent"))
+        .andExpect(status().isNotFound());
+  }
 }

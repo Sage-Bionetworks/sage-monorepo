@@ -138,6 +138,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
+  @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
+  protected ResponseEntity<BasicErrorDto> handleConstraintViolationException(
+    jakarta.validation.ConstraintViolationException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+      BasicErrorDto.builder()
+        .title("Bad Request")
+        .status(HttpStatus.BAD_REQUEST.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
   @ExceptionHandler(IllegalArgumentException.class)
   protected ResponseEntity<BasicErrorDto> handleIllegalArgumentException(
     IllegalArgumentException ex,

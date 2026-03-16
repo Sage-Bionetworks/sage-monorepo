@@ -16,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Implementation of the Quest API delegate.
@@ -115,21 +114,15 @@ public class QuestApiDelegateImpl implements QuestApiDelegate {
     int limitValue = (limit != null) ? limit : 100;
 
     if (minBattlesValue < 1) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST,
-          "minBattles must be at least 1");
+      throw new IllegalArgumentException("minBattles must be at least 1");
     }
 
     if (limitValue < 1) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST,
-          "limit must be at least 1");
+      throw new IllegalArgumentException("limit must be at least 1");
     }
 
     if (limitValue > 1000) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST,
-          "limit must not exceed 1000");
+      throw new IllegalArgumentException("limit must not exceed 1000");
     }
 
     QuestContributorsDto contributors =

@@ -418,6 +418,132 @@ class QuestServiceTest {
     assertThat(result.getPosts().get(0).getLocked()).isFalse();
   }
 
+  // ── updateQuest ──────────────────────────────────────────────────────────
+
+  @Test
+  @DisplayName("should update all fields when updating quest")
+  void shouldUpdateAllFieldsWhenUpdatingQuest() {
+    // given
+    QuestCreateOrUpdateDto dto = QuestCreateOrUpdateDto.builder()
+        .questId("test-quest") // same id
+        .title("Updated Title")
+        .description("Updated Desc")
+        .goal(999)
+        .startDate(OffsetDateTime.of(2026, 2, 1, 0, 0, 0, 0, ZoneOffset.UTC))
+        .endDate(OffsetDateTime.of(2026, 11, 30, 0, 0, 0, 0, ZoneOffset.UTC))
+        .activePostIndex(3)
+        .build();
+
+    when(questRepository.findByQuestId("test-quest")).thenReturn(Optional.of(questEntity));
+    when(questRepository.save(any(QuestEntity.class))).thenAnswer(inv -> inv.getArgument(0));
+    when(questPostRepository.findByQuestIdOrderByPostIndexAsc(1L)).thenReturn(List.of());
+    when(battleRepository.countCompletedByDateRange(any(), any())).thenReturn(0L);
+
+    // when
+    QuestDto result = questService.updateQuest("test-quest", dto);
+
+    // then
+    assertThat(result.getTitle()).isEqualTo("Updated Title");
+    assertThat(result.getDescription()).isEqualTo("Updated Desc");
+    assertThat(result.getGoal()).isEqualTo(999);
+    verify(questRepository).save(any(QuestEntity.class));
+  }
+
+  @Test
+  @DisplayName("should throw duplicate when renaming quest to existing id")
+  void shouldThrowDuplicateWhenRenamingQuestToExistingId() {
+    // given — rename "test-quest" to "taken-id" which already exists
+    QuestCreateOrUpdateDto dto = QuestCreateOrUpdateDto.builder()
+        .questId("taken-id")
+        .title("T")
+        .description("D")
+        .goal(0)
+        .startDate(OffsetDateTime.now(ZoneOffset.UTC))
+        .endDate(OffsetDateTime.now(ZoneOffset.UTC))
+        .activePostIndex(0)
+        .build();
+
+    QuestEntity existingOther = QuestEntity.builder().id(2L).questId("taken-id").build();
+
+    when(questRepository.findByQuestId("test-quest")).thenReturn(Optional.of(questEntity));
+    when(questRepository.findByQuestId("taken-id")).thenReturn(Optional.of(existingOther));
+
+    // when/then
+    assertThatThrownBy(() -> questService.updateQuest("test-quest", dto))
+        .isInstanceOf(DuplicateQuestException.class);
+  }
+
+  @Test
+  @DisplayName("should allow rename when new quest id is available")
+  void shouldAllowRenameWhenNewQuestIdIsAvailable() {
+    // given
+    QuestCreateOrUpdateDto dto = QuestCreateOrUpdateDto.builder()
+        .questId("new-id")
+        .title("T")
+        .description("D")
+        .goal(0)
+        .startDate(OffsetDateTime.now(ZoneOffset.UTC))
+        .endDate(OffsetDateTime.now(ZoneOffset.UTC))
+        .activePostIndex(0)
+        .build();
+
+    when(questRepository.findByQuestId("test-quest")).thenReturn(Optional.of(questEntity));
+    when(questRepository.findByQuestId("new-id")).thenReturn(Optional.empty());
+    when(questRepository.save(any(QuestEntity.class))).thenAnswer(inv -> inv.getArgument(0));
+    when(questPostRepository.findByQuestIdOrderByPostIndexAsc(1L)).thenReturn(List.of());
+    when(battleRepository.countCompletedByDateRange(any(), any())).thenReturn(0L);
+
+    // when
+    QuestDto result = questService.updateQuest("test-quest", dto);
+
+    // then
+    assertThat(result.getQuestId()).isEqualTo("new-id");
+  }
+
+  // ── updateQuestPost ─────────────────────────────────────────────────────
+
+  @Test
+  @DisplayName("should update post fields when updating quest post")
+  void shouldUpdatePostFieldsWhenUpdatingQuestPost() {
+    // given
+    QuestPostEntity existingPost = QuestPostEntity.builder()
+        .id(10L).questId(1L).postIndex(0).title("Old Title")
+        .description("Old desc").images("[]").build();
+
+    QuestPostCreateOrUpdateDto dto = QuestPostCreateOrUpdateDto.builder()
+        .title("New Title")
+        .description("New desc")
+        .images(List.of(URI.create("https://example.com/img.png")))
+        .build();
+
+    when(questRepository.findByQuestId("test-quest")).thenReturn(Optional.of(questEntity));
+    when(questPostRepository.findByQuestIdAndPostIndex(1L, 0)).thenReturn(Optional.of(existingPost));
+    when(questPostRepository.save(any(QuestPostEntity.class))).thenAnswer(inv -> inv.getArgument(0));
+
+    // when
+    QuestPostDto result = questService.updateQuestPost("test-quest", 0, dto);
+
+    // then
+    assertThat(result.getTitle()).isEqualTo("New Title");
+    assertThat(result.getDescription()).isEqualTo("New desc");
+    verify(questPostRepository).save(existingPost);
+  }
+
+  @Test
+  @DisplayName("should throw not found when updating nonexistent post")
+  void shouldThrowNotFoundWhenUpdatingNonexistentPost() {
+    // given
+    QuestPostCreateOrUpdateDto dto = QuestPostCreateOrUpdateDto.builder()
+        .title("T").description("D").images(List.of()).build();
+
+    when(questRepository.findByQuestId("test-quest")).thenReturn(Optional.of(questEntity));
+    when(questPostRepository.findByQuestIdAndPostIndex(1L, 99)).thenReturn(Optional.empty());
+
+    // when/then
+    assertThatThrownBy(() -> questService.updateQuestPost("test-quest", 99, dto))
+        .isInstanceOf(QuestPostNotFoundException.class);
+  }
+
   // ── createQuestPost ───────────────────────────────────────────────────────
 
   @Test

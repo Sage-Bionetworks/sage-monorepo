@@ -355,4 +355,106 @@ class QuestApiIntegrationTest {
         .andExpect(jsonPath("$.posts[0].images").isEmpty())
         .andExpect(jsonPath("$.posts[0].requiredProgress").value(500));
   }
+
+  // --- Validation & edge case integration tests ---
+
+  @Test
+  @DisplayName("should return 400 when list contributors with minBattles less than 1")
+  void shouldReturn400WhenMinBattlesLessThanOne() throws Exception {
+    // given
+    seedQuest("validation-quest");
+
+    // when/then
+    mockMvc.perform(get("/v1/quests/validation-quest/contributors")
+            .param("minBattles", "0"))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @DisplayName("should return 400 when list contributors with limit less than 1")
+  void shouldReturn400WhenLimitLessThanOne() throws Exception {
+    // given
+    seedQuest("validation-quest");
+
+    // when/then
+    mockMvc.perform(get("/v1/quests/validation-quest/contributors")
+            .param("limit", "0"))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @DisplayName("should return 400 when list contributors with limit exceeding 1000")
+  void shouldReturn400WhenLimitExceeds1000() throws Exception {
+    // given
+    seedQuest("validation-quest");
+
+    // when/then
+    mockMvc.perform(get("/v1/quests/validation-quest/contributors")
+            .param("limit", "1001"))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @DisplayName("should return 200 when updating quest as admin")
+  @WithMockUser(roles = "ADMIN")
+  void shouldReturn200WhenUpdatingQuestAsAdmin() throws Exception {
+    // given
+    seedQuest("updatable-quest");
+
+    QuestCreateOrUpdateDto updateDto = QuestCreateOrUpdateDto.builder()
+        .questId("updatable-quest")
+        .title("Updated Title")
+        .description("Updated description")
+        .goal(500)
+        .startDate(OffsetDateTime.now().minusDays(1))
+        .endDate(OffsetDateTime.now().plusDays(60))
+        .activePostIndex(0)
+        .build();
+
+    // when/then
+    mockMvc.perform(put("/v1/quests/updatable-quest")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updateDto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.title").value("Updated Title"))
+        .andExpect(jsonPath("$.goal").value(500));
+  }
+
+  @Test
+  @DisplayName("should return 401 when updating quest anonymously")
+  void shouldReturn401WhenUpdatingQuestAnonymously() throws Exception {
+    // given
+    seedQuest("protected-update");
+
+    QuestCreateOrUpdateDto updateDto = buildCreateDto("protected-update");
+
+    // when/then
+    mockMvc.perform(put("/v1/quests/protected-update")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updateDto)))
+        .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  @DisplayName("should return 401 when creating post anonymously")
+  void shouldReturn401WhenCreatingPostAnonymously() throws Exception {
+    // given
+    seedQuest("post-auth-quest");
+    QuestPostCreateOrUpdateDto postDto = buildPostDto("Unauthorized Post");
+
+    // when/then
+    mockMvc.perform(post("/v1/quests/post-auth-quest/posts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(postDto)))
+        .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  @DisplayName("should return 404 when deleting post from nonexistent quest")
+  @WithMockUser(roles = "ADMIN")
+  void shouldReturn404WhenDeletingPostFromNonexistentQuest() throws Exception {
+    // when/then
+    mockMvc.perform(delete("/v1/quests/no-such-quest/posts/0"))
+        .andExpect(status().isNotFound());
+  }
 }
