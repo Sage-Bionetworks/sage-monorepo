@@ -58,11 +58,6 @@ public class SecurityConfiguration {
             "/v1/stats"
           )
           .permitAll()
-          // Battles: anonymous users can create and update battles
-          .requestMatchers(HttpMethod.POST, "/v1/battles/**")
-          .permitAll()
-          .requestMatchers(HttpMethod.PATCH, "/v1/battles/**")
-          .permitAll()
           // Everything else requires authentication
           .anyRequest()
           .authenticated()
