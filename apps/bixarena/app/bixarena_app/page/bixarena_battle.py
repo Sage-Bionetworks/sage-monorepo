@@ -669,6 +669,31 @@ def build_side_by_side_ui_anony():
             next_btn,
         ) = example_prompt_ui.build(textbox=None)
 
+        # Battle interface - will appear once a prompt is submitted
+        with gr.Group(elem_id="chatbot-container", visible=False) as battle_interface:
+            with gr.Row(equal_height=True):
+                for i in range(num_sides):
+                    label = "Model 1" if i == 0 else "Model 2"
+                    with gr.Column():
+                        chatbot = gr.Chatbot(
+                            label=label,
+                            elem_id="chatbot",
+                            show_copy_button=True,
+                            type="messages",
+                            group_consecutive_messages=False,
+                        )
+                        chatbots.append(chatbot)
+
+                        # Model name footer attached to each chatbot
+                        model_selector = gr.HTML(anony_names[i])
+                        model_selectors.append(model_selector)
+
+        # Voting buttons
+        with gr.Row(visible=False) as voting_row:
+            left_vote_btn = gr.Button(value="Left is Better 👈")
+            tie_btn = gr.Button(value="🤝 Tie")
+            right_vote_btn = gr.Button(value="👉 Right is Better")
+
         # Prompt input - always visible, centered with 80% width via CSS
         with gr.Row(visible=True) as textbox_row:
             textbox = gr.Textbox(
@@ -700,31 +725,6 @@ def build_side_by_side_ui_anony():
             </div>
             """,
         )
-
-        # Battle interface - will appear once a prompt is submitted
-        with gr.Group(elem_id="chatbot-container", visible=False) as battle_interface:
-            with gr.Row(equal_height=True):
-                for i in range(num_sides):
-                    label = "Model 1" if i == 0 else "Model 2"
-                    with gr.Column():
-                        chatbot = gr.Chatbot(
-                            label=label,
-                            elem_id="chatbot",
-                            show_copy_button=True,
-                            type="messages",
-                            group_consecutive_messages=False,
-                        )
-                        chatbots.append(chatbot)
-
-                        # Model name footer attached to each chatbot
-                        model_selector = gr.HTML(anony_names[i])
-                        model_selectors.append(model_selector)
-
-        # Voting buttons
-        with gr.Row(visible=False) as voting_row:
-            left_vote_btn = gr.Button(value="Left is Better 👈")
-            tie_btn = gr.Button(value="🤝 Tie")
-            right_vote_btn = gr.Button(value="👉 Right is Better")
 
         # New Battle / Same Prompt buttons
         with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
