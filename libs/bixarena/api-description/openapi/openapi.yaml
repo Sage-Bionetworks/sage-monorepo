@@ -1410,6 +1410,7 @@ components:
           type: integer
           description: Display ordering index (0-based)
           minimum: 0
+          maximum: 99
           example: 0
         date:
           type: string
@@ -1500,6 +1501,8 @@ components:
         activePostIndex:
           type: integer
           description: Index of the post to expand by default in the UI
+          minimum: 0
+          maximum: 99
           example: 4
         totalBlocks:
           type: integer
@@ -2671,6 +2674,7 @@ components:
           type: integer
           description: Index of the post to expand by default in the UI
           minimum: 0
+          maximum: 99
           example: 4
       required:
         - questId

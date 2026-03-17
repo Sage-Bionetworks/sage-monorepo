@@ -1661,6 +1661,7 @@ components:
         postIndex:
           description: Display ordering index (0-based)
           example: 0
+          maximum: 99
           minimum: 0
           type: integer
         date:
@@ -1797,6 +1798,8 @@ components:
         activePostIndex:
           description: Index of the post to expand by default in the UI
           example: 4
+          maximum: 99
+          minimum: 0
           type: integer
         totalBlocks:
           description: Current total number of completed battles during the quest
@@ -3348,6 +3351,7 @@ components:
         activePostIndex:
           description: Index of the post to expand by default in the UI
           example: 4
+          maximum: 99
           minimum: 0
           type: integer
       required:

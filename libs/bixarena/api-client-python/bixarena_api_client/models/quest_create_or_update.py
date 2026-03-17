@@ -43,7 +43,7 @@ class QuestCreateOrUpdate(BaseModel):
     )
     start_date: datetime = Field(description="Quest start date", alias="startDate")
     end_date: datetime = Field(description="Quest end date", alias="endDate")
-    active_post_index: Annotated[int, Field(strict=True, ge=0)] = Field(
+    active_post_index: Annotated[int, Field(le=99, strict=True, ge=0)] = Field(
         description="Index of the post to expand by default in the UI",
         alias="activePostIndex",
     )

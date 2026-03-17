@@ -198,9 +198,11 @@ public class QuestDto {
 
   /**
    * Index of the post to expand by default in the UI
+   * minimum: 0
+   * maximum: 99
    * @return activePostIndex
    */
-  @NotNull 
+  @NotNull @Min(0) @Max(99) 
   @Schema(name = "activePostIndex", example = "4", description = "Index of the post to expand by default in the UI", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("activePostIndex")
   public Integer getActivePostIndex() {

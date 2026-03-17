@@ -36,7 +36,7 @@ class QuestPost(BaseModel):
     A single quest post. Content fields (description, images) are null/empty when the caller does not meet unlock gates.
     """  # noqa: E501
 
-    post_index: Annotated[int, Field(strict=True, ge=0)] = Field(
+    post_index: Annotated[int, Field(le=99, strict=True, ge=0)] = Field(
         description="Display ordering index (0-based)", alias="postIndex"
     )
     var_date: Optional[date] = Field(

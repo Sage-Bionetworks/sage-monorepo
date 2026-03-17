@@ -45,6 +45,7 @@ CREATE TABLE api.quest_post (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 
     CONSTRAINT uq_quest_post_index UNIQUE (quest_id, post_index),
+    CONSTRAINT chk_quest_post_index CHECK (post_index >= 0),
     CONSTRAINT chk_quest_post_required_progress CHECK (required_progress >= 0),
     CONSTRAINT chk_quest_post_required_tier CHECK (required_tier IN ('knight', 'champion'))
 );

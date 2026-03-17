@@ -33,6 +33,8 @@ properties:
   activePostIndex:
     type: integer
     description: Index of the post to expand by default in the UI
+    minimum: 0
+    maximum: 99
     example: 4
   totalBlocks:
     type: integer

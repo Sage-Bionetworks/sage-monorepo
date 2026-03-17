@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List
 from typing_extensions import Annotated
 from bixarena_api_client.models.quest_post import QuestPost
@@ -44,7 +44,7 @@ class Quest(BaseModel):
     )
     start_date: datetime = Field(description="Quest start date", alias="startDate")
     end_date: datetime = Field(description="Quest end date", alias="endDate")
-    active_post_index: StrictInt = Field(
+    active_post_index: Annotated[int, Field(le=99, strict=True, ge=0)] = Field(
         description="Index of the post to expand by default in the UI",
         alias="activePostIndex",
     )

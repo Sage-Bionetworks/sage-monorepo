@@ -50,6 +50,9 @@ public class QuestService {
   private final QuestMapper questMapper = new QuestMapper();
   private final QuestPostMapper questPostMapper = new QuestPostMapper();
 
+  // Temporary offset for two-pass reindexing to avoid unique constraint violations
+  private static final int REINDEX_OFFSET = 1_000_000;
+
   // Tier thresholds (battles per week)
   private static final double CHAMPION_THRESHOLD = 10.0;
   private static final double KNIGHT_THRESHOLD = 5.0;
@@ -242,9 +245,9 @@ public class QuestService {
         questPostRepository.findByQuestIdOrderByPostIndexAsc(quest.getId());
 
     if (!remaining.isEmpty()) {
-      // Pass 1: assign negative temporary indexes
+      // Pass 1: assign temporary offset indexes to avoid unique constraint violations
       for (int i = 0; i < remaining.size(); i++) {
-        remaining.get(i).setPostIndex(-(i + 1));
+        remaining.get(i).setPostIndex(i + REINDEX_OFFSET);
       }
       questPostRepository.saveAll(remaining);
       questPostRepository.flush();
@@ -299,19 +302,16 @@ public class QuestService {
           "Reorder request must contain exactly all existing post indexes");
     }
 
-    // First pass: assign temporary negative indexes to avoid unique constraint violations
+    // First pass: assign temporary offset indexes to avoid unique constraint violations
+    java.util.Map<Integer, QuestPostEntity> indexToPost = new java.util.HashMap<>();
     for (int i = 0; i < existingPosts.size(); i++) {
       QuestPostEntity post = existingPosts.get(i);
-      post.setPostIndex(-(post.getPostIndex() + 1));
+      int originalIndex = post.getPostIndex();
+      indexToPost.put(originalIndex, post);
+      post.setPostIndex(originalIndex + REINDEX_OFFSET);
     }
     questPostRepository.saveAll(existingPosts);
     questPostRepository.flush();
-
-    // Build a map from old index to entity
-    java.util.Map<Integer, QuestPostEntity> indexToPost = existingPosts.stream()
-        .collect(Collectors.toMap(
-            p -> -(p.getPostIndex() + 1),  // recover original index
-            p -> p));
 
     // Second pass: assign new indexes based on requested order
     for (int newIndex = 0; newIndex < requestedIndexes.size(); newIndex++) {

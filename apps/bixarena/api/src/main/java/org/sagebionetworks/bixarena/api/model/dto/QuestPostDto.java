@@ -110,9 +110,10 @@ public class QuestPostDto {
   /**
    * Display ordering index (0-based)
    * minimum: 0
+   * maximum: 99
    * @return postIndex
    */
-  @NotNull @Min(0) 
+  @NotNull @Min(0) @Max(99) 
   @Schema(name = "postIndex", example = "0", description = "Display ordering index (0-based)", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("postIndex")
   public Integer getPostIndex() {

@@ -5,6 +5,7 @@ properties:
     type: integer
     description: Display ordering index (0-based)
     minimum: 0
+    maximum: 99
     example: 0
   date:
     type: string
