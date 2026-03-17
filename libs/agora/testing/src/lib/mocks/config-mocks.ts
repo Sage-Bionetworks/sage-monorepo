@@ -8,4 +8,5 @@ export const configMock: AppConfig = {
   ssrApiUrl: 'http://agora-api:3333/v1',
   isPlatformServer: false,
   googleTagManagerId: '',
+  sentryRelease: '',
 };

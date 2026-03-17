@@ -152,24 +152,29 @@ class ExamplePromptUI:
         self.history = [initial]
         self.index = 0
 
-        with gr.Row(elem_id="prompt-card-section", visible=False) as group, gr.Row():
-            self.prev_btn = gr.Button(
-                value="←",
-                elem_classes=["nav-button", "left", "hidden"],
-                interactive=False,
+        with gr.Column(elem_id="prompt-card-section", visible=False) as group:
+            gr.HTML(
+                '<p style="text-align:center;font-size:var(--text-sm);color:var(--body-text-color-subdued);text-transform:uppercase;letter-spacing:0.1em;margin:0;padding:0;">Try an example</p>',
+                elem_id="try-example-label",
             )
             with gr.Row():
-                self.prompt_cards = []
-                for i, p in enumerate(initial):
-                    # Create HTML button with JavaScript to set textbox value
-                    html_btn = gr.HTML(
-                        self._generate_prompt_button_html(i, p),
-                        elem_classes=["prompt-card-wrapper"],
-                    )
-                    self.prompt_cards.append(html_btn)
-            self.next_btn = gr.Button(
-                value="→", elem_classes=["nav-button", "right"], interactive=True
-            )
+                self.prev_btn = gr.Button(
+                    value="←",
+                    elem_classes=["nav-button", "left", "hidden"],
+                    interactive=False,
+                )
+                with gr.Row():
+                    self.prompt_cards = []
+                    for i, p in enumerate(initial):
+                        # Create HTML button with JavaScript to set textbox value
+                        html_btn = gr.HTML(
+                            self._generate_prompt_button_html(i, p),
+                            elem_classes=["prompt-card-wrapper"],
+                        )
+                        self.prompt_cards.append(html_btn)
+                self.next_btn = gr.Button(
+                    value="→", elem_classes=["nav-button", "right"], interactive=True
+                )
 
         # Store group reference for visibility updates
         self.group = group

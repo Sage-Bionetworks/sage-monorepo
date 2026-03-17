@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.bixarena.api.configuration.CacheNames;
 import org.sagebionetworks.bixarena.api.exception.BattleNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.BattleValidationNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.ModelNotFoundException;
@@ -22,7 +21,6 @@ import org.sagebionetworks.bixarena.api.model.mapper.BattleMapper;
 import org.sagebionetworks.bixarena.api.model.repository.BattleRepository;
 import org.sagebionetworks.bixarena.api.model.repository.BattleValidationRepository;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +38,7 @@ public class BattleService {
   private final BattleRepository battleRepository;
   private final BattleValidationRepository battleValidationRepository;
   private final ModelRepository modelRepository;
+  private final StatsCacheService statsCacheService;
   private final BattleMapper battleMapper = new BattleMapper();
 
   @Transactional(readOnly = true)
@@ -138,8 +137,6 @@ public class BattleService {
       );
     }
 
-    boolean wasIncomplete = existingBattle.getEndedAt() == null;
-
     // Update title if provided
     if (request.getTitle() != null) {
       existingBattle.setTitle(request.getTitle());
@@ -155,12 +152,6 @@ public class BattleService {
 
     // Save the updated battle
     BattleEntity updatedBattle = battleRepository.save(existingBattle);
-
-    // Invalidate user rank cache if battle was just completed
-    boolean isNowComplete = updatedBattle.getEndedAt() != null;
-    if (wasIncomplete && isNowComplete) {
-      invalidateUserRankCache(updatedBattle.getUserId());
-    }
 
     log.info("Successfully updated battle with ID: {}", battleId);
 
@@ -192,18 +183,8 @@ public class BattleService {
     battle.setEffectiveValidationId(validationId);
     BattleEntity updated = battleRepository.save(battle);
 
+    statsCacheService.invalidateStatsForValidation(battle.getUserId());
     return battleMapper.convertToDto(updated);
-  }
-
-  /**
-   * Invalidate the cached rank for a specific user.
-   * Called when a user completes a battle, as their rank may have changed.
-   *
-   * @param userId The user whose rank cache should be invalidated
-   */
-  @CacheEvict(value = CacheNames.USER_RANKS, key = "#userId")
-  public void invalidateUserRankCache(UUID userId) {
-    log.info("Invalidated rank cache for user: {}", userId);
   }
 
   @Transactional

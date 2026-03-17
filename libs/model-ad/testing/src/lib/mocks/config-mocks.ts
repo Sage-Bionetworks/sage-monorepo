@@ -8,6 +8,5 @@ export const configMock: AppConfig = {
   googleTagManagerId: '',
   ssrApiUrl: 'http://model-ad-api:3333/v1',
   isPlatformServer: false,
-  privacyPolicyUrl: 'http://localhost:4200/privacy-policy',
-  termsOfUseUrl: 'http://localhost:4200/terms-of-use',
+  sentryRelease: '',
 };
