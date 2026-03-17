@@ -300,27 +300,18 @@ INPUT_PROMPT_CSS = """
 
 # CSS for disclaimer (starts hidden, revealed by JS on input focus/typing)
 DISCLAIMER_CSS = """
-/* Collapse the Gradio wrapper when disclaimer is hidden */
-:has(> #disclaimer:not(.show)) {
-    min-height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
 #disclaimer {
-    padding: 0 24px;
+    padding: 16px 24px;
     max-width: 850px;
     margin: 0 auto;
-    max-height: 0;
+    visibility: hidden;
     opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 #disclaimer.show {
-    max-height: 200px;
+    visibility: visible;
     opacity: 1;
-    padding: 16px 24px;
 }
 
 #disclaimer-content {
