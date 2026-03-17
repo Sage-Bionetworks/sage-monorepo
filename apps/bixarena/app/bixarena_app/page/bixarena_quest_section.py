@@ -1013,7 +1013,7 @@ def _build_carousel_html(
 
 
 def build_quest_section(
-    quest_data: dict,
+    quest_data: dict | None = None,
     progress_data: dict | None = None,
     contributors_data: dict | None = None,
 ) -> tuple[
@@ -1031,6 +1031,8 @@ def build_quest_section(
                   carousel_html_container, contribute_button_authenticated,
                   contribute_button_login, carousel_init_trigger, carousel_id, rotation_interval)
     """
+    quest_data = quest_data or {}
+
     # Use provided progress data or defaults
     if progress_data is None:
         progress_data = _get_default_progress_data()
@@ -1070,11 +1072,11 @@ def build_quest_section(
                 </div>
 
                 <h1 style="font-size: var(--text-section-title); color: var(--body-text-color); margin-bottom: 0.75rem; font-weight: 600;">
-                    {escape(quest_data["title"])}
+                    {escape(quest_data.get("title", ""))}
                 </h1>
 
                 <p style="color: var(--body-text-color-subdued); font-size: var(--text-xl); max-width: 48rem; margin: 0 auto;">
-                    {escape(quest_data["description"])}
+                    {escape(quest_data.get("description", ""))}
                 </p>
             </div>
         </div>

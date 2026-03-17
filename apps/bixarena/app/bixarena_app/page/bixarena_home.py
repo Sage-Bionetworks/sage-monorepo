@@ -298,7 +298,7 @@ def load_quest_content_on_page_load(
         quest_data = fetch_quest(quest_id, cookies=cookies)
 
         # If quest doesn't exist, keep section hidden
-        if contributors_data.get("error", False):
+        if quest_data is None:
             return (gr.update(visible=False), gr.update(), gr.update(), gr.update())
 
         # Fetch contributors separately (public endpoint)
