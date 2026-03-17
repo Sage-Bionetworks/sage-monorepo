@@ -8,7 +8,7 @@
 </button>
 <p-popover #popover>
   <ng-template #content>
-    <ul id="scores-columns">
+    <ul id="scores-columns" class="unselectable-text">
       @for (column of columns; track column) {
         <li>
           <div class="score-column" (click)="toggleColumn(column)">
