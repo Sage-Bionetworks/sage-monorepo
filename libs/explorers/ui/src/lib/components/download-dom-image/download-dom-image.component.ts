@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
-import domtoimage from 'dom-to-image-more';
 import { saveAs } from 'file-saver';
 import { BaseDownloadDomImageComponent } from '../base-download-dom-image/base-download-dom-image.component';
+import { captureDomToBlob } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'explorers-download-dom-image',
@@ -29,20 +29,10 @@ export class DownloadDomImageComponent {
   };
 
   downloadImage = async (fileType: string): Promise<void> => {
-    // width and height need to be specified
-    // known issue: https://github.com/1904labs/dom-to-image-more/issues/198
+    const target = this.target();
     const paddingPx = this.downloadImagePaddingPx() ?? 0;
-    const blob = await domtoimage.toBlob(this.target(), {
-      bgcolor: '#fff',
-      width: this.target().offsetWidth + paddingPx * 2,
-      height: this.target().offsetHeight + paddingPx * 2,
-      ...(this.downloadImagePaddingPx() !== undefined && {
-        style: {
-          padding: `${paddingPx}px`,
-        },
-      }),
-    });
-    saveAs(blob, this.filename() + fileType);
+    const blob = await captureDomToBlob(target, paddingPx);
+    if (blob) saveAs(blob, this.filename() + fileType);
   };
 
   downloadCsvData = async (fileType: string): Promise<void> => {
