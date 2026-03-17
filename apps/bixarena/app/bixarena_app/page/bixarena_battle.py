@@ -637,7 +637,7 @@ def build_side_by_side_ui_anony():
             Discover how different AIs answer biomedical questions. Find out which ones you trust.
         </p>
         <p style="font-size: var(--text-xl); color: var(--body-text-color-subdued); margin: 0;">
-            No expertise required. Just vote for the response you find most useful.
+            No expertise needed. Just vote for the response you find most useful.
         </p>
     </div>
     <style>
