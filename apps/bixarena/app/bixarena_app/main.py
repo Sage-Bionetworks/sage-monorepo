@@ -360,6 +360,10 @@ def build_app():
             max-width: 1400px;
             margin: 0 auto;
         }
+        /* Battle page: don't stretch to fill viewport */
+        #battle-page-wrapper {
+            min-height: unset !important;
+        }
         /* Keep CTA buttons centered at all screen sizes */
         #cta-button-row {
             justify-content: center !important;
@@ -430,7 +434,9 @@ def build_app():
                 rotation_interval,
             ) = build_home_page()
 
-        with gr.Column(visible=False, elem_classes=["page-content"]) as battle_page:
+        with gr.Column(
+            visible=False, elem_classes=["page-content"], elem_id="battle-page-wrapper"
+        ) as battle_page:
             _, example_prompt_ui, prompt_outputs = build_battle_page()
 
         with gr.Column(

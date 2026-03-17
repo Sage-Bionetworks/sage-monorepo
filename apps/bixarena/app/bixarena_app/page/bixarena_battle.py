@@ -50,6 +50,82 @@ from bixarena_app.page.example_prompt_ui import (
 
 logger = logging.getLogger(__name__)
 
+# JavaScript to inject a submit arrow button inside the prompt textbox
+SUBMIT_BUTTON_INJECT_JS = """
+() => {
+    const wrapper = document.querySelector('#input_box');
+    if (!wrapper || wrapper.querySelector('.submit-arrow-injected')) return;
+    const textarea = wrapper.querySelector('textarea');
+    if (!textarea) return;
+
+    const container = textarea.parentElement;
+    container.style.position = 'relative';
+
+    const btn = document.createElement('button');
+    btn.className = 'submit-arrow-injected';
+    btn.innerHTML = '\\u2192';
+    btn.type = 'button';
+    Object.assign(btn.style, {
+        position: 'absolute',
+        right: '8px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        width: '32px',
+        height: '32px',
+        borderRadius: '6px',
+        background: 'var(--border-color-primary)',
+        color: 'var(--body-text-color)',
+        border: 'none',
+        fontSize: '18px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: '0.7',
+        transition: 'opacity 0.2s',
+        zIndex: '10',
+    });
+
+    btn.onmouseenter = () => { btn.style.opacity = '0.9'; };
+    btn.onmouseleave = () => { btn.style.opacity = '0.7'; };
+
+    btn.onclick = () => {
+        if (textarea.value.trim()) {
+            // Click the hidden Gradio button to trigger the submit chain
+            const hiddenBtn = document.querySelector('#arrow-submit-btn');
+            if (hiddenBtn) hiddenBtn.click();
+        }
+    };
+
+    container.appendChild(btn);
+}
+"""
+
+# JavaScript to show/hide disclaimer based on textbox focus and content
+DISCLAIMER_TOGGLE_JS = """
+() => {
+    const textarea = document.querySelector('#input_box textarea');
+    const disclaimer = document.getElementById('disclaimer');
+    if (!textarea || !disclaimer || disclaimer._disclaimerSetup) return;
+    disclaimer._disclaimerSetup = true;
+
+    const update = () => {
+        const hasFocus = document.activeElement === textarea;
+        const hasContent = textarea.value.length > 0;
+        if (hasFocus || hasContent) {
+            disclaimer.classList.add('show');
+        } else {
+            disclaimer.classList.remove('show');
+        }
+    };
+
+    textarea.addEventListener('focus', update);
+    textarea.addEventListener('blur', () => setTimeout(update, 150));
+    textarea.addEventListener('input', update);
+    update();
+}
+"""
+
 num_sides = 2
 anony_names = ["", ""]
 
@@ -557,8 +633,11 @@ def build_side_by_side_ui_anony():
     page_header_html = f"""
     <div style="text-align: center; padding: 0px;">
         <h1 style="font-size: var(--text-hero-title); margin-bottom: 0.5rem; color: var(--body-text-color);">BioArena</h1>
+        <p style="font-size: var(--text-xl); color: var(--body-text-color); margin: 0 0 0.25rem 0;">
+            Discover how different AIs answer biomedical questions. Find out which ones you trust.
+        </p>
         <p style="font-size: var(--text-xl); color: var(--body-text-color-subdued); margin: 0;">
-            Benchmarking AI Models for Biomedical Breakthroughs
+            No expertise needed. Just vote for the response you find most useful.
         </p>
     </div>
     <style>
@@ -579,7 +658,7 @@ def build_side_by_side_ui_anony():
     example_prompt_ui = ExamplePromptUI()
 
     # Page content
-    with gr.Column():
+    with gr.Column(elem_id="battle-page-content"):
         page_header = gr.HTML(page_header_html, visible=True)
         # Example prompts (cards + arrows) now provided by helper (textbox bound later)
         # Start with empty prompts - will be loaded when page is navigated to
@@ -623,6 +702,29 @@ def build_side_by_side_ui_anony():
                 elem_id="input_box",
                 elem_classes=["prompt_input"],
             )
+            # Hidden button for arrow submit — JS clicks this to trigger Gradio submit
+            arrow_submit_btn = gr.Button(visible=False, elem_id="arrow-submit-btn")
+
+        # Disclaimer
+        disclaimer = gr.HTML(
+            """
+            <div id="disclaimer">
+                <div id="disclaimer-content">
+                    <h3 id="disclaimer-title">Data Processing & Privacy</h3>
+                    <p id="disclaimer-text">
+                        We process your prompts to ensure they are relevant to
+                        biomedical research. Your prompts are also sent to
+                        third-party LLM proxies and AI model providers who may
+                        store and use them for training and service improvement.
+                        <strong>Do not include private, sensitive, confidential,
+                        or personally identifiable information in your prompts.</strong>
+                        AI responses may contain errors. Verify all AI responses
+                        independently.
+                    </p>
+                </div>
+            </div>
+            """,
+        )
 
         # New Battle / Same Prompt buttons
         with gr.Row(visible=False, elem_id="next-battle-row") as next_battle_row:
@@ -637,28 +739,6 @@ def build_side_by_side_ui_anony():
                 variant="primary",
                 elem_id="next-battle-btn",
             )
-
-        # Disclaimer
-        disclaimer = gr.HTML(
-            """
-            <div id="disclaimer">
-                <div id="disclaimer-content">
-                    <h3 id="disclaimer-title">Data Processing & Privacy:</h3>
-                    <p id="disclaimer-text">
-                        We process your prompts to ensure they are relevant to
-                        biomedical research. Your prompts are also sent to
-                        third-party LLM proxies and AI model providers who may
-                        store and use them for training and service improvement.
-                        <strong>Do not include private, sensitive, confidential,
-                        or personally identifiable information in your prompts.</strong>
-                        AI responses may contain errors. Verify all AI responses
-                        independently.
-                    </p>
-                </div>
-            </div>
-            """,
-            visible=True,
-        )
 
     # Register listeners
     vote_outputs = (
@@ -841,6 +921,36 @@ def build_side_by_side_ui_anony():
         js=enable_enter_js,
     )
 
+    # Arrow submit button — same chain as textbox.submit
+    arrow_submit_btn.click(
+        add_text,
+        states + [battle_session] + model_selectors + [textbox],
+        states
+        + [battle_session]
+        + chatbots
+        + [textbox]
+        + [battle_interface, voting_row, next_battle_row, example_prompts_group]
+        + [page_header, textbox_row, disclaimer],
+    ).then(
+        lambda: None,
+        [],
+        [],
+        js=disable_enter_js,
+    ).then(
+        bot_response_multi,
+        states + [battle_session],
+        states
+        + [battle_session]
+        + chatbots
+        + [voting_row, next_battle_row, page_header, textbox_row]
+        + [new_battle_same_prompt_btn, new_battle_btn],
+    ).then(
+        lambda: None,
+        [],
+        [],
+        js=enable_enter_js,
+    )
+
     # Re-wire prompt buttons to use plain text prompts and trigger auto-submission
     for i, card in enumerate(prompt_cards):
         card.click(
@@ -918,5 +1028,11 @@ def build_battle_page():
 
         # Load JavaScript for prompt card click handlers
         battle_page.load(lambda: None, None, None, js=PROMPT_CARD_CLICK_JS)
+
+        # Inject submit arrow button into the textbox
+        battle_page.load(lambda: None, None, None, js=SUBMIT_BUTTON_INJECT_JS)
+
+        # Setup disclaimer show/hide based on textbox focus
+        battle_page.load(lambda: None, None, None, js=DISCLAIMER_TOGGLE_JS)
 
     return battle_page, example_prompt_ui, prompt_outputs

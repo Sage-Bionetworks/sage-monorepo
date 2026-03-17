@@ -4,6 +4,11 @@ CSS styles for the BixArena battle page.
 
 # CSS for chatbot battle interface
 CHATBOT_BATTLE_CSS = """
+/* Prevent battle page from stretching children to fill viewport */
+#battle-page-wrapper {
+    min-height: unset !important;
+}
+
 /* System message styling */
 .message.bot.panel-full-width.thought:has(.system-message) {
     border: none;
@@ -118,6 +123,17 @@ CHATBOT_BATTLE_CSS = """
 
 # CSS for example prompt cards and navigation
 EXAMPLE_PROMPTS_CSS = """
+/* Column wrapper for prompt section */
+#prompt-card-section {
+    gap: 0 !important;
+}
+
+#try-example-label {
+    padding: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+}
+
 /* Example prompt UI section */
 #prompt-card-section > .row {
     display: flex;
@@ -189,6 +205,7 @@ EXAMPLE_PROMPTS_CSS = """
     border-radius: 50%;
     background: transparent;
     border: 1px solid var(--border-color-primary);
+    opacity: 0.45;
     transition: all 0.2s ease;
 }
 
@@ -198,6 +215,7 @@ EXAMPLE_PROMPTS_CSS = """
 
 #prompt-card-section > .row > .nav-button:not(:disabled):hover {
     background: var(--panel-background-fill);
+    opacity: 0.75;
     transform: translateY(-1px);
 }
 
@@ -251,8 +269,9 @@ INPUT_PROMPT_CSS = """
 #input_box.prompt_input textarea {
     border-radius: 12px;
     overflow-y: auto !important;
-    padding: 16px 20px;
+    padding: 16px 48px 16px 20px;
     line-height: 1.5;
+    font-size: var(--text-md);
 }
 
 .form:has(.prompt_input) {
@@ -273,18 +292,26 @@ INPUT_PROMPT_CSS = """
     }
 
     #input_box.prompt_input textarea {
-        padding: 12px 16px;
+        padding: 12px 44px 12px 16px;
         font-size: var(--text-md);
     }
 }
 """
 
-# CSS for disclaimer
+# CSS for disclaimer (starts hidden, revealed by JS on input focus/typing)
 DISCLAIMER_CSS = """
 #disclaimer {
     padding: 16px 24px;
     max-width: 850px;
     margin: 0 auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#disclaimer.show {
+    visibility: visible;
+    opacity: 1;
 }
 
 #disclaimer-content {
