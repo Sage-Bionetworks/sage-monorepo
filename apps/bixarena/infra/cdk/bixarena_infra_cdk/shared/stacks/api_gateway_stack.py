@@ -70,23 +70,32 @@ class ApiGatewayStack(cdk.Stack):
             "APP_AUTH_SERVICE_URL": (
                 f"http://bixarena-auth-service.{cluster.cluster_name}.local:8115"
             ),
-            # Route 0: API Service - must specify complete route definition
-            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_ID": "bixarena-api",
+            # Route 0: AI Service - must specify complete route definition
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_ID": "bixarena-ai-service",
             "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_URI": (
-                f"http://bixarena-api.{cluster.cluster_name}.local:8112"
+                f"http://bixarena-ai-service.{cluster.cluster_name}.local:8114"
             ),
             "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_PREDICATES_0": (
-                "Path=/api/v1/**"
+                "Path=/api/v1/health-check"
             ),
-            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_FILTERS_0": ("StripPrefix=1"),
-            # Route 1: Auth Service - must specify complete route definition
-            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_ID": (
-                "bixarena-auth-service"
-            ),
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_FILTERS_0": "StripPrefix=2",
+            # Route 1: API Service - must specify complete route definition
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_ID": "bixarena-api",
             "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_URI": (
-                f"http://bixarena-auth-service.{cluster.cluster_name}.local:8115"
+                f"http://bixarena-api.{cluster.cluster_name}.local:8112"
             ),
             "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_PREDICATES_0": (
+                "Path=/api/v1/**"
+            ),
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_1_FILTERS_0": "StripPrefix=1",
+            # Route 2: Auth Service - must specify complete route definition
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_2_ID": (
+                "bixarena-auth-service"
+            ),
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_2_URI": (
+                f"http://bixarena-auth-service.{cluster.cluster_name}.local:8115"
+            ),
+            "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_2_PREDICATES_0": (
                 "Path=/auth/**,/.well-known/jwks.json,/oauth2/token,/userinfo"
             ),
         }

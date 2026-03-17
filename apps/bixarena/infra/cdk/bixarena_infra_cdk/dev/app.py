@@ -19,6 +19,7 @@ Architecture Overview:
     3. Service Layer:
        - Auth Service: OAuth2/OIDC authentication with Synapse integration
        - API Service: Backend business logic and data access
+       - AI Service: Biomedical prompt and battle validation via LLM
        - API Gateway: Request routing, session validation, and service aggregation
        - Web Client: Gradio-based Python frontend application
 
@@ -30,6 +31,7 @@ Service Discovery:
     Services communicate internally using AWS Cloud Map service discovery:
     - bixarena-auth-service.{cluster_name}.local:8115 (Auth Service)
     - bixarena-api.{cluster_name}.local:8112 (API Service)
+    - bixarena-ai-service.{cluster_name}.local:8114 (AI Service)
     - bixarena-api-gateway.{cluster_name}.local:8113 (API Gateway)
     - bixarena-app.{cluster_name}.local:8100 (Web Client)
 
@@ -56,8 +58,12 @@ Stack Dependencies:
        - Backend services with database and cache access
        - Use Cloud Map for service discovery
 
+    4b. AI Service Stack (depends on: VPC, ECS Cluster, Valkey)
+        - Biomedical validation service (no database access)
+        - Use Cloud Map for service discovery
+
     5. API Gateway Stack
-       (depends on: VPC, ECS Cluster, Valkey, Auth Service, API Service)
+       (depends on: VPC, ECS Cluster, Valkey, Auth Service, API Service, AI Service)
        - Routes traffic to backend services
        - Validates sessions using Auth Service
        - Connected to ALB target group
@@ -125,6 +131,7 @@ from bixarena_infra_cdk.shared.config import (
     get_environment,
     get_stack_prefix,
 )
+from bixarena_infra_cdk.shared.stacks.ai_service_stack import AiServiceStack
 from bixarena_infra_cdk.shared.stacks.alb_stack import AlbStack
 from bixarena_infra_cdk.shared.stacks.api_gateway_stack import ApiGatewayStack
 from bixarena_infra_cdk.shared.stacks.api_service_stack import ApiServiceStack
@@ -305,7 +312,24 @@ def main() -> None:
     )
     # Note: Dependencies are automatic via CloudFormation references
 
-    # Create API Gateway stack (depends on API, Auth, Valkey, ECS cluster, and ALB)
+    # Create AI service stack (depends on valkey and ECS cluster)
+    _ai_service_stack = AiServiceStack(
+        app,
+        f"{stack_prefix}-ai-service",
+        stack_prefix=stack_prefix,
+        environment=environment,
+        developer_name=developer_name,
+        vpc=vpc_stack.vpc_construct.vpc,
+        cluster=ecs_cluster_stack.cluster_construct.cluster,
+        valkey_endpoint=valkey_stack.valkey_construct.cluster_endpoint,
+        valkey_port=valkey_stack.valkey_construct.cluster_port,
+        openrouter_api_key=os.getenv("OPENROUTER_API_KEY", ""),
+        app_version=app_version,
+        description=f"AI service for BixArena {environment} environment",
+    )
+    # Note: Dependencies are automatic via CloudFormation references
+
+    # Create API Gateway stack (depends on API, Auth, AI, Valkey, ECS cluster, and ALB)
     api_gateway_stack = ApiGatewayStack(
         app,
         f"{stack_prefix}-api-gateway",
@@ -324,6 +348,7 @@ def main() -> None:
     # This ensures backend services are available when Gateway starts
     api_gateway_stack.add_dependency(_api_service_stack)
     api_gateway_stack.add_dependency(_auth_service_stack)
+    api_gateway_stack.add_dependency(_ai_service_stack)
 
     # Create web stack (depends on ECS cluster, ALB, and API Gateway)
     # Uses ALB DNS name by default, or custom FQDN if provided
