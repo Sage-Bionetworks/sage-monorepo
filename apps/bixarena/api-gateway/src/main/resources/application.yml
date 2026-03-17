@@ -70,7 +70,7 @@ spring:
             - id: bixarena-ai-service
               uri: http://bixarena-ai-service:8114
               predicates:
-                - Path=/api/v1/health-check,/api/v1/validate-prompt
+                - Path=/api/v1/health-check,/api/v1/validate-prompt,/api/v1/validate-battle
               filters:
                 - StripPrefix=2
                 - name: Retry
