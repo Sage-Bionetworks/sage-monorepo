@@ -8,14 +8,17 @@ properties:
   title:
     type: string
     description: Quest display title
+    maxLength: 200
     example: 'Build BioArena Together'
   description:
     type: string
     description: Quest narrative description
+    maxLength: 5000
     example: 'Join forces to build an arena together...'
   goal:
     type: integer
     description: Target total battle count for the quest
+    minimum: 0
     example: 2850
   startDate:
     type: string
@@ -34,6 +37,7 @@ properties:
   totalBlocks:
     type: integer
     description: Current total number of completed battles during the quest period
+    minimum: 0
     example: 150
   posts:
     type: array

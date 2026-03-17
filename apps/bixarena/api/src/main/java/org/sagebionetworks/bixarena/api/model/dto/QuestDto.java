@@ -99,7 +99,7 @@ public class QuestDto {
    * Quest display title
    * @return title
    */
-  @NotNull 
+  @NotNull @Size(max = 200) 
   @Schema(name = "title", example = "Build BioArena Together", description = "Quest display title", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("title")
   public String getTitle() {
@@ -119,7 +119,7 @@ public class QuestDto {
    * Quest narrative description
    * @return description
    */
-  @NotNull 
+  @NotNull @Size(max = 5000) 
   @Schema(name = "description", example = "Join forces to build an arena together...", description = "Quest narrative description", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("description")
   public String getDescription() {
@@ -137,9 +137,10 @@ public class QuestDto {
 
   /**
    * Target total battle count for the quest
+   * minimum: 0
    * @return goal
    */
-  @NotNull 
+  @NotNull @Min(0) 
   @Schema(name = "goal", example = "2850", description = "Target total battle count for the quest", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("goal")
   public Integer getGoal() {
@@ -217,9 +218,10 @@ public class QuestDto {
 
   /**
    * Current total number of completed battles during the quest period
+   * minimum: 0
    * @return totalBlocks
    */
-  @NotNull 
+  @NotNull @Min(0) 
   @Schema(name = "totalBlocks", example = "150", description = "Current total number of completed battles during the quest period", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("totalBlocks")
   public Integer getTotalBlocks() {

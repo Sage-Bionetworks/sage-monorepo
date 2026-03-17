@@ -14,7 +14,7 @@
 -- ============================================================================
 ALTER TABLE api.quest
     ADD COLUMN title VARCHAR(200) NOT NULL DEFAULT '',
-    ADD COLUMN description TEXT NOT NULL DEFAULT '',
+    ADD COLUMN description VARCHAR(5000) NOT NULL DEFAULT '',
     ADD COLUMN goal INTEGER NOT NULL DEFAULT 0,
     ADD COLUMN active_post_index INTEGER NOT NULL DEFAULT 0;
 
@@ -23,7 +23,9 @@ ALTER TABLE api.quest
     ALTER COLUMN title DROP DEFAULT,
     ALTER COLUMN description DROP DEFAULT,
     ALTER COLUMN goal DROP DEFAULT,
-    ALTER COLUMN active_post_index DROP DEFAULT;
+    ALTER COLUMN active_post_index DROP DEFAULT,
+    ADD CONSTRAINT chk_quest_goal CHECK (goal >= 0),
+    ADD CONSTRAINT chk_quest_active_post_index CHECK (active_post_index >= 0);
 
 -- ============================================================================
 -- Create quest_post table
@@ -43,6 +45,7 @@ CREATE TABLE api.quest_post (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 
     CONSTRAINT uq_quest_post_index UNIQUE (quest_id, post_index),
+    CONSTRAINT chk_quest_post_required_progress CHECK (required_progress >= 0),
     CONSTRAINT chk_quest_post_required_tier CHECK (required_tier IN ('knight', 'champion'))
 );
 

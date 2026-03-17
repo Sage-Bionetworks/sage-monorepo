@@ -19,6 +19,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List
+from typing_extensions import Annotated
 from bixarena_api_client.models.quest_post import QuestPost
 from typing import Optional, Set
 from typing_extensions import Self
@@ -32,16 +33,22 @@ class Quest(BaseModel):
     quest_id: StrictStr = Field(
         description="Unique identifier for the quest", alias="questId"
     )
-    title: StrictStr = Field(description="Quest display title")
-    description: StrictStr = Field(description="Quest narrative description")
-    goal: StrictInt = Field(description="Target total battle count for the quest")
+    title: Annotated[str, Field(strict=True, max_length=200)] = Field(
+        description="Quest display title"
+    )
+    description: Annotated[str, Field(strict=True, max_length=5000)] = Field(
+        description="Quest narrative description"
+    )
+    goal: Annotated[int, Field(strict=True, ge=0)] = Field(
+        description="Target total battle count for the quest"
+    )
     start_date: datetime = Field(description="Quest start date", alias="startDate")
     end_date: datetime = Field(description="Quest end date", alias="endDate")
     active_post_index: StrictInt = Field(
         description="Index of the post to expand by default in the UI",
         alias="activePostIndex",
     )
-    total_blocks: StrictInt = Field(
+    total_blocks: Annotated[int, Field(strict=True, ge=0)] = Field(
         description="Current total number of completed battles during the quest period",
         alias="totalBlocks",
     )

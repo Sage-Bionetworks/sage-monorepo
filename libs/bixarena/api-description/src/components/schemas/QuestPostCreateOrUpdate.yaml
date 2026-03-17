@@ -11,13 +11,13 @@ properties:
     type: string
     description: Post heading
     minLength: 1
-    maxLength: 200
+    maxLength: 300
     example: 'Chapter 1: Laying the First Stones'
   description:
     type: string
     description: Post content text
     minLength: 1
-    maxLength: 10000
+    maxLength: 100000
     example: 'The arena walls began to rise...'
   images:
     type: array

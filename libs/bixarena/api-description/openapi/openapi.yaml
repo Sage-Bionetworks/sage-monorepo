@@ -1409,6 +1409,7 @@ components:
         postIndex:
           type: integer
           description: Display ordering index (0-based)
+          minimum: 0
           example: 0
         date:
           type: string
@@ -1419,15 +1420,18 @@ components:
         title:
           type: string
           description: Post heading (always visible for published posts)
+          maxLength: 300
           example: 'Chapter 1: Laying the First Stones'
         description:
           type: string
           nullable: true
           description: Post content text. Null when the caller does not meet unlock gates.
+          maxLength: 100000
           example: The arena walls began to rise...
         images:
           type: array
           description: Image URLs for the post. Empty when the caller does not meet unlock gates.
+          maxItems: 50
           items:
             type: string
             format: uri
@@ -1441,6 +1445,7 @@ components:
           type: integer
           nullable: true
           description: Minimum quest-wide battle count required to unlock content. Null means no progress gate.
+          minimum: 0
           example: 500
         requiredTier:
           type: string
@@ -1470,14 +1475,17 @@ components:
         title:
           type: string
           description: Quest display title
+          maxLength: 200
           example: Build BioArena Together
         description:
           type: string
           description: Quest narrative description
+          maxLength: 5000
           example: Join forces to build an arena together...
         goal:
           type: integer
           description: Target total battle count for the quest
+          minimum: 0
           example: 2850
         startDate:
           type: string
@@ -1496,6 +1504,7 @@ components:
         totalBlocks:
           type: integer
           description: Current total number of completed battles during the quest period
+          minimum: 0
           example: 150
         posts:
           type: array
@@ -2748,13 +2757,13 @@ components:
           type: string
           description: Post heading
           minLength: 1
-          maxLength: 200
+          maxLength: 300
           example: 'Chapter 1: Laying the First Stones'
         description:
           type: string
           description: Post content text
           minLength: 1
-          maxLength: 10000
+          maxLength: 100000
           example: The arena walls began to rise...
         images:
           type: array

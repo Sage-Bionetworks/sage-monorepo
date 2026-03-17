@@ -32,10 +32,10 @@ class QuestPostCreateOrUpdate(BaseModel):
     var_date: Optional[date] = Field(
         default=None, description="Optional display date for the post", alias="date"
     )
-    title: Annotated[str, Field(min_length=1, strict=True, max_length=200)] = Field(
+    title: Annotated[str, Field(min_length=1, strict=True, max_length=300)] = Field(
         description="Post heading"
     )
-    description: Annotated[str, Field(min_length=1, strict=True, max_length=10000)] = (
+    description: Annotated[str, Field(min_length=1, strict=True, max_length=100000)] = (
         Field(description="Post content text")
     )
     images: Annotated[List[StrictStr], Field(max_length=50)] = Field(

@@ -39,7 +39,7 @@ public class QuestEntity {
   @Column(name = "title", nullable = false, length = 200)
   private String title;
 
-  @Column(name = "description", nullable = false, columnDefinition = "TEXT")
+  @Column(name = "description", nullable = false, length = 5000)
   private String description;
 
   @Column(name = "goal", nullable = false)

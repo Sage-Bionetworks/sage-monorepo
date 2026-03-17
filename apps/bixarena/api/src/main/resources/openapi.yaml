@@ -1647,6 +1647,9 @@ components:
         images:
           - https://openapi-generator.tech
           - https://openapi-generator.tech
+          - https://openapi-generator.tech
+          - https://openapi-generator.tech
+          - https://openapi-generator.tech
         postIndex: 0
         publishDate: 2026-03-16T09:00:00Z
         description: The arena walls began to rise...
@@ -1658,6 +1661,7 @@ components:
         postIndex:
           description: Display ordering index (0-based)
           example: 0
+          minimum: 0
           type: integer
         date:
           description: Optional display date for the post
@@ -1668,11 +1672,13 @@ components:
         title:
           description: Post heading (always visible for published posts)
           example: 'Chapter 1: Laying the First Stones'
+          maxLength: 300
           type: string
         description:
           description: Post content text. Null when the caller does not meet unlock
             gates.
           example: The arena walls began to rise...
+          maxLength: 100000
           nullable: true
           type: string
         images:
@@ -1681,6 +1687,7 @@ components:
           items:
             format: uri
             type: string
+          maxItems: 50
           type: array
         publishDate:
           description: Post is hidden entirely before this timestamp. Null means immediately
@@ -1693,6 +1700,7 @@ components:
           description: Minimum quest-wide battle count required to unlock content.
             Null means no progress gate.
           example: 500
+          minimum: 0
           nullable: true
           type: integer
         requiredTier:
@@ -1730,6 +1738,9 @@ components:
             images:
               - https://openapi-generator.tech
               - https://openapi-generator.tech
+              - https://openapi-generator.tech
+              - https://openapi-generator.tech
+              - https://openapi-generator.tech
             postIndex: 0
             publishDate: 2026-03-16T09:00:00Z
             description: The arena walls began to rise...
@@ -1739,6 +1750,9 @@ components:
             requiredTier: knight
           - date: 2026-02-03
             images:
+              - https://openapi-generator.tech
+              - https://openapi-generator.tech
+              - https://openapi-generator.tech
               - https://openapi-generator.tech
               - https://openapi-generator.tech
             postIndex: 0
@@ -1758,14 +1772,17 @@ components:
         title:
           description: Quest display title
           example: Build BioArena Together
+          maxLength: 200
           type: string
         description:
           description: Quest narrative description
           example: Join forces to build an arena together...
+          maxLength: 5000
           type: string
         goal:
           description: Target total battle count for the quest
           example: 2850
+          minimum: 0
           type: integer
         startDate:
           description: Quest start date
@@ -1785,6 +1802,7 @@ components:
           description: Current total number of completed battles during the quest
             period
           example: 150
+          minimum: 0
           type: integer
         posts:
           description: Quest posts ordered by post index
@@ -3435,13 +3453,13 @@ components:
         title:
           description: Post heading
           example: 'Chapter 1: Laying the First Stones'
-          maxLength: 200
+          maxLength: 300
           minLength: 1
           type: string
         description:
           description: Post content text
           example: The arena walls began to rise...
-          maxLength: 10000
+          maxLength: 100000
           minLength: 1
           type: string
         images:

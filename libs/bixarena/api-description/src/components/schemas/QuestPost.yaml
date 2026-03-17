@@ -4,6 +4,7 @@ properties:
   postIndex:
     type: integer
     description: Display ordering index (0-based)
+    minimum: 0
     example: 0
   date:
     type: string
@@ -14,15 +15,18 @@ properties:
   title:
     type: string
     description: Post heading (always visible for published posts)
+    maxLength: 300
     example: 'Chapter 1: Laying the First Stones'
   description:
     type: string
     nullable: true
     description: Post content text. Null when the caller does not meet unlock gates.
+    maxLength: 100000
     example: 'The arena walls began to rise...'
   images:
     type: array
     description: Image URLs for the post. Empty when the caller does not meet unlock gates.
+    maxItems: 50
     items:
       type: string
       format: uri
@@ -36,6 +40,7 @@ properties:
     type: integer
     nullable: true
     description: Minimum quest-wide battle count required to unlock content. Null means no progress gate.
+    minimum: 0
     example: 500
   requiredTier:
     type: string

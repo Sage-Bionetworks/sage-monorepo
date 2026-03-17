@@ -109,9 +109,10 @@ public class QuestPostDto {
 
   /**
    * Display ordering index (0-based)
+   * minimum: 0
    * @return postIndex
    */
-  @NotNull 
+  @NotNull @Min(0) 
   @Schema(name = "postIndex", example = "0", description = "Display ordering index (0-based)", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("postIndex")
   public Integer getPostIndex() {
@@ -151,7 +152,7 @@ public class QuestPostDto {
    * Post heading (always visible for published posts)
    * @return title
    */
-  @NotNull 
+  @NotNull @Size(max = 300) 
   @Schema(name = "title", example = "Chapter 1: Laying the First Stones", description = "Post heading (always visible for published posts)", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("title")
   public String getTitle() {
@@ -171,7 +172,7 @@ public class QuestPostDto {
    * Post content text. Null when the caller does not meet unlock gates.
    * @return description
    */
-  
+  @Size(max = 100000) 
   @Schema(name = "description", example = "The arena walls began to rise...", description = "Post content text. Null when the caller does not meet unlock gates.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("description")
   public @Nullable String getDescription() {
@@ -199,7 +200,7 @@ public class QuestPostDto {
    * Image URLs for the post. Empty when the caller does not meet unlock gates.
    * @return images
    */
-  @NotNull @Valid 
+  @NotNull @Valid @Size(max = 50) 
   @Schema(name = "images", description = "Image URLs for the post. Empty when the caller does not meet unlock gates.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("images")
   public List<URI> getImages() {
@@ -237,9 +238,10 @@ public class QuestPostDto {
 
   /**
    * Minimum quest-wide battle count required to unlock content. Null means no progress gate.
+   * minimum: 0
    * @return requiredProgress
    */
-  
+  @Min(0) 
   @Schema(name = "requiredProgress", example = "500", description = "Minimum quest-wide battle count required to unlock content. Null means no progress gate.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("requiredProgress")
   public @Nullable Integer getRequiredProgress() {

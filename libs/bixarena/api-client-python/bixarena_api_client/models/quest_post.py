@@ -22,11 +22,11 @@ from pydantic import (
     ConfigDict,
     Field,
     StrictBool,
-    StrictInt,
     StrictStr,
     field_validator,
 )
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -36,20 +36,22 @@ class QuestPost(BaseModel):
     A single quest post. Content fields (description, images) are null/empty when the caller does not meet unlock gates.
     """  # noqa: E501
 
-    post_index: StrictInt = Field(
+    post_index: Annotated[int, Field(strict=True, ge=0)] = Field(
         description="Display ordering index (0-based)", alias="postIndex"
     )
     var_date: Optional[date] = Field(
         default=None, description="Optional display date for the post", alias="date"
     )
-    title: StrictStr = Field(
+    title: Annotated[str, Field(strict=True, max_length=300)] = Field(
         description="Post heading (always visible for published posts)"
     )
-    description: Optional[StrictStr] = Field(
-        default=None,
-        description="Post content text. Null when the caller does not meet unlock gates.",
+    description: Optional[Annotated[str, Field(strict=True, max_length=100000)]] = (
+        Field(
+            default=None,
+            description="Post content text. Null when the caller does not meet unlock gates.",
+        )
     )
-    images: List[StrictStr] = Field(
+    images: Annotated[List[StrictStr], Field(max_length=50)] = Field(
         description="Image URLs for the post. Empty when the caller does not meet unlock gates."
     )
     publish_date: Optional[datetime] = Field(
@@ -57,7 +59,7 @@ class QuestPost(BaseModel):
         description="Post is hidden entirely before this timestamp. Null means immediately visible.",
         alias="publishDate",
     )
-    required_progress: Optional[StrictInt] = Field(
+    required_progress: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
         default=None,
         description="Minimum quest-wide battle count required to unlock content. Null means no progress gate.",
         alias="requiredProgress",
