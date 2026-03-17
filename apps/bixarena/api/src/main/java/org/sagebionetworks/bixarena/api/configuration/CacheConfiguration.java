@@ -20,6 +20,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 @Configuration
 @EnableCaching
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(
+    name = "spring.cache.type", havingValue = "redis", matchIfMissing = true)
 public class CacheConfiguration {
 
   @Bean
