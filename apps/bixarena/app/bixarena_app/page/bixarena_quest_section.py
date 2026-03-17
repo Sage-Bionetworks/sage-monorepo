@@ -811,6 +811,7 @@ def _build_carousel_html(
             border: 2px solid var(--border-color-primary);
             border-radius: 8px;
             transition: all 0.2s ease;
+            overflow: hidden;
         }}
 
         .quest-update-accordion.active {{
@@ -824,6 +825,7 @@ def _build_carousel_html(
 
         .quest-update-accordion.reward.active {{
             border-color: transparent;
+            overflow: visible;
         }}
 
         .quest-update-accordion.reward.active::before {{
