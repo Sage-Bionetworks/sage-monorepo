@@ -76,8 +76,7 @@ class ApiGatewayStack(cdk.Stack):
                 f"http://bixarena-ai-service.{cluster.cluster_name}.local:8114"
             ),
             "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_PREDICATES_0": (
-                "Path=/api/v1/health-check,/api/v1/validate-prompt,"
-                "/api/v1/validate-battle"
+                "Path=/api/v1/health-check"
             ),
             "SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_ROUTES_0_FILTERS_0": "StripPrefix=2",
             # Route 1: API Service - must specify complete route definition
