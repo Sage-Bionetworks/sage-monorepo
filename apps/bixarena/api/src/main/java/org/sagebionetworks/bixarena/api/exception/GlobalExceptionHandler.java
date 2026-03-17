@@ -96,6 +96,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
+  @ExceptionHandler(BattleValidationNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleBattleValidationNotFound(
+    BattleValidationNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+      BasicErrorDto.builder()
+        .title("Battle Validation Not Found")
+        .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
   @ExceptionHandler(QuestPostNotFoundException.class)
   protected ResponseEntity<BasicErrorDto> handleQuestPostNotFoundException(
     QuestPostNotFoundException ex,
@@ -105,6 +119,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       BasicErrorDto.builder()
         .title("Quest Post Not Found")
         .status(HttpStatus.NOT_FOUND.value())
+        .detail(ex.getMessage())
+        .build()
+    );
+  }
+
+  @ExceptionHandler(DuplicateBattleValidationException.class)
+  protected ResponseEntity<BasicErrorDto> handleDuplicateBattleValidation(
+    DuplicateBattleValidationException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(
+      BasicErrorDto.builder()
+        .title("Duplicate Battle Validation")
+        .status(HttpStatus.CONFLICT.value())
         .detail(ex.getMessage())
         .build()
     );
