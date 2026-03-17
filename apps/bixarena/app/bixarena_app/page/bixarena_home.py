@@ -187,6 +187,13 @@ Your Rank</div>
         <div id="{stats_id}">
             <div style="{flex_style}; {justify_style};">{stats_items}
             </div>
+            <hr style="border: none; border-top: 1px solid \
+var(--border-color-primary); margin: 1.5rem 0 1rem 0;">
+            <div style="text-align: center; font-size: var(--text-md); \
+color: var(--body-text-color-subdued);">
+                Only battles on biomedical topics count toward stats \
+and rankings. Each battle is verified using AI.
+            </div>
         </div>
     </div>
     """
