@@ -40,6 +40,7 @@ def dev() -> None:  # noqa: D401
         host=args.host,
         port=args.port,
         log_level=args.log_level,
+        access_log=False,
         reload=True,
         reload_dirs=["bixarena_app"],
         timeout_graceful_shutdown=3,  # Force shutdown after 3 seconds
