@@ -88,6 +88,10 @@ class ApiServiceStack(cdk.Stack):
             # CORS configuration: only allow requests from deployment URL
             # This overrides the default list in application.yml
             "APP_CORS_ALLOWED_ORIGINS": ui_base_url,
+            # AI service URL: override to use ECS service discovery
+            "AI_SERVICE_BASE_URL": (
+                f"http://bixarena-ai-service.{cluster.cluster_name}.local:8114"
+            ),
         }
 
         # Secrets from AWS Secrets Manager (injected securely at runtime)
