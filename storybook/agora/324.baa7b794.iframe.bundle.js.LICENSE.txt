@@ -22,8 +22,6 @@ https://github.com/nodeca/pako/blob/main/LICENSE
  * Copyright 2024 Fonticons, Inc.
  */
 
-/*! dom-to-image-more 16-10-2024 */
-
 /**
  * @license Angular v20.3.1
  * (c) 2010-2025 Google LLC. https://angular.io/
