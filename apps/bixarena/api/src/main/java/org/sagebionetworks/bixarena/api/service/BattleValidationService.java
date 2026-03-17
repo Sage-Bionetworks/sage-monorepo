@@ -41,6 +41,7 @@ public class BattleValidationService {
   private final ServiceTokenProvider serviceTokenProvider;
   private final AppProperties appProperties;
   private final ObjectMapper objectMapper;
+  private final StatsCacheService statsCacheService;
 
   /** Response from the AI service /validate-battle endpoint. */
   private record AiBattleValidationResponse(
@@ -130,6 +131,7 @@ public class BattleValidationService {
       battleRepository.save(battle);
 
       log.info("Human validation {} set as effective for battle {}", saved.getId(), battleId);
+      statsCacheService.invalidateStatsForValidation(battle.getUserId());
       return toDto(saved);
     } catch (DataIntegrityViolationException ex) {
       throw new DuplicateBattleValidationException(battleId, "human-review");
@@ -216,6 +218,13 @@ public class BattleValidationService {
     int updated = battleRepository.setEffectiveValidationIfNull(battleId, entity.getId());
     if (updated > 0) {
       log.info("Auto-set effective validation {} for battle {}", entity.getId(), battleId);
+      // Invalidate stats caches now that this battle counts (or doesn't) in queries
+      UUID userId = battleRepository.findById(battleId)
+          .map(BattleEntity::getUserId)
+          .orElse(null);
+      if (userId != null) {
+        statsCacheService.invalidateStatsForValidation(userId);
+      }
     }
 
     return entity;
