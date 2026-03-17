@@ -81,12 +81,12 @@ def create_intro_section():
                         Welcome to BioArena
                     </p>
                     <h1 style="font-size: var(--text-hero-title); margin-bottom: 2rem; color: var(--body-text-color); line-height: 1.2;">
-                        Drive the next wave of biomedical breakthroughs
+                        Your vote shapes the future of biomedical AI
                     </h1>
 
                     <p style="font-size: var(--text-xl); line-height: 1.75; color: var(--body-text-color-subdued);">
-                        BioArena crowdsources the benchmarking of AI models to unlock the
-                        next breakthrough in biomedicine, inviting a global community of researchers, clinicians, and biomedical enthusiasts.
+                        Every perspective matters — clinical expertise, research experience, and lived health experience alike. 
+                        Vote on which AI does better. Help us find out.
                     </p>
                 </div>
 
