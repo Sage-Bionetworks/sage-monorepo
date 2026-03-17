@@ -25,10 +25,66 @@ class TestAdminApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_admin_get_quest(self) -> None:
+        """Test case for admin_get_quest
+
+        Get a quest (admin, ungated)
+        """
+        pass
+
     def test_admin_stats(self) -> None:
         """Test case for admin_stats
 
         Admin statistics
+        """
+        pass
+
+    def test_create_quest(self) -> None:
+        """Test case for create_quest
+
+        Create a quest
+        """
+        pass
+
+    def test_create_quest_post(self) -> None:
+        """Test case for create_quest_post
+
+        Create a quest post
+        """
+        pass
+
+    def test_delete_quest(self) -> None:
+        """Test case for delete_quest
+
+        Delete a quest
+        """
+        pass
+
+    def test_delete_quest_post(self) -> None:
+        """Test case for delete_quest_post
+
+        Delete a quest post
+        """
+        pass
+
+    def test_reorder_quest_posts(self) -> None:
+        """Test case for reorder_quest_posts
+
+        Reorder quest posts
+        """
+        pass
+
+    def test_update_quest(self) -> None:
+        """Test case for update_quest
+
+        Update a quest
+        """
+        pass
+
+    def test_update_quest_post(self) -> None:
+        """Test case for update_quest_post
+
+        Update a quest post
         """
         pass
 

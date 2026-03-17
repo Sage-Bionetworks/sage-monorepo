@@ -39,6 +39,8 @@ tags:
     description: Operations about the authenticated user.
 
 paths:
+  /admin/quests/{questId}:
+    $ref: paths/admin/quests/{questId}.yaml
   /admin/stats:
     $ref: paths/admin-stats.yaml
   /battles:
@@ -71,8 +73,18 @@ paths:
     $ref: paths/battles/{battleId}/validations/effective.yaml
   /battles/{battleId}/validations/run:
     $ref: paths/battles/{battleId}/validations/run.yaml
+  /quests:
+    $ref: paths/quests.yaml
+  /quests/{questId}:
+    $ref: paths/quests/{questId}.yaml
   /quests/{questId}/contributors:
     $ref: paths/quests/{questId}/contributors.yaml
+  /quests/{questId}/posts:
+    $ref: paths/quests/{questId}/posts.yaml
+  /quests/{questId}/posts/{postIndex}:
+    $ref: paths/quests/{questId}/posts/{postIndex}.yaml
+  /quests/{questId}/posts/reorder:
+    $ref: paths/quests/{questId}/posts/reorder.yaml
   /stats:
     $ref: paths/stats.yaml
   /users/me/stats:

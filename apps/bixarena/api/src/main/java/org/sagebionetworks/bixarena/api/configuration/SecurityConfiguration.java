@@ -35,12 +35,18 @@ public class SecurityConfiguration {
       .cors(Customizer.withDefaults())
       .authorizeHttpRequests(authz ->
         authz
+          // Infrastructure & docs — all methods
           .requestMatchers(
             "/actuator/health",
             "/actuator/health/**",
             "/actuator/info",
             "/swagger-ui.html",
             "/swagger-ui/**",
+            "/v3/api-docs/**"
+          )
+          .permitAll()
+          // Public read-only API endpoints — GET only
+          .requestMatchers(HttpMethod.GET,
             "/v1/example-prompts",
             "/v1/example-prompts/**",
             "/v1/leaderboards",
@@ -49,14 +55,10 @@ public class SecurityConfiguration {
             "/v1/models/**",
             "/v1/quests",
             "/v1/quests/**",
-            "/v1/stats",
-            "/v3/api-docs/**"
+            "/v1/stats"
           )
           .permitAll()
-          .requestMatchers(HttpMethod.POST, "/v1/battles/**")
-          .permitAll()
-          .requestMatchers(HttpMethod.PATCH, "/v1/battles/**")
-          .permitAll()
+          // Everything else requires authentication
           .anyRequest()
           .authenticated()
       )

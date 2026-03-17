@@ -671,27 +671,16 @@ def build_app():
             ],
         )
 
-        # Load quest content on page load (includes personalized progress card
-        # for authenticated users)
-        demo.load(
-            fn=load_quest_content_on_page_load,
-            inputs=None,
-            outputs=[
-                quest_progress_container,
-                quest_contributors_container,
-                quest_carousel_container,
-            ],
-        )
-
-        # Initialize carousel on page load (only if community quest is enabled)
+        # Load quest content on page load, then initialize carousel JS.
+        # The js= callback runs after the Python fn output is applied to the DOM,
+        # ensuring the carousel HTML exists before we attach event listeners.
+        carousel_init_js = ""
         if carousel_id:
-            carousel_init_trigger.click(
-                None,
-                js=f"""
+            carousel_init_js = f"""
 () => {{
     const carouselId = '{carousel_id}';
     let retryCount = 0;
-    const MAX_RETRIES = 100;
+    const MAX_RETRIES = 50;
 
     function initCarousel() {{
         retryCount++;
@@ -711,14 +700,8 @@ def build_app():
         const carouselParent = carousel.parentElement;
         let indicators = carouselParent.querySelectorAll('.indicator');
 
-        if (images.length === 0) {{
-            if (retryCount < MAX_RETRIES) {{
-                setTimeout(initCarousel, 50);
-            }} else {{
-                console.error('Carousel images not found');
-            }}
-            return;
-        }}
+        // images may be empty if the active post has no images yet — proceed anyway
+        // so accordion click listeners still get attached
 
         let currentIndex = 0;
         let autoRotateInterval;
@@ -794,7 +777,13 @@ def build_app():
         }}
 
         // Handle accordion clicks to expand/collapse and switch carousel images
-        const accordionItems = carouselParent.querySelectorAll('.quest-update-accordion');
+        const allAccordionItems = carouselParent.querySelectorAll('.quest-update-accordion');
+
+        function collapseAll() {{
+            allAccordionItems.forEach(item => {{
+                item.classList.remove('active', 'expanded');
+            }});
+        }}
 
         function loadUpdateImages(accordion) {{
             const newImagesJson = accordion.getAttribute('data-images');
@@ -807,12 +796,6 @@ def build_app():
 
             // Stop auto-rotation
             stopAutoRotate();
-
-            // Collapse all accordions, then expand clicked one
-            accordionItems.forEach(item => {{
-                item.classList.remove('active', 'expanded');
-            }});
-            accordion.classList.add('active', 'expanded');
 
             // Rebuild carousel images
             const container = carousel.querySelector('.carousel-container');
@@ -862,25 +845,41 @@ def build_app():
             startAutoRotate();
         }}
 
-        accordionItems.forEach(accordion => {{
+        function handleAccordionToggle(accordion, e) {{
+            e.preventDefault();
+            e.stopPropagation();
+            if (accordion.classList.contains('expanded')) {{
+                accordion.classList.remove('active', 'expanded');
+            }} else {{
+                collapseAll();
+                accordion.classList.add('active', 'expanded');
+                // Update carousel images only for unlocked posts
+                if (!accordion.classList.contains('locked')) {{
+                    loadUpdateImages(accordion);
+                }} else {{
+                    // Hide indicators when a locked post (no images) is opened
+                    const indicatorsWrapper = carouselParent.querySelector('.carousel-indicators-wrapper');
+                    if (indicatorsWrapper) {{
+                        indicatorsWrapper.style.display = 'none';
+                    }}
+                    stopAutoRotate();
+                    // Clear carousel images
+                    const container = carousel.querySelector('.carousel-container');
+                    container.innerHTML = '';
+                    images = [];
+                    indicators = [];
+                }}
+            }}
+        }}
+
+        allAccordionItems.forEach(accordion => {{
             const header = accordion.querySelector('.accordion-header');
             header.addEventListener('click', function(e) {{
-                e.preventDefault();
-                e.stopPropagation();
-                if (accordion.classList.contains('expanded')) {{
-                    accordion.classList.remove('active', 'expanded');
-                }} else {{
-                    loadUpdateImages(accordion);
-                }}
+                handleAccordionToggle(accordion, e);
             }});
             header.addEventListener('keypress', function(e) {{
                 if (e.key === 'Enter' || e.key === ' ') {{
-                    e.preventDefault();
-                    if (accordion.classList.contains('expanded')) {{
-                        accordion.classList.remove('active', 'expanded');
-                    }} else {{
-                        loadUpdateImages(accordion);
-                    }}
+                    handleAccordionToggle(accordion, e);
                 }}
             }});
         }});
@@ -891,26 +890,23 @@ def build_app():
 
     initCarousel();
 }}
-            """,
-            )
+            """
 
-            # Trigger carousel initialization on page load
-            demo.load(
-                None,
-                None,
-                None,
-                js=f"""
-() => {{
-    setTimeout(() => {{
-        const btn = document.getElementById('carousel-init-trigger');
-        if (btn) {{
-            btn.click();
-        }} else {{
-            console.error('Carousel init button not found');
-        }}
-    }}, 500);
-}}
-        """,
+        quest_load_event = demo.load(
+            fn=load_quest_content_on_page_load,
+            inputs=None,
+            outputs=[
+                quest_progress_container,
+                quest_contributors_container,
+                quest_carousel_container,
+            ],
+        )
+        if carousel_init_js:
+            quest_load_event.then(
+                fn=None,
+                inputs=None,
+                outputs=None,
+                js=carousel_init_js,
             )
 
         # (Removed MutationObserver; direct JS click handles login redirect.)

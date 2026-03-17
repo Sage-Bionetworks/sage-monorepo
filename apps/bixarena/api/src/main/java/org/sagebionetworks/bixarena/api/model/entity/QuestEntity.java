@@ -36,6 +36,18 @@ public class QuestEntity {
   @Column(name = "end_date", nullable = false)
   private OffsetDateTime endDate;
 
+  @Column(name = "title", nullable = false, length = 200)
+  private String title;
+
+  @Column(name = "description", nullable = false, length = 5000)
+  private String description;
+
+  @Column(name = "goal", nullable = false)
+  private Integer goal;
+
+  @Column(name = "active_post_index", nullable = false)
+  private Integer activePostIndex;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private OffsetDateTime createdAt;

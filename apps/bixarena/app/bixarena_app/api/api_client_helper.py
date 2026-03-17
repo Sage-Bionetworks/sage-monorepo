@@ -103,59 +103,106 @@ def fetch_public_stats() -> dict:
         }
 
 
-def calculate_quest_progress(contributors_data: dict) -> dict:
-    """Calculate Community Quest progress from contributors data.
-
-    Counts battles completed during the quest period by summing up all
-    contributors' battle counts.
+def fetch_quest(quest_id: str, cookies: dict[str, str] | None = None) -> dict | None:
+    """Fetch quest data including posts from the API.
 
     Args:
-        contributors_data: Dict from fetch_quest_contributors() containing
-                          contributors with their battle counts.
+        quest_id: The quest identifier (e.g., 'build-bioarena-together')
+        cookies: Optional cookies dict for authenticated requests
+
+    Returns:
+        Dictionary with quest data or None if quest not found / error.
+    """
+    try:
+        with create_authenticated_api_client(cookies) as client:
+            api = QuestApi(client)
+            quest = api.get_quest(quest_id)
+
+            # Convert end_date to naive datetime for days_remaining calculation
+            end_date = quest.end_date.replace(tzinfo=None)
+            now = datetime.now(timezone.utc).replace(tzinfo=None)
+            days_remaining = max(1, (end_date - now).days + 1) if now < end_date else 0
+
+            # Calculate progress percentage
+            percentage = (
+                (quest.total_blocks / quest.goal * 100) if quest.goal > 0 else 0.0
+            )
+
+            # Convert posts to dicts
+            posts = []
+            for post in quest.posts:
+                date_str = ""
+                if post.var_date is not None:
+                    date_str = post.var_date.strftime("%Y-%m-%d")
+                posts.append(
+                    {
+                        "post_index": post.post_index,
+                        "date": date_str,
+                        "title": post.title,
+                        "description": post.description or "",
+                        "images": post.images or [],
+                        "locked": post.locked,
+                        "required_progress": post.required_progress,
+                        "required_tier": post.required_tier,
+                    }
+                )
+
+            logger.info(
+                f"Fetched quest '{quest_id}': {quest.total_blocks}/{quest.goal} blocks, "
+                f"{len(posts)} posts"
+            )
+
+            return {
+                "quest_id": quest.quest_id,
+                "title": quest.title,
+                "description": quest.description,
+                "goal": quest.goal,
+                "start_date": quest.start_date.strftime("%Y-%m-%d"),
+                "end_date": quest.end_date.strftime("%Y-%m-%d"),
+                "active_post_index": quest.active_post_index,
+                "total_blocks": quest.total_blocks,
+                "posts": posts,
+                "progress": {
+                    "current_blocks": quest.total_blocks,
+                    "goal_blocks": quest.goal,
+                    "percentage": percentage,
+                    "days_remaining": days_remaining,
+                },
+                "error": False,
+            }
+    except NotFoundException:
+        logger.warning(f"Quest not found: {quest_id}")
+        return None
+    except ApiException as e:
+        logger.error(f"API error fetching quest (status {e.status}): {e.reason}")
+        return None
+    except Exception as e:
+        logger.error(f"Unexpected error fetching quest: {e}")
+        return None
+
+
+def calculate_quest_progress(quest_data: dict) -> dict:
+    """Extract quest progress from quest API data.
+
+    Args:
+        quest_data: Dict from fetch_quest() containing quest data with progress.
 
     Returns:
         Dictionary with:
-            - current_blocks: int (battles during quest period only)
-            - goal_blocks: int (from QUEST_CONFIG)
+            - current_blocks: int
+            - goal_blocks: int
             - percentage: float (0-100+, can exceed 100%)
-            - days_remaining: int (calculated from end date)
+            - days_remaining: int
     """
-    # Import quest configuration
-    from bixarena_app.page.bixarena_quest_section import QUEST_CONFIG
-
-    QUEST_END_DATE = datetime.strptime(QUEST_CONFIG["end_date"], "%Y-%m-%d")
-    QUEST_GOAL_BLOCKS = QUEST_CONFIG["goal"]
-
-    # Sum all contributors' battle counts (only battles in quest period)
-    current_blocks = sum(
-        contributor["battle_count"]
-        for tier_list in contributors_data.get("contributors_by_tier", {}).values()
-        for contributor in tier_list
+    return quest_data.get(
+        "progress",
+        {
+            "current_blocks": 0,
+            "goal_blocks": 0,
+            "percentage": 0.0,
+            "days_remaining": 0,
+        },
     )
-
-    # Calculate percentage (allow >100% if goal exceeded)
-    percentage = (
-        (current_blocks / QUEST_GOAL_BLOCKS * 100) if QUEST_GOAL_BLOCKS > 0 else 0.0
-    )
-
-    # Calculate days remaining (add 1 to show "1 day left" on the final day)
-    # Use UTC for consistency with backend timezone handling
-    now = datetime.now(timezone.utc).replace(tzinfo=None)
-    days_remaining = (
-        max(1, (QUEST_END_DATE - now).days + 1) if now < QUEST_END_DATE else 0
-    )
-
-    logger.info(
-        f"Quest progress: {current_blocks}/{QUEST_GOAL_BLOCKS} blocks "
-        f"({percentage:.1f}%), {days_remaining} days remaining"
-    )
-
-    return {
-        "current_blocks": current_blocks,
-        "goal_blocks": QUEST_GOAL_BLOCKS,
-        "percentage": percentage,
-        "days_remaining": days_remaining,
-    }
 
 
 def fetch_quest_contributors(

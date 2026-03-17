@@ -41,6 +41,39 @@ tags:
     description: Authentication and token minting operations.
     x-displayName: Auth
 paths:
+  /admin/quests/{questId}:
+    parameters:
+      - $ref: '#/components/parameters/questId'
+    get:
+      x-rate-limit-requests-per-minute: 60
+      tags:
+        - Admin
+      summary: Get a quest (admin, ungated)
+      description: |
+        Get the full quest with ALL posts and full content. No publish date
+        filtering, no progress or tier gating. Requires admin role.
+        Use this endpoint for content management; use GET /quests/{questId}
+        to experience the quest as a user.
+      operationId: adminGetQuest
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /admin/stats:
     get:
       x-rate-limit-requests-per-minute: 60
@@ -677,6 +710,133 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer: []
+  /quests:
+    post:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Quest
+        - Admin
+      summary: Create a quest
+      description: Create a new community quest. Requires admin role.
+      operationId: createQuest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestCreateOrUpdate'
+        required: true
+      responses:
+        '201':
+          description: Quest created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /quests/{questId}:
+    parameters:
+      - $ref: '#/components/parameters/questId'
+    get:
+      x-anonymous-access: true
+      x-rate-limit-requests-per-minute: 100
+      tags:
+        - Quest
+      summary: Get a quest
+      description: |
+        Get the full quest configuration including metadata and published posts.
+        Post content (description, images) is filtered based on unlock gates:
+        - Posts before their publish date are excluded entirely.
+        - Posts whose progress or tier gate is not met return metadata only
+          (title, date, requiredTier, requiredProgress) with null description
+          and empty images.
+        When authenticated, the caller's contributor tier is resolved from their
+        battle count during the quest period.
+      operationId: getQuest
+      security: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Quest
+        - Admin
+      summary: Update a quest
+      description: Update quest metadata. Requires admin role.
+      operationId: updateQuest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestCreateOrUpdate'
+        required: true
+      responses:
+        '200':
+          description: Quest updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+    delete:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Quest
+        - Admin
+      summary: Delete a quest
+      description: Delete a quest and all its posts. Requires admin role.
+      operationId: deleteQuest
+      responses:
+        '204':
+          description: Quest deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /quests/{questId}/contributors:
     parameters:
       - $ref: '#/components/parameters/questId'
@@ -724,6 +884,151 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /quests/{questId}/posts:
+    parameters:
+      - $ref: '#/components/parameters/questId'
+    post:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Quest
+        - Admin
+      summary: Create a quest post
+      description: |
+        Add a new post to a quest. The post is appended at the next available
+        post index. Requires admin role.
+      operationId: createQuestPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestPostCreateOrUpdate'
+        required: true
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestPost'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /quests/{questId}/posts/{postIndex}:
+    parameters:
+      - $ref: '#/components/parameters/questId'
+      - $ref: '#/components/parameters/postIndex'
+    put:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Quest
+        - Admin
+      summary: Update a quest post
+      description: Update an existing quest post. Requires admin role.
+      operationId: updateQuestPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestPostCreateOrUpdate'
+        required: true
+      responses:
+        '200':
+          description: Post updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestPost'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+    delete:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Quest
+        - Admin
+      summary: Delete a quest post
+      description: Delete a quest post. Remaining posts are not automatically reindexed. Requires admin role.
+      operationId: deleteQuestPost
+      responses:
+        '204':
+          description: Post deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
+  /quests/{questId}/posts/reorder:
+    parameters:
+      - $ref: '#/components/parameters/questId'
+    put:
+      x-rate-limit-requests-per-minute: 30
+      tags:
+        - Quest
+        - Admin
+      summary: Reorder quest posts
+      description: |
+        Reorder all posts in a quest. The request body must contain the complete
+        list of existing post indexes in the desired new order. The backend
+        validates that the array contains exactly all existing post indexes
+        (no duplicates, no missing), then reassigns post_index values 0, 1, 2, ...
+        based on array order. Requires admin role.
+      operationId: reorderQuestPosts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestPostReorder'
+        required: true
+      responses:
+        '200':
+          description: Posts reordered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer: []
   /stats:
     get:
       x-anonymous-access: true
@@ -1000,7 +1305,225 @@ components:
       bearerFormat: JWT
       description: |
         Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
+  parameters:
+    questId:
+      name: questId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Unique identifier for a quest
+      example: build-bioarena-together
+    battleSearchQuery:
+      name: battleSearchQuery
+      description: The search query used to find and filter battles.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/BattleSearchQuery'
+    battleId:
+      name: battleId
+      description: The unique identifier of the battle
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/BattleId'
+    roundId:
+      name: roundId
+      description: The unique identifier of the battle round
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/BattleRoundId'
+    examplePromptSearchQuery:
+      name: examplePromptSearchQuery
+      description: The search query used to find and filter example prompts.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ExamplePromptSearchQuery'
+    leaderboardId:
+      name: leaderboardId
+      description: The unique identifier of a leaderboard
+      in: path
+      required: true
+      schema:
+        type: string
+        example: open-source
+    leaderboardSearchQuery:
+      name: leaderboardSearchQuery
+      description: The search query used to find and filter leaderboard entries.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/LeaderboardSearchQuery'
+    modelId:
+      name: modelId
+      description: The unique identifier of a model
+      in: path
+      required: true
+      schema:
+        type: string
+        example: model_456
+    leaderboardModelHistoryQuery:
+      name: leaderboardModelHistoryQuery
+      description: The query used to filter and paginate historical model performance data.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/LeaderboardModelHistoryQuery'
+    leaderboardSnapshotQuery:
+      name: leaderboardSnapshotQuery
+      description: The query used to filter and paginate leaderboard snapshots.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/LeaderboardSnapshotQuery'
+    modelSearchQuery:
+      name: modelSearchQuery
+      description: The search query used to find and filter models.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ModelSearchQuery'
+    postIndex:
+      name: postIndex
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+      description: Display ordering index of a quest post (0-based)
+      example: 0
   schemas:
+    QuestPost:
+      type: object
+      description: A single quest post. Content fields (description, images) are null/empty when the caller does not meet unlock gates.
+      properties:
+        postIndex:
+          type: integer
+          description: Display ordering index (0-based)
+          minimum: 0
+          maximum: 99
+          example: 0
+        date:
+          type: string
+          format: date
+          nullable: true
+          description: Optional display date for the post
+          example: '2026-02-03'
+        title:
+          type: string
+          description: Post heading (always visible for published posts)
+          maxLength: 300
+          example: 'Chapter 1: Laying the First Stones'
+        description:
+          type: string
+          nullable: true
+          description: Post content text. Null when the caller does not meet unlock gates.
+          maxLength: 100000
+          example: The arena walls began to rise...
+        images:
+          type: array
+          description: Image URLs for the post. Empty when the caller does not meet unlock gates.
+          maxItems: 50
+          items:
+            type: string
+            format: uri
+        publishDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: Post is hidden entirely before this timestamp. Null means immediately visible.
+          example: '2026-03-16T09:00:00Z'
+        requiredProgress:
+          type: integer
+          nullable: true
+          description: Minimum quest-wide battle count required to unlock content. Null means no progress gate.
+          minimum: 0
+          example: 500
+        requiredTier:
+          type: string
+          enum:
+            - knight
+            - champion
+          nullable: true
+          description: Minimum contributor tier required to unlock content. Null means public access.
+          example: knight
+        locked:
+          type: boolean
+          description: Whether the post content is locked for the current caller. True when the caller does not meet the required progress or tier gates. Always false for posts with no gates.
+          example: false
+      required:
+        - postIndex
+        - title
+        - images
+        - locked
+    Quest:
+      type: object
+      description: A community quest with its metadata and posts
+      properties:
+        questId:
+          type: string
+          description: Unique identifier for the quest
+          example: build-bioarena-together
+        title:
+          type: string
+          description: Quest display title
+          maxLength: 200
+          example: Build BioArena Together
+        description:
+          type: string
+          description: Quest narrative description
+          maxLength: 5000
+          example: Join forces to build an arena together...
+        goal:
+          type: integer
+          description: Target total battle count for the quest
+          minimum: 0
+          example: 2850
+        startDate:
+          type: string
+          format: date-time
+          description: Quest start date
+          example: '2026-02-01T00:00:00Z'
+        endDate:
+          type: string
+          format: date-time
+          description: Quest end date
+          example: '2026-04-30T23:59:59Z'
+        activePostIndex:
+          type: integer
+          description: Index of the post to expand by default in the UI
+          minimum: 0
+          maximum: 99
+          example: 4
+        totalBlocks:
+          type: integer
+          description: Current total number of completed battles during the quest period
+          minimum: 0
+          example: 150
+        posts:
+          type: array
+          description: Quest posts ordered by post index
+          items:
+            $ref: '#/components/schemas/QuestPost'
+      required:
+        - questId
+        - title
+        - description
+        - goal
+        - startDate
+        - endDate
+        - activePostIndex
+        - totalBlocks
+        - posts
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -2109,6 +2632,58 @@ components:
           format: uuid
           nullable: true
           description: ID of the battle validation to set as effective. Set to null to clear the effective validation.
+    QuestCreateOrUpdate:
+      type: object
+      description: Request body for creating or updating a quest
+      properties:
+        questId:
+          type: string
+          description: Unique identifier for the quest
+          minLength: 1
+          maxLength: 100
+          pattern: ^[a-z0-9-]+$
+          example: build-bioarena-together
+        title:
+          type: string
+          description: Quest display title
+          minLength: 1
+          maxLength: 200
+          example: Build BioArena Together
+        description:
+          type: string
+          description: Quest narrative description
+          minLength: 1
+          maxLength: 5000
+          example: Join forces to build an arena together...
+        goal:
+          type: integer
+          description: Target total battle count for the quest
+          minimum: 0
+          example: 2850
+        startDate:
+          type: string
+          format: date-time
+          description: Quest start date
+          example: '2026-02-01T00:00:00Z'
+        endDate:
+          type: string
+          format: date-time
+          description: Quest end date
+          example: '2026-04-30T23:59:59Z'
+        activePostIndex:
+          type: integer
+          description: Index of the post to expand by default in the UI
+          minimum: 0
+          maximum: 99
+          example: 4
+      required:
+        - questId
+        - title
+        - description
+        - goal
+        - startDate
+        - endDate
+        - activePostIndex
     QuestContributor:
       type: object
       description: A user who contributed to the quest
@@ -2172,6 +2747,76 @@ components:
         - endDate
         - totalContributors
         - contributors
+    QuestPostCreateOrUpdate:
+      type: object
+      description: Request body for creating or updating a quest post
+      properties:
+        date:
+          type: string
+          format: date
+          nullable: true
+          description: Optional display date for the post
+          example: '2026-02-03'
+        title:
+          type: string
+          description: Post heading
+          minLength: 1
+          maxLength: 300
+          example: 'Chapter 1: Laying the First Stones'
+        description:
+          type: string
+          description: Post content text
+          minLength: 1
+          maxLength: 100000
+          example: The arena walls began to rise...
+        images:
+          type: array
+          description: List of image URLs for the post
+          maxItems: 50
+          items:
+            type: string
+            format: uri
+        publishDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: Post is hidden entirely before this timestamp. Null means immediately visible.
+          example: '2026-03-16T09:00:00Z'
+        requiredProgress:
+          type: integer
+          nullable: true
+          description: Minimum quest-wide battle count required to unlock content. Null means no progress gate.
+          minimum: 0
+          example: 500
+        requiredTier:
+          type: string
+          enum:
+            - knight
+            - champion
+          nullable: true
+          description: Minimum contributor tier required to unlock content. Null means public access.
+          example: knight
+      required:
+        - title
+        - description
+        - images
+    QuestPostReorder:
+      type: object
+      description: Request body for reordering all posts in a quest
+      properties:
+        postIndexes:
+          type: array
+          description: Complete ordered list of existing post indexes. The backend reassigns post_index values 0, 1, 2, ... based on array order.
+          items:
+            type: integer
+          example:
+            - 3
+            - 0
+            - 1
+            - 2
+            - 4
+      required:
+        - postIndexes
     PublicStats:
       type: object
       description: Public statistics about the BixArena platform.
@@ -2283,6 +2928,12 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
     TooManyRequests:
       description: Too many requests. Rate limit exceeded. The client should wait before making additional requests.
       content:
@@ -2322,105 +2973,12 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
     Conflict:
       description: The request conflicts with current state of the target resource
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-  parameters:
-    battleSearchQuery:
-      name: battleSearchQuery
-      description: The search query used to find and filter battles.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/BattleSearchQuery'
-    battleId:
-      name: battleId
-      description: The unique identifier of the battle
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/BattleId'
-    roundId:
-      name: roundId
-      description: The unique identifier of the battle round
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/BattleRoundId'
-    examplePromptSearchQuery:
-      name: examplePromptSearchQuery
-      description: The search query used to find and filter example prompts.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/ExamplePromptSearchQuery'
-    leaderboardId:
-      name: leaderboardId
-      description: The unique identifier of a leaderboard
-      in: path
-      required: true
-      schema:
-        type: string
-        example: open-source
-    leaderboardSearchQuery:
-      name: leaderboardSearchQuery
-      description: The search query used to find and filter leaderboard entries.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/LeaderboardSearchQuery'
-    modelId:
-      name: modelId
-      description: The unique identifier of a model
-      in: path
-      required: true
-      schema:
-        type: string
-        example: model_456
-    leaderboardModelHistoryQuery:
-      name: leaderboardModelHistoryQuery
-      description: The query used to filter and paginate historical model performance data.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/LeaderboardModelHistoryQuery'
-    leaderboardSnapshotQuery:
-      name: leaderboardSnapshotQuery
-      description: The query used to filter and paginate leaderboard snapshots.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/LeaderboardSnapshotQuery'
-    modelSearchQuery:
-      name: modelSearchQuery
-      description: The search query used to find and filter models.
-      in: query
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/ModelSearchQuery'
-    questId:
-      name: questId
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Unique identifier for a quest
-      example: build-bioarena-together
 x-tagGroups:
   - name: BixArena API Service
     tags:

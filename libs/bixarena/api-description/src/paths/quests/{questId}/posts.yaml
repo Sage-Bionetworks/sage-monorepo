@@ -1,0 +1,38 @@
+parameters:
+  - $ref: ../../../components/parameters/path/questId.yaml
+
+post:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Quest
+    - Admin
+  summary: Create a quest post
+  description: |
+    Add a new post to a quest. The post is appended at the next available
+    post index. Requires admin role.
+  operationId: createQuestPost
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/QuestPostCreateOrUpdate.yaml
+    required: true
+  responses:
+    '201':
+      description: Post created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/QuestPost.yaml
+    '400':
+      $ref: ../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

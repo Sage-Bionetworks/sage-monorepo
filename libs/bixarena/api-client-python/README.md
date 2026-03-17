@@ -83,14 +83,15 @@ configuration = bixarena_api_client.Configuration(
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bixarena_api_client.AdminApi(api_client)
+    quest_id = 'build-bioarena-together' # str | Unique identifier for a quest
 
     try:
-        # Admin statistics
-        api_response = api_instance.admin_stats()
-        print("The response of AdminApi->admin_stats:\n")
+        # Get a quest (admin, ungated)
+        api_response = api_instance.admin_get_quest(quest_id)
+        print("The response of AdminApi->admin_get_quest:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling AdminApi->admin_stats: %s\n" % e)
+        print("Exception when calling AdminApi->admin_get_quest: %s\n" % e)
 
 ```
 
@@ -100,7 +101,15 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 
 | Class              | Method                                                                            | HTTP request                                            | Description                                        |
 | ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------- |
+| _AdminApi_         | [**admin_get_quest**](docs/AdminApi.md#admin_get_quest)                           | **GET** /admin/quests/{questId}                         | Get a quest (admin, ungated)                       |
 | _AdminApi_         | [**admin_stats**](docs/AdminApi.md#admin_stats)                                   | **GET** /admin/stats                                    | Admin statistics                                   |
+| _AdminApi_         | [**create_quest**](docs/AdminApi.md#create_quest)                                 | **POST** /quests                                        | Create a quest                                     |
+| _AdminApi_         | [**create_quest_post**](docs/AdminApi.md#create_quest_post)                       | **POST** /quests/{questId}/posts                        | Create a quest post                                |
+| _AdminApi_         | [**delete_quest**](docs/AdminApi.md#delete_quest)                                 | **DELETE** /quests/{questId}                            | Delete a quest                                     |
+| _AdminApi_         | [**delete_quest_post**](docs/AdminApi.md#delete_quest_post)                       | **DELETE** /quests/{questId}/posts/{postIndex}          | Delete a quest post                                |
+| _AdminApi_         | [**reorder_quest_posts**](docs/AdminApi.md#reorder_quest_posts)                   | **PUT** /quests/{questId}/posts/reorder                 | Reorder quest posts                                |
+| _AdminApi_         | [**update_quest**](docs/AdminApi.md#update_quest)                                 | **PUT** /quests/{questId}                               | Update a quest                                     |
+| _AdminApi_         | [**update_quest_post**](docs/AdminApi.md#update_quest_post)                       | **PUT** /quests/{questId}/posts/{postIndex}             | Update a quest post                                |
 | _AuthApi_          | [**callback**](docs/AuthApi.md#callback)                                          | **GET** /auth/callback                                  | OIDC redirect callback                             |
 | _AuthApi_          | [**get_jwks**](docs/AuthApi.md#get_jwks)                                          | **GET** /.well-known/jwks.json                          | JSON Web Key Set                                   |
 | _AuthApi_          | [**get_user_info**](docs/AuthApi.md#get_user_info)                                | **GET** /userinfo                                       | Get current user profile                           |
@@ -127,7 +136,15 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards                    |
 | _ModelApi_         | [**create_model_error**](docs/ModelApi.md#create_model_error)                     | **POST** /models/{modelId}/errors                       | Report a model error                               |
 | _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                                        |
+| _QuestApi_         | [**create_quest**](docs/QuestApi.md#create_quest)                                 | **POST** /quests                                        | Create a quest                                     |
+| _QuestApi_         | [**create_quest_post**](docs/QuestApi.md#create_quest_post)                       | **POST** /quests/{questId}/posts                        | Create a quest post                                |
+| _QuestApi_         | [**delete_quest**](docs/QuestApi.md#delete_quest)                                 | **DELETE** /quests/{questId}                            | Delete a quest                                     |
+| _QuestApi_         | [**delete_quest_post**](docs/QuestApi.md#delete_quest_post)                       | **DELETE** /quests/{questId}/posts/{postIndex}          | Delete a quest post                                |
+| _QuestApi_         | [**get_quest**](docs/QuestApi.md#get_quest)                                       | **GET** /quests/{questId}                               | Get a quest                                        |
 | _QuestApi_         | [**list_quest_contributors**](docs/QuestApi.md#list_quest_contributors)           | **GET** /quests/{questId}/contributors                  | Get quest contributors                             |
+| _QuestApi_         | [**reorder_quest_posts**](docs/QuestApi.md#reorder_quest_posts)                   | **PUT** /quests/{questId}/posts/reorder                 | Reorder quest posts                                |
+| _QuestApi_         | [**update_quest**](docs/QuestApi.md#update_quest)                                 | **PUT** /quests/{questId}                               | Update a quest                                     |
+| _QuestApi_         | [**update_quest_post**](docs/QuestApi.md#update_quest_post)                       | **PUT** /quests/{questId}/posts/{postIndex}             | Update a quest post                                |
 | _StatsApi_         | [**get_public_stats**](docs/StatsApi.md#get_public_stats)                         | **GET** /stats                                          | Get public platform statistics                     |
 | _UserApi_          | [**get_user_stats**](docs/UserApi.md#get_user_stats)                              | **GET** /users/me/stats                                 | Get current user&#39;s statistics                  |
 
@@ -181,8 +198,13 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 - [ModelSort](docs/ModelSort.md)
 - [PageMetadata](docs/PageMetadata.md)
 - [PublicStats](docs/PublicStats.md)
+- [Quest](docs/Quest.md)
 - [QuestContributor](docs/QuestContributor.md)
 - [QuestContributors](docs/QuestContributors.md)
+- [QuestCreateOrUpdate](docs/QuestCreateOrUpdate.md)
+- [QuestPost](docs/QuestPost.md)
+- [QuestPostCreateOrUpdate](docs/QuestPostCreateOrUpdate.md)
+- [QuestPostReorder](docs/QuestPostReorder.md)
 - [RateLimitError](docs/RateLimitError.md)
 - [SetEffectiveValidationRequest](docs/SetEffectiveValidationRequest.md)
 - [SortDirection](docs/SortDirection.md)

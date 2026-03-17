@@ -1,0 +1,8 @@
+name: postIndex
+in: path
+required: true
+schema:
+  type: integer
+  minimum: 0
+description: Display ordering index of a quest post (0-based)
+example: 0

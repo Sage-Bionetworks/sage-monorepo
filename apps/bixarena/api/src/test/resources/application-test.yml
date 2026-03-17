@@ -6,7 +6,7 @@ spring:
       repositories:
         enabled: false # Disable Redis repositories for tests
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_UPPER=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS api\;CREATE SCHEMA IF NOT EXISTS auth
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -24,11 +24,28 @@ spring:
 
 logging:
   level:
-    org.sagebionetworks.amp.als: DEBUG
-    org.hibernate.search: OFF
+    org.sagebionetworks.bixarena: DEBUG
 
-# Minimal application properties required for configuration binding during tests
+# Application properties required for configuration binding during tests
 app:
   welcome-message: 'Welcome to BixArena API (test)'
   auth-service:
-    base-url: 'http://bixarena-auth-service:8115'
+    base-url: 'http://localhost:8115'
+    service-client-id: 'test-client-id'
+    service-client-secret: 'test-client-secret'
+  ai-service:
+    base-url: 'http://localhost:8116'
+  jwt:
+    expected-issuer: 'urn:bixarena:auth:test'
+    expected-audience: 'urn:bixarena:api:test'
+  cors:
+    allowed-origins:
+      - 'http://localhost:3000'
+    allowed-methods:
+      - 'GET'
+      - 'POST'
+      - 'PUT'
+      - 'DELETE'
+    allowed-headers:
+      - '*'
+    allow-credentials: true

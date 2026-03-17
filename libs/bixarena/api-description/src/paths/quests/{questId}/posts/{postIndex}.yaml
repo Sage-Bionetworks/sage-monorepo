@@ -1,0 +1,59 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/questId.yaml
+  - $ref: ../../../../components/parameters/path/postIndex.yaml
+
+put:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Quest
+    - Admin
+  summary: Update a quest post
+  description: Update an existing quest post. Requires admin role.
+  operationId: updateQuestPost
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../components/schemas/QuestPostCreateOrUpdate.yaml
+    required: true
+  responses:
+    '200':
+      description: Post updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/QuestPost.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml
+
+delete:
+  x-rate-limit-requests-per-minute: 30
+  tags:
+    - Quest
+    - Admin
+  summary: Delete a quest post
+  description: Delete a quest post. Remaining posts are not automatically reindexed. Requires admin role.
+  operationId: deleteQuestPost
+  responses:
+    '204':
+      description: Post deleted successfully
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '429':
+      $ref: ../../../../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

@@ -83,8 +83,13 @@ __all__ = [
     "ModelSort",
     "PageMetadata",
     "PublicStats",
+    "Quest",
     "QuestContributor",
     "QuestContributors",
+    "QuestCreateOrUpdate",
+    "QuestPost",
+    "QuestPostCreateOrUpdate",
+    "QuestPostReorder",
     "RateLimitError",
     "SetEffectiveValidationRequest",
     "SortDirection",
@@ -233,11 +238,22 @@ from bixarena_api_client.models.model_search_query import (
 from bixarena_api_client.models.model_sort import ModelSort as ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
 from bixarena_api_client.models.public_stats import PublicStats as PublicStats
+from bixarena_api_client.models.quest import Quest as Quest
 from bixarena_api_client.models.quest_contributor import (
     QuestContributor as QuestContributor,
 )
 from bixarena_api_client.models.quest_contributors import (
     QuestContributors as QuestContributors,
+)
+from bixarena_api_client.models.quest_create_or_update import (
+    QuestCreateOrUpdate as QuestCreateOrUpdate,
+)
+from bixarena_api_client.models.quest_post import QuestPost as QuestPost
+from bixarena_api_client.models.quest_post_create_or_update import (
+    QuestPostCreateOrUpdate as QuestPostCreateOrUpdate,
+)
+from bixarena_api_client.models.quest_post_reorder import (
+    QuestPostReorder as QuestPostReorder,
 )
 from bixarena_api_client.models.rate_limit_error import RateLimitError as RateLimitError
 from bixarena_api_client.models.set_effective_validation_request import (

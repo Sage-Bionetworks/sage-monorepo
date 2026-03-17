@@ -7,6 +7,7 @@ from bixarena_app.api.api_client_helper import (
     calculate_quest_progress,
     create_authenticated_api_client,
     fetch_public_stats,
+    fetch_quest,
     fetch_quest_contributors,
 )
 from bixarena_app.auth.request_auth import (
@@ -16,7 +17,7 @@ from bixarena_app.auth.request_auth import (
 )
 from bixarena_app.config.constants import COMMUNITY_QUEST_ENABLED
 from bixarena_app.page.bixarena_quest_section import (
-    QUEST_CONFIG,
+    QUEST_UI_CONFIG,
     _build_builders_credits_html,
     _build_carousel_html,
     _build_progress_html,
@@ -277,6 +278,9 @@ def load_quest_content_on_page_load(
 ) -> tuple[dict, dict, dict]:
     """Load all dynamic quest content on page load (progress, contributors, carousel).
 
+    Fetches quest data (with posts gated by caller auth) and contributors,
+    then rebuilds the progress bar, contributors list, and carousel HTML.
+
     If the user is authenticated and found in the contributors list, a personal
     tier progress card is included above the builders list.
 
@@ -287,15 +291,23 @@ def load_quest_content_on_page_load(
         Tuple of (progress_html_update, contributors_html_update, carousel_html_update)
     """
     try:
-        # Fetch contributors (single API call for all data)
-        contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
+        quest_id = QUEST_UI_CONFIG["quest_id"]
+
+        # Fetch quest data (posts gated by caller's auth/tier)
+        cookies = get_session_cookie(request) if is_authenticated(request) else None
+        quest_data = fetch_quest(quest_id, cookies=cookies)
 
         # If quest doesn't exist, skip building content HTML
-        if contributors_data.get("error", False):
+        if quest_data is None:
             return (gr.update(), gr.update(), gr.update())
 
-        # Calculate progress using contributors data
-        progress_data = calculate_quest_progress(contributors_data)
+        # Fetch contributors separately (public endpoint)
+        contributors_data = fetch_quest_contributors(quest_id)
+        if contributors_data.get("error", False):
+            contributors_data = None
+
+        # Extract progress from quest data
+        progress_data = calculate_quest_progress(quest_data)
 
         # Build progress HTML
         progress_html = _build_progress_html(
@@ -310,29 +322,34 @@ def load_quest_content_on_page_load(
         # using UserState, which may not be populated yet since all
         # demo.load() handlers run concurrently.
         current_user_data = None
-        username = get_username_from_request(request)
-        if username:
-            for tier_name in ["champion", "knight", "apprentice"]:
-                for contributor in contributors_data["contributors_by_tier"].get(
-                    tier_name, []
-                ):
-                    if contributor["username"] == username:
-                        current_user_data = {
-                            "username": username,
-                            "tier": tier_name,
-                            "battles_per_week": contributor["battles_per_week"],
-                        }
+        if contributors_data:
+            username = get_username_from_request(request)
+            if username:
+                for tier_name in ["champion", "knight", "apprentice"]:
+                    for contributor in contributors_data["contributors_by_tier"].get(
+                        tier_name, []
+                    ):
+                        if contributor["username"] == username:
+                            current_user_data = {
+                                "username": username,
+                                "tier": tier_name,
+                                "battles_per_week": contributor["battles_per_week"],
+                            }
+                            break
+                    if current_user_data:
                         break
-                if current_user_data:
-                    break
 
         # Build contributors HTML (with progress card if user found)
         contributors_html = _build_builders_credits_html(
             contributors_data, current_user_data=current_user_data
         )
 
-        # Build carousel HTML (images from config, but rebuildable)
-        carousel_html = _build_carousel_html("quest-carousel")
+        # Build carousel HTML using posts from the quest API
+        carousel_html = _build_carousel_html(
+            "quest-carousel",
+            posts=quest_data.get("posts", []),
+            active_post_index=quest_data.get("active_post_index"),
+        )
 
         return (
             gr.update(value=progress_html),
@@ -376,11 +393,11 @@ def build_quest_section_wrapper():
 
     # Try to fetch quest data and build section
     # If quest doesn't exist or any error occurs, show error section
-    contributors_data = fetch_quest_contributors(QUEST_CONFIG["quest_id"])
+    quest_id = QUEST_UI_CONFIG["quest_id"]
+    quest_data = fetch_quest(quest_id)
 
-    # Check if quest was not found (error from API)
-    # Note: Warning already logged in api_client_helper, no need to log again
-    if contributors_data.get("error", False):
+    if quest_data is None:
+        # Quest not found in API
         (
             quest_container,
             progress_html_container,
@@ -393,9 +410,13 @@ def build_quest_section_wrapper():
             rotation_interval,
         ) = build_quest_not_found_section()
     else:
-        # Quest exists, fetch progress data and build normal section
+        # Quest exists, fetch contributors and build normal section
         try:
-            progress_data = calculate_quest_progress(contributors_data)
+            contributors_data = fetch_quest_contributors(quest_id)
+            if contributors_data.get("error", False):
+                contributors_data = None
+
+            progress_data = calculate_quest_progress(quest_data)
             (
                 quest_container,
                 progress_html_container,
@@ -406,7 +427,7 @@ def build_quest_section_wrapper():
                 carousel_init_trigger,
                 carousel_id,
                 rotation_interval,
-            ) = build_quest_section(progress_data, contributors_data)
+            ) = build_quest_section(quest_data, progress_data, contributors_data)
         except Exception as e:
             logger.error(f"Error building quest section: {e}")
             # Fall back to quest not found section if build fails

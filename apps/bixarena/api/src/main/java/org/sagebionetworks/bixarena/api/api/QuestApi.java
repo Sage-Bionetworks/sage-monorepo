@@ -7,6 +7,11 @@ package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.QuestContributorsDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestCreateOrUpdateDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestPostCreateOrUpdateDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestPostDto;
+import org.sagebionetworks.bixarena.api.model.dto.QuestPostReorderDto;
 import org.sagebionetworks.bixarena.api.model.dto.RateLimitErrorDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +45,303 @@ public interface QuestApi {
     default QuestApiDelegate getDelegate() {
         return new QuestApiDelegate() {};
     }
+
+    /**
+     * POST /quests : Create a quest
+     * Create a new community quest. Requires admin role.
+     *
+     * @param questCreateOrUpdateDto  (required)
+     * @return Quest created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createQuest",
+        summary = "Create a quest",
+        description = "Create a new community quest. Requires admin role.",
+        tags = { "Quest", "Admin" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Quest created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = QuestDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = QuestDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/quests",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<QuestDto> createQuest(
+        @Parameter(name = "QuestCreateOrUpdateDto", description = "", required = true) @Valid @RequestBody QuestCreateOrUpdateDto questCreateOrUpdateDto
+    ) {
+        return getDelegate().createQuest(questCreateOrUpdateDto);
+    }
+
+
+    /**
+     * POST /quests/{questId}/posts : Create a quest post
+     * Add a new post to a quest. The post is appended at the next available post index. Requires admin role. 
+     *
+     * @param questId Unique identifier for a quest (required)
+     * @param questPostCreateOrUpdateDto  (required)
+     * @return Post created successfully (status code 201)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createQuestPost",
+        summary = "Create a quest post",
+        description = "Add a new post to a quest. The post is appended at the next available post index. Requires admin role. ",
+        tags = { "Quest", "Admin" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Post created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = QuestPostDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = QuestPostDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/quests/{questId}/posts",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<QuestPostDto> createQuestPost(
+        @Parameter(name = "questId", description = "Unique identifier for a quest", required = true, in = ParameterIn.PATH) @PathVariable("questId") String questId,
+        @Parameter(name = "QuestPostCreateOrUpdateDto", description = "", required = true) @Valid @RequestBody QuestPostCreateOrUpdateDto questPostCreateOrUpdateDto
+    ) {
+        return getDelegate().createQuestPost(questId, questPostCreateOrUpdateDto);
+    }
+
+
+    /**
+     * DELETE /quests/{questId} : Delete a quest
+     * Delete a quest and all its posts. Requires admin role.
+     *
+     * @param questId Unique identifier for a quest (required)
+     * @return Quest deleted successfully (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "deleteQuest",
+        summary = "Delete a quest",
+        description = "Delete a quest and all its posts. Requires admin role.",
+        tags = { "Quest", "Admin" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Quest deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/quests/{questId}",
+        produces = { "application/problem+json", "application/json" }
+    )
+    
+    default ResponseEntity<Void> deleteQuest(
+        @Parameter(name = "questId", description = "Unique identifier for a quest", required = true, in = ParameterIn.PATH) @PathVariable("questId") String questId
+    ) {
+        return getDelegate().deleteQuest(questId);
+    }
+
+
+    /**
+     * DELETE /quests/{questId}/posts/{postIndex} : Delete a quest post
+     * Delete a quest post. Remaining posts are not automatically reindexed. Requires admin role.
+     *
+     * @param questId Unique identifier for a quest (required)
+     * @param postIndex Display ordering index of a quest post (0-based) (required)
+     * @return Post deleted successfully (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "deleteQuestPost",
+        summary = "Delete a quest post",
+        description = "Delete a quest post. Remaining posts are not automatically reindexed. Requires admin role.",
+        tags = { "Quest", "Admin" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Post deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/quests/{questId}/posts/{postIndex}",
+        produces = { "application/problem+json", "application/json" }
+    )
+    
+    default ResponseEntity<Void> deleteQuestPost(
+        @Parameter(name = "questId", description = "Unique identifier for a quest", required = true, in = ParameterIn.PATH) @PathVariable("questId") String questId,
+        @Min(0) @Parameter(name = "postIndex", description = "Display ordering index of a quest post (0-based)", required = true, in = ParameterIn.PATH) @PathVariable("postIndex") Integer postIndex
+    ) {
+        return getDelegate().deleteQuestPost(questId, postIndex);
+    }
+
+
+    /**
+     * GET /quests/{questId} : Get a quest
+     * Get the full quest configuration including metadata and published posts. Post content (description, images) is filtered based on unlock gates: - Posts before their publish date are excluded entirely. - Posts whose progress or tier gate is not met return metadata only   (title, date, requiredTier, requiredProgress) with null description   and empty images. When authenticated, the caller&#39;s contributor tier is resolved from their battle count during the quest period. 
+     *
+     * @param questId Unique identifier for a quest (required)
+     * @return Success (status code 200)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "getQuest",
+        summary = "Get a quest",
+        description = "Get the full quest configuration including metadata and published posts. Post content (description, images) is filtered based on unlock gates: - Posts before their publish date are excluded entirely. - Posts whose progress or tier gate is not met return metadata only   (title, date, requiredTier, requiredProgress) with null description   and empty images. When authenticated, the caller's contributor tier is resolved from their battle count during the quest period. ",
+        tags = { "Quest" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = QuestDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = QuestDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/quests/{questId}",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<QuestDto> getQuest(
+        @Parameter(name = "questId", description = "Unique identifier for a quest", required = true, in = ParameterIn.PATH) @PathVariable("questId") String questId
+    ) {
+        return getDelegate().getQuest(questId);
+    }
+
 
     /**
      * GET /quests/{questId}/contributors : Get quest contributors
@@ -89,6 +391,212 @@ public interface QuestApi {
         @Min(1) @Max(1000) @Parameter(name = "limit", description = "Maximum number of contributors to return", in = ParameterIn.QUERY) @Valid @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit
     ) {
         return getDelegate().listQuestContributors(questId, minBattles, limit);
+    }
+
+
+    /**
+     * PUT /quests/{questId}/posts/reorder : Reorder quest posts
+     * Reorder all posts in a quest. The request body must contain the complete list of existing post indexes in the desired new order. The backend validates that the array contains exactly all existing post indexes (no duplicates, no missing), then reassigns post_index values 0, 1, 2, ... based on array order. Requires admin role. 
+     *
+     * @param questId Unique identifier for a quest (required)
+     * @param questPostReorderDto  (required)
+     * @return Posts reordered successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "reorderQuestPosts",
+        summary = "Reorder quest posts",
+        description = "Reorder all posts in a quest. The request body must contain the complete list of existing post indexes in the desired new order. The backend validates that the array contains exactly all existing post indexes (no duplicates, no missing), then reassigns post_index values 0, 1, 2, ... based on array order. Requires admin role. ",
+        tags = { "Quest", "Admin" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Posts reordered successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = QuestDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = QuestDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PUT,
+        value = "/quests/{questId}/posts/reorder",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<QuestDto> reorderQuestPosts(
+        @Parameter(name = "questId", description = "Unique identifier for a quest", required = true, in = ParameterIn.PATH) @PathVariable("questId") String questId,
+        @Parameter(name = "QuestPostReorderDto", description = "", required = true) @Valid @RequestBody QuestPostReorderDto questPostReorderDto
+    ) {
+        return getDelegate().reorderQuestPosts(questId, questPostReorderDto);
+    }
+
+
+    /**
+     * PUT /quests/{questId} : Update a quest
+     * Update quest metadata. Requires admin role.
+     *
+     * @param questId Unique identifier for a quest (required)
+     * @param questCreateOrUpdateDto  (required)
+     * @return Quest updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "updateQuest",
+        summary = "Update a quest",
+        description = "Update quest metadata. Requires admin role.",
+        tags = { "Quest", "Admin" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Quest updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = QuestDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = QuestDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PUT,
+        value = "/quests/{questId}",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<QuestDto> updateQuest(
+        @Parameter(name = "questId", description = "Unique identifier for a quest", required = true, in = ParameterIn.PATH) @PathVariable("questId") String questId,
+        @Parameter(name = "QuestCreateOrUpdateDto", description = "", required = true) @Valid @RequestBody QuestCreateOrUpdateDto questCreateOrUpdateDto
+    ) {
+        return getDelegate().updateQuest(questId, questCreateOrUpdateDto);
+    }
+
+
+    /**
+     * PUT /quests/{questId}/posts/{postIndex} : Update a quest post
+     * Update an existing quest post. Requires admin role.
+     *
+     * @param questId Unique identifier for a quest (required)
+     * @param postIndex Display ordering index of a quest post (0-based) (required)
+     * @param questPostCreateOrUpdateDto  (required)
+     * @return Post updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or Too many requests. Rate limit exceeded. The client should wait before making additional requests. (status code 429)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "updateQuestPost",
+        summary = "Update a quest post",
+        description = "Update an existing quest post. Requires admin role.",
+        tags = { "Quest", "Admin" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Post updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = QuestPostDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = QuestPostDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "429", description = "Too many requests. Rate limit exceeded. The client should wait before making additional requests.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RateLimitErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RateLimitErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PUT,
+        value = "/quests/{questId}/posts/{postIndex}",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<QuestPostDto> updateQuestPost(
+        @Parameter(name = "questId", description = "Unique identifier for a quest", required = true, in = ParameterIn.PATH) @PathVariable("questId") String questId,
+        @Min(0) @Parameter(name = "postIndex", description = "Display ordering index of a quest post (0-based)", required = true, in = ParameterIn.PATH) @PathVariable("postIndex") Integer postIndex,
+        @Parameter(name = "QuestPostCreateOrUpdateDto", description = "", required = true) @Valid @RequestBody QuestPostCreateOrUpdateDto questPostCreateOrUpdateDto
+    ) {
+        return getDelegate().updateQuestPost(questId, postIndex, questPostCreateOrUpdateDto);
     }
 
 }

@@ -1,0 +1,50 @@
+type: object
+description: Request body for creating or updating a quest post
+properties:
+  date:
+    type: string
+    format: date
+    nullable: true
+    description: Optional display date for the post
+    example: '2026-02-03'
+  title:
+    type: string
+    description: Post heading
+    minLength: 1
+    maxLength: 300
+    example: 'Chapter 1: Laying the First Stones'
+  description:
+    type: string
+    description: Post content text
+    minLength: 1
+    maxLength: 100000
+    example: 'The arena walls began to rise...'
+  images:
+    type: array
+    description: List of image URLs for the post
+    maxItems: 50
+    items:
+      type: string
+      format: uri
+  publishDate:
+    type: string
+    format: date-time
+    nullable: true
+    description: Post is hidden entirely before this timestamp. Null means immediately visible.
+    example: '2026-03-16T09:00:00Z'
+  requiredProgress:
+    type: integer
+    nullable: true
+    description: Minimum quest-wide battle count required to unlock content. Null means no progress gate.
+    minimum: 0
+    example: 500
+  requiredTier:
+    type: string
+    enum: [knight, champion]
+    nullable: true
+    description: Minimum contributor tier required to unlock content. Null means public access.
+    example: 'knight'
+required:
+  - title
+  - description
+  - images
