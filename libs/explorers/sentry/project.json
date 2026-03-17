@@ -1,0 +1,21 @@
+{
+  "name": "explorers-sentry",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/explorers/sentry/src",
+  "prefix": "explorers",
+  "tags": ["type:util", "scope:explorers", "language:typescript"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/explorers/sentry"],
+      "options": {
+        "jestConfig": "{projectRoot}/jest.config.ts",
+        "tsConfig": "libs/explorers/sentry/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

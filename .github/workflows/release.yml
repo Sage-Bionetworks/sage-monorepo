@@ -15,6 +15,7 @@ permissions:
 env:
   PRODUCT: ''
   VERSION: ''
+  SHORT_SHA: ''
 
 jobs:
   deploy:
@@ -30,11 +31,13 @@ jobs:
         run: |
           # Extract the product name (part before the first slash) and version (part after the first slash)
           PRODUCT=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/' -f1)
-          VERSION=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/' -f2)
+          VERSION=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/' -f2 | sed 's/^v//')
+          SHORT_SHA=${GITHUB_SHA::7}
 
           # Output extracted values for the rest of the job
           echo "PRODUCT=${PRODUCT}" >> $GITHUB_ENV
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "SHORT_SHA=${SHORT_SHA}" >> $GITHUB_ENV
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
@@ -59,7 +62,11 @@ jobs:
 
       - name: Upload Sentry sourcemaps for the specified product
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo \
+            --remote-env SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
+            --remote-env SENTRY_RELEASE=$SENTRY_RELEASE \
+            bash -c ". ./dev-env.sh \
             && nx run-many --target=sentry-sourcemaps --projects=${{ env.PRODUCT }}-*"
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_RELEASE: ${{ env.VERSION }}+${{ env.SHORT_SHA }}
