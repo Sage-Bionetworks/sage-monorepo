@@ -21,7 +21,6 @@ def main() -> None:  # noqa: D401
         host=args.host,
         port=args.port,
         log_level=args.log_level,
-        access_log=False,
     )
 
 
