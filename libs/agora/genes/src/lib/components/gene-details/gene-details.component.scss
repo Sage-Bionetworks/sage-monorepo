@@ -1,8 +1,8 @@
 /* stylelint-disable plugin/no-unsupported-browser-features */
 /* stylelint-disable no-descending-specificity */
 
-@use 'agora/styles/src/lib/variables';
-@use 'agora/styles/src/lib/mixins';
+@use 'agora/styles/src/variables';
+@use 'agora/styles/src/mixins';
 
 .gene-details-nav {
   position: relative;
