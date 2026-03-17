@@ -1,11 +1,11 @@
 @use 'sass:map';
-@use 'agora/styles/src/variables';
-@use 'agora/styles/src/mixins';
+@use 'agora/styles/src/variables' as vars;
+@use 'agora/styles/src/mixins' as mixins;
 
 .gct-filter-list-item {
   display: flex;
   padding: 8px 15px;
-  background-color: rgba(map.get(variables.$main-colors, 'action-primary'), 0.2);
+  background-color: rgba(map.get(vars.$main-colors, 'action-primary'), 0.2);
   border-radius: 40px;
   margin-left: 8px;
   margin-bottom: 8px;
@@ -33,7 +33,7 @@
     color: var(--color-action-primary);
 
     svg path {
-      transition: variables.$transition-duration;
+      transition: vars.$transition-duration;
     }
   }
 }

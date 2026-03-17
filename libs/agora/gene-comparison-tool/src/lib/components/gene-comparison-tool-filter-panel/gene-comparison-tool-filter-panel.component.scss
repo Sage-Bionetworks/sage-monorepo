@@ -1,7 +1,7 @@
 /* stylelint-disable no-descending-specificity */
 
-@use 'agora/styles/src/variables';
-@use 'agora/styles/src/mixins';
+@use 'agora/styles/src/variables' as vars;
+@use 'agora/styles/src/mixins' as mixins;
 
 .gct-filter-panel {
   position: absolute;
@@ -11,7 +11,7 @@
   opacity: 0;
   visibility: hidden;
   transform: translateX(-200px);
-  transition: variables.$transition-duration;
+  transition: vars.$transition-duration;
   z-index: 500;
 
   .p-popover {
@@ -89,7 +89,7 @@
         align-items: center;
         flex: 1;
         padding: 10px 30px;
-        transition: variables.$transition-duration;
+        transition: vars.$transition-duration;
         cursor: pointer;
         font-size: 18px;
 
@@ -166,7 +166,7 @@
   opacity: 0;
   visibility: hidden;
   transform: translateX(-100%);
-  transition: variables.$transition-duration;
+  transition: vars.$transition-duration;
   overflow: auto;
   box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
 

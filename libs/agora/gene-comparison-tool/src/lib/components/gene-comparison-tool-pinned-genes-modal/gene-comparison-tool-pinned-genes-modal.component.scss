@@ -1,5 +1,5 @@
-@use 'agora/styles/src/variables';
-@use 'agora/styles/src/mixins';
+@use 'agora/styles/src/variables' as vars;
+@use 'agora/styles/src/mixins' as mixins;
 
 .gct-pinned-genes-conversion-modal {
   max-height: 95% !important;

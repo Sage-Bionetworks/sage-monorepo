@@ -1,5 +1,5 @@
-@use 'explorers/styles/src/variables';
-@use 'explorers/styles/src/mixins';
+@use 'explorers/styles/src/variables' as vars;
+@use 'explorers/styles/src/mixins' as mixins;
 
 .search-input {
   position: relative;
@@ -16,7 +16,7 @@
     border: 1px solid var(--color-gray-300);
     padding: 12px 40px 12px 34px;
     width: 100%;
-    transition: variables.$transition-duration;
+    transition: vars.$transition-duration;
     box-sizing: border-box;
     font-size: var(--font-size-xs);
     outline: none;

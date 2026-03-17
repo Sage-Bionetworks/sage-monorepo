@@ -1,4 +1,4 @@
-@use 'model-ad/styles/src/variables';
+@use 'model-ad/styles/src/variables' as vars;
 
 [class*='-container'] {
   padding-top: var(--section-padding);
