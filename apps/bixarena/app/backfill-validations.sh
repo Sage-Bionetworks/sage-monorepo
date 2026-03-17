@@ -68,18 +68,24 @@ for page in $(seq 0 $((TOTAL_PAGES - 1))); do
     BATTLES_JSON=$(curl -s "${GATEWAY_BASE_URL}/api/v1/battles?pageNumber=${page}&pageSize=${PAGE_SIZE}" \
         -H "Cookie: JSESSIONID=${SESSION_ID}")
 
-    # Extract all battle IDs and their validation status
-    ALL_BATTLES=$(echo "$BATTLES_JSON" | jq -r '.battles[] | "\(.id) \(.effectiveValidationId // "null")"')
+    # Extract all battle IDs, their validation status, and endedAt
+    ALL_BATTLES=$(echo "$BATTLES_JSON" | jq -r '.battles[] | "\(.id) \(.effectiveValidationId // "null") \(.endedAt // "null")"')
 
     if [ -z "$ALL_BATTLES" ]; then
         echo "  No battles on this page."
         continue
     fi
 
-    while IFS=' ' read -r BATTLE_ID VALIDATION_ID; do
+    while IFS=' ' read -r BATTLE_ID VALIDATION_ID ENDED_AT; do
         if [ "$VALIDATION_ID" != "null" ]; then
             SKIPPED=$((SKIPPED + 1))
             echo "  [SKIP] $BATTLE_ID -> already has effective validation"
+            continue
+        fi
+
+        if [ "$ENDED_AT" = "null" ]; then
+            SKIPPED=$((SKIPPED + 1))
+            echo "  [SKIP] $BATTLE_ID -> no vote (endedAt is null)"
             continue
         fi
 
