@@ -61,6 +61,13 @@
         "command": "uv run pytest tests/",
         "cwd": "{projectRoot}"
       }
+    },
+    "export-image-tarball": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker save ghcr.io/sage-bionetworks/{projectName}:local -o /tmp/{projectName}.tar"
+      },
+      "dependsOn": ["build-image"]
     }
   },
   "tags": ["type:service", "scope:backend", "language:python", "package-manager:uv"],
