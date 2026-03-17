@@ -493,7 +493,7 @@ def new_battle_same_prompt(battle_session: BattleSession, request: gr.Request = 
             gr.update(
                 value=last_prompt,
                 interactive=True,
-                placeholder="Or ask anything biomedical...",
+                placeholder="Ask anything biomedical...",
             )
         ]  # textbox: prefill with last prompt
         + [
@@ -698,7 +698,7 @@ def build_side_by_side_ui_anony():
         with gr.Row(visible=True) as textbox_row:
             textbox = gr.Textbox(
                 show_label=False,
-                placeholder="Or ask anything biomedical...",
+                placeholder="Ask anything biomedical...",
                 elem_id="input_box",
                 elem_classes=["prompt_input"],
             )
