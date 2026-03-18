@@ -2,6 +2,7 @@ import { provideComparisonToolService } from '@sagebionetworks/explorers/service
 import { mockComparisonToolDataConfig } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { VisualizationOverviewPanelComponent } from './visualization-overview-panel.component';
 
 const meta: Meta<VisualizationOverviewPanelComponent> = {
@@ -10,6 +11,7 @@ const meta: Meta<VisualizationOverviewPanelComponent> = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         ...provideComparisonToolService({
           configs: mockComparisonToolDataConfig,
           visualizationOverviewVisibility: true,

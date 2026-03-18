@@ -20,6 +20,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { ComparisonToolComponent } from './comparison-tool.component';
 import DocumentationTemplate from './comparison-tool.component.template.mdx';
@@ -42,7 +43,11 @@ type StoryArgs = Omit<
   selector: 'explorers-comparison-tool-inner',
   standalone: true,
   imports: [ComparisonToolComponent],
-  providers: [...provideComparisonToolService(), ...provideComparisonToolFilterService()],
+  providers: [
+    MessageService,
+    ...provideComparisonToolService(),
+    ...provideComparisonToolFilterService(),
+  ],
   template: '<explorers-comparison-tool [isLoading]="false" />',
 })
 class ComparisonToolInnerComponent {
@@ -330,6 +335,7 @@ const meta: Meta<StoryArgs> = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
