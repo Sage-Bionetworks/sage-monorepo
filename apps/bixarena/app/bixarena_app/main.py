@@ -641,7 +641,7 @@ def build_app():
 
         # Load quest content on page load (includes personalized progress card
         # for authenticated users)
-        demo.load(
+        quest_load_event = demo.load(
             fn=load_quest_content_on_page_load,
             inputs=None,
             outputs=[
@@ -870,23 +870,12 @@ def build_app():
 }}
             """
 
-            # Trigger carousel initialization on page load
-            demo.load(
-                None,
-                None,
-                None,
-                js="""
-() => {
-    setTimeout(() => {
-        const btn = document.getElementById('carousel-init-trigger');
-        if (btn) {
-            btn.click();
-        } else {
-            console.error('Carousel init button not found');
-        }
-    }, 500);
-}
-        """,
+            # Initialize carousel + accordion listeners after quest content loads
+            quest_load_event.then(
+                fn=None,
+                inputs=None,
+                outputs=None,
+                js=carousel_init_js,
             )
 
     return demo
