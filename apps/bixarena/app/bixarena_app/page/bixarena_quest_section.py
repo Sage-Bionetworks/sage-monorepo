@@ -229,6 +229,56 @@ def _build_user_progress_card_html(
     """
 
 
+def _build_contributor_row_html(
+    username: str, tier: str, battles_per_week: float
+) -> str:
+    """Build a single contributor row with emoji, username, progress bar, and stats.
+
+    Args:
+        username: The contributor's display name
+        tier: Current tier ('champion', 'knight', or 'apprentice')
+        battles_per_week: Average battles per week
+
+    Returns:
+        HTML string for one contributor row
+    """
+    tier_info = TIER_CONFIG.get(tier, TIER_CONFIG["apprentice"])
+    emoji = tier_info["emoji"]
+    bar_color = tier_info["color"]
+
+    if tier == "champion":
+        progress_pct = 100.0
+    elif tier == "knight":
+        progress_pct = min((battles_per_week - 5.0) / 5.0 * 100, 100)
+    else:  # apprentice
+        progress_pct = min(battles_per_week / 5.0 * 100, 100)
+
+    safe_username = escape(username)
+
+    return f"""
+        <div style="display: grid;
+                    grid-template-columns: minmax(auto, 160px) minmax(80px, 1fr) auto;
+                    align-items: center; gap: 0.5rem;">
+            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+                        font-size: 0.875rem; color: var(--body-text-color);"
+                 title="{safe_username}">
+                <span style="margin-right: 0.25rem;">{emoji}</span>{safe_username}
+            </div>
+            <div style="width: 100%; height: 8px;
+                        background-color: var(--background-fill-secondary);
+                        border-radius: 4px; overflow: hidden;
+                        border: 1px solid var(--border-color-primary);">
+                <div style="height: 100%; width: {progress_pct:.0f}%;
+                            background: {bar_color};
+                            border-radius: 4px;"></div>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
+                        text-align: right; white-space: nowrap;">
+                {battles_per_week:.1f} battles/wk
+            </div>
+        </div>"""
+
+
 def _build_tier_legend_html() -> str:
     """Build the tier legend HTML with descriptions and accuracy note.
 
@@ -411,23 +461,19 @@ def _build_builders_credits_html(
         total_count = contributors_data["total_contributors"]
         contributors_by_tier = contributors_data["contributors_by_tier"]
 
-        builders_parts = []
+        builders_rows = []
         for rank in ["champion", "knight", "apprentice"]:
             rank_contributors = contributors_by_tier.get(rank, [])
             for contributor in rank_contributors:
-                username = contributor["username"]
-                emoji = TIER_CONFIG[rank]["emoji"]
-                builders_parts.append(
-                    f'<span style="color: var(--body-text-color); '
-                    f'font-size: 0.875rem;">'
-                    f'<span style="margin-right: 0.25rem;">{emoji}</span>{username}'
-                    f"</span>"
+                builders_rows.append(
+                    _build_contributor_row_html(
+                        username=contributor["username"],
+                        tier=rank,
+                        battles_per_week=contributor.get("battles_per_week", 0.0),
+                    )
                 )
 
-        # Join with separators
-        builders_html = '<span style="color: var(--body-text-color-subdued); font-size: 0.75rem;">•</span>'.join(
-            builders_parts
-        )
+        builders_html = "\n".join(builders_rows)
 
     # Build progress card (personalized for contributors, default for others)
     if current_user_data is not None:
@@ -459,9 +505,8 @@ def _build_builders_credits_html(
 
             <div style="flex: 1; overflow-y: auto; min-height: 0;
                         padding-right: 0.25rem;">
-                <div style="display: flex; flex-wrap: wrap;
-                            align-items: center; gap: 0.5rem;
-                            line-height: 1.5;">
+                <div style="display: flex; flex-direction: column;
+                            gap: 0.5rem;">
                     {builders_html}
                 </div>
             </div>
