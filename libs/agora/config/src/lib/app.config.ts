@@ -1,9 +1,9 @@
 import { InjectionToken } from '@angular/core';
 
 export interface AppConfig {
+  apiDocsUrl: string;
   appVersion: string;
   commitSha: string;
-  apiDocsUrl: string;
   csrApiUrl: string;
   ssrApiUrl: string;
   googleTagManagerId: string;
