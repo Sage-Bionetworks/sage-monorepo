@@ -257,14 +257,15 @@ def _build_contributor_row_html(
 
     return f"""
         <div style="display: grid;
-                    grid-template-columns: minmax(auto, 160px) minmax(80px, 1fr) auto;
-                    align-items: center; gap: 0.5rem;">
+                    grid-template-columns: 140px 0.75rem 1fr 0.25rem 55px;
+                    align-items: center;">
             <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
                         font-size: 0.875rem; color: var(--body-text-color);"
                  title="{safe_username}">
                 <span style="margin-right: 0.25rem;">{emoji}</span>{safe_username}
             </div>
-            <div style="width: 100%; height: 8px;
+            <div></div>
+            <div style="width: 100%; height: 10px;
                         background-color: var(--background-fill-secondary);
                         border-radius: 4px; overflow: hidden;
                         border: 1px solid var(--border-color-primary);">
@@ -272,9 +273,10 @@ def _build_contributor_row_html(
                             background: {bar_color};
                             border-radius: 4px;"></div>
             </div>
+            <div></div>
             <div style="font-size: 0.75rem; color: var(--body-text-color-subdued);
                         text-align: right; white-space: nowrap;">
-                {battles_per_week:.1f} battles/wk
+                {battles_per_week:.1f}/wk
             </div>
         </div>"""
 
