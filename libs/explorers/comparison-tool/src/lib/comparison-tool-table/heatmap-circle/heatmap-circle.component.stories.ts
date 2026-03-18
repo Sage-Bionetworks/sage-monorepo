@@ -1,6 +1,6 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { Component, effect, inject, input } from '@angular/core';
 import { provideLocationMocks } from '@angular/common/testing';
+import { Component, effect, inject, input } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { HeatmapCircleData } from '@sagebionetworks/explorers/models';
 import {
@@ -9,6 +9,7 @@ import {
   provideComparisonToolService,
 } from '@sagebionetworks/explorers/services';
 import type { Meta, StoryObj } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { HeatmapCircleComponent } from './heatmap-circle.component';
 
 type ExampleResult = HeatmapCircleData<'log2_fc'>;
@@ -64,6 +65,7 @@ const meta: Meta<HeatmapCircleStoryArgs> = {
           provideRouter([]),
           provideLocationMocks(),
           provideHttpClient(withInterceptorsFromDi()),
+          MessageService,
           ...provideComparisonToolService(),
           ...provideComparisonToolFilterService({
             significanceThreshold,

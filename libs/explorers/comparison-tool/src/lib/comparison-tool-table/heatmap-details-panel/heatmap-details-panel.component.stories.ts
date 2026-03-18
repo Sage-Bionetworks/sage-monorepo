@@ -7,6 +7,7 @@ import { provideComparisonToolService } from '@sagebionetworks/explorers/service
 import { heatmapDetailsPanelDataMock } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig, moduleMetadata } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { HeatmapDetailsPanelComponent } from './heatmap-details-panel.component';
 
 @Component({
@@ -35,6 +36,7 @@ const meta: Meta<HeatmapDetailsPanelWrapperComponent> = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),

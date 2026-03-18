@@ -9,6 +9,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolCategorySelectorsComponent } from './comparison-tool-category-selectors.component';
 
 const meta: Meta<ComparisonToolCategorySelectorsComponent> = {
@@ -17,6 +18,7 @@ const meta: Meta<ComparisonToolCategorySelectorsComponent> = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
@@ -32,6 +34,7 @@ export const MultipleDropdowns: Story = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         ...provideComparisonToolService({
           configs: mockComparisonToolConfigs,
           viewConfig: { selectorsWikiParams: mockComparisonToolSelectorsWikiParams },
@@ -46,6 +49,7 @@ export const NoDropdowns: Story = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         ...provideComparisonToolService({
           configs: [{ ...mockComparisonToolConfigs[0], dropdowns: [] }],
         }),

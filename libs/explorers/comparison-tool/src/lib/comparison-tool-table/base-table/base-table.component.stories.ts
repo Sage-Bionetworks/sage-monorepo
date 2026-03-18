@@ -11,6 +11,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { BaseTableComponent } from './base-table.component';
 
 const meta: Meta<BaseTableComponent> = {
@@ -19,6 +20,7 @@ const meta: Meta<BaseTableComponent> = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
