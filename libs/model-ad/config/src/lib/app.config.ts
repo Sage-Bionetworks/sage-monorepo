@@ -8,6 +8,8 @@ export interface AppConfig {
   ssrApiUrl: string;
   googleTagManagerId: string;
   isPlatformServer: boolean;
+  sentryDSN: string;
+  sentryEnvironment: string;
   sentryRelease: string;
 }
 
