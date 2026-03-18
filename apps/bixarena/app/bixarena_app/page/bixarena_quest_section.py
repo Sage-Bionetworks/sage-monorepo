@@ -212,7 +212,7 @@ def _build_user_progress_card_html(
                     border-radius: 5px; overflow: hidden;
                     border: 1px solid var(--border-color-primary);">
             <div style="height: 100%; width: {progress_pct:.0f}%;
-                        background: var(--color-accent, #f97316);
+                        background: {tier_color};
                         border-radius: 5px;"></div>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
