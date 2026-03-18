@@ -10,6 +10,7 @@ import {
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolHeaderComponent } from './comparison-tool-header.component';
 
 type StoryArgs = Pick<
@@ -49,6 +50,7 @@ const meta: Meta<StoryArgs> = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),

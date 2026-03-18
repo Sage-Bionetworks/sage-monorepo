@@ -8,6 +8,7 @@ import {
 import { mockComparisonToolFiltersWithSelections } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolFilterListComponent } from './comparison-tool-filter-list.component';
 
 const meta: Meta<ComparisonToolFilterListComponent> = {
@@ -16,6 +17,7 @@ const meta: Meta<ComparisonToolFilterListComponent> = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),

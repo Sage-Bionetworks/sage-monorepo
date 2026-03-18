@@ -12,6 +12,7 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { ComparisonToolTableComponent } from './comparison-tool-table.component';
 
 const meta: Meta<ComparisonToolTableComponent> = {
@@ -20,6 +21,7 @@ const meta: Meta<ComparisonToolTableComponent> = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
@@ -36,6 +38,7 @@ export const NoPinned: Story = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         ...provideComparisonToolService({
           pinnedItems: [],
           maxPinnedItems: 5,
@@ -53,6 +56,7 @@ export const PinnedWithoutSearchTerm: Story = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         ...provideComparisonToolService({
           pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
           maxPinnedItems: 5,
@@ -70,6 +74,7 @@ export const SearchTermActive: Story = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         ...provideComparisonToolService({
           pinnedItems: mockComparisonToolData.slice(0, 3).map((item) => item['_id']),
           maxPinnedItems: 5,

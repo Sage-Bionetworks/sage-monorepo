@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { provideComparisonToolService } from '@sagebionetworks/explorers/services';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
+import { MessageService } from 'primeng/api';
 import { PrimaryIdentifierControlsComponent } from './primary-identifier-controls.component';
 
 const meta: Meta<PrimaryIdentifierControlsComponent> = {
@@ -12,6 +13,7 @@ const meta: Meta<PrimaryIdentifierControlsComponent> = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
@@ -42,6 +44,7 @@ export const Pinned: Story = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
@@ -67,6 +70,7 @@ export const MaxPinnedReached: Story = {
   decorators: [
     applicationConfig({
       providers: [
+        MessageService,
         provideRouter([]),
         provideLocationMocks(),
         provideHttpClient(withInterceptorsFromDi()),
