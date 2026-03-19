@@ -15,7 +15,7 @@ export function initSentry(config: SentryConfig): void {
 
   Sentry.init({
     dsn: config.dsn,
-    environment: config.environment || undefined,
+    environment: config.environment || window.location.hostname,
     release: config.release || undefined,
     sendDefaultPii: false,
   });

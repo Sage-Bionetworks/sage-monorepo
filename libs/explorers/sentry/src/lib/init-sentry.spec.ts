@@ -25,16 +25,20 @@ describe('initSentry', () => {
     });
   });
 
-  it('should initialize Sentry without environment when not provided', () => {
+  it('should fallback to window.location.hostname when environment not provided', () => {
     initSentry(mockConfig);
 
-    expect(Sentry.init).toHaveBeenCalledWith(expect.objectContaining({ environment: undefined }));
+    expect(Sentry.init).toHaveBeenCalledWith(
+      expect.objectContaining({ environment: window.location.hostname }),
+    );
   });
 
-  it('should initialize Sentry without environment when empty string', () => {
+  it('should fallback to window.location.hostname when environment is empty string', () => {
     initSentry({ ...mockConfig, environment: '' });
 
-    expect(Sentry.init).toHaveBeenCalledWith(expect.objectContaining({ environment: undefined }));
+    expect(Sentry.init).toHaveBeenCalledWith(
+      expect.objectContaining({ environment: window.location.hostname }),
+    );
   });
 
   it('should initialize Sentry without release when not provided', () => {
