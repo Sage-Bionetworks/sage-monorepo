@@ -505,7 +505,7 @@ def _build_builders_credits_html(
                 Builders ({total_count})
             </h4>
 
-            <div style="flex: 1; overflow-y: scroll; min-height: 0;
+            <div style="flex: 1; overflow-y: auto; min-height: 0;
                         max-height: 375px; padding-right: 0.25rem;
                         scrollbar-color: var(--border-color-primary) transparent;">
                 <div style="display: flex; flex-direction: column;
@@ -983,6 +983,7 @@ def _build_carousel_html(
             padding: 0.5rem 2rem 1.5rem 2rem;
             scrollbar-color: var(--border-color-primary) transparent;
         }}
+
 
         .update-description {{
             color: var(--body-text-color-subdued);
