@@ -505,8 +505,9 @@ def _build_builders_credits_html(
                 Builders ({total_count})
             </h4>
 
-            <div style="flex: 1; overflow-y: auto; min-height: 0;
-                        padding-right: 0.25rem;">
+            <div style="flex: 1; overflow-y: scroll; min-height: 0;
+                        max-height: 375px; padding-right: 0.25rem;
+                        scrollbar-color: var(--border-color-primary) transparent;">
                 <div style="display: flex; flex-direction: column;
                             gap: 0.5rem;">
                     {builders_html}

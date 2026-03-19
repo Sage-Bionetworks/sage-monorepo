@@ -5,13 +5,13 @@
 -- (Feb 1, 2026), so all contributors end up as apprentices. This migration
 -- adds enough validated battles within the quest period to produce:
 --
--- - quest_champion_1 (user1): +70 battles → ~10.8 battles/week (Champion)
--- - quest_knight_1   (user3): +35 battles → ~5.4 battles/week  (Knight)
+-- - quest_user_1 (user1): +70 battles → ~10.8 battles/week (Champion)
+-- - quest_user_3 (user3): +35 battles → ~5.4 battles/week  (Knight)
 --
 -- Battles/week = battle_count / weeks_elapsed (Feb 1 → now)
 -- ============================================================================
 
--- User1 (quest_champion_1): 70 battles spread across Feb 1 - Mar 15
+-- User1 (quest_user_1): 70 battles spread across Feb 1 - Mar 15
 -- ~1.5 per day, 6 hours apart
 INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
 SELECT
@@ -24,7 +24,7 @@ SELECT
   '2026-02-01 00:00:00+00'::timestamptz + ((n * 6 + 1) || ' hours')::interval
 FROM generate_series(1, 70) AS n;
 
--- User3 (quest_knight_1): 35 battles spread across Feb 1 - Mar 15
+-- User3 (quest_user_3): 35 battles spread across Feb 1 - Mar 15
 -- ~0.8 per day, 12 hours apart
 INSERT INTO api.battle (id, user_id, model1_id, model2_id, title, created_at, ended_at)
 SELECT
