@@ -142,18 +142,20 @@ public interface BattleRepository
   Long findUserRankByCompletedBattles(@Param("userId") UUID userId);
 
   /**
-   * Count completed battles within a date range.
+   * Count completed biomedical battles within a date range.
    *
    * @param startDate range start (inclusive)
    * @param endDate range end (exclusive)
-   * @return total completed battles in the range
+   * @return total completed biomedical battles in the range
    */
   @Query(
     value =
-      "SELECT COUNT(b.id) FROM api.battle b " +
-      "WHERE b.ended_at IS NOT NULL " +
-      "AND b.ended_at >= :startDate " +
-      "AND b.ended_at < :endDate",
+      "SELECT COUNT(b.id) FROM api.battle b "
+          + "INNER JOIN api.battle_validation bv ON bv.id = b.effective_validation_id "
+          + "WHERE b.ended_at IS NOT NULL "
+          + "AND bv.is_biomedical = true "
+          + "AND b.ended_at >= :startDate "
+          + "AND b.ended_at < :endDate",
     nativeQuery = true
   )
   Long countCompletedByDateRange(
@@ -161,20 +163,22 @@ public interface BattleRepository
       @Param("endDate") OffsetDateTime endDate);
 
   /**
-   * Count completed battles by a specific user within a date range.
+   * Count completed biomedical battles by a specific user within a date range.
    *
    * @param userId the user's UUID
    * @param startDate range start (inclusive)
    * @param endDate range end (exclusive)
-   * @return completed battles by the user in the range
+   * @return completed biomedical battles by the user in the range
    */
   @Query(
     value =
-      "SELECT COUNT(b.id) FROM api.battle b " +
-      "WHERE b.user_id = :userId " +
-      "AND b.ended_at IS NOT NULL " +
-      "AND b.ended_at >= :startDate " +
-      "AND b.ended_at < :endDate",
+      "SELECT COUNT(b.id) FROM api.battle b "
+          + "INNER JOIN api.battle_validation bv ON bv.id = b.effective_validation_id "
+          + "WHERE b.user_id = :userId "
+          + "AND b.ended_at IS NOT NULL "
+          + "AND bv.is_biomedical = true "
+          + "AND b.ended_at >= :startDate "
+          + "AND b.ended_at < :endDate",
     nativeQuery = true
   )
   Long countCompletedByUserIdAndDateRange(
