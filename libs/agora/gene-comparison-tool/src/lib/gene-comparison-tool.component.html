@@ -51,7 +51,7 @@
         <div class="gct-controls" [hidden]="isLoading">
           <div class="gct-controls-inner">
             <div class="gct-controls-left">
-              <div class="gene-label">DISPLAYED GENES</div>
+              <div class="gene-label unselectable-text">DISPLAYED GENES</div>
               @if (genesTable) {
                 <div class="gene-count" data-testid="gene-count">
                   {{ (genesTable?.totalRecords || 0) + uniquePinnedGenesCount }}
@@ -166,7 +166,7 @@
                   </div>
                   <div>
                     <p-popover #columnPopover styleClass="gct-toggle-columns">
-                      <ul id="scores-columns">
+                      <ul id="scores-columns" class="unselectable-text">
                         @for (column of scoresColumns; track column) {
                           <li>
                             <div class="column-toggle" (click)="toggleGCTColumn(column)">
@@ -182,7 +182,7 @@
                           </li>
                         }
                       </ul>
-                      <ul>
+                      <ul class="unselectable-text">
                         @for (column of brainRegionsColumns; track column) {
                           <li>
                             @if (column.visible) {

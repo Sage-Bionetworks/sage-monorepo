@@ -127,6 +127,7 @@
       color: var(--color-text-secondary);
       transition: var(--transition-duration);
       align-items: center;
+      cursor: pointer;
 
       &:hover {
         color: var(--color-action-primary);
