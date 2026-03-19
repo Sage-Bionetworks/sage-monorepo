@@ -92,7 +92,8 @@ def fetch_battle_evaluations(conn) -> list[dict[str, Any]]:
     """
     Fetch battle evaluations with model names for ranking.
 
-    Only includes evaluations where both models are active.
+    Only includes evaluations where both models are active and the battle
+    is validated as biomedical.
 
     Args:
         conn: Database connection
@@ -108,9 +109,11 @@ def fetch_battle_evaluations(conn) -> list[dict[str, Any]]:
                    eval.outcome
             FROM api.battle_evaluation eval
             JOIN api.battle b ON eval.battle_id = b.id
+            JOIN api.battle_validation bv ON bv.id = b.effective_validation_id
             JOIN api.model m1 ON b.model1_id = m1.id
             JOIN api.model m2 ON b.model2_id = m2.id
             WHERE m1.active = true AND m2.active = true
+              AND bv.is_biomedical = true
             """
         )
         return cur.fetchall()
