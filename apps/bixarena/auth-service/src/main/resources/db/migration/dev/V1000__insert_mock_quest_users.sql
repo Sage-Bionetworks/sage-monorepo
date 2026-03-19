@@ -23,4 +23,4 @@ INSERT INTO auth.user (id, username, created_at, updated_at) VALUES
   ('00000000-0000-0000-0000-000000000015'::uuid, 'quest_user_15', now(), now()),
   ('00000000-0000-0000-0000-000000000016'::uuid, 'quest_user_16', now(), now()),
   ('00000000-0000-0000-0000-000000000017'::uuid, 'quest_user_17', now(), now())
-ON CONFLICT (id) DO UPDATE SET username = EXCLUDED.username;
+;
