@@ -28,7 +28,7 @@ class Settings(BaseSettings):
 
     # Validation confidence thresholds
     prompt_validation_confidence_threshold: float = 0.5
-    battle_validation_confidence_threshold: float = 0.5
+    battle_validation_confidence_threshold: float = 0.2
     prompt_max_length: int = 10000
 
     # OpenRouter / LLM configuration
